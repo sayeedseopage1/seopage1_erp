@@ -1,0 +1,57 @@
+.emp-dashboard{
+
+    .clock-in-out{
+        p span{
+            line-height: 1.5;
+        }
+    }
+
+    .e-d-info .card-img{
+        width: 80px;
+        height: 80px;
+
+        img{
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+    }
+
+    .cal-info .card-text {
+        line-height: 1.2;
+    }
+
+    @include media-breakpoint-down(lg){
+        .cal-info{
+            height: calc(100vh - 850px) !important;
+            overflow-y: scroll;
+        }
+    }
+    @include media-breakpoint-down(sm){
+        .cal-info{
+            height: calc(100vh - 350px) !important;
+            overflow-y: scroll;
+        }
+    }
+
+}
+
+.admin-dash-settings a{
+
+    &:hover{
+        border-bottom: none;
+    }
+}
+.admin-dash-table {
+    @include media-breakpoint-down(sm){
+        width: 600px;
+    }
+}
+
+// @include media-breakpoint-down(sm){
+//     #dashboardWidgetForm .dashboard-settings{
+//         width: 270px !important;
+//         left: auto !important;
+//         right: 0px !important;
+//     }
+// }

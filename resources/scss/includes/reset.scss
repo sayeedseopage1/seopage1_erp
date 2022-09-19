@@ -1,0 +1,125 @@
+/* ===== RESET CSS ====== */
+
+body{
+  font-size: 14px;
+  font-family: $helvetica;
+  background-color: $white;
+  font-stretch: normal;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 20.5px;
+  color: $dark_text;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-moz-selection {
+  background: #222;
+  color: $white;
+}
+
+::selection {
+  background: #222;
+  color: $white;
+}
+/*===== custom scrollbar ====== */
+::-webkit-scrollbar {
+  width: 10px;
+  background:#e3e8ec ;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 7px;
+  background-color:#aaa8a8;
+  border: 3px solid #e3e8ec;
+}
+
+a{
+  cursor: pointer;
+
+  &:hover{
+    color: darken($color: $c-black, $amount: 100%) !important;
+    outline: 0 none;
+    text-decoration: none;
+  }
+}
+
+img{
+  max-width: 100%;
+  height: auto;
+}
+
+ul,li{
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+p {
+  line-height: 24px;
+  margin-top: 0;
+}
+span {
+  color: inherit;
+}
+i {
+  line-height: 1;
+  font-style: normal;
+}
+
+img {
+  border-style: none;
+  height: auto;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+iframe {
+  border: none;
+}
+
+:active,
+:focus {
+  outline: none !important;
+}
+
+.btn.focus,
+.btn:focus {
+  outline: 0;
+  box-shadow: none;
+}
+
+/* ===== Headings ====== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $helvetica;
+  margin-top: 0;
+}
+h1{
+  font-size: 40px;
+}
+h2{
+  font-size: 32px;
+}
+h3{
+  font-size: 25px;
+}
+h4{
+  font-size: 20px;
+}
+h5{
+  font-size:18px;
+  a{
+    transition: all 0.3s ease;
+  }
+}
+h6{
+  font-size:16px;
+  a{
+    transition: all 0.3s ease;
+  }
+}

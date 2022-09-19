@@ -1,0 +1,36 @@
+.card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
+.card-img {
+    margin: 1.25rem;
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 4px;
+    overflow: hidden;
+    border: solid 1px $dark_grey;
+
+    img{
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+    }
+}
+.card-img-small {
+    flex-shrink: 0;
+    margin: 1.25rem;
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    border-radius: 4px;
+    overflow: hidden;
+    border: solid 1px $dark_grey;
+}
+.card-title{
+    line-height: 21px;
+    margin-bottom: 7px;
+}
+.card-text{
+    line-height: 1.50;
+}

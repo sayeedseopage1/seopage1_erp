@@ -1,0 +1,99 @@
+/* =====  Button ===== */
+button:focus{
+    box-shadow: none !important;
+}
+button.disabled, button:disabled {
+    opacity: .65;
+}
+
+.btn-primary{
+    text-transform: capitalize;
+    padding: 9px 11px;
+    background-color: $blue !important;
+    color: $white !important;
+    border: 1px solid $blue !important;
+    position: relative;
+    &:hover{
+        background-color: darken($color: $white, $amount: 100%) !important;
+        border: 1px solid black !important;
+        color: $white !important;
+    }
+}
+
+.btn-primary.disabled, .btn-primary:disabled{
+    background-color: $blue ;
+
+    &:hover{
+        background-color: $blue !important;
+        border: 1px solid $blue !important;
+        cursor: not-allowed;
+    }
+}
+
+// white_btn
+.btn-secondary{
+    text-transform: capitalize;
+    padding: 9px 11px;
+    border: solid 1px $dark_grey;
+    background-color: $white !important;
+    color: $dark_grey !important;
+    position: relative;
+    &:hover{
+        background-color: darken($color: $white, $amount: 100%) !important;
+        border: solid 1px $black !important;
+        color: #fff !important;
+    }
+}
+
+.btn-secondary.disabled, .btn-secondary:disabled{
+    &:hover{    
+        border: solid 1px $dark_grey !important;
+        background-color: $white !important;
+        color: $dark_grey !important;
+        cursor: not-allowed;
+    }
+}
+
+.btn-cancel{
+    text-transform: capitalize;
+    padding: 9px 11px;
+    border: 1px solid #fff;
+    background-color: $white !important;
+    color: $light_text !important;
+    position: relative;
+    &:hover{
+        background-color: darken($color: $white, $amount: 100%) !important;
+        border: solid 1px $black !important;
+        color: #fff !important;
+    }
+}
+
+.btn-cancel.disabled, .btn-cancel:disabled{
+    &:hover{    
+        border: 1px solid #fff !important;
+        background-color: $white !important;
+        color: $light_text !important;
+        cursor: not-allowed;
+    }
+}
+
+.btn-danger{
+    text-transform: capitalize;
+    background-color: $red;
+    color: $white;
+    border: 0px;
+    position: relative;
+    padding: 9px 11px;
+    &:hover{
+        background-color: darken($color: $white, $amount: 100%);
+    }
+}
+
+.btn-danger.disabled, .btn-danger:disabled{
+    &:hover{    
+        border: 0px !important;
+        background-color: $red !important;
+        cursor: not-allowed;
+    }
+}
+

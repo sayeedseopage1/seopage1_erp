@@ -1,0 +1,18 @@
+grumphp:
+  process_timeout: 9999999
+  tasks: {
+    phpcs: {
+      standard: ~/.composer/vendor/froiden/php_standard/ruleset.xml,
+      whitelist_patterns: [
+          '/^app\/(.*)/',
+          '/^database\/(.*)/',
+          '/^config\/(.*)/',
+          '/^routes\/(.*)/',
+          '/^tests\/(.*)/',
+      ],
+    },
+    phpstan: {
+      memory_limit: "-1",
+      use_grumphp_paths: false
+    }
+  }

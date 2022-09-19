@@ -1,0 +1,23 @@
+/*********** CLIENT DETAIL **************/
+.client-detail-chart{
+    height: 159px;
+}
+
+/*********** CLIENT LIST **************/
+.client-list-filter{
+    .select-box{
+        width: auto;
+
+        .input-group{
+            width: auto;
+        }
+    }
+
+    @include media-breakpoint-down(sm){
+        position: initial;
+    }
+}
+
+.client-list-filter.filter-box{
+    padding: 0px 28px;
+}

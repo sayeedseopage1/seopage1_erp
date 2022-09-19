@@ -1,0 +1,38 @@
+.pagination .page-item.active .page-link{
+    background-color: $blue;
+}
+.pagination li{
+  margin-right: 8px;
+
+  a{
+    border-radius: 4px;
+    min-width: 35px;
+    height: 35px;
+    line-height: 1.54;
+    font-size: 13px;
+    color: #4d4f5c;
+    border: 1px solid $grey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:focus{
+      box-shadow: none
+    }
+  }
+
+}
+.page-item.active .page-link {
+    background-color: $blue;
+    border-color: $blue;
+
+    &:hover, &:focus{
+      color: #fff !important;
+      box-shadow: none;
+    }
+}
+
+div.dataTables_wrapper div.dataTables_info {
+  padding-top: 1.3rem;
+  padding-left: 1rem;
+}

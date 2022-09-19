@@ -1,0 +1,27 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - database
+        - app/Models
+        - app/Console
+        - app/Actions
+        - app/Events
+        - app/Observers
+        - app/Listeners
+        - app/View
+        - app/Http
+
+    # The level 8 is the highest level
+    level: 2
+
+    ignoreErrors:
+        - '#Access to an undefined property App\\Http\\Controllers\\[a-zA-Z0-9\\_]+::\$(\w)+#'
+
+    excludePaths:
+        - ./*/*/FileToBeExcluded.php
+
+    checkMissingIterableValueType: false
+    reportUnmatchedIgnoredErrors: false

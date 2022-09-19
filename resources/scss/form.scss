@@ -1,0 +1,249 @@
+.form-control {
+    border: 1px solid $grey;
+    box-shadow: none;
+    border-radius: 0.25rem;
+    transition: all .3s ease;
+    background-color: $white;
+    color: #28313C;
+    font-weight: 400;
+    position: relative;
+    padding: 0px 6px 0px;
+    height: auto;
+    &:focus,
+    &:hover{
+      border-color: #28313C;
+      box-shadow: none;
+    }
+  }
+
+  :focus{
+    &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+      opacity: 0.5;
+      transition: all 0.3s ease
+    }
+    &::-moz-placeholder { /* Firefox 19+ */
+      opacity: 0.5;
+      transition: all 0.3s ease
+    }
+    &:-ms-input-placeholder { /* IE 10+ */
+      opacity: 0.5;
+      transition: all 0.3s ease
+    }
+    &:-moz-placeholder { /* Firefox 18- */
+      opacity: 0.5;
+      transition: all 0.3s ease
+    }
+  }
+
+  textarea {
+    overflow: hidden;
+  }
+
+  .form-control{
+    &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+      color: $light_text;
+      transition: all 0.3s ease;
+    }
+    &::-moz-placeholder { /* Firefox 19+ */
+      color: $light_text;
+      transition: all 0.3s ease;
+    }
+    &:-ms-input-placeholder { /* IE 10+ */
+      color: $light_text;
+      transition: all 0.3s ease;
+    }
+    &:-moz-placeholder { /* Firefox 18- */
+      color: $light_text;
+      transition: all 0.3s ease;
+    }
+  }
+
+.cursor-pointer{
+  cursor: pointer;
+}
+.form-check-input{
+  height:20px;
+  width:20px;
+  vertical-align: middle;
+}
+
+/*********** CUSTOM CHECKBOX *************/
+.form_custom_label {
+    display: flex;
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+    font-size: 13px;
+    // -webkit-user-select: none;
+    // -moz-user-select: none;
+    // -ms-user-select: none;
+    user-select: none;
+    color: $blue;
+    color: #28313c;
+    align-items: center;
+    justify-content: center;
+}
+.form_custom_label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: solid 2px #1d82f5;
+    background-color: $white;
+
+    &:after{
+        content: "";
+        position: absolute;
+        display: none;
+    }
+}
+
+.form_custom_label.checkmark-20{
+    padding-top: 3px;
+
+    .checkmark{
+        height: 20px;
+        width: 20px;
+        border-radius: 4px;
+
+        &:after{
+            left: 5.5px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid $white;
+            border-width: 0 2px 2px 0;
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+    }
+}
+
+.form_custom_label.checkmark-15{
+    padding-top: 1px;
+
+    .checkmark{
+        height: 15px;
+        width: 15px;
+        border-radius: 3px;
+
+        &:after{
+            left: 3.5px;
+            top: 0.5px;
+            width: 5px;
+            height: 8px;
+            border: solid $white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+    }
+}
+
+.form_custom_label input:checked ~ .checkmark {
+  background-color: #1d82f5;
+}
+.form_custom_label input:checked ~ .checkmark:after {
+  display: block;
+}
+
+// .custom-control-label::before{
+//     border:#1d82f5 solid 2px;
+// }
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    color: #fff;
+    border-color :#1d82f5;
+    background-color: #1d82f5;
+}
+
+.custom-control-input:focus ~ .custom-control-label::before{
+  box-shadow: 0 0 0 0.2rem #1d82f529;
+}
+
+/*********** DROPDOWN *************/
+
+.dropdown-toggle::after, .dropup .dropdown-toggle::after{
+  content: none;
+}
+.dropdown-item{
+    font-size: 14px;
+    line-height: 1.99;
+    color: $dark_text;
+}
+.form-group label sup{
+    color: #fd0202;
+    top: 0px;
+    right: -4px;
+}
+.dropdown-item span{
+    padding-right: 20px;
+}
+
+/*********** CUSTOM DATEPICKER *************/
+.input-daterange input{
+    width: 99px;
+    @include media-breakpoint-down(sm){
+        width: 96px;
+    }
+}
+.input-daterange input::placeholder{
+  color: $dark_text !important;
+  font-weight: 500;
+}
+.qs-datepicker-container .qs-overlay input::placeholder{
+  color: #fff !important;
+}
+.qs-controls{
+  background: #F2F4F7 !important;
+  padding: 8px !important;
+}
+.qs-month-year{
+  font-size: 15px;
+}
+.qs-day {
+    font-weight: 700;
+    color: black;
+    font-size: 14px;
+    margin: 10px 0px;
+}
+.qs-num{
+  font-size: 14px;
+  padding: 16px 0px;
+}
+.qs-datepicker-container{
+  border: 0px;
+}
+.qs-square:not(.qs-empty):not(.qs-disabled):not(.qs-day):not(.qs-active):hover {
+    background :#f2f4f7;
+}
+.qs-current {
+    background: #1d82f5;
+    color: #fff;
+    text-decoration: none;
+
+    &:hover{
+      background: #1d82f5 !important;
+    }
+}
+.qs-active, .qs-range-end, .qs-range-start {
+    background: #616e80;
+    color: #fff;
+}
+
+.input-group-text{
+   border: 1px solid $grey;
+}
+
+
+.input-group-append .btn{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

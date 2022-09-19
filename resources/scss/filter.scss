@@ -1,0 +1,104 @@
+.filter-box{
+  box-shadow: 0 1px 0 0 $grey;
+  width: 100%;
+  top: 63px;
+  position: sticky;
+  z-index: 1;
+
+  @include media-breakpoint-down(md){
+    width: 100%;
+    position: initial;
+  }
+}
+
+.more-filters {
+  border-left: solid 1px $grey;
+
+  @include media-breakpoint-down(md){
+    border-left: 0px;
+  }
+
+  a{
+    line-height: 2;
+  }
+
+  .more-filter-tab{
+    background-color: $white;
+    position: fixed;
+    top: 62px;
+    right: 0;
+    z-index: 9;
+    border: solid 1px $grey;
+    white-space: nowrap;
+    overflow-x: hidden;
+    transform: translate3d(273px, 0, 0);
+    height: 100%;
+    width: 268px;
+    transition: all ease-in 0.3s;
+
+    .clear-all{
+        transition: all ease 0.3s;
+        position: fixed;
+        width: 100% !important;
+    }
+
+    h3{
+      line-height: 1.17;
+      padding: 18px 28px 0;
+    }
+
+    label{
+      line-height: 1.14;
+      padding: 0px 28px;
+      margin-bottom: 12px;
+    }
+  }
+
+  .more-filter-tab.in{
+    transform: translate3d(0px, 0, 0);
+    transition: all ease-in 0.3s;
+    width: 268px;
+
+    .filter-detail{
+      height: calc(100vh - 197px);
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .clear-all{
+        // width: 268px;
+        transition: width ease 0.3s;
+        padding: 0px 28px;
+        border-top: solid 1px $grey;
+
+        button{
+          padding: 9px 11px;
+          margin-right: 9px;
+        }
+    }
+
+  }
+
+  .filter-detail {
+    height: calc(100vh - 197px);
+  }
+  
+}
+
+.close-more-filter{
+  position: absolute;
+  right: 28px;
+  top: 14px;
+
+  &:hover{
+    color: $black;
+  }
+}
+.select-filter {
+  padding: 0px 28px;
+}
+
+
+
+
+

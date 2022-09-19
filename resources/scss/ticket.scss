@@ -1,0 +1,141 @@
+.ticket-wrapper{
+    margin: 0px 9px;
+    overflow: hidden;
+    border: 1px solid #e8eef3;
+
+    .ticket-left{
+        .ticket-msg{
+            height: calc(100vh - 260px);
+            overflow-y: auto;
+
+            @include media-breakpoint-down(md){
+                height: calc(100vh - 328px);
+            }
+
+            .ticket-card-img{
+                margin: 1.3rem 1rem;
+                width: 35px;
+                height: 35px;
+                -o-object-fit: contain;
+                object-fit: contain;
+                border-radius: 4px;
+                overflow: hidden;
+                border: solid 1px $dark_grey;
+            }
+        }
+        .ticket-reply-back button{
+            padding: 9px 11px;
+        }
+    }
+
+    .ticket-right{
+        max-width: 393px;
+        width: 393px;
+
+        @include media-breakpoint-down(md){
+            max-width: 0px;
+            transition: 0.3s;
+            position: fixed;
+            right: 0;
+            z-index: 99;
+            top: 0px;
+            height: 100vh;
+            white-space: nowrap;
+        }
+
+        .ticket-filters {
+            height: calc(100vh - 236px);
+            overflow-y: auto;
+
+            @include media-breakpoint-down(md){
+                height: calc(100vh - 125px);
+            }
+        }
+
+        .nav-item{
+            padding: 14px 28px;
+        }
+        .ticket-update button{
+            padding: 9px 11px;
+        }
+        .ticket-contact-owner{
+            .card-img{
+                width: 42px;
+                height: 42px;
+                margin: 0;
+            }
+        }
+        .recent-ticket{
+            height: calc(100vh - 451px);
+            overflow-y: auto;
+
+            @include media-breakpoint-down(md){
+                height: calc(100vh - 333px);
+            }
+
+            .recent-ticket-inner:before{ 
+                position: absolute;
+                left: 10.9px;
+                content: '';
+                width: 1px;
+                height: 100%;
+                background-color: $light_text;
+                top: 4px;
+            }
+
+            .r-t-items{
+                margin-bottom: 20px;
+
+                .r-t-items-right{
+                    padding-left: 10px;
+                }
+
+                &:last-child{
+                    margin-bottom: 0px;
+
+                    p{
+                        margin-bottom: 0px;
+                    }
+                }
+            }
+        }
+    }
+    @include media-breakpoint-down(md){
+        .ticket-right.in{
+            max-width: 14rem;
+            transition: 0.3s;
+            white-space: normal;
+
+            .close-it {
+                opacity: 1;
+                -webkit-transition: width 0.7s;
+                transition: width 0.7s;
+            }
+        }
+        .ticket-reply-back{
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 97%;
+            margin: 0 auto;
+        }
+        .ticket-update{
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    }
+     @include media-breakpoint-down(sm){
+        .ticket-reply-back{
+            width: 95%;
+        }
+        
+     }
+}
+
+@include media-breakpoint-down(sm){
+    .ticket-wrapper .ticket-right.in~.main-container{
+        z-index: auto;
+    }
+}

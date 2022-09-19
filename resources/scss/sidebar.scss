@@ -1,0 +1,372 @@
+/******************** MAIN SIDEBAR *********************/
+.mobile-close-sidebar-panel{
+  display: none;
+}
+@include media-breakpoint-down(md){
+    .mobile-close-sidebar-panel.toggled{
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 100px;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 99;
+      display: block;
+    }
+}
+
+.main-sidebar{
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 240px;
+  transition: width 0.3s;
+
+  @include media-breakpoint-down(md){
+    transition: 0.3s;
+    top: 0px;
+    overflow-x: auto;
+    transform: translate3d(-293px, 0, 0);
+  }
+}
+
+/******************** SIDEBAR BRAND *********************/
+.sidebar-brand-box {
+  z-index: 1 !important;
+  transition: width 0.3s;
+  // overflow: hidden;
+  // @include media-breakpoint-down(sm){
+  //   width: 14rem;
+  // }
+  .sidebar-brand {
+    padding: 8px 20px 8px 20px;
+    transition: width 0.3s;
+    border-bottom: 1px solid $dark_border;
+
+    &:after{
+      content: none;
+    }
+
+    .sidebar-brand-name{
+      width: 80%;
+      word-break: break-word;
+      overflow: hidden;
+
+      h1{
+        line-height: 1.38;
+        white-space: nowrap;
+        width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        i{
+          font-size: 10px;
+          color: $white_shade;
+          font-weight: 700;
+        }
+      }
+
+      .pro-name{
+        line-height: 1.69;
+        margin-left: 20px;
+
+        span{
+          width: 12px;
+          height: 12px;
+          position: absolute;
+          top: 4px;
+          left: -20px;
+        }
+
+        p{
+            white-space: nowrap;
+            width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+      }
+    }
+  }
+  .sidebar-brand-dropdown {
+    // width: 100%;
+    // z-index: 99;
+    width: 300px;
+    left: 0px !important;
+    border-radius: 3px;
+    border: 1px solid #e8eef3;
+
+    @include media-breakpoint-down(md){
+      transform: translate3d(-2px, 60px, 0px) !important;
+      padding-bottom: 10px;
+      position: fixed !important;
+      top: 0px;
+    }
+    .profile-box{
+      padding: 16px 24px;
+      a{
+        color: $dark_grey;
+
+        &:hover{
+          color: $blue;
+        }
+      }
+      .profileImg{
+        width: 36px;
+        height: 36px;
+        border-radius: 3px;
+        border: solid 1px $grey;
+        overflow: hidden;
+
+        img{
+            object-fit: cover;
+        }
+      }
+      .ProfileData h3{
+        line-height: 1.13;
+        margin-bottom: 5px;
+        word-break: break-all;
+        white-space: nowrap;
+        width: 177px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .ProfileData p{
+        line-height: 1.09;
+      }
+    }
+    a.dropdown-item {
+        line-height: 1.87;
+        white-space: initial;
+        line-break: anywhere;
+
+      &:hover{
+        background-color: $blue;
+        color: $white !important;
+      }
+    }
+    .custom-control.custom-switch{
+        margin-right: -8px;
+    }
+  }
+}
+
+/******************** SIDEBAR MENU *********************/
+.closeIt .accordionItemContent{
+    height:0px;
+    // transition:height 1s ease-out;
+	  transform: scaleY(0);
+    float:left;
+    display:block;
+}
+.openIt .accordionItemContent{
+    display:block;
+    transform: scaleY(1);
+    transform-origin: top;
+    box-sizing: border-box;
+}
+// .sidebar-menu ul li.active .nav-item, .accordionItem a.active{
+//     color: #f7faff ;
+// }
+
+.accordionItem a.active{
+    color: #f7faff ;
+}
+
+.sidebar-menu {
+  height: calc(100% - 111px);
+  z-index: 0;
+  // transition: width 0.3s;
+  display: block !important;
+  white-space: nowrap;
+  overflow: auto;
+
+  @include media-breakpoint-down(md){
+    height: calc(100% - 63px);
+  }
+
+  li  {
+    position: relative;
+    box-shadow: 0 1px 0 0 $dark_border;
+
+    .accordionItemContent a{
+      padding: 0.5rem 1.2rem;
+      display: block;
+      white-space: nowrap;
+      margin-left: 36px;
+
+      &:hover{
+        color: $white_shade !important;
+      }
+    }
+    .nav-item {
+      line-height: 1.87;
+      white-space: nowrap;
+      display: block;
+      align-items: center;
+      padding: 10px 20px 10px 20px;
+
+      &:focus, &:hover{
+        color: $white_shade !important;
+      }
+    }
+  }
+}
+
+.side-icon{
+    width: 16px;
+    vertical-align: middle;
+    font-size: 16px;
+    display: inline-block;
+
+    position: relative;
+    // overflow: visible;
+}
+
+// .accordionItemHeading span{
+//   width: 100px;
+// }
+
+.accordionItem.openIt .accordionItemHeading::after {
+    content: "\E604";
+    font-family: 'simple-line-icons';
+    display: inline-block;
+    font-style: normal;
+    font-stretch: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 900;
+    line-height: 27px;
+    font-size: 10px;
+    position: absolute;
+    right: 15px;
+}
+.accordionItem.closeIt .accordionItemHeading::after  {
+    content: "\E606";
+    font-family: 'simple-line-icons';
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 900;
+    line-height: 27px;
+    font-size: 10px;
+    position: absolute;
+    right: 15px;
+}
+
+.sidebar-brand-logo{
+    max-width: 32px;
+    border-radius: 4px;
+    overflow: hidden;
+    // max-height: 32px;
+}
+
+/******************** SIDEBAR TOGGLER BOX *********************/
+.sidebarTogglerBox {
+    width: 240px;
+    -webkit-transition: width 0.3s;
+    transition: width 0.3s;
+    z-index: 2;
+    height: 48px;
+    bottom: 0;
+    padding: 0 16px;
+    border-top: 1px solid $dark_border;
+
+    @include media-breakpoint-down(md){
+      // transition: all 350ms cubic-bezier(0.19, 1, 0.22, 1);
+      // transform: translate3d(-293px, 0, 0);
+      display: none !important;
+    }
+    #sidebarToggle{
+      // cursor: pointer;
+      // background-color: transparent;
+      font-family: "Font Awesome 5 Free";
+      -webkit-font-smoothing: antialiased;
+      display: inline-block;
+      font-style: normal;
+      font-variant: normal;
+      text-rendering: auto;
+      line-height: 1;
+      background-color: transparent;
+    }
+    p{
+      font-size: 11px;
+      line-height: 1.82;
+      display: block;
+    }
+}
+#sidebarToggle::before {
+  content: "\f053";
+}
+
+/******************** SIDEBAR TOGGLED *********************/
+.sidebar-toggled {
+  #sidebarToggle::before {
+    content: "\f054";
+  }
+  .main-header{
+    margin-left: 60px;
+    transition: width .3s ease-in-out;
+  }
+  .main-container{
+    margin-left: 60px;
+    transition: width .3s ease-in-out;
+  }
+  .sidebarTogglerBox, .main-sidebar {
+    width: 3.77rem !important;
+    transition: width 0.3s;
+  }
+  .sidebar-brand-box .sidebar-brand {
+    padding: 14px;
+    height: 63px;
+    transition: width 0.3s;
+  }
+  .accordionItem.closeIt .accordionItemHeading::after, .accordionItem.openIt .accordionItemHeading::after, .sidebarTogglerBox p, .nav-item span, .sidebar-brand-name, .accordionItemContent  {
+    display: none;
+  }
+  .sidebarTogglerBox button{
+      margin: 0 auto;
+  }
+  .main-sidebar:hover, .main-sidebar:hover~.sidebarTogglerBox{
+    width: 16rem !important;
+    z-index: 99;
+    transition: width 0.3s;
+  }
+  .main-sidebar:hover~.sidebarTogglerBox p{
+    display: block
+  }
+  .main-sidebar:hover .sidebar-brand-logo {
+    margin: 0;
+    padding: 0;
+  }
+  .main-sidebar:hover .sidebar-brand{
+    padding: 10px 16px 10px 20px;
+  }
+  .main-sidebar:hover .collapse-inner{
+    display: block;
+  }
+  .main-sidebar:hover .accordionItem.closeIt .accordionItemHeading::after, .main-sidebar:hover .sidebarTogglerBox p, .main-sidebar:hover .nav-item span, .main-sidebar:hover .sidebar-brand-name, .main-sidebar:hover .accordionItemContent, .main-sidebar:hover .accordionItem.openIt .accordionItemHeading::after {
+    display: initial;
+    transition: width 0.3s;
+  }
+}
+@include media-breakpoint-down(md){
+  .main-sidebar.toggled {
+    z-index: 9999;
+    transition: 0.3s;
+    overflow-x: inherit;
+    transform: translate3d(0px, 0, 0);
+  }
+}
+
+.sidebar-menu::-webkit-scrollbar {
+  width: 10px;
+  background:#262f3a ;
+}
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background-color:#585858 ;
+  border: 3px solid #262f3a ;
+}

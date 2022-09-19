@@ -1,0 +1,136 @@
+/*!--
+
+TEMPLATE NAME: Bootbox - Agency HTML Template
+TEMPLATE URI: - https://bootbox.froid.works/src/index.html
+DESCRIPTION: Bootbox Agency HTML Template is crafted carefully and with love which can bring attentions to your client to make things working good for your business.
+VERSION: 1.0.1
+AUTHOR: Ajay Kumar Choudhary
+AUTHOR URL: https://themeforest.net/user/ajay138/
+
+[TABLE OF CONTENTS]
+
+1.0 Custom Variables
+2.0 Variable Reset, Bootstrap mixins & Functions
+3.0 Common CSS
+    3.1 Nav
+    3.1 Header
+    3.1 Footer
+4.0 Page CSS
+    4.1 Home
+    4.2 About
+    4.3 Price
+    4.4 Blog
+    4.5 Contact
+    4.6 Error
+    4.7 Login
+    4.8 FAQ
+    4.9 Careers
+5.0 Reset
+6.0 Custom
+7.0 Animations
+8.0 Customizer Styles
+
+--*/
+
+// (2)Variable Reset, Bootstrap mixins & Functions
+@import "variables";
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+
+// cropper.js CSS
+@import "../../node_modules/cropperjs/src/css/cropper";
+
+
+// (3)Common CSS
+@import "includes/tabs";
+@import "includes/header";
+
+// (5)Reset CSS
+@import "includes/reset";
+
+// (6)Custom CSS
+@import "custom";
+
+//IMPORT STYLE
+@import "style";
+
+//LOGIN CSS
+@import "login";
+
+//FORM CSS
+@import "form";
+
+//BTN CSS
+@import "btn";
+
+//BTN CSS
+@import "task_list";
+
+//FILTER CSS
+@import "filter";
+
+//SIDEBAR CSS
+@import "sidebar";
+
+//UI KIT CSS
+@import "ui_inventory";
+
+//UI COLORS CSS
+@import "colors";
+
+//UI TYPOGRAPHY CSS
+@import "typography";
+
+//UI AVATAR CSS
+@import "avatar";
+
+//UI PAGINATION CSS
+@import "pagination";
+
+//UI LABELS CSS
+@import "labels";
+
+//UI CARDS CSS
+@import "cards";
+
+//UI TABLES CSS
+@import "tables";
+
+//MESSAGES CSS
+@import "messages";
+
+//TASK BOARD CSS
+@import "task-board";
+
+//SETTINGS CSS
+@import "settings";
+
+//INVOICE CSS
+@import "invoice";
+
+//CREATE INVOICE CSS
+@import "create-invoice";
+
+//TICKET CSS
+@import "ticket";
+
+//PROJECT CSS
+@import "project";
+
+//CLIENT CSS
+@import "client";
+
+//DASHBOARD CSS
+@import "dashboard";
+
+//MODAL CSS
+@import "modal";
+
+//Re CSS
+@import "recruit";
+
+//RTL CSS
+@import "rtl";
+
+//DARK THEME CSS
+@import "dark-theme";

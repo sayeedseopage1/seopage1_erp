@@ -1,0 +1,104 @@
+.task-search input{
+    text-overflow: ellipsis;
+}
+
+.select-box, .task-search{
+    width: 26%;
+
+    @include media-breakpoint-down(md){
+        width: auto;
+    }
+}
+.w-task-board-box{
+   overflow-x: hidden;
+   position: relative;
+
+   &:after{
+        content: '';
+        height: 1px;
+        width: 100%;
+        background-color: $grey;
+        position: absolute;
+        bottom: 26px;
+        left: 0;
+        right: 0;
+   }
+
+    .w-task-board-panel{
+        overflow-x: scroll;
+
+        .board-panel{
+            width: 340px;
+            margin-bottom: 20px;
+            flex: 0 0 340px;
+            white-space: nowrap;
+
+            @include media-breakpoint-down(sm){
+                width: 255px;
+                flex: 0 0 255px;
+            }
+
+            .b-p-header{
+
+                .bg-dark:hover{
+                    color: #fff;
+                }     
+                
+                .b-p-badge{
+                    line-height: 1.9;
+                    vertical-align: middle;
+                }
+            }
+
+            .b-p-body{
+                height: calc(100vh - 213px);
+                overflow-y: auto;
+
+                @include media-breakpoint-down(sm){
+                    height: calc(100vh - 276px);
+                }
+              
+            }   
+        }
+
+        .minimized{
+            margin-bottom: 20px;
+
+            .b-p-header{
+                writing-mode: vertical-rl;
+                text-orientation: sideways;
+            }
+        }
+    }
+}
+
+.w-task-board-panel::-webkit-scrollbar {
+    width: 5px;
+    background: $white ;
+    height: 10px;
+}
+.w-task-board-panel::-webkit-scrollbar-thumb {
+    border-radius: 7px;
+    background-color: $grey ;
+}
+
+.gu-transit{
+    background-color: #848586 !important;
+    opacity: 0.1 !important;
+    border: 2px dashed black;
+
+    .card-body{
+        visibility: hidden;
+    }
+}
+.gu-mirror{
+    box-shadow: none;
+    opacity: 1 !important;
+    height: 125px !important;
+    transform: rotate(5deg);
+    border: 2px dashed rgba(0, 0, 0, 0.397);
+}
+.full .filter-box{
+    position: relative;
+    top: 0px;
+}

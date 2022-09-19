@@ -1,0 +1,133 @@
+.ui_header{
+    background-color: $ui_header_bg;
+   
+    h2{
+        padding: 34px 0px;
+        font-size: 28px;
+        font-weight: bold;
+        line-height: 1.14;
+        letter-spacing: 0.12px;
+        color:$white;
+    }
+}
+.ui_box{
+    padding: 77px 0px;
+
+    .ui_heading h4{
+        font-size: 28px;
+        font-weight: 500;
+        line-height: 1.14;
+        letter-spacing: 0.12px;
+        color: #131523;
+        margin-bottom: 65px;
+    }
+
+    .ntfcn_add_box{
+        margin-top: 94px;
+    }
+
+    .ui_sub_heading h4{
+        font-size: 28px;
+        font-weight: 500;
+        line-height: 1.14;
+        letter-spacing: 0.12px;
+        color: $dark_text;
+        margin-bottom: 31.9px;
+    }
+}
+.choose_ui_color{
+
+    @include media-breakpoint-down(sm){
+
+        .card{
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+    }
+
+    .ui_color_title {
+        border-bottom: 1px solid #D5D7E3;
+        margin-bottom: 20.8px;
+
+        p{
+            font-size: 16px;
+            line-height: 1.13;
+            letter-spacing: 0.1px;
+            color: #7e84a3;
+            margin-bottom: 23.5px;
+        }
+    }
+
+    .card-header{
+        height: 130px;
+        margin-bottom: 23.8px;
+    }
+
+    .card-body{
+
+        p{
+            font-size: 23.4px;
+            font-weight: 500;
+            line-height: 1.33;
+            text-align: left;
+            color: #354052;
+            margin-bottom: 0px;
+        }
+    }
+}
+
+.typo_heading p span:nth-child(5), .typo_heading p span:nth-child(6){
+    color: #131523;
+}
+
+.typography_and_elements{
+    .typo_font{
+        p{
+            font-size: 13px;
+            line-height: 1.15;
+            color: #131523;
+        }
+        h2{
+            font-size: 55px;
+            line-height: 1.16;
+            color: #131523;
+        }
+    }
+    .typo_heading{
+        margin-top: 41px;
+        font-weight: normal;
+        color: $dark_text;
+
+        span{
+            margin-right: 31px;
+
+            @include media-breakpoint-down(sm){
+                display: block;
+                margin-bottom: 3rem;
+            }
+        }
+    }
+    /****************** UI ELEMENTS **********************/
+    .ui_elements{
+        margin-top: 105px;
+
+        .col{
+            width: 20%;
+
+            @include media-breakpoint-down(md){
+                width: 50%;
+            }
+
+            @include media-breakpoint-down(sm){
+                width: 100%;
+            }
+        }
+    }
+}
+.ui_cards_tables{
+    background-color: $additional_grey;
+}
+
+.ui_select .select2-container{
+    width: 100% !important;
+}

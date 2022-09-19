@@ -1,0 +1,99 @@
+.w-tables{
+  box-shadow:  0 0 4px 0 #d2d9e4;
+
+  @include media-breakpoint-down(sm){
+      overflow-x: scroll;
+  }
+}
+.dataTables_wrapper {
+  width: 100%;
+  z-index: 0;
+}
+.dataTables_filter{
+  display: none;
+}
+.table thead th, .table th, .table td{
+  border: 0px;
+  padding: 6px;
+}
+.table thead th{
+  font-size: 13px;
+  font-weight: 500;
+  color: $light_text;
+  box-shadow: 0 1px 0 0 $light_grey;
+}
+
+.table thead th:first-child, .table tbody td:first-child {
+  padding-left: 20px;
+}
+
+.table tr td{
+  font-size: 13px;
+  color:$dark_text;
+  box-shadow: 0 1px 0 0 $light_grey;
+  vertical-align: middle;
+}
+.taskEmployeeImg{
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  overflow: hidden;
+  object-fit: cover;
+}
+.task_view{
+  border: 1px solid $light_text;
+  border-radius: 4px;
+  display: inline-flex;
+
+  .taskView{
+    padding: 0px 7px;
+    line-height: 2;
+    color: $light_text;
+    border-right: 1px solid $light_text;
+
+    &:hover{
+      background-color: $additional_grey;
+    }
+  }
+
+  .task_view_more{
+    color: $light_text;
+    padding: 6.3px 5px;
+    border-radius: 4px;
+
+    &:hover{
+      background-color: $additional_grey;
+    }
+
+    &:after{
+      content: none;
+    }
+  }
+
+  .dropdown-menu{
+    border: 0;
+    -webkit-box-shadow: 1px 4px 6px 4px #68686814;
+    box-shadow: 1px 4px 6px 4px #68686814;
+  }
+}
+
+table.dataTable{
+  margin-bottom: 0px !important;
+
+  @include media-breakpoint-down(sm){
+    width: 862px;
+  }
+}
+
+.dataTables_paginate{
+  margin: 12px !important;
+}
+
+.dataTables_length {
+  padding: 15px 20px;
+}
+
+.dataTables_length select {
+  height: 35px;
+  min-width: 53px;
+}

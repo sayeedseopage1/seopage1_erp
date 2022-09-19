@@ -1,0 +1,164 @@
+.invoice{
+    .inv-num-date td{
+        padding: 6px;
+        border: 1px solid #DBDBDB;
+    }
+    .inv-detail, .inv-desc-mob {
+        
+        .i-d-heading{
+            border: 1px solid #DBDBDB;
+
+            td{
+                border: 1px solid #DBDBDB;
+            }
+        }
+
+        td, th{
+            padding: 11px 10px;
+            border: 1px solid #e7e9eb;
+            word-break: break-word;
+        }
+    } 
+    .card-footer {
+        button{
+            padding: 0px 30px;
+
+            @include media-breakpoint-down(sm){
+                padding: 9px 22px;
+            }
+        }
+        .inv-action{
+             .dropdown-toggle{
+                font-size: 15px;
+                color: #616e80;
+                border: solid 1px #616e80;
+                padding: 0px 9px;
+                border-radius: 4px;
+                height: 36px;
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                line-height: 0;
+
+                &:hover{
+                    background-color: black;
+                    color: #fff !important;
+
+                    span .fa-chevron-down{
+                        color: #fff !important;
+                    }
+                }
+
+                span{
+                    border-left: 1px solid #99a5b5;
+                    height: 34px;
+                    display: inline-flex;
+                    padding-left: 8px;
+                    align-items: center;
+                    margin-left: 8px;
+
+                    @include media-breakpoint-down(sm){
+                        margin-left: 30px;
+                    }
+                }
+             }
+        }
+    }
+}
+
+.unpaid{
+    text-transform: uppercase;
+    background-color: $white;
+    color: $red;
+    border: 1px solid $red;
+    position: relative;
+    padding: 11px 22px;
+    // &:hover{
+    //     background-color: darken($color: $white, $amount: 100%);
+    //     border: 1px solid black !important;
+    //     color: #fff;
+    // }
+}
+
+.inv-desc, .inv-note{
+    width: 100%;
+}
+.inv-note td{
+    width: 50%;    
+}
+.inv-unpaid td:nth-child(2){
+    text-align: right;
+
+    @include media-breakpoint-down(sm){   
+        text-align: left;
+    }
+}
+@include media-breakpoint-down(sm){   
+    .inv-logo-heading img{
+        width: auto;
+    }                       
+    .inv-logo-heading td{
+        width: 100%;
+        display: block;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .inv-num-date{
+        width: 100%;
+
+        td{
+            display: table-cell !important;
+            text-align: left !important;
+        }
+    }
+    .inv-num td{
+        display: block;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .blank-td{
+        display: none;
+    }
+    .inv-note td, .inv-unpaid td{
+        width: 100%;
+        display: block;
+    }
+    .inv-detail {
+        margin-bottom: 5px;
+    }
+    .inv-desc::-webkit-scrollbar {
+        width: 5px;
+        background: $white ;
+        height: 10px;
+    }
+    .inv-desc::-webkit-scrollbar-thumb {
+        border-radius: 7px;
+        background-color: $grey ;
+    }
+}
+
+.invoice .card-footer{
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-end;
+
+    @include media-breakpoint-down(sm){
+        flex-flow: column;
+
+        .btn-primary, .inv-action{
+            width: 50%;     
+        }
+
+        .btn-primary{
+            margin-right: 0px !important;
+        }
+
+        .inv-action button{
+            width: 100%;    
+        }
+        
+        .btn-cancel{
+            order: 3;
+        }
+    }
+}

@@ -1,0 +1,290 @@
+.settings-sidebar{
+    height: calc(100% - 63px);
+    width: 100%;
+    max-height: 100%;
+    max-width: 270px;
+    position: fixed;
+    white-space: nowrap;
+
+    @include media-breakpoint-down(md){
+        max-width: 0px;
+        transition: 0.3s;
+        position: fixed;
+        right: 0;
+        z-index: 99;
+        top: 0px;
+        height: 100vh;
+    }
+
+    .settings-menu {
+        height: calc(100vh - 150px);
+        overflow: auto;
+
+        @include media-breakpoint-down(md){
+            height: calc(100vh - 80px);
+        }
+
+        li a{
+            padding: 15px 24px;
+            white-space: break-spaces;
+
+            &:hover{
+                color: $dark_text !important;
+                background-color: #e8eef385;
+                border-right: 2px solid #28313c85;
+            }
+        }
+    }
+
+    li.active{
+        background-color: $grey;
+
+        a{
+            color: $dark_text;
+            border-right: 2px solid $dark_text;
+        }
+    }
+}
+
+ @include media-breakpoint-down(md){
+    .settings-sidebar.in{
+        max-width: 14rem;
+        // position: fixed;
+        transition: 0.3s;
+
+        form {
+            a{
+                margin-top: 9px;
+                margin-left: 8px;
+                color: #99a5b5;
+            }
+        }
+
+        .close-it{
+            opacity: 1;
+            transition: width 0.7s;
+        }
+    }
+}
+
+.settings-box{
+    width: 100%;
+    // padding: 54px;
+    margin-left: 270px;
+    // overflow: hidden;
+
+    @include media-breakpoint-down(xl){
+        // padding: 54px;
+    }
+
+    @include media-breakpoint-down(lg){
+        padding: 30px;
+    }
+
+    @include media-breakpoint-down(md){
+        margin-left: 0px;
+        padding: 0px 25px 25px;
+    }
+
+    .s-b-mob-sidebar{
+        position: absolute;
+        right: 24px;
+        top: 28px;
+    }
+
+    .s-b-inner{
+        height: 100%;
+
+        @include media-breakpoint-down(lg){
+            .s-b-n-header .nav{
+                flex-wrap: nowrap;
+                overflow: auto;
+                overflow-y: hidden;
+                overflow-x: scroll;
+            }
+        }
+
+        @include media-breakpoint-down(sm){
+            .s-b-n-header .nav{
+                flex-wrap: nowrap;
+                overflow: auto;
+                overflow-y: hidden;
+                overflow-x: scroll;
+            }
+        }
+
+        .s-b-n-content{
+
+            // .ntfcn-tab-content-left {
+            //     .form-group {
+            //         width: 48.1%;
+            //         float: left;
+
+            //         @include media-breakpoint-down(lg){
+            //             width: 100%;
+            //         }
+
+            //         @include media-breakpoint-down(md){
+            //             width: 48.8%;
+            //         }
+
+            //         @include media-breakpoint-down(sm){
+            //             width: 100%;
+            //         }
+
+            //         .select2-container{
+            //             width: 100% !important;
+            //         }
+            //     }
+            // }
+
+            .ntfcn-tab-content-right{
+                margin-top: -58px;
+                height: auto;
+
+                @include media-breakpoint-down(md){
+                    margin-top: 0;
+
+                    // label{
+                    //     width: 50%;
+                    //     float: left;
+                    // }
+                }
+
+                @include media-breakpoint-down(sm){
+                    label{
+                         width: 100%;
+                    }
+                }
+
+                h4{
+                    height: 56px;
+
+                    @include media-breakpoint-down(md){
+                        height: 40px;
+                        // margin-bottom: 25px;
+                    }
+                }
+            }
+
+            @include media-breakpoint-down(sm){
+                .s-save{
+                    width: 100%;
+                }
+                .s-send-test-mail{
+                    width: 57%;
+                }
+                .s-cancel{
+                    width: 35%;
+                }
+            }
+            .settings-btns button{
+                padding: 9px 14px;
+            }
+        }
+    }
+}
+.s-b-n-header .nav::-webkit-scrollbar {
+    display: none;
+}
+.mobile-close-overlay{
+  height: 100%;
+  position: fixed;
+  top: 0;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 99;
+   display: none ;
+  transition: width 0.3s;
+}
+@include media-breakpoint-down(md){
+    .mobile-close-overlay.in{
+        display: block !important;
+        transition: width 0.3s;
+    }
+    .close-it{
+        position: absolute;
+        left: -44px;
+        top: 17px;
+        background-color: #1D82F5;
+        padding: 9px 17px !important;
+        color: #fff;
+        border-radius: 22px 0px 0px 22px;
+        font-size: 12px;
+        transition: width 0.7s;
+        opacity: 0;
+    }
+}
+
+.settings-btns{
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-end;
+
+    @include media-breakpoint-down(sm){
+        // flex-flow: column;
+
+        // .btn-primary, .inv-action{
+        //     width: 50%;
+        // }
+        .btn-primary, .inv-action{
+            width: 50%;
+        }
+
+        .btn-cancel{
+            margin-right: 0px !important;
+        }
+
+        .inv-action button{
+            width: 100%;
+        }
+
+        .btn-cancel{
+            order: 3;
+        }
+    }
+}
+
+// .settings-menu::-webkit-scrollbar {
+//   width: 10px;
+//   background:#e3e8ec ;
+// }
+// .settings-menu::-webkit-scrollbar-thumb {
+//   background-color:#aaa8a8 ;
+//   border: 3px solid #e3e8ec;
+// }
+.gdpr-tabs{
+    text-align: center;
+
+    li a {
+        white-space: nowrap;
+    }
+
+    .-more .-secondary li{
+        text-align: left;
+    }
+}
+
+.permisison-table .thead-light {
+    position: sticky;
+    top: 63px;
+    z-index: 1;
+    overflow: auto;
+
+    @include media-breakpoint-down(sm){
+        z-index: 1;
+    }
+}
+.role-permission-select{
+    width: 100px;
+}
+.set-btns{
+    position: sticky;
+    background: $white;
+    bottom: 0;
+    z-index: 1;
+
+    @include media-breakpoint-down(md){
+        position: relative;
+    }
+}

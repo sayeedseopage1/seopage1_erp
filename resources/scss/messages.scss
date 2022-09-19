@@ -1,0 +1,193 @@
+.message_wrapper{
+    margin: 0px 9px;
+    overflow: hidden;
+    border: 1px solid #e8eef3;
+
+    .msg-header{
+        height: 62px;
+        border-bottom: 1px solid #e8eef3;
+
+        .msg-header-left{
+            // max-width: 392px;
+            // float: left;
+            // width: 40%;
+            padding: 0px 1.25rem;
+
+            @include media-breakpoint-down(md){
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+
+        .msg-header-right{
+            max-width: 100%;
+            padding: 0px 1.25rem;
+        }
+    }
+
+    .input-group{
+        border: solid 1px #e8eef3;
+        border-radius: 4px;
+
+        .input-group-text{
+            background-color: transparent;
+            padding: 0px 6px;
+        }
+
+        input{
+           line-height: 1.8;
+        }
+    }
+
+    .msg-content-left{
+        // height: calc(100vh - 127px);
+        border: 1px solid #e8eef3;
+        max-width: 392px;
+        float: left;
+        width: 40%;
+
+        @include media-breakpoint-down(md){
+            max-width: 100%;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-img{
+            border: 1px solid $grey;
+        }
+        .card{
+            border: 1px solid #e8eef3;
+            // display: inline-table;
+        }
+        .card-title{
+            line-height: 1;
+        }
+        .card-date{
+            line-height: 1;
+        }
+        .card-body .card-text{
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.62;
+        }
+        .tablinks.active, .card:hover{
+            border-radius: 0px;
+            background-color: $grey;
+            cursor: pointer;
+
+            .card-title{
+                color: $dark_text;
+            }
+            .card-date{
+                color: $dark_text;
+            }
+            .card-text{
+                color: $dark_grey;
+            }
+        }
+    }
+
+    .msg-content-right{
+        max-width: 100%;
+        // margin-left: 392px;
+        width: 100%;
+        height: auto;
+
+        @include media-breakpoint-down(md){
+            margin-left: 0;
+            display: none;
+            position: fixed;
+            top: 62px;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-color: #fff;
+            margin: 0 9px;
+        }
+
+        .mbl-sender-name{
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #e8eef3;
+        }
+
+        .chat-box{
+            height: calc(100vh - 330px);
+
+            @include media-breakpoint-down(md){
+                height: calc(100vh - 273px);
+                margin-bottom: 157px;
+            }
+
+            .card-img{
+                border: 1px solid $grey;
+            }
+
+            .card{
+
+
+
+                &:hover{
+                    background-color: #e8eef3;
+
+                    p{
+                        color: $dark_text ;
+                    }
+                }
+            }
+        }
+
+        .chat-box .card-text, .card-date{
+            line-height: 1.6;
+        }
+
+        .custom-file-input:lang(en) ~ .custom-file-label::after {
+            content: none;
+            cursor: pointer;
+        }
+
+        .custom-file{
+            width: 75%;
+
+            label{
+                padding-left: 0px;
+            }
+
+        }
+
+        .attach-send{
+            padding: 11px 16px;
+
+            // button{
+            //     padding: 0px 11px;
+            // }
+        }
+    }
+}
+
+.scroll {
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll.ps > .ps__rail-y {
+    height: 0px !important;
+    display: none !important;
+}
+
+@include media-breakpoint-down(md){
+    .msg-content-right  form{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0px 9px;
+        background-color: #fff;
+    }
+}
+
+
+
+
+

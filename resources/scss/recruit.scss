@@ -1,0 +1,44 @@
+.banner{
+    background-image: url(https://recruit.froid.works/front/assets/img/header-bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 200px;
+
+    .banner-logo{
+        position: absolute;
+        background-color: white;
+        width: 130px;
+        height: 130px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        bottom: -49px;
+    }
+}
+
+.job-container{
+    background-color: $white;
+    display: flex;
+    flex-wrap: nowrap;
+
+    .job-left{
+        border-right: 1px solid $grey;
+        width: 504px;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 150px);
+        overflow-y: auto;
+    }
+    .job-right{
+        width: 100%;
+        height: calc(100vh - 150px);
+        overflow-y: auto;
+
+        @include media-breakpoint-down(md){
+            display: none;
+        }
+    }
+}    
+.list-style-disc{
+    list-style-type: disc;
+}
