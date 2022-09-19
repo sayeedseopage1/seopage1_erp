@@ -94,7 +94,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
             <div id="table-actions" class="d-flex align-items-center">
                 @if ($addContractPermission == 'all' || $addContractPermission == 'added')
                     <x-forms.link-primary :link="route('contracts.create')" class="mr-3 openRightModal" icon="plus">
-                        @lang('modules.contracts.createContract')
+                        Create Deal
                     </x-forms.link-primary>
                 @endif
 

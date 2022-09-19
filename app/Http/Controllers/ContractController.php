@@ -33,6 +33,10 @@ class ContractController extends AccountBaseController
             return $next($request);
         });
     }
+    public function storeDeal(Request $request)
+    {
+      dd($request);
+    }
 
     public function index(ContractsDataTable $dataTable)
     {
@@ -113,7 +117,7 @@ class ContractController extends AccountBaseController
         $this->currencies = Currency::all();
 
         $this->contractTemplate = request('template') ? ContractTemplate::findOrFail(request('template')) : null;
-        
+
         if (request()->ajax()) {
             $this->pageTitle = __('app.add') . ' ' . __('app.menu.contract');
             $html = view('contracts.ajax.create', $this->data)->render();

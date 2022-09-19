@@ -908,6 +908,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
 
     // Contracts
+      Route::post('contracts/deal-store', [ContractController::class, 'storeDeal'])->name('deal-store');
     Route::post('contracts/apply-quick-action', [ContractController::class, 'applyQuickAction'])->name('contracts.apply_quick_action');
     Route::get('contracts/download/{id}', [ContractController::class, 'download'])->name('contracts.download');
     Route::post('contracts/sign/{id}', [ContractController::class, 'sign'])->name('contracts.sign');
@@ -923,6 +924,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     );
     Route::resource('contracts', ContractController::class);
     Route::resource('contract-renew', ContractRenewController::class);
+
 
     // Contract template
 
