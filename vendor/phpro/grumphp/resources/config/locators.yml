@@ -1,0 +1,48 @@
+services:
+    GrumPHP\Locator\AsciiLocator:
+        arguments:
+            - '@GrumPHP\Configuration\Model\AsciiConfig'
+            - '@filesystem'
+            - '@GrumPHP\Util\Paths'
+
+    GrumPHP\Locator\ExternalCommand:
+        class:
+        factory: ['GrumPHP\Locator\ExternalCommand', 'loadWithPaths']
+        arguments:
+            - '@GrumPHP\Util\Paths'
+            - '@executable_finder'
+
+    GrumPHP\Locator\ChangedFiles:
+        arguments:
+            - '@GrumPHP\Git\GitRepository'
+            - '@filesystem'
+            - '@GrumPHP\Util\Paths'
+
+    GrumPHP\Locator\ListedFiles:
+        arguments:
+            - '@GrumPHP\Util\Paths'
+
+    GrumPHP\Locator\RegisteredFiles:
+        arguments:
+            - '@GrumPHP\Git\GitRepository'
+            - '@GrumPHP\Util\Paths'
+            - '@GrumPHP\Locator\ListedFiles'
+
+    GrumPHP\Locator\StdInFiles:
+        arguments:
+            - '@GrumPHP\Locator\ChangedFiles'
+            - '@GrumPHP\Locator\ListedFiles'
+
+    GrumPHP\Locator\GitWorkingDirLocator:
+        arguments:
+            - '@executable_finder'
+    GrumPHP\Locator\GitRepositoryDirLocator:
+        arguments:
+            - '@grumphp.util.filesystem'
+    GrumPHP\Locator\GitRepositoryLocator:
+        arguments:
+            - '@GrumPHP\Util\Paths'
+    GrumPHP\Locator\EnrichedGuessedPathsFromDotEnvLocator:
+        public: true
+        arguments:
+            - '@grumphp.util.filesystem'

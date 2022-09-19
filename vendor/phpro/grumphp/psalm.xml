@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="2"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="src" />
+        <ignoreFiles>
+            <directory name="src/Test" />
+            <directory name="vendor" />
+            <directory name="test" />
+            <directory name="spec" />
+            <file name="src/Parser/Php/Visitor/AbstractVisitor.php" />
+        </ignoreFiles>
+    </projectFiles>
+
+    <stubs>
+        <file name="stubs/Amp.php"/>
+    </stubs>
+</psalm>

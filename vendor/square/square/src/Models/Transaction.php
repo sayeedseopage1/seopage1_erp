@@ -1,0 +1,425 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Square\Models;
+
+use stdClass;
+
+/**
+ * Represents a transaction processed with Square, either with the
+ * Connect API or with Square Point of Sale.
+ *
+ * The `tenders` field of this object lists all methods of payment used to pay in
+ * the transaction.
+ */
+class Transaction implements \JsonSerializable
+{
+    /**
+     * @var string|null
+     */
+    private $id;
+
+    /**
+     * @var string|null
+     */
+    private $locationId;
+
+    /**
+     * @var string|null
+     */
+    private $createdAt;
+
+    /**
+     * @var Tender[]|null
+     */
+    private $tenders;
+
+    /**
+     * @var Refund[]|null
+     */
+    private $refunds;
+
+    /**
+     * @var string|null
+     */
+    private $referenceId;
+
+    /**
+     * @var string|null
+     */
+    private $product;
+
+    /**
+     * @var string|null
+     */
+    private $clientId;
+
+    /**
+     * @var Address|null
+     */
+    private $shippingAddress;
+
+    /**
+     * @var string|null
+     */
+    private $orderId;
+
+    /**
+     * Returns Id.
+     *
+     * The transaction's unique ID, issued by Square payments servers.
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    /**
+     * Sets Id.
+     *
+     * The transaction's unique ID, issued by Square payments servers.
+     *
+     * @maps id
+     */
+    public function setId(?string $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Returns Location Id.
+     *
+     * The ID of the transaction's associated location.
+     */
+    public function getLocationId(): ?string
+    {
+        return $this->locationId;
+    }
+
+    /**
+     * Sets Location Id.
+     *
+     * The ID of the transaction's associated location.
+     *
+     * @maps location_id
+     */
+    public function setLocationId(?string $locationId): void
+    {
+        $this->locationId = $locationId;
+    }
+
+    /**
+     * Returns Created At.
+     *
+     * The timestamp for when the transaction was created, in RFC 3339 format.
+     */
+    public function getCreatedAt(): ?string
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Sets Created At.
+     *
+     * The timestamp for when the transaction was created, in RFC 3339 format.
+     *
+     * @maps created_at
+     */
+    public function setCreatedAt(?string $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * Returns Tenders.
+     *
+     * The tenders used to pay in the transaction.
+     *
+     * @return Tender[]|null
+     */
+    public function getTenders(): ?array
+    {
+        return $this->tenders;
+    }
+
+    /**
+     * Sets Tenders.
+     *
+     * The tenders used to pay in the transaction.
+     *
+     * @maps tenders
+     *
+     * @param Tender[]|null $tenders
+     */
+    public function setTenders(?array $tenders): void
+    {
+        $this->tenders = $tenders;
+    }
+
+    /**
+     * Returns Refunds.
+     *
+     * Refunds that have been applied to any tender in the transaction.
+     *
+     * @return Refund[]|null
+     */
+    public function getRefunds(): ?array
+    {
+        return $this->refunds;
+    }
+
+    /**
+     * Sets Refunds.
+     *
+     * Refunds that have been applied to any tender in the transaction.
+     *
+     * @maps refunds
+     *
+     * @param Refund[]|null $refunds
+     */
+    public function setRefunds(?array $refunds): void
+    {
+        $this->refunds = $refunds;
+    }
+
+    /**
+     * Returns Reference Id.
+     *
+     * If the transaction was created with the [Charge]($e/Transactions/Charge)
+     * endpoint, this value is the same as the value provided for the `reference_id`
+     * parameter in the request to that endpoint. Otherwise, it is not set.
+     */
+    public function getReferenceId(): ?string
+    {
+        return $this->referenceId;
+    }
+
+    /**
+     * Sets Reference Id.
+     *
+     * If the transaction was created with the [Charge]($e/Transactions/Charge)
+     * endpoint, this value is the same as the value provided for the `reference_id`
+     * parameter in the request to that endpoint. Otherwise, it is not set.
+     *
+     * @maps reference_id
+     */
+    public function setReferenceId(?string $referenceId): void
+    {
+        $this->referenceId = $referenceId;
+    }
+
+    /**
+     * Returns Product.
+     *
+     * Indicates the Square product used to process a transaction.
+     */
+    public function getProduct(): ?string
+    {
+        return $this->product;
+    }
+
+    /**
+     * Sets Product.
+     *
+     * Indicates the Square product used to process a transaction.
+     *
+     * @maps product
+     */
+    public function setProduct(?string $product): void
+    {
+        $this->product = $product;
+    }
+
+    /**
+     * Returns Client Id.
+     *
+     * If the transaction was created in the Square Point of Sale app, this value
+     * is the ID generated for the transaction by Square Point of Sale.
+     *
+     * This ID has no relationship to the transaction's canonical `id`, which is
+     * generated by Square's backend servers. This value is generated for bookkeeping
+     * purposes, in case the transaction cannot immediately be completed (for example,
+     * if the transaction is processed in offline mode).
+     *
+     * It is not currently possible with the Connect API to perform a transaction
+     * lookup by this value.
+     */
+    public function getClientId(): ?string
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * Sets Client Id.
+     *
+     * If the transaction was created in the Square Point of Sale app, this value
+     * is the ID generated for the transaction by Square Point of Sale.
+     *
+     * This ID has no relationship to the transaction's canonical `id`, which is
+     * generated by Square's backend servers. This value is generated for bookkeeping
+     * purposes, in case the transaction cannot immediately be completed (for example,
+     * if the transaction is processed in offline mode).
+     *
+     * It is not currently possible with the Connect API to perform a transaction
+     * lookup by this value.
+     *
+     * @maps client_id
+     */
+    public function setClientId(?string $clientId): void
+    {
+        $this->clientId = $clientId;
+    }
+
+    /**
+     * Returns Shipping Address.
+     *
+     * Represents a postal address in a country. The address format is based
+     * on an [open-source library from Google](https://github.com/google/libaddressinput). For more
+     * information,
+     * see [AddressValidationMetadata](https://github.
+     * com/google/libaddressinput/wiki/AddressValidationMetadata).
+     * This format has dedicated fields for four address components: postal code,
+     * locality (city), administrative district (state, prefecture, or province), and
+     * sublocality (town or village). These components have dedicated fields in the
+     * `Address` object because software sometimes behaves differently based on them.
+     * For example, sales tax software may charge different amounts of sales tax
+     * based on the postal code, and some software is only available in
+     * certain states due to compliance reasons.
+     *
+     * For the remaining address components, the `Address` type provides the
+     * `address_line_1` and `address_line_2` fields for free-form data entry.
+     * These fields are free-form because the remaining address components have
+     * too many variations around the world and typical software does not parse
+     * these components. These fields enable users to enter anything they want.
+     *
+     * Note that, in the current implementation, all other `Address` type fields are blank.
+     * These include `address_line_3`, `sublocality_2`, `sublocality_3`,
+     * `administrative_district_level_2`, `administrative_district_level_3`,
+     * `first_name`, `last_name`, and `organization`.
+     *
+     * When it comes to localization, the seller's language preferences
+     * (see [Language preferences](https://developer.squareup.com/docs/locations-api#location-specific-and-
+     * seller-level-language-preferences))
+     * are ignored for addresses. Even though Square products (such as Square Point of Sale
+     * and the Seller Dashboard) mostly use a seller's language preference in
+     * communication, when it comes to addresses, they will use English for a US address,
+     * Japanese for an address in Japan, and so on.
+     */
+    public function getShippingAddress(): ?Address
+    {
+        return $this->shippingAddress;
+    }
+
+    /**
+     * Sets Shipping Address.
+     *
+     * Represents a postal address in a country. The address format is based
+     * on an [open-source library from Google](https://github.com/google/libaddressinput). For more
+     * information,
+     * see [AddressValidationMetadata](https://github.
+     * com/google/libaddressinput/wiki/AddressValidationMetadata).
+     * This format has dedicated fields for four address components: postal code,
+     * locality (city), administrative district (state, prefecture, or province), and
+     * sublocality (town or village). These components have dedicated fields in the
+     * `Address` object because software sometimes behaves differently based on them.
+     * For example, sales tax software may charge different amounts of sales tax
+     * based on the postal code, and some software is only available in
+     * certain states due to compliance reasons.
+     *
+     * For the remaining address components, the `Address` type provides the
+     * `address_line_1` and `address_line_2` fields for free-form data entry.
+     * These fields are free-form because the remaining address components have
+     * too many variations around the world and typical software does not parse
+     * these components. These fields enable users to enter anything they want.
+     *
+     * Note that, in the current implementation, all other `Address` type fields are blank.
+     * These include `address_line_3`, `sublocality_2`, `sublocality_3`,
+     * `administrative_district_level_2`, `administrative_district_level_3`,
+     * `first_name`, `last_name`, and `organization`.
+     *
+     * When it comes to localization, the seller's language preferences
+     * (see [Language preferences](https://developer.squareup.com/docs/locations-api#location-specific-and-
+     * seller-level-language-preferences))
+     * are ignored for addresses. Even though Square products (such as Square Point of Sale
+     * and the Seller Dashboard) mostly use a seller's language preference in
+     * communication, when it comes to addresses, they will use English for a US address,
+     * Japanese for an address in Japan, and so on.
+     *
+     * @maps shipping_address
+     */
+    public function setShippingAddress(?Address $shippingAddress): void
+    {
+        $this->shippingAddress = $shippingAddress;
+    }
+
+    /**
+     * Returns Order Id.
+     *
+     * The order_id is an identifier for the order associated with this transaction, if any.
+     */
+    public function getOrderId(): ?string
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * Sets Order Id.
+     *
+     * The order_id is an identifier for the order associated with this transaction, if any.
+     *
+     * @maps order_id
+     */
+    public function setOrderId(?string $orderId): void
+    {
+        $this->orderId = $orderId;
+    }
+
+    /**
+     * Encode this object to JSON
+     *
+     * @param bool $asArrayWhenEmpty Whether to serialize this model as an array whenever no fields
+     *        are set. (default: false)
+     *
+     * @return mixed
+     */
+    public function jsonSerialize(bool $asArrayWhenEmpty = false)
+    {
+        $json = [];
+        if (isset($this->id)) {
+            $json['id']               = $this->id;
+        }
+        if (isset($this->locationId)) {
+            $json['location_id']      = $this->locationId;
+        }
+        if (isset($this->createdAt)) {
+            $json['created_at']       = $this->createdAt;
+        }
+        if (isset($this->tenders)) {
+            $json['tenders']          = $this->tenders;
+        }
+        if (isset($this->refunds)) {
+            $json['refunds']          = $this->refunds;
+        }
+        if (isset($this->referenceId)) {
+            $json['reference_id']     = $this->referenceId;
+        }
+        if (isset($this->product)) {
+            $json['product']          = $this->product;
+        }
+        if (isset($this->clientId)) {
+            $json['client_id']        = $this->clientId;
+        }
+        if (isset($this->shippingAddress)) {
+            $json['shipping_address'] = $this->shippingAddress;
+        }
+        if (isset($this->orderId)) {
+            $json['order_id']         = $this->orderId;
+        }
+        $json = array_filter($json, function ($val) {
+            return $val !== null;
+        });
+
+        return (!$asArrayWhenEmpty && empty($json)) ? new stdClass() : $json;
+    }
+}
