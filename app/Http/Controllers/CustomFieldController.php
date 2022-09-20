@@ -9,6 +9,7 @@ use App\Models\CustomField;
 use App\Models\CustomFieldGroup;
 use App\Models\EmployeeDetails;
 use App\Models\Project;
+use App\Models\ContractCustomForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
@@ -114,11 +115,14 @@ class CustomFieldController extends AccountBaseController
      */
     public function store(StoreCustomField $request)
     {
+      //dd($request);
         if ($request->module == 1) {
             $model = new ClientDetails();
         }
         elseif ($request->module == 2) {
             $model = new EmployeeDetails();
+        }elseif($request->module== 12){
+          $model= new ContractCustomForm();
         }
         else {
             $model = new Project();

@@ -20,6 +20,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use App\Models\ContractCustomForm;
+use App\Traits\CustomFieldsTrait;
+use App\Models\CustomField;
+use App\Models\CustomFieldData;
 
 class ContractController extends AccountBaseController
 {
@@ -33,10 +37,7 @@ class ContractController extends AccountBaseController
             return $next($request);
         });
     }
-    public function storeDeal(Request $request)
-    {
-      dd($request);
-    }
+
 
     public function index(ContractsDataTable $dataTable)
     {
@@ -115,6 +116,11 @@ class ContractController extends AccountBaseController
         $this->clients = User::allClients();
         $this->contractTypes = ContractType::all();
         $this->currencies = Currency::all();
+        $contract = new ContractCustomForm();
+
+        if (!empty($contract->getCustomFieldGroupsWithFields())) {
+            $this->fields = $contract->getCustomFieldGroupsWithFields()->fields;
+        }
 
         $this->contractTemplate = request('template') ? ContractTemplate::findOrFail(request('template')) : null;
 
@@ -131,15 +137,21 @@ class ContractController extends AccountBaseController
 
     public function store(StoreRequest $request)
     {
+      //dd($request);
         $contract = new Contract();
+
+
+
+
         $this->storeUpdate($request, $contract);
+
         return Reply::redirect(route('contracts.index'), __('messages.contractAdded'));
     }
 
     public function edit($id)
     {
         $this->editPermission = user()->permission('edit_contract');
-        $this->contract = Contract::with('signature', 'renewHistory', 'renewHistory.renewedBy')->find($id);
+        $this->contract = Contract::with('signature', 'renewHistory', 'renewHistory.renewedBy')->find($id)->withCustomFields();
 
         abort_403(!(
             $this->editPermission == 'all'
@@ -151,6 +163,9 @@ class ContractController extends AccountBaseController
         $this->clients = User::allClients();
         $this->contractTypes = ContractType::all();
         $this->currencies = Currency::all();
+        if (!empty($this->contract->getCustomFieldGroupsWithFields())) {
+            $this->fields = $this->contract->getCustomFieldGroupsWithFields()->fields;
+        }
 
         if (request()->ajax()) {
             $this->pageTitle = __('app.update') . ' ' . __('app.menu.contract');
@@ -166,7 +181,11 @@ class ContractController extends AccountBaseController
     public function update(UpdateRequest $request, $id)
     {
         $contract = Contract::findOrFail($id);
+
+
+
         $this->storeUpdate($request, $contract);
+
 
         return Reply::redirect(route('contracts.index'), __('messages.contractUpdated'));
     }
@@ -193,6 +212,8 @@ class ContractController extends AccountBaseController
         $contract->original_end_date = $request->end_date == null ? $request->end_date : Carbon::createFromFormat($this->global->date_format, $request->end_date)->format('Y-m-d');
         $contract->description = str_replace('<p><br></p>', '', trim($request->description));
         $contract->contract_detail = $request->contract_detail;
+        //
+
 
         if ($request->company_logo_delete == 'yes') {
             Files::deleteFile($contract->company_logo, 'contract-logo');
@@ -208,7 +229,13 @@ class ContractController extends AccountBaseController
             $contract->contract_detail = $request->contract_detail;
         }
 
+
+
         $contract->save();
+
+        // if ($request->get('custom_fields_data')) {
+        //     $contract->updateCustomFieldData($request->get('custom_fields_data'));
+        // }
 
         return $contract;
     }
@@ -232,7 +259,8 @@ class ContractController extends AccountBaseController
             if ($viewDiscussionPermission == 'added') {
                 $q->where('contract_discussions.added_by', user()->id);
             }
-        }, 'discussion.user'])->findOrFail($id);
+        }, 'discussion.user'])->findOrFail($id)
+          ->withCustomFields();
 
         abort_403(!(
             $viewPermission == 'all'
@@ -242,6 +270,13 @@ class ContractController extends AccountBaseController
         ));
 
         $this->pageTitle = __('modules.contracts.contractNumber') . ' #' . $this->contract->id;
+        $this->contractFormFields = ContractCustomForm::with('customField')->where('status', 'active')->where('custom_fields_id', '!=', 'null')->get();
+
+        $this->contractId = $id;
+
+        if (!empty($this->contract->getCustomFieldGroupsWithFields())) {
+            $this->fields = $this->contract->getCustomFieldGroupsWithFields()->fields;
+        }
         $this->view = 'contracts.ajax.summary';
 
         $tab = request('tab');
