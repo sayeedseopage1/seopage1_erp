@@ -4,17 +4,17 @@ namespace App\Observers;
 use App\Models\ContractCustomForm;
 class ContractCustomFormObserver
 {
-  public function saving(ContractCustomForm $leadCustomForm)
+  public function saving(ContractCustomForm $contractCustomForm)
   {
       if (user()) {
-          $leadCustomForm->last_updated_by = user()->id;
+          $contractCustomForm->last_updated_by = user()->id;
       }
   }
 
   public function creating(ContractCustomForm $leadCustomForm)
   {
       if (user()) {
-          $leadCustomForm->added_by = user()->id;
+          $contractCustomForm->added_by = user()->id;
       }
   }
 }

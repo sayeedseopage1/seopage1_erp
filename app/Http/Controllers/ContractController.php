@@ -24,6 +24,7 @@ use App\Models\ContractCustomForm;
 use App\Traits\CustomFieldsTrait;
 use App\Models\CustomField;
 use App\Models\CustomFieldData;
+use App\Models\RoleUser;
 
 class ContractController extends AccountBaseController
 {
@@ -192,6 +193,8 @@ class ContractController extends AccountBaseController
 
     private function storeUpdate($request, $contract)
     {
+        $userrole= RoleUser::all();
+        dd($userrole);
         $contract->client_id = $request->client;
         $contract->subject = $request->subject;
         $contract->amount = $request->amount;
@@ -232,6 +235,7 @@ class ContractController extends AccountBaseController
 
 
         $contract->save();
+
 
         // if ($request->get('custom_fields_data')) {
         //     $contract->updateCustomFieldData($request->get('custom_fields_data'));
