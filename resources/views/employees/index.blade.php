@@ -406,6 +406,7 @@ $viewDesignationPermission = user()->permission('view_designation');
                         userId: id,
                         _token: token
                     },
+                    
                     success: function(response) {
                         if (response.status == "success") {
                             window.LaravelDataTables["employees-table"].draw();

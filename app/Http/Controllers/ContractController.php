@@ -142,7 +142,13 @@ class ContractController extends AccountBaseController
     // Custom module for seopage 1 to store deals
     public function storeDeal(Request $request)
     {
-
+      $roleuser= RoleUser::where('role_id',4)->get();
+      $roleuser_count= RoleUser::where('role_id',4)->count();
+      dd($roleuser_count);
+      foreach ($role_user as $row) {
+        // code...
+      }
+    
 
       $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
            $suffle = substr(str_shuffle($chars), 0, 6);
@@ -170,6 +176,7 @@ class ContractController extends AccountBaseController
       $project->project_summary= $request->description;
       $project->completion_percent= 0;
       $project->added_by= Auth::id();
+      $project->status= 'not started';
       $project->public= 0;
       $project->save();
          return Redirect::back()->with('messages.contractAdded');
@@ -178,7 +185,7 @@ class ContractController extends AccountBaseController
 
     public function store(StoreRequest $request)
     {
-      dd($request);
+      //dd($request);
         $contract = new Contract();
 
 

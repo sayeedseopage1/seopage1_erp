@@ -49,6 +49,7 @@ use App\Http\Requests\Admin\Employee\UpdateRequest;
 use App\Http\Requests\User\CreateInviteLinkRequest;
 use App\Http\Requests\Admin\Employee\ImportProcessRequest;
 use App\Models\LanguageSetting;
+use App\Models\PMAssign;
 
 class EmployeeController extends AccountBaseController
 {
@@ -126,6 +127,23 @@ class EmployeeController extends AccountBaseController
 
     public function assignRole(Request $request)
     {
+      //dd($request);
+      if($request->role == 4)
+      {
+        $pmassign= new PMAssign();
+        $pmassign->pm_id= $request->userId;
+        $pmassign->project_count= 0;
+        $pmassign->amount=0;
+        $pmassign->save();
+
+
+      }
+      $pmu= PMAssign::where('pm_id',$request->userId)->first();
+
+      if ($pmu != null && $request->role != 4 ) {
+        $pmd= PMAssign::find($pmu->pm_id);
+        $pmd->delete();
+      }
         $changeEmployeeRolePermission = user()->permission('change_employee_role');
 
         abort_403($changeEmployeeRolePermission != 'all');
@@ -147,6 +165,7 @@ class EmployeeController extends AccountBaseController
 
         $userSession = new AppSettingController();
         $userSession->deleteSessions([$user->id]);
+
 
         return Reply::success(__('messages.roleAssigned'));
     }
@@ -277,6 +296,7 @@ class EmployeeController extends AccountBaseController
      * @param int $id
      * @return \Illuminate\Http\Response
      */
+
     public function edit($id)
     {
         $this->employee = $employee = User::withoutGlobalScope('active')->with('employeeDetail', 'reportingTeam')->findOrFail($id);
