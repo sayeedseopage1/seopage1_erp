@@ -25,6 +25,10 @@ use App\Traits\CustomFieldsTrait;
 use App\Models\CustomField;
 use App\Models\CustomFieldData;
 use App\Models\RoleUser;
+use App\Models\Deal;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\Project;
+use Auth;
 
 class ContractController extends AccountBaseController
 {
@@ -32,7 +36,7 @@ class ContractController extends AccountBaseController
     public function __construct()
     {
         parent::__construct();
-        $this->pageTitle = 'app.menu.contracts';
+        $this->pageTitle = 'Deals';
         $this->middleware(function ($request, $next) {
             abort_403(!in_array('contracts', $this->user->modules));
             return $next($request);
@@ -135,10 +139,46 @@ class ContractController extends AccountBaseController
         return view('contracts.create', $this->data);
 
     }
+    // Custom module for seopage 1 to store deals
+    public function storeDeal(Request $request)
+    {
+
+
+      $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+           $suffle = substr(str_shuffle($chars), 0, 6);
+
+      $deal = new Deal();
+      $deal->project_name= $request->project_name;
+      $deal->client_name= $request->client_name;
+      $deal->organization= $request->organization;
+
+      $deal->start_date=  Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+      $deal->pipeline_stage= $request->pipeline_stage;
+      $deal->amount= $request->amount;
+      $deal->deal_creation_date= Carbon::now();
+      $deal->profile_link= $request->profile_link;
+      $deal->message_link= $request->message_link;
+      $deal->deal_id= 'DSEOP1'. $suffle;
+      $deal->currency_id= $request->currency_id;
+      $deal->description= $request->description;
+      $deal->save();
+
+      $project= new Project();
+      $project->project_name= $request->project_name;
+      $project->project_short_code= 'PSEOP1' . $suffle;
+      $project->start_date= Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+      $project->project_summary= $request->description;
+      $project->completion_percent= 0;
+      $project->added_by= Auth::id();
+      $project->public= 0;
+      $project->save();
+         return Redirect::back()->with('messages.contractAdded');
+        //  return Reply::success(__('messages.updateSuccess'));
+    }
 
     public function store(StoreRequest $request)
     {
-      //dd($request);
+      dd($request);
         $contract = new Contract();
 
 
@@ -146,7 +186,7 @@ class ContractController extends AccountBaseController
 
         $this->storeUpdate($request, $contract);
 
-        return Reply::redirect(route('contracts.index'), __('messages.contractAdded'));
+        return redirect()(route('contracts.index'), __('messages.contractAdded'));
     }
 
     public function edit($id)
@@ -193,8 +233,13 @@ class ContractController extends AccountBaseController
 
     private function storeUpdate($request, $contract)
     {
-        $userrole= RoleUser::all();
-        dd($userrole);
+        $userrole= RoleUser::where('role_id',4)->get();
+        //dd($userrole);
+        foreach ($userrole as $row) {
+
+          $row->user_id;
+          dd($row->user_id);
+        }
         $contract->client_id = $request->client;
         $contract->subject = $request->subject;
         $contract->amount = $request->amount;

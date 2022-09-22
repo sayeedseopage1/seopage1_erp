@@ -91,7 +91,7 @@ class Contract extends BaseModel
 
     protected $dates = [
         'start_date',
-        'end_date'
+        
     ];
 
     protected $with = ['currency'];

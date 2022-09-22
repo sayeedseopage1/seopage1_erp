@@ -2,39 +2,94 @@
 $manageContractTypePermission = user()->permission('manage_contract_type');
 $addClientPermission = user()->permission('add_clients');
 @endphp
-
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <div class="row">
     <div class="col-sm-12">
-        <x-form id="save-contract-data-form">
+        <form method="post" action="{{route('store-deals')}}">
+          @csrf
             <div class="add-client bg-white rounded">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
                     @lang('app.menu.contract') @lang('app.details')</h4>
-                <input type="hidden" name="template_id" value="{{ $contractTemplate->id ?? '' }}">
+
 
                 <div class="row p-20">
+
+                    <div class="col-md-4">
+
+
+                        <x-forms.text fieldId="client_name" :fieldLabel="__('Client Name')" fieldName="client_name"
+                            :fieldValue="($contractTemplate ? $contractTemplate->client_name : '')" fieldRequired="true"></x-forms.text>
+                    </div>
+                    <div class="col-md-4">
+                        <x-forms.text fieldId="organization" :fieldLabel="__('Organization')" fieldName="organization"
+                            :fieldValue="($contractTemplate ? $contractTemplate->organization: '')" fieldRequired="true"></x-forms.text>
+                    </div>
+                    <div class="col-md-4">
+                        <x-forms.text fieldId="project_name" :fieldLabel="__('Project Name')" fieldName="project_name"
+                            :fieldValue="($contractTemplate ? $contractTemplate->project_name : '')" fieldRequired="true"></x-forms.text>
+                    </div>
                     <div class="col-md-12">
-                        <x-forms.text fieldId="subject" :fieldLabel="__('app.subject')" fieldName="subject"
-                            :fieldValue="($contractTemplate ? $contractTemplate->subject : '')" fieldRequired="true"></x-forms.text>
+                      <div class="form-group my-3">
+                          <label for="description">Project Summary</label>
+
+                          <textarea name="description" id="description" class="d-none" ></textarea>
+                      </div>
                     </div>
 
-                    <div class="col-md-12">
-                        <div class="form-group my-3">
-                            <x-forms.label fieldId="description" :fieldLabel="__('app.description')">
-                            </x-forms.label>
-                            <div id="description">{!! $contractTemplate ? $contractTemplate->contract_detail : '' !!}</div>
-                            <textarea name="contract_detail" id="description-text" class="d-none"></textarea>
-                        </div>
-                    </div>
+
+                    <div class="col-md-6">
+                              <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
+                                  <x-forms.label fieldId="pipeline_stage" :fieldLabel="__('Pipeline Stage')" fieldRequired="true">
+                                  </x-forms.label>
+
+                                  <div class="select-others height-35 rounded">
+                                      <select class="form-control select-picker" name="pipeline_stage" >
+                                        <option value="Contact Made">Contact Made</option>
+                                        <option value="Qualified">Qualified</option>
+                                        <option value="Requirements Defined">Requirements Defined</option>
+                                        <option value="Proposal Made">Proposal Made</option>
+                                          <option value="Negotiation Started">Negotiation Started</option>
 
 
-                    <div class="col-md-6 col-lg-3">
+
+
+                                      </select>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- CURRENCY START -->
+                      <div class="col-md-6">
+                              <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
+                                  <x-forms.label fieldId="currency_id" :fieldLabel="__('modules.invoices.currency')">
+                                  </x-forms.label>
+
+                                  <div class="select-others height-35 rounded">
+                                      <select class="form-control select-picker" name="currency_id" id="currency_id">
+                                          @foreach ($currencies as $currency)
+                                          <option
+                                              @if ($contractTemplate && $currency->id == $contractTemplate->currency_id) selected @endif
+                                              value="{{ $currency->id }}">
+                                              {{ $currency->currency_code . ' (' . $currency->currency_symbol . ')' }}
+                                          </option>
+                                          @endforeach
+                                      </select>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- CURRENCY END -->
+
+
+
+
+                   <div class="col-md-6">
                         <x-forms.datepicker fieldId="start_date" fieldRequired="true"
                             :fieldLabel="__('modules.projects.startDate')" fieldName="start_date"
                             :fieldValue="($contract ? $contract->start_date->timezone(global_setting()->timezone)->format(global_setting()->date_format) : '')"
                             :fieldPlaceholder="__('placeholders.date')" />
                     </div>
 
-                    <div class="col-md-6 col-lg-3 due-date-box" @if($contract && is_null($contract->end_date)) style="display: none" @endif>
+
+                  {{-- <div class="col-md-6 col-lg-3 due-date-box" @if($contract && is_null($contract->end_date)) style="display: none" @endif>
                         <x-forms.datepicker fieldId="end_date"
                             :fieldValue="($contract ? ($contract->end_date==null ? $contract->end_date : $contract->end_date->timezone(global_setting()->timezone)->format(global_setting()->date_format)) : '')"
                             :fieldLabel="__('modules.timeLogs.endDate')" fieldName="end_date"
@@ -45,8 +100,9 @@ $addClientPermission = user()->permission('add_clients');
                         <x-forms.checkbox class="mr-0 mr-lg-2 mr-md-2" :checked="$contract ? is_null($contract->end_date) : ''" :fieldLabel="__('app.withoutDueDate')"
                         fieldName="without_duedate" fieldId="without_duedate" fieldValue="yes" />
                     </div>
+                    --}}
 
-                    <div class="col-md-6 col-lg-3">
+                  {{-- <div class="col-md-6 col-lg-3">
                         <x-forms.label class="mt-3" fieldId="contractType"
                             :fieldLabel="__('modules.contracts.contractType')" fieldRequired="true"></x-forms.label>
                         <x-forms.input-group>
@@ -67,9 +123,9 @@ $addClientPermission = user()->permission('add_clients');
                                 </x-slot>
                             @endif
                         </x-forms.input-group>
-                    </div>
+                    </div> --}}
 
-                    <div class="col-md-6 col-lg-3">
+                    <div class="col-md-6">
                         <x-forms.label class="mt-3" fieldId="amount"
                             :fieldLabel="__('modules.contracts.contractValue')"
                             :popover="__('modules.contracts.setZero')" fieldRequired="true"></x-forms.label>
@@ -79,33 +135,23 @@ $addClientPermission = user()->permission('add_clients');
                         </x-forms.input-group>
                     </div>
 
-                    <!-- CURRENCY START -->
-                    <div class="col-md-6 col-lg-3">
-                        <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
-                            <x-forms.label fieldId="currency_id" :fieldLabel="__('modules.invoices.currency')">
-                            </x-forms.label>
-
-                            <div class="select-others height-35 rounded">
-                                <select class="form-control select-picker" name="currency_id" id="currency_id">
-                                    @foreach ($currencies as $currency)
-                                    <option
-                                        @if ($contractTemplate && $currency->id == $contractTemplate->currency_id) selected @endif
-                                        value="{{ $currency->id }}">
-                                        {{ $currency->currency_code . ' (' . $currency->currency_symbol . ')' }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                    <div class="col-md-6">
+                        <x-forms.text fieldId="profile_link" :fieldLabel="__('Freealancer Profile Link')" fieldName="profile_link"
+                            :fieldValue="($contractTemplate ? $contractTemplate->profile_link : '')" fieldRequired="true"></x-forms.text>
                     </div>
-                    <!-- CURRENCY END -->
+                    <div class="col-md-6">
+                        <x-forms.text fieldId="message_link" :fieldLabel="__('Freelancer Message Link')" fieldName="message_link"
+                            :fieldValue="($contractTemplate ? $contractTemplate->message_link: '')" fieldRequired="true"></x-forms.text>
+                    </div>
+
+
 
                 </div>
 
-                <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey">
-                    @lang('modules.client.clientDetails')</h4>
+              {{--  <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey">
+                    @lang('modules.client.clientDetails')</h4>--}}
                 <div class="row p-20">
-                    <div class="col-md-6 col-lg-4">
+                {{--  <div class="col-md-6 col-lg-4">
                         <x-forms.label class="mt-3" fieldId="client_id" :fieldLabel="__('app.client')"
                             fieldRequired="true">
                         </x-forms.label>
@@ -127,9 +173,9 @@ $addClientPermission = user()->permission('add_clients');
                                 </x-slot>
                             @endif
                         </x-forms.input-group>
-                    </div>
+                    </div>--}}
 
-                    <div class="col-md-6 col-lg-4">
+              {{--     <div class="col-md-6 col-lg-4">
                         <x-forms.text fieldId="cell" :fieldLabel="__('modules.client.cell')"
                             :fieldValue="($contract ? $contract->cell: '')" fieldName="cell">
                         </x-forms.text>
@@ -190,7 +236,8 @@ $addClientPermission = user()->permission('add_clients');
                             :fieldValue="($contract ? $contract->image_url : '')" fieldName="company_logo"
                             fieldId="company_logo" :popover="__('messages.fileFormat.ImageFile')" />
                     </div>
-                    
+                    --}}
+
                     @if (isset($fields) && count($fields) > 0)
                         @foreach ($fields as $field)
                             <div class="col-md-4">
@@ -287,20 +334,26 @@ $addClientPermission = user()->permission('add_clients');
                 </div>
 
                 <x-form-actions>
-                    <x-forms.button-primary id="save-contract-form" class="mr-3" icon="check">
+                  <button class="btn btn-primary mr-3" type="submit">Create Deal</button>
+                    {{--<button class="btn btn-danger border-0" data-dismiss="modal" >Cancel</button> --}}
+                  {{-- <x-forms.button-primary id="save-contract-form" class="mr-3" icon="check">
                         @lang('app.save')
-                    </x-forms.button-primary>
-                    <x-forms.button-cancel :link="route('contracts.index')" class="border-0">@lang('app.cancel')
-                    </x-forms.button-cancel>
+                    </x-forms.button-primary> --}}
+                  {{--  <x-forms.button-cancel :link="route('contracts.index')" class="border-0">@lang('app.cancel')
+                    </x-forms.button-cancel>--}}
                 </x-form-actions>
             </div>
-        </x-form>
+        </form>
 
     </div>
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script>
+$(document).ready(function() {
+  $('#description').summernote();
+});
+
     $(document).ready(function() {
         const dp1 = datepicker('#start_date', {
             position: 'bl',
@@ -325,85 +378,85 @@ $addClientPermission = user()->permission('add_clients');
             ...datepickerConfig
         });
 
-        $('#add-client').click(function() {
-            $(MODAL_XL).modal('show');
+        // $('#add-client').click(function() {
+        //     $(MODAL_XL).modal('show');
+        //
+        //     const url = "{{ route('clients.create') }}";
+        //
+        //     $.easyAjax({
+        //         url: url,
+        //         blockUI: true,
+        //         container: MODAL_XL,
+        //         success: function(response) {
+        //             if (response.status == "success") {
+        //                 $(MODAL_XL + ' .modal-body').html(response.html);
+        //                 $(MODAL_XL + ' .modal-title').html(response.title);
+        //                 init(MODAL_XL);
+        //             }
+        //         }
+        //     });
+        // });
 
-            const url = "{{ route('clients.create') }}";
+        // $('#save-contract-form').click(function() {
+        //     var note = document.getElementById('description').children[0].innerHTML;
+        //     document.getElementById('description-text').value = note;
+        //
+        //     const url = "{{ route('contracts.store') }}";
+        //
+        //     $.easyAjax({
+        //         url: url,
+        //         container: '#save-contract-data-form',
+        //         type: "POST",
+        //         disableButton: false,
+        //         blockUI: false,
+        //         buttonSelector: "#save-contract-form",
+        //         file: true,
+        //         data: $('#save-contract-data-form').serialize(),
+        //         redirect: true
+        //     })
+        // });
+        // quillImageLoad('#description');
 
-            $.easyAjax({
-                url: url,
-                blockUI: true,
-                container: MODAL_XL,
-                success: function(response) {
-                    if (response.status == "success") {
-                        $(MODAL_XL + ' .modal-body').html(response.html);
-                        $(MODAL_XL + ' .modal-title').html(response.title);
-                        init(MODAL_XL);
-                    }
-                }
-            });
-        });
+        // $('#createContractType').click(function() {
+        //     const url = "{{ route('contractTypes.create') }}";
+        //     $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+        //     $.ajaxModal(MODAL_LG, url);
+        // });
 
-        $('#save-contract-form').click(function() {
-            var note = document.getElementById('description').children[0].innerHTML;
-            document.getElementById('description-text').value = note;
+        // $('#contract_client_id').change(function() {
+        //     var id = $(this).val();
+        //     var url = "{{ route('clients.ajax_details', ':id') }}";
+        //     url = url.replace(':id', id);
+        //     var token = "{{ csrf_token() }}";
+        //
+        //     $.easyAjax({
+        //         url: url,
+        //         container: '#save-contract-data-form',
+        //         type: "POST",
+        //         blockUI: false,
+        //         data: {
+        //             _token: token
+        //         },
+        //         success: function(response) {
+        //             if (response.status == 'success') {
+        //                 if (response.data !== null) {
+        //                     $('#office').val(response.data.client_details.office);
+        //                     $('#postal_code').val(response.data.client_details.postal_code);
+        //                     $('#state').val(response.data.client_details.state);
+        //                     $('#city').val(response.data.client_details.city);
+        //                     if (response.data.country) {
+        //                         $('#country').val(response.data.country.nicename);
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     });
+        //
+        // });
 
-            const url = "{{ route('contracts.store') }}";
-
-            $.easyAjax({
-                url: url,
-                container: '#save-contract-data-form',
-                type: "POST",
-                disableButton: true,
-                blockUI: true,
-                buttonSelector: "#save-contract-form",
-                file: true,
-                data: $('#save-contract-data-form').serialize(),
-                redirect: true
-            })
-        });
-        quillImageLoad('#description');
-
-        $('#createContractType').click(function() {
-            const url = "{{ route('contractTypes.create') }}";
-            $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
-            $.ajaxModal(MODAL_LG, url);
-        });
-
-        $('#contract_client_id').change(function() {
-            var id = $(this).val();
-            var url = "{{ route('clients.ajax_details', ':id') }}";
-            url = url.replace(':id', id);
-            var token = "{{ csrf_token() }}";
-
-            $.easyAjax({
-                url: url,
-                container: '#save-contract-data-form',
-                type: "POST",
-                blockUI: true,
-                data: {
-                    _token: token
-                },
-                success: function(response) {
-                    if (response.status == 'success') {
-                        if (response.data !== null) {
-                            $('#office').val(response.data.client_details.office);
-                            $('#postal_code').val(response.data.client_details.postal_code);
-                            $('#state').val(response.data.client_details.state);
-                            $('#city').val(response.data.client_details.city);
-                            if (response.data.country) {
-                                $('#country').val(response.data.country.nicename);
-                            }
-                        }
-                    }
-                }
-            });
-
-        });
-
-        $('#without_duedate').click(function () {
-            $('.due-date-box').toggle();
-        });
+        // $('#without_duedate').click(function () {
+        //     $('.due-date-box').toggle();
+        // });
 
         init(RIGHT_MODAL);
     });
