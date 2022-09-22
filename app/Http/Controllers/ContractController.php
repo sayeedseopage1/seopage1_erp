@@ -28,6 +28,8 @@ use App\Models\RoleUser;
 use App\Models\Deal;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Project;
+use App\Models\PMProject;
+use App\Models\PMAssign;
 use Auth;
 
 class ContractController extends AccountBaseController
@@ -142,13 +144,11 @@ class ContractController extends AccountBaseController
     // Custom module for seopage 1 to store deals
     public function storeDeal(Request $request)
     {
-      $roleuser= RoleUser::where('role_id',4)->get();
-      $roleuser_count= RoleUser::where('role_id',4)->count();
-      dd($roleuser_count);
-      foreach ($role_user as $row) {
-        // code...
-      }
-    
+      //$roleuser= RoleUser::where('role_id',4)->get();
+    //$roleuser_count= RoleUser::where('role_id',4)->count();
+    //  dd($roleuser_count);
+
+
 
       $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
            $suffle = substr(str_shuffle($chars), 0, 6);
@@ -179,6 +179,46 @@ class ContractController extends AccountBaseController
       $project->status= 'not started';
       $project->public= 0;
       $project->save();
+
+      $pm_users=PMAssign::where('project_count','<', 2)->first();
+      //dd($pm_users);
+      if($pm_users->project_count < 1)
+      {
+        $pmassign= new PMProject();
+        $pmassign->project_id= $project->id;
+        $pmassign->status= 'pending';
+        $pmassign->pm_id= $pm_users->pm_id;
+        $pmassign->save();
+      //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+        $pm_project_find= PMAssign::where('pm_id',$pm_users->pm_id)->first();
+        $pm_project_update=PMAssign::find($pm_project_find->id);
+        $pm_project_update->project_count= $pm_project_update->project_count + 1;
+        $pm_project_update->amount= $pm_project_update->amount + $request->amount;
+        $pm_project_update->save();
+        $pm_users=PMAssign::where('project_count',1)->first();
+
+
+      }elseif($pm_users->project_count < 2)
+
+
+        {
+          $pmassign= new PMProject();
+          $pmassign->project_id= $project->id;
+          $pmassign->status= 'pending';
+          $pmassign->pm_id= $pm_users->pm_id;
+          $pmassign->save();
+        //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+          $pm_project_find= PMAssign::where('pm_id',$pm_users->pm_id)->first();
+          $pm_project_update=PMAssign::find($pm_project_find->id);
+          $pm_project_update->project_count= $pm_project_update->project_count + 1;
+          $pm_project_update->amount= $pm_project_update->amount + $request->amount;
+          $pm_project_update->save();
+
+
+        }
+
+
+
          return Redirect::back()->with('messages.contractAdded');
         //  return Reply::success(__('messages.updateSuccess'));
     }
