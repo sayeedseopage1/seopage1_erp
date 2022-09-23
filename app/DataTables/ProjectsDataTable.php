@@ -266,6 +266,9 @@ class ProjectsDataTable extends BaseDataTable
             $datatables->addColumn('short_code', function ($row) {
                 return ucfirst($row->project_short_code);
             });
+            $datatables->addColumn('project_manager', function ($row) {
+                return ucfirst($row->project_manager);
+            });
 
             $datatables->addIndexColumn();
             $datatables->setRowId(function ($row) {
