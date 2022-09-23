@@ -144,6 +144,7 @@ class ContractController extends AccountBaseController
     // Custom module for seopage 1 to store deals
     public function storeDeal(Request $request)
     {
+    //  dd($request);
       //$roleuser= RoleUser::where('role_id',4)->get();
     //$roleuser_count= RoleUser::where('role_id',4)->count();
     //  dd($roleuser_count);
@@ -151,7 +152,7 @@ class ContractController extends AccountBaseController
 
 
       $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-           $suffle = substr(str_shuffle($chars), 0, 6);
+      $suffle = substr(str_shuffle($chars), 0, 6);
 
       $deal = new Deal();
       $deal->project_name= $request->project_name;
@@ -172,7 +173,7 @@ class ContractController extends AccountBaseController
       $project= new Project();
       $project->project_name= $request->project_name;
       $project->project_short_code= 'PSEOP1' . $suffle;
-      $project->start_date= Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+      $project->start_date= Carbon::createFromFormat($this->global->date_format, $request->date)->format('Y-m-d');
       $project->project_summary= $request->description;
       $project->completion_percent= 0;
       $project->added_by= Auth::id();
@@ -227,7 +228,7 @@ class ContractController extends AccountBaseController
 
 
           else {
-          
+
             $pmassign= new PMProject();
             $pmassign->project_id= $project->id;
             $pmassign->status= 'pending';
@@ -311,7 +312,7 @@ class ContractController extends AccountBaseController
         foreach ($userrole as $row) {
 
           $row->user_id;
-          dd($row->user_id);
+          //dd($row->user_id);
         }
         $contract->client_id = $request->client;
         $contract->subject = $request->subject;

@@ -9,7 +9,7 @@ $addClientPermission = user()->permission('add_clients');
           @csrf
             <div class="add-client bg-white rounded">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
-                    @lang('app.menu.contract') @lang('app.details')</h4>
+                   @lang('Deals Details')</h4>
 
 
                 <div class="row p-20">
