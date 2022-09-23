@@ -147,7 +147,7 @@ class ContractController extends AccountBaseController
       //$roleuser= RoleUser::where('role_id',4)->get();
     //$roleuser_count= RoleUser::where('role_id',4)->count();
     //  dd($roleuser_count);
-
+    //$min_amount= DB::table('')
 
 
       $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -180,42 +180,68 @@ class ContractController extends AccountBaseController
       $project->public= 0;
       $project->save();
 
-      $pm_users=PMAssign::where('project_count','<', 2)->first();
-      //dd($pm_users);
-      if($pm_users->project_count < 1)
-      {
-        $pmassign= new PMProject();
-        $pmassign->project_id= $project->id;
-        $pmassign->status= 'pending';
-        $pmassign->pm_id= $pm_users->pm_id;
-        $pmassign->save();
-      //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-        $pm_project_find= PMAssign::where('pm_id',$pm_users->pm_id)->first();
-        $pm_project_update=PMAssign::find($pm_project_find->id);
-        $pm_project_update->project_count= $pm_project_update->project_count + 1;
-        $pm_project_update->amount= $pm_project_update->amount + $request->amount;
-        $pm_project_update->save();
-        $pm_users=PMAssign::where('project_count',1)->first();
+        $pm_count= PMAssign::select('project_count')->min('project_count');
+        $pm_user= PMAssign::where('project_count',$pm_count)->first();
+        if ($pm_count < 2) {
+          if ($pm_user != null) {
+            $pmassign= new PMProject();
+            $pmassign->project_id= $project->id;
+            $pmassign->status= 'pending';
+            $pmassign->pm_id= $pm_user->pm_id;
+            $pmassign->save();
+          //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+            $pm_project_find= PMAssign::where('pm_id',$pm_user->pm_id)->first();
+            $pm_project_update=PMAssign::find($pm_project_find->id);
+            $pm_project_update->project_count= $pm_project_update->project_count + 1;
+            $pm_project_update->amount= $pm_project_update->amount + $request->amount;
+            $pm_project_update->save();
+          }
+        }else {
+          $items = PMAssign::all();
+          $pm_amount=  $items->min('amount');
+          $pm_count_id=  $items->min('project_count');
+
+          $pm_find_id= PMAssign::where('amount',$pm_amount)->first();
+          $pm_min_pro= PMAssign::where('project_count',  $pm_count_id)->first();
+          $find_rest= PMAssign::where('project_count',$pm_count_id)->get();
+
+          $fin_min= $find_rest->min('amount');
+
+          $final_id= PMAssign::where('amount',$fin_min)->first();
+
+        //  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
+
+          if (($pm_find_id->project_count +1) <= $pm_count_id*1.5) {
+            $pmassign= new PMProject();
+            $pmassign->project_id= $project->id;
+            $pmassign->status= 'pending';
+            $pmassign->pm_id= $pm_find_id->pm_id;
+            $pmassign->save();
+          //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+            $pm_project_find= PMAssign::where('pm_id',$pm_find_id->pm_id)->first();
+            $pm_project_update=PMAssign::find($pm_project_find->id);
+            $pm_project_update->project_count= $pm_project_update->project_count + 1;
+            $pm_project_update->amount= $pm_project_update->amount + $request->amount;
+            $pm_project_update->save();
+          }
 
 
-      }elseif($pm_users->project_count < 2)
-
-
-        {
-          $pmassign= new PMProject();
-          $pmassign->project_id= $project->id;
-          $pmassign->status= 'pending';
-          $pmassign->pm_id= $pm_users->pm_id;
-          $pmassign->save();
-        //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-          $pm_project_find= PMAssign::where('pm_id',$pm_users->pm_id)->first();
-          $pm_project_update=PMAssign::find($pm_project_find->id);
-          $pm_project_update->project_count= $pm_project_update->project_count + 1;
-          $pm_project_update->amount= $pm_project_update->amount + $request->amount;
-          $pm_project_update->save();
-
-
+          else {
+          
+            $pmassign= new PMProject();
+            $pmassign->project_id= $project->id;
+            $pmassign->status= 'pending';
+            $pmassign->pm_id=  $final_id->pm_id;
+            $pmassign->save();
+          //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+            $pm_project_find= PMAssign::where('pm_id', $final_id->pm_id)->first();
+            $pm_project_update=PMAssign::find($pm_project_find->id);
+            $pm_project_update->project_count= $pm_project_update->project_count + 1;
+            $pm_project_update->amount= $pm_project_update->amount + $request->amount;
+            $pm_project_update->save();
+          }
         }
+
 
 
 
