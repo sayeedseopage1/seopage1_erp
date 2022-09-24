@@ -5,7 +5,9 @@
 @endpush
 
 @section('filter-section')
-
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <x-filters.filter-box>
         <!-- DATE START -->
         <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
@@ -119,11 +121,68 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
         </div>
         <!-- Add Task Export Buttons End -->
+<?php
+$deals= App\Models\Deal::all();
+
+ ?>
 
         <!-- Task Box Start -->
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
+          <table id="dealtable"  class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th class="whitespace-nowrap"></th>
+                <th class="whitespace-nowrap">#</th>
+                <th class="whitespace-nowrap">Short Code</th>
+                <th class="whitespace-nowrap">Project Name</th>
+                <th class="whitespace-nowrap">Amount</th>
+                <th class="whitespace-nowrap">Client Name</th>
+                <th class="whitespace-nowrap">PipeLine Stage</th>
+                <th class="whitespace-nowrap">Deal Creation Date</th>
+                  <th class="whitespace-nowrap">Client Form</th>
+                <th class="whitespace-nowrap">Action</th>
 
-            {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
+            </tr>
+        </thead>
+        <tbody>
+          @foreach($deals as $deal)
+          <?php
+          $id= $deal->id;
+          $key = base64_encode(Hash::make($id));
+
+           ?>
+            <tr>
+              <td></td>
+                <td>{{$loop->index+1}}</td>
+                <td>{{$deal->deal_id}}</td>
+                <td>{{$deal->project_name}}</td>
+                <td>{{$deal->amount}}</td>
+
+                <td>{{$deal->client_name}}</td>
+                <td>{{$deal->pipeline_stage}}</td>
+                <td>{{$deal->start_date}}</td>
+                <td>  <a class="btn btn-success" href="/deals/{{$key}}">
+                                    <i class="fa-solid fa-copy"></i> </a>
+
+                                        <button class="btn btn-success"  data-bs-toggle="modal" data-bs-target="#clientformModal{{$deal->id}}"><i class="fa-solid fa-eye"></i></button>
+
+
+                                  </td>
+                <td>
+
+                  <a class="btn btn-info" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+
+                    <a class="btn btn-danger" href="#"><i class="fa-solid fa-trash"></i></a>
+
+                </td>
+            </tr>
+              @include('contracts.modals.clientformmodal')
+            @endforeach
+
+        </tbody>
+    </table>
+
+
 
         </div>
         <!-- Task Box End -->
@@ -131,9 +190,26 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
     <!-- CONTENT WRAPPER END -->
 
 @endsection
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#whatsapp').summernote();
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" charset="utf-8"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js" charset="utf-8"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" charset="utf-8"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#dealtable').DataTable();
+});
+</script>
+
 
 @push('scripts')
     @include('sections.datatable_js')
+
 
     <script>
 

@@ -68,6 +68,11 @@ class HomeController extends Controller
     {
         return redirect(route('login'));
     }
+    public function deal($key)
+    {
+
+      return view('client');
+    }
 
     public function invoice($hash)
     {

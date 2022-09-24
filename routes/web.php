@@ -1032,4 +1032,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
 
 });
+Route::get('/deals/{id}', [HomeController::class, 'deal']);
     /* Account prefix routes end here */

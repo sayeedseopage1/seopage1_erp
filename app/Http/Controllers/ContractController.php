@@ -64,6 +64,7 @@ class ContractController extends AccountBaseController
             $this->aboutToExpireCounts = Contract::where(DB::raw('DATE(`end_date`)'), '>', now()->format('Y-m-d'))
                 ->where(DB::raw('DATE(`end_date`)'), '<', now()->timezone($this->global->timezone)->addDays(7)->format('Y-m-d'))
                 ->count();
+                
         }
 
         return $dataTable->render('contracts.index', $this->data);
@@ -176,6 +177,7 @@ class ContractController extends AccountBaseController
       $project->start_date= Carbon::createFromFormat($this->global->date_format, $request->date)->format('Y-m-d');
       $project->project_summary= $request->description;
       $project->completion_percent= 0;
+      $project->deal_id=$deal->id;
       $project->added_by= Auth::id();
       $project->status= 'not started';
       $project->public= 0;
@@ -189,6 +191,7 @@ class ContractController extends AccountBaseController
             $pmassign->project_id= $project->id;
             $pmassign->status= 'pending';
             $pmassign->pm_id= $pm_user->pm_id;
+              $pmassign->deal_id=$deal->id;
             $pmassign->save();
           //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
             $pm_project_find= PMAssign::where('pm_id',$pm_user->pm_id)->first();
@@ -216,6 +219,7 @@ class ContractController extends AccountBaseController
             $pmassign= new PMProject();
             $pmassign->project_id= $project->id;
             $pmassign->status= 'pending';
+              $pmassign->deal_id=$deal->id;
             $pmassign->pm_id= $pm_find_id->pm_id;
             $pmassign->save();
           //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
@@ -232,6 +236,7 @@ class ContractController extends AccountBaseController
             $pmassign= new PMProject();
             $pmassign->project_id= $project->id;
             $pmassign->status= 'pending';
+            $pmassign->deal_id=$deal->id;
             $pmassign->pm_id=  $final_id->pm_id;
             $pmassign->save();
           //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
