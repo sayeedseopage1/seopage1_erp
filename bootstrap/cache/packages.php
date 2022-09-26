@@ -47,6 +47,17 @@
       0 => 'Billow\\PayfastServiceProvider',
     ),
   ),
+  'brian2694/laravel-toastr' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Brian2694\\Toastr\\ToastrServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Toastr' => 'Brian2694\\Toastr\\Facades\\Toastr',
+    ),
+  ),
   'craftsys/msg91-laravel' => 
   array (
     'aliases' => 

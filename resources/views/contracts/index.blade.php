@@ -6,7 +6,7 @@
 
 @section('filter-section')
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <x-filters.filter-box>
         <!-- DATE START -->
@@ -137,6 +137,7 @@ $deals= App\Models\Deal::all();
                 <th class="whitespace-nowrap">Project Name</th>
                 <th class="whitespace-nowrap">Amount</th>
                 <th class="whitespace-nowrap">Client Name</th>
+                  <th class="whitespace-nowrap">Project Manager</th>
                 <th class="whitespace-nowrap">PipeLine Stage</th>
                 <th class="whitespace-nowrap">Deal Creation Date</th>
                   <th class="whitespace-nowrap">Client Form</th>
@@ -147,32 +148,41 @@ $deals= App\Models\Deal::all();
         <tbody>
           @foreach($deals as $deal)
           <?php
-          $id= $deal->id;
-          $key = base64_encode(Hash::make($id));
 
+          $project= App\Models\Project::where('deal_id',$deal->id)->first();
+          $pm= App\Models\PMProject::where('deal_id',$deal->id)->first();
+          $pm_name= App\Models\User::where('id',$pm->pm_id)->first();
+          //dd($pm_name);
            ?>
             <tr>
               <td></td>
                 <td>{{$loop->index+1}}</td>
                 <td>{{$deal->deal_id}}</td>
-                <td>{{$deal->project_name}}</td>
+                <td><a href="/account/projects/{{$project->id}}">{{$deal->project_name}}</a></td>
                 <td>{{$deal->amount}}</td>
 
                 <td>{{$deal->client_name}}</td>
+                  <td><a href="/account/employees/{{$pm_name->id}}">{{$pm_name->name}}</a></td>
                 <td>{{$deal->pipeline_stage}}</td>
-                <td>{{$deal->start_date}}</td>
-                <td>  <a class="btn btn-success" href="/deals/{{$key}}">
-                                    <i class="fa-solid fa-copy"></i> </a>
+                <td>{{$deal->deal_creation_date}}</td>
+                <td>
+                  @if($deal->submission_status == 'Submitted')
+                  <span class="badge bg-success">Submitted</span>
+                  @elseif($deal->submission_status == 'Awaiting for client Response')
+                    <span class="badge bg-warning">Awaiting for client Response</span>
+                  @else
 
+
+                                      {{--  <a class="btn btn-danger" href="/deals/{{$key}}"><i class="fa-solid fa-trash"></i></a>--}}
                                         <button class="btn btn-success"  data-bs-toggle="modal" data-bs-target="#clientformModal{{$deal->id}}"><i class="fa-solid fa-eye"></i></button>
 
-
+                                        @endif
                                   </td>
                 <td>
 
                   <a class="btn btn-info" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
 
-                    <a class="btn btn-danger" href="#"><i class="fa-solid fa-trash"></i></a>
+                    <a class="btn btn-danger" href="contracts/deal-delete/{{$deal->id}}"><i class="fa-solid fa-trash"></i></a>
 
                 </td>
             </tr>
@@ -387,4 +397,5 @@ $(document).ready(function () {
         });
 
     </script>
+
 @endpush

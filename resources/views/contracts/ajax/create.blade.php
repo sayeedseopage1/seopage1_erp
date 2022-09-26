@@ -14,17 +14,23 @@ $addClientPermission = user()->permission('add_clients');
 
                 <div class="row p-20">
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
 
 
                         <x-forms.text fieldId="client_name" :fieldLabel="__('Client Name')" fieldName="client_name"
                             :fieldValue="($contractTemplate ? $contractTemplate->client_name : '')" fieldRequired="true"></x-forms.text>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
+
+
+                        <x-forms.text fieldId="client_username" :fieldLabel="__('Client User Name')" fieldName="client_username"
+                            :fieldValue="($contractTemplate ? $contractTemplate->client_username : '')" fieldRequired="true"></x-forms.text>
+                    </div>
+                    <div class="col-md-6">
                         <x-forms.text fieldId="organization" :fieldLabel="__('Organization')" fieldName="organization"
                             :fieldValue="($contractTemplate ? $contractTemplate->organization: '')" fieldRequired="true"></x-forms.text>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <x-forms.text fieldId="project_name" :fieldLabel="__('Project Name')" fieldName="project_name"
                             :fieldValue="($contractTemplate ? $contractTemplate->project_name : '')" fieldRequired="true"></x-forms.text>
                     </div>
@@ -32,7 +38,7 @@ $addClientPermission = user()->permission('add_clients');
                       <div class="form-group my-3">
                           <label for="description">Project Summary</label>
 
-                          <textarea name="description" id="description" class="d-none" ></textarea>
+                          <textarea name="description" id="description" class="d-none" required></textarea>
                       </div>
                     </div>
 

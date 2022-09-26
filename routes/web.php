@@ -909,6 +909,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     // Contracts
       Route::post('contracts/deal-store', [ContractController::class, 'storeDeal'])->name('store-deals');
+      Route::get('contracts/deal-delete/{id}', [ContractController::class, 'deleteDeal']);
     Route::post('contracts/apply-quick-action', [ContractController::class, 'applyQuickAction'])->name('contracts.apply_quick_action');
     Route::get('contracts/download/{id}', [ContractController::class, 'download'])->name('contracts.download');
     Route::post('contracts/sign/{id}', [ContractController::class, 'sign'])->name('contracts.sign');
@@ -1033,4 +1034,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
 });
 Route::get('/deals/{id}', [HomeController::class, 'deal']);
+Route::post('/deals/client-form', [HomeController::class, 'ClientForm'])->name('client-submission');
+Route::post('/deals/client-form-submit', [ContractController::class, 'ClientFormSubmit'])->name('form-submit-to-client');
+Route::get('/thankyou', [HomeController::class, 'Thankyou']);
     /* Account prefix routes end here */

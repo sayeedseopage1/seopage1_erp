@@ -6,6 +6,11 @@
         <h5 class="modal-title" id="exampleModalLabel">Required information for the successful completion of your project</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <form class="" action="{{route('form-submit-to-client')}}" method="post">
+        @csrf
+        <input type="hidden" name="id" value="{{$deal->id}}">
+
+
       <div class="modal-body">
         <h6>We understand that you may not be available on freelancer.com
           the whole day. So we would like to have your contact information
@@ -60,11 +65,56 @@
 
                             </div>
 
+
+
+                            <div class="mt-3">
+                                <label for="input-state-3" class="form-label"><strong>Url For Submission</strong></label>
+                              <div class="row">
+
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control"  value="http://127.0.0.1:8000/deals/{{$deal->hash}}" id="{{$deal->hash}}">
+                                </div>
+                                <div class="col-md-4">
+                                        <button type="button" class="btn btn-info" onclick="myFunction{{$deal->hash}}()"><i class="fa-solid fa-copy"></i></button>
+                                </div>
+
+
+                              </div>
+
+
+
+                                    <!-- The button used to copy the text -->
+
+
+
+
+                            </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" >Confirm to Submit</button>
 
       </div>
+        </form>
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+function myFunction{{$deal->hash}}() {
+  // Get the text field
+  var copyText = document.getElementById("{{$deal->hash}}");
+
+  // Select the text field
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); // For mobile devices
+
+   // Copy the text inside the text field
+  navigator.clipboard.writeText(copyText.value);
+
+  // Alert the copied text
+  alert("Copied the text: " + copyText.value);
+}
+
+</script>

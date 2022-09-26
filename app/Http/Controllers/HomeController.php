@@ -48,6 +48,11 @@ use App\Http\Requests\Lead\StorePublicLead;
 use App\Http\Requests\ProposalAcceptRequest;
 use App\Http\Requests\Stripe\StoreStripeDetail;
 use App\Http\Requests\Tickets\StoreCustomTicket;
+use App\Models\ClientForm;
+use Crypt;
+use Toastr;
+use App\Models\Deal;
+use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
@@ -63,6 +68,10 @@ class HomeController extends Controller
     {
         return view('home');
     }
+    public function Thankyou()
+    {
+      return view('thankyou');
+    }
 
     public function login()
     {
@@ -70,8 +79,36 @@ class HomeController extends Controller
     }
     public function deal($key)
     {
+      //dd($key);
+      $decrypt= Crypt::decrypt($key);
+      //dd($decrypt);
 
-      return view('client');
+
+
+
+      //dd($decrypt);
+
+      return view('client',compact('decrypt'));
+    }
+    public function ClientForm(Request $request)
+    {
+
+    // dd($request);
+      $client = new ClientForm();
+      $client->deal_id=$request->decrypt;
+      $client->client_username= $request->client_username;
+      $client->client_email= $request->client_email;
+      $client->client_phone= $request->client_phone;
+      $client->client_whatsapp= $request->client_whatsapp;
+      $client->other_platform= $request->other_platform;
+      $client->message= $request->message;
+      $client->save();
+      $deal= Deal::find($client->deal_id);
+      $deal->submission_status= 'Submitted';
+      $deal->save();
+
+
+          return redirect('/thankyou')->with('message','Submitted Successfully');
     }
 
     public function invoice($hash)

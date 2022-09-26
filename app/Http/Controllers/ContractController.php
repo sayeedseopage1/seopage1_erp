@@ -31,6 +31,7 @@ use App\Models\Project;
 use App\Models\PMProject;
 use App\Models\PMAssign;
 use Auth;
+use Crypt;
 
 class ContractController extends AccountBaseController
 {
@@ -64,7 +65,7 @@ class ContractController extends AccountBaseController
             $this->aboutToExpireCounts = Contract::where(DB::raw('DATE(`end_date`)'), '>', now()->format('Y-m-d'))
                 ->where(DB::raw('DATE(`end_date`)'), '<', now()->timezone($this->global->timezone)->addDays(7)->format('Y-m-d'))
                 ->count();
-                
+
         }
 
         return $dataTable->render('contracts.index', $this->data);
@@ -142,39 +143,66 @@ class ContractController extends AccountBaseController
         return view('contracts.create', $this->data);
 
     }
+
     // Custom module for seopage 1 to store deals
+
+
+    public function ClientFormSubmit(Request $request)
+    {
+  //  dd($request);
+      $deal= Deal::find($request->id);
+      $deal->submission_status= 'Awaiting for client Response';
+      $deal->save();
+       return Redirect::back()->with('messages.contractAdded');
+    }
+    public function deleteDeal($id)
+  {
+      $deal=Deal::findOrFail($id)->delete();
+      $notification=array(
+          'message'=>'Deal Deleted !!!',
+          'alert-type'=>'success'
+      );
+      return Redirect()->back()->with($notification);
+  }
     public function storeDeal(Request $request)
     {
-    //  dd($request);
-      //$roleuser= RoleUser::where('role_id',4)->get();
-    //$roleuser_count= RoleUser::where('role_id',4)->count();
-    //  dd($roleuser_count);
-    //$min_amount= DB::table('')
 
 
+      //$decrypt= Crypt::decrypt($request);
       $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       $suffle = substr(str_shuffle($chars), 0, 6);
 
       $deal = new Deal();
       $deal->project_name= $request->project_name;
       $deal->client_name= $request->client_name;
+      $deal->client_username= $request->client_username;
       $deal->organization= $request->organization;
 
-      $deal->start_date=  Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+
+      $deal->start_date=  $request->start_date;
       $deal->pipeline_stage= $request->pipeline_stage;
       $deal->amount= $request->amount;
-      $deal->deal_creation_date= Carbon::now();
+      $deal->deal_creation_date= Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
       $deal->profile_link= $request->profile_link;
       $deal->message_link= $request->message_link;
       $deal->deal_id= 'DSEOP1'. $suffle;
       $deal->currency_id= $request->currency_id;
       $deal->description= $request->description;
       $deal->save();
+      //dd($deal->id);
+      $deal_hash= $deal->id;
+        //$key= Crypt::encrypt($deal_hash);
+        $key = encrypt($deal_hash);
+
+
+      $deal_hash_store= Deal::find($deal_hash);
+      $deal_hash_store->hash= $key;
+      $deal_hash_store->save();
 
       $project= new Project();
       $project->project_name= $request->project_name;
       $project->project_short_code= 'PSEOP1' . $suffle;
-      $project->start_date= Carbon::createFromFormat($this->global->date_format, $request->date)->format('Y-m-d');
+      $project->start_date= Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
       $project->project_summary= $request->description;
       $project->completion_percent= 0;
       $project->deal_id=$deal->id;
@@ -250,8 +278,9 @@ class ContractController extends AccountBaseController
 
 
 
+          return redirect('/account/contracts')->with('messages.contractAdded');
 
-         return Redirect::back()->with('messages.contractAdded');
+
         //  return Reply::success(__('messages.updateSuccess'));
     }
 

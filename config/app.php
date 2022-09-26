@@ -203,6 +203,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         \App\Providers\TranslateSettingConfigProvider::class,
+        Brian2694\Toastr\ToastrServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -274,6 +275,7 @@ return [
         'ApiRoute' => Froiden\RestAPI\Facades\ApiRoute::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Zip' => Macellan\Zip\ZipFacade::class,
+        'Toastr'  => Brian2694\Toastr\Facades\Toastr::class,
     ],
 
     'debug_blacklist' => [
