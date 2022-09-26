@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 23, 2022 at 10:16 AM
+-- Generation Time: Sep 26, 2022 at 10:12 AM
 -- Server version: 5.7.33
 -- PHP Version: 8.1.10
 
@@ -173,7 +173,8 @@ CREATE TABLE `client_details` (
 
 INSERT INTO `client_details` (`id`, `user_id`, `company_name`, `address`, `shipping_address`, `postal_code`, `state`, `city`, `office`, `website`, `note`, `linkedin`, `facebook`, `twitter`, `skype`, `gst_number`, `created_at`, `updated_at`, `category_id`, `sub_category_id`, `added_by`, `last_updated_by`) VALUES
 (1, 13, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '<p><br></p>', NULL, NULL, NULL, NULL, NULL, '2022-09-19 22:53:06', '2022-09-19 22:53:06', NULL, NULL, 1, 1),
-(2, 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '<p><br></p>', NULL, NULL, NULL, NULL, NULL, '2022-09-19 23:51:56', '2022-09-19 23:51:56', NULL, NULL, 1, 1);
+(2, 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '<p><br></p>', NULL, NULL, NULL, NULL, NULL, '2022-09-19 23:51:56', '2022-09-19 23:51:56', NULL, NULL, 1, 1),
+(3, 17, 'Test', NULL, NULL, NULL, NULL, NULL, NULL, 'https://dateful.com/time-zone-converter', '<p>ksadmkas</p>', NULL, NULL, NULL, NULL, 'jsanjsand', '2022-09-25 21:08:33', '2022-09-25 21:08:33', NULL, NULL, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -190,6 +191,25 @@ CREATE TABLE `client_docs` (
   `size` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `added_by` int(10) UNSIGNED DEFAULT NULL,
   `last_updated_by` int(10) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `client_forms`
+--
+
+CREATE TABLE `client_forms` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `deal_id` int(11) NOT NULL,
+  `client_username` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `client_email` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `client_phone` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `client_whatsapp` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `other_platform` text COLLATE utf8mb4_unicode_ci,
+  `message` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -221,7 +241,8 @@ CREATE TABLE `client_notes` (
 
 INSERT INTO `client_notes` (`id`, `client_id`, `title`, `type`, `member_id`, `is_client_show`, `ask_password`, `details`, `added_by`, `last_updated_by`, `created_at`, `updated_at`) VALUES
 (1, 13, 'Note', 0, NULL, 0, 0, '<p><br></p>', 1, 1, '2022-09-19 22:53:06', '2022-09-19 22:53:06'),
-(2, 14, 'Note', 0, NULL, 0, 0, '<p><br></p>', 1, 1, '2022-09-19 23:51:56', '2022-09-19 23:51:56');
+(2, 14, 'Note', 0, NULL, 0, 0, '<p><br></p>', 1, 1, '2022-09-19 23:51:56', '2022-09-19 23:51:56'),
+(3, 17, 'Note', 0, NULL, 0, 0, '<p>ksadmkas</p>', 1, 1, '2022-09-25 21:08:33', '2022-09-25 21:08:33');
 
 -- --------------------------------------------------------
 
@@ -926,7 +947,8 @@ CREATE TABLE `custom_fields_data` (
 
 INSERT INTO `custom_fields_data` (`id`, `custom_field_id`, `model_id`, `model`, `value`) VALUES
 (1, 8, 2, 'App\\Models\\ClientDetails', 'Test Custom Field'),
-(2, 3, 1, 'App\\Models\\Lead', 'test');
+(2, 3, 1, 'App\\Models\\Lead', 'test'),
+(3, 8, 3, 'App\\Models\\ClientDetails', 'bdbsajkdbajks');
 
 -- --------------------------------------------------------
 
@@ -1098,6 +1120,7 @@ CREATE TABLE `deals` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `deal_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `client_name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `client_username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `organization` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `project_name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `pipeline_stage` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1107,7 +1130,9 @@ CREATE TABLE `deals` (
   `message_link` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `profile_link` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `currency_id` int(11) DEFAULT NULL,
+  `submission_status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
   `description` text COLLATE utf8mb4_unicode_ci,
+  `hash` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1116,56 +1141,8 @@ CREATE TABLE `deals` (
 -- Dumping data for table `deals`
 --
 
-INSERT INTO `deals` (`id`, `deal_id`, `client_name`, `organization`, `project_name`, `pipeline_stage`, `start_date`, `amount`, `deal_creation_date`, `message_link`, `profile_link`, `currency_id`, `description`, `created_at`, `updated_at`) VALUES
-(64, 'DSEOP1NF8GA8', 'jhsadjasdkasjnd', 'kjsdjsadkas das', 'bjdsjkadbsabdasb', 'Contact Made', '2022-09-23', '300', '2022-09-23 06:16:57', 'sdnsadnasdnadnlak', 'dasdasdas', 1, '<p>sbdjsabdasbdasbdasb</p>', '2022-09-23 00:16:57', '2022-09-23 00:16:57'),
-(65, 'DSEOP1LXZPKE', 'jhsadjasdkasjnd', 'kjsdjsadkas das', 'bjdsjkadbsabdasb', 'Contact Made', '2022-09-23', '300', '2022-09-23 06:19:24', 'sdnsadnasdnadnlak', 'dasdasdas', 1, '<p>sbdjsabdasbdasbdasb</p>', '2022-09-23 00:19:24', '2022-09-23 00:19:24'),
-(66, 'DSEOP1DEF9Y6', 'jhsadjasdkasjnd', 'kjsdjsadkas das', 'bjdsjkadbsabdasb', 'Contact Made', '2022-09-23', '300', '2022-09-23 06:19:50', 'sdnsadnasdnadnlak', 'dasdasdas', 1, '<p>sbdjsabdasbdasbdasb</p>', '2022-09-23 00:19:50', '2022-09-23 00:19:50'),
-(67, 'DSEOP1WCOQS4', 'daskdnkjasn dasnd', 'kndlkasndlkasnnd', 'dnklasndlasnd', 'Contact Made', '2022-09-23', '400', '2022-09-23 06:32:04', 'hjdbsjdjasdjhasb', 'sadsadasd', 1, '<p>sbajdbasjbd</p>', '2022-09-23 00:32:04', '2022-09-23 00:32:04'),
-(68, 'DSEOP1LS8XJH', 'sdjkasdkjasbdkja', 'bdasbdkaskdbs', 'bjdsakjdsadb', 'Contact Made', '2022-09-23', '500', '2022-09-23 06:32:35', 'dksamdklsamdklasmdas', 'jsndsadasnlkdnask', 1, '<p>jncsnlkcnsalkcnlkasnlkasnl</p>', '2022-09-23 00:32:35', '2022-09-23 00:32:35'),
-(69, 'DSEOP1ANDAI2', 'jsbksacxsakjcbkjasb', 'bdjkasndksanlkdas', 'dnsakldnlasdnlaks', 'Contact Made', '2022-09-23', '550', '2022-09-23 06:33:40', 'opsadaspodpoas', 'snkladnklsandsandlaskkln', 1, '<p>dlkasndasndaslkdnlask</p>', '2022-09-23 00:33:40', '2022-09-23 00:33:40'),
-(70, 'DSEOP1R0V07E', 'lkznxlkZNxl', 'dlkjasndlkasnd', 'ndlksadlnasld', 'Contact Made', '2022-09-23', '100', '2022-09-23 06:34:43', 'jdsandasnd', 'sbdjasndkjsa', 1, '<p>cnklsankldfndfnlasn</p>', '2022-09-23 00:34:43', '2022-09-23 00:34:43'),
-(71, 'DSEOP13KOFDD', 'sadsajkdnaskln', 'ndnsadnasdnk', 'ndsandlkasndlkas', 'Contact Made', '2022-09-23', '300', '2022-09-23 06:37:25', 'hdsahdashdaos', 'jsdasndasndlkasn', 1, '<p>nnlkdsandasnd</p>', '2022-09-23 00:37:25', '2022-09-23 00:37:25'),
-(72, 'DSEOP1V4W3ZN', 'bxkjsabxkasb', 'sadsahodihaso', 'sdjsabdsakjbdas', 'Contact Made', '2022-09-23', '1000', '2022-09-23 06:38:23', 'sdjlsandasdaslk', 'jsdjasdnlkasnd', 1, '<p>jnskdnsaldnkaslndklas</p>', '2022-09-23 00:38:23', '2022-09-23 00:38:23'),
-(73, 'DSEOP124AEED', 'dklasdnasnd', 'jdnjsandlkasn', 'dbjkasdasdn', 'Contact Made', '2022-09-23', '350', '2022-09-23 06:38:52', 'kldnklasdnlkasndkl', 'nisdjdad;las', 1, '<p>jisdbjkasbdjasb</p>', '2022-09-23 00:38:52', '2022-09-23 00:38:52'),
-(74, 'DSEOP18ISOK0', 'dkjasdnsanda', 'dsamdlasmdlk;mas', 'jkbdaskjbdkas', 'Qualified', '2022-09-23', '450', '2022-09-23 06:39:46', 'klsdnklasndsal', 'kdklsandlkas', 1, '<p>nsakdlkas</p>', '2022-09-23 00:39:46', '2022-09-23 00:39:46'),
-(75, 'DSEOP158BKTX', 'djksabdkjsabd', 'kldnksandanslkd', 'klsanldnasldnas', 'Contact Made', '2022-09-23', '530', '2022-09-23 06:40:14', 'ksamdasmdl;as', 'klsandlkasnldka', 1, '<p>ndsakldasnldna</p>', '2022-09-23 00:40:14', '2022-09-23 00:40:14'),
-(76, 'DSEOP113KSB5', 'nsadlkasnd', 'nkenlqwne', 'kllksadasn', 'Contact Made', '2022-09-23', '530', '2022-09-23 06:41:27', 'dasndoasn', 'adsasdeas', 1, '<p>nklsandasdlkasn</p>', '2022-09-23 00:41:27', '2022-09-23 00:41:27'),
-(77, 'DSEOP1EUISDA', 'sjdnkasdnkas', ';ld;aslmd;las', 'sdlasndnaslk', 'Contact Made', '2022-09-23', '5000', '2022-09-23 06:43:03', 'uiggeiuqwgeuqw', 'okeqpwokeopqw', 1, '<p>hiosodasdbnasbn</p>', '2022-09-23 00:43:03', '2022-09-23 00:43:03'),
-(78, 'DSEOP1OBIYY0', 'sjdnkasdnkas', ';ld;aslmd;las', 'sdlasndnaslk', 'Contact Made', '2022-09-23', '5000', '2022-09-23 06:44:25', 'uiggeiuqwgeuqw', 'okeqpwokeopqw', 1, '<p>hiosodasdbnasbn</p>', '2022-09-23 00:44:25', '2022-09-23 00:44:25'),
-(79, 'DSEOP1GPAK7A', 'sjdnkasdnkas', ';ld;aslmd;las', 'sdlasndnaslk', 'Contact Made', '2022-09-23', '5000', '2022-09-23 06:45:00', 'uiggeiuqwgeuqw', 'okeqpwokeopqw', 1, '<p>hiosodasdbnasbn</p>', '2022-09-23 00:45:00', '2022-09-23 00:45:00'),
-(80, 'DSEOP1G875HR', 'sjdnkasdnkas', ';ld;aslmd;las', 'sdlasndnaslk', 'Contact Made', '2022-09-23', '5000', '2022-09-23 06:45:12', 'uiggeiuqwgeuqw', 'okeqpwokeopqw', 1, '<p>hiosodasdbnasbn</p>', '2022-09-23 00:45:12', '2022-09-23 00:45:12'),
-(81, 'DSEOP10MCN6V', 'sjdnkasdnkas', ';ld;aslmd;las', 'sdlasndnaslk', 'Contact Made', '2022-09-23', '5000', '2022-09-23 06:47:39', 'uiggeiuqwgeuqw', 'okeqpwokeopqw', 1, '<p>hiosodasdbnasbn</p>', '2022-09-23 00:47:39', '2022-09-23 00:47:39'),
-(82, 'DSEOP1BBJSU4', 'sjdnkasdnkas', ';ld;aslmd;las', 'sdlasndnaslk', 'Contact Made', '2022-09-23', '5000', '2022-09-23 06:48:02', 'uiggeiuqwgeuqw', 'okeqpwokeopqw', 1, '<p>hiosodasdbnasbn</p>', '2022-09-23 00:48:02', '2022-09-23 00:48:02'),
-(83, 'DSEOP199N3YV', 'sjdnkasdnkas', ';ld;aslmd;las', 'sdlasndnaslk', 'Contact Made', '2022-09-23', '5000', '2022-09-23 06:52:54', 'uiggeiuqwgeuqw', 'okeqpwokeopqw', 1, '<p>hiosodasdbnasbn</p>', '2022-09-23 00:52:54', '2022-09-23 00:52:54'),
-(84, 'DSEOP1JFD9NQ', 'sjdnkasdnkas', ';ld;aslmd;las', 'sdlasndnaslk', 'Contact Made', '2022-09-23', '5000', '2022-09-23 06:53:07', 'uiggeiuqwgeuqw', 'okeqpwokeopqw', 1, '<p>hiosodasdbnasbn</p>', '2022-09-23 00:53:07', '2022-09-23 00:53:07'),
-(85, 'DSEOP186JZX1', 'sjdnkasdnkas', ';ld;aslmd;las', 'sdlasndnaslk', 'Contact Made', '2022-09-23', '5000', '2022-09-23 06:53:21', 'uiggeiuqwgeuqw', 'okeqpwokeopqw', 1, '<p>hiosodasdbnasbn</p>', '2022-09-23 00:53:21', '2022-09-23 00:53:21'),
-(86, 'DSEOP1LGY3MF', 'sjdnkasdnkas', ';ld;aslmd;las', 'sdlasndnaslk', 'Contact Made', '2022-09-23', '100', '2022-09-23 07:00:28', 'uiggeiuqwgeuqw', 'okeqpwokeopqw', 1, '<p>hiosodasdbnasbn</p>', '2022-09-23 01:00:28', '2022-09-23 01:00:28'),
-(87, 'DSEOP1L76XD5', 'ssaknsandasn', 'dsajdpasjpdjas', 'kndsadnaskldnaskl', 'Contact Made', '2022-09-23', '100', '2022-09-23 07:01:15', 'sa,das,da\'sd,', 'kldnasmdkalsdmlkas', 1, '<p>od;asdasm;ldams</p>', '2022-09-23 01:01:15', '2022-09-23 01:01:15'),
-(88, 'DSEOP1QZB63N', 'ihodehwqodqwd', 'jkdkasdaksj', 'jklsdnaslndas', 'Contact Made', '2022-09-23', '100', '2022-09-23 07:04:54', 'lk;da;sldmsam', 'mklsmdasmda', 1, '<p>nklsalndlaskd</p>', '2022-09-23 01:04:54', '2022-09-23 01:04:54'),
-(89, 'DSEOP1UM46IY', 'sabjkdsakjndas', 'klndlksandasd', 'kdsakjbdsjkab', 'Contact Made', '2022-09-23', '100', '2022-09-23 07:07:45', 'nksldlknaskldnaslkd', 'nkldlsandsaklnd', 1, NULL, '2022-09-23 01:07:45', '2022-09-23 01:07:45'),
-(90, 'DSEOP1EJ3LQ8', 'sabjkdsakjndas', 'klndlksandasd', 'kdsakjbdsjkab', 'Contact Made', '2022-09-23', '100', '2022-09-23 07:09:36', 'nksldlknaskldnaslkd', 'nkldlsandsaklnd', 1, NULL, '2022-09-23 01:09:36', '2022-09-23 01:09:36'),
-(91, 'DSEOP1707O6K', 'jdkjasndjkalsndas', 'nkldnaslkdnasld', 'mkdsamd;lasmda', 'Contact Made', '2022-09-23', '600', '2022-09-23 07:14:44', 'l;dsadsamdas;m', 'samdasmdas;ld;a', 1, '<p>mldmsa;;das;dasml;</p>', '2022-09-23 01:14:44', '2022-09-23 01:14:44'),
-(92, 'DSEOP1PITONE', 'jdkjasndjkalsndas', 'nkldnaslkdnasld', 'mkdsamd;lasmda', 'Contact Made', '2022-09-23', '600', '2022-09-23 07:16:12', 'l;dsadsamdas;m', 'samdasmdas;ld;a', 1, '<p>mldmsa;;das;dasml;</p>', '2022-09-23 01:16:12', '2022-09-23 01:16:12'),
-(93, 'DSEOP1XTJ5D2', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:21:55', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:21:55', '2022-09-23 01:21:55'),
-(94, 'DSEOP1TUPDBF', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:22:14', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:22:14', '2022-09-23 01:22:14'),
-(95, 'DSEOP1VXLSRY', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:24:13', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:24:13', '2022-09-23 01:24:13'),
-(96, 'DSEOP1JUSFMW', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:25:36', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:25:36', '2022-09-23 01:25:36'),
-(97, 'DSEOP16A18U0', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:28:26', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:28:26', '2022-09-23 01:28:26'),
-(98, 'DSEOP1YJJLQ1', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:34:17', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:34:17', '2022-09-23 01:34:17'),
-(99, 'DSEOP1JERBUN', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:34:32', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:34:32', '2022-09-23 01:34:32'),
-(100, 'DSEOP1DOO5QT', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:37:54', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:37:54', '2022-09-23 01:37:54'),
-(101, 'DSEOP1ULAOI3', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:39:27', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:39:27', '2022-09-23 01:39:27'),
-(102, 'DSEOP1OOCS46', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:39:56', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:39:56', '2022-09-23 01:39:56'),
-(103, 'DSEOP1XIQ9JH', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:40:30', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:40:30', '2022-09-23 01:40:30'),
-(104, 'DSEOP1H31JBO', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:42:18', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:42:18', '2022-09-23 01:42:18'),
-(105, 'DSEOP1OQRWSX', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:43:45', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:43:45', '2022-09-23 01:43:45'),
-(106, 'DSEOP1ZBARW5', 'nklsandasndanlk', 'klsnlkasnmdsan', 'lsadlmsad;mas', 'Contact Made', '2022-09-23', '300', '2022-09-23 07:43:54', 'lmsalmdl;asmda', 'kmsddsamd;las', 1, '<p>kjsdnsadnsadnsa</p>', '2022-09-23 01:43:54', '2022-09-23 01:43:54'),
-(107, 'DSEOP11RQJWK', 'jdbskjdkasbbdjkas', 'iohdhsadhoiashd', 'jbsadnasbndla', 'Contact Made', '2022-09-23', '580', '2022-09-23 07:44:59', 'klndsnasnlkdlkas', 'kosandasndkas', 1, '<p>kdlkasndasn</p>', '2022-09-23 01:44:59', '2022-09-23 01:44:59'),
-(108, 'DSEOP1GOILTC', 'g8eeqwegqwgiu', 'iowehoiqwehqw', 'knnsdnasdlkas', 'Contact Made', '2022-09-23', '400', '2022-09-23 07:45:34', 'sdashdaslkdhalsk', 'md;asdm;amd;a', 1, '<p>bjcxasdasbjkdjbksa</p>', '2022-09-23 01:45:34', '2022-09-23 01:45:34'),
-(109, 'DSEOP1KJL6GA', 'dioadasndklas', 'md;asm;asm', 'nmkdlksandl;aksn', 'Contact Made', '2022-09-23', '500', '2022-09-23 07:46:08', 'jkasdnlasndlaks', 'nkidma;d;mas;d', 1, '<p>mdsadasmldmasl;dma;slm</p>', '2022-09-23 01:46:08', '2022-09-23 01:46:08'),
-(110, 'DSEOP1KJNSZB', 'dasdasda', 'fasdasd', 'asddasd', 'Contact Made', '2022-09-24', '500', '2022-09-23 07:54:46', 'klsndlasndlaskd', 'kldnklasdnlkas', 1, '<p>dbaskdbkasdbas</p>', '2022-09-23 01:54:46', '2022-09-23 01:54:46'),
-(111, 'DSEOP174CHZO', 'nsadnasdnkla', 'jbsadjasjbdjk', 'djasndlkasnd', 'Qualified', '2022-09-23', '200', '2022-09-23 09:40:31', 'kldmlskadnlaskd', 'kdnklasndlkans', 1, '<p>jsabdljkasndlkasn</p>', '2022-09-23 03:40:31', '2022-09-23 03:40:31'),
-(112, 'DSEOP17L9SVJ', 'hadklasdnasnd', 'bdasdaksbdkaj', 'jkbdbkasbdaskjbd', 'Contact Made', '2022-09-23', '500', '2022-09-23 09:46:22', 'bdsndlkasndla', 'bjsdkasdkljasnd', 1, '<p>bdaskjdaskdbaskdbaskbd</p>', '2022-09-23 03:46:22', '2022-09-23 03:46:22');
+INSERT INTO `deals` (`id`, `deal_id`, `client_name`, `client_username`, `organization`, `project_name`, `pipeline_stage`, `start_date`, `amount`, `deal_creation_date`, `message_link`, `profile_link`, `currency_id`, `submission_status`, `description`, `hash`, `created_at`, `updated_at`) VALUES
+(131, 'DSEOP1145VDT', 'Tamara Myatt', 'test username', 'Tamara Myatt Education University', 'LMS Project', 'Proposal Made', '0000-00-00', '50', '2022-09-08', 'adasdasdas', 'dasdasdasd', 1, 'pending', '<p>sadsadas</p>', 'eyJpdiI6IkJ6VEUyZWZ0VldpUXU4T3lnL0xucEE9PSIsInZhbHVlIjoiV3pnbDl0TGFDNmRDQUdBL1pNUXRFdz09IiwibWFjIjoiNTFhMGJjYmExNzhiNTY2ZDcwYzhjNjlkMmUxNDNlMjFlMGY1YTcyMWYwNzc0MzIzNGJhYmNiY2I1YjM4YmMwZCIsInRhZyI6IiJ9', '2022-09-26 04:09:42', '2022-09-26 04:09:42');
 
 -- --------------------------------------------------------
 
@@ -1502,6 +1479,13 @@ CREATE TABLE `employee_shift_schedules` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `employee_shift_schedules`
+--
+
+INSERT INTO `employee_shift_schedules` (`id`, `user_id`, `date`, `employee_shift_id`, `added_by`, `last_updated_by`, `shift_start_time`, `shift_end_time`, `remarks`, `created_at`, `updated_at`) VALUES
+(1, 1, '2022-09-19', 1, 1, 1, '2022-09-19 09:00:00', '2022-09-19 18:00:00', NULL, '2022-09-23 04:56:39', '2022-09-23 04:56:39');
+
 -- --------------------------------------------------------
 
 --
@@ -1785,6 +1769,13 @@ CREATE TABLE `file_storage` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `file_storage`
+--
+
+INSERT INTO `file_storage` (`id`, `path`, `filename`, `type`, `size`, `storage_location`, `created_at`, `updated_at`) VALUES
+(1, 'products', '093f72db2b1c0675ba29dc7dd8412f05.png', NULL, 70528, 'local', '2022-09-23 22:32:36', '2022-09-23 22:32:36');
 
 -- --------------------------------------------------------
 
@@ -3594,7 +3585,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (648, '2022_09_20_042618_create_contract_custom_forms_table', 3),
 (652, '2022_09_21_095840_create_deals_table', 4),
 (654, '2022_09_22_065040_create_p_m_projects_table', 5),
-(655, '2022_09_22_073037_create_p_m_assigns_table', 6);
+(655, '2022_09_22_073037_create_p_m_assigns_table', 6),
+(656, '2022_09_26_044657_create_client_forms_table', 7);
 
 -- --------------------------------------------------------
 
@@ -3805,9 +3797,11 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 ('5f469152-e1cf-42e6-b0ea-41f9bde4809b', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":29,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"AJPtVSbpSk9CcoKt6cEYN0rzvq4jBhAG\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-20 00:16:56', '2022-09-20 00:16:56'),
 ('64172712-28b3-4b18-b101-ca85f098038c', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":7,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"cr2u09yjhJRf8F34GM7dBYBkDKzap6PQ\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-19 23:36:38', '2022-09-19 23:36:38'),
 ('6a50284a-8b66-4194-89ad-cae7683aad0d', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":5,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"sNndnGJ8ZvW96sCV4AkHKMeHOTl5ysrL\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-19 23:36:16', '2022-09-19 23:36:16'),
-('8528b5a4-a986-4f46-b96d-48a021db9d98', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":14,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"bYhQ1eYn5ou43Ftk8L7JRdtDcM66CG8u\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-19 23:40:23', '2022-09-19 23:40:23');
+('750685f6-8664-4da6-aab3-7ca59f828528', 'App\\Notifications\\NewProjectMember', 'App\\Models\\User', 10, '{\"member_id\":4,\"project_id\":110,\"project\":\"jkbdbkasbdaskjbd\"}', NULL, '2022-09-23 04:58:01', '2022-09-23 04:58:01');
 INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `read_at`, `created_at`, `updated_at`) VALUES
+('8528b5a4-a986-4f46-b96d-48a021db9d98', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":14,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"bYhQ1eYn5ou43Ftk8L7JRdtDcM66CG8u\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-19 23:40:23', '2022-09-19 23:40:23'),
 ('8b775f0c-9e33-419b-86c0-c55aa78862b3', 'App\\Notifications\\NewProjectMember', 'App\\Models\\User', 12, '{\"member_id\":1,\"project_id\":1,\"project\":\"sadfsdsdg\"}', NULL, '2022-09-21 05:08:22', '2022-09-21 05:08:22'),
+('8c618c1d-e91c-4cc4-bf10-3da6294deed0', 'App\\Notifications\\NewUser', 'App\\Models\\User', 17, '{\"id\":17,\"name\":\"John Cena\",\"email\":\"johncena@gmail.com\",\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":\"01575202020\",\"gender\":\"male\",\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":18,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/06012123511b9be7d1a6fdcc4bb79f51.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[],\"client_details\":null,\"session\":null,\"employee_detail\":null}', NULL, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
 ('8cf9141a-7ef1-4eb2-9133-298ce265c41b', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":9,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"XhLAhojAlsCW3DmJcz76x1ku7Zt2F49r\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-19 23:38:54', '2022-09-19 23:38:54'),
 ('8ec1be89-036d-4535-af83-0ff1536e8f1f', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":4,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"0QX2GyngDv9nRmmdHkKLbtzk0OJZiw00\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-19 23:34:52', '2022-09-19 23:34:52'),
 ('916d794a-16f2-41e2-9dd1-a4695c6281d5', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":19,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"F7fCH4T0j3xXyinXJZfllLWYyY2xoYVS\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-19 23:47:14', '2022-09-19 23:47:14'),
@@ -3826,10 +3820,10 @@ INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `
 ('bdbbd0a7-e8e3-4447-a6f6-56566dd7b8ea', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":27,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"xyufHzLgOdQwpeKRMvlnSa09sAx9ybPY\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-20 00:06:46', '2022-09-20 00:06:46'),
 ('c7213c3f-0364-4d7d-a991-9e2c1ba27186', 'App\\Notifications\\NewUser', 'App\\Models\\User', 12, '{\"id\":12,\"name\":\"pm4\",\"email\":\"pm4@gmail.com\",\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":\"01575202020\",\"gender\":\"male\",\"salutation\":null,\"locale\":\"en\",\"status\":\"active\",\"login\":\"enable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":18,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/2271f213f62ab9eb7749d5c09ffbb087.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[],\"client_details\":null,\"session\":null,\"employee_detail\":null}', NULL, '2022-09-19 01:52:35', '2022-09-19 01:52:35'),
 ('c8102827-824a-4fe3-9f21-effab43c62a0', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":8,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"ZgCt0xJZLjXqd9Ww2DzhQS8UxKYaJ7Ip\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-19 23:36:50', '2022-09-19 23:36:50'),
-('cd291c78-3efe-4af0-a06c-be418476fd48', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":25,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"MfFufEqoUpnfFP9WTHhV8o5w11NTgTKJ\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-20 00:04:33', '2022-09-20 00:04:33'),
-('d1057070-215a-405e-ab25-59897a01e0ef', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":17,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"arfmQvKH8Pq0qqKVNx1GBE6ejJeC74GA\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-19 23:43:29', '2022-09-19 23:43:29'),
-('d461007d-7be5-490f-9de2-4b8795f56a73', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":33,\"client_id\":13,\"subject\":\"sfdasdas\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-20T00:00:00+00:00\",\"original_start_date\":\"2022-09-20\",\"end_date\":\"2022-09-20T00:00:00+00:00\",\"original_end_date\":\"2022-09-20\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>dasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"GXUfaDbAqPwBfudk3WQnjr0DbNy5N1O5\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-20 00:35:34', '2022-09-20 00:35:34');
+('cd291c78-3efe-4af0-a06c-be418476fd48', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":25,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"MfFufEqoUpnfFP9WTHhV8o5w11NTgTKJ\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-20 00:04:33', '2022-09-20 00:04:33');
 INSERT INTO `notifications` (`id`, `type`, `notifiable_type`, `notifiable_id`, `data`, `read_at`, `created_at`, `updated_at`) VALUES
+('d1057070-215a-405e-ab25-59897a01e0ef', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":17,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"arfmQvKH8Pq0qqKVNx1GBE6ejJeC74GA\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-19 23:43:29', '2022-09-19 23:43:29'),
+('d461007d-7be5-490f-9de2-4b8795f56a73', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":33,\"client_id\":13,\"subject\":\"sfdasdas\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-20T00:00:00+00:00\",\"original_start_date\":\"2022-09-20\",\"end_date\":\"2022-09-20T00:00:00+00:00\",\"original_end_date\":\"2022-09-20\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>dasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"GXUfaDbAqPwBfudk3WQnjr0DbNy5N1O5\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-20 00:35:34', '2022-09-20 00:35:34'),
 ('de72a83b-d45f-49d4-ba19-147edb0ca323', 'App\\Notifications\\NewContract', 'App\\Models\\User', 14, '{\"id\":43,\"client_id\":14,\"subject\":\"sdasdasd\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-20T00:00:00+00:00\",\"original_start_date\":\"2022-09-20\",\"end_date\":\"2022-09-20T00:00:00+00:00\",\"original_end_date\":\"2022-09-20\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>dasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"Fy3UYEq5XBu0OFFz7MXcyLOaiU8UKtab\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":14,\"name\":\"Test custom\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":0,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":14,\"role_id\":3}],\"client_details\":{\"id\":2,\"user_id\":14,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-20 02:31:30', '2022-09-20 02:31:30'),
 ('df7a4e9c-79fd-4d1e-8101-0f446e4d7e68', 'App\\Notifications\\NewContract', 'App\\Models\\User', 14, '{\"id\":32,\"client_id\":14,\"subject\":\"test\",\"amount\":\"50\",\"original_amount\":\"50.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-20T00:00:00+00:00\",\"original_start_date\":\"2022-09-20\",\"end_date\":\"2022-09-20T00:00:00+00:00\",\"original_end_date\":\"2022-09-20\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>dsadasd<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"dUKsMfwtVfziwEynuN83cCl5nZhfuch6\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":14,\"name\":\"Test custom\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":0,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":14,\"role_id\":3}],\"client_details\":{\"id\":2,\"user_id\":14,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-20 00:28:14', '2022-09-20 00:28:14'),
 ('e74c4438-da51-4135-9406-dbf4868ff829', 'App\\Notifications\\NewContract', 'App\\Models\\User', 13, '{\"id\":12,\"client_id\":13,\"subject\":\"Test\",\"amount\":\"500\",\"original_amount\":\"500.00\",\"contract_type_id\":1,\"start_date\":\"2022-09-21T00:00:00+00:00\",\"original_start_date\":\"2022-09-21\",\"end_date\":\"2022-09-21T00:00:00+00:00\",\"original_end_date\":\"2022-09-21\",\"description\":\"\",\"contract_name\":null,\"company_logo\":null,\"alternate_address\":null,\"cell\":null,\"office\":null,\"city\":null,\"state\":null,\"country\":null,\"postal_code\":null,\"contract_detail\":\"<p>sadasdas<\\/p>\",\"added_by\":1,\"last_updated_by\":1,\"hash\":\"W5z8GYtAJmbw8l5NyXkGvIGp8yxIjD0q\",\"currency_id\":1,\"event_id\":null,\"image_url\":\"http:\\/\\/127.0.0.1:8000\\/user-uploads\\/app-logo\\/48db542bfee795a9175aa6443ac9692b.png\",\"currency\":{\"id\":1,\"currency_name\":\"Dollars\",\"currency_symbol\":\"$\",\"currency_code\":\"USD\",\"exchange_rate\":null,\"is_cryptocurrency\":\"no\",\"usd_price\":null},\"client\":{\"id\":13,\"name\":\"Client 1\",\"email\":null,\"two_factor_secret\":null,\"two_factor_recovery_codes\":null,\"two_factor_confirmed\":0,\"two_factor_email_confirmed\":0,\"image\":null,\"mobile\":null,\"gender\":null,\"salutation\":\"mr\",\"locale\":\"en\",\"status\":\"active\",\"login\":\"disable\",\"onesignal_player_id\":null,\"last_login\":null,\"email_notifications\":1,\"country_id\":null,\"dark_theme\":0,\"rtl\":0,\"two_fa_verify_via\":null,\"two_factor_code\":null,\"two_factor_expires_at\":null,\"admin_approval\":1,\"permission_sync\":1,\"google_calendar_status\":1,\"image_url\":\"https:\\/\\/www.gravatar.com\\/avatar\\/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp\",\"modules\":[\"clients\",\"projects\",\"tickets\",\"invoices\",\"estimates\",\"events\",\"messages\",\"tasks\",\"timelogs\",\"contracts\",\"notices\",\"payments\",\"orders\",\"knowledgebase\",\"employees\",\"attendance\",\"expenses\",\"leaves\",\"leads\",\"holidays\",\"products\",\"reports\",\"settings\"],\"user_other_role\":true,\"role\":[{\"user_id\":13,\"role_id\":3}],\"client_details\":{\"id\":1,\"user_id\":13,\"company_name\":null,\"address\":null,\"shipping_address\":null,\"postal_code\":null,\"state\":null,\"city\":null,\"office\":null,\"website\":null,\"note\":\"<p><br><\\/p>\",\"linkedin\":null,\"facebook\":null,\"twitter\":null,\"skype\":null,\"gst_number\":null,\"category_id\":null,\"sub_category_id\":null,\"added_by\":1,\"last_updated_by\":1},\"session\":null,\"employee_detail\":null}}', NULL, '2022-09-19 23:39:43', '2022-09-19 23:39:43'),
@@ -5561,6 +5555,13 @@ CREATE TABLE `products` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `name`, `price`, `taxes`, `allow_purchase`, `downloadable`, `downloadable_file`, `description`, `category_id`, `sub_category_id`, `added_by`, `last_updated_by`, `hsn_sac_code`, `default_image`, `created_at`, `updated_at`) VALUES
+(1, 'Web Hosting', '50000', NULL, 0, 0, NULL, 'bdsajdbasjdbjas', 1, NULL, 1, 1, 'dsadfasfa', '093f72db2b1c0675ba29dc7dd8412f05.png', '2022-09-23 22:32:35', '2022-09-23 22:32:36');
+
 -- --------------------------------------------------------
 
 --
@@ -5573,6 +5574,13 @@ CREATE TABLE `product_category` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_category`
+--
+
+INSERT INTO `product_category` (`id`, `category_name`, `created_at`, `updated_at`) VALUES
+(1, 'Web Design', '2022-09-23 22:32:16', '2022-09-23 22:32:16');
 
 -- --------------------------------------------------------
 
@@ -5589,6 +5597,13 @@ CREATE TABLE `product_files` (
   `added_by` int(10) UNSIGNED DEFAULT NULL,
   `last_updated_by` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_files`
+--
+
+INSERT INTO `product_files` (`id`, `product_id`, `filename`, `hashname`, `size`, `added_by`, `last_updated_by`) VALUES
+(1, 1, 'filezilla sha.PNG', '093f72db2b1c0675ba29dc7dd8412f05.png', '70528', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -5616,6 +5631,7 @@ CREATE TABLE `projects` (
   `project_short_code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `project_summary` longtext COLLATE utf8mb4_unicode_ci,
   `project_admin` int(10) UNSIGNED DEFAULT NULL,
+  `deal_id` int(11) DEFAULT NULL,
   `start_date` date NOT NULL,
   `deadline` date DEFAULT NULL,
   `notes` longtext COLLATE utf8mb4_unicode_ci,
@@ -5646,43 +5662,8 @@ CREATE TABLE `projects` (
 -- Dumping data for table `projects`
 --
 
-INSERT INTO `projects` (`id`, `project_name`, `project_short_code`, `project_summary`, `project_admin`, `start_date`, `deadline`, `notes`, `category_id`, `client_id`, `team_id`, `feedback`, `manual_timelog`, `client_view_task`, `allow_client_notification`, `completion_percent`, `calculate_task_progress`, `project_budget`, `currency_id`, `hours_allocated`, `status`, `project_status`, `added_by`, `last_updated_by`, `hash`, `public`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(35, 'dsdsadas', 'PSEOP1VE71BK', '<p>fsdfasfa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'JhOtpwMrZDECOvHtQ1MDMLkrl5bbwgsk', 0, '2022-09-22 22:09:17', '2022-09-22 22:09:17', NULL),
-(76, 'sdlasndnaslk', 'PSEOP1OBIYY0', '<p>hiosodasdbnasbn</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'wfojvxRZRO8eO7AVAjeV1SUBgBUyxM3s', 0, '2022-09-23 00:44:25', '2022-09-23 00:44:25', NULL),
-(77, 'sdlasndnaslk', 'PSEOP1GPAK7A', '<p>hiosodasdbnasbn</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'fjgBgoOmRGvXvtLoSD4z2bg55TNiOdHP', 0, '2022-09-23 00:45:00', '2022-09-23 00:45:00', NULL),
-(78, 'sdlasndnaslk', 'PSEOP1G875HR', '<p>hiosodasdbnasbn</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'DvbOQEYbIRDo6RUwr3JyMN0I6olKdFnM', 0, '2022-09-23 00:45:12', '2022-09-23 00:45:12', NULL),
-(79, 'sdlasndnaslk', 'PSEOP10MCN6V', '<p>hiosodasdbnasbn</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'ryaBnR6otvWbaZgwCVqNr5otvkPvjDtV', 0, '2022-09-23 00:47:39', '2022-09-23 00:47:39', NULL),
-(80, 'sdlasndnaslk', 'PSEOP1BBJSU4', '<p>hiosodasdbnasbn</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'EeSGCxDw7qyf1eWxypkyZoAMw5Jwsr2r', 0, '2022-09-23 00:48:02', '2022-09-23 00:48:02', NULL),
-(81, 'sdlasndnaslk', 'PSEOP199N3YV', '<p>hiosodasdbnasbn</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'hTxTwqv86vpexghdELOVBW1TymPfRtJy', 0, '2022-09-23 00:52:54', '2022-09-23 00:52:54', NULL),
-(82, 'sdlasndnaslk', 'PSEOP1JFD9NQ', '<p>hiosodasdbnasbn</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, '0yr8vQcTMryeAKwfPiaj9Yj0GKAywko6', 0, '2022-09-23 00:53:07', '2022-09-23 00:53:07', NULL),
-(83, 'sdlasndnaslk', 'PSEOP186JZX1', '<p>hiosodasdbnasbn</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'iebgbvQglEKbEaydhqTtshDyzW7hX23C', 0, '2022-09-23 00:53:21', '2022-09-23 00:53:21', NULL),
-(84, 'sdlasndnaslk', 'PSEOP1LGY3MF', '<p>hiosodasdbnasbn</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'PifGf5y7dDnH8kM6ufq79HotIcWFF9mK', 0, '2022-09-23 01:00:28', '2022-09-23 01:00:28', NULL),
-(85, 'kndsadnaskldnaskl', 'PSEOP1L76XD5', '<p>od;asdasm;ldams</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'XuWQHqHBUGrJhIA6Q4zP5l4oGlL5Z1cE', 0, '2022-09-23 01:01:15', '2022-09-23 01:01:15', NULL),
-(86, 'jklsdnaslndas', 'PSEOP1QZB63N', '<p>nklsalndlaskd</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'mZue62t74Twj8GsmgoG130CC2W6FwQXG', 0, '2022-09-23 01:04:54', '2022-09-23 01:04:54', NULL),
-(87, 'kdsakjbdsjkab', 'PSEOP1UM46IY', NULL, NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'crbqQzO5BT4pP7VeUBmkIDrst20J6d0k', 0, '2022-09-23 01:07:45', '2022-09-23 01:07:45', NULL),
-(88, 'kdsakjbdsjkab', 'PSEOP1EJ3LQ8', NULL, NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'QfcDLxxmOXqFXzRhkQyNKcP1yev2fC1x', 0, '2022-09-23 01:09:36', '2022-09-23 01:09:36', NULL),
-(89, 'mkdsamd;lasmda', 'PSEOP1707O6K', '<p>mldmsa;;das;dasml;</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'MqcNnpjbvmMVmJSN6SFJaQwJApbrfdXp', 0, '2022-09-23 01:14:44', '2022-09-23 01:14:44', NULL),
-(90, 'mkdsamd;lasmda', 'PSEOP1PITONE', '<p>mldmsa;;das;dasml;</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'm1NgDjBaY9yjGggOY7xz3Om6i4FDKBT9', 0, '2022-09-23 01:16:12', '2022-09-23 01:16:12', NULL),
-(91, 'lsadlmsad;mas', 'PSEOP1XTJ5D2', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'sWCDLXaToy98EUcxitgJopJaUkhdTwza', 0, '2022-09-23 01:21:55', '2022-09-23 01:21:55', NULL),
-(92, 'lsadlmsad;mas', 'PSEOP1TUPDBF', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'YBKvAn6eVKPb7XqIvhJFw1VRNFP6Amfa', 0, '2022-09-23 01:22:14', '2022-09-23 01:22:14', NULL),
-(93, 'lsadlmsad;mas', 'PSEOP1VXLSRY', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'LAUlyyY6KH7JlKMDlmwTiJ2tXP27PxKO', 0, '2022-09-23 01:24:13', '2022-09-23 01:24:13', NULL),
-(94, 'lsadlmsad;mas', 'PSEOP1JUSFMW', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'cyjGI8H4rZSaSjH9Z8byCG4Pwbv0a9og', 0, '2022-09-23 01:25:36', '2022-09-23 01:25:36', NULL),
-(95, 'lsadlmsad;mas', 'PSEOP16A18U0', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'D5nrrRlXmvDRW9Owh0N3SJnQDGvSeZxR', 0, '2022-09-23 01:28:26', '2022-09-23 01:28:26', NULL),
-(96, 'lsadlmsad;mas', 'PSEOP1YJJLQ1', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, '2pcsNDqufQrDEJsF01HoN8dO47DNuZe6', 0, '2022-09-23 01:34:17', '2022-09-23 01:34:17', NULL),
-(97, 'lsadlmsad;mas', 'PSEOP1JERBUN', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, '4pfRNqCt9KgFA5bYIyQAntfCU2To9xMf', 0, '2022-09-23 01:34:32', '2022-09-23 01:34:32', NULL),
-(98, 'lsadlmsad;mas', 'PSEOP1DOO5QT', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'oQMdFnwTQBWtL4vFf0PjhVVNpws3ncUV', 0, '2022-09-23 01:37:54', '2022-09-23 01:37:54', NULL),
-(99, 'lsadlmsad;mas', 'PSEOP1ULAOI3', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'S42twjcgCA3DD0GfLefnpCUulUSoRsqQ', 0, '2022-09-23 01:39:27', '2022-09-23 01:39:27', NULL),
-(100, 'lsadlmsad;mas', 'PSEOP1OOCS46', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'uJ7oVF5YVgUSmkVEKGnarQhjFSkEqcrM', 0, '2022-09-23 01:39:56', '2022-09-23 01:39:56', NULL),
-(101, 'lsadlmsad;mas', 'PSEOP1XIQ9JH', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'JNRT2gWdO704rQCUARLpHFYUxUUIpYQj', 0, '2022-09-23 01:40:30', '2022-09-23 01:40:30', NULL),
-(102, 'lsadlmsad;mas', 'PSEOP1H31JBO', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'XXxmzp2oDs2UUHqfZ8gVpDPT3gbmR4rS', 0, '2022-09-23 01:42:18', '2022-09-23 01:42:18', NULL),
-(103, 'lsadlmsad;mas', 'PSEOP1OQRWSX', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'LGIrlkX2YuNNA0Qky7whqI5hCYdeD8mZ', 0, '2022-09-23 01:43:45', '2022-09-23 01:43:45', NULL),
-(104, 'lsadlmsad;mas', 'PSEOP1ZBARW5', '<p>kjsdnsadnsadnsa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'inGEpR3AzIMI5blrzWOrqg8GDbLp3xEB', 0, '2022-09-23 01:43:54', '2022-09-23 01:43:54', NULL),
-(105, 'jbsadnasbndla', 'PSEOP11RQJWK', '<p>kdlkasndasn</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'OqrN6rHcIaAb7uQl8l47xm0yZ2bsGIRs', 0, '2022-09-23 01:44:59', '2022-09-23 01:44:59', NULL),
-(106, 'knnsdnasdlkas', 'PSEOP1GOILTC', '<p>bjcxasdasbjkdjbksa</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'odHi41ScPOCIlzb1or4oVq2lkVZHh9UC', 0, '2022-09-23 01:45:34', '2022-09-23 01:45:34', NULL),
-(107, 'nmkdlksandl;aksn', 'PSEOP1KJL6GA', '<p>mdsadasmldmasl;dma;slm</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'qIGbPBigpjhhpejr1i3OUe50uk6FZSOF', 0, '2022-09-23 01:46:08', '2022-09-23 01:46:08', NULL),
-(108, 'asddasd', 'PSEOP1KJNSZB', '<p>dbaskdbkasdbas</p>', NULL, '2022-09-24', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'BYWQ8PN0S2UHJpBK709KB6Ibr0mmm0mC', 0, '2022-09-23 01:54:46', '2022-09-23 01:54:46', NULL),
-(109, 'djasndlkasnd', 'PSEOP174CHZO', '<p>jsabdljkasndlkasn</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, '9rJjZ6j56aMX2sxOzuslyZyFiLyPgPq4', 0, '2022-09-23 03:40:31', '2022-09-23 03:40:31', NULL),
-(110, 'jkbdbkasbdaskjbd', 'PSEOP17L9SVJ', '<p>bdaskjdaskdbaskdbaskbd</p>', NULL, '2022-09-23', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, '1I2vp8Errc7VCAXq0ohRNaDCWmTAYZoA', 0, '2022-09-23 03:46:22', '2022-09-23 03:46:22', NULL);
+INSERT INTO `projects` (`id`, `project_name`, `project_short_code`, `project_summary`, `project_admin`, `deal_id`, `start_date`, `deadline`, `notes`, `category_id`, `client_id`, `team_id`, `feedback`, `manual_timelog`, `client_view_task`, `allow_client_notification`, `completion_percent`, `calculate_task_progress`, `project_budget`, `currency_id`, `hours_allocated`, `status`, `project_status`, `added_by`, `last_updated_by`, `hash`, `public`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(124, 'LMS Project', 'PSEOP1145VDT', '<p>sadsadas</p>', NULL, 131, '2022-09-08', NULL, NULL, NULL, NULL, NULL, NULL, 'disable', 'disable', 'disable', 0, 'true', NULL, NULL, NULL, 'not started', 'pending', 1, 1, 'SVM6ppxVpT5BQNOmL46I2eqHSO4yQ1Pc', 0, '2022-09-26 04:09:42', '2022-09-26 04:09:42', NULL);
 
 -- --------------------------------------------------------
 
@@ -6050,6 +6031,13 @@ CREATE TABLE `proposals` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `proposals`
+--
+
+INSERT INTO `proposals` (`id`, `lead_id`, `valid_till`, `sub_total`, `total`, `currency_id`, `discount_type`, `discount`, `invoice_convert`, `status`, `note`, `description`, `client_comment`, `signature_approval`, `added_by`, `last_updated_by`, `hash`, `calculate_tax`, `created_at`, `updated_at`) VALUES
+(1, 1, '2022-10-24', 50000.00, 50000.00, 1, 'percent', 0, 0, 'waiting', '', '<p>bjscszncsalcnasl</p>', NULL, 1, 1, 1, 'PhnmBXJfPp6wpJlchPmw8hf67Av993cS', 'after_discount', '2022-09-23 22:33:30', '2022-09-23 22:33:30');
+
 -- --------------------------------------------------------
 
 --
@@ -6071,6 +6059,13 @@ CREATE TABLE `proposal_items` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `proposal_items`
+--
+
+INSERT INTO `proposal_items` (`id`, `proposal_id`, `item_name`, `type`, `quantity`, `unit_price`, `amount`, `item_summary`, `taxes`, `hsn_sac_code`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Web Hosting', 'item', 1.00, 50000.00, 50000.00, 'bdsajdbasjdbjas', NULL, NULL, '2022-09-23 22:33:30', '2022-09-23 22:33:30');
+
 -- --------------------------------------------------------
 
 --
@@ -6087,6 +6082,13 @@ CREATE TABLE `proposal_item_images` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `proposal_item_images`
+--
+
+INSERT INTO `proposal_item_images` (`id`, `proposal_item_id`, `filename`, `hashname`, `size`, `external_link`, `created_at`, `updated_at`) VALUES
+(1, 1, '', '', '', 'http://127.0.0.1:8000/user-uploads/products/093f72db2b1c0675ba29dc7dd8412f05.png', '2022-09-23 22:33:30', '2022-09-23 22:33:30');
 
 -- --------------------------------------------------------
 
@@ -6303,12 +6305,12 @@ CREATE TABLE `p_m_assigns` (
 --
 
 INSERT INTO `p_m_assigns` (`id`, `pm_id`, `project_count`, `amount`, `created_at`, `updated_at`) VALUES
-(14, 15, '4', '800', '2022-09-22 21:35:01', '2022-09-23 01:46:08'),
-(15, 12, '3', '1200', '2022-09-22 21:35:13', '2022-09-23 01:16:12'),
-(16, 11, '3', '1800', '2022-09-22 21:35:22', '2022-09-23 01:45:34'),
-(17, 10, '4', '1650', '2022-09-22 21:54:58', '2022-09-23 01:54:46'),
-(18, 9, '3', '1580', '2022-09-22 21:55:07', '2022-09-23 01:44:59'),
-(19, 16, '2', '700', '2022-09-23 03:39:35', '2022-09-23 03:46:22');
+(14, 15, '1', '50', '2022-09-22 21:35:01', '2022-09-26 04:09:42'),
+(15, 12, '0', '0', '2022-09-22 21:35:13', '2022-09-26 03:46:12'),
+(16, 11, '0', '0', '2022-09-22 21:35:22', '2022-09-26 03:56:51'),
+(17, 10, '0', '0', '2022-09-22 21:54:58', '2022-09-26 03:18:26'),
+(18, 9, '0', '0', '2022-09-22 21:55:07', '2022-09-26 03:33:15'),
+(19, 16, '0', '0', '2022-09-23 03:39:35', '2022-09-23 03:46:22');
 
 -- --------------------------------------------------------
 
@@ -6320,6 +6322,7 @@ CREATE TABLE `p_m_projects` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `pm_id` int(11) NOT NULL,
   `project_id` int(11) NOT NULL,
+  `deal_id` int(11) DEFAULT NULL,
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `status` enum('pending','approve','rejected') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
@@ -6331,50 +6334,8 @@ CREATE TABLE `p_m_projects` (
 -- Dumping data for table `p_m_projects`
 --
 
-INSERT INTO `p_m_projects` (`id`, `pm_id`, `project_id`, `start_date`, `end_date`, `status`, `created_at`, `updated_at`) VALUES
-(33, 15, 39, NULL, NULL, 'pending', '2022-09-22 22:43:31', '2022-09-22 22:43:31'),
-(34, 12, 40, NULL, NULL, 'pending', '2022-09-22 22:44:01', '2022-09-22 22:44:01'),
-(35, 11, 41, NULL, NULL, 'pending', '2022-09-22 22:56:16', '2022-09-22 22:56:16'),
-(36, 10, 42, NULL, NULL, 'pending', '2022-09-22 22:56:54', '2022-09-22 22:56:54'),
-(37, 9, 43, NULL, NULL, 'pending', '2022-09-22 22:57:32', '2022-09-22 22:57:32'),
-(38, 15, 46, NULL, NULL, 'pending', '2022-09-22 23:09:18', '2022-09-22 23:09:18'),
-(39, 12, 46, NULL, NULL, 'pending', '2022-09-22 23:09:18', '2022-09-22 23:09:18'),
-(40, 11, 46, NULL, NULL, 'pending', '2022-09-22 23:09:18', '2022-09-22 23:09:18'),
-(41, 10, 46, NULL, NULL, 'pending', '2022-09-22 23:09:18', '2022-09-22 23:09:18'),
-(42, 9, 46, NULL, NULL, 'pending', '2022-09-22 23:09:18', '2022-09-22 23:09:18'),
-(43, 15, 49, NULL, NULL, 'pending', '2022-09-22 23:21:29', '2022-09-22 23:21:29'),
-(44, 12, 49, NULL, NULL, 'pending', '2022-09-22 23:21:29', '2022-09-22 23:21:29'),
-(45, 11, 49, NULL, NULL, 'pending', '2022-09-22 23:21:29', '2022-09-22 23:21:29'),
-(46, 10, 49, NULL, NULL, 'pending', '2022-09-22 23:21:29', '2022-09-22 23:21:29'),
-(47, 9, 49, NULL, NULL, 'pending', '2022-09-22 23:21:29', '2022-09-22 23:21:29'),
-(48, 15, 51, NULL, NULL, 'pending', '2022-09-22 23:26:27', '2022-09-22 23:26:27'),
-(49, 12, 51, NULL, NULL, 'pending', '2022-09-22 23:26:27', '2022-09-22 23:26:27'),
-(50, 11, 51, NULL, NULL, 'pending', '2022-09-22 23:26:27', '2022-09-22 23:26:27'),
-(51, 10, 51, NULL, NULL, 'pending', '2022-09-22 23:26:27', '2022-09-22 23:26:27'),
-(52, 9, 51, NULL, NULL, 'pending', '2022-09-22 23:26:27', '2022-09-22 23:26:27'),
-(53, 15, 60, NULL, NULL, 'pending', '2022-09-22 23:59:11', '2022-09-22 23:59:11'),
-(54, 15, 60, NULL, NULL, 'pending', '2022-09-22 23:59:11', '2022-09-22 23:59:11'),
-(55, 12, 64, NULL, NULL, 'pending', '2022-09-23 00:19:50', '2022-09-23 00:19:50'),
-(56, 11, 65, NULL, NULL, 'pending', '2022-09-23 00:32:04', '2022-09-23 00:32:04'),
-(57, 10, 66, NULL, NULL, 'pending', '2022-09-23 00:32:35', '2022-09-23 00:32:35'),
-(58, 9, 67, NULL, NULL, 'pending', '2022-09-23 00:33:40', '2022-09-23 00:33:40'),
-(59, 15, 68, NULL, NULL, 'pending', '2022-09-23 00:34:43', '2022-09-23 00:34:43'),
-(60, 12, 69, NULL, NULL, 'pending', '2022-09-23 00:37:25', '2022-09-23 00:37:25'),
-(61, 11, 70, NULL, NULL, 'pending', '2022-09-23 00:38:23', '2022-09-23 00:38:23'),
-(62, 10, 71, NULL, NULL, 'pending', '2022-09-23 00:38:52', '2022-09-23 00:38:52'),
-(63, 9, 72, NULL, NULL, 'pending', '2022-09-23 00:39:46', '2022-09-23 00:39:46'),
-(64, 15, 73, NULL, NULL, 'pending', '2022-09-23 00:40:14', '2022-09-23 00:40:14'),
-(65, 15, 84, NULL, NULL, 'pending', '2022-09-23 01:00:28', '2022-09-23 01:00:28'),
-(66, 15, 85, NULL, NULL, 'pending', '2022-09-23 01:01:15', '2022-09-23 01:01:15'),
-(67, 15, 86, NULL, NULL, 'pending', '2022-09-23 01:04:54', '2022-09-23 01:04:54'),
-(68, 12, 90, NULL, NULL, 'pending', '2022-09-23 01:16:12', '2022-09-23 01:16:12'),
-(69, 10, 104, NULL, NULL, 'pending', '2022-09-23 01:43:54', '2022-09-23 01:43:54'),
-(70, 9, 105, NULL, NULL, 'pending', '2022-09-23 01:44:59', '2022-09-23 01:44:59'),
-(71, 11, 106, NULL, NULL, 'pending', '2022-09-23 01:45:34', '2022-09-23 01:45:34'),
-(72, 15, 107, NULL, NULL, 'pending', '2022-09-23 01:46:08', '2022-09-23 01:46:08'),
-(73, 10, 108, NULL, NULL, 'pending', '2022-09-23 01:54:46', '2022-09-23 01:54:46'),
-(74, 16, 109, NULL, NULL, 'pending', '2022-09-23 03:40:31', '2022-09-23 03:40:31'),
-(75, 16, 110, NULL, NULL, 'pending', '2022-09-23 03:46:22', '2022-09-23 03:46:22');
+INSERT INTO `p_m_projects` (`id`, `pm_id`, `project_id`, `deal_id`, `start_date`, `end_date`, `status`, `created_at`, `updated_at`) VALUES
+(89, 15, 124, 131, NULL, NULL, 'pending', '2022-09-26 04:09:42', '2022-09-26 04:09:42');
 
 -- --------------------------------------------------------
 
@@ -6496,6 +6457,7 @@ INSERT INTO `role_user` (`user_id`, `role_id`) VALUES
 (16, 2),
 (13, 3),
 (14, 3),
+(17, 3),
 (9, 4),
 (10, 4),
 (11, 4),
@@ -7303,7 +7265,11 @@ INSERT INTO `universal_search` (`id`, `searchable_id`, `module_type`, `title`, `
 (10, 1, 'lead', 'company3@gmail.com', 'leads.show', '2022-09-21 20:10:18', '2022-09-21 20:10:18'),
 (11, 1, 'lead', 'Test', 'leads.show', '2022-09-21 20:10:18', '2022-09-21 20:10:18'),
 (12, 15, 'employee', 'Pm5', 'employees.show', '2022-09-22 04:25:58', '2022-09-22 04:25:58'),
-(13, 16, 'employee', 'pm6', 'employees.show', '2022-09-23 03:39:18', '2022-09-23 03:39:18');
+(13, 16, 'employee', 'pm6', 'employees.show', '2022-09-23 03:39:18', '2022-09-23 03:39:18'),
+(14, 1, 'proposal', 'Proposal #1', 'proposals.show', '2022-09-23 22:33:30', '2022-09-23 22:33:30'),
+(15, 17, 'client', 'John Cena', 'clients.show', '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(16, 17, 'client', 'johncena@gmail.com', 'clients.show', '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(17, 17, 'client', 'Test', 'clients.show', '2022-09-25 21:08:34', '2022-09-25 21:08:34');
 
 -- --------------------------------------------------------
 
@@ -7349,7 +7315,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed`, `two_factor_email_confirmed`, `remember_token`, `image`, `mobile`, `gender`, `salutation`, `locale`, `status`, `login`, `onesignal_player_id`, `last_login`, `email_notifications`, `country_id`, `dark_theme`, `rtl`, `two_fa_verify_via`, `two_factor_code`, `two_factor_expires_at`, `admin_approval`, `permission_sync`, `google_calendar_status`, `created_at`, `updated_at`) VALUES
-(1, 'SeoPAge1', 'company@example.com', '$2y$10$FfG84wI.eH6lQD7Gkt2F4eqvBg5NKo0Snik56Vm/BoiFrl1nTJyCW', NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, 'en', 'active', 'enable', NULL, '2022-09-22 20:17:33', 1, NULL, 0, 0, NULL, NULL, NULL, 1, 1, 1, '2022-09-19 00:15:47', '2022-09-22 20:17:33'),
+(1, 'SeoPAge1', 'company@example.com', '$2y$10$FfG84wI.eH6lQD7Gkt2F4eqvBg5NKo0Snik56Vm/BoiFrl1nTJyCW', NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, 'en', 'active', 'enable', NULL, '2022-09-25 20:04:12', 1, NULL, 0, 0, NULL, NULL, NULL, 1, 1, 1, '2022-09-19 00:15:47', '2022-09-25 20:04:12'),
 (9, 'John Doe', 'pm1@gmail.com', '$2y$10$QvYglr1GCH4gMHmPeFhXs.SNDZfR7/xsDPrPG2nfTZhT.sTX8tLiO', NULL, NULL, 0, 0, NULL, NULL, '01575202020', 'male', NULL, 'en', 'active', 'disable', NULL, NULL, 1, 18, 0, 0, NULL, NULL, NULL, 1, 1, 1, '2022-09-19 00:44:40', '2022-09-19 00:44:40'),
 (10, 'Pm2', 'pm2@gmail.com', '$2y$10$dSWm5Fat/cea/HYS6V8I2OVRwW59PYVD1R5eGIUtE3CWmIRf0Nrk6', NULL, NULL, 0, 0, NULL, NULL, '01575202028', 'male', NULL, 'en', 'active', 'enable', NULL, NULL, 1, 18, 0, 0, NULL, NULL, NULL, 1, 1, 1, '2022-09-19 01:50:49', '2022-09-19 01:50:49'),
 (11, 'pm3', 'pm3@gmail.com', '$2y$10$bKFbrB0hR8Wf/.jwenyZj.U2DRU6SVy5y0sGni2rrecXqsiM/2ztS', NULL, NULL, 0, 0, NULL, NULL, '01575202020', 'male', NULL, 'en', 'active', 'enable', NULL, NULL, 1, 18, 0, 0, NULL, NULL, NULL, 1, 1, 1, '2022-09-19 01:51:45', '2022-09-19 01:51:45'),
@@ -7357,7 +7323,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `two_factor_secret`, `tw
 (13, 'Client 1', NULL, '$2y$10$yTLoU8tbmmRRgXu0/2yJ3.FBFUS/xhXaGKfOquc9FnU3tsPUYXzn2', NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, 'mr', 'en', 'active', 'disable', NULL, NULL, 1, NULL, 0, 0, NULL, NULL, NULL, 1, 1, 1, '2022-09-19 22:53:06', '2022-09-19 22:53:06'),
 (14, 'Test custom', NULL, '$2y$10$geh2brkSPUsaUfXXC88gLOoS67ESXidpkTFZYTP3HIUHPBy2Bh0zu', NULL, NULL, 0, 0, NULL, NULL, NULL, NULL, 'mr', 'en', 'active', 'disable', NULL, NULL, 0, NULL, 0, 0, NULL, NULL, NULL, 1, 1, 1, '2022-09-19 23:51:56', '2022-09-19 23:51:56'),
 (15, 'Pm5', 'pm@gmail.com', '$2y$10$G60UYl5QsmMbfWzBo0qj4OKqayLp5QoUDoBP3daM92dCEOLbEZLMW', NULL, NULL, 0, 0, NULL, NULL, '01575202020', 'male', NULL, 'en', 'active', 'enable', NULL, NULL, 1, 18, 0, 0, NULL, NULL, NULL, 1, 1, 1, '2022-09-22 04:25:56', '2022-09-22 04:25:56'),
-(16, 'pm6', 'pm6@gmail.com', '$2y$10$wJwYsBWTMPLss6zyX./d.uidV39b.q63IJt9CwK6pyCZCKrzicqRa', NULL, NULL, 0, 0, NULL, NULL, '01575202020', 'male', NULL, 'en', 'active', 'enable', NULL, NULL, 1, 18, 0, 0, NULL, NULL, NULL, 1, 1, 1, '2022-09-23 03:39:16', '2022-09-23 03:39:16');
+(16, 'pm6', 'pm6@gmail.com', '$2y$10$wJwYsBWTMPLss6zyX./d.uidV39b.q63IJt9CwK6pyCZCKrzicqRa', NULL, NULL, 0, 0, NULL, NULL, '01575202020', 'male', NULL, 'en', 'active', 'enable', NULL, NULL, 1, 18, 0, 0, NULL, NULL, NULL, 1, 1, 1, '2022-09-23 03:39:16', '2022-09-23 03:39:16'),
+(17, 'John Cena', 'johncena@gmail.com', '$2y$10$b.UM7bXjO7tgGkFbKU8PieFilWKbeGUpn9.I0uPLhK9r90HGmgLQK', NULL, NULL, 0, 0, NULL, NULL, '01575202020', 'male', 'mr', 'en', 'active', 'disable', NULL, NULL, 1, 18, 0, 0, NULL, NULL, NULL, 1, 1, 1, '2022-09-25 21:08:32', '2022-09-25 21:08:32');
 
 -- --------------------------------------------------------
 
@@ -9871,7 +9838,274 @@ INSERT INTO `user_permissions` (`id`, `user_id`, `permission_id`, `permission_ty
 (2400, 16, 264, 5, '2022-09-23 03:39:18', '2022-09-23 03:39:18'),
 (2401, 16, 265, 5, '2022-09-23 03:39:18', '2022-09-23 03:39:18'),
 (2402, 16, 266, 5, '2022-09-23 03:39:18', '2022-09-23 03:39:18'),
-(2403, 16, 267, 5, '2022-09-23 03:39:18', '2022-09-23 03:39:18');
+(2403, 16, 267, 5, '2022-09-23 03:39:18', '2022-09-23 03:39:18'),
+(2404, 17, 1, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2405, 17, 2, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2406, 17, 3, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2407, 17, 4, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2408, 17, 5, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2409, 17, 6, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2410, 17, 7, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2411, 17, 8, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2412, 17, 9, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2413, 17, 10, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2414, 17, 11, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2415, 17, 12, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2416, 17, 13, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2417, 17, 14, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2418, 17, 15, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2419, 17, 16, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2420, 17, 17, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2421, 17, 18, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2422, 17, 19, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2423, 17, 20, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2424, 17, 21, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2425, 17, 22, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2426, 17, 23, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2427, 17, 24, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2428, 17, 25, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2429, 17, 26, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2430, 17, 27, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2431, 17, 28, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2432, 17, 29, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2433, 17, 30, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2434, 17, 31, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2435, 17, 32, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2436, 17, 33, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2437, 17, 34, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2438, 17, 35, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2439, 17, 36, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2440, 17, 37, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2441, 17, 38, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2442, 17, 39, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2443, 17, 40, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2444, 17, 41, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2445, 17, 42, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2446, 17, 43, 2, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2447, 17, 44, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2448, 17, 45, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2449, 17, 46, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2450, 17, 47, 4, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2451, 17, 48, 4, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2452, 17, 49, 1, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2453, 17, 50, 4, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2454, 17, 51, 4, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2455, 17, 52, 1, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2456, 17, 53, 1, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2457, 17, 54, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2458, 17, 55, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2459, 17, 56, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2460, 17, 57, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2461, 17, 58, 5, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2462, 17, 59, 4, '2022-09-25 21:08:33', '2022-09-25 21:08:33'),
+(2463, 17, 60, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2464, 17, 61, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2465, 17, 62, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2466, 17, 63, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2467, 17, 64, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2468, 17, 65, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2469, 17, 66, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2470, 17, 67, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2471, 17, 68, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2472, 17, 69, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2473, 17, 70, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2474, 17, 71, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2475, 17, 72, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2476, 17, 73, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2477, 17, 74, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2478, 17, 75, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2479, 17, 76, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2480, 17, 77, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2481, 17, 78, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2482, 17, 79, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2483, 17, 80, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2484, 17, 81, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2485, 17, 82, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2486, 17, 83, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2487, 17, 84, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2488, 17, 85, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2489, 17, 86, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2490, 17, 87, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2491, 17, 88, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2492, 17, 89, 2, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2493, 17, 90, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2494, 17, 91, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2495, 17, 92, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2496, 17, 93, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2497, 17, 94, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2498, 17, 95, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2499, 17, 96, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2500, 17, 97, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2501, 17, 98, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2502, 17, 99, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2503, 17, 100, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2504, 17, 101, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2505, 17, 102, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2506, 17, 103, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2507, 17, 104, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2508, 17, 105, 1, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2509, 17, 106, 1, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2510, 17, 107, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2511, 17, 108, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2512, 17, 109, 1, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2513, 17, 110, 1, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2514, 17, 111, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2515, 17, 112, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2516, 17, 113, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2517, 17, 114, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2518, 17, 115, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2519, 17, 116, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2520, 17, 117, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2521, 17, 118, 2, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2522, 17, 119, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2523, 17, 120, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2524, 17, 121, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2525, 17, 122, 2, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2526, 17, 123, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2527, 17, 124, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2528, 17, 125, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2529, 17, 126, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2530, 17, 127, 2, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2531, 17, 128, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2532, 17, 129, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2533, 17, 130, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2534, 17, 131, 2, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2535, 17, 132, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2536, 17, 133, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2537, 17, 134, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2538, 17, 135, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2539, 17, 136, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2540, 17, 137, 1, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2541, 17, 138, 3, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2542, 17, 139, 1, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2543, 17, 140, 1, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2544, 17, 141, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2545, 17, 142, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2546, 17, 143, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2547, 17, 144, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2548, 17, 145, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2549, 17, 146, 2, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2550, 17, 147, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2551, 17, 148, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2552, 17, 149, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2553, 17, 150, 2, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2554, 17, 151, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2555, 17, 152, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2556, 17, 153, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2557, 17, 154, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2558, 17, 155, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2559, 17, 156, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2560, 17, 157, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2561, 17, 158, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2562, 17, 159, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2563, 17, 160, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2564, 17, 161, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2565, 17, 162, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2566, 17, 163, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2567, 17, 164, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2568, 17, 165, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2569, 17, 166, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2570, 17, 167, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2571, 17, 168, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2572, 17, 169, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2573, 17, 170, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2574, 17, 171, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2575, 17, 172, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2576, 17, 173, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2577, 17, 174, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2578, 17, 175, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2579, 17, 176, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2580, 17, 177, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2581, 17, 178, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2582, 17, 179, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2583, 17, 180, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2584, 17, 181, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2585, 17, 182, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2586, 17, 183, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2587, 17, 184, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2588, 17, 185, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2589, 17, 186, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2590, 17, 187, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2591, 17, 188, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2592, 17, 189, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2593, 17, 190, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2594, 17, 191, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2595, 17, 192, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2596, 17, 193, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2597, 17, 194, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2598, 17, 195, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2599, 17, 196, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2600, 17, 197, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2601, 17, 198, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2602, 17, 199, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2603, 17, 200, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2604, 17, 201, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2605, 17, 202, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2606, 17, 203, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2607, 17, 204, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2608, 17, 205, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2609, 17, 206, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2610, 17, 207, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2611, 17, 208, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2612, 17, 209, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2613, 17, 210, 2, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2614, 17, 211, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2615, 17, 212, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2616, 17, 213, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2617, 17, 214, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2618, 17, 215, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2619, 17, 216, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2620, 17, 217, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2621, 17, 218, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2622, 17, 219, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2623, 17, 220, 4, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2624, 17, 221, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2625, 17, 222, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2626, 17, 223, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2627, 17, 224, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2628, 17, 225, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2629, 17, 226, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2630, 17, 227, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2631, 17, 228, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2632, 17, 229, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2633, 17, 230, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2634, 17, 231, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2635, 17, 232, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2636, 17, 233, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2637, 17, 234, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2638, 17, 235, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2639, 17, 236, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2640, 17, 237, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2641, 17, 238, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2642, 17, 239, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2643, 17, 240, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2644, 17, 241, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2645, 17, 242, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2646, 17, 243, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2647, 17, 244, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2648, 17, 245, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2649, 17, 246, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2650, 17, 247, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2651, 17, 248, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2652, 17, 249, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2653, 17, 250, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2654, 17, 251, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2655, 17, 252, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2656, 17, 253, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2657, 17, 254, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2658, 17, 255, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2659, 17, 256, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2660, 17, 257, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2661, 17, 258, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2662, 17, 259, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2663, 17, 260, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2664, 17, 261, 2, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2665, 17, 262, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2666, 17, 263, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2667, 17, 264, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2668, 17, 265, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2669, 17, 266, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34'),
+(2670, 17, 267, 5, '2022-09-25 21:08:34', '2022-09-25 21:08:34');
 
 -- --------------------------------------------------------
 
@@ -9965,6 +10199,13 @@ ALTER TABLE `client_docs`
   ADD KEY `client_docs_user_id_foreign` (`user_id`),
   ADD KEY `client_docs_added_by_foreign` (`added_by`),
   ADD KEY `client_docs_last_updated_by_foreign` (`last_updated_by`);
+
+--
+-- Indexes for table `client_forms`
+--
+ALTER TABLE `client_forms`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `deal_id` (`deal_id`);
 
 --
 -- Indexes for table `client_notes`
@@ -11583,7 +11824,7 @@ ALTER TABLE `client_contacts`
 -- AUTO_INCREMENT for table `client_details`
 --
 ALTER TABLE `client_details`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `client_docs`
@@ -11592,10 +11833,16 @@ ALTER TABLE `client_docs`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `client_forms`
+--
+ALTER TABLE `client_forms`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
 -- AUTO_INCREMENT for table `client_notes`
 --
 ALTER TABLE `client_notes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `client_sub_categories`
@@ -11721,7 +11968,7 @@ ALTER TABLE `custom_fields`
 -- AUTO_INCREMENT for table `custom_fields_data`
 --
 ALTER TABLE `custom_fields_data`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `custom_field_groups`
@@ -11751,7 +11998,7 @@ ALTER TABLE `database_backup_cron_settings`
 -- AUTO_INCREMENT for table `deals`
 --
 ALTER TABLE `deals`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- AUTO_INCREMENT for table `designations`
@@ -11829,7 +12076,7 @@ ALTER TABLE `employee_shift_change_requests`
 -- AUTO_INCREMENT for table `employee_shift_schedules`
 --
 ALTER TABLE `employee_shift_schedules`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `employee_skills`
@@ -11913,7 +12160,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `file_storage`
 --
 ALTER TABLE `file_storage`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `file_storage_settings`
@@ -12129,7 +12376,7 @@ ALTER TABLE `message_settings`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=656;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=657;
 
 --
 -- AUTO_INCREMENT for table `modules`
@@ -12219,19 +12466,19 @@ ALTER TABLE `pinned`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `product_category`
 --
 ALTER TABLE `product_category`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `product_files`
 --
 ALTER TABLE `product_files`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `product_sub_category`
@@ -12243,13 +12490,13 @@ ALTER TABLE `product_sub_category`
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- AUTO_INCREMENT for table `project_activity`
 --
 ALTER TABLE `project_activity`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `project_category`
@@ -12267,7 +12514,7 @@ ALTER TABLE `project_files`
 -- AUTO_INCREMENT for table `project_members`
 --
 ALTER TABLE `project_members`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `project_milestones`
@@ -12279,7 +12526,7 @@ ALTER TABLE `project_milestones`
 -- AUTO_INCREMENT for table `project_notes`
 --
 ALTER TABLE `project_notes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `project_ratings`
@@ -12351,19 +12598,19 @@ ALTER TABLE `project_user_notes`
 -- AUTO_INCREMENT for table `proposals`
 --
 ALTER TABLE `proposals`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `proposal_items`
 --
 ALTER TABLE `proposal_items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `proposal_item_images`
 --
 ALTER TABLE `proposal_item_images`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `proposal_signs`
@@ -12435,7 +12682,7 @@ ALTER TABLE `p_m_assigns`
 -- AUTO_INCREMENT for table `p_m_projects`
 --
 ALTER TABLE `p_m_projects`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `quotations`
@@ -12681,13 +12928,13 @@ ALTER TABLE `translate_settings`
 -- AUTO_INCREMENT for table `universal_search`
 --
 ALTER TABLE `universal_search`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `users_chat`
@@ -12723,7 +12970,7 @@ ALTER TABLE `user_leadboard_settings`
 -- AUTO_INCREMENT for table `user_permissions`
 --
 ALTER TABLE `user_permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2404;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2671;
 
 --
 -- AUTO_INCREMENT for table `user_taskboard_settings`
