@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\Deal;
 
 /**
  * App\Models\Contract
@@ -91,7 +92,7 @@ class Contract extends BaseModel
 
     protected $dates = [
         'start_date',
-        
+
     ];
 
     protected $with = ['currency'];
@@ -136,6 +137,10 @@ class Contract extends BaseModel
     public function files(): HasMany
     {
         return $this->hasMany(ContractFile::class, 'contract_id')->orderBy('id', 'desc');
+    }
+    public function deal()
+    {
+        return $this->belongsTo(Deal::class, 'deal_id');
     }
 
 }

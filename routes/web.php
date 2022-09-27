@@ -908,6 +908,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
 
     // Contracts
+      Route::post('contracts/deal-create', [ContractController::class, 'createDeal'])->name('create-deal');
       Route::post('contracts/deal-store', [ContractController::class, 'storeDeal'])->name('store-deals');
       Route::get('contracts/deal-delete/{id}', [ContractController::class, 'deleteDeal']);
     Route::post('contracts/apply-quick-action', [ContractController::class, 'applyQuickAction'])->name('contracts.apply_quick_action');

@@ -164,6 +164,17 @@ class ContractController extends AccountBaseController
       );
       return Redirect()->back()->with($notification);
   }
+  public function createDeal(Request $request)
+  {
+    $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $suffle = substr(str_shuffle($chars), 0, 6);
+  $deal= new Deal();
+  $deal->deal_id= 'DSEOP1'. $suffle;
+  $deal->save();
+    return redirect('/account/contracts')->with('messages.contractAdded');
+
+
+  }
     public function storeDeal(Request $request)
     {
 
@@ -189,6 +200,20 @@ class ContractController extends AccountBaseController
       $deal->currency_id= $request->currency_id;
       $deal->description= $request->description;
       $deal->save();
+      $contract = new Contract();
+      $contract->id= $deal->id;
+      $contract->deal_id= $deal->id;
+      $contract->subject=$request->project_name;
+      $contract->amount= $request->amount;
+      $contract->original_amount=$request->amount;
+      $contract->start_date=  Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+      $contract->original_start_date=  Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+      $contract->description= $request->description;
+        $contract->client_id= 13;
+          $contract->currency_id= 1;
+
+
+      $contract->save();
       //dd($deal->id);
       $deal_hash= $deal->id;
         //$key= Crypt::encrypt($deal_hash);
@@ -198,7 +223,7 @@ class ContractController extends AccountBaseController
       $deal_hash_store= Deal::find($deal_hash);
       $deal_hash_store->hash= $key;
       $deal_hash_store->save();
-
+///have to find project id
       $project= new Project();
       $project->project_name= $request->project_name;
       $project->project_short_code= 'PSEOP1' . $suffle;
@@ -403,6 +428,7 @@ class ContractController extends AccountBaseController
      */
     public function show($id)
     {
+
         $viewPermission = user()->permission('view_contract');
         $this->viewDiscussionPermission = $viewDiscussionPermission = user()->permission('view_contract_discussion');
         $this->viewContractFilesPermission = $viewContractFilesPermission = user()->permission('view_contract_files');
@@ -417,7 +443,7 @@ class ContractController extends AccountBaseController
                 $q->where('contract_discussions.added_by', user()->id);
             }
         }, 'discussion.user'])->findOrFail($id)
-          ->withCustomFields();
+          ;
 
         abort_403(!(
             $viewPermission == 'all'
@@ -427,13 +453,9 @@ class ContractController extends AccountBaseController
         ));
 
         $this->pageTitle = __('modules.contracts.contractNumber') . ' #' . $this->contract->id;
-        $this->contractFormFields = ContractCustomForm::with('customField')->where('status', 'active')->where('custom_fields_id', '!=', 'null')->get();
 
-        $this->contractId = $id;
 
-        if (!empty($this->contract->getCustomFieldGroupsWithFields())) {
-            $this->fields = $this->contract->getCustomFieldGroupsWithFields()->fields;
-        }
+
         $this->view = 'contracts.ajax.summary';
 
         $tab = request('tab');

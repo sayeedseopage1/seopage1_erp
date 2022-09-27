@@ -15,10 +15,10 @@
             <x-tab :href="route('contracts.show', $contract->id)" :text="__('modules.contracts.summery')" class="profile" />
             <x-tab :href="route('contracts.show', $contract->id).'?tab=discussion'"
                 :text="__('modules.contracts.discussion')" class="discussion" />
-            <x-tab :href="route('contracts.show', $contract->id).'?tab=files'" :text="__('app.contractFiles')"
+            <x-tab :href="route('contracts.show', $contract->id).'?tab=files'" :text="__('Deal Files')"
                 class="files" />
             <x-tab :href="route('contracts.show', $contract->id).'?tab=renew'"
-                :text="__('modules.contracts.contractRenewalHistory')" class="renew" />
+                :text="__('Deal Renewal History')" class="renew" />
 
         </div>
 

@@ -32,13 +32,13 @@ class NewContract extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        $via = ['database'];
-
-        if ($notifiable->email_notifications && $notifiable->email != '') {
-            array_push($via, 'mail');
-        }
-
-        return $via;
+        // $via = ['database'];
+        //
+        // if ($notifiable->email_notifications && $notifiable->email != '') {
+        //     array_push($via, 'mail');
+        // }
+        //
+        // return $via;
     }
 
     /**

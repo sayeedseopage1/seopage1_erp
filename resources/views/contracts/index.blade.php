@@ -99,13 +99,20 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
                         Create Deal
                     </x-forms.link-primary>
                 @endif
+            
+            {{--  <form class="hidden" action="{{route('create-deal')}}" method="post">
+                @csrf
 
-                @if ($manageContractTemplatePermission == 'all' || $manageContractTemplatePermission == 'added')
+
+              <button type="submit" class="btn btn-primary mr-3">Create Deal</button>
+                </form>--}}
+              {{--  @if ($manageContractTemplatePermission == 'all' || $manageContractTemplatePermission == 'added')
                     <x-forms.link-secondary :link="route('contract-template.index')"
                         class="mr-3 mb-2 mb-lg-0 mb-md-0 float-left" icon="layer-group">
                         @lang('app.menu.contractTemplate')
                     </x-forms.link-secondary>
                 @endif
+                --}}
             </div>
 
             @if (!in_array('client', user_roles()))
@@ -151,13 +158,16 @@ $deals= App\Models\Deal::all();
 
           $project= App\Models\Project::where('deal_id',$deal->id)->first();
           $pm= App\Models\PMProject::where('deal_id',$deal->id)->first();
-          $pm_name= App\Models\User::where('id',$pm->pm_id)->first();
+
+        $pm_name= App\Models\User::where('id',$pm->pm_id)->first();
+
+
           //dd($project);
            ?>
             <tr>
               <td></td>
                 <td>{{$loop->index+1}}</td>
-                <td>{{$deal->deal_id}}</td>
+                <td><a href="/account/contracts/{{$deal->id}}">{{$deal->deal_id}}</a></td>
                 <td>
                     @if($project->project_status == 'pending')
                       {{$deal->project_name}}
@@ -172,8 +182,10 @@ $deals= App\Models\Deal::all();
                 <td>{{$deal->client_name}}</td>
 
                   <td>
+                    @if($pm->deal_id != null)
 
                           <a href="/account/employees/{{$pm_name->id}}">{{$pm_name->name}}</a>
+                    @endif
 
 
                     </td>

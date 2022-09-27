@@ -32,7 +32,7 @@
                     <td><img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
                             class="logo" /></td>
                     <td align="right" class="font-weight-bold f-21 text-dark text-uppercase mt-4 mt-lg-0 mt-md-0">
-                        @lang('app.menu.contract')</td>
+                      Deal</td>
                 </tr>
                 <tr class="inv-num">
                     <td class="f-14 text-dark">
@@ -46,13 +46,19 @@
                         <table class="inv-num-date text-dark f-13 mt-3">
                             <tr>
                                 <td class="bg-light-grey border-right-0 f-w-500">
-                                    @lang('modules.contracts.contractNumber')</td>
-                                <td class="border-left-0">#{{ $contract->id }}</td>
+                                    Deal Number</td>
+                                <td class="border-left-0">#{{ $contract->deal->deal_id }}</td>
                             </tr>
                             <tr>
                                 <td class="bg-light-grey border-right-0 f-w-500">
                                     @lang('modules.projects.startDate')</td>
                                 <td class="border-left-0">{{ $contract->start_date->format(global_setting()->date_format) }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="bg-light-grey border-right-0 f-w-500">
+                                  Pipeline Stage</td>
+                                <td class="border-left-0">{{ $contract->deal->pipeline_stage }}
                                 </td>
                             </tr>
                             @if ($contract->end_date != null)
@@ -64,10 +70,10 @@
                                 </tr>
                             @endif
                             <tr>
-                                <td class="bg-light-grey border-right-0 f-w-500">
+                                {{--}}<td class="bg-light-grey border-right-0 f-w-500">
                                     @lang('modules.contracts.contractType')</td>
                                 <td class="border-left-0">{{ $contract->contractType->name }}
-                                </td>
+                                </td> --}}
                             </tr>
                         </table>
                     </td>
@@ -81,9 +87,9 @@
                     <td class="f-14 text-dark">
                         <p class="mb-0 text-left"><span
                                 class="text-dark-grey text-capitalize">@lang("app.client")</span><br>
-                            {{ mb_ucwords($contract->client->name) }}<br>
-                            {{ mb_ucwords($contract->client->clientDetails->company_name) }}<br>
-                            {!! nl2br($contract->client->clientDetails->address) !!}</p>
+                            {{ mb_ucwords($contract->deal->client_name) }}<br>
+                           {{ mb_ucwords($contract->deal->organization) }}<br>
+                          {{--  {!! nl2br($contract->client->clientDetails->address) !!}</p>--}}
                     </td>
                     <td align="right">
                         @if ($contract->company_logo)
@@ -103,12 +109,12 @@
             <p class="f-15">{{ $contract->subject }}</p>
 
             <h5>@lang('app.description')</h5>
-            <div class="ql-editor p-0">{!! $contract->contract_detail !!}</div>
+            <div class="ql-editor p-0">{!! $contract->description !!}</div>
 
             @if ($contract->amount != 0)
                 <div class="text-right pt-3 border-top">
-                    <h4>@lang('modules.contracts.contractValue'):
-                        {{ currency_formatter($contract->amount, $contract->currency->currency_symbol) }}</h4>
+                    <h4>Deal Value:
+                        {{$contract->amount}}$</h4>
                 </div>
             @endif
         </div>
