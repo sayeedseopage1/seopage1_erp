@@ -214,7 +214,17 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
         <!-- Task Box Start -->
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
 
-            {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
+
+
+                {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
+
+
+
+
+          
+
+
+
 
         </div>
         <!-- Task Box End -->

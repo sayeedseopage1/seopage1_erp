@@ -152,17 +152,33 @@ $deals= App\Models\Deal::all();
           $project= App\Models\Project::where('deal_id',$deal->id)->first();
           $pm= App\Models\PMProject::where('deal_id',$deal->id)->first();
           $pm_name= App\Models\User::where('id',$pm->pm_id)->first();
-          //dd($pm_name);
+          //dd($project);
            ?>
             <tr>
               <td></td>
                 <td>{{$loop->index+1}}</td>
                 <td>{{$deal->deal_id}}</td>
-                <td><a href="/account/projects/{{$project->id}}">{{$deal->project_name}}</a></td>
+                <td>
+                    @if($project->project_status == 'pending')
+                      {{$deal->project_name}}
+                      @else
+
+                  <a href="/account/projects/{{$project->id}}">{{$deal->project_name}}</a>
+                  @endif
+
+                </td>
                 <td>{{$deal->amount}}</td>
 
                 <td>{{$deal->client_name}}</td>
-                  <td><a href="/account/employees/{{$pm_name->id}}">{{$pm_name->name}}</a></td>
+
+                  <td>
+
+                          <a href="/account/employees/{{$pm_name->id}}">{{$pm_name->name}}</a>
+
+
+                    </td>
+
+
                 <td>{{$deal->pipeline_stage}}</td>
                 <td>{{$deal->deal_creation_date}}</td>
                 <td>
@@ -180,7 +196,7 @@ $deals= App\Models\Deal::all();
                                   </td>
                 <td>
 
-                  <a class="btn btn-info" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                  <a class="btn btn-info mr-3 openRightModal" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
 
                     <a class="btn btn-danger" href="contracts/deal-delete/{{$deal->id}}"><i class="fa-solid fa-trash"></i></a>
 
