@@ -8,6 +8,7 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <x-filters.filter-box>
         <!-- DATE START -->
         <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
@@ -88,6 +89,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 @endphp
 
 @section('content')
+
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper">
         <!-- Add Task Export Buttons Start -->
@@ -95,11 +97,10 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
             <div id="table-actions" class="d-flex align-items-center">
                 @if ($addContractPermission == 'all' || $addContractPermission == 'added')
-                    <x-forms.link-primary :link="route('contracts.create')" class="mr-3 openRightModal" icon="plus">
-                        Create Deal
-                    </x-forms.link-primary>
+                    <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#dealaddmodal"><i class="fa-solid fa-plus"></i></button>
+                    @include('contracts.modals.dealaddmodal')
                 @endif
-            
+
             {{--  <form class="hidden" action="{{route('create-deal')}}" method="post">
                 @csrf
 
@@ -145,7 +146,7 @@ $deals= App\Models\Deal::all();
                 <th class="whitespace-nowrap">Amount</th>
                 <th class="whitespace-nowrap">Client Name</th>
                   <th class="whitespace-nowrap">Project Manager</th>
-                <th class="whitespace-nowrap">PipeLine Stage</th>
+
                 <th class="whitespace-nowrap">Deal Creation Date</th>
                   <th class="whitespace-nowrap">Client Form</th>
                 <th class="whitespace-nowrap">Action</th>
@@ -159,7 +160,9 @@ $deals= App\Models\Deal::all();
           $project= App\Models\Project::where('deal_id',$deal->id)->first();
           $pm= App\Models\PMProject::where('deal_id',$deal->id)->first();
 
+
         $pm_name= App\Models\User::where('id',$pm->pm_id)->first();
+        $client_name= App\Models\User::where('id',$pm->client_id)->first();
 
 
           //dd($project);
@@ -179,7 +182,7 @@ $deals= App\Models\Deal::all();
                 </td>
                 <td>{{$deal->amount}}</td>
 
-                <td>{{$deal->client_name}}</td>
+                <td> <a href="/account/clients/{{$client_name->id}}">{{$deal->client_name}}</a></td>
 
                   <td>
                     @if($pm->deal_id != null)
@@ -191,26 +194,27 @@ $deals= App\Models\Deal::all();
                     </td>
 
 
-                <td>{{$deal->pipeline_stage}}</td>
+
                 <td>{{$deal->deal_creation_date}}</td>
                 <td>
                   @if($deal->submission_status == 'Submitted')
-                  <span class="badge bg-success">Submitted</span>
+                  <span class="badge bg-success" style="color:white !important;">Submitted</span>
                   @elseif($deal->submission_status == 'Awaiting for client Response')
                     <span class="badge bg-warning">Awaiting for client Response</span>
                   @else
 
 
                                       {{--  <a class="btn btn-danger" href="/deals/{{$key}}"><i class="fa-solid fa-trash"></i></a>--}}
-                                        <button class="btn btn-success"  data-bs-toggle="modal" data-bs-target="#clientformModal{{$deal->id}}"><i class="fa-solid fa-eye"></i></button>
-
+                                      {{-- <button class="btn btn-success"  data-bs-toggle="modal" data-bs-target="#clientformModal{{$deal->id}}"><i class="fa-solid fa-eye"></i></button>--}}
+                                      <a class="btn btn-success" href="/deals/details/{{$deal->id}}"><i class="fa-solid fa-eye"></i></a>
                                         @endif
                                   </td>
                 <td>
 
-                  <a class="btn btn-info mr-3 openRightModal" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                  <a class="btn btn-info mr-3 openRightModal{{$deal->id}}" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
 
-                    <a class="btn btn-danger" href="contracts/deal-delete/{{$deal->id}}"><i class="fa-solid fa-trash"></i></a>
+                  {{--<a class="btn btn-danger" href="contracts/deal-delete/{{$deal->id}}"><i class="fa-solid fa-trash"></i></a> --}}
+                    @include('contracts.modals.editmodal')
 
                 </td>
             </tr>
