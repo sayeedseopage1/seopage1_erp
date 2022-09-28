@@ -1,6 +1,89 @@
 <script src="{{ asset('vendor/jquery/frappe-charts.min.iife.js') }}"></script>
 
-<div class="row">
+<?php
+$projects= App\Models\PMProject::orderBy('id','asc')->get();
+
+ ?>
+
+<div class="d-flex flex-column w-tables rounded mt-3 bg-white">
+  <table id="dealtable"  class="table table-striped" style="width:100%">
+<thead>
+    <tr>
+        <th class="whitespace-nowrap"></th>
+
+        <th class="whitespace-nowrap">#</th>
+        <th class="whitespace-nowrap">Deal Id</th>
+
+        <th class="whitespace-nowrap">Project Name</th>
+
+        <th class="whitespace-nowrap">Amount</th>
+        <th class="whitespace-nowrap">Client Name</th>
+          <th class="whitespace-nowrap">Project Manager</th>
+
+        <th class="whitespace-nowrap">Deal Creation Date</th>
+
+
+    </tr>
+</thead>
+<tbody>
+  @foreach($projects as $project)
+  <?php
+  $deal= App\Models\Deal::where('id',$project->deal_id)->first();
+  $user= App\Models\User::where('id',$project->pm_id)->first();
+  $project_count= App\Models\PMAssign::where('pm_id',$project->pm_id)->first();
+
+
+
+   ?>
+
+
+
+
+    <tr>
+
+      <td></td>
+        <td>{{$loop->index+1}}</td>
+        <td>
+
+          {{$deal->deal_id}}
+        </td>
+        <td>
+          {{$deal->project_name}}
+
+
+        </td>
+        <td>
+          {{$deal->amount}}
+
+        </td>
+
+        <td>
+        {{$deal->client_name}} </td>
+
+          <td>
+
+              {{$user->name}}  ({{$project_count->project_count}},{{$project_count->amount}})
+
+            </td>
+
+
+
+        <td>{{$deal->deal_creation_date}}</td>
+
+
+    </tr>
+    @endforeach
+
+
+
+</tbody>
+</table>
+
+
+
+</div>
+<hr>
+<div class="row mt-3">
     @if (in_array('clients', $modules) && in_array('total_clients', $activeWidgets))
         <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
             <a href="{{ route('clients.index') }}">
@@ -82,6 +165,7 @@
     @endif
 
 </div>
+
 
 <div class="row">
     @if (in_array('payments', $modules) && in_array('recent_earnings', $activeWidgets))
@@ -401,4 +485,13 @@
             }
         })
     });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" charset="utf-8"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js" charset="utf-8"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" charset="utf-8"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#dealtable').DataTable();
+});
 </script>
