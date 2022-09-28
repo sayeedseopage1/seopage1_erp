@@ -57,12 +57,9 @@
                   <div class="mt-3">
                       <label for="input-state-3" class="form-label"><strong style="color:red;">Please Copy This URL, Send It To The Client & Confirm Submission</strong></label>
                     <div class="row" style="margin-left:40px;">
-                      <?php
-                        $url = env('APP_URL');
-
-                       ?>
+                    
                       <div class="col-md-10">
-                          <input type="text" class="form-control"  value="{{$url}}/deals/{{$deal->hash}}" id="{{$deal->hash}}">
+                          <input type="text" class="form-control"  value="https://erp.seopage1.net/deals/{{$deal->hash}}" id="{{$deal->hash}}">
                       </div>
                       <div class="col-md-2">
                               <button type="button" class="btn btn-info" onclick="myFunction{{$deal->hash}}()"><i class="fa-solid fa-copy"></i></button>
