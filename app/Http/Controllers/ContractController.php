@@ -248,6 +248,7 @@ class ContractController extends AccountBaseController
           $project->project_name= $request->project_name;
           $project->project_short_code= 'PSEOP1' . $suffle;
           $project->start_date= $newDate;
+          $project->project_budget= $request->amount;
 
           $project->completion_percent= 0;
           $project->deal_id=$deal->id;
