@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Deal;
 
 /**
  * App\Models\Project
@@ -364,6 +365,10 @@ class Project extends BaseModel
         }
 
         return false;
+    }
+    public function deal()
+    {
+        return $this->belongsTo(Deal::class, 'deal_id');
     }
 
 }

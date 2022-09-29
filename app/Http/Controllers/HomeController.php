@@ -79,13 +79,8 @@ class HomeController extends Controller
     }
     public function deal($key)
     {
-      //dd($key);
+
       $decrypt= Crypt::decrypt($key);
-      //dd($decrypt);
-
-
-
-
       //dd($decrypt);
 
       return view('client',compact('decrypt'));

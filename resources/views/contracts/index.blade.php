@@ -136,10 +136,10 @@ $deals= App\Models\Deal::all();
 
         <!-- Task Box Start -->
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
-          <table id="dealtable"  class="display" style="width:100%">
+          <table id="dealtable"  class="table table-striped" style="width:100%">
         <thead>
             <tr>
-                <th class="whitespace-nowrap"></th>
+
                 <th class="whitespace-nowrap">#</th>
                 <th class="whitespace-nowrap">Short Code</th>
                 <th class="whitespace-nowrap">Project Name</th>
@@ -168,7 +168,7 @@ $deals= App\Models\Deal::all();
           //dd($project);
            ?>
             <tr>
-              <td></td>
+
                 <td>{{$loop->index+1}}</td>
                 <td><a href="/account/contracts/{{$deal->id}}">{{$deal->deal_id}}</a></td>
                 <td>
@@ -210,8 +210,11 @@ $deals= App\Models\Deal::all();
                                         @endif
                                   </td>
                 <td>
+                  @if($deal->submission_status == "Awaiting for client Response")
+                      <a class="btn btn-success" href="/deals/details/{{$deal->id}}"><i class="fa-solid fa-eye"></i></a>
+                      @endif
 
-                  <a class="btn btn-info mr-3 openRightModal{{$deal->id}}" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                  {{--<a class="btn btn-info mr-3 openRightModal{{$deal->id}}" href="#"><i class="fa-solid fa-pen-to-square"></i></a>--}}
 
                   {{--<a class="btn btn-danger" href="contracts/deal-delete/{{$deal->id}}"><i class="fa-solid fa-trash"></i></a> --}}
                     @include('contracts.modals.editmodal')

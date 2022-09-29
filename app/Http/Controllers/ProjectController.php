@@ -53,6 +53,7 @@ use App\Models\ProjectNote;
 use App\Models\ProjectStatusSetting;
 use App\Models\PMProject;
 use App\Models\PMAssign;
+use App\Models\Deal;
 
 class ProjectController extends AccountBaseController
 {
@@ -91,8 +92,11 @@ class ProjectController extends AccountBaseController
             $this->categories = ProjectCategory::all();
             $this->departments = Team::all();
             $this->projectStatus = ProjectStatusSetting::where('status', 'active')->get();
+
         }
-      $this->project_data= Project::all();
+          $this->project_data= Project::where('project_status','Accepted')->get();
+
+
 
 
         return $dataTable->render('projects.index', $this->data);
@@ -566,6 +570,7 @@ if ($pm_count < 2) {
         $project->currency_id = $request->currency_id != '' ? $request->currency_id : global_setting()->currency_id;
         $project->hours_allocated = $request->hours_allocated;
         $project->status = $request->status;
+        $project->project_status= 'Accepted';
 
         if ($request->public) {
             $project->public = 1;
@@ -581,6 +586,13 @@ if ($pm_count < 2) {
         }
 
         $project->save();
+        $deal_id = PMProject::where('project_id',$project->id)->first();
+        $deal= Deal::find($deal_id->deal_id);
+        $deal->status= 'Accepted';
+        $deal->save();
+        $pmproject= PMProject::find($deal_id->id);
+        $pmproject->status='Accepted';
+        $pmproject->save();
 
 
         // To add custom fields data

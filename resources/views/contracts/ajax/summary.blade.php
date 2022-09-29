@@ -22,6 +22,12 @@
     }
 
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+<?php
+$project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first();
+//dd($project_id->project_id);
+
+ ?>
 
 <div class="card border-0 invoice">
     <!-- CARD BODY START -->
@@ -31,8 +37,20 @@
                 <tr class="inv-logo-heading">
                     <td><img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
                             class="logo" /></td>
-                    <td align="right" class="font-weight-bold f-21 text-dark text-uppercase mt-4 mt-lg-0 mt-md-0">
-                      Deal</td>
+                            <div class="float-right">
+                              @if($contract->deal->status == 'pending')
+                              <button class="btn btn-danger"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
+                                @include('contracts.modals.dealdenymodal')
+                              <a href="/account/projects/{{$project_id->project_id}}/edit" class="btn btn-success">Accept <i class="fa-solid fa-check"></i></a>
+
+                              @elseif($contract->deal->status == 'Accepted')
+                                <h3 style="color:green;">{{$contract->deal->status}}</h3>
+                                @else
+                              <h3 style="color:red;">{{$contract->deal->status}}</h3>
+
+                              @endif
+                            </div>
+
                 </tr>
                 <tr class="inv-num">
                     <td class="f-14 text-dark">
@@ -105,11 +123,11 @@
         </div>
 
         <div class="d-flex flex-column">
-            <h5>@lang('app.subject')</h5>
-            <p class="f-15">{{ $contract->subject }}</p>
+            <h5>Project Name</h5>
+            <p class="f-15">{{ $contract->deal->project_name }}</p>
 
-            <h5>@lang('app.description')</h5>
-            <div class="ql-editor p-0">{!! $contract->description !!}</div>
+            <h5>Project Summary</h5>
+            <div class="ql-editor p-0">{!! $contract->deal->description !!}</div>
 
             @if ($contract->amount != 0)
                 <div class="text-right pt-3 border-top">

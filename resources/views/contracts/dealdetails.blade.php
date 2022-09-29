@@ -57,7 +57,7 @@
                   <div class="mt-3">
                       <label for="input-state-3" class="form-label"><strong style="color:red;">Please Copy This URL, Send It To The Client & Confirm Submission</strong></label>
                     <div class="row" style="margin-left:40px;">
-                    
+
                       <div class="col-md-10">
                           <input type="text" class="form-control"  value="https://erp.seopage1.net/deals/{{$deal->hash}}" id="{{$deal->hash}}">
                       </div>
@@ -83,10 +83,12 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <form method="post" action="#">
+                        <form method="post" action="{{route('store-deal-details')}}">
                           @csrf
+
                           <input type="hidden" name="id" value="{{$deal->id}}">
                           <div class="row">
+
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Deal Id</label>
@@ -106,14 +108,14 @@
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Project Name <span style="color:red;">*</span></label>
-                              <input type="text" value="{{$deal->project_name}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required>
+                              <input type="text" name="project_name" value="{{$deal->project_name}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required>
                               </div>
 
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Project Budget <span style="color:red;">*</span></label>
-                              <input type="" value="{{$deal->amount}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required>
+                              <input type="text" name="amount" value="{{$deal->amount}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
                               </div>
                             </div>
 
@@ -128,7 +130,7 @@
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Client Username</label>
-                              <input type="text" value="{{$deal->client_username}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
+                              <input type="text" name="client_username" value="{{$deal->client_username}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
                               </div>
                             </div>
                             <div class="col-md-3">

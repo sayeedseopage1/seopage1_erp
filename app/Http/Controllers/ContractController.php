@@ -330,6 +330,83 @@ class ContractController extends AccountBaseController
 
 
     }
+    public function updatedealDetails(Request $request)
+    {
+    //  dd($request->client_username);
+      $deal= Deal::find($request->id);
+      $deal->project_name=$request->project_name;
+      $deal->amount=$request->amount;
+      $deal->organization=$request->organization;
+      $deal->client_email=$request->client_email;
+      $deal->description=$request->description;
+      $deal->pipeline_stage=$request->pipeline_stage;
+      $deal->deadline=$request->deadline;
+      $deal->currency_id=$request->currency_id;
+      $deal->message_link=$request->message_link;
+      $deal->profile_link=$request->profile_link;
+      $deal->description2=$request->description2;
+      $deal->description3=$request->description3;
+      $deal->description4=$request->description4;
+      $deal->description5=$request->description5;
+      $deal->description6=$request->description6;
+      $deal->description7=$request->description7;
+      $deal->description8=$request->description8;
+      $deal->description9=$request->description9;
+      $deal->save();
+      $project_id= Project::where('deal_id',$request->id)->first();
+      $project= Project::find($project_id->id);
+      $project->project_name= $request->project_name;
+      $project->project_summary= $request->description;
+      $project->deadline= $request->deadline;
+      $project->project_budget= $request->amount;
+      $project->currency_id=$request->currency_id;
+      $project->save();
+      $contract_id= Contract::where('deal_id',$request->id)->first();
+      $contract= Contract::find($contract_id->id);
+      $contract->subject= $request->project_name;
+      $contract->amount= $request->amount;
+      $contract->original_amount= $request->amount;
+      $contract->description = $request->description;
+      $contract->currency_id =$request->currency_id;
+      $contract->save();
+      $client_id= User::where('id',$contract_id->client_id)->first();
+      $client= User::find($client_id->id);
+      $client->email=$request->client_email;
+      $client->name= $request->client_name;
+      $client->save();
+      // $clientdetail= ClientDetails::find($client_id->id);
+      // //dd($clientdetail);
+      // $clientdetail->company_name= $request->organization;
+      // $clientdetail->save();
+      return redirect('/account/contracts')->with('messages.contractAdded');
+
+
+    }
+    public function DealDeny(Request $request)
+    {
+      $deal= Deal::find($request->id);
+      $deal->reason= $request->reason;
+      $deal->status= 'Denied';
+      $deal->save();
+
+      $pm_id= PMProject::where('deal_id',$request->id)->first();
+      $project= Project::find($pm_id->project_id);
+    //  dd($project);
+      $project->project_status = 'Denied';
+      $project->status= 'Denied';
+      $pmassign= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+    //  dd($pmassign);
+      $pmassign_id= PMAssign::find($pmassign->id);
+      //$deal_id=$request->id;
+      $pmassign_id->project_count= $pmassign->project_count - 1;
+      $pmassign_id->amount= $pmassign->amount - $deal->amount;
+      $pmassign_id->save();
+      // $pm_project= PMProject::find($pm_id->id);
+      // $pm_project->delete();
+      return redirect('/account/contracts/'.$deal->id)->with('messages.contractAdded');
+
+
+    }
 //     public function updateDeal(Request $request)
 //     {
 //
