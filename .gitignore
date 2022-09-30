@@ -4,8 +4,8 @@
 #public/user-uploads
 /storage/*.key
 #vendor
-.env
-.env.backup
+/.env
+/.env.backup
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
