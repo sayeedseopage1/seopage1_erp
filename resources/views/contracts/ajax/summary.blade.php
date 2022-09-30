@@ -29,27 +29,54 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
 
  ?>
 
+
 <div class="card border-0 invoice">
-    <!-- CARD BODY START -->
+
+<!-- CARD BODY START -->
+
     <div class="card-body">
+
         <div class="invoice-table-wrapper">
+
             <table width="100%" class="">
                 <tr class="inv-logo-heading">
                     <td><img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
                             class="logo" /></td>
-                            <div class="float-right">
-                              @if($contract->deal->status == 'pending')
-                              <button class="btn btn-danger"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
-                                @include('contracts.modals.dealdenymodal')
-                              <a href="/account/projects/{{$project_id->project_id}}/edit" class="btn btn-success">Accept <i class="fa-solid fa-check"></i></a>
+                            <td>
+                              <div class="dropdown float-right">
+                                  <button class="btn f-14 px-0 py-0 text-dark-grey dropdown-toggle" type="button"
+                                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <i class="fa fa-ellipsis-h"></i>
+                                  </button>
 
-                              @elseif($contract->deal->status == 'Accepted')
-                                <h3 style="color:green;">{{$contract->deal->status}}</h3>
-                                @else
-                              <h3 style="color:red;">{{$contract->deal->status}}</h3>
+                                  <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
+                                      aria-labelledby="dropdownMenuLink" tabindex="0">
+                                      <a class="dropdown-item"
+                                          href="/deals/details/edit/{{$contract->deal->id}}">@lang('Edit')</a>
+                                  </div>
+                              </div>
 
-                              @endif
-                            </div>
+
+                            </td>
+
+
+                </tr>
+                <tr>
+                  <td>
+                    <div class="d-flex justify-content-center">
+                      @if($contract->deal->status == 'pending')
+                      <button class="btn btn-danger mr-3"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
+                        @include('contracts.modals.dealdenymodal')
+                      <a href="/account/projects/{{$project_id->project_id}}/edit" class="btn btn-success">Accept <i class="fa-solid fa-check"></i></a>
+
+                      @elseif($contract->deal->status == 'Accepted')
+                        <h3 class="d-flex justify-content-center" style="color:green;">{{$contract->deal->status}}</h3>
+                        @else
+                      <h3 class="d-flex justify-content-center" style="color:red;">{{$contract->deal->status}}</h3>
+
+                      @endif
+                    </div>
+                  </td>
 
                 </tr>
                 <tr class="inv-num">
@@ -175,7 +202,7 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
                             </a>
                         </li>
                     @endif
-                    <li>
+                   <li>
                         <a class="dropdown-item f-14 text-dark"
                             href="{{ route('contracts.download', $contract->id) }}">
                             <i class="fa fa-download f-w-500 mr-2 f-11"></i> @lang('app.download')

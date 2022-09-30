@@ -46,9 +46,6 @@
                 <h5>Deal Details</h5>
             @endif
             <hr>
-            <?php
-            $url= url('/');
-             ?>
               <div class="invoice-table-wrapper">
                 @if($deal->submission_status == 'pending')
                 <div class="d-flex justify-content-center">
@@ -62,7 +59,7 @@
                     <div class="row" style="margin-left:40px;">
 
                       <div class="col-md-10">
-                          <input type="text" class="form-control"  value="{{$url}}/deals/{{$deal->hash}}" id="{{$deal->hash}}">
+                          <input type="text" class="form-control"  value="https://erp.seopage1.net/deals/{{$deal->hash}}" id="{{$deal->hash}}">
                       </div>
                       <div class="col-md-2">
                               <button type="button" class="btn btn-info" onclick="myFunction{{$deal->hash}}()"><i class="fa-solid fa-copy"></i></button>
@@ -86,7 +83,7 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <form method="post" action="{{route('store-deal-details')}}">
+                        <form method="post" action="{{route('update-deal-details')}}">
                           @csrf
 
                           <input type="hidden" name="id" value="{{$deal->id}}">
@@ -139,13 +136,13 @@
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Organization</label>
-                              <input type="text" name="organization" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" >
+                              <input type="text" value="{{$deal->organization}}" name="organization" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" >
                               </div>
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Client Email</label>
-                              <input type="text" name="client_email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" >
+                              <input type="text" value="{{$deal->client_email}}" name="client_email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" >
                               </div>
                             </div>
 
@@ -154,7 +151,7 @@
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Project Summary <span style="color:red;">*</span></label>
-                                <textarea name="description" class="form-control" id="description" rows="3" required></textarea>
+                                <textarea name="description" class="form-control" id="description" rows="3" value="{{$deal->description}}" required>{{$deal->description}}</textarea>
                               </div>
                             </div>
 
@@ -163,6 +160,7 @@
                             <div class="col-md-4">
                                 <label for="exampleFormControlTextarea1">Pipeline Stage <span style="color:red;">*</span></label>
                               <select class="form-control" name="pipeline_stage">
+                                <option seelcted value="{{$deal->pipeline_stage}}">{{$deal->pipeline_stage}}</option>
                                 <option value="Contact Made">Contact Made</option>
                                 <option value="Qualified">Qualified</option>
                                 <option value="Requirements Defined">Requirements Defined</option>
@@ -173,7 +171,7 @@
                             <div class="col-md-4">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Deadline</label>
-                              <input type="date" name="deadline" class="form-control" id="exampleFormControlInput1" placeholder="Enter deadline" >
+                              <input type="date" name="deadline" value="{{$deal->deadline}}" class="form-control" id="exampleFormControlInput1" placeholder="Enter deadline" >
                               </div>
                             </div>
                             <div class="col-md-4">
@@ -184,7 +182,9 @@
                                ?>
                               <label for="exampleFormControlTextarea1">Currency <span style="color:red;">*</span></label>
                             <select class="form-control" name="currency_id">
+
                               @foreach($currencies as $currency)
+
                               <option value="{{$currency->id}}">{{$currency->currency_code}} ({{$currency->currency_symbol}})</option>
                             @endforeach
                             </select>
@@ -196,13 +196,13 @@
                             <div class="col-md-6">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Profile Link <span style="color:red;">*</span></label>
-                              <input type="text" name="message_link" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
+                              <input type="text" value="{{$deal->message_link}}" name="message_link" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
                               </div>
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
-                              <input type="text" name="profile_link" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
+                              <input type="text" name="profile_link" value="{{$deal->profile_link}}" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
                               </div>
                             </div>
 
@@ -211,7 +211,7 @@
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.) <span style="color:red;">*</span></label>
-                                <textarea name="description2" class="form-control" id="description2" rows="3" required></textarea>
+                                <textarea name="description2" value="{{$deal->description2}}" class="form-control" id="description2" rows="3" required>{{$deal->description2}}</textarea>
                               </div>
                             </div>
 
@@ -224,7 +224,7 @@
                                   The look and feel should be better than the references.)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description3" class="form-control" id="description3" rows="3" required></textarea>
+                                <textarea value="{{$deal->description3}}" name="description3" class="form-control" id="description3" rows="3" required>{{$deal->description3}}</textarea>
                               </div>
                             </div>
 
@@ -238,7 +238,7 @@
                                                 However, none of these can be copied)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description4" class="form-control" id="description4" rows="3" required></textarea>
+                                <textarea value="{{$deal->description4}}" name="description4" class="form-control" id="description4" rows="3" required>{{$deal->description4}}</textarea>
                               </div>
                             </div>
 
@@ -251,7 +251,7 @@
                                   The client is very concerned if the booking functionality will work the way he wants.)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description5" class="form-control" id="description5" rows="3" required></textarea>
+                                <textarea value="{{$deal->description5}}" name="description5" class="form-control" id="description5" rows="3" required>{{$deal->description5}}</textarea>
                               </div>
                             </div>
 
@@ -262,7 +262,7 @@
                                 <label for="exampleFormControlTextarea1">Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description6" class="form-control" id="description6" rows="3" required></textarea>
+                                <textarea value="{{$deal->description6}}" name="description6" class="form-control" id="description6" rows="3" required>{{$deal->description6}}</textarea>
                               </div>
                             </div>
 
@@ -274,7 +274,7 @@
 
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description7" class="form-control" id="description7" rows="3" required></textarea>
+                                <textarea value="{{$deal->description7}}" name="description7" class="form-control" id="description7" rows="3" required>{{$deal->description7}}</textarea>
                               </div>
                             </div>
 
@@ -286,7 +286,7 @@
 
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description8" class="form-control" id="description8" rows="3" required></textarea>
+                                <textarea value="{{$deal->description8}}" name="description8" class="form-control" id="description8" rows="3" required>{{$deal->description8}}</textarea>
                               </div>
                             </div>
 
@@ -299,7 +299,7 @@
 
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description9" class="form-control" id="description9" rows="3" required></textarea>
+                                <textarea value="{{$deal->description9}}" name="description9" class="form-control" id="description9" rows="3" required>{{$deal->description9}}</textarea>
                               </div>
                             </div>
 
@@ -309,7 +309,7 @@
 
                           <br>
                           <div class="d-flex justify-content-center">
-                            <button class="btn btn-primary" type="submit">Complete Deal Creation</button>
+                            <button class="btn btn-primary" type="submit">Update Deal Creation</button>
 
                           </div>
                         </form>

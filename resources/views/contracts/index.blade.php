@@ -210,8 +210,27 @@ $deals= App\Models\Deal::all();
                                         @endif
                                   </td>
                 <td>
+                  <div class="dropdown float-right">
+                      <button class="btn f-14 px-0 py-0 text-dark-grey" type="button"
+                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fa fa-ellipsis-v"></i>
+                          <!-- <i class="fa-thin fa-square-ellipsis-vertical"></i> -->
+                      </button>
+
+                      <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
+                          aria-labelledby="dropdownMenuLink" tabindex="0">
+                          <a class="dropdown-item"
+                              href="/deals/details/edit/{{$deal->id}}"><i class="fa-solid fa-pen-to-square"></i> @lang('Edit')</a>
+                              <a class="dropdown-item"
+                                  href="/deals/details/edit/{{$deal->id}}"><i class="fa-solid fa-eye"></i> @lang('View')</a>
+                                  <a class="dropdown-item"
+                                      href="contracts/deal-delete/{{$deal->id}}"><i class="fa-solid fa-trash"></i> @lang('Delete')</a>
+                      </div>
+                  </div>
+
+
                   @if($deal->submission_status == "Awaiting for client Response")
-                      <a class="btn btn-success" href="/deals/details/{{$deal->id}}"><i class="fa-solid fa-eye"></i></a>
+                    {{--  <a class="btn btn-success" href="/deals/details/{{$deal->id}}"><i class="fa-solid fa-eye"></i></a>--}}
                       @endif
 
                   {{--<a class="btn btn-info mr-3 openRightModal{{$deal->id}}" href="#"><i class="fa-solid fa-pen-to-square"></i></a>--}}
