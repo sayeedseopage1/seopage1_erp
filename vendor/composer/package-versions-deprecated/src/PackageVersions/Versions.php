@@ -47,7 +47,6 @@ final class Versions
   'berkayk/onesignal-laravel' => 'v1.0.10@4b3bc2ff3376f5adb224948b759ccf052e3e6b7b',
   'billowapp/payfast' => '0.5.0@3912032abd18cf4f90890aa41ac774b4971100a2',
   'billowapp/show-me-the-money' => '0.4.3@70409331d4ca1cdcd458589cdbd12105f0bca599',
-  'brian2694/laravel-toastr' => '5.57@1274f58564b9d845dfe82d5aca60b99b6fbb5a71',
   'brick/math' => '0.10.2@459f2781e1a08d52ee56b0b1444086e038561e3f',
   'clue/stream-filter' => 'v1.6.0@d6169430c7731d8509da7aecd0af756a5747b78e',
   'composer/ca-bundle' => '1.3.3@30897edbfb15e784fe55587b4f73ceefd3c4d98c',
@@ -122,6 +121,7 @@ final class Versions
   'macsidigital/laravel-oauth2-client' => '2.0.0@6aad67ed5c26efce2a1127a3eff66045883c13e9',
   'macsidigital/laravel-zoom' => '5.0.3@cfc10998bc401e5e4463ae11aaa3c3adbfba4a47',
   'maennchen/zipstream-php' => '2.2.1@211e9ba1530ea5260b45d90c9ea252f56ec52729',
+  'magarrent/laravel-url-shortener' => '1.0.5@f212f3854b162827c7e83875fca654a35783a14d',
   'markbaker/complex' => '3.0.1@ab8bc271e404909db09ff2d5ffa1e538085c0f22',
   'markbaker/matrix' => '3.0.0@c66aefcafb4f6c269510e9ac46b82619a904c576',
   'masterminds/html5' => '2.7.6@897eb517a343a2281f11bc5556d6548db7d93947',
@@ -298,7 +298,7 @@ final class Versions
   'symfony/filesystem' => 'v6.0.12@a36b782dc19dce3ab7e47d4b92b13cefb3511da3',
   'symfony/yaml' => 'v6.0.12@8c68efb08b038ec02753da6f16e1601a6ed4ef17',
   'theseer/tokenizer' => '1.2.1@34a41e998c2183e22995f158c581e7b5e755ab9e',
-  'laravel/laravel' => 'dev-master@bb0affaf97b029662b34b756ef882048ea837029',
+  'laravel/laravel' => 'dev-master@e73930035e28e408aa813f20fd9f43d8eb403428',
 );
 
     private function __construct()

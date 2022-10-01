@@ -106,6 +106,20 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
                                 <td class="border-left-0">{{ $contract->deal->pipeline_stage }}
                                 </td>
                             </tr>
+                            @if ($contract->amount != 0)
+                            <tr>
+                              <td class="bg-light-grey border-right-0 f-w-500">
+                                Deal Value </td>
+                                <td class="border-left-0">
+                                    <h4>
+                                        {{$contract->amount}}$</h4>
+                                </td>
+
+
+                            </tr>
+
+
+                            @endif
                             @if ($contract->end_date != null)
                                 <tr>
                                     <td class="bg-light-grey border-right-0 f-w-500">@lang('modules.contracts.endDate')
@@ -121,6 +135,7 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
                                 </td> --}}
                             </tr>
                         </table>
+
                     </td>
                 </tr>
                 <tr>
@@ -150,18 +165,165 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
         </div>
 
         <div class="d-flex flex-column">
+
             <h5>Project Name</h5>
             <p class="f-15">{{ $contract->deal->project_name }}</p>
 
-            <h5>Project Summary</h5>
-            <div class="ql-editor p-0">{!! $contract->deal->description !!}</div>
+            <br>
+            <h4>Deal Details From Sales Team</h4>
+            <div class="card" style="width:100%">
 
-            @if ($contract->amount != 0)
-                <div class="text-right pt-3 border-top">
-                    <h4>Deal Value:
-                        {{$contract->amount}}$</h4>
-                </div>
-            @endif
+            <div class="card-body">
+            <h6 style="background-color:#F2F2F2;">Project Summary</h6>
+              <p class="card-text">  <div class="ql-editor p-0">{!! $contract->deal->description !!}</div></p>
+
+            </div>
+          </div>
+
+
+
+            <br>
+            <div class="card" style="width:100%">
+
+            <div class="card-body">
+            <h6 style="background-color:#F2F2F2;">Freelancer Profile Link </h6>
+              <p class="card-text">
+                  <div class="ql-editor p-0">{{ $contract->deal->profile_link}}</div>
+
+              </p>
+
+            </div>
+          </div>
+
+
+            <br>
+            <div class="card" style="width:100%">
+
+            <div class="card-body">
+            <h6 style="background-color:#F2F2F2;">Freelancer Message Link </h6>
+              <p class="card-text">
+                    <div class="ql-editor p-0">{{ $contract->deal->message_link}}</div>
+
+              </p>
+
+            </div>
+          </div>
+
+
+            <br>
+            <div class="card" style="width:100%">
+
+            <div class="card-body">
+              <h6 style="background-color:#F2F2F2;">Write the what in 2-8 words here
+                (Examples: Website redesign, Shopify website migration to Wix,
+                Creating a 5 page business website in WordPress, Shopify website creation, etc.)</h6>
+              <p class="card-text">
+                      <div class="ql-editor p-0">{!! $contract->deal->description2 !!}</div>
+
+              </p>
+
+            </div>
+          </div>
+
+
+            <br>
+            <div class="card" style="width:100%">
+
+            <div class="card-body">
+              <h6 style="background-color:#F2F2F2;">Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress
+                website for his new design agency. It should include home, about, his services in
+                one page, blog, and contact. The look and feel should be better than the references.)</h6>
+              <p class="card-text">
+                    <div class="ql-editor p-0">{!! $contract->deal->description3 !!}</div>
+
+              </p>
+
+            </div>
+          </div>
+
+
+            <br>
+            <div class="card" style="width:100%">
+
+            <div class="card-body">
+              <h6 style="background-color:#F2F2F2;">Reference websites and what the references are for (Ex: ABC.com
+                 is for the color scheme. XYZ.com is for section layouts DEF.com is
+                 for header & footer styling. However, none of these can be copied)</h6>
+              <p class="card-text">
+                    <div class="ql-editor p-0">{!! $contract->deal->description4 !!}</div>
+
+              </p>
+
+            </div>
+          </div>
+
+
+            <br>
+            <div class="card" style="width:100%">
+
+            <div class="card-body">
+              <h6 style="background-color:#F2F2F2;">Any particular focus/concern of the client (Ex: 1. The client is very
+                concerned about the final look & feel so needs to be careful with the design 2.
+                The client is very concerned if the booking functionality will work the way he wants.)</h6>
+              <p class="card-text">
+                    <div class="ql-editor p-0">{!! $contract->deal->description5 !!}</div>
+
+              </p>
+
+            </div>
+          </div>
+          <br>
+          <div class="card" style="width:100%">
+
+          <div class="card-body">
+            <h6 style="background-color:#F2F2F2;">Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)</h6>
+            <p class="card-text">
+                  <div class="ql-editor p-0">{!! $contract->deal->description6 !!}</div>
+
+            </p>
+
+          </div>
+        </div>
+        <br>
+        <div class="card" style="width:100%">
+
+        <div class="card-body">
+          <h6 style="background-color:#F2F2F2;">Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)</h6>
+          <p class="card-text">
+                <div class="ql-editor p-0">{!! $contract->deal->description7 !!}</div>
+
+          </p>
+
+        </div>
+      </div>
+      <br>
+      <div class="card" style="width:100%">
+
+      <div class="card-body">
+        <h6 style="background-color:#F2F2F2;">If there is any cross-departmental work involved in this project (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web development) </h6>
+        <p class="card-text">
+              <div class="ql-editor p-0">{!! $contract->deal->description8 !!}</div>
+
+        </p>
+
+      </div>
+    </div>
+    <br>
+    <div class="card" style="width:100%">
+
+    <div class="card-body">
+      <h6 style="background-color:#F2F2F2;">Any other notes for the project manager/technical team </h6>
+      <p class="card-text">
+            <div class="ql-editor p-0">{!! $contract->deal->description8 !!}</div>
+
+      </p>
+
+    </div>
+  </div>
+
+
+
+
         </div>
 
         @if ($contract->signature)

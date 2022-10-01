@@ -219,12 +219,16 @@ $deals= App\Models\Deal::all();
 
                       <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
                           aria-labelledby="dropdownMenuLink" tabindex="0">
+
+                              <a class="dropdown-item"
+                                  href="deal-url/{{$deal->id}}"><i class="fa-solid fa-file"></i> @lang('Client Form')</a>
                           <a class="dropdown-item"
                               href="/deals/details/edit/{{$deal->id}}"><i class="fa-solid fa-pen-to-square"></i> @lang('Edit')</a>
                               <a class="dropdown-item"
                                   href="/deals/details/edit/{{$deal->id}}"><i class="fa-solid fa-eye"></i> @lang('View')</a>
                                   <a class="dropdown-item"
                                       href="contracts/deal-delete/{{$deal->id}}"><i class="fa-solid fa-trash"></i> @lang('Delete')</a>
+
                       </div>
                   </div>
 

@@ -32,6 +32,7 @@ use App\Models\PMProject;
 use App\Models\PMAssign;
 use Auth;
 use Crypt;
+use App\Models\ClientForm;
 use App\Models\ClientDetails;
 
 class ContractController extends AccountBaseController
@@ -446,6 +447,22 @@ class ContractController extends AccountBaseController
       return redirect('/account/contracts/'.$deal->id)->with('messages.contractAdded');
 
 
+    }
+    public function DealUrl($id)
+    {
+      $this->pageTitle = 'Client Submission Information';
+      $this->middleware(function ($request, $next) {
+          abort_403(!in_array('contracts', $this->user->modules));
+          return $next($request);
+      });
+      $deal= Deal::where('id',$id)->first();
+      $client= ClientForm::where('deal_id',$deal->id)->first();
+      if ($client == null) {
+        return redirect('/account/contracts')->with('message','Client have not submitted the information yet');
+      }
+
+
+      return view('contracts.dealurl',compact('deal','client'),$this->data);
     }
     public function DealDeny(Request $request)
     {

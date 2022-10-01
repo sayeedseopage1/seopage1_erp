@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bd58b78d3edc9cdd04351d3ba518bc07",
+    "content-hash": "55d702c05677447373bb42bf435123df",
     "packages": [
         {
             "name": "apimatic/jsonmapper",
@@ -6212,6 +6212,66 @@
                 }
             ],
             "time": "2022-05-18T15:52:06+00:00"
+        },
+        {
+            "name": "magarrent/laravel-url-shortener",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magarrent/laravel-url-shortener.git",
+                "reference": "f212f3854b162827c7e83875fca654a35783a14d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magarrent/laravel-url-shortener/zipball/f212f3854b162827c7e83875fca654a35783a14d",
+                "reference": "f212f3854b162827c7e83875fca654a35783a14d",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "^3",
+                "illuminate/support": "^7.0|^8.0|^9.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Magarrent\\LaravelUrlShortener\\LaravelUrlShortenerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Magarrent\\LaravelUrlShortener\\": "./src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marc Garcia Torrent (Kodio Technologies)",
+                    "email": "magarrent@gmail.com"
+                }
+            ],
+            "description": "Simpler Url Shortener for Laravel",
+            "keywords": [
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/magarrent/laravel-url-shortener/issues",
+                "source": "https://github.com/magarrent/laravel-url-shortener/tree/1.0.5"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/magarrent",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-04-04T13:57:40+00:00"
         },
         {
             "name": "markbaker/complex",

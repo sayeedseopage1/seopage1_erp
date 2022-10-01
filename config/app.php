@@ -203,7 +203,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         \App\Providers\TranslateSettingConfigProvider::class,
-        Brian2694\Toastr\ToastrServiceProvider::class,
+        
 
         /*
          * Package Service Providers...
