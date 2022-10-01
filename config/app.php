@@ -275,7 +275,7 @@ return [
         'ApiRoute' => Froiden\RestAPI\Facades\ApiRoute::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Zip' => Macellan\Zip\ZipFacade::class,
-        'Toastr'  => Brian2694\Toastr\Facades\Toastr::class,
+       
     ],
 
     'debug_blacklist' => [
