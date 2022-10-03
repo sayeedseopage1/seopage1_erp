@@ -258,6 +258,16 @@ $deals= App\Models\Deal::all();
     <!-- CONTENT WRAPPER END -->
 
 @endsection
+<script src="sweetalert2.all.min.js"></script>
+<script type="text/javascript">
+Swal.fire({
+  title: 'Error!',
+  text: 'Do you want to continue',
+  icon: 'error',
+  confirmButtonText: 'Cool'
+})
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script>
 $(document).ready(function() {

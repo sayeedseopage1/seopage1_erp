@@ -94,7 +94,7 @@ class ProjectController extends AccountBaseController
             $this->projectStatus = ProjectStatusSetting::where('status', 'active')->get();
 
         }
-          $this->project_data= Project::where('project_status','Accepted')->get();
+          $this->project_data= Project::all();
 
 
 
