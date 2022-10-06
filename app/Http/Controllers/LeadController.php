@@ -37,6 +37,7 @@ use App\Http\Requests\Admin\Employee\ImportProcessRequest;
 use App\Http\Requests\FollowUp\StoreRequest as FollowUpStoreRequest;
 use App\Models\LeadCustomForm;
 use App\Models\LeadNote;
+use Auth;
 
 class LeadController extends AccountBaseController
 {
@@ -215,7 +216,7 @@ class LeadController extends AccountBaseController
     }
     public function storeLead(Request $request)
     {
-      //dd($request);
+      //dd(Auth::id());
 
       $lead = new Lead();
       $lead->client_name= $request->client_name;
@@ -225,6 +226,7 @@ class LeadController extends AccountBaseController
       $lead->value= $request->value;
       $lead->status_id= 1;
       $lead->currency_id= 1;
+      $lead->agent_id =Auth::id();
       $lead->save();
       return redirect('/account/leads/')->with('messages.LeadAddedUpdate');
 

@@ -127,13 +127,13 @@ class LeadsDataTable extends BaseDataTable
                     return $row->leadAgent->user->name;
                 }
             });
-            $datatables->addColumn('mobile', function ($row) {
-                if ($row->mobile != '') {
-                    return '<a href="tel:'.$row->mobile.'" class="text-darkest-grey"><u>'.$row->mobile.'</u></a>';
-                }
-
-                return '--';
-            });
+            // $datatables->addColumn('mobile', function ($row) {
+            //     if ($row->mobile != '') {
+            //         return '<a href="tel:'.$row->mobile.'" class="text-darkest-grey"><u>'.$row->mobile.'</u></a>';
+            //     }
+            //
+            //     return '--';
+            // });
             $datatables->addColumn('lead', function ($row) {
                 return $row->client_name;
             });
@@ -267,7 +267,7 @@ class LeadsDataTable extends BaseDataTable
             $datatables->removeColumn('source');
             $datatables->removeColumn('next_follow_up');
             $datatables->removeColumn('statusName');
-            $datatables->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date', 'agent_name', 'check', 'mobile']);
+            $datatables->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date', 'agent_name', 'check']);
 
             return $datatables;
     }
@@ -283,7 +283,7 @@ class LeadsDataTable extends BaseDataTable
             ->select(
                 'leads.id',
                 'leads.agent_id',
-                'leads.mobile',
+
                 'leads.added_by',
                 'leads.client_id',
                 'leads.next_follow_up',
@@ -388,7 +388,7 @@ class LeadsDataTable extends BaseDataTable
             $lead = $lead->where(function ($query) {
                 $query->where('leads.client_name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('leads.company_name', 'like', '%' . request('searchText') . '%')
-                    ->orwhere('leads.mobile', 'like', '%' . request('searchText') . '%');
+                  ;
             });
         }
 
@@ -455,11 +455,11 @@ class LeadsDataTable extends BaseDataTable
             __('app.lead') => ['data' => 'lead', 'name' => 'client_name', 'visible' => false, 'title' => __('app.lead')],
             __('modules.lead.leadCategory') => ['data' => 'category_name', 'name' => 'category_name', 'exportable' => true, 'visible' => false, 'title' => __('modules.lead.leadCategory')],
             __('modules.lead.companyName') => ['data' => 'company_name', 'name' => 'company_name', 'title' => __('modules.lead.companyName')],
-            __('modules.lead.mobile') => ['data' => 'mobile', 'name' => 'mobile', 'title' => __('modules.lead.mobile')],
+
             __('app.createdOn') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('app.createdOn')],
             __('modules.lead.nextFollowUp') => ['data' => 'next_follow_up_date', 'name' => 'next_follow_up_date', 'orderable' => false, 'searchable' => false, 'title' => __('modules.lead.nextFollowUp')],
-            __('modules.lead.leadAgent') => ['data' => 'agent_name', 'name' => 'users.name', 'exportable' => false, 'title' => __('modules.lead.leadAgent')],
-            __('app.leadAgent') => ['data' => 'employee_name', 'name' => 'users.name', 'visible' => false, 'title' => __('app.leadAgent')],
+            // __('modules.lead.leadAgent') => ['data' => 'agent_name', 'name' => 'users.name', 'exportable' => false, 'title' => __('modules.lead.leadAgent')],
+            // __('app.leadAgent') => ['data' => 'employee_name', 'name' => 'users.name', 'visible' => false, 'title' => __('app.leadAgent')],
             __('app.status') => ['data' => 'status', 'name' => 'status', 'exportable' => false, 'title' => __('app.status')],
             __('app.leadStatus') => ['data' => 'leadStatus', 'name' => 'leadStatus', 'visible' => false, 'orderable' => false, 'searchable' => false, 'title' => __('app.status')],
             Column::computed('action', __('app.action'))
