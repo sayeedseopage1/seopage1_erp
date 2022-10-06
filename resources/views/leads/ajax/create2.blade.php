@@ -12,14 +12,13 @@ $addLeadNotePermission = user()->permission('add_lead_note');
 
 <div class="row">
     <div class="col-sm-12">
-        <form action="{{route('store-lead')}}" method="post">
-          @csrf
+        <x-form id="save-lead-data-form">
             <div class="add-client bg-white rounded">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
                     @lang('modules.lead.leadDetails')</h4>
                 <div class="row p-20">
 
-                  {{-- <div class="col-lg-4 col-md-6">
+            <div class="col-lg-4 col-md-6">
                         <x-forms.select fieldId="salutation" :fieldLabel="__('modules.client.salutation')"
                             fieldName="salutation">
                             <option value="">--</option>
@@ -27,37 +26,21 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                 <option value="{{ $salutation }}">@lang('app.'.$salutation)</option>
                             @endforeach
                         </x-forms.select>
-                    </div> --}}
+                    </div> 
 
-               <div class="col-lg-4 col-md-6">
+                    <div class="col-lg-4 col-md-6">
                         <x-forms.text :fieldLabel="__('modules.lead.clientName')" fieldName="client_name"
                             fieldId="client_name" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" />
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                             <x-forms.text :fieldLabel="__('Project Name')" fieldName="project_name"
-                                 fieldId="project_name" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" />
-                         </div>
-                         <div class="col-lg-4 col-md-6">
-                                  <x-forms.text :fieldLabel="__('Project ID')" fieldName="project_id"
-                                      fieldId="project_id" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" />
-                              </div>
-                              <div class="col-lg-6 col-md-6">
-                                       <x-forms.text :fieldLabel="__('Project Link')" fieldName="project_link"
-                                           fieldId="project_link" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" />
-                                   </div>
-                                   <div class="col-lg-6 col-md-6">
-                                       <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Project') .' '. __('Budget')"
-                                           fieldName="value" fieldId="value" fieldRequired="true"/>
-                                   </div>
 
-                  {{--  <div class="col-lg-4 col-md-6">
+                    <div class="col-lg-4 col-md-6">
                         <x-forms.email fieldId="client_email" :fieldLabel="__('modules.lead.clientEmail')"
                             fieldName="client_email" :fieldPlaceholder="__('placeholders.email')" :fieldHelp="__('modules.lead.leadEmailInfo')">
                         </x-forms.email>
-                    </div> --}}
+                    </div>
 
 
-                {{--   @if ($viewLeadAgentPermission != 'none')
+                    @if ($viewLeadAgentPermission != 'none')
                         <div class="col-lg-4 col-md-6">
                             <x-forms.label class="my-3" fieldId="" :fieldLabel="__('modules.tickets.chooseAgents')">
                             </x-forms.label>
@@ -80,9 +63,9 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                 @endif
                             </x-forms.input-group>
                         </div>
-                    @endif --}}
+                    @endif
 
-                  {{--@if ($viewLeadSourcesPermission != 'none')
+                    @if ($viewLeadSourcesPermission != 'none')
                         <div class="col-lg-4 col-md-6">
                             <x-forms.label class="my-3" fieldId="source_id" :fieldLabel="__('modules.lead.leadSource')">
                             </x-forms.label>
@@ -103,9 +86,9 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                 @endif
                             </x-forms.input-group>
                         </div>
-                    @endif --}}
+                    @endif
 
-                {{-- @if ($viewLeadCategoryPermission != 'none')
+                    @if ($viewLeadCategoryPermission != 'none')
                         <div class="col-lg-4 col-md-6">
                             <x-forms.label class="my-3" fieldId="category_id" :fieldLabel="__('modules.lead.leadCategory')">
                             </x-forms.label>
@@ -127,18 +110,21 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                 @endif
                             </x-forms.input-group>
                         </div>
-                    @endif --}}
+                    @endif
 
+                    <div class="col-lg-4 mt-2">
+                        <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('app.lead') .' '. __('app.value')"
+                            fieldName="value" fieldId="value" />
+                    </div>
 
-
-                  {{-- <div class="col-lg-4 mt-2">
+                    <div class="col-lg-4 mt-2">
                         <x-forms.select fieldId="next_follow_up" fieldName="next_follow_up" :fieldLabel="__('app.next_follow_up')">
                             <option value="yes"> @lang('app.yes')</option>
                             <option value="no"> @lang('app.no')</option>
                         </x-forms.select>
-                    </div> --}}
+                    </div>
 
-                {{--   <div class="col-lg-4 mt-2">
+                    <div class="col-lg-4 mt-2">
                         <x-forms.select fieldId="status" :fieldLabel="__('app.status')" fieldName="status">
                             <option value="">--</option>
                             @foreach ($status as $sts)
@@ -146,9 +132,9 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                     {{ ucfirst($sts->type) }}</option>
                             @endforeach
                         </x-forms.select>
-                    </div> --}}
+                    </div>
 
-                  {{--  @if ($addLeadNotePermission == 'all' || $addLeadNotePermission == 'added' || $addLeadNotePermission == 'both')
+                    @if ($addLeadNotePermission == 'all' || $addLeadNotePermission == 'added' || $addLeadNotePermission == 'both')
                     <div class="col-md-12">
                         <div class="form-group my-3">
                             <x-forms.label fieldId="note" :fieldLabel="__('app.note')">
@@ -157,18 +143,18 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                             <textarea name="note" id="note-text" class="d-none"></textarea>
                         </div>
                     </div>
-                    @endif --}}
+                    @endif
                 </div>
 
-                {{--<h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey">
+                <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey">
                     <a href="javascript:;" class="text-dark toggle-other-details"><i class="fa fa-chevron-down"></i>
                         @lang('modules.client.companyDetails')</a>
-                </h4> --}}
+                </h4>
 
 
                 <div class="row p-20 d-none" id="other-details">
 
-                  {{--  <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-3 col-md-6">
                         <x-forms.text :fieldLabel="__('modules.lead.companyName')" fieldName="company_name"
                             fieldId="company_name" :fieldPlaceholder="__('placeholders.company')" />
                     </div>
@@ -221,7 +207,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                 fieldName="address" fieldId="address" fieldPlaceholder="e.g. Rocket Road">
                             </x-forms.textarea>
                         </div>
-                    </div> --}}
+                    </div>
 
                     @if (isset($fields) && count($fields) > 0)
                         @foreach ($fields as $field)
@@ -316,20 +302,16 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                     @endif
 
                 </div>
-                <div class="container">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
 
-
-
-                  {{--  <x-forms.button-primary id="save-lead-form" class="mr-3" icon="check">@lang('app.save')
+                <x-form-actions>
+                    <x-forms.button-primary id="save-lead-form" class="mr-3" icon="check">@lang('app.save')
                     </x-forms.button-primary>
                     <x-forms.button-cancel :link="route('tasks.index')" class="border-0">@lang('app.cancel')
                     </x-forms.button-cancel>
-                </x-form-actions> --}}
+                </x-form-actions>
 
             </div>
-        </form>
+        </x-form>
 
     </div>
 </div>

@@ -38,16 +38,20 @@ class ProjectsDataTable extends BaseDataTable
      */
     public function dataTable($query)
     {
+      //  dd($query);
         $project = new Project();
+
         $customFieldsGroupsId = CustomFieldGroup::where('model', $project->customFieldModel)->pluck('id')->first();
         $customFields = CustomField::where('custom_field_group_id', $customFieldsGroupsId)->where('export', 1)->get();
         $datatables = datatables()->eloquent($query);
+        //dd($datatables);
 
             $datatables->addColumn('check', function ($row) {
                 return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             });
             $datatables->addColumn('action', function ($row) {
                 $memberIds = $row->members->pluck('user_id')->toArray();
+                //dd($memberIds);
 
                 $action = '<div class="task_view">
 
@@ -224,6 +228,7 @@ class ProjectsDataTable extends BaseDataTable
             ->addColumn('project_status', function ($row) {
                 return $row->status;
             })
+
             ->editColumn('client_id', function ($row) {
                 if (is_null($row->client_id)) {
                     return '';
@@ -290,6 +295,7 @@ class ProjectsDataTable extends BaseDataTable
     public function query(Project $model)
     {
         $request = $this->request();
+        //dd($request);
         $model = $model
             ->with('members', 'members.user', 'client', 'client.clientDetails', 'currency', 'client.session')
             ->leftJoin('project_members', 'project_members.project_id', 'projects.id')

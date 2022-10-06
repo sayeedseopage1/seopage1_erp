@@ -266,6 +266,7 @@ class TaskController extends AccountBaseController
     // @codingStandardsIgnoreLine
     public function store(StoreTask $request)
     {
+      dd($request);
         $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
 
         if (is_null($project) || ($project->project_admin != user()->id)) {
@@ -359,6 +360,7 @@ class TaskController extends AccountBaseController
 
 
             $subTask = SubTask::with(['files'])->where('task_id', $request->taskId)->get();
+            //dd($subTask);
 
             if ($subTask) {
                 foreach ($subTask as $subTasks) {

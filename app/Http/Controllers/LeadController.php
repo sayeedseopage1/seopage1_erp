@@ -213,6 +213,24 @@ class LeadController extends AccountBaseController
         return view('leads.create', $this->data);
 
     }
+    public function storeLead(Request $request)
+    {
+      //dd($request);
+
+      $lead = new Lead();
+      $lead->client_name= $request->client_name;
+      $lead->project_name= $request->project_name;
+      $lead->project_id= $request->project_id;
+      $lead->project_link= $request->project_link;
+      $lead->value= $request->value;
+      $lead->status_id= 1;
+      $lead->currency_id= 1;
+      $lead->save();
+      return redirect('/account/leads/')->with('messages.LeadAddedUpdate');
+
+
+
+    }
 
     /**
      * @param StoreRequest $request
@@ -221,6 +239,7 @@ class LeadController extends AccountBaseController
      */
     public function store(StoreRequest $request)
     {
+      //dd($request);
         $this->addPermission = user()->permission('add_lead');
 
         abort_403(!in_array($this->addPermission, ['all', 'added']));

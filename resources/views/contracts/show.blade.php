@@ -17,8 +17,8 @@
                 :text="__('modules.contracts.discussion')" class="discussion" />
             <x-tab :href="route('contracts.show', $contract->id).'?tab=files'" :text="__('Deal Files')"
                 class="files" />
-            <x-tab :href="route('contracts.show', $contract->id).'?tab=renew'"
-                :text="__('Deal Renewal History')" class="renew" />
+          {{-- <x-tab :href="route('contracts.show', $contract->id).'?tab=renew'"
+                :text="__('Deal Renewal History')" class="renew" /> --}} 
 
         </div>
 

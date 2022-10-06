@@ -120,14 +120,14 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
 
 
                             @endif
-                            @if ($contract->end_date != null)
+                          {{-- @if ($contract->end_date != null)
                                 <tr>
                                     <td class="bg-light-grey border-right-0 f-w-500">@lang('modules.contracts.endDate')
                                     </td>
                                     <td class="border-left-0">{{ $contract->end_date->format(global_setting()->date_format) }}
                                     </td>
                                 </tr>
-                            @endif
+                            @endif --}} 
                             <tr>
                                 {{--}}<td class="bg-light-grey border-right-0 f-w-500">
                                     @lang('modules.contracts.contractType')</td>
@@ -345,7 +345,7 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
     </div>
     <!-- CARD BODY END -->
     <!-- CARD FOOTER START -->
-    <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
+  {{--  <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
 
         <div class="d-flex">
             <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
@@ -378,7 +378,7 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
         <x-forms.button-cancel :link="route('contracts.index')" class="border-0">@lang('app.cancel')
         </x-forms.button-cancel>
 
-    </div>
+    </div> --}}
     <!-- CARD FOOTER END -->
 </div>
 <!-- INVOICE CARD END -->

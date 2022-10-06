@@ -1046,3 +1046,5 @@ Route::post('/deals/client-form', [HomeController::class, 'ClientForm'])->name('
 Route::post('/deals/client-form-submit', [ContractController::class, 'ClientFormSubmit'])->name('form-submit-to-client');
 Route::get('/thankyou', [HomeController::class, 'Thankyou']);
     /* Account prefix routes end here */
+//store custom lead route for seaopage1
+Route::post('/lead/store', [LeadController::class, 'storeLead'])->name('store-lead');

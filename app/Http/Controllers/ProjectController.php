@@ -64,7 +64,9 @@ class ProjectController extends AccountBaseController
         parent::__construct();
         $this->pageTitle = 'app.menu.projects';
         $this->middleware(function ($request, $next) {
+
             abort_403(!in_array('projects', $this->user->modules));
+            //dd($this->user->modules);
             return $next($request);
         });
     }
@@ -76,13 +78,16 @@ class ProjectController extends AccountBaseController
      */
     public function index(ProjectsDataTable $dataTable)
     {
+    //  dd($dataTable);
         $viewPermission = user()->permission('view_projects');
         abort_403(!in_array($viewPermission, ['all', 'added', 'owned', 'both']));
 
         if (!request()->ajax()) {
 
+
             if (in_array('client', user_roles())) {
                 $this->clients = User::client();
+                //dd($this->clients);
             }
             else {
                 $this->clients = User::allClients();
@@ -92,14 +97,18 @@ class ProjectController extends AccountBaseController
             $this->categories = ProjectCategory::all();
             $this->departments = Team::all();
             $this->projectStatus = ProjectStatusSetting::where('status', 'active')->get();
+            $project = Project::where('project_status', 'Accepted')->get();
+
+            //dd($project);
 
         }
-          $this->project_data= Project::all();
+
+        //dd($this->data);
 
 
 
 
-        return $dataTable->render('projects.index', $this->data);
+      return $dataTable->render('projects.index', $this->data);
 
     }
 
