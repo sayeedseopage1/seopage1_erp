@@ -22,7 +22,7 @@
 
             <x-cards.data-row :label="__('modules.lead.clientName')" :value="$lead->client_name ?? '--'" />
 
-            <x-cards.data-row :label="__('modules.lead.clientEmail')" :value="$lead->client_email ?? '--'" />
+            <!-- <x-cards.data-row :label="__('modules.lead.clientEmail')" :value="$lead->client_email ?? '--'" />
 
             <x-cards.data-row :label="__('modules.lead.companyName')" :value="!empty($lead->company_name) ? mb_ucwords($lead->company_name) : '--'" />
 
@@ -37,13 +37,13 @@
 
             <x-cards.data-row :label="__('modules.stripeCustomerAddress.city')" :value="$lead->city ?? '--'" />
 
-            <x-cards.data-row :label="__('modules.stripeCustomerAddress.postalCode')" :value="$lead->postal_code ?? '--'" />
+            <x-cards.data-row :label="__('modules.stripeCustomerAddress.postalCode')" :value="$lead->postal_code ?? '--'" /> -->
 
-            <x-cards.data-row :label="__('modules.lead.address')" :value="$lead->address ?? '--'" />
+            <!-- <x-cards.data-row :label="__('modules.lead.address')" :value="$lead->address ?? '--'" /> -->
 
             <div class="col-12 px-0 pb-3 d-flex">
                 <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
-                    @lang('modules.lead.leadAgent')</p>
+                    @lang('Added By')</p>
                 <p class="mb-0 text-dark-grey f-14">
                     @if (!is_null($lead->leadAgent))
                         <x-employee :user="$lead->leadAgent->user" />
@@ -53,7 +53,7 @@
                 </p>
             </div>
 
-            <x-cards.data-row :label="__('modules.lead.source')" :value="$lead->leadSource->type ?? '--'" />
+            <!-- <x-cards.data-row :label="__('modules.lead.source')" :value="$lead->leadSource->type ?? '--'" /> -->
 
             @if ($lead->leadStatus)
                 <div class="col-12 px-0 pb-3 d-flex">
@@ -66,7 +66,7 @@
                 </div>
             @endif
 
-            <x-cards.data-row :label="__('modules.lead.leadCategory')" :value="$lead->category->category_name ?? '--'" />
+            <!-- <x-cards.data-row :label="__('modules.lead.leadCategory')" :value="$lead->category->category_name ?? '--'" /> -->
 
             <x-cards.data-row :label="__('app.lead') . ' ' .__('app.value')" :value="$lead->value ?? '--'" />
 

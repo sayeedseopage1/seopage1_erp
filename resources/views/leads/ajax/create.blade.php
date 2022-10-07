@@ -316,9 +316,9 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                     @endif
 
                 </div>
-                <div class="container">
+
                     <button type="submit" class="btn btn-primary">Save</button>
-                </div>
+              
 
 
 
