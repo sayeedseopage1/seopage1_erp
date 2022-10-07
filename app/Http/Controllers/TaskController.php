@@ -266,7 +266,7 @@ class TaskController extends AccountBaseController
     // @codingStandardsIgnoreLine
     public function store(StoreTask $request)
     {
-      dd($request);
+      //dd($request);
         $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
 
         if (is_null($project) || ($project->project_admin != user()->id)) {
