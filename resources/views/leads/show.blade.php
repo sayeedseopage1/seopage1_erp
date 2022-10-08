@@ -19,22 +19,22 @@ $viewClientNote = user()->permission('view_lead_note');
             <a class="d-none close-it" href="javascript:;" id="close-client-detail" >
                 <i class="fa fa-times"></i>
             </a>
-            <x-tab :href="route('leads.show', $lead->id)" :text="__('modules.lead.profile')" class="profile" />
-
+            <x-tab :href="route('leads.show', $lead->id)" :text="__('Lead Details')" class="profile" />
+<!--
             <x-tab :href="route('leads.show', $lead->id).'?tab=files'" :text="__('modules.lead.file')" class="files" ajax="false"/>
 
             <x-tab :href="route('leads.show', $lead->id).'?tab=follow-up'" :text="__('modules.lead.followUp')" class="follow-up" />
 
-            <x-tab :href="route('leads.show', $lead->id).'?tab=proposals'" :text="__('modules.lead.proposal')" class="proposals" ajax="false" />
+            <x-tab :href="route('leads.show', $lead->id).'?tab=proposals'" :text="__('modules.lead.proposal')" class="proposals" ajax="false" /> -->
 
-        @if ($viewClientNote == 'all' || $viewClientNote == 'both' || $viewClientNote == 'added' || $viewClientNote == 'owned')
+        <!-- @if ($viewClientNote == 'all' || $viewClientNote == 'both' || $viewClientNote == 'added' || $viewClientNote == 'owned')
             <x-tab :href="route('leads.show', $lead->id).'?tab=notes'" ajax="false" text="Notes"
             class="notes" />
-        @endif
+        @endif -->
 
-            @if ($gdpr->enable_gdpr)
+            <!-- @if ($gdpr->enable_gdpr)
                 <x-tab :href="route('leads.show', $lead->id).'?tab=gdpr'" :text="__('app.menu.gdpr')" class="gdpr" ajax="false" />
-            @endif
+            @endif -->
         </div>
         <a class="mb-0 d-block d-lg-none text-dark-grey ml-auto mr-2 border-left-grey"
             onclick="openClientDetailSidebar()"><i class="fa fa-ellipsis-v "></i></a>

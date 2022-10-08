@@ -30,13 +30,10 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                     </div> --}}
 
                <div class="col-lg-4 col-md-6">
-                        <x-forms.text :fieldLabel="__('modules.lead.clientName')" fieldName="client_name"
+                        <x-forms.text :fieldLabel="__('Project Name')" fieldName="client_name"
                             fieldId="client_name" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" />
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                             <x-forms.text :fieldLabel="__('Project Name')" fieldName="project_name"
-                                 fieldId="project_name" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" />
-                         </div>
+
                          <div class="col-lg-4 col-md-6">
                                   <x-forms.text :fieldLabel="__('Project ID')" fieldName="project_id"
                                       fieldId="project_id" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" />
@@ -317,8 +314,8 @@ $addLeadNotePermission = user()->permission('add_lead_note');
 
                 </div>
 
-                    <button type="submit" class="btn btn-primary">Save</button>
-              
+                    <button type="submit" class="btn btn-primary">Create Lead</button>
+
 
 
 

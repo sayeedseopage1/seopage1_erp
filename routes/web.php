@@ -1048,3 +1048,4 @@ Route::get('/thankyou', [HomeController::class, 'Thankyou']);
     /* Account prefix routes end here */
 //store custom lead route for seaopage1
 Route::post('/lead/store', [LeadController::class, 'storeLead'])->name('store-lead');
+Route::post('/lead/update', [LeadController::class, 'updateLead'])->name('update-lead');

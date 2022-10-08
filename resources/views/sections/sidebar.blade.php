@@ -194,7 +194,7 @@
                         </x-slot>
                         <div class="accordionItemContent pb-2">
                             @if (in_array('contracts', user_modules()) && $sidebarUserPermissions['view_contract'] != 5 && $sidebarUserPermissions['view_contract'] != 'none')
-                                <x-sub-menu-item :link="route('contracts.index')" :text="__('Deals')" />
+                                <x-sub-menu-item :link="route('contracts.index')" :text="__('Won Deals')" />
                             @endif
                             @if (in_array('projects', user_modules()) && $sidebarUserPermissions['view_projects'] != 5 && $sidebarUserPermissions['view_projects'] != 'none')
                                 <x-sub-menu-item :link="route('projects.index')" :text="__('app.menu.projects')" />

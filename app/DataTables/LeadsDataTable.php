@@ -51,6 +51,7 @@ class LeadsDataTable extends BaseDataTable
      */
     public function dataTable($query)
     {
+      //dd($query);
         $currentDate = Carbon::now(global_setting()->timezone)->format('Y-m-d');
         $status = $this->status;
 
@@ -105,7 +106,7 @@ class LeadsDataTable extends BaseDataTable
                 if ($row->client_id == null || $row->client_id == '') {
                     $action .= '<a class="dropdown-item" href="' . route('clients.create') . '?lead=' . $row->id . '">
                                 <i class="fa fa-user mr-2"></i>
-                                ' . trans('modules.lead.changeToClient') . '
+                                ' . trans('Convert to Deal') . '
                             </a>';
                 }
 

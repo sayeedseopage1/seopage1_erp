@@ -204,5 +204,9 @@ class Lead extends BaseModel
 
         return $addedBy ?: null;
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'added_by');
+    }
 
 }

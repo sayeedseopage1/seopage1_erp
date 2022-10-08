@@ -220,11 +220,30 @@ class LeadController extends AccountBaseController
 
       $lead = new Lead();
       $lead->client_name= $request->client_name;
-      $lead->project_name= $request->project_name;
+
       $lead->project_id= $request->project_id;
       $lead->project_link= $request->project_link;
       $lead->value= $request->value;
       $lead->status_id= 1;
+      $lead->currency_id= 1;
+      $lead->agent_id =Auth::id();
+      $lead->save();
+      return redirect('/account/leads/')->with('messages.LeadAddedUpdate');
+
+
+
+    }
+    public function updateLead(Request $request)
+    {
+      //dd(Auth::id());
+
+      $lead = Lead::find($request->id);
+      $lead->client_name= $request->client_name;
+      
+      $lead->project_id= $request->project_id;
+      $lead->project_link= $request->project_link;
+      $lead->value= $request->value;
+      $lead->status_id= $request->status;
       $lead->currency_id= 1;
       $lead->agent_id =Auth::id();
       $lead->save();
