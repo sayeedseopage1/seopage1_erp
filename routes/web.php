@@ -1049,3 +1049,6 @@ Route::get('/thankyou', [HomeController::class, 'Thankyou']);
 //store custom lead route for seaopage1
 Route::post('/lead/store', [LeadController::class, 'storeLead'])->name('store-lead');
 Route::post('/lead/update', [LeadController::class, 'updateLead'])->name('update-lead');
+
+//deal stage creation
+Route::get('/lead/deal-stage/{id}', [LeadController::class, 'DealStage'])->name('deal-stage-create');

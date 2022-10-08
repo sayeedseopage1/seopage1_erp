@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @push('datatable-styles')
-    @include('sections.datatable_css')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 @endpush
 
 @section('filter-section')
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <x-filters.filter-box>
         <!-- DATE START -->
@@ -276,6 +276,10 @@ $(document).ready(function() {
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" charset="utf-8"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.js" charset="utf-8"></script>
+
+
+
+@push('scripts')
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" charset="utf-8"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js" charset="utf-8"></script>
 <script type="text/javascript">
@@ -283,10 +287,6 @@ $(document).ready(function () {
     $('#dealtable').DataTable();
 });
 </script>
-
-
-@push('scripts')
-    @include('sections.datatable_js')
 
 
     <script>

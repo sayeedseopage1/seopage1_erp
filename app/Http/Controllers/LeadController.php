@@ -38,6 +38,9 @@ use App\Http\Requests\FollowUp\StoreRequest as FollowUpStoreRequest;
 use App\Models\LeadCustomForm;
 use App\Models\LeadNote;
 use Auth;
+use App\Models\User;
+use App\Models\Contract;
+use App\Models\ContractType;
 
 class LeadController extends AccountBaseController
 {
@@ -239,7 +242,7 @@ class LeadController extends AccountBaseController
 
       $lead = Lead::find($request->id);
       $lead->client_name= $request->client_name;
-      
+
       $lead->project_id= $request->project_id;
       $lead->project_link= $request->project_link;
       $lead->value= $request->value;
@@ -251,6 +254,28 @@ class LeadController extends AccountBaseController
 
 
 
+    }
+    public function DealStage($id)
+    {
+      abort_403(user()->permission('view_contract') == 'none');
+
+      if (!request()->ajax()) {
+          if (in_array('client', user_roles())) {
+              $this->clients = User::client();
+          }
+          else {
+              $this->clients = User::allClients();
+          }
+
+          $this->contractTypes = ContractType::all();
+          $this->contractCounts = Contract::count();
+          $this->expiredCounts = Contract::where(DB::raw('DATE(`end_date`)'), '<', now()->format('Y-m-d'))->count();
+          $this->aboutToExpireCounts = Contract::where(DB::raw('DATE(`end_date`)'), '>', now()->format('Y-m-d'))
+              ->where(DB::raw('DATE(`end_date`)'), '<', now()->timezone($this->global->timezone)->addDays(7)->format('Y-m-d'))
+              ->count();
+
+      }
+        return view('contracts.dealstage',$this->data);
     }
 
     /**

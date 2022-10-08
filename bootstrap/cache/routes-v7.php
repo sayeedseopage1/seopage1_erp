@@ -283,7 +283,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::YuHSJLDDDFmWJHR1',
+            '_route' => 'generated::8wULTeycd78NpqsJ',
           ),
           1 => NULL,
           2 => 
@@ -303,7 +303,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Im8HaSsG2yts9Ygt',
+            '_route' => 'generated::NUbOiHLNU3TxvCpE',
           ),
           1 => NULL,
           2 => 
@@ -423,7 +423,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::FMDjjFvw6ixxFIBu',
+            '_route' => 'generated::fBkdjc8bNuL2JNuI',
           ),
           1 => NULL,
           2 => 
@@ -460,7 +460,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::RmNQKOOjEtT2mK2k',
+            '_route' => 'generated::jb9bQQwwP9z6zdcZ',
           ),
           1 => NULL,
           2 => 
@@ -570,7 +570,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::wLGEKsPTKux6Jnnq',
+            '_route' => 'generated::oVxPr7WRv4vUL6wW',
           ),
           1 => NULL,
           2 => 
@@ -666,7 +666,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Oa4zImdQnVAtuqQi',
+            '_route' => 'generated::d7LgV0JbjX37Hetl',
           ),
           1 => NULL,
           2 => 
@@ -739,7 +739,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::VlkxZ0MMbUKn8foc',
+            '_route' => 'generated::EPYXFcXWeErpVuZ0',
           ),
           1 => NULL,
           2 => 
@@ -869,7 +869,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::jXSOclwlGUE7IEoA',
+            '_route' => 'generated::DjxUsu8fRkLiYI3m',
           ),
           1 => NULL,
           2 => 
@@ -888,7 +888,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::YTSd80Jb0sUtve2Q',
+            '_route' => 'generated::jOKIOO4yBjHJNhgY',
           ),
           1 => NULL,
           2 => 
@@ -908,7 +908,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::VPqpCLZSYG3qIaYC',
+            '_route' => 'generated::5Jv7BoB6isK57BO9',
           ),
           1 => NULL,
           2 => 
@@ -928,7 +928,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::wHJkWov4Z2IFxGLI',
+            '_route' => 'generated::d9qKUKI4kDC6XW0L',
           ),
           1 => NULL,
           2 => 
@@ -1006,7 +1006,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::qwAHu6cdLXr8KY24',
+            '_route' => 'generated::KNt0KbT4jY6WuUY8',
           ),
           1 => NULL,
           2 => 
@@ -1047,7 +1047,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::bSw1ftfauHGeoVVS',
+            '_route' => 'generated::KyJnPT6wde84vYCH',
           ),
           1 => NULL,
           2 => 
@@ -11792,7 +11792,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::0OpSFRJ0VSByEDGT',
+            '_route' => 'generated::OlggHxGTjfnEB4Ts',
           ),
           1 => NULL,
           2 => 
@@ -11847,7 +11847,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/_debugbar/c(?|lockwork/([^/]++)(*:39)|ache/([^/]++)(?:/([^/]++))?(*:73))|/t(?|ranslations(?|/view(?:/(.*))?(*:115)|(?:/(.*))?(*:133)|/(?|add/(.*)(*:153)|edit/(.*)(*:170)|groups/add(*:188)|delete/(.*)/([^/]++)(*:216)|import(*:230)|find(*:242)|locales/(?|add(*:264)|remove(*:278))|publish/(.*)(*:299)|translate\\-missing(*:325)))|ask(?|/([^/]++)(*:350)|\\-board/(?|([^/]++)(*:377)|load\\-more/([^/]++)(*:404))))|/d(?|own/([^/]++)(*:432)|eals/(?|([^/]++)(*:456)|de(?|tails/(?|([^/]++)(*:486)|edit/([^/]++)(*:507)|store(*:520)|update(*:534))|ny(*:545))|client\\-form(?|(*:569)|\\-submit(*:585))))|/up/([^/]++)(*:608)|/hide\\-review\\-modal/([^/]++)(*:645)|/re(?|set\\-password/([^/]++)(*:681)|direct/([^/]++)(*:704))|/e(?|mail/verify/([^/]++)/([^/]++)(*:747)|stimate/(?|([^/]++)(*:774)|d(?|ecline/([^/]++)(*:801)|ownload/([^/]++)(*:825))|accept/([^/]++)(*:849)))|/oauth2/([^/]++)/(?|authori(?|se(*:891)|ze(*:901))|callback(*:918))|/inv(?|itation/(?|([^/]++)(*:953)|accept\\-invite(*:975))|oice(?|/(?|([^/]++)(*:1003)|download/([^/]++)(*:1029))|\\-payment\\-failed/([^/]++)(*:1065)))|/c(?|on(?|tract/(?|([^/]++)(*:1103)|sign/([^/]++)(*:1125)|download/([^/]++)(*:1151))|sent/l/(?|([^/]++)(*:1179)|update/([^/]++)(*:1203)))|allback/([^/]++)(*:1230)|ropper/([^/]++)(*:1254))|/gantt\\-chart(?|\\-data/([^/]++)(*:1295)|/([^/]++)(*:1313))|/p(?|roposal(?|/(?|([^/]++)(*:1350)|download/([^/]++)(*:1376))|\\-action/([^/]++)(*:1403))|ay(?|stack(?|\\-public/([^/]++)(*:1443)|/callback/([^/]++)/([^/]++)(*:1479))|fast/callback/([^/]++)/([^/]++)/([^/]++)(*:1529)|pal(?|\\-public/([^/]++)(*:1561)|/([^/]++)(*:1579))))|/s(?|tripe(?|/([^/]++)(*:1613)|\\-public/([^/]++)(*:1639))|quare/callback/([^/]++)/([^/]++)(*:1681))|/flutterwave(?|\\-public/([^/]++)(*:1723)|/callback/([^/]++)/([^/]++)(*:1759))|/mollie(?|\\-public/([^/]++)(*:1796)|/callback/([^/]++)/([^/]++)(*:1832))|/a(?|uthorize\\-public/([^/]++)(*:1872)|ccount/(?|d(?|ashboard/widget/([^/]++)(*:1919)|e(?|signations/([^/]++)(?|(*:1954)|/edit(*:1968)|(*:1977))|partments/([^/]++)(?|(*:2008)|/edit(*:2022)|(*:2031))|al\\-url/([^/]++)(*:2057)))|s(?|e(?|ttings/(?|([^/]++)(?|/edit(*:2102)|(*:2111))|a(?|pp\\-settings(?|(*:2140)|/([^/]++)(?|(*:2161)|/edit(*:2175)|(*:2184)))|ttendance\\-settings(?|(*:2217)|/([^/]++)(?|(*:2238)|/edit(*:2252)|(*:2261))))|p(?|ro(?|file(?|\\-settings(?|(*:2302)|/([^/]++)(?|(*:2323)|/edit(*:2337)|(*:2346)))|(*:2357)|/([^/]++)(?|(*:2378)|/edit(*:2392)|(*:2401)))|ject\\-settings(?|(*:2429)|/([^/]++)(?|(*:2450)|/edit(*:2464)|(*:2473))|(?:/([^/]++))?(*:2497)|/(?|change\\-status(?:/([^/]++))?(*:2538)|set\\-default(?:/([^/]++))?(*:2573))))|ush(?|\\-notification\\-settings(?|(*:2618)|/([^/]++)(?|(*:2639)|/edit(*:2653)|(*:2662)))|er\\-settings(?|(*:2688)|/([^/]++)(?|(*:2709)|/edit(*:2723)|(*:2732))))|ayment\\-gateway\\-settings(?|(*:2772)|/([^/]++)(?|(*:2793)|/edit(*:2807)|(*:2816))))|2fa\\-(?|co(?|des\\-download(*:2854)|nfirm(?|(*:2871)))|email\\-confirm(?|(*:2899)))|verify\\-(?|2fa\\-password(*:2934)|google\\-recaptcha\\-v3(*:2964))|t(?|wo\\-fa\\-settings(?|(*:2997)|/([^/]++)(?|(*:3018)|/edit(*:3032)|(*:3041)))|i(?|cket(?|\\-(?|agents(?|/(?|update\\-group/([^/]++)(*:3103)|([^/]++)(?|(*:3123)|/edit(*:3137)|(*:3146)))|(*:3157))|settings(?|(*:3178)|/([^/]++)(?|(*:3199)|/edit(*:3213)|(*:3222)))|groups(?|(*:3242)|/([^/]++)(?|(*:3263)|/edit(*:3277)|(*:3286)))|email\\-settings(?|(*:3315)|/([^/]++)(?|(*:3336)|/edit(*:3350)|(*:3359))))|Types(?|(*:3379)|/([^/]++)(?|(*:3400)|/edit(*:3414)|(*:3423)))|Channels(?|(*:3445)|/([^/]++)(?|(*:3466)|/edit(*:3480)|(*:3489))))|melog\\-settings(?|(*:3519)|/([^/]++)(?|(*:3540)|/edit(*:3554)|(*:3563))))|ask\\-settings(?|(*:3591))|heme\\-settings(?|(*:3618)|/([^/]++)(?|(*:3639)|/edit(*:3653)|(*:3662))))|s(?|mtp\\-settings(?|(*:3694)|/([^/]++)(?|(*:3715)|/edit(*:3729)|(*:3738)))|lack\\-settings(?|(*:3766)|/([^/]++)(?|(*:3787)|/edit(*:3801)|(*:3810)))|torage\\-settings(?|(*:3840)|/([^/]++)(?|(*:3861)|/edit(*:3875)|(*:3884)))|ocial\\-auth\\-settings(?|(*:3919)|/([^/]++)(*:3937))|ecurity\\-settings(?|(*:3967)|/([^/]++)(?|(*:3988)|/edit(*:4002)|(*:4011))))|notifications(?|(*:4039)|/([^/]++)(?|(*:4060)|/edit(*:4074)|(*:4083)))|cu(?|rrency\\-settings(?|/(?|exchange\\-rate/([^/]++)(*:4145)|([^/]++)(?|(*:4165)|/edit(*:4179)|(*:4188)))|(*:4199))|stom\\-(?|fields(?|(*:4227)|/([^/]++)(?|(*:4248)|/edit(*:4262)|(*:4271)))|modules(?|(*:4292)|/([^/]++)(?|(*:4313)|/edit(*:4327)|(*:4336)))))|offline\\-payment\\-setting(?|(*:4377)|/([^/]++)(?|(*:4398)|/edit(*:4412)|(*:4421)))|invoice\\-settings(?|(*:4452)|/([^/]++)(?|(*:4473)|/edit(*:4487)|(*:4496)))|r(?|eplyTemplates(?|(*:4527)|/([^/]++)(?|(*:4548)|/edit(*:4562)|(*:4571)))|ole\\-permissions(?|(*:4601)|/([^/]++)(?|(*:4622)|/edit(*:4636)|(*:4645))))|l(?|ea(?|ve(?|s\\-settings(?|(*:4685)|/([^/]++)(?|(*:4706)|/edit(*:4720)|(*:4729)))|Type(?|(*:4747)|/([^/]++)(?|(*:4768)|/edit(*:4782)|(*:4791))))|d\\-(?|s(?|ettings(?|(*:4823)|/([^/]++)(?|(*:4844)|/edit(*:4858)|(*:4867)))|ource\\-settings(?|(*:4896)|/([^/]++)(?|(*:4917)|/edit(*:4931)|(*:4940)))|tatus\\-(?|update/([^/]++)(*:4976)|settings(?|(*:4996)|/([^/]++)(?|(*:5017)|/edit(*:5031)|(*:5040)))))|agent\\-settings(?|(*:5071)|/([^/]++)(?|(*:5092)|/edit(*:5106)|(*:5115)))))|anguage\\-settings(?|/(?|update\\-data(?:/([^/]++))?(*:5178)|([^/]++)(?|(*:5198)|/edit(*:5212)|(*:5221)))|(*:5232)))|m(?|essage\\-settings(?|(*:5266)|/([^/]++)(?|(*:5287)|/edit(*:5301)|(*:5310)))|odule\\-settings(?|(*:5339)|/([^/]++)(?|(*:5360)|/edit(*:5374)|(*:5383))))|google\\-(?|calendar\\-settings(?|(*:5427)|/([^/]++)(?|(*:5448)|/edit(*:5462)|(*:5471)))|auth(?|(*:5489)))|database\\-backup\\-settings(?|/(?|d(?|ownload/([^/]++)(*:5553)|elete/([^/]++)(*:5576))|([^/]++)(?|(*:5597)|/edit(*:5611)|(*:5620)))|(*:5631))|business\\-address(?|(*:5661)|/([^/]++)(?|(*:5682)|/edit(*:5696)|(*:5705)))|employee\\-shifts(?|(*:5735)|/([^/]++)(?|(*:5756)|/edit(*:5770)|(*:5779))))|arch/([^/]++)(?|(*:5807)|/edit(*:5821)|(*:5830)))|ave\\-consent\\-purpose\\-data/([^/]++)(*:5877)|hifts(?|/(?|mark/([^/]++)/([^/]++)/([^/]++)/([^/]++)(*:5938)|export\\-all/([^/]++)/([^/]++)/([^/]++)/([^/]++)(*:5994)|([^/]++)(?|(*:6014)|/edit(*:6028)|(*:6037)))|\\-change/(?|approve_request/([^/]++)(*:6084)|decline_request/([^/]++)(*:6117)|([^/]++)(?|(*:6137)|/edit(*:6151)|(*:6160))))|ticky\\-notes/([^/]++)(?|(*:6196)|/edit(*:6210)|(*:6219)))|c(?|o(?|mpany\\-settings/([^/]++)(?|/edit(*:6270)|(*:6279))|ntract(?|s/(?|d(?|eal\\-delete/([^/]++)(*:6327)|ownload/([^/]++)(*:6352))|sign/([^/]++)(*:6375)|contract(?|Discussions/([^/]++)(?|(*:6418)|/edit(*:6432)|(*:6441))|Files/(?|download/([^/]++)(*:6477)|([^/]++)(?|(*:6497)|/edit(*:6511)|(*:6520)))|Types/([^/]++)(?|(*:6548)|/edit(*:6562)|(*:6571)))|([^/]++)(?|(*:6593)|/edit(*:6607)|(*:6616)))|\\-(?|renew/([^/]++)(?|(*:6649)|/edit(*:6663)|(*:6672))|template/(?|([^/]++)(?|(*:6705)|/edit(*:6719)|(*:6728))|download/([^/]++)(*:6755)))))|lient(?|s/(?|save\\-client\\-consent/([^/]++)(*:6811)|ajax\\-details/([^/]++)(*:6842)|project\\-list/([^/]++)(*:6873)|([^/]++)(?|(*:6893)|/edit(*:6907)|(*:6916)))|\\-(?|contacts/([^/]++)(?|(*:6952)|/edit(*:6966)|(*:6975))|notes/(?|ask\\-for\\-password/([^/]++)(*:7021)|([^/]++)(?|(*:7041)|/edit(*:7055)|(*:7064)))|docs/(?|download/([^/]++)(*:7100)|([^/]++)(?|(*:7120)|/edit(*:7134)|(*:7143))))|Category/([^/]++)(?|(*:7175)|/edit(*:7189)|(*:7198))|SubCategory/([^/]++)(?|(*:7231)|/edit(*:7245)|(*:7254)))|reditnotes/(?|d(?|elete\\-credited\\-invoice/([^/]++)(*:7316)|ownload/([^/]++)(*:7341))|c(?|redited\\-invoices/([^/]++)(*:7381)|onvert\\-invoice/([^/]++)(*:7414))|apply\\-(?|invoice\\-credit/([^/]++)(*:7458)|to\\-invoice/([^/]++)(*:7487))|([^/]++)(?|(*:7508)|/edit(*:7522)|(*:7531))))|a(?|pprove/([^/]++)(*:7562)|ttendance(?|s/(?|export\\-a(?|ttendance/([^/]++)/([^/]++)/([^/]++)(*:7636)|llattendance/([^/]++)/([^/]++)/([^/]++)/([^/]++)/([^/]++)(*:7702))|mark/([^/]++)/([^/]++)/([^/]++)/([^/]++)(*:7752)|([^/]++)(?|(*:7772)|/edit(*:7786)|(*:7795)))|\\-report/([^/]++)(?|(*:7826)|/edit(*:7840)|(*:7849))))|g(?|et(?|ClientSubCategories/([^/]++)(*:7898)|ProductSubCategories/([^/]++)(*:7936))|dpr(?|/(?|lead/approve\\-reject/([^/]++)/([^/]++)(*:7994)|customer/approve\\-reject/([^/]++)/([^/]++)(*:8045)|edit\\-consent/([^/]++)(*:8076)|update\\-consent/([^/]++)(*:8109)|([^/]++)(?|(*:8129)|/edit(*:8143)|(*:8152)))|\\-settings/(?|purpose\\-delete/([^/]++)(*:8201)|([^/]++)(?|(*:8221)|/edit(*:8235)|(*:8244)))))|e(?|m(?|ployee(?|s/(?|byDepartment/([^/]++)(*:8300)|import/exception/([^/]++)(*:8334)|([^/]++)(?|(*:8354)|/edit(*:8368)|(*:8377)))|\\-(?|docs/(?|download/([^/]++)(*:8418)|([^/]++)(?|(*:8438)|/edit(*:8452)|(*:8461)))|leaves/(?|employeeLeaveTypes/([^/]++)(*:8509)|([^/]++)(?|(*:8529)|/edit(*:8543)|(*:8552)))))|ergency\\-contacts/([^/]++)(?|(*:8594)|/edit(*:8608)|(*:8617)))|vent(?|s/([^/]++)(?|(*:8648)|/edit(*:8662)|(*:8671))|\\-files/(?|download/([^/]++)(*:8709)|([^/]++)(?|(*:8729)|/edit(*:8743)|(*:8752))))|stimates/(?|d(?|ownload/([^/]++)(*:8796)|ecline/([^/]++)(*:8820))|send\\-estimate/([^/]++)(*:8853)|change\\-status/([^/]++)(*:8885)|accept/([^/]++)(*:8909)|([^/]++)(?|(*:8929)|/edit(*:8943)|(*:8952)))|xpense(?|s/(?|recurring\\-expenses/([^/]++)(?|(*:9008)|/edit(*:9022)|(*:9031))|([^/]++)(?|(*:9052)|/edit(*:9066)|(*:9075)))|Category/([^/]++)(?|(*:9106)|/edit(*:9120)|(*:9129))|\\-report/([^/]++)(?|(*:9159)|/edit(*:9173)|(*:9182))))|i(?|mport/process/([^/]++)/([^/]++)(*:9229)|n(?|voices/(?|d(?|elete\\-applied\\-credit/([^/]++)(*:9287)|ownload/([^/]++)(*:9312))|a(?|pplied\\-credits/([^/]++)(*:9350)|dd\\-shipping\\-address/([^/]++)(*:9389))|payment\\-reminder/([^/]++)(*:9425)|s(?|end\\-invoice/([^/]++)(*:9459)|hipping\\-address\\-modal/([^/]++)(*:9500))|update\\-status/([^/]++)(*:9533)|get\\-client\\-company(?:/([^/]++))?(*:9576)|toggle\\-shipping\\-address/([^/]++)(*:9619)|recurring\\-invoice(?|/(?|export/([^/]++)/([^/]++)/([^/]++)/([^/]++)(*:9695)|recurring\\-invoice/([^/]++)(*:9731))|s/([^/]++)(?|(*:9754)|/edit(*:9768)|(*:9777)))|([^/]++)(?|(*:9799)|/edit(*:9813)|(*:9822)))|come\\-expense\\-report/([^/]++)(?|(*:9866)|/edit(*:9880)|(*:9889))))|u(?|ser\\-permissions/(?|customPermissions/([^/]++)(*:9951)|([^/]++)(?|(*:9971)|/edit(*:9985)|(*:9994)))|pdate\\-settings/([^/]++)(?|(*:10032)|/edit(*:10047)|(*:10057)))|p(?|ro(?|ject(?|Category/([^/]++)(?|(*:10105)|/edit(*:10120)|(*:10130))|s/(?|archive\\-(?|restore/([^/]++)(*:10174)|delete/([^/]++)(*:10199))|updateStatus/([^/]++)(*:10231)|d(?|estroy\\-pin/([^/]++)(*:10265)|iscussion(?|\\-(?|category/([^/]++)(?|(*:10312)|/edit(*:10327)|(*:10337))|reply/(?|get\\-replies/([^/]++)(*:10378)|([^/]++)(?|(*:10399)|/edit(*:10414)|(*:10424)))|files/(?|download/([^/]++)(*:10462)|([^/]++)(?|(*:10483)|/edit(*:10498)|(*:10508))))|/([^/]++)(?|(*:10533)|/edit(*:10548)|(*:10558))))|invoiceList/([^/]++)(*:10591)|m(?|embers/([^/]++)(*:10620)|ilestones/(?|byProject/([^/]++)(*:10661)|([^/]++)(?|(*:10682)|/edit(*:10697)|(*:10707))))|labels/([^/]++)(*:10735)|project(?|\\-(?|members/([^/]++)(?|(*:10779)|/edit(*:10794)|(*:10804))|ratings/([^/]++)(?|(*:10834)|/edit(*:10849)|(*:10859))|template(?|/([^/]++)(?|(*:10893)|/edit(*:10908)|(*:10918))|\\-(?|member/([^/]++)(?|(*:10952)|/edit(*:10967)|(*:10977))|task/(?|data(?:/([^/]++))?(*:11014)|([^/]++)(?|(*:11035)|/edit(*:11050)|(*:11060)))|sub\\-task/([^/]++)(?|(*:11093)|/edit(*:11108)|(*:11118)))))|s/burndown(?:/([^/]++))?(*:11156))|files/(?|download/([^/]++)(*:11193)|([^/]++)(?|(*:11214)|/edit(*:11229)|(*:11239)))|([^/]++)(?|(*:11262)|/edit(*:11277)|(*:11287)))|\\-notes/(?|ask\\-for\\-password/([^/]++)(*:11337)|([^/]++)(?|(*:11358)|/edit(*:11373)|(*:11383))))|duct(?|s/(?|remove\\-cart\\-item/([^/]++)(*:11435)|([^/]++)(?|(*:11456)|/edit(*:11471)|(*:11481)))|Category/([^/]++)(?|(*:11513)|/edit(*:11528)|(*:11538))|SubCategory/([^/]++)(?|(*:11572)|/edit(*:11587)|(*:11597))|\\-files/(?|d(?|ownload/([^/]++)(*:11639)|elete\\-image/([^/]++)(*:11670))|([^/]++)(?|(*:11692)|/edit(*:11707)|(*:11717))))|posal(?|s/(?|download/([^/]++)(*:11760)|send\\-proposal/([^/]++)(*:11793)|([^/]++)(?|(*:11814)|/edit(*:11829)|(*:11839)))|\\-template/(?|([^/]++)(?|(*:11876)|/edit(*:11891)|(*:11901))|download/([^/]++)(*:11929))))|ayments/(?|download/([^/]++)(*:11970)|([^/]++)(?|(*:11991)|/edit(*:12006)|(*:12016))))|t(?|a(?|xes/([^/]++)(?|(*:12052)|/edit(*:12067)|(*:12077))|sk(?|s/(?|destroy\\-pin/([^/]++)(*:12119)|check\\-task/([^/]++)(*:12149)|gantt\\-task\\-update/([^/]++)(*:12187)|members/([^/]++)(*:12213)|project_tasks/([^/]++)(*:12245)|task(?|\\-(?|label/([^/]++)(?|(*:12284)|/edit(*:12299)|(*:12309))|note/([^/]++)(?|(*:12336)|/edit(*:12351)|(*:12361))|files/(?|download/([^/]++)(*:12398)|([^/]++)(?|(*:12419)|/edit(*:12434)|(*:12444)))|calendar/([^/]++)(?|(*:12476)|/edit(*:12491)|(*:12501)))|C(?|ategory/([^/]++)(?|(*:12536)|/edit(*:12551)|(*:12561))|omment/([^/]++)(?|(*:12590)|/edit(*:12605)|(*:12615)))|boards/([^/]++)(?|(*:12645)|/edit(*:12660)|(*:12670)))|sub\\-task(?|s/([^/]++)(?|(*:12707)|/edit(*:12722)|(*:12732))|\\-files/(?|download/([^/]++)(*:12771)|([^/]++)(?|(*:12792)|/edit(*:12807)|(*:12817))))|([^/]++)(?|(*:12841)|/edit(*:12856)|(*:12866)))|\\-report/([^/]++)(?|(*:12898)|/edit(*:12913)|(*:12923))))|i(?|me(?|logs/(?|timelog\\-(?|calendar/([^/]++)(?|(*:12985)|/edit(*:13000)|(*:13010))|break/([^/]++)(?|(*:13038)|/edit(*:13053)|(*:13063)))|([^/]++)(?|(*:13086)|/edit(*:13101)|(*:13111)))|\\-log\\-report/([^/]++)(?|(*:13148)|/edit(*:13163)|(*:13173)))|cket(?|s/(?|updateOtherData/([^/]++)(*:13221)|([^/]++)(?|(*:13242)|/edit(*:13257)|(*:13267)))|\\-(?|f(?|orm/([^/]++)(?|(*:13303)|/edit(*:13318)|(*:13328))|iles/(?|download/([^/]++)(*:13364)|([^/]++)(?|(*:13385)|/edit(*:13400)|(*:13410))))|replies/([^/]++)(?|(*:13442)|/edit(*:13457)|(*:13467))))))|orders/(?|make\\-invoice/([^/]++)(*:13514)|payment\\-failed/([^/]++)(*:13548)|download/([^/]++)(*:13575)|([^/]++)(?|(*:13596)|/edit(*:13611)|(*:13621)))|notices/([^/]++)(?|(*:13652)|/edit(*:13667)|(*:13677))|knowledgebase(?|/(?|create(?:/([^/]++))?(*:13728)|searchquery(?:/([^/]++))?(*:13763)|([^/]++)(?|(*:13784)|/edit(*:13799)|(*:13809)))|\\-files/(?|download/([^/]++)(*:13849)|([^/]++)(?|(*:13870)|/edit(*:13885)|(*:13895)))|category/([^/]++)(?|(*:13927)|/edit(*:13942)|(*:13952)))|holidays/([^/]++)(?|(*:13984)|/edit(*:13999)|(*:14009))|lea(?|ds/(?|lead(?|\\-(?|f(?|iles/(?|download/([^/]++)(*:14073)|([^/]++)(?|(*:14094)|/edit(*:14109)|(*:14119)))|orm/([^/]++)(?|(*:14146)|/edit(*:14161)|(*:14171)))|notes/(?|ask\\-for\\-password/([^/]++)(*:14219)|([^/]++)(?|(*:14240)|/edit(*:14255)|(*:14265))))|s/(?|follow\\-up(?|/([^/]++)(*:14305)|\\-(?|edit(?:/([^/]++))?(*:14338)|delete/([^/]++)(*:14363)))|save\\-lead\\-consent/([^/]++)(*:14403))|Category/([^/]++)(?|(*:14434)|/edit(*:14449)|(*:14459))|boards/([^/]++)(?|(*:14488)|/edit(*:14503)|(*:14513)))|([^/]++)(?|(*:14536)|/edit(*:14551)|(*:14561)))|ve(?|s/([^/]++)(?|(*:14591)|/edit(*:14606)|(*:14616))|\\-report/([^/]++)(?|(*:14647)|/edit(*:14662)|(*:14672))))|message(?|s/(?|fetch_messages/([^/]++)(*:14723)|([^/]++)(?|(*:14744)|/edit(*:14759)|(*:14769)))|\\-file/(?|download/([^/]++)(*:14808)|([^/]++)(?|(*:14829)|/edit(*:14844)|(*:14854))))|finance\\-report/([^/]++)(?|(*:14894)|/edit(*:14909)|(*:14919))))|/quill\\-image/([^/]++)(*:14954))/?$}sDu',
+      0 => '{^(?|/_debugbar/c(?|lockwork/([^/]++)(*:39)|ache/([^/]++)(?:/([^/]++))?(*:73))|/t(?|ranslations(?|/view(?:/(.*))?(*:115)|(?:/(.*))?(*:133)|/(?|add/(.*)(*:153)|edit/(.*)(*:170)|groups/add(*:188)|delete/(.*)/([^/]++)(*:216)|import(*:230)|find(*:242)|locales/(?|add(*:264)|remove(*:278))|publish/(.*)(*:299)|translate\\-missing(*:325)))|ask(?|/([^/]++)(*:350)|\\-board/(?|([^/]++)(*:377)|load\\-more/([^/]++)(*:404))))|/d(?|own/([^/]++)(*:432)|eals/(?|([^/]++)(*:456)|de(?|tails/(?|([^/]++)(*:486)|edit/([^/]++)(*:507)|store(*:520)|update(*:534))|ny(*:545))|client\\-form(?|(*:569)|\\-submit(*:585))))|/up/([^/]++)(*:608)|/hide\\-review\\-modal/([^/]++)(*:645)|/re(?|set\\-password/([^/]++)(*:681)|direct/([^/]++)(*:704))|/e(?|mail/verify/([^/]++)/([^/]++)(*:747)|stimate/(?|([^/]++)(*:774)|d(?|ecline/([^/]++)(*:801)|ownload/([^/]++)(*:825))|accept/([^/]++)(*:849)))|/oauth2/([^/]++)/(?|authori(?|se(*:891)|ze(*:901))|callback(*:918))|/inv(?|itation/(?|([^/]++)(*:953)|accept\\-invite(*:975))|oice(?|/(?|([^/]++)(*:1003)|download/([^/]++)(*:1029))|\\-payment\\-failed/([^/]++)(*:1065)))|/c(?|on(?|tract/(?|([^/]++)(*:1103)|sign/([^/]++)(*:1125)|download/([^/]++)(*:1151))|sent/l/(?|([^/]++)(*:1179)|update/([^/]++)(*:1203)))|allback/([^/]++)(*:1230)|ropper/([^/]++)(*:1254))|/gantt\\-chart(?|\\-data/([^/]++)(*:1295)|/([^/]++)(*:1313))|/p(?|roposal(?|/(?|([^/]++)(*:1350)|download/([^/]++)(*:1376))|\\-action/([^/]++)(*:1403))|ay(?|stack(?|\\-public/([^/]++)(*:1443)|/callback/([^/]++)/([^/]++)(*:1479))|fast/callback/([^/]++)/([^/]++)/([^/]++)(*:1529)|pal(?|\\-public/([^/]++)(*:1561)|/([^/]++)(*:1579))))|/s(?|tripe(?|/([^/]++)(*:1613)|\\-public/([^/]++)(*:1639))|quare/callback/([^/]++)/([^/]++)(*:1681))|/flutterwave(?|\\-public/([^/]++)(*:1723)|/callback/([^/]++)/([^/]++)(*:1759))|/mollie(?|\\-public/([^/]++)(*:1796)|/callback/([^/]++)/([^/]++)(*:1832))|/a(?|uthorize\\-public/([^/]++)(*:1872)|ccount/(?|d(?|ashboard/widget/([^/]++)(*:1919)|e(?|signations/([^/]++)(?|(*:1954)|/edit(*:1968)|(*:1977))|partments/([^/]++)(?|(*:2008)|/edit(*:2022)|(*:2031))|al\\-url/([^/]++)(*:2057)))|s(?|e(?|ttings/(?|([^/]++)(?|/edit(*:2102)|(*:2111))|a(?|pp\\-settings(?|(*:2140)|/([^/]++)(?|(*:2161)|/edit(*:2175)|(*:2184)))|ttendance\\-settings(?|(*:2217)|/([^/]++)(?|(*:2238)|/edit(*:2252)|(*:2261))))|p(?|ro(?|file(?|\\-settings(?|(*:2302)|/([^/]++)(?|(*:2323)|/edit(*:2337)|(*:2346)))|(*:2357)|/([^/]++)(?|(*:2378)|/edit(*:2392)|(*:2401)))|ject\\-settings(?|(*:2429)|/([^/]++)(?|(*:2450)|/edit(*:2464)|(*:2473))|(?:/([^/]++))?(*:2497)|/(?|change\\-status(?:/([^/]++))?(*:2538)|set\\-default(?:/([^/]++))?(*:2573))))|ush(?|\\-notification\\-settings(?|(*:2618)|/([^/]++)(?|(*:2639)|/edit(*:2653)|(*:2662)))|er\\-settings(?|(*:2688)|/([^/]++)(?|(*:2709)|/edit(*:2723)|(*:2732))))|ayment\\-gateway\\-settings(?|(*:2772)|/([^/]++)(?|(*:2793)|/edit(*:2807)|(*:2816))))|2fa\\-(?|co(?|des\\-download(*:2854)|nfirm(?|(*:2871)))|email\\-confirm(?|(*:2899)))|verify\\-(?|2fa\\-password(*:2934)|google\\-recaptcha\\-v3(*:2964))|t(?|wo\\-fa\\-settings(?|(*:2997)|/([^/]++)(?|(*:3018)|/edit(*:3032)|(*:3041)))|i(?|cket(?|\\-(?|agents(?|/(?|update\\-group/([^/]++)(*:3103)|([^/]++)(?|(*:3123)|/edit(*:3137)|(*:3146)))|(*:3157))|settings(?|(*:3178)|/([^/]++)(?|(*:3199)|/edit(*:3213)|(*:3222)))|groups(?|(*:3242)|/([^/]++)(?|(*:3263)|/edit(*:3277)|(*:3286)))|email\\-settings(?|(*:3315)|/([^/]++)(?|(*:3336)|/edit(*:3350)|(*:3359))))|Types(?|(*:3379)|/([^/]++)(?|(*:3400)|/edit(*:3414)|(*:3423)))|Channels(?|(*:3445)|/([^/]++)(?|(*:3466)|/edit(*:3480)|(*:3489))))|melog\\-settings(?|(*:3519)|/([^/]++)(?|(*:3540)|/edit(*:3554)|(*:3563))))|ask\\-settings(?|(*:3591))|heme\\-settings(?|(*:3618)|/([^/]++)(?|(*:3639)|/edit(*:3653)|(*:3662))))|s(?|mtp\\-settings(?|(*:3694)|/([^/]++)(?|(*:3715)|/edit(*:3729)|(*:3738)))|lack\\-settings(?|(*:3766)|/([^/]++)(?|(*:3787)|/edit(*:3801)|(*:3810)))|torage\\-settings(?|(*:3840)|/([^/]++)(?|(*:3861)|/edit(*:3875)|(*:3884)))|ocial\\-auth\\-settings(?|(*:3919)|/([^/]++)(*:3937))|ecurity\\-settings(?|(*:3967)|/([^/]++)(?|(*:3988)|/edit(*:4002)|(*:4011))))|notifications(?|(*:4039)|/([^/]++)(?|(*:4060)|/edit(*:4074)|(*:4083)))|cu(?|rrency\\-settings(?|/(?|exchange\\-rate/([^/]++)(*:4145)|([^/]++)(?|(*:4165)|/edit(*:4179)|(*:4188)))|(*:4199))|stom\\-(?|fields(?|(*:4227)|/([^/]++)(?|(*:4248)|/edit(*:4262)|(*:4271)))|modules(?|(*:4292)|/([^/]++)(?|(*:4313)|/edit(*:4327)|(*:4336)))))|offline\\-payment\\-setting(?|(*:4377)|/([^/]++)(?|(*:4398)|/edit(*:4412)|(*:4421)))|invoice\\-settings(?|(*:4452)|/([^/]++)(?|(*:4473)|/edit(*:4487)|(*:4496)))|r(?|eplyTemplates(?|(*:4527)|/([^/]++)(?|(*:4548)|/edit(*:4562)|(*:4571)))|ole\\-permissions(?|(*:4601)|/([^/]++)(?|(*:4622)|/edit(*:4636)|(*:4645))))|l(?|ea(?|ve(?|s\\-settings(?|(*:4685)|/([^/]++)(?|(*:4706)|/edit(*:4720)|(*:4729)))|Type(?|(*:4747)|/([^/]++)(?|(*:4768)|/edit(*:4782)|(*:4791))))|d\\-(?|s(?|ettings(?|(*:4823)|/([^/]++)(?|(*:4844)|/edit(*:4858)|(*:4867)))|ource\\-settings(?|(*:4896)|/([^/]++)(?|(*:4917)|/edit(*:4931)|(*:4940)))|tatus\\-(?|update/([^/]++)(*:4976)|settings(?|(*:4996)|/([^/]++)(?|(*:5017)|/edit(*:5031)|(*:5040)))))|agent\\-settings(?|(*:5071)|/([^/]++)(?|(*:5092)|/edit(*:5106)|(*:5115)))))|anguage\\-settings(?|/(?|update\\-data(?:/([^/]++))?(*:5178)|([^/]++)(?|(*:5198)|/edit(*:5212)|(*:5221)))|(*:5232)))|m(?|essage\\-settings(?|(*:5266)|/([^/]++)(?|(*:5287)|/edit(*:5301)|(*:5310)))|odule\\-settings(?|(*:5339)|/([^/]++)(?|(*:5360)|/edit(*:5374)|(*:5383))))|google\\-(?|calendar\\-settings(?|(*:5427)|/([^/]++)(?|(*:5448)|/edit(*:5462)|(*:5471)))|auth(?|(*:5489)))|database\\-backup\\-settings(?|/(?|d(?|ownload/([^/]++)(*:5553)|elete/([^/]++)(*:5576))|([^/]++)(?|(*:5597)|/edit(*:5611)|(*:5620)))|(*:5631))|business\\-address(?|(*:5661)|/([^/]++)(?|(*:5682)|/edit(*:5696)|(*:5705)))|employee\\-shifts(?|(*:5735)|/([^/]++)(?|(*:5756)|/edit(*:5770)|(*:5779))))|arch/([^/]++)(?|(*:5807)|/edit(*:5821)|(*:5830)))|ave\\-consent\\-purpose\\-data/([^/]++)(*:5877)|hifts(?|/(?|mark/([^/]++)/([^/]++)/([^/]++)/([^/]++)(*:5938)|export\\-all/([^/]++)/([^/]++)/([^/]++)/([^/]++)(*:5994)|([^/]++)(?|(*:6014)|/edit(*:6028)|(*:6037)))|\\-change/(?|approve_request/([^/]++)(*:6084)|decline_request/([^/]++)(*:6117)|([^/]++)(?|(*:6137)|/edit(*:6151)|(*:6160))))|ticky\\-notes/([^/]++)(?|(*:6196)|/edit(*:6210)|(*:6219)))|c(?|o(?|mpany\\-settings/([^/]++)(?|/edit(*:6270)|(*:6279))|ntract(?|s/(?|d(?|eal\\-delete/([^/]++)(*:6327)|ownload/([^/]++)(*:6352))|sign/([^/]++)(*:6375)|contract(?|Discussions/([^/]++)(?|(*:6418)|/edit(*:6432)|(*:6441))|Files/(?|download/([^/]++)(*:6477)|([^/]++)(?|(*:6497)|/edit(*:6511)|(*:6520)))|Types/([^/]++)(?|(*:6548)|/edit(*:6562)|(*:6571)))|([^/]++)(?|(*:6593)|/edit(*:6607)|(*:6616)))|\\-(?|renew/([^/]++)(?|(*:6649)|/edit(*:6663)|(*:6672))|template/(?|([^/]++)(?|(*:6705)|/edit(*:6719)|(*:6728))|download/([^/]++)(*:6755)))))|lient(?|s/(?|save\\-client\\-consent/([^/]++)(*:6811)|ajax\\-details/([^/]++)(*:6842)|project\\-list/([^/]++)(*:6873)|([^/]++)(?|(*:6893)|/edit(*:6907)|(*:6916)))|\\-(?|contacts/([^/]++)(?|(*:6952)|/edit(*:6966)|(*:6975))|notes/(?|ask\\-for\\-password/([^/]++)(*:7021)|([^/]++)(?|(*:7041)|/edit(*:7055)|(*:7064)))|docs/(?|download/([^/]++)(*:7100)|([^/]++)(?|(*:7120)|/edit(*:7134)|(*:7143))))|Category/([^/]++)(?|(*:7175)|/edit(*:7189)|(*:7198))|SubCategory/([^/]++)(?|(*:7231)|/edit(*:7245)|(*:7254)))|reditnotes/(?|d(?|elete\\-credited\\-invoice/([^/]++)(*:7316)|ownload/([^/]++)(*:7341))|c(?|redited\\-invoices/([^/]++)(*:7381)|onvert\\-invoice/([^/]++)(*:7414))|apply\\-(?|invoice\\-credit/([^/]++)(*:7458)|to\\-invoice/([^/]++)(*:7487))|([^/]++)(?|(*:7508)|/edit(*:7522)|(*:7531))))|a(?|pprove/([^/]++)(*:7562)|ttendance(?|s/(?|export\\-a(?|ttendance/([^/]++)/([^/]++)/([^/]++)(*:7636)|llattendance/([^/]++)/([^/]++)/([^/]++)/([^/]++)/([^/]++)(*:7702))|mark/([^/]++)/([^/]++)/([^/]++)/([^/]++)(*:7752)|([^/]++)(?|(*:7772)|/edit(*:7786)|(*:7795)))|\\-report/([^/]++)(?|(*:7826)|/edit(*:7840)|(*:7849))))|g(?|et(?|ClientSubCategories/([^/]++)(*:7898)|ProductSubCategories/([^/]++)(*:7936))|dpr(?|/(?|lead/approve\\-reject/([^/]++)/([^/]++)(*:7994)|customer/approve\\-reject/([^/]++)/([^/]++)(*:8045)|edit\\-consent/([^/]++)(*:8076)|update\\-consent/([^/]++)(*:8109)|([^/]++)(?|(*:8129)|/edit(*:8143)|(*:8152)))|\\-settings/(?|purpose\\-delete/([^/]++)(*:8201)|([^/]++)(?|(*:8221)|/edit(*:8235)|(*:8244)))))|e(?|m(?|ployee(?|s/(?|byDepartment/([^/]++)(*:8300)|import/exception/([^/]++)(*:8334)|([^/]++)(?|(*:8354)|/edit(*:8368)|(*:8377)))|\\-(?|docs/(?|download/([^/]++)(*:8418)|([^/]++)(?|(*:8438)|/edit(*:8452)|(*:8461)))|leaves/(?|employeeLeaveTypes/([^/]++)(*:8509)|([^/]++)(?|(*:8529)|/edit(*:8543)|(*:8552)))))|ergency\\-contacts/([^/]++)(?|(*:8594)|/edit(*:8608)|(*:8617)))|vent(?|s/([^/]++)(?|(*:8648)|/edit(*:8662)|(*:8671))|\\-files/(?|download/([^/]++)(*:8709)|([^/]++)(?|(*:8729)|/edit(*:8743)|(*:8752))))|stimates/(?|d(?|ownload/([^/]++)(*:8796)|ecline/([^/]++)(*:8820))|send\\-estimate/([^/]++)(*:8853)|change\\-status/([^/]++)(*:8885)|accept/([^/]++)(*:8909)|([^/]++)(?|(*:8929)|/edit(*:8943)|(*:8952)))|xpense(?|s/(?|recurring\\-expenses/([^/]++)(?|(*:9008)|/edit(*:9022)|(*:9031))|([^/]++)(?|(*:9052)|/edit(*:9066)|(*:9075)))|Category/([^/]++)(?|(*:9106)|/edit(*:9120)|(*:9129))|\\-report/([^/]++)(?|(*:9159)|/edit(*:9173)|(*:9182))))|i(?|mport/process/([^/]++)/([^/]++)(*:9229)|n(?|voices/(?|d(?|elete\\-applied\\-credit/([^/]++)(*:9287)|ownload/([^/]++)(*:9312))|a(?|pplied\\-credits/([^/]++)(*:9350)|dd\\-shipping\\-address/([^/]++)(*:9389))|payment\\-reminder/([^/]++)(*:9425)|s(?|end\\-invoice/([^/]++)(*:9459)|hipping\\-address\\-modal/([^/]++)(*:9500))|update\\-status/([^/]++)(*:9533)|get\\-client\\-company(?:/([^/]++))?(*:9576)|toggle\\-shipping\\-address/([^/]++)(*:9619)|recurring\\-invoice(?|/(?|export/([^/]++)/([^/]++)/([^/]++)/([^/]++)(*:9695)|recurring\\-invoice/([^/]++)(*:9731))|s/([^/]++)(?|(*:9754)|/edit(*:9768)|(*:9777)))|([^/]++)(?|(*:9799)|/edit(*:9813)|(*:9822)))|come\\-expense\\-report/([^/]++)(?|(*:9866)|/edit(*:9880)|(*:9889))))|u(?|ser\\-permissions/(?|customPermissions/([^/]++)(*:9951)|([^/]++)(?|(*:9971)|/edit(*:9985)|(*:9994)))|pdate\\-settings/([^/]++)(?|(*:10032)|/edit(*:10047)|(*:10057)))|p(?|ro(?|ject(?|Category/([^/]++)(?|(*:10105)|/edit(*:10120)|(*:10130))|s/(?|archive\\-(?|restore/([^/]++)(*:10174)|delete/([^/]++)(*:10199))|updateStatus/([^/]++)(*:10231)|d(?|estroy\\-pin/([^/]++)(*:10265)|iscussion(?|\\-(?|category/([^/]++)(?|(*:10312)|/edit(*:10327)|(*:10337))|reply/(?|get\\-replies/([^/]++)(*:10378)|([^/]++)(?|(*:10399)|/edit(*:10414)|(*:10424)))|files/(?|download/([^/]++)(*:10462)|([^/]++)(?|(*:10483)|/edit(*:10498)|(*:10508))))|/([^/]++)(?|(*:10533)|/edit(*:10548)|(*:10558))))|invoiceList/([^/]++)(*:10591)|m(?|embers/([^/]++)(*:10620)|ilestones/(?|byProject/([^/]++)(*:10661)|([^/]++)(?|(*:10682)|/edit(*:10697)|(*:10707))))|labels/([^/]++)(*:10735)|project(?|\\-(?|members/([^/]++)(?|(*:10779)|/edit(*:10794)|(*:10804))|ratings/([^/]++)(?|(*:10834)|/edit(*:10849)|(*:10859))|template(?|/([^/]++)(?|(*:10893)|/edit(*:10908)|(*:10918))|\\-(?|member/([^/]++)(?|(*:10952)|/edit(*:10967)|(*:10977))|task/(?|data(?:/([^/]++))?(*:11014)|([^/]++)(?|(*:11035)|/edit(*:11050)|(*:11060)))|sub\\-task/([^/]++)(?|(*:11093)|/edit(*:11108)|(*:11118)))))|s/burndown(?:/([^/]++))?(*:11156))|files/(?|download/([^/]++)(*:11193)|([^/]++)(?|(*:11214)|/edit(*:11229)|(*:11239)))|([^/]++)(?|(*:11262)|/edit(*:11277)|(*:11287)))|\\-notes/(?|ask\\-for\\-password/([^/]++)(*:11337)|([^/]++)(?|(*:11358)|/edit(*:11373)|(*:11383))))|duct(?|s/(?|remove\\-cart\\-item/([^/]++)(*:11435)|([^/]++)(?|(*:11456)|/edit(*:11471)|(*:11481)))|Category/([^/]++)(?|(*:11513)|/edit(*:11528)|(*:11538))|SubCategory/([^/]++)(?|(*:11572)|/edit(*:11587)|(*:11597))|\\-files/(?|d(?|ownload/([^/]++)(*:11639)|elete\\-image/([^/]++)(*:11670))|([^/]++)(?|(*:11692)|/edit(*:11707)|(*:11717))))|posal(?|s/(?|download/([^/]++)(*:11760)|send\\-proposal/([^/]++)(*:11793)|([^/]++)(?|(*:11814)|/edit(*:11829)|(*:11839)))|\\-template/(?|([^/]++)(?|(*:11876)|/edit(*:11891)|(*:11901))|download/([^/]++)(*:11929))))|ayments/(?|download/([^/]++)(*:11970)|([^/]++)(?|(*:11991)|/edit(*:12006)|(*:12016))))|t(?|a(?|xes/([^/]++)(?|(*:12052)|/edit(*:12067)|(*:12077))|sk(?|s/(?|destroy\\-pin/([^/]++)(*:12119)|check\\-task/([^/]++)(*:12149)|gantt\\-task\\-update/([^/]++)(*:12187)|members/([^/]++)(*:12213)|project_tasks/([^/]++)(*:12245)|task(?|\\-(?|label/([^/]++)(?|(*:12284)|/edit(*:12299)|(*:12309))|note/([^/]++)(?|(*:12336)|/edit(*:12351)|(*:12361))|files/(?|download/([^/]++)(*:12398)|([^/]++)(?|(*:12419)|/edit(*:12434)|(*:12444)))|calendar/([^/]++)(?|(*:12476)|/edit(*:12491)|(*:12501)))|C(?|ategory/([^/]++)(?|(*:12536)|/edit(*:12551)|(*:12561))|omment/([^/]++)(?|(*:12590)|/edit(*:12605)|(*:12615)))|boards/([^/]++)(?|(*:12645)|/edit(*:12660)|(*:12670)))|sub\\-task(?|s/([^/]++)(?|(*:12707)|/edit(*:12722)|(*:12732))|\\-files/(?|download/([^/]++)(*:12771)|([^/]++)(?|(*:12792)|/edit(*:12807)|(*:12817))))|([^/]++)(?|(*:12841)|/edit(*:12856)|(*:12866)))|\\-report/([^/]++)(?|(*:12898)|/edit(*:12913)|(*:12923))))|i(?|me(?|logs/(?|timelog\\-(?|calendar/([^/]++)(?|(*:12985)|/edit(*:13000)|(*:13010))|break/([^/]++)(?|(*:13038)|/edit(*:13053)|(*:13063)))|([^/]++)(?|(*:13086)|/edit(*:13101)|(*:13111)))|\\-log\\-report/([^/]++)(?|(*:13148)|/edit(*:13163)|(*:13173)))|cket(?|s/(?|updateOtherData/([^/]++)(*:13221)|([^/]++)(?|(*:13242)|/edit(*:13257)|(*:13267)))|\\-(?|f(?|orm/([^/]++)(?|(*:13303)|/edit(*:13318)|(*:13328))|iles/(?|download/([^/]++)(*:13364)|([^/]++)(?|(*:13385)|/edit(*:13400)|(*:13410))))|replies/([^/]++)(?|(*:13442)|/edit(*:13457)|(*:13467))))))|orders/(?|make\\-invoice/([^/]++)(*:13514)|payment\\-failed/([^/]++)(*:13548)|download/([^/]++)(*:13575)|([^/]++)(?|(*:13596)|/edit(*:13611)|(*:13621)))|notices/([^/]++)(?|(*:13652)|/edit(*:13667)|(*:13677))|knowledgebase(?|/(?|create(?:/([^/]++))?(*:13728)|searchquery(?:/([^/]++))?(*:13763)|([^/]++)(?|(*:13784)|/edit(*:13799)|(*:13809)))|\\-files/(?|download/([^/]++)(*:13849)|([^/]++)(?|(*:13870)|/edit(*:13885)|(*:13895)))|category/([^/]++)(?|(*:13927)|/edit(*:13942)|(*:13952)))|holidays/([^/]++)(?|(*:13984)|/edit(*:13999)|(*:14009))|lea(?|ds/(?|lead(?|\\-(?|f(?|iles/(?|download/([^/]++)(*:14073)|([^/]++)(?|(*:14094)|/edit(*:14109)|(*:14119)))|orm/([^/]++)(?|(*:14146)|/edit(*:14161)|(*:14171)))|notes/(?|ask\\-for\\-password/([^/]++)(*:14219)|([^/]++)(?|(*:14240)|/edit(*:14255)|(*:14265))))|s/(?|follow\\-up(?|/([^/]++)(*:14305)|\\-(?|edit(?:/([^/]++))?(*:14338)|delete/([^/]++)(*:14363)))|save\\-lead\\-consent/([^/]++)(*:14403))|Category/([^/]++)(?|(*:14434)|/edit(*:14449)|(*:14459))|boards/([^/]++)(?|(*:14488)|/edit(*:14503)|(*:14513)))|([^/]++)(?|(*:14536)|/edit(*:14551)|(*:14561)))|ve(?|s/([^/]++)(?|(*:14591)|/edit(*:14606)|(*:14616))|\\-report/([^/]++)(?|(*:14647)|/edit(*:14662)|(*:14672))))|message(?|s/(?|fetch_messages/([^/]++)(*:14723)|([^/]++)(?|(*:14744)|/edit(*:14759)|(*:14769)))|\\-file/(?|download/([^/]++)(*:14808)|([^/]++)(?|(*:14829)|/edit(*:14844)|(*:14854))))|finance\\-report/([^/]++)(?|(*:14894)|/edit(*:14909)|(*:14919))))|/quill\\-image/([^/]++)(*:14954)|/lead/deal\\-stage/([^/]++)(*:14990))/?$}sDu',
     ),
     3 => 
     array (
@@ -11904,7 +11904,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::F3wi6PTrJTUSyRqv',
+            '_route' => 'generated::Rw92wfW4IJjz67ab',
             'groupKey' => NULL,
           ),
           1 => 
@@ -11928,7 +11928,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::RpTeWkWllYY3jAXo',
+            '_route' => 'generated::PhCqvBhrtPnpysRs',
             'groupKey' => NULL,
           ),
           1 => 
@@ -11952,7 +11952,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::DhLfG9grBV9dZl6M',
+            '_route' => 'generated::0dEjVu6ZxRMuwgEX',
           ),
           1 => 
           array (
@@ -11974,7 +11974,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Rygw7tHsUFOYUJGB',
+            '_route' => 'generated::FglWufyxutGx4lWx',
           ),
           1 => 
           array (
@@ -11996,7 +11996,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Lh4unatWtgulzFA7',
+            '_route' => 'generated::AOk7JK4LH1jhkcmM',
           ),
           1 => 
           array (
@@ -12017,7 +12017,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Qpi4eMCxfdz8S92Z',
+            '_route' => 'generated::UjsNaxVZjFuMlq2h',
           ),
           1 => 
           array (
@@ -12040,7 +12040,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::usGl1owspAzXRxYv',
+            '_route' => 'generated::7KNwfembqWtzp6cL',
           ),
           1 => 
           array (
@@ -12061,7 +12061,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::rIAZVPlwwTeTlDy9',
+            '_route' => 'generated::zdtRRGCBocaBhZOz',
           ),
           1 => 
           array (
@@ -12082,7 +12082,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::lV48gcRoLPiLIXJn',
+            '_route' => 'generated::p6zCUUNNE0EnaKET',
           ),
           1 => 
           array (
@@ -12103,7 +12103,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::ePWRyNHQ6O3Dz0nC',
+            '_route' => 'generated::jtAqP6qvYX6VQCwg',
           ),
           1 => 
           array (
@@ -12124,7 +12124,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::IBQWCgivUxrWOigI',
+            '_route' => 'generated::I1o5lgSwBbY8BCso',
           ),
           1 => 
           array (
@@ -12146,7 +12146,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::xBtlM8hneWuwpSS4',
+            '_route' => 'generated::xCX1RSu6SnBc4d6X',
           ),
           1 => 
           array (
@@ -12236,7 +12236,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::PdrRdNCPIgjtLJSA',
+            '_route' => 'generated::B7Cgh7MOruT0w1hf',
           ),
           1 => 
           array (
@@ -12259,7 +12259,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::RF0a7eSVjGBvhgqL',
+            '_route' => 'generated::jwCOfSRt0HUEpQub',
           ),
           1 => 
           array (
@@ -12282,7 +12282,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::ewpNiV5VcuWBUrMt',
+            '_route' => 'generated::OTfeewk8JFMqMiSa',
           ),
           1 => 
           array (
@@ -12305,7 +12305,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::nMIzC6eyyfwy2zs4',
+            '_route' => 'generated::dcxYhqRGN34lnB75',
           ),
           1 => 
           array (
@@ -12433,7 +12433,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::WjhTljCHzXliaHUB',
+            '_route' => 'generated::1GwYliot4lmezWsk',
           ),
           1 => 
           array (
@@ -13589,7 +13589,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::9D8Tvm7Nq3voHw3f',
+            '_route' => 'generated::ndoCPH8ZE6J4f6Hv',
           ),
           1 => 
           array (
@@ -20027,7 +20027,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::3prCLpVV60Q9D7UU',
+            '_route' => 'generated::fgUELCHexFGXWwcp',
           ),
           1 => 
           array (
@@ -30312,6 +30312,29 @@ app('router')->setCompiledRoutes(
           5 => true,
           6 => NULL,
         ),
+      ),
+      14990 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'deal-stage-create',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
         1 => 
         array (
           0 => NULL,
@@ -30783,7 +30806,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::F3wi6PTrJTUSyRqv' => 
+    'generated::Rw92wfW4IJjz67ab' => 
     array (
       'methods' => 
       array (
@@ -30805,7 +30828,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::F3wi6PTrJTUSyRqv',
+        'as' => 'generated::Rw92wfW4IJjz67ab',
       ),
       'fallback' => false,
       'defaults' => 
@@ -30822,7 +30845,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::RpTeWkWllYY3jAXo' => 
+    'generated::PhCqvBhrtPnpysRs' => 
     array (
       'methods' => 
       array (
@@ -30844,7 +30867,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::RpTeWkWllYY3jAXo',
+        'as' => 'generated::PhCqvBhrtPnpysRs',
       ),
       'fallback' => false,
       'defaults' => 
@@ -30861,7 +30884,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::DhLfG9grBV9dZl6M' => 
+    'generated::0dEjVu6ZxRMuwgEX' => 
     array (
       'methods' => 
       array (
@@ -30882,7 +30905,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::DhLfG9grBV9dZl6M',
+        'as' => 'generated::0dEjVu6ZxRMuwgEX',
       ),
       'fallback' => false,
       'defaults' => 
@@ -30899,7 +30922,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Rygw7tHsUFOYUJGB' => 
+    'generated::FglWufyxutGx4lWx' => 
     array (
       'methods' => 
       array (
@@ -30920,7 +30943,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::Rygw7tHsUFOYUJGB',
+        'as' => 'generated::FglWufyxutGx4lWx',
       ),
       'fallback' => false,
       'defaults' => 
@@ -30937,7 +30960,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Lh4unatWtgulzFA7' => 
+    'generated::AOk7JK4LH1jhkcmM' => 
     array (
       'methods' => 
       array (
@@ -30958,7 +30981,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::Lh4unatWtgulzFA7',
+        'as' => 'generated::AOk7JK4LH1jhkcmM',
       ),
       'fallback' => false,
       'defaults' => 
@@ -30974,7 +30997,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Qpi4eMCxfdz8S92Z' => 
+    'generated::UjsNaxVZjFuMlq2h' => 
     array (
       'methods' => 
       array (
@@ -30995,7 +31018,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::Qpi4eMCxfdz8S92Z',
+        'as' => 'generated::UjsNaxVZjFuMlq2h',
       ),
       'fallback' => false,
       'defaults' => 
@@ -31012,7 +31035,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::usGl1owspAzXRxYv' => 
+    'generated::7KNwfembqWtzp6cL' => 
     array (
       'methods' => 
       array (
@@ -31033,7 +31056,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::usGl1owspAzXRxYv',
+        'as' => 'generated::7KNwfembqWtzp6cL',
       ),
       'fallback' => false,
       'defaults' => 
@@ -31049,7 +31072,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::rIAZVPlwwTeTlDy9' => 
+    'generated::zdtRRGCBocaBhZOz' => 
     array (
       'methods' => 
       array (
@@ -31070,7 +31093,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::rIAZVPlwwTeTlDy9',
+        'as' => 'generated::zdtRRGCBocaBhZOz',
       ),
       'fallback' => false,
       'defaults' => 
@@ -31086,7 +31109,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::lV48gcRoLPiLIXJn' => 
+    'generated::p6zCUUNNE0EnaKET' => 
     array (
       'methods' => 
       array (
@@ -31107,7 +31130,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::lV48gcRoLPiLIXJn',
+        'as' => 'generated::p6zCUUNNE0EnaKET',
       ),
       'fallback' => false,
       'defaults' => 
@@ -31123,7 +31146,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::ePWRyNHQ6O3Dz0nC' => 
+    'generated::jtAqP6qvYX6VQCwg' => 
     array (
       'methods' => 
       array (
@@ -31144,7 +31167,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::ePWRyNHQ6O3Dz0nC',
+        'as' => 'generated::jtAqP6qvYX6VQCwg',
       ),
       'fallback' => false,
       'defaults' => 
@@ -31160,7 +31183,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::IBQWCgivUxrWOigI' => 
+    'generated::I1o5lgSwBbY8BCso' => 
     array (
       'methods' => 
       array (
@@ -31181,7 +31204,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::IBQWCgivUxrWOigI',
+        'as' => 'generated::I1o5lgSwBbY8BCso',
       ),
       'fallback' => false,
       'defaults' => 
@@ -31198,7 +31221,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::xBtlM8hneWuwpSS4' => 
+    'generated::xCX1RSu6SnBc4d6X' => 
     array (
       'methods' => 
       array (
@@ -31219,7 +31242,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::xBtlM8hneWuwpSS4',
+        'as' => 'generated::xCX1RSu6SnBc4d6X',
       ),
       'fallback' => false,
       'defaults' => 
@@ -31336,7 +31359,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::YuHSJLDDDFmWJHR1' => 
+    'generated::8wULTeycd78NpqsJ' => 
     array (
       'methods' => 
       array (
@@ -31354,7 +31377,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::YuHSJLDDDFmWJHR1',
+        'as' => 'generated::8wULTeycd78NpqsJ',
       ),
       'fallback' => false,
       'defaults' => 
@@ -31370,7 +31393,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Im8HaSsG2yts9Ygt' => 
+    'generated::NUbOiHLNU3TxvCpE' => 
     array (
       'methods' => 
       array (
@@ -31388,7 +31411,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::Im8HaSsG2yts9Ygt',
+        'as' => 'generated::NUbOiHLNU3TxvCpE',
       ),
       'fallback' => false,
       'defaults' => 
@@ -31404,7 +31427,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::PdrRdNCPIgjtLJSA' => 
+    'generated::B7Cgh7MOruT0w1hf' => 
     array (
       'methods' => 
       array (
@@ -31422,7 +31445,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::PdrRdNCPIgjtLJSA',
+        'as' => 'generated::B7Cgh7MOruT0w1hf',
       ),
       'fallback' => false,
       'defaults' => 
@@ -31438,7 +31461,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::WjhTljCHzXliaHUB' => 
+    'generated::1GwYliot4lmezWsk' => 
     array (
       'methods' => 
       array (
@@ -31456,7 +31479,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::WjhTljCHzXliaHUB',
+        'as' => 'generated::1GwYliot4lmezWsk',
       ),
       'fallback' => false,
       'defaults' => 
@@ -31676,7 +31699,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::FMDjjFvw6ixxFIBu' => 
+    'generated::fBkdjc8bNuL2JNuI' => 
     array (
       'methods' => 
       array (
@@ -31694,7 +31717,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::FMDjjFvw6ixxFIBu',
+        'as' => 'generated::fBkdjc8bNuL2JNuI',
       ),
       'fallback' => false,
       'defaults' => 
@@ -31749,7 +31772,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::RmNQKOOjEtT2mK2k' => 
+    'generated::jb9bQQwwP9z6zdcZ' => 
     array (
       'methods' => 
       array (
@@ -31771,7 +31794,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::RmNQKOOjEtT2mK2k',
+        'as' => 'generated::jb9bQQwwP9z6zdcZ',
       ),
       'fallback' => false,
       'defaults' => 
@@ -32017,7 +32040,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::wLGEKsPTKux6Jnnq' => 
+    'generated::oVxPr7WRv4vUL6wW' => 
     array (
       'methods' => 
       array (
@@ -32039,7 +32062,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::wLGEKsPTKux6Jnnq',
+        'as' => 'generated::oVxPr7WRv4vUL6wW',
       ),
       'fallback' => false,
       'defaults' => 
@@ -32250,7 +32273,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Oa4zImdQnVAtuqQi' => 
+    'generated::d7LgV0JbjX37Hetl' => 
     array (
       'methods' => 
       array (
@@ -32273,7 +32296,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::Oa4zImdQnVAtuqQi',
+        'as' => 'generated::d7LgV0JbjX37Hetl',
       ),
       'fallback' => false,
       'defaults' => 
@@ -32405,7 +32428,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::VlkxZ0MMbUKn8foc' => 
+    'generated::EPYXFcXWeErpVuZ0' => 
     array (
       'methods' => 
       array (
@@ -32427,7 +32450,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::VlkxZ0MMbUKn8foc',
+        'as' => 'generated::EPYXFcXWeErpVuZ0',
       ),
       'fallback' => false,
       'defaults' => 
@@ -32674,7 +32697,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::jXSOclwlGUE7IEoA' => 
+    'generated::DjxUsu8fRkLiYI3m' => 
     array (
       'methods' => 
       array (
@@ -32696,7 +32719,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::jXSOclwlGUE7IEoA',
+        'as' => 'generated::DjxUsu8fRkLiYI3m',
       ),
       'fallback' => false,
       'defaults' => 
@@ -32823,7 +32846,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::YTSd80Jb0sUtve2Q' => 
+    'generated::jOKIOO4yBjHJNhgY' => 
     array (
       'methods' => 
       array (
@@ -32835,7 +32858,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'pcinaglia\\laraupdater\\LaraUpdaterController@check',
         'controller' => 'pcinaglia\\laraupdater\\LaraUpdaterController@check',
-        'as' => 'generated::YTSd80Jb0sUtve2Q',
+        'as' => 'generated::jOKIOO4yBjHJNhgY',
       ),
       'fallback' => false,
       'defaults' => 
@@ -32851,7 +32874,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::VPqpCLZSYG3qIaYC' => 
+    'generated::5Jv7BoB6isK57BO9' => 
     array (
       'methods' => 
       array (
@@ -32863,7 +32886,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'pcinaglia\\laraupdater\\LaraUpdaterController@getCurrentVersion',
         'controller' => 'pcinaglia\\laraupdater\\LaraUpdaterController@getCurrentVersion',
-        'as' => 'generated::VPqpCLZSYG3qIaYC',
+        'as' => 'generated::5Jv7BoB6isK57BO9',
       ),
       'fallback' => false,
       'defaults' => 
@@ -32879,7 +32902,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::wHJkWov4Z2IFxGLI' => 
+    'generated::d9qKUKI4kDC6XW0L' => 
     array (
       'methods' => 
       array (
@@ -32897,7 +32920,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::wHJkWov4Z2IFxGLI',
+        'as' => 'generated::d9qKUKI4kDC6XW0L',
       ),
       'fallback' => false,
       'defaults' => 
@@ -33022,7 +33045,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::qwAHu6cdLXr8KY24' => 
+    'generated::KNt0KbT4jY6WuUY8' => 
     array (
       'methods' => 
       array (
@@ -33048,7 +33071,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 'Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken',
         ),
-        'as' => 'generated::qwAHu6cdLXr8KY24',
+        'as' => 'generated::KNt0KbT4jY6WuUY8',
       ),
       'fallback' => false,
       'defaults' => 
@@ -33101,7 +33124,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::bSw1ftfauHGeoVVS' => 
+    'generated::KyJnPT6wde84vYCH' => 
     array (
       'methods' => 
       array (
@@ -33123,7 +33146,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::bSw1ftfauHGeoVVS',
+        'as' => 'generated::KyJnPT6wde84vYCH',
       ),
       'fallback' => false,
       'defaults' => 
@@ -76253,7 +76276,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::3prCLpVV60Q9D7UU' => 
+    'generated::fgUELCHexFGXWwcp' => 
     array (
       'methods' => 
       array (
@@ -76275,7 +76298,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::3prCLpVV60Q9D7UU',
+        'as' => 'generated::fgUELCHexFGXWwcp',
       ),
       'fallback' => false,
       'defaults' => 
@@ -76291,7 +76314,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::9D8Tvm7Nq3voHw3f' => 
+    'generated::ndoCPH8ZE6J4f6Hv' => 
     array (
       'methods' => 
       array (
@@ -76313,7 +76336,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::9D8Tvm7Nq3voHw3f',
+        'as' => 'generated::ndoCPH8ZE6J4f6Hv',
       ),
       'fallback' => false,
       'defaults' => 
@@ -84838,7 +84861,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::RF0a7eSVjGBvhgqL' => 
+    'generated::jwCOfSRt0HUEpQub' => 
     array (
       'methods' => 
       array (
@@ -84859,7 +84882,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::RF0a7eSVjGBvhgqL',
+        'as' => 'generated::jwCOfSRt0HUEpQub',
       ),
       'fallback' => false,
       'defaults' => 
@@ -84875,7 +84898,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::ewpNiV5VcuWBUrMt' => 
+    'generated::OTfeewk8JFMqMiSa' => 
     array (
       'methods' => 
       array (
@@ -84896,7 +84919,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::ewpNiV5VcuWBUrMt',
+        'as' => 'generated::OTfeewk8JFMqMiSa',
       ),
       'fallback' => false,
       'defaults' => 
@@ -84912,7 +84935,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::nMIzC6eyyfwy2zs4' => 
+    'generated::dcxYhqRGN34lnB75' => 
     array (
       'methods' => 
       array (
@@ -84933,7 +84956,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::nMIzC6eyyfwy2zs4',
+        'as' => 'generated::dcxYhqRGN34lnB75',
       ),
       'fallback' => false,
       'defaults' => 
@@ -85129,7 +85152,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::0OpSFRJ0VSByEDGT' => 
+    'generated::OlggHxGTjfnEB4Ts' => 
     array (
       'methods' => 
       array (
@@ -85150,7 +85173,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::0OpSFRJ0VSByEDGT',
+        'as' => 'generated::OlggHxGTjfnEB4Ts',
       ),
       'fallback' => false,
       'defaults' => 
@@ -85223,6 +85246,43 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'update-lead',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'deal-stage-create' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'lead/deal-stage/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'uses' => 'App\\Http\\Controllers\\LeadController@DealStage',
+        'controller' => 'App\\Http\\Controllers\\LeadController@DealStage',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'deal-stage-create',
       ),
       'fallback' => false,
       'defaults' => 

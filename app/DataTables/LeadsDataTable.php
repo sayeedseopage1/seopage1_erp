@@ -104,18 +104,18 @@ class LeadsDataTable extends BaseDataTable
 
 
                 if ($row->client_id == null || $row->client_id == '') {
-                    $action .= '<a class="dropdown-item" href="' . route('clients.create') . '?lead=' . $row->id . '">
-                                <i class="fa fa-user mr-2"></i>
+                    $action .= '<a class="dropdown-item" href="' . url('/lead/deal-stage/') .'/' . $row->id . '">
+                          <i class="fa fa-thumbs-up mr-2"></i>
                                 ' . trans('Convert to Deal') . '
                             </a>';
                 }
 
-                if (($this->addFollowUpPermission == 'all' || ($this->addFollowUpPermission == 'added' && user()->id == $row->added_by)) && $row->client_id == null && $row->next_follow_up == 'yes') {
-                    $action .= '<a onclick="followUp(' . $row->id . ')" class="dropdown-item" href="javascript:;">
-                                <i class="fa fa-thumbs-up mr-2"></i>
-                                ' . trans('modules.lead.addFollowUp') . '
-                            </a>';
-                }
+                // if (($this->addFollowUpPermission == 'all' || ($this->addFollowUpPermission == 'added' && user()->id == $row->added_by)) && $row->client_id == null && $row->next_follow_up == 'yes') {
+                //     $action .= '<a onclick="followUp(' . $row->id . ')" class="dropdown-item" href="javascript:;">
+                //                 <i class="fa fa-thumbs-up mr-2"></i>
+                //                 ' . trans('modules.lead.addFollowUp') . '
+                //             </a>';
+                // }
 
                 $action .= '</div>
                     </div>
