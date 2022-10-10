@@ -41,6 +41,7 @@ use Auth;
 use App\Models\User;
 use App\Models\Contract;
 use App\Models\ContractType;
+use App\Models\DealStage;
 
 class LeadController extends AccountBaseController
 {
@@ -53,6 +54,43 @@ class LeadController extends AccountBaseController
             abort_403(!in_array('leads', $this->user->modules));
             return $next($request);
         });
+    }
+    public function DealStageChange(Request $request)
+    {
+      abort_403(user()->permission('view_contract') == 'none');
+
+      if (!request()->ajax()) {
+          if (in_array('client', user_roles())) {
+              $this->clients = User::client();
+          }
+          else {
+              $this->clients = User::allClients();
+          }
+
+          $this->contractTypes = ContractType::all();
+          $this->contractCounts = Contract::count();
+          $this->expiredCounts = Contract::where(DB::raw('DATE(`end_date`)'), '<', now()->format('Y-m-d'))->count();
+          $this->aboutToExpireCounts = Contract::where(DB::raw('DATE(`end_date`)'), '>', now()->format('Y-m-d'))
+              ->where(DB::raw('DATE(`end_date`)'), '<', now()->timezone($this->global->timezone)->addDays(7)->format('Y-m-d'))
+              ->count();
+
+      }
+      $lead= Lead::where('id',$request->id)->first();
+      $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      $suffle = substr(str_shuffle($chars), 0, 6);
+      $deal= new DealStage();
+      $deal->short_code= 'DSEOP1'. $suffle;
+      $deal->lead_id= $lead->id;
+      $deal->status= 1;
+      $deal->deal_stage= $request->deal_stage;
+      $deal->save();
+      $lead= Lead::find($lead->id);
+      $lead->deal_status=1;
+      $lead->save();
+
+      $deal= DealStage::where('id',$deal->id)->first();
+
+        return view('contracts.dealstage',$this->data,compact('lead','deal'));
     }
 
     public function index(LeadsDataTable $dataTable)
@@ -275,7 +313,47 @@ class LeadController extends AccountBaseController
               ->count();
 
       }
-        return view('contracts.dealstage',$this->data);
+      $lead= Lead::where('id',$id)->first();
+      $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      $suffle = substr(str_shuffle($chars), 0, 6);
+      $deal= new DealStage();
+      $deal->short_code= 'DSEOP1'. $suffle;
+      $deal->lead_id= $lead->id;
+      $deal->status= 1;
+      $deal->save();
+      $lead= Lead::find($lead->id);
+      $lead->deal_status=1;
+      $lead->save();
+
+      $deal= DealStage::where('id',$deal->id)->first();
+
+        return view('contracts.dealstage',$this->data,compact('lead','deal'));
+    }
+    public function DealStageView($id)
+    {
+      abort_403(user()->permission('view_contract') == 'none');
+
+      if (!request()->ajax()) {
+          if (in_array('client', user_roles())) {
+              $this->clients = User::client();
+          }
+          else {
+              $this->clients = User::allClients();
+          }
+
+          $this->contractTypes = ContractType::all();
+          $this->contractCounts = Contract::count();
+          $this->expiredCounts = Contract::where(DB::raw('DATE(`end_date`)'), '<', now()->format('Y-m-d'))->count();
+          $this->aboutToExpireCounts = Contract::where(DB::raw('DATE(`end_date`)'), '>', now()->format('Y-m-d'))
+              ->where(DB::raw('DATE(`end_date`)'), '<', now()->timezone($this->global->timezone)->addDays(7)->format('Y-m-d'))
+              ->count();
+
+      }
+
+      $deal= DealStage::where('lead_id',$id)->first();
+        $lead= Lead::where('id',$id)->first();
+
+        return view('contracts.dealstage',$this->data,compact('deal','lead'));
     }
 
     /**

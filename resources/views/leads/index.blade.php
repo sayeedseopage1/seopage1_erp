@@ -16,6 +16,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
 @endphp
 
 @section('content')
+
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper">
         <!-- Add Task Export Buttons Start -->
@@ -71,7 +72,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
 
             {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
-
+            @include('contracts.modals.dealstmodal')
         </div>
         <!-- Task Box End -->
     </div>
@@ -170,6 +171,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
 
         $('body').on('click', '.delete-table-row', function() {
             var id = $(this).data('id');
+
             Swal.fire({
                 title: "@lang('messages.sweetAlertTitle')",
                 text: "@lang('messages.recoverRecord')",
@@ -188,6 +190,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
                 },
                 buttonsStyling: false
             }).then((result) => {
+              //console.log('id');
                 if (result.isConfirmed) {
                     var url = "{{ route('leads.destroy', ':id') }}";
                     url = url.replace(':id', id);
@@ -214,7 +217,9 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
         const applyQuickAction = () => {
             var rowdIds = $("#leads-table input:checkbox:checked").map(function() {
                 return $(this).val();
+                //console.log= ('rowIds');
             }).get();
+
 
             var url = "{{ route('leads.apply_quick_action') }}?row_ids=" + rowdIds;
 
@@ -309,4 +314,15 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
         });
 
     </script>
+
+    <script>
+  function dataTableRowCheck2(id)
+  {
+     var id = id;
+
+  document.getElementById('mydata').value= id;
+  }
+  </script>
+
+
 @endpush

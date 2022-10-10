@@ -12,6 +12,7 @@ use App\DataTables\BaseDataTable;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
+use App\Models\DealStage;
 
 class LeadsDataTable extends BaseDataTable
 {
@@ -103,12 +104,32 @@ class LeadsDataTable extends BaseDataTable
                 }
 
 
-                if ($row->client_id == null || $row->client_id == '') {
-                    $action .= '<a class="dropdown-item" href="' . url('/lead/deal-stage/') .'/' . $row->id . '">
-                          <i class="fa fa-thumbs-up mr-2"></i>
-                                ' . trans('Convert to Deal') . '
-                            </a>';
-                }
+                    $lead_id= lead::where('id',$row->id)->first();
+                    //dd($row->deal_status);
+                    if($lead_id->deal_status == 1)
+                    {
+                      $action .= '<a class="dropdown-item" href="' . url('/deal-stage-view/') .'/' . $row->id . '">
+                            <i class="fa fa-eye mr-2"></i>
+                                  ' . trans('View Deal Stage') . '
+                              </a>';
+                    }
+                      // else {
+                      //   $action .= '<a class="dropdown-item" href="' . url('/deal-stage/') .'/' . $row->id . '">
+                      //         <i class="fa fa-thumbs-up mr-2"></i>
+                      //               ' . trans('Convert to Deal') . '
+                      //           </a>';
+                      //
+                      // }
+                      else {
+                        $action .= '<button class="dropdown-item"   data-toggle="modal" data-target="#dealstmodal" onclick="dataTableRowCheck2(' . $row->id . ')">
+                              <i class="fa fa-thumbs-up mr-2"></i>
+                                    ' . trans('Convert to Deal') . '
+                                </button>';
+
+                      }
+
+
+
 
                 // if (($this->addFollowUpPermission == 'all' || ($this->addFollowUpPermission == 'added' && user()->id == $row->added_by)) && $row->client_id == null && $row->next_follow_up == 'yes') {
                 //     $action .= '<a onclick="followUp(' . $row->id . ')" class="dropdown-item" href="javascript:;">

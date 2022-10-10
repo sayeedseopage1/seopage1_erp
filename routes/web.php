@@ -1051,4 +1051,6 @@ Route::post('/lead/store', [LeadController::class, 'storeLead'])->name('store-le
 Route::post('/lead/update', [LeadController::class, 'updateLead'])->name('update-lead');
 
 //deal stage creation
-Route::get('/lead/deal-stage/{id}', [LeadController::class, 'DealStage'])->name('deal-stage-create');
+Route::get('/deal-stage/{id}', [LeadController::class, 'DealStage'])->name('deal-stage-create');
+Route::get('/deal-stage-view/{id}', [LeadController::class, 'DealStageView']);
+Route::post('/deal/stage', [LeadController::class, 'DealStageChange'])->name('deal-stage');
