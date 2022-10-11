@@ -49,7 +49,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
         </div>
         @if(Session::has('status_updated'))
             <div class="alert alert-success show mb-2" role="alert">  {{Session::get('status_updated')}}</div>
-          
+
             @endif
         <!-- Add Task Export Buttons End -->
 
@@ -78,7 +78,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
          @elseif($deal->deal_stage == 1)
          <?php
-         $deal_stage = "Requirements Define";
+         $deal_stage = "Requirements Defined";
           ?>
          <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />
          @elseif($deal->deal_stage == 2)

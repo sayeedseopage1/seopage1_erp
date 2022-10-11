@@ -26,7 +26,12 @@
         <hr>
         <div class="row">
           <div class="d-flex justify-content-center">
+               @if($deal->deal_stage == 3)
+               <h6><strong>Deal Status</strong></h6>
+               @else
+
             <h6><strong>Deal Won?</strong></h6>
+            @endif
             <br>
           </div>
           <div class="d-flex justify-content-center">

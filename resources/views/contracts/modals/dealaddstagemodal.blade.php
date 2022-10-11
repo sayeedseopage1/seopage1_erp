@@ -49,7 +49,7 @@
                               <div class="col-md-6">
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Project Name <span style="color:red;">*<span></strong></label>
-                                    <input name="project_name" id="input-state-3" type="text" class="form-control" placeholder="Enter Project Name" required>
+                                    <input name="project_name" value="{{$lead_id->client_name}}" readonly id="input-state-3" type="text" class="form-control" placeholder="Enter Project Name" required>
 
                                 </div>
                               </div>
@@ -58,7 +58,7 @@
 
                             <div class="mt-3">
                                 <label for="input-state-3" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong></label>
-                                <input name="amount" id="input-state-3" type="text" class="form-control" placeholder="Enter Amount" required>
+                                <input name="amount" value="{{$lead_id->value}}" id="input-state-3" type="text" class="form-control" placeholder="Enter Amount" required>
 
                             </div>
 
