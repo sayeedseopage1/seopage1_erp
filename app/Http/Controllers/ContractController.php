@@ -34,6 +34,7 @@ use Auth;
 use Crypt;
 use App\Models\ClientForm;
 use App\Models\ClientDetails;
+use App\Models\DealStage;
 
 class ContractController extends AccountBaseController
 {
@@ -337,6 +338,182 @@ class ContractController extends AccountBaseController
                 $pm_project_update->save();
               }
             }
+
+
+
+              return redirect('/deals/details/'.$deal->id)->with('messages.contractAdded');
+
+
+    }
+    public function storeLeadDeal(Request $request)
+    {
+      $deal_stage= DealStage::where('id',$request->id)->first();
+      $deal= DealStage::find($request->id);
+      //dd($deal);
+      if($deal_stage->deal_stage == 0 )
+      {
+        $deal->deal_stage= $deal_stage->deal_stage+1;
+        $deal->comments=$deal_stage->comments;
+        $deal->won_lost='Yes';
+        $deal->save();
+      }elseif ($deal_stage->deal_stage == 1) {
+        $deal->deal_stage= $deal_stage->deal_stage+1;
+        $deal->comments=$deal_stage->comments;
+        $deal->won_lost='Yes';
+        $deal->save();
+      }elseif ($deal_stage->deal_stage == 2) {
+        $deal->deal_stage= $deal_stage->deal_stage+1;
+        $deal->comments=$deal_stage->comments;
+        $deal->won_lost='Yes';
+        $deal->save();
+      }else {
+            $deal->deal_stage= $deal_stage->deal_stage;
+            $deal->comments=$deal_stage->comments;
+            $deal->won_lost='Yes';
+            $deal->save();
+      }
+      $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      $suffle = substr(str_shuffle($chars), 0, 6);
+      $deal = new Deal();
+      $deal->deal_id= $request->deal_id;
+      $deal->project_name= $request->project_name;
+      $deal->amount= $request->amount;
+      $deal->client_name= $request->client_name;
+      $deal->client_username= $request->client_username;
+      //$date= Carbon::now();
+
+    $date = date('Y-m-d H:i:s');
+
+    $newDate = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date)
+
+                    ->format('Y-m-d');
+
+        //dd($newDate);
+
+      $deal->deal_creation_date= $newDate;
+
+
+      $deal->start_date= $newDate;
+      $deal->save();
+      $user= new User();
+      $user->name= $request->client_name;
+      $user->user_name= $request->client_username;
+      $user->save();
+      $role = new RoleUser();
+      $role->role_id = 3;
+      $role->user_id= $user->id;
+      $role->save();
+      $client = new ClientDetails();
+      $client->user_id= $user->id;
+
+
+      $client->client_username=$request->client_username;
+      $client->save();
+
+      $contract = new Contract();
+      $contract->id= $deal->id;
+      $contract->deal_id= $deal->id;
+      $contract->subject=$request->project_name;
+      $contract->amount= $request->amount;
+      $contract->original_amount=$request->amount;
+      $contract->start_date=  $newDate;
+      $contract->original_start_date= $newDate;
+      $contract->client_id= $user->id;
+      $contract->currency_id= 1;
+
+
+    $contract->save();
+    $deal_hash= $deal->id;
+      //$key= Crypt::encrypt($deal_hash);
+      $key = encrypt($deal_hash);
+
+
+          $deal_hash_store= Deal::find($deal_hash);
+          $deal_hash_store->hash= $key;
+          $deal_hash_store->save();
+    ///have to find project id
+          $project= new Project();
+          $project->client_id= $user->id;
+          $project->project_name= $request->project_name;
+          $project->project_short_code= 'PSEOP1' . $suffle;
+          $project->start_date= $newDate;
+          $project->project_budget= $request->amount;
+
+          $project->completion_percent= 0;
+          $project->deal_id=$deal->id;
+          $project->added_by= Auth::id();
+          $project->status= 'not started';
+          $project->public= 0;
+          $project->save();
+
+            $pm_count= PMAssign::select('project_count')->min('project_count');
+            $pm_user= PMAssign::where('project_count',$pm_count)->first();
+            if ($pm_count < 2) {
+              if ($pm_user != null) {
+                $pmassign= new PMProject();
+                $pmassign->project_id= $project->id;
+                $pmassign->status= 'pending';
+                $pmassign->pm_id= $pm_user->pm_id;
+                  $pmassign->deal_id=$deal->id;
+                  $pmassign->client_id=$user->id;
+                $pmassign->save();
+              //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+                $pm_project_find= PMAssign::where('pm_id',$pm_user->pm_id)->first();
+                $pm_project_update=PMAssign::find($pm_project_find->id);
+                $pm_project_update->project_count= $pm_project_update->project_count + 1;
+                $pm_project_update->amount= $pm_project_update->amount + $request->amount;
+                $pm_project_update->save();
+              }
+            }else {
+              $items = PMAssign::all();
+              $pm_amount=  $items->min('amount');
+              $pm_count_id=  $items->min('project_count');
+
+              $pm_find_id= PMAssign::where('amount',$pm_amount)->first();
+              $pm_min_pro= PMAssign::where('project_count',  $pm_count_id)->first();
+              $find_rest= PMAssign::where('project_count',$pm_count_id)->get();
+
+              $fin_min= $find_rest->min('amount');
+
+              $final_id= PMAssign::where('amount',$fin_min)->first();
+
+            //  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
+
+              if (($pm_find_id->project_count +1) <= $pm_count_id*1.5) {
+                $pmassign= new PMProject();
+                $pmassign->project_id= $project->id;
+                $pmassign->status= 'pending';
+                  $pmassign->deal_id=$deal->id;
+                    $pmassign->client_id=$user->id;
+                $pmassign->pm_id= $pm_find_id->pm_id;
+                $pmassign->save();
+              //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+                $pm_project_find= PMAssign::where('pm_id',$pm_find_id->pm_id)->first();
+                $pm_project_update=PMAssign::find($pm_project_find->id);
+                $pm_project_update->project_count= $pm_project_update->project_count + 1;
+                $pm_project_update->amount= $pm_project_update->amount + $request->amount;
+                $pm_project_update->save();
+              }
+
+
+              else {
+
+                $pmassign= new PMProject();
+                $pmassign->project_id= $project->id;
+                $pmassign->status= 'pending';
+                $pmassign->deal_id=$deal->id;
+                  $pmassign->client_id=$user->id;
+                $pmassign->pm_id=  $final_id->pm_id;
+                $pmassign->save();
+              //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+                $pm_project_find= PMAssign::where('pm_id', $final_id->pm_id)->first();
+                $pm_project_update=PMAssign::find($pm_project_find->id);
+                $pm_project_update->project_count= $pm_project_update->project_count + 1;
+                $pm_project_update->amount= $pm_project_update->amount + $request->amount;
+                $pm_project_update->save();
+              }
+            }
+
 
 
 

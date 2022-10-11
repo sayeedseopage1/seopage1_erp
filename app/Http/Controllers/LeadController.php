@@ -90,7 +90,51 @@ class LeadController extends AccountBaseController
 
       $deal= DealStage::where('id',$deal->id)->first();
 
-        return view('contracts.dealstage',$this->data,compact('lead','deal'));
+        return back()->with('status_updated', 'Lead Converted to Deal Successfully.!!');
+    }
+    public function DealStageUpdate(Request $request)
+    {
+      $deal_stage= DealStage::where('id',$request->id)->first();
+      $deal= DealStage::find($request->id);
+      //dd($deal);
+      if($deal_stage->deal_stage == 0 )
+      {
+        $deal->deal_stage= $deal_stage->deal_stage+1;
+        $deal->comments=$request->comments;
+        $deal->won_lost=$request->won_lost;
+        $deal->save();
+      }elseif ($deal_stage->deal_stage == 1) {
+        $deal->deal_stage= $deal_stage->deal_stage+1;
+        $deal->comments=$request->comments;
+        $deal->won_lost=$request->won_lost;
+        $deal->save();
+      }elseif ($deal_stage->deal_stage == 2) {
+        $deal->deal_stage= $deal_stage->deal_stage+1;
+        $deal->comments=$request->comments;
+        $deal->won_lost=$request->won_lost;
+        $deal->save();
+      }else {
+            $deal->deal_stage= $deal_stage->deal_stage;
+            $deal->comments=$request->comments;
+            $deal->won_lost=$request->won_lost;
+            $deal->save();
+      }
+
+    return back()->with('status_updated', 'Status Updated!!');
+    }
+    public function DealStageUpdateLost(Request $request)
+    {
+
+      $deal= DealStage::find($request->id);
+      //dd($deal);
+
+        
+        $deal->comments=$request->comments;
+        $deal->won_lost=$request->won_lost;
+        $deal->save();
+
+
+    return back()->with('status_updated', 'Status Updated!!');
     }
 
     public function index(LeadsDataTable $dataTable)
@@ -327,7 +371,7 @@ class LeadController extends AccountBaseController
 
       $deal= DealStage::where('id',$deal->id)->first();
 
-        return view('contracts.dealstage',$this->data,compact('lead','deal'));
+      return back();
     }
     public function DealStageView($id)
     {

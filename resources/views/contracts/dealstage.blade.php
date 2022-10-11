@@ -47,46 +47,21 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
             @endif
 
         </div>
+        @if(Session::has('status_updated'))
+            <div class="alert alert-success show mb-2" role="alert">Success</div>
+            <div>
+                {{Session::get('status_updated')}}
+            </div>
+            @endif
         <!-- Add Task Export Buttons End -->
 
 
         <!-- Task Box Start -->
 
-          <table id="dealstagetable"  class="table table-striped" style="width:100%">
-        <thead>
-            <!-- <tr>
-
-                <th class="whitespace-nowrap">#</th>
-                <th class="whitespace-nowrap">Short Code</th>
-                <th class="whitespace-nowrap">Project Name</th>
-                <th class="whitespace-nowrap">Budget</th>
-                <th class="whitespace-nowrap">Deal Stage</th>
-                <th class="whitespace-nowrap">Deal Status</th>
-
-                <th class="whitespace-nowrap">Deal Creation Date</th>
-
-
-            </tr> -->
-        </thead>
-        <tbody>
-          <?php
+        <?php
           $lead_id= App\Models\Lead::where('id',$lead->id)->first();
           //dd($lead_id);
            ?>
-
-          <!-- <tr>
-            <td>#</td>
-            <td>{{$deal->short_code}}</td>
-            <td>{{$lead_id->project_name}}</td>
-              <td>{{$lead_id->value}}</td>
-              <td>{{$deal->deal_stage}}</td>
-              <td>{{$deal->deal_status}}</td>
-                <td>{{$deal->created_at}}</td>
-          </tr> -->
-
-
-        </tbody>
-    </table>
 
     <h5>Deal Stage Status</h5>
     <hr>
@@ -94,43 +69,81 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
 
 
-    <x-cards.data-row :label="__('Project Name :')" :value="!empty($lead_id->project_name) ? mb_ucwords($lead_id->project_name) : '--'" />
+    <x-cards.data-row :label="__('Project Name :')" :value="!empty($lead_id->client_name) ? mb_ucwords($lead_id->client_name) : '--'" />
    <x-cards.data-row :label="__('Project Budget :')" :value="!empty($lead_id->value) ? mb_ucwords($lead_id->value) : '--'" />
      @if($deal->deal_stage == 0)
      <?php
      $deal_stage = "Contract Made";
       ?>
 
-         <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />  <button class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#dealstagemodal" type="button">Change</button>
+         <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />
 
          @elseif($deal->deal_stage == 1)
          <?php
          $deal_stage = "Requirements Define";
           ?>
-         <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />  <button class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#dealstagemodal" type="button">Change</button>
+         <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />
          @elseif($deal->deal_stage == 2)
          <?php
-          $deal_stage = "Requirements Define";
+          $deal_stage = "Proposal Made";
 
           ?>
-           <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />  <button class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#dealstagemodal" type="button">Change</button>
+           <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />
            @else
-          
+
            <?php
             $deal_stage = "Negotiation Started";
 
             ?>
 
-            <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />  <button class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#dealstagemodal" type="button">Change</button>
+            <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />
             @endif
            <hr>
-     <x-cards.data-row :label="__('Deal Status :')" :value="$deal->deal_status ?? '--'" />
+           @if($deal->won_lost == 'Yes')
+           <h3 style="color:green;">
+              <x-cards.data-row :label="__('Deal Stage :')" :value="'Won'" /></h3>
+              @else
 
-    <x-cards.data-row :label="__('Won/Lost :')" :value="$deal->won_lost ?? '--'" />
+              <x-cards.data-row :label="__('Deal Status :')" :value=" ''" />
+                <div class="row">
+                   <div class="col-md-2">
+                    <div class="form-check">
+                      <label for="input-state-2" class="form-check-label">Qualified <span style="color:red;">*<span></label>
+                 <input type="radio"  name="deal_stage" value="yes"/>
+               </div>
+              </div>
+              <div class="col-md-2">
+              <div class="form-check">
+                  <label for="input-state-2" class="form-check-label">Lost<span style="color:red;">*<span></label>
+
+              <input type="radio"  name="deal_stage" value="no" />
+              </div>
+              </div>
+
+
+<br>
+
+<!-- <input type='hidden' id='yes' name='yes' placeholder='If yes, explain:'/>
+
+
+<input type='hidden' id='other3' name='other3' placeholder='other 3'> -->
+@include('contracts.modals.dealqualifymodal')
+@include('contracts.modals.deallostmodal')
+
+
+
+
+</div>
+ @endif
+<br>
+
+
+    <x-cards.data-row :label="__('Won :')" :value="$deal->won_lost ?? '--'" />
        <x-cards.data-row :label="__('Comments :')" :value="$deal->comments ?? '--'" />
     <x-cards.data-row :label="__('Deal Creation Date :')" :value="$deal->created_at->format('Y-m-d') ?? '--'" />
 
 @include('contracts.modals.dealstagemodal')
+
     <!-- <x-cards.data-row :label="__('modules.stripeCustomerAddress.state')" :value="$lead->state ?? '--'" />
 
     <x-cards.data-row :label="__('modules.stripeCustomerAddress.city')" :value="$lead->city ?? '--'" />
@@ -147,6 +160,26 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
 @endsection
 <script src="sweetalert2.all.min.js"></script>
+@if(session('status_updated'))
+        <script>
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: '{{session('Lead Successfully Added')}}'
+            })
+        </script>
+    @endif
 <script type="text/javascript">
 Swal.fire({
   title: 'Error!',
@@ -169,5 +202,38 @@ $(document).ready(function () {
     $('#dealstagetable').DataTable();
 });
 </script>
+<script type="text/javascript">
+function yesnoCheck() {
+    yes1 = document.getElementById('yes')
+    //yes2 = document.getElementById('acc')
+
+    no1 = document.getElementById('other3')
+  //  no2 = document.getElementById('other4')
+
+    if (document.getElementById('yesCheck').checked) {
+        yes1.type  = 'text';
+        no1.type =  'hidden';
+    } else {
+        no1.type =  'text';
+        yes1.type =  'hidden';
+    }
+
+}
+
+</script>
+<script type="text/javascript">
+$('input[name="deal_stage"]').change(function() {
+   if($(this).is(':checked') && $(this).val() == 'yes') {
+        $('#qualifymodal').modal('show');
+   }
+});
+$('input[name="deal_stage"]').change(function() {
+   if($(this).is(':checked') && $(this).val() == 'no') {
+        $('#lostmodal').modal('show');
+   }
+});
+
+</script>
+
 
 @endpush

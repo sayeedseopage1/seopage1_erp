@@ -59,6 +59,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
                 </div>
             </x-datatable.actions>
 
+
             <div class="btn-group mt-2 mt-lg-0 mt-md-0 ml-0 ml-lg-3 ml-md-3" role="group">
                 <a href="{{ route('leads.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
                     data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
@@ -70,6 +71,12 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
         <!-- Add Task Export Buttons End -->
         <!-- Task Box Start -->
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
+          @if(Session::has('status_updated'))
+              <div class="alert alert-success show mb-2" role="alert">Success</div>
+              <div>
+                  {{Session::get('status_updated')}}
+              </div>
+              @endif
 
             {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
             @include('contracts.modals.dealstmodal')
@@ -323,6 +330,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
   document.getElementById('mydata').value= id;
   }
   </script>
+
 
 
 @endpush
