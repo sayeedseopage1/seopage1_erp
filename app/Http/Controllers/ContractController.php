@@ -348,6 +348,7 @@ class ContractController extends AccountBaseController
     public function storeLeadDeal(Request $request)
     {
       $deal_stage= DealStage::where('id',$request->id)->first();
+    
       $deal= DealStage::find($request->id);
       //dd($deal);
       if($deal_stage->deal_stage == 0 )

@@ -32,13 +32,22 @@
           <div class="d-flex justify-content-center">
             <div class="col-md-4">
              <div class="form-check">
+               @if($deal->deal_stage == 3)
+<label for="input-state-2" class="form-check-label">Won<span style="color:red;">*<span></label>
+  @else
                <label for="input-state-2" class="form-check-label">Yes<span style="color:red;">*<span></label>
+                 @endif
           <input type="radio" value="Yes" name="won_lost"  required/>
         </div>
       </div>
       <div class="col-md-4">
        <div class="form-check">
-           <label for="input-state-2"  class="form-check-label">No<span style="color:red;">*<span></label>
+         @if($deal->deal_stage ==
+3)
+           <label for="input-state-2"  class="form-check-label">Lost<span style="color:red;">*<span></label>
+             @else
+             <label for="input-state-2"  class="form-check-label">No<span style="color:red;">*<span></label>
+               @endif
 
   <input type="radio" value="No" name="won_lost" required/>
   </div>

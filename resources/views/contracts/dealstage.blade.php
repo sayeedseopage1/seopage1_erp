@@ -48,10 +48,8 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
         </div>
         @if(Session::has('status_updated'))
-            <div class="alert alert-success show mb-2" role="alert">Success</div>
-            <div>
-                {{Session::get('status_updated')}}
-            </div>
+            <div class="alert alert-success show mb-2" role="alert">  {{Session::get('status_updated')}}</div>
+          
             @endif
         <!-- Add Task Export Buttons End -->
 
@@ -99,6 +97,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
             <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />
             @endif
            <hr>
+           @if($deal->deal_status == 'pending')
            @if($deal->won_lost == 'Yes')
            <h3 style="color:green;">
               <x-cards.data-row :label="__('Deal Stage :')" :value="'Won'" /></h3>
@@ -135,12 +134,16 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
 </div>
  @endif
+ @else
+ <h3 style="color:red;">
+    <x-cards.data-row :label="__('Deal Stage :')" :value="'Lost'" /></h3>
+ @endif
 <br>
 
 
     <x-cards.data-row :label="__('Won :')" :value="$deal->won_lost ?? '--'" />
        <x-cards.data-row :label="__('Comments :')" :value="$deal->comments ?? '--'" />
-    <x-cards.data-row :label="__('Deal Creation Date :')" :value="$deal->created_at->format('Y-m-d') ?? '--'" />
+    <x-cards.data-row :label="__('Deal Converted On :')" :value="$deal->created_at->format('Y-m-d') ?? '--'" />
 
 @include('contracts.modals.dealstagemodal')
 
