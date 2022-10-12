@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
-@push('datatable-styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
-@endpush
+
 
 @section('filter-section')
 
@@ -21,19 +19,15 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
 @section('content')
 
+@push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+@endpush
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper">
         <!-- Add Task Export Buttons Start -->
         <div class="d-flex justify-content-between action-bar">
 
-            <div id="table-actions" class="d-flex align-items-center">
-                <!-- @if ($addContractPermission == 'all' || $addContractPermission == 'added')
-                    <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#dealaddmodal"><i class="fa-solid fa-plus"></i></button>
-                    @include('contracts.modals.dealaddmodal')
-                @endif -->
 
-
-            </div>
 
             @if (!in_array('client', user_roles()))
                 <x-datatable.actions>
@@ -60,33 +54,42 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
           $lead_id= App\Models\Lead::where('id',$lead->id)->first();
           //dd($lead_id);
            ?>
-
-    <h5>Deal Stage Status</h5>
-    <hr>
-    <x-cards.data-row :label="__('Deal ID :')" :value="$deal->short_code ?? '--'" />
-
+           <div class="d-flex justify-content-center">
+             <h3 class="card-header bg-white border-0 text-center d-flex justify-content-between p-20 text-center">Deal Stage Status</h3>
+           </div>
 
 
-    <x-cards.data-row :label="__('Project Name :')" :value="!empty($lead_id->client_name) ? mb_ucwords($lead_id->client_name) : '--'" />
-   <x-cards.data-row :label="__('Project Budget :')" :value="!empty($lead_id->value) ? mb_ucwords($lead_id->value) : '--'" />
+    <div class="card">
+  <div class="card-body">
+
+
+
+
+
+  <strong style="font-size:20px;">  <x-cards.data-row :label="__('Deal ID :')" :value="$deal->short_code ?? '--'" /></strong>
+
+
+
+  <strong style="font-size:20px;">  <x-cards.data-row :label="__('Project Name :')" :value="!empty($lead_id->client_name) ? mb_ucwords($lead_id->client_name) : '--'" /></strong>
+  <strong style="font-size:20px;"> <x-cards.data-row :label="__('Project Budget :')" :value="!empty($lead_id->value) ? mb_ucwords($lead_id->value) : '--'" /></strong>
      @if($deal->deal_stage == 0)
      <?php
      $deal_stage = "Contract Made";
       ?>
 
-         <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />
+         <strong style="font-size:20px;"><x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" /></strong>
 
          @elseif($deal->deal_stage == 1)
          <?php
          $deal_stage = "Requirements Defined";
           ?>
-         <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />
+      <strong style="font-size:20px;">   <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" /></strong>
          @elseif($deal->deal_stage == 2)
          <?php
           $deal_stage = "Proposal Made";
 
           ?>
-           <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />
+        <strong style="font-size:20px;">   <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" /></strong>
            @else
 
            <?php
@@ -94,16 +97,16 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
             ?>
 
-            <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" />
+        <strong style="font-size:20px;">    <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" /></strong>
             @endif
            <hr>
            @if($deal->deal_status == 'pending')
            @if($deal->won_lost == 'Yes')
-           <h3 style="color:green;">
-              <x-cards.data-row :label="__('Deal Stage :')" :value="'Won'" /></h3>
+
+            <strong style="font-size:20px;">  <x-cards.data-row :label="__('Deal Status :')" :value="''" /><h3 style="color:green;">Won</h3></strong>
               @else
 
-              <x-cards.data-row :label="__('Deal Status :')" :value=" ''" />
+            <strong style="font-size:20px;">  <x-cards.data-row :label="__('Deal Status :')" :value=" ''" /></strong>
                 <div class="row">
                    <div class="col-md-2">
                     <div class="form-check">
@@ -135,15 +138,16 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 </div>
  @endif
  @else
- <h3 style="color:red;">
-    <x-cards.data-row :label="__('Deal Stage :')" :value="'Lost'" /></h3>
+
+  <strong style="font-size:20px;">  <x-cards.data-row :label="__('Deal Status :')" :value="''" /><h3 style="color:red;">Lost</h3></strong>
  @endif
 <br>
 
 
-    <x-cards.data-row :label="__('Won :')" :value="$deal->won_lost ?? '--'" />
-       <x-cards.data-row :label="__('Comments :')" :value="$deal->comments ?? '--'" />
-    <x-cards.data-row :label="__('Deal Converted On :')" :value="$deal->created_at->format('Y-m-d') ?? '--'" />
+    <strong style="font-size:20px;">  <x-cards.data-row :label="__('Won :')" :value="$deal->won_lost ?? '--'" /></strong>
+      <strong style="font-size:20px;">   <x-cards.data-row :label="__('Comments :')" :value="
+         ''" /></strong>{!!$deal->comments!!}
+      <strong style="font-size:20px;"><x-cards.data-row :label="__('Deal Converted On :')" :value="$deal->created_at->format('Y-m-d') ?? '--'" /></strong>
 
 @include('contracts.modals.dealstagemodal')
 
@@ -154,7 +158,8 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
     <x-cards.data-row :label="__('modules.stripeCustomerAddress.postalCode')" :value="$lead->postal_code ?? '--'" /> -->
     <!-- <x-cards.data-row :label="__('modules.lead.address')" :value="$lead->address ?? '--'" /> -->
 
-
+<div>
+  <div>
 
 
         <!-- Task Box End -->

@@ -117,6 +117,7 @@
 
             <x-cards.data-row :label="__('app.address')" :value="$client->clientDetails->address ?? '--'" />
 
+
             <x-cards.data-row :label="__('modules.stripeCustomerAddress.state')"
                 :value="$client->clientDetails->state ?? '--'" />
 

@@ -16,9 +16,18 @@
                         aria-labelledby="dropdownMenuLink" tabindex="0">
                         <a class="dropdown-item openRightModal"
                             href="{{ route('leads.edit', $lead->id) }}">@lang('app.edit')</a>
+                            @if($lead->deal_status == 0)
+                            <a class="dropdown-item"
+                                  data-toggle="modal" data-target="#dealstmodal" onclick="dataTableRowCheck2(' {{$lead->id}} ')">@lang('Convert to Deal')</a>
+                                  @else
+                                  <a class="dropdown-item"
+                                      href="/deal-stage-view/{{$lead->id}}">@lang('View Deal Stage')</a>
+                                  @endif
+
                     </div>
                 </div>
             </x-slot>
+            @include('contracts.modals.dealstmodal')
 
             <x-cards.data-row :label="__('Project Name')" :value="$lead->client_name ?? '--'" />
 
@@ -104,3 +113,14 @@
     <!--  USER CARDS END -->
 </div>
 <!-- ROW END -->
+<script>
+function dataTableRowCheck2(id)
+{
+  //console.log(id);
+  var id =id;
+
+
+
+document.getElementById('mydata').value= id;
+}
+</script>

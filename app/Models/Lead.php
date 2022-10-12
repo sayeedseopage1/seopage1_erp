@@ -136,6 +136,10 @@ class Lead extends BaseModel
     {
         return $this->belongsTo(LeadCategory::class, 'category_id');
     }
+    public function deal(): BelongsTo
+    {
+        return $this->belongsTo(DealStage::class, 'lead_id');
+    }
 
     public function leadStatus(): BelongsTo
     {

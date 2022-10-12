@@ -131,6 +131,7 @@ class LeadsDataTable extends BaseDataTable
 
 
 
+
                 // if (($this->addFollowUpPermission == 'all' || ($this->addFollowUpPermission == 'added' && user()->id == $row->added_by)) && $row->client_id == null && $row->next_follow_up == 'yes') {
                 //     $action .= '<a onclick="followUp(' . $row->id . ')" class="dropdown-item" href="javascript:;">
                 //                 <i class="fa fa-thumbs-up mr-2"></i>
@@ -159,6 +160,51 @@ class LeadsDataTable extends BaseDataTable
             $datatables->addColumn('lead', function ($row) {
                 return $row->client_name;
             });
+            $datatables->addColumn('deal_status', function ($row) {
+              if($row->deal_status == 0)
+              {
+                  return "Not Converted to Deal";
+              }else
+                return "Converted to Deal";
+            });
+            $datatables->addColumn('won_lost', function ($row)  {
+              //dd($row);
+              $won_lost= '';
+              $leadids= DealStage::all();
+
+              foreach ($leadids as $leadid) {
+                  $nleadid= DealStage::where('lead_id',$row->id)->first();
+                  if ($nleadid == null) {
+                      $won_lost ="Not Applicable";
+                  }else {
+                    if($row->id == $leadid->lead_id)
+                    {
+                      if($leadid->deal_status == 'pending' && $leadid->won_lost == 'Yes')
+                      {
+                        $won_lost= "Won";
+
+
+                      }elseif($leadid->deal_status == 'Lost'){
+                        $won_lost=  "Lost";
+
+                    }elseif($leadid->deal_status == 'pending' && $leadid->won_lost == 'No') {
+                      $won_lost ="Not Activity Yet";
+
+                    }
+
+                  }
+                  }
+
+              }
+
+
+              return $won_lost;
+
+
+          });
+
+
+
 
             $datatables->addColumn('category_name', function ($row) {
 
@@ -315,6 +361,7 @@ class LeadsDataTable extends BaseDataTable
                 'company_name',
                 'lead_status.type as statusName',
                 'status_id',
+                'deal_status',
                 'leads.created_at',
                 'lead_sources.type as source',
                 'users.name as agent_name',
@@ -324,7 +371,9 @@ class LeadsDataTable extends BaseDataTable
             ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
             ->leftJoin('lead_agents', 'lead_agents.id', 'leads.agent_id')
             ->leftJoin('users', 'users.id', 'lead_agents.user_id')
-            ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id');
+            ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id')
+
+            ;
 
         if ($this->request()->followUp != 'all' && $this->request()->followUp != '') {
             $lead = $lead->leftJoin('lead_follow_up', 'lead_follow_up.lead_id', 'leads.id');
@@ -484,6 +533,8 @@ class LeadsDataTable extends BaseDataTable
             // __('modules.lead.leadAgent') => ['data' => 'agent_name', 'name' => 'users.name', 'exportable' => false, 'title' => __('modules.lead.leadAgent')],
             // __('app.leadAgent') => ['data' => 'employee_name', 'name' => 'users.name', 'visible' => false, 'title' => __('app.leadAgent')],
             __('app.status') => ['data' => 'status', 'name' => 'status', 'exportable' => false, 'title' => __('app.status')],
+              __('app.deal_status') => ['data' => 'deal_status', 'name' => 'deal_status', 'exportable' => false, 'title' => __('Lead to Deal')],
+                  __('app.won_lost') => ['data' => 'won_lost', 'name' => 'won_lost', 'exportable' => false, 'title' => __('Won/Lost')],
             __('app.leadStatus') => ['data' => 'leadStatus', 'name' => 'leadStatus', 'visible' => false, 'orderable' => false, 'searchable' => false, 'title' => __('app.status')],
             Column::computed('action', __('app.action'))
                 ->exportable(false)
