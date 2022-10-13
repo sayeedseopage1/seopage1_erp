@@ -43,9 +43,101 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                            fieldId="project_link" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" />
                                    </div>
                                    <div class="col-lg-6 col-md-6">
-                                       <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Project') .' '. __('Budget')"
+                                       <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Project') .' '. __('Budget')"
                                            fieldName="value" fieldId="value" fieldRequired="true"/>
                                    </div>
+                                   @if (isset($fields) && count($fields) > 0)
+                                       @foreach ($fields as $field)
+                                           <div class="col-md-12">
+                                               @if ($field->type == 'text')
+                                                   <x-forms.text fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                       :fieldLabel="$field->label"
+                                                       fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                       :fieldPlaceholder="$field->label"
+                                                       :fieldRequired="($field->required === 'yes') ? true : false">
+                                                   </x-forms.text>
+                                               @elseif($field->type == 'password')
+                                                   <x-forms.password
+                                                       fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                       :fieldLabel="$field->label"
+                                                       fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                       :fieldPlaceholder="$field->label"
+                                                       :fieldRequired="($field->required === 'yes') ? true : false">
+                                                   </x-forms.password>
+                                               @elseif($field->type == 'number')
+                                                   <x-forms.number
+                                                       fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                       :fieldLabel="$field->label"
+                                                       fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                       :fieldPlaceholder="$field->label"
+                                                       :fieldRequired="($field->required === 'yes') ? true : false">
+                                                   </x-forms.number>
+                                               @elseif($field->type == 'textarea')
+                                                   <x-forms.textarea :fieldLabel="$field->label"
+                                                       fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                       fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                       :fieldRequired="($field->required === 'yes') ? true : false"
+                                                       :fieldPlaceholder="$field->label">
+                                                   </x-forms.textarea>
+                                               @elseif($field->type == 'radio')
+                                                   <div class="form-group my-3">
+                                                       <x-forms.label
+                                                           fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                           :fieldLabel="$field->label"
+                                                           :fieldRequired="($field->required === 'yes') ? true : false">
+                                                       </x-forms.label>
+                                                       <div class="d-flex">
+                                                           @foreach ($field->values as $key => $value)
+                                                               <x-forms.radio fieldId="optionsRadios{{ $key . $field->id }}"
+                                                                   :fieldLabel="$value"
+                                                                   fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                                   :fieldValue="$value" :checked="($key == 0) ? true : false" />
+                                                           @endforeach
+                                                       </div>
+                                                   </div>
+                                               @elseif($field->type == 'select')
+                                                   <div class="form-group my-3">
+                                                       <x-forms.label
+                                                           fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                           :fieldLabel="$field->label"
+                                                           :fieldRequired="($field->required === 'yes') ? true : false">
+                                                       </x-forms.label>
+                                                       {!! Form::select('custom_fields_data[' . $field->name . '_' . $field->id . ']', $field->values, isset($editUser) ? $editUser->custom_fields_data['field_' . $field->id] : '', ['class' => 'form-control select-picker']) !!}
+                                                   </div>
+                                               @elseif($field->type == 'date')
+                                                   <x-forms.datepicker custom="true"
+                                                       fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                       :fieldRequired="($field->required === 'yes') ? true : false"
+                                                       :fieldLabel="$field->label"
+                                                       fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                       :fieldValue="now()->timezone(global_setting()->timezone)->format(global_setting()->date_format)"
+                                                       :fieldPlaceholder="$field->label" />
+                                               @elseif($field->type == 'checkbox')
+                                                   <div class="form-group my-3">
+                                                       <x-forms.label
+                                                           fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                           :fieldLabel="$field->label"
+                                                           :fieldRequired="($field->required === 'yes') ? true : false">
+                                                       </x-forms.label>
+                                                       <div class="d-flex checkbox-{{$field->id}}">
+                                                           <input type="hidden" name="custom_fields_data[{{$field->name.'_'.$field->id}}]" id="{{$field->name.'_'.$field->id}}">
+
+                                                           @foreach ($field->values as $key => $value)
+                                                               <x-forms.checkbox fieldId="optionsRadios{{ $key . $field->id }}"
+                                                                   :fieldLabel="$value"
+                                                                   fieldName="$field->name.'_'.$field->id.'[]'"
+                                                                   :fieldValue="$value"
+                                                                   onchange="checkboxChange('checkbox-{{$field->id}}', '{{$field->name.'_'.$field->id}}')"
+                                                                   :fieldRequired="($field->required === 'yes') ? true : false" />
+                                                           @endforeach
+                                                       </div>
+                                                   </div>
+                                               @endif
+
+                                           </div>
+                                       @endforeach
+                                   @endif
+
 
                   {{--  <div class="col-lg-4 col-md-6">
                         <x-forms.email fieldId="client_email" :fieldLabel="__('modules.lead.clientEmail')"
@@ -220,97 +312,6 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                         </div>
                     </div> --}}
 
-                    @if (isset($fields) && count($fields) > 0)
-                        @foreach ($fields as $field)
-                            <div class="col-md-4">
-                                @if ($field->type == 'text')
-                                    <x-forms.text fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldLabel="$field->label"
-                                        fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldPlaceholder="$field->label"
-                                        :fieldRequired="($field->required === 'yes') ? true : false">
-                                    </x-forms.text>
-                                @elseif($field->type == 'password')
-                                    <x-forms.password
-                                        fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldLabel="$field->label"
-                                        fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldPlaceholder="$field->label"
-                                        :fieldRequired="($field->required === 'yes') ? true : false">
-                                    </x-forms.password>
-                                @elseif($field->type == 'number')
-                                    <x-forms.number
-                                        fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldLabel="$field->label"
-                                        fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldPlaceholder="$field->label"
-                                        :fieldRequired="($field->required === 'yes') ? true : false">
-                                    </x-forms.number>
-                                @elseif($field->type == 'textarea')
-                                    <x-forms.textarea :fieldLabel="$field->label"
-                                        fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldRequired="($field->required === 'yes') ? true : false"
-                                        :fieldPlaceholder="$field->label">
-                                    </x-forms.textarea>
-                                @elseif($field->type == 'radio')
-                                    <div class="form-group my-3">
-                                        <x-forms.label
-                                            fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                            :fieldLabel="$field->label"
-                                            :fieldRequired="($field->required === 'yes') ? true : false">
-                                        </x-forms.label>
-                                        <div class="d-flex">
-                                            @foreach ($field->values as $key => $value)
-                                                <x-forms.radio fieldId="optionsRadios{{ $key . $field->id }}"
-                                                    :fieldLabel="$value"
-                                                    fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                                    :fieldValue="$value" :checked="($key == 0) ? true : false" />
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @elseif($field->type == 'select')
-                                    <div class="form-group my-3">
-                                        <x-forms.label
-                                            fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                            :fieldLabel="$field->label"
-                                            :fieldRequired="($field->required === 'yes') ? true : false">
-                                        </x-forms.label>
-                                        {!! Form::select('custom_fields_data[' . $field->name . '_' . $field->id . ']', $field->values, isset($editUser) ? $editUser->custom_fields_data['field_' . $field->id] : '', ['class' => 'form-control select-picker']) !!}
-                                    </div>
-                                @elseif($field->type == 'date')
-                                    <x-forms.datepicker custom="true"
-                                        fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldRequired="($field->required === 'yes') ? true : false"
-                                        :fieldLabel="$field->label"
-                                        fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldValue="now()->timezone(global_setting()->timezone)->format(global_setting()->date_format)"
-                                        :fieldPlaceholder="$field->label" />
-                                @elseif($field->type == 'checkbox')
-                                    <div class="form-group my-3">
-                                        <x-forms.label
-                                            fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                            :fieldLabel="$field->label"
-                                            :fieldRequired="($field->required === 'yes') ? true : false">
-                                        </x-forms.label>
-                                        <div class="d-flex checkbox-{{$field->id}}">
-                                            <input type="hidden" name="custom_fields_data[{{$field->name.'_'.$field->id}}]" id="{{$field->name.'_'.$field->id}}">
-
-                                            @foreach ($field->values as $key => $value)
-                                                <x-forms.checkbox fieldId="optionsRadios{{ $key . $field->id }}"
-                                                    :fieldLabel="$value"
-                                                    fieldName="$field->name.'_'.$field->id.'[]'"
-                                                    :fieldValue="$value"
-                                                    onchange="checkboxChange('checkbox-{{$field->id}}', '{{$field->name.'_'.$field->id}}')"
-                                                    :fieldRequired="($field->required === 'yes') ? true : false" />
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @endif
-
-                            </div>
-                        @endforeach
-                    @endif
 
                 </div>
 

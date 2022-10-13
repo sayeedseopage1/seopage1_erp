@@ -33,8 +33,12 @@ $projectArchived = $project->trashed();
             <nav class="tabs">
                 <ul class="-primary">
                     <li>
-                        <x-tab :href="route('projects.show', $project->id)" :text="__('modules.projects.overview')" class="overview" />
+                        <x-tab :href="route('projects.show', $project->id)" :text="__('Dashboard')" class="overview" />
                     </li>
+                    <!-- <li>
+                        <x-tab :href="route('projects.show', $project->id)" :text="__('Project Details')" class="overview" />
+                    </li> -->
+
 
                     @if (
                         !$project->public && $viewProjectMemberPermission == 'all'

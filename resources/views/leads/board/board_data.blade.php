@@ -41,7 +41,7 @@
                          <i class="fa fa-chevron-left"></i>
                      </a>
 
-                     <div class="dropdown">
+                    {{--<div class="dropdown">
                          <button
                              class="btn bg-white btn-lg f-10 px-2 py-1 text-dark-grey text-capitalize rounded  dropdown-toggle"
                              type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
@@ -63,7 +63,7 @@
                                      data-column-id="{{ $column->id }}" href="javascript:;">@lang('app.delete')</a>
                              @endif
                          </div>
-                     </div>
+                     </div> --}} 
 
                  </span>
              </div>

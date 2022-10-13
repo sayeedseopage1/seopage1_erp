@@ -23,6 +23,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
 @endpush
     <!-- CONTENT WRAPPER START -->
+     
     <div class="content-wrapper">
         <!-- Add Task Export Buttons Start -->
         <div class="d-flex justify-content-between action-bar">
@@ -144,7 +145,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 <br>
 
 
-    <strong style="font-size:20px;">  <x-cards.data-row :label="__('Won :')" :value="$deal->won_lost ?? '--'" /></strong>
+
       <strong style="font-size:20px;">   <x-cards.data-row :label="__('Comments :')" :value="
          ''" /></strong>{!!$deal->comments!!}
       <strong style="font-size:20px;"><x-cards.data-row :label="__('Deal Converted On :')" :value="$deal->created_at->format('Y-m-d') ?? '--'" /></strong>

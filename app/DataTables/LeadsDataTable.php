@@ -68,14 +68,14 @@ class LeadsDataTable extends BaseDataTable
             $datatables->addColumn('action', function ($row) {
                 $action = '<div class="task_view">
 
-                    <div class="dropdown">
+                  <div class="dropdown">
                         <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
                             id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="icon-options-vertical icons"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
 
-                    $action .= '<a href="' . route('leads.show', [$row->id]) . '" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
+                   // $action .= '<a href="' . route('leads.show', [$row->id]) . '" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
 
                 if (
                     $this->editLeadPermission == 'all'
@@ -532,9 +532,9 @@ class LeadsDataTable extends BaseDataTable
             // __('modules.lead.nextFollowUp') => ['data' => 'next_follow_up_date', 'name' => 'next_follow_up_date', 'orderable' => false, 'searchable' => false, 'title' => __('modules.lead.nextFollowUp')],
             // __('modules.lead.leadAgent') => ['data' => 'agent_name', 'name' => 'users.name', 'exportable' => false, 'title' => __('modules.lead.leadAgent')],
             // __('app.leadAgent') => ['data' => 'employee_name', 'name' => 'users.name', 'visible' => false, 'title' => __('app.leadAgent')],
-            __('app.status') => ['data' => 'status', 'name' => 'status', 'exportable' => false, 'title' => __('app.status')],
-              __('app.deal_status') => ['data' => 'deal_status', 'name' => 'deal_status', 'exportable' => false, 'title' => __('Lead to Deal')],
-                  __('app.won_lost') => ['data' => 'won_lost', 'name' => 'won_lost', 'exportable' => false, 'title' => __('Won/Lost')],
+            // __('app.status') => ['data' => 'status', 'name' => 'status', 'exportable' => false, 'title' => __('app.status')],
+              __('app.deal_status') => ['data' => 'deal_status', 'name' => 'deal_status', 'exportable' => false, 'title' => __('Staus')],
+                  __('app.won_lost') => ['data' => 'won_lost', 'name' => 'won_lost', 'exportable' => false, 'title' => __('Deal Status')],
             __('app.leadStatus') => ['data' => 'leadStatus', 'name' => 'leadStatus', 'visible' => false, 'orderable' => false, 'searchable' => false, 'title' => __('app.status')],
             Column::computed('action', __('app.action'))
                 ->exportable(false)

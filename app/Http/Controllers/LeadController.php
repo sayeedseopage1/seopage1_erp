@@ -327,6 +327,9 @@ class LeadController extends AccountBaseController
       $lead->currency_id= 1;
       $lead->agent_id =Auth::id();
       $lead->save();
+      if ($request->get('custom_fields_data')) {
+          $lead->updateCustomFieldData($request->get('custom_fields_data'));
+      }
       return redirect('/account/leads/')->with('messages.LeadAddedUpdate');
 
 

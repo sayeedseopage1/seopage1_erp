@@ -35,6 +35,7 @@ use Crypt;
 use App\Models\ClientForm;
 use App\Models\ClientDetails;
 use App\Models\DealStage;
+use App\Models\Lead;
 
 class ContractController extends AccountBaseController
 {
@@ -347,8 +348,9 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
+      //dd($request->lead_id);
       $deal_stage= DealStage::where('id',$request->id)->first();
-    
+
       $deal= DealStage::find($request->id);
       //dd($deal);
       if($deal_stage->deal_stage == 0 )
@@ -381,6 +383,7 @@ class ContractController extends AccountBaseController
       $deal->amount= $request->amount;
       $deal->client_name= $request->client_name;
       $deal->client_username= $request->client_username;
+      $deal->lead_id= $request->lead_id;
       //$date= Carbon::now();
 
     $date = date('Y-m-d H:i:s');
@@ -396,6 +399,11 @@ class ContractController extends AccountBaseController
 
       $deal->start_date= $newDate;
       $deal->save();
+
+      $lead= Lead::find($request->lead_id);
+      $lead->status_id= 3;
+      $lead->save();
+
       $user= new User();
       $user->name= $request->client_name;
       $user->user_name= $request->client_username;

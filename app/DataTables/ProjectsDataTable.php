@@ -38,7 +38,7 @@ class ProjectsDataTable extends BaseDataTable
      */
     public function dataTable($query)
     {
-      //  dd($query);
+        //dd($query);
         $project = new Project();
 
         $customFieldsGroupsId = CustomFieldGroup::where('model', $project->customFieldModel)->pluck('id')->first();

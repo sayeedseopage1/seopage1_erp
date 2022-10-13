@@ -264,9 +264,11 @@ $memberIds = $project->members->pluck('user_id')->toArray();
             <!-- BUDGET VS SPENT END -->
         </div>
         <!-- TASK STATUS AND BUDGET END -->
-
+        <?php
+            $deal= App\Models\Deal::where('id',$project->deal_id)->first();
+         ?>
         <!-- PROJECT DETAILS START -->
-        <div class="row">
+      {{-- <div class="row">
             <div class="col-md-12 mb-4">
                 <x-cards.data :title="__('app.project') . ' ' . __('app.details')"
                     otherClasses="d-flex justify-content-between align-items-center">
@@ -279,9 +281,7 @@ $memberIds = $project->members->pluck('user_id')->toArray();
             </div>
         </div>
         <!-- PROJECT DETAILS END -->
-        <?php
-            $deal= App\Models\Deal::where('id',$project->deal_id)->first();
-         ?>
+
 
          <div class="row">
              <div class="col-md-12 mb-4">
@@ -379,6 +379,157 @@ $memberIds = $project->members->pluck('user_id')->toArray();
                  </x-cards.data>
              </div>
          </div>
+         --}}
+
+         <div class="card bg-light mb-3" style="max-width: 100%">
+       <div class="card-header"><h5>Project Summary</h5></div>
+       <div class="card-body">
+
+         <p class="card-text">{!! $deal->description !!}</p>
+       </div>
+     </div>
+
+
+
+
+         <br>
+
+
+       <div class="card bg-light mb-3" style="max-width: 100%">
+     <div class="card-header"><h5>Freelancer Profile Link</h5></div>
+     <div class="card-body">
+
+       <p class="card-text">{{ $deal->profile_link}}</p>
+     </div>
+   </div>
+
+
+         <br>
+
+
+       <div class="card bg-light mb-3" style="max-width: 100%">
+     <div class="card-header"><h5>Freelancer Message Link</h5></div>
+     <div class="card-body">
+
+       <p class="card-text">{{ $deal->message_link}}</p>
+     </div>
+   </div>
+
+
+         <br>
+
+
+       <div class="card bg-light mb-3" style="max-width: 100%">
+     <div class="card-header"><h5>Write the what in 2-8 words here
+       (Examples: Website redesign, Shopify website migration to Wix,
+       Creating a 5 page business website in WordPress, Shopify website creation, etc.)</h5></div>
+     <div class="card-body">
+
+       <p class="card-text">{!! $deal->description2 !!}</p>
+     </div>
+   </div>
+
+
+         <br>
+
+
+       <div class="card bg-light mb-3" style="max-width: 100%">
+     <div class="card-header"><h5>Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress
+       website for his new design agency. It should include home, about, his services in
+       one page, blog, and contact. The look and feel should be better than the references.)</h5></div>
+     <div class="card-body">
+
+       <p class="card-text">{!! $deal->description3 !!}</p>
+     </div>
+   </div>
+
+
+         <br>
+
+       <div class="card bg-light mb-3" style="max-width: 100%">
+     <div class="card-header"><h5>Reference websites and what the references are for (Ex: ABC.com
+        is for the color scheme. XYZ.com is for section layouts DEF.com is
+        for header & footer styling. However, none of these can be copied)</h5></div>
+     <div class="card-body">
+
+       <p class="card-text">{!! $deal->description4 !!}</p>
+     </div>
+   </div>
+
+
+         <br>
+
+
+       <div class="card bg-light mb-3" style="max-width: 100%">
+     <div class="card-header"><h5>Any particular focus/concern of the client (Ex: 1. The client is very
+       concerned about the final look & feel so needs to be careful with the design 2.
+       The client is very concerned if the booking functionality will work the way he wants.)</h5></div>
+     <div class="card-body">
+
+       <p class="card-text">{!! $deal->description5 !!}</p>
+     </div>
+   </div>
+
+
+
+
+
+
+       <br>
+
+
+     <div class="card bg-light mb-3" style="max-width: 100%">
+   <div class="card-header"><h5>Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)</h5></div>
+   <div class="card-body">
+
+     <p class="card-text">{!! $deal->description6 !!}</p>
+   </div>
+ </div>
+
+
+
+
+     <br>
+
+
+   <div class="card bg-light mb-3" style="max-width: 100%">
+ <div class="card-header"><h5>Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)</h5></div>
+ <div class="card-body">
+
+   <p class="card-text">{!! $deal->description7 !!}</p>
+ </div>
+</div>
+
+
+
+
+   <br>
+
+
+ <div class="card bg-light mb-3" style="max-width: 100%">
+<div class="card-header"><h5>If there is any cross-departmental work involved in this project (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web development) </h5></div>
+<div class="card-body">
+
+ <p class="card-text">{!! $deal->description8 !!}</p>
+</div>
+</div>
+
+
+
+
+ <br>
+
+
+<div class="card bg-light mb-3" style="max-width: 100%">
+<div class="card-header"><h5>Any other notes for the project manager/technical team </h5></div>
+<div class="card-body">
+
+<p class="card-text">{!! $deal->description9 !!}</p>
+</div>
+</div>
+
+
+
 
 
 

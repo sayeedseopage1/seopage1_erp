@@ -13,6 +13,7 @@
         <?php
           $date= \Carbon\Carbon::now();
          ?>
+        <input type="hidden" name="lead_id" value="{{$lead->id}}">
         <input type="hidden" name="date" value="{{$date}}">
         <input type="hidden" name="id" value="{{$deal->id}}">
 
