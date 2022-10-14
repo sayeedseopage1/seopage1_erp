@@ -40,6 +40,8 @@ class ProjectsDataTable extends BaseDataTable
     {
         //dd($query);
         $project = new Project();
+        //dd($project);
+        //dd($row);
 
         $customFieldsGroupsId = CustomFieldGroup::where('model', $project->customFieldModel)->pluck('id')->first();
         $customFields = CustomField::where('custom_field_group_id', $customFieldsGroupsId)->where('export', 1)->get();

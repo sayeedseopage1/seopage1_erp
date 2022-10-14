@@ -127,7 +127,9 @@ class EmployeeController extends AccountBaseController
 
     public function assignRole(Request $request)
     {
-      //dd($request);
+      $user= User::find($request->userId);
+      $user->role_id= $request->role;
+      $user->save();
       if($request->role == 4)
       {
         $pmassign= new PMAssign();

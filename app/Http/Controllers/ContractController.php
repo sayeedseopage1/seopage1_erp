@@ -36,6 +36,7 @@ use App\Models\ClientForm;
 use App\Models\ClientDetails;
 use App\Models\DealStage;
 use App\Models\Lead;
+use App\Models\ProjectMember;
 
 class ContractController extends AccountBaseController
 {
@@ -271,6 +272,15 @@ class ContractController extends AccountBaseController
           $project->status= 'not started';
           $project->public= 0;
           $project->save();
+          $lead_developer_id= RoleUser::where('role_id',6)->get();
+          //dd($lead_developer_id);
+          foreach ($lead_developer_id as $lead) {
+            $lead_developer= new ProjectMember();
+            $lead_developer->user_id= $lead->user_id;
+            $lead_developer->project_id= $project->id;
+            $lead_developer->hourly_rate= 0;
+            $lead_developer->save();
+          }
 
             $pm_count= PMAssign::select('project_count')->min('project_count');
             $pm_user= PMAssign::where('project_count',$pm_count)->first();

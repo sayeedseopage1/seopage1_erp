@@ -160,7 +160,11 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                 <x-forms.input-group>
                                     <select class="form-control multiple-users" multiple name="member_id[]"
                                         id="selectEmployee" data-live-search="true" data-size="8">
-                                        @foreach ($employees as $item)
+                                        <?php
+                                        $users= App\Models\User::where('role_id',5)->get();
+                                        $user= App\Models\User::where('role_id',6)->first();
+                                         ?>
+                                        @foreach ($users as $item)
                                             @php
                                                 $selected = '';
                                             @endphp
@@ -188,6 +192,12 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                         </x-slot>
                                     @endif
                                 </x-forms.input-group>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group my-3">
+                          <x-forms.text :fieldLabel="__('Lead Developer')" fieldName="" fieldId=""
+                              :fieldValue="$user->name" fieldReadOnly="true" />
                             </div>
                         </div>
                     @endif

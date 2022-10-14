@@ -54,6 +54,8 @@ use App\Models\ProjectStatusSetting;
 use App\Models\PMProject;
 use App\Models\PMAssign;
 use App\Models\Deal;
+use App\Models\RoleUser;
+
 
 class ProjectController extends AccountBaseController
 {
@@ -312,7 +314,18 @@ class ProjectController extends AccountBaseController
                 $project->public = $request->public ? 1 : 0;
             }
 
+
             $project->save();
+            $lead_developer_id= RoleUser::where('role_id',6)->get();
+            //dd($lead_developer_id);
+            foreach ($lead_developer_id as $lead) {
+              $lead_developer= new ProjectMember();
+              $lead_developer->user_id= $lead->user_id;
+              $lead_developer->project_id= $project->id;
+              $lead_developer->hourly_rate= 0;
+              $lead_developer->save();
+            }
+
 
 //seopage1 custom module
 $pm_count= PMAssign::select('project_count')->min('project_count');

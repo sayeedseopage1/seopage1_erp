@@ -153,23 +153,31 @@ $addProjectNotePermission = user()->permission('add_project_note');
                     @endif
 
                     @if ($addProjectMemberPermission == 'all' || $addProjectMemberPermission == 'added')
+
+
+
                         <div class="col-md-12" id="add_members">
                             <div class="form-group my-3">
                                 <x-forms.label class="my-3" fieldId="selectEmployee" fieldRequired="true"
-                                    :fieldLabel="__('modules.projects.addMemberTitle')">
+                                    :fieldLabel="__('Recommended Developers')">
                                 </x-forms.label>
                                 <x-forms.input-group>
                                     <select class="form-control multiple-users" multiple name="user_id[]"
                                         id="selectEmployee" data-live-search="true" data-size="8">
-                                        @foreach ($employees as $item)
+                                        <?php
+                                        $users= App\Models\User::where('role_id',5)->get();
+                                        $user= App\Models\User::where('role_id',6)->first();
+                                         ?>
+                                        @foreach ($users as $item)
                                             <option @if (request()->has('default_assign') && request('default_assign') == $item->id) selected @endif
                                                 @if (isset($projectTemplateMembers) && in_array($item->id, $projectTemplateMembers)) selected @endif data-content="<span class='badge badge-pill badge-light border'>
                                             <div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle'
                                                     src='{{ $item->image_url }}'></div>
-                                            {{ ucfirst($item->name) }}{{ user() && user()->id == $item->id ? '<span class="ml-2 badge badge-secondary">' . __('app.itsYou') . '</span>' : '' }}
+                                            {{ ucfirst($item->name) }}{{ user() && user()->id == $item->id ? '<span class="ml-2 badge badge-primary">' . __(' (Busy Until 20-10-2022 02:00PM') . '</span>' : ' (Busy Until 20-10-2022 02:00PM)' }}
                                         </span>"
-                                        value="{{ $item->id }}">{{ mb_ucwords($item->name) }}</option>
+                                        value="{{ $item->id }}">{{ mb_ucwords($item->name) }}  </option>
                                         @endforeach
+
                                     </select>
 
                                     @if ($addEmployeePermission == 'all' || $addEmployeePermission == 'added')
@@ -179,6 +187,12 @@ $addProjectNotePermission = user()->permission('add_project_note');
                                         </x-slot>
                                     @endif
                                 </x-forms.input-group>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group my-3">
+                          <x-forms.text :fieldLabel="__('Lead Developer')" fieldName="" fieldId=""
+                              :fieldValue="$user->name" fieldReadOnly="true" />
                             </div>
                         </div>
                     @elseif(in_array('employee', user_roles()))
