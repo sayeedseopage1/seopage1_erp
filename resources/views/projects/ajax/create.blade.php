@@ -171,9 +171,21 @@ $addProjectNotePermission = user()->permission('add_project_note');
                                         @foreach ($users as $item)
                                             <option @if (request()->has('default_assign') && request('default_assign') == $item->id) selected @endif
                                                 @if (isset($projectTemplateMembers) && in_array($item->id, $projectTemplateMembers)) selected @endif data-content="<span class='badge badge-pill badge-light border'>
+                                                  <?php
+                                                  $task_id= App\Models\TaskUser::where('user_id',$item->id)->first();
+                                                  if($task_id != null)
+                                                  {
+                                                      $task= App\Models\Task::where('id',$task_id->task_id)->first();
+                                                        $d_data= "Busy Until ".$task->due_date;
+                                                  }else {
+                                                    $d_data=  "Open to Work";
+                                                  }
+                                                // dd($task_id->task_id);
+
+                                                   ?>
                                             <div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle'
                                                     src='{{ $item->image_url }}'></div>
-                                            {{ ucfirst($item->name) }}{{ user() && user()->id == $item->id ? '<span class="ml-2 badge badge-primary">' . __(' (Busy Until 20-10-2022 02:00PM') . '</span>' : ' (Busy Until 20-10-2022 02:00PM)' }}
+                                            {{ ucfirst($item->name) }}{{ '<span class="badge badge-pill badge-light border">'. '('.$d_data .')'. '</span>'   }}
                                         </span>"
                                         value="{{ $item->id }}">{{ mb_ucwords($item->name) }}  </option>
                                         @endforeach
