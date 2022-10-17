@@ -109,7 +109,7 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
                                     value="{{ $employee->id }}">{{ mb_ucwords($employee->name) }}</option>
                             @endforeach
                             @if ($viewUnassignedTasksPermission == 'all')
-                                <option value="unassigned">@lang('modules.tasks.unassigned')</option>                                
+                                <option value="unassigned">@lang('modules.tasks.unassigned')</option>
                             @endif
                         </select>
                     </div>
@@ -202,14 +202,14 @@ $addTaskPermission = user()->permission('add_tasks');
                         @lang('app.task')
                     </x-forms.link-primary>
                 @endif
-                
-                @if (user()->permission('add_status') == 'all')
+
+              {{--  @if (user()->permission('add_status') == 'all')
                     <x-forms.button-secondary icon="plus" class="mr-lg-3 mr-1 float-left" id="add-column">
                         @lang('modules.tasks.addBoardColumn')
                     </x-forms.button-secondary>
-                @endif
+                @endif --}}
 
-                
+
                 <x-forms.button-secondary id="filter-my-task" icon="user">
                     @lang('modules.tasks.myTask')
                 </x-forms.button-primary>
@@ -487,7 +487,7 @@ $addTaskPermission = user()->permission('add_tasks');
 
         });
 
-        
+
         $('#filter-my-task').click(function () {
             $('.filter-box #assignedTo').val('{{ user()->id }}');
             $('.filter-box .select-picker').selectpicker("refresh");

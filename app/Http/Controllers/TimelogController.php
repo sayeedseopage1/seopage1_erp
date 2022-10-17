@@ -120,6 +120,7 @@ class TimelogController extends AccountBaseController
 
     public function store(StoreTimeLog $request)
     {
+      //dd($request);
         $startDateTime = Carbon::createFromFormat($this->global->date_format, $request->start_date, $this->global->timezone)->format('Y-m-d') . ' ' . Carbon::createFromFormat($this->global->time_format, $request->start_time)->format('H:i:s');
         $startDateTime = Carbon::parse($startDateTime, $this->global->timezone)->setTimezone('UTC');
 
@@ -361,7 +362,13 @@ class TimelogController extends AccountBaseController
      */
     public function startTimer(StartTimer $request)
     {
-        $timeLog = new ProjectTimeLog();
+      //dd($request->task_id);
+      $task_status= Task::find($request->task_id);
+    //  dd($task_status);
+      $task_status->task_status="in progress";
+      $task_status->board_column_id= 3;
+      $task_status->save();
+      $timeLog = new ProjectTimeLog();
 
         $activeTimer = ProjectTimeLog::with('user')
             ->whereNull('end_time')

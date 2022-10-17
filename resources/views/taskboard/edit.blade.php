@@ -12,14 +12,14 @@
                     :fieldValue="$boardColumn->column_name" fieldRequired="true" />
             </div>
 
-            <div class="col-md-6">
+          {{-- <div class="col-md-6">
                 <x-forms.select fieldId="priority" :fieldLabel="__('modules.tasks.position')" fieldName="priority"
                     search="true">
                     @for ($i = 1; $i <= $maxPriority; $i++)
                         <option @if ($i == $boardColumn->priority) selected @endif>{{ $i }}</option>
                     @endfor
                 </x-forms.select>
-            </div>
+            </div> --}}
 
             <div class="col-md-6">
                 <div class="form-group my-3">

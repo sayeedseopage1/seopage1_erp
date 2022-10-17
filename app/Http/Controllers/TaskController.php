@@ -323,6 +323,7 @@ class TaskController extends AccountBaseController
             $task->repeat_type = $request->repeat_type;
             $task->repeat_cycles = $request->repeat_cycles;
         }
+        $task->task_status= "pending";
 
         $task->save();
 

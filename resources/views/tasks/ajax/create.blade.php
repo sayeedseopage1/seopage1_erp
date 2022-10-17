@@ -90,17 +90,18 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                     </div>
 
                     <div class="col-md-12 col-lg-8">
+                      <?php
+                      $users= App\Models\User::where('role_id',5)->get();
+
+                       ?>
                         <div class="form-group my-3">
                             <x-forms.label fieldId="selectAssignee" :fieldLabel="__('modules.tasks.assignTo')">
                             </x-forms.label>
                             <x-forms.input-group>
                                 <select class="form-control multiple-users" multiple name="user_id[]"
                                     id="selectAssignee" data-live-search="true" data-size="8">
-                                    <?php
-                                    $users= App\Models\User::where('role_id',5)->get();
 
-                                     ?>
-                                    @foreach ($users as $item)
+                                    @foreach ($employees as $item)
                                         <option @if ((isset($defaultAssignee) && $defaultAssignee == $item->id) || (!is_null($task) && isset($projectMember) && in_array($item->id, $projectMember))) selected @endif
 
                                           <?php
@@ -116,8 +117,8 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
 
                                            ?>
                                             data-content="<span class='badge badge-pill badge-light border'><div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $item->image_url }}' >
-                                            </div> {{ ucfirst($item->name) }}{{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}</span>"
-                                            value="{{ $item->id }}">{{ mb_ucwords($item->name) }}</option>
+                                            </div> {{ ucfirst($item->name) }} {{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}</span>"
+                                            value="{{ $item->id }}">{{ mb_ucwords($item->name) }}  </option>
                                     @endforeach
                                 </select>
 
@@ -185,7 +186,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                 </div>
                             </div>
 
-                            <div class="col-md-12 col-lg-4">
+                        {{--    <div class="col-md-12 col-lg-4">
                                 <x-forms.select fieldName="milestone_id" fieldId="milestone-id"
                                     :fieldLabel="__('modules.projects.milestones')">
                                     <option value="">--</option>
@@ -198,19 +199,25 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                         @endif
                                     @endif
                                 </x-forms.select>
-                            </div>
+                            </div> --}}
+                            <?php
+
+                              $board_column= App\Models\TaskboardColumn::where('id',2)->first();
+                            //  dd($board_column);
+                             ?>
 
                             @if (user()->permission('change_status') == 'all')
                                 <div class="col-lg-3 col-md-6">
                                     <x-forms.select fieldId="board_column_id" :fieldLabel="__('app.status')"
-                                        fieldName="board_column_id" search="true">
-                                        @foreach ($taskboardColumns as $item)
-                                            <option @if ($columnId == $item->id || ( !is_null($task) && $task->board_column_id == $item->id)) selected @elseif (global_setting()->default_task_status == $item->id) selected @endif value="{{ $item->id }}">
-                                                {{ $item->slug == 'completed' || $item->slug == 'incomplete' ? __('app.' . $item->slug) : $item->column_name }}
+                                        fieldName="board_column_id" fieldReadOnly="true" >
+
+                                            <option selected value="{{$board_column->id}}">{{$board_column->column_name}}
                                             </option>
-                                        @endforeach
+
                                     </x-forms.select>
                                 </div>
+
+
                             @endif
 
                             <div class="col-lg-3 col-md-6">

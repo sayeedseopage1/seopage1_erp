@@ -279,6 +279,7 @@ class ContractController extends AccountBaseController
             $lead_developer->user_id= $lead->user_id;
             $lead_developer->project_id= $project->id;
             $lead_developer->hourly_rate= 0;
+            $lead_developer->lead_developer_id= $lead->user_id;
             $lead_developer->save();
           }
 

@@ -322,6 +322,7 @@ class ProjectController extends AccountBaseController
               $lead_developer= new ProjectMember();
               $lead_developer->user_id= $lead->user_id;
               $lead_developer->project_id= $project->id;
+              $lead_developer->lead_developer_id= $lead->user_id;
               $lead_developer->hourly_rate= 0;
               $lead_developer->save();
             }
@@ -606,8 +607,19 @@ if ($pm_count < 2) {
         if (!$request->private && !$request->public && $request->member_id) {
             $project->membersMany()->sync($request->member_id);
         }
+        
 
         $project->save();
+        $lead_developer_id= RoleUser::where('role_id',6)->get();
+        //dd($lead_developer_id);
+        foreach ($lead_developer_id as $lead) {
+          $lead_developer= new ProjectMember();
+          $lead_developer->user_id= $lead->user_id;
+          $lead_developer->project_id= $project->id;
+          $lead_developer->lead_developer_id= $lead->user_id;
+          $lead_developer->hourly_rate= 0;
+          $lead_developer->save();
+        }
         $deal_id = PMProject::where('project_id',$project->id)->first();
         $deal= Deal::find($deal_id->deal_id);
         $deal->status= 'Accepted';

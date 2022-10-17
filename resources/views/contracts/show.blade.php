@@ -11,17 +11,12 @@
             <a class="d-none close-it" href="javascript:;" id="close-client-detail">
                 <i class="fa fa-times"></i>
             </a>
-            <?php
-            $deal=App\Models\Deal::where('id',$contract->id)->first();
-            $proposal_id= App\Models\Proposal::where('lead_id',$deal->lead_id)->first();
-            //dd($proposal_id);
 
-             ?>
 
             <x-tab :href="route('contracts.show', $contract->id)" :text="__('modules.contracts.summery')" class="profile" />
-                <x-tab :href="route('leads.show', $deal->lead_id).'?tab=proposals'" :text="__('modules.lead.proposal')" class="proposals" ajax="false" />
+              
 
-              <!-- <x-tab :href="('/account/leads/'. $deal->lead_id).'?tab=proposals'" :text="__('Proposals')" class="proposal" /> -->
+
             <x-tab :href="route('contracts.show', $contract->id).'?tab=files'" :text="__('Deal Files')"
                 class="files" />
           {{-- <x-tab :href="route('contracts.show', $contract->id).'?tab=renew'"
