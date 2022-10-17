@@ -185,7 +185,7 @@ $addProjectNotePermission = user()->permission('add_project_note');
                                                    ?>
                                             <div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle'
                                                     src='{{ $item->image_url }}'></div>
-                                            {{ ucfirst($item->name) }}{{ '<span class="badge badge-pill badge-light border">'. '('.$d_data .')'. '</span>'   }}
+                                            {{ ucfirst($item->name) }} {{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}
                                         </span>"
                                         value="{{ $item->id }}">{{ mb_ucwords($item->name) }}  </option>
                                         @endforeach

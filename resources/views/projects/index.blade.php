@@ -153,7 +153,7 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
         <!-- Add Task Export Buttons Start -->
         <div class="d-block d-lg-flex d-md-flex justify-content-between action-bar">
             <div id="table-actions" class="flex-grow-1 align-items-center mb-2 mb-lg-0 mb-md-0">
-                @if ($addProjectPermission == 'all' || $addProjectPermission == 'added' || $addProjectPermission == 'both')
+            {{--   @if ($addProjectPermission == 'all' || $addProjectPermission == 'added' || $addProjectPermission == 'both')
                     <x-forms.link-primary :link="route('projects.create')"
                         class="mr-3 openRightModal float-left mb-2 mb-lg-0 mb-md-0" icon="plus">
                         @lang('app.add')
@@ -166,6 +166,7 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
                         @lang('app.menu.projectTemplate')
                     </x-forms.link-secondary>
                 @endif
+                --}} 
 
 
                 @if ($addProjectPermission == 'all' || $addProjectPermission == 'added' || $addProjectPermission == 'both')
