@@ -96,9 +96,27 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                             <x-forms.input-group>
                                 <select class="form-control multiple-users" multiple name="user_id[]"
                                     id="selectAssignee" data-live-search="true" data-size="8">
-                                    @foreach ($employees as $item)
+                                    <?php
+                                    $users= App\Models\User::where('role_id',5)->get();
+
+                                     ?>
+                                    @foreach ($users as $item)
                                         <option @if ((isset($defaultAssignee) && $defaultAssignee == $item->id) || (!is_null($task) && isset($projectMember) && in_array($item->id, $projectMember))) selected @endif
-                                            data-content="<span class='badge badge-pill badge-light border'><div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $item->image_url }}' ></div> {{ ucfirst($item->name) }}{{ (user() && user()->id == $item->id) ? '<span class="ml-2 badge badge-secondary">' . __('app.itsYou') . '</span>' : '' }}</span>"
+
+                                          <?php
+                                          $task_id= App\Models\TaskUser::where('user_id',$item->id)->first();
+                                          if($task_id != null)
+                                          {
+                                              $task= App\Models\Task::where('id',$task_id->task_id)->first();
+                                                $d_data= "Busy Until ".$task->due_date;
+                                          }else {
+                                            $d_data=  "Open to Work";
+                                          }
+                                        // dd($task_id->task_id);
+
+                                           ?>
+                                            data-content="<span class='badge badge-pill badge-light border'><div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $item->image_url }}' >
+                                            </div> {{ ucfirst($item->name) }}{{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}</span>"
                                             value="{{ $item->id }}">{{ mb_ucwords($item->name) }}</option>
                                     @endforeach
                                 </select>
