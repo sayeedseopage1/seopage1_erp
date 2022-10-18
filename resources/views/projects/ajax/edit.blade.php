@@ -181,7 +181,12 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                             if($task_id != null)
                                             {
                                                 $task= App\Models\Task::where('id',$task_id->task_id)->first();
+                                                if ($task != null) {
                                                   $d_data= "Busy Until ".$task->due_date;
+                                                }else {
+                                                      $d_data=  "Open to Work";
+                                                }
+                                                  //$d_data= "Busy Until ".$task->due_date;
                                             }else {
                                               $d_data=  "Open to Work";
                                             }

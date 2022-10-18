@@ -181,8 +181,13 @@ class TasksDataTable extends BaseDataTable
 
                 return implode(',', $members);
             });
+
             $datatables->addColumn('timer', function ($row) {
                 if ($row->boardColumn->slug != 'completed' && !is_null($row->is_task_user)) {
+                  if($row->board_column_id == 6)
+                  {
+                    return '';
+                  }else{
                     if (is_null($row->userActiveTimer)) {
                         return '<a href="javascript:;" class="text-primary btn border f-15 start-timer" data-task-id="'.$row->id.'" data-toggle="tooltip" data-original-title="' . __('modules.timeLogs.startTimer') . '"><i class="bi bi-play-circle-fill"></i></a>';
 
@@ -201,6 +206,8 @@ class TasksDataTable extends BaseDataTable
                         }
 
                     }
+                  }
+
                 }
             });
             $datatables->editColumn('clientName', function ($row) {

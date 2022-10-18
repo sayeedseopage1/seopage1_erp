@@ -3,7 +3,7 @@ $editTaskPermission = user()->permission('edit_tasks');
 $sendReminderPermission = user()->permission('send_reminder');
 $changeStatusPermission = user()->permission('change_status');
 @endphp
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 <div id="task-detail-section">
 
     <h3 class="heading-h1 mb-3">{{ ucfirst($task->heading) }}</h3>
@@ -19,24 +19,41 @@ $changeStatusPermission = user()->permission('change_status');
                             || ($changeStatusPermission == 'both' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id))
                             || ($task->project && $task->project->project_admin == user()->id)
                             )
-                                @if ($task->boardColumn->slug != 'completed')
-                                    <x-forms.button-primary icon="check" data-status="completed"
+                                @if ($task->task_status == 'submitted')
+                                    <!-- <x-forms.button-primary icon="check" data-status="completed"
                                         class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
                                         @lang('modules.tasks.markComplete')
-                                    </x-forms.button-primary>
-                                @else
-                                    <x-forms.button-secondary icon="times" data-status="incomplete"
-                                        class="change-task-status mr-3">
-                                        @lang('modules.tasks.markIncomplete')
-                                    </x-forms.button-secondary>
+                                    </x-forms.button-primary> -->
+                                      <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskapprove">Approve</button>
+                                      <button class="btn bg-danger mr-3 mb-2 mb-lg-0 mb-md-0 text-white" type="button">Need Revision</button>
+                                      @include('tasks.modals.taskapprove')
+
                                 @endif
                             @endif
 
+
                             @if ($task->boardColumn->slug != 'completed' && !is_null($task->is_task_user))
                                 @if (is_null($task->userActiveTimer))
+                                @if($task->board_column_id != 6)
+                                <div class="row">
+                                  <div class="mr-1">
                                     <x-forms.button-secondary id="start-task-timer" icon="play">
                                         @lang('modules.timeLogs.startTimer')
                                     </x-forms.button-secondary>
+                                  </div>
+                                  <div class="col">
+                                    <form action="{{route('task-status-change')}}" method="post">
+                                      @csrf
+                                      <input type="hidden" name="id" value="{{$task->id}}">
+                                        <button class="btn btn-secondary btn-sm" type="submit" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
+                                    </form>
+                                  </div>
+
+
+
+                                </div>
+
+
                                 @elseif (!is_null($task->userActiveTimer))
 
                                     <span class="border p-2 rounded mr-2 bg-light"><i class="fa fa-clock mr-1"></i><span id="active-task-timer">{{ $task->userActiveTimer->timer }}</span></span>
@@ -51,6 +68,7 @@ $changeStatusPermission = user()->permission('change_status');
                                     @else
                                         <x-forms.button-secondary id="resume-timer-btn" icon="play-circle"
                                         data-time-id="{{ $task->userActiveTimer->activeBreak->id }}">@lang('modules.timeLogs.resumeTimer')</x-forms.button-secondary>
+                                    @endif
                                     @endif
 
                                 @endif

@@ -1,0 +1,89 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+#modal {
+  position: relative;
+  background: linear-gradient(150deg, #e9967a, #e75480);
+  height: 100vh;
+  text-align: center;
+}
+
+svg {
+  max-width: 100%;
+  max-height: 100%;
+  fill: rgba(0, 0, 0, 0.0006);
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.feedback {
+  position: relative;
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px 20px 40px;
+  margin: 20px auto;
+  max-width: 550px;
+}
+.feedback__content {
+  padding: 0 40px 20px;
+}
+.feedback__form {
+  padding: 10px 0;
+}
+.feedback__submit {
+  background-color: #e75480;
+  padding: 10px 40px;
+  border: 0;
+  color: #fff;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 5px grey;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.feedback__submit:hover {
+  background-color: #e1275f;
+}
+
+.rating {
+  margin-bottom: 20px;
+  border: none;
+}
+.rating input {
+  display: none;
+}
+.rating input:checked ~ label svg {
+  fill: gold;
+}
+.rating input + label:hover svg, .rating input + label:hover ~ label svg {
+  fill: gold;
+}
+.rating label {
+  position: relative;
+  width: 2em;
+  height: 2em;
+}
+
+#close {
+  border: none;
+  background: transparent;
+  outline: none;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}

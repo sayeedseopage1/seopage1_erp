@@ -37,6 +37,8 @@ use Modules\Gitlab\Entities\GitlabEmployee;
 use Modules\Gitlab\Entities\GitlabProject;
 use Modules\Gitlab\Entities\GitlabSetting;
 use Modules\Gitlab\Entities\GitlabTask;
+use Redirect;
+use App\Models\TaskApprove;
 
 use function PHPUnit\Framework\isNull;
 
@@ -70,6 +72,33 @@ class TaskController extends AccountBaseController
         }
 
         return $dataTable->render('tasks.index', $this->data);
+    }
+    public function TaskReview(Request $request)
+    {
+      $task= Task::find($request->id);
+      $task->board_column_id= 6;
+      $task->task_status="submitted";
+      $task->save();
+      return Redirect::back()->with('messages.taskUpdatedSuccessfully');
+
+    }
+    public function TaskApprove(Request $request)
+    {
+      $task_status= Task::find($request->task_id);
+      $task_status->status= "complete";
+      $task_status->task_status="approved";
+      $task_status->board_column_id=4;
+      $task_status->save();
+      $task= new TaskApprove();
+      $task->user_id= $request->user_id;
+      $task->task_id= $request->task_id;
+      $task->rating= $request->rating;
+      $task->rating2= $request->rating2;
+      $task->rating3= $request->rating3;
+      $task->comments= $request->comments;
+      $task->save();
+      return Redirect::back()->with('messages.taskUpdatedSuccessfully');
+
     }
 
     /**
