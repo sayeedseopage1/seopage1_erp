@@ -262,6 +262,7 @@ $changeStatusPermission = user()->permission('change_status');
                         </div>
                     @endif
 
+
                     @if (($taskSettings->task_category == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                         <x-cards.data-row :label="__('modules.tasks.taskCategory')"
                         :value="$task->category->category_name ?? '--'" html="true" />
@@ -270,6 +271,28 @@ $changeStatusPermission = user()->permission('change_status');
                     @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                         <x-cards.data-row :label="__('app.description')" :value="!empty($task->description) ? $task->description : '--'" html="true" />
                     @endif
+                    <?php
+
+                    $task_name=App\Models\Task::where('id',$task->dependent_task_id)->first();
+
+                     ?>
+                     @if($task_name != null)
+                    @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                    <div class="col-12 px-0 pb-3 d-lg-flex d-md-flex d-block">
+                      <p class="mb-0 text-lightest f-14 w-30 text-capitalize">
+                          Parent Task
+                      </p>
+                      <div class="mb-0 text-dark-grey">
+                          <a class="text-dark-grey" style="font-weight:bold;" href="/account/tasks/{{$task_name->id}}">{{$task_name->heading}}</a>
+                      </div>
+
+
+                    </div>
+
+
+                    @endif
+                    @endif
+
 
                     {{-- Custom fields data --}}
                     @if (($taskSettings->custom_fields == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
