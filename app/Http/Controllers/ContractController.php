@@ -654,9 +654,7 @@ class ContractController extends AccountBaseController
       });
       $deal= Deal::where('id',$id)->first();
       $client= ClientForm::where('deal_id',$deal->id)->first();
-      if ($client == null) {
-        return redirect('/account/contracts')->with('message','Client have not submitted the information yet');
-      }
+    
 
 
       return view('contracts.dealurl',compact('deal','client'),$this->data);

@@ -93,6 +93,8 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                       <?php
                       $users= App\Models\User::where('role_id',5)->get();
 
+
+
                        ?>
                         <div class="form-group my-3">
                             <x-forms.label fieldId="selectAssignee" :fieldLabel="__('modules.tasks.assignTo')">
@@ -109,9 +111,15 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
 
                                           if($task_id != null)
                                           {
-                                              $task= App\Models\Task::where('id',$task_id->task_id)->first();
-                                              if ($task != null) {
-                                                $d_data= "Busy Until ".$task->due_date;
+                                              $task_s= App\Models\Task::where('id',$task_id->task_id)->first();
+                                              if ($task_s != null && $task_s->status != 'completed') {
+                                                // $date1 = new DateTime($task_s['due_date']);
+                                                // $date2 = new DateTime(Carbon\Carbon::now()->addDay(1));
+                                                // $days  = $date2->diff($date1)->format('%a');
+
+                                                    $d_data= "Busy Until ".$task_s->due_date;
+
+
                                               }else {
                                                     $d_data=  "Open to Work";
                                               }

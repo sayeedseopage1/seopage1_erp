@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
 /**
  * App\Models\SubTask
  *
@@ -64,5 +65,6 @@ class SubTask extends BaseModel
     {
         return $this->hasMany(SubTaskFile::class, 'sub_task_id');
     }
+  
 
 }

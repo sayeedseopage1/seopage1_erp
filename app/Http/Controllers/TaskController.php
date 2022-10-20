@@ -85,7 +85,7 @@ class TaskController extends AccountBaseController
     public function TaskApprove(Request $request)
     {
       $task_status= Task::find($request->task_id);
-      $task_status->status= "complete";
+      $task_status->status= "completed";
       $task_status->task_status="approved";
       $task_status->board_column_id=4;
       $task_status->save();
@@ -99,6 +99,21 @@ class TaskController extends AccountBaseController
       $task->save();
       return Redirect::back()->with('messages.taskUpdatedSuccessfully');
 
+    }
+    public function TaskRevision(Request $request)
+    {
+      $task_status= Task::find($request->task_id);
+      $task_status->status= "incomplete";
+      $task_status->task_status="revision";
+      $task_status->board_column_id=1;
+      $task_status->save();
+      $task= new TaskApprove();
+      $task->user_id= $request->user_id;
+      $task->task_id= $request->task_id;
+    
+      $task->comments= $request->comments;
+      $task->save();
+      return Redirect::back()->with('messages.taskUpdatedSuccessfully');
     }
 
     /**

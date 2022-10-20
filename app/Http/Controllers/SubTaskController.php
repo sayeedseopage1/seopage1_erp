@@ -8,7 +8,7 @@ use App\Models\SubTask;
 use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use App\Models\TaskUser;
 class SubTaskController extends AccountBaseController
 {
 
@@ -65,6 +65,30 @@ class SubTaskController extends AccountBaseController
         $subTask->assigned_to = $request->user_id ? $request->user_id : null;
 
         $subTask->save();
+        $task_id= Task::where('id',$request->task_id)->first();
+        $task_s= new Task();
+        $task_s->task_short_code= $task_id->task_short_code .'-'.$subTask->id;
+        $task_s->heading= $subTask->title;
+        $task_s->description= str_replace('<p><br></p>', '', trim($request->description));
+        if ($request->start_date != '' && $request->due_date != '') {
+            $task_s->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+            $task_s->due_date = Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+        }
+      $task_s->project_id= $task_id->project_id;
+      $task_s->task_category_id=$task_id->task_category_id;
+      $task_s->priority= $task_id->priority;
+
+        $task_s->board_column_id = 2;
+        $task_s->task_status= "pending";
+        $task_s->dependent_task_id= $request->task_id;
+        $task_s->subtask_id= $subTask->id;
+        $task_s->save();
+        $task_user= new TaskUser();
+        $task_user->task_id= $request->task_id;
+        $task_user->user_id= $request->user_id ? $request->user_id : null;
+
+        $task_user->save();
+
 
         $task = $subTask->task;
         $this->logTaskActivity($task->id, $this->user->id, 'subTaskCreateActivity', $task->board_column_id, $subTask->id);

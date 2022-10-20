@@ -1061,3 +1061,4 @@ Route::post('/leads/deals/store', [ContractController::class, 'storeLeadDeal'])-
 //task review
 Route::post('/tasks/task-stage/store', [TaskController::class, 'TaskReview'])->name('task-status-change');
 Route::post('/tasks/task-stage/approve', [TaskController::class, 'TaskApprove'])->name('task-status-approve');
+Route::post('/tasks/task-stage/revision', [TaskController::class, 'TaskRevision'])->name('task-status-revision');

@@ -1,4 +1,6 @@
-@php
+
+
+ @php
 $addSubTaskPermission = user()->permission('add_sub_tasks');
 $editSubTaskPermission = user()->permission('edit_sub_tasks');
 $deleteSubTaskPermission = user()->permission('delete_sub_tasks');
@@ -38,7 +40,6 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                             :fieldPlaceholder="__('placeholders.date')" />
                     </div>
 
-                    <div class="col-md-4">
                         <x-forms.datepicker fieldId="sub_task_due_date" :fieldLabel="__('app.dueDate')" fieldName="due_date"
                             :fieldPlaceholder="__('placeholders.date')" />
                     </div>
@@ -51,11 +52,30 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                             <x-forms.input-group>
                                 <select class="form-control select-picker" name="user_id"
                                     id="subTaskAssignee" data-live-search="true">
-                                    <option value="">--</option>
+
+
                                     @foreach ($task->users as $item)
+                                    <?php
+                                    $task_id= App\Models\TaskUser::where('user_id',$item->id)->first();
+
+                                    if($task_id != null )
+                                    {
+                                        $task_s= App\Models\Task::where('id',$task_id->task_id)->first();
+                                        if ($task_s != null && $task_s->status != 'completed') {
+                                          $d_data= "Busy Until ".$task_s->due_date;
+                                        }else {
+                                              $d_data=  "Open to Work";
+                                        }
+
+                                    }else {
+                                      $d_data=  "Open to Work";
+                                    }
+                                  // dd($task_id->task_id);
+
+                                     ?>
                                         <option
-                                            data-content="<span class='badge badge-pill badge-light border'><div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $item->image_url }}' ></div> {{ ucfirst($item->name) }}{{ (user() && user()->id == $item->id) ? '<span class="ml-2 badge badge-secondary">' . __('app.itsYou') . '</span>' : '' }}</span>"
-                                            value="{{ $item->id }}">{{ mb_ucwords($item->name) }}</option>
+                                            data-content="<span class='badge badge-pill badge-light border'><div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $item->image_url }}' ></div> {{ ucfirst($item->name) }} {{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}"
+                                            value="{{ $item->id }}">{{ mb_ucwords($item->name) }} </option>
                                     @endforeach
                                 </select>
                             </x-forms.input-group>
@@ -105,25 +125,37 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
 
     @if ($viewSubTaskPermission == 'all' || $viewSubTaskPermission == 'added')
         <div class="d-flex flex-wrap justify-content-between p-20" id="sub-task-list">
+
             @forelse ($task->subtasks as $subtask)
+
                 <div class="card w-100 rounded-0 border-0 subtask mb-3">
 
                     <div class="card-horizontal">
-                        <div class="d-flex">
+                        <!-- <div class="d-flex">
                             <x-forms.checkbox :fieldId="'checkbox'.$subtask->id" class="task-check"
                                 data-sub-task-id="{{ $subtask->id }}"
                                 :checked="($subtask->status == 'complete') ? true : false" fieldLabel=""
                                 :fieldName="'checkbox'.$subtask->id" />
 
-                        </div>
+                        </div> -->
+                        <?php
+
+                          $task_id= App\Models\Task::where('subtask_id',$subtask->id)->first();
+                         ?>
+
                         <div class="card-body pt-0">
                             <div class="d-flex">
                                 @if ($subtask->assigned_to)
                                     <x-employee-image :user="$subtask->assignedTo" />
                                 @endif
 
+
                                 <p class="card-title f-14 mr-3 text-dark flex-grow-1" id="subTask">
-                                    {!! $subtask->status == 'complete' ? '<s>' . $subtask->id . ucfirst($subtask->title) . '</s>' : '<a class="view-subtask" href="javascript:;" style="color:black;" data-row-id=' . $subtask->id . ' >' .  ucfirst($subtask->title) . '</a>' !!}
+                                  @if($task_id != null)
+                                  <a class="openRightModal" href="/account/tasks/{{$task_id->id}}" style="color:black;" >{{ucfirst($subtask->title)}}</a>
+                                  @else
+
+                                  @endif
                                     {!! $subtask->due_date ? '<span class="f-11 text-lightest"><br>'.__('modules.invoices.due') . ': ' . $subtask->due_date->format(global_setting()->date_format) . '</span>' : '' !!}
                                 </p>
                                 <div class="dropdown ml-auto subtask-action">
@@ -174,7 +206,7 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
 
                                                     <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
                                                         aria-labelledby="dropdownMenuLink" tabindex="0">
-                                                        
+
                                                             <a class="cursor-pointer d-block text-dark-grey f-13 pt-3 px-3 "
                                                                 target="_blank"
                                                                 href="{{ $file->file_url }}">@lang('app.view')</a>

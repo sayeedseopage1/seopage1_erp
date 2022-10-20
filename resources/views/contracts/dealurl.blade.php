@@ -60,15 +60,23 @@
                       <div class="col-md-6">
                         <div class="mt-3">
                             <label for="input-state-2" class="form-label"><strong>Client Username</strong></label>
-                            <input id="input-state-2" name="client_username" type="text" value="{{$client->client_username}}" readonly class="form-control" placeholder="Enter User Name" required>
+                            @if($client== null)
 
+                            <input id="input-state-2" name="client_username" type="text"  readonly class="form-control" placeholder="Enter User Name" required>
+                            @else
+                            <input id="input-state-2" name="client_username" type="text" value="{{$client->client_username}}" readonly class="form-control" placeholder="Enter User Name" required>
+                            @endif
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="mt-3">
                             <label for="input-state-3" class="form-label"><strong>Client Email</strong></label>
-                            <input id="input-state-3" readonly name="client_email" value="{{$client->client_email}}" type="text" class="form-control" placeholder="Enter Your Email" required>
+                            @if($client== null)
+                                <input id="input-state-3" readonly name="client_email"  type="text" class="form-control" placeholder="Enter Your Email" required>
 
+                            @else
+                            <input id="input-state-3" readonly name="client_email" value="{{$client->client_email}}" type="text" class="form-control" placeholder="Enter Your Email" required>
+                            @endif
                         </div>
                       </div>
 
@@ -76,28 +84,46 @@
                     </div>
 
                     <div class="mt-3">Client Phone Number</strong></label>
+                      @if($client== null)
+                      <input id="input-state-3" name="client_phone" readonly   type="text" class="form-control" placeholder="Enter Your Phone number" required>
+
+                      @else
                         <input id="input-state-3" name="client_phone" readonly value="{{$client->client_phone}}"  type="text" class="form-control" placeholder="Enter Your Phone number" required>
+                        @endif
 
                     </div>
                     <div class="mt-3">
                         <label for="floatingTextarea"><strong>Client WhatsApp ID (For future communication)!</strong></label>
+                        @if($client== null)
+
+                          <textarea class="form-control"  readonly name="client_whatsapp" placeholder="Leave a comment here" ></textarea>
+                        @else
                       <textarea class="form-control"  readonly name="client_whatsapp" placeholder="Leave a comment here" >{!!$client->client_whatsapp!!}</textarea>
+                      @endif
 
 
 
                     </div>
                     <div class="mt-3">
                         <label for="floatingTextarea"><strong>Client's Available Platform</strong></label>
-                      <textarea class="form-control" value="{{$client->other_platform}}" readonly name="other_platform" placeholder="Leave a comment here">{!!$client->other_platform!!}</textarea>
+                        @if($client== null)
+                          <textarea class="form-control"  readonly name="other_platform" placeholder="Leave a comment here"></textarea>
 
+                        @else
+                      <textarea class="form-control" value="{{$client->other_platform}}" readonly name="other_platform" placeholder="Leave a comment here">{!!$client->other_platform!!}</textarea>
+                      @endif
 
 
                     </div>
                     <div class="mt-3">
                         <label for="floatingTextarea"><strong>Client's Message </strong></label>
+                        @if($client== null)
+                              <textarea class="form-control" readonly  name="message"  placeholder="Leave a comment here" required></textarea>
+
+                        @else
                       <textarea class="form-control" readonly  name="message"  placeholder="Leave a comment here" required>{!!$client->message!!}</textarea>
 
-
+                      @endif
 
                     </div>
                     <div class="mt-3">

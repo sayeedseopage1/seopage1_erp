@@ -220,12 +220,17 @@ $deals= App\Models\Deal::all();
                       <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
                           aria-labelledby="dropdownMenuLink" tabindex="0">
 
+                          @if($deal->submission_status == "Awaiting for client Response")
+                          <a class="dropdown-item"
+                              href="/account/deal-url/{{$deal->id}}"><i class="fa-solid fa-file"></i> @lang('Client Form')</a>
+                              @else
                               <a class="dropdown-item"
                                   href="deal-url/{{$deal->id}}"><i class="fa-solid fa-file"></i> @lang('Client Form')</a>
+                                  @endif
                           <a class="dropdown-item"
                               href="/deals/details/edit/{{$deal->id}}"><i class="fa-solid fa-pen-to-square"></i> @lang('Edit')</a>
-                              <a class="dropdown-item"
-                                  href="/deals/details/edit/{{$deal->id}}"><i class="fa-solid fa-eye"></i> @lang('View')</a>
+                              {{--<a class="dropdown-item"
+                                  href="/deals/details/edit/{{$deal->id}}"><i class="fa-solid fa-eye"></i> @lang('View')</a>--}}
                                   <a class="dropdown-item"
                                       href="contracts/deal-delete/{{$deal->id}}"><i class="fa-solid fa-trash"></i> @lang('Delete')</a>
 
@@ -237,7 +242,7 @@ $deals= App\Models\Deal::all();
                     {{--  <a class="btn btn-success" href="/deals/details/{{$deal->id}}"><i class="fa-solid fa-eye"></i></a>--}}
                       @endif
 
-                  {{--<a class="btn btn-info mr-3 openRightModal{{$deal->id}}" href="#"><i class="fa-solid fa-pen-to-square"></i></a>--}}
+                
 
                   {{--<a class="btn btn-danger" href="contracts/deal-delete/{{$deal->id}}"><i class="fa-solid fa-trash"></i></a> --}}
                     @include('contracts.modals.editmodal')

@@ -173,7 +173,7 @@ $addProjectNotePermission = user()->permission('add_project_note');
                                                 @if (isset($projectTemplateMembers) && in_array($item->id, $projectTemplateMembers)) selected @endif data-content="<span class='badge badge-pill badge-light border'>
                                                   <?php
                                                   $task_id= App\Models\TaskUser::where('user_id',$item->id)->first();
-                                                  if($task_id != null)
+                                                  if($task_id != null )
                                                   {
                                                       $task= App\Models\Task::where('id',$task_id->task_id)->first();
                                                         $d_data= "Busy Until ".$task->due_date;

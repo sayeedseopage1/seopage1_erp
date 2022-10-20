@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Subtask;
 
 /**
  * App\Models\Task
@@ -470,6 +471,10 @@ class Task extends BaseModel
     public function breakMinutes()
     {
         return ProjectTimeLogBreak::taskBreakMinutes($this->id);
+    }
+    public function subtask(): BelongsTo
+    {
+        return $this->belongsTo(Subtask::class,'subtask_id');
     }
 
 }

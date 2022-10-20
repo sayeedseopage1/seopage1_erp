@@ -25,8 +25,9 @@ $changeStatusPermission = user()->permission('change_status');
                                         @lang('modules.tasks.markComplete')
                                     </x-forms.button-primary> -->
                                       <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskapprove">Approve</button>
-                                      <button class="btn bg-danger mr-3 mb-2 mb-lg-0 mb-md-0 text-white" type="button">Need Revision</button>
+                                      <button class="btn bg-danger mr-3 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskrevision">Need Revision</button>
                                       @include('tasks.modals.taskapprove')
+                                      @include('tasks.modals.taskrevision')
 
                                 @endif
                             @endif
