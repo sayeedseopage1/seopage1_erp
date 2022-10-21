@@ -19,6 +19,24 @@ $changeStatusPermission = user()->permission('change_status');
                             || ($changeStatusPermission == 'both' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id))
                             || ($task->project && $task->project->project_admin == user()->id)
                             )
+                            <?php
+                            $extension_request= App\Models\TaskTimeExtension::where('task_id',$task->id)->first();
+                             ?>
+                             @if($extension_request != null)
+                            @if ($extension_request->status == 'pending')
+                                <!-- <x-forms.button-primary icon="check" data-status="completed"
+                                    class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
+                                    @lang('modules.tasks.markComplete')
+                                </x-forms.button-primary> -->
+                                  <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#extensionrequest">Extension Request</button>
+
+
+                                  @include('tasks.modals.extensionrequest')
+
+
+
+                            @endif
+                            @endif
                                 @if ($task->task_status == 'submitted')
                                     <!-- <x-forms.button-primary icon="check" data-status="completed"
                                         class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
@@ -26,8 +44,10 @@ $changeStatusPermission = user()->permission('change_status');
                                     </x-forms.button-primary> -->
                                       <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskapprove">Approve</button>
                                       <button class="btn bg-danger mr-3 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskrevision">Need Revision</button>
+
                                       @include('tasks.modals.taskapprove')
                                       @include('tasks.modals.taskrevision')
+
 
                                 @endif
                             @endif
@@ -42,18 +62,40 @@ $changeStatusPermission = user()->permission('change_status');
                                         @lang('modules.timeLogs.startTimer')
                                     </x-forms.button-secondary>
                                   </div>
-                                  <div class="col">
-                                    <form action="{{route('task-status-change')}}" method="post">
-                                      @csrf
-                                      <input type="hidden" name="id" value="{{$task->id}}">
-                                        <button class="btn btn-secondary btn-sm" type="submit" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
-                                    </form>
+                                  <div class="mr-1">
+
+                                        <button class="btn btn-secondary" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
+                                          </div>
+                                          <div class="">
+                                            <?php
+                                              $extension=App\Models\TaskTimeExtension::orderBy('id','desc')->where('user_id',Auth::id())->first();
+                                             ?>
+                                             @if($extension == null)
+                                            <button class="btn btn-secondary" data-toggle="modal" data-target="#timextension"><i class="fa-solid fa-plus"></i> Request Time Extension</button>
+
+
+
+                                            @endif
                                   </div>
+
+
+
+                                  @include('tasks.modals.markcomplete')
+                                    @include('tasks.modals.timeextension')
 
 
 
                                 </div>
 
+                                @if($extension->status == 'pending' || $extension->status != 'approved')
+
+                                <!-- <button class="btn btn-primary" ><i class="fa-solid fa-check"></i> Submitted for Extension</button> -->
+                                <div class="d-flex justify-content-center float-right">
+
+
+                              <h4>  <span class="badge badge-success">Submitted for Extension</span></h4>
+                                </div>
+                                @endif
 
                                 @elseif (!is_null($task->userActiveTimer))
 
@@ -75,10 +117,11 @@ $changeStatusPermission = user()->permission('change_status');
                                 @endif
                             @endif
                         </div>
+
                         <div class="col-lg-4 col-2 text-right">
                             <div class="dropdown">
                                 <button
-                                    class="btn btn-lg f-14 px-2 py-1 text-dark-grey text-capitalize rounded  dropdown-toggle"
+                                    class="btn btn-lg f-14 px-2 py-1 text-dark-grey text-capitalize rounded"
                                     type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-ellipsis-h"></i>
                                 </button>
@@ -439,8 +482,25 @@ $changeStatusPermission = user()->permission('change_status');
                             @else
                                 --
                             @endif
+
                         </p>
                     </div>
+                @endif
+                @if($task->original_due_date != null)
+                @if (($taskSettings->due_date == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                    <div class="col-12 px-0 pb-3 d-lg-flex d-block">
+                        <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Original Due Date') }}
+                        </p>
+                        <p class="mb-0 text-dark-grey w-50 f-14">
+                            @if(!is_null($task->original_due_date))
+                                {{  \Carbon\Carbon::parse($task->original_due_date)->format('d-m-Y') }}
+                            @else
+                                --
+                            @endif
+
+                        </p>
+                    </div>
+                @endif
                 @endif
 
                 @if (($taskSettings->time_estimate == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))

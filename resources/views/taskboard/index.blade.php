@@ -203,11 +203,12 @@ $addTaskPermission = user()->permission('add_tasks');
                     </x-forms.link-primary>
                 @endif
 
-              {{--  @if (user()->permission('add_status') == 'all')
+            {{--   @if (user()->permission('add_status') == 'all')
                     <x-forms.button-secondary icon="plus" class="mr-lg-3 mr-1 float-left" id="add-column">
                         @lang('modules.tasks.addBoardColumn')
                     </x-forms.button-secondary>
-                @endif --}}
+                @endif
+                --}} 
 
 
                 <x-forms.button-secondary id="filter-my-task" icon="user">

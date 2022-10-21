@@ -12,6 +12,8 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProjectTimeLogBreak;
+use App\Models\RoleUser;
+use Auth;
 
 class TasksDataTable extends BaseDataTable
 {
@@ -581,33 +583,63 @@ class TasksDataTable extends BaseDataTable
         $customFieldsGroupsId = CustomFieldGroup::where('model', $task->customFieldModel)->pluck('id')->first();
         $customFields = CustomField::where('custom_field_group_id', $customFieldsGroupsId)->where('export', 1)->get();
         $customFieldsDataMerge = [];
+        if (Auth::user()->role_id == 5) {
+          $data = [
+              'check' => [
+                  'title' => '<input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
+                  'exportable' => false,
+                  'orderable' => false,
+                  'searchable' => false
+              ],
+              // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+              // __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
+              __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
+              __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
+              __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
+              __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
+              __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
+              __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
+              __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],
+              __('modules.tasks.assignTo') => ['data' => 'users', 'name' => 'member.name', 'exportable' => false, 'title' => __('modules.tasks.assignTo')],
+              __('app.columnStatus') => ['data' => 'board_column', 'name' => 'board_column', 'exportable' => false, 'searchable' => false, 'title' => __('app.columnStatus')],
+              __('app.task').' '.__('app.status') => ['data' => 'status', 'name' => 'board_column_id', 'visible' => false, 'title' => __('app.task')],
+              Column::computed('action', __('app.action'))
+                  ->exportable(false)
+                  ->printable(false)
+                  ->orderable(false)
+                  ->searchable(false)
+                  ->addClass('text-right pr-20')
+          ];
+        }else {
+          $data = [
+              'check' => [
+                  'title' => '<input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
+                  'exportable' => false,
+                  'orderable' => false,
+                  'searchable' => false
+              ],
+              __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+              __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
+              __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
+              __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
+              __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
+              __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
+              __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
+              __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
+              __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],
+              __('modules.tasks.assignTo') => ['data' => 'users', 'name' => 'member.name', 'exportable' => false, 'title' => __('modules.tasks.assignTo')],
+              __('app.columnStatus') => ['data' => 'board_column', 'name' => 'board_column', 'exportable' => false, 'searchable' => false, 'title' => __('app.columnStatus')],
+              __('app.task').' '.__('app.status') => ['data' => 'status', 'name' => 'board_column_id', 'visible' => false, 'title' => __('app.task')],
+              Column::computed('action', __('app.action'))
+                  ->exportable(false)
+                  ->printable(false)
+                  ->orderable(false)
+                  ->searchable(false)
+                  ->addClass('text-right pr-20')
+          ];
+        }
 
-        $data = [
-            'check' => [
-                'title' => '<input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
-                'exportable' => false,
-                'orderable' => false,
-                'searchable' => false
-            ],
-            __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
-            __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
-            __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
-            __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
-            __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
-            __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
-            __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
-            __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
-            __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],
-            __('modules.tasks.assignTo') => ['data' => 'users', 'name' => 'member.name', 'exportable' => false, 'title' => __('modules.tasks.assignTo')],
-            __('app.columnStatus') => ['data' => 'board_column', 'name' => 'board_column', 'exportable' => false, 'searchable' => false, 'title' => __('app.columnStatus')],
-            __('app.task').' '.__('app.status') => ['data' => 'status', 'name' => 'board_column_id', 'visible' => false, 'title' => __('app.task')],
-            Column::computed('action', __('app.action'))
-                ->exportable(false)
-                ->printable(false)
-                ->orderable(false)
-                ->searchable(false)
-                ->addClass('text-right pr-20')
-        ];
+
 
         foreach ($customFields as $customField) {
             $customFieldsData = [$customField->name => ['data' => $customField->name, 'name' => $customField->name, 'title' => $customField->name, 'visible' => false]];

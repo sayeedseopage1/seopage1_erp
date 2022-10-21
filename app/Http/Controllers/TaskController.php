@@ -39,6 +39,7 @@ use Modules\Gitlab\Entities\GitlabSetting;
 use Modules\Gitlab\Entities\GitlabTask;
 use Redirect;
 use App\Models\TaskApprove;
+use App\Models\TaskTimeExtension;
 
 use function PHPUnit\Framework\isNull;
 
@@ -75,6 +76,7 @@ class TaskController extends AccountBaseController
     }
     public function TaskReview(Request $request)
     {
+      //dd($request);
       $task= Task::find($request->id);
       $task->board_column_id= 6;
       $task->task_status="submitted";
@@ -110,9 +112,38 @@ class TaskController extends AccountBaseController
       $task= new TaskApprove();
       $task->user_id= $request->user_id;
       $task->task_id= $request->task_id;
-    
+
       $task->comments= $request->comments;
       $task->save();
+      return Redirect::back()->with('messages.taskUpdatedSuccessfully');
+    }
+    public function TaskExtension(Request $request)
+    {
+      $task= new TaskTimeExtension();
+      $task->user_id=$request->user_id;
+      $task->task_id=$request->task_id;
+      $task->due_date=\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $request->due_date)
+
+                      ->format('Y-m-d');
+      $task->description=$request->description;
+      $task->save();
+
+      return Redirect::back()->with('messages.taskUpdatedSuccessfully');
+    }
+    public function TaskExtensionApprove(Request $request)
+    {
+      $task_e= TaskTimeExtension::find($request->id);
+      //dd($task);
+      $task_e->updated_by=$request->added_by;
+
+      $task_e->status="approved";
+
+      $task_e->save();
+      $task=Task::find($request->task_id);
+      $task->original_due_date= $task->due_date;
+      $task->due_date=$task_e->due_date;
+      $task->save();
+
       return Redirect::back()->with('messages.taskUpdatedSuccessfully');
     }
 

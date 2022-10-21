@@ -81,6 +81,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('send-auto-followup-reminder')->everyMinute();
         $schedule->command('fetch-ticket-emails')->everyMinute();
         $schedule->command('add-missing-permissions')->everyThirtyMinutes();
+        $schedule->command('daily:schedule')->everyMinute();
     }
 
     /**

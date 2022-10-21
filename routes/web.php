@@ -1062,3 +1062,5 @@ Route::post('/leads/deals/store', [ContractController::class, 'storeLeadDeal'])-
 Route::post('/tasks/task-stage/store', [TaskController::class, 'TaskReview'])->name('task-status-change');
 Route::post('/tasks/task-stage/approve', [TaskController::class, 'TaskApprove'])->name('task-status-approve');
 Route::post('/tasks/task-stage/revision', [TaskController::class, 'TaskRevision'])->name('task-status-revision');
+Route::post('/tasks/task-time/extension', [TaskController::class, 'TaskExtension'])->name('user-time-extension');
+Route::post('/tasks/task-time/extension/approve', [TaskController::class, 'TaskExtensionApprove'])->name('accept-task-extension');
