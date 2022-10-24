@@ -40,6 +40,8 @@ use Modules\Gitlab\Entities\GitlabTask;
 use Redirect;
 use App\Models\TaskApprove;
 use App\Models\TaskTimeExtension;
+use App\Models\TaskSubmission;
+use Illuminate\Support\Facades\Storage;
 
 use function PHPUnit\Framework\isNull;
 
@@ -76,11 +78,69 @@ class TaskController extends AccountBaseController
     }
     public function TaskReview(Request $request)
     {
-      //dd($request);
+      if ($request->table != null || $request->list != null || $request->list != null) {
+        $task_submit= new TaskSubmission();
+        $task_submit->task_id= $request->id;
+        $task_submit->user_id= $request->user_id;
+
+        $task_submit->table=$request->table;
+        $task_submit->list=$request->list;
+        $task_submit->text=$request->text;
+        $task_submit->save();
+      }
+
+    if ($request->link != null) {
+      // code...
+
+    foreach ($request->link as $lin) {
+      $task_submit= new TaskSubmission();
+      $task_submit->task_id= $request->id;
+      $task_submit->user_id= $request->user_id;
+
+      $task_submit->link=$lin;
+
+
+      $task_submit->save();
+
+    }
+      }
+
+    if($request->file('file') != null)
+    {
+
+
+    foreach ($request->file('file') as $att) {
+      $task_submit= new TaskSubmission();
+
+
+
+
+      $filename=null;
+      if ($att) {
+          $filename = time() . $att->getClientOriginalName();
+
+          Storage::disk('public')->putFileAs(
+              'TaskSubmission/',
+              $att,
+              $filename
+          );
+
+      }
+        $task_submit->attach= $filename;
+        $task_submit->task_id= $request->id;
+        $task_submit->user_id= $request->user_id;
+
+
+      $task_submit->save();
+
+    }
+      }
+
+
       $task= Task::find($request->id);
       $task->board_column_id= 6;
       $task->task_status="submitted";
-      $task->save();
+      //$task->save();
       return Redirect::back()->with('messages.taskUpdatedSuccessfully');
 
     }
