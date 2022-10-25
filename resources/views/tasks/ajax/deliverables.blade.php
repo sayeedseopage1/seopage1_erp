@@ -1,3 +1,4 @@
+
 <!-- TAB CONTENT START -->
 <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="nav-email-tab">
 <?php
@@ -19,24 +20,155 @@ $user= App\Models\User::where('id',$user_id->user_id)->first();
                             <h4 class="card-title f-12 font-weight-normal text-dark mr-3 mb-1">
                                  <a
                                     href="{{ route('employees.show', $user->id) }}"
-                                    class="text-darkest-grey">{{ mb_ucwords($user->name) }}</a>
+                                    class="text-darkest-grey">Task Submission by {{ mb_ucwords($user->name) }}</a>
                             </h4>
                         </div>
+                        <hr>
+
+
+
                         <div class="col-12 px-0 pb-3 d-lg-flex d-md-flex d-block">
-                          <p class="mb-0 text-lightest f-14 w-30 text-capitalize">
-                              Parent Task
-                          </p>
+
+
                           <div class="mb-0 text-dark-grey">
-                              <a class="text-dark-grey" style="font-weight:bold;" href="#">jndasdnasd</a>
+
+                              <h5 class="text-center">Links</h5>
+
+                              <div class="card bg-light" >
+                                <div class="card-body text-center" style="width:100%">
+
+
+                            @foreach($tasks as $row)
+                            @if($row->link != null)
+
+
+
+                                    <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;" target="_blank" href="{{$row->link}}"><i class="fa-solid fa-link"></i> {{$row->link}}</a></p>
+                              <br>
+                              @endif
+                              @endforeach
+                            </div>
                           </div>
 
 
+                          </div>
+
                         </div>
+
+                      {{--  <div class="col-12 px-0 pb-3 d-lg-flex d-md-flex d-block">
+
+
+                          <div class="mb-0 text-dark-grey">
+
+                              <h5 class="text-center">Tables</h5>
+                              <div class="card bg-light" style="width:655%">
+                                <div class="card-body text-center" >
+
+                            @foreach($tasks as $row)
+                            @if($row->table != null)
+
+                                  <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;"> {!!$row->table!!}</a></p>
+                              @endif
+                              @endforeach
+                              </div>
+                              </div>
+
+                          </div>
+
+                        </div>
+                        <div class="col-12 px-0 pb-3 d-lg-flex d-md-flex d-block">
+
+
+                          <div class="mb-0 text-dark-grey">
+
+                              <h5 class="text-center">Lists</h5>
+
+                              <div class="card bg-light" style="width:655%">
+                                <div class="card-body text-center" >
+
+
+                            @foreach($tasks as $row)
+                            @if($row->list != null)
+
+
+
+                                    <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;"> {!!$row->link!!}</a></p>
+                              <br>
+                              @endif
+                              @endforeach
+                            </div>
+                          </div>
+
+
+                          </div>
+
+                        </div> --}}
+                        <div class="col-12 px-0 pb-3 d-lg-flex d-md-flex d-block">
+
+
+                          <div class="mb-0 text-dark-grey">
+
+                              <h5 class="text-center">Texts</h5>
+
+                              <div class="card bg-light" >
+                                <div class="card-body text-center" style="width:100%">
+
+
+                            @foreach($tasks as $row)
+                            @if($row->text != null)
+
+
+
+                                    <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;"> {!!$row->text!!}</a></p>
+                              <br>
+                              @endif
+                              @endforeach
+                            </div>
+                          </div>
+
+
+                          </div>
+
+                        </div>
+                        <div class="col-12 px-0 pb-3 d-lg-flex d-md-flex d-block">
+
+
+                          <div class="mb-0 text-dark-grey">
+
+                              <h5 class="text-center">Attachment</h5>
+
+
+
+
+
+                            @foreach($tasks as $row)
+                            @if($row->attach != null)
+                            <div class="card-body" style="width:100%">
+
+                             <img class="card-img-top" src="{{asset('storage/TaskSubmission/'.$row->attach)}}" width="300" height="150" alt="Card image">
+
+
+
+                               </div>
+
+                              @endif
+                              @endforeach
+
+
+
+                          </div>
+
+                        </div>
+
+
+
                     </div>
                 </div>
             </div>
+            @if($tasks == null)
 
             <x-cards.no-record icon="history" :message="__('messages.noRecordFound')" />
+            @endif
 
 
     </div>
