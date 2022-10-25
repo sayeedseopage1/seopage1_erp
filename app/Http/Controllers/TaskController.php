@@ -78,6 +78,8 @@ class TaskController extends AccountBaseController
     }
     public function TaskReview(Request $request)
     {
+      $order= TaskSubmission::orderBy('id','desc')->where('user_id',$request->user_id)->where('task_id',$request->id)->first();
+
       if ($request->table != null || $request->list != null || $request->list != null) {
         $task_submit= new TaskSubmission();
         $task_submit->task_id= $request->id;
@@ -86,6 +88,11 @@ class TaskController extends AccountBaseController
         $task_submit->table=$request->table;
         $task_submit->list=$request->list;
         $task_submit->text=$request->text;
+        if ($order == null) {
+          $task_submit->submission_no= 1;
+        }else {
+            $task_submit->submission_no= $order->submission_no+1;
+        }
         $task_submit->save();
       }
 
@@ -98,6 +105,11 @@ class TaskController extends AccountBaseController
       $task_submit->user_id= $request->user_id;
 
       $task_submit->link=$lin;
+      if ($order == null) {
+        $task_submit->submission_no= 1;
+      }else {
+          $task_submit->submission_no= $order->submission_no+1;
+      }
 
 
       $task_submit->save();
@@ -129,6 +141,11 @@ class TaskController extends AccountBaseController
         $task_submit->attach= $filename;
         $task_submit->task_id= $request->id;
         $task_submit->user_id= $request->user_id;
+        if ($order == null) {
+          $task_submit->submission_no= 1;
+        }else {
+            $task_submit->submission_no= $order->submission_no+1;
+        }
 
 
       $task_submit->save();
@@ -140,7 +157,7 @@ class TaskController extends AccountBaseController
       $task= Task::find($request->id);
       $task->board_column_id= 6;
       $task->task_status="submitted";
-      //$task->save();
+      $task->save();
       return Redirect::back()->with('messages.taskUpdatedSuccessfully');
 
     }
@@ -890,6 +907,9 @@ class TaskController extends AccountBaseController
                 break;
         case 'history':
             $this->tab = 'tasks.ajax.history';
+                break;
+        case 'deliverables':
+            $this->tab = 'tasks.ajax.deliverables';
                 break;
         case 'time_logs':
             $this->tab = 'tasks.ajax.timelogs';

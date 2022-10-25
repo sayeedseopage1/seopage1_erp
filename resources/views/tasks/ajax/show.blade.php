@@ -416,6 +416,11 @@ $changeStatusPermission = user()->permission('change_status');
                                     :link="route('tasks.show', $task->id).'?view=history'">@lang('modules.tasks.history')
                                 </x-tab-item>
                             @endif
+                            @if (($taskSettings->history == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                                <x-tab-item class="ajax-tab" :active="(request('view') === 'deliverables')"
+                                    :link="route('tasks.show', $task->id).'?view=deliverables'">@lang('Deliverables')
+                                </x-tab-item>
+                            @endif
                         </x-tab-section>
 
 
@@ -430,7 +435,7 @@ $changeStatusPermission = user()->permission('change_status');
                 </div>
                 <!-- TASK TABS END -->
             @endif
-            
+
 
 
 
