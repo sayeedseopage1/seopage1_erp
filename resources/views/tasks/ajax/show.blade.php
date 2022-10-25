@@ -52,23 +52,44 @@ $changeStatusPermission = user()->permission('change_status');
                                 @endif
                             @endif
 
-
+                            @if($task->board_column_id != 6)
                             @if ($task->boardColumn->slug != 'completed' && !is_null($task->is_task_user))
-                                @if (is_null($task->userActiveTimer))
-                                @if($task->board_column_id != 6)
-                                <div class="row">
-                                  <div class="mr-1">
-                                    <x-forms.button-secondary id="start-task-timer" icon="play">
-                                        @lang('modules.timeLogs.startTimer')
-                                    </x-forms.button-secondary>
-                                  </div>
-                                  <div class="mr-1">
+                                  @if (is_null($task->userActiveTimer))
+                                      <x-forms.button-secondary id="start-task-timer" icon="play">
+                                          @lang('modules.timeLogs.startTimer')
+                                      </x-forms.button-secondary>
+                                  @elseif (!is_null($task->userActiveTimer))
+
+                                      <span class="border p-2 rounded mr-2 bg-light"><i class="fa fa-clock mr-1"></i><span id="active-task-timer">{{ $task->userActiveTimer->timer }}</span></span>
+
+                                      @if (is_null($task->userActiveTimer->activeBreak))
+                                          <x-forms.button-secondary icon="pause-circle" data-time-id="{{ $task->userActiveTimer->id }}" id="pause-timer-btn" class="mr-2">@lang('modules.timeLogs.pauseTimer')</x-forms.button-secondary>
+
+                                          <x-forms.button-secondary data-time-id="{{ $task->userActiveTimer->id }}"
+                                              id="stop-task-timer" icon="stop-circle">
+                                              @lang('modules.timeLogs.stopTimer')
+                                          </x-forms.button-secondary>
+                                      @else
+                                          <x-forms.button-secondary id="resume-timer-btn" icon="play-circle"
+                                          data-time-id="{{ $task->userActiveTimer->activeBreak->id }}">@lang('modules.timeLogs.resumeTimer')</x-forms.button-secondary>
+                                      @endif
+
+                                  @endif
+                              @endif
+                                 @if(Auth::user()->role_id == 5)
+
+
+
+
+                                  @if($task->status != "completed")
+
 
                                         <button class="btn btn-secondary" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
-                                          </div>
-                                          <div class="">
+
+                                          @endif
+
                                             <?php
-                                              $extension=App\Models\TaskTimeExtension::orderBy('id','desc')->where('user_id',Auth::id())->first();
+                                              $extension=App\Models\TaskTimeExtension::orderBy('id','desc')->where('task_id',$task->id)->where('user_id',Auth::id())->first();
                                              ?>
                                              @if($extension == null)
                                             <button class="btn btn-secondary" data-toggle="modal" data-target="#timextension"><i class="fa-solid fa-plus"></i> Request Time Extension</button>
@@ -76,7 +97,7 @@ $changeStatusPermission = user()->permission('change_status');
 
 
                                             @endif
-                                  </div>
+
 
 
 
@@ -85,9 +106,16 @@ $changeStatusPermission = user()->permission('change_status');
 
 
 
-                                </div>
 
-                                @if($extension->status == 'pending' || $extension->status != 'approved')
+                                <?php
+
+
+                                  $extension_status=App\Models\TaskTimeExtension::orderBy('id','desc')->where('task_id',$task->id)->first();
+                                     ?>
+
+
+                                     @if($extension_status != null)
+                                @if($extension_status->status == 'pending' || $extension->status != 'approved')
 
                                 <!-- <button class="btn btn-primary" ><i class="fa-solid fa-check"></i> Submitted for Extension</button> -->
                                 <div class="d-flex justify-content-center float-right">
@@ -96,25 +124,11 @@ $changeStatusPermission = user()->permission('change_status');
                               <h4>  <span class="badge badge-success">Submitted for Extension</span></h4>
                                 </div>
                                 @endif
-
-                                @elseif (!is_null($task->userActiveTimer))
-
-                                    <span class="border p-2 rounded mr-2 bg-light"><i class="fa fa-clock mr-1"></i><span id="active-task-timer">{{ $task->userActiveTimer->timer }}</span></span>
-
-                                    @if (is_null($task->userActiveTimer->activeBreak))
-                                        <x-forms.button-secondary icon="pause-circle" data-time-id="{{ $task->userActiveTimer->id }}" id="pause-timer-btn" class="mr-2">@lang('modules.timeLogs.pauseTimer')</x-forms.button-secondary>
-
-                                        <x-forms.button-secondary data-time-id="{{ $task->userActiveTimer->id }}"
-                                            id="stop-task-timer" icon="stop-circle">
-                                            @lang('modules.timeLogs.stopTimer')
-                                        </x-forms.button-secondary>
-                                    @else
-                                        <x-forms.button-secondary id="resume-timer-btn" icon="play-circle"
-                                        data-time-id="{{ $task->userActiveTimer->activeBreak->id }}">@lang('modules.timeLogs.resumeTimer')</x-forms.button-secondary>
-                                    @endif
-                                    @endif
-
                                 @endif
+                                @endif
+
+
+
                             @endif
                         </div>
 
@@ -1108,5 +1122,6 @@ $changeStatusPermission = user()->permission('change_status');
 
             init(RIGHT_MODAL);
         });
+
     </script>
 </div>

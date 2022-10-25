@@ -290,6 +290,7 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
 @push('scripts')
     @include('sections.datatable_js')
 
+
     <script>
         $('#allTasks-table').on('preXhr.dt', function(e, settings, data) {
 
@@ -663,4 +664,5 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
 
 
     </script>
+
 @endpush

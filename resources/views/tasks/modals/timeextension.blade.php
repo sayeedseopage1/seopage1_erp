@@ -1,7 +1,5 @@
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
-    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
+
 
 <!------ Include the above in your HEAD tag ---------->
 
@@ -24,7 +22,9 @@
 
         <div class="form-group">
         <label for="exampleFormControlInput1">Extension Date</label>
-         <input name="due_date" value="{{\Carbon\Carbon::now()}}" id="datepicker" width="100%" />
+         <input type="date" class="form-control form-control-lg" name="due_date"  id="datepicker" width="100%" />
+
+
         </div>
         </div>
         <div class="col-md-12">
@@ -45,8 +45,22 @@
     </div>
   </div>
 </div>
-<script>
-        $('#datepicker').datepicker({
-            uiLibrary: 'bootstrap4'
-        });
-    </script>
+@push('scripts')
+<script type="text/javascript">
+const dp1 = datepicker('#due_date_ex', {
+    position: 'bl',
+    onSelect: (instance, date) => {
+        if (typeof dp2.dateSelected !== 'undefined' && dp2.dateSelected.getTime() < date
+            .getTime()) {
+            dp2.setDate(date, true)
+        }
+        if (typeof dp2.dateSelected === 'undefined') {
+            dp2.setDate(date, true)
+        }
+        dp2.setMin(date);
+    },
+    ...datepickerConfig
+});
+</script>
+
+@endpush

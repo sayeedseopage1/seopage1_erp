@@ -196,12 +196,13 @@ class TaskController extends AccountBaseController
     }
     public function TaskExtension(Request $request)
     {
+      $date= date('Y-m-d', strtotime($request->due_date));
+
+
       $task= new TaskTimeExtension();
       $task->user_id=$request->user_id;
       $task->task_id=$request->task_id;
-      $task->due_date=\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $request->due_date)
-
-                      ->format('Y-m-d');
+      $task->due_date=$date;
       $task->description=$request->description;
       $task->save();
 
