@@ -92,7 +92,7 @@ $user= App\Models\User::where('id',$user_id->user_id)->first();
 
 
 
-                                    <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;"> {!!$row->link!!}</a></p>
+                                    <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;"> {!!$row->list!!}</a></p>
                               <br>
                               @endif
                               @endforeach
@@ -144,8 +144,9 @@ $user= App\Models\User::where('id',$user_id->user_id)->first();
                             @foreach($tasks as $row)
                             @if($row->attach != null)
                             <div class="card-body" style="width:100%">
+                              <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;" target="_blank" href="{{asset('storage/TaskSubmission/'.$row->attach)}}"><i class="fa-solid fa-link"></i> {{$row->attach}}</a></p>
 
-                             <img class="card-img-top" src="{{asset('storage/TaskSubmission/'.$row->attach)}}" width="300" height="150" alt="Card image">
+                             <!-- <img class="card-img-top" src="{{asset('storage/TaskSubmission/'.$row->attach)}}" width="300" height="150" alt="Card image"> -->
 
 
 

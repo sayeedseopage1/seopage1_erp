@@ -27,6 +27,8 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                 </div>
             </div>
 
+              
+
             <x-form id="save-subtask-data-form" class="d-none">
                 <input type="hidden" name="task_id" value="{{ $task->id }}">
                 <div class="row">
@@ -52,7 +54,9 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                             <x-forms.input-group>
                                 <select class="form-control select-picker" name="user_id"
                                     id="subTaskAssignee" data-live-search="true">
-
+                                    <?php
+                                    $task_user=App\Models\TaskUser::where('task_id',$task->id)->get();
+                                     ?>
 
                                     @foreach ($task->users as $item)
                                     <?php
