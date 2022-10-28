@@ -33,27 +33,29 @@ $user= App\Models\User::where('id',$user_id->user_id)->first();
                           <div class="mb-0 text-dark-grey">
 
                               <h5 class="text-center">Links</h5>
+                              @foreach($tasks as $row)
+                              @if($row->link != null)
 
                               <div class="card bg-light" >
-                                <div class="card-body text-center" style="width:100%">
+                                <div class="card-body text-center">
 
 
-                            @foreach($tasks as $row)
-                            @if($row->link != null)
 
 
 
                                     <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;" target="_blank" href="{{$row->link}}"><i class="fa-solid fa-link"></i> {{$row->link}}</a></p>
                               <br>
-                              @endif
-                              @endforeach
+
                             </div>
                           </div>
+                          @endif
+                          @endforeach
 
 
                           </div>
 
                         </div>
+                        <hr>
 
                       {{--  <div class="col-12 px-0 pb-3 d-lg-flex d-md-flex d-block">
 
@@ -108,34 +110,36 @@ $user= App\Models\User::where('id',$user_id->user_id)->first();
 
                           <div class="mb-0 text-dark-grey">
 
-                              <h5 class="text-center">Texts</h5>
-
+                              <h5 class="">Description</h5>
+                              @foreach($tasks as $row)
+                              @if($row->text != null)
                               <div class="card bg-light" >
-                                <div class="card-body text-center" style="width:100%">
-
-
-                            @foreach($tasks as $row)
-                            @if($row->text != null)
+                                <div class="card-body text-center">
 
 
 
-                                    <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;"> {!!$row->text!!}</a></p>
+
+
+
+                                    <p class="card-text">  {!!$row->text!!}</p>
                               <br>
-                              @endif
-                              @endforeach
+
                             </div>
                           </div>
+                          @endif
+                          @endforeach
 
 
                           </div>
 
                         </div>
+                        <hr>
                         <div class="col-12 px-0 pb-3 d-lg-flex d-md-flex d-block">
 
 
                           <div class="mb-0 text-dark-grey">
 
-                              <h5 class="text-center">Attachment</h5>
+                              <h5 class="">Attachment</h5>
 
 
 

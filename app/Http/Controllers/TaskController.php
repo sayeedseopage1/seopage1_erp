@@ -80,13 +80,13 @@ class TaskController extends AccountBaseController
     {
       $order= TaskSubmission::orderBy('id','desc')->where('user_id',$request->user_id)->where('task_id',$request->id)->first();
 
-      if ($request->table != null || $request->list != null || $request->list != null) {
+      if ($request->text != null) {
         $task_submit= new TaskSubmission();
         $task_submit->task_id= $request->id;
         $task_submit->user_id= $request->user_id;
 
-        $task_submit->table=$request->table;
-        $task_submit->list=$request->list;
+        //$task_submit->table=$request->table;
+        //$task_submit->list=$request->list;
         $task_submit->text=$request->text;
         if ($order == null) {
           $task_submit->submission_no= 1;
@@ -213,6 +213,7 @@ class TaskController extends AccountBaseController
       $task_e= TaskTimeExtension::find($request->id);
       //dd($task);
       $task_e->updated_by=$request->added_by;
+      $task_e->due_date= $request->due_date;
 
       $task_e->status="approved";
 
@@ -1017,6 +1018,7 @@ class TaskController extends AccountBaseController
 
     public function members($id)
     {
+    
         $options = '<option value="">--</option>';
 
         $members = Task::with('activeUsers')->findOrFail($id);

@@ -9,10 +9,14 @@
         <h5 class="modal-title" id="exampleModalLabel">Request of Time Extension</h5>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <form  action="{{route('accept-task-extension')}}" method="post">
         @csrf
         <?php
         $task_extension= App\Models\TaskTimeExtension::where('task_id',$task->id)->first();
+        $date= $task_extension->due_date;
+        //dd($date);
+
          ?>
         <input type="hidden" name="task_id" value="{{$task->id}}">
         <input type="hidden" name="added_by" value="{{Auth::user()->id}}">
@@ -20,6 +24,26 @@
 
 
       <div class="modal-body">
+        <div class="col-md-12">
+
+
+        <div class="form-group">
+        <label for="exampleFormControlInput1">Original Due Date</label>
+         <input type="text" class="form-control form-control-lg" value="{{$task->due_date->format('m/d/Y')}}" readonly  id="datepicker" width="100%" />
+
+
+        </div>
+        </div>
+        <div class="col-md-12">
+
+
+        <div class="form-group">
+        <label for="exampleFormControlInput1">Request Date</label>
+         <input type="date" class="form-control form-control-lg" value="{{$date}}" name="due_date"   width="100%" />
+
+
+        </div>
+        </div>
 
         <div class="col-md-12">
           <div class="form-group">

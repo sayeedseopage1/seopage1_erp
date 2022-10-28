@@ -98,18 +98,43 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                         @endphp
 
                                         @foreach ($task->users as $item)
+
                                             @if ($item->id == $employee->id)
                                                 @php
                                                     $selected = 'selected';
                                                 @endphp
                                             @endif
                                         @endforeach
+                                        <?php
+                                        $task_id= App\Models\TaskUser::where('user_id',$employee->id)->first();
+
+                                        if($task_id != null)
+                                        {
+                                            $task_s= App\Models\Task::where('id',$task_id->task_id)->first();
+                                            if ($task_s != null && $task_s->status != 'completed') {
+                                              // $date1 = new DateTime($task_s['due_date']);
+                                              // $date2 = new DateTime(Carbon\Carbon::now()->addDay(1));
+                                              // $days  = $date2->diff($date1)->format('%a');
+
+                                                  $d_data= "Busy Until ".$task_s->due_date;
+
+
+                                            }else {
+                                                  $d_data=  "Open to Work";
+                                            }
+
+                                        }else {
+                                          $d_data=  "Open to Work";
+                                        }
+                                      // dd($task_id->task_id);
+
+                                         ?>
                                         <option {{ $selected }} data-content="<span class='badge badge-pill badge-light border'>
                                                 <div class='d-inline-block mr-1'><img
                                                         class='taskEmployeeImg rounded-circle'
                                                         src='{{ $employee->image_url }}'></div>
-                                                {{ ucfirst($employee->name) }}
-                                            </span>" value="{{ $employee->id }}">{{ mb_ucwords($employee->name) }}
+                                                {{ ucfirst($employee->name) }} {{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}
+                                            </span>" value="{{ $employee->id }}">{{ mb_ucwords($employee->name) }} {{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -123,6 +148,68 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                             </x-forms.input-group>
                         </div>
                     </div>
+                    {{--<div class="col-md-12 col-lg-6">
+                        <div class="form-group my-3">
+                            <x-forms.label fieldId="selectAssignee2" :fieldLabel="__('Task Observer')">
+                            </x-forms.label>
+                            <x-forms.input-group>
+                                <select class="form-control multiple-users" multiple name="observer_id[]"
+                                    id="selectAssignee2" data-live-search="true" data-size="8">
+                                    @foreach ($employees as $employee)
+                                        @php
+                                            $selected = '';
+                                        @endphp
+
+                                        @foreach ($task->users as $item)
+                                            @if ($item->id == $employee->id)
+                                                @php
+                                                    $selected = 'selected';
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                        <?php
+                                        $task_id= App\Models\TaskUser::where('user_id',$employee->id)->first();
+
+                                        if($task_id != null)
+                                        {
+                                            $task_s= App\Models\Task::where('id',$task_id->task_id)->first();
+                                            if ($task_s != null && $task_s->status != 'completed') {
+                                              // $date1 = new DateTime($task_s['due_date']);
+                                              // $date2 = new DateTime(Carbon\Carbon::now()->addDay(1));
+                                              // $days  = $date2->diff($date1)->format('%a');
+
+                                                  $d_data= "Busy Until ".$task_s->due_date;
+
+
+                                            }else {
+                                                  $d_data=  "Open to Work";
+                                            }
+
+                                        }else {
+                                          $d_data=  "Open to Work";
+                                        }
+                                      // dd($task_id->task_id);
+
+                                         ?>
+                                        <option {{ $selected }} data-content="<span class='badge badge-pill badge-light border'>
+                                                <div class='d-inline-block mr-1'><img
+                                                        class='taskEmployeeImg rounded-circle'
+                                                        src='{{ $employee->image_url }}'></div>
+                                                {{ ucfirst($employee->name) }} {{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}
+                                            </span>" value="{{ $employee->id }}">{{ mb_ucwords($employee->name) }} {{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                @if ($addEmployeePermission == 'all' || $addEmployeePermission == 'added')
+                                    <x-slot name="append">
+                                        <button id="add-employee" type="button"
+                                            class="btn btn-outline-secondary border-grey">@lang('app.add')</button>
+                                    </x-slot>
+                                @endif
+                            </x-forms.input-group>
+                        </div>
+                    </div> --}}
 
                     <div class="col-md-12">
                         <div class="form-group my-3">
@@ -526,6 +613,17 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                 return selected + " {{ __('app.membersSelected') }} ";
             }
         });
+        $("#selectAssignee2").selectpicker({
+            actionsBox: true,
+            selectAllText: "{{ __('modules.permission.selectAll') }}",
+            deselectAllText: "{{ __('modules.permission.deselectAll') }}",
+            multipleSeparator: " ",
+            selectedTextFormat: "count > 8",
+            countSelectedText: function(selected, total) {
+                return selected + " {{ __('app.membersSelected') }} ";
+            }
+        });
+
 
         quillImageLoad('#description');
 
@@ -662,6 +760,27 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                 }
             })
         });
+        $('#project-id').change(function() {
+            let id = $(this).val();
+            if (id === '') {
+                id = 0;
+            }
+            let url = "{{ route('projects.members', ':id') }}";
+            url = url.replace(':id', id);
+            $.easyAjax({
+                url: url,
+                type: "GET",
+                container: '#save-task-data-form',
+                blockUI: true,
+                redirect: true,
+                success: function (data) {
+                    $('#selectAssignee2').html(data.data);
+                    $('.projectId').text(data.unique_id);
+                    $('#selectAssignee2').selectpicker('refresh');
+                }
+            })
+        });
+
 
         $('#save-task-data-form').on('change', '#project_id', function () {
             let id = $(this).val();

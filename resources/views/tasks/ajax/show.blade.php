@@ -91,12 +91,14 @@ $changeStatusPermission = user()->permission('change_status');
                                             <?php
                                               $extension=App\Models\TaskTimeExtension::orderBy('id','desc')->where('task_id',$task->id)->where('user_id',Auth::id())->first();
                                              ?>
+                                                 @if($task->status != "completed")
                                              @if($extension == null)
                                             <button class="btn btn-secondary" data-toggle="modal" data-target="#timextension"><i class="fa-solid fa-plus"></i> Request Time Extension</button>
 
 
 
                                             @endif
+                                                @endif
 
 
 
@@ -280,7 +282,7 @@ $changeStatusPermission = user()->permission('change_status');
                         @endif
                     @endif
 
-                    @if (($taskSettings->label == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                  {{--  @if (($taskSettings->label == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                         <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                             <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                                 @lang('app.label')</p>
@@ -297,7 +299,7 @@ $changeStatusPermission = user()->permission('change_status');
 
 
                         </div>
-                    @endif
+                    @endif --}}
 
                     @if (in_array('gitlab', user_modules()) && isset($gitlabIssue))
                         <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">

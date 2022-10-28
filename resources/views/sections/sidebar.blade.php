@@ -323,7 +323,7 @@
                 @endif
 
                 <!-- NAV ITEM - NOTICES -->
-            {{--     @if (in_array('notices', user_modules()) && $sidebarUserPermissions['view_notice'] != 5 && $sidebarUserPermissions['view_notice'] != 'none')
+               @if (in_array('notices', user_modules()) && $sidebarUserPermissions['view_notice'] != 5 && $sidebarUserPermissions['view_notice'] != 'none')
                     <x-menu-item icon="clipboard" :text="__('app.menu.noticeBoard')" :link="route('notices.index')">
                         <x-slot name="iconPath">
                             <path
@@ -332,7 +332,7 @@
                                 d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
                         </x-slot>
                     </x-menu-item>
-                @endif  --}}
+                @endif
 
                 <!-- Knowledge base -->
             {{--   @if (in_array('knowledgebase', user_modules()) && isset($sidebarUserPermissions['view_knowledgebase']) && $sidebarUserPermissions['view_knowledgebase'] != 5)
@@ -357,7 +357,7 @@
                 <!-- Knowledge base -->
 
                 <!-- NAV ITEM - NOTES -->
-          {{--}      @if (in_array('client', user_roles()))
+          {{--      @if (in_array('client', user_roles()))
                     <x-menu-item icon="journal-text" :text="__('app.menu.notes')" :link="route('client-notes.index')">
                         <x-slot name="iconPath">
                             <path
@@ -395,29 +395,29 @@
                                     :text="__('app.menu.timeLogReport')" />
                             @endif
 
-                          {{-- @if ($sidebarUserPermissions['view_finance_report'] != 5 && $sidebarUserPermissions['view_finance_report'] != 'none' && in_array('payments', user_modules()))
+                           @if ($sidebarUserPermissions['view_finance_report'] != 5 && $sidebarUserPermissions['view_finance_report'] != 'none' && in_array('payments', user_modules()))
                                 <x-sub-menu-item :link="route('finance-report.index')"
                                     :text="__('app.menu.financeReport')" />
-                            @endif --}}
+                            @endif
 
-                        {{--    @if ($sidebarUserPermissions['view_income_expense_report'] == 4 && $sidebarUserPermissions['view_income_expense_report'] != 'none' && in_array('expenses', user_modules()))
+                            @if ($sidebarUserPermissions['view_income_expense_report'] == 4 && $sidebarUserPermissions['view_income_expense_report'] != 'none' && in_array('expenses', user_modules()))
                                 <x-sub-menu-item :link="route('income-expense-report.index')"
                                     :text="__('app.menu.incomeVsExpenseReport')" />
-                            @endif --}}
+                            @endif
 
-                        {{--    @if ($sidebarUserPermissions['view_leave_report'] == 4 && $sidebarUserPermissions['view_leave_report'] != 'none' && in_array('leaves', user_modules()))
+                            @if ($sidebarUserPermissions['view_leave_report'] == 4 && $sidebarUserPermissions['view_leave_report'] != 'none' && in_array('leaves', user_modules()))
                                 <x-sub-menu-item :link="route('leave-report.index')"
                                     :text="__('app.menu.leaveReport')" />
-                            @endif --}}
+                            @endif
 
-                        {{--    @if ($sidebarUserPermissions['view_attendance_report'] == 4 && $sidebarUserPermissions['view_attendance_report'] != 'none' && in_array('attendance', user_modules()))
+                         @if ($sidebarUserPermissions['view_attendance_report'] == 4 && $sidebarUserPermissions['view_attendance_report'] != 'none' && in_array('attendance', user_modules()))
                                 <x-sub-menu-item :link="route('attendance-report.index')"
                                     :text="__('app.menu.attendanceReport')" />
-                            @endif --}}
-                        {{--    @if (isset($sidebarUserPermissions['view_expense_report']) && $sidebarUserPermissions['view_expense_report'] == 4 && $sidebarUserPermissions['view_expense_report'] != 'none' && in_array('expenses', user_modules()))
+                            @endif
+                           @if (isset($sidebarUserPermissions['view_expense_report']) && $sidebarUserPermissions['view_expense_report'] == 4 && $sidebarUserPermissions['view_expense_report'] != 'none' && in_array('expenses', user_modules()))
                                 <x-sub-menu-item :link="route('expense-report.index')"
                                     :text="__('app.menu.expenseReport')" />
-                            @endif --}}
+                            @endif
                         </div>
                     </x-menu-item>
                 @endif

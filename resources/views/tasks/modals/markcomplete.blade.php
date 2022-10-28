@@ -25,10 +25,10 @@
 
             <x-forms.select fieldId="submission_type" fieldName="" :fieldLabel="__('Choose From Below')"
                 search="true">
-                <option value="table" >Create Table</option>
+              {{--<option value="table" >Create Table</option>--}}
                 <option value="link">Insert Link</option>
                 <option value="text">Add Text</option>
-                <option value="list">Add List</option>
+              {{--  <option value="list">Add List</option> --}}
                 <option value="attach">Attach File</option>
             </x-forms.select>
 
@@ -37,7 +37,7 @@
 
 
 
-        <div class="container" id="submission_type_table">
+      {{--  <div class="container" id="submission_type_table">
       	<div class="row flex-column">
 
 
@@ -52,7 +52,7 @@
         </div>
 
       	</div>
-      </div>
+      </div> --}}
 
       <!-- <div class="" id="submission_type_link">
                 <x-forms.text :fieldLabel="__('Include Links You have Worked On')" fieldName="submission"
@@ -71,7 +71,7 @@
                   </div>
                   <input type="text"
                     class="form-control m-input" name="link[]">
-                        <input type="hidden" name="submission_type" value="link">
+
                 </div>
               </div>
 
@@ -96,14 +96,14 @@
             </div>
             <div class="">
                 <textarea id="text" name="text" rows="8" cols="60"></textarea>
-                    <input type="hidden" name="submission_type" value="text">
+
 
             </div>
 
             </div>
             </div>
 
-            <div class="container" id="submission_type_list">
+          {{--<div class="container" id="submission_type_list">
             <div class="row flex-column">
 
 
@@ -113,12 +113,12 @@
             </div>
             <div class="">
                     <textarea id="list" name="list" rows="8" cols="60"></textarea>
-                        <input type="hidden" name="submission_type" value="list">
+
 
             </div>
 
             </div>
-            </div>
+            </div> --}}  
 
             <!-- <div class="" id="submission_type_attachment">
               Attach File or Images (If Needed)
@@ -141,7 +141,7 @@
     							</div>
     							<input type="file"
     								class="form-control m-input" name="file[]" id="attach">
-                        <input type="hidden" name="submission_type" value="attach">
+
     						</div>
     					</div>
 

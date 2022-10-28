@@ -41,6 +41,7 @@ class SubTaskController extends AccountBaseController
      */
     public function store(StoreSubTask $request)
     {
+      //dd($request);
         $this->addPermission = user()->permission('add_sub_tasks');
         $task = Task::findOrFail($request->task_id);
         $taskUsers = $task->users->pluck('id')->toArray();
@@ -75,8 +76,21 @@ class SubTaskController extends AccountBaseController
             $task_s->due_date = Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
         }
       $task_s->project_id= $task_id->project_id;
-      $task_s->task_category_id=$task_id->task_category_id;
-      $task_s->priority= $task_id->priority;
+      $task_s->task_category_id=$request->task_category_id;
+
+      $task_s->priority= $request->priority;
+      $task_s->is_private = $request->has('is_private') ? 1 : 0;
+      $task_s->billable = $request->has('billable') && $request->billable ? 1 : 0;
+      $task_s->estimate_hours = $request->estimate_hours;
+      $task_s->estimate_minutes = $request->estimate_minutes;
+      $task_s->repeat = $request->repeat ? 1 : 0;
+
+      if ($request->has('repeat')) {
+          $task_s->repeat_count = $request->repeat_count;
+          $task_s->repeat_type = $request->repeat_type;
+          $task_s->repeat_cycles = $request->repeat_cycles;
+      }
+
 
         $task_s->board_column_id = 2;
         $task_s->task_status= "pending";
