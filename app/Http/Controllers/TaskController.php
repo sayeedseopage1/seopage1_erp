@@ -448,10 +448,10 @@ class TaskController extends AccountBaseController
         if ($request->has('dependent') && $request->has('dependent_task_id') && $request->dependent_task_id != '') {
             $dependentTask = Task::findOrFail($request->dependent_task_id);
 
-            if (!is_null($dependentTask->due_date) && !is_null($dueDate) && $dependentTask->due_date->greaterThan($dueDate)) {
-                /* @phpstan-ignore-line */
-                return Reply::error(__('messages.taskDependentDate'));
-            }
+            // if (!is_null($dependentTask->due_date) && !is_null($dueDate) && $dependentTask->due_date->greaterThan($dueDate)) {
+            //     /* @phpstan-ignore-line */
+            //     return Reply::error(__('messages.taskDependentDate'));
+            // }
 
             $task->dependent_task_id = $request->dependent_task_id;
         }
@@ -755,9 +755,9 @@ class TaskController extends AccountBaseController
         if ($request->has('dependent') && $request->has('dependent_task_id') && $request->dependent_task_id != '') {
             $dependentTask = Task::findOrFail($request->dependent_task_id);
 
-            if (!is_null($dependentTask->due_date) && !is_null($dueDate) && $dependentTask->due_date->greaterThan($dueDate)) {
-                return Reply::error(__('messages.taskDependentDate'));
-            }
+            // if (!is_null($dependentTask->due_date) && !is_null($dueDate) && $dependentTask->due_date->greaterThan($dueDate)) {
+            //     return Reply::error(__('messages.taskDependentDate'));
+            // }
 
             $task->dependent_task_id = $request->dependent_task_id;
         }
@@ -1018,7 +1018,7 @@ class TaskController extends AccountBaseController
 
     public function members($id)
     {
-    
+
         $options = '<option value="">--</option>';
 
         $members = Task::with('activeUsers')->findOrFail($id);
