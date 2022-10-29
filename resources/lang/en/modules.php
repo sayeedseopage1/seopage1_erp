@@ -98,6 +98,7 @@ return array(
     'lateMark' => 'Late Mark',
     'totalProject' => 'Total Projects',
     'totalOverdueProject' => 'Total Overdue Project',
+    'totalCanceledProject' => 'Total Canceled Project',
     'statusWiseProject' => 'Status Wise Projects',
     'pendingMilestone' => 'Pending Milestone',
     'totalUnassignedTicket' => 'Total Unassigned Ticket',

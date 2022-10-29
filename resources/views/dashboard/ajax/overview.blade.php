@@ -5,7 +5,7 @@ $projects= App\Models\PMProject::orderBy('id','asc')->get();
 
  ?>
 
-<div class="d-flex flex-column w-tables rounded mt-3 bg-white">
+{{--<div class="d-flex flex-column w-tables rounded mt-3 bg-white">
   <table id="dealtable"  class="table table-striped" style="width:100%">
 <thead>
     <tr>
@@ -82,6 +82,7 @@ $projects= App\Models\PMProject::orderBy('id','asc')->get();
 
 
 </div>
+--}}
 <hr>
 <div class="row mt-3">
     @if (in_array('clients', $modules) && in_array('total_clients', $activeWidgets))

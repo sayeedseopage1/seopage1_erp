@@ -1,6 +1,13 @@
 <script src="{{ asset('vendor/jquery/frappe-charts.min.iife.js') }}"></script>
 <script src="{{ asset('vendor/jquery/Chart.min.js') }}"></script>
 
+<?php
+$lead_convert= App\Models\Lead::where('deal_status',1)->count();
+//dd($lead_convert);
+$total_won_deals= App\Models\Deal::count();
+$total_deals= $lead_convert+ $total_won_deals;
+
+ ?>
 
 <div class="row">
     @if (in_array('clients', $modules) && in_array('total_clients', $activeWidgets))
@@ -31,8 +38,8 @@
     @if (in_array('contracts', $modules) && in_array('total_contracts_generated', $activeWidgets))
         <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
             <a href="javascript:;" id="totalContractsGenerated">
-                <x-cards.widget :title="__('modules.dashboard.totalContractsGenerated')"
-                    :value="$totalContractsGenerated" icon="file-contract" />
+                <x-cards.widget :title="__('Total Deals')"
+                    :value="$total_deals" icon="file-contract" />
             </a>
         </div>
     @endif
@@ -40,7 +47,7 @@
     @if (in_array('contracts', $modules) && in_array('total_contracts_signed', $activeWidgets))
         <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
             <a href="javascript:;" id="totalContractsSigned">
-                <x-cards.widget :title="__('modules.dashboard.totalContractsSigned')" :value="$totalContractsSigned"
+                <x-cards.widget :title="__('Total Won Deals')" :value="$totalwondeals"
                     icon="file-signature" />
             </a>
         </div>
@@ -190,7 +197,7 @@
         var dateRange = getDateRange();
         var url = `{{ route('leads.index') }}`;
 
-        string = `?type=client&start=${dateRange.startDate}&end=${dateRange.endDate}`;
+        string = `?deal_status=1&start=${dateRange.startDate}&end=${dateRange.endDate}`;
         url += string;
 
         window.location.href = url;

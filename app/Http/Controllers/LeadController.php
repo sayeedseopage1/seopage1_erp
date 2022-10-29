@@ -316,7 +316,7 @@ class LeadController extends AccountBaseController
     public function storeLead(Request $request)
     {
       //dd(Auth::id());
-
+      //dd($request);
       $lead = new Lead();
       $lead->client_name= $request->client_name;
 
@@ -326,6 +326,8 @@ class LeadController extends AccountBaseController
       $lead->status_id= 1;
       $lead->currency_id= 1;
       $lead->agent_id =Auth::id();
+      $lead->country= $request->country;
+      $lead->note= $request->description;
       $lead->save();
       if ($request->get('custom_fields_data')) {
           $lead->updateCustomFieldData($request->get('custom_fields_data'));

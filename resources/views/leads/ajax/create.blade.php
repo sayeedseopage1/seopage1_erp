@@ -7,7 +7,7 @@ $addLeadSourcesPermission = user()->permission('add_lead_sources');
 $addLeadCategoryPermission = user()->permission('add_lead_category');
 $addLeadNotePermission = user()->permission('add_lead_note');
 @endphp
-
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
 
 <div class="row">
@@ -31,21 +31,41 @@ $addLeadNotePermission = user()->permission('add_lead_note');
 
                <div class="col-lg-4 col-md-6">
                         <x-forms.text :fieldLabel="__('Project Name')" fieldName="client_name"
-                            fieldId="client_name" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" />
+                            fieldId="client_name" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" required />
                     </div>
 
                          <div class="col-lg-4 col-md-6">
                                   <x-forms.text :fieldLabel="__('Project ID')" fieldName="project_id"
-                                      fieldId="project_id" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" />
+                                      fieldId="project_id" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" required />
+                              </div>
+                              <div class="col-lg-4 col-md-6">
+                                  <x-forms.select fieldId="country" :fieldLabel="__('Client Country')" fieldName="country"
+                                      search="true"  fieldRequired="true" required>
+                                      <option value="">--</option>
+                                      @foreach ($countries as $item)
+                                          <option data-tokens="{{ $item->iso3 }}"
+                                              data-content="<span class='flag-icon flag-icon-{{ strtolower($item->iso) }} flag-icon-squared'></span> {{ $item->nicename }}"
+                                              value="{{ $item->nicename }}">{{ $item->nicename }}</option>
+                                      @endforeach
+                                  </x-forms.select>
                               </div>
                               <div class="col-lg-6 col-md-6">
                                        <x-forms.text :fieldLabel="__('Project Link')" fieldName="project_link"
-                                           fieldId="project_link" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" />
+                                           fieldId="project_link" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" required/>
                                    </div>
                                    <div class="col-lg-6 col-md-6">
                                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Project') .' '. __('Budget')"
                                            fieldName="value" fieldId="value" fieldRequired="true"/>
                                    </div>
+                                   @if ($addLeadNotePermission == 'all' || $addLeadNotePermission == 'added' || $addLeadNotePermission == 'both')
+                                   <div class="col-md-12">
+                                     <div class="form-group">
+                                       <label for="exampleFormControlTextarea1">Lead Description <span style="color:red;">*</span></label>
+                                       <textarea name="description" class="form-control" id="description" rows="3" required></textarea>
+                                     </div>
+                                   </div>
+                                   @endif
+
                                    @if (isset($fields) && count($fields) > 0)
                                        @foreach ($fields as $field)
                                            <div class="col-md-12">
@@ -314,8 +334,13 @@ $addLeadNotePermission = user()->permission('add_lead_note');
 
 
                 </div>
+                <div class="col-lg-4 col-md-6">
+                      <button type="submit" class="btn btn-primary">Create Lead</button>
+                </div>
+                <br>
+                <br>
 
-                    <button type="submit" class="btn btn-primary">Create Lead</button>
+
 
 
 
@@ -332,9 +357,13 @@ $addLeadNotePermission = user()->permission('add_lead_note');
     </div>
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
+$(document).ready(function() {
+  $('#description').summernote();
+});
+
 
     var add_lead_note_permission = "{{ $addLeadNotePermission }}";
 

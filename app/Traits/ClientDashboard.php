@@ -14,6 +14,7 @@ use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\Deal;
 
 /**
  *
@@ -47,9 +48,20 @@ trait ClientDashboard
         $this->totalLead = Lead::whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])
             ->count();
 
-        $this->totalLeadConversions = Lead::whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])
-            ->whereNotNull('client_id')
-            ->count();
+        // $this->totalLeadConversions = Lead::whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])
+        //     ->whereNotNull('client_id')
+        //     ->count();
+        $this->totalLeadConversions= Lead::
+                where('deal_status',1)
+                ->where(DB::raw('DATE(updated_at)'), '>=', $startDate)
+                ->where(DB::raw('DATE(updated_at)'), '<=', $endDate)
+                ->count();
+                $this->totalwondeals= Deal::
+
+                          where(DB::raw('DATE(created_at)'), '>=', $startDate)
+                        ->where(DB::raw('DATE(created_at)'), '<=', $endDate)
+                        ->count();
+              //  dd($this->totalLeadConversions);
 
         $this->totalContractsGenerated = Contract::whereBetween(DB::raw('DATE(contracts.`end_date`)'), [$startDate, $endDate])->orWhereBetween(DB::raw('DATE(contracts.`start_date`)'), [$startDate, $endDate])->count();
 

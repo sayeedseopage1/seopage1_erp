@@ -1,7 +1,9 @@
 <script src="{{ asset('vendor/jquery/frappe-charts.min.iife.js') }}"></script>
 <script src="{{ asset('vendor/jquery/Chart.min.js') }}"></script>
 
-
+<?php
+$cancel_project= App\Models\Project::where('status','canceled')->count();
+ ?>
 <div class="row">
     @if (in_array('projects', $modules) && in_array('total_project', $activeWidgets))
         <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
@@ -20,6 +22,15 @@
             </a>
         </div>
     @endif
+
+        <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
+            <a href="javascript:;" id="cancel">
+                <x-cards.widget :title="__('Total Canceled Project')" :value="$totalCanceledProject"
+                    icon="layer-group" />
+            </a>
+        </div>
+
+
 
     @if (in_array('timelogs', $modules) && in_array('total_hours_logged', $activeWidgets))
         <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
@@ -119,8 +130,24 @@
         endDate = encodeURIComponent(endDate);
 
         var url = `{{ route('projects.index') }}`;
+        //console.log(url);
 
         string = `?status=overdue&deadLineStartDate=${startDate}&deadLineEndDate=${endDate}`;
+        url += string;
+
+        window.location.href = url;
+    });
+    $('#cancel').click(function() {
+        var dateRange = $('#datatableRange2').data('daterangepicker');
+        var startDate = dateRange.startDate.format('{{ global_setting()->moment_date_format }}');
+        var endDate = dateRange.endDate.format('{{ global_setting()->moment_date_format }}');
+
+        startDate = encodeURIComponent(startDate);
+        endDate = encodeURIComponent(endDate);
+
+        var url = `{{ route('projects.index') }}`;
+
+        string = `?status=canceled&deadLineStartDate=${startDate}&deadLineEndDate=${endDate}`;
         url += string;
 
         window.location.href = url;

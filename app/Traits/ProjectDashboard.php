@@ -35,6 +35,7 @@ trait ProjectDashboard
         $endDate = $this->endDate->toDateString();
 
         $this->totalProject = Project::whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+        //$this->totalCanceledProject  = Project::where('status','canceled')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
 
         $hoursLogged = ProjectTimeLog::whereDate('start_time', '>=', $startDate)
             ->whereDate('end_time', '<=', $endDate)
@@ -62,6 +63,12 @@ trait ProjectDashboard
             ->where(DB::raw('DATE(deadline)'), '>=', $startDate)
             ->where(DB::raw('DATE(deadline)'), '<=', $endDate)
             ->count();
+        $this->totalCanceledProject= Project::
+                where('status','canceled')
+                ->where(DB::raw('DATE(updated_at)'), '>=', $startDate)
+                ->where(DB::raw('DATE(updated_at)'), '<=', $endDate)
+                ->count();
+
 
         $this->widgets = DashboardWidget::where('dashboard_type', 'admin-project-dashboard')->get();
         $this->activeWidgets = $this->widgets->filter(function ($value, $key) {

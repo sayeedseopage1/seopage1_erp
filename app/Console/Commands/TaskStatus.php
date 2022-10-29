@@ -48,9 +48,10 @@ class TaskStatus extends Command
                 // $date2 = new DateTime(Carbon::now()->addDay(1));
                 // $days  = $date2->diff($date1)->format('%a');
                 // //dd($days);
-                $to = new DateTime($task['due_date']->format('Y-m-d'));
-                $from = new DateTime(Carbon::now()->format('Y-m-d'));
+                $to = new DateTime($task['due_date']?->format('Y-m-d')??'');
+                $from = new DateTime(Carbon::now()?->format('Y-m-d')??'');
                 $days  = $from->diff($to)->format('%a');
+                //$startDate?->format('d/m/Y') ?? '',
 
                 //dd($from,$to);
                 if ($days != 0) {

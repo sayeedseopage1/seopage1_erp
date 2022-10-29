@@ -176,7 +176,12 @@ $addProjectNotePermission = user()->permission('add_project_note');
                                                   if($task_id != null )
                                                   {
                                                       $task= App\Models\Task::where('id',$task_id->task_id)->first();
+                                                      if ($task != null) {
                                                         $d_data= "Busy Until ".$task->due_date;
+                                                      }else {
+                                                      $d_data=  "Open to Work";
+                                                      }
+
                                                   }else {
                                                     $d_data=  "Open to Work";
                                                   }
