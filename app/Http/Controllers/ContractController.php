@@ -294,6 +294,9 @@ class ContractController extends AccountBaseController
                   $pmassign->deal_id=$deal->id;
                   $pmassign->client_id=$user->id;
                 $pmassign->save();
+                $deal_assign= Deal::find($deal->id);
+                $deal_assign->pm_id= $pmassign->pm_id;
+                $deal_assign->save();
               //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find= PMAssign::where('pm_id',$pm_user->pm_id)->first();
                 $pm_project_update=PMAssign::find($pm_project_find->id);
@@ -324,6 +327,9 @@ class ContractController extends AccountBaseController
                     $pmassign->client_id=$user->id;
                 $pmassign->pm_id= $pm_find_id->pm_id;
                 $pmassign->save();
+                $deal_assign= Deal::find($deal->id);
+                $deal_assign->pm_id= $pmassign->pm_id;
+                $deal_assign->save();
               //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find= PMAssign::where('pm_id',$pm_find_id->pm_id)->first();
                 $pm_project_update=PMAssign::find($pm_project_find->id);
@@ -342,6 +348,10 @@ class ContractController extends AccountBaseController
                   $pmassign->client_id=$user->id;
                 $pmassign->pm_id=  $final_id->pm_id;
                 $pmassign->save();
+                $deal_assign= Deal::find($deal->id);
+                $deal_assign->pm_id= $pmassign->pm_id;
+                $deal_assign->save();
+
               //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find= PMAssign::where('pm_id', $final_id->pm_id)->first();
                 $pm_project_update=PMAssign::find($pm_project_find->id);
@@ -654,7 +664,7 @@ class ContractController extends AccountBaseController
       });
       $deal= Deal::where('id',$id)->first();
       $client= ClientForm::where('deal_id',$deal->id)->first();
-    
+
 
 
       return view('contracts.dealurl',compact('deal','client'),$this->data);

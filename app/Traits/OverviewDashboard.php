@@ -15,6 +15,8 @@ use App\Models\UserActivity;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
+
+
 /**
  *
  */
@@ -70,6 +72,7 @@ trait OverviewDashboard
 
         $this->earningChartData = $this->earningChart($startDate, $endDate);
         $this->timlogChartData = $this->timelogChart($startDate, $endDate);
+      
 
         $this->leaves = Leave::with('user', 'type')
             ->where('status', 'pending')
@@ -203,5 +206,6 @@ trait OverviewDashboard
         $data['name'] = __('modules.dashboard.totalHoursLogged');
         return $data;
     }
+
 
 }

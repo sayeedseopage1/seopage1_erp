@@ -41,7 +41,7 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
 
 
                     <div class="col-lg-4 col-md-6">
-                        <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Project') .' '. __('Budget')"
+                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Project') .' '. __('Budget')"
                                         fieldName="value" fieldId="value" :fieldValue="$lead->value" />
                     </div>
 

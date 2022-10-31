@@ -168,6 +168,7 @@ $projects= App\Models\PMProject::orderBy('id','asc')->get();
 </div>
 
 
+
 <div class="row">
     @if (in_array('payments', $modules) && in_array('recent_earnings', $activeWidgets))
         <div class="col-sm-12 col-lg-6 mt-3">

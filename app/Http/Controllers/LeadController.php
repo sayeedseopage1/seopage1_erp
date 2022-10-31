@@ -43,6 +43,7 @@ use App\Models\Contract;
 use App\Models\ContractType;
 use App\Models\DealStage;
 
+
 class LeadController extends AccountBaseController
 {
 
@@ -325,10 +326,16 @@ class LeadController extends AccountBaseController
       $lead->value= $request->value;
       $lead->status_id= 1;
       $lead->currency_id= 1;
-      $lead->agent_id =Auth::id();
+    //  $lead->agent_id =Auth::id();
       $lead->country= $request->country;
       $lead->note= $request->description;
       $lead->save();
+      $lead_agent= new LeadAgent();
+      $lead_agent->user_id= Auth::id();
+      $lead_agent->status= "enabled";
+      $lead_agent->added_by= Auth::id();
+      $lead_agent->last_updated_by= Auth::id();
+      $lead_agent->save();
       if ($request->get('custom_fields_data')) {
           $lead->updateCustomFieldData($request->get('custom_fields_data'));
       }
@@ -349,7 +356,7 @@ class LeadController extends AccountBaseController
       $lead->value= $request->value;
       $lead->status_id= $request->status;
       $lead->currency_id= 1;
-      $lead->agent_id =Auth::id();
+    //  $lead->agent_id =Auth::id();
       $lead->save();
       return redirect('/account/leads/')->with('messages.LeadAddedUpdate');
 

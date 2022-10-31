@@ -89,6 +89,8 @@ trait ClientDashboard
 
         $this->leadStatusChart = $this->leadStatusChart($startDate, $endDate);
         $this->leadSourceChart = $this->leadSourceChart($startDate, $endDate);
+        $this->leadChartData = $this->leadChart($startDate, $endDate);
+        $this->dealChartData = $this->dealChart($startDate, $endDate);
 
         $this->widgets = DashboardWidget::where('dashboard_type', 'admin-client-dashboard')->get();
         $this->activeWidgets = $this->widgets->filter(function ($value, $key) {
@@ -220,6 +222,19 @@ trait ClientDashboard
         $data['values'] = $leadStatus->pluck('leads_count')->toArray();
 
         return $data;
+    }
+    public function leadChart($startDate, $endDate)
+    {
+       $leads = Lead::groupBy('added_by')->orderBy('created_at','ASC')->get(
+         [
+           DB::raw('DATE_FORMAT(created_at,\'%d-%M-%y\') as date')
+         ]
+       );
+
+    }
+    public function dealChart($startDate, $endDate)
+    {
+
     }
 
 }

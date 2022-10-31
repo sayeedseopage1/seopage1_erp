@@ -130,7 +130,13 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
         </div>
         <!-- Add Task Export Buttons End -->
 <?php
+
+if (Auth::user()->role_id == 4) {
+  $deals= App\Models\Deal::where('pm_id',Auth::id())->get();
+}else {
 $deals= App\Models\Deal::all();
+}
+
 
  ?>
 
@@ -242,7 +248,7 @@ $deals= App\Models\Deal::all();
                     {{--  <a class="btn btn-success" href="/deals/details/{{$deal->id}}"><i class="fa-solid fa-eye"></i></a>--}}
                       @endif
 
-                
+
 
                   {{--<a class="btn btn-danger" href="contracts/deal-delete/{{$deal->id}}"><i class="fa-solid fa-trash"></i></a> --}}
                     @include('contracts.modals.editmodal')

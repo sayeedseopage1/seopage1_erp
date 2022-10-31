@@ -68,6 +68,11 @@ trait ProjectDashboard
                 ->where(DB::raw('DATE(updated_at)'), '>=', $startDate)
                 ->where(DB::raw('DATE(updated_at)'), '<=', $endDate)
                 ->count();
+        $this->totalAcceptedProject= Project::
+                        where('project_status','Accepted')
+                        ->where(DB::raw('DATE(created_at)'), '>=', $startDate)
+                        ->where(DB::raw('DATE(created_at)'), '<=', $endDate)
+                        ->count();
 
 
         $this->widgets = DashboardWidget::where('dashboard_type', 'admin-project-dashboard')->get();

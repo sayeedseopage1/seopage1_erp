@@ -35,14 +35,14 @@ $total_deals= $lead_convert+ $total_won_deals;
         </div>
     @endif
 
-    @if (in_array('contracts', $modules) && in_array('total_contracts_generated', $activeWidgets))
+{{--  @if (in_array('contracts', $modules) && in_array('total_contracts_generated', $activeWidgets))
         <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
             <a href="javascript:;" id="totalContractsGenerated">
                 <x-cards.widget :title="__('Total Deals')"
                     :value="$total_deals" icon="file-contract" />
             </a>
         </div>
-    @endif
+    @endif --}}  
 
     @if (in_array('contracts', $modules) && in_array('total_contracts_signed', $activeWidgets))
         <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
@@ -72,6 +72,19 @@ $total_deals= $lead_convert+ $total_won_deals;
             </x-cards.data>
         </div>
     @endif
+    <div class="row">
+    {{--  <div class="col-sm-12 col-lg-6 mt-3">
+          <x-cards.data :title="__('Leads Growth').' <i class=\'fa fa-question-circle\' data-toggle=\'popover\' data-placement=\'top\' data-content=\''.__('app.from').' '.$startDate->format(global_setting()->date_format).' '.__('app.to').' '.$endDate->format(global_setting()->date_format).'\' data-trigger=\'hover\'></i>'">
+              <x-bar-chart id="task-chart1" :chartData="$leadChartData" height="300"></x-bar-chart>
+          </x-cards.data>
+      </div>
+      <div class="col-sm-12 col-lg-6 mt-3">
+          <x-cards.data :title="__('Deals Growth').' <i class=\'fa fa-question-circle\' data-toggle=\'popover\' data-placement=\'top\' data-content=\''.__('app.from').' '.$startDate->format(global_setting()->date_format).' '.__('app.to').' '.$endDate->format(global_setting()->date_format).'\' data-trigger=\'hover\'></i>'">
+              <x-bar-chart id="task-chart1" :chartData="$dealChartData" height="300"></x-bar-chart>
+          </x-cards.data>
+      </div> --}}
+
+    </div>
 
     @if (in_array('leads', $modules) && in_array('lead_vs_status', $activeWidgets))
         <div class="col-sm-12 col-lg-6 mt-3">

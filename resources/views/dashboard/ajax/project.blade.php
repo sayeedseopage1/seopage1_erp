@@ -14,6 +14,14 @@ $cancel_project= App\Models\Project::where('status','canceled')->count();
         </div>
     @endif
 
+        <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
+            <a href="javascript:;" id="totalAcceptedProjectsCount">
+                <x-cards.widget :title="__('Total Accepted Project')" :value="$totalAcceptedProject"
+                    icon="layer-group" />
+            </a>
+        </div>
+
+
     @if (in_array('projects', $modules) && in_array('total_overdue_project', $activeWidgets))
         <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
             <a href="javascript:;" id="overDue">
@@ -158,6 +166,15 @@ $cancel_project= App\Models\Project::where('status','canceled')->count();
         var url = `{{ route('projects.index') }}`;
 
         string = `?start=${dateRange.startDate}&end=${dateRange.endDate}`;
+        url += string;
+
+        window.location.href = url;
+    });
+    $('#totalAcceptedProjectsCount').click(function() {
+        var dateRange = getDateRange();
+        var url = `{{ route('projects.index') }}`;
+
+        string = `?project_status=Accepted&start=${dateRange.startDate}&end=${dateRange.endDate}`;
         url += string;
 
         window.location.href = url;
