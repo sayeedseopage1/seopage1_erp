@@ -50,6 +50,112 @@ $cancel_project= App\Models\Project::where('status','canceled')->count();
     @endif
 
 </div>
+<div class="row">
+  <div class="col-sm-12 col-lg-6 mt-3">
+      <x-cards.data :title="__('Project Manager Overview')" padding="false" otherClasses="h-200">
+          <x-table class="border-0 pb-3 admin-dash-table table-hover">
+
+              <x-slot name="thead">
+                  <th class="pl-20">#</th>
+                  <th>PM Name</th>
+                  <th>No. of Projects</th>
+                  <th>Total Project Value</th>
+                  <th>Total Released Amount</th>
+              </x-slot>
+
+              @forelse($projectassign as $item)
+                  <tr>
+                      <td class="pl-20">{{ $loop->index+1 }}</td>
+                      <td>
+                          <a href="/account/employees/{{$item->pm_id}}" class="text-darkest-grey f-w-500"
+                            >{{ ucfirst($item->project->name) }}</a>
+                      </td>
+                      <td>
+                        {{$item->project_count}}
+                      </td>
+                      <td>
+                          ${{$item->amount}}
+                      </td>
+                      <?php
+                      $pm_projects= App\Models\PMProject::where('pm_id',$item->pm_id)->get();
+
+                      foreach ($pm_projects as $value) {
+                        $payment= 0;
+                        $payment_s= App\Models\Payment::where('project_id',$value->project_id)->where('status','complete')->sum('amount');
+                        $payment += $payment+$payment_s;
+
+                      }
+
+                       ?>
+                      <td>{{$payment}}</td>
+                  </tr>
+              @empty
+                  <tr>
+                      <td colspan="5" class="shadow-none">
+                          <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                      </td>
+                  </tr>
+              @endforelse
+          </x-table>
+      </x-cards.data>
+  </div>
+  <div class="col-sm-12 col-lg-6 mt-3">
+      <x-cards.data :title="__('Project OverView')" padding="false" otherClasses="h-200">
+          <x-table class="border-0 pb-3 admin-dash-table table-hover">
+
+              <x-slot name="thead">
+                  <th class="pl-20">#</th>
+                  <th>Project Name</th>
+                  <th>Start Date</th>
+                  <th>Due Date</th>
+                  <th>Current Status</th>
+                  <th>Progress(%)</th>
+              </x-slot>
+
+              @forelse($projects as $item)
+                  <tr >
+                      <td class="pl-20">{{ $loop->index + 1 }}</td>
+                      <td>
+                          <a href="{{ route('projects.show', [$item->id]) }}" class="text-darkest-grey f-w-500"
+                              >{{ ucfirst($item->project_name) }}</a>
+                      </td>
+                      <td>
+                        {{
+                        date('d-m-Y', strtotime($item->start_date))}}
+
+                      </td>
+                      <td>
+                        {{
+                        date('d-m-Y', strtotime($item->deadline))}}
+                      </td>
+
+                        <?php
+                          $status_id= App\Models\ProjectStatusSetting::where('status_name',$item->status)->first();
+                          //dd($status_id);
+                         ?>
+                         <td class="f-14" width="20%">
+                           <x-status :style="'color:'.$status_id->color"
+                                 :value="$item->status" />
+                         </td>
+
+                      <td>
+
+
+                        {{$item->completion_percent}}%
+
+                      </td>
+                  </tr>
+              @empty
+                  <tr>
+                      <td colspan="5" class="shadow-none">
+                          <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                      </td>
+                  </tr>
+              @endforelse
+          </x-table>
+      </x-cards.data>
+  </div>
+</div>
 
 <div class="row">
     @if (in_array('projects', $modules) && in_array('status_wise_project', $activeWidgets))
@@ -60,6 +166,7 @@ $cancel_project= App\Models\Project::where('status','canceled')->count();
             </x-cards.data>
         </div>
     @endif
+
 
     @if (in_array('projects', $modules) && in_array('pending_milestone', $activeWidgets))
         <div class="col-sm-12 col-lg-6 mt-3">

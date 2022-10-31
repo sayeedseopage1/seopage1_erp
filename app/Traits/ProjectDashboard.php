@@ -10,6 +10,7 @@ use App\Models\ProjectTimeLog;
 use App\Models\ProjectTimeLogBreak;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\PMAssign;
 
 /**
  *
@@ -74,6 +75,15 @@ trait ProjectDashboard
                         ->where(DB::raw('DATE(created_at)'), '<=', $endDate)
                         ->count();
 
+        $this->projectassign = PMAssign::whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])
+                        //  ->with('project_count')
+
+                          ->get();
+        $this->projects = Project::whereBetween(DB::raw('DATE(`start_date`)'), [$startDate, $endDate])
+                                          //  ->with('project_count')
+
+            ->get();
+                           //dd($this->projectassign);
 
         $this->widgets = DashboardWidget::where('dashboard_type', 'admin-project-dashboard')->get();
         $this->activeWidgets = $this->widgets->filter(function ($value, $key) {
