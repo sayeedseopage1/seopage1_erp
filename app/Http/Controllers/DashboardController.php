@@ -23,6 +23,7 @@ use App\Traits\HRDashboard;
 use App\Traits\OverviewDashboard;
 use App\Traits\ProjectDashboard;
 use App\Traits\TicketDashboard;
+use App\Traits\webdevelopmentDashboard;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Froiden\Envato\Traits\AppBoot;
@@ -31,7 +32,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends AccountBaseController
 {
-    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard;
+    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard;
 
     public function __construct()
     {
@@ -103,7 +104,10 @@ class DashboardController extends AccountBaseController
         || $this->sidebarUserPermissions['view_client_dashboard'] == 4
         || $this->sidebarUserPermissions['view_hr_dashboard'] == 4
         || $this->sidebarUserPermissions['view_ticket_dashboard'] == 4
-        || $this->sidebarUserPermissions['view_finance_dashboard'] == 4) {
+        || $this->sidebarUserPermissions['view_finance_dashboard'] == 4)
+
+
+         {
 
             $tab = request('tab');
 
@@ -123,6 +127,9 @@ class DashboardController extends AccountBaseController
             case 'finance':
                 $this->financeDashboard();
                 break;
+                case 'web-development':
+                    $this->webdevelopmentDashboard();
+                    break;
             default:
                 if (in_array('admin', user_roles()) || $this->sidebarUserPermissions['view_overview_dashboard'] == 4) {
                     $this->activeTab = ($tab == '') ? 'overview' : $tab;
@@ -147,8 +154,10 @@ class DashboardController extends AccountBaseController
                 } else if ($this->sidebarUserPermissions['view_ticket_dashboard'] == 4) {
                     $this->activeTab = ($tab == '') ? 'finance' : $tab;
                     $this->financeDashboard();
-                }
-
+                }else if ($this->sidebarUserPermissions['view_ticket_dashboard'] == 4) {
+                    $this->activeTab = ($tab == '') ? 'web-development' : $tab;
+                    $this->webdevelopmentDashboard();
+                  }
                 break;
             }
 

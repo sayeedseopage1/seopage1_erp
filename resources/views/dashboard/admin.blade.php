@@ -40,9 +40,13 @@
                 <x-tab :href="route('dashboard.advanced').'?tab=overview'" :text="__('modules.projects.overview')"
                     class="overview" ajax="false" />
             @endif
+            @if ($viewFinanceDashboard == 'all')
+                <x-tab :href="route('dashboard.advanced').'?tab=web-development'" :text="__('Web Development')" class="web-development"
+                    ajax="false" />
+            @endif
 
             @if (in_array('projects', user_modules()) && $viewProjectDashboard == 'all')
-                <x-tab :href="route('dashboard.advanced').'?tab=project'" :text="__('app.project')" class="project"
+                <x-tab :href="route('dashboard.advanced').'?tab=project'" :text="__('All Projects')" class="project"
                     ajax="false" />
             @endif
 
@@ -64,6 +68,7 @@
                 <x-tab :href="route('dashboard.advanced').'?tab=finance'" :text="__('app.menu.finance')" class="finance"
                     ajax="false" />
             @endif
+
 
         </div>
 
@@ -89,7 +94,7 @@
                             aria-expanded="false">
                             <i class="fa fa-cog"></i>
                         </a>
-                        <!-- Dropdown - User Information -->                            
+                        <!-- Dropdown - User Information -->
                         <ul class="dropdown-menu dropdown-menu-right dashboard-settings p-20"
                             aria-labelledby="dropdownMenuLink" tabindex="0">
                             <li class="border-bottom mb-3">

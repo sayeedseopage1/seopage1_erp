@@ -95,18 +95,19 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         <x-forms.label class="my-3" fieldId="client_id" :fieldLabel="__('app.client')">
                         </x-forms.label>
                         <x-forms.input-group>
-                            <select class="form-control select-picker" name="client_id" id="client_id"
-                                data-live-search="true" data-size="8">
-                                <option value="">--</option>
-                                @foreach ($clients as $client)
-                                    <option
-                                        data-content="<div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $client->image_url }}' ></div> {{ ucfirst($client->name) }}"
-                                        @if ($project->client_id == $client->id)
-                                        selected
+                            <select readonly class="form-control select-picker" name="client_id"
+                                data-live-search="false" data-size="8">
+                                <?php
 
-                                @endif
-                                value="{{ $client->id }}">{{ mb_ucwords($client->name) }}</option>
-                                @endforeach
+                                $client_id= App\Models\User::where('id',$project->client_id)->first();
+                                 ?>
+                                <option selected value="{{$client_id->id}}">
+                                  <div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $client_id->image_url }}' ></div>
+
+                                  {{$client_id->name}}</option>
+
+
+
                             </select>
 
                             @if ($addClientPermission == 'all' || $addClientPermission == 'added')
