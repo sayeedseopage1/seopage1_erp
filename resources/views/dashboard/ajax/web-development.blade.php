@@ -1,6 +1,11 @@
 <script src="{{ asset('vendor/jquery/frappe-charts.min.iife.js') }}"></script>
 <script src="{{ asset('vendor/jquery/Chart.min.js') }}"></script>
+<style media="screen">
 
+.card-color {
+  background-color: #1D2026 !important;
+}
+</style>
 <?php
 $total_members= App\Models\User::count();
 $total_managers= App\Models\User::where('role_id',4)->count();
@@ -53,6 +58,12 @@ $total_projects= App\Models\Project::count();
         </div>
         <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
 
+                <x-cards.widget :title="__('Total Leads')" :value="$total_leads"
+                    icon="layer-group" />
+
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
+
                 <x-cards.widget :title="__('Total Deals')" :value="$total_deals"
                     icon="layer-group" />
 
@@ -63,12 +74,7 @@ $total_projects= App\Models\Project::count();
                     icon="layer-group" />
 
         </div>
-        <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
 
-                <x-cards.widget :title="__('Total Leads')" :value="$total_leads"
-                    icon="layer-group" />
-
-        </div>
         <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
 
                 <x-cards.widget :title="__('Total Clients')" :value="$total_clients"
@@ -94,7 +100,7 @@ $developer= App\Models\User::where('role_id',5)->get();
 
  ?>
 
-    <x-cards.data :title="__('Project Manager Overview')" padding="false" >
+    <x-cards.data :title="__('Project Manager Overview')" cardClasses="card-color" padding="false" >
 
 
 <div class="row mb-3 ml-3 mr-3">

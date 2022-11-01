@@ -265,20 +265,20 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                 </div>
                             </div>
 
-                        {{--    <div class="col-md-12 col-lg-4">
+                            <div class="col-md-12 col-lg-4">
                                 <x-forms.select fieldName="milestone_id" fieldId="milestone-id"
                                     :fieldLabel="__('modules.projects.milestones')">
                                     <option value="">--</option>
                                     @if($project)
-                                        @if(in_array($viewMilestonePermission,['all','owned','added']) && user()->id == $project->client_id)
-                                            @foreach ($milestones as $item)
+                                        @if(in_array($viewMilestonePermission,['all','owned','added']) )
+                                            @foreach ($projects->milestones as $item)
                                                 <option value="{{ $item->id }}"
                                                         @if (!is_null($task) && $item->id == $task->milestone_id) selected @endif>{{ $item->milestone_title }}</option>
                                             @endforeach
                                         @endif
                                     @endif
                                 </x-forms.select>
-                            </div> --}}
+                            </div>
                             <?php
 
                               $board_column= App\Models\TaskboardColumn::where('id',2)->first();

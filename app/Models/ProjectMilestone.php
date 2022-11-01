@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Observers\ProjectMilestoneObserver;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * App\Models\ProjectMilestone
@@ -47,18 +47,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ProjectMilestone extends BaseModel
 {
     protected $dates = ['start_date', 'end_date'];
+    // public function project()
+    // {
+    //     return $this->belongsTo(User::class, 'pm_id');
+    // }
 
-    public function currency(): BelongsTo
+    public function currency()
     {
         return $this->belongsTo(Currency::class, 'currency_id');
     }
 
-    public function project(): BelongsTo
+    public function project()
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
 
-    public function tasks(): BelongsTo
+    public function tasks()
     {
         return $this->hasMany(Task::class, 'milestone_id');
     }
