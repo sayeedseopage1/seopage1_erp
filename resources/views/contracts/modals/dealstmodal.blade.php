@@ -22,7 +22,7 @@
                                             <select class="form-select" name="deal_stage" aria-label="Default select example">
 
                                               <option value="0">Contact Made</option>
-                                              <option value="1">Requirements Define</option>
+                                              <option value="1">Requirements Defined</option>
                                               <option value="2">Proposal Made</option>
                                                 <option value="3">Negotiation Started</option>
                                             </select>

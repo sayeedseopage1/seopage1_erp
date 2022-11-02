@@ -715,28 +715,30 @@ $developer= App\Models\User::where('role_id',5)->get();
 
               </x-slot>
 
-
+              @forelse($leads as $lead)
                   <tr>
-                      <td class="pl-20"></td>
+                      <td class="pl-20">{{$loop->index+1}}</td>
                       <td>
-
+                        {{$lead->client_name}}
                       </td>
                       <td>
-
+                          {{($lead->created_at)->format('Y-m-d')}}
                       </td>
-                      <td></td>
-                      <td></td>
+                      <td>{{$lead->value}}</td>
+                      <td>{{$lead->lead_status->type}}</td>
 
 
 
-                      <td></td>
+                      <td>{{$lead->user->name}}</td>
                   </tr>
 
+                  @empty
                   <tr>
                       <td colspan="5" class="shadow-none">
                           <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                       </td>
                   </tr>
+                  @endforelse
 
           </x-table>
       </x-cards.data>
@@ -756,29 +758,50 @@ $developer= App\Models\User::where('role_id',5)->get();
                   <th>Created By</th>
 
               </x-slot>
+              @forelse($deals as $deal)
 
 
                   <tr>
-                      <td class="pl-20"></td>
+                      <td class="pl-20">{{$loop->index+1}}</td>
                       <td>
 
+                         {{$deal->client_name}}
                       </td>
                       <td>
-
+                        {{($deal->updated_at)->format('Y-m-d')}}
                       </td>
-                      <td></td>
-                      <td></td>
+                      <td>{{$deal->value}}</td>
+                      <td>
+                        <?php
+                          $deal_id = App\Models\DealStage::where('lead_id',$deal->id)->first();
+                        //  dd($deal_id->deal_stage);
+                         ?>
+                         @if($deal_id != null)
+
+                         @if($deal_id->deal_stage == 0)
+                         Contact Made
+                         @elseif($deal_id->deal_stage == 1)
+                         Requirements Defined
+                         @elseif($deal_id->deal_stage == 2)
+                         Proposal Made
+                         @else
+                         Negotiation Started
+                         @endif
+                         @endif
+                      </td>
 
 
 
-                      <td></td>
+                      <td>{{$deal->user->name}}</td>
                   </tr>
+                  @empty
 
                   <tr>
                       <td colspan="5" class="shadow-none">
                           <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                       </td>
                   </tr>
+                  @endforelse
 
           </x-table>
       </x-cards.data>

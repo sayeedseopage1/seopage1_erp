@@ -17,6 +17,7 @@ use App\Models\Task;
 use App\Models\ClientDetails;
 use App\Models\Invoice;
 use App\Models\Payment;
+use App\Models\DealStage;
 
 
 /**
@@ -123,6 +124,8 @@ trait webdevelopmentDashboard
                                           //  ->with('project_count')
 
             ->get();
+        $this->leads=Lead::whereBetween(DB::raw('DATE(`created_at`)'),[$startDate,$endDate])->get();
+        $this->deals=Lead::where('deal_status',1)->whereBetween(DB::raw('DATE(`created_at`)'),[$startDate,$endDate])->get();
 
                            //dd($this->projectassign);
 

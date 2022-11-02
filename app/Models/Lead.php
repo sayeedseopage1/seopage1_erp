@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
+use App\Models\LeadStatus;
 
 /**
  * App\Models\Lead
@@ -211,6 +212,10 @@ class Lead extends BaseModel
     public function user()
     {
         return $this->belongsTo(User::class, 'added_by');
+    }
+    public function lead_status()
+    {
+        return $this->belongsTo(LeadStatus::class, 'status_id');
     }
 
 }
