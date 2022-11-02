@@ -7,7 +7,7 @@ $addClientPermission = user()->permission('add_clients');
     <div class="col-sm-12">
         <form method="post" action="{{route('store-deals')}}">
           @csrf
-          
+
             <div class="add-client bg-white rounded">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
                    @lang('Deals Details')</h4>
@@ -141,6 +141,7 @@ $addClientPermission = user()->permission('add_clients');
                                 class="form-control height-35 f-14" />
                         </x-forms.input-group>
                     </div>
+                    
 
                     <div class="col-md-6">
                         <x-forms.text fieldId="profile_link" :fieldLabel="__('Freealancer Profile Link')" fieldName="profile_link"
@@ -356,6 +357,7 @@ $addClientPermission = user()->permission('add_clients');
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
 <script>
 $(document).ready(function() {
   $('#description').summernote();
