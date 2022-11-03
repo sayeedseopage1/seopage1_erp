@@ -133,7 +133,11 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
 if (Auth::user()->role_id == 4) {
   $deals= App\Models\Deal::where('pm_id',Auth::id())->get();
-}else {
+}elseif(Auth::user()->role_id == 7)
+{
+  $deals= App\Models\Deal::where('added_by',Auth::id())->get();
+}
+else {
 $deals= App\Models\Deal::all();
 }
 

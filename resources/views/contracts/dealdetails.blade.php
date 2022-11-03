@@ -92,7 +92,7 @@
                           <input type="hidden" name="id" value="{{$deal->id}}">
                           <div class="row">
 
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Deal Id</label>
                               <input type="text" class="form-control" value="{{$deal->deal_id}}" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
@@ -100,7 +100,7 @@
 
 
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Deal Creation Date</label>
                               <input type="text" value="{{$deal->deal_creation_date}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
@@ -108,19 +108,38 @@
 
 
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Project Name <span style="color:red;">*</span></label>
                               <input type="text" name="project_name" value="{{$deal->project_name}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required>
                               </div>
 
                             </div>
-                            <div class="col-md-3">
+
+
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Project Budget <span style="color:red;">*</span></label>
                               <input type="text" name="amount" value="{{$deal->amount}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
                               </div>
                             </div>
+
+                            <!-- <div class="col-md-6">
+
+                                <label for="exampleFormControlInput1">Create Milestone <span style="color:red;">*</span></label>
+                              <div class="input-group mb-3">
+
+                              <input type="text" class="form-control" placeholder="Add Milestone" aria-label="Add Milstone" aria-describedby="basic-addon2" required>
+                              <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#milestoneaddmodal" type="button">Add</button>
+                              </div>
+                              @include('contracts.modals.milestonecreatemodal')
+                              </div>
+                            </div> -->
+
+
 
                           </div>
                           <div class="row">
@@ -139,7 +158,7 @@
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Organization</label>
-                              <input type="text" name="organization" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" >
+                              <input type="text" name="organization" class="form-control" id="exampleFormControlInput1" placeholder="Company Name" >
                               </div>
                             </div>
                             <div class="col-md-3">

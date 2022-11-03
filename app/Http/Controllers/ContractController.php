@@ -207,6 +207,7 @@ class ContractController extends AccountBaseController
       $deal->amount= $request->amount;
       $deal->client_name= $request->client_name;
       $deal->client_username= $request->client_username;
+      $deal->added_by= Auth::id();
       //$date= Carbon::now();
 
     $date = date('Y-m-d H:i:s');
@@ -405,6 +406,7 @@ class ContractController extends AccountBaseController
       $deal->client_name= $request->client_name;
       $deal->client_username= $request->client_username;
       $deal->lead_id= $request->lead_id;
+      $deal->added_by= Auth::id();
       //$date= Carbon::now();
 
     $date = date('Y-m-d H:i:s');
@@ -439,6 +441,9 @@ class ContractController extends AccountBaseController
 
       $client->client_username=$request->client_username;
       $client->save();
+      $deal_client= Deal::find($deal->id);
+      $deal_client->client_id = $user->id;
+      $deal_client->save();
 
       $contract = new Contract();
       $contract->id= $deal->id;
@@ -487,6 +492,9 @@ class ContractController extends AccountBaseController
                   $pmassign->deal_id=$deal->id;
                   $pmassign->client_id=$user->id;
                 $pmassign->save();
+                $deal_assign= Deal::find($deal->id);
+                $deal_assign->pm_id= $pm_user->pm_id;
+                $deal_assign->save();
               //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find= PMAssign::where('pm_id',$pm_user->pm_id)->first();
                 $pm_project_update=PMAssign::find($pm_project_find->id);
@@ -517,6 +525,9 @@ class ContractController extends AccountBaseController
                     $pmassign->client_id=$user->id;
                 $pmassign->pm_id= $pm_find_id->pm_id;
                 $pmassign->save();
+                $deal_assign= Deal::find($deal->id);
+                $deal_assign->pm_id= $pm_find_id->pm_id;
+                $deal_assign->save();
               //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find= PMAssign::where('pm_id',$pm_find_id->pm_id)->first();
                 $pm_project_update=PMAssign::find($pm_project_find->id);
@@ -535,6 +546,9 @@ class ContractController extends AccountBaseController
                   $pmassign->client_id=$user->id;
                 $pmassign->pm_id=  $final_id->pm_id;
                 $pmassign->save();
+                $deal_assign= Deal::find($deal->id);
+                $deal_assign->pm_id= $final_id->pm_id;
+                $deal_assign->save();
               //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find= PMAssign::where('pm_id', $final_id->pm_id)->first();
                 $pm_project_update=PMAssign::find($pm_project_find->id);
@@ -549,6 +563,10 @@ class ContractController extends AccountBaseController
 
               return redirect('/deals/details/'.$deal->id)->with('messages.contractAdded');
 
+
+    }
+    public function storeMilestone(Request $request)
+    {
 
     }
     public function storedealDetails(Request $request)
@@ -625,6 +643,7 @@ class ContractController extends AccountBaseController
       $deal->description7=$request->description7;
       $deal->description8=$request->description8;
       $deal->description9=$request->description9;
+      $deal->updated_by= Auth::id();
       $deal->save();
       $project_id= Project::where('deal_id',$request->id)->first();
       $project= Project::find($project_id->id);
@@ -694,147 +713,12 @@ class ContractController extends AccountBaseController
 
 
     }
-//     public function updateDeal(Request $request)
-//     {
-//
-//
-//       //$decrypt= Crypt::decrypt($request);
-//       $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-//       $suffle = substr(str_shuffle($chars), 0, 6);
-//
-//       $deal = new Deal();
-//       $deal->project_name= $request->project_name;
-//       $deal->client_name= $request->client_name;
-//       $deal->client_username= $request->client_username;
-//       $deal->organization= $request->organization;
-//
-//
-//       $deal->start_date=  $request->start_date;
-//       $deal->pipeline_stage= $request->pipeline_stage;
-//       $deal->amount= $request->amount;
-//       $deal->deal_creation_date= Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
-//       $deal->profile_link= $request->profile_link;
-//       $deal->message_link= $request->message_link;
-//       $deal->deal_id= 'DSEOP1'. $suffle;
-//       $deal->currency_id= $request->currency_id;
-//       $deal->description= $request->description;
-//       $deal->save();
-//       $contract = new Contract();
-//       $contract->id= $deal->id;
-//       $contract->deal_id= $deal->id;
-//       $contract->subject=$request->project_name;
-//       $contract->amount= $request->amount;
-//       $contract->original_amount=$request->amount;
-//       $contract->start_date=  Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
-//       $contract->original_start_date=  Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
-//       $contract->description= $request->description;
-//         $contract->client_id= 13;
-//           $contract->currency_id= 1;
-//
-//
-//       $contract->save();
-//       //dd($deal->id);
-//       $deal_hash= $deal->id;
-//         //$key= Crypt::encrypt($deal_hash);
-//         $key = encrypt($deal_hash);
-//
-//
-//       $deal_hash_store= Deal::find($deal_hash);
-//       $deal_hash_store->hash= $key;
-//       $deal_hash_store->save();
-// ///have to find project id
-//       $project= new Project();
-//       $project->project_name= $request->project_name;
-//       $project->project_short_code= 'PSEOP1' . $suffle;
-//       $project->start_date= Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
-//       $project->project_summary= $request->description;
-//       $project->completion_percent= 0;
-//       $project->deal_id=$deal->id;
-//       $project->added_by= Auth::id();
-//       $project->status= 'not started';
-//       $project->public= 0;
-//       $project->save();
-//
-//         $pm_count= PMAssign::select('project_count')->min('project_count');
-//         $pm_user= PMAssign::where('project_count',$pm_count)->first();
-//         if ($pm_count < 2) {
-//           if ($pm_user != null) {
-//             $pmassign= new PMProject();
-//             $pmassign->project_id= $project->id;
-//             $pmassign->status= 'pending';
-//             $pmassign->pm_id= $pm_user->pm_id;
-//               $pmassign->deal_id=$deal->id;
-//             $pmassign->save();
-//           //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-//             $pm_project_find= PMAssign::where('pm_id',$pm_user->pm_id)->first();
-//             $pm_project_update=PMAssign::find($pm_project_find->id);
-//             $pm_project_update->project_count= $pm_project_update->project_count + 1;
-//             $pm_project_update->amount= $pm_project_update->amount + $request->amount;
-//             $pm_project_update->save();
-//           }
-//         }else {
-//           $items = PMAssign::all();
-//           $pm_amount=  $items->min('amount');
-//           $pm_count_id=  $items->min('project_count');
-//
-//           $pm_find_id= PMAssign::where('amount',$pm_amount)->first();
-//           $pm_min_pro= PMAssign::where('project_count',  $pm_count_id)->first();
-//           $find_rest= PMAssign::where('project_count',$pm_count_id)->get();
-//
-//           $fin_min= $find_rest->min('amount');
-//
-//           $final_id= PMAssign::where('amount',$fin_min)->first();
-//
-//         //  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
-//
-//           if (($pm_find_id->project_count +1) <= $pm_count_id*1.5) {
-//             $pmassign= new PMProject();
-//             $pmassign->project_id= $project->id;
-//             $pmassign->status= 'pending';
-//               $pmassign->deal_id=$deal->id;
-//             $pmassign->pm_id= $pm_find_id->pm_id;
-//             $pmassign->save();
-//           //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-//             $pm_project_find= PMAssign::where('pm_id',$pm_find_id->pm_id)->first();
-//             $pm_project_update=PMAssign::find($pm_project_find->id);
-//             $pm_project_update->project_count= $pm_project_update->project_count + 1;
-//             $pm_project_update->amount= $pm_project_update->amount + $request->amount;
-//             $pm_project_update->save();
-//           }
-//
-//
-//           else {
-//
-//             $pmassign= new PMProject();
-//             $pmassign->project_id= $project->id;
-//             $pmassign->status= 'pending';
-//             $pmassign->deal_id=$deal->id;
-//             $pmassign->pm_id=  $final_id->pm_id;
-//             $pmassign->save();
-//           //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-//             $pm_project_find= PMAssign::where('pm_id', $final_id->pm_id)->first();
-//             $pm_project_update=PMAssign::find($pm_project_find->id);
-//             $pm_project_update->project_count= $pm_project_update->project_count + 1;
-//             $pm_project_update->amount= $pm_project_update->amount + $request->amount;
-//             $pm_project_update->save();
-//           }
-//         }
-//
-//
-//
-//           return redirect('/account/contracts')->with('messages.contractAdded');
-//
-//
-//         //  return Reply::success(__('messages.updateSuccess'));
-//     }
+
 
     public function store(StoreRequest $request)
     {
       //dd($request);
         $contract = new Contract();
-
-
-
 
         $this->storeUpdate($request, $contract);
 
