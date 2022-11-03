@@ -1059,6 +1059,7 @@ Route::post('/deal/stage/update/lost', [LeadController::class, 'DealStageUpdateL
 //lead to own deal
 Route::post('/leads/deals/store', [ContractController::class, 'storeLeadDeal'])->name('store-deals-stage');
 Route::post('/deals/milestone-store', [ContractController::class, 'storeMilestone'])->name('add-milestone');
+Route::get('/deals/milestone-get/{id}', [ContractController::class, 'Milestone']);
 //task review
 Route::post('/tasks/task-stage/store', [TaskController::class, 'TaskReview'])->name('task-status-change');
 Route::post('/tasks/task-stage/approve', [TaskController::class, 'TaskApprove'])->name('task-status-approve');

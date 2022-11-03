@@ -59,7 +59,7 @@
 
                             <div class="mt-3">
                                 <label for="input-state-3" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong></label>
-                                <input name="amount" value="{{$lead_id->value}}" id="input-state-3" type="text" class="form-control" placeholder="Enter Amount" required>
+                                <input name="amount" value="{{$lead_id->value}}" id="input-state-3" type="number" class="form-control" placeholder="Enter Amount" required>
 
                             </div>
 

@@ -37,6 +37,8 @@ use App\Models\ClientDetails;
 use App\Models\DealStage;
 use App\Models\Lead;
 use App\Models\ProjectMember;
+use App\Models\ProjectMilestone;
+use Illuminate\Support\Facades\Validator;
 
 class ContractController extends AccountBaseController
 {
@@ -565,8 +567,46 @@ class ContractController extends AccountBaseController
 
 
     }
+    public function Milestone($id)
+    {
+      //dd($id);
+      $milestones= ProjectMilestone::where('project_id',$id)->get();
+      return response()->json([
+        'milestones'=> $milestones,
+      ]);
+    }
     public function storeMilestone(Request $request)
     {
+      //dd($request);
+      $validator = Validator::make($request->all(),[
+        'title'=> 'required',
+        'cost'=> 'required',
+        'summary'=> 'required',
+          'project_id'=> 'required',
+
+      ]);
+      if ($validator->fails()) {
+        return response()->json([
+          'status'=>400,
+          'errors'=>$validator->messages(),
+        ]);
+      }
+      else {
+        $milestone= new ProjectMilestone();
+        $milestone->milestone_title= $request->title;
+        $milestone->project_id= $request->project_id;
+        $milestone->cost= $request->cost;
+        $milestone->summary= $request->summary;
+        $milestone->currency_id= 1;
+
+        $milestone->save();
+        return response()->json([
+          'status'=>200,
+          'message'=>'Milestone Added Successfully',
+        ]);
+      }
+
+
 
     }
     public function storedealDetails(Request $request)

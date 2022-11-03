@@ -4,16 +4,22 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Create Milestone</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form class="" action="#" method="post">
-        @csrf
+
+
+
+        <input type="hidden" class="project_id" name="project_id" value="{{$project_id->id}}">
 
 
       <div class="modal-body">
 
+        <ul id="saveform_errList">
 
+        </ul>
         <div class="row">
+
+
             <div class="col-md-6">
 
               <div class="form-group">
@@ -34,7 +40,7 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label for="exampleFormControlTextarea1">Milestone Summary <span style="color:red;">*</span></label>
-                <textarea name="summary" class="form-control summary" id="summary" rows="3" required></textarea>
+                <textarea name="summary" class="form-control summary" id="summary" rows="3" ></textarea>
               </div>
 
             </div>
@@ -53,33 +59,7 @@
           <button type="button" class="btn btn-primary add_milestone" >Create Milestone</button>
 
       </div>
-        </form>
+
     </div>
   </div>
 </div>
-<script type="text/javascript">
-
-$(document).ready(function() {
-  $(document).on('click','.add_milestone',function(e){
-
-  e.preventDefault();
-  //console.log("test");
-  var data= {
-    'title': $('.title').val(),
-    'cost': $('.cost').val(),
-    'summary': $('.summary').val(),
-  }
-  //console.log(data);
-  $.ajax({
-    type: "POST",
-    url: "{{route('add-milestone')}}",
-    data: data,
-    dataType: "json",
-    success: function (response){
-      console.log(response);
-    }
-  });
-});
-
-});
-</script>

@@ -32,7 +32,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                             <select class="form-control select-picker" name="category_id" id="task_category_id"
                                 data-live-search="true" data-size="8">
                                 <option value="">--</option>
-                                
+
                                 @if ($viewTaskCategoryPermission == 'all' || $viewTaskCategoryPermission == 'added')
                                     @foreach ($categories as $category)
                                         <option @if (!is_null($task) && $task->task_category_id == $category->id) selected @endif value="{{ $category->id }}">{{ mb_ucwords($category->category_name) }}

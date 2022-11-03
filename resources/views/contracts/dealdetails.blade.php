@@ -33,6 +33,11 @@
 @endpush
 
 @section('content')
+<?php
+  $project_id= App\Models\Project::where('deal_id',$deal->id)->first();
+  //dd($project_id->id);
+
+ ?>
 
     <div class="content-wrapper border-top-0 client-detail-wrapper">
       <div class="card border-0 invoice">
@@ -118,6 +123,9 @@
 
 
                           </div>
+                          <div id="success_message">
+
+                          </div>
                           <div class="row">
                             <div class="col-md-6">
                               <div class="form-group">
@@ -126,18 +134,24 @@
                               </div>
                             </div>
 
-                            <!-- <div class="col-md-6">
+                            <div class="col-md-6">
+                              <?php
+                                $milestones= App\Models\ProjectMilestone::where('project_id',$project_id->id)->get();
+
+
+                               ?>
+
 
                                 <label for="exampleFormControlInput1">Create Milestone <span style="color:red;">*</span></label>
-                              <div class="input-group mb-3">
+                              <div class="input-group mb-3 w-100">
+                                <div class="milestone-wrapper d-flex align-items-center flex-wrap form-control" id="milestone_value"></div>
 
-                              <input type="text" class="form-control" placeholder="Add Milestone" aria-label="Add Milstone" aria-describedby="basic-addon2" required>
                               <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#milestoneaddmodal" type="button">Add</button>
                               </div>
                               @include('contracts.modals.milestonecreatemodal')
                               </div>
-                            </div> -->
+                            </div>
 
 
 
@@ -348,14 +362,7 @@
           </div>
           <!-- CARD BODY END -->
           <!-- CARD FOOTER START -->
-          <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
 
-
-
-
-
-          </div>
-          <!-- CARD FOOTER END -->
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
@@ -404,6 +411,78 @@
       alert("Copied the text: " + copyText.value);
     }
 
+    </script>
+
+    <script type="text/javascript">
+
+
+    $(document).ready(function() {
+      fetchmilestone();
+      function fetchmilestone()
+      {
+        $.ajax({
+          type: "GET",
+          url: "/deals/milestone-get/{{$project_id->id}}",
+
+          dataType: "json",
+          success: function (response){
+          //  console.log(response.milestones);
+            let spans= '';
+            response.milestones.forEach((item)=> {
+              spans += `<span class="badge badge-info mr-2">${item.milestone_title}</span>`
+            });
+
+            document.querySelector('#milestone_value').innerHTML= spans;
+
+          }
+        });
+      }
+
+
+
+      $(document).on('click','.add_milestone',function(e){
+
+      e.preventDefault();
+      //console.log("test");
+      var data= {
+        'title': $('.title').val(),
+        'cost': $('.cost').val(),
+        'summary': $('.summary').val(),
+        'project_id': document.querySelector('.project_id').value,
+      }
+      //console.log(data);
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+      $.ajax({
+        type: "POST",
+        url: "{{route('add-milestone')}}",
+        data: data,
+        dataType: "json",
+        success: function (response){
+          if (response.status == 400) {
+            $('#saveform_errList').html("");
+            $('#saveform_errList').addClass('alert alert-danger');
+            $.each(response.errors, function (key, err_values){
+              $('#saveform_errList').append('<li>'+err_values+'</li>');
+            });
+          }
+          else {
+              $('#saveform_errList').html("");
+              $('#success_message').addClass('alert alert-success');
+              $('#success_message').text(response.message);
+              $('#milestoneaddmodal').modal('hide');
+              $('#milestoneaddmodal').find('input').val("");
+                fetchmilestone();
+
+          }
+        }
+      });
+    });
+
+    });
     </script>
 
 @endsection

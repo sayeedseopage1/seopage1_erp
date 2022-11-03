@@ -64,6 +64,7 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
                 <tr>
                   <td>
                     <div class="d-flex justify-content-center">
+                      @if(Auth::user()->role_id == 4)
                       @if($contract->deal->status == 'pending')
                       <button class="btn btn-danger mr-3"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
                         @include('contracts.modals.dealdenymodal')
@@ -74,6 +75,9 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
                         @else
                       <h3 class="d-flex justify-content-center" style="color:red;">{{$contract->deal->status}}</h3>
 
+                      @endif
+                      @else
+                          <h3 class="d-flex justify-content-center" style="color:green;">{{$contract->deal->status}}</h3>
                       @endif
                     </div>
                   </td>
@@ -312,7 +316,7 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
 
 
     <br>
-    
+
 
   <div class="card bg-light mb-3" style="max-width: 100%">
 <div class="card-header"><h5>Any other notes for the project manager/technical team </h5></div>

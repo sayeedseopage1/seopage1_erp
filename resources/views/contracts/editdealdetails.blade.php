@@ -6,7 +6,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <!-- FILTER START -->
     <!-- PROJECT HEADER START -->
+    <?php
+      $project_id= App\Models\Project::where('deal_id',$deal->id)->first();
+      //dd($project_id->id);
 
+     ?>
     <div class="d-flex filter-box project-header bg-white">
 
         <div class="mobile-close-overlay w-100 h-100" id="close-client-overlay"></div>
@@ -89,7 +93,7 @@
                           <input type="hidden" name="id" value="{{$deal->id}}">
                           <div class="row">
 
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Deal Id</label>
                               <input type="text" class="form-control" value="{{$deal->deal_id}}" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
@@ -97,7 +101,7 @@
 
 
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Deal Creation Date</label>
                               <input type="text" value="{{$deal->deal_creation_date}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
@@ -105,19 +109,47 @@
 
 
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Project Name <span style="color:red;">*</span></label>
                               <input type="text" name="project_name" value="{{$deal->project_name}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required>
                               </div>
 
                             </div>
-                            <div class="col-md-3">
+
+
+                          </div>
+                          <div id="success_message">
+
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Project Budget <span style="color:red;">*</span></label>
                               <input type="text" name="amount" value="{{$deal->amount}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
                               </div>
                             </div>
+
+                            <div class="col-md-6">
+                              <?php
+                                $milestones= App\Models\ProjectMilestone::where('project_id',$project_id->id)->get();
+
+
+                               ?>
+
+
+                                <label for="exampleFormControlInput1">Create Milestone <span style="color:red;">*</span></label>
+                              <div class="input-group mb-3 w-100">
+                                <div class="milestone-wrapper d-flex align-items-center flex-wrap form-control" id="milestone_value"></div>
+
+                              <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#milestoneaddmodal" type="button">Add</button>
+                              </div>
+                              @include('contracts.modals.milestonecreatemodal')
+                              </div>
+                            </div>
+
+
 
                           </div>
                           <div class="row">
@@ -385,6 +417,77 @@
       alert("Copied the text: " + copyText.value);
     }
 
+    </script>
+    <script type="text/javascript">
+
+
+    $(document).ready(function() {
+      fetchmilestone();
+      function fetchmilestone()
+      {
+        $.ajax({
+          type: "GET",
+          url: "/deals/milestone-get/{{$project_id->id}}",
+
+          dataType: "json",
+          success: function (response){
+          //  console.log(response.milestones);
+            let spans= '';
+            response.milestones.forEach((item)=> {
+              spans += `<span class="badge badge-info mr-2">${item.milestone_title}</span>`
+            });
+
+            document.querySelector('#milestone_value').innerHTML= spans;
+
+          }
+        });
+      }
+
+
+
+      $(document).on('click','.add_milestone',function(e){
+
+      e.preventDefault();
+      //console.log("test");
+      var data= {
+        'title': $('.title').val(),
+        'cost': $('.cost').val(),
+        'summary': $('.summary').val(),
+        'project_id': document.querySelector('.project_id').value,
+      }
+      //console.log(data);
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+      $.ajax({
+        type: "POST",
+        url: "{{route('add-milestone')}}",
+        data: data,
+        dataType: "json",
+        success: function (response){
+          if (response.status == 400) {
+            $('#saveform_errList').html("");
+            $('#saveform_errList').addClass('alert alert-danger');
+            $.each(response.errors, function (key, err_values){
+              $('#saveform_errList').append('<li>'+err_values+'</li>');
+            });
+          }
+          else {
+              $('#saveform_errList').html("");
+              $('#success_message').addClass('alert alert-success');
+              $('#success_message').text(response.message);
+              $('#milestoneaddmodal').modal('hide');
+              $('#milestoneaddmodal').find('input').val("");
+                fetchmilestone();
+
+          }
+        }
+      });
+    });
+
+    });
     </script>
 
 @endsection
