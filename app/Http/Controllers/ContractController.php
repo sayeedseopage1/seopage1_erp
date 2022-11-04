@@ -156,7 +156,7 @@ class ContractController extends AccountBaseController
 
     public function ClientFormSubmit(Request $request)
     {
-  //  dd($request);
+    //dd($request);
       $deal= Deal::find($request->id);
       $deal->submission_status= 'Awaiting for client Response';
       $deal->save();
@@ -239,6 +239,10 @@ class ContractController extends AccountBaseController
 
       $client->client_username=$request->client_username;
       $client->save();
+      $deal_client= Deal::find($deal->id);
+      $deal_client->client_id = $user->id;
+      $deal_client->save();
+
 
       $contract = new Contract();
       $contract->id= $deal->id;
@@ -577,7 +581,7 @@ class ContractController extends AccountBaseController
     }
     public function storeMilestone(Request $request)
     {
-      //dd($request);
+    //  dd($request);
       $validator = Validator::make($request->all(),[
         'title'=> 'required',
         'cost'=> 'required',

@@ -145,6 +145,7 @@
                               <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#milestoneaddmodal" type="button">Add</button>
                               </div>
+                                <input type="hidden" class="project_id" name="project_id" id="project_id" value="{{$project_id->id}}">
                               @include('contracts.modals.milestonecreatemodal')
                               </div>
                             </div>
@@ -417,77 +418,6 @@
       alert("Copied the text: " + copyText.value);
     }
 
-    </script>
-    <script type="text/javascript">
-
-
-    $(document).ready(function() {
-      fetchmilestone();
-      function fetchmilestone()
-      {
-        $.ajax({
-          type: "GET",
-          url: "/deals/milestone-get/{{$project_id->id}}",
-
-          dataType: "json",
-          success: function (response){
-          //  console.log(response.milestones);
-            let spans= '';
-            response.milestones.forEach((item)=> {
-              spans += `<span class="badge badge-info mr-2">${item.milestone_title}</span>`
-            });
-
-            document.querySelector('#milestone_value').innerHTML= spans;
-
-          }
-        });
-      }
-
-
-
-      $(document).on('click','.add_milestone',function(e){
-
-      e.preventDefault();
-      //console.log("test");
-      var data= {
-        'title': $('.title').val(),
-        'cost': $('.cost').val(),
-        'summary': $('.summary').val(),
-        'project_id': document.querySelector('.project_id').value,
-      }
-      //console.log(data);
-      $.ajaxSetup({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-      });
-      $.ajax({
-        type: "POST",
-        url: "{{route('add-milestone')}}",
-        data: data,
-        dataType: "json",
-        success: function (response){
-          if (response.status == 400) {
-            $('#saveform_errList').html("");
-            $('#saveform_errList').addClass('alert alert-danger');
-            $.each(response.errors, function (key, err_values){
-              $('#saveform_errList').append('<li>'+err_values+'</li>');
-            });
-          }
-          else {
-              $('#saveform_errList').html("");
-              $('#success_message').addClass('alert alert-success');
-              $('#success_message').text(response.message);
-              $('#milestoneaddmodal').modal('hide');
-              $('#milestoneaddmodal').find('input').val("");
-                fetchmilestone();
-
-          }
-        }
-      });
-    });
-
-    });
     </script>
 
 @endsection

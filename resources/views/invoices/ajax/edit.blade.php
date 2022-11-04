@@ -118,9 +118,42 @@ $addProductPermission = user()->permission('add_product');
                     </div>
                 </div>
             </div>
-            <!-- PROJECT END -->
 
+            <!-- PROJECT END -->
+            @if($invoice->project_id != null)
+            <?php
+            //dd($invoice->id);
+              $milestones = App\Models\ProjectMilestone::where('project_id',$invoice->project_id)->where('status','incomplete')->get();
+              if ($invoice->milestone_id != null) {
+                $milestone_name= App\Models\ProjectMilestone::where('id',$invoice->milestone_id)->first();
+              }
+
+
+             ?>
             <div class="col-md-4">
+                    <div class="form-group c-inv-select mb-4">
+                        <x-forms.label fieldId="calculate_tax" :fieldLabel="__('Milestone')">
+                        </x-forms.label>
+                        <div class="select-others height-35 rounded">
+                            <select class="form-control select-picker" data-live-search="true" data-size="8"
+                                name="milestone_id" >
+                                @if($invoice->milestone_id != null)
+                                <option selected value="{{$invoice->milestone_id }}">{{$milestone_name->milestone_title}}</option>
+                                @else
+                                @foreach($milestones as $milestone)
+                                <option value="{{$milestone->id}}">
+                                    {{$milestone->milestone_title}}</option>
+
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <!-- PROJECT END -->
+            @endif
+
+          {{-- <div class="col-md-4">
                 <div class="form-group c-inv-select mb-4">
                     <x-forms.label fieldId="calculate_tax" :fieldLabel="__('modules.invoices.calculateTax')">
                     </x-forms.label>
@@ -133,6 +166,7 @@ $addProductPermission = user()->permission('add_product');
                     </div>
                 </div>
             </div>
+            --}}
 
             @if ($invoice->amountPaid() == 0 && $invoice->status == 'paid')
                 <!-- STATUS START -->

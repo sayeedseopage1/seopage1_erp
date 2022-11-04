@@ -41,9 +41,19 @@
                                     @php
                                         $paidAmount = $inv->amountPaid();
                                     @endphp
+                                    @if($inv->milestone_id != null)
+                                    @php
+                                    $milestone= App\Models\ProjectMilestone::where('id',$inv->milestone_id)->first();
+                                    @endphp
+                                    <option data-currency-id="{{ $inv->currency->id }}"
+                                        data-content="{{ $inv->invoice_number . ' - ' . __('app.total') . ': <span class=\'text-dark f-w-500 mr-2\'>' . currency_formatter($inv->total, $inv->currency->currency_symbol) . ' </span>' . __('modules.invoices.due') . ': <span class=\'text-red\'>' . currency_formatter(max($inv->total - $paidAmount, 0), $inv->currency->currency_symbol) .' '. '<span class=\'badge badge-primary\'>'.' (Payment for '.$milestone->milestone_title.')'.'</span>'.'</span>' }}"
+                                        value="{{ $inv->id }}">{{ $inv->invoice_number }} {{$milestone->milestone_title}}</option>
+
+                                    @else
                                     <option data-currency-id="{{ $inv->currency->id }}"
                                         data-content="{{ $inv->invoice_number . ' - ' . __('app.total') . ': <span class=\'text-dark f-w-500 mr-2\'>' . currency_formatter($inv->total, $inv->currency->currency_symbol) . ' </span>' . __('modules.invoices.due') . ': <span class=\'text-red\'>' . currency_formatter(max($inv->total - $paidAmount, 0), $inv->currency->currency_symbol) . '</span>' }}"
                                         value="{{ $inv->id }}">{{ $inv->invoice_number }}</option>
+                                        @endif
                                 @endforeach
                             </x-forms.select>
                         @endif

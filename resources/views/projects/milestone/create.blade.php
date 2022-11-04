@@ -38,7 +38,7 @@
                 </x-forms.textarea>
             </div>
 
-            <div class="col-md-6">
+          {{--  <div class="col-md-6">
                 <x-forms.datepicker fieldId="start_date"
                     :fieldLabel="__('modules.timeLogs.startDate')" fieldName="start_date"
                     :fieldValue="\Carbon\Carbon::now(global_setting()->timezone)->format(global_setting()->date_format)"
@@ -50,7 +50,7 @@
                     :fieldLabel="__('modules.timeLogs.endDate')" fieldName="end_date"
                     :fieldValue="\Carbon\Carbon::now(global_setting()->timezone)->format(global_setting()->date_format)"
                     :fieldPlaceholder="__('placeholders.date')" />
-            </div>
+            </div> --}}
 
         </div>
     </div>

@@ -1066,3 +1066,6 @@ Route::post('/tasks/task-stage/approve', [TaskController::class, 'TaskApprove'])
 Route::post('/tasks/task-stage/revision', [TaskController::class, 'TaskRevision'])->name('task-status-revision');
 Route::post('/tasks/task-time/extension', [TaskController::class, 'TaskExtension'])->name('user-time-extension');
 Route::post('/tasks/task-time/extension/approve', [TaskController::class, 'TaskExtensionApprove'])->name('accept-task-extension');
+
+//milestone route
+Route::post('/milestone/complete', [ProjectMilestoneController::class, 'CompleteMilestone'])->name('milestone-complete');

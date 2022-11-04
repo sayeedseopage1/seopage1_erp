@@ -33,7 +33,7 @@
                 </x-forms.textarea>
             </div>
 
-            <div class="col-md-6">
+          {{--  <div class="col-md-6">
                 <x-forms.datepicker fieldId="start_date"
                     :fieldLabel="__('modules.projects.startDate')" fieldName="start_date"
                     :fieldValue="$milestone->start_date==null ? $milestone->start_date : $milestone->start_date->format(global_setting()->date_format)"
@@ -45,7 +45,7 @@
                     :fieldValue="$milestone->end_date==null ? $milestone->end_date : $milestone->end_date->format(global_setting()->date_format)"
                     :fieldLabel="__('modules.timeLogs.endDate')" fieldName="end_date"
                     :fieldPlaceholder="__('placeholders.date')" />
-            </div>
+            </div> --}}
 
         </div>
     </div>

@@ -10,6 +10,8 @@ use App\Models\Project;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectTimeLogBreak;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Auth;
 
 class ProjectMilestoneController extends AccountBaseController
 {
@@ -39,6 +41,14 @@ class ProjectMilestoneController extends AccountBaseController
 
         abort_403(!($addProjectMilestonePermission == 'all' || $project->project_admin == user()->id));
         return view('projects.milestone.create', $this->data);
+    }
+    public function CompleteMilestone(Request $request)
+    {
+      $milestone= ProjectMilestone::find($request->id);
+      $milestone->status= "complete";
+      $milestone->last_updated_by= Auth::id();
+      $milestone->save();
+      return back()->with('success','Milestone Status Updated Successfully');
     }
 
     /**

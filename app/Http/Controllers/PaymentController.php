@@ -14,6 +14,8 @@ use App\Models\Project;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\PMAssign;
+use App\Models\PMProject;
 
 class PaymentController extends AccountBaseController
 {
@@ -71,7 +73,7 @@ class PaymentController extends AccountBaseController
         abort_403(user()->permission('delete_payments') != 'all');
 
         $items = explode(',', $request->row_ids);
-        
+
         foreach ($items as $id) {
             $payment = Payment::find($id);
 
@@ -160,7 +162,7 @@ class PaymentController extends AccountBaseController
 
     public function store(StorePayment $request)
     {
-
+      //dd($request);
         $payment = new Payment();
 
         if (!is_null($request->currency_id)) {
@@ -204,6 +206,8 @@ class PaymentController extends AccountBaseController
         $payment->status = 'complete';
         $payment->save();
 
+
+
         if (isset($invoice) && isset($paidAmount)) {
 
             if ((float)($paidAmount + $request->amount) >= (float)$invoice->total) {
@@ -215,6 +219,17 @@ class PaymentController extends AccountBaseController
 
             $invoice->save();
         }
+        $project= Project::find($request->project_id);
+        $project->milestone_paid= $request->amount;
+        $project->due= $project->project_budget - $request->amount;
+        $project->paid_milestone_count= $project->paid_milestone_count + 1;
+        $project->save();
+        $pmassign= PMProject::where('project_id',$request->project_id)->first();
+        $pm= PMAssign::where('pm_id',$pmassign->pm_id)->first();
+        $pmassign_update= PMAssign::find($pm->id);
+        $pmassign_update->release_amount= $pmassign_update->release_amount + $request->amount;
+        $pmassign_update->release_date= Carbon::now()->format('Y-m-d');
+        $pmassign_update->save();
 
         $redirectUrl = urldecode($request->redirect_url);
 

@@ -145,11 +145,44 @@ $addProductPermission = user()->permission('add_product');
                             </select>
                         </div>
                     </div>
+
                 @endif
             </div>
-            <!-- PROJECT END -->
+            @if($project != null)
+            <?php
+
+            if (Request::get('milestone_id') != null) {
+              $milest= App\Models\ProjectMilestone::where('id',Request::get('milestone_id'))->first();
+            }
+            //dd($project->id);
+              $milestones = App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->get();
+
+             ?>
 
             <div class="col-md-4">
+                    <div class="form-group c-inv-select mb-4">
+                        <x-forms.label fieldId="calculate_tax" :fieldLabel="__('Milestone')">
+                        </x-forms.label>
+                        <div class="select-others height-35 rounded">
+                            <select class="form-control select-picker" readonly data-live-search="true" data-size="8"
+                                name="milestone_id" >
+                                @if( Request::get('milestone_id') != null)
+                                  <option selected value="{{$milest->id}}">{{$milest->milestone_title}}</option>
+                                    @else
+                                @foreach($milestones as $milestone)
+                                <option value="{{$milestone->id}}">
+                                    {{$milestone->milestone_title}}</option>
+
+                                    @endforeach
+                                    @endif
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <!-- PROJECT END -->
+            @endif
+
+        {{--  <div class="col-md-4">
                 <div class="form-group c-inv-select mb-4">
                     <x-forms.label fieldId="calculate_tax" :fieldLabel="__('modules.invoices.calculateTax')">
                     </x-forms.label>
@@ -163,10 +196,11 @@ $addProductPermission = user()->permission('add_product');
                         </select>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
         </div>
-        <div class="row px-lg-4 px-md-4 px-3 py-3">
+        <br>
+    {{--    <div class="row px-lg-4 px-md-4 px-3 py-3">
             <!-- BILLING ADDRESS START -->
             <div class="col-md-4">
                 <div class="form-group c-inv-select mb-0">
@@ -223,7 +257,7 @@ $addProductPermission = user()->permission('add_product');
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <!-- CLIENT, PROJECT, GST, BILLING, SHIPPING ADDRESS END -->
 
         @if (isset($fields) && count($fields) > 0)
@@ -317,7 +351,7 @@ $addProductPermission = user()->permission('add_product');
 
         <hr class="m-0 border-top-grey">
 
-        <div class="d-flex px-4 py-3">
+      {{-- <div class="d-flex px-4 py-3">
             <div class="form-group">
                 <x-forms.input-group>
                     <select class="form-control select-picker" data-live-search="true" data-size="8" id="add-products">
@@ -336,7 +370,7 @@ $addProductPermission = user()->permission('add_product');
                 </x-forms.input-group>
 
             </div>
-        </div>
+        </div> --}}
 
         <div id="sortable">
             @if (isset($estimate))

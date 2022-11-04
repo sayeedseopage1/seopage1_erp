@@ -6,8 +6,13 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 @endphp
 
 <!-- ROW START -->
+
 <div class="row py-5">
     <div class="col-lg-12 col-md-12 mb-4 mb-xl-0 mb-lg-4">
+      @if(Session::has('success'))
+          <div class="alert alert-success show mb-2" role="alert"> {{Session::get('success')}}</div>
+
+          @endif
         @if (($addProjectMilestonePermission == 'all' || $project->project_admin == user()->id) && !$project->trashed())
             <x-forms.button-primary icon="plus" id="add-project-milestone" class="type-btn mb-3">
                 @lang('modules.projects.createMilestone')
@@ -101,6 +106,8 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 </div>
 <!-- ROW END -->
+<input type="hidden" id="project_id"  value="{{$project->id}}">
+<input type="hidden" id="client_id"  value="{{$project->client_id}}">
 
 <script>
     $('#add-project-milestone').click(function() {
@@ -173,5 +180,6 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
         });
 
     });
+
 
 </script>

@@ -38,6 +38,7 @@ use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Illuminate\Support\Facades\App;
 
+
 class InvoiceController extends AccountBaseController
 {
 
@@ -128,6 +129,7 @@ class InvoiceController extends AccountBaseController
             }
 
             $this->view = 'invoices.ajax.create-timelog-invoice';
+
             return view('invoices.create', $this->data);
         }
 
@@ -143,6 +145,7 @@ class InvoiceController extends AccountBaseController
         }
 
         $this->view = 'invoices.ajax.create';
+        //dd($this->data);
         return view('invoices.create', $this->data);
 
     }
@@ -191,6 +194,7 @@ class InvoiceController extends AccountBaseController
 
         $invoice = new Invoice();
         $invoice->project_id = $request->project_id ?? null;
+        $invoice->milestone_id = $request->milestone_id ?? null;
         $invoice->client_id = ($request->client_id) ? $request->client_id : null;
         $invoice->issue_date = Carbon::createFromFormat($this->global->date_format, $request->issue_date)->format('Y-m-d');
         $invoice->due_date = Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
@@ -210,6 +214,11 @@ class InvoiceController extends AccountBaseController
         $invoice->company_address_id = $request->company_address_id;
         $invoice->estimate_id = $request->estimate_id ? $request->estimate_id : null;
         $invoice->save();
+        $project_milestone= ProjectMilestone::find($request->milestone_id);
+        $project_milestone->invoice_created= 1;
+        $project_milestone->invoice_id= $invoice->id;
+        $project_milestone->save();
+
 
         // To add custom fields data
         if ($request->get('custom_fields_data')) {
@@ -629,6 +638,7 @@ class InvoiceController extends AccountBaseController
         $invoice = Invoice::findOrFail($id);
 
         $invoice->project_id = $request->project_id ?? null;
+        $invoice->milestone_id = $request->milestone_id ?? null;
         $invoice->client_id = ($request->client_id) ? $request->client_id : null;
         $invoice->issue_date = Carbon::createFromFormat($this->global->date_format, $request->issue_date)->format('Y-m-d');
         $invoice->due_date = Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
