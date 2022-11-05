@@ -37,16 +37,22 @@ $changeStatusPermission = user()->permission('change_status');
 
                             @endif
                             @endif
-                                @if ($task->task_status == 'submitted')
+                            <?php
+                              $task_user= App\Models\TaskSubmission::orderBy('id','desc')->where('task_id',$task->id)->first();
+                            //  dd($task_user->user_id,Auth::user()->id);
+                             ?>
+                                @if ($task->task_status == 'submitted' )
                                     <!-- <x-forms.button-primary icon="check" data-status="completed"
                                         class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
                                         @lang('modules.tasks.markComplete')
                                     </x-forms.button-primary> -->
+                                    @if($task_user->user_id != Auth::user()->id)
                                       <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskapprove">Approve</button>
                                       <button class="btn bg-danger mr-3 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskrevision">Need Revision</button>
 
                                       @include('tasks.modals.taskapprove')
                                       @include('tasks.modals.taskrevision')
+                                    @endif
 
 
                                 @endif
@@ -76,7 +82,7 @@ $changeStatusPermission = user()->permission('change_status');
 
                                   @endif
                               @endif
-                                 @if(Auth::user()->role_id == 5)
+                                 @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 6)
 
 
 

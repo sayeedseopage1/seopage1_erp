@@ -270,11 +270,17 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                 <x-forms.select fieldName="milestone_id" fieldId="milestone-id"
                                     :fieldLabel="__('modules.projects.milestones')">
                                     <option value="">--</option>
+                                    <?php
+                                      $milestoness= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->get();
+
+                                     ?>
                                     @if($project)
                                         @if(in_array($viewMilestonePermission,['all','owned','added']) )
-                                            @foreach ($milestones as $item)
+                                            @foreach ($milestoness as $item)
+
                                                 <option value="{{ $item->id }}"
                                                         @if (!is_null($task) && $item->id == $task->milestone_id) selected @endif>{{ $item->milestone_title }}</option>
+
                                             @endforeach
                                         @endif
                                     @endif

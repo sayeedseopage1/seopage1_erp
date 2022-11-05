@@ -407,18 +407,13 @@ $developer= App\Models\User::where('role_id',5)->get();
                       <td>
                           ${{$item->amount}}
                       </td>
-                      <?php
-                      $pm_projects= App\Models\PMProject::where('pm_id',$item->pm_id)->get();
 
-                      foreach ($pm_projects as $value) {
-                        $payment= 0;
-                        $payment_s= App\Models\Payment::where('project_id',$value->project_id)->where('status','complete')->sum('amount');
-                        $payment += $payment+$payment_s;
 
-                      }
 
-                       ?>
-                      <td>{{$payment}}</td>
+                      <td>
+                        ${{$item->release_amount}}
+
+                      </td>
                   </tr>
               @empty
                   <tr>

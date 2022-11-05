@@ -16,7 +16,7 @@
         @csrf
           <input type="hidden" name="id" value="{{$milestone->id}}">
 
-        <button type="submit" class="btn-secondary rounded f-14 p-2 complete_milestone">Mark As Complete</button>
+        <button type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
           </form>
         <hr>
         @else
