@@ -64,7 +64,7 @@ class UpdateTask extends CoreRequest
             }
             else
             {
-                $rules['due_date'] = 'required|date_format:"' . $setting->date_format . '"|after_or_equal:start_date|before_or_equal:'.$milestoneEndDate;
+              //  $rules['due_date'] = 'required|date_format:"' . $setting->date_format . '"|after_or_equal:start_date|before_or_equal:'.$milestoneEndDate;
             }
         }
 
