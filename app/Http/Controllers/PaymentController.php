@@ -220,8 +220,8 @@ class PaymentController extends AccountBaseController
             $invoice->save();
         }
         $project= Project::find($request->project_id);
-        $project->milestone_paid= $request->amount;
-        $project->due= $project->project_budget - $request->amount;
+        $project->milestone_paid= $project->milestone_paid+$request->amount;
+        $project->due= $project->due - $request->amount;
         $project->paid_milestone_count= $project->paid_milestone_count + 1;
         $project->save();
         $pmassign= PMProject::where('project_id',$request->project_id)->first();

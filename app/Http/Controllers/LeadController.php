@@ -98,13 +98,13 @@ class LeadController extends AccountBaseController
 
       $deal_stage= DealStage::where('id',$request->id)->first();
       if ($deal_stage->deal_stage == 3 && $request->won_lost == "No") {
-  $deal= DealStage::find($request->id);
-  $deal->comments=$request->comments;
-  $deal->deal_status="Lost";
-  $deal->won_lost="No";
+            $deal= DealStage::find($request->id);
+            $deal->comments=$request->comments;
+            $deal->deal_status="Lost";
+            $deal->won_lost="No";
 
 
-    $deal->save();
+            $deal->save();
 
       }else {
         $deal= DealStage::find($request->id);
@@ -126,10 +126,10 @@ class LeadController extends AccountBaseController
           $deal->won_lost=$request->won_lost;
           $deal->save();
         }else {
-              $deal->deal_stage= $deal_stage->deal_stage;
-              $deal->comments=$request->comments;
-              $deal->won_lost=$request->won_lost;
-              $deal->save();
+          $deal->deal_stage= $deal_stage->deal_stage;
+          $deal->comments=$request->comments;
+          $deal->won_lost=$request->won_lost;
+          $deal->save();
         }
       }
 

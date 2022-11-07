@@ -22,7 +22,349 @@ $total_overdue_task= App\Models\Task::where('board_column_id',7)->count();
 $total_payment_release= App\Models\PMAssign::select('release_amount')->sum('release_amount');
 $total_project_due= App\Models\Project::select('project_budget')->sum('project_budget');
 $total_payment_due= $total_project_due - $total_payment_release;
+
+$project_managers= App\Models\User::where('role_id',4)->get();
+$lead_developer= App\Models\User::where('role_id',6)->get();
+$developer= App\Models\User::where('role_id',5)->get();
+
  ?>
+
+ {{-- Individual Project Manager Overview--}}
+ <div class="card col-md-3 mb-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Project Manager Combined Overview</h5></div>
+ <div class="row mt-2">
+   <div class="col-sm-12 col-lg-12 mt-3">
+       <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
+
+           <x-table class="border-0 pb-3 admin-dash-table table-hover">
+
+               <x-slot name="thead">
+                   <th class="pl-20">#</th>
+                   <th>PM Name</th>
+                   <th>No. of Projects</th>
+                   <th>Total Project Value</th>
+                   <th>Total Released Amount</th>
+                   <th>% of Project Got Money Released</th>
+                   <th>% of Project Got Canceled</th>
+                   <th>% of Amount Projects Got Canceled</th>
+                   <th>Average Project Completion Time</th>
+                   <th>No of Projects Got Canceled</th>
+                   <th>No. of Upsells (PM Made)</th>
+                   <th>Value of Upsells (PM Made)</th>
+                   <th>No. of Cross-sells (PM Made)</th>
+                   <th>Value of Cross-sells (PM Made)</th>
+               </x-slot>
+
+               @forelse($projectassign as $item)
+                   <tr>
+                       <td class="pl-20">{{ $loop->index+1 }}</td>
+                       <td>
+                           <a href="/account/employees/{{$item->pm_id}}" class="text-darkest-grey f-w-500"
+                             >{{ ucfirst($item->project->name) }}</a>
+                       </td>
+                       <td>
+                         {{$item->project_count}}
+                       </td>
+                       <td>
+                           ${{$item->amount}}
+                       </td>
+
+
+
+                       <td>
+                         ${{$item->release_amount}}
+
+                       </td>
+                       <td>
+                         @if($item->project_count != 0)
+                         @php
+                         $project_release_count= App\Models\Project::where('pm_id',$item->pm_id)->where('due',0)->count();
+                         $total_release_percentage=  ($project_release_count/$item->project_count)*100;
+                         @endphp
+
+                         {{$total_release_percentage}}%
+                         @else
+                         No Project Assign Yet
+                         @endif
+                       </td>
+                       <td>
+                         @if($item->project_count != 0)
+                         @php
+                         $project_cancel_count= App\Models\Project::where('pm_id',$item->pm_id)->where('status','canceled')->count();
+                         $total_cancel_percentage=  ($project_cancel_count/$item->project_count)*100;
+                         @endphp
+
+                         {{$total_cancel_percentage}}%
+                         @else
+                         No Project Assign Yet
+                         @endif
+
+
+                       </td>
+                       <td>
+                         @if($item->amount != 0)
+                         @php
+                         $project_cancel_amount= App\Models\Project::where('pm_id',$item->pm_id)->where('status','canceled')->sum('project_budget');
+                         $total_cancel_amount=  ($project_cancel_amount/$item->amount)*100;
+                         @endphp
+
+                         {{$total_cancel_amount}}%
+                         @else
+                         No Project Assign Yet
+                         @endif
+
+
+                       </td>
+                       <td>
+                        No Data
+
+
+
+                       </td>
+                       <td>
+                         @if($item->project_count != 0)
+
+
+                         {{$project_cancel_count}}
+                         @else
+                         No Project Assign Yet
+                         @endif
+
+                       </td>
+                       <td>
+                         0
+
+                       </td>
+                       <td>
+                         0
+
+
+                       </td>
+                       <td>
+                         0
+
+                       </td>
+                       <td>
+                         0
+                       </td>
+                   </tr>
+               @empty
+                   <tr>
+                       <td colspan="5" class="shadow-none">
+                           <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                       </td>
+                   </tr>
+               @endforelse
+           </x-table>
+       </x-cards.data>
+   </div>
+
+ </div>
+ <hr>
+
+ <div class="row">
+     @if (in_array('projects', $modules) && in_array('status_wise_project', $activeWidgets))
+         <div class="col-sm-12 col-lg-6 mt-3">
+             <x-cards.data :title="__('')">
+                 <div class="card col-md-6" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Status Wise Projects</h5></div>
+                 <x-pie-chart id="task-chart" :labels="$statusWiseProject['labels']"
+                     :values="$statusWiseProject['values']" :colors="$statusWiseProject['colors']" height="250" width="300" />
+             </x-cards.data>
+         </div>
+     @endif
+     <div class="col-sm-12 col-lg-6 mt-3">
+         <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
+           <div class="card col-md-6 mt-3 ml-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Status Wise Projects</h5></div>
+           <br>
+
+
+             <x-table class="border-0 pb-3 admin-dash-table table-hover">
+
+                 <x-slot name="thead">
+
+
+                     <th>In Progress</th>
+                     <th>Not Started</th>
+                     <th>On Hold</th>
+                     <th>Canceled</th>
+                     <th>Completed</th>
+                 </x-slot>
+
+
+                     <tr >
+
+                         <td >
+                           @php
+                           $project_in_progress= App\Models\Project::where('status','in progress')->count();
+
+                           @endphp
+                           {{$project_in_progress}}
+                         </td>
+                         <td>
+                           @php
+                           $project_not_started= App\Models\Project::where('status','not started')->count();
+
+                           @endphp
+                           {{ $project_not_started}}
+
+
+                         </td>
+                         <td>
+                           @php
+                           $project_on_hold= App\Models\Project::where('status','on hold')->count();
+
+                           @endphp
+                           {{$project_on_hold}}
+
+                         </td>
+
+
+                            <td class="f-14" width="20%">
+                              @php
+                              $project_canceled= App\Models\Project::where('status','canceled')->count();
+
+                              @endphp
+                              {{$project_canceled}}
+
+                            </td>
+
+                         <td>
+
+                           @php
+                           $project_finished= App\Models\Project::where('status','finished')->count();
+
+                           @endphp
+                           {{$project_finished}}
+
+
+
+                         </td>
+                     </tr>
+
+
+
+             </x-table>
+         </x-cards.data>
+     </div>
+
+
+
+
+ </div>
+ <hr>
+ <div class="card col-md-2" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Lead Developer Overview</h5></div>
+ <div class="row mb-3">
+ @foreach($lead_developer as $lead_dev)
+ <div class="col-sm-12 col-lg-12 mt-3 mb-3">
+   <x-cards.data :title="__('')" padding="false" >
+     <h5 class="text-center mt-3"><span class="badge badge-primary">{{mb_ucwords($lead_dev->name)}}</span></h5>
+     <div class="row ml-2">
+       <div class="col-xl-3 col-lg-3 col-md-2 mb-3" style="color:blue;">
+
+               <x-cards.widget :title="__('Project completion rate within deadline')" :value="$totalCanceledProject"
+                   icon="layer-group" />
+
+       </div>
+       <div class="col-xl-3 col-lg-3 col-md-2 mb-3" style="color:blue;">
+
+               <x-cards.widget :title="__('Number of negative comments')" :value="$totalCanceledProject"
+                   icon="layer-group" />
+
+       </div>
+       <div class="col-xl-3 col-lg-3 col-md-2 mb-3" style="color:blue;">
+
+               <x-cards.widget :title="__('Negative rating percentage')" :value="$totalCanceledProject"
+                   icon="layer-group" />
+
+       </div>
+       <div class="col-xl-3 col-lg-3 col-md-2 mb-5" style="color:blue;">
+
+               <x-cards.widget :title="__('Percentage of tasks completed on time')" :value="$totalCanceledProject"
+                   icon="layer-group" />
+
+       </div>
+
+       <div class="col-xl-3 col-lg-3 col-md-2 mb-5" style="color:blue;">
+
+               <x-cards.widget :title="__('Project cancel rate')" :value="$totalCanceledProject"
+                   icon="layer-group" />
+
+       </div>
+
+
+        </div>
+
+
+
+
+
+
+
+
+   </x-cards.data>
+ </div>
+ @endforeach
+ </div>
+
+ <hr>
+ {{-- Sales Executive Overview Leads--}}
+ <div class="card col-md-3 mt-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Sales Executive Overview (Leads)</h5></div>
+ <div class="row">
+   <div class="col-sm-12 col-lg-12 mt-3">
+       <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
+           <x-table class="border-0 pb-3 admin-dash-table table-hover">
+
+               <x-slot name="thead">
+                   <th class="pl-20">#</th>
+                   <th>Name</th>
+                   <th>No. of Leads</th>
+                   <th>No. of Leads Converted
+                     </th>
+                   <th>Total Bids Value</th>
+                   <th>Avg. Bids Value</th>
+                     <th>Won Deals</th>
+                     <th>% of Leads Conversion</th>
+                     <th>% of Won Deal</th>
+                      <th>Avg. Bidding Frequency</th>
+
+               </x-slot>
+
+
+                   <tr>
+                       <td class="pl-20"></td>
+                       <td>
+
+                       </td>
+                       <td></td>
+                       <td>
+
+                       </td>
+                       <td></td>
+                       <td></td>
+
+
+
+                       <td></td>
+                       <td></td>
+                       <td></td>
+
+
+
+                       <td></td>
+                   </tr>
+
+                   <tr>
+                       <td colspan="5" class="shadow-none">
+                           <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                       </td>
+                   </tr>
+
+           </x-table>
+       </x-cards.data>
+   </div>
+
+
+ </div>
+ <hr>
  <div class="card col-md-2 mb-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Team Overview</h5></div>
 <div class="row mt-2">
 
@@ -293,12 +635,9 @@ $total_payment_due= $total_project_due - $total_payment_release;
 </div>
 
 <hr>
-<?php
-$project_managers= App\Models\User::where('role_id',4)->get();
-$lead_developer= App\Models\User::where('role_id',6)->get();
-$developer= App\Models\User::where('role_id',5)->get();
 
- ?>
+
+ {{--
 <div class="card col-md-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Project Manager Overview</h5></div>
 
 
@@ -378,56 +717,17 @@ $developer= App\Models\User::where('role_id',5)->get();
   @endforeach
 </div>
 <hr>
+--}}
 
+{{-- Total Projects Overview--}}
 
 <div class="row mt-2">
+
   <div class="col-sm-12 col-lg-6 mt-3">
       <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
-        <div class="card col-md-6 mt-2 mb-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Project Manager Combined Overview</h5></div>
-          <x-table class="border-0 pb-3 admin-dash-table table-hover">
-
-              <x-slot name="thead">
-                  <th class="pl-20">#</th>
-                  <th>PM Name</th>
-                  <th>No. of Projects</th>
-                  <th>Total Project Value</th>
-                  <th>Total Released Amount</th>
-              </x-slot>
-
-              @forelse($projectassign as $item)
-                  <tr>
-                      <td class="pl-20">{{ $loop->index+1 }}</td>
-                      <td>
-                          <a href="/account/employees/{{$item->pm_id}}" class="text-darkest-grey f-w-500"
-                            >{{ ucfirst($item->project->name) }}</a>
-                      </td>
-                      <td>
-                        {{$item->project_count}}
-                      </td>
-                      <td>
-                          ${{$item->amount}}
-                      </td>
+          <div class="card col-md-6 mt-2 mb-3 ml-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Project OverView</h5></div>
 
 
-
-                      <td>
-                        ${{$item->release_amount}}
-
-                      </td>
-                  </tr>
-              @empty
-                  <tr>
-                      <td colspan="5" class="shadow-none">
-                          <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                      </td>
-                  </tr>
-              @endforelse
-          </x-table>
-      </x-cards.data>
-  </div>
-  <div class="col-sm-12 col-lg-6 mt-3">
-      <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
-          <div class="card col-md-6 mt-2 mb-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Project OverView</h5></div>
           <x-table class="border-0 pb-3 admin-dash-table table-hover">
 
               <x-slot name="thead">
@@ -482,6 +782,50 @@ $developer= App\Models\User::where('role_id',5)->get();
           </x-table>
       </x-cards.data>
   </div>
+  @if (in_array('projects', $modules) && in_array('pending_milestone', $activeWidgets))
+      <div class="col-sm-12 col-lg-6 mt-3">
+          <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
+              <div class="card col-md-6 mt-2 mb-3 ml-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Pending Milestone</h5></div>
+              <x-table class="border-0 pb-3 admin-dash-table table-hover">
+
+                  <x-slot name="thead">
+                      <th class="pl-20">#</th>
+                      <th>@lang('modules.projects.milestoneTitle')</th>
+                      <th>@lang('modules.projects.milestoneCost')</th>
+                      <th>@lang('app.project')</th>
+                  </x-slot>
+
+                  @forelse($pendingMilestone as $key=>$item)
+                      <tr id="row-{{ $item->id }}">
+                          <td class="pl-20">{{ $key + 1 }}</td>
+                          <td>
+                              <a href="javascript:;" class="milestone-detail text-darkest-grey f-w-500"
+                                  data-milestone-id="{{ $item->id }}">{{ ucfirst($item->milestone_title) }}</a>
+                          </td>
+                          <td>
+                              @if (!is_null($item->currency_id))
+                                  {{ $item->currency->currency_symbol . $item->cost }}
+                              @else
+                                  {{ $item->cost }}
+                              @endif
+                          </td>
+                          <td>
+                              <a href="{{ route('projects.show', [$item->project_id]) }}"
+                                  class="text-darkest-grey">{{ $item->project->project_name }}</a>
+                          </td>
+                      </tr>
+                  @empty
+                      <tr>
+                          <td colspan="5" class="shadow-none">
+                              <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                          </td>
+                      </tr>
+                  @endforelse
+              </x-table>
+          </x-cards.data>
+      </div>
+  @endif
+
 </div>
 <hr>
 {{-- Contry Wise Client Overview--}}
@@ -526,117 +870,9 @@ $developer= App\Models\User::where('role_id',5)->get();
 
 </div>
 <hr>
-<div class="row">
-    @if (in_array('projects', $modules) && in_array('status_wise_project', $activeWidgets))
-        <div class="col-sm-12 col-lg-6 mt-3">
-            <x-cards.data :title="__('')">
-                <div class="card col-md-6" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Status Wise Projects</h5></div>
-                <x-pie-chart id="task-chart" :labels="$statusWiseProject['labels']"
-                    :values="$statusWiseProject['values']" :colors="$statusWiseProject['colors']" height="250" width="300" />
-            </x-cards.data>
-        </div>
-    @endif
-
-
-    @if (in_array('projects', $modules) && in_array('pending_milestone', $activeWidgets))
-        <div class="col-sm-12 col-lg-6 mt-3">
-            <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
-                <div class="card col-md-6 mt-2 mb-3 ml-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Pending Milestone</h5></div>
-                <x-table class="border-0 pb-3 admin-dash-table table-hover">
-
-                    <x-slot name="thead">
-                        <th class="pl-20">#</th>
-                        <th>@lang('modules.projects.milestoneTitle')</th>
-                        <th>@lang('modules.projects.milestoneCost')</th>
-                        <th>@lang('app.project')</th>
-                    </x-slot>
-
-                    @forelse($pendingMilestone as $key=>$item)
-                        <tr id="row-{{ $item->id }}">
-                            <td class="pl-20">{{ $key + 1 }}</td>
-                            <td>
-                                <a href="javascript:;" class="milestone-detail text-darkest-grey f-w-500"
-                                    data-milestone-id="{{ $item->id }}">{{ ucfirst($item->milestone_title) }}</a>
-                            </td>
-                            <td>
-                                @if (!is_null($item->currency_id))
-                                    {{ $item->currency->currency_symbol . $item->cost }}
-                                @else
-                                    {{ $item->cost }}
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('projects.show', [$item->project_id]) }}"
-                                    class="text-darkest-grey">{{ $item->project->project_name }}</a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="shadow-none">
-                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                            </td>
-                        </tr>
-                    @endforelse
-                </x-table>
-            </x-cards.data>
-        </div>
-    @endif
-
-</div>
-<br>
-{{-- Lead Developer Overview--}}
-<hr>
-
-<div class="card col-md-2" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Lead Developer Overview</h5></div>
-<div class="row mb-3">
-@foreach($lead_developer as $lead_dev)
-<div class="col-sm-12 col-lg-6 mt-3 mb-3">
-  <x-cards.data :title="__('')" padding="false" >
-    <h5 class="text-center mt-3"><span class="badge badge-primary">{{mb_ucwords($lead_dev->name)}}</span></h5>
-    <div class="row ml-5">
-      <div class="col-xl-5 col-lg-6 col-md-6 mb-3 ml-3" style="color:blue;">
-
-              <x-cards.widget :title="__('Avg. Milestone Completion Time')" :value="$totalCanceledProject"
-                  icon="layer-group" />
-
-      </div>
-      <div class="col-xl-5 col-lg-6 col-md-6 mb-3 mr-3" style="color:blue;">
-
-              <x-cards.widget :title="__('Avg. Rating')" :value="$totalCanceledProject"
-                  icon="layer-group" />
-
-      </div>
-
-
-    </div>
-    <div class="row ml-5">
-
-      <div class="col-xl-5 col-lg-6 col-md-6 mb-3 ml-3">
-
-              <x-cards.widget :title="__('% of Milestone Compl. on Time')" :value="$totalCanceledProject"
-                  icon="layer-group" />
-
-      </div>
-      <div class="col-xl-5 col-lg-6 col-md-6 mb-3 mr-3" style="color:blue;">
-
-              <x-cards.widget :title="__('% of Milestone Cancl. Rate')" :value="$totalCanceledProject"
-                  icon="layer-group" />
-
-      </div>
-
-    </div>
 
 
 
-
-
-
-  </x-cards.data>
-</div>
-@endforeach
-</div>
-
-<hr>
 
 {{-- Developer Overview--}}
 <div class="card col-md-2" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Developer Overview</h5></div>
@@ -804,56 +1040,7 @@ $developer= App\Models\User::where('role_id',5)->get();
 
 </div>
 <hr>
-{{-- Sales Executive Overview Leads--}}
-<div class="card col-md-3 mt-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Sales Executive Overview (Leads)</h5></div>
-<div class="row">
-  <div class="col-sm-12 col-lg-12 mt-3">
-      <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
-          <x-table class="border-0 pb-3 admin-dash-table table-hover">
 
-              <x-slot name="thead">
-                  <th class="pl-20">#</th>
-                  <th>Sales Executive Name</th>
-                  <th>No. of Leads Converted
-                    </th>
-                  <th>Total Leads Value</th>
-                  <th>Avg. Leads Value</th>
-                    <th>No of Leads Converted</th>
-                    <th>Leads Conversion Rate</th>
-
-              </x-slot>
-
-
-                  <tr>
-                      <td class="pl-20"></td>
-                      <td>
-
-                      </td>
-                      <td></td>
-                      <td>
-
-                      </td>
-                      <td></td>
-                      <td></td>
-
-
-
-                      <td></td>
-                  </tr>
-
-                  <tr>
-                      <td colspan="5" class="shadow-none">
-                          <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                      </td>
-                  </tr>
-
-          </x-table>
-      </x-cards.data>
-  </div>
-
-
-</div>
-<hr>
 {{-- Sales Executive Overview Deals--}}
 <div class="card col-md-3 mt-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Sales Executive Overview (Deals)</h5></div>
 <div class="row">

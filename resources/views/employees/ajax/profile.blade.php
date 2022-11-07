@@ -36,6 +36,129 @@ $editEmployeePermission = user()->permission('edit_employees');
         <!-- ROW START -->
         <div class="row">
             <!--  USER CARDS START -->
+            @if(Auth::user()->role_id == 1 && $employee->role_id == 4)
+            <?php
+            $project_counts= App\Models\PMAssign::where('pm_id',$employee->id)->first();
+            if ($project_counts->project_count != 0) {
+              $project_realease_acount= App\Models\Project::where('pm_id',$employee->id)->where('due',0)->count();
+              $total_release_percentage= ($project_counts->project_count /$project_realease_acount)* 100;
+              $project_cancelation=  App\Models\Project::where('pm_id',$employee->id)->where('status','canceled')->count();
+              $percentage_of_project_cancelation= ($project_cancelation/$project_counts->project_count)*100;
+              $projects_on_hold= App\Models\Project::where('pm_id',$employee->id)->where('status','on hold')->count();
+              $projects_on_hold_percentage= ($projects_on_hold/$project_counts->project_count)*100;
+            }else {
+              $total_release_percentage=0;
+              $percentage_of_project_cancelation= 0;
+              $projects_on_hold_percentage= 0;
+            }
+            if ($project_counts->amount != 0) {
+
+              $project_cancelation_rate=  App\Models\Project::where('pm_id',$employee->id)->where('status','canceled')->sum('project_budget');
+              $percentage_of_project_cancelation_rate= ($project_cancelation_rate/$project_counts->amount)*100;
+            }else {
+
+              $percentage_of_project_cancelation_rate= 0;
+            }
+            //dd($project_counts);
+             ?>
+
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
+
+                    <x-cards.widget :title="__('Number of projects')" :value="$project_counts->project_count"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
+
+                    <x-cards.widget :title="__('Total project value')" :value="$project_counts->amount"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
+
+                    <x-cards.widget :title="__('Total released amount')" :value="$project_counts->release_amount"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
+
+                    <x-cards.widget :title="__('% of Project Got Completion')" :value="$total_release_percentage .'%'"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
+
+                    <x-cards.widget :title="__('% of Project Got Canceled')" :value="$percentage_of_project_cancelation . '%'"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
+
+                    <x-cards.widget :title="__('No. of Upsells')" :value="0"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
+
+                    <x-cards.widget :title="__('Value of Upsells')" :value="0"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
+
+                    <x-cards.widget :title="__('No. of Cross-sells')" :value="0"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
+
+                    <x-cards.widget :title="__('Value of Cross-sells')" :value="0"
+                        icon="layer-group" />
+
+            </div>
+
+
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
+
+                    <x-cards.widget :title="__('Avg. Project Completion Time')" :value="0"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3">
+
+                    <x-cards.widget :title="__('Avg. Payment Rel. Time')" :value="0"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
+
+                    <x-cards.widget :title="__('Neg. FB After Submission')" :value="0"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3">
+
+                    <x-cards.widget :title="__('% of Projects Compl. on Time')" :value="0"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
+
+                    <x-cards.widget :title="__('% of Projects Cancl. Rate')" :value="$percentage_of_project_cancelation_rate . '%'"
+                        icon="layer-group" />
+
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-3 mb-3">
+
+                    <x-cards.widget :title="__('% of Projects Gone On-Hold')" :value="$projects_on_hold_percentage .'%'"
+                        icon="layer-group" />
+
+            </div>
+
+
+
+
+            @endif
             <div class="col-lg-12 col-md-12 mb-4 mb-xl-0 mb-lg-4 mb-md-0">
                 <div class="row">
                     <div class="col-xl-6 col-md-6 mb-4 mb-lg-0">

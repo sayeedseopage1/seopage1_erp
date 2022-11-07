@@ -278,6 +278,7 @@ class ContractController extends AccountBaseController
           $project->added_by= Auth::id();
           $project->status= 'not started';
           $project->public= 0;
+          $project->due= $request->amount;
           $project->save();
           $lead_developer_id= RoleUser::where('role_id',6)->get();
           //dd($lead_developer_id);
@@ -304,6 +305,9 @@ class ContractController extends AccountBaseController
                 $deal_assign= Deal::find($deal->id);
                 $deal_assign->pm_id= $pmassign->pm_id;
                 $deal_assign->save();
+                $pm_assign_project= Project::find($project->id);
+                $pm_assign_project->pm_id= $pmassign->pm_id;
+                $pm_assign_project->save();
               //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find= PMAssign::where('pm_id',$pm_user->pm_id)->first();
                 $pm_project_update=PMAssign::find($pm_project_find->id);
@@ -337,6 +341,9 @@ class ContractController extends AccountBaseController
                 $deal_assign= Deal::find($deal->id);
                 $deal_assign->pm_id= $pmassign->pm_id;
                 $deal_assign->save();
+                $pm_assign_project= Project::find($project->id);
+                $pm_assign_project->pm_id= $pmassign->pm_id;
+                $pm_assign_project->save();
               //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find= PMAssign::where('pm_id',$pm_find_id->pm_id)->first();
                 $pm_project_update=PMAssign::find($pm_project_find->id);
@@ -358,6 +365,9 @@ class ContractController extends AccountBaseController
                 $deal_assign= Deal::find($deal->id);
                 $deal_assign->pm_id= $pmassign->pm_id;
                 $deal_assign->save();
+                $pm_assign_project= Project::find($project->id);
+                $pm_assign_project->pm_id= $pmassign->pm_id;
+                $pm_assign_project->save();
 
               //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find= PMAssign::where('pm_id', $final_id->pm_id)->first();
@@ -479,6 +489,7 @@ class ContractController extends AccountBaseController
           $project->project_short_code= 'PSEOP1' . $suffle;
           $project->start_date= $newDate;
           $project->project_budget= $request->amount;
+          $project->due= $request->amount;
 
           $project->completion_percent= 0;
           $project->deal_id=$deal->id;
@@ -501,6 +512,9 @@ class ContractController extends AccountBaseController
                 $deal_assign= Deal::find($deal->id);
                 $deal_assign->pm_id= $pm_user->pm_id;
                 $deal_assign->save();
+                $pm_assign_project= Project::find($project->id);
+                $pm_assign_project->pm_id= $pmassign->pm_id;
+                $pm_assign_project->save();
               //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find= PMAssign::where('pm_id',$pm_user->pm_id)->first();
                 $pm_project_update=PMAssign::find($pm_project_find->id);
@@ -534,6 +548,9 @@ class ContractController extends AccountBaseController
                 $deal_assign= Deal::find($deal->id);
                 $deal_assign->pm_id= $pm_find_id->pm_id;
                 $deal_assign->save();
+                $pm_assign_project= Project::find($project->id);
+                $pm_assign_project->pm_id= $pmassign->pm_id;
+                $pm_assign_project->save();
               //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find= PMAssign::where('pm_id',$pm_find_id->pm_id)->first();
                 $pm_project_update=PMAssign::find($pm_project_find->id);
@@ -555,6 +572,9 @@ class ContractController extends AccountBaseController
                 $deal_assign= Deal::find($deal->id);
                 $deal_assign->pm_id= $final_id->pm_id;
                 $deal_assign->save();
+                $pm_assign_project= Project::find($project->id);
+                $pm_assign_project->pm_id= $pmassign->pm_id;
+                $pm_assign_project->save();
               //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find= PMAssign::where('pm_id', $final_id->pm_id)->first();
                 $pm_project_update=PMAssign::find($pm_project_find->id);

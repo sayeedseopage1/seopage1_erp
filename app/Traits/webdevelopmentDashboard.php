@@ -134,7 +134,7 @@ trait webdevelopmentDashboard
             return $value->status == '1';
         })->pluck('widget_name')->toArray();
 
-        $this->pendingMilestone = ProjectMilestone::whereBetween(DB::raw('DATE(project_milestones.`created_at`)'), [$startDate, $endDate])
+        $this->pendingMilestone = ProjectMilestone::where('status','incomplete')->whereBetween(DB::raw('DATE(project_milestones.`updated_at`)'), [$startDate, $endDate])
             ->with('project', 'currency')
             ->get();
 

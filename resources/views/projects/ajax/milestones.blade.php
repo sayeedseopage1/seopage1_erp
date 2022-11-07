@@ -29,6 +29,8 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                         <th>@lang('modules.projects.milestoneTitle')</th>
                         <th>@lang('modules.projects.milestoneCost')</th>
                         <th>@lang('app.status')</th>
+                        <th>@lang('Invoice Genereted')</th>
+                        <th>@lang('Payment Release')</th>
                         <th class="text-right pr-20">@lang('app.action')</th>
                     </x-slot>
 
@@ -53,6 +55,36 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 @else
                                     <i class="fa fa-circle mr-1 text-red f-10"></i>
                                     {{ trans('app.' . $item->status) }}
+                                @endif
+                            </td>
+                            <td>
+                                @if ($item->invoice_created == 1)
+                                    <i class="fa fa-circle mr-1 text-dark-green f-10"></i>
+                                  Yes
+                                @else
+                                    <i class="fa fa-circle mr-1 text-red f-10"></i>
+                                  No
+                                @endif
+                            </td>
+                            <td>
+
+                              @if($item->invoice_id != null)
+                              @php
+                              $invoice= App\Models\Invoice::where('milestone_id',$item->id)->orderBy('id','desc')->first();
+                              @endphp
+
+
+                                @if ($invoice->status == 'paid')
+                                    <i class="fa fa-circle mr-1 text-dark-green f-10"></i>
+                                  Paid
+                                @else
+                                    <i class="fa fa-circle mr-1 text-red f-10"></i>
+                                  Unpaid
+                                @endif
+                                @else
+                                <i class="fa fa-circle mr-1 text-red f-10"></i>
+                              Unpaid
+
                                 @endif
                             </td>
                             <td class="text-right pr-20">
