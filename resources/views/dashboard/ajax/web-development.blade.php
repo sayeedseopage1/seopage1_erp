@@ -30,12 +30,12 @@ $developer= App\Models\User::where('role_id',5)->get();
  ?>
 
  {{-- Individual Project Manager Overview--}}
- <div class="card col-md-3 mb-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Project Manager Combined Overview</h5></div>
+ <div class="card col-md-4 mb-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Project Manager Combined Overview</h5></div>
  <div class="row mt-2">
    <div class="col-sm-12 col-lg-12 mt-3">
        <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
 
-           <x-table class="border-0 pb-3 admin-dash-table table-hover">
+           <x-table class="border-0 pb-3 admin-dash-table table-hover mt-3">
 
                <x-slot name="thead">
                    <th class="pl-20">#</th>
@@ -311,7 +311,7 @@ $developer= App\Models\User::where('role_id',5)->get();
  <div class="row">
    <div class="col-sm-12 col-lg-12 mt-3">
        <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
-           <x-table class="border-0 pb-3 admin-dash-table table-hover">
+           <x-table class="border-0 pb-3 admin-dash-table table-hover mt-3">
 
                <x-slot name="thead">
                    <th class="pl-20">#</th>
@@ -415,7 +415,7 @@ $developer= App\Models\User::where('role_id',5)->get();
  <div class="row">
    <div class="col-sm-12 col-lg-12 mt-3">
        <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
-           <x-table class="border-0 pb-3 admin-dash-table table-hover">
+           <x-table class="border-0 pb-3 admin-dash-table table-hover mt-3">
 
                <x-slot name="thead">
                    <th class="pl-20">#</th>
@@ -481,7 +481,7 @@ $developer= App\Models\User::where('role_id',5)->get();
  </div>
  <hr>
 
- <div class="card col-md-2 mb-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Team Overview</h5></div>
+ <div class="card col-md-3 mb-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Team Overview</h5></div>
 <div class="row mt-2">
 
         <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
@@ -991,7 +991,7 @@ $developer= App\Models\User::where('role_id',5)->get();
 
 
 {{-- Developer Overview--}}
-<div class="card col-md-2" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Developer Overview</h5></div>
+<div class="card col-md-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Developer Overview</h5></div>
 
 
 <div class="row mb-3">
