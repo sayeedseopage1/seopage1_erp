@@ -50,6 +50,7 @@ use App\Http\Requests\User\CreateInviteLinkRequest;
 use App\Http\Requests\Admin\Employee\ImportProcessRequest;
 use App\Models\LanguageSetting;
 use App\Models\PMAssign;
+use App\Models\SalesCount;
 
 class EmployeeController extends AccountBaseController
 {
@@ -127,6 +128,7 @@ class EmployeeController extends AccountBaseController
 
     public function assignRole(Request $request)
     {
+      //dd($request);
       $user= User::find($request->userId);
       $user->role_id= $request->role;
       $user->save();
@@ -138,6 +140,13 @@ class EmployeeController extends AccountBaseController
         $pmassign->amount=0;
         $pmassign->save();
 
+
+      }
+      if($request->role == 7)
+      {
+        $sales_ex= new SalesCount();
+        $sales_ex->user_id= $request->userId;
+        $sales_ex->save();
 
       }
       $pmu= PMAssign::where('pm_id',$request->userId)->first();

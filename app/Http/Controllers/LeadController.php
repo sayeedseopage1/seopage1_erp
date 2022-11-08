@@ -42,6 +42,8 @@ use App\Models\User;
 use App\Models\Contract;
 use App\Models\ContractType;
 use App\Models\DealStage;
+use App\Models\SalesCount;
+use DateTime;
 
 
 class LeadController extends AccountBaseController
@@ -85,9 +87,24 @@ class LeadController extends AccountBaseController
       $deal->status= 1;
       $deal->deal_stage= $request->deal_stage;
       $deal->save();
+      if ($request->deal_stage == 3) {
+        $lead_id= Lead::where('id',$request->id)->first();
+        $agent= SalesCount::where('user_id',$lead_id->added_by)->first();
+        $lead_ag= SalesCount::find($agent->id);
+
+        $lead_ag->negotiation_started= $lead_ag->negotiation_started +1;
+        $lead_ag->save();
+      }
       $lead= Lead::find($lead->id);
       $lead->deal_status=1;
       $lead->save();
+      $lead_con_id= Lead::where('id',$request->id)->first();
+      $agent_id= SalesCount::where('user_id',$lead_con_id->added_by)->first();
+      $lead_ag_id= SalesCount::find($agent_id->id);
+
+      $lead_ag_id->deals_count= $lead_ag_id->deals_count +1;
+      $lead_ag_id->save();
+
 
       $deal= DealStage::where('id',$deal->id)->first();
 
@@ -105,6 +122,15 @@ class LeadController extends AccountBaseController
 
 
             $deal->save();
+            if (Auth::user()->role_id == 7) {
+              $agent_id= SalesCount::where('user_id',Auth::id())->first();
+              $lead_ag_id= SalesCount::find($agent_id->id);
+
+              $lead_ag_id->lost_deals= $lead_ag_id->lost_deals +1;
+              $lead_ag_id->save();
+            }
+
+
 
       }else {
         $deal= DealStage::find($request->id);
@@ -130,6 +156,14 @@ class LeadController extends AccountBaseController
           $deal->comments=$request->comments;
           $deal->won_lost=$request->won_lost;
           $deal->save();
+          if (Auth::user()->role_id == 7) {
+            $agent= SalesCount::where('user_id',Auth::id())->first();
+            $lead_ag= SalesCount::find($agent->id);
+
+            $lead_ag->negotiation_started= $lead_ag->negotiation_started +1;
+            $lead_ag->save();
+          }
+
         }
       }
 
@@ -147,6 +181,13 @@ class LeadController extends AccountBaseController
         $deal->deal_status="Lost";
         $deal->won_lost="No";
         $deal->save();
+        if (Auth::user()->role_id == 7) {
+          $agent_id= SalesCount::where('user_id',Auth::id())->first();
+          $lead_ag_id= SalesCount::find($agent_id->id);
+
+          $lead_ag_id->lost_deals= $lead_ag_id->lost_deals +1;
+          $lead_ag_id->save();
+        }
 
 
     return back()->with('status_updated', 'Status Updated!!');
@@ -316,6 +357,29 @@ class LeadController extends AccountBaseController
     }
     public function storeLead(Request $request)
     {
+      if (Auth::user()->role_id == 7) {
+
+        $sales_ex= SalesCount::where('user_id',Auth::id())->first();
+        $sales_count= SalesCount::find($sales_ex->id);
+
+        $sales_count->leads_count= $sales_count->leads_count + 1;
+        if ($sales_count->last_lead_date != null) {
+          $sales_count->previous_lead_date= $sales_count->last_lead_date;
+          $date= Carbon::now();
+          $date1 = new DateTime($sales_count->previous_lead_date);
+          $date2 = new DateTime($date);
+          $difference = $date1->diff($date2);
+          //$diffInSeconds = $difference->s; //45
+          $diffInMinutes = $difference->i; //23
+        //  dd($diffInMinutes);
+         $sales_count->avg_lead_time=$diffInMinutes/$sales_count->leads_count;
+
+        }
+        $sales_count->last_lead_date= Carbon::now();
+        $sales_count->lead_value= $sales_count->lead_value + $request->value;
+        $sales_count->save();
+
+      }
       //dd(Auth::id());
       //dd($request);
       $lead = new Lead();
@@ -326,7 +390,7 @@ class LeadController extends AccountBaseController
       $lead->value= $request->value;
       $lead->status_id= 1;
       $lead->currency_id= 1;
-    //  $lead->agent_id =Auth::id();
+      //$lead->agent_id =Auth::id();
       $lead->country= $request->country;
       $lead->note= $request->description;
       $lead->save();
@@ -336,6 +400,7 @@ class LeadController extends AccountBaseController
       $lead_agent->added_by= Auth::id();
       $lead_agent->last_updated_by= Auth::id();
       $lead_agent->save();
+
       if ($request->get('custom_fields_data')) {
           $lead->updateCustomFieldData($request->get('custom_fields_data'));
       }

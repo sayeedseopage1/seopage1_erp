@@ -1,0 +1,369 @@
+@font-face {
+    font-family: Poppins-Regular;
+    src: url('../fonts/poppins/Poppins-Regular.ttf'); 
+  }
+  
+  @font-face {
+    font-family: Poppins-Bold;
+    src: url('../fonts/poppins/Poppins-Bold.ttf'); 
+  }
+  
+  @font-face {
+    font-family: Poppins-Medium;
+    src: url('../fonts/poppins/Poppins-Medium.ttf'); 
+  }
+  
+  @font-face {
+    font-family: Montserrat-Bold;
+    src: url('../fonts/montserrat/Montserrat-Bold.ttf'); 
+  }
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Poppins;
+    overflow-x: hidden;
+}
+
+.content_image img, svg {
+    
+    width: 90%;
+    margin: 0 auto;
+    display: block;
+}
+
+/* content_image  */
+.wrapper {
+    padding: 50px 0;
+}
+
+.content_image{
+    width: 100%;
+    height: auto;
+}
+
+
+.thankyou_content {
+    width: 100%;
+    height: 377px;
+    margin: 0 0 0.1px;
+    padding: inherit;
+    position: relative;
+    background: #F0F9FD;
+    border-radius: 190px 190px 0px 190px;
+    position: relative;
+    overflow: hidden;
+}
+.thankyou_content::before {
+    content: '';
+    width: 56%;
+    height: 25%;
+    background-image: url('../img/Path4.png');
+    background-size: contain;
+    position: absolute;
+    z-index: 111;
+    bottom: 0;
+    left: 47%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.thankyou_content::after {
+    content: '';
+    width: 53%;
+    height: 10%;
+    background-image: url('../img/4.png');
+    background-size: contain;
+    position: absolute;
+    z-index: 111;
+    top: 8%;
+    left: 43%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.thankyou_content h1{
+    margin: 0 51px 11px 0;
+    padding: 85px 10.7px 17px 86.1px;
+    font-family: Reey;
+    font-size: 65px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.2;
+    letter-spacing: normal;
+    text-align: center;
+    color: #41b4e1;
+}
+
+.thankyou_content h3{
+  font-family: Roboto;
+  font-size: 33px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.33;
+  letter-spacing: 0.33px;
+  text-align: center;
+  color: #41b4e1;
+}
+.thankyou_content p {
+    font-family: Poppins;
+    font-size: 20px;
+    font-weight: 300;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: 0.2px;
+    text-align: left;
+    color: #828282;
+    padding-left: 13%;
+    vertical-align: middle;
+}
+
+img.thanks {
+    margin: 0 auto;
+    display: block;
+    padding-top: 17%;
+}
+.check-mark {
+    width: 35px;
+    height: 35px;
+    margin: 1px 0 1px 3px;
+}
+
+.datainfo h4{
+  font-size: 25px;
+  letter-spacing: 0.25px;
+  color: #41b4e1;
+}
+.datainfo h5 {
+    font-family: Poppins;
+    font-size: 20px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: 0.2px;
+    text-align: left;
+    color: #364974;
+    padding-top: 30px;
+}
+.datainfo p{
+    font-family: Poppins;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.65;
+    letter-spacing: 0.2px;
+    text-align: left;
+    color: #000;
+}
+
+.lines hr{
+  opacity: 0.45;
+  background-color: #5ec4e9;
+}
+
+.datainfo span{
+    opacity: 0.65;
+    font-family: Poppins;
+    font-size: 18px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+}
+
+.datainfo img{
+    width: 129px;
+    height: 42px;
+    margin: 11px 0px;
+    display: block;
+}
+
+
+.social_icon ul {
+    margin: 0;
+    padding: 0;
+}
+.social_icon ul li {
+    list-style: none;
+    float: left;
+    padding: 10px 15px;
+    background: #30BCED;
+    margin: 3px;
+    border-radius: 5px;
+}
+
+.social_icon ul li i.fa-brands.fa-facebook-f {
+    width: 17px;
+    text-align: center;
+}
+
+.social_icon ul li:nth-child(2) {
+    background: #5070A9;
+}
+.social_icon ul li:nth-child(3) {
+    background: #FF0000;
+}
+.social_icon ul li:nth-child(4) {
+    background: #53A2C8;
+}
+.social_icon ul li:nth-child(5) {
+    background: #20C0EE;
+}
+.social_icon ul li:nth-child(6) {
+    background: #C02A00;
+}
+
+.social_icon ul li a{
+    color: #fff;
+}
+
+
+/* sign_seopage1 form stylesheet */
+
+
+.sign_seopage1{
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.sign_seopage1::before {
+    content: '';
+    width: 39%;
+    height: 8%;
+    background-image: url('../img/4.png');
+    background-size: contain;
+    position: absolute;
+    z-index: 111;
+    top: 5%;
+    right: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+.sign_seopage1::after {
+    content: '';
+    width: 29%;
+    height: 20%;
+    background-image: url('../img/1.png');
+    background-size: contain;
+    position: absolute;
+    z-index: 111;
+    bottom: 0;
+    right: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+#signing_bg {
+    background: #E7F5FA;
+    border-radius: 100px 100px 0 100px;
+    padding: 13%;
+}
+
+
+.signin_image img{
+    width: 80%;
+    height: auto;
+    margin:  0 auto;
+    display: block;
+}
+
+.signing_form h1{
+  object-fit: contain;
+  font-family: Poppins;
+  font-size: 30px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.53;
+  letter-spacing: 0.3px;
+  text-align: left;
+  color: #41b4e1;
+}
+
+
+.signing_form .form-label{
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: left;
+  color: #6a6a6a;
+}
+
+.signing_form input {
+    padding: 10px 0 10px 15.1px;
+    border-radius: 50px;
+    -webkit-backdrop-filter: blur(30px);
+    backdrop-filter: blur(30px);
+    box-shadow: 0 20px 40px 0 rgba(196, 196, 196, 0.06);
+    background-color: #fff;
+}
+
+.signing_form button {
+    border-radius: 24px;
+    -webkit-backdrop-filter: blur(30px);
+    backdrop-filter: blur(30px);
+    border: solid 1.8px #0f7ec7;
+    width: 100%;
+    background: transparent !important;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.56;
+    letter-spacing: normal;
+    text-align: center;
+    color: #41b4e1 !important;
+    transition: all .5s ease-in-out;
+}
+
+.signing_form button:hover{
+    background: #0f7ec7 !important;
+    color: #fff !important;
+}
+
+
+.signing_form input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    opacity: 0.19;
+    font-family: Poppins;
+    font-size: 13px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.54;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+  }
+  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: red;
+  }
+  
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    color: red;
+  }

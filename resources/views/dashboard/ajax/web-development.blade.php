@@ -327,36 +327,80 @@ $developer= App\Models\User::where('role_id',5)->get();
                       <th>Avg. Bidding Frequency</th>
 
                </x-slot>
+               @forelse($sales as $sale)
 
 
                    <tr>
-                       <td class="pl-20"></td>
+                       <td class="pl-20">{{$loop->index+1}}</td>
                        <td>
+                         {{$sale->user->name}}
+                       </td>
+                       <td>{{$sale->leads_count}}</td>
+                       <td>
+                         {{$sale->deals_count}}
+                       </td>
+                       <td>
+                         @if($sale->lead_value == null)
+                         Not Applicable
+                         @else
+                         ${{$sale->lead_value}}
+                         @endif
+                       </td>
+                       <td>
+                         @if($sale->lead_value == null)
+                         Not Applicable
+                         @else
+                         @php
+                         $av_lead_value = $sale->lead_value/ $sale->leads_count;
+                         @endphp
+                         ${{round($av_lead_value,2)}}
+                         @endif
+                       </td>
+
+
+
+                       <td>
+                        {{$sale->won_deals}}
+                    </td>
+                       <td>
+                         @if($sale->leads_count == 0)
+                         Not Applicable
+                         @else
+                         @php
+                         $percentage_of_conversion = ($sale->deals_count/$sale->leads_count)*100;
+                         @endphp
+                         {{round($percentage_of_conversion,3)}}%
+                         @endif
+                       </td>
+                       <td> @if($sale->leads_count == 0)
+                        Not Applicable
+                        @else
+                        @php
+                        $percentage_of_won_deal = ($sale->won_deals/$sale->leads_count)*100;
+                        @endphp
+                        {{round($percentage_of_won_deal,3)}}%
+                        @endif</td>
+
+
+
+                       <td>
+                         @if($sale->avg_lead_time == null)
+                         Not Applicable
+                         @else
+                         {{round($sale->avg_lead_time,2)}} minutes
+                         @endif
 
                        </td>
-                       <td></td>
-                       <td>
-
-                       </td>
-                       <td></td>
-                       <td></td>
-
-
-
-                       <td></td>
-                       <td></td>
-                       <td></td>
-
-
-
-                       <td></td>
                    </tr>
+                   @empty
+
 
                    <tr>
                        <td colspan="5" class="shadow-none">
                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                        </td>
                    </tr>
+                   @endforelse
 
            </x-table>
        </x-cards.data>
@@ -365,6 +409,78 @@ $developer= App\Models\User::where('role_id',5)->get();
 
  </div>
  <hr>
+
+ {{-- Sales Executive Overview Deals--}}
+ <div class="card col-md-3 mt-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Sales Executive Overview (Deals)</h5></div>
+ <div class="row">
+   <div class="col-sm-12 col-lg-12 mt-3">
+       <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
+           <x-table class="border-0 pb-3 admin-dash-table table-hover">
+
+               <x-slot name="thead">
+                   <th class="pl-20">#</th>
+                   <th>Name</th>
+                   <th>No. of Deals Converted
+                     </th>
+                     <th>No. of Deals Lost
+                       </th>
+                       <th>No. of deals moved to the price negotiation stage
+                         </th>
+                   <th>Total Won Deals Value</th>
+                   <th>Deal to Won Deals Conv. Rate</th>
+                     <th>No of Wrong Deals</th>
+
+               </x-slot>
+               @forelse($sales as $deal)
+
+                   <tr>
+                       <td class="pl-20">{{$loop->index+1}}</td>
+                       <td>
+                          {{$deal->user->name}}
+                       </td>
+                       <td> {{$deal->deals_count}}</td>
+                       <td>
+                          {{$deal->lost_deals}}
+                       </td>
+                       <td> {{$deal->negotiation_started}}</td>
+                       <td>@if($deal->deal_value== null)
+
+                         Not Applicable
+                         @else
+
+                          ${{$deal->deal_value}}
+                          @endif
+                        </td>
+
+
+
+                       <td>@if($sale->deals_count == 0)
+                        Not Applicable
+                        @else
+                        @php
+                        $percentage_of_won_deal = ($sale->won_deals/$sale->deals_count)*100;
+                        @endphp
+                        {{$percentage_of_won_deal}}%
+                        @endif</td>
+                       <td>{{$deal->wrong_deals}}</td>
+                   </tr>
+                   @empty
+
+                   <tr>
+                       <td colspan="5" class="shadow-none">
+                           <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                       </td>
+                   </tr>
+                   @endforelse
+
+           </x-table>
+       </x-cards.data>
+   </div>
+
+
+ </div>
+ <hr>
+
  <div class="card col-md-2 mb-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Team Overview</h5></div>
 <div class="row mt-2">
 
@@ -1039,57 +1155,7 @@ $developer= App\Models\User::where('role_id',5)->get();
   </div>
 
 </div>
-<hr>
 
-{{-- Sales Executive Overview Deals--}}
-<div class="card col-md-3 mt-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Sales Executive Overview (Deals)</h5></div>
-<div class="row">
-  <div class="col-sm-12 col-lg-12 mt-3">
-      <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
-          <x-table class="border-0 pb-3 admin-dash-table table-hover">
-
-              <x-slot name="thead">
-                  <th class="pl-20">#</th>
-                  <th>Sales Executive Name</th>
-                  <th>No. of Deals Converted
-                    </th>
-                  <th>Total Deals Value</th>
-                  <th>Avg. Deals Value</th>
-                    <th>No of Won Deals</th>
-                    <th>Won Deal Conversion Rate</th>
-
-              </x-slot>
-
-
-                  <tr>
-                      <td class="pl-20"></td>
-                      <td>
-
-                      </td>
-                      <td></td>
-                      <td>
-
-                      </td>
-                      <td></td>
-                      <td></td>
-
-
-
-                      <td></td>
-                  </tr>
-
-                  <tr>
-                      <td colspan="5" class="shadow-none">
-                          <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                      </td>
-                  </tr>
-
-          </x-table>
-      </x-cards.data>
-  </div>
-
-
-</div>
 
 <script>
     $('body').on('click', '.milestone-detail', function() {

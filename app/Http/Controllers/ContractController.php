@@ -39,6 +39,7 @@ use App\Models\Lead;
 use App\Models\ProjectMember;
 use App\Models\ProjectMilestone;
 use Illuminate\Support\Facades\Validator;
+use App\Models\SalesCount;
 
 class ContractController extends AccountBaseController
 {
@@ -225,6 +226,15 @@ class ContractController extends AccountBaseController
 
       $deal->start_date= $newDate;
       $deal->save();
+      if (Auth::user()->role_id == 7) {
+        $agent_id= SalesCount::where('user_id',Auth::id())->first();
+        $lead_ag_id= SalesCount::find($agent_id->id);
+
+        $lead_ag_id->won_deals= $lead_ag_id->won_deals +1;
+        $lead_ag_id->deal_value= $lead_ag_id->deal_value + $request->amount;
+        $lead_ag_id->save();
+      }
+
       $user= new User();
       $user->name= $request->client_name;
       $user->user_name= $request->client_username;
@@ -412,6 +422,12 @@ class ContractController extends AccountBaseController
             $deal->comments=$deal_stage->comments;
             $deal->won_lost='Yes';
             $deal->save();
+            $lead_id= Lead::where('id',$request->lead_id)->first();
+            $agent= SalesCount::where('user_id',$lead_id->added_by)->first();
+            $lead_ag= SalesCount::find($agent->id);
+
+            $lead_ag->negotiation_started= $lead_ag->negotiation_started +1;
+            $lead_ag->save();
       }
       $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       $suffle = substr(str_shuffle($chars), 0, 6);
@@ -438,6 +454,13 @@ class ContractController extends AccountBaseController
 
       $deal->start_date= $newDate;
       $deal->save();
+      $lead_con_id= Lead::where('id',$request->lead_id)->first();
+      $agent_id= SalesCount::where('user_id',$lead_con_id->added_by)->first();
+      $lead_ag_id= SalesCount::find($agent_id->id);
+
+      $lead_ag_id->won_deals= $lead_ag_id->won_deals +1;
+      $lead_ag_id->deal_value= $lead_ag_id->deal_value + $request->amount;
+      $lead_ag_id->save();
 
       $lead= Lead::find($request->lead_id);
       $lead->status_id= 3;
@@ -759,6 +782,9 @@ class ContractController extends AccountBaseController
       $deal->status= 'Denied';
       $deal->save();
 
+
+
+
       $pm_id= PMProject::where('deal_id',$request->id)->first();
       $project= Project::find($pm_id->project_id);
     //  dd($project);
@@ -773,6 +799,12 @@ class ContractController extends AccountBaseController
       $pmassign_id->save();
       // $pm_project= PMProject::find($pm_id->id);
       // $pm_project->delete();
+      $agent_id= Project::where('id',$pm_id->project_id)->first();
+      $agent= SalesCount::where('user_id',$agent_id->added_by)->first();
+      $lead_ag= SalesCount::find($agent->id);
+
+      $lead_ag->wrong_deals= $lead_ag->wrong_deals +1;
+      $lead_ag->save();
       return redirect('/account/contracts/'.$deal->id)->with('messages.contractAdded');
 
 

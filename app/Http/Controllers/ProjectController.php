@@ -56,6 +56,7 @@ use App\Models\PMAssign;
 use App\Models\Deal;
 use App\Models\RoleUser;
 use Auth;
+use App\Models\Lead;
 
 class ProjectController extends AccountBaseController
 {
@@ -617,7 +618,7 @@ if ($pm_count < 2) {
         $project_manager= new ProjectMember();
         $project_manager->user_id= Auth::id();
         $project_manager->project_id= $project->id;
-      
+
         $project_manager->hourly_rate= 0;
         $project_manager->save();
 

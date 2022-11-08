@@ -1,83 +1,122 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  <link rel="stylesheet" href="{{asset('/common/style.css')}}">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-
-     alpha/css/bootstrap.css" rel="stylesheet">
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Thank You</title>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Bootstrap 5 CDN  -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
 
-	<link rel="stylesheet" type="text/css"
-     href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+        <!-- Animate css CDN  -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-  </head>
-  <body>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"><meta name="google-site-verification" content="OBHSOz2bJypVuqhse4EbUNPh6u4nlzaqmKaLoOryaqs" />
-<main>
-  <div class="email-container">
-  <div class="email-body">
-    <div class="banner">
-        <h2>Submission Successful</h2>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+        <!-- Fontawesome CDN -->
 
-      <h1>Thank You</h1>
-        <h2>We've Got Your Information</h2>
-    </div>
-    <div class="email-content">
-      <p>Hi there!</p>
-      <p>Thank you for subscribing. We're so excited to share the latest news and updates about our product with you. If you'd like to learn more, follow us on social media!</p>
-      <a href="#"><i class="fab fa-facebook-square"></i> Check us out on Facebook</a><br>
-      <a href="#"><i class="fab fa-twitter-square"></i> Follow Us on Twitter</a>
-    <hr>
-    <p>Sincerely,</p>
-    <p class="sig">Melissa</p>
-    <p><em>Melissa A.</em>
-    <br>Customer Success Manager</p>
-    </div>
-  </div>
-</div>
-</main>
-<footer>
-  <p>unsubscribe</p>
-</footer>
-<script>
-  @if(Session::has('message'))
-  toastr.options =
-  {
-  	"closeButton" : true,
-  	"progressBar" : true
-  }
-  		toastr.success("{{ session('message') }}");
-  @endif
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+            integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
 
-  @if(Session::has('error'))
-  toastr.options =
-  {
-  	"closeButton" : true,
-  	"progressBar" : true
-  }
-  		toastr.error("{{ session('error') }}");
-  @endif
+        <!-- google font  -->
 
-  @if(Session::has('info'))
-  toastr.options =
-  {
-  	"closeButton" : true,
-  	"progressBar" : true
-  }
-  		toastr.info("{{ session('info') }}");
-  @endif
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+        </style>
+        <link rel="stylesheet" href="{{asset('custom/css/style.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{asset('custom/vendor/select2/select2.min.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{asset('custom/css/util.css')}}" />
+        <link rel="stylesheet" type="text/css" href="{{asset('custom/css/main.css')}}" />
+        <link rel="stylesheet" href="{{asset('custom/css/responsive.css')}}" />
+    </head>
+    <body>
+        <section class="wrapper py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-xl-6">
+                        <div class="content_image wow animate__animated animate__zoomIn">
+                            <img src="{{asset('custom/img/ERP_Thank_You.gif')}}" alt="" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <div class="thankyou_content">
+                            <!-- <h1>Thank you!</h1> -->
+                            <img class="thanks wow animate__animated animate__bounceIn" src="{{asset('custom/img/Thank_you.png')}}" alt="" />
+                            <h3>Submission Successful <img class="check-mark wow animate__animated animate__bounceIn" src="{{asset('custom/img/check-mark.png')}}" alt="" /></h3>
+                            <p>We've Got Your Information</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  @if(Session::has('warning'))
-  toastr.options =
-  {
-  	"closeButton" : true,
-  	"progressBar" : true
-  }
-  		toastr.warning("{{ session('warning') }}");
-  @endif
-</script>
-  </body>
+        <section class="thank_info pb-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col md-2 col-xl-2"></div>
+                    <div class="col-md-8 col-xl-8">
+                        <div class="datainfo animate__animated animate__fadeInUp">
+                            <h4 class="pb-4 wow">Hi there!</h4>
+                            <p>Thank you for subscribing. We're so excited to share the latest news and updates about our product with you. If you'd like to learn more, follow us on social media!</p>
+
+                            <span class="lines"><hr /></span>
+                            <span>Sincerely,</span>
+                            <br />
+                        Rajat Chakraboty
+                        <br>
+                            <span>
+                              CEO, Seopage1 <br />
+
+                            </span>
+
+                            <h5>Connect With Us</h5>
+                            <div class="social_icon">
+                                <ul>
+                                    <li>
+                                        <a href="#"> <i class="fa-brands fa-twitter"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> <i class="fa-brands fa-facebook-f"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> <i class="fa-brands fa-youtube"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> <i class="fa-brands fa-linkedin-in"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> <i class="fa-brands fa-skype"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> <i class="fa-brands fa-quora"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col md-2 col-xl-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <script src="{{asset('custom/js/jquery-3.6.1.min.js')}}"></script>
+        <script src="{{asset('custom/js/wow.min.js')}}"></script>
+        <script src="{{asset('custom/js/tilt.jquery.min.js')}}"></script>
+        <script src="{{asset('custom/js/wow.min.js')}}"></script>
+        <script src="{{asset('custom/js/main.js')}}"></script>
+
+        <script>
+            new WOW().init();
+        </script>
+
+        <script>
+            $(".js-tilt").tilt({
+                scale: 1.1,
+            });
+        </script>
+    </body>
 </html>
