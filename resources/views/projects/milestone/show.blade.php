@@ -20,7 +20,7 @@
           </form>
         <hr>
         @else
-          @if($milestone->invoice_id == 'null')
+          @if($milestone->invoice_id != 'null')
             <a href="#"  id="create-invoice"  class="btn-primary rounded f-14 p-2 flex-right">Generate Invoice</a>
           @else
           @php
