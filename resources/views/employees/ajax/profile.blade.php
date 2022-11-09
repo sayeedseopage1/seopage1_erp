@@ -40,16 +40,28 @@ $editEmployeePermission = user()->permission('edit_employees');
             <?php
             $project_counts= App\Models\PMAssign::where('pm_id',$employee->id)->first();
             if ($project_counts->project_count != 0) {
-              $project_realease_acount= App\Models\Project::where('pm_id',$employee->id)->where('due',0)->count();
-              $total_release_percentage= ($project_counts->project_count /$project_realease_acount)* 100;
+              $project_release_count= App\Models\Project::where('pm_id',$employee->id)->where('due',0)->count();
+              //dd($project_release_count);
+              if ($project_release_count != 0) {
+                $total_release_percentage= ($project_counts->project_count /$project_release_count)* 100;
+              }else {
+                $total_release_percentage=0;
+              }
+
               $project_cancelation=  App\Models\Project::where('pm_id',$employee->id)->where('status','canceled')->count();
-              $percentage_of_project_cancelation= ($project_cancelation/$project_counts->project_count)*100;
+              if ($project_cancelation != 0) {
+                  $percentage_of_project_cancelation= ($project_cancelation/$project_counts->project_count)*100;
+              }else {
+                $percentage_of_project_cancelation= 0;
+              }
+
               $projects_on_hold= App\Models\Project::where('pm_id',$employee->id)->where('status','on hold')->count();
-              $projects_on_hold_percentage= ($projects_on_hold/$project_counts->project_count)*100;
-            }else {
-              $total_release_percentage=0;
-              $percentage_of_project_cancelation= 0;
-              $projects_on_hold_percentage= 0;
+              if ($projects_on_hold != 0) {
+                $projects_on_hold_percentage= ($projects_on_hold/$project_counts->project_count)*100;
+              }else {
+                $projects_on_hold_percentage= 0;
+              }
+
             }
             if ($project_counts->amount != 0) {
 

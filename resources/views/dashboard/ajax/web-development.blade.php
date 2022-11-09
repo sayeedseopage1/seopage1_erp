@@ -251,7 +251,7 @@ $developer= App\Models\User::where('role_id',5)->get();
 
  </div>
  <hr>
- <div class="card col-md-2" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Lead Developer Overview</h5></div>
+ <div class="card col-md-3" style="background-color:#008ff8;"><h5 class="text-center mt-1 text-white">Lead Developer Overview</h5></div>
  <div class="row mb-3">
  @foreach($lead_developer as $lead_dev)
  <div class="col-sm-12 col-lg-12 mt-3 mb-3">
@@ -259,8 +259,13 @@ $developer= App\Models\User::where('role_id',5)->get();
      <h5 class="text-center mt-3"><span class="badge badge-primary">{{mb_ucwords($lead_dev->name)}}</span></h5>
      <div class="row ml-2">
        <div class="col-xl-3 col-lg-3 col-md-2 mb-3" style="color:blue;">
+         <?php
+         $number_of_projects= App\Models\ProjectMember::where('user_id',$lead_dev->id)->count();
+         //dd($number_of_projects);
 
-               <x-cards.widget :title="__('Project completion rate within deadline')" :value="$totalCanceledProject"
+          ?>
+
+               <x-cards.widget :title="__('Project completion rate within deadline')" :value="$totalCanceledProject . '%'"
                    icon="layer-group" />
 
        </div>
@@ -272,7 +277,7 @@ $developer= App\Models\User::where('role_id',5)->get();
        </div>
        <div class="col-xl-3 col-lg-3 col-md-2 mb-3" style="color:blue;">
 
-               <x-cards.widget :title="__('Negative rating percentage')" :value="$totalCanceledProject"
+               <x-cards.widget :title="__('Negative rating percentage')" :value="$totalCanceledProject . '%'"
                    icon="layer-group" />
 
        </div>
@@ -285,7 +290,7 @@ $developer= App\Models\User::where('role_id',5)->get();
 
        <div class="col-xl-3 col-lg-3 col-md-2 mb-5" style="color:blue;">
 
-               <x-cards.widget :title="__('Project cancel rate')" :value="$totalCanceledProject"
+               <x-cards.widget :title="__('Project cancel rate')" :value="$totalCanceledProject . '%'"
                    icon="layer-group" />
 
        </div>
@@ -332,8 +337,8 @@ $developer= App\Models\User::where('role_id',5)->get();
 
                    <tr>
                        <td class="pl-20">{{$loop->index+1}}</td>
-                       <td>
-                         {{$sale->user->name}}
+                       <td >
+                         <a href="/account/employees/{{$sale->user_id}}" class="text-darkest-grey f-w-500">{{$sale->user->name}}</a>
                        </td>
                        <td>{{$sale->leads_count}}</td>
                        <td>
@@ -436,7 +441,7 @@ $developer= App\Models\User::where('role_id',5)->get();
                    <tr>
                        <td class="pl-20">{{$loop->index+1}}</td>
                        <td>
-                          {{$deal->user->name}}
+                        <a href="/account/employees/{{$sale->user_id}}" class="text-darkest-grey f-w-500">{{$deal->user->name}}</a>
                        </td>
                        <td> {{$deal->deals_count}}</td>
                        <td>

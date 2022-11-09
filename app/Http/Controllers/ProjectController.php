@@ -597,8 +597,8 @@ if ($pm_count < 2) {
         $project->project_status= 'Accepted';
         //$project->added_by= Auth::id();
         $project->last_updated_by= Auth::id();
-        $project_admin= User::where('role_id',6)->first();
-        $project->project_admin= $project_admin->id;
+        //$project_admin= User::where('role_id',6)->first();
+        $project->project_admin= Auth::id();
 
         if ($request->public) {
             $project->public = 1;

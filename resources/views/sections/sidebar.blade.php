@@ -193,8 +193,19 @@
                                 d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z" />
                         </x-slot>
                         <div class="accordionItemContent pb-2">
+                          <?php
+                          $won_deals_project= App\Models\Project::where('pm_id',Auth::id())->where('project_status','pending')->count();
+                          $won_deals=App\Models\Project::where('project_status','pending')->count();
+
+                           ?>
                             @if (in_array('contracts', user_modules()) && $sidebarUserPermissions['view_contract'] != 5 && $sidebarUserPermissions['view_contract'] != 'none')
-                                <x-sub-menu-item :link="route('contracts.index')" :text="__('Won Deals')" />
+                              @if(Auth::user()->role_id == 4)
+                                  <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals ('.$won_deals_project.')'" />
+                              @elseif(Auth::user()->role_id == 1)
+                                  <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals ('.$won_deals.')'" />
+                                  @else
+                                    <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
+                              @endif
                             @endif
                             @if (in_array('projects', user_modules()) && $sidebarUserPermissions['view_projects'] != 5 && $sidebarUserPermissions['view_projects'] != 'none')
                                 <x-sub-menu-item :link="route('projects.index')" :text="__('app.menu.projects')" />
