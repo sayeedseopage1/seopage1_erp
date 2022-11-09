@@ -62,6 +62,10 @@ $editEmployeePermission = user()->permission('edit_employees');
                 $projects_on_hold_percentage= 0;
               }
 
+            }else {
+                $total_release_percentage=0;
+                $percentage_of_project_cancelation= 0;
+                $projects_on_hold_percentage= 0;
             }
             if ($project_counts->amount != 0) {
 
