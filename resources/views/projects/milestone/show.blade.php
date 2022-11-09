@@ -11,7 +11,7 @@
   <input type="hidden" id="milestone_id" value="{{$milestone->id}}">
 
     <x-cards.data>
-      @if($milestone->status == "incomplete")
+      @if($milestone->status == 'incomplete')
       <form class="" action="{{route('milestone-complete')}}" method="post">
         @csrf
           <input type="hidden" name="id" value="{{$milestone->id}}">
@@ -36,7 +36,7 @@
 
             @endif
 
-                                    
+
         <hr>
 
 
