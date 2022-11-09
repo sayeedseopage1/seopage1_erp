@@ -25,6 +25,7 @@
                                       @php
                                       $invoice= App\Models\Invoice::where('milestone_id',$milestone->id)->orderBy('id','desc')->first();
                                       @endphp
+                                      @if(!$invoice)
 
 
                                         @if ($invoice->status == 'paid')
@@ -34,6 +35,7 @@
                                             <i class="fa fa-circle mr-1 text-red f-10"></i>
                                           Unpaid
                                         @endif
+                                      @endif
                                         @else
                                               <a href="#"  id="create-invoice"  class="btn-primary rounded f-14 p-2 flex-right">Generate Invoice</a>
                                         @endif

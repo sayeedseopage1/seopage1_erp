@@ -132,14 +132,14 @@
                 @endif
 
                 <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
-                @if (!in_array('client', user_roles()) && in_array('leads', user_modules()) && $sidebarUserPermissions['view_lead'] != 5 && $sidebarUserPermissions['view_lead'] != 'none')
+                <!-- @if (!in_array('client', user_roles()) && in_array('leads', user_modules()) && $sidebarUserPermissions['view_lead'] != 5 && $sidebarUserPermissions['view_lead'] != 'none')
                     <x-menu-item icon="person" :text="__('app.menu.lead')" :link="route('leads.index')">
                         <x-slot name="iconPath">
                             <path
                                 d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
                         </x-slot>
                     </x-menu-item>
-                @endif
+                @endif -->
 
                 @if (!in_array('client', user_roles()) && in_array('clients', user_modules()) && $sidebarUserPermissions['view_clients'] != 5 && $sidebarUserPermissions['view_clients'] != 'none')
                     <x-menu-item icon="building" :text="__('app.menu.clients')" :link="route('clients.index')">
@@ -193,6 +193,15 @@
                                 d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z" />
                         </x-slot>
                         <div class="accordionItemContent pb-2">
+                          <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
+                          @if (!in_array('client', user_roles()) && in_array('leads', user_modules()) && $sidebarUserPermissions['view_lead'] != 5 && $sidebarUserPermissions['view_lead'] != 'none')
+                              <x-sub-menu-item icon="person" :text="__('app.menu.lead')" :link="route('leads.index')">
+                                  <x-slot name="iconPath">
+                                      <path
+                                          d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                                  </x-slot>
+                              </x-sub-menu-item>
+                          @endif
                           <?php
                           $won_deals_project= App\Models\Project::where('pm_id',Auth::id())->where('project_status','pending')->count();
                           $won_deals=App\Models\Project::where('project_status','pending')->count();
