@@ -98,8 +98,6 @@
              Is this task completed within deadline?
           </div>
       	<div class="rating mb-3">
-
-
             <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="Meh">5 stars</label>
             <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="Kinda bad">4 stars</label>
             <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="Kinda bad">3 stars</label>
@@ -110,8 +108,6 @@
            How beautifully the task is submitted?
         </div>
         <div class="rating2 mb-3">
-
-
             <input type="radio" id="star6" name="rating2" value="5" /><label for="star6" title="Meh">5 stars</label>
             <input type="radio" id="star7" name="rating2" value="4" /><label for="star7" title="Kinda bad">4 stars</label>
             <input type="radio" id="star8" name="rating2" value="3" /><label for="star8" title="Kinda bad">3 stars</label>
@@ -122,8 +118,6 @@
            How perfectly the task requirements are fulfilled?
         </div>
         <div class="rating3 mb-3">
-
-
             <input type="radio" id="star11" name="rating3" value="5" /><label for="star11" title="Meh">5 stars</label>
             <input type="radio" id="star12" name="rating3" value="4" /><label for="star12" title="Kinda bad">4 stars</label>
             <input type="radio" id="star13" name="rating3" value="3" /><label for="star13" title="Kinda bad">3 stars</label>

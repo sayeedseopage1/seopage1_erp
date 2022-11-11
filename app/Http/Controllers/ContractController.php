@@ -373,8 +373,7 @@ class ContractController extends AccountBaseController
                 $pm_assign_project = Project::find($project->id);
                 $pm_assign_project->pm_id = $pmassign->pm_id;
                 $pm_assign_project->save();
-
-                //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+          //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find = PMAssign::where('pm_id', $final_id->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
