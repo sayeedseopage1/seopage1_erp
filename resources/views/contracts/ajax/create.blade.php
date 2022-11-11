@@ -141,7 +141,7 @@ $addClientPermission = user()->permission('add_clients');
                                 class="form-control height-35 f-14" />
                         </x-forms.input-group>
                     </div>
-                    
+
 
                     <div class="col-md-6">
                         <x-forms.text fieldId="profile_link" :fieldLabel="__('Freealancer Profile Link')" fieldName="profile_link"

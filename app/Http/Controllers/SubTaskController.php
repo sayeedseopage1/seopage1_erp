@@ -97,11 +97,11 @@ class SubTaskController extends AccountBaseController
         $task_s->dependent_task_id= $request->task_id;
         $task_s->subtask_id= $subTask->id;
         $task_s->save();
-        $task_user= new TaskUser();
-        $task_user->task_id= $request->task_id;
-        $task_user->user_id= $request->user_id ? $request->user_id : null;
-
-        $task_user->save();
+        // $task_user= new TaskUser();
+        // $task_user->task_id= $request->task_id;
+        // $task_user->user_id= $request->user_id ? $request->user_id : null;
+        //
+        // $task_user->save();
 
 
         $task = $subTask->task;

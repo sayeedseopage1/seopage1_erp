@@ -187,7 +187,7 @@ class LeadsDataTable extends BaseDataTable
                       }elseif($leadid->deal_status == 'Lost'){
                         $won_lost=  "Lost";
 
-                    }elseif($leadid->deal_status == 'pending' && $leadid->won_lost == 'No') {
+                    }elseif(($leadid->deal_status == 'pending' && $leadid->won_lost == 'No')|| ($leadid->deal_status == 'pending' && $leadid->won_lost == null)) {
                       $won_lost ="Not Activity Yet";
 
                     }

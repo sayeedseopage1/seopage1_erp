@@ -31,9 +31,14 @@
                               <div class="col-md-6">
                                 <div class="mt-3">
                                     <label for="input-state-2" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong></label>
-                                    <input name="client_name" id="input-state-2" type="text" class="form-control" placeholder="Enter Client Name" required>
+                                    <input name="client_name" id="input-state-2" type="text" class="form-control @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
 
                                 </div>
+                                @error('client_name')
+                                  <div class="mt-3">
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    </div>
+                                @enderror
                               </div>
 
 
@@ -42,9 +47,14 @@
                               <div class="col-md-6">
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Client Username <span style="color:red;">*<span></strong></label>
-                                    <input name="client_username" id="input-state-3" type="text" class="form-control" placeholder="Enter Client Username" required>
+                                    <input name="user_name" id="input-state-3" type="text" class="form-control @error('user_name') is-invalid @enderror" placeholder="Enter Client Username" >
 
                                 </div>
+                                @error('user_name')
+                                  <div class="mt-3">
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    </div>
+                                @enderror
                               </div>
 
                               <div class="col-md-6">
@@ -78,3 +88,10 @@
     </div>
   </div>
 </div>
+@if (count($errors) > 0)
+<script>
+    $( document ).ready(function() {
+        $('#dealaddstagemodal').modal('show');
+    });
+</script>
+  @endif

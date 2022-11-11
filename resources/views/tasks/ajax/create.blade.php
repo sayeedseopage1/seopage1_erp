@@ -265,7 +265,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                     </x-forms.input-group>
                                 </div>
                             </div>
-
+                            @if($project != null)
                             <div class="col-md-12 col-lg-4">
                                 <x-forms.select fieldName="milestone_id" fieldId="milestone-id"
                                     :fieldLabel="__('modules.projects.milestones')">
@@ -286,6 +286,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                     @endif
                                 </x-forms.select>
                             </div>
+                            @endif
                             <?php
 
                               $board_column= App\Models\TaskboardColumn::where('id',2)->first();

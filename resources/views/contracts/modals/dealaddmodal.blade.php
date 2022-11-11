@@ -20,16 +20,27 @@
                               <div class="col-md-6">
                                 <div class="mt-3">
                                     <label for="input-state-2" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong></label>
-                                    <input name="client_name" id="input-state-2" type="text" class="form-control" placeholder="Enter Client Name" required>
+                                    <input name="client_name" id="input-state-2" type="text" class="form-control @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
+
 
                                 </div>
+                                @error('client_name')
+                                <div class="mt-3">
+                                  <div class="alert alert-danger">{{ $message }}</div>
+                                  </div>
+                                @enderror
                               </div>
                               <div class="col-md-6">
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Client Username <span style="color:red;">*<span></strong></label>
-                                    <input name="client_username" id="input-state-3" type="text" class="form-control" placeholder="Enter Client Username" required>
+                                    <input name="user_name" id="input-state-3" type="text" class="form-control @error('user_name') is-invalid @enderror" placeholder="Enter Client Username">
 
                                 </div>
+                                @error('user_name')
+                                  <div class="mt-3">
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                    </div>
+                                @enderror
                               </div>
 
 
@@ -37,15 +48,24 @@
 
                             <div class="mt-3">
                                 <label for="input-state-3" class="form-label"><strong>Project Name <span style="color:red;">*<span></strong></label>
-                                <input name="project_name" id="input-state-3" type="text" class="form-control" placeholder="Enter Project Name" required>
+                                <input name="project_name" id="input-state-3" type="text" class="form-control @error('project_name') is-invalid @enderror" placeholder="Enter Project Name" >
 
                             </div>
+                            @error('project_name')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
                             <div class="mt-3">
                                 <label for="input-state-3" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong></label>
-                                <input name="amount" id="input-state-3" type="number" class="form-control" placeholder="Enter Amount" required>
+                                <input name="amount" id="input-state-3" type="number" class="form-control @error('amount') is-invalid @enderror" placeholder="Enter Amount">
 
                             </div>
-
+                            @error('amount')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
 
 
