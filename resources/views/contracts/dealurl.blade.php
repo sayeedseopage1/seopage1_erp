@@ -110,7 +110,7 @@
                           <textarea class="form-control"  readonly name="other_platform" placeholder="Leave a comment here"></textarea>
 
                         @else
-                      <textarea class="form-control" value="{{$client->other_platform}}" readonly name="other_platform" placeholder="Leave a comment here">{!!$client->other_platform!!}</textarea>
+                      <textarea class="form-control"  readonly name="other_platform" placeholder="Leave a comment here">{!!$client->other_platform!!}</textarea>
                       @endif
 
 

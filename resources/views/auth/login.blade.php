@@ -92,16 +92,17 @@
                                 Sign in
                             </button>
                         </div>
-                        @if ($errors->any())
-                            <div class="alert alert-danger gfg border rounded-pill mt-4">
 
-                                    @foreach ($errors->all() as $error)
-                                        {{ $error }}
-                                    @endforeach
-
-                            </div>
-                        @endif
                     </form>
+                    @if ($errors->any())
+                        <div class="container-login100-form-btn wow animate__animated animate__fadeInUp alert alert-danger gfg border rounded-pill mt-4">
+
+                                @foreach ($errors->all() as $error)
+                                    {{ $error }}
+                                @endforeach
+
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

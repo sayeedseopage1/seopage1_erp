@@ -54,6 +54,8 @@ use Toastr;
 use App\Models\Deal;
 use Illuminate\Support\Facades\Redirect;
 
+
+
 class HomeController extends Controller
 {
     use UniversalSearchTrait;
@@ -87,20 +89,38 @@ class HomeController extends Controller
     }
     public function ClientForm(Request $request)
     {
+      $validated = $request->validate([
+          'user_name' => 'required|unique:users|max:255',
+          'email' => 'required|unique:users|max:255',
 
-    // dd($request);
+
+      ]);
+    // /  dd($request);
       $client = new ClientForm();
       $client->deal_id=$request->decrypt;
-      $client->client_username= $request->client_username;
-      $client->client_email= $request->client_email;
+      $client->client_username= $request->user_name;
+      $client->client_email= $request->email;
       $client->client_phone= $request->client_phone;
       $client->client_whatsapp= $request->client_whatsapp;
       $client->other_platform= $request->other_platform;
       $client->message= $request->message;
       $client->save();
       $deal= Deal::find($client->deal_id);
+      //dd($deal);
+      $deal->client_username=$request->user_name;
       $deal->submission_status= 'Submitted';
       $deal->save();
+      $usr= User::where('id',$deal->client_id)->first();
+      //dd($usr);
+      $user=User::find($usr->id);
+      $user->mobile= $request->client_phone;
+      $user->email= $request->email;
+      $user->user_name=  $request->user_name;
+      $user->save();
+      $client_details= ClientDetails::where('user_id',$deal->client_id)->first();
+      $cl= ClientDetails::find($client_details->id);
+      $cl->client_username= $request->user_name;
+      $cl->save();
 
 
           return redirect('/thankyou')->with('message','Submitted Successfully');
