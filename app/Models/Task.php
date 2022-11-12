@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Subtask;
+use App\Models\ProjectMilestone;
 
 /**
  * App\Models\Task
@@ -475,6 +476,10 @@ class Task extends BaseModel
     public function subtask(): BelongsTo
     {
         return $this->belongsTo(Subtask::class,'subtask_id');
+    }
+    public function milestone()
+    {
+        return $this->belongsTo(ProjectMilestone::class, 'milestone_id');
     }
 
 }

@@ -205,6 +205,23 @@ $changeStatusPermission = user()->permission('change_status');
                                     @endif
                                     <a href="{{ route('projects.show', $task->project_id) }}" class="text-dark-grey">
                                         {{ $task->project->project_name }}</a>
+
+                                @else
+                                    --
+                                @endif
+                            </p>
+
+                        </div>
+                        <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                            <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">@lang('Milestone')</p>
+                            <p class="mb-0 text-dark-grey f-14 w-70">
+                                @if ($task->milestone_id != null)
+
+                                        <i class="fa fa-circle mr-1 text-red f-10"></i>
+
+                                    <span class="text-dark-grey">
+                                        {{ $task->milestone->milestone_title }}</span>
+
                                 @else
                                     --
                                 @endif
@@ -213,22 +230,7 @@ $changeStatusPermission = user()->permission('change_status');
                         </div>
                     @endif
 
-                    @if (($taskSettings->priority == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()) )
-                        <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
-                            <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
-                                @lang('modules.tasks.priority')</p>
-                                <p class="mb-0 text-dark-grey f-14 w-70">
-                                    @if ($task->priority == 'high')
-                                    <i class="fa fa-circle mr-1 text-red f-10"></i>
-                                    @elseif ($task->priority == 'medium')
-                                    <i class="fa fa-circle mr-1 text-yellow f-10"></i>
-                                    @else
-                                    <i class="fa fa-circle mr-1 text-dark-green f-10"></i>
-                                    @endif
-                                    @lang('app.'.$task->priority)
-                                </p>
-                        </div>
-                    @endif
+
 
                     @if (($taskSettings->assigned_to == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                         <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
@@ -464,6 +466,10 @@ $changeStatusPermission = user()->permission('change_status');
 
 
         </div>
+        <?php
+          $task_review= App\Models\TaskApprove::where('task_id',$task->id)->first();
+
+         ?>
 
         <div class="col-sm-3">
             <x-cards.data>
@@ -562,102 +568,178 @@ $changeStatusPermission = user()->permission('change_status');
                     </div>
                 @endif
             </x-cards.data>
+             @if($task_review != null)
             <br>
+
             <x-cards.data>
                 @if (($taskSettings->status == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                     <p style="font-size:15px;" class="f-w-500 badge badge-primary">Task Review</p>
                 @endif
 
-                @if (($taskSettings->make_private == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
-                    @if ($task->is_private || $pin)
-                        <div class="col-12 px-0 pb-3 d-flex">
-                            @if ($task->is_private)
-                                <span class='badge badge-secondary'><i class='fa fa-lock'></i>
-                                    @lang('app.private')</span>&nbsp;
-                            @endif
 
-                            @if ($pin)
-                                <span class='badge badge-success'><i class='fa fa-thumbtack'></i> @lang('app.pinned')</span>
-                            @endif
-                        </div>
-                    @endif
-                @endif
+                 <?php
+                 $avg=($task_review->rating+ $task_review->rating2 + $task_review->rating3)/3;
+                  $avgRating = number_format($avg,1);
 
-                @if (($taskSettings->start_date == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                  ?>
+
                     <div class="col-12 px-0 pb-3 d-lg-flex d-block">
-                        <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('app.startDate') }}
+                        <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Deadline Meet') }}
                         </p>
-                        <p class="mb-0 text-dark-grey w-50 f-14">
-                            @if(!is_null($task->start_date))
-                                {{ $task->start_date->format(global_setting()->date_format) }}
-                            @else
-                                --
-                            @endif
+                        @if($task_review->rating ==5)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                        </p>
+                        @elseif($task_review->rating == 4)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star"></span>
+
+                        </p>
+                        @elseif($task_review->rating == 3)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+
+                        </p>
+                        @elseif($task_review->rating == 2)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+
+
+                        </p>
+                        @elseif($task_review->rating == 1)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+
+                        </p>
+
+
+                        @endif
+                    </div>
+
+
+
+                    <div class="col-12 px-0 pb-3 d-lg-flex d-block">
+                        <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Submission Quality') }}
+                        </p>
+                        @if($task_review->rating2 ==5)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                        </p>
+                        @elseif($task_review->rating2 == 4)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star"></span>
+
+                        </p>
+                        @elseif($task_review->rating2 == 3)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+
+                        </p>
+                        @elseif($task_review->rating2 == 2)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+
+
+                        </p>
+                        @elseif($task_review->rating2 == 1)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+
+                        </p>
+
+
+                        @endif
+                    </div>
+
+
+                    <div class="col-12 px-0 pb-3 d-lg-flex d-block">
+                        <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Req. Fullfillment') }}
+                        </p>
+                        @if($task_review->rating3 ==5)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="fa fa-star"></span>
+                        </p>
+                        @elseif($task_review->rating3 == 4)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star"></span>
+
+                        </p>
+                        @elseif($task_review->rating3 == 3)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+
+                        </p>
+                        @elseif($task_review->rating3 == 2)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+
+
+                        </p>
+                        @elseif($task_review->rating3 == 1)
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          <span class="fa fa-star checked"></span>
+
+                        </p>
+
+
+                        @endif
+                    </div>
+
+                    <div class="col-12 px-0 pb-3 d-lg-flex d-block">
+                        <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Overall Task Ratings') }}
+                        </p>
+                        <p class="mb-0 w-50 f-14" style="color:orange;">
+                          @for ($i =1 ; $i <= $avgRating ; $i++)
+                       <span style="color: orange;" class="fa fa-star{{ ($i <= $avgRating) ? '' : '-empty' }}"></span>
+                     @endfor
+
+
                         </p>
                     </div>
-                @endif
 
-                @if (($taskSettings->due_date == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
-                    <div class="col-12 px-0 pb-3 d-lg-flex d-block">
-                        <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('app.dueDate') }}
-                        </p>
-                        <p class="mb-0 text-dark-grey w-50 f-14">
-                            @if(!is_null($task->due_date))
-                                {{ $task->due_date->format(global_setting()->date_format) }}
-                            @else
-                                --
-                            @endif
 
-                        </p>
-                    </div>
-                @endif
-                @if($task->original_due_date != null)
-                @if (($taskSettings->due_date == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
-                    <div class="col-12 px-0 pb-3 d-lg-flex d-block">
-                        <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Original Due Date') }}
-                        </p>
-                        <p class="mb-0 text-dark-grey w-50 f-14">
-                            @if(!is_null($task->original_due_date))
-                                {{  \Carbon\Carbon::parse($task->original_due_date)->format('d-m-Y') }}
-                            @else
-                                --
-                            @endif
-
-                        </p>
-                    </div>
-                @endif
-                @endif
-
-                @if (($taskSettings->time_estimate == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
-                    @if ($task->estimate_hours > 0 || $task->estimate_minutes > 0)
-                        <div class="col-12 px-0 pb-3 d-lg-flex d-block">
-                            <p class="mb-0 text-lightest w-50 f-14 text-capitalize">
-                                {{ __('modules.tasks.setTimeEstimate') }}
-                            </p>
-                            <p class="mb-0 text-dark-grey w-50 f-14">{{ $task->estimate_hours }} @lang('app.hrs') {{ $task->estimate_minutes }} @lang('app.mins')</p>
-                        </div>
-                    @endif
-                @endif
-
-                @php
-                    $totalMinutes = $task->timeLogged->sum('total_minutes') - $breakMinutes;
-                    $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                    if ($totalMinutes % 60 > 0) {
-                        $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                    }
-                @endphp
-
-                @if (($taskSettings->hours_logged == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                     <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                         <p class="mb-0 text-lightest w-50 f-14 text-capitalize">
-                            {{ __('modules.employees.hoursLogged') }}
+                            {{ __('Comments') }}
                         </p>
-                        <p class="mb-0 text-dark-grey w-50 f-14">{{ $timeLog }}</p>
+                        <p class="mb-0 text-dark-grey w-50 f-14">{!! $task_review->comments!!}</p>
                     </div>
-                @endif
+
+
             </x-cards.data>
+                @endif
         </div>
+
 
 
     </div>

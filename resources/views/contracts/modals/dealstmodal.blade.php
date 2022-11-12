@@ -1,12 +1,13 @@
 @push('datatable-styles')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 @endpush
 <div class="modal fade" data-id="id" id="dealstmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title"  id="exampleModalLabel">Select Deal Stage</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <form class="" action="{{route('deal-stage')}}" method="post">
         @csrf
@@ -26,6 +27,13 @@
                                               <option value="2">Proposal Made</option>
                                                 <option value="3">Negotiation Started</option>
                                             </select>
+
+
+                                    </div>
+                                    <div class="col-md-12 mt-3">
+                                      <label for="floatingTextarea"><strong>Comments</strong></label>
+
+                                            <textarea id="comments" class="form-control"  name="comments"  placeholder="Leave a comment here" required></textarea>
 
 
                                     </div>
@@ -52,3 +60,11 @@
     </div>
   </div>
 </div>
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#comments').summernote();
+});
+</script>
+@endpush

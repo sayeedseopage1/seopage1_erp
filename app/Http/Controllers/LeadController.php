@@ -86,14 +86,18 @@ class LeadController extends AccountBaseController
       $deal->lead_id= $lead->id;
       $deal->status= 1;
       $deal->deal_stage= $request->deal_stage;
+      $deal->comments= $request->comments;
       $deal->save();
       if ($request->deal_stage == 3) {
         $lead_id= Lead::where('id',$request->id)->first();
         $agent= SalesCount::where('user_id',$lead_id->added_by)->first();
-        $lead_ag= SalesCount::find($agent->id);
+        if ($agent != null) {
+          $lead_ag= SalesCount::find($agent->id);
 
-        $lead_ag->negotiation_started= $lead_ag->negotiation_started +1;
-        $lead_ag->save();
+          $lead_ag->negotiation_started= $lead_ag->negotiation_started +1;
+          $lead_ag->save();
+        }
+
       }
       $lead= Lead::find($lead->id);
       $lead->deal_status=1;
@@ -122,6 +126,10 @@ class LeadController extends AccountBaseController
 
 
             $deal->save();
+            // $lead_id= Lead::where('id',$deal->lead_id)->first();
+            // $lead= Lead::find($lead_id->id);
+            // $lead->status_id= 4;
+            // $lead->save();
             if (Auth::user()->role_id == 7) {
               $agent_id= SalesCount::where('user_id',Auth::id())->first();
               $lead_ag_id= SalesCount::find($agent_id->id);
@@ -141,6 +149,11 @@ class LeadController extends AccountBaseController
           $deal->comments=$request->comments;
           $deal->won_lost=$request->won_lost;
           $deal->save();
+
+          $lead_id= Lead::where('id',$deal->lead_id)->first();
+          $lead= Lead::find($lead_id->id);
+          $lead->status_id= 4;
+          $lead->save();
         }elseif ($deal_stage->deal_stage == 1) {
           $deal->deal_stage= $deal_stage->deal_stage+1;
           $deal->comments=$request->comments;
