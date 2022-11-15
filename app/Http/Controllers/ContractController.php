@@ -633,9 +633,96 @@ class ContractController extends AccountBaseController
             ]);
         }
     }
+    public function editMilestone($id)
+    {
+      $milestone= ProjectMilestone::find($id);
+      if($milestone)
+      {
+        return response()->json([
+            'status' => 200,
+            'milestone' => $milestone,
+        ]);
+      }else {
+        return response()->json([
+            'status' => 404,
+            'message' => 'Milestone Not Found',
+        ]);
+      }
+
+    }
+    public function updateMilestone(Request $request, $id)
+    {
+      //dd($request);
+      $validator = Validator::make($request->all(), [
+          'title' => 'required',
+          'cost' => 'required',
+          'summary' => 'required',
+
+      ]);
+      if ($validator->fails()) {
+          return response()->json([
+              'status' => 400,
+              'errors' => $validator->messages(),
+          ]);
+      } else {
+          $milestone = ProjectMilestone::find($id);
+          if($milestone)
+          {
+
+                      $milestone->milestone_title = $request->title;
+
+                      $milestone->cost = $request->cost;
+                      $milestone->summary = $request->summary;
+                      $milestone->currency_id = 1;
+
+                      $milestone->update();
+                      return response()->json([
+                          'status' => 200,
+                          'message' => 'Milestone Updated Successfully',
+                      ]);
+          }else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Milestone Not Found',
+            ]);
+          }
+
+
+      }
+    }
+
+    public function deleteMilestone($id)
+    {
+    $milestone= ProjectMilestone::find($id);
+    $milestone->delete();
+    return response()->json([
+        'status' => 200,
+        'message' => 'Milestone Deleted Successfully',
+    ]);
+
+    }
     public function storedealDetails(Request $request)
     {
         //  dd($request->client_username);
+        $validated = $request->validate([
+            'project_name' => 'required',
+            'client_name' => 'required',
+            'description' => 'required',
+            'description2' => 'required',
+            'description3' => 'required',
+            'description4' => 'required',
+            'description5' => 'required',
+            'description6' => 'required',
+            'description7' => 'required',
+            'description8' => 'required',
+            'description9' => 'required',
+            'pipeline_stage' => 'required',
+            'currency_id' => 'required',
+            'message_link' => 'required',
+            'profile_link'=>'required',
+
+        ]);
+        //dd("hello");
         $deal = Deal::find($request->id);
         $deal->project_name = $request->project_name;
         $deal->amount = $request->amount;

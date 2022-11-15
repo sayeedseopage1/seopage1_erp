@@ -4,6 +4,10 @@
     .card-color {
         background-color: #1d2026 !important;
     }
+  .filter-custom {
+	padding: 8px 17px;
+	margin-top: 4px;
+}
 </style>
 <?php
 $total_members= App\Models\User::count();
@@ -552,59 +556,170 @@ Overview--}}
 </div>
 
 <hr />
+{{-- Total Project Overview--}}
+<div class="card col-md-4 mt-2 mb-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Project OverView</h5></div>
+<div class="col-sm-12 col-lg-12 mt-3">
+    <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
 
-{{-- Total Projects Overview--}}
+        <form id="myForm">
+
+
+        <div class="row ml-2 mt-2 ">
+          <!-- <div class="col-md-2">
+            <label for="start_date">Start Date</label>
+              <input type="date" class="form-control form-control-lg" name="" value="" placeholder="Start Date">
+          </div>
+          <div class="col-md-2">
+            <label for="start_date">Due Date</label>
+              <input type="date" class="form-control form-control-lg" name="" value="" placeholder="Start Date">
+          </div>
+          <div class="col-md-2">
+            <label for="start_date">Due Date</label>
+            <select class="form-control form-control-lg" name="">
+              <option value="">Budget</option>
+              <option value="">Progress</option>
+            </select>
+
+          </div> -->
+          <?php
+          $date= \Carbon\Carbon::now();
+           ?>
+          {{--<div class="col-md-6 col-lg-2 mt-1">
+              <x-forms.datepicker fieldId="start_date"
+                  :fieldLabel="__('modules.projects.startDate')" fieldName="start_date"
+                  :fieldPlaceholder="__('Search By Start Date')" />
+          </div>
+          <div class="col-md-6 col-lg-2 mt-1">
+              <x-forms.datepicker fieldId="due_date"
+                  :fieldLabel="__('Due Date')" fieldName="due_date"
+                  :fieldPlaceholder="__('Search By Due Date')" />
+          </div> --}}
+          <div class="col-md-6 col-lg-4">
+              <x-forms.label class="my-3" fieldId="type_id"
+                  :fieldLabel="__('Select Type')">
+              </x-forms.label>
+              <x-forms.input-group>
+                  <select class="form-control select-picker" id="type_id" name="type_id"
+                      data-live-search="true">
+                      <option value="">--</option>
+
+                          <option
+                            value="budget"  >
+                              Budget
+
+                          </option>
+                          <option
+                            value="progress"  >
+                            Progress
+
+                          </option>
+
+                  </select>
+
+
+              </x-forms.input-group>
+          </div>
+          <div class="col-md-6 col-lg-4">
+              <x-forms.label class="my-3" fieldId="stauts_id"
+                  :fieldLabel="__('Select Status')">
+              </x-forms.label>
+              <x-forms.input-group>
+                <?php
+                $status= App\Models\ProjectStatusSetting::where('status_name','!=','finished')->get();
+                 ?>
+                  <select class="form-control select-picker" id="status_id" name="status_id"
+                      data-live-search="true">
+                      <option value="">--</option>
+                      @foreach ($status as $data)
+
+
+
+                          <option
+                          value="{{$data->status_name}}" >
+                            {{$data->status_name}}
+
+                          </option>
+
+                          @endforeach
+
+                  </select>
+
+
+              </x-forms.input-group>
+          </div>
+        {{--  <div class="col-md-6 col-lg-2 mt-5">
+              <button class="btn-primary rounded f-14 p-y filter-custom" id="ajaxSubmit" type="button" >Filter</button>
+          </div> --}}
+
+
+
+        </div>
+        <!-- <div class="d-flex justify-content-center mt-3">
+          <button class="btn-primary rounded f-14 p-y" type="button" >Filter</button>
+        </div> -->
+          </form>
+          <hr>
+
+
+        <x-table class="border-0 pb-3 admin-dash-table table-hover">
+
+            <x-slot name="thead">
+                <th class="pl-20">#</th>
+                <th>Project Name</th>
+                <th>Project Budget</th>
+                <th>Start Date</th>
+                <th>Due Date</th>
+                <th>Current Status</th>
+                <th>Progress(%)</th>
+            </x-slot>
+                <tbody id="tbody">
+            @forelse($projects as $item)
+            <tr>
+                <td class="pl-20">{{ $loop->index + 1 }}</td>
+                <td>
+                    <a href="{{ route('projects.show', [$item->id]) }}" class="text-darkest-grey f-w-500">{{ ucfirst($item->project_name) }}</a>
+                </td>
+                <td>
+                  ${{ ucfirst($item->project_budget) }}
+                </td>
+                <td>
+                    {{ date('d-m-Y', strtotime($item->start_date))}}
+                </td>
+                <td>
+                    {{ date('d-m-Y', strtotime($item->deadline))}}
+                </td>
+
+                <?php
+                      $status_id= App\Models\ProjectStatusSetting::where('status_name',$item->status)->first(); //dd($status_id); ?>
+                <td class="f-14" width="20%">
+                    <x-status :style="'color:'.$status_id->color" :value="$item->status" />
+                </td>
+
+                <td>
+                    {{$item->completion_percent}}%
+                </td>
+            </tr>
+
+            @empty
+            <tr>
+                <td colspan="5" class="shadow-none">
+                    <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                </td>
+            </tr>
+              </tbody>
+
+            @endforelse
+        </x-table>
+    </x-cards.data>
+</div>
+<hr>
+
+{{-- Total Milestone Overview--}}
 
 <div class="row mt-2">
-    <div class="col-sm-12 col-lg-6 mt-3">
-        <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
-            <div class="card col-md-6 mt-2 mb-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Project OverView</h5></div>
 
-            <x-table class="border-0 pb-3 admin-dash-table table-hover">
-                <x-slot name="thead">
-                    <th class="pl-20">#</th>
-                    <th>Project Name</th>
-                    <th>Start Date</th>
-                    <th>Due Date</th>
-                    <th>Current Status</th>
-                    <th>Progress(%)</th>
-                </x-slot>
-
-                @forelse($projects as $item)
-                <tr>
-                    <td class="pl-20">{{ $loop->index + 1 }}</td>
-                    <td>
-                        <a href="{{ route('projects.show', [$item->id]) }}" class="text-darkest-grey f-w-500">{{ ucfirst($item->project_name) }}</a>
-                    </td>
-                    <td>
-                        {{ date('d-m-Y', strtotime($item->start_date))}}
-                    </td>
-                    <td>
-                        {{ date('d-m-Y', strtotime($item->deadline))}}
-                    </td>
-
-                    <?php
-                          $status_id= App\Models\ProjectStatusSetting::where('status_name',$item->status)->first(); //dd($status_id); ?>
-                    <td class="f-14" width="20%">
-                        <x-status :style="'color:'.$status_id->color" :value="$item->status" />
-                    </td>
-
-                    <td>
-                        {{$item->completion_percent}}%
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="5" class="shadow-none">
-                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                    </td>
-                </tr>
-                @endforelse
-            </x-table>
-        </x-cards.data>
-    </div>
     @if (in_array('projects', $modules) && in_array('pending_milestone', $activeWidgets))
-    <div class="col-sm-12 col-lg-6 mt-3">
+    <div class="col-sm-12 col-lg-12 mt-3">
         <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
             <div class="card col-md-6 mt-2 mb-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Pending Milestone</h5></div>
             <x-table class="border-0 pb-3 admin-dash-table table-hover">
@@ -742,6 +857,7 @@ Overview--}}
             </x-table>
         </x-cards.data>
     </div>
+
     <div class="col-sm-12 col-lg-6 mt-3">
         <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
             <div class="card col-md-6 mt-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Active Deals Overview</h5></div>
@@ -781,6 +897,7 @@ Overview--}}
                         <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                     </td>
                 </tr>
+
                 @endforelse
             </x-table>
         </x-cards.data>
@@ -875,4 +992,136 @@ Overview--}}
 
         return data;
     }
+
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+
+    if ($('.custom-date-picker').length > 0) {
+        datepicker('.custom-date-picker', {
+            position: 'bl',
+            ...datepickerConfig
+        });
+    }
+
+    const dp1 = datepicker('#start_date', {
+        position: 'bl',
+        onSelect: (instance, date) => {
+            dp2.setMin(date);
+        },
+        ...datepickerConfig
+    });
+
+    const dp2 = datepicker('#due_date', {
+        position: 'bl',
+        onSelect: (instance, date) => {
+            dp1.setMax(date);
+        },
+        ...datepickerConfig
+    });
+  });
+
+//For Project overview filtering
+//   jQuery(document).ready(function(){
+//    jQuery('#ajaxSubmit').click(function(e){
+//     //e.preventDefault();
+//     $.ajaxSetup({
+//      headers: {
+//          'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+//      }
+//  });
+//     jQuery.ajax({
+//        url: "{{ route('project-overview-filter') }}",
+//        method: "get",
+//        data: {
+//           start_date: jQuery('#start_date').val(),
+//           due_date: jQuery('#due_date').val(),
+//           type_id: jQuery('#type_id').val(),
+//           status_id: jQuery('#status_id').val(),
+//       },
+//       success: function(response){
+//         //console.log(response);
+//           $.each(response,function (key,value){
+//             $('tbody').append('<tr>'+
+//             '<td>'+value['id']+'</td>\
+//             <td>'+value['project_name']+'</td>\
+//             <td>'+value['project_budget']+'</td>\
+//             <td>'+value['start_date']+'</td>\
+//             <td>'+value['deadline']+'</td>\
+//             <td>'+value['status']+'</td>\
+//             <td>'+value['completion_percent']+'</td>\
+//             </tr>'
+//           );
+//           });
+//       }
+//     });
+// });
+// });
+
+$(document).ready(function(){
+  $("#type_id").on('change',function(){
+    var type_id = $(this).val();
+    $.ajax({
+      url: "{{ route('project-overview-filter') }}",
+      type:"GET",
+      data:{'type_id':type_id},
+      success:function(data){
+        console.log(data);
+        var projects = data.projects;
+        var html = '';
+        console.log(projects);
+        if(projects.length > 0){
+          for (let i = 0; i < projects.length; i++) {
+            html += '<tr>\
+            <td>'+(i+1)+'</td>\
+            <td>'+projects[i]['project_name']+'</td>\
+            <td>'+projects[i]['project_budget']+'$</td>\
+            <td>'+projects[i]['start_date']+'</td>\
+            <td>'+projects[i]['deadline']+'</td>\
+            <td>'+projects[i]['status']+'</td>\
+            <td>'+projects[i]['completion_percent']+'%</td>\
+            </tr>';
+          }
+        }else {
+           html += '<tr>\
+           <td>No Projects Found</td>\
+           </tr>';
+        }
+        $("#tbody").html(html);
+      }
+    });
+  });
+  $("#status_id").on('change',function(){
+    var status_id = $(this).val();
+    $.ajax({
+      url: "{{ route('project-overview-filter') }}",
+      type:"GET",
+      data:{'status_id':status_id},
+      success:function(data){
+        console.log(data);
+        var projects = data.projects;
+        var html = '';
+        //console.log(projects);
+        if(projects.length > 0){
+          for (let i = 0; i < projects.length; i++) {
+            html += '<tr>\
+            <td>'+(i+1)+'</td>\
+            <td>'+projects[i]['project_name']+'</td>\
+            <td>'+projects[i]['project_budget']+'$</td>\
+            <td>'+projects[i]['start_date']+'</td>\
+            <td>'+projects[i]['deadline']+'</td>\
+            <td>'+projects[i]['status']+'</td>\
+            <td>'+projects[i]['completion_percent']+'%</td>\
+            </tr>';
+          }
+        }else {
+           html += '<tr>\
+           <td>No Projects Found</td>\
+           </tr>';
+        }
+        $("#tbody").html(html);
+      }
+    });
+  });
+});
 </script>

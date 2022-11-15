@@ -57,6 +57,7 @@ use App\Models\Deal;
 use App\Models\RoleUser;
 use Auth;
 use App\Models\Lead;
+use Response;
 
 class ProjectController extends AccountBaseController
 {
@@ -114,7 +115,47 @@ class ProjectController extends AccountBaseController
       return $dataTable->render('projects.index', $this->data);
 
     }
+    public function ProjectOverviewFilter(Request $request)
+    {
+    //  dd($request);
+          //   $start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+          // //  dd($start_date);
+          //    $due_date =  Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+          //    $type_id= $request->type_id;
+          //    $status_id= $request->status_id;
+          //   if ($start_date != null) {
+          //     $data2= Project::where('start_date','>=',$start_date)->get();
+          //   }
+          //   if ($due_date != null) {
+          //       $data2= Project::where('deadline','>=',$due_date)->get();
+          //   }
+          //   if ($type_id != null && $type_id == 'budget') {
+          //       $data2= Project::orderBy('project_budget','desc')->get();
+          //   }if ($type_id != null && $type_id == 'progress') {
+          //       $data2= Project::orderBy('completion_percent')->get();
+          //   }
+          //   if ($status_id != null) {
+          //     $data2= Project::where('status',$status_id)->get();
+          //   }
+          //   $data2->get();
+          // return Response::json($data2);
+         //$projects= Project::query();
+         if($request->ajax()){
+           if ($request->type_id == "budget") {
 
+              $projects= Project::orderBy('project_budget','desc')->get();
+
+           }else {
+             $projects= Project::orderBy('completion_percent','desc')->get();
+           }
+           if ($request->status_id) {
+               $projects= Project::where('status',$request->status_id)->get();
+           }
+
+         }
+         //$projects= $qu->get();
+         return Response::json(['projects'=>$projects]);
+    }
     /**
      * XXXXXXXXXXX
      *

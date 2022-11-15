@@ -467,7 +467,7 @@ $changeStatusPermission = user()->permission('change_status');
 
         </div>
         <?php
-          $task_review= App\Models\TaskApprove::where('task_id',$task->id)->first();
+          $task_review= App\Models\TaskApprove::where('task_id',$task->id)->orderBy('id','desc')->first();
 
          ?>
 

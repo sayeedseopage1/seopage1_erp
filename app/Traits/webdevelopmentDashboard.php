@@ -137,15 +137,7 @@ trait webdevelopmentDashboard
         $this->sales=SalesCount::whereBetween(DB::raw('DATE(`updated_at`)'),[$startDate,$endDate])->get();
         $this->developers=User::where('role_id',5)->get();
         $this->tasks=TaskUser::with('task')->first();
-        // $this->project_developers = DB::table('projects')
-        //     ->join('project_members', 'projects.id', '=', 'project_members.project_id')
-        //     ->join('tasks', 'projects.id', '=', 'tasks.project_id')
-        //     ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-        //     ->join('users', 'task_users.id', '=', 'users.id')
-        //     ->select('projects.*', 'project_members.user_id', 'tasks.project_id','task_users.task_id','users.id')
-        //     ->get();
-      //  dd($this->tasks->task);
-
+      
 
                            //dd($this->projectassign);
 

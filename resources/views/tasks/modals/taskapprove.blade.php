@@ -74,7 +74,10 @@
 
 </style>
 <!------ Include the above in your HEAD tag ---------->
+<?php
+$task_submission= App\Models\TaskSubmission::where('task_id',$task->id)->orderBy('submission_no','desc')->get();
 
+ ?>
 <div class="modal fade" id="taskapprove" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -134,6 +137,31 @@
 
       	</div>
       </div>
+      @if($task_submission != null)
+      <hr>
+      <h5>Deliverables</h5>
+      @foreach($task_submission as $submission)
+      @if($submission->link != null)
+      <div class="mb-3">
+        <a href="{{$submission->link}}" target="_blank">  {{$submission->link}}</a>
+
+      </div>
+      @endif
+      @if($submission->text != null)
+      <div class="mb-3">
+         {!!$submission->text!!}
+
+      </div>
+      @endif
+      @if($submission->attach != null)
+      <div class="mb-3">
+          <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;" target="_blank" href="{{asset('storage/TaskSubmission/'.$submission->attach)}}"><i class="fa-solid fa-link"></i> {{$submission->attach}}</a></p>
+
+      </div>
+      @endif
+
+      @endforeach
+        @endif
 
 
 

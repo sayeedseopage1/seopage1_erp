@@ -116,8 +116,13 @@
                             <div class="col-md-4">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Project Name <span style="color:red;">*</span></label>
-                              <input type="text" name="project_name" value="{{$deal->project_name}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required>
+                              <input type="text" name="project_name" value="{{$deal->project_name}}" class="form-control  @error('project_name') is-invalid @enderror" id="exampleFormControlInput1" placeholder="" >
                               </div>
+                              @error('project_name')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
 
                             </div>
 
@@ -151,6 +156,8 @@
                               </div>
                                 <input type="hidden" class="project_id" name="project_id" id="project_id" value="{{$project_id->id}}">
                               @include('contracts.modals.milestonecreatemodal')
+                                @include('contracts.modals.milestoneeditmodal')
+                                @include('contracts.modals.milestonedeletemodal')
                               </div>
                             </div>
 
@@ -161,8 +168,13 @@
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Client Name</label>
-                              <input type="text" name="client_name" value="{{$deal->client_name}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required>
+                              <input type="text" name="client_name" value="{{$deal->client_name}}" class="form-control @error('project_name') is-invalid @enderror" id="exampleFormControlInput1" placeholder="name@example.com" >
                               </div>
+                              @error('client_name')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
@@ -188,21 +200,31 @@
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Project Summary <span style="color:red;">*</span></label>
-                                <textarea name="description" class="form-control" id="description" rows="3" required></textarea>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description" rows="3"></textarea>
                               </div>
+                              @error('description')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
                             </div>
 
                           </div>
                           <div class="row">
                             <div class="col-md-4">
                                 <label for="exampleFormControlTextarea1">Pipeline Stage <span style="color:red;">*</span></label>
-                              <select class="form-control" name="pipeline_stage">
+                              <select class="form-control @error('pipeline_stage') is-invalid @enderror" name="pipeline_stage">
                                 <option value="Contact Made">Contact Made</option>
                                 <option value="Qualified">Qualified</option>
                                 <option value="Requirements Defined">Requirements Defined</option>
                                 <option value="Proposal Made">Proposal Made</option>
                                   <option value="Negotiation Started">Negotiation Started</option>
                               </select>
+                              @error('pipeline_stage')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
                             </div>
                             <div class="col-md-4">
                               <div class="form-group">
@@ -230,14 +252,24 @@
                             <div class="col-md-6">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Profile Link <span style="color:red;">*</span></label>
-                              <input type="text" name="message_link" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
+                              <input type="text" name="message_link" class="form-control @error('profile_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
                               </div>
+                              @error('profile_link')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
                             </div>
                             <div class="col-md-6">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
-                              <input type="text" name="profile_link" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
+                              <input type="text" name="profile_link" class="form-control @error('message_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
                               </div>
+                              @error('message_link')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
                             </div>
 
                           </div>
@@ -245,9 +277,14 @@
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.) <span style="color:red;">*</span></label>
-                                <textarea name="description2" class="form-control" id="description2" rows="3" required></textarea>
+                                <textarea name="description2" class="form-control  @error('description2') is-invalid @enderror" id="description2" rows="3"></textarea>
                               </div>
                             </div>
+                            @error('description2')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -258,9 +295,14 @@
                                   The look and feel should be better than the references.)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description3" class="form-control" id="description3" rows="3" required></textarea>
+                                <textarea name="description3" class="form-control  @error('description3') is-invalid @enderror" id="description3" rows="3"></textarea>
                               </div>
                             </div>
+                            @error('description3')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -272,9 +314,14 @@
                                                 However, none of these can be copied)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description4" class="form-control" id="description4" rows="3" required></textarea>
+                                <textarea name="description4" class="form-control  @error('description4') is-invalid @enderror" id="description4" rows="3"></textarea>
                               </div>
                             </div>
+                            @error('description4')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -285,9 +332,14 @@
                                   The client is very concerned if the booking functionality will work the way he wants.)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description5" class="form-control" id="description5" rows="3" required></textarea>
+                                <textarea name="description5" class="form-control  @error('description5') is-invalid @enderror" id="description5" rows="3"></textarea>
                               </div>
                             </div>
+                            @error('description5')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -296,9 +348,14 @@
                                 <label for="exampleFormControlTextarea1">Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description6" class="form-control" id="description6" rows="3" required></textarea>
+                                <textarea name="description6" class="form-control  @error('description6') is-invalid @enderror" id="description6" rows="3"></textarea>
                               </div>
                             </div>
+                            @error('description6')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -308,9 +365,14 @@
 
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description7" class="form-control" id="description7" rows="3" required></textarea>
+                                <textarea name="description7" class="form-control  @error('description7') is-invalid @enderror" id="description7" rows="3"></textarea>
                               </div>
                             </div>
+                            @error('description7')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -320,9 +382,14 @@
 
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description8" class="form-control" id="description8" rows="3" required></textarea>
+                                <textarea name="description8" class="form-control  @error('description8') is-invalid @enderror" id="description8" rows="3"></textarea>
                               </div>
                             </div>
+                            @error('description8')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -333,9 +400,14 @@
 
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description9" class="form-control" id="description9" rows="3" required></textarea>
+                                <textarea name="description9" class="form-control  @error('description9') is-invalid @enderror" id="description9" rows="3"></textarea>
                               </div>
                             </div>
+                            @error('description9')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
 
@@ -368,6 +440,9 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script>
+    $(document).ready(function() {
+      $('#summary2').summernote();
+    });
     $(document).ready(function() {
       $('#description').summernote();
     });
@@ -411,7 +486,182 @@
       // Alert the copied text
       alert("Copied the text: " + copyText.value);
     }
+    $(document).ready(function() {
+      fetchmilestone();
+      function fetchmilestone()
+      {
+        $.ajax({
+          type: "GET",
+          url: "/deals/milestone-get/{{$project_id->id}}",
 
+          dataType: "json",
+          success: function (response){
+          //  console.log(response.milestones);
+            let spans= '';
+            response.milestones.forEach((item)=> {
+              spans += `<span class="badge badge-light mr-2">${item.milestone_title} <button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
+            });
+
+            document.querySelector('#milestone_value').innerHTML= spans;
+
+          }
+        });
+      }
+
+      $(document).on('click',' .edit_milestone',function(e){
+        e.preventDefault();
+        var milestone_id = $(this).val();
+        //console.log(milestone_id);
+        $('#editmilestone').modal('show');
+        $.ajax({
+          type: "GET",
+          url: "/deals/edit-milestone/"+milestone_id,
+
+          success: function(response){
+            //console.log(response);
+            if (response.status == 404) {
+              $('#success_message').html("");
+              $('#success_message').addClass('alert alert-danger');
+              $('#success_message').text(response.message);
+            }else {
+              $('#title').val(response.milestone.milestone_title);
+              $('#cost').val(response.milestone.cost);
+              $('#summary').val(response.milestone.summary);
+              $('#milestone_id').val(milestone_id);
+            }
+          }
+        });
+
+      });
+
+      $(document).on('click',' .update_milestone',function(e){
+        e.preventDefault();
+
+        var milestone_id = $('#milestone_id').val();
+        var data= {
+          'title' : $('#title').val(),
+          'cost' : $('#cost').val(),
+          'summary' : $('#summary').val(),
+        }
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+        $.ajax({
+          type: "PUT",
+          url: "/deals/update-milestone/"+milestone_id,
+          data: data,
+          dataType: "json",
+          success: function(response){
+          //  console.log(response);
+            if (response.status == 400) {
+              $('#updateform_errList').html("");
+              $('#updateform_errList').addClass('alert alert-danger');
+              $.each(response.errors, function (key, err_values){
+                $('#updateform_errList').append('<li>'+err_values+'</li>');
+              });
+            }
+            else if (response.status == 400)
+            {
+              $('#updateform_errList').html("");
+              $('#success_message').addClass('alert alert-success');
+              $('#success_message').text(response.message);
+            }
+
+            else{
+              $('#updateform_errList').html("");
+              $('#success_message').html("");
+              $('#success_message').addClass('alert alert-success');
+              $('#success_message').text(response.message);
+              $('#editmilestone').modal('hide');
+                fetchmilestone();
+            }
+          }
+        });
+
+
+      });
+
+      $(document).on('click','.delete_milestone',function(e){
+        e.preventDefault();
+        var milestone_id= $(this).val();
+          //console.log(milestone_id);
+        $('#delete_milestone_id').val(milestone_id);
+
+        $('#deletemilestone').modal('show');
+      });
+      $(document).on('click','.delete_milestone_btn',function(e){
+        e.preventDefault();
+        $(this).text("Deleting");
+        var milestone_id= $('#delete_milestone_id').val();
+      //  console.log(milestone_id);
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+        $.ajax({
+          type: "DELETE",
+          url: "/deals/delete-milestone/"+milestone_id,
+          success: function (response){
+            //console.log(response);
+              $('#success_message').addClass('alert alert-danger');
+            $('#success_message').text(response.message);
+            $('#deletemilestone').modal('hide');
+              $('delete_milestone_btn').text("Yes Delete");
+              fetchmilestone();
+          }
+
+        });
+
+      });
+
+      $(document).on('click','.add_milestone',function(e){
+
+      e.preventDefault();
+      //console.log("test");
+      var data= {
+        'title': $('.title').val(),
+        'cost': $('.cost').val(),
+        'summary': $('.summary').val(),
+        //'project_id': document.querySelector('.project_id').value,
+        'project_id': document.getElementById("project_id").value,
+      }
+      //console.log(data);
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+      $.ajax({
+        type: "POST",
+        url: "{{route('add-milestone')}}",
+        data: data,
+        dataType: "json",
+        success: function (response){
+          if (response.status == 400) {
+            $('#saveform_errList').html("");
+            $('#saveform_errList').addClass('alert alert-danger');
+            $.each(response.errors, function (key, err_values){
+              $('#saveform_errList').append('<li>'+err_values+'</li>');
+            });
+          }
+          else {
+              $('#saveform_errList').html("");
+              $('#success_message').addClass('alert alert-success');
+              $('#success_message').text(response.message);
+              $('#milestoneaddmodal').modal('hide');
+              $('#milestoneaddmodal').find('input').val("");
+              document.querySelector('#summary').value= '';
+                fetchmilestone();
+
+          }
+        }
+      });
+    });
+
+    });
     </script>
 
 

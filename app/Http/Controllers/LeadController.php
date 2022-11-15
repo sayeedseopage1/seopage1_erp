@@ -44,6 +44,7 @@ use App\Models\ContractType;
 use App\Models\DealStage;
 use App\Models\SalesCount;
 use DateTime;
+use App\Models\DealStageChange;
 
 
 class LeadController extends AccountBaseController
@@ -88,6 +89,14 @@ class LeadController extends AccountBaseController
       $deal->deal_stage= $request->deal_stage;
       $deal->comments= $request->comments;
       $deal->save();
+      $deal_stage= new DealStageChange();
+      $deal_stage->lead_id= $lead->id;
+      $deal_stage->deal_id= $deal->short_code;
+      $deal_stage->comments= $request->comments;
+      $deal_stage->deal_stage_id=$deal->deal_stage;
+      $deal_stage->save();
+
+
       if ($request->deal_stage == 3) {
         $lead_id= Lead::where('id',$request->id)->first();
         $agent= SalesCount::where('user_id',$lead_id->added_by)->first();
@@ -126,6 +135,12 @@ class LeadController extends AccountBaseController
 
 
             $deal->save();
+            $deal_stage= new DealStageChange();
+            $deal_stage->lead_id= $deal->lead_id;
+            $deal_stage->deal_id= $deal->short_code;
+            $deal_stage->comments= $request->comments;
+            $deal_stage->deal_stage_id=$deal->deal_stage;
+            $deal_stage->save();
             // $lead_id= Lead::where('id',$deal->lead_id)->first();
             // $lead= Lead::find($lead_id->id);
             // $lead->status_id= 4;
@@ -149,6 +164,12 @@ class LeadController extends AccountBaseController
           $deal->comments=$request->comments;
           $deal->won_lost=$request->won_lost;
           $deal->save();
+          $deal_stage= new DealStageChange();
+          $deal_stage->lead_id= $deal->lead_id;
+          $deal_stage->deal_id= $deal->short_code;
+          $deal_stage->comments= $request->comments;
+          $deal_stage->deal_stage_id=$deal->deal_stage;
+          $deal_stage->save();
 
           $lead_id= Lead::where('id',$deal->lead_id)->first();
           $lead= Lead::find($lead_id->id);
@@ -159,16 +180,35 @@ class LeadController extends AccountBaseController
           $deal->comments=$request->comments;
           $deal->won_lost=$request->won_lost;
           $deal->save();
+          $deal_stage= new DealStageChange();
+          $deal_stage->lead_id= $deal->lead_id;
+          $deal_stage->deal_id= $deal->short_code;
+          $deal_stage->comments= $request->comments;
+          $deal_stage->deal_stage_id=$deal->deal_stage;
+          $deal_stage->save();
+
         }elseif ($deal_stage->deal_stage == 2) {
           $deal->deal_stage= $deal_stage->deal_stage+1;
           $deal->comments=$request->comments;
           $deal->won_lost=$request->won_lost;
           $deal->save();
+          $deal_stage= new DealStageChange();
+          $deal_stage->lead_id= $deal->lead_id;
+          $deal_stage->deal_id= $deal->short_code;
+          $deal_stage->comments= $request->comments;
+          $deal_stage->deal_stage_id=$deal->deal_stage;
+          $deal_stage->save();
         }else {
           $deal->deal_stage= $deal_stage->deal_stage;
           $deal->comments=$request->comments;
           $deal->won_lost=$request->won_lost;
           $deal->save();
+          $deal_stage= new DealStageChange();
+          $deal_stage->lead_id= $deal->lead_id;
+          $deal_stage->deal_id= $deal->short_code;
+          $deal_stage->comments= $request->comments;
+          $deal_stage->deal_stage_id=$deal->deal_stage;
+          $deal_stage->save();
           if (Auth::user()->role_id == 7) {
             $agent= SalesCount::where('user_id',Auth::id())->first();
             $lead_ag= SalesCount::find($agent->id);

@@ -197,7 +197,7 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
         <div class="card-header"><h5>Freelancer Profile Link</h5></div>
         <div class="card-body">
 
-          <p class="card-text">{{ $contract->deal->profile_link}}</p>
+          <p class="card-text"><a href="{{$contract->deal->profile_link}}" target="_blank">{{ $contract->deal->profile_link}}</a></p>
         </div>
       </div>
 
@@ -209,7 +209,7 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
         <div class="card-header"><h5>Freelancer Message Link</h5></div>
         <div class="card-body">
 
-          <p class="card-text">{{ $contract->deal->message_link}}</p>
+          <p class="card-text"><a href="{{$contract->deal->message_link}}" target="_blank">{{ $contract->deal->message_link}}</a></p>
         </div>
       </div>
 
