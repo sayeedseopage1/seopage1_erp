@@ -1066,7 +1066,7 @@ $(document).ready(function(){
       type:"GET",
       data:{'type_id':type_id},
       success:function(data){
-        console.log(data);
+        //console.log(data);
         var projects = data.projects;
         var html = '';
         console.log(projects);
@@ -1098,7 +1098,7 @@ $(document).ready(function(){
       type:"GET",
       data:{'status_id':status_id},
       success:function(data){
-        console.log(data);
+        //console.log(data);
         var projects = data.projects;
         var html = '';
         //console.log(projects);

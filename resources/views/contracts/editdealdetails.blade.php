@@ -147,6 +147,8 @@
                               </div>
                                 <input type="hidden" class="project_id" name="project_id" id="project_id" value="{{$project_id->id}}">
                               @include('contracts.modals.milestonecreatemodal')
+                              @include('contracts.modals.milestoneeditmodal')
+                              @include('contracts.modals.milestonedeletemodal')
                               </div>
                             </div>
 
@@ -417,6 +419,182 @@
       // Alert the copied text
       alert("Copied the text: " + copyText.value);
     }
+    $(document).ready(function() {
+      fetchmilestone();
+      function fetchmilestone()
+      {
+        $.ajax({
+          type: "GET",
+          url: "/deals/milestone-get/{{$project_id->id}}",
+
+          dataType: "json",
+          success: function (response){
+          //  console.log(response.milestones);
+            let spans= '';
+            response.milestones.forEach((item)=> {
+              spans += `<span class="badge badge-light mr-2">${item.milestone_title} <button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
+            });
+
+            document.querySelector('#milestone_value').innerHTML= spans;
+
+          }
+        });
+      }
+
+      $(document).on('click',' .edit_milestone',function(e){
+        e.preventDefault();
+        var milestone_id = $(this).val();
+        //console.log(milestone_id);
+        $('#editmilestone').modal('show');
+        $.ajax({
+          type: "GET",
+          url: "/deals/edit-milestone/"+milestone_id,
+
+          success: function(response){
+            //console.log(response);
+            if (response.status == 404) {
+              $('#success_message').html("");
+              $('#success_message').addClass('alert alert-danger');
+              $('#success_message').text(response.message);
+            }else {
+              $('#title').val(response.milestone.milestone_title);
+              $('#cost').val(response.milestone.cost);
+              $('#summary').val(response.milestone.summary);
+              $('#milestone_id').val(milestone_id);
+            }
+          }
+        });
+
+      });
+
+      $(document).on('click',' .update_milestone',function(e){
+        e.preventDefault();
+
+        var milestone_id = $('#milestone_id').val();
+        var data= {
+          'title' : $('#title').val(),
+          'cost' : $('#cost').val(),
+          'summary' : $('#summary').val(),
+        }
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+        $.ajax({
+          type: "PUT",
+          url: "/deals/update-milestone/"+milestone_id,
+          data: data,
+          dataType: "json",
+          success: function(response){
+          //  console.log(response);
+            if (response.status == 400) {
+              $('#updateform_errList').html("");
+              $('#updateform_errList').addClass('alert alert-danger');
+              $.each(response.errors, function (key, err_values){
+                $('#updateform_errList').append('<li>'+err_values+'</li>');
+              });
+            }
+            else if (response.status == 400)
+            {
+              $('#updateform_errList').html("");
+              $('#success_message').addClass('alert alert-success');
+              $('#success_message').text(response.message);
+            }
+
+            else{
+              $('#updateform_errList').html("");
+              $('#success_message').html("");
+              $('#success_message').addClass('alert alert-success');
+              $('#success_message').text(response.message);
+              $('#editmilestone').modal('hide');
+                fetchmilestone();
+            }
+          }
+        });
+
+
+      });
+
+      $(document).on('click','.delete_milestone',function(e){
+        e.preventDefault();
+        var milestone_id= $(this).val();
+          //console.log(milestone_id);
+        $('#delete_milestone_id').val(milestone_id);
+
+        $('#deletemilestone').modal('show');
+      });
+      $(document).on('click','.delete_milestone_btn',function(e){
+        e.preventDefault();
+        $(this).text("Deleting");
+        var milestone_id= $('#delete_milestone_id').val();
+      //  console.log(milestone_id);
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+        $.ajax({
+          type: "DELETE",
+          url: "/deals/delete-milestone/"+milestone_id,
+          success: function (response){
+            //console.log(response);
+              $('#success_message').addClass('alert alert-danger');
+            $('#success_message').text(response.message);
+            $('#deletemilestone').modal('hide');
+              $('delete_milestone_btn').text("Yes Delete");
+              fetchmilestone();
+          }
+
+        });
+
+      });
+
+      $(document).on('click','.add_milestone',function(e){
+
+      e.preventDefault();
+      //console.log("test");
+      var data= {
+        'title': $('.title').val(),
+        'cost': $('.cost').val(),
+        'summary': $('.summary').val(),
+        //'project_id': document.querySelector('.project_id').value,
+        'project_id': document.getElementById("project_id").value,
+      }
+      //console.log(data);
+      $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+      $.ajax({
+        type: "POST",
+        url: "{{route('add-milestone')}}",
+        data: data,
+        dataType: "json",
+        success: function (response){
+          if (response.status == 400) {
+            $('#saveform_errList').html("");
+            $('#saveform_errList').addClass('alert alert-danger');
+            $.each(response.errors, function (key, err_values){
+              $('#saveform_errList').append('<li>'+err_values+'</li>');
+            });
+          }
+          else {
+              $('#saveform_errList').html("");
+              $('#success_message').addClass('alert alert-success');
+              $('#success_message').text(response.message);
+              $('#milestoneaddmodal').modal('hide');
+              $('#milestoneaddmodal').find('input').val("");
+              document.querySelector('#summary').value= '';
+                fetchmilestone();
+
+          }
+        }
+      });
+    });
+
+    });
 
     </script>
 
