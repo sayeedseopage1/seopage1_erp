@@ -79,8 +79,12 @@
             @endif
 
             <!-- <x-cards.data-row :label="__('modules.lead.leadCategory')" :value="$lead->category->category_name ?? '--'" /> -->
+            <?php
+            $currency=App\Models\Currency::where('id',$lead->original_currency_id)->first();
+            $value= $lead->actual_value. $currency->currency_symbol;
 
-            <x-cards.data-row :label="__('Project') . ' ' .__('Budget')" :value="$lead->value ?? '--'" />
+             ?>
+            <x-cards.data-row :label="__('Project') . ' ' .__('Budget')" :value="$value ?? '--'" />
 
             {{-- <x-cards.data-row :label="__('app.note')" :value="!empty($lead->note) ? $lead->note : '--'" html="true" /> --}}
 

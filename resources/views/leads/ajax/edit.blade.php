@@ -6,7 +6,7 @@ $addLeadAgentPermission = user()->permission('add_lead_agent');
 $addLeadSourcesPermission = user()->permission('add_lead_sources');
 $addLeadCategoryPermission = user()->permission('add_lead_category');
 @endphp
-
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
 
 <div class="row">
@@ -33,6 +33,20 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
                             :fieldValue="$lead->project_id" />
                     </div>
                     <div class="col-lg-4 col-md-6">
+                        <x-forms.select fieldId="country" :fieldLabel="__('Client Country')" fieldName="country"
+                            search="true"  fieldRequired="true" required>
+                            @if($lead->country != null)
+                            <option selected value="{{$lead->country}}">{{$lead->country}}</option>
+                            @endif
+
+                            @foreach ($countries as $item)
+                                <option data-tokens="{{ $item->iso3 }}"
+                                    data-content="<span class='flag-icon flag-icon-{{ strtolower($item->iso) }} flag-icon-squared'></span> {{ $item->nicename }}"
+                                    value="{{ $item->nicename }}">{{ $item->nicename }}</option>
+                            @endforeach
+                        </x-forms.select>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
                         <x-forms.text :fieldLabel="__('Project Link')" fieldName="project_link"
                             fieldId="project_link" fieldPlaceholder="" fieldRequired="true"
                             :fieldValue="$lead->project_link" />
@@ -40,28 +54,51 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
 
 
 
+
                     <div class="col-lg-4 col-md-6">
                         <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Project') .' '. __('Budget')"
-                                        fieldName="value" fieldId="value" :fieldValue="$lead->value" />
+                                        fieldName="value" fieldId="value" :fieldValue="$lead->actual_value" />
+                    </div>
+                    <?php
+                     $currencies= App\Models\Currency::all();
+
+
+                     ?>
+                    <div class="col-md-6 col-lg-4 mt-3 ">
+                      <?php  ?>
+                        <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
+                            <x-forms.label fieldId="original_currency_id" :fieldLabel="__('modules.invoices.currency')">
+                            </x-forms.label>
+
+                            <div class="select-others height-35 rounded">
+                                <select class="form-control select-picker" name="original_currency_id" id="original_currency_id">
+                                  @if($lead->original_currency_id != null)
+                                  <?php
+                                    $currency_id= App\Models\Currency::where('id',$lead->original_currency_id)->first();
+                                   ?>
+                                  <option selected value="{{$lead->original_currency_id}}">  {{ $currency_id->currency_code . ' (' . $currency_id->currency_symbol . ')' }}</option>
+                                  @endif
+                                    @foreach ($currencies as $currency)
+
+                                    <option
+
+                                        value="{{ $currency->id }}">
+                                        {{ $currency->currency_code . ' (' . $currency->currency_symbol . ')' }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
 
 
 
-                    <div class="col-md-6 col-lg-4">
-                        <x-forms.label class="mt-3" fieldId="status" :fieldLabel="__('app.status')">
-                        </x-forms.label>
-                        <x-forms.input-group>
-                            <select class="form-control select-picker" name="status" id="status" data-live-search="true"
-                                data-size="8">
-                                @forelse($status as $sts)
-                                    <option @if ($lead->status_id == $sts->id) selected @endif value="{{ $sts->id }}">
-                                        {{ ucfirst($sts->type) }}</option>
-                                @empty
-                                    <option value="">--</option>
-                                @endforelse
-                            </select>
-                        </x-forms.input-group>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Lead Description <span style="color:red;">*</span></label>
+                        <textarea name="description" value="{{$lead->note}}" class="form-control" id="description" rows="3">{!!$lead->note!!}</textarea>
+                      </div>
                     </div>
 
                 </div>
@@ -183,7 +220,7 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
                     @endif
 
                 </div>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary">Update</button>
 
                 {{--<x-form-actions>
                     <x-forms.button-primary id="save-lead-form" class="mr-3" icon="check">@lang('app.save')
@@ -198,7 +235,7 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
     </div>
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
     $(document).ready(function() {
@@ -334,4 +371,7 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
         });
         $('#'+id).val(checkedData);
     }
+    $(document).ready(function() {
+      $('#description').summernote();
+    });
 </script>

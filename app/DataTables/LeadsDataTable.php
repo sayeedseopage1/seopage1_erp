@@ -13,6 +13,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
 use App\Models\DealStage;
+use App\Models\Currency;
 
 class LeadsDataTable extends BaseDataTable
 {
@@ -160,6 +161,28 @@ class LeadsDataTable extends BaseDataTable
             $datatables->addColumn('lead', function ($row) {
                 return $row->client_name;
             });
+            $datatables->addColumn('project_id', function ($row) {
+                return $row->project_id;
+            });
+            $datatables->addColumn('project_link', function ($row) {
+                return $row->project_link;
+                //return '<a href="' . $row->project_link . '">' . $row->project_link. '</a>';
+            });
+            $datatables->addColumn('bid_value', function ($row) {
+              $currency= Currency::where('id',$row->original_currency_id)->first();
+              //dd($currency,$lead_id->original_currency_id,$lead_id->currency_id);
+              $bid_value= $row->bid_value.''.$currency->currency_symbol;
+              //dd($actual_value);
+                return $bid_value;
+            });
+            $datatables->addColumn('actual_value', function ($row) {
+              //$lead_i= Lead::where('id',$row->id)->first();
+              $currency= Currency::where('id',$row->original_currency_id)->first();
+              //dd($currency,$lead_id->original_currency_id,$lead_id->currency_id);
+              $actual_value= $row->actual_value.''.$currency->currency_symbol;
+              //dd($actual_value);
+                return $actual_value;
+            });
             $datatables->addColumn('deal_status', function ($row) {
               if($row->deal_status == 0)
               {
@@ -296,6 +319,24 @@ class LeadsDataTable extends BaseDataTable
                     </div>
                   </div>';
             });
+            // $datatables->editColumn('project_link', function ($row) {
+            //     if ($row->project_link != null && $row->project_link != '') {
+            //         $label = '<label class="badge badge-secondary">' . __('Project Link') . '</label>';
+            //     }
+            //     else {
+            //         $label = '';
+            //     }
+            //
+            //     $project_link = ucfirst($row->project_link);
+            //
+            //     return '<div class="media align-items-center">
+            //             <div class="media-body">
+            //         <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . $row->project_link . '">' . $row->project_link . '</a></h5>
+            //         <p class="mb-0">' . $label . '</p>
+            //         </div>
+            //       </div>';
+            // });
+
             $datatables->editColumn('next_follow_up_date', function ($row) use ($currentDate) {
                 if ($this->viewLeadFollowUpPermission != 'none') {
                     // code...
@@ -358,10 +399,16 @@ class LeadsDataTable extends BaseDataTable
                 'leads.salutation',
                 'leads.category_id',
                 'client_name',
+                'actual_value',
+                'bid_value',
+                'project_id',
+                'project_link',
                 'company_name',
                 'lead_status.type as statusName',
                 'status_id',
                 'deal_status',
+                'currency_id',
+                'original_currency_id',
                 'leads.created_at',
                 'lead_sources.type as source',
                 'users.name as agent_name',
@@ -372,6 +419,7 @@ class LeadsDataTable extends BaseDataTable
             ->leftJoin('lead_agents', 'lead_agents.id', 'leads.agent_id')
             ->leftJoin('users', 'users.id', 'lead_agents.user_id')
             ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id')
+            ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
 
             ;
 
@@ -462,6 +510,13 @@ class LeadsDataTable extends BaseDataTable
                   ;
             });
         }
+        // if ($this->request()->searchText != '') {
+        //     $lead = $lead->where(function ($query) {
+        //         $query->where('project_id', 'like', '%' . request('searchText') . '%')
+        //             //->orWhere('project_link', 'like', '%' . request('searchText') . '%')
+        //           ;
+        //     });
+        // }
 
         return $lead->groupBy('leads.id');
     }
@@ -508,6 +563,7 @@ class LeadsDataTable extends BaseDataTable
     protected function getColumns()
     {
         $lead = new Lead();
+        // dd($lead);
         $customFieldsGroupsId = CustomFieldGroup::where('model', $lead->customFieldModel)->pluck('id')->first();
         $customFields = CustomField::where('custom_field_group_id', $customFieldsGroupsId)->where('export', 1)->get();
         $customFieldsDataMerge = [];
@@ -522,17 +578,19 @@ class LeadsDataTable extends BaseDataTable
             ],
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
             __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
-            __('app.name') => ['data' => 'client_name', 'name' => 'client_name', 'exportable' => false, 'title' => __('app.name')],
-            __('app.lead') => ['data' => 'lead', 'name' => 'client_name', 'visible' => false, 'title' => __('app.lead')],
+            __('app.name') => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('app.name')],
+              __('app.project_id') => ['data' => 'project_id', 'name' => 'project_id', 'title' => __('Project ID')],
+                __('app.project_link') => ['data' => 'project_link', 'name' => 'project_link', 'title' => __('Project Link')],
 
-            // __('modules.lead.companyName') => ['data' => 'company_name', 'name' => 'company_name', 'title' => __('modules.lead.companyName')],
-              __('modules.lead.leadCategory') => ['data' => 'category_name', 'name' => 'category_name', 'exportable' => true, 'visible' => false, 'title' => __('modules.lead.leadCategory')],
+
+              __('app.actual_value') => ['data' => 'actual_value', 'name' => 'actual_value', 'title' => __('Project Budget')],
+                __('app.bid_value') => ['data' => 'bid_value', 'name' => 'bid_value', 'title' => __('Bid Value')],
+
+
 
             __('app.createdOn') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('app.createdOn')],
-            // __('modules.lead.nextFollowUp') => ['data' => 'next_follow_up_date', 'name' => 'next_follow_up_date', 'orderable' => false, 'searchable' => false, 'title' => __('modules.lead.nextFollowUp')],
-            // __('modules.lead.leadAgent') => ['data' => 'agent_name', 'name' => 'users.name', 'exportable' => false, 'title' => __('modules.lead.leadAgent')],
-            // __('app.leadAgent') => ['data' => 'employee_name', 'name' => 'users.name', 'visible' => false, 'title' => __('app.leadAgent')],
-            // __('app.status') => ['data' => 'status', 'name' => 'status', 'exportable' => false, 'title' => __('app.status')],
+
+
               __('app.deal_status') => ['data' => 'deal_status', 'name' => 'deal_status', 'exportable' => false, 'title' => __('Staus')],
                   __('app.won_lost') => ['data' => 'won_lost', 'name' => 'won_lost', 'exportable' => false, 'title' => __('Deal Status')],
             __('app.leadStatus') => ['data' => 'leadStatus', 'name' => 'leadStatus', 'visible' => false, 'orderable' => false, 'searchable' => false, 'title' => __('app.status')],

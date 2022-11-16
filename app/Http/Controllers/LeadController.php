@@ -443,13 +443,14 @@ class LeadController extends AccountBaseController
       $lead->project_link= $request->project_link;
       $lead->actual_value= $request->value;
       $currency= Currency::where('id',$request->original_currency_id)->first();
-      $lead->value= ($request->value)*$currency->exchange_rate;
-      $lead->status_id= 1;
-      $lead->currency_id= 1;
+      $lead->value= ($request->value)/$currency->exchange_rate;
       $lead->original_currency_id =$request->original_currency_id;
       $lead->bid_value= $request->bid_value;
       $lead->country= $request->country;
       $lead->note= $request->description;
+      $lead->status_id= 1;
+      $lead->currency_id= 1;
+
       $lead->save();
       $lead_agent= new LeadAgent();
       $lead_agent->user_id= Auth::id();
@@ -475,7 +476,15 @@ class LeadController extends AccountBaseController
 
       $lead->project_id= $request->project_id;
       $lead->project_link= $request->project_link;
-      $lead->value= $request->value;
+      //$lead->value= $request->value;
+      $lead->actual_value= $request->value;
+      $currency= Currency::where('id',$request->original_currency_id)->first();
+      //dd($currency);
+      $lead->value= ($request->value)/$currency->exchange_rate;
+      $lead->original_currency_id =$request->original_currency_id;
+      $lead->bid_value= $request->bid_value;
+      $lead->country= $request->country;
+      $lead->note= $request->description;
       $lead->status_id= $request->status;
       $lead->currency_id= 1;
     //  $lead->agent_id =Auth::id();

@@ -217,5 +217,6 @@ class Lead extends BaseModel
     {
         return $this->belongsTo(LeadStatus::class, 'status_id');
     }
+  
 
 }
