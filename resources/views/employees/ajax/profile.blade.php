@@ -1,4 +1,7 @@
 <script src="{{ asset('vendor/jquery/Chart.min.js') }}"></script>
+@push('datatable-styles')
+    @include('sections.daterange_css')
+@endpush
 <style>
     .card-img {
         width: 120px;
@@ -29,54 +32,38 @@ if ($viewPermission == 'all'
 @php
 $editEmployeePermission = user()->permission('edit_employees');
 @endphp
+  @if(Auth::user()->role_id == 1 && $employee->role_id == 4)
+
+<div class="row">
+  <div class="col-md-6 col-lg-2 mt-1">
+      <x-forms.datepicker fieldId="start_date" fieldRequired="true"
+          :fieldLabel="__('Date Range From')" fieldName="start_date"
+          :fieldPlaceholder="__('Date Range From')" />
+  </div>
+  <div class="col-md-6 col-lg-2 mt-1">
+      <x-forms.datepicker fieldId="due_date"
+          :fieldLabel="__('Date Range To')" fieldName="due_date" fieldRequired="true"
+          :fieldPlaceholder="__('Date Range To')" />
+  </div>
+  <div class="col-md-6 col-lg-2 mt-1">
+    <button class="btn-secondary rounded f-14 p-2 my-5" type="button" name="button">Filter</button>
+  </div>
+</div>
+
+@endif
 
 <div class="d-lg-flex">
 
+
     <div class="project-left w-100 py-0 py-lg-5 py-md-0">
+
         <!-- ROW START -->
         <div class="row">
+
             <!--  USER CARDS START -->
             @if(Auth::user()->role_id == 1 && $employee->role_id == 4)
-            <?php
-            $project_counts= App\Models\PMAssign::where('pm_id',$employee->id)->first();
-            if ($project_counts->project_count != 0) {
-              $project_release_count= App\Models\Project::where('pm_id',$employee->id)->where('due',0)->count();
-              //dd($project_release_count);
-              if ($project_release_count != 0) {
-                $total_release_percentage= ($project_counts->project_count /$project_release_count)* 100;
-              }else {
-                $total_release_percentage=0;
-              }
 
-              $project_cancelation=  App\Models\Project::where('pm_id',$employee->id)->where('status','canceled')->count();
-              if ($project_cancelation != 0) {
-                  $percentage_of_project_cancelation= ($project_cancelation/$project_counts->project_count)*100;
-              }else {
-                $percentage_of_project_cancelation= 0;
-              }
 
-              $projects_on_hold= App\Models\Project::where('pm_id',$employee->id)->where('status','on hold')->count();
-              if ($projects_on_hold != 0) {
-                $projects_on_hold_percentage= ($projects_on_hold/$project_counts->project_count)*100;
-              }else {
-                $projects_on_hold_percentage= 0;
-              }
-
-            }else {
-                $total_release_percentage=0;
-                $percentage_of_project_cancelation= 0;
-                $projects_on_hold_percentage= 0;
-            }
-            if ($project_counts->amount != 0) {
-
-              $project_cancelation_rate=  App\Models\Project::where('pm_id',$employee->id)->where('status','canceled')->sum('project_budget');
-              $percentage_of_project_cancelation_rate= ($project_cancelation_rate/$project_counts->amount)*100;
-            }else {
-
-              $percentage_of_project_cancelation_rate= 0;
-            }
-            //dd($project_counts);
-             ?>
 
             <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
 
@@ -500,3 +487,37 @@ $editEmployeePermission = user()->permission('edit_employees');
 
     @endif
 </div>
+@push('scripts')
+    <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
+    <script type="text/javascript">
+
+    </script>
+  @endpush
+  <script type="text/javascript">
+  $(document).ready(function() {
+
+      if ($('.custom-date-picker').length > 0) {
+          datepicker('.custom-date-picker', {
+              position: 'bl',
+              ...datepickerConfig
+          });
+      }
+
+      const dp1 = datepicker('#start_date', {
+          position: 'bl',
+          onSelect: (instance, date) => {
+              dp2.setMin(date);
+          },
+          ...datepickerConfig
+      });
+
+      const dp2 = datepicker('#due_date', {
+          position: 'bl',
+          onSelect: (instance, date) => {
+              dp1.setMax(date);
+          },
+          ...datepickerConfig
+      });
+    });
+
+  </script>

@@ -45,6 +45,7 @@ use App\Models\DealStage;
 use App\Models\SalesCount;
 use DateTime;
 use App\Models\DealStageChange;
+use App\Models\Currency;
 
 
 class LeadController extends AccountBaseController
@@ -440,10 +441,13 @@ class LeadController extends AccountBaseController
 
       $lead->project_id= $request->project_id;
       $lead->project_link= $request->project_link;
-      $lead->value= $request->value;
+      $lead->actual_value= $request->value;
+      $currency= Currency::where('id',$request->original_currency_id)->first();
+      $lead->value= ($request->value)*$currency->exchange_rate;
       $lead->status_id= 1;
       $lead->currency_id= 1;
-      //$lead->agent_id =Auth::id();
+      $lead->original_currency_id =$request->original_currency_id;
+      $lead->bid_value= $request->bid_value;
       $lead->country= $request->country;
       $lead->note= $request->description;
       $lead->save();

@@ -137,7 +137,10 @@ trait webdevelopmentDashboard
         $this->sales=SalesCount::whereBetween(DB::raw('DATE(`updated_at`)'),[$startDate,$endDate])->get();
         $this->developers=User::where('role_id',5)->get();
         $this->tasks=TaskUser::with('task')->first();
-      
+
+
+        
+
 
                            //dd($this->projectassign);
 

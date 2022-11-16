@@ -33,17 +33,18 @@ Overview--}}
                     <th>% of Amount Projects Got Canceled</th>
                     <th>Average Project Completion Time</th>
                     <th>No of Projects Got Canceled</th>
-                    <th>No. of Upsells (PM Made)</th>
+                  {{-- <th>No. of Upsells (PM Made)</th>
                     <th>Value of Upsells (PM Made)</th>
                     <th>No. of Cross-sells (PM Made)</th>
-                    <th>Value of Cross-sells (PM Made)</th>
+                    <th>Value of Cross-sells (PM Made)</th> --}}
                 </x-slot>
 
                 @forelse($projectassign as $item)
                 <tr>
                     <td class="pl-20">{{ $loop->index+1 }}</td>
                     <td>
-                        <a href="/account/employees/{{$item->pm_id}}" class="text-darkest-grey f-w-500">{{ ucfirst($item->project->name) }}</a>
+                        <a href="#" data-toggle="modal" data-target="#manageroverviewmodal{{$item->pm_id}}" class="text-darkest-grey f-w-500">{{ ucfirst($item->project->name) }}</a>
+                        @include('dashboard.modals.manageroverviewmodal')
                     </td>
                     <td>
                         {{$item->project_count}}
@@ -73,7 +74,7 @@ Overview--}}
                     <td>
                         @if($item->project_count != 0) {{$project_cancel_count}} @else No Project Assign Yet @endif
                     </td>
-                    <td>
+                  {{-- <td>
                         0
                     </td>
                     <td>
@@ -84,7 +85,7 @@ Overview--}}
                     </td>
                     <td>
                         0
-                    </td>
+                    </td> --}}
                 </tr>
                 @empty
                 <tr>
@@ -144,6 +145,206 @@ Overview--}}
             </x-table>
         </x-cards.data>
     </div>
+</div>
+<hr />
+{{-- Total Project Overview--}}
+<div class="card col-md-4 mt-2 mb-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Project OverView</h5></div>
+<div class="col-sm-12 col-lg-12 mt-3">
+    <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
+
+        <form id="myForm">
+
+
+        <div class="row ml-2 mt-2 ">
+          <!-- <div class="col-md-2">
+            <label for="start_date">Start Date</label>
+              <input type="date" class="form-control form-control-lg" name="" value="" placeholder="Start Date">
+          </div>
+          <div class="col-md-2">
+            <label for="start_date">Due Date</label>
+              <input type="date" class="form-control form-control-lg" name="" value="" placeholder="Start Date">
+          </div>
+          <div class="col-md-2">
+            <label for="start_date">Due Date</label>
+            <select class="form-control form-control-lg" name="">
+              <option value="">Budget</option>
+              <option value="">Progress</option>
+            </select>
+
+          </div> -->
+          <?php
+          $date= \Carbon\Carbon::now();
+           ?>
+          {{--<div class="col-md-6 col-lg-2 mt-1">
+              <x-forms.datepicker fieldId="start_date"
+                  :fieldLabel="__('modules.projects.startDate')" fieldName="start_date"
+                  :fieldPlaceholder="__('Search By Start Date')" />
+          </div>
+          <div class="col-md-6 col-lg-2 mt-1">
+              <x-forms.datepicker fieldId="due_date"
+                  :fieldLabel="__('Due Date')" fieldName="due_date"
+                  :fieldPlaceholder="__('Search By Due Date')" />
+          </div> --}}
+          <div class="col-md-6 col-lg-4">
+              <x-forms.label class="my-3" fieldId="type_id"
+                  :fieldLabel="__('Select Type')">
+              </x-forms.label>
+              <x-forms.input-group>
+                  <select class="form-control select-picker" id="type_id" name="type_id"
+                      data-live-search="true">
+                      <option value="">--</option>
+
+                          <option
+                            value="budget"  >
+                              Budget
+
+                          </option>
+                          <option
+                            value="progress"  >
+                            Progress
+
+                          </option>
+
+                  </select>
+
+
+              </x-forms.input-group>
+          </div>
+          <div class="col-md-6 col-lg-4">
+              <x-forms.label class="my-3" fieldId="stauts_id"
+                  :fieldLabel="__('Select Status')">
+              </x-forms.label>
+              <x-forms.input-group>
+                <?php
+                $status= App\Models\ProjectStatusSetting::where('status_name','!=','finished')->get();
+                 ?>
+                  <select class="form-control select-picker" id="status_id" name="status_id"
+                      data-live-search="true">
+                      <option value="">--</option>
+                      @foreach ($status as $data)
+
+
+
+                          <option
+                          value="{{$data->status_name}}" >
+                            {{$data->status_name}}
+
+                          </option>
+
+                          @endforeach
+
+                  </select>
+
+
+              </x-forms.input-group>
+          </div>
+        {{--  <div class="col-md-6 col-lg-2 mt-5">
+              <button class="btn-primary rounded f-14 p-y filter-custom" id="ajaxSubmit" type="button" >Filter</button>
+          </div> --}}
+
+
+
+        </div>
+        <!-- <div class="d-flex justify-content-center mt-3">
+          <button class="btn-primary rounded f-14 p-y" type="button" >Filter</button>
+        </div> -->
+          </form>
+          <hr>
+
+
+        <x-table class="border-0 pb-3 admin-dash-table table-hover">
+
+            <x-slot name="thead">
+                <th class="pl-20">#</th>
+                <th>Project Name</th>
+                <th>Project Budget</th>
+                <th>Start Date</th>
+                <th>Due Date</th>
+                <th>Current Status</th>
+                <th>Progress(%)</th>
+            </x-slot>
+                <tbody id="tbody">
+            @forelse($projects as $item)
+            <tr>
+                <td class="pl-20">{{ $loop->index + 1 }}</td>
+                <td>
+                    <a href="{{ route('projects.show', [$item->id]) }}" class="text-darkest-grey f-w-500">{{ ucfirst($item->project_name) }}</a>
+                </td>
+                <td>
+                  ${{ ucfirst($item->project_budget) }}
+                </td>
+                <td>
+                    {{ date('d-m-Y', strtotime($item->start_date))}}
+                </td>
+                <td>
+                    {{ date('d-m-Y', strtotime($item->deadline))}}
+                </td>
+
+                <?php
+                      $status_id= App\Models\ProjectStatusSetting::where('status_name',$item->status)->first(); //dd($status_id); ?>
+                <td class="f-14" width="20%">
+                    <x-status :style="'color:'.$status_id->color" :value="$item->status" />
+                </td>
+
+                <td>
+                    {{$item->completion_percent}}%
+                </td>
+            </tr>
+
+            @empty
+            <tr>
+                <td colspan="5" class="shadow-none">
+                    <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                </td>
+            </tr>
+              </tbody>
+
+            @endforelse
+        </x-table>
+    </x-cards.data>
+</div>
+<hr>
+
+{{-- Total Milestone Overview--}}
+
+<div class="row mt-2">
+
+    @if (in_array('projects', $modules) && in_array('pending_milestone', $activeWidgets))
+    <div class="col-sm-12 col-lg-12 mt-3">
+        <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
+            <div class="card col-md-6 mt-2 mb-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Pending Milestone</h5></div>
+            <x-table class="border-0 pb-3 admin-dash-table table-hover">
+                <x-slot name="thead">
+                    <th class="pl-20">#</th>
+                    <th>@lang('modules.projects.milestoneTitle')</th>
+                    <th>@lang('modules.projects.milestoneCost')</th>
+                    <th>@lang('app.project')</th>
+                </x-slot>
+
+                @forelse($pendingMilestone as $key=>$item)
+                <tr id="row-{{ $item->id }}">
+                    <td class="pl-20">{{ $key + 1 }}</td>
+                    <td>
+                        <a href="javascript:;" class="milestone-detail text-darkest-grey f-w-500" data-milestone-id="{{ $item->id }}">{{ ucfirst($item->milestone_title) }}</a>
+                    </td>
+                    <td>
+                        @if (!is_null($item->currency_id)) {{ $item->currency->currency_symbol . $item->cost }} @else {{ $item->cost }} @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('projects.show', [$item->project_id]) }}" class="text-darkest-grey">{{ $item->project->project_name }}</a>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="5" class="shadow-none">
+                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                    </td>
+                </tr>
+                @endforelse
+            </x-table>
+        </x-cards.data>
+    </div>
+    @endif
 </div>
 <hr />
 <div class="card col-md-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Lead Developer Overview</h5></div>
@@ -424,6 +625,94 @@ Overview--}}
     </div>
 </div>
 <hr />
+{{-- Leads And Deals Overview--}}
+<div class="row">
+    <div class="col-sm-12 col-lg-6 mt-3">
+        <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
+            <div class="card col-md-6 mt-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Active Leads Overview</h5></div>
+            <br />
+            <x-table class="border-0 pb-3 admin-dash-table table-hover">
+                <x-slot name="thead">
+                    <th class="pl-20">#</th>
+                    <th>Lead Name</th>
+                    <th>Created Date</th>
+                    <th>Lead Value</th>
+                    <th>Current Status</th>
+                    <th>Created By</th>
+                </x-slot>
+
+                @forelse($leads as $lead)
+                <tr>
+                    <td class="pl-20">{{$loop->index+1}}</td>
+                    <td>
+                        {{$lead->client_name}}
+                    </td>
+                    <td>
+                        {{($lead->created_at)->format('Y-m-d')}}
+                    </td>
+                    <td>{{$lead->value}}</td>
+                    <td>{{$lead->lead_status->type}}</td>
+
+                    <td>{{$lead->user->name}}</td>
+                </tr>
+
+                @empty
+                <tr>
+                    <td colspan="5" class="shadow-none">
+                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                    </td>
+                </tr>
+                @endforelse
+            </x-table>
+        </x-cards.data>
+    </div>
+
+    <div class="col-sm-12 col-lg-6 mt-3">
+        <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
+            <div class="card col-md-6 mt-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Active Deals Overview</h5></div>
+            <br />
+            <x-table class="border-0 pb-3 admin-dash-table table-hover">
+                <x-slot name="thead">
+                    <th class="pl-20">#</th>
+                    <th>Deal Name</th>
+                    <th>Created Date</th>
+                    <th>Deal Value</th>
+                    <th>Current Status</th>
+                    <th>Created By</th>
+                </x-slot>
+                @forelse($deals as $deal)
+
+                <tr>
+                    <td class="pl-20">{{$loop->index+1}}</td>
+                    <td>
+                        {{$deal->client_name}}
+                    </td>
+                    <td>
+                        {{($deal->updated_at)->format('Y-m-d')}}
+                    </td>
+                    <td>{{$deal->value}}</td>
+                    <td>
+                        <?php
+                          $deal_id = App\Models\DealStage::where('lead_id',$deal->id)->first(); // dd($deal_id->deal_stage); ?> @if($deal_id != null) @if($deal_id->deal_stage == 0) Contact Made @elseif($deal_id->deal_stage == 1)
+                        Requirements Defined @elseif($deal_id->deal_stage == 2) Proposal Made @else Negotiation Started @endif @endif
+                    </td>
+
+                    <td>{{$deal->user->name}}</td>
+                </tr>
+                @empty
+
+                <tr>
+                    <td colspan="5" class="shadow-none">
+                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                    </td>
+                </tr>
+
+                @endforelse
+            </x-table>
+        </x-cards.data>
+    </div>
+</div>
+<hr>
 
 <div class="card col-md-3 mb-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Team Overview</h5></div>
 <div class="row mt-2">
@@ -556,206 +845,7 @@ Overview--}}
 </div>
 
 <hr />
-{{-- Total Project Overview--}}
-<div class="card col-md-4 mt-2 mb-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Project OverView</h5></div>
-<div class="col-sm-12 col-lg-12 mt-3">
-    <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
 
-        <form id="myForm">
-
-
-        <div class="row ml-2 mt-2 ">
-          <!-- <div class="col-md-2">
-            <label for="start_date">Start Date</label>
-              <input type="date" class="form-control form-control-lg" name="" value="" placeholder="Start Date">
-          </div>
-          <div class="col-md-2">
-            <label for="start_date">Due Date</label>
-              <input type="date" class="form-control form-control-lg" name="" value="" placeholder="Start Date">
-          </div>
-          <div class="col-md-2">
-            <label for="start_date">Due Date</label>
-            <select class="form-control form-control-lg" name="">
-              <option value="">Budget</option>
-              <option value="">Progress</option>
-            </select>
-
-          </div> -->
-          <?php
-          $date= \Carbon\Carbon::now();
-           ?>
-          {{--<div class="col-md-6 col-lg-2 mt-1">
-              <x-forms.datepicker fieldId="start_date"
-                  :fieldLabel="__('modules.projects.startDate')" fieldName="start_date"
-                  :fieldPlaceholder="__('Search By Start Date')" />
-          </div>
-          <div class="col-md-6 col-lg-2 mt-1">
-              <x-forms.datepicker fieldId="due_date"
-                  :fieldLabel="__('Due Date')" fieldName="due_date"
-                  :fieldPlaceholder="__('Search By Due Date')" />
-          </div> --}}
-          <div class="col-md-6 col-lg-4">
-              <x-forms.label class="my-3" fieldId="type_id"
-                  :fieldLabel="__('Select Type')">
-              </x-forms.label>
-              <x-forms.input-group>
-                  <select class="form-control select-picker" id="type_id" name="type_id"
-                      data-live-search="true">
-                      <option value="">--</option>
-
-                          <option
-                            value="budget"  >
-                              Budget
-
-                          </option>
-                          <option
-                            value="progress"  >
-                            Progress
-
-                          </option>
-
-                  </select>
-
-
-              </x-forms.input-group>
-          </div>
-          <div class="col-md-6 col-lg-4">
-              <x-forms.label class="my-3" fieldId="stauts_id"
-                  :fieldLabel="__('Select Status')">
-              </x-forms.label>
-              <x-forms.input-group>
-                <?php
-                $status= App\Models\ProjectStatusSetting::where('status_name','!=','finished')->get();
-                 ?>
-                  <select class="form-control select-picker" id="status_id" name="status_id"
-                      data-live-search="true">
-                      <option value="">--</option>
-                      @foreach ($status as $data)
-
-
-
-                          <option
-                          value="{{$data->status_name}}" >
-                            {{$data->status_name}}
-
-                          </option>
-
-                          @endforeach
-
-                  </select>
-
-
-              </x-forms.input-group>
-          </div>
-        {{--  <div class="col-md-6 col-lg-2 mt-5">
-              <button class="btn-primary rounded f-14 p-y filter-custom" id="ajaxSubmit" type="button" >Filter</button>
-          </div> --}}
-
-
-
-        </div>
-        <!-- <div class="d-flex justify-content-center mt-3">
-          <button class="btn-primary rounded f-14 p-y" type="button" >Filter</button>
-        </div> -->
-          </form>
-          <hr>
-
-
-        <x-table class="border-0 pb-3 admin-dash-table table-hover">
-
-            <x-slot name="thead">
-                <th class="pl-20">#</th>
-                <th>Project Name</th>
-                <th>Project Budget</th>
-                <th>Start Date</th>
-                <th>Due Date</th>
-                <th>Current Status</th>
-                <th>Progress(%)</th>
-            </x-slot>
-                <tbody id="tbody">
-            @forelse($projects as $item)
-            <tr>
-                <td class="pl-20">{{ $loop->index + 1 }}</td>
-                <td>
-                    <a href="{{ route('projects.show', [$item->id]) }}" class="text-darkest-grey f-w-500">{{ ucfirst($item->project_name) }}</a>
-                </td>
-                <td>
-                  ${{ ucfirst($item->project_budget) }}
-                </td>
-                <td>
-                    {{ date('d-m-Y', strtotime($item->start_date))}}
-                </td>
-                <td>
-                    {{ date('d-m-Y', strtotime($item->deadline))}}
-                </td>
-
-                <?php
-                      $status_id= App\Models\ProjectStatusSetting::where('status_name',$item->status)->first(); //dd($status_id); ?>
-                <td class="f-14" width="20%">
-                    <x-status :style="'color:'.$status_id->color" :value="$item->status" />
-                </td>
-
-                <td>
-                    {{$item->completion_percent}}%
-                </td>
-            </tr>
-
-            @empty
-            <tr>
-                <td colspan="5" class="shadow-none">
-                    <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                </td>
-            </tr>
-              </tbody>
-
-            @endforelse
-        </x-table>
-    </x-cards.data>
-</div>
-<hr>
-
-{{-- Total Milestone Overview--}}
-
-<div class="row mt-2">
-
-    @if (in_array('projects', $modules) && in_array('pending_milestone', $activeWidgets))
-    <div class="col-sm-12 col-lg-12 mt-3">
-        <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
-            <div class="card col-md-6 mt-2 mb-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Pending Milestone</h5></div>
-            <x-table class="border-0 pb-3 admin-dash-table table-hover">
-                <x-slot name="thead">
-                    <th class="pl-20">#</th>
-                    <th>@lang('modules.projects.milestoneTitle')</th>
-                    <th>@lang('modules.projects.milestoneCost')</th>
-                    <th>@lang('app.project')</th>
-                </x-slot>
-
-                @forelse($pendingMilestone as $key=>$item)
-                <tr id="row-{{ $item->id }}">
-                    <td class="pl-20">{{ $key + 1 }}</td>
-                    <td>
-                        <a href="javascript:;" class="milestone-detail text-darkest-grey f-w-500" data-milestone-id="{{ $item->id }}">{{ ucfirst($item->milestone_title) }}</a>
-                    </td>
-                    <td>
-                        @if (!is_null($item->currency_id)) {{ $item->currency->currency_symbol . $item->cost }} @else {{ $item->cost }} @endif
-                    </td>
-                    <td>
-                        <a href="{{ route('projects.show', [$item->project_id]) }}" class="text-darkest-grey">{{ $item->project->project_name }}</a>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="5" class="shadow-none">
-                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                    </td>
-                </tr>
-                @endforelse
-            </x-table>
-        </x-cards.data>
-    </div>
-    @endif
-</div>
-<hr />
 {{-- Contry Wise Client Overview--}}
 <div class="card col-md-3 mt-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Country Wise Clients</h5></div>
 <div class="row">
@@ -789,7 +879,7 @@ Overview--}}
 <hr />
 
 {{-- Developer Overview--}}
-<div class="card col-md-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Developer Overview</h5></div>
+{{--<div class="card col-md-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Developer Overview</h5></div>
 
 <div class="row mb-3">
     @foreach($developer as $dev)
@@ -814,95 +904,9 @@ Overview--}}
     </div>
     @endforeach
 </div>
-<hr />
+--}}
 
-{{-- Leads And Deals Overview--}}
-<div class="row">
-    <div class="col-sm-12 col-lg-6 mt-3">
-        <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
-            <div class="card col-md-6 mt-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Active Leads Overview</h5></div>
-            <br />
-            <x-table class="border-0 pb-3 admin-dash-table table-hover">
-                <x-slot name="thead">
-                    <th class="pl-20">#</th>
-                    <th>Lead Name</th>
-                    <th>Created Date</th>
-                    <th>Lead Value</th>
-                    <th>Current Status</th>
-                    <th>Created By</th>
-                </x-slot>
 
-                @forelse($leads as $lead)
-                <tr>
-                    <td class="pl-20">{{$loop->index+1}}</td>
-                    <td>
-                        {{$lead->client_name}}
-                    </td>
-                    <td>
-                        {{($lead->created_at)->format('Y-m-d')}}
-                    </td>
-                    <td>{{$lead->value}}</td>
-                    <td>{{$lead->lead_status->type}}</td>
-
-                    <td>{{$lead->user->name}}</td>
-                </tr>
-
-                @empty
-                <tr>
-                    <td colspan="5" class="shadow-none">
-                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                    </td>
-                </tr>
-                @endforelse
-            </x-table>
-        </x-cards.data>
-    </div>
-
-    <div class="col-sm-12 col-lg-6 mt-3">
-        <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
-            <div class="card col-md-6 mt-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Active Deals Overview</h5></div>
-            <br />
-            <x-table class="border-0 pb-3 admin-dash-table table-hover">
-                <x-slot name="thead">
-                    <th class="pl-20">#</th>
-                    <th>Deal Name</th>
-                    <th>Created Date</th>
-                    <th>Deal Value</th>
-                    <th>Current Status</th>
-                    <th>Created By</th>
-                </x-slot>
-                @forelse($deals as $deal)
-
-                <tr>
-                    <td class="pl-20">{{$loop->index+1}}</td>
-                    <td>
-                        {{$deal->client_name}}
-                    </td>
-                    <td>
-                        {{($deal->updated_at)->format('Y-m-d')}}
-                    </td>
-                    <td>{{$deal->value}}</td>
-                    <td>
-                        <?php
-                          $deal_id = App\Models\DealStage::where('lead_id',$deal->id)->first(); // dd($deal_id->deal_stage); ?> @if($deal_id != null) @if($deal_id->deal_stage == 0) Contact Made @elseif($deal_id->deal_stage == 1)
-                        Requirements Defined @elseif($deal_id->deal_stage == 2) Proposal Made @else Negotiation Started @endif @endif
-                    </td>
-
-                    <td>{{$deal->user->name}}</td>
-                </tr>
-                @empty
-
-                <tr>
-                    <td colspan="5" class="shadow-none">
-                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                    </td>
-                </tr>
-
-                @endforelse
-            </x-table>
-        </x-cards.data>
-    </div>
-</div>
 
 <script>
     $("body").on("click", ".milestone-detail", function () {

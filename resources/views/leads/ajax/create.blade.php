@@ -57,6 +57,36 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Project') .' '. __('Budget')"
                                            fieldName="value" fieldId="value" fieldRequired="true"/>
                                    </div>
+                                   <!-- CURRENCY START -->
+                                   <?php
+                                    $currencies= App\Models\Currency::all();
+
+                                    ?>
+                                   <div class="col-md-6 col-lg-6 mt-3 ">
+                                     <?php  ?>
+                                       <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
+                                           <x-forms.label fieldId="original_currency_id" :fieldLabel="__('modules.invoices.currency')">
+                                           </x-forms.label>
+
+                                           <div class="select-others height-35 rounded">
+                                               <select class="form-control select-picker" name="original_currency_id" id="original_currency_id">
+                                                   @foreach ($currencies as $currency)
+                                                   <option
+
+                                                       value="{{ $currency->id }}">
+                                                       {{ $currency->currency_code . ' (' . $currency->currency_symbol . ')' }}
+                                                   </option>
+                                                   @endforeach
+                                               </select>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="col-lg-6 col-md-6">
+                                       <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Bid') .' '. __('Value')"
+                                           fieldName="bid_value" fieldId="bid_value" fieldRequired="true"/>
+                                   </div>
+                                   <!-- CURRENCY END -->
+
                                    @if ($addLeadNotePermission == 'all' || $addLeadNotePermission == 'added' || $addLeadNotePermission == 'both')
                                    <div class="col-md-12">
                                      <div class="form-group">

@@ -51,6 +51,8 @@ use App\Http\Requests\Admin\Employee\ImportProcessRequest;
 use App\Models\LanguageSetting;
 use App\Models\PMAssign;
 use App\Models\SalesCount;
+use App\Models\Project;
+
 
 class EmployeeController extends AccountBaseController
 {
@@ -623,6 +625,8 @@ class EmployeeController extends AccountBaseController
         }
 
         $this->activeTab = ($tab == '') ? 'profile' : $tab;
+      
+        //dd($project_counts);
 
         return view('employees.show', $this->data);
     }

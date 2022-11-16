@@ -3,7 +3,7 @@
 @push('datatable-styles')
     @include('sections.daterange_css')
 @endpush
-
+ 
 @push('styles')
     <style>
         .h-200 {
