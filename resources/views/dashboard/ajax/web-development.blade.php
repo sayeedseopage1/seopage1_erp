@@ -1072,15 +1072,15 @@ $(document).ready(function(){
         console.log(projects);
         if(projects.length > 0){
           for (let i = 0; i < projects.length; i++) {
-            html += '<tr>\
-            <td>'+(i+1)+'</td>\
-            <td>'+projects[i]['project_name']+'</td>\
-            <td>'+projects[i]['project_budget']+'$</td>\
-            <td>'+projects[i]['start_date']+'</td>\
-            <td>'+projects[i]['deadline']+'</td>\
-            <td>'+projects[i]['status']+'</td>\
-            <td>'+projects[i]['completion_percent']+'%</td>\
-            </tr>';
+            html += `<tr>
+            <td>${(i+1)}</td>
+            <td>${projects[i]['project_name']}</td>
+            <td>${projects[i]['project_budget']}$</td>
+            <td>${new Date(projects[i]['start_date']).toDateString()}</td>
+            <td>${new Date(projects[i]['deadline']).toDateString()}</td>
+            <td>${projects[i]['status']}</td>
+            <td>${projects[i]['completion_percent']}%</td>
+            </tr>`;
           }
         }else {
            html += '<tr>\
@@ -1104,15 +1104,15 @@ $(document).ready(function(){
         //console.log(projects);
         if(projects.length > 0){
           for (let i = 0; i < projects.length; i++) {
-            html += '<tr>\
-            <td>'+(i+1)+'</td>\
-            <td>'+projects[i]['project_name']+'</td>\
-            <td>'+projects[i]['project_budget']+'$</td>\
-            <td>'+projects[i]['start_date']+'</td>\
-            <td>'+projects[i]['deadline']+'</td>\
-            <td>'+projects[i]['status']+'</td>\
-            <td>'+projects[i]['completion_percent']+'%</td>\
-            </tr>';
+            html +=  `<tr>
+            <td>${(i+1)}</td>
+            <td>${projects[i]['project_name']}</td>
+            <td>${projects[i]['project_budget']}$</td>
+            <td>${new Date(projects[i]['start_date']).toDateString()}</td>
+            <td>${new Date(projects[i]['deadline']).toDateString()}</td>
+            <td>${projects[i]['status']}</td>
+            <td>${projects[i]['completion_percent']}%</td>
+            </tr>`;
           }
         }else {
            html += '<tr>\
