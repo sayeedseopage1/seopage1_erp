@@ -40,7 +40,7 @@ class UpdateProject extends CoreRequest
 
         if ($this->project_budget != '') {
             $rules['project_budget'] = 'numeric';
-            $rules['currency_id'] = 'required';
+          
         }
 
         $project = Project::find(request()->project_id);

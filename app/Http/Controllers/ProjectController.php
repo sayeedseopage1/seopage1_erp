@@ -570,6 +570,7 @@ if ($pm_count < 2) {
      */
     public function update(UpdateProject $request, $id)
     {
+      // /dd($request);
         $project = Project::findOrFail($id);
         $project->project_name = $request->project_name;
         $project->project_short_code = $request->project_code;
@@ -630,9 +631,13 @@ if ($pm_count < 2) {
             $project->calculate_task_progress = 'false';
             $project->completion_percent = $request->completion_percent;
         }
+        $deal= Deal::where('id',$project->deal_id)->first();
 
-        $project->project_budget = $request->project_budget;
-        $project->currency_id = $request->currency_id != '' ? $request->currency_id : global_setting()->currency_id;
+        $currency= Currency::where('id',$deal->original_currency_id)->first();
+        //dd($currency);
+        $project->project_budget = $deal->amount;
+
+        $project->currency_id = 1;
         $project->hours_allocated = $request->hours_allocated;
         $project->status = $request->status;
         $project->project_status= 'Accepted';

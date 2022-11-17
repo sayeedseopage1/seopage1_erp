@@ -6,11 +6,10 @@
         <h5 class="modal-title" id="exampleModalLabel">Create Milestone</h5>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
+<?php
+$currencies= App\Models\Currency::all();
 
-
-
-
-
+ ?>
 
       <div class="modal-body">
 
@@ -32,6 +31,16 @@
               <div class="form-group">
               <label for="exampleFormControlInput1">Milestone Cost <span style="color:red;">*</span></label>
               <input type="text" name="cost" class="form-control cost" id="exampleFormControlInput1"  placeholder="Milestone Cost">
+              </div>
+
+            </div>
+            <?php
+            $original_currency_id = App\Models\Currency::where('id',$deal->original_currency_id)->first();
+             ?>
+            <div class="col-md-6">
+              <div class="form-group">
+              <label for="exampleFormControlInput1">Currency <span style="color:red;">*</span></label>
+              <input type="text" id="original_currency_id"  readonly value="{{$original_currency_id->currency_code}}({{$original_currency_id->currency_symbol}})"  class="form-control original_currency_id" id="exampleFormControlInput1"  placeholder="{{$original_currency_id->currency_code}}({{$original_currency_id->currency_symbol}})">
               </div>
 
             </div>

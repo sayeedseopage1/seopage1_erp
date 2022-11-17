@@ -7,7 +7,10 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
 
+      <?php
+      $currencies= App\Models\Currency::all();
 
+       ?>
 
 
 
@@ -36,7 +39,13 @@
               </div>
 
             </div>
+            <div class="col-md-6">
+              <div class="form-group">
+              <label for="exampleFormControlInput1">Currency <span style="color:red;">*</span></label>
+              <input type="text"  readonly value="{{$deal->original_currency->currency_code}}({{ $deal->original_currency->currency_symbol}})"  class="form-control cost" id="exampleFormControlInput1"  placeholder="Milestone Cost">
+              </div>
 
+            </div>
 
             <div class="col-md-12">
               <div class="form-group">

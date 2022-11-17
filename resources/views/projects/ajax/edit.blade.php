@@ -299,21 +299,29 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     @lang('modules.client.clientOtherDetails')</h4>
 
                 <div class="row p-20">
-                    <div class="col-lg-4">
-                        <x-forms.select fieldId="currency_id" :fieldLabel="__('modules.invoices.currency')"
-                            fieldName="currency_id" search="true">
-                            @foreach ($currencies as $currency)
-                                <option @if ($currency->id == $project->currency_id) selected @endif value="{{ $currency->id }}">
-                                    {{ $currency->currency_symbol . ' (' . $currency->currency_code . ')' }}
-                                </option>
-                            @endforeach
-                        </x-forms.select>
-                    </div>
+                  <div class="col-lg-4 col-md-6 mt-3">
+                      <x-forms.label fieldId="" :fieldLabel="__('Currency Id')">
+                      </x-forms.label>
+                      <div class="input-group">
 
-                    <div class="col-lg-4 col-md-6">
+                          <input type="text"  value="{{ $project->deal->original_currency->currency_symbol }} ({{ $project->deal->original_currency->currency_code }})"
+                              class="form-control height-35 f-15 readonly-background" readonly>
+                      </div>
+                  </div>
+
+                  {{-- <div class="col-lg-4 col-md-6">
                         <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.projectBudget')"
                             fieldName="project_budget" fieldId="project_budget" :fieldValue="$project->project_budget"
-                            :fieldPlaceholder="__('placeholders.price')" />
+                            :fieldPlaceholder="__('placeholders.price')" readonly/>
+                    </div> --}}
+                    <div class="col-lg-4 col-md-6 mt-3">
+                        <x-forms.label fieldId="project_budget" :fieldLabel="__('modules.projects.projectBudget')">
+                        </x-forms.label>
+                        <div class="input-group">
+
+                            <input type="number" name="project_budget" value="{{ $project->deal->actual_amount }}"
+                                class="form-control height-35 f-15 readonly-background" readonly>
+                        </div>
                     </div>
 
                     <div class="col-lg-4 col-md-6">

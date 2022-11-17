@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Currency;
 
 /**
  * App\Models\Currency
@@ -33,5 +34,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Currency extends BaseModel
 {
-    //
+  public function original_currency()
+  {
+      return $this->belongsTo(Currency::class, 'original_currency_id');
+  }
 }

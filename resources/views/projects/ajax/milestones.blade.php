@@ -13,7 +13,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
           <div class="alert alert-success show mb-2" role="alert"> {{Session::get('success')}}</div>
 
           @endif
-        @if (($addProjectMilestonePermission == 'all' || $project->project_admin == user()->id) && !$project->trashed())
+     @if (($addProjectMilestonePermission == 'all' || $project->project_admin == user()->id) && !$project->trashed())
             <x-forms.button-primary icon="plus" id="add-project-milestone" class="type-btn mb-3">
                 @lang('modules.projects.createMilestone')
             </x-forms.button-primary>
@@ -42,8 +42,11 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                     data-milestone-id="{{ $item->id }}">{{ ucfirst($item->milestone_title) }}</a>
                             </td>
                             <td>
-                                @if (!is_null($item->currency_id))
-                                    {{ currency_formatter($item->cost, $item->currency->currency_symbol) }}
+                                @if (!is_null($item->original_currency_id))
+                                @php
+                                  $original_currency= App\Models\Currency::where('id',$item->original_currency_id)->first();
+                                @endphp
+                                    {{ currency_formatter($item->actual_cost, $original_currency->currency_symbol) }}
                                 @else
                                     {{ currency_formatter($item->cost) }}
                                 @endif

@@ -46,9 +46,11 @@
 
 
         <x-cards.data-row :label="__('modules.projects.milestoneTitle')" :value="$milestone->milestone_title" />
-
+          @php
+            $original_currency= App\Models\Currency::where('id',$milestone->original_currency_id)->first();
+          @endphp
         <x-cards.data-row :label="__('modules.projects.milestoneCost')"
-            :value="currency_formatter($milestone->cost, $milestone->currency->currency_symbol)" />
+            :value="currency_formatter($milestone->actual_cost, $original_currency->currency_symbol)" />
 
         @if ($milestone->status == 'incomplete')
             @php

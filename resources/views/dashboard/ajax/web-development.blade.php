@@ -50,7 +50,7 @@ Overview--}}
                         {{$item->project_count}}
                     </td>
                     <td>
-                        ${{$item->amount}}
+                        ${{round($item->amount,2)}}
                     </td>
 
                     <td>
@@ -547,7 +547,7 @@ Overview--}}
                         {{$sale->deals_count}}
                     </td>
                     <td>
-                        @if($sale->lead_value == null) Not Applicable @else ${{$sale->lead_value}} @endif
+                        @if($sale->lead_value == null) Not Applicable @else ${{round($sale->lead_value,2)}} @endif
                     </td>
                     <td>
                         @if($sale->lead_value == null) Not Applicable @else @php $av_lead_value = $sale->lead_value/ $sale->leads_count; @endphp ${{round($av_lead_value,2)}} @endif
@@ -607,7 +607,7 @@ Overview--}}
                         {{$deal->lost_deals}}
                     </td>
                     <td>{{$deal->negotiation_started}}</td>
-                    <td>@if($deal->deal_value== null) Not Applicable @else ${{$deal->deal_value}} @endif</td>
+                    <td>@if($deal->deal_value== null) Not Applicable @else ${{round($deal->deal_value,2)}} @endif</td>
 
                     <td>@if($sale->deals_count == 0) Not Applicable @else @php $percentage_of_won_deal = ($sale->won_deals/$sale->deals_count)*100; @endphp {{$percentage_of_won_deal}}% @endif</td>
                     <td>{{$deal->wrong_deals}}</td>

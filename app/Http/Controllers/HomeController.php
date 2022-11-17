@@ -89,12 +89,7 @@ class HomeController extends Controller
     }
     public function ClientForm(Request $request)
     {
-      $validated = $request->validate([
-          'user_name' => 'required|unique:users|max:255',
-          'email' => 'required|unique:users|max:255',
-
-
-      ]);
+      
     // /  dd($request);
       $client = new ClientForm();
       $client->deal_id=$request->decrypt;

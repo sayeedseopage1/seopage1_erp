@@ -11,7 +11,7 @@ use App\Models\ProjectStatusSetting;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Currency;
 class ProjectsDataTable extends BaseDataTable
 {
 
@@ -165,6 +165,10 @@ class ProjectsDataTable extends BaseDataTable
             });
             $datatables->addColumn('project', function ($row) {
                 return ucfirst($row->project_name);
+            });
+            $datatables->addColumn('project_value', function ($row) {
+              $currency= Currency::where('id',$row->currency_id)->first();
+                return $row->project_budget . $currency->currency_symbol;
             });
 
         $customFieldsId = $customFields->pluck('id');
@@ -452,6 +456,7 @@ class ProjectsDataTable extends BaseDataTable
             __('modules.taskCode') => ['data' => 'short_code', 'name' => 'project_short_code', 'title' => __('modules.taskCode')],
             __('modules.projects.projectName') => ['data' => 'project_name', 'name' => 'project_name', 'exportable' => false, 'title' => __('modules.projects.projectName')],
             __('app.project') => ['data' => 'project', 'name' => 'project_name', 'visible' => false, 'title' => __('app.project')],
+              __('app.project_value') => ['data' => 'project_value', 'name' => 'project_value',  'title' => __('Project Value')],
             __('modules.projects.members')  => ['data' => 'members', 'name' => 'members', 'exportable' => false, 'width' => '15%', 'title' => __('modules.projects.members')],
             __('modules.projects.projectMembers')  => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.projects.projectMembers')],
             __('modules.projects.startDate')  => ['data' => 'start_date', 'name' => 'start_date', 'visible' => false, 'title' => __('modules.projects.startDate')],

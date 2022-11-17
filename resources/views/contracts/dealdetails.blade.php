@@ -175,7 +175,9 @@
                               <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#milestoneaddmodal" type="button">Add</button>
                               </div>
+
                                 <input type="hidden" class="project_id" name="project_id" id="project_id" value="{{$project_id->id}}">
+
                               @include('contracts.modals.milestonecreatemodal')
                                 @include('contracts.modals.milestoneeditmodal')
                                 @include('contracts.modals.milestonedeletemodal')
@@ -510,7 +512,7 @@
               $('#success_message').text(response.message);
             }else {
               $('#title').val(response.milestone.milestone_title);
-              $('#cost').val(response.milestone.cost);
+              $('#cost').val(response.milestone.actual_cost);
               $('#summary').val(response.milestone.summary);
               $('#milestone_id').val(milestone_id);
             }
@@ -526,6 +528,7 @@
         var data= {
           'title' : $('#title').val(),
           'cost' : $('#cost').val(),
+          'original_currency_id': $('#original_currency_id').val(),
           'summary' : $('#summary').val(),
         }
         $.ajaxSetup({
@@ -609,9 +612,11 @@
       var data= {
         'title': $('.title').val(),
         'cost': $('.cost').val(),
+
         'summary': $('.summary').val(),
         //'project_id': document.querySelector('.project_id').value,
         'project_id': document.getElementById("project_id").value,
+          'original_currency_id': document.getElementById("original_currency_id").value,
       }
       //console.log(data);
       $.ajaxSetup({

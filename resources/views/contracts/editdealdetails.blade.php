@@ -445,7 +445,8 @@
               $('#success_message').text(response.message);
             }else {
               $('#title').val(response.milestone.milestone_title);
-              $('#cost').val(response.milestone.cost);
+
+                $('#cost').val(response.milestone.actual_cost);
               $('#summary').val(response.milestone.summary);
               $('#milestone_id').val(milestone_id);
             }
@@ -547,6 +548,7 @@
         'summary': $('.summary').val(),
         //'project_id': document.querySelector('.project_id').value,
         'project_id': document.getElementById("project_id").value,
+          'original_currency_id': document.getElementById("original_currency_id").value,
       }
       //console.log(data);
       $.ajaxSetup({

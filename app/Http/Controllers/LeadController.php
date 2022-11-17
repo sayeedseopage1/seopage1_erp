@@ -429,8 +429,10 @@ class LeadController extends AccountBaseController
          $sales_count->avg_lead_time=$diffInMinutes/$sales_count->leads_count;
 
         }
+        $currency= Currency::where('id',$request->original_currency_id)->first();
+        $val= ($request->value)/$currency->exchange_rate;
         $sales_count->last_lead_date= Carbon::now();
-        $sales_count->lead_value= $sales_count->lead_value + $request->value;
+        $sales_count->lead_value= $sales_count->lead_value + $val;
         $sales_count->save();
 
       }
