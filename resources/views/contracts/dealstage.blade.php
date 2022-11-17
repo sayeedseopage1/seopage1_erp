@@ -23,7 +23,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
 @endpush
     <!-- CONTENT WRAPPER START -->
-     
+
     <div class="content-wrapper">
         <!-- Add Task Export Buttons Start -->
         <div class="d-flex justify-content-between action-bar">
@@ -69,10 +69,14 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
   <strong style="font-size:20px;">  <x-cards.data-row :label="__('Deal ID :')" :value="$deal->short_code ?? '--'" /></strong>
 
-
+    <?php
+    $currency=App\Models\Currency::where('id',$lead_id->original_currency_id)->first();
+    $value= $lead_id->actual_value. $currency->currency_symbol;
+    $bid_value= $lead_id->bid_value. $currency->currency_symbol;
+     ?>
 
   <strong style="font-size:20px;">  <x-cards.data-row :label="__('Project Name :')" :value="!empty($lead_id->client_name) ? mb_ucwords($lead_id->client_name) : '--'" /></strong>
-  <strong style="font-size:20px;"> <x-cards.data-row :label="__('Project Budget :')" :value="!empty($lead_id->value) ? mb_ucwords($lead_id->value) : '--'" /></strong>
+  <strong style="font-size:20px;"> <x-cards.data-row :label="__('Project Budget :')" :value="!empty($lead_id->value) ? mb_ucwords($value) : '--'" /></strong>
      @if($deal->deal_stage == 0)
      <?php
      $deal_stage = "Contract Made";

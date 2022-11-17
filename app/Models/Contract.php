@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\Deal;
+use App\Models\Currency;
 
 /**
  * App\Models\Contract
@@ -141,6 +142,10 @@ class Contract extends BaseModel
     public function deal()
     {
         return $this->belongsTo(Deal::class, 'deal_id');
+    }
+    public function original_currency()
+    {
+        return $this->belongsTo(Currency::class, 'original_currency_id');
     }
 
 }

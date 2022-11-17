@@ -82,9 +82,11 @@
             <?php
             $currency=App\Models\Currency::where('id',$lead->original_currency_id)->first();
             $value= $lead->actual_value. $currency->currency_symbol;
+            $bid_value= $lead->bid_value. $currency->currency_symbol;
 
              ?>
             <x-cards.data-row :label="__('Project') . ' ' .__('Budget')" :value="$value ?? '--'" />
+            <x-cards.data-row :label="__('Bid') . ' ' .__('Value')" :value="$bid_value ?? '--'" />
 
             {{-- <x-cards.data-row :label="__('app.note')" :value="!empty($lead->note) ? $lead->note : '--'" html="true" /> --}}
 

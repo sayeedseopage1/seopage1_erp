@@ -69,9 +69,24 @@
 
                             <div class="mt-3">
                                 <label for="input-state-3" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong></label>
-                                <input name="amount" value="{{$lead_id->value}}" id="input-state-3" type="number" class="form-control" placeholder="Enter Amount" required>
+                                <input name="amount" value="{{$lead_id->actual_value}}" id="input-state-3" type="number" class="form-control" placeholder="Enter Amount" required>
 
                             </div>
+                              <div class="mt-3">
+                                <?php
+                                  $currencies= App\Models\Currency::all();
+                                 ?>
+                                 <label for="input-state-3" class="form-label"><strong>Currency <span style="color:red;">*<span></strong></label>
+                            <select class="form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id">
+                                <option selected value="{{$lead_id->original_currency_id}}">({{$lead_id->original_currency->currency_code}})</option>
+
+                                @foreach($currencies as $currency)
+                                <option value="{{$currency->id}}">({{$currency->currency_code}})</option>
+
+                                @endforeach
+                              </select>
+                              </div>
+
 
 
 

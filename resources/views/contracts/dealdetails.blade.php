@@ -97,7 +97,7 @@
                           <input type="hidden" name="id" value="{{$deal->id}}">
                           <div class="row">
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Deal Id</label>
                               <input type="text" class="form-control" value="{{$deal->deal_id}}" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
@@ -105,7 +105,7 @@
 
 
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Deal Creation Date</label>
                               <input type="text" value="{{$deal->deal_creation_date}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
@@ -113,7 +113,7 @@
 
 
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Project Name <span style="color:red;">*</span></label>
                               <input type="text" name="project_name" value="{{$deal->project_name}}" class="form-control  @error('project_name') is-invalid @enderror" id="exampleFormControlInput1" placeholder="" >
@@ -125,6 +125,12 @@
                               @enderror
 
                             </div>
+                            <div class="col-md-3">
+                              <div class="form-group">
+                              <label for="exampleFormControlInput1">Deadline</label>
+                              <input type="date" name="deadline"  class="form-control" id="exampleFormControlInput1" placeholder="Enter deadline" >
+                              </div>
+                            </div>
 
 
                           </div>
@@ -132,11 +138,26 @@
 
                           </div>
                           <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Project Budget <span style="color:red;">*</span></label>
-                              <input type="text" name="amount" value="{{$deal->amount}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
+                              <input type="text" name="amount" value="{{$deal->actual_amount}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
                               </div>
+                            </div>
+                            <div class="col-md-3">
+                              <?php
+                              $currency= App\Models\Currency::where('id',$deal->original_currency_id)->first();
+
+
+                               ?>
+                              <label for="exampleFormControlTextarea1">Currency <span style="color:red;">*</span></label>
+                            <select class="form-control" name="original_currency_id">
+
+
+
+                              <option selected value="{{$deal->original_currency->id}}">{{$deal->original_currency->currency_code}} ({{$deal->original_currency->currency_symbol}})</option>
+
+                            </select>
                             </div>
 
                             <div class="col-md-6">
@@ -210,43 +231,7 @@
                             </div>
 
                           </div>
-                          <div class="row">
-                            <div class="col-md-4">
-                                <label for="exampleFormControlTextarea1">Pipeline Stage <span style="color:red;">*</span></label>
-                              <select class="form-control @error('pipeline_stage') is-invalid @enderror" name="pipeline_stage">
-                                <option value="Contact Made">Contact Made</option>
-                                <option value="Qualified">Qualified</option>
-                                <option value="Requirements Defined">Requirements Defined</option>
-                                <option value="Proposal Made">Proposal Made</option>
-                                  <option value="Negotiation Started">Negotiation Started</option>
-                              </select>
-                              @error('pipeline_stage')
-                              <div class="mt-3">
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                </div>
-                              @enderror
-                            </div>
-                            <div class="col-md-4">
-                              <div class="form-group">
-                              <label for="exampleFormControlInput1">Deadline</label>
-                              <input type="date" name="deadline" class="form-control" id="exampleFormControlInput1" placeholder="Enter deadline" >
-                              </div>
-                            </div>
-                            <div class="col-md-4">
-                              <?php
-                              $currencies= App\Models\Currency::all();
 
-
-                               ?>
-                              <label for="exampleFormControlTextarea1">Currency <span style="color:red;">*</span></label>
-                            <select class="form-control" name="currency_id">
-                              @foreach($currencies as $currency)
-                              <option value="{{$currency->id}}">{{$currency->currency_code}} ({{$currency->currency_symbol}})</option>
-                            @endforeach
-                            </select>
-                            </div>
-
-                          </div>
                           <br>
                           <div class="row">
                             <div class="col-md-6">

@@ -66,6 +66,25 @@
                               <div class="alert alert-danger">{{ $message }}</div>
                               </div>
                             @enderror
+                            <div class="mt-3">
+                              <?php
+                                $currencies= App\Models\Currency::all();
+                               ?>
+                               <label for="input-state-3" class="form-label"><strong>Currency <span style="color:red;">*<span></strong></label>
+                          <select class="form-select form-control mb-3 @error('original_currency_id') is-invalid @enderror" aria-label=".form-select-lg example" name="original_currency_id">
+
+
+                              @foreach($currencies as $currency)
+                              <option value="{{$currency->id}}">({{$currency->currency_code}})</option>
+
+                              @endforeach
+                            </select>
+                            </div>
+                            @error('original_currency_id')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
 
 

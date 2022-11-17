@@ -507,16 +507,14 @@ class LeadsDataTable extends BaseDataTable
             $lead = $lead->where(function ($query) {
                 $query->where('leads.client_name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('leads.company_name', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('leads.project_id', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('leads.actual_value', 'like', '%' . request('searchText') . '%')
+
                   ;
             });
         }
-        // if ($this->request()->searchText != '') {
-        //     $lead = $lead->where(function ($query) {
-        //         $query->where('project_id', 'like', '%' . request('searchText') . '%')
-        //             //->orWhere('project_link', 'like', '%' . request('searchText') . '%')
-        //           ;
-        //     });
-        // }
+
 
         return $lead->groupBy('leads.id');
     }

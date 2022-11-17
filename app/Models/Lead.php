@@ -217,6 +217,9 @@ class Lead extends BaseModel
     {
         return $this->belongsTo(LeadStatus::class, 'status_id');
     }
-  
+    public function original_currency()
+    {
+        return $this->belongsTo(Currency::class, 'original_currency_id');
+    }
 
 }

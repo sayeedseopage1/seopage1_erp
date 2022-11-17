@@ -26,6 +26,7 @@
 <?php
 $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first();
 //dd($project_id->project_id);
+$currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->first();
 
  ?>
 
@@ -110,13 +111,13 @@ $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first()
                                 <td class="border-left-0">{{ $contract->deal->pipeline_stage }}
                                 </td>
                             </tr>
-                            @if ($contract->amount != 0)
+                            @if ($contract->actual_amount != 0)
                             <tr>
                               <td class="bg-light-grey border-right-0 f-w-500">
                                 Deal Value </td>
                                 <td class="border-left-0">
                                     <h4>
-                                        {{$contract->amount}}$</h4>
+                                        {{$contract->actual_amount}}{{$contract->deal->original_currency->currency_symbol}}</h4>
                                 </td>
 
 

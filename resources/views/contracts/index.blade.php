@@ -175,6 +175,7 @@ $deals= App\Models\Deal::all();
         $client_name= App\Models\User::where('id',$pm->client_id)->first();
 
 
+
           //dd($project);
            ?>
             <tr>
@@ -190,7 +191,7 @@ $deals= App\Models\Deal::all();
                   @endif
 
                 </td>
-                <td>{{$deal->amount}}</td>
+                <td>{{$deal->actual_amount}}{{$deal->original_currency->currency_symbol}}</td>
 
                 <td> <a href="/account/clients/{{$client_name->id}}">{{$deal->client_name}}</a></td>
 

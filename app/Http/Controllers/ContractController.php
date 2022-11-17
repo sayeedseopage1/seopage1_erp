@@ -159,8 +159,11 @@ class ContractController extends AccountBaseController
     {
         //dd($request);
         $deal = Deal::find($request->id);
-        $deal->submission_status = 'Awaiting for client Response';
-        $deal->save();
+        if ($deal->submission_status != "Submitted") {
+          $deal->submission_status = 'Awaiting for client Response';
+          $deal->save();
+        }
+
         return Redirect::back()->with('messages.contractAdded');
     }
     public function deleteDeal($id)
@@ -204,6 +207,7 @@ class ContractController extends AccountBaseController
             'client_name' => 'required',
             'project_name' => 'required',
             'amount' => 'required',
+            'original_currency_id' => 'required',
         ]);
 
         //  dd($request->date);
@@ -212,7 +216,11 @@ class ContractController extends AccountBaseController
         $deal = new Deal();
         $deal->deal_id = 'DSEOP1' . $suffle;
         $deal->project_name = $request->project_name;
-        $deal->amount = $request->amount;
+        $deal->currency_id= 1;
+        $deal->actual_amount=  $request->amount;
+        $currency= Currency::where('id',$request->original_currency_id)->first();
+        //dd($currency);
+        $deal->amount = ($request->amount)/$currency->exchange_rate;
         $deal->client_name = $request->client_name;
         $deal->client_username = $request->user_name;
         $deal->added_by = Auth::id();
@@ -259,8 +267,13 @@ class ContractController extends AccountBaseController
         $contract->id = $deal->id;
         $contract->deal_id = $deal->id;
         $contract->subject = $request->project_name;
-        $contract->amount = $request->amount;
+
         $contract->original_amount = $request->amount;
+        $contract->actual_amount = $request->amount;
+        //$deal->actual_amount=  $request->amount;
+        $currency= Currency::where('id',$request->original_currency_id)->first();
+
+        $contract->amount = ($request->amount)/$currency->exchange_rate;
         $contract->start_date = $newDate;
         $contract->original_start_date = $newDate;
         $contract->client_id = $user->id;
@@ -280,14 +293,14 @@ class ContractController extends AccountBaseController
         $project->project_name = $request->project_name;
         $project->project_short_code = 'PSEOP1' . $suffle;
         $project->start_date = $newDate;
-        $project->project_budget = $request->amount;
+        $project->project_budget = $deal->amount;
 
         $project->completion_percent = 0;
         $project->deal_id = $deal->id;
         $project->added_by = Auth::id();
         $project->status = 'not started';
         $project->public = 0;
-        $project->due = $request->amount;
+        $project->due = $deal->amount;
         $project->save();
         $lead_developer_id = RoleUser::where('role_id', 6)->get();
         //dd($lead_developer_id);
@@ -321,7 +334,7 @@ class ContractController extends AccountBaseController
                 $pm_project_find = PMAssign::where('pm_id', $pm_user->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                $pm_project_update->amount = $pm_project_update->amount + $request->amount;
+                $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
                 $pm_project_update->save();
             }
         } else {
@@ -357,7 +370,7 @@ class ContractController extends AccountBaseController
                 $pm_project_find = PMAssign::where('pm_id', $pm_find_id->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                $pm_project_update->amount = $pm_project_update->amount + $request->amount;
+                $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
                 $pm_project_update->save();
             } else {
                 $pmassign = new PMProject();
@@ -377,7 +390,7 @@ class ContractController extends AccountBaseController
                 $pm_project_find = PMAssign::where('pm_id', $final_id->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                $pm_project_update->amount = $pm_project_update->amount + $request->amount;
+                $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
                 $pm_project_update->save();
             }
         }
@@ -423,14 +436,19 @@ class ContractController extends AccountBaseController
             $lead_ag = SalesCount::find($agent->id);
 
             $lead_ag->negotiation_started = $lead_ag->negotiation_started + 1;
-            $lead_ag->save();
+        //    $lead_ag->save();
         }
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new Deal();
         $deal->deal_id = $request->deal_id;
         $deal->project_name = $request->project_name;
-        $deal->amount = $request->amount;
+        $deal->original_currency_id= $request->original_currency_id;
+        $deal->currency_id= 1;
+        $deal->actual_amount=  $request->amount;
+        $currency= Currency::where('id',$request->original_currency_id)->first();
+        //dd($currency);
+        $deal->amount = ($request->amount)/$currency->exchange_rate;
         $deal->client_name = $request->client_name;
         $deal->client_username = $request->user_name;
         $deal->lead_id = $request->lead_id;
@@ -481,8 +499,12 @@ class ContractController extends AccountBaseController
         $contract->id = $deal->id;
         $contract->deal_id = $deal->id;
         $contract->subject = $request->project_name;
-        $contract->amount = $request->amount;
         $contract->original_amount = $request->amount;
+        //$deal->actual_amount=  $request->amount;
+        $currency= Currency::where('id',$request->original_currency_id)->first();
+        $contract->actual_amount = $request->amount;
+        $contract->amount = ($request->amount)/$currency->exchange_rate;
+
         $contract->start_date = $newDate;
         $contract->original_start_date = $newDate;
         $contract->client_id = $user->id;
@@ -502,8 +524,8 @@ class ContractController extends AccountBaseController
         $project->project_name = $request->project_name;
         $project->project_short_code = 'PSEOP1' . $suffle;
         $project->start_date = $newDate;
-        $project->project_budget = $request->amount;
-        $project->due = $request->amount;
+        $project->project_budget = $deal->amount;
+        $project->due = $deal->amount;
 
         $project->completion_percent = 0;
         $project->deal_id = $deal->id;
@@ -533,7 +555,7 @@ class ContractController extends AccountBaseController
                 $pm_project_find = PMAssign::where('pm_id', $pm_user->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                $pm_project_update->amount = $pm_project_update->amount + $request->amount;
+                $pm_project_update->amount = $pm_project_update->amount + $$deal->amount;
                 $pm_project_update->save();
             }
         } else {
@@ -569,7 +591,7 @@ class ContractController extends AccountBaseController
                 $pm_project_find = PMAssign::where('pm_id', $pm_find_id->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                $pm_project_update->amount = $pm_project_update->amount + $request->amount;
+                $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
                 $pm_project_update->save();
             } else {
                 $pmassign = new PMProject();
@@ -589,7 +611,7 @@ class ContractController extends AccountBaseController
                 $pm_project_find = PMAssign::where('pm_id', $final_id->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                $pm_project_update->amount = $pm_project_update->amount + $request->amount;
+                $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
                 $pm_project_update->save();
             }
         }
@@ -716,8 +738,8 @@ class ContractController extends AccountBaseController
             'description7' => 'required',
             'description8' => 'required',
             'description9' => 'required',
-            'pipeline_stage' => 'required',
-            'currency_id' => 'required',
+
+
             'message_link' => 'required',
             'profile_link'=>'required',
 
@@ -725,11 +747,15 @@ class ContractController extends AccountBaseController
         //dd("hello");
         $deal = Deal::find($request->id);
         $deal->project_name = $request->project_name;
-        $deal->amount = $request->amount;
+        $deal->currency_id= 1;
+        $deal->actual_amount=  $request->amount;
+        $currency= Currency::where('id',$request->original_currency_id)->first();
+        //dd($currency);
+        $deal->amount = ($request->amount)/$currency->exchange_rate;
         $deal->organization = $request->organization;
         $deal->client_email = $request->client_email;
         $deal->description = $request->description;
-        $deal->pipeline_stage = $request->pipeline_stage;
+        // $deal->pipeline_stage = $request->pipeline_stage;
         $deal->deadline = $request->deadline;
         $deal->currency_id = $request->currency_id;
         $deal->message_link = $request->message_link;
@@ -754,7 +780,11 @@ class ContractController extends AccountBaseController
         $contract_id = Contract::where('deal_id', $request->id)->first();
         $contract = Contract::find($contract_id->id);
         $contract->subject = $request->project_name;
-        $contract->amount = $request->amount;
+        $contract->actual_amount = $request->amount;
+        //$deal->actual_amount=  $request->amount;
+        $currency= Currency::where('id',$request->original_currency_id)->first();
+
+        $contract->amount = ($request->amount)/$currency->exchange_rate;
         $contract->original_amount = $request->amount;
         $contract->description = $request->description;
         $contract->currency_id = $request->currency_id;
@@ -775,11 +805,15 @@ class ContractController extends AccountBaseController
         //  dd($request->client_username);
         $deal = Deal::find($request->id);
         $deal->project_name = $request->project_name;
-        $deal->amount = $request->amount;
+        $deal->currency_id= 1;
+        $deal->actual_amount=  $request->amount;
+        $currency= Currency::where('id',$request->original_currency_id)->first();
+        //dd($currency);
+        $deal->amount = ($request->amount)/$currency->exchange_rate;
         $deal->organization = $request->organization;
         $deal->client_email = $request->client_email;
         $deal->description = $request->description;
-        $deal->pipeline_stage = $request->pipeline_stage;
+
         $deal->deadline = $request->deadline;
         $deal->currency_id = $request->currency_id;
         $deal->message_link = $request->message_link;
@@ -805,7 +839,11 @@ class ContractController extends AccountBaseController
         $contract_id = Contract::where('deal_id', $request->id)->first();
         $contract = Contract::find($contract_id->id);
         $contract->subject = $request->project_name;
-        $contract->amount = $request->amount;
+        $contract->actual_amount = $request->amount;
+        //$deal->actual_amount=  $request->amount;
+        $currency= Currency::where('id',$request->original_currency_id)->first();
+
+        $contract->amount = ($request->amount)/$currency->exchange_rate;
         $contract->original_amount = $request->amount;
         $contract->description = $request->description;
         $contract->currency_id = $request->currency_id;
