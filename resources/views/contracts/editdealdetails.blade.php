@@ -215,16 +215,16 @@
 
                           <br>
                           <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Profile Link <span style="color:red;">*</span></label>
-                              <input type="text" value="{{$deal->message_link}}" name="message_link" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
+                              <input type="text" value="{{$deal->profile_link}}" name="profile_link" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
                               </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
-                              <input type="text" name="profile_link" value="{{$deal->profile_link}}" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
+                              <textarea value="{{$deal->message_link}}" name="message_link" class="form-control" id="message_link" rows="3" required>{{$deal->message_link}}</textarea>
                               </div>
                             </div>
 
@@ -363,6 +363,9 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script>
+    $(document).ready(function() {
+      $('#message_link').summernote();
+    });
     $(document).ready(function() {
       $('#description').summernote();
     });

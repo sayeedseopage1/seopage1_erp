@@ -89,8 +89,8 @@ class HomeController extends Controller
     }
     public function ClientForm(Request $request)
     {
-      
-    // /  dd($request);
+
+      //dd($request);
       $client = new ClientForm();
       $client->deal_id=$request->decrypt;
       $client->client_username= $request->user_name;
@@ -99,6 +99,7 @@ class HomeController extends Controller
       $client->client_whatsapp= $request->client_whatsapp;
       $client->other_platform= $request->other_platform;
       $client->message= $request->message;
+      $client->timezone= $request->timezone;
       $client->save();
       $deal= Deal::find($client->deal_id);
       //dd($deal);

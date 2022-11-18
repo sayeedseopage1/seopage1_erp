@@ -127,6 +127,17 @@
 
                     </div>
                     <div class="mt-3">
+                        <label for="floatingTextarea"><strong>Client's Timezone</strong></label>
+                        @if($client== null)
+                              <textarea class="form-control" readonly  name="message"  placeholder="Leave a comment here" required></textarea>
+
+                        @else
+                      <textarea class="form-control" readonly  name="timezone"  placeholder="Leave a comment here" required>{!!$client->timezone!!}</textarea>
+
+                      @endif
+
+                    </div>
+                    <div class="mt-3">
                         <label for="input-state-3" class="form-label"><strong style="color:red;">Client Submission Url</strong></label>
                       <div class="row" >
 

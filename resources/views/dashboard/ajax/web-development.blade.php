@@ -57,8 +57,8 @@ Overview--}}
                         ${{$item->release_amount}}
                     </td>
                     <td>
-                        @if($item->project_count != 0) @php $project_release_count= App\Models\Project::where('pm_id',$item->pm_id)->where('due',0)->count(); $total_release_percentage= ($project_release_count/$item->project_count)*100;
-                        @endphp {{$total_release_percentage}}% @else No Project Assign Yet @endif
+                        @if($item->project_count != 0) @php $total_release_percentage= ($item->release_amount/$item->amount)*100;
+                        @endphp {{round($total_release_percentage,2)}}% @else No Project Assign Yet @endif
                     </td>
                     <td>
                         @if($item->project_count != 0) @php $project_cancel_count= App\Models\Project::where('pm_id',$item->pm_id)->where('status','canceled')->count(); $total_cancel_percentage=

@@ -177,7 +177,7 @@
                               </div>
 
                                 <input type="hidden" class="project_id" name="project_id" id="project_id" value="{{$project_id->id}}">
-
+                              @include('contracts.modals.milestoneviewmodal')
                               @include('contracts.modals.milestonecreatemodal')
                                 @include('contracts.modals.milestoneeditmodal')
                                 @include('contracts.modals.milestonedeletemodal')
@@ -236,7 +236,7 @@
 
                           <br>
                           <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Profile Link <span style="color:red;">*</span></label>
                               <input type="text" name="message_link" class="form-control @error('profile_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
@@ -247,10 +247,12 @@
                                 </div>
                               @enderror
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
-                              <input type="text" name="profile_link" class="form-control @error('message_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
+
+
+                              <textarea name="message_link" class="form-control  @error('message_link') is-invalid @enderror" id="message_link" rows="3"></textarea>
                               </div>
                               @error('message_link')
                               <div class="mt-3">
@@ -428,6 +430,9 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script>
     $(document).ready(function() {
+      $('#message_link').summernote();
+    });
+    $(document).ready(function() {
       $('#summary2').summernote();
     });
     $(document).ready(function() {
@@ -486,7 +491,7 @@
           //  console.log(response.milestones);
             let spans= '';
             response.milestones.forEach((item)=> {
-              spans += `<span class="badge badge-light mr-2">${item.milestone_title} <button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
+              spans += `<span class="badge badge-light mr-2"><a href="#" data-toggle="modal" data-target="#milestoneviewmodal" . ${item.id}>${item.milestone_title}</a> <button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
             });
 
             document.querySelector('#milestone_value').innerHTML= spans;
