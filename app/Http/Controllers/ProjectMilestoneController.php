@@ -58,6 +58,7 @@ class ProjectMilestoneController extends AccountBaseController
      */
     public function store(StoreMilestone $request)
     {
+      //dd($request);
         $milestone = new ProjectMilestone();
         $milestone->project_id = $request->project_id;
         $milestone->milestone_title = $request->milestone_title;

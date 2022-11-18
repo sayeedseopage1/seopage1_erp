@@ -861,8 +861,11 @@ class ContractController extends AccountBaseController
         $project->project_name = $request->project_name;
         $project->project_summary = $request->description;
         $project->deadline = $request->deadline;
-        $project->project_budget = $request->amount;
-        $project->currency_id = $request->currency_id;
+        $currency= Currency::where('id',$request->original_currency_id)->first();
+        //dd($currency);
+        $project->project_budget = ($request->amount)/$currency->exchange_rate;
+        $project->due = $deal->amount;
+        $project->currency_id = 1;
         $project->save();
         $contract_id = Contract::where('deal_id', $request->id)->first();
         $contract = Contract::find($contract_id->id);

@@ -152,6 +152,7 @@ class InvoiceController extends AccountBaseController
 
     public function store(StoreInvoice $request)
     {
+      //dd($request->all());
         $redirectUrl = urldecode($request->redirect_url);
 
         if ($redirectUrl == '') {

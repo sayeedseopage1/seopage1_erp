@@ -207,11 +207,30 @@ $memberIds = $project->members->pluck('user_id')->toArray();
                     </div>
                     @if ($projectBudgetPermission == 'all')
                         <div class="col">
-                            <x-cards.widget :title="__('modules.projects.projectBudget')"
+                            <x-cards.widget :title="__('Project Budget (USD)')"
                                 :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->project_budget, $project->currency->currency_symbol) : '0')"
                                 icon="coins" />
+
                         </div>
                     @endif
+                    @if ($projectBudgetPermission == 'all')
+                    @if($project->currency_id != $project->deal->original_currency_id)
+                        <div class="col">
+                            <x-cards.widget :title="__('Project Budget ('. $project->deal->original_currency->currency_code .')')"
+                                :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->deal->actual_amount, $project->deal->original_currency->currency_symbol) : '0')"
+                                icon="coins" />
+
+                        </div>
+                    @endif
+                    @endif
+
+                    {{-- @if ($viewExpensePermission == 'all')
+                        <div class="col">
+                            <x-cards.widget :title="__('modules.projects.expenses_total')"
+                                :value="(!is_null($project->currency) ? currency_formatter($expenses, $project->currency->currency_symbol) : currency_formatter($expenses))"
+                                icon="coins" />
+                        </div>
+                    @endif --}}
 
                     @if ($viewPaymentPermission == 'all')
                         <div class="col">
@@ -229,13 +248,7 @@ $memberIds = $project->members->pluck('user_id')->toArray();
                         </div>
                     @endif
 
-                    @if ($viewExpensePermission == 'all')
-                        <div class="col">
-                            <x-cards.widget :title="__('modules.projects.expenses_total')"
-                                :value="(!is_null($project->currency) ? currency_formatter($expenses, $project->currency->currency_symbol) : currency_formatter($expenses))"
-                                icon="coins" />
-                        </div>
-                    @endif
+
                 </div>
             </div>
             <!-- BUDGET VS SPENT END -->

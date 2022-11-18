@@ -67,28 +67,60 @@ $addProductPermission = user()->permission('add_product');
             </div>
             <!-- DUE DATE END -->
             <!-- FREQUENCY START -->
-            <div class="col-md-3">
-                <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
-                    <x-forms.label fieldId="currency_id" :fieldLabel="__('modules.invoices.currency')">
-                    </x-forms.label>
+            @if($project != null)
+            <?php
 
-                    <div class="select-others height-35 rounded">
-                        <select class="form-control select-picker" name="currency_id" id="currency_id">
-                            @foreach ($currencies as $currency)
-                                <option @if (isset($estimate))
-                                    @if ($currency->id == $estimate->currency_id) selected @endif
-                                @else
-                                    @if ($currency->id == global_setting()->currency_id)
-                                        selected @endif
-                            @endif
-                            value="{{ $currency->id }}">
-                            {{ $currency->currency_code . ' (' . $currency->currency_symbol . ')' }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
+            if (Request::get('milestone_id') != null) {
+              $milest= App\Models\ProjectMilestone::where('id',Request::get('milestone_id'))->first();
+            }
+            //dd($project->id);
+              $milestones = App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->get();
+
+             ?>
+             <div class="col-md-3">
+                 <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
+                     <x-forms.label fieldId="currency_id" :fieldLabel="__('modules.invoices.currency')">
+                     </x-forms.label>
+
+                     <div class="select-others height-35 rounded">
+                         <select class="form-control select-picker" name="currency_id" id="currency_id">
+
+                                 <option selected value="{{$project->deal->original_currency_id}}">
+
+
+                             {{ $project->deal->original_currency->currency_code . ' (' . $project->deal->original_currency->currency_symbol . ')' }}
+                             </option>
+
+                         </select>
+                     </div>
+                 </div>
+             </div>
+             @else
+             <div class="col-md-3">
+                 <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
+                     <x-forms.label fieldId="currency_id" :fieldLabel="__('modules.invoices.currency')">
+                     </x-forms.label>
+
+                     <div class="select-others height-35 rounded">
+                         <select class="form-control select-picker" name="currency_id" id="currency_id">
+                             @foreach ($currencies as $currency)
+                                 <option @if (isset($estimate))
+                                     @if ($currency->id == $estimate->currency_id) selected @endif
+                                 @else
+                                     @if ($currency->id == global_setting()->currency_id)
+                                         selected @endif
+                             @endif
+                             value="{{ $currency->id }}">
+                             {{ $currency->currency_code . ' (' . $currency->currency_symbol . ')' }}
+                             </option>
+                             @endforeach
+                         </select>
+                     </div>
+                 </div>
+             </div>
+
+            @endif
+
             <!-- FREQUENCY END -->
         </div>
         <!-- INVOICE NUMBER, DATE, DUE DATE, FREQUENCY END -->

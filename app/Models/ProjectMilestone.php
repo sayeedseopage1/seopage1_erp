@@ -66,5 +66,8 @@ class ProjectMilestone extends BaseModel
     {
         return $this->hasMany(Task::class, 'milestone_id');
     }
-
+    public function original_currency()
+    {
+        return $this->belongsTo(Currency::class, 'original_currency_id');
+    }
 }

@@ -12,6 +12,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
 use App\Models\Currency;
+use App\Models\Deal;
 class ProjectsDataTable extends BaseDataTable
 {
 
@@ -167,8 +168,13 @@ class ProjectsDataTable extends BaseDataTable
                 return ucfirst($row->project_name);
             });
             $datatables->addColumn('project_value', function ($row) {
-              $currency= Currency::where('id',$row->currency_id)->first();
-                return $row->project_budget . $currency->currency_symbol;
+              $project_id= Project::where('id',$row->id)->first();
+                $deal= Deal::where('id',$project_id->deal_id)->first();
+              $currency= Currency::where('id',$deal->original_currency_id)->first();
+
+              //dd($deal);
+
+                return $deal->actual_amount . $currency->currency_symbol;
             });
 
         $customFieldsId = $customFields->pluck('id');

@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\PMAssign;
 use App\Models\PMProject;
+use App\Models\ProjectMilestone;
 
 class PaymentController extends AccountBaseController
 {
@@ -220,16 +221,21 @@ class PaymentController extends AccountBaseController
             $invoice->save();
         }
         $project= Project::find($request->project_id);
-        $project->milestone_paid= $project->milestone_paid+$request->amount;
-        $project->due= $project->due - $request->amount;
-        $project->paid_milestone_count= $project->paid_milestone_count + 1;
-        $project->save();
-        $pmassign= PMProject::where('project_id',$request->project_id)->first();
-        $pm= PMAssign::where('pm_id',$pmassign->pm_id)->first();
-        $pmassign_update= PMAssign::find($pm->id);
-        $pmassign_update->release_amount= $pmassign_update->release_amount + $request->amount;
-        $pmassign_update->release_date= Carbon::now()->format('Y-m-d');
-        $pmassign_update->save();
+        $invoice_id= Invoice::where('id',$request->invoice_id)->first();
+        if ($invoice_id->milestone_id != null) {
+          $milestone= ProjectMilestone::where('id',$invoice_id->milestone_id)->first();
+          $project->milestone_paid= $project->milestone_paid+$milestone->cost;
+          $project->due= $project->due - $milestone->cost;
+          $project->paid_milestone_count= $project->paid_milestone_count + 1;
+          $project->save();
+          $pmassign= PMProject::where('project_id',$request->project_id)->first();
+          $pm= PMAssign::where('pm_id',$pmassign->pm_id)->first();
+          $pmassign_update= PMAssign::find($pm->id);
+          $pmassign_update->release_amount= $pmassign_update->release_amount + $milestone->cost;
+          $pmassign_update->release_date= Carbon::now()->format('Y-m-d');
+          $pmassign_update->save();
+        }
+
 
         $redirectUrl = urldecode($request->redirect_url);
 

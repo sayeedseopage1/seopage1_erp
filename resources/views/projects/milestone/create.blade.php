@@ -33,7 +33,7 @@
             </div>
             <div class="col-md-12">
                 <x-forms.textarea class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.milestoneSummary')"
-                    fieldName="summary" fieldId="summary" fieldRequired="true"
+                    fieldName="summary" fieldId="summary" 
                     :fieldPlaceholder="__('placeholders.milestoneSummary')">
                 </x-forms.textarea>
             </div>
