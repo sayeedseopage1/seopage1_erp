@@ -13,7 +13,9 @@ use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProjectTimeLogBreak;
 use App\Models\RoleUser;
+use App\Models\Project;
 use Auth;
+use App\Models\User;
 
 class TasksDataTable extends BaseDataTable
 {
@@ -308,6 +310,17 @@ class TasksDataTable extends BaseDataTable
 
                 return '<a href="' . route('projects.show', $row->project_id) . '" class="text-darkest-grey">' . ucfirst($row->project_name) . '</a>';
             });
+            $datatables->editColumn('client_name', function ($row) {
+                if (is_null($row->project_id)) {
+                    return '';
+                }
+                $client_id= Project::where('id',$row->project_id)->first();
+                //dd($client_id);
+                $client_name= User::where('id',$client_id->client_id)->first();
+
+
+                return $client_name->name;
+            });
             $datatables->setRowId(function ($row) {
                 return 'row-' . $row->id;
             });
@@ -597,6 +610,7 @@ class TasksDataTable extends BaseDataTable
               __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
               __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
               __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
+              __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
               __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
               __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
               __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],
@@ -624,6 +638,7 @@ class TasksDataTable extends BaseDataTable
               __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
               __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
               __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
+                __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
               __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
               __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
               __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],

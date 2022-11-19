@@ -203,7 +203,7 @@
                             </div>
 
                           </div>
-                          <div class="row">
+                        {{--  <div class="row">
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Project Summary <span style="color:red;">*</span></label>
@@ -211,7 +211,7 @@
                               </div>
                             </div>
 
-                          </div>
+                          </div> --}}
 
                           <br>
                           <div class="row">

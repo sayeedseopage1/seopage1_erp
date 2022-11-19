@@ -87,8 +87,30 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                           fieldName="without_duedate" fieldId="without_duedate" fieldValue="yes" />
                     </div>
 
-                    <div class="col-md-12 col-lg-12">
-                    </div>
+
+                      @if($project != null)
+                      <div class="col-md-12 col-lg-4">
+                          <x-forms.select fieldName="milestone_id" fieldId="milestone-id"
+                              :fieldLabel="__('modules.projects.milestones')">
+                              <option value="">--</option>
+                              <?php
+                                $milestoness= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->get();
+
+                               ?>
+                              @if($project)
+                                  @if(in_array($viewMilestonePermission,['all','owned','added']) )
+                                      @foreach ($milestoness as $item)
+
+                                          <option value="{{ $item->id }}"
+                                                  @if (!is_null($task) && $item->id == $task->milestone_id) selected @endif>{{ $item->milestone_title }}</option>
+
+                                      @endforeach
+                                  @endif
+                              @endif
+                          </x-forms.select>
+                      </div>
+                      @endif
+                  
 
                     <div class="col-md-12 col-lg-8">
                       <?php
@@ -232,14 +254,14 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
 
                 </div>
 
-                <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey other-details-button">
+                <!-- <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey other-details-button">
                     <a href="javascript:;" class="text-dark toggle-other-details"><i class="fa fa-chevron-down"></i>
                         @lang('modules.client.clientOtherDetails')</a>
-                </h4>
+                </h4> -->
 
-                <div class="row p-20 d-none" id="other-details">
 
-                    <div class="col-sm-12">
+
+                    <div class="col-md-12">
                         <div class="row">
 
                             <div class="col-md-12 col-lg-4">
@@ -265,28 +287,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                     </x-forms.input-group>
                                 </div>
                             </div>
-                            @if($project != null)
-                            <div class="col-md-12 col-lg-4">
-                                <x-forms.select fieldName="milestone_id" fieldId="milestone-id"
-                                    :fieldLabel="__('modules.projects.milestones')">
-                                    <option value="">--</option>
-                                    <?php
-                                      $milestoness= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->get();
 
-                                     ?>
-                                    @if($project)
-                                        @if(in_array($viewMilestonePermission,['all','owned','added']) )
-                                            @foreach ($milestoness as $item)
-
-                                                <option value="{{ $item->id }}"
-                                                        @if (!is_null($task) && $item->id == $task->milestone_id) selected @endif>{{ $item->milestone_title }}</option>
-
-                                            @endforeach
-                                        @endif
-                                    @endif
-                                </x-forms.select>
-                            </div>
-                            @endif
                             <?php
 
                               $board_column= App\Models\TaskboardColumn::where('id',2)->first();
@@ -525,7 +526,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                             </div>
                         @endforeach
                     @endif
-                </div>
+
 
                 <x-form-actions>
                     <x-forms.button-primary class="mr-3" id="save-task-form" icon="check">@lang('app.save')

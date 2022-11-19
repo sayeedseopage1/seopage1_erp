@@ -82,8 +82,20 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                           fieldName="without_duedate" fieldId="without_duedate" fieldValue="yes" />
                     </div>
 
-                    <div class="col-md-12 col-lg-12">
-                    </div>
+
+                      <div class="col-md-12 col-lg-4">
+                          <x-forms.select fieldName="milestone_id" fieldId="milestone-id"
+                              :fieldLabel="__('modules.projects.milestones')">
+                              <option value="">--</option>
+                              @if ($task->project && count($task->project->milestones) > 0)
+                                  @foreach ($task->project->milestones as $milestone)
+                                      <option @if ($milestone->id == $task->milestone_id) selected @endif value="{{ $milestone->id }}">
+                                          {{ $milestone->milestone_title }}</option>
+                                  @endforeach
+                              @endif
+                          </x-forms.select>
+                      </div>
+                    
 
                     <div class="col-md-12 col-lg-6">
                         <div class="form-group my-3">
@@ -222,12 +234,12 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
 
                 </div>
 
-                <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey">
+                <!-- <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey">
                     @lang('modules.client.clientOtherDetails')
-                </h4>
+                </h4> -->
 
-                <div class="row p-20">
-                    <div class="col-sm-12">
+
+                    <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-12 col-lg-4">
                                 <div class="form-group my-3">
@@ -265,18 +277,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                 </div>
                             </div>
 
-                            <div class="col-md-12 col-lg-4">
-                                <x-forms.select fieldName="milestone_id" fieldId="milestone-id"
-                                    :fieldLabel="__('modules.projects.milestones')">
-                                    <option value="">--</option>
-                                    @if ($task->project && count($task->project->milestones) > 0)
-                                        @foreach ($task->project->milestones as $milestone)
-                                            <option @if ($milestone->id == $task->milestone_id) selected @endif value="{{ $milestone->id }}">
-                                                {{ $milestone->milestone_title }}</option>
-                                        @endforeach
-                                    @endif
-                                </x-forms.select>
-                            </div>
+
 
 
                             @if ($changeStatusPermission == 'all'
@@ -429,7 +430,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                         <input type="hidden" name="addedFiles" id="addedFiles">
                     @endif
 
-                </div>
+
 
                 @if (isset($fields) && count($fields) > 0)
                     <div class="row p-20">

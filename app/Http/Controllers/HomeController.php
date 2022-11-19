@@ -90,7 +90,7 @@ class HomeController extends Controller
     public function ClientForm(Request $request)
     {
 
-      //dd($request);
+      dd($request);
       $client = new ClientForm();
       $client->deal_id=$request->decrypt;
       $client->client_username= $request->user_name;

@@ -219,7 +219,7 @@
                             </div>
 
                           </div>
-                          <div class="row">
+                          <!-- <div class="row">
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Project Summary <span style="color:red;">*</span></label>
@@ -232,14 +232,14 @@
                               @enderror
                             </div>
 
-                          </div>
+                          </div> -->
 
                           <br>
                           <div class="row">
                             <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Profile Link <span style="color:red;">*</span></label>
-                              <input type="text" name="message_link" class="form-control @error('profile_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
+                              <input type="text" name="profile_link" class="form-control @error('profile_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
                               </div>
                               @error('profile_link')
                               <div class="mt-3">

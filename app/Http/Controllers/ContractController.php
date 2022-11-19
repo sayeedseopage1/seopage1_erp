@@ -753,7 +753,7 @@ class ContractController extends AccountBaseController
         $validated = $request->validate([
             'project_name' => 'required',
             'client_name' => 'required',
-            'description' => 'required',
+
             'description2' => 'required',
             'description3' => 'required',
             'description4' => 'required',
@@ -778,7 +778,7 @@ class ContractController extends AccountBaseController
         $deal->amount = ($request->amount)/$currency->exchange_rate;
         $deal->organization = $request->organization;
         $deal->client_email = $request->client_email;
-        $deal->description = $request->description;
+      //  $deal->description = $request->description;
         // $deal->pipeline_stage = $request->pipeline_stage;
         $deal->deadline = $request->deadline;
         $deal->currency_id = $request->currency_id;
@@ -840,7 +840,7 @@ class ContractController extends AccountBaseController
         $deal->amount = ($request->amount)/$currency->exchange_rate;
         $deal->organization = $request->organization;
         $deal->client_email = $request->client_email;
-        $deal->description = $request->description;
+      // /  $deal->description = $request->description;
 
         $deal->deadline = $request->deadline;
         $deal->currency_id = $request->currency_id;
