@@ -84,6 +84,7 @@ class SubTaskController extends AccountBaseController
       $task_s->estimate_hours = $request->estimate_hours;
       $task_s->estimate_minutes = $request->estimate_minutes;
       $task_s->repeat = $request->repeat ? 1 : 0;
+      $task_s->milestone_id= $request->milestone_id;
 
       if ($request->has('repeat')) {
           $task_s->repeat_count = $request->repeat_count;

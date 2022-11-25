@@ -249,6 +249,8 @@ class ContractController extends AccountBaseController
         $user = new User();
         $user->name = $request->client_name;
         $user->user_name = $request->user_name;
+        $user->login= 'disable';
+        $user->email_notifications = 0;
         $user->save();
         $role = new RoleUser();
         $role->role_id = 3;
@@ -485,6 +487,8 @@ class ContractController extends AccountBaseController
         $user = new User();
         $user->name = $request->client_name;
         $user->user_name = $request->user_name;
+        $user->login= 'disable';
+        $user->email_notifications = 0;
         $user->save();
         $role = new RoleUser();
         $role->role_id = 3;

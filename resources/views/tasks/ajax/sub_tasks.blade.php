@@ -29,15 +29,27 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
             </div>
 
             <x-form id="save-subtask-data-form" class="d-none">
-
+                <input type="hidden" name="milestone_id" value="{{$task->milestone_id}}">
                 <input type="hidden" name="task_id" value="{{ $task->id }}">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <x-forms.text :fieldLabel="__('app.title')" fieldName="title" fieldRequired="true"
                             fieldId="title" :fieldPlaceholder="__('placeholders.task')" />
-                            <x-forms.text :fieldLabel="__('Dependent Task')" fieldName="" fieldId=""
+                            <x-forms.text :fieldLabel="__('Parent Task')" fieldName="" fieldId=""
                                 :fieldValue="$task->heading" fieldReadOnly="true" />
                     </div>
+                    <?php
+                    $milestone= App\Models\ProjectMilestone::where('id',$task->milestone_id)->first();
+
+                     ?>
+
+                    <div class="col-md-6 col-lg-4">
+
+                    
+                          <x-forms.text :fieldLabel="__('Milestone')" fieldName="" fieldId=""
+                              :fieldValue="$milestone->milestone_title" fieldReadOnly="true" />
+                    </div>
+
 
 
                     <div class="col-md-6">

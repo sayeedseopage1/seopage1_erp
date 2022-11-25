@@ -142,11 +142,14 @@ class TasksDataTable extends BaseDataTable
                 }
 
                 if ($row->due_date->endOfDay()->isPast()) {
-                    return '<span class="text-danger">' . $row->due_date->format($this->global->date_format) . '</span>';
+                    return '<span style="color:#d50000;"><strong>' . $row->due_date->format($this->global->date_format) . '</strong></span>';
                 }
                 elseif ($row->due_date->isToday()) {
-                    return '<span class="text-success">' . __('app.today') . '</span>';
+                    return '<span style="color:#ef5350;">' . __('app.today') . '</span>';
                 }
+                // elseif($row->due_date->isToday()+1 ){
+                //     return '<span class="text-warning">' . __('Tommorow') . '</span>';
+                // }
                 return '<span >' . $row->due_date->format($this->global->date_format) . '</span>';
             });
             $datatables->editColumn('users', function ($row) {
@@ -175,6 +178,12 @@ class TasksDataTable extends BaseDataTable
             });
             $datatables->addColumn('short_code', function ($row) {
                 return ucfirst($row->task_short_code);
+            });
+            $datatables->addColumn('created_at', function ($row) {
+
+              $created_at= Task::where('id',$row->id)->first();
+              //dd($created_at->created_at);
+                return $created_at->created_at->format($this->global->date_format);
             });
             $datatables->addColumn('name', function ($row) {
                 $members = [];
@@ -615,6 +624,7 @@ class TasksDataTable extends BaseDataTable
               __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
               __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],
               __('modules.tasks.assignTo') => ['data' => 'users', 'name' => 'member.name', 'exportable' => false, 'title' => __('modules.tasks.assignTo')],
+                __('app.created_at') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('Creation Date')],
               __('app.columnStatus') => ['data' => 'board_column', 'name' => 'board_column', 'exportable' => false, 'searchable' => false, 'title' => __('app.columnStatus')],
               __('app.task').' '.__('app.status') => ['data' => 'status', 'name' => 'board_column_id', 'visible' => false, 'title' => __('app.task')],
               Column::computed('action', __('app.action'))
@@ -643,6 +653,7 @@ class TasksDataTable extends BaseDataTable
               __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
               __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],
               __('modules.tasks.assignTo') => ['data' => 'users', 'name' => 'member.name', 'exportable' => false, 'title' => __('modules.tasks.assignTo')],
+                __('app.created_at') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('Creation Date')],
               __('app.columnStatus') => ['data' => 'board_column', 'name' => 'board_column', 'exportable' => false, 'searchable' => false, 'title' => __('app.columnStatus')],
               __('app.task').' '.__('app.status') => ['data' => 'status', 'name' => 'board_column_id', 'visible' => false, 'title' => __('app.task')],
               Column::computed('action', __('app.action'))

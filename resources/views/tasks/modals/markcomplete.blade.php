@@ -118,7 +118,7 @@
             </div>
 
             </div>
-            </div> --}}  
+            </div> --}}
 
             <!-- <div class="" id="submission_type_attachment">
               Attach File or Images (If Needed)
@@ -229,20 +229,9 @@ $(document).ready(function() {
 );
 });
 $(document).ready(function() {
-  $('#text').summernote({
-    toolbar: [
-       // [groupName, [list of button]]
-       ['style', ['bold', 'italic', 'underline', 'clear']],
-       ['font', ['strikethrough', 'superscript', 'subscript']],
-       ['fontsize', ['fontsize']],
-       ['color', ['color']],
-       ['para', [ 'paragraph']],
-       ['height', ['height']]
-     ]
-  }
-
-);
+  $('#text').summernote();
 });
+//$('#whatsapp').summernote();
 $(document).ready(function() {
   $('#list').summernote({
     toolbar: [

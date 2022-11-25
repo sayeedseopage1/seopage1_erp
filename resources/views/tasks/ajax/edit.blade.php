@@ -95,7 +95,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                               @endif
                           </x-forms.select>
                       </div>
-                    
+
 
                     <div class="col-md-12 col-lg-6">
                         <div class="form-group my-3">
@@ -225,7 +225,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
 
                     <div class="col-md-12">
                         <div class="form-group my-3">
-                            <x-forms.label fieldId="description" :fieldLabel="__('app.description')">
+                            <x-forms.label fieldId="description" :fieldLabel="__('app.description')" fieldRequired="true">
                             </x-forms.label>
                             <div id="description">{!! $task->description !!}</div>
                             <textarea name="description" id="description-text" class="d-none"></textarea>

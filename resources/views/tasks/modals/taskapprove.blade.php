@@ -149,7 +149,9 @@ $task_submission= App\Models\TaskSubmission::where('task_id',$task->id)->orderBy
       @endif
       @if($submission->text != null)
       <div class="mb-3">
-         {!!$submission->text!!}
+
+
+         {!! $submission->text !!}
 
       </div>
       @endif

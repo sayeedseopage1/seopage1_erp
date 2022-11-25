@@ -283,7 +283,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
 
                     <div class="col-md-12">
                         <div class="form-group my-3">
-                            <x-forms.label fieldId="description" :fieldLabel="__('app.description')">
+                            <x-forms.label fieldId="description" :fieldLabel="__('app.description')" fieldRequired="true">
                             </x-forms.label>
                             <div id="description">{!! $task ? $task->description : '' !!}</div>
                             <textarea name="description" id="description-text" class="d-none"></textarea>

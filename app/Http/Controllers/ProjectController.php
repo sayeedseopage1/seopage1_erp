@@ -631,6 +631,7 @@ if ($pm_count < 2) {
             $project->calculate_task_progress = 'false';
             $project->completion_percent = $request->completion_percent;
         }
+      //  dd($project);
         $deal= Deal::where('id',$project->deal_id)->first();
 
         $currency= Currency::where('id',$deal->original_currency_id)->first();
@@ -638,6 +639,7 @@ if ($pm_count < 2) {
         $project->project_budget = $deal->amount;
 
         $project->currency_id = 1;
+
         $project->hours_allocated = $request->hours_allocated;
         $project->status = $request->status;
         $project->project_status= 'Accepted';

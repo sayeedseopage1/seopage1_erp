@@ -712,12 +712,12 @@
 		<option value="PST">PST GMT-8:00</option>
 		<option value="SST">SST GMT+11:00</option>
 		<option value="VST">VST GMT+7:00</option>
-	  </select>
+  </select>
 
 
 
                                 <!-- <textarea class="form-control" name="timezone" id="timezone" placeholder="Enter Text Here"></textarea> -->
-                              {{--  <div class="row">
+                                <div class="row">
                                   <div class="col-md-12">
                                     <div class="card border-0">
 
@@ -756,7 +756,7 @@
                                           <div class="fa fa-plus-circle text-success add"></div>
                                           <p class="text-success ml-3 add">Add</p>
                                       </div>
-                                    </div>--}}
+                                    </div>
 
                             </div> --}}
                             <div class="mt-3">
