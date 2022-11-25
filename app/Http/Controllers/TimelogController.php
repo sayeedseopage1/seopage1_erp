@@ -120,7 +120,7 @@ class TimelogController extends AccountBaseController
 
     public function store(StoreTimeLog $request)
     {
-      //dd($request);
+    //  dd($request);
         $startDateTime = Carbon::createFromFormat($this->global->date_format, $request->start_date, $this->global->timezone)->format('Y-m-d') . ' ' . Carbon::createFromFormat($this->global->time_format, $request->start_time)->format('H:i:s');
         $startDateTime = Carbon::parse($startDateTime, $this->global->timezone)->setTimezone('UTC');
 

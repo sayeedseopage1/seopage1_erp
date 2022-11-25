@@ -160,7 +160,7 @@ $user= App\Models\User::where('id',$user_id->user_id)->first();
                         <section class="description">
                             <div class="container">
                                 <hr>
-                                <div class="row ml-2">
+                                <div class="row ml-1">
                                     <h4 class="py-4">Description :</h4>
                                     @foreach($tasks as $row)
                                     @if($row->text != null)
@@ -181,6 +181,7 @@ $user= App\Models\User::where('id',$user_id->user_id)->first();
 
                         <section class="overlay_layer">
                             <div class="container">
+                              <hr>
 
                                 <div class="row">
                                     <div class="col-md-3">

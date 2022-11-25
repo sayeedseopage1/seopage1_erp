@@ -282,29 +282,31 @@ class TasksDataTable extends BaseDataTable
             $datatables->editColumn('board_column', function ($row) use ($taskBoardColumns) {
                 $taskUsers = $row->users->pluck('id')->toArray();
 
-                if (
-                    $this->changeStatusPermission == 'all'
-                    || ($this->changeStatusPermission == 'added' && $row->added_by == user()->id)
-                    || ($this->changeStatusPermission == 'owned' && in_array(user()->id, $taskUsers))
-                    || ($this->changeStatusPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id))
-                    || ($row->project_admin == user()->id)
-                    ) {
-                    $status = '<select class="form-control select-picker change-status" data-task-id="' . $row->id . '">';
+                // if (
+                //     $this->changeStatusPermission == 'all'
+                //     || ($this->changeStatusPermission == 'added' && $row->added_by == user()->id)
+                //     || ($this->changeStatusPermission == 'owned' && in_array(user()->id, $taskUsers))
+                //     || ($this->changeStatusPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id))
+                //     || ($row->project_admin == user()->id)
+                //     ) {
+                //     $status = '<select class="form-control select-picker change-status" data-task-id="' . $row->id . '">';
+                //
+                //     foreach ($taskBoardColumns as $item) {
+                //         $status .= '<option ';
+                //
+                //         if ($item->id == $row->board_column_id) {
+                //             $status .= 'selected';
+                //         }
+                //
+                //         $status .= '  data-content="<i class=\'fa fa-circle mr-2\' style=\'color: ' . $item->label_color . '\'></i> ' . $item->column_name . '" value="' . $item->slug . '">' . $item->column_name . '</option>';
+                //     }
+                //
+                //     $status .= '</select>';
+                //     return $status;
+                //
+                // } else
 
-                    foreach ($taskBoardColumns as $item) {
-                        $status .= '<option ';
-
-                        if ($item->id == $row->board_column_id) {
-                            $status .= 'selected';
-                        }
-
-                        $status .= '  data-content="<i class=\'fa fa-circle mr-2\' style=\'color: ' . $item->label_color . '\'></i> ' . $item->column_name . '" value="' . $item->slug . '">' . $item->column_name . '</option>';
-                    }
-
-                    $status .= '</select>';
-                    return $status;
-
-                } else {
+                 {
                     return '<i class="fa fa-circle mr-1 text-yellow"
                     style="color: '. $row->boardColumn->label_color .'"></i>'. $row->boardColumn->column_name;
                 }

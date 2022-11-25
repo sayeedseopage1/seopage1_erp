@@ -402,7 +402,7 @@ $changeStatusPermission = user()->permission('change_status');
 
                             @if (($taskSettings->files == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                                 <x-tab-item class="ajax-tab" :active="(request('view') === 'file' || !request('view'))"
-                                :link="route('tasks.show', $task->id).'?view=file'">@lang('app.file')</x-tab-item>
+                                :link="route('tasks.show', $task->id).'?view=file'">@lang('Comment')</x-tab-item>
                             @endif
 
                             @if (($taskSettings->sub_task == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
@@ -411,13 +411,13 @@ $changeStatusPermission = user()->permission('change_status');
                                 @lang('modules.tasks.subTask')</x-tab-item>
                             @endif
 
-                            @if (($taskSettings->comments == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                          {{--  @if (($taskSettings->comments == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                                 @if ($viewTaskCommentPermission != 'none')
                                     <x-tab-item class="ajax-tab" :active="(request('view') === 'comments')"
                                         :link="route('tasks.show', $task->id).'?view=comments'">
                                         @lang('modules.tasks.comment')</x-tab-item>
                                 @endif
-                            @endif
+                            @endif --}}
 
                             @if (($taskSettings->time_logs == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                                 <x-tab-item class="ajax-tab" :active="(request('view') === 'time_logs')"

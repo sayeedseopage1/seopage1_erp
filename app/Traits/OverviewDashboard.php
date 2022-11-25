@@ -72,7 +72,9 @@ trait OverviewDashboard
 
         $this->earningChartData = $this->earningChart($startDate, $endDate);
         $this->timlogChartData = $this->timelogChart($startDate, $endDate);
-      
+        $this->bandwidthData = $this->bandwidthChart($startDate, $endDate);
+
+
 
         $this->leaves = Leave::with('user', 'type')
             ->where('status', 'pending')
@@ -207,6 +209,25 @@ trait OverviewDashboard
         $data['name'] = __('modules.dashboard.totalHoursLogged');
         return $data;
     }
+    public function bandwidthChart($startDate, $endDate)
+    {
+        //$timelogs = ProjectTimeLog::whereBetween('created_at', [$startDate, $endDate]);
+      //     $timelogs = ProjectTimeLog::whereBetween('created_at', [$startDate, $endDate]);
+      //   $timelogs = $timelogs->where('end_time','=',null)->get();
+      // //  dd($timelogs);
+      //   $timelogs = $timelogs->groupBy('date')
+      //       ->orderBy('created_at', 'ASC')
+      //       ->get([
+      //           DB::raw('DATE_FORMAT(created_at,\'%d-%M-%y\') as date'),
+      //           DB::raw('FLOOR(count(start_time)) as total_count')
+      //       ]);
+      //   $data['labels'] = $timelogs->pluck('date');
+      //   $data['values'] = $timelogs->pluck('total_count')->toArray();
+      //   $data['colors'] = [$this->appTheme->header_color];
+      //   $data['name'] = __('Total Bandwidth');
+      //   return $data;
+    }
+
 
 
 }
