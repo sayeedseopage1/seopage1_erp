@@ -110,9 +110,9 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                           </x-forms.select>
                       </div>
                       @endif
-                  
 
-                    <div class="col-md-12 col-lg-8">
+
+                    <div class="col-md-12 col-lg-6">
                       <?php
                       $users= App\Models\User::where('role_id',5)->get();
 
@@ -177,7 +177,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                             </x-forms.input-group>
                         </div>
                     </div>
-                    <div class="col-md-12 col-lg-8">
+                    <div class="col-md-12 col-lg-6">
                       <?php
                       $users= App\Models\User::where('role_id',5)->get();
 
@@ -242,6 +242,44 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                             </x-forms.input-group>
                         </div>
                     </div>
+                    <div class="col-md-6 col-lg-6" id="set-time-estimate-fields">
+                        <label for="">Task Estimation Time</label>
+                        <div class="form-group">
+
+                            <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14"
+                                name="estimate_hours" value="{{ $task ? $task->estimate_hours : '0'}}">
+                            @lang('app.hrs')
+                            &nbsp;&nbsp;
+                            <input type="number" min="0" name="estimate_minutes"
+                            value="{{ $task ? $task->estimate_minutes : '0'}}" class="w-25 height-35 f-14 border rounded p-2">
+                            @lang('app.mins')
+                        </div>
+                    </div>
+                    @if(is_null($task))
+                    <div class="col-md-6">
+                        <div class="form-group my-3">
+                            <div class="d-flex">
+                                <x-forms.checkbox :fieldLabel="__('modules.tasks.dependent')" fieldName="dependent"
+                                    fieldId="dependent-task" />
+                            </div>
+                        </div>
+
+                        <div class="d-none" id="dependent-fields">
+                            <x-forms.select fieldId="dependent_task_id" :fieldLabel="__('modules.tasks.dependentTask')"
+                                fieldName="dependent_task_id" search="true">
+                                <option value="">--</option>
+                                @foreach ($allTasks as $item)
+                                    <option value="{{ $item->id }}">{{ $item->heading }} (@lang('app.dueDate'):
+                                        @if(!is_null($item->due_date)) {{ $item->due_date->format(global_setting()->date_format) }} @else - @endif )
+                                    </option>
+                                @endforeach
+                            </x-forms.select>
+                        </div>
+                    </div>
+                    @endif
+
+
+
 
                     <div class="col-md-12">
                         <div class="form-group my-3">
@@ -320,7 +358,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                     </div>
 
 
-                    <div class="col-md-6 col-lg-3">
+                  {{--  <div class="col-md-6 col-lg-3">
                         <div class="form-group">
                             <div class="d-flex mt-5">
                                 <x-forms.checkbox :fieldLabel="__('modules.tasks.makePrivate')" fieldName="is_private"
@@ -328,9 +366,9 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                     :checked="$task ? $task->is_private : ''"/>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="col-md-6 col-lg-3">
+                  {{--  <div class="col-md-6 col-lg-3">
                         <div class="form-group">
                             <div class="d-flex mt-5">
                                 <x-forms.checkbox :fieldLabel="__('modules.tasks.billable')" :checked="true"
@@ -339,9 +377,9 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                     :checked="$task ? $task->billable : ''"/>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="col-md-6 col-lg-3">
+                {{--    <div class="col-md-6 col-lg-3">
                         <div class="form-group">
                             <div class="d-flex mt-5">
                                 <x-forms.checkbox :fieldLabel="__('modules.tasks.setTimeEstimate')"
@@ -362,8 +400,9 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                             @lang('app.mins')
                         </div>
                     </div>
+                    --}}
 
-                    <div class="col-md-6">
+                {{--    <div class="col-md-6">
                         <div class="form-group my-3">
                             <div class="d-flex">
                                 <x-forms.checkbox :fieldLabel="__('modules.events.repeat')" fieldName="repeat"
@@ -399,30 +438,9 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    @if(is_null($task))
-                    <div class="col-md-6">
-                        <div class="form-group my-3">
-                            <div class="d-flex">
-                                <x-forms.checkbox :fieldLabel="__('modules.tasks.dependent')" fieldName="dependent"
-                                    fieldId="dependent-task" />
-                            </div>
-                        </div>
 
-                        <div class="d-none" id="dependent-fields">
-                            <x-forms.select fieldId="dependent_task_id" :fieldLabel="__('modules.tasks.dependentTask')"
-                                fieldName="dependent_task_id" search="true">
-                                <option value="">--</option>
-                                @foreach ($allTasks as $item)
-                                    <option value="{{ $item->id }}">{{ $item->heading }} (@lang('app.dueDate'):
-                                        @if(!is_null($item->due_date)) {{ $item->due_date->format(global_setting()->date_format) }} @else - @endif )
-                                    </option>
-                                @endforeach
-                            </x-forms.select>
-                        </div>
-                    </div>
-                    @endif
 
                     @if ($addTaskFilePermission == 'all' || $addTaskFilePermission == 'added')
                         <div class="col-lg-12">

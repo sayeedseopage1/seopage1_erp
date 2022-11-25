@@ -1,0 +1,240 @@
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+.wrapper h5 {
+    font-size: 20px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+}
+
+
+.wrapper div {
+    display:none;
+    /* padding: 10px;
+    margin-bottom: 5px; */
+    
+}
+.totop {
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+}
+.totop a {
+    display: none;
+}
+.wrapper a, a:visited {
+    color: #1492e6;
+    text-decoration: none;
+    display: block;
+    /* margin: 10px 0; */
+}
+.wrapper a:hover {
+    text-decoration: none;
+}
+
+
+#loadMore {
+    padding: 10px;
+    text-align: center;
+    color: #1492e6;
+    border-width: 0 1px 1px 0;
+    border: 1.8px solid  #1492e6;
+    transition: all 600ms ease-in-out;
+    -webkit-transition: all 600ms ease-in-out;
+    -moz-transition: all 600ms ease-in-out;
+    -o-transition: all 600ms ease-in-out;
+    display: block;
+    width: 150px;
+    margin: 18px 117px;
+    border-radius: 10px;
+    font-size: 16px;
+    height: 48px;
+}
+
+
+#loadMore:hover {
+    background-color: #fff;
+    color: #33739E;
+}
+
+
+
+.main_links{
+    overflow: hidden;
+}
+
+
+.myLinks{
+    width: 100%;
+    height: auto;
+    padding: 17px 19px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px 0 rgba(204, 204, 204, 0.16);
+    background-color: #fff;
+    overflow: hidden;
+    margin: 10px auto;
+    transition: all .5s ease-in-out;
+}
+.myLinks:hover {
+    background: #eee;
+}
+.myLinks a{
+    text-decoration: none;
+    color: #111;
+    font-family: Poppins;
+    font-size: 16px;
+}
+
+.myLinks span i {
+    color: #1492e6;
+    padding-bottom: 15px;
+}
+
+/* description stylesheet  */
+
+.description h4 {
+    font-size: 20px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+}
+
+
+.description{
+    width: 100%;
+    height: auto;
+    padding: 50px 0;
+}
+
+
+.description_content{
+    width: 100%;
+    height: 200px;
+    overflow: auto;
+    padding: 20px 15px 19px;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px 0 rgba(204, 204, 204, 0.15);
+    background-color: #fff;
+}
+
+.description_content p{
+    font-size: 16px;
+    font-weight: 400;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.88;
+    letter-spacing: normal;
+    text-align: left;
+    color: #777;
+}
+
+
+
+  .description_content::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .description_content::-webkit-scrollbar-thumb {
+    background: #1473e6; 
+    border-radius: 5px;
+  } 
+  .description_content::-webkit-scrollbar {
+    width: 5px;
+  }
+  .description_content::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 10px #ebebeb; 
+    border-radius: 5px;
+  }
+ 
+
+  /* main_overlay  */
+
+  .overlays_content h4{
+    font-size: 20px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+  }
+
+  .overlays_content p {
+        text-align: right;
+        font-size: 16px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.88;
+        letter-spacing: normal;
+        color: #555;
+        font-family: roboto;
+    }
+
+  .overlay_layer{
+    width: 100%;
+    height: 100%;
+    padding: 50px 0;
+  }
+
+  .main_overlay {
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+   }
+  
+  .main_overlay img {
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .overlay {
+    position: absolute; 
+    bottom: 0; 
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.5); /* Black see-through */
+    color: #f1f1f1; 
+    width: 100%;
+    transition: .5s ease;
+    opacity:1;
+    color: white;
+    font-size: 20px;
+    padding: 20px;
+    text-align: center;
+    height: 50%;
+  }
+
+  .overlay p {
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    width: 95%;
+    font-size: 16px;
+    font-family: Roboto;
+}
+  
+  .main_overlay:hover .overlay {
+    opacity: 1;
+    width: 100%;
+    height: 100%;
+  }
+
+
+

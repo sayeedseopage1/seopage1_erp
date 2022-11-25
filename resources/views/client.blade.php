@@ -75,7 +75,7 @@
                                 <textarea class="form-control" name="other_platform" id="platform" placeholder="Leave a comment here"></textarea>
 
                             </div>
-                            <div class="mt-3">
+                      {{--      <div class="mt-3">
                                 <label for="floatingTextarea">
                                     <strong>
                                       What time of the day should we primarily reach out to you for any queries, updates, etc. & what is your current timezone? (optional)
@@ -717,7 +717,7 @@
 
 
                                 <!-- <textarea class="form-control" name="timezone" id="timezone" placeholder="Enter Text Here"></textarea> -->
-                                <div class="row">
+                              {{--  <div class="row">
                                   <div class="col-md-12">
                                     <div class="card border-0">
 
@@ -734,6 +734,7 @@
                                             </div>
 
                                             <div class="col-md-4"> <label class="text-grey">From</label> <input class="form-control" type="time" name="from"> </div>
+                                            <!-- <div class="col-md-4"> <label class="text-grey">To</label> <input class="form-control" type="time" name="to"> </div> -->
                                             <div class="col-md-4"> <label class="text-grey">To</label> <input class="form-control" type="time" name="to"> </div>
                                               <div class="col-md-1 mt-5 cancel fa fa-times text-danger"></div>
                                           </div>
@@ -755,9 +756,9 @@
                                           <div class="fa fa-plus-circle text-success add"></div>
                                           <p class="text-success ml-3 add">Add</p>
                                       </div>
-                                      </div>
+                                    </div>--}}
 
-                            </div>
+                            </div> --}}
                             <div class="mt-3">
                                 <label for="floatingTextarea">
                                     <strong>
@@ -780,6 +781,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" charset="utf-8"></script>
         <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput-jquery.min.js'></script><script  src="{{asset('custom/mobilec/script.js')}}"></script>
+
         <script>
         $(document).ready(function(){
 

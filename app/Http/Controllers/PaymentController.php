@@ -167,7 +167,7 @@ class PaymentController extends AccountBaseController
         $payment = new Payment();
 
         if (!is_null($request->currency_id)) {
-            $payment->currency_id = $request->currency_id;
+            $payment->currency_id = 1;
         }
         else {
             $payment->currency_id = $this->global->currency_id;
@@ -176,7 +176,7 @@ class PaymentController extends AccountBaseController
         if ($request->project_id != '') {
             $project = Project::findOrFail($request->project_id);
             $payment->project_id = $request->project_id;
-            $payment->currency_id = $project->currency_id;
+            $payment->currency_id = 1;
         }
 
         if ($request->invoice_id != '') {
@@ -186,14 +186,23 @@ class PaymentController extends AccountBaseController
 
             $payment->project_id = $invoice->project_id;
             $payment->invoice_id = $invoice->id;
-            $payment->currency_id = $invoice->currency->id;
+            $payment->currency_id = 1;
 
             if ($request->amount > $invoice->amountDue()) {
                 return Reply::error(__('messages.invoicePaymentExceedError'));
             }
         }
+        $invoice_id= Invoice::where('id',$request->invoice_id)->first();
+        if ($invoice_id->milestone_id != null) {
+          $milestone= ProjectMilestone::where('id',$invoice_id->milestone_id)->first();
+            $payment->amount = $milestone->cost;
+              $payment->actual_amount = $request->amount;
+                $payment->original_currency_id = $request->currency_id;
+        }else {
+          $payment->amount = round($request->amount, 2);
+        }
 
-        $payment->amount = round($request->amount, 2);
+
         $payment->gateway = $request->gateway;
         $payment->transaction_id = $request->transaction_id;
         $payment->paid_on = Carbon::createFromFormat($this->global->date_format, $request->paid_on)->format('Y-m-d');

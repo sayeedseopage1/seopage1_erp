@@ -93,6 +93,7 @@ trait OverviewDashboard
 
         $currentDate = now()->timezone($this->global->timezone)->toDateTimeString();
 
+
         $this->pendingLeadFollowUps = Lead::with('followup', 'leadAgent', 'leadAgent.user', 'leadAgent.user.employeeDetail', 'leadAgent.user.employeeDetail.designation')
             ->selectRaw('leads.id,leads.company_name, leads.client_name, leads.agent_id, ( select lead_follow_up.next_follow_up_date from lead_follow_up where lead_follow_up.lead_id = leads.id and DATE(lead_follow_up.next_follow_up_date) < "'.$currentDate.'" ORDER BY lead_follow_up.created_at DESC Limit 1) as follow_up_date_past,
             ( select lead_follow.next_follow_up_date from lead_follow_up as lead_follow where lead_follow.lead_id = leads.id and DATE(lead_follow.next_follow_up_date) > "'.$currentDate.'" ORDER BY lead_follow.created_at DESC Limit 1) as follow_up_date_next'

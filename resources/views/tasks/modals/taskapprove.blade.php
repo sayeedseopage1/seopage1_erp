@@ -139,7 +139,7 @@ $task_submission= App\Models\TaskSubmission::where('task_id',$task->id)->orderBy
       </div>
       @if($task_submission != null)
       <hr>
-      <h5>Deliverables</h5>
+      <h5>Submitted Work</h5>
       @foreach($task_submission as $submission)
       @if($submission->link != null)
       <div class="mb-3">

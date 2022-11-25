@@ -185,6 +185,7 @@ $projects= App\Models\PMProject::orderBy('id','asc')->get();
             </x-cards.data>
         </div>
     @endif
+    
 
     @if (in_array('leaves', $modules) && in_array('settings_leaves', $activeWidgets))
         <div class="col-sm-12 col-lg-6 mt-3">
