@@ -48,7 +48,7 @@ $currencies= App\Models\Currency::all();
 
             <div class="col-md-12">
               <div class="form-group">
-                <label for="exampleFormControlTextarea1">Milestone Summary <span style="color:red;">*</span></label>
+                <label for="exampleFormControlTextarea1">Milestone Summary</label>
                 <textarea  name="summary" class="form-control summary" rows="3" ></textarea>
               </div>
 

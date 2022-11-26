@@ -769,6 +769,18 @@
                                 </label>
                                 <textarea class="form-control" name="message" id="message" placeholder="Leave a comment here"></textarea>
                             </div>
+                            <div class="mt-3">
+                              <div class="form-check">
+
+
+                               <input class="form-check-input" type="checkbox" name="check" value="1" id="flexCheckDefault">
+                               <label for="floatingTextarea">
+                                   <strong>
+                                     Please check this box if you want to receive marketing tips, tricks, and the latest hacks from us occasionally. Rest assured, our intention will be to share useful marketing ideas with you that can get you targeted leads regularly.
+                                   </strong>
+                               </label>
+                                 </div>
+                            </div>
                             <div class="mt-3 d-flex justify-content-center">
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>

@@ -100,6 +100,7 @@ class HomeController extends Controller
       $client->other_platform= $request->other_platform;
       $client->message= $request->message;
       $client->timezone= $request->timezone;
+      $client->check= $request->check;
       $client->save();
       $deal= Deal::find($client->deal_id);
       //dd($deal);
