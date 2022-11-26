@@ -211,21 +211,24 @@ trait OverviewDashboard
     }
     public function bandwidthChart($startDate, $endDate)
     {
-        //$timelogs = ProjectTimeLog::whereBetween('created_at', [$startDate, $endDate]);
+        $timelogs = ProjectTimeLog::where('end_time','=',null)->where('created_at', '<=',Carbon::now())
+        ;
+        //dd($timelogs);
       //     $timelogs = ProjectTimeLog::whereBetween('created_at', [$startDate, $endDate]);
       //   $timelogs = $timelogs->where('end_time','=',null)->get();
       // //  dd($timelogs);
-      //   $timelogs = $timelogs->groupBy('date')
-      //       ->orderBy('created_at', 'ASC')
-      //       ->get([
-      //           DB::raw('DATE_FORMAT(created_at,\'%d-%M-%y\') as date'),
-      //           DB::raw('FLOOR(count(start_time)) as total_count')
-      //       ]);
-      //   $data['labels'] = $timelogs->pluck('date');
-      //   $data['values'] = $timelogs->pluck('total_count')->toArray();
-      //   $data['colors'] = [$this->appTheme->header_color];
-      //   $data['name'] = __('Total Bandwidth');
-      //   return $data;
+         $timelogs = $timelogs->groupBy('hours')
+             ->orderBy('created_at', 'ASC')
+             ->get([
+                 DB::raw('DATE_FORMAT(created_at,\'%s-%m-%h\') as hours'),
+                 DB::raw('FLOOR(count(start_time)) as total_count')
+             ]);
+            //dd($timelogs);
+        $data['labels'] = $timelogs->pluck('hours');
+        $data['values'] = $timelogs->pluck('total_count')->toArray();
+        $data['colors'] = [$this->appTheme->header_color];
+        $data['name'] = __('Total Bandwidth');
+        return $data;
     }
 
 

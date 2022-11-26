@@ -186,16 +186,12 @@ $projects= App\Models\PMProject::orderBy('id','asc')->get();
         </div>
     @endif
     @if (in_array('timelogs', $modules) && in_array('timelogs', $activeWidgets))
-        <div class="col-sm-12 col-lg-6 mt-3">
-            <x-cards.data :title="__('app.menu.timeLogs').' <i class=\'fa fa-question-circle\' data-toggle=\'popover\' data-placement=\'top\' data-content=\''.__('app.from').' '.$startDate->format(global_setting()->date_format).' '.__('app.to').' '.$endDate->format(global_setting()->date_format).'\' data-trigger=\'hover\'></i>'">
-                <x-line-chart id="task-chart2" :chartData="$timlogChartData" height="300"></x-line-chart>
-            </x-cards.data>
-        </div>
-      {{-- <div class="col-sm-12 col-lg-6 mt-3">
+        
+       <div class="col-sm-12 col-lg-6 mt-3">
             <x-cards.data :title="__('Bandwidth').' <i class=\'fa fa-question-circle\' data-toggle=\'popover\' data-placement=\'top\' data-content=\''.__('app.from').' '.$startDate->format(global_setting()->date_format).' '.__('app.to').' '.$endDate->format(global_setting()->date_format).'\' data-trigger=\'hover\'></i>'">
                 <x-line-chart id="task-chart2" :chartData="$bandwidthData" height="300"></x-line-chart>
             </x-cards.data>
-        </div> --}} 
+        </div>
     @endif
 
 
