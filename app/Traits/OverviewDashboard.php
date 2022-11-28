@@ -211,6 +211,10 @@ trait OverviewDashboard
     }
     public function bandwidthChart($startDate, $endDate)
     {
+        // $timelogs = ProjectTimeLog::whereBetween('start_time', [$startDate, $endDate]);
+        // $timelogs = $timelogs->where('end_time','=',null)->where('created_at', '<=',Carbon::now())
+        // ;
+        //$timelogs = ProjectTimeLog::whereBetween('start_time', [$startDate, $endDate]);
         $timelogs = ProjectTimeLog::where('end_time','=',null)->where('created_at', '<=',Carbon::now())
         ;
         //dd($timelogs);
@@ -220,7 +224,7 @@ trait OverviewDashboard
          $timelogs = $timelogs->groupBy('hours')
              ->orderBy('created_at', 'ASC')
              ->get([
-                 DB::raw('DATE_FORMAT(created_at,\'%s-%m-%h\') as hours'),
+                 DB::raw('DATE_FORMAT(created_at,\'%d-%M-%y\') as hours'),
                  DB::raw('FLOOR(count(start_time)) as total_count')
              ]);
             //dd($timelogs);

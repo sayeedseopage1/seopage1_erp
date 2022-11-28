@@ -58,6 +58,7 @@ use App\Models\RoleUser;
 use Auth;
 use App\Models\Lead;
 use Response;
+use Illuminate\Support\Facades\App;
 
 class ProjectController extends AccountBaseController
 {
@@ -771,6 +772,9 @@ if ($pm_count < 2) {
         case 'milestones':
             $this->view = 'projects.ajax.milestones';
                 break;
+        case 'deliverables':
+                    $this->view = 'projects.ajax.deliverables';
+                        break;
         case 'taskboard':
             session()->forget('pusher_settings');
             $this->view = 'projects.ajax.taskboard';
@@ -1437,5 +1441,68 @@ if ($pm_count < 2) {
 
         return Reply::successWithData(__('messages.importProcessStart'), ['batch' => $batch]);
     }
+    public function deliverables($id)
+    {
+      dd($id);
+    }
+    public function download($id)
+    {
+        $this->contract = Project::findOrFail($id);
+      //  $viewPermission = user()->permission('view_project');
+        $this->project = Project::with('client', 'client.clientDetails', 'files')->findOrFail($id);
+
+        // abort_403(
+        //     !(
+        //         $viewPermission == 'all' ||
+        //         ($viewPermission == 'added' && user()->id == $this->project->added_by) ||
+        //         ($viewPermission == 'owned' && user()->id == $this->project->client_id) ||
+        //         ($viewPermission == 'both' && (user()->id == $this->project->client_id || user()->id == $this->project->added_by))
+        //     )
+        // );
+
+        $pdf = app('dompdf.wrapper');
+
+        $this->global = $this->settings = global_setting();
+
+        $this->invoiceSetting = invoice_setting();
+
+        $pdf->getDomPDF()->set_option('enable_php', true);
+        App::setLocale($this->invoiceSetting->locale);
+        Carbon::setLocale($this->invoiceSetting->locale);
+        $pdf->loadView('projects.project-pdf', $this->data);
+
+        $dom_pdf = $pdf->getDomPDF();
+        $canvas = $dom_pdf->getCanvas();
+        $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
+        $filename = 'project-' . $this->project->id;
+
+        return $pdf->download($filename . '.pdf');
+    }
+
+    public function downloadView($id)
+    {
+        $this->project = Project::findOrFail($id);
+        $pdf = app('dompdf.wrapper');
+
+        $this->global = $this->settings = global_setting();
+
+        $this->invoiceSetting = invoice_setting();
+
+        $pdf->getDomPDF()->set_option('enable_php', true);
+        App::setLocale($this->invoiceSetting->locale);
+        Carbon::setLocale($this->invoiceSetting->locale);
+        $pdf->loadView('projects.project-pdf', $this->data);
+
+        $dom_pdf = $pdf->getDomPDF();
+        $canvas = $dom_pdf->getCanvas();
+        $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
+        $filename = 'project-' . $this->project->id;
+
+        return [
+            'pdf' => $pdf,
+            'fileName' => $filename,
+        ];
+    }
+
 
 }

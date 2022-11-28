@@ -428,7 +428,14 @@
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    
     <script>
+    $(document).ready(function() {
+      $('#summary').summernote();
+    });
+    $(document).ready(function() {
+      $('#summary3').summernote();
+    });
     $(document).ready(function() {
       $('#message_link').summernote();
     });

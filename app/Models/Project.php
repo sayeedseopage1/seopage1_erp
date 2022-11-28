@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Deal;
+use App\Models\User;
+use App\Models\ProjectCategory;
 
 /**
  * App\Models\Project
@@ -369,6 +371,14 @@ class Project extends BaseModel
     public function deal()
     {
         return $this->belongsTo(Deal::class, 'deal_id');
+    }
+    public function pm()
+    {
+        return $this->belongsTo(User::class, 'pm_id');
+    }
+    public function project_type()
+    {
+        return $this->belongsTo(ProjectCategory::class, 'category_id');
     }
 
 }

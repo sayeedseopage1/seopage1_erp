@@ -769,7 +769,7 @@
                                 </label>
                                 <textarea class="form-control" name="message" id="message" placeholder="Leave a comment here"></textarea>
                             </div>
-                            <div class="mt-3">
+                            <div class="mt-4">
                               <div class="form-check">
 
 

@@ -35,6 +35,9 @@ $projectArchived = $project->trashed();
                     <li>
                         <x-tab :href="route('projects.show', $project->id)" :text="__('Dashboard')" class="overview" />
                     </li>
+                    <li>
+                        <x-tab :href="route('projects.show', $project->id).'?tab=deliverables'" :text="__('Deliverables')" class="deliverables" />
+                    </li>
                     <!-- <li>
                         <x-tab :href="route('projects.show', $project->id)" :text="__('Project Details')" class="overview" />
                     </li> -->

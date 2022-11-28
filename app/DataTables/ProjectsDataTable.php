@@ -13,6 +13,7 @@ use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
 use App\Models\Currency;
 use App\Models\Deal;
+use App\Models\User;
 class ProjectsDataTable extends BaseDataTable
 {
 
@@ -284,14 +285,25 @@ class ProjectsDataTable extends BaseDataTable
                 return ucfirst($row->project_short_code);
             });
             $datatables->addColumn('project_manager', function ($row) {
-                return ucfirst($row->project_manager);
-            });
+                $label = '<label class="badge badge-secondary">' . $row->pm->name. '</label>';
+
+                $project_manager = ucfirst($row->salutation) . ' ' . ucfirst($row->pm->name);
+
+                $pm= '<div class="media align-items-center">
+                        <div class="media-body">
+                    <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$row->pm_id]) . '">' . $project_manager . '</a></h5>
+                        <p class="mb-0">' . $label . '</p>
+                    </div>
+                  </div>';
+                  return $row->pm->name;
+            })
+            ;
 
             $datatables->addIndexColumn();
             $datatables->setRowId(function ($row) {
                 return 'row-' . $row->id;
             });
-            $datatables->rawColumns(['project_name', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check']);
+            $datatables->rawColumns(['project_name','pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check']);
             $datatables->removeColumn('project_summary');
             $datatables->removeColumn('notes');
             $datatables->removeColumn('category_id');
@@ -313,7 +325,7 @@ class ProjectsDataTable extends BaseDataTable
             ->leftJoin('project_members', 'project_members.project_id', 'projects.id')
             ->leftJoin('users', 'project_members.user_id', 'users.id')
             ->leftJoin('users as client', 'projects.client_id', 'users.id')
-            ->selectRaw('projects.id, projects.project_short_code, projects.hash, projects.added_by, projects.project_name, projects.start_date, projects.deadline, projects.client_id,
+            ->selectRaw('projects.id, projects.pm_id, projects.project_short_code, projects.hash, projects.added_by, projects.project_name, projects.start_date, projects.deadline, projects.client_id,
               projects.completion_percent, projects.project_budget, projects.currency_id,
             projects.status, users.name, client.name as client_name, client.email as client_email, projects.public,
            ( select count("id") from pinned where pinned.project_id = projects.id and pinned.user_id = ' . user()->id . ') as pinned_project');
@@ -471,6 +483,7 @@ class ProjectsDataTable extends BaseDataTable
             __('app.customers')  => ['data' => 'client_name', 'name' => 'client_id', 'visible' => false, 'title' => __('app.customers')],
 
             __('app.client') . ' ' . __('app.email')  => ['data' => 'client_email', 'name' => 'client_id', 'visible' => false, 'title' => __('app.client') . ' ' . __('app.email')],
+              __('app.project_manager') => ['data' => 'project_manager', 'name' => 'project_manager',  'title' => __('Project Manager')],
             __('app.progress') => ['data' => 'completion_percent', 'name' => 'completion_percent', 'exportable' => false, 'title' => __('app.progress')],
             __('app.completion') => ['data' => 'completion_export', 'name' => 'completion_export', 'visible' => false, 'title' => __('app.completion')],
             __('app.status') => ['data' => 'status', 'name' => 'status', 'width' => '16%', 'exportable' => false, 'title' => __('app.status')],

@@ -103,6 +103,7 @@ class ProjectMilestoneController extends AccountBaseController
      */
     public function update(StoreMilestone $request, $id)
     {
+      //dd($request);
         $milestone = ProjectMilestone::findOrFail($id);
         $milestone->project_id = $request->project_id;
         $milestone->milestone_title = $request->milestone_title;

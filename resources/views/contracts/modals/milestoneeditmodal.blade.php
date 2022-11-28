@@ -50,7 +50,7 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label for="exampleFormControlTextarea1">Milestone Summary</label>
-                <textarea id="summary"  name="summary" class="form-control summary" rows="3" ></textarea>
+                <textarea  name="summary" class="ckeditor form-control summary" rows="3" ></textarea>
               </div>
 
             </div>

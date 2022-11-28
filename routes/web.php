@@ -1073,3 +1073,8 @@ Route::post('/tasks/task-time/extension/approve', [TaskController::class, 'TaskE
 //milestone route
 Route::post('/milestone/complete', [ProjectMilestoneController::class, 'CompleteMilestone'])->name('milestone-complete');
 Route::get('/project-overview/filter', [ProjectController::class, 'ProjectOverviewFilter'])->name('project-overview-filter');
+
+//project deliverables
+
+Route::get('/projects/deliverables/{id}', [ProjectController::class, 'deliverables']);
+  Route::get('/projects/download/{id}', [ProjectController::class, 'download'])->name('projects.download');

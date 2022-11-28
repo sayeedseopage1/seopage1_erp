@@ -32,8 +32,8 @@
                 </x-forms.select>
             </div>
             <div class="col-md-12">
-                <x-forms.textarea class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.milestoneSummary')"
-                    fieldName="summary" fieldId="summary" 
+                <x-forms.textarea class="ckeditor mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.milestoneSummary')"
+                    fieldName="summary" fieldId="summary"
                     :fieldPlaceholder="__('placeholders.milestoneSummary')">
                 </x-forms.textarea>
             </div>
@@ -60,7 +60,7 @@
     </div>
 
 </x-form>
-
+<script src="//cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
 <script>
 
 $(document).ready(function() {
