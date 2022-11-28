@@ -1077,4 +1077,5 @@ Route::get('/project-overview/filter', [ProjectController::class, 'ProjectOvervi
 //project deliverables
 
 Route::get('/projects/deliverables/{id}', [ProjectController::class, 'deliverables']);
-  Route::get('/projects/download/{id}', [ProjectController::class, 'download'])->name('projects.download');
+Route::get('/projects/download/{id}', [ProjectController::class, 'download'])->name('projects.download');
+Route::post('projects/sign/{id}', [ProjectController::class, 'sign'])->name('projects.sign');

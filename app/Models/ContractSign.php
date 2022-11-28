@@ -33,7 +33,7 @@ class ContractSign extends BaseModel
 
     public function getSignatureAttribute()
     {
-        return asset_url('contract/sign/'.$this->attributes['signature']);
+        return asset_url('project/sign/'.$this->attributes['signature']);
     }
 
     /**
@@ -41,9 +41,9 @@ class ContractSign extends BaseModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function contract(): BelongsTo
+    public function project(): BelongsTo
     {
-        return $this->belongsTo(Contract::class, 'contract_id');
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
 }

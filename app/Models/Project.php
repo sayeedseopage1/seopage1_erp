@@ -380,5 +380,9 @@ class Project extends BaseModel
     {
         return $this->belongsTo(ProjectCategory::class, 'category_id');
     }
+    public function signature(): HasOne
+    {
+        return $this->hasOne(ContractSign::class, 'project_id');
+    }
 
 }

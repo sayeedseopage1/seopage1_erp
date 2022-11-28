@@ -104,18 +104,23 @@
             @if ($project->project_budget != 0)
                 <div class="text-right pt-3 border-top">
                     <h4>@lang('Project Budget'):
-                          {{$project->deal->actual_amount}}{{$project->deal->original_currency->currency_code}}</h4>
+                          {{$project->deal->actual_amount}}({{$project->deal->original_currency->currency_code}})</h4>
                 </div>
             @endif
-        </div>
 
-      {{--  @if ($contract->signature)
-            <div class="d-flex flex-column">
-                <h6>@lang('modules.estimates.signature')</h6>
-                <img src="{{ $contract->signature->signature }}" style="width: 200px;">
-                <p>({{ $contract->signature->full_name }})</p>
-            </div>
-        @endif
+        </div>
+      
+
+          @if ($project->signature)
+                 <div class="d-flex flex-column">
+                     <h6>@lang('modules.estimates.signature')</h6>
+                     <img src="{{ $project->signature->signature }}" style="width: 200px;">
+                     <p>({{ $project->signature->full_name }})</p>
+                 </div>
+             @endif
+
+
+
 
         <div id="signature-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog d-flex justify-content-center align-items-center modal-xl">
@@ -123,7 +128,7 @@
                     @include('estimates.ajax.accept-estimate')
                 </div>
             </div>
-        </div> --}}
+        </div>
 
     </div>
     <!-- CARD BODY END -->
@@ -138,7 +143,7 @@
                 </button>
                 <!-- DROPDOWN - INFORMATION -->
                 <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton" tabindex="0">
-                {{--    @if (!$contract->signature && user()->id == $contract->client->id)
+                    @if (!$project->signature)
                         <li>
                             <a class="dropdown-item f-14 text-dark" href="javascript:;" data-toggle="modal"
                                 data-target="#signature-modal">
@@ -146,7 +151,7 @@
                                 @lang('app.sign')
                             </a>
                         </li>
-                    @endif --}}
+                    @endif
                     <li>
                         <a class="dropdown-item f-14 text-dark"
                             href="{{ route('projects.download', $project->id) }}">
@@ -225,7 +230,7 @@
         }
 
         $.easyAjax({
-            url: "{{ route('contracts.sign', $project->id) }}",
+            url: "{{ route('projects.sign', $project->id) }}",
             container: '#acceptEstimate',
             type: "POST",
             blockUI: true,

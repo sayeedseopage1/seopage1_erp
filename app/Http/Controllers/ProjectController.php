@@ -59,6 +59,11 @@ use Auth;
 use App\Models\Lead;
 use Response;
 use Illuminate\Support\Facades\App;
+use App\Events\ProjectSignedEvent;
+use App\Http\Requests\ClientContracts\SignRequest;
+use App\Models\ContractSign;
+use Illuminate\Support\Facades\File;
+
 
 class ProjectController extends AccountBaseController
 {
@@ -1502,6 +1507,44 @@ if ($pm_count < 2) {
             'pdf' => $pdf,
             'fileName' => $filename,
         ];
+    }
+    public function sign(SignRequest $request, $id)
+    {
+        $this->project = Project::with('signature')->findOrFail($id);
+
+        if ($this->project && $this->project->signature) {
+            return Reply::error(__('messages.alreadySigned'));
+        }
+
+        $sign = new ContractSign();
+        $sign->full_name = $request->first_name . ' ' . $request->last_name;
+        $sign->project_id = $this->project->id;
+        $sign->email = $request->email;
+        $imageName = null;
+
+        if ($request->signature_type == 'signature') {
+            $image = $request->signature; // your base64 encoded
+            $image = str_replace('data:image/png;base64,', '', $image);
+            $image = str_replace(' ', '+', $image);
+            $imageName = str_random(32) . '.' . 'jpg';
+
+            if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/' . 'project/sign'))) {
+                File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/project/sign'), 0775, true);
+            }
+
+            File::put(public_path() . '/' . Files::UPLOAD_FOLDER . '/project/sign/' . $imageName, base64_decode($image));
+        } else {
+            if ($request->hasFile('image')) {
+                $imageName = Files::upload($request->image, 'project/sign', 300);
+            }
+        }
+
+        $sign->signature = $imageName;
+        $sign->save();
+
+        event(new ProjectSignedEvent($this->project, $sign));
+
+        return Reply::redirect(route('projects.show', $this->project->id));
     }
 
 

@@ -309,17 +309,17 @@
         @if ($project->project_budget != 0)
             <div class="text-right pt-3 border-top">
                 <h4>@lang('Project Budget'):
-                    {{$project->deal->actual_amount}}{{$project->deal->original_currency->currency_code}}</h4>
+                    {{$project->deal->actual_amount}}({{$project->deal->original_currency->currency_code}})</h4>
             </div>
         @endif
 
-      {{-- @if ($contract->signature)
+       @if ($project->signature)
             <div style="text-align: left; margin-top: 10px;">
                 <h2 class="name" style="margin-bottom: 20px;">@lang('app.signature')</h2>
                 {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
                 <p>({{ $project->signature->full_name }})</p>
             </div>
-        @endif --}}
+        @endif
     </div>
 
 </body>
