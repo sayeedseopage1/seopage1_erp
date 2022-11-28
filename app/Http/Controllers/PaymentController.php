@@ -114,8 +114,9 @@ class PaymentController extends AccountBaseController
 
         if (request()->get('invoice_id')) {
             $this->invoice = Invoice::findOrFail(request()->get('invoice_id'));
-            $this->paidAmount = $this->invoice->amountPaid();
-            $this->unpaidAmount = $this->invoice->amountDue();
+             $this->paidAmount = $this->invoice->amountPaid();
+             $this->unpaidAmount = $this->invoice->amountDue();
+             //dd($this->paidAmount, $this->unpaidAmount );
 
             if ($this->invoice->project_id) {
                 $this->project = Project::find($this->invoice->project_id);
@@ -170,7 +171,8 @@ class PaymentController extends AccountBaseController
             $payment->currency_id = 1;
         }
         else {
-            $payment->currency_id = $this->global->currency_id;
+            // $payment->currency_id = $this->global->currency_id;
+              $payment->currency_id = 1;
         }
 
         if ($request->project_id != '') {
@@ -178,11 +180,19 @@ class PaymentController extends AccountBaseController
             $payment->project_id = $request->project_id;
             $payment->currency_id = 1;
         }
-
+        $invoice_id= Invoice::where('id',$request->invoice_id)->first();
+        if ($invoice_id->milestone_id != null) {
+          $milestone= ProjectMilestone::where('id',$invoice_id->milestone_id)->first();
+            $payment->amount = $milestone->cost;
+              $payment->actual_amount = $request->amount;
+                $payment->original_currency_id = $request->currency_id;
+        }else {
+          $payment->amount = round($request->amount, 1);
+        }
         if ($request->invoice_id != '') {
             $invoice = Invoice::findOrFail($request->invoice_id);
 
-            $paidAmount = $invoice->amountPaid();
+            $paidAmount = $milestone->cost;
 
             $payment->project_id = $invoice->project_id;
             $payment->invoice_id = $invoice->id;
@@ -192,15 +202,7 @@ class PaymentController extends AccountBaseController
                 return Reply::error(__('messages.invoicePaymentExceedError'));
             }
         }
-        $invoice_id= Invoice::where('id',$request->invoice_id)->first();
-        if ($invoice_id->milestone_id != null) {
-          $milestone= ProjectMilestone::where('id',$invoice_id->milestone_id)->first();
-            $payment->amount = $milestone->cost;
-              $payment->actual_amount = $request->amount;
-                $payment->original_currency_id = $request->currency_id;
-        }else {
-          $payment->amount = round($request->amount, 2);
-        }
+
 
 
         $payment->gateway = $request->gateway;
@@ -227,7 +229,8 @@ class PaymentController extends AccountBaseController
                 $invoice->status = 'partial';
             }
 
-            $invoice->save();
+
+          //  $invoice->save();
         }
         $project= Project::find($request->project_id);
         $invoice_id= Invoice::where('id',$request->invoice_id)->first();

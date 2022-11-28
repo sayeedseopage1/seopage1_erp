@@ -109,7 +109,7 @@
             @endif
 
         </div>
-      
+
 
           @if ($project->signature)
                  <div class="d-flex flex-column">
@@ -143,6 +143,7 @@
                 </button>
                 <!-- DROPDOWN - INFORMATION -->
                 <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton" tabindex="0">
+
                     @if (!$project->signature)
                         <li>
                             <a class="dropdown-item f-14 text-dark" href="javascript:;" data-toggle="modal"
@@ -152,11 +153,14 @@
                             </a>
                         </li>
                     @endif
+
                     <li>
                         <a class="dropdown-item f-14 text-dark"
                             href="{{ route('projects.download', $project->id) }}">
                             <i class="fa fa-download f-w-500 mr-2 f-11"></i> @lang('app.download')
                         </a>
+                        <!-- <a class="dropdown-item btn-copy" href="javascript:;" data-clipboard-text="route('front.agreement', $project->project_short_code)"><i class="fa fa-copy mr-2"></i>Copy Link</a> -->
+                          <a class="dropdown-item btn-copy" href="javascript:;" data-clipboard-text="http://127.0.0.1:8000/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
                     </li>
                 </ul>
             </div>
@@ -170,7 +174,34 @@
     <!-- CARD FOOTER END -->
 </div>
 <!-- INVOICE CARD END -->
+@push('scripts')
+<script src="{{ asset('vendor/jquery/clipboard.min.js') }}"></script>
+<script>
+    $(function() {
+    var clipboard = new ClipboardJS('.btn-copy');
 
+    clipboard.on('success', function(e) {
+        Swal.fire({
+            icon: 'success',
+            text: '@lang("app.copied")',
+            toast: true,
+            position: 'top-end',
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+            customClass: {
+                confirmButton: 'btn btn-primary',
+            },
+            showClass: {
+                popup: 'swal2-noanimation',
+                backdrop: 'swal2-noanimation'
+            },
+        })
+    });
+    });
+
+</script>
+@endpush
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
 <script>
     var canvas = document.getElementById('signature-pad');
@@ -248,5 +279,6 @@
             },
         })
     });
+
 
 </script>

@@ -224,10 +224,10 @@
                 <td>
                     <p class="line-height mt-1 mb-0 f-14 text-black">
                         {{ mb_ucwords(global_setting()->company_name) }}<br>
-                        @if (!is_null($settings))
+
                             {!! nl2br(default_address()->address) !!}<br>
                             {{ global_setting()->company_phone }}
-                        @endif
+                      
 
                     </p>
                 </td>

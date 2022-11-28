@@ -123,6 +123,19 @@ class HomeController extends Controller
           return redirect('/thankyou')->with('message','Submitted Successfully');
     }
 
+    public function agreement($hash)
+    {
+      $this->pageTitle = 'Project Agreement';
+      $this->pageIcon = 'icon-draft';
+
+      $this->project = Project::where('project_short_code', $hash)->firstOrFail();
+      $this->global = $this->settings = global_setting();
+
+      $this->invoiceSetting = invoice_setting();
+
+      return view('agreement',$this->data);
+    }
+
     public function invoice($hash)
     {
         $this->pageTitle = 'app.menu.invoices';

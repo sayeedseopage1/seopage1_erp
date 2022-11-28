@@ -204,7 +204,7 @@ class Invoice extends BaseModel
 
     public function appliedCredits()
     {
-        return Payment::where('invoice_id', $this->id)->sum('amount');
+        return Payment::where('invoice_id', $this->id)->sum('actual_amount');
     }
 
     public function amountDue()
@@ -215,12 +215,12 @@ class Invoice extends BaseModel
 
     public function amountPaid()
     {
-        return $this->payment->where('status', 'complete')->sum('amount');
+        return $this->payment->where('status', 'complete')->sum('actual_amount');
     }
 
     public function getPaidAmount()
     {
-        return Payment::where('invoice_id', $this->id)->sum('amount');
+        return Payment::where('invoice_id', $this->id)->sum('actual_amount');
     }
 
     public function getTotalAmountAttribute()

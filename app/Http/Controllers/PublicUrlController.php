@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\File;
 use App\Traits\UniversalSearchTrait;
 use App\Http\Requests\EstimateAcceptRequest;
 use App\Http\Requests\Admin\Contract\SignRequest;
+use App\Models\Project;
+use App\Events\SignedEvent;
+use App\Events\ProjectSignedEvent;
 
 class PublicUrlController extends Controller
 {
@@ -77,6 +80,45 @@ class PublicUrlController extends Controller
 
         return Reply::redirect(route('contracts.show', $this->contract->id));
     }
+    public function projectSign(SignRequest $request, $id)
+    {
+        $this->project = Project::with('signature')->findOrFail($id);
+
+        if($this->project && $this->project->signature){
+            return Reply::error(__('messages.alreadySigned'));
+        }
+
+        $sign = new ContractSign();
+        $sign->full_name = $request->first_name . ' ' . $request->last_name;
+        $sign->project_id = $this->project->id;
+        $sign->email = $request->email;
+        $imageName = null;
+
+        if ($request->signature_type == 'signature') {
+             $image = $request->signature;  // your base64 encoded
+            $image = str_replace('data:image/png;base64,', '', $image);
+            $image = str_replace(' ', '+', $image);
+            $imageName = str_random(32) . '.' . 'jpg';
+
+            if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/' . 'project/sign'))) {
+                $result = File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/project/sign'), 0775, true);
+            }
+
+            File::put(public_path() . '/' . Files::UPLOAD_FOLDER . '/project/sign/' . $imageName, base64_decode($image));
+        }
+        else {
+            if ($request->hasFile('image')) {
+                $imageName = Files::upload($request->image, 'project/sign', 300);
+            }
+        }
+
+        $sign->signature = $imageName;
+        $sign->save();
+
+        event(new ProjectSignedEvent($this->project, $sign));
+
+      return Reply::redirect(route('projects.show', $this->project->id));
+    }
 
     public function contractDownload($id)
     {
@@ -114,6 +156,49 @@ class PublicUrlController extends Controller
         $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
 
         $filename = 'contract-' . $contract->id;
+
+        return [
+            'pdf' => $pdf,
+            'fileName' => $filename
+        ];
+    }
+
+    public function projectDownload($id)
+    {
+        $project = Project::findOrFail($id);
+          $global = $settings = global_setting();
+
+        $this->invoiceSetting = InvoiceSetting::first();
+        $pdf = app('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option('enable_php', true);
+        App::setLocale($this->invoiceSetting->locale);
+        Carbon::setLocale($this->invoiceSetting->locale);
+        $pdf->loadView('projects.project-pdf', ['project' => $project, 'global' => $global]);
+
+        $dom_pdf = $pdf->getDomPDF();
+        $canvas = $dom_pdf->getCanvas();
+        $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
+
+        $filename = 'project-' . $project->id;
+
+        return $pdf->download($filename . '.pdf');
+    }
+
+    public function projectDownloadView($id)
+    {
+        $project = Project::findOrFail($id);
+        $pdf = app('dompdf.wrapper');
+        $global = $settings = global_setting();
+        $pdf->getDomPDF()->set_option('enable_php', true);
+        App::setLocale($this->invoiceSetting->locale);
+        Carbon::setLocale($this->invoiceSetting->locale);
+        $pdf->loadView('projects.project-pdf', ['project' => $project, 'global' => $global]);
+
+        $dom_pdf = $pdf->getDomPDF();
+        $canvas = $dom_pdf->getCanvas();
+        $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
+
+        $filename = 'project-' . $project->id;
 
         return [
             'pdf' => $pdf,

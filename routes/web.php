@@ -1079,3 +1079,6 @@ Route::get('/project-overview/filter', [ProjectController::class, 'ProjectOvervi
 Route::get('/projects/deliverables/{id}', [ProjectController::class, 'deliverables']);
 Route::get('/projects/download/{id}', [ProjectController::class, 'download'])->name('projects.download');
 Route::post('projects/sign/{id}', [ProjectController::class, 'sign'])->name('projects.sign');
+Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
+Route::post('/projects/public/sign/{id}', [PublicUrlController::class, 'projectSign'])->name('front.project.sign');
+Route::get('/projects/public/download/{id}', [PublicUrlController::class, 'projectDownload'])->name('front.project.download');
