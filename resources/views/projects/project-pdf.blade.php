@@ -309,7 +309,7 @@
         @if ($project->project_budget != 0)
             <div class="text-right pt-3 border-top">
                 <h4>@lang('Project Budget'):
-                    {{ currency_formatter($project->deal->actual_amount, $project->deal->original_currency->currency_symbol) }}</h4>
+                    {{ currency_formatter($project->deal->actual_amount, $project->deal->original_currency->currency_code) }}</h4>
             </div>
         @endif
 
@@ -319,7 +319,7 @@
                 {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
                 <p>({{ $project->signature->full_name }})</p>
             </div>
-        @endif --}} 
+        @endif --}}
     </div>
 
 </body>
