@@ -1452,9 +1452,9 @@ if ($pm_count < 2) {
     }
     public function download($id)
     {
-        $this->project = Project::findOrFail($id);
+        $project = Project::findOrFail($id);
       //  $viewPermission = user()->permission('view_project');
-        $this->project = Project::with('client', 'client.clientDetails', 'files')->findOrFail($id);
+        $project = Project::with('client', 'client.clientDetails', 'files')->findOrFail($id);
 
         // abort_403(
         //     !(

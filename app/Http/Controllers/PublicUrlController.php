@@ -198,7 +198,7 @@ class PublicUrlController extends Controller
         $canvas = $dom_pdf->getCanvas();
         $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
 
-          $filename = $project->project_name . '-agreement-' . $project->id;
+        $filename = $project->project_name . '-agreement-' . $project->id;
 
         return [
             'pdf' => $pdf,
