@@ -222,7 +222,7 @@
 
         .table-box td:last-child,
         .summary-box td:last-child {
-          text-align: right;
+
         }
 
         .table-box table tr.heading td {
@@ -283,13 +283,7 @@
                     </table>
                 </td>
             </tr>
-            <!-- Table Row End -->
-            <!-- Table Row Start -->
-            <tr>
-                <td height="30"></td>
-            </tr>
-            <!-- Table Row End -->
-            <!-- Table Row Start -->
+
             <tr>
                 <td colspan="2">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -315,17 +309,14 @@
             </tr>
             <!-- Table Row End -->
             <!-- Table Row Start -->
-            <tr>
-                <td height="20" colspan="2"></td>
-            </tr>
-            <!-- Table Row End -->
+
 
         </tbody>
     </table>
 
     <div>
-      <h5>@lang('Scope of Work')</h5>
-        <p class="f-15 text-black">Rajat Chakraborty (Seopage1.net) agrees to perform (Website Design Development) and
+
+        <p class="f-15 text-black">Scope of Work: Rajat Chakraborty (Seopage1.net) agrees to perform (Website Design Development) and
           related services specified on this Agreement ("Project Deliverables").</p>
         <h5 class="text-grey text-capitalize">@lang('app.subject')</h5>
         <p class="f-15 text-black text-capitalize">Agreement for Project: {{ $project->project_name }}</p>
@@ -336,53 +327,46 @@
          <table cellpadding="0" cellspacing="0">
            <tbody>
              <tr class="heading">
+               <td>#</td>
+               <td>Deliverable</td>
                <td>Description</td>
-               <td>QTY</td>
-               <td>Unit Price</td>
-               <td>Total</td>
+               <td>From</td>
+               <td>To</td>
              </tr>
 
              <tr class="item">
-               <td></td>
-               <td></td>
-               <td></td>
-               <td></td>
+               <td>1</td>
+               <td>Header And Footer Design</td>
+               <td>Need Also the Content</td>
+               <td>12-11-22</td>
+               <td>12-11-22</td>
              </tr>
 
              <tr class="item">
-               <td></td>
-               <td></td>
-               <td></td>
-               <td></td>
+               <td>1</td>
+               <td>Header And Footer Design</td>
+               <td>Need Also the Content</td>
+               <td>12-11-22</td>
+               <td>12-11-22</td>
              </tr>
 
              <tr class="item">
-               <td></td>
-               <td></td>
-               <td></td>
-               <td></td>
+               <td>1</td>
+               <td>Header And Footer Design</td>
+               <td>Need Also the Content</td>
+               <td>12-11-22</td>
+               <td>12-11-22</td>
              </tr>
 
              <tr class="item">
-               <td></td>
-               <td></td>
-               <td></td>
-               <td></td>
+               <td>1</td>
+               <td>Header And Footer Design</td>
+               <td>Need Also the Content</td>
+               <td>12-11-22</td>
+               <td>12-11-22</td>
              </tr>
 
-             <tr class="item">
-               <td></td>
-               <td></td>
-               <td></td>
-               <td></td>
-             </tr>
 
-             <tr class="item">
-               <td></td>
-               <td></td>
-               <td></td>
-               <td></td>
-             </tr>
            </tbody>
          </table>
        </div>
