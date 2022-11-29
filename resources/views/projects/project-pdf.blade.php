@@ -208,7 +208,7 @@
         .styled-table {
     border-collapse: collapse;
     margin: 25px 0;
-    font-size: 0.9em;
+    font-size: 0.8em;
     font-family: sans-serif;
     min-width: 400px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -281,6 +281,13 @@
                             <td class="heading-table-right">{{ $project->project_type->category_name }}
                             </td>
                         </tr>
+                          @if ($project->project_budget != 0)
+                        <tr>
+                            <td class="heading-table-left">@lang('Project Budget')</td>
+                            <td class="heading-table-right">{{$project->deal->actual_amount}}({{$project->deal->original_currency->currency_code}})
+                            </td>
+                        </tr>
+                        @endif
                     </table>
                 </td>
             </tr>
@@ -391,12 +398,7 @@
 
 
 
-        @if ($project->project_budget != 0)
-            <div class="text-right pt-3 border-top">
-                <h4>@lang('Project Budget'):
-                    {{$project->deal->actual_amount}}({{$project->deal->original_currency->currency_code}})</h4>
-            </div>
-        @endif
+
 
        @if ($project->signature)
             <div style="text-align: left; margin-top: 8px;">
