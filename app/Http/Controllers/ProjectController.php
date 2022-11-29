@@ -1479,7 +1479,7 @@ if ($pm_count < 2) {
         $dom_pdf = $pdf->getDomPDF();
         $canvas = $dom_pdf->getCanvas();
         $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
-        $filename = 'project_name-agreement-' . $this->project->id;
+        $filename = $project->project_name . '-agreement-' . $project->id;
 
         return $pdf->download($filename . '.pdf');
     }
@@ -1501,7 +1501,7 @@ if ($pm_count < 2) {
         $dom_pdf = $pdf->getDomPDF();
         $canvas = $dom_pdf->getCanvas();
         $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
-        $filename = 'project_name-agreement-' . $this->project->id;
+        $filename = $project->project_name . '-agreement-' . $project->id;
 
         return [
             'pdf' => $pdf,
