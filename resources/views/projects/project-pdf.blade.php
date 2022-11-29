@@ -402,12 +402,18 @@
 
        @if ($project->signature)
             <div style="text-align: left; margin-top: 8px;">
-                <h2 class="name" style="margin-bottom: 20px;">@lang('app.signature')</h2>
+                <h3 class="name" style="margin-bottom: 20px;">@lang('Client Signature')</h3>
                 {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
                 <p>({{ $project->signature->full_name }})</p>
                 <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
             </div>
         @endif
+        <div style="text-align: right; margin-top: 8px;">
+            <h3 class="name" style="margin-bottom: 20px;">@lang('Provider Signature')</h3>
+            {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
+            <p>Rajat Chakraboty</p>
+            <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
+        </div>
     </div>
 
 </body>
