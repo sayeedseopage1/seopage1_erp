@@ -205,6 +205,38 @@
         .logo {
             height: 33px;
         }
+        .table-box table,
+        .summary-box table {
+          width: 100%;
+          font-size: 0.625rem;
+        }
+
+        .table-box table {
+          padding-top: 2rem;
+        }
+
+        .table-box td:first-child,
+        .summary-box td:first-child {
+          width: 50%;
+        }
+
+        .table-box td:last-child,
+        .summary-box td:last-child {
+          text-align: right;
+        }
+
+        .table-box table tr.heading td {
+          border-top: 1px solid #000000;
+          border-bottom: 1px solid #000000;
+          height: 1.5rem;
+        }
+
+        .table-box table tr.item td,
+        .summary-box table tr.item td {
+          border-bottom: 1px solid #d7dce4;
+          height: 1.5rem;
+        }
+
 
     </style>
 </head>
@@ -300,30 +332,61 @@
 
         <h5>@lang('Project Deliverables')</h5>
 
-        <td>
-            <table class="text-black mt-1 f-13 b-collapse">
+        <div class="table-box">
+         <table cellpadding="0" cellspacing="0">
+           <tbody>
+             <tr class="heading">
+               <td>Description</td>
+               <td>QTY</td>
+               <td>Unit Price</td>
+               <td>Total</td>
+             </tr>
 
-                  <tr >
-                    <th>#</th>
-                    <th>Deliverable</th>
-                    <th>Description</th>
-                    <th>From</th>
-                    <th>To</th>
+             <tr class="item">
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+             </tr>
 
-                  </tr>
+             <tr class="item">
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+             </tr>
 
-                  <tr>
-                    <td>1</td>
-                  <td>Header And Footer Design</td>
-                  <td>Need header and Footer</td>
-                  <td>26-07-22</td>
-                  <td>26-07-22</td>
+             <tr class="item">
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+             </tr>
 
-                  </tr>
-                  
+             <tr class="item">
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+             </tr>
 
-            </table>
-        </td>
+             <tr class="item">
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+             </tr>
+
+             <tr class="item">
+               <td></td>
+               <td></td>
+               <td></td>
+               <td></td>
+             </tr>
+           </tbody>
+         </table>
+       </div>
+
 
 
 
