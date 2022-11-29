@@ -191,7 +191,7 @@ $addClientPermission = user()->permission('add_clients');
                     <x-forms.button-primary id="save-contract-form" class="mr-3" icon="check">
                         @lang('app.save')
                     </x-forms.button-primary>
-                    <x-forms.button-cancel :link="route('contracts.index')" class="border-0">@lang('app.cancel')
+                    <x-forms.button-cancel :link="route('deals.index')" class="border-0">@lang('app.cancel')
                     </x-forms.button-cancel>
                 </x-form-actions>
             </div>

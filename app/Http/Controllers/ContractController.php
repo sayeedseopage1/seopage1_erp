@@ -1052,7 +1052,7 @@ class ContractController extends AccountBaseController
         $this->viewContractFilesPermission = $viewContractFilesPermission = user()->permission('view_contract_files');
 
         $this->contract = Contract::with([
-            'signature',
+
             'client',
             'client.clientDetails',
             'files' => function ($q) use ($viewContractFilesPermission) {
