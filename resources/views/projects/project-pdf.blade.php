@@ -249,7 +249,7 @@
             <tr>
                 <td><img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
                         class="logo" /></td>
-                <td align="right" class="f-21 text-black font-weight-700 text-uppercase">@lang('Project Agreement')</td>
+                <td align="right" class="f-21 text-black font-weight-500 text-uppercase">@lang('Project Agreement')</td>
             </tr>
             <!-- Table Row End -->
             <!-- Table Row Start -->
@@ -286,9 +286,7 @@
             </tr>
             <!-- Table Row End -->
             <!-- Table Row Start -->
-            <tr>
-                <td height="30"></td>
-            </tr>
+
             <!-- Table Row End -->
             <!-- Table Row Start -->
             <tr>
@@ -316,9 +314,7 @@
             </tr>
             <!-- Table Row End -->
             <!-- Table Row Start -->
-            <tr>
-                <td height="20" colspan="2"></td>
-            </tr>
+
             <!-- Table Row End -->
 
         </tbody>
@@ -403,7 +399,7 @@
         @endif
 
        @if ($project->signature)
-            <div style="text-align: left; margin-top: 10px;">
+            <div style="text-align: left; margin-top: 8px;">
                 <h2 class="name" style="margin-bottom: 20px;">@lang('app.signature')</h2>
                 {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
                 <p>({{ $project->signature->full_name }})</p>
