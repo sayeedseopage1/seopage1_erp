@@ -395,27 +395,26 @@
 </table>
 
 
+          <div class="" style="overflow:hidden;">
+            @if ($project->signature)
 
+                 <div style="text-align: left; margin-top: 8px; width:50%; float:left;">
+                     <h3 class="name" style="margin-bottom: 20px;">@lang('Client Signature')</h3>
+                     {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
+                     <p>({{ $project->signature->full_name }})</p>
+                     <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
+                 </div>
+             @endif
+                @if ($project->signature)
+             <div style="text-align: right;  margin-top: 8px; width:50%; float:left;">
+                 <h3 class="name">@lang('Provider Signature')</h3>
+                 {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
+                 <p>Rajat Chakraboty</p>
+                 <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
+             </div>
+               @endif
+          </div>
 
-
-
-
-       @if ($project->signature)
-            <div style="text-align: left; margin-top: 8px;">
-                <h3 class="name" style="margin-bottom: 20px;">@lang('Client Signature')</h3>
-                {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
-                <p>({{ $project->signature->full_name }})</p>
-                <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
-            </div>
-        @endif
-           @if ($project->signature)
-        <div style="text-align: right;  margin-top: -50px;">
-            <h3 class="name">@lang('Provider Signature')</h3>
-            {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
-            <p>Rajat Chakraboty</p>
-            <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
-        </div>
-          @endif
     </div>
 
 </body>
