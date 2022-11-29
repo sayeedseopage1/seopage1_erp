@@ -301,8 +301,8 @@
         <h5>@lang('Project Deliverables')</h5>
 
         <td width="100%">
-            <table class="inv-num-date text-dark f-13 mt-3">
-              <thead>
+            <table class="text-black mt-1 f-13 b-collapse rightaligned">
+
                   <tr class="bg-light-grey border-right-0 f-w-500">
                     <th scope="col" class="text-center">#</th>
                     <th scope="col" class="text-center">Deliverable</th>
@@ -311,7 +311,7 @@
                     <th scope="col" class="text-center">To</th>
 
                   </tr>
-                </thead>
+                
                 <tbody >
                   <tr>
                     <td>1</td>
