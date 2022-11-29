@@ -205,37 +205,8 @@
         .logo {
             height: 33px;
         }
-        .table-box table,
-        .summary-box table {
-          width: 100%;
-          font-size: 0.625rem;
-        }
 
-        .table-box table {
-          padding-top: 2rem;
-        }
-
-        .table-box td:first-child,
-        .summary-box td:first-child {
-          width: 50%;
-        }
-
-        .table-box td:last-child,
-        .summary-box td:last-child {
-
-        }
-
-        .table-box table tr.heading td {
-          border-top: 1px solid #000000;
-          border-bottom: 1px solid #000000;
-          height: 1.5rem;
-        }
-
-        .table-box table tr.item td,
-        .summary-box table tr.item td {
-          border-bottom: 1px solid #d7dce4;
-          height: 1.5rem;
-        }
+      
 
 
     </style>
