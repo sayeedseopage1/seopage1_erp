@@ -1464,6 +1464,7 @@ if ($pm_count < 2) {
         //         ($viewPermission == 'both' && (user()->id == $this->project->client_id || user()->id == $this->project->added_by))
         //     )
         // );
+        $project_name= Project::where('id',$id)->first();
 
         $pdf = app('dompdf.wrapper');
 
@@ -1479,7 +1480,7 @@ if ($pm_count < 2) {
         $dom_pdf = $pdf->getDomPDF();
         $canvas = $dom_pdf->getCanvas();
         $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
-        $filename = $project->project_name . '-agreement-' . $project->id;
+        $filename = $project_name->project_name . '-agreement-' . $project->id;
 
         return $pdf->download($filename . '.pdf');
     }
