@@ -28,66 +28,20 @@
     <div class="card-body">
         <div class="invoice-table-wrapper">
             <table width="100%" class="">
-                <tr class="inv-logo-heading">
-                    <td><img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
-                            class="logo" /></td>
-                    <td align="right" class="font-weight-bold f-21 text-dark text-uppercase mt-4 mt-lg-0 mt-md-0">
-                        @lang('Project Agreement')</td>
+                <tr class="inv-logo-heading text-center">
+
+
                 </tr>
                 <tr class="inv-num">
-                    <td class="f-14 text-dark">
-                        <p class="mt-3 mb-0">
-                            {{ mb_ucwords(global_setting()->company_name) }}<br>
-                            {!! nl2br(default_address()->address) !!}<br>
-                            {{ global_setting()->company_phone }}
-                        </p><br>
-                    </td>
-                    <td align="right">
-                        <table class="inv-num-date text-dark f-13 mt-3">
-                            <tr>
-                                <td class="bg-light-grey border-right-0 f-w-500">
-                                    @lang('Project ID')</td>
-                                <td class="border-left-0">#{{ $project->project_short_code }}</td>
-                            </tr>
-                            <tr>
-                                <td class="bg-light-grey border-right-0 f-w-500">
-                                    @lang('modules.projects.startDate')</td>
-                                <td class="border-left-0">{{ $project->start_date->format(global_setting()->date_format) }}
-                                </td>
-                            </tr>
-                            @if ($project->due_date != null)
-                                <tr>
-                                    <td class="bg-light-grey border-right-0 f-w-500">@lang('Project End Date')
-                                    </td>
-                                    <td class="border-left-0">{{ $project-deadline->format(global_setting()->date_format) }}
-                                    </td>
-                                </tr>
-                            @endif
-                            <tr>
-                                <td class="bg-light-grey border-right-0 f-w-500">
-                                    @lang('Project Type')</td>
-                                <td class="border-left-0">{{ $project->project_type->category_name}}
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
+
+
                 </tr>
                 <tr>
                     <td height="20"></td>
                 </tr>
             </table>
             <table width="100%">
-                <tr class="inv-unpaid">
-                    <td class="f-14 text-dark">
-                        <p class="mb-0 text-left"><span
-                                class="text-dark-grey text-capitalize">@lang("app.client")</span><br>
-                            {{ mb_ucwords($project->client->name) }}<br>
-                              {{ mb_ucwords($project->client->email) }}<br>
-                            {{ mb_ucwords($project->client->clientDetails->company_name) }}<br>
-                            {!! nl2br($project->client->clientDetails->address) !!}</p>
-                    </td>
 
-                </tr>
                 <tr>
                     <td height="30"></td>
                 </tr>
@@ -95,18 +49,11 @@
         </div>
 
         <div class="d-flex flex-column">
-            <h5>@lang('app.subject')</h5>
-            <p class="f-15">{{ $project->project_name }}</p>
+
 
             <h5>@lang('app.description')</h5>
             <div class="ql-editor p-0">{!! $project->project_summary !!}</div>
 
-            @if ($project->project_budget != 0)
-                <div class="text-right pt-3 border-top">
-                    <h4>@lang('Project Budget'):
-                          {{$project->deal->actual_amount}}({{$project->deal->original_currency->currency_code}})</h4>
-                </div>
-            @endif
 
         </div>
 
@@ -160,7 +107,7 @@
                             <i class="fa fa-download f-w-500 mr-2 f-11"></i> @lang('app.download')
                         </a>
                         <!-- <a class="dropdown-item btn-copy" href="javascript:;" data-clipboard-text="route('front.agreement', $project->project_short_code)"><i class="fa fa-copy mr-2"></i>Copy Link</a> -->
-                          <a class="dropdown-item btn-copy" href="javascript:;" data-clipboard-text="https://erp.seopage1.net/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
+                          <a class="dropdown-item btn-copy"  onclick="copyLink()"  data-clipboard-text="https://erp.seopage1.net/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
                     </li>
                 </ul>
             </div>
@@ -174,34 +121,32 @@
     <!-- CARD FOOTER END -->
 </div>
 <!-- INVOICE CARD END -->
-@push('scripts')
 <script src="{{ asset('vendor/jquery/clipboard.min.js') }}"></script>
-<script>
-    $(function() {
-    var clipboard = new ClipboardJS('.btn-copy');
+<script type="text/javascript">
+function copyLink(){
+  var clipboard = new ClipboardJS('.btn-copy');
 
-    clipboard.on('success', function(e) {
-        Swal.fire({
-            icon: 'success',
-            text: '@lang("app.copied")',
-            toast: true,
-            position: 'top-end',
-            timer: 3000,
-            timerProgressBar: true,
-            showConfirmButton: false,
-            customClass: {
-                confirmButton: 'btn btn-primary',
-            },
-            showClass: {
-                popup: 'swal2-noanimation',
-                backdrop: 'swal2-noanimation'
-            },
-        })
-    });
-    });
-
+  clipboard.on('success', function(e) {
+      Swal.fire({
+          icon: 'success',
+          text: '@lang("app.copied")',
+          toast: true,
+          position: 'top-end',
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          customClass: {
+              confirmButton: 'btn btn-primary',
+          },
+          showClass: {
+              popup: 'swal2-noanimation',
+              backdrop: 'swal2-noanimation'
+          },
+      })
+  });
+}
 </script>
-@endpush
+
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
 <script>
     var canvas = document.getElementById('signature-pad');

@@ -166,7 +166,7 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
                         @lang('app.menu.projectTemplate')
                     </x-forms.link-secondary>
                 @endif
-                --}} 
+                --}}
 
 
                 @if ($addProjectPermission == 'all' || $addProjectPermission == 'added' || $addProjectPermission == 'both')

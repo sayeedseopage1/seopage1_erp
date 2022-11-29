@@ -281,10 +281,17 @@ Overview--}}
                 </td>
 
                 <?php
-                      $status_id= App\Models\ProjectStatusSetting::where('status_name',$item->status)->first(); //dd($status_id); ?>
+                      $status_id= App\Models\ProjectStatusSetting::where('status_name',$item->status)->first();
+                       ?>
+                       @if($item->status != null)
                 <td class="f-14" width="20%">
                     <x-status :style="'color:'.$status_id->color" :value="$item->status" />
                 </td>
+                @else
+                <td class="f-14" width="20%">
+                    <x-status :value="$item->status" />
+                </td>
+                @endif
 
                 <td>
                     {{$item->completion_percent}}%
