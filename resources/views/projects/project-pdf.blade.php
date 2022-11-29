@@ -320,34 +320,7 @@
                   <td>26-07-22</td>
 
                   </tr>
-                  <tr>
-                    <td>1</td>
-                  <td>Header And Footer Design</td>
-                  <td>Need header and Footer</td>
-                  <td>26-07-22</td>
-                  <td>26-07-22</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                  <td>Header And Footer Design</td>
-                  <td>Need header and Footer</td>
-                  <td>26-07-22</td>
-                  <td>26-07-22</td>
-                  </tr>
-                  <tr>
-                    <td>1</td>
-                  <td>Header And Footer Design</td>
-                  <td>Need header and Footer</td>
-                  <td>26-07-22</td>
-                  <td>26-07-22</td>
-
-                  </tr>
-
-
-
-
-
-
+                  
 
             </table>
         </td>
