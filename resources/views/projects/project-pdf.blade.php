@@ -301,9 +301,9 @@
         <h5>@lang('Project Deliverables')</h5>
 
         <td width="100%">
-            <table class="text-black mt-1 f-13 b-collapse rightaligned">
+            <table class="bg-white" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
               <thead>
-                  <tr class="bg-light-grey border-right-0 f-w-500">
+                  <tr class="heading-table-left">
                     <th scope="col" class="text-center">#</th>
                     <th scope="col" class="text-center">Deliverable</th>
                     <th scope="col" class="text-center">Description</th>
@@ -343,7 +343,7 @@
                   <td class="text-center">26-07-22</td>
 
                   </tr>
-                
+
 
 
 
