@@ -178,7 +178,7 @@
                             <i class="fa fa-download f-w-500 mr-2 f-11"></i> @lang('app.download')
                         </a>
                         <!-- <a class="dropdown-item btn-copy" href="javascript:;" data-clipboard-text="route('front.agreement', $project->project_short_code)"><i class="fa fa-copy mr-2"></i>Copy Link</a> -->
-                          <a class="dropdown-item btn-copy"  onclick="copyLink()"  data-clipboard-text="http://127.0.0.1:8000/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
+                          <a class="dropdown-item btn-copy"  onclick="copyLink()"  data-clipboard-text="https://erp.seopage1.net/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
                     </li>
                 </ul>
             </div>
