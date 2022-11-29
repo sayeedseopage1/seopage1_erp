@@ -1452,7 +1452,7 @@ if ($pm_count < 2) {
     }
     public function download($id)
     {
-        $this->contract = Project::findOrFail($id);
+        $this->project = Project::findOrFail($id);
       //  $viewPermission = user()->permission('view_project');
         $this->project = Project::with('client', 'client.clientDetails', 'files')->findOrFail($id);
 
