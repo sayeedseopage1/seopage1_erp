@@ -464,41 +464,41 @@
          <table cellpadding="0" cellspacing="0">
            <tbody>
              <tr class="heading">
-               <td>#</td>
-               <td>Deliverable</td>
 
+               <td>Deliverable</td>
+               <td>Description</td>
                <td>From</td>
                <td>To</td>
              </tr>
 
              <tr class="item">
-               <td>1</td>
+            
                <td>Header And Footer Design</td>
-              
+               <td>Need Also the Content</td>
                <td>12-11-22</td>
                <td>12-11-22</td>
              </tr>
 
              <tr class="item">
-               <td>1</td>
+            
                <td>Header And Footer Design</td>
-              
+               <td>Need Also the Content</td>
                <td>12-11-22</td>
                <td>12-11-22</td>
              </tr>
 
              <tr class="item">
-               <td>1</td>
+            
                <td>Header And Footer Design</td>
-              
+               <td>Need Also the Content</td>
                <td>12-11-22</td>
                <td>12-11-22</td>
              </tr>
 
              <tr class="item">
-               <td>1</td>
+            
                <td>Header And Footer Design</td>
-              
+               <td>Need Also the Content</td>
                <td>12-11-22</td>
                <td>12-11-22</td>
              </tr>
