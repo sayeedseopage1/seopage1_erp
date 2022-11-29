@@ -41,15 +41,15 @@
         }
 
         .f-14 {
-            font-size: 11px;
+            font-size: 9px;
         }
 
         .f-15 {
-            font-size: 12px;
+            font-size: 10px;
         }
 
         .f-21 {
-            font-size: 18px;
+            font-size: 12px;
         }
 
         .text-black {
@@ -208,7 +208,7 @@
         .styled-table {
     border-collapse: collapse;
     margin: 25px 0;
-    font-size: 0.9em;
+    font-size: 0.6em;
     font-family: sans-serif;
     min-width: 400px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
