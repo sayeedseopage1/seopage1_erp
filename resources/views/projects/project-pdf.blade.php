@@ -208,9 +208,9 @@
         .styled-table {
     border-collapse: collapse;
     margin: 20px 0;
-    font-size: 0.9em;
+    font-size: 0.7em;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    min-width: 400px;
+    min-width: 500px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .styled-table thead tr {
@@ -328,8 +328,8 @@
     </table>
 
     <div>
-      <h5>@lang('Scope of Work')</h5>
-        <p class="f-15 text-black">Rajat Chakraborty (Seopage1.net) agrees to perform (Website Design Development) and
+
+        <p class="f-15 text-black">Scope of Work: Rajat Chakraborty (Seopage1.net) agrees to perform (Website Design Development) and
           related services specified on this Agreement ("Project Deliverables").</p>
         <h5 class="text-grey text-capitalize">@lang('app.subject')</h5>
         <p class="f-15 text-black text-capitalize">Agreement for Project: {{ $project->project_name }}</p>
