@@ -463,7 +463,7 @@
         <div class="table-box">
          <table cellpadding="0" cellspacing="0">
            <tbody>
-             <tr >
+             <tr class="heading">
                <td>#</td>
                <td>Deliverable</td>
                <td>Description</td>
