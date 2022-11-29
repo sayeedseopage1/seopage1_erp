@@ -301,14 +301,14 @@
         <h5>@lang('Project Deliverables')</h5>
 
         <td width="100%">
-            <table class="bg-white" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
+            <table >
               <thead>
-                  <tr class="heading-table-left">
-                    <th scope="col" class="text-center">#</th>
-                    <th scope="col" class="text-center">Deliverable</th>
-                    <th scope="col" class="text-center">Description</th>
-                    <th scope="col" class="text-center">From</th>
-                    <th scope="col" class="text-center">To</th>
+                  <tr >
+                    <th>#</th>
+                    <th>Deliverable</th>
+                    <th>Description</th>
+                    <th>From</th>
+                    <th>To</th>
 
                   </tr>
                 </thead>
@@ -317,30 +317,30 @@
                     <td>1</td>
                   <td>Header And Footer Design</td>
                   <td>Need header and Footer</td>
-                  <td class="text-center">26-07-22</td>
-                  <td class="text-center">26-07-22</td>
+                  <td>26-07-22</td>
+                  <td>26-07-22</td>
 
                   </tr>
                   <tr>
                     <td>1</td>
                   <td>Header And Footer Design</td>
                   <td>Need header and Footer</td>
-                  <td class="text-center">26-07-22</td>
-                  <td class="text-center">26-07-22</td>
+                  <td>26-07-22</td>
+                  <td>26-07-22</td>
                   </tr>
                   <tr>
                     <td>1</td>
                   <td>Header And Footer Design</td>
                   <td>Need header and Footer</td>
-                  <td class="text-center">26-07-22</td>
-                  <td class="text-center">26-07-22</td>
+                  <td>26-07-22</td>
+                  <td>26-07-22</td>
                   </tr>
                   <tr>
                     <td>1</td>
                   <td>Header And Footer Design</td>
                   <td>Need header and Footer</td>
-                  <td class="text-center">26-07-22</td>
-                  <td class="text-center">26-07-22</td>
+                  <td>26-07-22</td>
+                  <td>26-07-22</td>
 
                   </tr>
 
