@@ -402,7 +402,7 @@
 
        @if ($project->signature)
             <div style="text-align: left; margin-top: 8px;">
-                <h3 class="name" style="margin-bottom: 20px;">@lang('Client Signature')</h3>
+                <h3 class="name" style="margin-bottom: 0px;">@lang('Client Signature')</h3>
                 {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
                 <p>({{ $project->signature->full_name }})</p>
                 <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
