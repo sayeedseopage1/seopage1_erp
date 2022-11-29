@@ -300,7 +300,59 @@
 
         <h5>@lang('Project Deliverables')</h5>
 
-      
+        <td width="100%">
+            <table class="text-black mt-1 f-13 b-collapse rightaligned">
+              <thead>
+                  <tr class="bg-light-grey border-right-0 f-w-500">
+                    <th scope="col" class="text-center">#</th>
+                    <th scope="col" class="text-center">Deliverable</th>
+                    <th scope="col" class="text-center">Description</th>
+                    <th scope="col" class="text-center">From</th>
+                    <th scope="col" class="text-center">To</th>
+
+                  </tr>
+                </thead>
+                <tbody >
+                  <tr>
+                    <td>1</td>
+                  <td>Header And Footer Design</td>
+                  <td>Need header and Footer</td>
+                  <td class="text-center">26-07-22</td>
+                  <td class="text-center">26-07-22</td>
+
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                  <td>Header And Footer Design</td>
+                  <td>Need header and Footer</td>
+                  <td class="text-center">26-07-22</td>
+                  <td class="text-center">26-07-22</td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                  <td>Header And Footer Design</td>
+                  <td>Need header and Footer</td>
+                  <td class="text-center">26-07-22</td>
+                  <td class="text-center">26-07-22</td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                  <td>Header And Footer Design</td>
+                  <td>Need header and Footer</td>
+                  <td class="text-center">26-07-22</td>
+                  <td class="text-center">26-07-22</td>
+
+                  </tr>
+                
+
+
+
+
+                </tbody>
+
+            </table>
+        </td>
+
 
 
         @if ($project->project_budget != 0)
