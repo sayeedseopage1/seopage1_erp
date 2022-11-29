@@ -37,19 +37,19 @@
         }
 
         .f-13 {
-            font-size: 13px;
+            font-size: 10px;
         }
 
         .f-14 {
-            font-size: 14px;
+            font-size: 11px;
         }
 
         .f-15 {
-            font-size: 15px;
+            font-size: 12px;
         }
 
         .f-21 {
-            font-size: 21px;
+            font-size: 18px;
         }
 
         .text-black {
@@ -249,7 +249,7 @@
             <tr>
                 <td><img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
                         class="logo" /></td>
-                <td align="right" class="f-21 text-black font-weight-500 text-uppercase">@lang('Project Agreement')</td>
+                <td align="right" class="f-21 text-black font-weight-700 text-uppercase">@lang('Project Agreement')</td>
             </tr>
             <!-- Table Row End -->
             <!-- Table Row Start -->
