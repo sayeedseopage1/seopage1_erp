@@ -205,174 +205,38 @@
         .logo {
             height: 33px;
         }
+        .styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
 
-        .intro-table {
-          display: flex;
-          justify-content: space-between;
-          margin: 3rem 0 3rem 0;
-          border-top: 1px solid #000000;
-          border-bottom: 1px solid #000000;
-        }
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
 
-        .intro-form {
-          display: flex;
-          flex-direction: column;
-          border-right: 1px solid #000000;
-          width: 50%;
-        }
-
-        .intro-form:last-child {
-          border-right: none;
-        }
-
-        .intro-table-title {
-          font-size: 0.625rem;
-          margin: 0;
-        }
-
-        .intro-form-item {
-          padding: 1.25rem 1.5rem 1.25rem 1.5rem;
-        }
-
-        .intro-form-item:first-child {
-          padding-left: 0;
-        }
-
-        .intro-form-item:last-child {
-          padding-right: 0;
-        }
-
-        .intro-form-item-border {
-          padding: 1.25rem 0 0.75rem 1.5rem;
-          border-bottom: 1px solid #000000;
-        }
-
-        .intro-form-item-border:last-child {
-          border-bottom: none;
-        }
-
-        .form {
-          display: flex;
-          flex-direction: column;
-          margin-top: 6rem;
-        }
-
-        .no-border {
-          border: none;
-        }
-
-        .border {
-          border: 1px solid #000000;
-        }
-
-        .border-bottom {
-          border: 1px solid #000000;
-          border-top: none;
-          border-left: none;
-          border-right: none;
-        }
-
-        .signer {
-          display: flex;
-          justify-content: space-between;
-          gap: 2.5rem;
-          margin: 2rem 0 2rem 0;
-        }
-
-        .signer-item {
-          flex-grow: 1;
-        }
-
-        input {
-          color: #4537de;
-          font-family: "Space Mono", monospace;
-          text-align: center;
-          margin-top: 1.5rem;
-          height: 4rem;
-          width: 100%;
-          box-sizing: border-box;
-        }
-
-        input#date,
-        input#notes {
-          text-align: left;
-        }
-
-        input#signature {
-          height: 8rem;
-        }
-
-        .intro-text {
-          width: 60%;
-        }
-
-        .table-box table,
-        .summary-box table {
-          width: 100%;
-          font-size: 0.625rem;
-        }
-
-        .table-box table {
-          padding-top: 2rem;
-        }
-
-        .table-box td:first-child,
-        .summary-box td:first-child {
-          width: 50%;
-        }
-
-        .table-box td:last-child,
-        .summary-box td:last-child {
-          text-align: right;
-        }
-
-        .table-box table tr.heading td {
-          border-top: 1px solid #000000;
-          border-bottom: 1px solid #000000;
-          height: 1.5rem;
-        }
-
-        .table-box table tr.item td,
-        .summary-box table tr.item td {
-          border-bottom: 1px solid #d7dce4;
-          height: 1.5rem;
-        }
-
-        .summary-box table tr.no-border-item td {
-          border-bottom: none;
-          height: 1.5rem;
-        }
-
-        .summary-box table tr.total td {
-          border-top: 1px solid #000000;
-          border-bottom: 1px solid #000000;
-          height: 1.5rem;
-        }
-
-        .summary-box table tr.item td:first-child,
-        .summary-box table tr.total td:first-child {
-          border: none;
-          height: 1.5rem;
-        }
-
-        #pspdfkit-footer {
-          font-size: 0.5rem;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          font-weight: 500;
-          color: #717885;
-          margin-top: 2.5rem;
-          bottom: 2.5rem;
-          position: absolute;
-          width: 100%;
-        }
-
-        .footer-columns {
-          display: flex;
-          justify-content: space-between;
-          padding-left: 2.5rem;
-          padding-right: 2.5rem;
-        }
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
 
 
     </style>
@@ -420,7 +284,13 @@
                     </table>
                 </td>
             </tr>
-
+            <!-- Table Row End -->
+            <!-- Table Row Start -->
+            <tr>
+                <td height="30"></td>
+            </tr>
+            <!-- Table Row End -->
+            <!-- Table Row Start -->
             <tr>
                 <td colspan="2">
                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -446,67 +316,44 @@
             </tr>
             <!-- Table Row End -->
             <!-- Table Row Start -->
-
+            <tr>
+                <td height="20" colspan="2"></td>
+            </tr>
+            <!-- Table Row End -->
 
         </tbody>
     </table>
 
     <div>
-
-        <p class="f-15 text-black">Scope of Work: Rajat Chakraborty (Seopage1.net) agrees to perform (Website Design Development) and
+      <h5>@lang('Scope of Work')</h5>
+        <p class="f-15 text-black">Rajat Chakraborty (Seopage1.net) agrees to perform (Website Design Development) and
           related services specified on this Agreement ("Project Deliverables").</p>
         <h5 class="text-grey text-capitalize">@lang('app.subject')</h5>
         <p class="f-15 text-black text-capitalize">Agreement for Project: {{ $project->project_name }}</p>
 
         <h5>@lang('Project Deliverables')</h5>
 
-        <div class="table-box">
-         <table cellpadding="0" cellspacing="0">
-           <tbody>
-             <tr class="heading">
-               <td>#</td>
-               <td>Deliverable</td>
-               <td>Description</td>
-               <td>From</td>
-               <td>To</td>
-             </tr>
 
-             <tr class="item">
-               <td>1</td>
-               <td>Header And Footer Design</td>
-               <td>Need Also the Content</td>
-               <td>12-11-22</td>
-               <td>12-11-22</td>
-             </tr>
+          <table class="styled-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Points</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Dom</td>
+            <td>6000</td>
+        </tr>
+        <tr class="active-row">
+            <td>Melissa</td>
+            <td>5150</td>
+        </tr>
+        <!-- and so on... -->
+    </tbody>
+</table>
 
-             <tr class="item">
-               <td>1</td>
-               <td>Header And Footer Design</td>
-               <td>Need Also the Content</td>
-               <td>12-11-22</td>
-               <td>12-11-22</td>
-             </tr>
-
-             <tr class="item">
-               <td>1</td>
-               <td>Header And Footer Design</td>
-               <td>Need Also the Content</td>
-               <td>12-11-22</td>
-               <td>12-11-22</td>
-             </tr>
-
-             <tr class="item">
-               <td>1</td>
-               <td>Header And Footer Design</td>
-               <td>Need Also the Content</td>
-               <td>12-11-22</td>
-               <td>12-11-22</td>
-             </tr>
-
-
-           </tbody>
-         </table>
-       </div>
 
 
 
