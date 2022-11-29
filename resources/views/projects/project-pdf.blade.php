@@ -37,19 +37,19 @@
         }
 
         .f-13 {
-            font-size: 10px;
+            font-size: 12px;
         }
 
         .f-14 {
-            font-size: 9px;
+            font-size: 11px;
         }
 
         .f-15 {
-            font-size: 10px;
+            font-size: 12px;
         }
 
         .f-21 {
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .text-black {
@@ -209,7 +209,7 @@
     border-collapse: collapse;
     margin: 20px 0;
     font-size: 0.9em;
-    font-family: sans-serif;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
     min-width: 400px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
