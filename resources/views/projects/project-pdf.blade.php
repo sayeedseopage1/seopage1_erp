@@ -300,9 +300,9 @@
 
         <h5>@lang('Project Deliverables')</h5>
 
-        <td width="100%">
-            <table >
-              <thead>
+        <td>
+            <table class="text-black mt-1 f-13 b-collapse">
+
                   <tr >
                     <th>#</th>
                     <th>Deliverable</th>
@@ -311,7 +311,7 @@
                     <th>To</th>
 
                   </tr>
-                </thead>
+              
                 <tbody >
                   <tr>
                     <td>1</td>
