@@ -395,7 +395,7 @@
 </table>
 
 
-          <div class="" style="overflow:hidden;">
+          <div class="" >
             @if ($project->signature)
 
                  <div style="text-align: left; margin-top: 8px; width:50%; float:left;">
