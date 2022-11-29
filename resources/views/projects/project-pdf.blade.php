@@ -409,8 +409,8 @@
             </div>
         @endif
            @if ($project->signature)
-        <div >
-            <h3 class="name" >@lang('Provider Signature')</h3>
+        <div style="text-align: right;">
+            <h3 class="name">@lang('Provider Signature')</h3>
             {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
             <p>Rajat Chakraboty</p>
             <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
