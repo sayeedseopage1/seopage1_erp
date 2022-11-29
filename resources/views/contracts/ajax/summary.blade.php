@@ -91,7 +91,13 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                             {!! nl2br(default_address()->address) !!}<br>
                             {{ global_setting()->company_phone }}
                         </p><br>
+                        <p class="mb-0 text-left"><span
+                                class="text-dark-grey text-capitalize">@lang("app.client")</span><br>
+                            {{ mb_ucwords($contract->deal->client_name) }}<br>
+                           {{ mb_ucwords($contract->deal->organization) }}<br>
+                          {{--  {!! nl2br($contract->client->clientDetails->address) !!}</p>--}}
                     </td>
+                  
                     <td align="right">
                         <table class="inv-num-date text-dark f-13 mt-3">
                             <tr>
@@ -107,8 +113,8 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                             </tr>
                             <tr>
                                 <td class="bg-light-grey border-right-0 f-w-500">
-                                  Pipeline Stage</td>
-                                <td class="border-left-0">{{ $contract->deal->pipeline_stage }}
+                                  Deal Name</td>
+                                <td class="border-left-0">{{ $contract->deal->project_name }}
                                 </td>
                             </tr>
                             @if ($contract->actual_amount != 0)
@@ -147,184 +153,13 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                     <td height="20"></td>
                 </tr>
             </table>
-            <table width="100%">
-                <tr class="inv-unpaid">
-                    <td class="f-14 text-dark">
-                        <p class="mb-0 text-left"><span
-                                class="text-dark-grey text-capitalize">@lang("app.client")</span><br>
-                            {{ mb_ucwords($contract->deal->client_name) }}<br>
-                           {{ mb_ucwords($contract->deal->organization) }}<br>
-                          {{--  {!! nl2br($contract->client->clientDetails->address) !!}</p>--}}
-                    </td>
-                    <td align="right">
-                        @if ($contract->company_logo)
-                            <img src="{{ $contract->image_url }}"
-                            alt="{{ mb_ucwords($contract->client->clientDetails->company_name) }}" class="logo" />
-                        @endif
-                    </td>
-                </tr>
-                <tr>
-                    <td height="30"></td>
-                </tr>
-            </table>
+
         </div>
 
         <div class="d-flex flex-column">
 
-            <h5>Project Name</h5>
-            <p class="f-15">{{ $contract->deal->project_name }}</p>
 
-            <br>
 
-
-            <h4>Deal Details From Sales Team</h4>
-            <hr>
-
-            <div class="card bg-light mb-3" style="max-width: 100%">
-          <div class="card-header"><h5>Project Summary</h5></div>
-          <div class="card-body">
-
-            <p class="card-text">{!! $contract->deal->description !!}</p>
-          </div>
-        </div>
-
-
-
-
-            <br>
-
-
-          <div class="card bg-light mb-3" style="max-width: 100%">
-        <div class="card-header"><h5>Freelancer Profile Link</h5></div>
-        <div class="card-body">
-
-          <p class="card-text"><a href="{{$contract->deal->profile_link}}" target="_blank">{{ $contract->deal->profile_link}}</a></p>
-        </div>
-      </div>
-
-
-            <br>
-
-
-          <div class="card bg-light mb-3" style="max-width: 100%">
-        <div class="card-header"><h5>Freelancer Message Link</h5></div>
-        <div class="card-body">
-
-          <p class="card-text"><a href="{{$contract->deal->message_link}}" target="_blank">{{ $contract->deal->message_link}}</a></p>
-        </div>
-      </div>
-
-
-            <br>
-
-
-          <div class="card bg-light mb-3" style="max-width: 100%">
-        <div class="card-header"><h5>Write the what in 2-8 words here
-          (Examples: Website redesign, Shopify website migration to Wix,
-          Creating a 5 page business website in WordPress, Shopify website creation, etc.)</h5></div>
-        <div class="card-body">
-
-          <p class="card-text">{!! $contract->deal->description2 !!}</p>
-        </div>
-      </div>
-
-
-            <br>
-
-
-          <div class="card bg-light mb-3" style="max-width: 100%">
-        <div class="card-header"><h5>Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress
-          website for his new design agency. It should include home, about, his services in
-          one page, blog, and contact. The look and feel should be better than the references.)</h5></div>
-        <div class="card-body">
-
-          <p class="card-text">{!! $contract->deal->description3 !!}</p>
-        </div>
-      </div>
-
-
-            <br>
-
-          <div class="card bg-light mb-3" style="max-width: 100%">
-        <div class="card-header"><h5>Reference websites and what the references are for (Ex: ABC.com
-           is for the color scheme. XYZ.com is for section layouts DEF.com is
-           for header & footer styling. However, none of these can be copied)</h5></div>
-        <div class="card-body">
-
-          <p class="card-text">{!! $contract->deal->description4 !!}</p>
-        </div>
-      </div>
-
-
-            <br>
-
-
-          <div class="card bg-light mb-3" style="max-width: 100%">
-        <div class="card-header"><h5>Any particular focus/concern of the client (Ex: 1. The client is very
-          concerned about the final look & feel so needs to be careful with the design 2.
-          The client is very concerned if the booking functionality will work the way he wants.)</h5></div>
-        <div class="card-body">
-
-          <p class="card-text">{!! $contract->deal->description5 !!}</p>
-        </div>
-      </div>
-
-
-
-
-
-
-          <br>
-
-
-        <div class="card bg-light mb-3" style="max-width: 100%">
-      <div class="card-header"><h5>Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)</h5></div>
-      <div class="card-body">
-
-        <p class="card-text">{!! $contract->deal->description6 !!}</p>
-      </div>
-    </div>
-
-
-
-
-        <br>
-
-
-      <div class="card bg-light mb-3" style="max-width: 100%">
-    <div class="card-header"><h5>Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)</h5></div>
-    <div class="card-body">
-
-      <p class="card-text">{!! $contract->deal->description7 !!}</p>
-    </div>
-  </div>
-
-
-
-
-      <br>
-
-
-    <div class="card bg-light mb-3" style="max-width: 100%">
-  <div class="card-header"><h5>If there is any cross-departmental work involved in this project (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web development) </h5></div>
-  <div class="card-body">
-
-    <p class="card-text">{!! $contract->deal->description8 !!}</p>
-  </div>
-</div>
-
-
-
-
-    <br>
-
-
-  <div class="card bg-light mb-3" style="max-width: 100%">
-<div class="card-header"><h5>Any other notes for the project manager/technical team </h5></div>
-<div class="card-body">
-
-  <p class="card-text">{!! $contract->deal->description9 !!}</p>
-</div>
 </div>
 
 
@@ -333,10 +168,198 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
 
         </div>
 
-      
+
 
     </div>
     <!-- CARD BODY END -->
+  <br>
+
+
+
+      <h4 class="text-center">Deal Details From Sales Team</h4>
+      <hr>
+
+
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Freelancer Profile Link</h4>
+                          <br>
+                          <p><a href="{{ $contract->deal->profile_link}}">{{ $contract->deal->profile_link}}</a></p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Freelancer Message Link</h4>
+                          <br>
+                          <p>{!! $contract->deal->message_link !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description2 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>
+                            Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency.
+                            It should include home, about, his services in one page, blog, and contact. The look and feel should be
+                            better than the references.)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description3 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>
+                            Reference websites and what the references are for (Ex: ABC.com is for the color scheme. XYZ.com is for
+                              section layouts DEF.com is for header & footer styling. However, none of these can be copied)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description4 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>
+                            Any particular focus/concern of the client (Ex: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work
+                            the way he wants.)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description5 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>
+                            Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description6 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description7 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>  If there is any cross-departmental work involved in this project
+                            (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web
+                            development)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description8 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Any other notes for the project manager/technical team</h4>
+                          <br>
+                          <p>{!! $contract->deal->description9 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
     <!-- CARD FOOTER START -->
 
     <!-- CARD FOOTER END -->

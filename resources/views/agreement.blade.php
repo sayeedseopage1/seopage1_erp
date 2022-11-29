@@ -130,18 +130,11 @@
                                   </tr>
                                   <tr>
                                       <td class="bg-light-grey border-right-0 f-w-500">
-                                          @lang('modules.projects.startDate')</td>
-                                      <td class="border-left-0">{{ $project->start_date->format(global_setting()->date_format) }}
+                                          @lang('Project Name')</td>
+                                      <td class="border-left-0 text-capitalize">{{ $project->project_name }}
                                       </td>
                                   </tr>
-                                  @if ($project->due_date != null)
-                                      <tr>
-                                          <td class="bg-light-grey border-right-0 f-w-500">@lang('Project End Date')
-                                          </td>
-                                          <td class="border-left-0">{{ $project-deadline->format(global_setting()->date_format) }}
-                                          </td>
-                                      </tr>
-                                  @endif
+
                                   <tr>
                                       <td class="bg-light-grey border-right-0 f-w-500">
                                           @lang('Project Type')</td>
@@ -174,11 +167,88 @@
                 </div>
 
                 <div class="d-flex flex-column">
+                  <h5>@lang('Scope of Work')</h5>
+                    <p class="f-15 text-black">Rajat Chakraborty (Seopage1.net) agrees to perform (Website Design Development) and
+                      related services specified on this Agreement ("Project Deliverables").</p>
                   <h5>@lang('app.subject')</h5>
-                  <p class="f-15">{{ $project->project_name }}</p>
+                    <p class="f-15 text-black text-capitalize">Agreement for Project: {{ $project->project_name }}</p>
 
-                  <h5>@lang('app.description')</h5>
-                  <div class="ql-editor p-0">{!! $project->project_summary !!}</div>
+                  <h5>@lang('Project Deliverables')</h5>
+
+                  <td width="100%">
+                      <table class="inv-num-date text-dark f-13 mt-3">
+                        <thead>
+                            <tr class="bg-light-grey border-right-0 f-w-500">
+                              <th scope="col" class="text-center">#</th>
+                              <th scope="col" class="text-center">Deliverable</th>
+                              <th scope="col" class="text-center">Description</th>
+                              <th scope="col" class="text-center">From</th>
+                              <th scope="col" class="text-center">To</th>
+
+                            </tr>
+                          </thead>
+                          <tbody >
+                            <tr>
+                              <td>1</td>
+                            <td>Header And Footer Design</td>
+                            <td>Need header and Footer</td>
+                            <td class="text-center">26-07-22</td>
+                            <td class="text-center">26-07-22</td>
+
+                            </tr>
+                            <tr>
+                              <td>1</td>
+                            <td>Header And Footer Design</td>
+                            <td>Need header and Footer</td>
+                            <td class="text-center">26-07-22</td>
+                            <td class="text-center">26-07-22</td>
+                            </tr>
+                            <tr>
+                              <td>1</td>
+                            <td>Header And Footer Design</td>
+                            <td>Need header and Footer</td>
+                            <td class="text-center">26-07-22</td>
+                            <td class="text-center">26-07-22</td>
+                            </tr>
+                            <tr>
+                              <td>1</td>
+                            <td>Header And Footer Design</td>
+                            <td>Need header and Footer</td>
+                            <td class="text-center">26-07-22</td>
+                            <td class="text-center">26-07-22</td>
+
+                            </tr>
+                            <tr>
+                              <td>1</td>
+                            <td>Header And Footer Design</td>
+                            <td>Need header and Footer</td>
+                            <td class="text-center">26-07-22</td>
+                            <td class="text-center">26-07-22</td>
+                            </tr>
+                            <tr>
+                              <td>1</td>
+                            <td>Header And Footer Design</td>
+                            <td>Need header and Footer</td>
+                            <td class="text-center">26-07-22</td>
+                            <td class="text-center">26-07-22</td>
+
+                            </tr>
+                            <tr>
+                              <td>1</td>
+                            <td>Header And Footer Design</td>
+                            <td>Need header and Footer</td>
+                            <td class="text-center">26-07-22</td>
+                            <td class="text-center">26-07-22</td>
+
+                            </tr>
+
+
+
+
+                          </tbody>
+
+                      </table>
+                  </td>
 
                   @if ($project->project_budget != 0)
                       <div class="text-right pt-3 border-top">
@@ -193,7 +263,8 @@
                        <div class="d-flex flex-column">
                            <h6>@lang('modules.estimates.signature')</h6>
                            <img src="{{ $project->signature->signature }}" style="width: 200px;">
-                           <p>({{ $project->signature->full_name }})</p>
+                            <p>{{ $project->signature->full_name }}</p>
+                           <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
                        </div>
                    @endif
 

@@ -227,7 +227,7 @@
 
                             {!! nl2br(default_address()->address) !!}<br>
                             {{ global_setting()->company_phone }}
-                      
+
 
                     </p>
                 </td>
@@ -238,18 +238,11 @@
                             <td class="heading-table-right">#{{ $project->project_short_code }}</td>
                         </tr>
                         <tr>
-                            <td class="heading-table-left">@lang('modules.projects.startDate')</td>
-                            <td class="heading-table-right">{{ $project->start_date->format(global_setting()->date_format) }}
+                            <td class="heading-table-left">@lang('Project Name')</td>
+                            <td class="heading-table-right text-capitalize">{{ $project->project_name }}
                             </td>
                         </tr>
-                        @if ($project->due_date != null)
-                            <tr>
-                                <td class="heading-table-left">@lang('Project Due Date')</td>
-                                <td class="heading-table-right">
-                                    {{ $project->deadline->format(global_setting()->date_format) }}
-                                </td>
-                            </tr>
-                        @endif
+
                         <tr>
                             <td class="heading-table-left">@lang('Project Type')</td>
                             <td class="heading-table-right">{{ $project->project_type->category_name }}
@@ -299,11 +292,89 @@
     </table>
 
     <div>
+      <h5>@lang('Scope of Work')</h5>
+        <p class="f-15 text-black">Rajat Chakraborty (Seopage1.net) agrees to perform (Website Design Development) and
+          related services specified on this Agreement ("Project Deliverables").</p>
         <h5 class="text-grey text-capitalize">@lang('app.subject')</h5>
-        <p class="f-15 text-black">{{ $project->project_name }}</p>
+        <p class="f-15 text-black text-capitalize">Agreement for Project: {{ $project->project_name }}</p>
 
-        <h5 class="text-grey text-capitalize">@lang('app.description')</h5>
-        <p class="f-15 text-black">{!! nl2br(strip_tags($project->project_summary, ['p', 'b', 'strong', 'a'])) !!}</p>
+        <h5>@lang('Project Deliverables')</h5>
+
+        <td width="100%">
+            <table class="inv-num-date text-dark f-13 mt-3">
+              <thead>
+                  <tr class="bg-light-grey border-right-0 f-w-500">
+                    <th scope="col" class="text-center">#</th>
+                    <th scope="col" class="text-center">Deliverable</th>
+                    <th scope="col" class="text-center">Description</th>
+                    <th scope="col" class="text-center">From</th>
+                    <th scope="col" class="text-center">To</th>
+
+                  </tr>
+                </thead>
+                <tbody >
+                  <tr>
+                    <td>1</td>
+                  <td>Header And Footer Design</td>
+                  <td>Need header and Footer</td>
+                  <td class="text-center">26-07-22</td>
+                  <td class="text-center">26-07-22</td>
+
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                  <td>Header And Footer Design</td>
+                  <td>Need header and Footer</td>
+                  <td class="text-center">26-07-22</td>
+                  <td class="text-center">26-07-22</td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                  <td>Header And Footer Design</td>
+                  <td>Need header and Footer</td>
+                  <td class="text-center">26-07-22</td>
+                  <td class="text-center">26-07-22</td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                  <td>Header And Footer Design</td>
+                  <td>Need header and Footer</td>
+                  <td class="text-center">26-07-22</td>
+                  <td class="text-center">26-07-22</td>
+
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                  <td>Header And Footer Design</td>
+                  <td>Need header and Footer</td>
+                  <td class="text-center">26-07-22</td>
+                  <td class="text-center">26-07-22</td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                  <td>Header And Footer Design</td>
+                  <td>Need header and Footer</td>
+                  <td class="text-center">26-07-22</td>
+                  <td class="text-center">26-07-22</td>
+
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                  <td>Header And Footer Design</td>
+                  <td>Need header and Footer</td>
+                  <td class="text-center">26-07-22</td>
+                  <td class="text-center">26-07-22</td>
+
+                  </tr>
+
+
+
+
+                </tbody>
+
+            </table>
+        </td>
+
 
 
         @if ($project->project_budget != 0)
@@ -318,6 +389,7 @@
                 <h2 class="name" style="margin-bottom: 20px;">@lang('app.signature')</h2>
                 {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
                 <p>({{ $project->signature->full_name }})</p>
+                <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
             </div>
         @endif
     </div>

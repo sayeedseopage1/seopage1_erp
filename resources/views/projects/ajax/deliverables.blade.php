@@ -51,20 +51,99 @@
         <div class="d-flex flex-column">
 
 
-            <h5>@lang('app.description')</h5>
-            <div class="ql-editor p-0">{!! $project->project_summary !!}</div>
+          <h5>@lang('Project Deliverables')</h5>
+
+          <td width="80%">
+              <table class="inv-num-date text-dark f-13 mt-3">
+                <thead>
+                    <tr class="bg-light-grey border-right-0 f-w-500">
+                      <th scope="col" class="text-center">#</th>
+                      <th scope="col" class="text-center">Deliverable</th>
+                      <th scope="col" class="text-center">Description</th>
+                      <th scope="col" class="text-center">From</th>
+                      <th scope="col" class="text-center">To</th>
+
+                    </tr>
+                  </thead>
+                  <tbody >
+                    <tr>
+                      <td>1</td>
+                    <td>Header And Footer Design</td>
+                    <td>Need header and Footer</td>
+                    <td class="text-center">26-07-22</td>
+                    <td class="text-center">26-07-22</td>
+
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                    <td>Header And Footer Design</td>
+                    <td>Need header and Footer</td>
+                    <td class="text-center">26-07-22</td>
+                    <td class="text-center">26-07-22</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                    <td>Header And Footer Design</td>
+                    <td>Need header and Footer</td>
+                    <td class="text-center">26-07-22</td>
+                    <td class="text-center">26-07-22</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                    <td>Header And Footer Design</td>
+                    <td>Need header and Footer</td>
+                    <td class="text-center">26-07-22</td>
+                    <td class="text-center">26-07-22</td>
+
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                    <td>Header And Footer Design</td>
+                    <td>Need header and Footer</td>
+                    <td class="text-center">26-07-22</td>
+                    <td class="text-center">26-07-22</td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                    <td>Header And Footer Design</td>
+                    <td>Need header and Footer</td>
+                    <td class="text-center">26-07-22</td>
+                    <td class="text-center">26-07-22</td>
+
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                    <td>Header And Footer Design</td>
+                    <td>Need header and Footer</td>
+                    <td class="text-center">26-07-22</td>
+                    <td class="text-center">26-07-22</td>
+
+                    </tr>
+
+
+
+
+                  </tbody>
+
+              </table>
+          </td>
+
 
 
         </div>
+        <div class="mt-3">
+
+                    @if ($project->signature)
+                           <div class="d-flex flex-column">
+                               <h6>@lang('Client Signature')</h6>
+                               <img src="{{ $project->signature->signature }}" style="width: 200px;">
+                                 <p>{{ $project->signature->full_name }}</p>
+                              <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
+                           </div>
+                       @endif
+        </div>
 
 
-          @if ($project->signature)
-                 <div class="d-flex flex-column">
-                     <h6>@lang('modules.estimates.signature')</h6>
-                     <img src="{{ $project->signature->signature }}" style="width: 200px;">
-                     <p>({{ $project->signature->full_name }})</p>
-                 </div>
-             @endif
 
 
 
@@ -91,15 +170,7 @@
                 <!-- DROPDOWN - INFORMATION -->
                 <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton" tabindex="0">
 
-                    @if (!$project->signature)
-                        <li>
-                            <a class="dropdown-item f-14 text-dark" href="javascript:;" data-toggle="modal"
-                                data-target="#signature-modal">
-                                <i class="fa fa-check f-w-500  mr-2 f-12"></i>
-                                @lang('app.sign')
-                            </a>
-                        </li>
-                    @endif
+
 
                     <li>
                         <a class="dropdown-item f-14 text-dark"
@@ -107,7 +178,7 @@
                             <i class="fa fa-download f-w-500 mr-2 f-11"></i> @lang('app.download')
                         </a>
                         <!-- <a class="dropdown-item btn-copy" href="javascript:;" data-clipboard-text="route('front.agreement', $project->project_short_code)"><i class="fa fa-copy mr-2"></i>Copy Link</a> -->
-                          <a class="dropdown-item btn-copy"  onclick="copyLink()"  data-clipboard-text="https://erp.seopage1.net/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
+                          <a class="dropdown-item btn-copy"  onclick="copyLink()"  data-clipboard-text="http://127.0.0.1:8000/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
                     </li>
                 </ul>
             </div>
