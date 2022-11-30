@@ -343,8 +343,7 @@
             <th>#</th>
             <th>Deliverable</th>
             <th>Description</th>
-            <th>From</th>
-              <th>To</th>
+            <th>Estimated completion date</th>
         </tr>
     </thead>
     <tbody>
@@ -352,43 +351,37 @@
             <td>1</td>
             <td>Header & Footer Design</td>
             <td>Need to develop UI & UIX Design First</td>
-            <td>22-11-22</td>
-            <td>22-11-22</td>
+          <td>Between 26-07-22 & 28-07-22</td>
         </tr>
         <tr>
           <td>2</td>
           <td>Header & Footer Design</td>
           <td>Need to develop UI & UIX Design First</td>
-          <td>22-11-22</td>
-          <td>22-11-22</td>
+          <td>Between 26-07-22 & 28-07-22</td>
         </tr>
         <tr>
           <td>3</td>
           <td>Header & Footer Design</td>
           <td>Need to develop UI & UIX Design First</td>
-          <td>22-11-22</td>
-          <td>22-11-22</td>
+        <td>Between 26-07-22 & 28-07-22</td>
         </tr>
         <tr>
           <td>4</td>
           <td>Header & Footer Design</td>
           <td>Need to develop UI & UIX Design First</td>
-          <td>22-11-22</td>
-          <td>22-11-22</td>
+          <td>Between 26-07-22 & 28-07-22</td>
         </tr>
         <tr>
           <td>5</td>
           <td>Header & Footer Design</td>
           <td>Need to develop UI & UIX Design First</td>
-          <td>22-11-22</td>
-          <td>22-11-22</td>
+        <td>Between 26-07-22 & 28-07-22</td>
         </tr>
         <tr>
           <td>6</td>
           <td>Header & Footer Design</td>
           <td>Need to develop UI & UIX Design First</td>
-          <td>22-11-22</td>
-          <td>22-11-22</td>
+          <td>Between 26-07-22 & 28-07-22</td>
         </tr>
         <!-- and so on... -->
     </tbody>

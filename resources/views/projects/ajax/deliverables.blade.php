@@ -60,8 +60,8 @@
                       <th scope="col" class="text-center">#</th>
                       <th scope="col" class="text-center">Deliverable</th>
                       <th scope="col" class="text-center">Description</th>
-                      <th scope="col" class="text-center">From</th>
-                      <th scope="col" class="text-center">To</th>
+                      <th scope="col" class="text-center">Estimated completion date</th>
+
 
                     </tr>
                   </thead>
@@ -70,53 +70,53 @@
                       <td>1</td>
                     <td>Header And Footer Design</td>
                     <td>Need header and Footer</td>
-                    <td class="text-center">26-07-22</td>
-                    <td class="text-center">26-07-22</td>
+                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
+
 
                     </tr>
                     <tr>
                       <td>1</td>
                     <td>Header And Footer Design</td>
                     <td>Need header and Footer</td>
-                    <td class="text-center">26-07-22</td>
-                    <td class="text-center">26-07-22</td>
+
+                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
                     </tr>
                     <tr>
                       <td>1</td>
                     <td>Header And Footer Design</td>
                     <td>Need header and Footer</td>
-                    <td class="text-center">26-07-22</td>
-                    <td class="text-center">26-07-22</td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                    <td>Header And Footer Design</td>
-                    <td>Need header and Footer</td>
-                    <td class="text-center">26-07-22</td>
-                    <td class="text-center">26-07-22</td>
+                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
 
                     </tr>
                     <tr>
                       <td>1</td>
                     <td>Header And Footer Design</td>
                     <td>Need header and Footer</td>
-                    <td class="text-center">26-07-22</td>
-                    <td class="text-center">26-07-22</td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                    <td>Header And Footer Design</td>
-                    <td>Need header and Footer</td>
-                    <td class="text-center">26-07-22</td>
-                    <td class="text-center">26-07-22</td>
+
+                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
 
                     </tr>
                     <tr>
                       <td>1</td>
                     <td>Header And Footer Design</td>
                     <td>Need header and Footer</td>
-                    <td class="text-center">26-07-22</td>
-                    <td class="text-center">26-07-22</td>
+                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
+
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                    <td>Header And Footer Design</td>
+                    <td>Need header and Footer</td>
+                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
+
+
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                    <td>Header And Footer Design</td>
+                    <td>Need header and Footer</td>
+                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
+
 
                     </tr>
 
@@ -171,14 +171,16 @@
                 <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton" tabindex="0">
 
 
-
+                  <?php
+                  $url= url('/');
+                   ?>
                     <li>
                         <a class="dropdown-item f-14 text-dark"
                             href="{{ route('projects.download', $project->id) }}">
                             <i class="fa fa-download f-w-500 mr-2 f-11"></i> @lang('app.download')
                         </a>
                         <!-- <a class="dropdown-item btn-copy" href="javascript:;" data-clipboard-text="route('front.agreement', $project->project_short_code)"><i class="fa fa-copy mr-2"></i>Copy Link</a> -->
-                          <a class="dropdown-item btn-copy"  onclick="copyLink()"  data-clipboard-text="https://erp.seopage1.net/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
+                          <a class="dropdown-item btn-copy"  onclick="copyLink()"  data-clipboard-text="{{$url}}/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
                     </li>
                 </ul>
             </div>

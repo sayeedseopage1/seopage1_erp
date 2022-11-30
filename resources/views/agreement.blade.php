@@ -167,8 +167,8 @@
                 </div>
 
                 <div class="d-flex flex-column">
-                  <h5>@lang('Scope of Work')</h5>
-                    <p class="f-15 text-black">Rajat Chakraborty (Seopage1.net) agrees to perform (Website Design Development) and
+
+                    <p class="f-15 text-black">Scope of Work: Seopage1.net agrees to perform (Website Design Development) and
                       related services specified on this Agreement ("Project Deliverables").</p>
                   <h5>@lang('app.subject')</h5>
                     <p class="f-15 text-black text-capitalize">Agreement for Project: {{ $project->project_name }}</p>
@@ -182,8 +182,8 @@
                               <th scope="col" class="text-center">#</th>
                               <th scope="col" class="text-center">Deliverable</th>
                               <th scope="col" class="text-center">Description</th>
-                              <th scope="col" class="text-center">From</th>
-                              <th scope="col" class="text-center">To</th>
+                              <th scope="col" class="text-center">Estimated completion date</th>
+
 
                             </tr>
                           </thead>
@@ -192,53 +192,46 @@
                               <td>1</td>
                             <td>Header And Footer Design</td>
                             <td>Need header and Footer</td>
-                            <td class="text-center">26-07-22</td>
-                            <td class="text-center">26-07-22</td>
+                          <td class="text-center">Between 26-07-22 & 28-07-22</td>
 
                             </tr>
                             <tr>
                               <td>1</td>
                             <td>Header And Footer Design</td>
                             <td>Need header and Footer</td>
-                            <td class="text-center">26-07-22</td>
-                            <td class="text-center">26-07-22</td>
+                          <td class="text-center">Between 26-07-22 & 28-07-22</td>
                             </tr>
                             <tr>
                               <td>1</td>
                             <td>Header And Footer Design</td>
                             <td>Need header and Footer</td>
-                            <td class="text-center">26-07-22</td>
-                            <td class="text-center">26-07-22</td>
+                          <td class="text-center">Between 26-07-22 & 28-07-22</td>
                             </tr>
                             <tr>
                               <td>1</td>
                             <td>Header And Footer Design</td>
                             <td>Need header and Footer</td>
-                            <td class="text-center">26-07-22</td>
-                            <td class="text-center">26-07-22</td>
+                          <td class="text-center">Between 26-07-22 & 28-07-22</td>
 
                             </tr>
                             <tr>
                               <td>1</td>
                             <td>Header And Footer Design</td>
                             <td>Need header and Footer</td>
-                            <td class="text-center">26-07-22</td>
-                            <td class="text-center">26-07-22</td>
+                          <td class="text-center">Between 26-07-22 & 28-07-22</td>
                             </tr>
                             <tr>
                               <td>1</td>
                             <td>Header And Footer Design</td>
                             <td>Need header and Footer</td>
-                            <td class="text-center">26-07-22</td>
-                            <td class="text-center">26-07-22</td>
+                          <td class="text-center">Between 26-07-22 & 28-07-22</td>
 
                             </tr>
                             <tr>
                               <td>1</td>
                             <td>Header And Footer Design</td>
                             <td>Need header and Footer</td>
-                            <td class="text-center">26-07-22</td>
-                            <td class="text-center">26-07-22</td>
+                          <td class="text-center">Between 26-07-22 & 28-07-22</td>
 
                             </tr>
 
