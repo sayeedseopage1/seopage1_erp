@@ -8,6 +8,7 @@
      alpha/css/bootstrap.css"
             rel="stylesheet"
         />
+          <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -19,6 +20,9 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css'><link rel="stylesheet" href="{{asset('custom/mobilec/style.css')}}">
+
+
+
 
     </head>
     <body>
@@ -35,7 +39,7 @@
                         <form class="" action="{{route('client-submission')}}" method="post">
                             @csrf
 
-                            <input type="hidden" name="decrypt" value="{{$decrypt}}" />
+                            <input type="hidden" name="deal_id" value="{{$deal->id}}" />
 
                             <div class="row">
                                 <div class="col-md-12">
@@ -75,7 +79,7 @@
                                 <textarea class="form-control" name="other_platform" id="platform" placeholder="Leave a comment here"></textarea>
 
                             </div>
-                      {{--      <div class="mt-3">
+                        {{--    <div class="mt-3">
                                 <label for="floatingTextarea">
                                     <strong>
                                       What time of the day should we primarily reach out to you for any queries, updates, etc. & what is your current timezone? (optional)
@@ -83,8 +87,8 @@
                                 </label>
                                 <label for="time_zone">Time Zone</label>
  
-	<select  class="form-control custom-select mt-2">
-		<option value="Africa/Abidjan">Africa/Abidjan GMT+0:00</option>
+	<select  class="form-control mt-2 js-Selector">
+		<!-- <option value="Africa/Abidjan">Africa/Abidjan GMT+0:00</option>
 		<option value="Africa/Accra">Africa/Accra GMT+0:00</option>
 		<option value="Africa/Addis_Ababa">Africa/Addis_Ababa GMT+3:00</option>
 		<option value="Africa/Algiers">Africa/Algiers GMT+1:00</option>
@@ -711,7 +715,7 @@
 		<option value="PRT">PRT GMT-4:00</option>
 		<option value="PST">PST GMT-8:00</option>
 		<option value="SST">SST GMT+11:00</option>
-		<option value="VST">VST GMT+7:00</option>
+		<option value="VST">VST GMT+7:00</option> -->
   </select>
 
 
@@ -793,7 +797,10 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" charset="utf-8"></script>
         <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput-jquery.min.js'></script><script  src="{{asset('custom/mobilec/script.js')}}"></script>
-
+        <script src='https://momentjs.com/downloads/moment.js'></script>
+      <script src='https://momentjs.com/downloads/moment-timezone-with-data.js'></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'></script><script  src="{{asset('custom/timezone/script.js')}}"></script>
         <script>
         $(document).ready(function(){
 

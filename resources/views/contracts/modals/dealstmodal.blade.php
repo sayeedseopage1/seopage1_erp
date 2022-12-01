@@ -6,7 +6,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"  id="exampleModalLabel">Select Deal Stage</h5>
+        <h5 class="modal-title"  id="exampleModalLabel">Convert Lead to Deal (Contact Made)</h5>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <form class="" action="{{route('deal-stage')}}" method="post">
@@ -22,10 +22,8 @@
                                           <label for="input-state-2" class="form-label"><strong>Select Status <span style="color:red;">*<span></strong></label>
                                             <select class="form-select" name="deal_stage" aria-label="Default select example">
 
-                                              <option value="0">Contact Made</option>
-                                              <option value="1">Requirements Defined</option>
-                                              <option value="2">Proposal Made</option>
-                                                <option value="3">Negotiation Started</option>
+                                              <option selected value="0">Contact Made</option>
+
                                             </select>
 
 

@@ -1,9 +1,10 @@
 @extends('layouts.app')
 
 @section('filter-section')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
 
     <!-- FILTER START -->
     <!-- PROJECT HEADER START -->
@@ -31,11 +32,62 @@
 
 @push('styles')
     <script src="{{ asset('vendor/jquery/frappe-charts.min.iife.js') }}"></script>
+    <style>
+        .seopage_card {
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+            padding: 5%;
+            margin: 5% auto;
+            display: block;
+            border-radius: 30px;
+        }
+        .details-seopage1 {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ddd;
+            padding: 8px 0;
+        }
+        .details-seopage1 h4{
+            font-family: Poppins;
+            font-size: 22px;
+            font-weight: normal;
+            line-height: 1.48;
+            text-align: left;
+            color: #41b4e1;
+        }
+        .details-seopage1 p{
+            font-size: 16px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+            text-align: left;
+            color: #6a6a6a;
+        }
+        .details-seopage1 a{
+            font-size: 16px;
+            font-weight: normal;
+            line-height: 1.5;
+            text-align: left;
+            color: #41b4e1;
+            text-decoration: none;
+        }
+        .details-seopage1 p span {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .details-seopage1 i.fa-regular.fa-copy {
+            color: #41b4e1 !important;
+            font-size: 18px;
+        }
+    </style>
+
 @endpush
 
 @section('content')
 
-    <div class="content-wrapper border-top-0 client-detail-wrapper">
+  {{--  <div class="content-wrapper border-top-0 client-detail-wrapper">
       <div class="card border-0 invoice">
 
           <!-- CARD BODY START -->
@@ -187,12 +239,117 @@
           </div>
           <!-- CARD FOOTER END -->
       </div>
-    </div>
+    </div> --}}
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2"></div>
+                @if($client != null)
+                <div class="col-md-8 seopage_card">
+                    <h3 class="text-center" style="color:#41b4e1;font-weight: 600;"> Clients Data Details</h3>
+
+
+                      <div class="details-seopage1">
+                        <h4>Client User Neme</h4>
+                        <p>{{$client->client_username}}</p>
+                      </div>
+
+                      <div class="details-seopage1">
+                        <h4>Client Email</h4>
+                        <p>{{$client->client_email}}</p>
+                      </div>
+
+                      <div class="details-seopage1">
+                        <h4>Client Phone</h4>
+                        <p>{{$client->client_phone}}</p>
+                      </div>
+
+                      <div class="details-seopage1">
+                        <h4>Client WatsApp ID (For Future Communation)!</h4>
+                        <p>{!!$client->client_whatsapp!!}</p>
+                      </div>
+
+                      <div class="details-seopage1">
+                        <h4>Client's Avilable Platform</h4>
+                        <p>{!!$client->other_platform!!}</p>
+                      </div>
+
+                      <div class="details-seopage1">
+                        <h4>Client's Message</h4>
+                        <p>{!!$client->message!!}</p>
+                      </div>
+
+                      <div class="details-seopage1 py-4">
+                        <?php
+                        $url= url('/');
+                        $deal_url = $url.'/'.'deals/'.$deal->hash;
+                        //dd($deal_url);
+                         ?>
+                        <span>
+                          <input type="text" readonly class="form-control"  value="{{$url}}/deals/{{$deal->deal_id}}" id="{{$deal->deal_id}}">
+
+                        </span>
+                            <button type="button" class="btn btn-info mt-3" onclick="myFunction{{$deal->hash}}()"><i class="fa-solid fa-copy"></i></button>
+
+
+                      </div>
+                </div>
+                @else
+                <div class="col-md-8 seopage_card">
+                    <h3 class="text-center" style="color:#41b4e1;font-weight: 600;"> Clients Data Details</h3>
+
+
+                      <div class="details-seopage1">
+                        <h4>Client User Neme</h4>
+                        <p></p>
+                      </div>
+
+                      <div class="details-seopage1">
+                        <h4>Client Email</h4>
+                        <p></p>
+                      </div>
+
+                      <div class="details-seopage1">
+                        <h4>Client Phone</h4>
+                        <p></p>
+                      </div>
+
+                      <div class="details-seopage1">
+                        <h4>Client WatsApp ID (For Future Communation)!</h4>
+                        <p></p>
+                      </div>
+
+                      <div class="details-seopage1">
+                        <h4>Client's Avilable Platform</h4>
+                        <p></p>
+                      </div>
+
+                      <div class="details-seopage1">
+                        <h4>Client's Message</h4>
+                        <p></p>
+                      </div>
+
+                      <div class="details-seopage1 py-4">
+
+                        <span>
+                          <h4 class="text-center" style="color:red !important;"> Client hasn't Responsed Yet!</h4>
+
+                        </span>
+
+
+
+                      </div>
+                </div>
+                @endif
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+    </section>
 
     <script type="text/javascript">
     function myFunction{{$deal->hash}}() {
       // Get the text field
-      var copyText = document.getElementById("{{$deal->hash}}");
+      var copyText = document.getElementById("{{$deal->deal_id}}");
 
       // Select the text field
       copyText.select();
@@ -203,6 +360,7 @@
 
       // Alert the copied text
       alert("Copied the text: " + copyText.value);
+
     }
 
     </script>
@@ -244,5 +402,24 @@
       		toastr.warning("{{ session('warning') }}");
       @endif
     </script>
+    <script>
+        const textElement = document.getElementById("textcopyseopage1");
+        const copyButton = document.getElementById("copy");
+
+        const copyText = (e) => {
+        window.getSelection().selectAllChildren(textElement);
+        document.execCommand("copy");
+        e.target.setAttribute("tooltip", "Copied! ✅");
+        };
+
+        const resetTooltip = (e) => {
+        e.target.setAttribute("tooltip", "Copy to clipboard");
+        };
+
+        copyButton.addEventListener("click", (e) => copyText(e));
+        copyButton.addEventListener("mouseover", (e) => resetTooltip(e));
+
+    </script>
+
 
 @endsection

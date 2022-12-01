@@ -329,7 +329,7 @@
 
     <div>
 
-        <p class="f-15 text-black">Scope of Work: Rajat Chakraborty (Seopage1.net) agrees to perform (Website Design Development) and
+        <p class="f-15 text-black">Scope of Work: Seopage1.net agrees to perform (Website Design Development) and
           related services specified on this Agreement ("Project Deliverables").</p>
         <h5 class="text-grey text-capitalize">@lang('app.subject')</h5>
         <p class="f-15 text-black text-capitalize">Agreement for Project: {{ $project->project_name }}</p>

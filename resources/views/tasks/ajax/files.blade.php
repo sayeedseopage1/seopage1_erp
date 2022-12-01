@@ -21,21 +21,21 @@ $deleteTaskCommentPermission = user()->permission('delete_task_comments');
 
 <!-- TAB CONTENT START -->
 <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="nav-email-tab">
-  
+
   @if ($addTaskCommentPermission == 'all'
   || ($addTaskCommentPermission == 'added' && $task->added_by == user()->id)
   || ($addTaskCommentPermission == 'owned' && in_array(user()->id, $taskUsers))
   || ($addTaskCommentPermission == 'both' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id))
   )
-      <div class="row p-20">
+    {{--  <div class="row p-20">
           <div class="col-md-12">
               <a class="f-15 f-w-500" href="javascript:;" id="add-comment"><i
                       class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
                   @lang('modules.tasks.comment')</a>
           </div>
-      </div>
+      </div> --}}
 
-      <x-form id="save-comment-data-form" class="d-none">
+      <x-form id="save-comment-data-form" >
           <div class="col-md-12 p-20 ">
               <div class="media">
                   <img src="{{ user()->image_url }}" class="align-self-start mr-3 taskEmployeeImg rounded"
@@ -65,14 +65,14 @@ $deleteTaskCommentPermission = user()->permission('delete_task_comments');
     )
         <div class="p-20">
 
-            <div class="row">
+          {{--<div class="row">
                 <div class="col-md-12">
                     <a class="f-15 f-w-500" href="javascript:;" id="add-task-file"><i
                             class="icons icon-plus font-weight-bold mr-1"></i>@lang('modules.projects.uploadFile')</a>
                 </div>
-            </div>
+            </div> --}}
 
-            <x-form id="save-taskfile-data-form" class="d-none">
+            <x-form id="save-taskfile-data-form" >
                 <input type="hidden" name="task_id" value="{{ $task->id }}">
                 <div class="row">
                     <div class="col-md-12">

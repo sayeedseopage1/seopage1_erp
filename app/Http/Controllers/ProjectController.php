@@ -576,7 +576,7 @@ if ($pm_count < 2) {
      */
     public function update(UpdateProject $request, $id)
     {
-      // /dd($request);
+    //  dd($request->all());
         $project = Project::findOrFail($id);
         $project->project_name = $request->project_name;
         $project->project_short_code = $request->project_code;

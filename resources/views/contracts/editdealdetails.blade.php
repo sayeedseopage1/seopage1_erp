@@ -159,7 +159,7 @@
                                ?>
 
 
-                                <label for="exampleFormControlInput1">Create Milestone <span style="color:red;">*</span></label>
+                                <label for="exampleFormControlInput1">Milestones <span style="color:red;">*</span></label>
                               <div class="input-group mb-3 w-100">
                                 <div class="milestone-wrapper d-flex align-items-center flex-wrap form-control" id="milestone_value"></div>
 

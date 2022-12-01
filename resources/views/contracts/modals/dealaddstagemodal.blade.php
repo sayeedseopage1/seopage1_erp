@@ -1,6 +1,4 @@
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-
 <div class="modal fade" id="dealaddstagemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -15,7 +13,7 @@
          ?>
         <input type="hidden" name="lead_id" value="{{$lead->id}}">
         <input type="hidden" name="date" value="{{$date}}">
-        <input type="hidden" name="id" value="{{$deal->id}}">
+        <input type="hidden" name="id" value="{{$lead_id->id}}">
 
       <div class="modal-body">
 
@@ -24,14 +22,14 @@
                               <div class="col-md-6">
                                 <div class="mt-3">
                                     <label for="input-state-2" class="form-label"><strong>Deal ID <span style="color:red;">*<span></strong></label>
-                                    <input name="deal_id" value="{{$deal->short_code}}" readonly id="input-state-2" type="text" class="form-control" placeholder="Enter Client Name" required>
+                                    <input name="deal_id" value="{{$lead_id->short_code}}" readonly id="input-state-2" type="text" class="form-control height-35 f-14" placeholder="Enter Client Name" required>
 
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="mt-3">
                                     <label for="input-state-2" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong></label>
-                                    <input name="client_name" id="input-state-2" type="text" class="form-control @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
+                                    <input name="client_name" id="input-state-2" type="text" class="form-control height-35 f-14 @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
 
                                 </div>
                                 @error('client_name')
@@ -47,7 +45,7 @@
                               <div class="col-md-6">
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Client Username <span style="color:red;">*<span></strong></label>
-                                    <input name="user_name" id="input-state-3" type="text" class="form-control @error('user_name') is-invalid @enderror" placeholder="Enter Client Username" >
+                                    <input name="user_name" id="input-state-3" type="text" class="form-control height-35 f-14 @error('user_name') is-invalid @enderror" placeholder="Enter Client Username" >
 
                                 </div>
                                 @error('user_name')
@@ -57,10 +55,10 @@
                                 @enderror
                               </div>
 
-                              <div class="col-md-6">
+                              <div class="col-md-12">
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Project Name <span style="color:red;">*<span></strong></label>
-                                    <input name="project_name" value="{{$lead_id->client_name}}" readonly id="input-state-3" type="text" class="form-control" placeholder="Enter Project Name" required>
+                                    <input name="project_name" value="{{$lead->client_name}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                 </div>
                               </div>
@@ -69,21 +67,18 @@
 
                             <div class="mt-3">
                                 <label for="input-state-3" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong></label>
-                                <input name="amount" value="{{$lead_id->actual_value}}" id="input-state-3" type="number" class="form-control" placeholder="Enter Amount" required>
+                                <input name="amount" value="{{$lead->actual_value}}" id="input-state-3" type="number" class="form-control height-35 f-14" placeholder="Enter Amount" required>
 
                             </div>
                               <div class="mt-3">
                                 <?php
-                                  $currencies= App\Models\Currency::all();
+                                  $currencies= App\Models\Currency::where('id',$lead->original_currency_id)->first();
                                  ?>
                                  <label for="input-state-3" class="form-label"><strong>Currency <span style="color:red;">*<span></strong></label>
-                            <select class="form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id">
-                                <option selected value="{{$lead_id->original_currency_id}}">({{$lead_id->original_currency->currency_code}})</option>
+                            <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id">
+                                <option selected value="{{$currencies->id}}">({{$currencies->currency_code}})</option>
 
-                                @foreach($currencies as $currency)
-                                <option value="{{$currency->id}}">({{$currency->currency_code}})</option>
 
-                                @endforeach
                               </select>
                               </div>
 

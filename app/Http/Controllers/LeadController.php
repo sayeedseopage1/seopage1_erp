@@ -126,6 +126,8 @@ class LeadController extends AccountBaseController
     }
     public function DealStageUpdate(Request $request)
     {
+    //  dd($request);
+
 
       $deal_stage= DealStage::where('id',$request->id)->first();
       if ($deal_stage->deal_stage == 3 && $request->won_lost == "No") {

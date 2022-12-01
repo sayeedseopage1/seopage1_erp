@@ -220,13 +220,6 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
                 {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
 
 
-
-
-
-
-
-
-
         </div>
         <!-- Task Box End -->
     </div>

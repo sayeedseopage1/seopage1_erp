@@ -67,7 +67,7 @@
                     <div class="row" style="margin-left:40px;">
 
                       <div class="col-md-10">
-                          <input type="text" class="form-control"  value="{{$url}}/deals/{{$deal->hash}}" id="{{$deal->hash}}">
+                          <input type="text" class="form-control"  value="{{$url}}/deals/{{$deal->deal_id}}" id="{{$deal->deal_id}}">
                       </div>
                       <div class="col-md-2">
                               <button type="button" class="btn btn-info" onclick="myFunction{{$deal->hash}}()"><i class="fa-solid fa-copy"></i></button>
@@ -168,7 +168,7 @@
                                ?>
 
 
-                                <label for="exampleFormControlInput1">Create Milestone <span style="color:red;">*</span></label>
+                                <label for="exampleFormControlInput1">Milestones <span style="color:red;">*</span></label>
                               <div class="input-group mb-3 w-100">
                                 <div class="milestone-wrapper d-flex align-items-center flex-wrap form-control" id="milestone_value"></div>
 
@@ -428,7 +428,7 @@
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-    
+
     <script>
     $(document).ready(function() {
       $('#summary').summernote();
@@ -473,7 +473,7 @@
     <script type="text/javascript">
     function myFunction{{$deal->hash}}() {
       // Get the text field
-      var copyText = document.getElementById("{{$deal->hash}}");
+      var copyText = document.getElementById("{{$deal->deal_id}}");
 
       // Select the text field
       copyText.select();

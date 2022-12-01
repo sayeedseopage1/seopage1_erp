@@ -81,18 +81,19 @@ class HomeController extends Controller
     }
     public function deal($key)
     {
+      //dd($key);
 
-      $decrypt= Crypt::decrypt($key);
-      //dd($decrypt);
+      $deal= Deal::where('deal_id',$key)->first();
+    //dd($deal);
 
-      return view('client',compact('decrypt'));
+      return view('client',compact('deal'));
     }
     public function ClientForm(Request $request)
     {
 
       //dd($request);
       $client = new ClientForm();
-      $client->deal_id=$request->decrypt;
+      $client->deal_id=$request->deal_id;
       $client->client_username= $request->user_name;
       $client->client_email= $request->email;
       $client->client_phone= $request->client_phone;
@@ -100,7 +101,7 @@ class HomeController extends Controller
       $client->other_platform= $request->other_platform;
       $client->message= $request->message;
       $client->timezone= $request->timezone;
-      $client->check= $request->check;
+      $client->checklist= $request->check;
       $client->save();
       $deal= Deal::find($client->deal_id);
       //dd($deal);
