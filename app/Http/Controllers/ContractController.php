@@ -449,6 +449,8 @@ class ContractController extends AccountBaseController
         $deal = new Deal();
         $deal->deal_id = $request->deal_id;
         $deal->project_name = $request->project_name;
+        $deal->profile_link= $request->profile_link;
+        $deal->message_link= $request->message_link;
         $deal->original_currency_id= $request->original_currency_id;
         $deal->currency_id= 1;
         $deal->actual_amount=  $request->amount;
@@ -642,7 +644,7 @@ class ContractController extends AccountBaseController
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'cost' => 'required',
-            'summary' => 'required',
+
             'project_id' => 'required',
 
         ]);
@@ -655,6 +657,7 @@ class ContractController extends AccountBaseController
             $milestone = new ProjectMilestone();
             $milestone->milestone_title = $request->title;
             $milestone->project_id = $request->project_id;
+            $milestone->milestone_type = $request->milestone_type;
 
             $milestone->actual_cost=  $request->cost;
             $project= Project::where('id',$request->project_id)->first();
@@ -698,7 +701,7 @@ class ContractController extends AccountBaseController
       $validator = Validator::make($request->all(), [
           'title' => 'required',
           'cost' => 'required',
-          'summary' => 'required',
+
 
 
       ]);
@@ -724,6 +727,7 @@ class ContractController extends AccountBaseController
                       $milestone->cost = ($request->cost)/$currency->exchange_rate;
                       $milestone->summary = $request->summary;
                       $milestone->currency_id = 1;
+                      $milestone->milestone_type = $request->milestone_type;
 
                       $milestone->update();
                       return response()->json([

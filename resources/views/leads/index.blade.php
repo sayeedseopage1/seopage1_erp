@@ -23,7 +23,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
         <div class="d-block d-lg-flex d-md-flex justify-content-between action-bar">
             <div id="table-actions" class="flex-grow-1 align-items-center">
                 @if ($addLeadPermission == 'all' || $addLeadPermission == 'added')
-                    <x-forms.link-primary :link="route('leads.create')" class="mr-3 openRightModal float-left mb-2 mb-lg-0 mb-md-0" icon="plus">
+                    <x-forms.link-primary :link="url('/account/leads/create')" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" icon="plus">
                         @lang('app.add')
                         @lang('app.lead')
                     </x-forms.link-primary>
@@ -72,9 +72,9 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
         <!-- Task Box Start -->
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
           @if(Session::has('status_updated'))
-              <div class="alert alert-success show mb-2" role="alert">Success</div>
+              <div class="alert alert-success show mb-2" role="alert">{{Session::get('status_updated')}}</div>
               <div>
-                  {{Session::get('status_updated')}}
+
               </div>
               @endif
 

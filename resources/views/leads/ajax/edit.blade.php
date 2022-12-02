@@ -55,9 +55,13 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
 
 
 
-                    <div class="col-lg-4 col-md-6">
+                    <div class="col-lg-4 col-md-3">
                         <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Project') .' '. __('Budget')"
                                         fieldName="value" fieldId="value" :fieldValue="$lead->actual_value" />
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Bid') .' '. __('Value')"
+                            fieldName="bid_value" fieldId="bid_value" :fieldValue="$lead->bid_value" />
                     </div>
                     <?php
                      $currencies= App\Models\Currency::all();
@@ -90,16 +94,48 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6 col-md-6 mt-3" id="set-time-estimate-fields">
+                        <label for="">Bidding Delay Time <span style="color:red;">*</span></label>
+                        <div class="form-group">
+
+                            <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14"
+                                name="bidding_minutes" value="{{$lead->bidding_minutes}}" required>
+                            @lang('Minutes')
+                            &nbsp;&nbsp;
+                            <input type="number" min="0" name="bidding_seconds"
+                            class="w-25 height-35 f-14 border rounded p-2" value="{{$lead->bidding_seconds}}">
+                            @lang('Seconds')
+                        </div>
+                    </div>
 
 
 
 
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-3">
                       <div class="form-group">
-                        <label for="exampleFormControlTextarea1">Lead Description <span style="color:red;">*</span></label>
+                        <label for="exampleFormControlTextarea1">Project Description <span style="color:red;">*</span></label>
                         <textarea name="description" value="{{$lead->note}}" class="form-control" id="description" rows="3">{!!$lead->note!!}</textarea>
                       </div>
                     </div>
+                    <div class="col-md-12 mt-3">
+                      <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Cover Letter <span style="color:red;">*</span></label>
+                        <textarea name="description" value="{{$lead->cover_letter}}" class="form-control" id="cover_letter" rows="3">{!!$lead->cover_letter!!}</textarea>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                             <x-forms.text :fieldLabel="__('Bids Insight Page (Screenshot)')" fieldName="insight_screenshot"
+                                 fieldId="insight_screenshot" :fieldPlaceholder="__('Enter the link only')" fieldRequired="true" :fieldValue="$lead->insight_screenshot"/>
+                         </div>
+                         <div class="col-lg-4 col-md-4">
+                                  <x-forms.text :fieldLabel="__('Bids Page (Screenshot)')" fieldName="bidpage_screenshot"
+                                      fieldId="bidpage_screenshot" :fieldPlaceholder="__('Enter the link only')" :fieldValue="$lead->bidpage_screenshot"  fieldRequired="true" />
+                              </div>
+                              <div class="col-lg-4 col-md-4">
+                                       <x-forms.text :fieldLabel="__('Project Page (Screenshot)')" fieldName="projectpage_screenshot"
+                                           fieldId="projectpage_screenshot" :fieldPlaceholder="__('Enter the link only')" :fieldValue="$lead->projectpage_screenshot"  fieldRequired="true" />
+                                   </div>
+
 
                 </div>
 
@@ -107,13 +143,6 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
 
 
                 <div class="row p-20">
-
-
-
-
-
-
-
 
                     @if (isset($fields) && count($fields) > 0)
                         @foreach ($fields as $field)
@@ -373,5 +402,6 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
     }
     $(document).ready(function() {
       $('#description').summernote();
+        $('#cover_letter').summernote();
     });
 </script>

@@ -89,6 +89,9 @@ class LeadController extends AccountBaseController
       $deal->status= 1;
       $deal->deal_stage= $request->deal_stage;
       $deal->comments= $request->comments;
+      $deal->profile_link= $request->profile_link;
+      $deal->message_link= $request->message_link;
+      $deal->client_username= $request->client_username;
       $deal->save();
       $deal_stage= new DealStageChange();
       $deal_stage->lead_id= $lead->id;
@@ -454,6 +457,12 @@ class LeadController extends AccountBaseController
       $lead->note= $request->description;
       $lead->status_id= 1;
       $lead->currency_id= 1;
+      $lead->bidding_minutes= $request->bidding_minutes;
+      $lead->bidding_seconds= $request->bidding_seconds;
+      $lead->cover_letter= $request->cover_letter;
+      $lead->insight_screenshot= $request->insight_screenshot;
+      $lead-> bidpage_screenshot= $request-> bidpage_screenshot;
+      $lead->projectpage_screenshot =$request->projectpage_screenshot;
 
       $lead->save();
       $lead_agent= new LeadAgent();
@@ -491,6 +500,12 @@ class LeadController extends AccountBaseController
       $lead->note= $request->description;
       $lead->status_id= $request->status;
       $lead->currency_id= 1;
+      $lead->bidding_minutes= $request->bidding_minutes;
+      $lead->bidding_seconds= $request->bidding_seconds;
+      $lead->cover_letter= $request->cover_letter;
+      $lead->insight_screenshot= $request->insight_screenshot;
+      $lead-> bidpage_screenshot= $request-> bidpage_screenshot;
+      $lead->projectpage_screenshot =$request->projectpage_screenshot;
     //  $lead->agent_id =Auth::id();
       $lead->save();
       return redirect('/account/leads/')->with('messages.LeadAddedUpdate');
@@ -588,6 +603,8 @@ class LeadController extends AccountBaseController
         $lead->client_name = $request->client_name;
         $lead->client_email = $request->client_email;
         $lead->mobile = $request->mobile;
+
+
         $lead->note = str_replace('<p><br></p>', '', trim($request->note));
         $lead->next_follow_up = $request->next_follow_up;
         $lead->agent_id = $request->agent_id;
@@ -720,6 +737,12 @@ class LeadController extends AccountBaseController
         $lead->state = $request->state;
         $lead->country = $request->country;
         $lead->postal_code = $request->postal_code;
+        $lead->bidding_minutes= $request->bidding_minutes;
+        $lead->bidding_seconds= $request->bidding_seconds;
+        $lead->cover_letter= $request->cover_letter;
+        $lead->insight_screenshot= $request->insight_screenshot;
+        $lead-> bidpage_screenshot= $request-> bidpage_screenshot;
+        $lead->projectpage_screenshot =$request->projectpage_screenshot;
         $lead->save();
 
         // To add custom fields data

@@ -64,6 +64,32 @@
                     @endif
                 </p>
             </div>
+            <div class="col-12 px-0 pb-3 d-flex">
+                <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
+                    @lang('Bidding Delay Time')</p>
+                <p class="mb-0 text-dark-grey f-14">
+                    @if (!is_null($lead->bidding_minutes))
+                    {{$lead->bidding_minutes}} mins {{$lead->bidding_seconds}} seconds
+
+
+                    @else
+                        --
+                    @endif
+                </p>
+            </div>
+            <div class="col-12 px-0 pb-3 d-flex">
+                <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
+                    @lang('Client Country')</p>
+                <p class="mb-0 text-dark-grey f-14">
+                    @if (!is_null($lead->country))
+                    {{$lead->country}}
+
+
+                    @else
+                        --
+                    @endif
+                </p>
+            </div>
 
             <!-- <x-cards.data-row :label="__('modules.lead.source')" :value="$lead->leadSource->type ?? '--'" /> -->
 
@@ -77,6 +103,60 @@
 
                 </div>
             @endif
+            <div class="col-12 px-0 pb-3 d-flex">
+                <p class="mb-0 text-lightest f-14 w-30 d-inline-block">
+                    @lang('Bids Insight Page Screenshot (Full)')</p>
+                <p class="mb-0 text-dark-grey f-14">
+                    @if (!is_null($lead->insight_screenshot))
+                  <a href="{{$lead->insight_screenshot}}" target="_blank">  {{$lead->insight_screenshot}} </a>
+
+
+                    @else
+                        --
+                    @endif
+                </p>
+            </div>
+            <div class="col-12 px-0 pb-3 d-flex">
+                <p class="mb-0 text-lightest f-14 w-30 d-inline-block">
+                    @lang('Bid Page Screenshot (Full)')</p>
+                <p class="mb-0 text-dark-grey f-14">
+                    @if (!is_null($lead->bidpage_screenshot))
+                  <a href="{{$lead->bidpage_screenshot}}" target="_blank"> {{$lead->bidpage_screenshot}}</a>
+
+
+                    @else
+                        --
+                    @endif
+                </p>
+            </div>
+            <div class="col-12 px-0 pb-3 d-flex">
+                <p class="mb-0 text-lightest f-14 w-30 d-inline-block">
+                    @lang('Project Page Screenshot (Full)')</p>
+                <p class="mb-0 text-dark-grey f-14">
+                    @if (!is_null($lead->projectpage_screenshot))
+                  <a href="{{$lead->projectpage_screenshot}}" target="_blank"> {{$lead->projectpage_screenshot}}</a>
+
+
+                    @else
+                        --
+                    @endif
+                </p>
+            </div>
+            <div class="col-12 px-0 pb-3 d-flex">
+                <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
+                    @lang('Client Country')</p>
+                <p class="mb-0 text-dark-grey f-14">
+                    @if (!is_null($lead->country))
+                    {{$lead->country}}
+
+
+                    @else
+                        --
+                    @endif
+                </p>
+            </div>
+
+
 
             <!-- <x-cards.data-row :label="__('modules.lead.leadCategory')" :value="$lead->category->category_name ?? '--'" /> -->
             <?php
@@ -87,6 +167,32 @@
              ?>
             <x-cards.data-row :label="__('Project') . ' ' .__('Budget')" :value="$value ?? '--'" />
             <x-cards.data-row :label="__('Bid') . ' ' .__('Value')" :value="$bid_value ?? '--'" />
+            <div class="col-12 px-0 pb-3 d-flex">
+                <p class="mb-0 text-lightest f-14 w-50">
+                    @lang('Project Description')</p>
+                <p class="mb-0 text-dark-grey f-14">
+                    @if (!is_null($lead->note))
+                    {!! $lead->note !!}
+
+
+                    @else
+                        --
+                    @endif
+                </p>
+            </div>
+            <div class="col-12 px-0 pb-3 d-flex">
+                <p class="mb-0 text-lightest f-14 w-50">
+                    @lang('Cover Letter')</p>
+                <p class="text-dark-grey f-14">
+                    @if (!is_null($lead->cover_letter))
+                    {!! $lead->cover_letter!!}
+
+
+                    @else
+                        --
+                    @endif
+                </p>
+            </div>
 
             {{-- <x-cards.data-row :label="__('app.note')" :value="!empty($lead->note) ? $lead->note : '--'" html="true" /> --}}
 

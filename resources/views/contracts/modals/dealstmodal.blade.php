@@ -20,14 +20,34 @@
                                     <div class="col-md-12">
 
                                           <label for="input-state-2" class="form-label"><strong>Select Status <span style="color:red;">*<span></strong></label>
-                                            <select class="form-select" name="deal_stage" aria-label="Default select example">
+                                            <select class="form-control height-35 f-14 form-select" name="deal_stage" aria-label="Default select example">
 
                                               <option selected value="0">Contact Made</option>
 
                                             </select>
+                                    </div>
+                                    <div class="col-md-12 mt-3">
+                                      <label for="Client Username"><strong>Client Username</strong></label>
+
+                                            <input class="form-control height-35 f-14"  name="client_username"  placeholder="Enter Client Username" required></input>
 
 
                                     </div>
+                                    <div class="col-md-12 mt-3">
+                                      <label for="Client Username"><strong>Client Profile Link</strong></label>
+
+                                            <input class="form-control height-35 f-14"  name="profile_link"  placeholder="Enter Profile Link" required></input>
+                                    </div>
+                                    <div class="col-md-12 mt-3">
+                                      <label for="Client Username"><strong>Client Message Thread Link</strong></label>
+
+                                            <input class="form-control height-35 f-14"  name="message_link"  placeholder="Enter Message Thread Link" required></input>
+                                    </div>
+                                    <!-- <div class="col-md-12 mt-3">
+                                      <label for="floatingTextarea"><strong>Client Message Thread Link</strong></label>
+
+                                              <textarea id="message" class="form-control"  name="message_link"  placeholder="Client Message Thread Link" required></textarea>
+                                    </div> -->
                                     <div class="col-md-12 mt-3">
                                       <label for="floatingTextarea"><strong>Comments</strong></label>
 
@@ -63,6 +83,7 @@
 <script>
 $(document).ready(function() {
   $('#comments').summernote();
+  $('#message').summernote();
 });
 </script>
 @endpush

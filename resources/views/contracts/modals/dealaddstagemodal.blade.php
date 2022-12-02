@@ -42,10 +42,10 @@
 
                             </div>
                             <div class="row">
-                              <div class="col-md-6">
+                              <div class="col-md-12">
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Client Username <span style="color:red;">*<span></strong></label>
-                                    <input name="user_name" id="input-state-3" type="text" class="form-control height-35 f-14 @error('user_name') is-invalid @enderror" placeholder="Enter Client Username" >
+                                    <input name="user_name" id="input-state-3" readonly value="{{$lead_id->client_username}}" type="text" class="form-control height-35 f-14 @error('user_name') is-invalid @enderror" placeholder="Enter Client Username" >
 
                                 </div>
                                 @error('user_name')
@@ -63,6 +63,23 @@
                                 </div>
                               </div>
                             </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="mt-3">
+                                    <label for="input-state-3" class="form-label"><strong>Project Link <span style="color:red;">*<span></strong></label>
+                                    <input name="profile_link" value="{{$lead_id->profile_link}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="mt-3">
+                                    <label for="input-state-3" class="form-label"><strong>Message Link <span style="color:red;">*<span></strong></label>
+                                    <input name="message_link" value="{{$lead_id->message_link}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+
+                                </div>
+                              </div>
+                            </div>
+
 
 
                             <div class="mt-3">

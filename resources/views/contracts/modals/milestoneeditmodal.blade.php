@@ -46,6 +46,19 @@
               </div>
 
             </div>
+            <div class="col-md-6">
+                <div class="form-group">
+
+              <label for="exampleFormControlTextarea1">Milestone Type <span style="color:red;">*</span></label>
+            <select class="form-control milestone_type" id="milestone_type" name="milestone_type">
+
+              <option value="Proposed Milestone">Proposed Milestone</option>
+                <option value="Client Agreed to this Milestone">Client Agreed to this Milestone</option>
+                  <option value="Client Created this Milestone">Client Created this Milestone</option>
+
+            </select>
+            </div>
+          </div>
 
             <div class="col-md-12">
               <div class="form-group">

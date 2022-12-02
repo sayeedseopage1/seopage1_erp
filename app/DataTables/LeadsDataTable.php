@@ -114,13 +114,7 @@ class LeadsDataTable extends BaseDataTable
                                   ' . trans('View Deal Stage') . '
                               </a>';
                     }
-                      // else {
-                      //   $action .= '<a class="dropdown-item" href="' . url('/deal-stage/') .'/' . $row->id . '">
-                      //         <i class="fa fa-thumbs-up mr-2"></i>
-                      //               ' . trans('Convert to Deal') . '
-                      //           </a>';
-                      //
-                      // }
+                      
                       else {
                         $action .= '<button class="dropdown-item"   data-toggle="modal" data-target="#dealstmodal" onclick="dataTableRowCheck2(' . $row->id . ')">
                               <i class="fa fa-thumbs-up mr-2"></i>
@@ -235,6 +229,15 @@ class LeadsDataTable extends BaseDataTable
                     return $row->category->category_name;
                 }
             });
+            $datatables->addColumn('bidding_time', function ($row) {
+
+                if (!is_null($row->bidding_minutes)) {
+                    return $row->bidding_minutes . ' mins '. $row->bidding_seconds. ' seconds';
+                }else {
+                return  '--';
+                }
+            });
+
 
             $datatables->addColumn('status', function ($row) use ($status) {
                 $action = '--';
@@ -355,7 +358,7 @@ class LeadsDataTable extends BaseDataTable
                 }
             });
             $datatables->editColumn('created_at', function ($row) {
-                return $row->created_at->format($this->global->date_format);
+                return $row->created_at->format($this->global->date_format). ' ('.$row->created_at->format('h:i:s A').')';
             });
             $datatables->editColumn('agent_name', function ($row) {
 
@@ -400,6 +403,8 @@ class LeadsDataTable extends BaseDataTable
                 'leads.category_id',
                 'client_name',
                 'actual_value',
+                'bidding_minutes',
+                'bidding_seconds',
                 'bid_value',
                 'project_id',
                 'project_link',
@@ -587,6 +592,7 @@ class LeadsDataTable extends BaseDataTable
 
 
             __('app.createdOn') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('app.createdOn')],
+            __('app.biding_time') => ['data' => 'bidding_time', 'name' => 'bidding_time', 'title' => __('Bidding Delay Time')],
 
 
               __('app.deal_status') => ['data' => 'deal_status', 'name' => 'deal_status', 'exportable' => false, 'title' => __('Staus')],

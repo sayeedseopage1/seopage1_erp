@@ -53,9 +53,13 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                        <x-forms.text :fieldLabel="__('Project Link')" fieldName="project_link"
                                            fieldId="project_link" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" required/>
                                    </div>
-                                   <div class="col-lg-6 col-md-6">
+                                   <div class="col-lg-3 col-md-3">
                                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Project') .' '. __('Budget')"
                                            fieldName="value" fieldId="value" fieldRequired="true"/>
+                                   </div>
+                                   <div class="col-lg-3 col-md-3">
+                                       <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Bid') .' '. __('Value')"
+                                           fieldName="bid_value" fieldId="bid_value" fieldRequired="true"/>
                                    </div>
                                    <!-- CURRENCY START -->
                                    <?php
@@ -63,13 +67,13 @@ $addLeadNotePermission = user()->permission('add_lead_note');
 
                                     ?>
                                    <div class="col-md-6 col-lg-6 mt-3 ">
-                                     <?php  ?>
+
                                        <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
                                            <x-forms.label fieldId="original_currency_id" :fieldLabel="__('modules.invoices.currency')">
                                            </x-forms.label>
 
                                            <div class="select-others height-35 rounded">
-                                               <select class="form-control select-picker" name="original_currency_id" id="original_currency_id">
+                                               <select class="form-control height-35 f-14 select-picker" name="original_currency_id" id="original_currency_id">
                                                    @foreach ($currencies as $currency)
                                                    <option
 
@@ -81,20 +85,48 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                            </div>
                                        </div>
                                    </div>
-                                   <div class="col-lg-6 col-md-6">
-                                       <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Bid') .' '. __('Value')"
-                                           fieldName="bid_value" fieldId="bid_value" fieldRequired="true"/>
+
+                                   <div class="col-md-6 col-md-6 mt-3" id="set-time-estimate-fields">
+                                       <label for="">Bidding Delay Time <span style="color:red;">*</span></label>
+                                       <div class="form-group">
+
+                                           <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14"
+                                               name="bidding_minutes" required>
+                                           @lang('Minutes')
+                                           &nbsp;&nbsp;
+                                           <input type="number" min="0" name="bidding_seconds"
+                                           class="w-25 height-35 f-14 border rounded p-2" required>
+                                           @lang('Seconds')
+                                       </div>
                                    </div>
                                    <!-- CURRENCY END -->
 
                                    @if ($addLeadNotePermission == 'all' || $addLeadNotePermission == 'added' || $addLeadNotePermission == 'both')
-                                   <div class="col-md-12">
+                                   <div class="col-md-12 mt-3">
                                      <div class="form-group">
-                                       <label for="exampleFormControlTextarea1">Lead Description <span style="color:red;">*</span></label>
+                                       <label for="exampleFormControlTextarea1">Project Description <span style="color:red;">*</span></label>
                                        <textarea name="description" class="form-control" id="description" rows="3" required></textarea>
                                      </div>
                                    </div>
                                    @endif
+                                   <div class="col-md-12">
+                                     <div class="form-group">
+                                       <label for="exampleFormControlTextarea1">Cover Letter <span style="color:red;">*</span></label>
+                                       <textarea name="cover_letter" class="form-control" id="cover_letter" rows="3" required></textarea>
+                                     </div>
+                                   </div>
+                                   <div class="col-lg-4 col-md-4">
+                                            <x-forms.text :fieldLabel="__('Bids Insight Page (Screenshot)')" fieldName="insight_screenshot"
+                                                fieldId="insight_screenshot" :fieldPlaceholder="__('Enter the link only')" fieldRequired="true" />
+                                        </div>
+                                        <div class="col-lg-4 col-md-4">
+                                                 <x-forms.text :fieldLabel="__('Bids Page (Screenshot)')" fieldName="bidpage_screenshot"
+                                                     fieldId="bidpage_screenshot" :fieldPlaceholder="__('Enter the link only')" fieldRequired="true" />
+                                             </div>
+                                             <div class="col-lg-4 col-md-4">
+                                                      <x-forms.text :fieldLabel="__('Project Page (Screenshot)')" fieldName="projectpage_screenshot"
+                                                          fieldId="projectpage_screenshot" :fieldPlaceholder="__('Enter the link only')" fieldRequired="true" />
+                                                  </div>
 
                                    @if (isset($fields) && count($fields) > 0)
                                        @foreach ($fields as $field)
@@ -392,6 +424,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
 <script>
 $(document).ready(function() {
   $('#description').summernote();
+  $('#cover_letter').summernote();
 });
 
 

@@ -239,7 +239,7 @@
                             <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Profile Link <span style="color:red;">*</span></label>
-                              <input type="text" name="profile_link" class="form-control @error('profile_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
+                              <input type="text" name="profile_link" readonly value="{{$deal->profile_link}}" class="form-control @error('profile_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
                               </div>
                               @error('profile_link')
                               <div class="mt-3">
@@ -250,9 +250,7 @@
                             <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
-
-
-                              <textarea name="message_link" class="form-control  @error('message_link') is-invalid @enderror" id="message_link" rows="3"></textarea>
+                              <input type="text" name="message_link" readonly value="{{$deal->message_link}}" class="form-control @error('message_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
                               </div>
                               @error('message_link')
                               <div class="mt-3">
@@ -526,6 +524,7 @@
               $('#title').val(response.milestone.milestone_title);
               $('#cost').val(response.milestone.actual_cost);
               $('#summary').val(response.milestone.summary);
+              $('#milestone_type').val(response.milestone.milestone_type);
               $('#milestone_id').val(milestone_id);
             }
           }
@@ -540,6 +539,7 @@
         var data= {
           'title' : $('#title').val(),
           'cost' : $('#cost').val(),
+          'milestone_type': $('#milestone_type').val(),
           'original_currency_id': $('#original_currency_id').val(),
           'summary' : $('#summary').val(),
         }
@@ -624,6 +624,7 @@
       var data= {
         'title': $('.title').val(),
         'cost': $('.cost').val(),
+        'milestone_type': $('.milestone_type').val(),
 
         'summary': $('.summary').val(),
         //'project_id': document.querySelector('.project_id').value,

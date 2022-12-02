@@ -49,7 +49,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
         font-weight: normal;
         line-height: 1.48;
         text-align: left;
-        color: #41b4e1;
+        color: #333;
     }
     .info_dets h6 {
         font-family: Poppins;
@@ -69,7 +69,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
         font-weight: normal;
         line-height: 1.48;
         text-align: left;
-        color: #41b4e1;
+        color: #333;
     }
     .details-seopage1 p{
         font-size: 16px;
@@ -79,7 +79,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
         line-height: 1.5;
         letter-spacing: normal;
         text-align: left;
-        color: #6a6a6a;
+        color: #333;
     }
     #textcopyseopage1 a{
         font-size: 16px;
@@ -126,155 +126,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
     }
 </style>
 @endpush
-    <!-- CONTENT WRAPPER START -->
-{{--
-    <div class="content-wrapper">
-        <!-- Add Task Export Buttons Start -->
-        <div class="d-flex justify-content-between action-bar">
 
-
-
-            @if (!in_array('client', user_roles()))
-                <x-datatable.actions>
-                    <div class="select-status mr-3 pl-3">
-                        <select name="action_type" class="form-control select-picker" id="quick-action-type" disabled>
-                            <option value="">@lang('app.selectAction')</option>
-                            <option value="delete">@lang('app.delete')</option>
-                        </select>
-                    </div>
-                </x-datatable.actions>
-            @endif
-
-        </div>
-        @if(Session::has('status_updated'))
-            <div class="alert alert-success show mb-2" role="alert">  {{Session::get('status_updated')}}</div>
-
-            @endif
-        <!-- Add Task Export Buttons End -->
-
-
-        <!-- Task Box Start -->
-
-        <?php
-          $lead_id= App\Models\Lead::where('id',$lead->id)->first();
-          //dd($lead_id);
-           ?>
-           <div class="d-flex justify-content-center">
-             <h3 class="card-header bg-white border-0 text-center d-flex justify-content-between p-20 text-center">Deal Stage Status</h3>
-           </div>
-
-
-    <div class="card">
-  <div class="card-body">
-
-
-
-
-
-  <strong style="font-size:20px;">  <x-cards.data-row :label="__('Deal ID :')" :value="$deal->short_code ?? '--'" /></strong>
-
-    <?php
-    $currency=App\Models\Currency::where('id',$lead_id->original_currency_id)->first();
-    $value= $lead_id->actual_value. $currency->currency_symbol;
-    $bid_value= $lead_id->bid_value. $currency->currency_symbol;
-     ?>
-
-  <strong style="font-size:20px;">  <x-cards.data-row :label="__('Project Name :')" :value="!empty($lead_id->client_name) ? mb_ucwords($lead_id->client_name) : '--'" /></strong>
-  <strong style="font-size:20px;"> <x-cards.data-row :label="__('Project Budget :')" :value="!empty($lead_id->value) ? mb_ucwords($value) : '--'" /></strong>
-     @if($deal->deal_stage == 0)
-     <?php
-     $deal_stage = "Contract Made";
-      ?>
-
-         <strong style="font-size:20px;"><x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" /></strong>
-
-         @elseif($deal->deal_stage == 1)
-         <?php
-         $deal_stage = "Requirements Defined";
-          ?>
-      <strong style="font-size:20px;">   <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" /></strong>
-         @elseif($deal->deal_stage == 2)
-         <?php
-          $deal_stage = "Proposal Made";
-
-          ?>
-        <strong style="font-size:20px;">   <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" /></strong>
-           @else
-
-           <?php
-            $deal_stage = "Negotiation Started";
-
-            ?>
-
-        <strong style="font-size:20px;">    <x-cards.data-row :label="__('Deal Stage :')" :value="!empty($deal_stage) ? mb_ucwords($deal_stage) : '--'" /></strong>
-            @endif
-           <hr>
-           @if($deal->deal_status == 'pending')
-           @if($deal->won_lost == 'Yes')
-
-            <strong style="font-size:20px;">  <x-cards.data-row :label="__('Deal Status :')" :value="''" /><h3 style="color:green;">Won</h3></strong>
-              @else
-
-            <strong style="font-size:20px;">  <x-cards.data-row :label="__('Deal Status :')" :value=" ''" /></strong>
-                <div class="row">
-                   <div class="col-md-2">
-                    <div class="form-check">
-                      <label for="input-state-2" class="form-check-label">Qualified <span style="color:red;">*<span></label>
-                 <input type="radio"  name="deal_stage" value="yes"/>
-               </div>
-              </div>
-              <div class="col-md-2">
-              <div class="form-check">
-                  <label for="input-state-2" class="form-check-label">Lost<span style="color:red;">*<span></label>
-
-              <input type="radio"  name="deal_stage" value="no" />
-              </div>
-              </div>
-
-
-<br>
-
-<!-- <input type='hidden' id='yes' name='yes' placeholder='If yes, explain:'/>
-
-
-<input type='hidden' id='other3' name='other3' placeholder='other 3'> -->
-@include('contracts.modals.dealqualifymodal')
-@include('contracts.modals.deallostmodal')
-
-
-
-
-</div>
- @endif
- @else
-
-  <strong style="font-size:20px;">  <x-cards.data-row :label="__('Deal Status :')" :value="''" /><h3 style="color:red;">Lost</h3></strong>
- @endif
-<br>
-
-
-
-      <strong style="font-size:20px;">   <x-cards.data-row :label="__('Comments :')" :value="
-         ''" /></strong>{!!$deal->comments!!}
-      <strong style="font-size:20px;"><x-cards.data-row :label="__('Deal Converted On :')" :value="$deal->created_at->format('Y-m-d') ?? '--'" /></strong>
-
-@include('contracts.modals.dealstagemodal')
-
-    <!-- <x-cards.data-row :label="__('modules.stripeCustomerAddress.state')" :value="$lead->state ?? '--'" />
-
-    <x-cards.data-row :label="__('modules.stripeCustomerAddress.city')" :value="$lead->city ?? '--'" />
-
-    <x-cards.data-row :label="__('modules.stripeCustomerAddress.postalCode')" :value="$lead->postal_code ?? '--'" /> -->
-    <!-- <x-cards.data-row :label="__('modules.lead.address')" :value="$lead->address ?? '--'" /> -->
-
-<div>
-  <div>
-
-
-        <!-- Task Box End -->
-    </div>
-    --}}
-    <!-- CONTENT WRAPPER END -->
 
     <?php
       $lead_id= App\Models\DealStage::where('lead_id',$lead->id)->first();
@@ -303,7 +155,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                         <div class="col-sm-6 col-md-4">
                             <div class="info_dets">
                                 <h6>Lead Converted On <br><i class="fa-solid fa-calendar-days"></i>
-                                <span> {{$lead_id->created_at->format('d-m-Y')}} {{$lead_id->created_at->format('h:i:s A')}}</span> </h6>
+                                <span> {{$lead_id->created_at->format('d-m-Y')}} ({{$lead_id->created_at->format('h:i:s A')}}</span> </h6>
                             </div>
                         </div>
 
@@ -311,7 +163,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                             <div class="info_dets">
                                 <h6>Deal Won/Lost Date <br><i class="fa-solid fa-calendar-days"></i>
                                   @if($lead_id->won_lost != null)
-                                <span> {{$lead_id->updated_at->format('d-m-Y')}} {{$lead_id->updated_at->format('h:i:s A')}}</span> </h6>
+                                <span> {{$lead_id->updated_at->format('d-m-Y')}} ({{$lead_id->updated_at->format('h:i:s A')}})</span> </h6>
                                 @else
                                 <span> No Information</span> </h6>
                                 @endif
@@ -372,14 +224,26 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                     <div class="row pb-4">
                         <div class="col-md-3 nopadding">
                             <div class="deal active">
-                                0 Days
+                              <?php
+
+                               //  $lead_creation_date = $lead->created_at;
+                               $lead_converted_date= $lead_id->created_at->diffForHumans();
+                               //  $datetime1 = new DateTime($lead_creation_date);
+                               //  $datetime2 = new DateTime($lead_converted_date);
+                               //  $interval = $datetime1->diff($datetime2);
+                               //  $days = $interval->format('%a');
+                               //
+                               //
+                               // ?>
+                                {{$lead_converted_date}}
                             </div>
                             <h3>Contact Made</h3>
                         </div>
                         @if($lead_id->deal_stage == 0)
                         <div class="col-md-3 nopadding">
                             <div class="deal"  data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
-                                10 Days
+
+                                0 Days
                             </div>
                             <h3>Requirments Defined</h3>
                         </div>
@@ -390,7 +254,21 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                         @else
                         <div class="col-md-3 nopadding">
                             <div class="deal active" >
-                                10 Days
+                              <?php
+
+                                // $lead_converted_date= $lead_id->created_at;
+                                 $lead_converted_to_req_def= App\Models\DealStageChange::where('lead_id',$lead->id)->where('deal_stage_id',1)->first();
+                                 $lead_converted_to_req= $lead_converted_to_req_def->created_at->diffForHumans();
+                                // $datetime3 = new DateTime($lead_converted_date);
+                                // $datetime4 = new DateTime($lead_converted_to_req_def->created_at);
+                                // //dd($datetime4);
+                                // $interval2 = $datetime3->diff($datetime4);
+                                // $days2 = $interval2->format('%a');
+                                //dd($days2);
+
+
+                               ?>
+                              {{$lead_converted_to_req}}
                             </div>
                             <h3>Requirments Defined</h3>
                         </div>
@@ -401,7 +279,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                         <div class="col-md-3 nopadding">
                             <div class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
-                                12 Days
+                                0 Days
                             </div>
                             <h3>Proposal Made</h3>
                         </div>
@@ -412,14 +290,30 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                         @elseif($lead_id->deal_stage == 2 || $lead_id->deal_stage == 3)
                         <div class="col-md-3 nopadding">
                             <div class="deal active">
-                                12 Days
+                              <?php
+
+                                //
+                                // $lead_converted_to_req_def= App\Models\DealStageChange::where('lead_id',$lead->id)->where('deal_stage_id',1)->first();
+                                 $lead_converted_to_prop_def= App\Models\DealStageChange::where('lead_id',$lead->id)->where('deal_stage_id',2)->first();
+                                 $lead_converted_to_prop= $lead_converted_to_prop_def->created_at->diffForHumans();
+                                // //$datetime3 = new DateTime($lead_converted_date);
+                                // $datetime5 = new DateTime($lead_converted_to_req_def->created_at);
+                                // $datetime6 = new DateTime($lead_converted_to_prop_def->created_at);
+                                // //dd($datetime4);
+                                // $interval3 = $datetime5->diff($datetime6);
+                                // $days3 = $interval3->format('%a');
+                                //dd($days2);
+
+
+                               ?>
+                                {{$lead_converted_to_prop}}
                             </div>
                             <h3>Proposal Made</h3>
                         </div>
                         @else
                         <div class="col-md-3 nopadding">
                             <div class="deal">
-                                12 Days
+                                0 Days
                             </div>
                             <h3>Proposal Made</h3>
                         </div>
@@ -432,7 +326,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                         <div class="col-md-3 nopadding">
                             <div class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
-                                15 Days
+                                0 Days
                             </div>
                             <h3>Negotiation Started</h3>
                         </div>
@@ -443,14 +337,32 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                         @elseif($lead_id->deal_stage == 3)
                         <div class="col-md-3 nopadding">
                             <div class="deal active">
-                                15 Days
+                              <?php
+
+
+                                // //$lead_converted_to_req_def= App\Models\DealStageChange::where('lead_id',$lead->id)->where('deal_stage_id',1)->first();
+                                // $lead_converted_to_prop_def= App\Models\DealStageChange::where('lead_id',$lead->id)->where('deal_stage_id',2)->first();
+                                 $lead_converted_to_neg_def= App\Models\DealStageChange::where('lead_id',$lead->id)->where('deal_stage_id',3)->first();
+                                 $lead_converted_to_neg= $lead_converted_to_neg_def->created_at->diffForHumans();
+                                // //$datetime3 = new DateTime($lead_converted_date);
+                                //
+                                // $datetime7 = new DateTime($lead_converted_to_prop_def->created_at);
+                                // $datetime8 = new DateTime($lead_converted_to_neg_def->created_at);
+                                // //dd($datetime4);
+                                // $interval4 = $datetime7->diff($datetime8);
+                                // $days4 = $interval4->format('%a');
+                                // //dd($days2);
+
+
+                               ?>
+                                {{$lead_converted_to_neg}} 
                             </div>
                             <h3>Negotiation Started</h3>
                         </div>
                         @else
                         <div class="col-md-3 nopadding">
                             <div class="deal">
-                                15 Days
+                                0 Days
                             </div>
                             <h3>Negotiation Started</h3>
                         </div>

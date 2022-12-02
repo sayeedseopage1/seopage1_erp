@@ -97,7 +97,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                            {{ mb_ucwords($contract->deal->organization) }}<br>
                           {{--  {!! nl2br($contract->client->clientDetails->address) !!}</p>--}}
                     </td>
-                  
+
                     <td align="right">
                         <table class="inv-num-date text-dark f-13 mt-3">
                             <tr>
@@ -188,7 +188,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                       <div class="col">
                           <h4>Freelancer Profile Link</h4>
                           <br>
-                          <p><a href="{{ $contract->deal->profile_link}}">{{ $contract->deal->profile_link}}</a></p>
+                          <p><a target="_blank" href="{{ $contract->deal->profile_link}}">{{ $contract->deal->profile_link}}</a></p>
 
                       </div>
 
@@ -205,7 +205,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                       <div class="col">
                           <h4>Freelancer Message Link</h4>
                           <br>
-                          <p>{!! $contract->deal->message_link !!}</p>
+                          <p><a target="_blank" href="{{ $contract->deal->message_link}}">{{ $contract->deal->message_link}}</a></p>
 
                       </div>
 
