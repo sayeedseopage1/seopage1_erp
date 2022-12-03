@@ -114,7 +114,7 @@ class LeadsDataTable extends BaseDataTable
                                   ' . trans('View Deal Stage') . '
                               </a>';
                     }
-                      
+
                       else {
                         $action .= '<button class="dropdown-item"   data-toggle="modal" data-target="#dealstmodal" onclick="dataTableRowCheck2(' . $row->id . ')">
                               <i class="fa fa-thumbs-up mr-2"></i>
@@ -165,7 +165,7 @@ class LeadsDataTable extends BaseDataTable
             $datatables->addColumn('bid_value', function ($row) {
               $currency= Currency::where('id',$row->original_currency_id)->first();
               //dd($currency,$lead_id->original_currency_id,$lead_id->currency_id);
-              $bid_value= $row->bid_value.''.$currency->currency_symbol;
+              $bid_value= $row->bid_value.''.$currency->currency_symbol. '-' . $row->bid_value2 .''.$currency->currency_symbol;
               //dd($actual_value);
                 return $bid_value;
             });
@@ -406,6 +406,7 @@ class LeadsDataTable extends BaseDataTable
                 'bidding_minutes',
                 'bidding_seconds',
                 'bid_value',
+                'bid_value2',
                 'project_id',
                 'project_link',
                 'company_name',
@@ -586,8 +587,9 @@ class LeadsDataTable extends BaseDataTable
                 __('app.project_link') => ['data' => 'project_link', 'name' => 'project_link', 'title' => __('Project Link')],
 
 
-              __('app.actual_value') => ['data' => 'actual_value', 'name' => 'actual_value', 'title' => __('Project Budget')],
-                __('app.bid_value') => ['data' => 'bid_value', 'name' => 'bid_value', 'title' => __('Bid Value')],
+
+                __('app.bid_value') => ['data' => 'bid_value', 'name' => 'bid_value', 'title' => __('Project Budget')],
+                  __('app.actual_value') => ['data' => 'actual_value', 'name' => 'actual_value', 'title' => __('Bid Value')],
 
 
 

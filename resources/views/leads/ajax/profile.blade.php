@@ -37,19 +37,7 @@
             <x-cards.data-row :label="__('Project ID')" :value="!empty($lead->project_id) ? mb_ucwords($lead->project_id) : '--'" />
                 <x-cards.data-row :label="__('Project Link')" :value="!empty($lead->project_link) ? mb_ucwords($lead->project_link) : '--'" />
 
-            <!-- <x-cards.data-row :label="__('modules.lead.website')" :value="$lead->website ?? '--'" />
 
-            <x-cards.data-row :label="__('modules.lead.mobile')" :value="$lead->mobile ?? '--'" />
-
-            <x-cards.data-row :label="__('modules.client.officePhoneNumber')" :value="$lead->office ?? '--'" />
-            <x-cards.data-row :label="__('app.country')" :value="$lead->country ?? '--'" />
-
-            <x-cards.data-row :label="__('modules.stripeCustomerAddress.state')" :value="$lead->state ?? '--'" />
-
-            <x-cards.data-row :label="__('modules.stripeCustomerAddress.city')" :value="$lead->city ?? '--'" />
-
-            <x-cards.data-row :label="__('modules.stripeCustomerAddress.postalCode')" :value="$lead->postal_code ?? '--'" /> -->
-            <!-- <x-cards.data-row :label="__('modules.lead.address')" :value="$lead->address ?? '--'" /> -->
 
             <div class="col-12 px-0 pb-3 d-flex">
                 <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
@@ -64,19 +52,7 @@
                     @endif
                 </p>
             </div>
-            <div class="col-12 px-0 pb-3 d-flex">
-                <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
-                    @lang('Bidding Delay Time')</p>
-                <p class="mb-0 text-dark-grey f-14">
-                    @if (!is_null($lead->bidding_minutes))
-                    {{$lead->bidding_minutes}} mins {{$lead->bidding_seconds}} seconds
 
-
-                    @else
-                        --
-                    @endif
-                </p>
-            </div>
             <div class="col-12 px-0 pb-3 d-flex">
                 <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                     @lang('Client Country')</p>
@@ -162,13 +138,13 @@
             <?php
             $currency=App\Models\Currency::where('id',$lead->original_currency_id)->first();
             $value= $lead->actual_value. $currency->currency_symbol;
-            $bid_value= $lead->bid_value. $currency->currency_symbol;
+            $bid_value= $lead->bid_value. $currency->currency_symbol .'-'. $lead->bid_value2. $currency->currency_symbol  ;
 
              ?>
-            <x-cards.data-row :label="__('Project') . ' ' .__('Budget')" :value="$value ?? '--'" />
-            <x-cards.data-row :label="__('Bid') . ' ' .__('Value')" :value="$bid_value ?? '--'" />
+            <x-cards.data-row :label="__('Bid') . ' ' .__('Value')" :value="$value ?? '--'" />
+            <x-cards.data-row :label="__('Project') . ' ' .__('Budget')" :value="$bid_value ?? '--'" />
             <div class="col-12 px-0 pb-3 d-flex">
-                <p class="mb-0 text-lightest f-14 w-50">
+                <p class="mb-0 text-lightest f-14 w-30">
                     @lang('Project Description')</p>
                 <p class="mb-0 text-dark-grey f-14">
                     @if (!is_null($lead->note))
@@ -181,7 +157,7 @@
                 </p>
             </div>
             <div class="col-12 px-0 pb-3 d-flex">
-                <p class="mb-0 text-lightest f-14 w-50">
+                <p class="mb-0 text-lightest f-14 w-30">
                     @lang('Cover Letter')</p>
                 <p class="text-dark-grey f-14">
                     @if (!is_null($lead->cover_letter))

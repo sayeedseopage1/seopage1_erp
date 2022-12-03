@@ -165,7 +165,7 @@ use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\ProposalTemplateController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
-
+use App\Http\Controllers\DealController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes

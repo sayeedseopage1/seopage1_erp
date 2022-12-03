@@ -453,6 +453,7 @@ class LeadController extends AccountBaseController
       $lead->value= ($request->value)/$currency->exchange_rate;
       $lead->original_currency_id =$request->original_currency_id;
       $lead->bid_value= $request->bid_value;
+      $lead->bid_value2= $request->bid_value2;
       $lead->country= $request->country;
       $lead->note= $request->description;
       $lead->status_id= 1;
@@ -496,13 +497,15 @@ class LeadController extends AccountBaseController
       $lead->value= ($request->value)/$currency->exchange_rate;
       $lead->original_currency_id =$request->original_currency_id;
       $lead->bid_value= $request->bid_value;
+      $lead->bid_value2= $request->bid_value2;
       $lead->country= $request->country;
       $lead->note= $request->description;
+      $lead->cover_letter= $request->cover_letter;
       $lead->status_id= $request->status;
       $lead->currency_id= 1;
       $lead->bidding_minutes= $request->bidding_minutes;
       $lead->bidding_seconds= $request->bidding_seconds;
-      $lead->cover_letter= $request->cover_letter;
+      //$lead->cover_letter= $request->cover_letter;
       $lead->insight_screenshot= $request->insight_screenshot;
       $lead-> bidpage_screenshot= $request-> bidpage_screenshot;
       $lead->projectpage_screenshot =$request->projectpage_screenshot;

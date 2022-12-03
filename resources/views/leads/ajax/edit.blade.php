@@ -51,25 +51,13 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
                             fieldId="project_link" fieldPlaceholder="" fieldRequired="true"
                             :fieldValue="$lead->project_link" />
                     </div>
-
-
-
-
-                    <div class="col-lg-4 col-md-3">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Project') .' '. __('Budget')"
-                                        fieldName="value" fieldId="value" :fieldValue="$lead->actual_value" />
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Bid') .' '. __('Value')"
-                            fieldName="bid_value" fieldId="bid_value" :fieldValue="$lead->bid_value" />
-                    </div>
                     <?php
                      $currencies= App\Models\Currency::all();
 
 
                      ?>
                     <div class="col-md-6 col-lg-4 mt-3 ">
-                      <?php  ?>
+
                         <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
                             <x-forms.label fieldId="original_currency_id" :fieldLabel="__('modules.invoices.currency')">
                             </x-forms.label>
@@ -94,7 +82,31 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-md-6 mt-3" id="set-time-estimate-fields">
+                    <div class="col-md-5 col-md-5 mt-3" id="set-time-estimate-fields">
+                        <label for="">Project Budget<span style="color:red;">*</span></label>
+                        <div class="form-group">
+                          @lang('From')
+                          &nbsp;&nbsp;
+                            <input type="text"  class="w-25 border rounded p-2 height-35 f-14"
+                                name="bid_value" value="{{$lead->bid_value}}" required>
+                            @lang('To')
+                            <input type="text"  name="bid_value2"
+                            class="w-25 height-35 f-14 border rounded p-2" value="{{$lead->bid_value2}}">
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="col-lg-2 col-md-2">
+                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Bid') .' '. __('Value')"
+                                        fieldName="value" fieldId="value" :fieldValue="$lead->actual_value" />
+                    </div>
+
+
+
+                    <div class="col-md-5 col-md-5 mt-3" id="set-time-estimate-fields">
                         <label for="">Bidding Delay Time <span style="color:red;">*</span></label>
                         <div class="form-group">
 
@@ -120,7 +132,7 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
                     <div class="col-md-12 mt-3">
                       <div class="form-group">
                         <label for="exampleFormControlTextarea1">Cover Letter <span style="color:red;">*</span></label>
-                        <textarea name="description" value="{{$lead->cover_letter}}" class="form-control" id="cover_letter" rows="3">{!!$lead->cover_letter!!}</textarea>
+                        <textarea name="cover_letter" value="{{$lead->cover_letter}}" class="form-control" id="cover_letter" rows="3">{!!$lead->cover_letter!!}</textarea>
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-4">
@@ -129,7 +141,7 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
                          </div>
                          <div class="col-lg-4 col-md-4">
                                   <x-forms.text :fieldLabel="__('Bids Page (Screenshot)')" fieldName="bidpage_screenshot"
-                                      fieldId="bidpage_screenshot" :fieldPlaceholder="__('Enter the link only')" :fieldValue="$lead->bidpage_screenshot"  fieldRequired="true" />
+                                      fieldId="bidpage_screenshot" :fieldPlaceholder="__('Enter the link only')" :fieldValue="$lead->bidpage_screenshot" />
                               </div>
                               <div class="col-lg-4 col-md-4">
                                        <x-forms.text :fieldLabel="__('Project Page (Screenshot)')" fieldName="projectpage_screenshot"

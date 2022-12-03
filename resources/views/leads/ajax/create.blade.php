@@ -53,15 +53,6 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                        <x-forms.text :fieldLabel="__('Project Link')" fieldName="project_link"
                                            fieldId="project_link" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" required/>
                                    </div>
-                                   <div class="col-lg-3 col-md-3">
-                                       <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Project') .' '. __('Budget')"
-                                           fieldName="value" fieldId="value" fieldRequired="true"/>
-                                   </div>
-                                   <div class="col-lg-3 col-md-3">
-                                       <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Bid') .' '. __('Value')"
-                                           fieldName="bid_value" fieldId="bid_value" fieldRequired="true"/>
-                                   </div>
-                                   <!-- CURRENCY START -->
                                    <?php
                                     $currencies= App\Models\Currency::all();
 
@@ -85,8 +76,28 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                            </div>
                                        </div>
                                    </div>
+                                   <div class="col-md-5 mt-3" id="set-time-estimate-fields">
+                                       <label for="">Project Budget <span style="color:red;">*</span></label>
+                                       <div class="form-group">
 
-                                   <div class="col-md-6 col-md-6 mt-3" id="set-time-estimate-fields">
+                                           <input type="text"  class="w-25 border rounded p-2 height-35 f-14"
+                                               name="bid_value" placeholder="From" required>
+
+                                           <input type="text" name="Bid Value2"
+                                           class="w-25 height-35 f-14 border rounded p-2" placeholder="To" required>
+
+                                       </div>
+                                   </div>
+                                   <div class="col-lg-2 col-md-2">
+                                       <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Bid') .' '. __('Value')"
+                                           fieldName="value" fieldId="value" fieldRequired="true"/>
+                                   </div>
+
+
+                                   <!-- CURRENCY START -->
+
+
+                                   <div class="col-md-5  mt-3" id="set-time-estimate-fields">
                                        <label for="">Bidding Delay Time <span style="color:red;">*</span></label>
                                        <div class="form-group">
 
@@ -121,7 +132,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                         </div>
                                         <div class="col-lg-4 col-md-4">
                                                  <x-forms.text :fieldLabel="__('Bids Page (Screenshot)')" fieldName="bidpage_screenshot"
-                                                     fieldId="bidpage_screenshot" :fieldPlaceholder="__('Enter the link only')" fieldRequired="true" />
+                                                     fieldId="bidpage_screenshot" :fieldPlaceholder="__('Enter the link only')"  />
                                              </div>
                                              <div class="col-lg-4 col-md-4">
                                                       <x-forms.text :fieldLabel="__('Project Page (Screenshot)')" fieldName="projectpage_screenshot"
