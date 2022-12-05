@@ -87,11 +87,18 @@ class LeadController extends AccountBaseController
       $deal->short_code= 'DSEOP1'. $suffle;
       $deal->lead_id= $lead->id;
       $deal->status= 1;
-      $deal->deal_stage= $request->deal_stage;
+      $deal->deal_stage= 0;
       $deal->comments= $request->comments;
       $deal->profile_link= $request->profile_link;
       $deal->message_link= $request->message_link;
       $deal->client_username= $request->client_username;
+      $deal->currency_id= 1;
+      $deal->project_name= $lead->client_name;
+      $deal->original_currency_id= $lead->original_currency_id;
+      $deal->amount= $lead->value;
+      $deal->actual_amount= $lead->actual_value;
+      $deal->added_by= Auth::id();
+      $deal->converted_by= Auth::id();
       $deal->save();
       $deal_stage= new DealStageChange();
       $deal_stage->lead_id= $lead->id;
@@ -416,6 +423,7 @@ class LeadController extends AccountBaseController
     }
     public function storeLead(Request $request)
     {
+      //dd($request);
       if (Auth::user()->role_id == 7) {
 
         $sales_ex= SalesCount::where('user_id',Auth::id())->first();

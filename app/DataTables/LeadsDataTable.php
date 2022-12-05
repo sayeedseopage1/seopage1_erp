@@ -107,21 +107,15 @@ class LeadsDataTable extends BaseDataTable
 
                     $lead_id= lead::where('id',$row->id)->first();
                     //dd($row->deal_status);
-                    if($lead_id->deal_status == 1)
+                    if($lead_id->deal_status == 0)
                     {
-                      $action .= '<a class="dropdown-item" href="' . url('/deal-stage-view/') .'/' . $row->id . '">
-                            <i class="fa fa-eye mr-2"></i>
-                                  ' . trans('View Deal Stage') . '
-                              </a>';
+                      $action .= '<button class="dropdown-item"   data-toggle="modal" data-target="#dealstmodal" onclick="dataTableRowCheck2(' . $row->id . ')">
+                            <i class="fa fa-thumbs-up mr-2"></i>
+                                  ' . trans('Convert to Deal') . '
+                              </button>';
                     }
 
-                      else {
-                        $action .= '<button class="dropdown-item"   data-toggle="modal" data-target="#dealstmodal" onclick="dataTableRowCheck2(' . $row->id . ')">
-                              <i class="fa fa-thumbs-up mr-2"></i>
-                                    ' . trans('Convert to Deal') . '
-                                </button>';
-
-                      }
+                      
 
 
 

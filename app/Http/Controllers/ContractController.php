@@ -46,7 +46,7 @@ class ContractController extends AccountBaseController
     public function __construct()
     {
         parent::__construct();
-        $this->pageTitle = 'Deals';
+        $this->pageTitle = 'Won Deals';
         $this->middleware(function ($request, $next) {
             abort_403(!in_array('contracts', $this->user->modules));
             return $next($request);

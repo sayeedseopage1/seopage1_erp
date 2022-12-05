@@ -108,7 +108,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
     }
 
 
-    .active{
+    .actives{
         background: #119143;
         color: #fff;
     }
@@ -129,11 +129,12 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
 
     <?php
-
+      //$lead_id= App\Models\DealStage::where('id',$deal->id)->first();
       $currency=App\Models\Currency::where('id',$deal->original_currency_id)->first();
-      //$value= $deal->actual_amount. $currency->currency_symbol;
-    //  $bid_value= $deal->bid_value. $currency->currency_symbol;
-      //dd($deal);
+      $value= $deal->actual_value. $currency->currency_symbol;
+      $bid_value= $deal->bid_value. $currency->currency_symbol;
+      $lead= App\Models\Lead::where('id',$deal->lead_id)->first();
+      //dd($lead_id);
        ?>
     <section>
         <div class="container-fluid">
@@ -154,7 +155,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                         </div>
                         <div class="col-sm-6 col-md-4">
                             <div class="info_dets">
-                                <h6>Lead Converted On/Deal Created On <br><i class="fa-solid fa-calendar-days"></i>
+                                <h6>Lead Converted On <br><i class="fa-solid fa-calendar-days"></i>
                                 <span> {{$deal->created_at->format('d-m-Y')}} ({{$deal->created_at->format('h:i:s A')}}</span> </h6>
                             </div>
                         </div>
@@ -174,9 +175,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                     <div class="row pb-3">
                         <div class="col-sm-6 col-md-4 text-start">
                             <div class="info_dets">
-
-                                <h5>Deal Value {{$currency->currency_symbol}}<span>{{$deal->actual_amount}}</span> </h5>
-
+                                <h5>Deal Value {{$currency->currency_symbol}}<span>{{$lead->actual_value}}</span> </h5>
                             </div>
                         </div>
 
@@ -186,9 +185,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                             <div class="info_dets">
                                 @if($deal->won_lost != null)
                                 @if($deal->won_lost == 'Yes')
-
-                                <h5>Deal Closing Value {{$currency->currency_symbol}}<span>{{$deal->actual_amount}}</span> </h5>
-
+                                <h5>Deal Closing Value {{$currency->currency_symbol}}<span>{{$lead->actual_value}}</span> </h5>
                                 @else
                                 <h5 style="color:red;"> </h5>
 
@@ -227,13 +224,18 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                     <div class="row pb-4">
                         <div class="col-md-3 nopadding">
-                            <div class="deal active">
+                            <div class="deal actives">
                               <?php
 
-
+                               //  $lead_creation_date = $lead->created_at;
                                $lead_converted_date= $deal->created_at->diffForHumans();
-
-                                ?>
+                               //  $datetime1 = new DateTime($lead_creation_date);
+                               //  $datetime2 = new DateTime($lead_converted_date);
+                               //  $interval = $datetime1->diff($datetime2);
+                               //  $days = $interval->format('%a');
+                               //
+                               //
+                               // ?>
                                 {{$lead_converted_date}}
                             </div>
                             <h3>Contact Made</h3>
@@ -252,13 +254,18 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                         @endif
                         @else
                         <div class="col-md-3 nopadding">
-                            <div class="deal active" >
+                            <div class="deal actives" >
                               <?php
 
-
-                                 $lead_converted_to_req_def= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',1)->first();
+                                // $lead_converted_date= $deal->created_at;
+                                 $lead_converted_to_req_def= App\Models\DealStageChange::where('lead_id',$lead->id)->where('deal_stage_id',1)->first();
                                  $lead_converted_to_req= $lead_converted_to_req_def->created_at->diffForHumans();
-
+                                // $datetime3 = new DateTime($lead_converted_date);
+                                // $datetime4 = new DateTime($lead_converted_to_req_def->created_at);
+                                // //dd($datetime4);
+                                // $interval2 = $datetime3->diff($datetime4);
+                                // $days2 = $interval2->format('%a');
+                                //dd($days2);
 
 
                                ?>
@@ -283,14 +290,20 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                         @endif
                         @elseif($deal->deal_stage == 2 || $deal->deal_stage == 3)
                         <div class="col-md-3 nopadding">
-                            <div class="deal active">
+                            <div class="deal actives">
                               <?php
 
-
-
-                                 $lead_converted_to_prop_def= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',2)->first();
+                                //
+                                // $lead_converted_to_req_def= App\Models\DealStageChange::where('lead_id',$lead->id)->where('deal_stage_id',1)->first();
+                                 $lead_converted_to_prop_def= App\Models\DealStageChange::where('lead_id',$lead->id)->where('deal_stage_id',2)->first();
                                  $lead_converted_to_prop= $lead_converted_to_prop_def->created_at->diffForHumans();
-
+                                // //$datetime3 = new DateTime($lead_converted_date);
+                                // $datetime5 = new DateTime($lead_converted_to_req_def->created_at);
+                                // $datetime6 = new DateTime($lead_converted_to_prop_def->created_at);
+                                // //dd($datetime4);
+                                // $interval3 = $datetime5->diff($datetime6);
+                                // $days3 = $interval3->format('%a');
+                                //dd($days2);
 
 
                                ?>
@@ -324,13 +337,22 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                         @endif
                         @elseif($deal->deal_stage == 3)
                         <div class="col-md-3 nopadding">
-                            <div class="deal active">
+                            <div class="deal actives">
                               <?php
 
 
-
-                                 $lead_converted_to_neg_def= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',3)->first();
+                                // //$lead_converted_to_req_def= App\Models\DealStageChange::where('lead_id',$lead->id)->where('deal_stage_id',1)->first();
+                                // $lead_converted_to_prop_def= App\Models\DealStageChange::where('lead_id',$lead->id)->where('deal_stage_id',2)->first();
+                                 $lead_converted_to_neg_def= App\Models\DealStageChange::where('lead_id',$lead->id)->where('deal_stage_id',3)->first();
                                  $lead_converted_to_neg= $lead_converted_to_neg_def->created_at->diffForHumans();
+                                // //$datetime3 = new DateTime($lead_converted_date);
+                                //
+                                // $datetime7 = new DateTime($lead_converted_to_prop_def->created_at);
+                                // $datetime8 = new DateTime($lead_converted_to_neg_def->created_at);
+                                // //dd($datetime4);
+                                // $interval4 = $datetime7->diff($datetime8);
+                                // $days4 = $interval4->format('%a');
+                                // //dd($days2);
 
 
                                ?>
@@ -355,11 +377,11 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                       <div class="details-seopage1">
                         <h4>Project Name :</h4>
-                        <p>{{$deal->project_name}}</p>
+                        <p>{{$lead->client_name}}</p>
                       </div>
 
                       <?php
-                          $deal_stages= App\Models\DealStageChange::where('deal_id',$deal->short_code)->get();
+                          $deal_stages= App\Models\DealStageChange::where('lead_id',$lead->id)->get();
                         //  dd($deal_stages);
 
                        ?>

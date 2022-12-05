@@ -8,7 +8,7 @@
       </div>
       <form class="" action="{{route('deal-stage-update-lost')}}" method="post">
         @csrf
-        <input type="hidden" name="id" value="{{$lead_id->id}}">
+        <input type="hidden" name="id" value="{{$deal->id}}">
       <div class="modal-body">
         <div class="col-md-12">
           <div class="form-group">

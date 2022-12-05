@@ -30,7 +30,7 @@ $viewClientNote = user()->permission('view_lead_note');
          @if ($viewClientNote == 'all' || $viewClientNote == 'both' || $viewClientNote == 'added' || $viewClientNote == 'owned')
             <x-tab :href="route('leads.show', $lead->id).'?tab=notes'" ajax="false" text="Notes"
             class="notes" />
-        @endif
+         @endif
 
             <!-- @if ($gdpr->enable_gdpr)
                 <x-tab :href="route('leads.show', $lead->id).'?tab=gdpr'" :text="__('app.menu.gdpr')" class="gdpr" ajax="false" />

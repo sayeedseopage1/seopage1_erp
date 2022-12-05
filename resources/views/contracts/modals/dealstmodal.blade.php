@@ -19,12 +19,13 @@
                                   <div class="row">
                                     <div class="col-md-12">
 
-                                          <label for="input-state-2" class="form-label"><strong>Select Status <span style="color:red;">*<span></strong></label>
-                                            <select class="form-control height-35 f-14 form-select" name="deal_stage" aria-label="Default select example">
+                                          <label for="input-state-2" class="form-label"><strong>Status <span style="color:red;">*<span></strong></label>
 
-                                              <option selected value="0">Contact Made</option>
+                                                <input readonly class="form-control height-35 f-14" value="Contact Made"  name="deal_stage"  placeholder="Contract Made" required></input>
 
-                                            </select>
+
+
+
                                     </div>
                                     <div class="col-md-12 mt-3">
                                       <label for="Client Username"><strong>Client Username</strong></label>

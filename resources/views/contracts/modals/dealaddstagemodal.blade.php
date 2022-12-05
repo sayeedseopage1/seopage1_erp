@@ -11,9 +11,11 @@
         <?php
           $date= \Carbon\Carbon::now();
          ?>
-        <input type="hidden" name="lead_id" value="{{$lead->id}}">
+         @if($deal->lead_id != null)
+        <input type="hidden" name="lead_id" value="{{$deal->lead_id}}">
+        @endif
         <input type="hidden" name="date" value="{{$date}}">
-        <input type="hidden" name="id" value="{{$lead_id->id}}">
+        <input type="hidden" name="id" value="{{$deal->id}}">
 
       <div class="modal-body">
 
@@ -22,7 +24,7 @@
                               <div class="col-md-6">
                                 <div class="mt-3">
                                     <label for="input-state-2" class="form-label"><strong>Deal ID <span style="color:red;">*<span></strong></label>
-                                    <input name="deal_id" value="{{$lead_id->short_code}}" readonly id="input-state-2" type="text" class="form-control height-35 f-14" placeholder="Enter Client Name" required>
+                                    <input name="deal_id" value="{{$deal->short_code}}" readonly id="input-state-2" type="text" class="form-control height-35 f-14" placeholder="Enter Client Name" required>
 
                                 </div>
                               </div>
@@ -45,7 +47,7 @@
                               <div class="col-md-12">
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Client Username <span style="color:red;">*<span></strong></label>
-                                    <input name="user_name" id="input-state-3" readonly value="{{$lead_id->client_username}}" type="text" class="form-control height-35 f-14 @error('user_name') is-invalid @enderror" placeholder="Enter Client Username" >
+                                    <input name="user_name" id="input-state-3" readonly value="{{$deal->client_username}}" type="text" class="form-control height-35 f-14 @error('user_name') is-invalid @enderror" placeholder="Enter Client Username" >
 
                                 </div>
                                 @error('user_name')
@@ -58,7 +60,7 @@
                               <div class="col-md-12">
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Project Name <span style="color:red;">*<span></strong></label>
-                                    <input name="project_name" value="{{$lead->client_name}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+                                    <input name="project_name" value="{{$deal->client_name}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                 </div>
                               </div>
@@ -67,14 +69,14 @@
                               <div class="col-md-12">
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Project Link <span style="color:red;">*<span></strong></label>
-                                    <input name="profile_link" value="{{$lead_id->profile_link}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+                                    <input name="profile_link" value="{{$deal->profile_link}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                 </div>
                               </div>
                               <div class="col-md-12">
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Message Link <span style="color:red;">*<span></strong></label>
-                                    <input name="message_link" value="{{$lead_id->message_link}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+                                    <input name="message_link" value="{{$deal->message_link}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                 </div>
                               </div>
@@ -84,7 +86,7 @@
 
                             <div class="mt-3">
                                 <label for="input-state-3" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong></label>
-                                <input name="amount" value="{{$lead->actual_value}}" id="input-state-3" type="number" class="form-control height-35 f-14" placeholder="Enter Amount" required>
+                                <input name="amount" value="{{$deal->actual_amount}}" id="input-state-3" type="number" class="form-control height-35 f-14" placeholder="Enter Amount" required>
 
                             </div>
                               <div class="mt-3">

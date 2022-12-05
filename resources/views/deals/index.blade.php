@@ -2,9 +2,11 @@
 
 @push('datatable-styles')
     @include('sections.datatable_css')
+
 @endpush
 
 @section('filter-section')
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
     <x-filters.filter-box>
         <!-- DATE START -->
@@ -17,28 +19,11 @@
         </div>
         <!-- DATE END -->
 
-        @if (!in_array('client', user_roles()))
-        <!-- CLIENT START -->
-        <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
-            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.client')</p>
-            <div class="select-status">
-                <select class="form-control select-picker" name="client" id="client" data-live-search="true" data-size="8">
-                    @if (!in_array('client', user_roles()))
-                        <option value="all">@lang('app.all')</option>
-                    @endif
-                    @foreach ($clients as $client)
-                        <option
-                            data-content="<div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $client->image_url }}' ></div> {{ ucfirst($client->name) }}"
-                            value="{{ $client->id }}">{{ $client->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-        @endif
+
 
         <!-- CLIENT END -->
         <!-- STATUS START -->
-      
+
         <!-- STATUS END -->
 
         <!-- SEARCH BY TASK START -->
@@ -82,9 +67,9 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
             <div id="table-actions" class="d-flex align-items-center">
                 @if ($addContractPermission == 'all' || $addContractPermission == 'added')
-                {{--  <x-forms.link-primary :link="route('deals.create')" class="mr-3 openRightModal" icon="plus">
-                        @lang('modules.contracts.createContract')
-                    </x-forms.link-primary> --}}
+                  <x-forms.link-primary :link="route('deals.create')" class="mr-3 openRightModal" icon="plus">
+                        @lang('Create Deal')
+                    </x-forms.link-primary>
                 @endif
 
               {{--  @if ($manageContractTemplatePermission == 'all' || $manageContractTemplatePermission == 'added')
@@ -126,7 +111,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
     <script>
 
-        $('#contracts-table').on('preXhr.dt', function(e, settings, data) {
+        $('#deals-table').on('preXhr.dt', function(e, settings, data) {
             var dateRangePicker = $('#datatableRange').data('daterangepicker');
             var startDate = $('#datatableRange').val();
 
@@ -138,34 +123,31 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
                 endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
             }
 
-            var contract_type = $('#contract_type').val();
-            var client = $('#client').val();
             var searchText = $('#search-text-field').val();
             data['startDate'] = startDate;
             data['endDate'] = endDate;
-            data['contract_type'] = contract_type;
-            data['client'] = client;
+
             data['searchText'] = searchText;
         });
         const showTable = () => {
-            window.LaravelDataTables["contracts-table"].draw();
+            window.LaravelDataTables["deals-table"].draw();
         }
 
-        $('#client, #contract_type, #search-text-field').on('change keyup', function() {
-            if ($('#contract_type').val() != "all") {
-                $('#reset-filters').removeClass('d-none');
-                showTable();
-            } else if ($('#client').val() != "all") {
-                $('#reset-filters').removeClass('d-none');
-                showTable();
-            } else if ($('#search-text-field').val() != "") {
-                $('#reset-filters').removeClass('d-none');
-                showTable();
-            } else {
-                $('#reset-filters').addClass('d-none');
-                showTable();
-            }
-        });
+        // $('#client, #contract_type, #search-text-field').on('change keyup', function() {
+        //     if ($('#contract_type').val() != "all") {
+        //         $('#reset-filters').removeClass('d-none');
+        //         showTable();
+        //     } else if ($('#client').val() != "all") {
+        //         $('#reset-filters').removeClass('d-none');
+        //         showTable();
+        //     } else if ($('#search-text-field').val() != "") {
+        //         $('#reset-filters').removeClass('d-none');
+        //         showTable();
+        //     } else {
+        //         $('#reset-filters').addClass('d-none');
+        //         showTable();
+        //     }
+        // });
 
         $('#reset-filters').click(function() {
             $('#filter-form')[0].reset();
@@ -299,5 +281,12 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
             @endif
         });
 
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $('#description2').summernote();
+
+    });
     </script>
 @endpush

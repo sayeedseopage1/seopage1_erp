@@ -208,6 +208,7 @@
 
                            ?>
                             @if (in_array('contracts', user_modules()) && $sidebarUserPermissions['view_contract'] != 5 && $sidebarUserPermissions['view_contract'] != 'none')
+                              <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
                               @if(Auth::user()->role_id == 4)
                                   <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals ('.$won_deals_project.')'" />
                               @elseif(Auth::user()->role_id == 1)

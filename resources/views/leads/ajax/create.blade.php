@@ -83,7 +83,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                            <input type="text"  class="w-25 border rounded p-2 height-35 f-14"
                                                name="bid_value" placeholder="From" required>
 
-                                           <input type="text" name="Bid Value2"
+                                           <input type="text" name="bid_value2"
                                            class="w-25 height-35 f-14 border rounded p-2" placeholder="To" required>
 
                                        </div>
