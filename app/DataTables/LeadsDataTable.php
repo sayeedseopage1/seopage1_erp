@@ -163,9 +163,10 @@ class LeadsDataTable extends BaseDataTable
             $datatables->addColumn('deal_status', function ($row) {
               if($row->deal_status == 0)
               {
-                  return "Not Converted to Deal";
+                  return '<badge class="badge badge-danger">Not Converted to Deal</badge>';
               }else
-                return "Converted to Deal";
+                return
+                '<badge class="badge badge-success">Converted to Deal</badge>';
             });
             $datatables->addColumn('won_lost', function ($row)  {
               //dd($row);
@@ -181,14 +182,14 @@ class LeadsDataTable extends BaseDataTable
                     {
                       if($leadid->deal_status == 'pending' && $leadid->won_lost == 'Yes')
                       {
-                        $won_lost= "Won";
+                        $won_lost= '<badge class="badge badge-success">Won</badge>';
 
 
                       }elseif($leadid->deal_status == 'Lost'){
-                        $won_lost=  "Lost";
+                        $won_lost= '<badge class="badge badge-danger">Lost</badge>';
 
                     }elseif(($leadid->deal_status == 'pending' && $leadid->won_lost == 'No')|| ($leadid->deal_status == 'pending' && $leadid->won_lost == null)) {
-                      $won_lost ="Not Activity Yet";
+                      $won_lost = '<badge class="badge badge-warning">No Activity Yet</badge>';
 
                     }
 
@@ -362,7 +363,7 @@ class LeadsDataTable extends BaseDataTable
             $datatables->removeColumn('source');
             $datatables->removeColumn('next_follow_up');
             $datatables->removeColumn('statusName');
-            $datatables->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date', 'agent_name', 'check','project_link']);
+            $datatables->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date', 'agent_name', 'check','project_link','deal_status','won_lost']);
 
             return $datatables;
     }
