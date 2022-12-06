@@ -11,6 +11,8 @@ use Yajra\DataTables\Html\Column;
 use App\Models\Currency;
 use App\Models\Lead;
 use App\Models\User;
+use App\Models\Deal;
+use App\Models\Project;
 class DealsDataTable extends BaseDataTable
 {
 
@@ -71,10 +73,27 @@ class DealsDataTable extends BaseDataTable
                     || ($this->editContractPermission == 'owned' && user()->id == $row->client_id)
                     || ($this->editContractPermission == 'both' && (user()->id == $row->client_id || user()->id == $row->added_by))
                     ) {
-                    $action .= '<a class="dropdown-item openRightModal" href="' . route('deals.edit', [$row->id]) . '">
-                            <i class="fa fa-edit mr-2"></i>
-                            ' . trans('app.edit') . '
-                        </a>';
+                      if ($row->won_lost != 'Yes') {
+                        $action .= '<a class="dropdown-item openRightModal" href="' . route('deals.edit', [$row->id]) . '">
+                                <i class="fa fa-edit mr-2"></i>
+                                ' . trans('app.edit') . '
+                            </a>';
+                      }else {
+                        $won_deal_id= Deal::where('deal_id',$row->short_code)->first();
+                        $action .= '<a class="dropdown-item" href="/deals/details/edit/'.$won_deal_id->id.'">
+                                <i class="fa fa-edit mr-2"></i>
+                                ' . trans('app.edit') . '
+                            </a>';
+                      }
+                      if ($row->won_lost == 'Yes') {
+                        $won_deal_id= Deal::where('deal_id',$row->short_code)->first();
+                        $action .= '<a class="dropdown-item" href="/account/deal-url/'.$won_deal_id->id.'">
+
+                                <i class="fa fa-file mr-2"></i>
+                                ' . trans('Client Form') . '
+                            </a>';
+                      }
+
                 }
 
                 if (
@@ -102,10 +121,28 @@ class DealsDataTable extends BaseDataTable
                 return $action;
             })
             ->addColumn('project_name', function($row) {
+              if ($row->won_lost== 'Yes') {
+                $deal= Deal::where('deal_id',$row->short_code)->first();
+                $project= Project::where('deal_id',$deal->id)->first();
+                if ($project->project_status != 'pending') {
+                  return '<div class="media align-items-center">
+
+                           <div class="media-body">
+                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('projects.show', [$project->id]) . '">' . ucfirst($project->project_name) . '</a></h5>
+
+                           </div>
+                        </div>';
+                }else {
+                  return ucfirst($row->project_name);
+                }
+              }else {
                 return ucfirst($row->project_name);
+              }
+
             })
             ->addColumn('deal_id', function($row) {
               //  return ucfirst($row->short_code);
+              if($row->won_lost != 'Yes'){
                 return '<div class="media align-items-center">
 
                          <div class="media-body">
@@ -113,6 +150,16 @@ class DealsDataTable extends BaseDataTable
 
                          </div>
                       </div>';
+              }else {
+                return '<div class="media align-items-center">
+
+                         <div class="media-body">
+                        <h5 class="mb-0 f-13 text-darkest-grey"><a href="/account/deals/'.$row->id .'?tab=summary">' . ucfirst($row->short_code) . '</a></h5>
+
+                         </div>
+                      </div>';
+              }
+
             })
 
             // ->editColumn('subject', function ($row) {
@@ -166,6 +213,44 @@ class DealsDataTable extends BaseDataTable
                   return '--';
                 }
             })
+            ->addColumn('project_manager', function($row) {
+              if ($row->won_lost == 'Yes') {
+                $pm= Deal::where('deal_id',$row->short_code)->first();
+                $user= User::where('id',$pm->pm_id)->first();
+              //  dd($row->added_by->name);
+                  //return ucfirst($user->name);
+                  return '<div class="media align-items-center">
+                         <a href="' . route('employees.show', [$user->id]) . '">
+                         <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
+                           <div class="media-body">
+                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$user->id]) . '">' . ucfirst($user->name) . '</a></h5>
+
+                           </div>
+                        </div>';
+              }else {
+                return '--';
+              }
+
+            })
+            ->addColumn('client_name', function($row) {
+              if ($row->won_lost == 'Yes') {
+                $client= Deal::where('deal_id',$row->short_code)->first();
+                $user= User::where('id',$client->client_id)->first();
+              //  dd($row->added_by->name);
+                  //return ucfirst($user->name);
+                  return '<div class="media align-items-center">
+                         <a href="' . route('employees.show', [$user->id]) . '">
+                         <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
+                           <div class="media-body">
+                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$user->id]) . '">' . ucfirst($user->name) . '</a></h5>
+
+                           </div>
+                        </div>';
+              }else {
+                return '--';
+              }
+
+            })
             ->addColumn('added_by', function($row) {
               $user= User::where('id',$row->added_by)->first();
             //  dd($row->added_by->name);
@@ -212,7 +297,7 @@ class DealsDataTable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['action', 'check', 'project_name','deal_id','status','added_by','converted_by']);
+            ->rawColumns(['action', 'check', 'project_name','deal_id','status','added_by','converted_by','project_manager','client_name']);
     }
 
     /**
@@ -336,13 +421,15 @@ class DealsDataTable extends BaseDataTable
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
             __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
 
-            __('app.deal_id')  => ['data' => 'deal_id', 'name' => 'deal_id', 'exportable' => false, 'title' => __('Short Code')],
+            __('app.deal_id')  => ['data' => 'deal_id', 'name' => 'deal_id',  'title' => __('Short Code')],
             __('app.project_name') => ['data' => 'project_name', 'name' => 'project_name', 'exportable' => false, 'title' => __('Project Name')],
             __('app.project_name').' '.__('app.project_name') => ['data' => 'project_name', 'name' => 'project_name', 'visible' => false, 'title' => __('Project Name')],
+              __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
 
           //  __('app.customers')  => ['data' => 'client_name', 'name' => 'client.name', 'visible' => false, 'title' => __('app.customers')],
             __('app.amount') => ['data' => 'amount', 'name' => 'amount', 'title' => __('Project Budget (USD)')],
             __('app.actual_amount') => ['data' => 'actual_amount', 'name' => 'actual_amount', 'title' => __('Project Budget (Original Currency)')],
+            __('app.project_manager')  => ['data' => 'project_manager', 'name' => 'project_manager', 'title' => __('Project Manager')],
             // __('app.startDate') => ['data' => 'start_date', 'name' => 'start_date', 'title' => __('app.startDate')],
             __('app.created_at') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('Creation Date')],
              __('app.added_by')  => ['data' => 'added_by', 'name' => 'added_by', 'title' => __('Added By')],

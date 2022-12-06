@@ -323,6 +323,9 @@ class DealController extends AccountBaseController
             case 'files':
                 $this->view = 'deals.ajax.files';
                 break;
+                case 'summary':
+                    $this->view = 'deals.ajax.summary';
+                    break;
             case 'followup':
                 $this->view = 'deals.ajax.followup';
                 break;

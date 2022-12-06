@@ -8,9 +8,9 @@
       </div>
       <form class="" action="{{route('deny-deal')}}" method="post">
         @csrf
-        
 
-        <input type="hidden" name="id" value="{{$contract->deal->id}}">
+
+        <input type="hidden" name="id" value="{{$deal_id->id}}">
 
       <div class="modal-body">
         <h3>Are you sure you want to deny the deal?</h3>

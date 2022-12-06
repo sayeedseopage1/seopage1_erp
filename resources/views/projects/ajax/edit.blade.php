@@ -373,49 +373,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 
                 </div>
-                <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey">
-                    @lang('Add Deliverables')</h4>
-                <div class="row p-20 list">
-                  <hr>
 
-
-                  <div class="col-lg-4 col-md-4">
-                    <label for="">Title</label>
-                    <input type="text" class="form-control height-35 f-14 title" name="title[]" value="" placeholder="Input Deliverable Title">
-                  </div>
-
-                  <div class="col-lg-4 col-md-4">
-                    <label for="">From</label>
-                    <input type="date" name="from[]" class="form-control height-35 f-14 from" value="" placeholder="Input Deliverable Start Date">
-                  </div>
-                  <div class="col-lg-4 col-md-4">
-                    <label for="">To</label>
-                    <input type="date" name="to[]" class="form-control height-35 f-14 to" value="" placeholder="Input Deliverable Start Date">
-
-                  </div>
-                  <div class="col-lg-12 col-md-12 mt-3 mb-3">
-
-                    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                      <textarea class="form-control form-control-sm description" name="del_description[]" id="exampleFormControlTextarea1" rows="3"></textarea>
-                  </div>
-                  <!-- <div class="col-lg-3 col-md-3 mt-3">
-                      <button type="button" class="btn btn-danger cancel">Delete</button>
-                  </div> -->
-
-
-
-
-
-                </div>
-                <div class="row p-20">
-                  <div class="col-lg-6 col-md-6">
-                    <div class=" col-md-3">
-                      <button type="button" class="btn btn-info add">Add More</button>
-                    </div>
-                    <div class="col-md-6 mt-2">
-                      <button type="button" class="btn btn-success add_deliverable">Confirm Deliverable</button>
-                    </div>
-                  </div>
 
                   </div>
 
@@ -580,21 +538,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
             },
             ...datepickerConfig
         });
-        const dp3 = datepicker('#from', {
-            position: 'bl',
-            onSelect: (instance, date) => {
-                dp2.setMin(date);
-            },
-            ...datepickerConfig
-        });
-
-        const dp4 = datepicker('#to', {
-            position: 'bl',
-            onSelect: (instance, date) => {
-                dp1.setMax(date);
-            },
-            ...datepickerConfig
-        });
+      
 
         @if ($project->deadline == null)
             $('#deadlineBox').hide();
@@ -712,94 +656,4 @@ $createPublicProjectPermission = user()->permission('create_public_project');
         $('#'+id).val(checkedData);
     }
 
-</script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput-jquery.min.js'></script><script  src="{{asset('custom/mobilec/script.js')}}"></script>
-
-<script>
-$(document).ready(function(){
-
-$('.add').click(function(){
-  //alert('success');
-$(".list").append(
-
-                  '<div class="col-lg-4 col-md-4">'+
-                      '<label for="">Title</label>'+
-                      '<input type="text" class="form-control height-35 f-14" name="title[]" value="" placeholder="Input Deliverable Title">'+
-                    '</div>'+
-
-                    '<div class="col-lg-4 col-md-4">'+
-                      '<label for="">From</label>'+
-                      '<input type="date" class="form-control height-35 f-14" name="from[]" value="" placeholder="Input Deliverable Start Date">'+
-                    '</div>'+
-                    '<div class="col-lg-4 col-md-4">'+
-                      '<label for="">To</label>'+
-                      '<input type="date" class="form-control height-35 f-14" name="to[]" value="" placeholder="Input Deliverable Start Date">'+
-
-                    '</div>'+
-                    '<div class="col-lg-12 col-md-12 mt-3 mb-3">'+
-
-                      '<label for="exampleFormControlTextarea1" class="form-label">Description</label>'+
-                      '<textarea class="form-control form-control-sm" name="del_description[]" id="exampleFormControlTextarea1" rows="3"></textarea>'+
-                    '</div>'
-
-                  //   '<div class="col-lg-3 col-md-3 mt-3">'+
-                  //       '<button type="button" class="btn btn-danger cancel">Delete</button>'+
-                  // '</div>'
-
-
-
-  );
-});
-
-$(".list").on('click', '.cancel', function(){
-$(this).parent().remove();
-});
-
-});
-$(document).on('click','.add_deliverable',function(e){
-//alert('success');
-e.preventDefault();
-//console.log("test");
-var data= {
-  'title': $('.title').val(),
-  'from': $('.from').val(),
-  'to': $('.to').val(),
-
-  'del_description': $('.description').val(),
-  //'project_id': document.querySelector('.project_id').value,
-  'project_id': document.getElementById("project_id").value,
-
-}
-//console.log(data);
-$.ajaxSetup({
-  headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-  }
-});
-$.ajax({
-  type: "POST",
-  url: "{{route('add-milestone')}}",
-  data: data,
-  dataType: "json",
-  success: function (response){
-    if (response.status == 400) {
-      $('#saveform_errList').html("");
-      $('#saveform_errList').addClass('alert alert-danger');
-      $.each(response.errors, function (key, err_values){
-        $('#saveform_errList').append('<li>'+err_values+'</li>');
-      });
-    }
-    else {
-        $('#saveform_errList').html("");
-        $('#success_message').addClass('alert alert-success');
-        $('#success_message').text(response.message);
-        $('#milestoneaddmodal').modal('hide');
-        $('#milestoneaddmodal').find('input').val("");
-        document.querySelector('#summary').value= '';
-          fetchmilestone();
-
-    }
-  }
-});
-});
 </script>

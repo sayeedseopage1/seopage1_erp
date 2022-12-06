@@ -52,6 +52,8 @@
         <!-- RESET END -->
     </x-filters.filter-box>
 
+
+
 @endsection
 
 @php
@@ -92,7 +94,19 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
                 </x-datatable.actions>
             @endif
 
+
         </div>
+        <div class="d-flex justify-content-end">
+          <div class="btn-group  ml-0 ml-lg-3 ml-md-3" role="group">
+              <a href="{{ route('deals.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
+                  data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
+
+              <a href="{{ route('leadboards.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip" data-original-title="@lang('modules.lead.kanbanboard')"><i class="side-icon bi bi-kanban"></i></a>
+          </div>
+
+        </div>
+
+
         <!-- Add Task Export Buttons End -->
 
         <!-- Task Box Start -->
