@@ -46,6 +46,8 @@ use App\Models\SalesCount;
 use DateTime;
 use App\Models\DealStageChange;
 use App\Models\Currency;
+use Illuminate\Support\Facades\Redirect;
+use Toastr;
 
 
 class LeadController extends AccountBaseController
@@ -130,9 +132,11 @@ class LeadController extends AccountBaseController
       $lead_ag_id->save();
 
 
-      $deal= DealStage::where('id',$deal->id)->first();
+      $deal= DealStage::where('lead_id',$lead->id)->first();
+      Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+      return redirect('/account/deals/'.$deal->id);
 
-        return back()->with('status_updated', 'Lead Converted to Deal Successfully.!!');
+        //return back()->with('status_updated', 'Lead Converted to Deal Successfully.!!');
     }
     public function DealStageUpdate(Request $request)
     {
@@ -184,10 +188,10 @@ class LeadController extends AccountBaseController
           $deal_stage->deal_stage_id=$deal->deal_stage;
           $deal_stage->save();
 
-          $lead_id= Lead::where('id',$deal->lead_id)->first();
-          $lead= Lead::find($lead_id->id);
-          $lead->status_id= 4;
-          $lead->save();
+          // $lead_id= Lead::where('id',$deal->lead_id)->first();
+          // $lead= Lead::find($lead_id->id);
+          // $lead->status_id= 4;
+          // $lead->save();
         }elseif ($deal_stage->deal_stage == 1) {
           $deal->deal_stage= $deal_stage->deal_stage+1;
           $deal->comments=$request->comments;

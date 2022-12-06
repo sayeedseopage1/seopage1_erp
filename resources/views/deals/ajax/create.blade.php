@@ -92,7 +92,7 @@
 
 
                 <div class="col-lg-4 col-md-6">
-                      <button type="submit" class="btn btn-primary">Create Lead</button>
+                      <button type="submit" class="btn btn-primary">Create Deal</button>
                 </div>
                 <br>
                 <br>

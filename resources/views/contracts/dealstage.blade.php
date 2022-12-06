@@ -360,7 +360,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                       <?php
                           $deal_stages= App\Models\DealStageChange::where('deal_id',$deal->short_code)->get();
-                        //  dd($deal_stages);
+
 
                        ?>
                        @foreach($deal_stages as $stage)

@@ -115,18 +115,7 @@ class LeadsDataTable extends BaseDataTable
                               </button>';
                     }
 
-                      
 
-
-
-
-
-                // if (($this->addFollowUpPermission == 'all' || ($this->addFollowUpPermission == 'added' && user()->id == $row->added_by)) && $row->client_id == null && $row->next_follow_up == 'yes') {
-                //     $action .= '<a onclick="followUp(' . $row->id . ')" class="dropdown-item" href="javascript:;">
-                //                 <i class="fa fa-thumbs-up mr-2"></i>
-                //                 ' . trans('modules.lead.addFollowUp') . '
-                //             </a>';
-                // }
 
                 $action .= '</div>
                     </div>
@@ -153,8 +142,8 @@ class LeadsDataTable extends BaseDataTable
                 return $row->project_id;
             });
             $datatables->addColumn('project_link', function ($row) {
-                return $row->project_link;
-                //return '<a href="' . $row->project_link . '">' . $row->project_link. '</a>';
+              //  return $row->project_link;
+                return '<a target="_blank" class="mb-0 f-13 text-darkest-grey" href="' . $row->project_link . '">' . $row->project_link. '</a>';
             });
             $datatables->addColumn('bid_value', function ($row) {
               $currency= Currency::where('id',$row->original_currency_id)->first();
@@ -373,7 +362,7 @@ class LeadsDataTable extends BaseDataTable
             $datatables->removeColumn('source');
             $datatables->removeColumn('next_follow_up');
             $datatables->removeColumn('statusName');
-            $datatables->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date', 'agent_name', 'check']);
+            $datatables->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date', 'agent_name', 'check','project_link']);
 
             return $datatables;
     }

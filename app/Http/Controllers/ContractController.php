@@ -437,12 +437,15 @@ class ContractController extends AccountBaseController
             $deal->comments = $deal_stage->comments;
             $deal->won_lost = 'Yes';
             $deal->save();
-            $lead_id = Lead::where('id', $request->lead_id)->first();
-            $agent = SalesCount::where('user_id', $lead_id->added_by)->first();
-            $lead_ag = SalesCount::find($agent->id);
+            //$lead_id = Lead::where('id', $request->lead_id)->first();
+            if (Auth::id() != null) {
+              $agent = SalesCount::where('user_id', Auth::id())->first();
+              $lead_ag = SalesCount::find($agent->id);
 
-            $lead_ag->negotiation_started = $lead_ag->negotiation_started + 1;
-        //    $lead_ag->save();
+              $lead_ag->negotiation_started = $lead_ag->negotiation_started + 1;
+              $lead_ag->save();
+            }
+
         }
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
@@ -474,17 +477,23 @@ class ContractController extends AccountBaseController
 
         $deal->start_date = $newDate;
         $deal->save();
-        $lead_con_id = Lead::where('id', $request->lead_id)->first();
-        $agent_id = SalesCount::where('user_id', $lead_con_id->added_by)->first();
-        $lead_ag_id = SalesCount::find($agent_id->id);
+        //$lead_con_id = Lead::where('id', $request->lead_id)->first();
+        if (Auth::id() != null) {
+          $agent_id = SalesCount::where('user_id', Auth::id())->first();
+          $lead_ag_id = SalesCount::find($agent_id->id);
 
-        $lead_ag_id->won_deals = $lead_ag_id->won_deals + 1;
-        $lead_ag_id->deal_value = $lead_ag_id->deal_value + $deal->amount;
-        $lead_ag_id->save();
+          $lead_ag_id->won_deals = $lead_ag_id->won_deals + 1;
+          $lead_ag_id->deal_value = $lead_ag_id->deal_value + $deal->amount;
+          $lead_ag_id->save();
+        }
+
 
         $lead = Lead::find($request->lead_id);
-        $lead->status_id = 3;
-        $lead->save();
+        if ($lead != null) {
+          $lead->status_id = 3;
+          $lead->save();
+        }
+
 
         $user = new User();
         $user->name = $request->client_name;

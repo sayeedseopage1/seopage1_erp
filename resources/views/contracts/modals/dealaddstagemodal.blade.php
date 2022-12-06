@@ -29,11 +29,21 @@
                                 </div>
                               </div>
                               <div class="col-md-6">
+                                @if($deal->client_name != null)
                                 <div class="mt-3">
                                     <label for="input-state-2" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong></label>
-                                    <input name="client_name" id="input-state-2" type="text" class="form-control height-35 f-14 @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
+                                    <input name="client_name" readonly value="{{$deal->client_name}}"   id="input-state-2" type="text" class="form-control height-35 f-14 @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
 
                                 </div>
+                                @else
+                                <div class="mt-3">
+                                    <label for="input-state-2" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong></label>
+                                    <input name="client_name"  id="input-state-2" type="text" class="form-control height-35 f-14 @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
+
+                                </div>
+
+
+                                @endif
                                 @error('client_name')
                                   <div class="mt-3">
                                     <div class="alert alert-danger">{{ $message }}</div>
@@ -60,25 +70,44 @@
                               <div class="col-md-12">
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Project Name <span style="color:red;">*<span></strong></label>
-                                    <input name="project_name" value="{{$deal->client_name}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+                                    <input name="project_name" value="{{$deal->project_name}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                 </div>
                               </div>
                             </div>
                             <div class="row">
                               <div class="col-md-12">
+                                @if($deal->profile_link != null)
                                 <div class="mt-3">
-                                    <label for="input-state-3" class="form-label"><strong>Project Link <span style="color:red;">*<span></strong></label>
+                                    <label for="input-state-3" class="form-label"><strong>Profile Link <span style="color:red;">*<span></strong></label>
                                     <input name="profile_link" value="{{$deal->profile_link}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                 </div>
+                                @else
+                                <div class="mt-3">
+                                    <label for="input-state-3" class="form-label"><strong>Profile Link <span style="color:red;">*<span></strong></label>
+                                    <input name="profile_link"  id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+
+                                </div>
+
+                                @endif
                               </div>
                               <div class="col-md-12">
+                                @if($deal->message_link != null)
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Message Link <span style="color:red;">*<span></strong></label>
                                     <input name="message_link" value="{{$deal->message_link}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                 </div>
+                                @else
+
+                                <div class="mt-3">
+                                    <label for="input-state-3" class="form-label"><strong>Message Link <span style="color:red;">*<span></strong></label>
+                                    <input name="message_link"  id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+
+                                </div>
+
+                                @endif
                               </div>
                             </div>
 
@@ -91,7 +120,7 @@
                             </div>
                               <div class="mt-3">
                                 <?php
-                                  $currencies= App\Models\Currency::where('id',$lead->original_currency_id)->first();
+                                  $currencies= App\Models\Currency::where('id',$deal->original_currency_id)->first();
                                  ?>
                                  <label for="input-state-3" class="form-label"><strong>Currency <span style="color:red;">*<span></strong></label>
                             <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id">

@@ -15,6 +15,7 @@
         "barryvdh/laravel-ide-helper": "^2.10",
         "barryvdh/laravel-translation-manager": "^0.6.3",
         "billowapp/payfast": "^0.5.0",
+        "brian2694/laravel-toastr": "^5.57",
         "craftsys/msg91-laravel-notification-channel": "^0.6.2",
         "doctrine/dbal": "^3.0",
         "edujugon/push-notification": "dev-master",

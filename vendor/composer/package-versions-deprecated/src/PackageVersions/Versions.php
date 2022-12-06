@@ -47,6 +47,7 @@ final class Versions
   'berkayk/onesignal-laravel' => 'v1.0.10@4b3bc2ff3376f5adb224948b759ccf052e3e6b7b',
   'billowapp/payfast' => '0.5.0@3912032abd18cf4f90890aa41ac774b4971100a2',
   'billowapp/show-me-the-money' => '0.4.3@70409331d4ca1cdcd458589cdbd12105f0bca599',
+  'brian2694/laravel-toastr' => '5.57@1274f58564b9d845dfe82d5aca60b99b6fbb5a71',
   'brick/math' => '0.10.2@459f2781e1a08d52ee56b0b1444086e038561e3f',
   'clue/stream-filter' => 'v1.6.0@d6169430c7731d8509da7aecd0af756a5747b78e',
   'composer/ca-bundle' => '1.3.3@30897edbfb15e784fe55587b4f73ceefd3c4d98c',
@@ -298,7 +299,7 @@ final class Versions
   'symfony/filesystem' => 'v6.0.12@a36b782dc19dce3ab7e47d4b92b13cefb3511da3',
   'symfony/yaml' => 'v6.0.12@8c68efb08b038ec02753da6f16e1601a6ed4ef17',
   'theseer/tokenizer' => '1.2.1@34a41e998c2183e22995f158c581e7b5e755ab9e',
-  'laravel/laravel' => 'dev-master@1784f5d1a09c95275ec71e31966b38c33bff728c',
+  'laravel/laravel' => 'dev-master@3458382648681aa1632eccf15e4092c72e9fe268',
 );
 
     private function __construct()

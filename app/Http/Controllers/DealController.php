@@ -48,6 +48,8 @@ use DateTime;
 use App\Models\DealStageChange;
 use App\Models\Currency;
 use Illuminate\Support\Facades\Redirect;
+//use SweetAlert;
+use Toastr;
 
 class DealController extends AccountBaseController
 {
@@ -112,7 +114,7 @@ class DealController extends AccountBaseController
         );
 
         DealStage::destroy($id);
-        return Reply::success(__('messages.contactDeleted'));
+        return Reply::success(__('Deal Deleted Successfully'));
     }
 
     public function create()
@@ -158,8 +160,9 @@ class DealController extends AccountBaseController
         $deal->client_username= $request->client_username;
         $deal->deal_stage= 0;
         $deal->project_name = $request->project_name;
+        $deal->project_link = $request->project_link;
         $deal->currency_id= 1;
-        $deal->original_currency_id= 1;
+        $deal->original_currency_id= $request->original_currency_id;
         $deal->actual_amount=  $request->amount;
         $currency= Currency::where('id',$request->original_currency_id)->first();
         //dd($currency);
@@ -168,12 +171,12 @@ class DealController extends AccountBaseController
         $deal->added_by= Auth::id();
         $deal->converted_by= Auth::id();
         $deal->save();
-        $user = new User();
-        $user->name = $request->client_name;
-        $user->user_name = $request->user_name;
-        $user->login= 'disable';
-        $user->email_notifications = 0;
-        $user->save();
+        // $user = new User();
+        // $user->name = $request->client_name;
+        // $user->user_name = $request->user_name;
+        // $user->login= 'disable';
+        // $user->email_notifications = 0;
+        // $user->save();
 
 
 
@@ -184,43 +187,53 @@ class DealController extends AccountBaseController
     public function edit($id)
     {
         $this->editPermission = user()->permission('edit_contract');
-        $this->contract = Contract::with('signature', 'renewHistory', 'renewHistory.renewedBy')
-            ->find($id)
-            ->withCustomFields();
+        $this->deal = DealStage::
+            find($id);
 
-        abort_403(
-            !(
-                $this->editPermission == 'all' ||
-                ($this->editPermission == 'added' && user()->id == $this->contract->added_by) ||
-                ($this->editPermission == 'owned' && user()->id == $this->contract->client_id) ||
-                ($this->editPermission == 'both' && (user()->id == $this->contract->client_id || user()->id == $this->contract->added_by))
-            )
-        );
+        //dd($this->deal);
 
-        $this->clients = User::allClients();
-        $this->contractTypes = ContractType::all();
+
+
+
+
         $this->currencies = Currency::all();
-        if (!empty($this->contract->getCustomFieldGroupsWithFields())) {
-            $this->fields = $this->contract->getCustomFieldGroupsWithFields()->fields;
-        }
+
 
         if (request()->ajax()) {
-            $this->pageTitle = __('app.update') . ' ' . __('app.menu.contract');
-            $html = view('contracts.ajax.edit', $this->data)->render();
+            $this->pageTitle = __('app.update') . ' ' . __('Deal');
+            $html = view('deals.ajax.edit', $this->data)->render();
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
-        $this->view = 'contracts.ajax.edit';
-        return view('contracts.create', $this->data);
+        $this->view = 'deals.ajax.edit';
+        return view('deals.create', $this->data);
     }
 
-    public function update(UpdateRequest $request, $id)
+    public function update(Request $request)
     {
-        $contract = Contract::findOrFail($id);
 
-        $this->storeUpdate($request, $contract);
+        $deal = DealStage::findOrFail($request->id);
+        $deal->client_name= $request->client_name;
 
-        return Reply::redirect(route('contracts.index'), __('messages.contractUpdated'));
+        $deal->client_username= $request->client_username;
+      //  $deal->deal_stage= 0;
+        $deal->project_name = $request->project_name;
+        $deal->project_link = $request->project_link;
+        $deal->currency_id= 1;
+        $deal->original_currency_id= $request->original_currency_id;
+        $deal->actual_amount=  $request->amount;
+        $currency= Currency::where('id',$request->original_currency_id)->first();
+        //dd($currency);
+        $deal->amount = ($request->amount)/$currency->exchange_rate;
+        $deal->description= $request->description;
+        $deal->updated_by= Auth::id();
+
+        $deal->save();
+
+        //SweetAlert::message('Deal Updated Successfully!');
+
+         Toastr::success('Deals Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return redirect()->route('deals.index',__('Deals Updated'));
     }
 
     private function storeUpdate($request, $contract)

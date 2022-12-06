@@ -7,6 +7,7 @@
 
 @section('filter-section')
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
     <x-filters.filter-box>
         <!-- DATE START -->
@@ -286,7 +287,10 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
     <script type="text/javascript">
     $(document).ready(function() {
       $('#description2').summernote();
+        $('#description3').summernote();
 
     });
     </script>
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+       {!! Toastr::message() !!}
 @endpush

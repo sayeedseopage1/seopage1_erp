@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Lead;
 use App\Models\User;
+use App\Models\Currency;
 
 class DealStage extends Model
 {
@@ -22,5 +23,9 @@ class DealStage extends Model
       public function converted_by()
       {
           return $this->belongsTo(User::class, 'converted_by');
+      }
+      public function original_currency()
+      {
+          return $this->belongsTo(Currency::class, 'original_currency_id');
       }
 }

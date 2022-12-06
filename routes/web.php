@@ -930,6 +930,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('deals', DealController::class);
     Route::post('deals/apply-quick-action', [DealController::class, 'applyQuickAction'])->name('deals.apply_quick_action');
     Route::post('accounts/deals/store', [DealController::class, 'store'])->name('store.deal');
+      Route::post('accounts/deals/update', [DealController::class, 'update'])->name('update.deal');
 
     // Contract template
 

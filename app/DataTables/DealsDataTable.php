@@ -65,17 +65,17 @@ class DealsDataTable extends BaseDataTable
                 //         </a>';
                 // }
 
-                // if (
-                //     $this->editContractPermission == 'all'
-                //     || ($this->editContractPermission == 'added' && user()->id == $row->added_by)
-                //     || ($this->editContractPermission == 'owned' && user()->id == $row->client_id)
-                //     || ($this->editContractPermission == 'both' && (user()->id == $row->client_id || user()->id == $row->added_by))
-                //     ) {
-                //     $action .= '<a class="dropdown-item openRightModal" href="' . route('contracts.edit', [$row->id]) . '">
-                //             <i class="fa fa-edit mr-2"></i>
-                //             ' . trans('app.edit') . '
-                //         </a>';
-                // }
+                if (
+                    $this->editContractPermission == 'all'
+                    || ($this->editContractPermission == 'added' && user()->id == $row->added_by)
+                    || ($this->editContractPermission == 'owned' && user()->id == $row->client_id)
+                    || ($this->editContractPermission == 'both' && (user()->id == $row->client_id || user()->id == $row->added_by))
+                    ) {
+                    $action .= '<a class="dropdown-item openRightModal" href="' . route('deals.edit', [$row->id]) . '">
+                            <i class="fa fa-edit mr-2"></i>
+                            ' . trans('app.edit') . '
+                        </a>';
+                }
 
                 if (
                     $this->deleteContractPermission == 'all'
@@ -138,7 +138,7 @@ class DealsDataTable extends BaseDataTable
                 // $currencySymbol = $row->currency->currency_symbol;
                 //
                 // return currency_formatter($row->amount, $currencySymbol);
-              return $row->amount . $currency->currency_symbol;
+              return round($row->amount,2) . $currency->currency_symbol;
 
 
             })
