@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('deal_statuses', function (Blueprint $table) {
             $table->id();
+            $table->string('type');
+            $table->integer('priority');
+            
             $table->timestamps();
         });
     }

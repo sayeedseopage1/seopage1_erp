@@ -328,6 +328,21 @@
                         <h4>Client's Message</h4>
                         <p></p>
                       </div>
+                      <div class="details-seopage1 py-4">
+                        <h4>Public Url</h4>
+                        <?php
+                        $url= url('/');
+                        $deal_url = $url.'/'.'deals/'.$deal->hash;
+                        //dd($deal_url);
+                         ?>
+                        <span>
+                          <input type="text" readonly class="form-control"  value="{{$url}}/deals/{{$deal->deal_id}}" id="{{$deal->deal_id}}">
+
+                        </span>
+                            <button type="button" class="btn btn-info mt-3" onclick="myFunction{{$deal->hash}}()"><i class="fa-solid fa-copy"></i></button>
+
+
+                      </div>
 
                       <div class="details-seopage1 py-4">
 
