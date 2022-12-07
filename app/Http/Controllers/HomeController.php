@@ -91,7 +91,9 @@ class HomeController extends Controller
     public function ClientForm(Request $request)
     {
 
-      //dd($request);
+    //dd($request->day);
+    //count($request->day);
+
       $client = new ClientForm();
       $client->deal_id=$request->deal_id;
       $client->client_username= $request->user_name;
@@ -102,6 +104,47 @@ class HomeController extends Controller
       $client->message= $request->message;
       $client->timezone= $request->timezone;
       $client->checklist= $request->check;
+      // for($count = 0; $count < count($position); $count++)
+      //           {
+      //               $insert = array(
+      //                   'code_insert' => $code_insert[$count],
+      //                   'quality'     => $quality[$count]
+      //               );
+      //               $insert_data[] = $insert;
+      //
+      //               $tool = array(
+      //                   'position'    => $position[$count],
+      //                   'code_tool'   => $code_tool[$count],
+      //                   'insert_id'   => $insert_data[$count]
+      //
+      //               );
+      //               $tool_data[] = $tool;
+      //           }
+
+      $days = $request->day;
+      $from = $request->from;
+      $to = $request->to;
+      for ($i=0; $i < count($request->day) ; $i++) {
+        $data = array(
+               'day' => $days[$i] .' '. $from[$i] . '-'. $to[$i],
+
+             );
+
+       $day[] = $data;
+
+
+      }
+    //  Schedule::insert($insert_schedule);
+    $value= '';
+    foreach ($day as $d) {
+      //dd($d['day']);
+      $value= $value  . $d['day'].'<br> ';
+
+    }
+    //dd($value);
+    $client->day= $value;
+
+      //$client->day= $request->day[] . $request->from[] . $request->to[];
       $client->save();
       $deal= Deal::find($client->deal_id);
       //dd($deal);

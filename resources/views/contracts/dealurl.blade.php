@@ -87,159 +87,7 @@
 
 @section('content')
 
-  {{--  <div class="content-wrapper border-top-0 client-detail-wrapper">
-      <div class="card border-0 invoice">
 
-          <!-- CARD BODY START -->
-          <div class="card-body">
-
-              <h5 class="d-flex justify-content-center">Client Data Collection</h5>
-
-
-            <hr>
-            <?php
-            $url= url('/');
-             ?>
-              <div class="invoice-table-wrapper">
-
-                <div class="d-flex justify-content-center">
-                  <form class="" action="#" method="post">
-                    @csrf
-
-
-
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="mt-3">
-                            <label for="input-state-2" class="form-label"><strong>Client Username</strong></label>
-                            @if($client== null)
-
-                            <input id="input-state-2" name="client_username" type="text"  readonly class="form-control" placeholder="Enter User Name" required>
-                            @else
-                            <input id="input-state-2" name="client_username" type="text" value="{{$client->client_username}}" readonly class="form-control" placeholder="Enter User Name" required>
-                            @endif
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="mt-3">
-                            <label for="input-state-3" class="form-label"><strong>Client Email</strong></label>
-                            @if($client== null)
-                                <input id="input-state-3" readonly name="client_email"  type="text" class="form-control" placeholder="Enter Your Email" required>
-
-                            @else
-                            <input id="input-state-3" readonly name="client_email" value="{{$client->client_email}}" type="text" class="form-control" placeholder="Enter Your Email" required>
-                            @endif
-                        </div>
-                      </div>
-
-
-                    </div>
-
-                    <div class="mt-3">Client Phone Number</strong></label>
-                      @if($client== null)
-                      <input id="input-state-3" name="client_phone" readonly   type="text" class="form-control" placeholder="Enter Your Phone number" required>
-
-                      @else
-                        <input id="input-state-3" name="client_phone" readonly value="{{$client->client_phone}}"  type="text" class="form-control" placeholder="Enter Your Phone number" required>
-                        @endif
-
-                    </div>
-                    <div class="mt-3">
-                        <label for="floatingTextarea"><strong>Client WhatsApp ID (For future communication)!</strong></label>
-                        @if($client== null)
-
-                          <textarea class="form-control"  readonly name="client_whatsapp" placeholder="Leave a comment here" ></textarea>
-                        @else
-                      <textarea class="form-control"  readonly name="client_whatsapp" placeholder="Leave a comment here" >{!!$client->client_whatsapp!!}</textarea>
-                      @endif
-
-
-
-                    </div>
-                    <div class="mt-3">
-                        <label for="floatingTextarea"><strong>Client's Available Platform</strong></label>
-                        @if($client== null)
-                          <textarea class="form-control"  readonly name="other_platform" placeholder="Leave a comment here"></textarea>
-
-                        @else
-                      <textarea class="form-control"  readonly name="other_platform" placeholder="Leave a comment here">{!!$client->other_platform!!}</textarea>
-                      @endif
-
-
-                    </div>
-                    <div class="mt-3">
-                        <label for="floatingTextarea"><strong>Client's Message </strong></label>
-                        @if($client== null)
-                              <textarea class="form-control" readonly  name="message"  placeholder="Leave a comment here" required></textarea>
-
-                        @else
-                      <textarea class="form-control" readonly  name="message"  placeholder="Leave a comment here" required>{!!$client->message!!}</textarea>
-
-                      @endif
-
-                    </div>
-                    <div class="mt-3">
-                        <label for="floatingTextarea"><strong>Client's Timezone</strong></label>
-                        @if($client== null)
-                              <textarea class="form-control" readonly  name="message"  placeholder="Leave a comment here" required></textarea>
-
-                        @else
-                      <textarea class="form-control" readonly  name="timezone"  placeholder="Leave a comment here" required>{!!$client->timezone!!}</textarea>
-
-                      @endif
-
-                    </div>
-                    <div class="mt-3">
-                        <label for="input-state-3" class="form-label"><strong style="color:red;">Client Submission Url</strong></label>
-                      <div class="row" >
-
-                        <div class="col-md-10">
-                            <input type="text" readonly class="form-control"  value="{{$url}}/deals/{{$deal->hash}}" id="{{$deal->hash}}">
-                        </div>
-                        <div class="col-md-2">
-                                <button type="button" class="btn btn-info" onclick="myFunction{{$deal->hash}}()"><i class="fa-solid fa-copy"></i></button>
-                        </div>
-
-
-                      </div>
-
-
-
-                            <!-- The button used to copy the text -->
-
-                    </div>
-
-                      </form>
-
-
-
-
-
-                </div>
-
-
-
-
-              </div>
-
-
-
-
-
-
-          </div>
-          <!-- CARD BODY END -->
-          <!-- CARD FOOTER START -->
-          <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
-
-
-
-
-
-          </div>
-          <!-- CARD FOOTER END -->
-      </div>
-    </div> --}}
     <section>
         <div class="container">
             <div class="row">
@@ -278,8 +126,20 @@
                         <h4>Client's Message</h4>
                         <p>{!!$client->message!!}</p>
                       </div>
+                      <div class="details-seopage1">
+                        <h4>Client's Timezone</h4>
+                        <p>{{$client->timezone}}</p>
+                      </div>
+                      <?php
+                      // $day= rtrim($client->day, " ,");
+                       ?>
+                      <div class="details-seopage1">
+                        <h4>Client's Available Time</h4>
+                        <p>{!!$client->day!!}</p>
+                      </div>
 
                       <div class="details-seopage1 py-4">
+                          <h4>Public Url</h4>
                         <?php
                         $url= url('/');
                         $deal_url = $url.'/'.'deals/'.$deal->hash;
@@ -299,7 +159,7 @@
                     <h3 class="text-center" style="color:#41b4e1;font-weight: 600;"> Clients Data Details</h3>
 
 
-                      <div class="details-seopage1">
+                      <!-- <div class="details-seopage1">
                         <h4>Client User Neme</h4>
                         <p></p>
                       </div>
@@ -328,6 +188,14 @@
                         <h4>Client's Message</h4>
                         <p></p>
                       </div>
+                      <div class="details-seopage1">
+                        <h4>Client's Timezone</h4>
+                        <p></p>
+                      </div>
+                      <div class="details-seopage1">
+                        <h4>Client's Available Time</h4>
+                        <p></p>
+                      </div> -->
                       <div class="details-seopage1 py-4">
                         <h4>Public Url</h4>
                         <?php
@@ -347,7 +215,7 @@
                       <div class="details-seopage1 py-4">
 
                         <span>
-                          <h4 class="text-center" style="color:red !important;"> Client hasn't Responsed Yet!</h4>
+                          <h4 class="text-center" style="color:red !important;"> Client hasn't Responded Yet!</h4>
 
                         </span>
 
