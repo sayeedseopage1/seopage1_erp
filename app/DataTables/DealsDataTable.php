@@ -214,6 +214,26 @@ class DealsDataTable extends BaseDataTable
                   return '--';
                 }
             })
+            ->addColumn('submission_status', function($row) {
+
+            //  dd($row->added_by->name);
+                //return $row->won_lost;
+                $deal= Deal::where('deal_id',$row->short_code)->first();
+                if ($deal != null) {
+                  if ($deal->submission_status == 'pending') {
+                      return '<badge class="badge badge-danger">Pending</badge>';
+                  }elseif ($deal->submission_status == 'Submitted') {
+                  return '<badge class="badge badge-success">Submitted</badge>';
+                  }
+                  else {
+                    return '<badge class="badge badge-warning">'.$deal->submission_status.'</badge>';
+                  }
+                }else {
+                  return '--';
+                }
+
+
+            })
             ->addColumn('project_manager', function($row) {
               if ($row->won_lost == 'Yes') {
                 $pm= Deal::where('deal_id',$row->short_code)->first();
@@ -298,7 +318,7 @@ class DealsDataTable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['action', 'check', 'project_name','deal_id','status','added_by','converted_by','project_manager','client_name']);
+            ->rawColumns(['action', 'check', 'project_name','deal_id','status','added_by','converted_by','project_manager','client_name','submission_status']);
     }
 
     /**
@@ -432,6 +452,7 @@ class DealsDataTable extends BaseDataTable
             __('app.actual_amount') => ['data' => 'actual_amount', 'name' => 'actual_amount', 'title' => __('Project Budget (Original Currency)')],
             __('app.project_manager')  => ['data' => 'project_manager', 'name' => 'project_manager', 'title' => __('Project Manager')],
             // __('app.startDate') => ['data' => 'start_date', 'name' => 'start_date', 'title' => __('app.startDate')],
+              __('app.submission_status_manager')  => ['data' => 'submission_status', 'name' => 'submission_status', 'title' => __('Client Form')],
             __('app.created_at') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('Creation Date')],
              __('app.added_by')  => ['data' => 'added_by', 'name' => 'added_by', 'title' => __('Added By')],
                 __('app.converted_by')  => ['data' => 'converted_by', 'name' => 'converted_by', 'title' => __('Closed By')],
