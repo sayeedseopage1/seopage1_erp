@@ -374,6 +374,500 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
                 </div>
 
+                  <hr>
+                  <div class="col-md-6 col-lg-3 mt-5">
+                    <h5>Add Deliverables</h5>
+
+                  </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex mt-5">
+                            <x-forms.checkbox fieldId="graphics_design"
+
+                                :fieldLabel="__('Graphics Design')" fieldName="graphics_design" :fieldValue="'Graphics Design'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="graphics_design_box">
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_graphics" type="text" class="form-control height-35 f-14" name="from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_graphics" type="text" class="form-control height-35 f-14" name="to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+
+                  <div class="col-md-6 col-lg-3">
+                      <div class="form-group">
+                          <div class="d-flex">
+                              <x-forms.checkbox fieldId="ux_design"
+                                :checked="($project->deadline == null) ? true : false"
+
+                                  :fieldLabel="__('UX Design')" fieldName="ux_design" :fieldValue="'Ux Design'" />
+                          </div>
+                      </div>
+                  </div>
+                    <div class="row" id="UX_Box">
+
+                  <div class="col-md-4 col-lg-4">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Quantity</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4 col-lg-3">
+                      <div class="form-group">
+                          <label class="ml-3" for="">From</label>
+                          <div class="d-flex ml-3">
+
+                            <input id="from" type="text" class="form-control height-35 f-14" name="from" value="">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4 col-lg-3">
+                      <div class="form-group">
+                          <label class="ml-3" for="">To</label>
+                          <div class="d-flex ml-3">
+
+                            <input id="to" type="text" class="form-control height-35 f-14" name="to" value="">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-12 col-lg-12">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Description</label>
+                          <div class="d-flex ml-3">
+                            <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+
+                          </div>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="main_page_development"
+
+                                :fieldLabel="__('Main Page Development')" fieldName="main_page_development" :fieldValue="'Main Page Development'"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="main_page_development_box">
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_main_page_development" type="text" class="form-control height-35 f-14" name="from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_main_page_development" type="text" class="form-control height-35 f-14" name="to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="secondary_page_development"
+
+                                :fieldLabel="__('Secondary Page Development')" fieldName="secondary_page_development" :fieldValue="'Secondary Page Development'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="secondary_page_development_box">
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="secondary_page_development_quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_secondary_page_development" type="text" class="form-control height-35 f-14" name="secondary_page_development_from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_secondary_page_development" type="text" class="form-control height-35 f-14" name="secondary_page_development_to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="secondary_page_development_deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="content_creation"
+
+                                :fieldLabel="__('Content Creation')" fieldName="content_creation" :fieldValue="'Content Creation'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="content_creation_box">
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_content_creation" type="text" class="form-control height-35 f-14" name="from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_content_creation" type="text" class="form-control height-35 f-14" name="to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="marketing"
+
+                                :fieldLabel="__('Marketing')" fieldName="marketing" :fieldValue="'Marketing'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="marketing_box">
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_marketing" type="text" class="form-control height-35 f-14" name="from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_marketing" type="text" class="form-control height-35 f-14" name="to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="domain_hosting"
+
+                                :fieldLabel="__('Domain/Hosting')" fieldName="domain_hosting" :fieldValue="'Domain/Hosting'"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="domain_hosting_box">
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_domain_hosting" type="text" class="form-control height-35 f-14" name="from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_domain_hosting" type="text" class="form-control height-35 f-14" name="to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="products"
+
+                                :fieldLabel="__('Products')" fieldName="products" :fieldValue="'Products'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="products_box">
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_products" type="text" class="form-control height-35 f-14" name="from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_products" type="text" class="form-control height-35 f-14" name="to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="collection"
+
+                                :fieldLabel="__('Collection')" fieldName="collection" :fieldValue="'Collection'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="collection_box">
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_collection" type="text" class="form-control height-35 f-14" name="from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_collection" type="text" class="form-control height-35 f-14" name="to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3 mb-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="others"
+
+                                :fieldLabel="__('Others')" fieldName="others" :fieldValue="'Others'"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="others_box">
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_others" type="text" class="form-control height-35 f-14" name="from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_others" type="text" class="form-control height-35 f-14" name="to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3 mb-3">
+                    <br>
+                </div>
+
 
                   </div>
 
@@ -538,7 +1032,168 @@ $createPublicProjectPermission = user()->permission('create_public_project');
             },
             ...datepickerConfig
         });
-      
+        const dp3 = datepicker('#from', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+              dp4.setMin(date);
+            },
+            ...datepickerConfig
+        });
+        const dp4 = datepicker('#to', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+               dp3.setMax(date);
+            },
+            ...datepickerConfig
+        });
+        const dp5 = datepicker('#from_graphics', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+              dp6.setMin(date);
+            },
+            ...datepickerConfig
+        });
+        const dp6 = datepicker('#to_graphics', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+               dp5.setMax(date);
+            },
+            ...datepickerConfig
+        });
+        const dp7 = datepicker('#from_main_page_development', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+              dp8.setMin(date);
+            },
+            ...datepickerConfig
+        });
+        const dp8 = datepicker('#to_main_page_development', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+               dp7.setMax(date);
+            },
+            ...datepickerConfig
+        });
+        const dp9 = datepicker('#from_secondary_page_development', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+              dp10.setMin(date);
+            },
+            ...datepickerConfig
+        });
+        const dp10 = datepicker('#to_secondary_page_development', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+               dp9.setMax(date);
+            },
+            ...datepickerConfig
+        });
+        const dp11 = datepicker('#from_content_creation', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+              dp12.setMin(date);
+            },
+            ...datepickerConfig
+        });
+        const dp12 = datepicker('#to_content_creation', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+               dp11.setMax(date);
+            },
+            ...datepickerConfig
+        });
+        const dp13 = datepicker('#from_marketing', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+              dp14.setMin(date);
+            },
+            ...datepickerConfig
+        });
+        const dp14 = datepicker('#to_marketing', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+               dp13.setMax(date);
+            },
+            ...datepickerConfig
+        });
+        const dp15 = datepicker('#from_domain_hosting', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+              dp16.setMin(date);
+            },
+            ...datepickerConfig
+        });
+        const dp16 = datepicker('#to_domain_hosting', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+               dp15.setMax(date);
+            },
+            ...datepickerConfig
+        });
+        const dp17 = datepicker('#from_products', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+              dp18.setMin(date);
+            },
+            ...datepickerConfig
+        });
+        const dp18 = datepicker('#to_products', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+               dp17.setMax(date);
+            },
+            ...datepickerConfig
+        });
+        const dp19 = datepicker('#from_collection', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+              dp20.setMin(date);
+            },
+            ...datepickerConfig
+        });
+        const dp20 = datepicker('#to_collection', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+               dp19.setMax(date);
+            },
+            ...datepickerConfig
+        });
+        const dp21 = datepicker('#from_others', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+              dp22.setMin(date);
+            },
+            ...datepickerConfig
+        });
+        const dp22 = datepicker('#to_others', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+               dp21.setMax(date);
+            },
+            ...datepickerConfig
+        });
+
+
 
         @if ($project->deadline == null)
             $('#deadlineBox').hide();
@@ -550,6 +1205,97 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                 $('#deadlineBox').hide();
             } else {
                 $('#deadlineBox').show();
+            }
+        });
+        $('#UX_Box').hide();
+        $('#ux_design').click(function() {
+            var check = $('#ux_design').is(":checked") ? true : false;
+            if (check == true) {
+                $('#UX_Box').show();
+            } else {
+                $('#UX_Box').hide();
+            }
+        });
+        $('#graphics_design_box').hide();
+        $('#graphics_design').click(function() {
+            var check = $('#graphics_design').is(":checked") ? true : false;
+            if (check == true) {
+                $('#graphics_design_box').show();
+            } else {
+                $('#graphics_design_box').hide();
+            }
+        });
+        $('#main_page_development_box').hide();
+        $('#main_page_development').click(function() {
+            var check = $('#main_page_development').is(":checked") ? true : false;
+            if (check == true) {
+                $('#main_page_development_box').show();
+            } else {
+                $('#main_page_development_box').hide();
+            }
+        });
+
+        $('#secondary_page_development_box').hide();
+        $('#secondary_page_development').click(function() {
+            var check = $('#secondary_page_development').is(":checked") ? true : false;
+            if (check == true) {
+                $('#secondary_page_development_box').show();
+            } else {
+                $('#secondary_page_development_box').hide();
+            }
+        });
+        $('#content_creation_box').hide();
+        $('#content_creation').click(function() {
+            var check = $('#content_creation').is(":checked") ? true : false;
+            if (check == true) {
+                $('#content_creation_box').show();
+            } else {
+                $('#content_creation_box').hide();
+            }
+        });
+        $('#marketing_box').hide();
+        $('#marketing').click(function() {
+            var check = $('#marketing').is(":checked") ? true : false;
+            if (check == true) {
+                $('#marketing_box').show();
+            } else {
+                $('#marketing_box').hide();
+            }
+        });
+        $('#domain_hosting_box').hide();
+        $('#domain_hosting').click(function() {
+            var check = $('#domain_hosting').is(":checked") ? true : false;
+            if (check == true) {
+                $('#domain_hosting_box').show();
+            } else {
+                $('#domain_hosting_box').hide();
+            }
+        });
+        $('#products_box').hide();
+        $('#products').click(function() {
+            var check = $('#products').is(":checked") ? true : false;
+            if (check == true) {
+                $('#products_box').show();
+            } else {
+                $('#products_box').hide();
+            }
+        });
+        $('#collection_box').hide();
+        $('#collection').click(function() {
+            var check = $('#collection').is(":checked") ? true : false;
+            if (check == true) {
+                $('#collection_box').show();
+            } else {
+                $('#collection_box').hide();
+            }
+        });
+        $('#others_box').hide();
+        $('#others').click(function() {
+            var check = $('#others').is(":checked") ? true : false;
+            if (check == true) {
+                $('#others_box').show();
+            } else {
+                $('#others_box').hide();
             }
         });
 
