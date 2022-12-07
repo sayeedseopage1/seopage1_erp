@@ -49,15 +49,21 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                       @endforeach
                                   </x-forms.select>
                               </div>
-                              <div class="col-lg-6 col-md-6">
+                              <div class="col-lg-4 col-md-4">
                                        <x-forms.text :fieldLabel="__('Project Link')" fieldName="project_link"
                                            fieldId="project_link" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" required/>
                                    </div>
+                                   <div class="col-md-4 col-lg-4 my-3" id="deadlineBox">
+                                     <label for="">Deadline</label>
+                                     <input type="date" class="form-control height-35 f-14" name="deadline" id="deadline" value="">
+
+                                   </div>
+
                                    <?php
                                     $currencies= App\Models\Currency::all();
 
                                     ?>
-                                   <div class="col-md-6 col-lg-6 mt-3 ">
+                                   <div class="col-md-4 col-lg-4 mt-3 ">
 
                                        <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
                                            <x-forms.label fieldId="original_currency_id" :fieldLabel="__('modules.invoices.currency')">
@@ -439,6 +445,7 @@ $(document).ready(function() {
 });
 
 
+
     var add_lead_note_permission = "{{ $addLeadNotePermission }}";
 
     $(document).ready(function() {
@@ -455,6 +462,13 @@ $(document).ready(function() {
             quillImageLoad('#note');
 
         }
+        const dp2 = datepicker('#deadline', {
+            position: 'bl',
+            onSelect: (instance, date) => {
+                dp1.setMax(date);
+            },
+            ...datepickerConfig
+        });
 
 
         $('#save-lead-form').click(function() {

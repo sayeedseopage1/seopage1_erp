@@ -461,6 +461,7 @@ class LeadController extends AccountBaseController
       $lead->project_id= $request->project_id;
       $lead->project_link= $request->project_link;
       $lead->actual_value= $request->value;
+      $lead->deadline= $request->deadline;
       $currency= Currency::where('id',$request->original_currency_id)->first();
       $lead->value= ($request->value)/$currency->exchange_rate;
       $lead->original_currency_id =$request->original_currency_id;
@@ -499,6 +500,7 @@ class LeadController extends AccountBaseController
 
       $lead = Lead::find($request->id);
       $lead->client_name= $request->client_name;
+      $lead->deadline= $request->deadline;
 
       $lead->project_id= $request->project_id;
       $lead->project_link= $request->project_link;

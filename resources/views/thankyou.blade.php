@@ -61,7 +61,7 @@
                     <div class="col-md-8 col-xl-8">
                         <div class="datainfo animate__animated animate__fadeInUp">
                             <h4 class="pb-4 wow">Hi there!</h4>
-                            <p>Thank you for subscribing. We're so excited to share the latest news and updates about our product with you. If you'd like to learn more, follow us on social media!</p>
+                            <p>Thank you for subscribing. We will use these information in case of emergencies and if we can't reach out to you using our regular channels.</p>
 
                             <span class="lines"><hr /></span>
                             <span>Sincerely,</span>
@@ -73,7 +73,7 @@
 
                             </span>
 
-                            <h5>Connect With Us</h5>
+                          {{--  <h5>Connect With Us</h5>
                             <div class="social_icon">
                                 <ul>
                                     <li>
@@ -96,6 +96,7 @@
                                     </li>
                                 </ul>
                             </div>
+                            --}}
                         </div>
                     </div>
                     <div class="col md-2 col-xl-2"></div>

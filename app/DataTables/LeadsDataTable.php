@@ -14,6 +14,7 @@ use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
 use App\Models\DealStage;
 use App\Models\Currency;
+use Illuminate\Support\Str;
 
 class LeadsDataTable extends BaseDataTable
 {
@@ -143,7 +144,7 @@ class LeadsDataTable extends BaseDataTable
             });
             $datatables->addColumn('project_link', function ($row) {
               //  return $row->project_link;
-                return '<a target="_blank" class="mb-0 f-13 text-darkest-grey" href="' . $row->project_link . '">' . $row->project_link. '</a>';
+                return '<a target="_blank" class="mb-0 f-13 text-darkest-grey" href="' . $row->project_link . '">' . Str::limit($row->project_link,15). '</a>';
             });
             $datatables->addColumn('bid_value', function ($row) {
               $currency= Currency::where('id',$row->original_currency_id)->first();
@@ -301,28 +302,12 @@ class LeadsDataTable extends BaseDataTable
 
                 return '<div class="media align-items-center">
                         <div class="media-body">
-                    <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('leads.show', [$row->id]) . '">' . $client_name . '</a></h5>
+                    <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('leads.show', [$row->id]) . '">' . (Str::limit($client_name,40)) . '</a></h5>
                     <p class="mb-0">' . $label . '</p>
                     </div>
                   </div>';
             });
-            // $datatables->editColumn('project_link', function ($row) {
-            //     if ($row->project_link != null && $row->project_link != '') {
-            //         $label = '<label class="badge badge-secondary">' . __('Project Link') . '</label>';
-            //     }
-            //     else {
-            //         $label = '';
-            //     }
-            //
-            //     $project_link = ucfirst($row->project_link);
-            //
-            //     return '<div class="media align-items-center">
-            //             <div class="media-body">
-            //         <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . $row->project_link . '">' . $row->project_link . '</a></h5>
-            //         <p class="mb-0">' . $label . '</p>
-            //         </div>
-            //       </div>';
-            // });
+
 
             $datatables->editColumn('next_follow_up_date', function ($row) use ($currentDate) {
                 if ($this->viewLeadFollowUpPermission != 'none') {

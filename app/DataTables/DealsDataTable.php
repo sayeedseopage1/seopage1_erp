@@ -13,6 +13,7 @@ use App\Models\Lead;
 use App\Models\User;
 use App\Models\Deal;
 use App\Models\Project;
+use Illuminate\Support\Str;
 class DealsDataTable extends BaseDataTable
 {
 
@@ -128,7 +129,7 @@ class DealsDataTable extends BaseDataTable
                   return '<div class="media align-items-center">
 
                            <div class="media-body">
-                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('projects.show', [$project->id]) . '">' . ucfirst($project->project_name) . '</a></h5>
+                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('projects.show', [$project->id]) . '">' . ucfirst(Str::limit($project->project_name,40)) . '</a></h5>
 
                            </div>
                         </div>';

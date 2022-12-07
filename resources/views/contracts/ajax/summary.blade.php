@@ -24,6 +24,7 @@
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 <?php
+$deal_id=App\Models\Deal::where('id',$contract->deal->id)->first();
 $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first();
 //dd($project_id->project_id);
 $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->first();

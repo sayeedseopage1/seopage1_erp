@@ -46,17 +46,23 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
                             @endforeach
                         </x-forms.select>
                     </div>
-                    <div class="col-lg-4 col-md-6">
+                    <div class="col-lg-4 col-md-4">
                         <x-forms.text :fieldLabel="__('Project Link')" fieldName="project_link"
                             fieldId="project_link" fieldPlaceholder="" fieldRequired="true"
                             :fieldValue="$lead->project_link" />
                     </div>
+                    <div class="col-md-4 col-lg-4 my-3" id="deadlineBox">
+                      <label for="">Deadline</label>
+                      <input type="date" class="form-control height-35 f-14" name="deadline" id="deadline" value="{{$lead->deadline}}">
+
+                    </div>
+
                     <?php
                      $currencies= App\Models\Currency::all();
 
 
                      ?>
-                    <div class="col-md-6 col-lg-4 mt-3 ">
+                    <div class="col-md-4 col-lg-4 mt-3 ">
 
                         <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
                             <x-forms.label fieldId="original_currency_id" :fieldLabel="__('modules.invoices.currency')">

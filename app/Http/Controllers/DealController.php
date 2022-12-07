@@ -312,7 +312,7 @@ class DealController extends AccountBaseController
         //     )
         // );
 
-        $this->pageTitle = __('Deal') . ': ' . ucfirst($this->deal->project_name);
+        $this->pageTitle = __('') . ucfirst($this->deal->short_code);
 
         $this->view = 'deals.ajax.deal_details';
 
