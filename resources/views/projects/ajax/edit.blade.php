@@ -213,7 +213,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                 </x-forms.input-group>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                           <div class="form-group my-3">
                           <x-forms.text :fieldLabel="__('Lead Developer')" fieldName="" fieldId=""
                               :fieldValue="$user->name" fieldReadOnly="true" />
@@ -258,7 +258,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         <input type="hidden" name="user_id[]" value="{{ user()->id }}">
                     @endif
 
-                    <div class="col-md-12 col-lg-4">
+                    <div class="col-md-6 col-lg-6">
                         <x-forms.select fieldId="project_status"
                             :fieldLabel="__('app.project') . ' ' . __('app.status')" fieldName="status" search="true">
                             @foreach ($projectStatus as $status)
@@ -275,7 +275,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         </x-forms.select>
                     </div>
 
-                    <div class="col-md-12 col-lg-4">
+                  {{--  <div class="col-md-12 col-lg-4">
                         <x-forms.range class="mr-0 mr-lg-2 mr-md-2"
                             :disabled="($project->calculate_task_progress == 'true' ? 'true' : 'false')"
                             :fieldLabel="__('modules.projects.projectCompletionStatus')" fieldName="completion_percent"
@@ -291,7 +291,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                     fieldName="calculate_task_progress" />
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
 
                 </div>
