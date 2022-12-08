@@ -225,7 +225,7 @@ class ContractController extends AccountBaseController
         $deal->client_username = $request->user_name;
         $deal->added_by = Auth::id();
         //$date= Carbon::now();
-
+        $deal->original_currency_id= $request->original_currency_id;
         $date = date('Y-m-d H:i:s');
 
         $newDate = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date)

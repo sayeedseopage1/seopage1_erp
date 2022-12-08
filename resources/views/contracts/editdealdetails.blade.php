@@ -224,7 +224,8 @@
                             <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
-                              <textarea value="{{$deal->message_link}}" name="message_link" class="form-control" id="message_link" rows="3" required>{{$deal->message_link}}</textarea>
+                                <input type="text" value="{{$deal->message_link}}" name="message_link" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
+                            
                               </div>
                             </div>
 
@@ -233,6 +234,7 @@
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.) <span style="color:red;">*</span></label>
+
                                 <textarea name="description2" value="{{$deal->description2}}" class="form-control" id="description2" rows="3" required>{{$deal->description2}}</textarea>
                               </div>
                             </div>

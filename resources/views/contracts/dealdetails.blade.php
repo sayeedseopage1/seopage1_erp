@@ -236,6 +236,7 @@
 
                           <br>
                           <div class="row">
+                            @if($deal->profile_link != null)
                             <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Profile Link <span style="color:red;">*</span></label>
@@ -247,6 +248,23 @@
                                 </div>
                               @enderror
                             </div>
+                            @else
+                            <div class="col-md-12">
+                              <div class="form-group">
+                              <label for="exampleFormControlInput1">Freelancer Profile Link <span style="color:red;">*</span></label>
+                              <input type="text" name="profile_link" class="form-control @error('profile_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
+                              </div>
+                              @error('profile_link')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
+                            </div>
+
+
+
+                            @endif
+                              @if($deal->profile_link != null)
                             <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
@@ -258,6 +276,23 @@
                                 </div>
                               @enderror
                             </div>
+                            @else
+                            <div class="col-md-12">
+                              <div class="form-group">
+                              <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
+                              <input type="text" name="message_link"  class="form-control @error('message_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
+                              </div>
+                              @error('message_link')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
+                            </div>
+
+
+
+
+                            @endif
 
                           </div>
                           <div class="row">

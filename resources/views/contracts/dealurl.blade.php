@@ -146,7 +146,7 @@
                         //dd($deal_url);
                          ?>
                         <span>
-                          <input type="text" readonly class="form-control"  value="{{$url}}/deals/{{$deal->deal_id}}" id="{{$deal->deal_id}}">
+                          <input type="text" readonly class="form-control"  value="{{$url}}/deals/client-form/{{$deal->deal_id}}" id="{{$deal->deal_id}}">
 
                         </span>
                             <button type="button" class="btn btn-info mt-3" onclick="myFunction{{$deal->hash}}()"><i class="fa-solid fa-copy"></i></button>
@@ -204,7 +204,7 @@
                         //dd($deal_url);
                          ?>
                         <span>
-                          <input type="text" readonly class="form-control"  value="{{$url}}/deals/{{$deal->deal_id}}" id="{{$deal->deal_id}}">
+                          <input type="text" readonly class="form-control"  value="{{$url}}/deals/cilent-form/{{$deal->deal_id}}" id="{{$deal->deal_id}}">
 
                         </span>
                             <button type="button" class="btn btn-info mt-3" onclick="myFunction{{$deal->hash}}()"><i class="fa-solid fa-copy"></i></button>

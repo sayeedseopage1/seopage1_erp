@@ -230,7 +230,7 @@ class PaymentController extends AccountBaseController
             }
 
 
-          //  $invoice->save();
+            $invoice->save();
         }
         $project= Project::find($request->project_id);
         $invoice_id= Invoice::where('id',$request->invoice_id)->first();
