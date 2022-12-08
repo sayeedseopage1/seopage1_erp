@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('user_deal_board_settings', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id');
+            $table->integer('board_column_id');
+            $table->integer('collapsed')->default(0);
+            
             $table->timestamps();
         });
     }

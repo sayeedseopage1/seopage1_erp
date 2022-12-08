@@ -63,6 +63,7 @@ use App\Events\ProjectSignedEvent;
 use App\Http\Requests\ClientContracts\SignRequest;
 use App\Models\ContractSign;
 use Illuminate\Support\Facades\File;
+use App\Models\ProjectDeliverable;
 
 
 class ProjectController extends AccountBaseController
@@ -577,7 +578,7 @@ if ($pm_count < 2) {
     public function update(UpdateProject $request, $id)
     {
 
-        dd($request->all());
+        //dd($request->all());
         $project = Project::findOrFail($id);
         $project->project_name = $request->project_name;
         $project->project_short_code = $request->project_code;
@@ -694,6 +695,121 @@ if ($pm_count < 2) {
         $pmproject= PMProject::find($deal_id->id);
         $pmproject->status='Accepted';
         $pmproject->save();
+        if ($request->graphics_design != null) {
+          $deliverable= new ProjectDeliverable();
+          $deliverable->project_id= $project->id;
+          $deliverable->deliverable_type= $request->graphics_design;
+          $deliverable->title= $request->graphics_title;
+          $deliverable->quantity= $request->graphics_quantity;
+          $deliverable->from= $request->graphics_from;
+          $deliverable->to= $request->graphics_to;
+          $deliverable->description = $request->graphics_deliverable_description;
+          $deliverable->save();
+
+        }
+        if ($request->ux_design != null) {
+          $deliverable = new ProjectDeliverable();
+          $deliverable->project_id= $project->id;
+          $deliverable->deliverable_type= $request->ux_design;
+          $deliverable->title= $request->ux_title;
+          $deliverable->quantity= $request->ux_quantity;
+          $deliverable->from= $request->ux_from;
+          $deliverable->to= $request->ux_to;
+          $deliverable->description= $request->ux_deliverable_description;
+          $deliverable->save();
+        }
+        if ($request->main_page_development != null) {
+          $deliverable= new ProjectDeliverable();
+          $deliverable->project_id= $project->id;
+          $deliverable->title= $request->main_title;
+          $deliverable->deliverable_type= $request->main_page_development;
+          $deliverable->quantity= $request->main_quantity;
+          $deliverable->from= $request->main_from;
+          $deliverable->to= $request->main_to;
+          $deliverable->description= $request->main_deliverable_description;
+          $deliverable->save();
+        }
+        if ($request->secondary_page_development != null) {
+          $deliverable= new ProjectDeliverable();
+          $deliverable->project_id= $project->id;
+          $deliverable->deliverable_type= $request->secondary_page_development;
+          $deliverable->title= $request->secondary_title;
+          $deliverable->quantity= $request->secondary_quantity;
+          $deliverable->from= $request->secondary_from;
+          $deliverable->to= $request->secondary_to;
+          $deliverable->description= $request->secondary_deliverable_description;
+          $deliverable->save();
+        }
+        if ($request->content_creation != null) {
+          $deliverable= new ProjectDeliverable();
+          $deliverable->project_id= $project->id;
+          $deliverable->deliverable_type= $request->content_creation;
+          $deliverable->title= $request->content_title;
+          $deliverable->quantity= $request->content_quantity;
+          $deliverable->from= $request->content_from;
+          $deliverable->to= $request->content_to;
+          $deliverable->description= $request->content_deliverable_description;
+          $deliverable->save();
+
+        }
+        if ($request->marketing != null) {
+          $deliverable = new ProjectDeliverable();
+          $deliverable->project_id= $project->id;
+          $deliverable->deliverable_type= $request->marketing;
+          $deliverable->title= $request->marketing_title;
+          $deliverable->quantity= $request->marketing_quantity;
+          $deliverable->from= $request->marketing_from;
+          $deliverable->to= $request->marketing_to;
+          $deliverable->description= $request->marketing_deliverable_description;
+          $deliverable->save();
+
+        }
+        if ($request->domain_hosting != null)
+        {
+          $deliverable= new ProjectDeliverable();
+          $deliverable->project_id= $project->id;
+          $deliverable->deliverable_type= $request->domain_hosting;
+          $deliverable->title= $request->domain_title;
+          $deliverable->quantity= $request->domain_quantity;
+          $deliverable->from= $request->domain_from;
+          $deliverable->to= $request->domain_to;
+          $deliverable->description= $request->domain_deliverable_description;
+          $deliverable->save();
+        }
+        if ($request->products != null) {
+          $deliverable= new ProjectDeliverable();
+          $deliverable->project_id= $project->id;
+          $deliverable->deliverable_type= $request->products;
+          $deliverable->title= $request->products_title;
+          $deliverable->from= $request->products_from;
+          $deliverable->to= $request->products_to;
+          $deliverable->quantity= $request->products_quantity;
+          $deliverable->description = $request->products_deliverable_description;
+          $deliverable->save();
+        }
+        if ($request->collection != null) {
+          $deliverable= new ProjectDeliverable();
+          $deliverable->project_id= $project->id;
+          $deliverable->deliverable_type= $request->collection;
+          $deliverable->title= $request->collection_title;
+          $deliverable->quantity= $request->collection_quantity;
+          $deliverable->from= $request->collection_from;
+          $deliverable->to= $request->collection_to;
+          $deliverable->description= $request->collection_deliverable_description;
+          $deliverable->save();
+        }
+        if ($request->others != null)
+        {
+          $deliverable= new ProjectDeliverable();
+          $deliverable->project_id= $project->id;
+          $deliverable->deliverable_type= $request->others;
+          $deliverable->title= $request->others_title;
+          $deliverable->quantity= $request->others_quantity;
+          $deliverable->from= $request->others_from;
+          $deliverable->to= $request->others_to;
+          $deliverable->description= $request->others_deliverable_description;
+          $deliverable->save();
+        }
 
 
         // To add custom fields data
@@ -765,6 +881,7 @@ if ($pm_count < 2) {
 
         $this->messageSetting = MessageSetting::first();
         $this->projectStatus = ProjectStatusSetting::where('status', 'active')->get();
+        $this->deliverables= ProjectDeliverable::where('project_id',$this->project->id)->get();
 
         $tab = request('tab');
 

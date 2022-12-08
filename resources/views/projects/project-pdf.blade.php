@@ -241,7 +241,10 @@
 
     </style>
 </head>
+<?php
+$deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->get();
 
+ ?>
 <body class="content-wrapper">
     <table class="bg-white" border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation">
         <tbody>
@@ -275,12 +278,13 @@
                             <td class="heading-table-right text-capitalize">{{ $project->project_name }}
                             </td>
                         </tr>
-
+                          @if ($project->project_type != null)
                         <tr>
                             <td class="heading-table-left">@lang('Project Type')</td>
                             <td class="heading-table-right">{{ $project->project_type->category_name }}
                             </td>
                         </tr>
+                        @endif
                           @if ($project->project_budget != 0)
                         <tr>
                             <td class="heading-table-left">@lang('Project Budget')</td>
@@ -341,48 +345,27 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Deliverable</th>
+            <th>Type</th>
+            <th>Title</th>
+            <th>Quantity</th>
             <th>Description</th>
             <th>Estimated completion date</th>
         </tr>
     </thead>
     <tbody>
+      @forealse($deliverables as $row)
         <tr>
-            <td>1</td>
-            <td>Header & Footer Design</td>
-            <td>Need to develop UI & UIX Design First</td>
-          <td>Between 26-07-22 & 28-07-22</td>
+            <td>{{$loop->index+1}}</td>
+            <td>{{$row->deliverable_type}}</td>
+            <td>{{$row->title}}</td>
+            <td>{{$row->quantity}}</td>
+            <td>{{$row->description}}</td>
+          <td>Between {{$row->from}} & {{$row->to}}</td>
         </tr>
-        <tr>
-          <td>2</td>
-          <td>Header & Footer Design</td>
-          <td>Need to develop UI & UIX Design First</td>
-          <td>Between 26-07-22 & 28-07-22</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Header & Footer Design</td>
-          <td>Need to develop UI & UIX Design First</td>
-        <td>Between 26-07-22 & 28-07-22</td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>Header & Footer Design</td>
-          <td>Need to develop UI & UIX Design First</td>
-          <td>Between 26-07-22 & 28-07-22</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>Header & Footer Design</td>
-          <td>Need to develop UI & UIX Design First</td>
-        <td>Between 26-07-22 & 28-07-22</td>
-        </tr>
-        <tr>
-          <td>6</td>
-          <td>Header & Footer Design</td>
-          <td>Need to develop UI & UIX Design First</td>
-          <td>Between 26-07-22 & 28-07-22</td>
-        </tr>
+        @empty
+        No Data
+        @endforelse
+
         <!-- and so on... -->
     </tbody>
 </table>

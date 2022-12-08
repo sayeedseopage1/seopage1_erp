@@ -354,7 +354,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
                     @if ($editPermission == 'all')
                         <div class="col-lg-3 col-md-6">
-                            <x-forms.select fieldId="added_by" :fieldLabel="__('app.added').' '.__('app.by')"
+                            <x-forms.select  fieldId="added_by" :fieldLabel="__('app.added').' '.__('app.by')"
                                 fieldName="added_by">
                                 <option value="">--</option>
                                 @foreach ($employees as $item)
@@ -373,7 +373,10 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 
                 </div>
-
+                <?php
+                  $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->first();
+                 ?>
+                 @if($deliverables == null)
                   <hr>
                   <div class="col-md-6 col-lg-3 mt-5">
                     <h5>Add Deliverables</h5>
@@ -390,13 +393,22 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="graphics_design_box">
+                  <div class="col-md-10 col-lg-10">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="graphics_title" value="">
+                          </div>
+                      </div>
+                  </div>
 
               <div class="col-md-4 col-lg-4">
                   <div class="form-group">
                       <label class="ml-3" for="">Quantity</label>
                       <div class="d-flex ml-3">
 
-                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                        <input type="text" class="form-control height-35 f-14" name="graphics_quantity" value="">
                       </div>
                   </div>
               </div>
@@ -405,7 +417,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">From</label>
                       <div class="d-flex ml-3">
 
-                        <input id="from_graphics" type="text" class="form-control height-35 f-14" name="from" value="">
+                        <input id="from_graphics" type="text" class="form-control height-35 f-14" name="graphics_from" value="">
                       </div>
                   </div>
               </div>
@@ -414,7 +426,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">To</label>
                       <div class="d-flex ml-3">
 
-                        <input id="to_graphics" type="text" class="form-control height-35 f-14" name="to" value="">
+                        <input id="to_graphics" type="text" class="form-control height-35 f-14" name="graphics_to" value="">
                       </div>
                   </div>
               </div>
@@ -422,7 +434,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                   <div class="form-group">
                       <label class="ml-3" for="">Description</label>
                       <div class="d-flex ml-3">
-                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+                        <textarea name="graphics_deliverable_description" rows="6" cols="180"></textarea>
 
                       </div>
                   </div>
@@ -440,13 +452,22 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       </div>
                   </div>
                     <div class="row" id="UX_Box">
+                      <div class="col-md-10 col-lg-10">
+                          <div class="form-group">
+                              <label class="ml-3" for="">Title</label>
+                              <div class="d-flex ml-3">
+
+                                <input type="text" class="form-control height-35 f-14" name="ux_title" value="">
+                              </div>
+                          </div>
+                      </div>
 
                   <div class="col-md-4 col-lg-4">
                       <div class="form-group">
                           <label class="ml-3" for="">Quantity</label>
                           <div class="d-flex ml-3">
 
-                            <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                            <input type="text" class="form-control height-35 f-14" name="ux_quantity" value="">
                           </div>
                       </div>
                   </div>
@@ -455,7 +476,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                           <label class="ml-3" for="">From</label>
                           <div class="d-flex ml-3">
 
-                            <input id="from" type="text" class="form-control height-35 f-14" name="from" value="">
+                            <input id="from" type="text" class="form-control height-35 f-14" name="ux_from" value="">
                           </div>
                       </div>
                   </div>
@@ -464,7 +485,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                           <label class="ml-3" for="">To</label>
                           <div class="d-flex ml-3">
 
-                            <input id="to" type="text" class="form-control height-35 f-14" name="to" value="">
+                            <input id="to" type="text" class="form-control height-35 f-14" name="ux_to" value="">
                           </div>
                       </div>
                   </div>
@@ -472,7 +493,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <div class="form-group">
                           <label class="ml-3" for="">Description</label>
                           <div class="d-flex ml-3">
-                            <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+                            <textarea name="ux_deliverable_description" rows="6" cols="180"></textarea>
 
                           </div>
                       </div>
@@ -489,13 +510,22 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="main_page_development_box">
+                  <div class="col-md-4 col-lg-4">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="main_title" value="">
+                          </div>
+                      </div>
+                  </div>
 
               <div class="col-md-4 col-lg-4">
                   <div class="form-group">
                       <label class="ml-3" for="">Quantity</label>
                       <div class="d-flex ml-3">
 
-                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                        <input type="text" class="form-control height-35 f-14" name="main_quantity" value="">
                       </div>
                   </div>
               </div>
@@ -504,7 +534,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">From</label>
                       <div class="d-flex ml-3">
 
-                        <input id="from_main_page_development" type="text" class="form-control height-35 f-14" name="from" value="">
+                        <input id="from_main_page_development" type="text" class="form-control height-35 f-14" name="main_from" value="">
                       </div>
                   </div>
               </div>
@@ -513,7 +543,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">To</label>
                       <div class="d-flex ml-3">
 
-                        <input id="to_main_page_development" type="text" class="form-control height-35 f-14" name="to" value="">
+                        <input id="to_main_page_development" type="text" class="form-control height-35 f-14" name="main_to" value="">
                       </div>
                   </div>
               </div>
@@ -521,7 +551,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                   <div class="form-group">
                       <label class="ml-3" for="">Description</label>
                       <div class="d-flex ml-3">
-                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+                        <textarea name="main_deliverable_description" rows="6" cols="180"></textarea>
 
                       </div>
                   </div>
@@ -538,13 +568,22 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="secondary_page_development_box">
+                  <div class="col-md-4 col-lg-4">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="secondary_title" value="">
+                          </div>
+                      </div>
+                  </div>
 
               <div class="col-md-4 col-lg-4">
                   <div class="form-group">
                       <label class="ml-3" for="">Quantity</label>
                       <div class="d-flex ml-3">
 
-                        <input type="text" class="form-control height-35 f-14" name="secondary_page_development_quantity" value="">
+                        <input type="text" class="form-control height-35 f-14" name="secondary_quantity" value="">
                       </div>
                   </div>
               </div>
@@ -553,7 +592,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">From</label>
                       <div class="d-flex ml-3">
 
-                        <input id="from_secondary_page_development" type="text" class="form-control height-35 f-14" name="secondary_page_development_from" value="">
+                        <input id="from_secondary_page_development" type="text" class="form-control height-35 f-14" name="secondary_from" value="">
                       </div>
                   </div>
               </div>
@@ -562,7 +601,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">To</label>
                       <div class="d-flex ml-3">
 
-                        <input id="to_secondary_page_development" type="text" class="form-control height-35 f-14" name="secondary_page_development_to" value="">
+                        <input id="to_secondary_page_development" type="text" class="form-control height-35 f-14" name="secondary_to" value="">
                       </div>
                   </div>
               </div>
@@ -570,7 +609,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                   <div class="form-group">
                       <label class="ml-3" for="">Description</label>
                       <div class="d-flex ml-3">
-                        <textarea name="secondary_page_development_deliverable_description" rows="6" cols="180"></textarea>
+                        <textarea name="secondary_deliverable_description" rows="6" cols="180"></textarea>
 
                       </div>
                   </div>
@@ -586,13 +625,22 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="content_creation_box">
+                  <div class="col-md-4 col-lg-4">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="content_title" value="">
+                          </div>
+                      </div>
+                  </div>
 
               <div class="col-md-4 col-lg-4">
                   <div class="form-group">
                       <label class="ml-3" for="">Quantity</label>
                       <div class="d-flex ml-3">
 
-                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                        <input type="text" class="form-control height-35 f-14" name="content_quantity" value="">
                       </div>
                   </div>
               </div>
@@ -601,7 +649,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">From</label>
                       <div class="d-flex ml-3">
 
-                        <input id="from_content_creation" type="text" class="form-control height-35 f-14" name="from" value="">
+                        <input id="from_content_creation" type="text" class="form-control height-35 f-14" name="content_from" value="">
                       </div>
                   </div>
               </div>
@@ -610,7 +658,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">To</label>
                       <div class="d-flex ml-3">
 
-                        <input id="to_content_creation" type="text" class="form-control height-35 f-14" name="to" value="">
+                        <input id="to_content_creation" type="text" class="form-control height-35 f-14" name="content_to" value="">
                       </div>
                   </div>
               </div>
@@ -618,7 +666,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                   <div class="form-group">
                       <label class="ml-3" for="">Description</label>
                       <div class="d-flex ml-3">
-                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+                        <textarea name="content_deliverable_description" rows="6" cols="180"></textarea>
 
                       </div>
                   </div>
@@ -634,13 +682,22 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="marketing_box">
+                  <div class="col-md-4 col-lg-4">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="marketing_title" value="">
+                          </div>
+                      </div>
+                  </div>
 
               <div class="col-md-4 col-lg-4">
                   <div class="form-group">
                       <label class="ml-3" for="">Quantity</label>
                       <div class="d-flex ml-3">
 
-                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                        <input type="text" class="form-control height-35 f-14" name="marketing_quantity" value="">
                       </div>
                   </div>
               </div>
@@ -649,7 +706,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">From</label>
                       <div class="d-flex ml-3">
 
-                        <input id="from_marketing" type="text" class="form-control height-35 f-14" name="from" value="">
+                        <input id="from_marketing" type="text" class="form-control height-35 f-14" name="marketing_from" value="">
                       </div>
                   </div>
               </div>
@@ -658,7 +715,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">To</label>
                       <div class="d-flex ml-3">
 
-                        <input id="to_marketing" type="text" class="form-control height-35 f-14" name="to" value="">
+                        <input id="to_marketing" type="text" class="form-control height-35 f-14" name="marketing_to" value="">
                       </div>
                   </div>
               </div>
@@ -666,7 +723,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                   <div class="form-group">
                       <label class="ml-3" for="">Description</label>
                       <div class="d-flex ml-3">
-                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+                        <textarea name="marketing_deliverable_description" rows="6" cols="180"></textarea>
 
                       </div>
                   </div>
@@ -682,13 +739,22 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="domain_hosting_box">
+                  <div class="col-md-4 col-lg-4">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="domain_title" value="">
+                          </div>
+                      </div>
+                  </div>
 
               <div class="col-md-4 col-lg-4">
                   <div class="form-group">
                       <label class="ml-3" for="">Quantity</label>
                       <div class="d-flex ml-3">
 
-                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                        <input type="text" class="form-control height-35 f-14" name="domain_quantity" value="">
                       </div>
                   </div>
               </div>
@@ -697,7 +763,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">From</label>
                       <div class="d-flex ml-3">
 
-                        <input id="from_domain_hosting" type="text" class="form-control height-35 f-14" name="from" value="">
+                        <input id="from_domain_hosting" type="text" class="form-control height-35 f-14" name="domain_from" value="">
                       </div>
                   </div>
               </div>
@@ -706,7 +772,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">To</label>
                       <div class="d-flex ml-3">
 
-                        <input id="to_domain_hosting" type="text" class="form-control height-35 f-14" name="to" value="">
+                        <input id="to_domain_hosting" type="text" class="form-control height-35 f-14" name="domain_to" value="">
                       </div>
                   </div>
               </div>
@@ -714,7 +780,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                   <div class="form-group">
                       <label class="ml-3" for="">Description</label>
                       <div class="d-flex ml-3">
-                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+                        <textarea name="domain_deliverable_description" rows="6" cols="180"></textarea>
 
                       </div>
                   </div>
@@ -730,13 +796,22 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="products_box">
+                  <div class="col-md-4 col-lg-4">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="products_title" value="">
+                          </div>
+                      </div>
+                  </div>
 
               <div class="col-md-4 col-lg-4">
                   <div class="form-group">
                       <label class="ml-3" for="">Quantity</label>
                       <div class="d-flex ml-3">
 
-                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                        <input type="text" class="form-control height-35 f-14" name="products_quantity" value="">
                       </div>
                   </div>
               </div>
@@ -745,7 +820,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">From</label>
                       <div class="d-flex ml-3">
 
-                        <input id="from_products" type="text" class="form-control height-35 f-14" name="from" value="">
+                        <input id="from_products" type="text" class="form-control height-35 f-14" name="products_from" value="">
                       </div>
                   </div>
               </div>
@@ -754,7 +829,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">To</label>
                       <div class="d-flex ml-3">
 
-                        <input id="to_products" type="text" class="form-control height-35 f-14" name="to" value="">
+                        <input id="to_products" type="text" class="form-control height-35 f-14" name="products_to" value="">
                       </div>
                   </div>
               </div>
@@ -762,7 +837,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                   <div class="form-group">
                       <label class="ml-3" for="">Description</label>
                       <div class="d-flex ml-3">
-                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+                        <textarea name="products_deliverable_description" rows="6" cols="180"></textarea>
 
                       </div>
                   </div>
@@ -778,13 +853,22 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="collection_box">
+                  <div class="col-md-4 col-lg-4">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="collection_title" value="">
+                          </div>
+                      </div>
+                  </div>
 
               <div class="col-md-4 col-lg-4">
                   <div class="form-group">
                       <label class="ml-3" for="">Quantity</label>
                       <div class="d-flex ml-3">
 
-                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                        <input type="text" class="form-control height-35 f-14" name="collection_quantity" value="">
                       </div>
                   </div>
               </div>
@@ -793,7 +877,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">From</label>
                       <div class="d-flex ml-3">
 
-                        <input id="from_collection" type="text" class="form-control height-35 f-14" name="from" value="">
+                        <input id="from_collection" type="text" class="form-control height-35 f-14" name="collection_from" value="">
                       </div>
                   </div>
               </div>
@@ -802,7 +886,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">To</label>
                       <div class="d-flex ml-3">
 
-                        <input id="to_collection" type="text" class="form-control height-35 f-14" name="to" value="">
+                        <input id="to_collection" type="text" class="form-control height-35 f-14" name="collection_to" value="">
                       </div>
                   </div>
               </div>
@@ -810,7 +894,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                   <div class="form-group">
                       <label class="ml-3" for="">Description</label>
                       <div class="d-flex ml-3">
-                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+                        <textarea name="collection_deliverable_description" rows="6" cols="180"></textarea>
 
                       </div>
                   </div>
@@ -826,13 +910,22 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="others_box">
+                  <div class="col-md-4 col-lg-4">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="others_title" value="">
+                          </div>
+                      </div>
+                  </div>
 
               <div class="col-md-4 col-lg-4">
                   <div class="form-group">
                       <label class="ml-3" for="">Quantity</label>
                       <div class="d-flex ml-3">
 
-                        <input type="text" class="form-control height-35 f-14" name="quantity" value="">
+                        <input type="text" class="form-control height-35 f-14" name="others_quantity" value="">
                       </div>
                   </div>
               </div>
@@ -841,7 +934,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">From</label>
                       <div class="d-flex ml-3">
 
-                        <input id="from_others" type="text" class="form-control height-35 f-14" name="from" value="">
+                        <input id="from_others" type="text" class="form-control height-35 f-14" name="others_from" value="">
                       </div>
                   </div>
               </div>
@@ -850,7 +943,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">To</label>
                       <div class="d-flex ml-3">
 
-                        <input id="to_others" type="text" class="form-control height-35 f-14" name="to" value="">
+                        <input id="to_others" type="text" class="form-control height-35 f-14" name="others_to" value="">
                       </div>
                   </div>
               </div>
@@ -858,12 +951,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                   <div class="form-group">
                       <label class="ml-3" for="">Description</label>
                       <div class="d-flex ml-3">
-                        <textarea name="deliverable_description" rows="6" cols="180"></textarea>
+                        <textarea name="others_deliverable_description" rows="6" cols="180"></textarea>
 
                       </div>
                   </div>
               </div>
             </div>
+            @endif
                 <div class="col-md-6 col-lg-3 mb-3">
                     <br>
                 </div>

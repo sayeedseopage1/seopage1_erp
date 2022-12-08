@@ -58,7 +58,9 @@
                 <thead>
                     <tr class="bg-light-grey border-right-0 f-w-500">
                       <th scope="col" class="text-center">#</th>
-                      <th scope="col" class="text-center">Deliverable</th>
+                      <th scope="col" class="text-center">Type</th>
+                      <th scope="col" class="text-center">Title</th>
+                      <th scope="col" class="text-center">Quantity</th>
                       <th scope="col" class="text-center">Description</th>
                       <th scope="col" class="text-center">Estimated completion date</th>
 
@@ -66,59 +68,27 @@
                     </tr>
                   </thead>
                   <tbody >
+                    @forelse($deliverables as $deliverable)
                     <tr>
-                      <td>1</td>
-                    <td>Header And Footer Design</td>
-                    <td>Need header and Footer</td>
-                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
+                      <td>{{$loop->index+1}}</td>
+                    <td>{{$deliverable->deliverable_type}}</td>
+                    <td>{{$deliverable->title}}</td>
+                      <td>{{$deliverable->quantity}}</td>
+                        <td>{{$deliverable->description}}</td>
+                    <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
 
 
                     </tr>
+                    @empty
                     <tr>
-                      <td>1</td>
-                    <td>Header And Footer Design</td>
-                    <td>Need header and Footer</td>
-
-                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
+                        No Data
                     </tr>
-                    <tr>
-                      <td>1</td>
-                    <td>Header And Footer Design</td>
-                    <td>Need header and Footer</td>
-                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
-
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                    <td>Header And Footer Design</td>
-                    <td>Need header and Footer</td>
-
-                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
-
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                    <td>Header And Footer Design</td>
-                    <td>Need header and Footer</td>
-                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
-
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                    <td>Header And Footer Design</td>
-                    <td>Need header and Footer</td>
-                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
 
 
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                    <td>Header And Footer Design</td>
-                    <td>Need header and Footer</td>
-                    <td class="text-center">Between 26-07-22 & 28-07-22</td>
+
+                    @endforelse
 
 
-                    </tr>
 
 
 

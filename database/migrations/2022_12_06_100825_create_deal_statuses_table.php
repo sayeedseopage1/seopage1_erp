@@ -17,7 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('type');
             $table->integer('priority');
+            $table->integer('default');
+            $table->string('label_color')->default('#ff0000');
             
+
             $table->timestamps();
         });
     }
