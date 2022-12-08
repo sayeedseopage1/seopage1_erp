@@ -112,7 +112,7 @@
                     @if ($project->signature)
                            <div class="d-flex flex-column">
                                <h6>@lang('Client Signature')</h6>
-                               <img src="/img/ceo_signature.png" style="width: 200px;">
+                               <img src="{{ $project->signature->signature }}" style="width: 200px;">
                                  <p>{{ $project->signature->full_name }}</p>
                               <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
                            </div>
