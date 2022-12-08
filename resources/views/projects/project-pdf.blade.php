@@ -353,7 +353,7 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
         </tr>
     </thead>
     <tbody>
-      @forealse($deliverables as $row)
+      @forelse($deliverables as $row)
         <tr>
             <td>{{$loop->index+1}}</td>
             <td>{{$row->deliverable_type}}</td>

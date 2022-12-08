@@ -510,7 +510,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="main_page_development_box">
-                  <div class="col-md-4 col-lg-4">
+                  <div class="col-md-10 col-lg-10">
                       <div class="form-group">
                           <label class="ml-3" for="">Title</label>
                           <div class="d-flex ml-3">
@@ -568,7 +568,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="secondary_page_development_box">
-                  <div class="col-md-4 col-lg-4">
+                  <div class="col-md-10 col-lg-10">
                       <div class="form-group">
                           <label class="ml-3" for="">Title</label>
                           <div class="d-flex ml-3">
@@ -625,7 +625,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="content_creation_box">
-                  <div class="col-md-4 col-lg-4">
+                  <div class="col-md-10 col-lg-10">
                       <div class="form-group">
                           <label class="ml-3" for="">Title</label>
                           <div class="d-flex ml-3">
@@ -682,7 +682,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="marketing_box">
-                  <div class="col-md-4 col-lg-4">
+                  <div class="col-md-10 col-lg-10">
                       <div class="form-group">
                           <label class="ml-3" for="">Title</label>
                           <div class="d-flex ml-3">
@@ -739,7 +739,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="domain_hosting_box">
-                  <div class="col-md-4 col-lg-4">
+                  <div class="col-md-10 col-lg-10">
                       <div class="form-group">
                           <label class="ml-3" for="">Title</label>
                           <div class="d-flex ml-3">
@@ -796,7 +796,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="products_box">
-                  <div class="col-md-4 col-lg-4">
+                  <div class="col-md-10 col-lg-10">
                       <div class="form-group">
                           <label class="ml-3" for="">Title</label>
                           <div class="d-flex ml-3">
@@ -853,7 +853,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="collection_box">
-                  <div class="col-md-4 col-lg-4">
+                  <div class="col-md-10 col-lg-10">
                       <div class="form-group">
                           <label class="ml-3" for="">Title</label>
                           <div class="d-flex ml-3">
@@ -910,7 +910,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                 </div>
                 <div class="row" id="others_box">
-                  <div class="col-md-4 col-lg-4">
+                  <div class="col-md-10 col-lg-10">
                       <div class="form-group">
                           <label class="ml-3" for="">Title</label>
                           <div class="d-flex ml-3">
