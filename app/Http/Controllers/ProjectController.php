@@ -64,6 +64,8 @@ use App\Http\Requests\ClientContracts\SignRequest;
 use App\Models\ContractSign;
 use Illuminate\Support\Facades\File;
 use App\Models\ProjectDeliverable;
+use Toastr;
+use Illuminate\Support\Facades\Redirect;
 
 
 class ProjectController extends AccountBaseController
@@ -1665,6 +1667,44 @@ if ($pm_count < 2) {
 
         return Reply::redirect(route('projects.show', $this->project->id));
     }
+    public function projectDeliverable(Request $request)
+    {
+      $deliverable= new ProjectDeliverable();
+      $deliverable->project_id= $request->project_id;
+      $deliverable->title= $request->title;
+      $deliverable->deliverable_type= $request->deliverable_type;
+      $deliverable->quantity= $request->quantity;
+      $deliverable->from= $request->from;
+      $deliverable->to= $request->to;
+      $deliverable->description= $request->description;
+      $deliverable->save();
+      Toastr::success('Deliverable Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return Redirect::back();
+    }
+    public function updateDeliverable(Request $request)
+    {
+      $deliverable= ProjectDeliverable::find($request->id);
+
+      $deliverable->title= $request->title;
+      $deliverable->deliverable_type= $request->deliverable_type;
+      $deliverable->quantity= $request->quantity;
+      $deliverable->from= $request->from;
+      $deliverable->to= $request->to;
+      $deliverable->description= $request->description;
+      $deliverable->save();
+      Toastr::success('Deliverable Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return Redirect::back();
+    }
+    public function deleteDeliverable($id)
+    {
+
+      $deliverable = ProjectDeliverable::findOrFail($id)->delete();
+
+    
+      Toastr::success('Deliverable Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return Redirect::back();
+    }
+
 
 
 }

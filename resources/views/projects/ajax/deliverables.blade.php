@@ -22,33 +22,25 @@
     }
 
 </style>
+<link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
-<div class="card border-0 invoice">
+<div class="card border-0 invoice mt-5">
+  <?php
+  $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
+   ?>
+   @if($signature == null)
+  <div class="col-md-2 mt-3">
+      <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
+  </div>
+  @include('projects.modals.clientdeliverableaddmodal')
+  @endif
     <!-- CARD BODY START -->
     <div class="card-body">
-        <div class="invoice-table-wrapper">
-            <table width="100%" class="">
-                <tr class="inv-logo-heading text-center">
 
-
-                </tr>
-                <tr class="inv-num">
-
-
-                </tr>
-                <tr>
-                    <td height="20"></td>
-                </tr>
-            </table>
-            <table width="100%">
-
-                <tr>
-                    <td height="30"></td>
-                </tr>
-            </table>
-        </div>
 
         <div class="d-flex flex-column">
+
+
 
 
           <h5>@lang('Project Deliverables')</h5>
@@ -63,6 +55,9 @@
                       <th scope="col" class="text-center">Quantity</th>
                       <th scope="col" class="text-center">Description</th>
                       <th scope="col" class="text-center">Estimated completion date</th>
+                      @if($signature == null)
+                      <th scope="col" class="text-center">Action</th>
+                      @endif
 
 
                     </tr>
@@ -71,14 +66,25 @@
                     @forelse($deliverables as $deliverable)
                     <tr>
                       <td>{{$loop->index+1}}</td>
-                    <td>{{$deliverable->deliverable_type}}</td>
-                    <td>{{$deliverable->title}}</td>
-                      <td>{{$deliverable->quantity}}</td>
-                        <td>{{$deliverable->description}}</td>
+                    <td class="text-center">{{$deliverable->deliverable_type}}</td>
+                    <td class="text-center">{{$deliverable->title}}</td>
+                      <td class="text-center">{{$deliverable->quantity}}</td>
+                        <td class="text-center">{{$deliverable->description}}</td>
                     <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
+                    @if($signature == null)
+                    <td class="text-center">
+                      <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn primary" data-toggle="modal" data-target="#deliverablesdeleteModal{{$deliverable->id}}"><i class="fas fa-trash"></i></button>
+
+                    </td>
+                  @endif
 
 
                     </tr>
+                    @if($signature == null)
+                    @include('projects.modals.clientdeliverableeditmodal')
+                      @include('projects.modals.clientdeliverabledeletemodal')
+                      @endif
                     @empty
                     <tr>
                         No Data
@@ -106,7 +112,7 @@
                     @if ($project->signature)
                            <div class="d-flex flex-column">
                                <h6>@lang('Client Signature')</h6>
-                               <img src="{{ $project->signature->signature }}" style="width: 200px;">
+                               <img src="/img/ceo_signature.png" style="width: 200px;">
                                  <p>{{ $project->signature->full_name }}</p>
                               <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
                            </div>
@@ -270,3 +276,33 @@ function copyLink(){
 
 
 </script>
+<script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
+<script>
+    $(document).ready(function() {
+
+        if ($('.custom-date-picker').length > 0) {
+            datepicker('.custom-date-picker', {
+                position: 'bl',
+                ...datepickerConfig
+            });
+        }
+        const dp3 = datepicker('#from', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+              dp4.setMin(date);
+            },
+            ...datepickerConfig
+        });
+        const dp4 = datepicker('#to', {
+            position: 'bl',
+
+            onSelect: (instance, date) => {
+               dp3.setMax(date);
+            },
+            ...datepickerConfig
+        });
+      });
+</script>
+<script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+   {!! Toastr::message() !!}

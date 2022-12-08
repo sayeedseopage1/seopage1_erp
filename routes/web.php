@@ -1087,3 +1087,9 @@ Route::post('projects/sign/{id}', [ProjectController::class, 'sign'])->name('pro
 Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
 Route::post('/projects/public/sign/{id}', [PublicUrlController::class, 'projectSign'])->name('front.project.sign');
 Route::get('/projects/public/download/{id}', [PublicUrlController::class, 'projectDownload'])->name('front.project.download');
+
+
+//project dekiverables
+Route::post('/projects/add-deliverables/', [ProjectController::class, 'projectDeliverable'])->name('add-project-deliverable');
+Route::post('/projects/update-deliverables/', [ProjectController::class, 'updateDeliverable'])->name('update-project-deliverable');
+Route::get('/projects/delete-deliverables/{id}', [ProjectController::class, 'deleteDeliverable']);

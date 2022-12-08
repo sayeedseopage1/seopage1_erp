@@ -384,7 +384,9 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
                 @if ($project->signature)
              <div style="text-align: right;  margin-top: 8px; width:50%; float:left;">
                  <h3 class="name">@lang('Provider Signature')</h3>
-                 {!! Html::image($project->signature->signature, '', ['class' => '', 'height' => '75px']) !!}
+                 /img/ceo_signature.png
+                 <img src="/img/ceo_signature.png" style="height: 75px;">
+              
                  <p>Rajat Chakraboty</p>
                  <p>Date: {{ ($project->signature->created_at)->format('d-m-Y') }}</p>
              </div>
