@@ -209,6 +209,8 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
 
                 <a href="javascript:;" class="btn btn-secondary f-14 show-pinned" data-toggle="tooltip"
                     data-original-title="@lang('app.pinned')"><i class="side-icon bi bi-pin-angle"></i></a>
+                      <a href="{{ route('projectboards.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
+                      data-original-title="@lang('Kanban')"><i class="side-icon bi bi-kanban"></i></a>
             </div>
         </div>
         <!-- Add Task Export Buttons End -->

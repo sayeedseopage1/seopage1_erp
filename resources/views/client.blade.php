@@ -16,8 +16,16 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
     <link rel="stylesheet" href="{{asset('custom/client/css/intlTelInput.css')}}">
+    <link rel="stylesheet" href="{{asset('mobile/css/style.css')}}">
 
+    <style media="screen">
+    input, button {
 
+margin: 0;
+padding: 0;
+
+}
+    </style>
 
 
 </head>
@@ -62,13 +70,16 @@
                         </div>
                         @enderror
 
-                        <div class="col-md-12">
+                        <div id="input-tel-parent" class="col-md-12">
                             <label for="inputEmail4" class="form-label">Phone number!</label> <br>
-                            <input id="phone" class="form-control" name="client_phone" type="number" placeholder="Enter Your Number" required>
+
+                            <input  class="form-control" id="phone" name="client_phone" type="tel" required>
+                            <span id="valid-msg" class="hide">Valid</span>
+                            <span id="error-msg" class="hide">Invalid number</span>
                         </div>
                         <div class="col-md-12">
                             <label for="inputEmail4" class="form-label">Your WhatsApp ID (For future communication)!</label> <br>
-                            <input id="phone" class="form-control" name="client_whatsapp" type="text" placeholder="Enter Your Number">
+                            <input id="whatsapp" class="form-control" name="client_whatsapp" type="text" placeholder="Enter Your Whats NUmber">
                         </div>
                         <div class="col-md-12">
                             <label for="floatingTextarea"><strong>Any other instant messengers where you are mostly available (Example, skype, telegram etc.)! (optional)</strong></label>
@@ -832,8 +843,8 @@
                            </div>
                       </div>
 
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary sp1submit rounded-pill py-3 px-5">Submit</button>
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-primary sp1submit rounded-pill py-0 px-5">Submit</button>
                         </div>
                     </form>
 
@@ -869,7 +880,7 @@
 
     </script>
   <script>
-    var input = document.querySelector("#phone");
+    var input = document.querySelector("#phone2");
     window.intlTelInput(input, {
       autoPlaceholder: "off",
       formatOnDisplay: false,
@@ -881,6 +892,74 @@
   </script>
 
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.9/js/intlTelInput.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.9/js/intlTelInput.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.9/js/utils.js"></script>
+
+  <script src="{{asset('mobile/js/mask.js')}}"></script>
+  <script src="{{asset('mobile/js/mask_list.js')}}"></script>
+
+  <script>
+      mask("input");
+  </script>
+
+  <script>
+
+  var telInput = $("#phone"),
+    errorMsg = $("#error-msg"),
+    validMsg = $("#valid-msg");
+
+  // initialise plugin
+  telInput.intlTelInput({
+
+    allowExtensions: true,
+    formatOnDisplay: true,
+    autoFormat: true,
+    autoHideDialCode: true,
+    autoPlaceholder: true,
+    defaultCountry: "auto",
+    ipinfoToken: "yolo",
+
+    nationalMode: false,
+    numberType: "MOBILE",
+    //onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+    preferredCountries: ['sa', 'ae', 'qa','om','bh','kw','ma'],
+    preventInvalidNumbers: true,
+    separateDialCode: true,
+    initialCountry: "auto",
+    geoIpLookup: function(callback) {
+    $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+      var countryCode = (resp && resp.country) ? resp.country : "";
+      callback(countryCode);
+    });
+  },
+     utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.9/js/utils.js"
+  });
+
+  var reset = function() {
+    telInput.removeClass("error");
+    errorMsg.addClass("hide");
+    validMsg.addClass("hide");
+  };
+
+  // on blur: validate
+  telInput.blur(function() {
+    reset();
+    if ($.trim(telInput.val())) {
+      if (telInput.intlTelInput("isValidNumber")) {
+        validMsg.removeClass("hide");
+      } else {
+        telInput.addClass("error");
+        errorMsg.removeClass("hide");
+      }
+    }
+  });
+
+  // on keyup / change flag: reset
+
+
+
+  </script>
 
 </body>
 </html>

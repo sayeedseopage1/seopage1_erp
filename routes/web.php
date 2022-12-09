@@ -167,6 +167,7 @@ use App\Http\Controllers\ProposalTemplateController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\DealController;
 use App\Http\Controllers\DealBoardController;
+use App\Http\Controllers\ProjectBoardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1093,3 +1094,9 @@ Route::get('/projects/public/download/{id}', [PublicUrlController::class, 'proje
 Route::post('/projects/add-deliverables/', [ProjectController::class, 'projectDeliverable'])->name('add-project-deliverable');
 Route::post('/projects/update-deliverables/', [ProjectController::class, 'updateDeliverable'])->name('update-project-deliverable');
 Route::get('/projects/delete-deliverables/{id}', [ProjectController::class, 'deleteDeliverable']);
+
+//projectboard
+Route::post('projectboards/collapseColumn', [ProjectBoardController::class, 'collapseColumn'])->name('projectboards.collapse_column');
+Route::post('projectboards/updateIndex', [ProjectBoardController::class, 'updateIndex'])->name('projectboards.update_index');
+Route::get('projectboards/loadMore', [ProjectBoardController::class, 'loadMore'])->name('projectboards.load_more');
+Route::resource('projectboards', ProjectBoardController::class);
