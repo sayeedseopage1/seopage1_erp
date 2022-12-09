@@ -85,8 +85,8 @@
                                 </div>
                                 @else
                                 <div class="mt-3">
-                                    <label for="input-state-3" class="form-label"><strong>Profile Link <span style="color:red;">*<span></strong></label>
-                                    <input name="profile_link"  id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+                                    <label for="input-state-3" class="form-label"><strong>Profile Link</strong></label>
+                                    <input name="profile_link"  id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" >
 
                                 </div>
 
@@ -102,8 +102,8 @@
                                 @else
 
                                 <div class="mt-3">
-                                    <label for="input-state-3" class="form-label"><strong>Message Link <span style="color:red;">*<span></strong></label>
-                                    <input name="message_link"  id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+                                    <label for="input-state-3" class="form-label"><strong>Message Link </strong></label>
+                                    <input name="message_link"  id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Message Link" >
 
                                 </div>
 

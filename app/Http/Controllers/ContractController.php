@@ -239,11 +239,14 @@ class ContractController extends AccountBaseController
         $deal->save();
         if (Auth::user()->role_id == 7) {
             $agent_id = SalesCount::where('user_id', Auth::id())->first();
-            $lead_ag_id = SalesCount::find($agent_id->id);
+            if ($agent_id != null) {
+              $lead_ag_id = SalesCount::find($agent_id->id);
 
-            $lead_ag_id->won_deals = $lead_ag_id->won_deals + 1;
-            $lead_ag_id->deal_value = $lead_ag_id->deal_value + $deal->amount;
-            $lead_ag_id->save();
+              $lead_ag_id->won_deals = $lead_ag_id->won_deals + 1;
+              $lead_ag_id->deal_value = $lead_ag_id->deal_value + $deal->amount;
+              $lead_ag_id->save();
+            }
+
         }
 
         $user = new User();
@@ -440,10 +443,13 @@ class ContractController extends AccountBaseController
             //$lead_id = Lead::where('id', $request->lead_id)->first();
             if (Auth::id() != null) {
               $agent = SalesCount::where('user_id', Auth::id())->first();
-              $lead_ag = SalesCount::find($agent->id);
+              if ($agent != null) {
+                $lead_ag = SalesCount::find($agent->id);
 
-              $lead_ag->negotiation_started = $lead_ag->negotiation_started + 1;
-              $lead_ag->save();
+                $lead_ag->negotiation_started = $lead_ag->negotiation_started + 1;
+                $lead_ag->save();
+              }
+
             }
 
         }
@@ -480,11 +486,14 @@ class ContractController extends AccountBaseController
         //$lead_con_id = Lead::where('id', $request->lead_id)->first();
         if (Auth::id() != null) {
           $agent_id = SalesCount::where('user_id', Auth::id())->first();
-          $lead_ag_id = SalesCount::find($agent_id->id);
+          if ($agent_id != null) {
+            $lead_ag_id = SalesCount::find($agent_id->id);
 
-          $lead_ag_id->won_deals = $lead_ag_id->won_deals + 1;
-          $lead_ag_id->deal_value = $lead_ag_id->deal_value + $deal->amount;
-          $lead_ag_id->save();
+            $lead_ag_id->won_deals = $lead_ag_id->won_deals + 1;
+            $lead_ag_id->deal_value = $lead_ag_id->deal_value + $deal->amount;
+            $lead_ag_id->save();
+          }
+
         }
 
 

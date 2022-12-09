@@ -251,7 +251,7 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
             <!-- Table Row Start -->
             <tr>
                 <td><img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
-                        class="logo" /></td>
+                        class="logo" style="height:70px;"/></td>
                 <td align="right" class="f-21 text-black font-weight-700 text-uppercase">@lang('Project Agreement')</td>
             </tr>
             <!-- Table Row End -->

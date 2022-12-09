@@ -67,7 +67,7 @@
                     <div class="row" style="margin-left:40px;">
 
                       <div class="col-md-10">
-                          <input type="text" class="form-control"  value="{{$url}}/deals/{{$deal->deal_id}}" id="{{$deal->deal_id}}">
+                          <input type="text" class="form-control"  value="{{$url}}/deals/client-form/{{$deal->deal_id}}" id="{{$deal->deal_id}}">
                       </div>
                       <div class="col-md-2">
                               <button type="button" class="btn btn-info" onclick="myFunction{{$deal->hash}}()"><i class="fa-solid fa-copy"></i></button>

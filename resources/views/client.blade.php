@@ -64,7 +64,7 @@
 
                         <div class="col-md-12">
                             <label for="inputEmail4" class="form-label">Phone number!</label> <br>
-                            <input id="phone" class="form-control" name="client_phone" type="number" placeholder="Enter Your Number">
+                            <input id="phone" class="form-control" name="client_phone" type="number" placeholder="Enter Your Number" required>
                         </div>
                         <div class="col-md-12">
                             <label for="inputEmail4" class="form-label">Your WhatsApp ID (For future communication)!</label> <br>
@@ -731,14 +731,9 @@
                                     <div class="col-md-12">
                                         <label for="Choose_days"  class="form-label">Choose Days</label>
                                         <select id="Choose_days" name="day[]" class="form-select">
-                                            <option selected>Choose...</option>
-                                            <option value="Saturday">Saturday</option>
-                                            <option value="Sunday">Sunday</option>
-                                            <option value="Monday">Monday</option>
-                                            <option value="Tuesday">Tuesday</option>
-                                            <option value="Wednesday">Wednesday</option>
-                                            <option value="Thursday">Thursday</option>
-                                            <option value="Friday">Friday</option>
+
+                                            <option selected value="Mon-Fri">Mon-Fri</option>
+
                                         </select>
                                     </div>
                                 </td>
