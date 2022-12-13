@@ -580,7 +580,7 @@ if ($pm_count < 2) {
     public function update(UpdateProject $request, $id)
     {
 
-        //dd($request->all());
+      //  dd($request->all());
         $project = Project::findOrFail($id);
         $project->project_name = $request->project_name;
         $project->project_short_code = $request->project_code;
@@ -1700,7 +1700,7 @@ if ($pm_count < 2) {
 
       $deliverable = ProjectDeliverable::findOrFail($id)->delete();
 
-    
+
       Toastr::success('Deliverable Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back();
     }
