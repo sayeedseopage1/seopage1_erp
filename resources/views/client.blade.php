@@ -20,11 +20,15 @@
 
     <style media="screen">
     input, button {
+        margin: 0;
+        padding: 0;
 
-margin: 0;
-padding: 0;
-
-}
+        }
+        .intl-tel-input {
+          	position: relative;
+          	display: inline-block;
+          	width: 100% !important;
+          }
     </style>
 
 
@@ -73,7 +77,7 @@ padding: 0;
                         <div id="input-tel-parent" class="col-md-12">
                             <label for="inputEmail4" class="form-label">Phone number!</label> <br>
 
-                            <input  class="form-control" id="phone" name="client_phone" type="tel" required>
+                            <input  class="form-control mybtns" id="phone" name="client_phone" type="tel" required>
                             <span id="valid-msg" class="hide">Valid</span>
                             <span id="error-msg" class="hide">Invalid number</span>
                         </div>

@@ -1,4 +1,5 @@
 @foreach ($result['boardColumns'] as $key => $column)
+
     @if ($column->userSetting && $column->userSetting->collapsed)
         <!-- MINIMIZED BOARD PANEL START -->
         <div class="minimized rounded bg-additional-grey border-grey mr-3">
@@ -11,7 +12,7 @@
                 </a>
 
                 <p class="mb-3 mx-0 f-15 text-dark-grey font-weight-bold"><i class="fa fa-circle mb-2 text-red"
-                        style="color: {{ $column->color }}"></i>{{ mb_ucwords($column->status_name) }}</p>
+                        style="color: {{ $column->label_color }}"></i>{{ mb_ucwords($column-type) }}</p>
 
                 <span
                     class="b-p-badge bg-grey f-13 px-2 py-2 text-lightest font-weight-bold rounded d-inline-block">{{ $column->projects_count }}</span>
@@ -27,7 +28,7 @@
             <!-- TASK BOARD HEADER START -->
             <div class="d-flex m-3 b-p-header">
                 <p class="mb-0 f-15 mr-3 text-dark-grey font-weight-bold"><i class="fa fa-circle mr-2 text-yellow"
-                        style="color: {{ $column->color }}"></i>{{ mb_ucwords($column->status_name) }}
+                        style="color: {{ $column->label_color }}"></i>{{ mb_ucwords($column-type) }}
                 </p>
 
                 <span
@@ -41,7 +42,7 @@
                         <i class="fa fa-chevron-left"></i>
                     </a>
 
-                   {{--<div class="dropdown">
+                   <div class="dropdown">
                         <button
                             class="btn bg-white btn-lg f-10 px-2 py-1 text-dark-grey text-capitalize rounded  dropdown-toggle"
                             type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
@@ -63,7 +64,7 @@
                                     data-column-id="{{ $column->id }}" href="javascript:;">@lang('app.delete')</a>
                             @endif
                         </div>
-                    </div> --}}
+                    </div>
 
                 </span>
             </div>
@@ -97,7 +98,7 @@
         <!-- TASK BOARD FOOTER START -->
         <div class="d-flex m-3 justify-content-center">
             <a class="f-13 text-dark-grey f-w-500 load-more-tasks" data-column-id="{{ $column->id }}"
-                data-total-tasks="{{ $column->leads_count }}"
+                data-total-tasks="{{ $column->projects_count }}"
                 href="javascript:;">@lang('modules.tasks.loadMore')</a>
         </div>
         <!-- TASK BOARD FOOTER END -->

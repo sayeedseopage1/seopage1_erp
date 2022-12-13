@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Deal;
 use App\Models\User;
 use App\Models\ProjectCategory;
-use App\MOdels\ProjectStatusSetting;
+use App\Models\ProjectStatus;
 
 /**
  * App\Models\Project
@@ -385,9 +385,10 @@ class Project extends BaseModel
     {
         return $this->hasOne(ContractSign::class, 'project_id');
     }
-    public function projectStatus(): BelongsTo
+    public function projectStatus()
     {
-        return $this->belongsTo(ProjectStatusSetting::class, 'status_id');
+        return $this->belongsTo(ProjectStatus::class, 'status_id');
     }
+
 
 }

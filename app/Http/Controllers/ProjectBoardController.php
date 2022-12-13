@@ -7,11 +7,12 @@ use App\Models\Project;
 
 use App\Models\ProjectCategory;
 
-use App\Models\ProjectStatusSetting;
-use App\Models\UserProjectboardSetting;
+use App\Models\ProjectStatus;
+use App\Models\UserProjectBoardSetting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\ProjectStatusSetting;
 
 class ProjectBoardController extends AccountBaseController
 {
@@ -33,12 +34,14 @@ class ProjectBoardController extends AccountBaseController
      */
     public function index(Request $request)
     {
+      //dd($request->all());
         // $this->viewProjectPermission = $viewPermission = user()->permission('view_project');
         // abort_403(!in_array($viewPermission, ['all', 'added', 'both', 'owned']));
 
         $this->categories = ProjectCategory::get();
 
-        $this->status = ProjectStatusSetting::get();
+        $this->status = ProjectStatusSetting::orderBy('priority')->get();
+        // /dd($this->status);
 
         $this->startDate = $startDate = now()->subDays(15)->format($this->global->date_format);
         $this->endDate = $endDate = now()->addDays(15)->format($this->global->date_format);
@@ -46,15 +49,30 @@ class ProjectBoardController extends AccountBaseController
 
 
 
+      //  dd(request()->ajax());
         if (request()->ajax()) {
+
 
             $startDate = ($request->startDate != 'null') ? Carbon::createFromFormat($this->global->date_format, $request->startDate)->toDateString() : null;
             $endDate = ($request->endDate != 'null') ? Carbon::createFromFormat($this->global->date_format, $request->endDate)->toDateString() : null;
 
-            $this->boardEdit = (request()->has('boardEdit') && request('boardEdit') == 'false') ? false : true;
-            $this->boardDelete = (request()->has('boardDelete') && request('boardDelete') == 'false') ? false : true;
 
-            $boardColumns = ProjectStatusSetting::with('userSetting')->withCount(['projects as projects_count' => function ($q) use ($startDate, $endDate, $request) {
+
+            if (in_array('client', user_roles())) {
+                $this->clients = User::client();
+                //dd($this->clients);
+            }
+            else {
+                $this->clients = User::allClients();
+                $this->allEmployees = User::allEmployees(null, true, ($viewPermission == 'all' ? 'all' : null));
+            }
+
+
+            $this->projectStatus = ProjectStatus::all();
+
+            $boardColumns = ProjectStatus::with('userSetting')->withCount(['projects as projects_count' => function ($q) use ($startDate, $endDate, $request) {
+            //dd($startDate, $endDate, $request);
+
 
                 if ($startDate && $endDate) {
                     $q->where(function ($task) use ($startDate, $endDate) {
@@ -108,8 +126,10 @@ class ProjectBoardController extends AccountBaseController
 
 
 
+
+
                 if ($request->type != 'all' && $request->type != '') {
-                    if ($request->type == 'lead') {
+                    if ($request->type == 'project') {
                         $q->whereNull('client_id');
                     }
                     else {
@@ -145,7 +165,7 @@ class ProjectBoardController extends AccountBaseController
 
 
                 if ($startDate && $endDate) {
-                    $leads->where(function ($task) use ($startDate, $endDate) {
+                    $projects->where(function ($task) use ($startDate, $endDate) {
                         $task->whereBetween(DB::raw('DATE(projects.`created_at`)'), [$startDate, $endDate]);
 
                         $task->orWhereBetween(DB::raw('DATE(projects.`created_at`)'), [$startDate, $endDate]);
@@ -156,17 +176,17 @@ class ProjectBoardController extends AccountBaseController
 
                 if ($request->type != 'all' && $request->type != '') {
                     if ($request->type == 'project') {
-                        $leads->whereNull('client_id');
+                        $projects->whereNull('client_id');
                     }
                     else {
-                        $leads->whereNotNull('client_id');
+                        $projects->whereNotNull('client_id');
                     }
                 }
 
 
 
                 if ($request->category_id != 'all' && $request->category_id != '') {
-                    $leads->where('category_id', $request->category_id);
+                    $projects->where('category_id', $request->category_id);
                 }
 
 
@@ -183,16 +203,22 @@ class ProjectBoardController extends AccountBaseController
                 $projects = $projects->get();
 
                 $result['boardColumns'][$key]['projects'] = $projects;
+                //dd($result['boardColumns'][$key]['projects']);
+
             }
 
             $this->result = $result;
             $this->startDate = $startDate;
             $this->endDate = $endDate;
-
+          //  dd($boardColumns);
+        //  dd($this->data);
             $view = view('projects.board.board_data', $this->data)->render();
+
             return Reply::dataOnly(['view' => $view]);
         }
+        // /dd($projects);
 
+      //  dd($this->data);
         return view('projects.board.index', $this->data);
     }
 
@@ -203,13 +229,13 @@ class ProjectBoardController extends AccountBaseController
         $skip = $request->currentTotalTasks;
         $totalTasks = $request->totalTasks;
 
-        $projects = Project::select('leads.*')
+        $projects = Project::select('projects.*')
             ->where('projects.status_id', $request->columnId)
             ->orderBy('column_priority', 'asc')
             ->groupBy('projects.id');
 
         if ($startDate && $endDate) {
-            $leads->where(function ($task) use ($startDate, $endDate) {
+            $projects->where(function ($task) use ($startDate, $endDate) {
                 $task->whereBetween(DB::raw('DATE(projects.`created_at`)'), [$startDate, $endDate]);
 
                 $task->orWhereBetween(DB::raw('DATE(projects.`created_at`)'), [$startDate, $endDate]);
@@ -220,21 +246,21 @@ class ProjectBoardController extends AccountBaseController
 
         if ($request->type != 'all' && $request->type != '') {
             if ($request->type == 'project') {
-                $leads->whereNull('client_id');
+                $projects->whereNull('client_id');
             }
             else {
-                $leads->whereNotNull('client_id');
+                $projects->whereNotNull('client_id');
             }
         }
 
 
         if ($request->category_id != 'all' && $request->category_id != '') {
-            $leads->where('category_id', $request->category_id);
+            $projects->where('category_id', $request->category_id);
         }
 
 
         if ($request->searchText != '') {
-            $leads->where(function ($query) {
+            $projects->where(function ($query) {
                 $query->where('projects.project_name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('projects.project_short_code', 'like', '%' . request('searchText') . '%')
                     ;
@@ -262,7 +288,7 @@ class ProjectBoardController extends AccountBaseController
         $boardColumnId = $request->boardColumnId;
         $priorities = $request->prioritys;
 
-        $board = ProjectStatusSetting::findOrFail($boardColumnId);
+        $board = ProjectStatus::findOrFail($boardColumnId);
 
         if (isset($taskIds) && count($taskIds) > 0) {
 
@@ -289,7 +315,7 @@ class ProjectBoardController extends AccountBaseController
 
     public function collapseColumn(Request $request)
     {
-        $setting = UserLeadboardSetting::firstOrNew([
+        $setting = UserProjectBoardSetting::firstOrNew([
             'user_id' => user()->id,
             'board_column_id' => $request->boardColumnId,
         ]);

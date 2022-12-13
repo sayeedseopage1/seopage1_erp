@@ -80,7 +80,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         <x-forms.label class="my-3" fieldId="department" :fieldLabel="__('app.department')">
                         </x-forms.label>
                         <x-forms.input-group>
-                            <select class="form-control select-picker" name="team_id" id="employee_department"
+                            <select class="form-control select-picker height-35 f-14" name="team_id" id="employee_department"
                                 data-live-search="true">
                                 <option value="">--</option>
                                 @foreach ($teams as $team)
@@ -257,22 +257,24 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     @elseif(in_array('employee', user_roles()))
                         <input type="hidden" name="user_id[]" value="{{ user()->id }}">
                     @endif
+                    <?php
+                      $p_status= App\Models\ProjectStatusSetting::where('status','active')->orderBy('priority')->get();
+                      $d_status= App\Models\ProjectStatusSetting::where('default_status',1)->first();
+                      //dd($d_status);
+                     ?>
+                    <div class="col-md-6 col-lg-6 mt-3">
+                      <label for="">Status</label>
+                            <select class="form-control height-35 f-14 text-capitalize" name="status">
 
-                    <div class="col-md-6 col-lg-6">
-                        <x-forms.select fieldId="project_status"
-                            :fieldLabel="__('app.project') . ' ' . __('app.status')" fieldName="status" search="true">
-                            @foreach ($projectStatus as $status)
-                                <option
-                                data-content="<i class='fa fa-circle mr-1 f-15' style='color:{{$status->color}}'></i>{{ ucfirst($status->status_name) }}"
-                                @if ($project->status == $status->status_name)
-                                selected @endif
-                                value="{{$status->status_name}}">$status->status_name
-                                </option>
+                              <option class="text-capitalize" selected value="{{$d_status->status_name}}">{{ucfirst($d_status->status_name)}}</option>
+                            @foreach ($p_status as $status)
+                            <option  class="text-capitalize" value="$status->status_name"><i class='fa fa-circle mr-1 f-15' style='color:{{$status->color}}'></i>{{ucfirst($status->status_name)}}</option>
+
 
                             @endforeach
 
 
-                        </x-forms.select>
+                        </select>
                     </div>
 
                   {{--  <div class="col-md-12 col-lg-4">

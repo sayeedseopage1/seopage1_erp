@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|UserProjectboardSetting whereUserId($value)
  * @mixin \Eloquent
  */
-class UserProjectboardSetting extends BaseModel
+class UserProjectBoardSetting extends BaseModel
 {
     use HasFactory;
     protected $guarded = ['id'];

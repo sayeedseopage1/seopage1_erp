@@ -1,108 +1,66 @@
-@extends('layouts.app')
-
-@push('datatable-styles')
-    @include('sections.daterange_css')
-@endpush
-
-@push('styles')
-    <!-- Drag and Drop CSS -->
-    <link rel='stylesheet' href="{{ asset('vendor/css/dragula.css') }}" type='text/css' />
-    <link rel='stylesheet' href="{{ asset('vendor/css/drag.css') }}" type='text/css' />
-    <link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-colorpicker.css') }}" />
-    <style>
-        #colorpicker .form-group {
-            width: 87%;
-        }
-
-        .b-p-tasks {
-            min-height: 100px;
-        }
-
-    </style>
-
-@endpush
 
 
-@section('filter-section')
+<link rel='stylesheet' href="{{ asset('vendor/css/dragula.css') }}" type='text/css' />
+<link rel='stylesheet' href="{{ asset('vendor/css/drag.css') }}" type='text/css' />
+<link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-colorpicker.css') }}" />
+<style>
+    #colorpicker .form-group {
+        width: 87%;
+    }
 
+    .b-p-tasks {
+        min-height: 100px;
+    }
 
+    .content-wrapper {
+        padding: 0;
+    }
 
-@endsection
+</style>
 
+<!-- CONTENT WRAPPER START -->
+<div class="w-task-board-box px-4 py-2 pt-3 bg-white">
+    <!-- Add Task Export Buttons Start -->
+    <div class="d-block d-lg-flex d-md-flex my-3">
 
-@section('content')
+        <x-alert type="warning" icon="info" class="d-lg-none">@lang('messages.dragDropScreenInfo')</x-alert>
 
-    <!-- CONTENT WRAPPER START -->
-    <div class="w-task-board-box px-4 py-2 bg-white">
-        <!-- Add Task Export Buttons Start -->
-        <div class="d-block d-lg-flex d-md-flex my-3">
-
-            <x-alert type="warning" icon="info" class="d-lg-none">@lang('messages.dragDropScreenInfo')</x-alert>
-
-            <div id="table-actions" class="flex-grow-1 align-items-center">
-
-                    <x-forms.link-primary :link="route('projects.create')" class="mr-3 openRightModal float-left" icon="plus">
-                        @lang('app.add')
-                        @lang('app.project')
-                    </x-forms.link-primary>
-
-
-            </div>
-
-            <div class="btn-group mt-2 mt-lg-0 mt-md-0" role="group">
-                <a href="{{ route('projects.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
-                    data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
-
-                <a href="{{ route('projectboards.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
-                    data-original-title="@lang('Kanban')"><i class="side-icon bi bi-kanban"></i></a>
-
-            </div>
-        </div>
-
-        <div class="w-task-board-panel d-flex" id="taskboard-columns">
+        <div id="table-actions" class="flex-grow-1 align-items-center">
 
         </div>
     </div>
-    <!-- CONTENT WRAPPER END -->
 
-@endsection
+    <div class="w-task-board-panel d-flex" id="taskboard-columns">
+    </div>
+</div>
+<!-- CONTENT WRAPPER END -->
 
-@push('scripts')
-    @include('sections.daterange_js')
-    <script src="{{ asset('vendor/jquery/dragula.js') }}"></script>
+<script src="{{ asset('vendor/jquery/dragula.js') }}"></script>
 
-    <script>
-        function showTable() {
-            var dateRangePicker = $('#datatableRange').data('daterangepicker');
-            var startDate = $('#datatableRange').val();
-
-            if (startDate == '') {
-                startDate = null;
-                endDate = null;
-            } else {
-                startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
-                endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
-            }
-
-            var searchText = $('#search-text-field').val();
-            var type = $('#type').val();
-
-            var category_id = $('#filter_category_id').val();
+<script>
+    $(document).ready(function() {
+        function loadData() {
 
 
-            var url = "{{ route('projectboards.index') }}?startDate=" + encodeURIComponent(startDate) + '&endDate=' +
-                encodeURIComponent(endDate) + '&type=' + type   + '&category_id=' + category_id +
-                '&searchText=' + searchText;
+            var startDate = null;
+            var endDate = null;
+
+
+            var url = "{{ route('taskboards.index') }}?startDate=" + encodeURIComponent(startDate) +
+                '&endDate=' +
+                encodeURIComponent(endDate) ;
 
             $.easyAjax({
                 url: url,
                 container: '#taskboard-columns',
                 type: "GET",
                 success: function(response) {
-                    $('#taskboard-columns').html(response.view);
-                    $("body").tooltip({
-                        selector: '[data-toggle="tooltip"]'
-                    });
+                    if (response.status == 'success') {
+                        $('#taskboard-columns').html(response.view);
+                        $("body").tooltip({
+                            selector: '[data-toggle="tooltip"]'
+                        });
+                    }
                 }
             });
         }
@@ -112,27 +70,16 @@
             var totalTasks = $(this).data('total-tasks');
             var currentTotalTasks = $('#drag-container-' + columnId + ' .task-card').length;
 
-            var dateRangePicker = $('#datatableRange').data('daterangepicker');
-            var startDate = $('#datatableRange').val();
 
-            if (startDate == '') {
-                startDate = null;
-                endDate = null;
-            } else {
-                startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
-                endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
-            }
+            var startDate = null;
+            var endDate = null;
 
-            var type = $('#type').val();
-
-            var category_id = $('#filter_category_id').val();
-
-            var searchText = $('#search-text-field').val();
-
-            var url = "{{ route('projectboards.load_more') }}?startDate=" + encodeURIComponent(startDate) +
+            var url = "{{ route('taskboards.load_more') }}?startDate=" + encodeURIComponent(
+                    startDate) +
                 '&endDate=' +
-                encodeURIComponent(endDate) + '&type=' + type +  '&category_id=' + category_id +
-                '&searchText=' + searchText + '&columnId=' + columnId + '&currentTotalTasks=' + currentTotalTasks +
+                encodeURIComponent(endDate) +  '&columnId=' + columnId +
+                '&currentTotalTasks=' +
+                currentTotalTasks +
                 '&totalTasks=' + totalTasks;
 
             $.easyAjax({
@@ -143,10 +90,12 @@
                 success: function(response) {
                     $('#drag-container-' + columnId).append(response.view);
                     if (response.load_more == 'show') {
-                        $('#drag-container-' + columnId).closest('.b-p-body').find('.load-more-tasks');
+                        $('#drag-container-' + columnId).closest('.b-p-body').find(
+                            '.load-more-tasks');
 
                     } else {
-                        $('#drag-container-' + columnId).closest('.b-p-body').find('.load-more-tasks')
+                        $('#drag-container-' + columnId).closest('.b-p-body').find(
+                                '.load-more-tasks')
                             .remove();
                     }
 
@@ -176,17 +125,69 @@
             }
         }
 
+        $('#add-column').click(function() {
+            const url = "{{ route('taskboards.create') }}";
+            $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_LG, url);
+        });
 
+        $('body').on('click', '.edit-column', function() {
+            var id = $(this).data('column-id');
+            var url = "{{ route('taskboards.edit', ':id') }}";
+            url = url.replace(':id', id);
 
+            $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_LG, url);
+        });
 
+        $('body').on('click', '.delete-column', function() {
+            var id = $(this).data('column-id');
+            var url = "{{ route('taskboards.destroy', ':id') }}";
+            url = url.replace(':id', id);
 
+            Swal.fire({
+                title: "@lang('messages.sweetAlertTitle')",
+                text: "@lang('messages.recoverRecord')",
+                icon: 'warning',
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText: "@lang('messages.confirmDelete')",
+                cancelButtonText: "@lang('app.cancel')",
+                customClass: {
+                    confirmButton: 'btn btn-primary mr-3',
+                    cancelButton: 'btn btn-secondary'
+                },
+                showClass: {
+                    popup: 'swal2-noanimation',
+                    backdrop: 'swal2-noanimation'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.easyAjax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            '_method': 'DELETE'
+                        },
+                        success: function(response) {
+                            if (response.status == 'success') {
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
 
         $('body').on('click', '.collapse-column', function() {
             var boardColumnId = $(this).data('column-id');
             var type = $(this).data('type');
 
             $.easyAjax({
-                url: "{{ route('projectboards.collapse_column') }}",
+                url: "{{ route('taskboards.collapse_column') }}",
                 type: 'POST',
                 container: '#taskboard-columns',
                 blockUI: true,
@@ -197,12 +198,21 @@
                 },
                 success: function(response) {
                     if (response.status == 'success') {
-                        showTable();
+                        loadData();
                     }
                 }
             });
         });
 
-        showTable();
-    </script>
-@endpush
+        //pusher
+        if ((pusher_setting.status === 1 && pusher_setting.taskboard === 1) || (pusher_setting.status == "1" && pusher_setting.taskboard == "1")) {
+
+            var channel = pusher.subscribe('task-updated-channel');
+            channel.bind('task-updated', function(data) {
+                loadData()
+            });
+        }
+
+        loadData();
+    });
+</script>

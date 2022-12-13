@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Models\ProjectTimeLog;
-use App\Models\ProjectStatusSetting;
+use App\Models\ProjectStatus;
 use App\Models\User;
 use App\Models\UserProjectboardSetting;
 use App\Models\Project;
@@ -11,7 +11,7 @@ use App\Models\Project;
 class ProjectStatusObserver
 {
 
-    public function created(ProjectStatusSetting $projectStatus)
+    public function created(ProjectStatus $projectStatus)
     {
         if (!isRunningInConsoleOrSeeding()) {
             $employees = User::allEmployees();
@@ -19,15 +19,15 @@ class ProjectStatusObserver
             foreach ($employees as $item) {
                 UserProjectboardSetting::create([
                     'user_id' => $item->id,
-                    'board_column_id' => $leadStatus->id
+                    'board_column_id' => $projectStatus->id
                 ]);
             }
         }
     }
 
-    public function deleting(ProjectStatusSetting $projectStatus)
+    public function deleting(ProjectStatus $projectStatus)
     {
-        $defaultStatus = ProjectStatusSetting::where('default', 1)->first();
+        $defaultStatus = ProjectStatus::where('default', 1)->first();
         abort_403($defaultStatus->id == $projectStatus->id);
 
         Project::where('status_id', $projectStatus->id)->update(['status_id' => $defaultStatus->id]);;
