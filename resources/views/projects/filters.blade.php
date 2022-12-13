@@ -4,7 +4,7 @@
 
     $projectStatus= App\Models\ProjectStatus::all();
     ?>
-    <div
+  {{--  <div
         class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
         <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.status')</p>
         <div class="select-status">
@@ -18,7 +18,7 @@
                 @endforeach
             </select>
         </div>
-    </div>
+    </div> --}}
 
     <!-- SEARCH BY TASK START -->
     <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
@@ -96,7 +96,7 @@
         data['client_id'] = clientID;
 
         data['category_id'] = categoryID;
-      
+
         data['deadLineStartDate'] = deadLineStartDate;
         data['deadLineEndDate'] = deadLineEndDate;
         data['searchText'] = searchText;

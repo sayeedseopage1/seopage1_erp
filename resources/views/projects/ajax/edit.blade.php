@@ -268,7 +268,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
                               <option class="text-capitalize" selected value="{{$d_status->status_name}}">{{ucfirst($d_status->status_name)}}</option>
                             @foreach ($p_status as $status)
-                            <option  class="text-capitalize" value="$status->status_name"><i class='fa fa-circle mr-1 f-15' style='color:{{$status->color}}'></i>{{ucfirst($status->status_name)}}</option>
+                            <option  class="text-capitalize" value="{{$status->id}}"><i class='fa fa-circle mr-1 f-15' style='color:{{$status->color}}'></i>{{ucfirst($status->status_name)}}</option>
 
 
                             @endforeach

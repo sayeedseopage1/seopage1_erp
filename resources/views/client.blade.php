@@ -55,8 +55,8 @@
                       @csrf
                         <input type="hidden" name="deal_id" value="{{$deal->id}}" />
                         <div class="col-md-12">
-                            <label for="inputEmail4" class="form-label">Please put your freelancer.com username here!</label>
-                            <input type="text" name="user_name" class="form-control @error('user_name') is-invalid @enderror" id="inputEmail4" required />
+                            <label for="Email3" class="form-label">Please put your freelancer.com username here!</label>
+                            <input type="text" name="user_name" class="form-control @error('user_name') is-invalid @enderror"  required />
                         </div>
                         @error('user_name')
                         <div class="mt-3">
@@ -65,8 +65,8 @@
                         @enderror
 
                         <div class="col-md-12">
-                            <label for="inputEmail4" class="form-label">Your email (For future communication)!</label>
-                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="inputEmail4" required/>
+                            <label for="Email3" class="form-label">Your email (For future communication)!</label>
+                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"  required/>
                         </div>
                         @error('email')
                         <div class="mt-3">

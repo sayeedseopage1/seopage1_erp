@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProjectStatusSetting;
+use App\Models\Item;
 
 class ProjectBoardController extends AccountBaseController
 {
@@ -68,7 +69,7 @@ class ProjectBoardController extends AccountBaseController
             }
 
 
-            $this->projectStatus = ProjectStatus::all();
+            $this->projectStatus = ProjectStatusSetting::all();
 
             $boardColumns = ProjectStatus::with('userSetting')->withCount(['projects as projects_count' => function ($q) use ($startDate, $endDate, $request) {
             //dd($startDate, $endDate, $request);
@@ -217,6 +218,11 @@ class ProjectBoardController extends AccountBaseController
             return Reply::dataOnly(['view' => $view]);
         }
         // /dd($projects);
+        $this->completeItem = Item::where('status',2)->orderBy('order')->get();
+        $this->todoItem = Item::where('status',0)->orderBy('order')->get();
+
+        $this->inprogressItem = Item::where('status',1)->orderBy('order')->get();
+
 
       //  dd($this->data);
         return view('projects.board.index', $this->data);
@@ -323,6 +329,42 @@ class ProjectBoardController extends AccountBaseController
         $setting->save();
 
         return Reply::dataOnly(['status' => 'success']);
+    }
+    public function updateItems(Request $request)
+
+    {
+      //dd($request);
+
+      $input = $request->all();
+
+      foreach ($input['todoArr'] as $key => $value) {
+
+        $key = $key+1;
+
+        Item::where('id',$value)->update(['status'=>0,'order'=>$key]);
+
+      }
+
+      foreach ($input['inprogressArr'] as $key => $value) {
+
+        $key = $key+1;
+
+        Item::where('id',$value)->update(['status'=>1,'order'=>$key]);
+
+      }
+
+
+      foreach ($input['completeArr'] as $key => $value) {
+
+        $key = $key+1;
+
+        Item::where('id',$value)->update(['status'=>2,'order'=>$key]);
+
+      }
+
+
+      return response()->json(['status'=>'success']);
+
     }
 
 }

@@ -389,6 +389,14 @@ class Project extends BaseModel
     {
         return $this->belongsTo(ProjectStatus::class, 'status_id');
     }
+    public function client_name()
+    {
+        return $this->belongsTo(User::class, 'client_id');
+    }
+    public function pm_name()
+    {
+        return $this->belongsTo(User::class, 'pm_id');
+    }
 
 
 }

@@ -1100,3 +1100,4 @@ Route::post('projectboards/collapseColumn', [ProjectBoardController::class, 'col
 Route::post('projectboards/updateIndex', [ProjectBoardController::class, 'updateIndex'])->name('projectboards.update_index');
 Route::get('projectboards/loadMore', [ProjectBoardController::class, 'loadMore'])->name('projectboards.load_more');
 Route::resource('projectboards', ProjectBoardController::class);
+Route::post('update-items', [ProjectBoardController::class, 'updateItems'])->name('update.items');
