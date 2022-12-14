@@ -101,7 +101,7 @@
                         $projects= App\Models\Project::where('status',$st->status_name)->get();
                         $project_count= App\Models\Project::where('status',$st->status_name)->count();
                       ?>
-                      <div class="col-md-3 inner-card p-2 todo-item">
+                      <div class="col-md-5 inner-card p-2 todo-item">
                         <li class="list-group-item text-center text-uppercase">
                             <p class="mb-0 f-15 mr-3 text-dark-grey font-weight-bold text-uppercase"><svg class="svg-inline--fa fa-circle fa-w-16 mr-2 text-yellow" style="color:{{$st->color}};;" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path></svg>
                               <!-- <i class="fa fa-circle mr-2 text-yellow" style="color: #d21010"></i> Font Awesome fontawesome.com -->{{$st->status_name}} ({{$project_count}})
@@ -120,24 +120,24 @@
                                          <div class="card-body p-3">
 
                                              <h6 class="mb-2 mt-1">
-                                                 <a href="http://127.0.0.1:8000/account/projects/{{$value->id}}" class="text-body">{{Str::limit($value->project_name,25)}}</a>
+                                                 <a href="/account/projects/{{$value->id}}" class="text-body">{{Str::limit($value->project_name,25)}}</a>
                                              </h6>
 
-                                             <a class="text-dark" href="http://127.0.0.1:8000/account/clients/{{$value->client_id}}">
+                                             <a class="text-dark" href="/account/clients/{{$value->client_id}}">
                                              <p class="mb-0">
                                                 <i class="fa-solid fa-person-military-pointing fa-x"></i>
                                                  <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
                                                  <span class="align-middle">{{$value->client_name->name}} (Client)</span>
                                              </p>
                                              </a>
-                                             <a class="text-dark" href="http://127.0.0.1:8000/account/employees/{{$value->pm_id}}">
+                                             <a class="text-dark" href="/account/employees/{{$value->pm_id}}">
                                              <p class="mb-0">
                                                 <i class="fa-solid fa-user"></i>
                                                  <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
                                                  <span class="align-middle">{{$value->pm_name->name}} (PM)</span>
                                              </p>
                                              </a>
-                                             <a class="text-dark" href="http://127.0.0.1:8000/account/employees/{{$value->pm_id}}">
+                                             <a class="text-dark" href="/account/employees/{{$value->pm_id}}">
                                              <p class="mb-2">
                                                <i class="fa-solid fa-people-roof"></i>
 
