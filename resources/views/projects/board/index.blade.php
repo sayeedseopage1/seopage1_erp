@@ -34,13 +34,14 @@
           padding: 0.5em;
 
       }
+
       .inner-card{
 
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
 	/* box-shadow: 3px 3px 11px rgba(0, 0, 0, 0.2); */
   max-width: 18%;
-	margin: 5px;
+	margin: 12px;
 	border-radius: 5px;
       }
     </style>
@@ -101,7 +102,7 @@
                         $projects= App\Models\Project::where('status',$st->status_name)->get();
                         $project_count= App\Models\Project::where('status',$st->status_name)->count();
                       ?>
-                      <div class="col-md-5 inner-card p-2 todo-item">
+                      <div class="col-md-3 inner-card p-2 todo-item">
                         <li class="list-group-item text-center text-uppercase">
                             <p class="mb-0 f-15 mr-3 text-dark-grey font-weight-bold text-uppercase"><svg class="svg-inline--fa fa-circle fa-w-16 mr-2 text-yellow" style="color:{{$st->color}};;" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path></svg>
                               <!-- <i class="fa fa-circle mr-2 text-yellow" style="color: #d21010"></i> Font Awesome fontawesome.com -->{{$st->status_name}} ({{$project_count}})
@@ -119,19 +120,19 @@
                               <div item-id="{{$value->id}}" class="card mb-0">
                                          <div class="card-body p-3">
 
-                                             <h6 class="mb-2 mt-1">
-                                                 <a href="/account/projects/{{$value->id}}" class="text-body">{{Str::limit($value->project_name,25)}}</a>
+                                             <h6 class="mt-3" style="font-size:12px;">
+                                                 <a href="/account/projects/{{$value->id}}" class="text-body">{{Str::limit($value->project_name,30)}}</a>
                                              </h6>
 
                                              <a class="text-dark" href="/account/clients/{{$value->client_id}}">
-                                             <p class="mb-0">
+                                             <p class="mb-0"  style="font-size:10px;">
                                                 <i class="fa-solid fa-person-military-pointing fa-x"></i>
                                                  <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
                                                  <span class="align-middle">{{$value->client_name->name}} (Client)</span>
                                              </p>
                                              </a>
                                              <a class="text-dark" href="/account/employees/{{$value->pm_id}}">
-                                             <p class="mb-0">
+                                             <p class="mb-0"  style="font-size:10px;">
                                                 <i class="fa-solid fa-user"></i>
                                                  <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
                                                  <span class="align-middle">{{$value->pm_name->name}} (PM)</span>
@@ -145,8 +146,7 @@
                                                   <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
                                                    <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
                                                     <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
-                                                     <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
-                                                      <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
+                                                     
 
                                              </p>
                                              </a>
@@ -180,9 +180,9 @@
                                              <span class="badge bg-danger">Deadline</span>
 
                                              <h6 class="mb-2">
-                                                 <a href="http://127.0.0.1:8000/account/projects/229" class="text-body">{{$value->title}}</a>
+                                                 <a href="/account/projects/229" class="text-body">{{$value->title}}</a>
                                              </h6>
-                                             <a class="text-dark" href="http://127.0.0.1:8000/account/clients/132">
+                                             <a class="text-dark" href="/account/clients/132">
                                              <p class="mb-0">
 
                                                  <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
