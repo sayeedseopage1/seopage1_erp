@@ -146,7 +146,7 @@
                                                   <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
                                                    <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
                                                     <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
-                                                     
+
 
                                              </p>
                                              </a>
