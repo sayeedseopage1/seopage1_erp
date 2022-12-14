@@ -1126,166 +1126,6 @@ $createPublicProjectPermission = user()->permission('create_public_project');
             },
             ...datepickerConfig
         });
-        const dp3 = datepicker('#from', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-              dp4.setMin(date);
-            },
-            ...datepickerConfig
-        });
-        const dp4 = datepicker('#to', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-               dp3.setMax(date);
-            },
-            ...datepickerConfig
-        });
-        const dp5 = datepicker('#from_graphics', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-              dp6.setMin(date);
-            },
-            ...datepickerConfig
-        });
-        const dp6 = datepicker('#to_graphics', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-               dp5.setMax(date);
-            },
-            ...datepickerConfig
-        });
-        const dp7 = datepicker('#from_main_page_development', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-              dp8.setMin(date);
-            },
-            ...datepickerConfig
-        });
-        const dp8 = datepicker('#to_main_page_development', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-               dp7.setMax(date);
-            },
-            ...datepickerConfig
-        });
-        const dp9 = datepicker('#from_secondary_page_development', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-              dp10.setMin(date);
-            },
-            ...datepickerConfig
-        });
-        const dp10 = datepicker('#to_secondary_page_development', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-               dp9.setMax(date);
-            },
-            ...datepickerConfig
-        });
-        const dp11 = datepicker('#from_content_creation', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-              dp12.setMin(date);
-            },
-            ...datepickerConfig
-        });
-        const dp12 = datepicker('#to_content_creation', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-               dp11.setMax(date);
-            },
-            ...datepickerConfig
-        });
-        const dp13 = datepicker('#from_marketing', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-              dp14.setMin(date);
-            },
-            ...datepickerConfig
-        });
-        const dp14 = datepicker('#to_marketing', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-               dp13.setMax(date);
-            },
-            ...datepickerConfig
-        });
-        const dp15 = datepicker('#from_domain_hosting', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-              dp16.setMin(date);
-            },
-            ...datepickerConfig
-        });
-        const dp16 = datepicker('#to_domain_hosting', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-               dp15.setMax(date);
-            },
-            ...datepickerConfig
-        });
-        const dp17 = datepicker('#from_products', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-              dp18.setMin(date);
-            },
-            ...datepickerConfig
-        });
-        const dp18 = datepicker('#to_products', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-               dp17.setMax(date);
-            },
-            ...datepickerConfig
-        });
-        const dp19 = datepicker('#from_collection', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-              dp20.setMin(date);
-            },
-            ...datepickerConfig
-        });
-        const dp20 = datepicker('#to_collection', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-               dp19.setMax(date);
-            },
-            ...datepickerConfig
-        });
-        const dp21 = datepicker('#from_others', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-              dp22.setMin(date);
-            },
-            ...datepickerConfig
-        });
-        const dp22 = datepicker('#to_others', {
-            position: 'bl',
-
-            onSelect: (instance, date) => {
-               dp21.setMax(date);
-            },
-            ...datepickerConfig
-        });
 
 
 
@@ -1299,97 +1139,6 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                 $('#deadlineBox').hide();
             } else {
                 $('#deadlineBox').show();
-            }
-        });
-        $('#UX_Box').hide();
-        $('#ux_design').click(function() {
-            var check = $('#ux_design').is(":checked") ? true : false;
-            if (check == true) {
-                $('#UX_Box').show();
-            } else {
-                $('#UX_Box').hide();
-            }
-        });
-        $('#graphics_design_box').hide();
-        $('#graphics_design').click(function() {
-            var check = $('#graphics_design').is(":checked") ? true : false;
-            if (check == true) {
-                $('#graphics_design_box').show();
-            } else {
-                $('#graphics_design_box').hide();
-            }
-        });
-        $('#main_page_development_box').hide();
-        $('#main_page_development').click(function() {
-            var check = $('#main_page_development').is(":checked") ? true : false;
-            if (check == true) {
-                $('#main_page_development_box').show();
-            } else {
-                $('#main_page_development_box').hide();
-            }
-        });
-
-        $('#secondary_page_development_box').hide();
-        $('#secondary_page_development').click(function() {
-            var check = $('#secondary_page_development').is(":checked") ? true : false;
-            if (check == true) {
-                $('#secondary_page_development_box').show();
-            } else {
-                $('#secondary_page_development_box').hide();
-            }
-        });
-        $('#content_creation_box').hide();
-        $('#content_creation').click(function() {
-            var check = $('#content_creation').is(":checked") ? true : false;
-            if (check == true) {
-                $('#content_creation_box').show();
-            } else {
-                $('#content_creation_box').hide();
-            }
-        });
-        $('#marketing_box').hide();
-        $('#marketing').click(function() {
-            var check = $('#marketing').is(":checked") ? true : false;
-            if (check == true) {
-                $('#marketing_box').show();
-            } else {
-                $('#marketing_box').hide();
-            }
-        });
-        $('#domain_hosting_box').hide();
-        $('#domain_hosting').click(function() {
-            var check = $('#domain_hosting').is(":checked") ? true : false;
-            if (check == true) {
-                $('#domain_hosting_box').show();
-            } else {
-                $('#domain_hosting_box').hide();
-            }
-        });
-        $('#products_box').hide();
-        $('#products').click(function() {
-            var check = $('#products').is(":checked") ? true : false;
-            if (check == true) {
-                $('#products_box').show();
-            } else {
-                $('#products_box').hide();
-            }
-        });
-        $('#collection_box').hide();
-        $('#collection').click(function() {
-            var check = $('#collection').is(":checked") ? true : false;
-            if (check == true) {
-                $('#collection_box').show();
-            } else {
-                $('#collection_box').hide();
-            }
-        });
-        $('#others_box').hide();
-        $('#others').click(function() {
-            var check = $('#others').is(":checked") ? true : false;
-            if (check == true) {
-                $('#others_box').show();
-            } else {
-                $('#others_box').hide();
             }
         });
 
@@ -1497,3 +1246,271 @@ $createPublicProjectPermission = user()->permission('create_public_project');
     }
 
 </script>
+@if($deliverables == null)
+<script >
+
+$(document).ready(function() {
+
+    if ($('.custom-date-picker').length > 0) {
+        datepicker('.custom-date-picker', {
+            position: 'bl',
+            ...datepickerConfig
+        });
+    }
+const dp3 = datepicker('#from', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+      dp4.setMin(date);
+    },
+    ...datepickerConfig
+});
+const dp4 = datepicker('#to', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+       dp3.setMax(date);
+    },
+    ...datepickerConfig
+});
+const dp5 = datepicker('#from_graphics', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+      dp6.setMin(date);
+    },
+    ...datepickerConfig
+});
+const dp6 = datepicker('#to_graphics', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+       dp5.setMax(date);
+    },
+    ...datepickerConfig
+});
+const dp7 = datepicker('#from_main_page_development', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+      dp8.setMin(date);
+    },
+    ...datepickerConfig
+});
+const dp8 = datepicker('#to_main_page_development', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+       dp7.setMax(date);
+    },
+    ...datepickerConfig
+});
+const dp9 = datepicker('#from_secondary_page_development', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+      dp10.setMin(date);
+    },
+    ...datepickerConfig
+});
+const dp10 = datepicker('#to_secondary_page_development', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+       dp9.setMax(date);
+    },
+    ...datepickerConfig
+});
+const dp11 = datepicker('#from_content_creation', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+      dp12.setMin(date);
+    },
+    ...datepickerConfig
+});
+const dp12 = datepicker('#to_content_creation', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+       dp11.setMax(date);
+    },
+    ...datepickerConfig
+});
+const dp13 = datepicker('#from_marketing', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+      dp14.setMin(date);
+    },
+    ...datepickerConfig
+});
+const dp14 = datepicker('#to_marketing', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+       dp13.setMax(date);
+    },
+    ...datepickerConfig
+});
+const dp15 = datepicker('#from_domain_hosting', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+      dp16.setMin(date);
+    },
+    ...datepickerConfig
+});
+const dp16 = datepicker('#to_domain_hosting', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+       dp15.setMax(date);
+    },
+    ...datepickerConfig
+});
+const dp17 = datepicker('#from_products', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+      dp18.setMin(date);
+    },
+    ...datepickerConfig
+});
+const dp18 = datepicker('#to_products', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+       dp17.setMax(date);
+    },
+    ...datepickerConfig
+});
+const dp19 = datepicker('#from_collection', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+      dp20.setMin(date);
+    },
+    ...datepickerConfig
+});
+const dp20 = datepicker('#to_collection', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+       dp19.setMax(date);
+    },
+    ...datepickerConfig
+});
+const dp21 = datepicker('#from_others', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+      dp22.setMin(date);
+    },
+    ...datepickerConfig
+});
+const dp22 = datepicker('#to_others', {
+    position: 'bl',
+
+    onSelect: (instance, date) => {
+       dp21.setMax(date);
+    },
+    ...datepickerConfig
+});
+$('#UX_Box').hide();
+$('#ux_design').click(function() {
+    var check = $('#ux_design').is(":checked") ? true : false;
+    if (check == true) {
+        $('#UX_Box').show();
+    } else {
+        $('#UX_Box').hide();
+    }
+});
+$('#graphics_design_box').hide();
+$('#graphics_design').click(function() {
+    var check = $('#graphics_design').is(":checked") ? true : false;
+    if (check == true) {
+        $('#graphics_design_box').show();
+    } else {
+        $('#graphics_design_box').hide();
+    }
+});
+$('#main_page_development_box').hide();
+$('#main_page_development').click(function() {
+    var check = $('#main_page_development').is(":checked") ? true : false;
+    if (check == true) {
+        $('#main_page_development_box').show();
+    } else {
+        $('#main_page_development_box').hide();
+    }
+});
+
+$('#secondary_page_development_box').hide();
+$('#secondary_page_development').click(function() {
+    var check = $('#secondary_page_development').is(":checked") ? true : false;
+    if (check == true) {
+        $('#secondary_page_development_box').show();
+    } else {
+        $('#secondary_page_development_box').hide();
+    }
+});
+$('#content_creation_box').hide();
+$('#content_creation').click(function() {
+    var check = $('#content_creation').is(":checked") ? true : false;
+    if (check == true) {
+        $('#content_creation_box').show();
+    } else {
+        $('#content_creation_box').hide();
+    }
+});
+$('#marketing_box').hide();
+$('#marketing').click(function() {
+    var check = $('#marketing').is(":checked") ? true : false;
+    if (check == true) {
+        $('#marketing_box').show();
+    } else {
+        $('#marketing_box').hide();
+    }
+});
+$('#domain_hosting_box').hide();
+$('#domain_hosting').click(function() {
+    var check = $('#domain_hosting').is(":checked") ? true : false;
+    if (check == true) {
+        $('#domain_hosting_box').show();
+    } else {
+        $('#domain_hosting_box').hide();
+    }
+});
+$('#products_box').hide();
+$('#products').click(function() {
+    var check = $('#products').is(":checked") ? true : false;
+    if (check == true) {
+        $('#products_box').show();
+    } else {
+        $('#products_box').hide();
+    }
+});
+$('#collection_box').hide();
+$('#collection').click(function() {
+    var check = $('#collection').is(":checked") ? true : false;
+    if (check == true) {
+        $('#collection_box').show();
+    } else {
+        $('#collection_box').hide();
+    }
+});
+$('#others_box').hide();
+$('#others').click(function() {
+    var check = $('#others').is(":checked") ? true : false;
+    if (check == true) {
+        $('#others_box').show();
+    } else {
+        $('#others_box').hide();
+    }
+});
+
+
+  });
+
+</script>
+@endif
