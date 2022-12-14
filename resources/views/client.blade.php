@@ -83,7 +83,10 @@
                         </div>
                         <div class="col-md-12">
                             <label for="inputEmail4" class="form-label">Your WhatsApp ID (For future communication)!</label> <br>
-                            <input id="whatsapp" class="form-control" name="client_whatsapp" type="text" placeholder="Enter Your Whats NUmber">
+                            <input  class="form-control mybtns" id="phone2" name="client_whatsapp" type="tel" required>
+                            <span id="valid-msg" class="hide">Valid</span>
+                            <span id="error-msg" class="hide">Invalid number</span>
+
                         </div>
                         <div class="col-md-12">
                             <label for="floatingTextarea"><strong>Any other instant messengers where you are mostly available (Example, skype, telegram etc.)! (optional)</strong></label>
@@ -905,6 +908,7 @@
 
   <script>
       mask("#phone");
+      mask("#phone2");
   </script>
 
   <script>

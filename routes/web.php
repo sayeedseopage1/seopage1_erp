@@ -1101,3 +1101,7 @@ Route::post('projectboards/updateIndex', [ProjectBoardController::class, 'update
 Route::get('projectboards/loadMore', [ProjectBoardController::class, 'loadMore'])->name('projectboards.load_more');
 Route::resource('projectboards', ProjectBoardController::class);
 Route::post('update-items', [ProjectBoardController::class, 'updateItems'])->name('update.items');
+
+//project dispute
+Route::get('acount/projects/dispute/{id}', [ProjectController::class, 'Dispute'])->name('projects.dispute');
+Route::post('acount/projects/dispute/store', [ProjectController::class, 'storeDispute'])->name('store-dispute');

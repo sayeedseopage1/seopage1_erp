@@ -60,6 +60,18 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 <x-forms.button-primary class="restore-project" icon="undo">@lang('app.unarchive') </x-forms.button-primary>
             </div>
             @endif
+            @if($project->project_status == 'Accepted')
+            <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
+                <div class="">
+                    <a class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded openRightModal" href="{{ route('projects.dispute', $project->id) }}"  aria-haspopup="true" aria-expanded="false">
+                    @lang('Dispute')
+                    </a>
+
+
+                </div>
+            </div>
+            @endif
+
         </div>
         <!-- PROJECT PROGRESS AND CLIENT START -->
         <div class="row">
