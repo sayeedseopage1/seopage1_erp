@@ -120,7 +120,7 @@
                                          <div class="card-body p-3">
 
                                              <h6 class="mb-2 mt-1">
-                                                 <a href="http://127.0.0.1:8000/account/projects/{{$value->id}}" class="text-body">{{$value->project_name}}</a>
+                                                 <a href="http://127.0.0.1:8000/account/projects/{{$value->id}}" class="text-body">{{Str::limit($value->project_name,25)}}</a>
                                              </h6>
 
                                              <a class="text-dark" href="http://127.0.0.1:8000/account/clients/{{$value->client_id}}">

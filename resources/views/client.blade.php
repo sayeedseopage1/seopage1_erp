@@ -904,7 +904,7 @@
   <script src="{{asset('mobile/js/mask_list.js')}}"></script>
 
   <script>
-      mask("input");
+      mask("#phone");
   </script>
 
   <script>
