@@ -1,7 +1,7 @@
 <script src="{{ asset('vendor/jquery/frappe-charts.min.iife.js') }}"></script>
 <script src="{{ asset('vendor/jquery/Chart.min.js') }}"></script>
 <script src="{{ asset('vendor/jquery/gauge.js') }}"></script>
-
+<link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 @php $editProjectPermission = user()->permission('edit_projects'); $addPaymentPermission = user()->permission('add_payments'); $projectBudgetPermission = user()->permission('view_project_budget'); $memberIds =
 $project->members->pluck('user_id')->toArray(); @endphp
 
@@ -61,6 +61,13 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             @endif
             @if($project->project_status == 'Accepted')
+            @if(Auth::user()->role_id == 7 || Auth::user()->role_id == 1)
+            @php
+              $dispute= App\Models\ProjectDispute::where('project_id',$project->id)->first();
+              //dd($dispute);
+
+            @endphp
+            @if($dispute == null)
             <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
                 <div class="">
                     <a class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded openRightModal" href="{{ route('projects.dispute', $project->id) }}"  aria-haspopup="true" aria-expanded="false">
@@ -70,6 +77,23 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
                 </div>
             </div>
+            @else
+            <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
+                <div class="">
+                    <a class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded openRightModal" href="{{ route('projects.dispute.form', $project->id) }}"  aria-haspopup="true" aria-expanded="false">
+                    @lang('Dispute Form')
+                    </a>
+
+
+                </div>
+            </div>
+
+
+
+
+
+            @endif
+            @endif
             @endif
 
         </div>
@@ -672,3 +696,5 @@ $project->members->pluck('user_id')->toArray(); @endphp
         });
     });
 </script>
+<script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+   {!! Toastr::message() !!}

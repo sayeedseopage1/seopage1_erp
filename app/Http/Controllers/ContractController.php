@@ -209,6 +209,7 @@ class ContractController extends AccountBaseController
             'amount' => 'required',
             'original_currency_id' => 'required',
         ]);
+        
 
         //  dd($request->date);
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";

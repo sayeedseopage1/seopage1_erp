@@ -1103,5 +1103,6 @@ Route::resource('projectboards', ProjectBoardController::class);
 Route::post('update-items', [ProjectBoardController::class, 'updateItems'])->name('update.items');
 
 //project dispute
-Route::get('acount/projects/dispute/{id}', [ProjectController::class, 'Dispute'])->name('projects.dispute');
-Route::post('acount/projects/dispute/store', [ProjectController::class, 'storeDispute'])->name('store-dispute');
+Route::get('/projects/dispute/{id}', [ProjectController::class, 'Dispute'])->name('projects.dispute');
+Route::get('/projects/dispute/view/{id}', [ProjectController::class, 'DisputeView'])->name('projects.dispute.form');
+Route::post('/projects/dispute/store', [ProjectController::class, 'storeDispute'])->name('store-dispute');

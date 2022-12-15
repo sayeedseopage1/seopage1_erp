@@ -66,6 +66,8 @@ use Illuminate\Support\Facades\File;
 use App\Models\ProjectDeliverable;
 use Toastr;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use App\Models\ProjectDispute;
 
 
 class ProjectController extends AccountBaseController
@@ -624,7 +626,119 @@ if ($pm_count < 2) {
     }
     public function storeDispute(Request $request)
     {
-      dd($request);
+
+      // $validated = $request->validate([
+      //     'client_username' => 'required',
+      //     'project_value' => 'required',
+      //     'project_name' => 'required',
+      //     'description1' => 'required',
+      //     'description2' => 'required',
+      //     'description3' => 'required',
+      //     'description4' => 'required',
+      //     'description5' => 'required',
+      //     'description6' => 'required',
+      //     'description7' => 'required',
+      //     'description8' => 'required',
+      //
+      //     'description10' => 'required',
+      //     'description11' => 'required',
+      //     'description12' => 'required',
+      //     'description13' => 'required',
+      //     'description14' => 'required',
+      //     'description15' => 'required',
+      //     'description16' => 'required',
+      //     'description17' => 'required',
+      //     'pm_name' => 'required',
+      //     'pm_email' => 'required',
+      //
+      // ]);
+      //dd($request->all());
+      $dispute = new ProjectDispute();
+      $dispute->client_username= $request->client_username;
+      $dispute->project_value= $request->project_value;
+      $dispute->project_id= $request->project_id;
+      $dispute->description1= $request->description1;
+      $dispute->description2= $request->description2;
+      $dispute->description3= $request->description3;
+      $dispute->description4= $request->description4;
+      $dispute->description5= $request->description5;
+      $dispute->description6= $request->description6;
+      $dispute->description7= $request->description7;
+      $dispute->description8= $request->description8;
+      $dispute->description9= $request->description9;
+      $dispute->description11= $request->description11;
+      $dispute->description10= $request->description10;
+      $dispute->description12= $request->description12;
+      $dispute->description13= $request->description13;
+      $dispute->description14= $request->description14;
+      $dispute->description15= $request->description15;
+      $dispute->description16= $request->description16;
+      $dispute->description17= $request->description17;
+      $dispute->pm_email= $request->pm_email;
+      $dispute->pm_name= $request->pm_name;
+      $dispute->pm_id= Auth::id();
+      $dispute->save();
+      $project= Project::find($dispute->project_id);
+      $project->status ='canceled';
+      $project->save();
+
+      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+      //  return Redirect::route('projects.index');
+        return redirect('/account/projects/' .$dispute->project_id);
+
+    }
+    public function disputeView($id)
+    {
+        $this->project = Project::with('client', 'members', 'members.user', 'members.user.session', 'members.user.employeeDetail.designation', 'milestones', 'milestones.currency')
+            ->withTrashed()
+            ->findOrFail($id)
+            ->withCustomFields();
+
+        $memberIds = $this->project->members->pluck('user_id')->toArray();
+
+        $this->editPermission = user()->permission('edit_projects');
+        $this->editProjectMembersPermission = user()->permission('edit_project_members');
+
+        abort_403(!(
+            $this->editPermission == 'all'
+            || ($this->editPermission == 'added' && user()->id == $this->project->added_by)
+            || ($this->editPermission == 'owned' && user()->id == $this->project->client_id && in_array('client', user_roles()))
+            || ($this->editPermission == 'owned' && in_array(user()->id, $memberIds) && in_array('employee', user_roles()))
+            || ($this->editPermission == 'both' && (user()->id == $this->project->client_id || user()->id == $this->project->added_by))
+            || ($this->editPermission == 'both' && in_array(user()->id, $memberIds) && in_array('employee', user_roles()))
+        ));
+
+        $this->pageTitle = __('Dispute') . ' ' . __('app.project');
+
+        if (!empty($this->project->getCustomFieldGroupsWithFields())) {
+            $this->fields = $this->project->getCustomFieldGroupsWithFields()->fields;
+        }
+
+        $this->clients = User::allClients();
+        $this->categories = ProjectCategory::all();
+        $this->currencies = Currency::all();
+        $this->teams = Team::all();
+        $this->dispute = ProjectDispute::where('project_id',$id)->first();
+        $this->projectStatus = ProjectStatusSetting::where('status', 'active')->get();
+
+        if ($this->editPermission == 'all' || $this->editProjectMembersPermission == 'all') {
+            $this->employees = User::allEmployees(null, null, ($this->editPermission == 'all' ? 'all' : null));
+        }
+        else{
+            $this->employees = '';
+        }
+
+        if (request()->ajax()) {
+            $html = view('projects.ajax.disputeview', $this->data)->render();
+            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+        }
+
+
+        abort_403(user()->permission('edit_projects') == 'added' && $this->project->added_by != user()->id);
+        $this->view = 'projects.ajax.disputeview';
+
+        return view('projects.create', $this->data);
+
     }
 
 
@@ -1625,7 +1739,7 @@ if ($pm_count < 2) {
     }
     public function deliverables($id)
     {
-      dd($id);
+      //dd($id);
     }
     public function download($id)
     {
