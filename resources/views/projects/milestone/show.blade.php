@@ -9,14 +9,24 @@
 </div>
 <div class="modal-body bg-additional-grey">
   <input type="hidden" id="milestone_id" value="{{$milestone->id}}">
-
+  <?php
+  $task= App\Models\Task::where('milestone_id',$milestone->id)->where('status','incomplete')->count();
+  //dd($task);
+   ?>
+   @if($task > 0)
+    <h6 class="text-center text-red">You can't complete this milestone because you have some pending tasks.</h6>
+    @endif
     <x-cards.data>
       @if($milestone->status == 'incomplete')
       <form class="" action="{{route('milestone-complete')}}" method="post">
         @csrf
           <input type="hidden" name="id" value="{{$milestone->id}}">
 
+           @if($task > 0)
+           <button type="submit" disabled class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
+           @else
         <button type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
+        @endif
           </form>
         <hr>
         @else

@@ -79,7 +79,7 @@
                               <div class="col-md-12">
                                 @if($deal->profile_link != null)
                                 <div class="mt-3">
-                                    <label for="input-state-3" class="form-label"><strong>Profile Link <span style="color:red;">*<span></strong></label>
+                                    <label for="input-state-3" class="form-label"><strong>Profile Link </strong></label>
                                     <input name="profile_link" value="{{$deal->profile_link}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                 </div>
@@ -95,7 +95,7 @@
                               <div class="col-md-12">
                                 @if($deal->message_link != null)
                                 <div class="mt-3">
-                                    <label for="input-state-3" class="form-label"><strong>Message Link <span style="color:red;">*<span></strong></label>
+                                    <label for="input-state-3" class="form-label"><strong>Message Link</strong></label>
                                     <input name="message_link" value="{{$deal->message_link}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                 </div>

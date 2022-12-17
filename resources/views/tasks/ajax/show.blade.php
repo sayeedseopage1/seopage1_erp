@@ -187,6 +187,27 @@ $changeStatusPermission = user()->permission('change_status');
                 </div>
 
                 <div class="card-body">
+                  <?php
+
+                  $task_name=App\Models\Task::where('id',$task->dependent_task_id)->first();
+
+                   ?>
+                   @if($task_name != null)
+                  @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                  <div class="col-12 px-0 pb-3 d-lg-flex d-md-flex d-block">
+                    <p class="mb-0 text-lightest f-14 w-30 text-capitalize">
+                        Parent Task
+                    </p>
+                    <div class="mb-0 text-dark-grey">
+                        <a class="text-dark-grey" style="font-weight:bold;" href="/account/tasks/{{$task_name->id}}">{{$task_name->heading}}</a>
+                    </div>
+
+
+                  </div>
+
+
+                  @endif
+                  @endif
                     @if (($taskSettings->project == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                         <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                             <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">@lang('app.project')</p>
@@ -256,13 +277,17 @@ $changeStatusPermission = user()->permission('change_status');
                             @endif
                         </div>
                     @endif
-
-                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
-                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">@lang('modules.taskShortCode')</p>
-                        <p class="mb-0 text-dark-grey f-14 w-70">
-                           {{ $task->task_short_code }}
-                        </p>
-                    </div>
+                    @if (($taskSettings->assigned_by == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                        @if ($task->created_by)
+                            <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                                <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
+                                    @lang('modules.tasks.assignBy')</p>
+                                {{-- <p class="mb-0 text-dark-grey f-14 w-70"> --}}
+                                <x-employee :user="$task->createBy" />
+                                {{-- </p> --}}
+                            </div>
+                        @endif
+                    @endif
                     <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                         <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                             @lang('modules.tasks.priority')</p>
@@ -277,18 +302,20 @@ $changeStatusPermission = user()->permission('change_status');
                             @lang('app.'.$task->priority)
                         </p>
                     </div>
-
-                    @if (($taskSettings->assigned_by == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
-                        @if ($task->created_by)
-                            <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
-                                <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
-                                    @lang('modules.tasks.assignBy')</p>
-                                {{-- <p class="mb-0 text-dark-grey f-14 w-70"> --}}
-                                <x-employee :user="$task->createBy" />
-                                {{-- </p> --}}
-                            </div>
-                        @endif
+                    @if (($taskSettings->task_category == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                        <x-cards.data-row :label="__('modules.tasks.taskCategory')"
+                        :value="$task->category->category_name ?? '--'" html="true" />
                     @endif
+
+                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">@lang('modules.taskShortCode')</p>
+                        <p class="mb-0 text-dark-grey f-14 w-70">
+                           {{ $task->task_short_code }}
+                        </p>
+                    </div>
+
+
+
 
                   {{--  @if (($taskSettings->label == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                         <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
@@ -330,35 +357,14 @@ $changeStatusPermission = user()->permission('change_status');
                     @endif
 
 
-                    @if (($taskSettings->task_category == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
-                        <x-cards.data-row :label="__('modules.tasks.taskCategory')"
-                        :value="$task->category->category_name ?? '--'" html="true" />
-                    @endif
+
 
                     @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                         <x-cards.data-row :label="__('app.description')" :value="!empty($task->description) ? $task->description : '--'" html="true" />
                     @endif
-                    <?php
+                  
+                      <x-cards.data-row :label="__('General Guidelines')" :value="!empty($task->project->project_summary) ? $task->project->project_summary : '--'" html="true" />
 
-                    $task_name=App\Models\Task::where('id',$task->dependent_task_id)->first();
-
-                     ?>
-                     @if($task_name != null)
-                    @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
-                    <div class="col-12 px-0 pb-3 d-lg-flex d-md-flex d-block">
-                      <p class="mb-0 text-lightest f-14 w-30 text-capitalize">
-                          Parent Task
-                      </p>
-                      <div class="mb-0 text-dark-grey">
-                          <a class="text-dark-grey" style="font-weight:bold;" href="/account/tasks/{{$task_name->id}}">{{$task_name->heading}}</a>
-                      </div>
-
-
-                    </div>
-
-
-                    @endif
-                    @endif
 
 
                     {{-- Custom fields data --}}

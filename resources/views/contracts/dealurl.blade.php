@@ -113,7 +113,7 @@
                       </div>
 
                       <div class="details-seopage1">
-                        <h4>Client WatsApp ID (For Future Communation)!</h4>
+                        <h4>Client WhatsApp ID (For Future Communation)!</h4>
                         <p>{!!$client->client_whatsapp!!}</p>
                       </div>
 
@@ -124,7 +124,13 @@
 
                       <div class="details-seopage1">
                         <h4>Client's Message</h4>
-                        <p>{!!$client->message!!}</p>
+                        <p>@if($client->message == "on")
+                          Yes
+                          @else
+                          No
+                          @endif
+                        </p>
+
                       </div>
                       <div class="details-seopage1">
                         <h4>Client's Timezone</h4>
@@ -136,6 +142,16 @@
                       <div class="details-seopage1">
                         <h4>Client's Available Time</h4>
                         <p>{!!$client->day!!}</p>
+                      </div>
+                      <div class="details-seopage1">
+                        <h4>Agree For Promotional Email</h4>
+                        <p>@if($client->checklist == "on")
+                          Yes
+                          @else
+                          No
+                          @endif
+                        </p>
+
                       </div>
 
                       <div class="details-seopage1 py-4">

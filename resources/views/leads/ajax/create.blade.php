@@ -36,7 +36,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
 
                          <div class="col-lg-4 col-md-6">
                                   <x-forms.text :fieldLabel="__('Project ID')" fieldName="project_id"
-                                      fieldId="project_id" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" required />
+                                      fieldId="project_id" :fieldPlaceholder="__('Enter Project ID From Freelancer.com')" fieldRequired="true" required />
                               </div>
                               <div class="col-lg-4 col-md-6">
                                   <x-forms.select fieldId="country" :fieldLabel="__('Client Country')" fieldName="country"
@@ -51,7 +51,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                               </div>
                               <div class="col-lg-4 col-md-4">
                                        <x-forms.text :fieldLabel="__('Project Link')" fieldName="project_link"
-                                           fieldId="project_link" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" required/>
+                                           fieldId="project_link" :fieldPlaceholder="__('Enter Project Link From Freelancer.com')" fieldRequired="true" required/>
                                    </div>
                                    <div class="col-md-4 col-lg-4 my-3" id="deadlineBox">
                                      <label for="">Deadline</label>

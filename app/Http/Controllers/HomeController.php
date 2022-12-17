@@ -91,7 +91,7 @@ class HomeController extends Controller
     public function ClientForm(Request $request)
     {
 
-    //dd($request->day);
+    //dd($request);
     //count($request->day);
 
       $client = new ClientForm();

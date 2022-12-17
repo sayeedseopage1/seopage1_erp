@@ -21,12 +21,12 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     <div class="col-lg-6 col-md-6">
                         <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.taskShortCode')"
                             fieldName="project_code" fieldRequired="true" fieldId="project_code"
-                            :fieldPlaceholder="__('placeholders.writeshortcode')" :fieldValue="$project->project_short_code" />
+                            :fieldPlaceholder="__('placeholders.writeshortcode')" :fieldValue="$project->project_short_code" fieldReadOnly="true"/>
                     </div>
                     <div class="col-lg-6 col-md-6">
                         <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.projectName')"
                             fieldName="project_name" fieldRequired="true" fieldId="project_name"
-                            :fieldValue="$project->project_name" :fieldPlaceholder="__('placeholders.project')" />
+                            :fieldValue="$project->project_name" :fieldPlaceholder="__('placeholders.project')" fieldReadOnly="true"/>
                     </div>
 
                     <input type="hidden" id="project_id" name="project_id" value="{{ $project->id }}">
@@ -123,7 +123,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     <div class="col-md-12 col-lg-12">
                         <div class="form-group my-3">
                             <x-forms.label class="my-3" fieldId="project_summary"
-                                :fieldLabel="__('modules.projects.projectSummary')">
+                                :fieldLabel="__('modules.projects.projectSummary')" fieldRequired="true">
                             </x-forms.label>
                             <div id="project_summary">{!! $project->project_summary !!}</div>
                             <textarea name="project_summary" id="project_summary-text"
@@ -157,7 +157,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     @if ($project->public == 0 && $editProjectMembersPermission == 'all' || $editPermission == 'all')
                         <div class="col-md-12" id="edit_members">
                            <div class="form-group my-3">
-                                <x-forms.label fieldId="selectAssignee" :fieldLabel="__('modules.tasks.assignTo')">
+                                <x-forms.label fieldId="selectAssignee" :fieldLabel="__('Recommended Developers')" fieldRequired="true">
                                 </x-forms.label>
                                 <x-forms.input-group>
                                     <select class="form-control multiple-users" multiple name="member_id[]"
@@ -958,9 +958,39 @@ $createPublicProjectPermission = user()->permission('create_public_project');
               </div>
             </div>
             @endif
-                <div class="col-md-6 col-lg-3 mb-3">
-                    <br>
+            @if($project->project_challenge != null)
+                <div class="col-md-12 col-lg-12 mb-3">
+
+                      <div class="form-group my-3">
+                          <x-forms.label class="my-3" fieldId="project_challenge"
+                              :fieldLabel="__('Write down the Challenges of the Project')" fieldRequired="true">
+                          </x-forms.label>
+                          <div class="" id="project_challenge">{!! $project->project_challenge !!}</div>
+                          <textarea name="project_challenge" id="project_challenge-text"
+                              class="d-none">{!! $project->project_challenge !!}</textarea>
+                      </div>
+
+                  <br>
                 </div>
+                @else
+                <div class="col-md-12 col-lg-12 mb-3">
+
+                      <div class="form-group my-3">
+                          <x-forms.label class="my-3" fieldId="project_challenge"
+                              :fieldLabel="__('Write down the Challenges of the Project')" fieldRequired="true">
+                          </x-forms.label>
+                          <div id="project_challenge"></div>
+                          <textarea name="project_challenge" id="project_challenge-text"
+                              class="d-none"></textarea>
+                      </div>
+
+                  <br>
+                </div>
+
+
+
+
+                @endif
 
 
                   </div>
@@ -1108,6 +1138,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
         });
 
         quillImageLoad('#project_summary');
+        quillImageLoad('#project_challenge');
 
         const dp1 = datepicker('#start_date', {
             position: 'bl',
@@ -1145,6 +1176,8 @@ $createPublicProjectPermission = user()->permission('create_public_project');
         $('#save-project-form').click(function() {
             var note = document.getElementById('project_summary').children[0].innerHTML;
             document.getElementById('project_summary-text').value = note;
+            var note2 = document.getElementById('project_challenge').children[0].innerHTML;
+            document.getElementById('project_challenge-text').value = note2;
 
             const url = "{{ route('projects.update', $project->id) }}";
 

@@ -49,8 +49,8 @@ $deleteTaskCommentPermission = user()->permission('delete_task_comments');
                   </div>
               </div>
               <div class="w-100 justify-content-end d-flex mt-2">
-                  <x-forms.button-cancel id="cancel-comment" class="border-0 mr-3">@lang('app.cancel')
-                  </x-forms.button-cancel>
+                {{--  <x-forms.button-cancel id="cancel-comment" class="border-0 mr-3">@lang('app.cancel')
+                  </x-forms.button-cancel> --}}
                   <x-forms.button-primary id="submit-comment" icon="location-arrow">@lang('app.submit')
                       </x-button-primary>
               </div>
@@ -78,12 +78,12 @@ $deleteTaskCommentPermission = user()->permission('delete_task_comments');
                     <div class="col-md-12">
                         <x-forms.file-multiple fieldLabel="" fieldName="file[]" fieldId="task-file-upload-dropzone" />
                     </div>
-                    <div class="col-md-12">
+                  {{-- <div class="col-md-12">
                         <div class="w-100 justify-content-end d-flex mt-2">
                             <x-forms.button-cancel id="cancel-taskfile" class="border-0">@lang('app.cancel')
                             </x-forms.button-cancel>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </x-form>
         </div>

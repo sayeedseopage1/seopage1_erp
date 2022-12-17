@@ -183,7 +183,8 @@ class TasksDataTable extends BaseDataTable
 
               $created_at= Task::where('id',$row->id)->first();
               //dd($created_at->created_at);
-                return $created_at->created_at->format($this->global->date_format);
+                return $created_at->created_at->format($this->global->date_format). ' ('.$created_at->created_at->format('h:i:s A').')';
+              //  return $row->created_at->format($this->global->date_format). ' ('.$row->created_at->format('h:i:s A').')';
             });
             $datatables->addColumn('name', function ($row) {
                 $members = [];

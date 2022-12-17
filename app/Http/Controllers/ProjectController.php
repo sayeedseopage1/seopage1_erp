@@ -627,64 +627,67 @@ if ($pm_count < 2) {
     public function storeDispute(Request $request)
     {
 
-      // $validated = $request->validate([
-      //     'client_username' => 'required',
-      //     'project_value' => 'required',
-      //     'project_name' => 'required',
-      //     'description1' => 'required',
-      //     'description2' => 'required',
-      //     'description3' => 'required',
-      //     'description4' => 'required',
-      //     'description5' => 'required',
-      //     'description6' => 'required',
-      //     'description7' => 'required',
-      //     'description8' => 'required',
-      //
-      //     'description10' => 'required',
-      //     'description11' => 'required',
-      //     'description12' => 'required',
-      //     'description13' => 'required',
-      //     'description14' => 'required',
-      //     'description15' => 'required',
-      //     'description16' => 'required',
-      //     'description17' => 'required',
-      //     'pm_name' => 'required',
-      //     'pm_email' => 'required',
-      //
-      // ]);
-      //dd($request->all());
-      $dispute = new ProjectDispute();
-      $dispute->client_username= $request->client_username;
-      $dispute->project_value= $request->project_value;
-      $dispute->project_id= $request->project_id;
-      $dispute->description1= $request->description1;
-      $dispute->description2= $request->description2;
-      $dispute->description3= $request->description3;
-      $dispute->description4= $request->description4;
-      $dispute->description5= $request->description5;
-      $dispute->description6= $request->description6;
-      $dispute->description7= $request->description7;
-      $dispute->description8= $request->description8;
-      $dispute->description9= $request->description9;
-      $dispute->description11= $request->description11;
-      $dispute->description10= $request->description10;
-      $dispute->description12= $request->description12;
-      $dispute->description13= $request->description13;
-      $dispute->description14= $request->description14;
-      $dispute->description15= $request->description15;
-      $dispute->description16= $request->description16;
-      $dispute->description17= $request->description17;
-      $dispute->pm_email= $request->pm_email;
-      $dispute->pm_name= $request->pm_name;
-      $dispute->pm_id= Auth::id();
-      $dispute->save();
-      $project= Project::find($dispute->project_id);
-      $project->status ='canceled';
-      $project->save();
+    // $validator=  $request->validate([
+    //       'client_username' => 'required',
+    //       'project_value' => 'required',
+    //       'project_name' => 'required',
+    //       'description1' => 'required',
+    //       'description2' => 'required',
+    //       'description3' => 'required',
+    //       'description4' => 'required',
+    //       'description5' => 'required',
+    //       'description6' => 'required',
+    //       'description7' => 'required',
+    //       'description8' => 'required',
+    //
+    //       'description10' => 'required',
+    //       'description11' => 'required',
+    //       'description12' => 'required',
+    //       'description13' => 'required',
+    //       'description14' => 'required',
+    //       'description15' => 'required',
+    //       'description16' => 'required',
+    //       'description17' => 'required',
+    //       'pm_name' => 'required',
+    //       'pm_email' => 'required',
+    //
+    //   ]);
+      //dd("Dispute is Valid");
 
-      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-      //  return Redirect::route('projects.index');
-        return redirect('/account/projects/' .$dispute->project_id);
+        $dispute = new ProjectDispute();
+        $dispute->client_username= $request->client_username;
+        $dispute->project_value= $request->project_value;
+        $dispute->project_id= $request->project_id;
+        $dispute->description1= $request->description1;
+        $dispute->description2= $request->description2;
+        $dispute->description3= $request->description3;
+        $dispute->description4= $request->description4;
+        $dispute->description5= $request->description5;
+        $dispute->description6= $request->description6;
+        $dispute->description7= $request->description7;
+        $dispute->description8= $request->description8;
+        $dispute->description9= $request->description9;
+        $dispute->description11= $request->description11;
+        $dispute->description10= $request->description10;
+        $dispute->description12= $request->description12;
+        $dispute->description13= $request->description13;
+        $dispute->description14= $request->description14;
+        $dispute->description15= $request->description15;
+        $dispute->description16= $request->description16;
+        $dispute->description17= $request->description17;
+        $dispute->pm_email= $request->pm_email;
+        $dispute->pm_name= $request->pm_name;
+        $dispute->pm_id= Auth::id();
+        $dispute->save();
+        $project= Project::find($dispute->project_id);
+        $project->status ='canceled';
+        $project->save();
+
+        Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        //  return Redirect::route('projects.index');
+          return redirect('/account/projects/' .$dispute->project_id);
+
+
 
     }
     public function disputeView($id)
@@ -757,6 +760,7 @@ if ($pm_count < 2) {
         $project->project_short_code = $request->project_code;
 
         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
+        $project->project_challenge = ($request->project_challenge !== '<p><br></p>') ? $request->project_challenge : null;
 
         $project->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
 

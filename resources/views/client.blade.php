@@ -105,7 +105,7 @@
                           </label>
                             <label for="inputState" class="form-label mt-3">Time Zone</label>
                             <select name="timezone" id="inputState" class="form-select">
-                                    <option selected>Choose...</option>
+
                                     <option value="Africa/Abidjan GMT+0:00" selected="selected">Africa/Abidjan GMT+0:00</option>
                                     <option value="Africa/Accra GMT+0:00">Africa/Accra GMT+0:00</option>
                                     <option value="Africa/Addis_Ababa GMT+3:00">Africa/Addis_Ababa GMT+3:00</option>
@@ -751,6 +751,7 @@
                                         <select id="Choose_days" name="day[]" class="form-select">
 
                                             <option selected value="Mon-Fri">Mon-Fri</option>
+                                            <option selected value="Mon-Sun">All 7 Days</option>
 
                                         </select>
                                     </div>
@@ -759,7 +760,7 @@
                                     <div class="col-md-12">
                                         <label for="inputState" class="form-label">From</label>
                                         <select id="Choose_days" name="from[]" class="form-select">
-                                            <option selected>Choose...</option>
+
                                             <option value="12:00 AM">12:00 AM</option>
                                             <option value="1:00 AM">01:00 AM</option>
                                             <option value="02:00 AM">02:00 AM</option>
@@ -791,7 +792,7 @@
                                     <div class="col-md-12">
                                         <label for="inputZip" class="form-label">To</label>
                                         <select id="Choose_days" name="to[]" class="form-select">
-                                            <option selected>Choose...</option>
+
                                             <option value="12:00 AM">12:00 AM</option>
                                             <option value="1:00 AM">01:00 AM</option>
                                             <option value="02:00 AM">02:00 AM</option>
@@ -825,6 +826,8 @@
                           </table>
                       </div>
                       <div class="col-md-12">
+                          <div class="form-check">
+                         <input class="form-check-input" type="checkbox" name="message"  id="flexCheckDefault">
                           <label for="floatingTextarea">
                               <strong>
                                   Our working hour is 8 am-5 pm Monday-Friday and 8 am-1 pm on Saturday. We are off on Sunday (We are in the Bangladeshi timezone GMAT+6). You can convert the Bangladeshi timezone to your timezone here:
@@ -832,16 +835,14 @@
                                   with this?
                               </strong>
                           </label>
-                          <div class="mt-3">
-                              <textarea class="form-control mt-3" name="message" id="message" placeholder="Leave a comment here"></textarea>
-                          </div>
 
+                          </div>
                       </div>
                       <div class="col-md-12">
                         <div class="form-check">
 
 
-                         <input class="form-check-input" type="checkbox" name="check" value="1" id="flexCheckDefault" required>
+                         <input class="form-check-input" type="checkbox" name="check"  id="flexCheckDefault">
                          <label for="floatingTextarea">
                              <strong>
                                Please check this box if you want to receive marketing tips, tricks, and the latest hacks from us occasionally. Rest assured, our intention will be to share useful marketing ideas with you that can get you targeted leads regularly.

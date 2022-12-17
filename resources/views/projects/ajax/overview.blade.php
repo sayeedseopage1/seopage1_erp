@@ -61,7 +61,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             @endif
             @if($project->project_status == 'Accepted')
-            @if(Auth::user()->role_id == 7 || Auth::user()->role_id == 1)
+            @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
             @php
               $dispute= App\Models\ProjectDispute::where('project_id',$project->id)->first();
               //dd($dispute);

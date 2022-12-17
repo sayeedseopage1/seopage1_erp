@@ -37,12 +37,12 @@
                                     <div class="col-md-12 mt-3">
                                       <label for="Client Username"><strong>Client Profile Link</strong></label>
 
-                                            <input class="form-control height-35 f-14"  name="profile_link"  placeholder="Enter Profile Link" required></input>
+                                            <input class="form-control height-35 f-14"  name="profile_link"  placeholder="Enter Profile Link"></input>
                                     </div>
                                     <div class="col-md-12 mt-3">
                                       <label for="Client Username"><strong>Client Message Thread Link</strong></label>
 
-                                            <input class="form-control height-35 f-14"  name="message_link"  placeholder="Enter Message Thread Link" required></input>
+                                            <input class="form-control height-35 f-14"  name="message_link"  placeholder="Enter Message Thread Link"></input>
                                     </div>
                                     <!-- <div class="col-md-12 mt-3">
                                       <label for="floatingTextarea"><strong>Client Message Thread Link</strong></label>

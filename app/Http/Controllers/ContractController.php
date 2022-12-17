@@ -209,7 +209,7 @@ class ContractController extends AccountBaseController
             'amount' => 'required',
             'original_currency_id' => 'required',
         ]);
-        
+
 
         //  dd($request->date);
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -796,6 +796,7 @@ class ContractController extends AccountBaseController
 
         ]);
         //dd("hello");
+
         $deal = Deal::find($request->id);
         $deal->project_name = $request->project_name;
         $deal->currency_id= 1;

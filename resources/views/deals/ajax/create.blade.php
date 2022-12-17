@@ -13,15 +13,15 @@
 
                   <div class="col-lg-4 col-md-6">
                            <x-forms.text :fieldLabel="__('Client Name')" fieldName="client_name"
-                               fieldId="client_name" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" required />
+                               fieldId="client_name" :fieldPlaceholder="__('Enter Client Name')" fieldRequired="true" required />
                        </div>
                        <div class="col-lg-4 col-md-6">
                                 <x-forms.text :fieldLabel="__('Client Username')" fieldName="client_username"
-                                    fieldId="client_username" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" required />
+                                    fieldId="client_username" :fieldPlaceholder="__('Enter Client Username')" fieldRequired="true" required />
                             </div>
                <div class="col-lg-4 col-md-4">
                         <x-forms.text :fieldLabel="__('Project Name')" fieldName="project_name"
-                            fieldId="project_name" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" required />
+                            fieldId="project_name" :fieldPlaceholder="__('Enter Project Name')" fieldRequired="true" required />
                     </div>
 
 
@@ -56,7 +56,7 @@
 
                               <div class="col-lg-12 col-md-12">
                                        <x-forms.text :fieldLabel="__('Project Link')" fieldName="project_link"
-                                           fieldId="project_link" :fieldPlaceholder="__('placeholders.name')" fieldRequired="true" required/>
+                                           fieldId="project_link" :fieldPlaceholder="__('Enter Project Link')" fieldRequired="true" required/>
                                    </div>
 
 

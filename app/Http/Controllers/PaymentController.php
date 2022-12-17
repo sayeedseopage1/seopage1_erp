@@ -247,6 +247,11 @@ class PaymentController extends AccountBaseController
           $pmassign_update->release_date= Carbon::now()->format('Y-m-d');
           $pmassign_update->save();
         }
+        $project_update= Project::find($project->id);
+        if ($project->due < 1) {
+          $project_update->status = 'finished';
+          $project_update->save();
+        }
 
 
         $redirectUrl = urldecode($request->redirect_url);

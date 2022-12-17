@@ -66,7 +66,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                 <tr>
                   <td>
                     <div class="d-flex justify-content-center">
-                      @if(Auth::user()->role_id == 4)
+                      @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
                       @if($contract->deal->status == 'pending')
                       <button class="btn btn-danger mr-3"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
                         @include('contracts.modals.dealdenymodal')

@@ -282,20 +282,26 @@ class ProjectsDataTable extends BaseDataTable
                 return $row->completion_percent . '% ' . __('app.complete');
             });
             $datatables->addColumn('short_code', function ($row) {
-                return ucfirst($row->project_short_code);
+            return  '<div class="media align-items-center">
+                      <div class="media-body">
+                  <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('projects.show', [$row->id]) . '">' . ucfirst($row->project_short_code) . '</a></h5>
+
+                  </div>
+              </div>';
+              //  return ucfirst($row->project_short_code);
             });
             $datatables->addColumn('project_manager', function ($row) {
-                $label = '<label class="badge badge-secondary">' . $row->pm->name. '</label>';
+                
 
                 $project_manager = ucfirst($row->salutation) . ' ' . ucfirst($row->pm->name);
 
-                $pm= '<div class="media align-items-center">
+              return '<div class="media align-items-center">
                         <div class="media-body">
                     <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$row->pm_id]) . '">' . $project_manager . '</a></h5>
-                        <p class="mb-0">' . $label . '</p>
+
                     </div>
                   </div>';
-                  return $row->pm->name;
+                //  return $row->pm->name;
             })
             ;
 
@@ -303,7 +309,7 @@ class ProjectsDataTable extends BaseDataTable
             $datatables->setRowId(function ($row) {
                 return 'row-' . $row->id;
             });
-            $datatables->rawColumns(['project_name','pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check']);
+            $datatables->rawColumns(['project_name','pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check','short_code','project_manager']);
             $datatables->removeColumn('project_summary');
             $datatables->removeColumn('notes');
             $datatables->removeColumn('category_id');
