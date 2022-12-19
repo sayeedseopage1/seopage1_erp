@@ -125,7 +125,7 @@
 
         <div class="custom_containers">
             <div class="email_contents">
-                <img src="{{asset('email/img/Check_mark.svg')}}" alt="">
+                <img src="{{asset('email/img/check_mark.png')}}" alt="">
 
                 <strong>New Deal Won</strong>
             </div>
