@@ -140,7 +140,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                                 // $date2 = new DateTime(Carbon\Carbon::now()->addDay(1));
                                                 // $days  = $date2->diff($date1)->format('%a');
 
-                                                    $d_data= "Busy Until ".$task_s->due_date;
+                                                    $d_data= "Busy Until ".$task_s->due_date->format('Y-m-d') . ' ('.$task_s->due_date->format('h:i:s A'). ')';
 
 
                                               }else {

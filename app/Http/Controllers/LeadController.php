@@ -126,10 +126,14 @@ class LeadController extends AccountBaseController
       $lead->save();
       $lead_con_id= Lead::where('id',$request->id)->first();
       $agent_id= SalesCount::where('user_id',$lead_con_id->added_by)->first();
-      $lead_ag_id= SalesCount::find($agent_id->id);
+      if ($agent_id != null) {
+        $lead_ag_id= SalesCount::find($agent_id->id);
 
-      $lead_ag_id->deals_count= $lead_ag_id->deals_count +1;
-      $lead_ag_id->save();
+
+        $lead_ag_id->deals_count= $lead_ag_id->deals_count +1;
+        $lead_ag_id->save();
+
+      }
 
 
       $deal= DealStage::where('lead_id',$lead->id)->first();

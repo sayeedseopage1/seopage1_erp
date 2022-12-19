@@ -184,7 +184,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                             {
                                                 $task= App\Models\Task::where('id',$task_id->task_id)->first();
                                                 if ($task != null && $task->status != 'completed') {
-                                                  $d_data= "Busy Until ".$task->due_date;
+                                                  $d_data= "Busy Until ".$task->due_date->format('Y-m-d') . ' ('.$task->due_date->format('h:i:s A'). ')';
                                                 }else {
                                                       $d_data=  "Open to Work";
                                                 }

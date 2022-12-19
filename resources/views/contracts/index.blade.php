@@ -243,8 +243,8 @@ $deals= App\Models\Deal::all();
                               href="/deals/details/edit/{{$deal->id}}"><i class="fa-solid fa-pen-to-square"></i> @lang('Edit')</a>
                               {{--<a class="dropdown-item"
                                   href="/deals/details/edit/{{$deal->id}}"><i class="fa-solid fa-eye"></i> @lang('View')</a>--}}
-                                  <a class="dropdown-item"
-                                      href="contracts/deal-delete/{{$deal->id}}"><i class="fa-solid fa-trash"></i> @lang('Delete')</a>
+                                {{--  <a class="dropdown-item"
+                                      href="contracts/deal-delete/{{$deal->id}}"><i class="fa-solid fa-trash"></i> @lang('Delete')</a> --}}
 
                       </div>
                   </div>
