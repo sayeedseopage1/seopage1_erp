@@ -120,12 +120,12 @@
  ?>
     <section class="email_templates">
         <div class="email_header">
-            <img src="{{public_path('email/img/logo_seopage1.png')}}" alt="{{public_path('email/img/logo_seopage1.png')}}">
+            <img src="{{asset('email/img/logo_seopage1.png')}}" alt="">
         </div>
 
         <div class="custom_containers">
             <div class="email_contents">
-                <img src="{{public_path('email/img/Check_mark.svg')}}" alt="{{public_path('email/img/logo_seopage1.png')}}">
+                <img src="{{asset('email/img/Check_mark.svg')}}" alt="">
 
                 <strong>New Deal Won</strong>
             </div>
