@@ -849,9 +849,15 @@ class ContractController extends AccountBaseController
         $user= User::where('id',$project->pm_id)->first();
           Mail::to($user->email)->send(new WonDealMail($project));
 
+          //  Mail::to($test->email)->send(new WonDealMail($project));
+            $users= User::where('role_id',1)->get();
+            foreach ($users as $usr) {
+              Mail::to($usr->email)->send(new WonDealMail($project));
+            }
+
           //for testing purpose
-          $ceo= User::where('id',62)->first();
-            Mail::to($ceo->email)->send(new WonDealMail($project));
+          // $ceo= User::where('id',62)->first();
+          //   Mail::to($ceo->email)->send(new WonDealMail($project));
         $contract_id = Contract::where('deal_id', $request->id)->first();
         $contract = Contract::find($contract_id->id);
         $contract->subject = $request->project_name;

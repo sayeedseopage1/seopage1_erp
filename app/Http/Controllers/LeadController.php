@@ -48,6 +48,8 @@ use App\Models\DealStageChange;
 use App\Models\Currency;
 use Illuminate\Support\Facades\Redirect;
 use Toastr;
+use Mail;
+use App\Mail\LeadConversionMail;
 
 
 class LeadController extends AccountBaseController
@@ -134,6 +136,11 @@ class LeadController extends AccountBaseController
         $lead_ag_id->save();
 
       }
+      $users= User::where('role_id',1)->get();
+      foreach ($users as $user) {
+        Mail::to($user->email)->send(new LeadConversionMail($lead));
+      }
+
 
 
       $deal= DealStage::where('lead_id',$lead->id)->first();
