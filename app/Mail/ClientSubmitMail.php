@@ -6,11 +6,12 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\User;
-class WonDealMail extends Mailable
+
+class ClientSubmitMail extends Mailable
 {
     use Queueable, SerializesModels;
-     public $data;
+    public $data;
+
     /**
      * Create a new message instance.
      *
@@ -19,8 +20,6 @@ class WonDealMail extends Mailable
     public function __construct($data)
     {
         $this->data = $data;
-
-        //dd($data);
     }
 
     /**
@@ -30,9 +29,7 @@ class WonDealMail extends Mailable
      */
     public function build()
     {
-
-      $subject = '[No Reply] New Won Deal';
-       return $this->view('emails.new_won_deal')->subject($subject);
-        //return $this->view('view.name');
+      $subject = '[No Reply] Client Submission';
+       return $this->view('emails.client_submission_form')->subject($subject);
     }
 }

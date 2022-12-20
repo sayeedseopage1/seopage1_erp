@@ -361,6 +361,23 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
           </div>
           <!-- BUDGET VS SPENT END -->
       </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Email</h4>
+                          <br>
+                          <p>{{$contract->deal->user->email}}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
     <!-- CARD FOOTER START -->
 
     <!-- CARD FOOTER END -->

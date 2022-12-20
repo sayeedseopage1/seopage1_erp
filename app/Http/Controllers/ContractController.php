@@ -344,8 +344,7 @@ class ContractController extends AccountBaseController
                 $pm_assign_project = Project::find($project->id);
                 $pm_assign_project->pm_id = $pmassign->pm_id;
                 $pm_assign_project->save();
-                $user= User::where('id',$pmassign->pm_id)->first();
-                  Mail::to($user->email)->send(new WonDealMail($pm_assign_project));
+
                 //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find = PMAssign::where('pm_id', $pm_user->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
@@ -382,8 +381,8 @@ class ContractController extends AccountBaseController
                 $pm_assign_project = Project::find($project->id);
                 $pm_assign_project->pm_id = $pmassign->pm_id;
                 $pm_assign_project->save();
-                $user= User::where('id',$pmassign->pm_id)->first();
-                  Mail::to($user->email)->send(new WonDealMail($pm_assign_project));
+
+
                 //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find = PMAssign::where('pm_id', $pm_find_id->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
@@ -404,8 +403,7 @@ class ContractController extends AccountBaseController
                 $pm_assign_project = Project::find($project->id);
                 $pm_assign_project->pm_id = $pmassign->pm_id;
                 $pm_assign_project->save();
-                $user= User::where('id',$pmassign->pm_id)->first();
-                  Mail::to($user->email)->send(new WonDealMail($pm_assign_project));
+
           //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find = PMAssign::where('pm_id', $final_id->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
@@ -593,8 +591,8 @@ class ContractController extends AccountBaseController
                 $pm_assign_project->pm_id = $pmassign->pm_id;
                 $pm_assign_project->save();
                 //$email = $request->email;
-                $user= User::where('id',$pmassign->pm_id)->first();
-                  Mail::to($user->email)->send(new WonDealMail($pm_assign_project));
+
+
                 //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find = PMAssign::where('pm_id', $pm_user->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
@@ -631,8 +629,7 @@ class ContractController extends AccountBaseController
                 $pm_assign_project = Project::find($project->id);
                 $pm_assign_project->pm_id = $pmassign->pm_id;
                 $pm_assign_project->save();
-                $user= User::where('id',$pmassign->pm_id)->first();
-                  Mail::to($user->email)->send(new WonDealMail($pm_assign_project));
+
                 //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find = PMAssign::where('pm_id', $pm_find_id->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
@@ -653,8 +650,7 @@ class ContractController extends AccountBaseController
                 $pm_assign_project = Project::find($project->id);
                 $pm_assign_project->pm_id = $pmassign->pm_id;
                 $pm_assign_project->save();
-                $user= User::where('id',$pmassign->pm_id)->first();
-                  Mail::to($user->email)->send(new WonDealMail($pm_assign_project));
+
                 //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
                 $pm_project_find = PMAssign::where('pm_id', $final_id->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
@@ -850,6 +846,12 @@ class ContractController extends AccountBaseController
         $project->due = $deal->amount;
         $project->currency_id = 1;
         $project->save();
+        $user= User::where('id',$project->pm_id)->first();
+          Mail::to($user->email)->send(new WonDealMail($project));
+
+          //for testing purpose
+          $ceo= User::where('id',62)->first();
+            Mail::to($ceo->email)->send(new WonDealMail($project));
         $contract_id = Contract::where('deal_id', $request->id)->first();
         $contract = Contract::find($contract_id->id);
         $contract->subject = $request->project_name;

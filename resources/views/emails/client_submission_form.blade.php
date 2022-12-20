@@ -128,13 +128,14 @@
 
 </head>
 <body>
-<?php
+{{--<?php
   $user= App\Models\User::where('id',$data->pm_id)->first();
   $deal= App\Models\Deal::where('id',$data->deal_id)->first();
   $client= App\Models\User::where('id',$data->client_id)->first();
   //$row->created_at->format($this->global->date_format).$row->created_at->format('h:i:s A');
 
  ?>
+ --}}
     <section class="email_templates">
         <div class="email_header">
             <img src="{{asset('email/img/logo_seopage1.png')}}" alt="">
@@ -144,56 +145,30 @@
             <div class="email_contents">
                 <img src="{{asset('email/img/check_mark.png')}}" alt="">
 
-                <strong>New Deal Won</strong>
+                <strong>Client Submission</strong>
             </div>
 
             <div class="email_message">
-                <h4>Hi {{$user->name}},</h4>
-                <p>We have won a new deal for you on <span>{{$deal->created_at->format('Y-m-d')}} at {{$deal->created_at->format('h:i:s A')}}.</span> Let's check the short details below. You can check the details about this deal following <a href="erp.seopage1.net/account/contracts/{{$data->deal_id}}">this link.</a></p>
+                <h4>Hi Admin,</h4>
+                <p>We have won a new deal for you on <span>12-12-22.</span> Let's check the short details below. You can check the details about this deal following <a href="erp.seopage1.net">this link.</a></p>
             </div>
 
             <div class="email_message">
                 <h4 style="color: #D99218;font-weight: 700;font-size: 22px;">Deal Details</h4>
                 <ul>
-                    <li><strong>Deal Name:</strong> {{$deal->project_name}}</li>
-                    <li><strong>Created On:</strong> {{$deal->created_at->format('Y-m-d')}} at {{$deal->created_at->format('h:i:s A')}}</li>
-                    <li><strong>Client Name:</strong> {{$client->user_name}}</li>
+                    <li><strong>Deal Name:</strong> Test</li>
+                    <li><strong>Created On:</strong> 12-12-22 at 10:00 P.M</li>
+                    <li><strong>Client Name:</strong> Test Client</li>
                 </ul>
                 <br>
-                  @if($data->deadline != null)
-                <ul>
-                  <li><strong>The  last Delivery Time Is {{$data->deadline}}  </strong></li>
-                </ul>
 
+                <strong>The last Delivery Time Is  </strong>
 
-                @endif
-                  <hr>
-                <ul>
-
-
-                    <li><h5>Freelancer Profile Link:</h5> <a target="_blank" href="{{$deal->profile_link}}">{{$deal->profile_link}}</a></li>
-                    <li><h5>Freelancer Message Link:</h5> <a target="_blank" href="{{$deal->message_link}}">{{$deal->message_link}}</a></li>
-                      <li><h5>Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix,
-                        Creating a 5 page business website in WordPress, Shopify website creation, etc.):</h5> <p>{!!$deal->description2!!}</p></li>
-                        <li><h5> Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency. It should include home, about, his services in one page, blog, and contact. The look and feel should be better than the references.)
-:</h5> <p>{!!$deal->description3!!}</p></li>
-                          <li><h5> Reference websites and what the references are for (Ex: ABC.com is for the color scheme. XYZ.com is for section layouts DEF.com is for header & footer styling. However, none of these can be copied)
-:</h5> <p>{!!$deal->description4!!}</p></li>
-                            <li><h5>Any particular focus/concern of the client (Ex: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work the way he wants.):</h5> <p>{!!$deal->description5!!}</p></li>
-                              <li><h5>Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register):</h5> <p>{!!$deal->description6!!}</p></li>
-                                <li><h5>Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)
-:</h5> <p>{!!$deal->description7!!}</p></li>
-                                  <li><h5>If there is any cross-departmental work involved in this project (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web development):</h5> <p>{!!$deal->description8!!}</p></li>
-                                    <li><h5>Any other notes for the project manager/technical team:</h5> <p>{!!$deal->description9!!}</p></li>
-                                    <li><h5>Sales Executive:</h5> {{$deal->user->email}}</li>
-
-
-                </ul>
 
             </div>
 
             <div class="email_submits">
-                <a href="erp.seopage1.net/account/contracts/{{$data->deal_id}}">Receive The Work</a>
+                <a href="erp.seopage1.net">Receive The Work</a>
             </div>
         </div>
 

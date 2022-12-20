@@ -53,6 +53,8 @@ use Crypt;
 use Toastr;
 use App\Models\Deal;
 use Illuminate\Support\Facades\Redirect;
+use Mail;
+use App\Mail\ClientSubmitMail;
 
 
 
@@ -162,6 +164,12 @@ class HomeController extends Controller
       $cl= ClientDetails::find($client_details->id);
       $cl->client_username= $request->user_name;
       $cl->save();
+      $users= User::where('role_id',1)->orWhere('id',$deal->pm_id)->get();
+
+      foreach ($users as $user) {
+        Mail::to($user->email)->send(new ClientSubmitMail($client));
+      }
+
 
 
           return redirect('/thankyou')->with('message','Submitted Successfully');
