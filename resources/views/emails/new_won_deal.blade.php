@@ -7,103 +7,120 @@
     <title>Seopage 1</title>
 
     <style>
-        body{
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-            font-family:arial;
-        }
-        .email_templates {
-            position: absolute;
-            max-width: 640px;
-            margin: 0 auto;
-            display: block;
-            border: 1px solid #eee;
-            border-radius: 5px;
-            transform: translate(-50%,-50%);
-            top: 50%;
-            left: 50%;
-        }
-        .custom_containers{
-            width: 96%;
-            margin: 15px auto;
-            display: block;
-        }
+    body{
+         padding: 0;
+         margin: 0;
+         box-sizing: border-box;
+         font-family:arial;
+     }
+     .email_templates {
+         max-width: 640px;
+         margin: 10px auto;
+         display: block;
+         border: 1px solid #eee;
+         border-radius: 5px;
 
-        .email_header {
-            background: #eee;
-            width: 100%;
-        }
-        .email_header img{
-            width: 142px;
-            height: 61px;
-        }
-        .email_contents {
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-        }
-        .email_contents img {
-            width: 35px;
-            height: 35px;
-        }
-        .email_contents strong {
-            padding-left: 5px;
-        }
+     }
+     .custom_containers{
+         width: 96%;
+         margin: 15px auto;
+         display: block;
+     }
 
-        .email_message {
-            width: 100%;
-        }
-        .email_message span{
-            color: #1D82F5;
-            font-style: italic;
-        }
+     .email_header {
+         background: #eee;
+         width: 100%;
+     }
+     .email_header img{
+         width: 142px;
+         height: 61px;
+     }
+     .email_contents {
+         width: 100%;
+         display: flex;
+         justify-content: flex-start;
+         align-items: center;
+     }
+     .email_contents img {
+         width: 35px;
+         height: 35px;
+     }
+     .email_contents strong {
+         padding-left: 5px;
+     }
 
-        .email_message p a{
-            color: #1D82F5;
-            text-decoration: none;
-        }
+     .email_message {
+         width: 100%;
+     }
+     .email_message span{
+         color: #1D82F5;
+         font-style: italic;
+     }
 
-        .email_message p {
-            font-weight: 500;
-            line-height: 1.4em;
-            font-size: 17px;
-        }
+     .email_message p a{
+         color: #1D82F5;
+         text-decoration: none;
+     }
 
-        .email_message ul{
-            padding: 0;
-            margin: 0;
-        }
+     .email_message p {
+         font-weight: 500;
+         line-height: 1.4em;
+         font-size: 17px;
+     }
 
-        .email_message ul li {
-            list-style: none;
-            padding: 17px 0;
-            border-bottom: 1px solid #eee;
-            font-family: arial;
-        }
-        .email_submits {
-            margin: 37px 0;
-            width: 100%;
-            display: block;
-        }
-        .email_submits a {
-            background: #119143;
-            padding: 15px 30px;
-            color: #fff;
-            text-decoration: none;
-            font-style: normal;
-            font-weight: 500;
-            border-radius: 5px;
-            transition: all .5s ease-in-out;
-        }
+     .email_message ul{
+         padding: 0;
+         margin: 0;
+     }
 
-        .email_submits a:hover{
-            background: #222;
-        }
+     .email_message ul li {
+         list-style: none;
+         padding: 17px 0;
+         border-bottom: 1px solid #eee;
+         font-family: arial;
+     }
+     .email_submits {
+         margin: 37px 0;
+         width: 100%;
+         display: block;
+     }
+     .email_submits a {
+         background: #119143;
+         padding: 15px 30px;
+         color: #fff;
+         text-decoration: none;
+         font-style: normal;
+         font-weight: 500;
+         border-radius: 5px;
+         transition: all .5s ease-in-out;
+     }
+
+     .email_submits a:hover{
+         background: #D9922E;
+     }
 
 
 
+     @media only screen and (min-width: 320px) and (max-width: 600px)  {
+         .email_templates {
+             max-width: 600px;
+             border: 1px solid #eee;
+             margin: 2%;
+         }
+         .email_submits a {
+             padding: 15px 10px;
+             margin: 0 auto;
+             display: block;
+             width: 170px;
+             text-align: center;
+             border-radius: 30px;
+             transition: all .5s ease-in-out;
+         }
+         .email_submits a:hover{
+             background: #D9922E;
+             color: #fff;
+         }
+     }
 
 
 
@@ -143,7 +160,9 @@
                     <li><strong>Client Name:</strong> {{$client->name}}</li>
                 </ul>
                 <br>
+                @if($data->deadline != null)
                 <strong>The  last Delivery Time Is {{$data->deadline}}  </strong>
+                @endif
 
             </div>
 
