@@ -171,21 +171,21 @@
                 <ul>
 
 
-                    <li><h5>Freelancer Profile Link:</h5> <a target="_blank" href="{{$deal->profile_link}}">{{$deal->profile_link}}</a></li>
-                    <li><h5>Freelancer Message Link:</h5> <a target="_blank" href="{{$deal->message_link}}">{{$deal->message_link}}</a></li>
-                      <li><h5>Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix,
-                        Creating a 5 page business website in WordPress, Shopify website creation, etc.):</h5> <p>{!!$deal->description2!!}</p></li>
-                        <li><h5> Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency. It should include home, about, his services in one page, blog, and contact. The look and feel should be better than the references.)
-:</h5> <p>{!!$deal->description3!!}</p></li>
-                          <li><h5> Reference websites and what the references are for (Ex: ABC.com is for the color scheme. XYZ.com is for section layouts DEF.com is for header & footer styling. However, none of these can be copied)
-:</h5> <p>{!!$deal->description4!!}</p></li>
-                            <li><h5>Any particular focus/concern of the client (Ex: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work the way he wants.):</h5> <p>{!!$deal->description5!!}</p></li>
-                              <li><h5>Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register):</h5> <p>{!!$deal->description6!!}</p></li>
-                                <li><h5>Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)
-:</h5> <p>{!!$deal->description7!!}</p></li>
-                                  <li><h5>If there is any cross-departmental work involved in this project (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web development):</h5> <p>{!!$deal->description8!!}</p></li>
-                                    <li><h5>Any other notes for the project manager/technical team:</h5> <p>{!!$deal->description9!!}</p></li>
-                                    <li><h5>Sales Executive:</h5> {{$deal->user->email}}</li>
+                    <li><strong>Freelancer Profile Link:</strong> <a target="_blank" href="{{$deal->profile_link}}">{{$deal->profile_link}}</a></li>
+                    <li><strong>Freelancer Message Link:</strong> <a target="_blank" href="{{$deal->message_link}}">{{$deal->message_link}}</a></li>
+                      <li><strong>Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix,
+                        Creating a 5 page business website in WordPress, Shopify website creation, etc.):</strong> <p>{!!$deal->description2!!}</p></li>
+                        <li><strong> Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency. It should include home, about, his services in one page, blog, and contact. The look and feel should be better than the references.)
+:</strong> <p>{!!$deal->description3!!}</p></li>
+                          <li><strong> Reference websites and what the references are for (Ex: ABC.com is for the color scheme. XYZ.com is for section layouts DEF.com is for header & footer styling. However, none of these can be copied)
+:</strong> <p>{!!$deal->description4!!}</p></li>
+                            <li><strong>Any particular focus/concern of the client (Ex: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work the way he wants.):</strong> <p>{!!$deal->description5!!}</p></li>
+                              <li><strong>Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register):</strong> <p>{!!$deal->description6!!}</p></li>
+                                <li><strong>Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)
+:</strong> <p>{!!$deal->description7!!}</p></li>
+                                  <li><strong>If there is any cross-departmental work involved in this project (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web development):</strong> <p>{!!$deal->description8!!}</p></li>
+                                    <li><strong>Any other notes for the project manager/technical team:</strong> <p>{!!$deal->description9!!}</p></li>
+                                    <li><strong>Sales Executive:</strong> {{$deal->user->email}}</li>
 
 
                 </ul>
