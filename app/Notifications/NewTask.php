@@ -12,6 +12,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use NotificationChannels\OneSignal\OneSignalChannel;
 use NotificationChannels\OneSignal\OneSignalMessage;
+use App\Models\User;
+use App\Models\Project;
 
 class NewTask extends Notification implements ShouldQueue
 {
@@ -66,17 +68,49 @@ class NewTask extends Notification implements ShouldQueue
     {
         $url = route('tasks.show', $this->task->id);
 
-        $dueDate = (!is_null($this->task->due_date)) ? $this->task->due_date->format(global_setting()->date_format) : null;
 
-        $content = ucfirst($this->task->heading) . ' #' . $this->task->id . '<p>
-            <b style="color: green">' . __('app.dueDate') . ': ' . $dueDate . '</b>
-        </p>';
+        $dueDate = (!is_null($this->task->due_date)) ? $this->task->due_date->format(global_setting()->date_format) : null;
+        $creationDate = (!is_null($this->task->created_at)) ? $this->task->created_at->format(global_setting()->date_format) : null;
+        $user= User::where('id',$this->task->added_by)->first();
+        $project= Project::where('id',$this->task->project_id)->first();
+        $greet= '<p>
+           <b style="color: black">'  . '<span style="color:black">'.'Hello '.$notifiable->name. ','.'</span>'.'</b>
+       </p>'
+       ;
+        $assigned_by= '<p>
+           <b style="color: black">'  . '<span style="color:blue">'. '<a class="text-darkest-grey" href="'. route('employees.show', $user->id) .'">'.$user->name.'</a>'. '</span>'.'</b>' . ' has assigned a new task to you. Check the short details below. You can check the details about this task following '. '<a class="text-darkest-grey" href="'. route('tasks.show', $this->task->id) . '">this link'.'.'.'</a>'.'
+       </p>'
+       ;
+       $header= '<p>
+          <h1 style="color: red; text-align: center;" >' . __('New Task Assigned to You') .'</b>'.'
+      </h1>';
+
+        $content =
+        '<p>
+           <b style="color: black">' . __('Task Name') . ': '.'</b>' . ucfirst($this->task->heading) . '
+       </p>' .
+        '<p>
+           <b style="color: black">' . __('Task Assign Date') . ': '.'</b>' . $creationDate . '
+       </p>'
+        .
+
+         '<p>
+            <b style="color: red">' . __('app.dueDate') . ': ' . $dueDate . '</b>
+        </p>'
+        .
+        '<p>
+           <b style="color: black">' . __('Task Assigned By') . ': '.'</b>' . '<a class="text-darkest-grey" href="'. route('employees.show', $user->id) .'">'.$user->name.'</a>' . '
+       </p>'.
+       '<p>
+          <b style="color: black">' . __('Project Name') . ': '.'</b>' . $project->project_name . '
+      </p>';
 
         return (new MailMessage)
             ->subject(__('email.newTask.subject') . ' #' . $this->task->id . ' - ' . config('app.name') . '.')
             ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
-            ->markdown('mail.task.created', ['url' => $url, 'content' => $content, 'name' => mb_ucwords($notifiable->name)]);
+            ->markdown('mail.task.created', ['url' => $url, 'content' => $content,'greet'=> $greet, 'assigned_by'=> $assigned_by,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
     }
+
 
     /**
      * Get the array representation of the notification.

@@ -98,32 +98,44 @@
 
 
                       <div class="details-seopage1">
-                        <h4>Client User Neme</h4>
+                        <h4>Freelancer.com User Name</h4>
                         <p>{{$client->client_username}}</p>
                       </div>
 
                       <div class="details-seopage1">
-                        <h4>Client Email</h4>
+                        <h4>Email</h4>
                         <p>{{$client->client_email}}</p>
                       </div>
 
                       <div class="details-seopage1">
-                        <h4>Client Phone</h4>
+                        <h4>Phone Number</h4>
                         <p>{{$client->client_phone}}</p>
                       </div>
 
                       <div class="details-seopage1">
-                        <h4>Client WhatsApp ID (For Future Communation)!</h4>
+                        <h4>WhatsApp ID (For Future Communation)!</h4>
                         <p>{!!$client->client_whatsapp!!}</p>
                       </div>
 
                       <div class="details-seopage1">
-                        <h4>Client's Avilable Platform</h4>
+                        <h4>Available Platform</h4>
                         <p>{!!$client->other_platform!!}</p>
                       </div>
 
+
                       <div class="details-seopage1">
-                        <h4>Client's Message</h4>
+                        <h4>Timezone</h4>
+                        <p>{{$client->timezone}}</p>
+                      </div>
+                      <?php
+                      // $day= rtrim($client->day, " ,");
+                       ?>
+                      <div class="details-seopage1">
+                        <h4>Available Time</h4>
+                        <p>{!!$client->day!!}</p>
+                      </div>
+                      <div class="details-seopage1">
+                        <h4>Agree for Our Office Time</h4>
                         <p>@if($client->message == "on")
                           Yes
                           @else
@@ -131,17 +143,6 @@
                           @endif
                         </p>
 
-                      </div>
-                      <div class="details-seopage1">
-                        <h4>Client's Timezone</h4>
-                        <p>{{$client->timezone}}</p>
-                      </div>
-                      <?php
-                      // $day= rtrim($client->day, " ,");
-                       ?>
-                      <div class="details-seopage1">
-                        <h4>Client's Available Time</h4>
-                        <p>{!!$client->day!!}</p>
                       </div>
                       <div class="details-seopage1">
                         <h4>Agree For Promotional Email</h4>
@@ -196,20 +197,20 @@
                       </div>
 
                       <div class="details-seopage1">
-                        <h4>Client's Avilable Platform</h4>
+                        <h4>Avilable Platform</h4>
                         <p></p>
                       </div>
 
                       <div class="details-seopage1">
-                        <h4>Client's Message</h4>
+                        <h4>Message</h4>
                         <p></p>
                       </div>
                       <div class="details-seopage1">
-                        <h4>Client's Timezone</h4>
+                        <h4>Timezone</h4>
                         <p></p>
                       </div>
                       <div class="details-seopage1">
-                        <h4>Client's Available Time</h4>
+                        <h4>Available Time</h4>
                         <p></p>
                       </div> -->
                       <div class="details-seopage1 py-4">

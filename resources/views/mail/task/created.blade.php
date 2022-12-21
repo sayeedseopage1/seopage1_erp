@@ -1,9 +1,20 @@
+
 @component('mail::message')
-# @lang('email.hello') {{ $name }} ,
+@component('mail::text', ['text' => $header])
 
-@lang('email.newTask.subject')
+@endcomponent
+<br>
 
-# @lang('app.task') @lang('app.details')
+@component('mail::text', ['text' => $greet])
+
+@endcomponent
+
+@component('mail::text', ['text' => $assigned_by])
+
+@endcomponent
+
+<br>
+
 
 @component('mail::text', ['text' => $content])
 

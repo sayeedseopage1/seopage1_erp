@@ -4,6 +4,11 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+<style>
+.milestone-wrapper{
+  height: auto !important; 
+}
+</style>
     <!-- FILTER START -->
     <!-- PROJECT HEADER START -->
     <?php
@@ -161,7 +166,7 @@
 
                                 <label for="exampleFormControlInput1">Milestones <span style="color:red;">*</span></label>
                               <div class="input-group mb-3 w-100">
-                                <div class="milestone-wrapper d-flex align-items-center flex-wrap form-control" id="milestone_value"></div>
+                                <div class="milestone-wrapper d-flex flex-wrap form-control" id="milestone_value"></div>
 
                               <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#milestoneaddmodal" type="button">Add</button>
@@ -225,7 +230,7 @@
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
                                 <input type="text" value="{{$deal->message_link}}" name="message_link" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
-                            
+
                               </div>
                             </div>
 

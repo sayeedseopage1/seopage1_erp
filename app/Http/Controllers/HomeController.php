@@ -167,7 +167,7 @@ class HomeController extends Controller
       $users= User::where('role_id',1)->orWhere('id',$deal->pm_id)->get();
 
       foreach ($users as $user) {
-        Mail::to($user->email)->send(new ClientSubmitMail($client));
+        Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
       }
 
 

@@ -7,10 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ClientSubmitMail extends Mailable
+class TaskAssignMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $data;
+     public $data;
 
     /**
      * Create a new message instance.
@@ -19,8 +19,7 @@ class ClientSubmitMail extends Mailable
      */
     public function __construct($data)
     {
-        $this->data = $data;
-
+          $this->data = $data;
     }
 
     /**
@@ -30,7 +29,7 @@ class ClientSubmitMail extends Mailable
      */
     public function build()
     {
-      $subject = '[No Reply] Client Submission';
-       return $this->view('emails.client_submission_form')->subject($subject);
+      $subject = '[No Reply] New Task Assign';
+       return $this->view('emails.new_task_assign')->subject($subject);
     }
 }

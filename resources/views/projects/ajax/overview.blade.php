@@ -135,9 +135,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                     <h4 class="card-title f-15 font-weight-normal mb-0 text-capitalize">
                                         <a href="{{ route('clients.show', $project->client_id) }}" class="text-dark">{{ $project->client->name }}</a>
                                     </h4>
-                                    <p class="card-text f-14 text-lightest mb-0">
-                                        {{ $project->client->clientDetails->company_name }}
-                                    </p>
+
                                     @if ($project->client->country_id)
                                     <span class="card-text f-12 text-lightest text-capitalize d-flex align-items-center">
                                         <span class="flag-icon flag-icon-{{ strtolower($project->client->country->iso) }} mr-2"></span>
@@ -271,7 +269,24 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         <div class="col">
                             <h4>Project Summary</h4>
                             <br>
-                            <p>{!! $deal->description !!}</p>
+                            <p>{!! $project->project_summary !!}</p>
+
+                        </div>
+
+                    </div>
+                </x-cards.data>
+            </div>
+            <!-- BUDGET VS SPENT END -->
+        </div>
+        <div class="row mb-4" >
+            <!-- BUDGET VS SPENT START -->
+            <div class="col-md-12">
+                <x-cards.data>
+                    <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                        <div class="col">
+                            <h4>Project Challenge</h4>
+                            <br>
+                            <p>{!! $project->project_challenge !!}</p>
 
                         </div>
 
