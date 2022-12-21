@@ -50,7 +50,7 @@
                       <li><strong>WhatsApp:</strong> {{$data->client_whatsapp}}</li>
                     <li><strong>Available Platform:</strong> {!!$data->other_platform!!}</li>
                       <li><strong>Timezone:</strong> {{$data->timezone}}</li>
-                      <li><strong>Available Time:</strong> {!!$client->day!!}</li>
+                      <li><strong>Available Time:</strong> {!!$data->day!!}</li>
                       <li><strong>Agree for Our Office Time:</strong> @if($data->message == "on")
                         Yes
                         @else
@@ -72,7 +72,9 @@
 
             </div>
 
-            
+            <div class="email_submits">
+                <a href="erp.seopage1.net/deal-url/{{$deal->id}}">View</a>
+            </div>
         </div>
 
     </section>
