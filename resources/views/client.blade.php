@@ -17,6 +17,8 @@
 
     <link rel="stylesheet" href="{{asset('custom/client/css/intlTelInput.css')}}">
     <link rel="stylesheet" href="{{asset('mobile/css/style.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 
     <style media="screen">
     input, button {
@@ -887,17 +889,14 @@
         });
 
     </script>
-  <script>
-    var input = document.querySelector("#phone2");
-    window.intlTelInput(input, {
-      autoPlaceholder: "off",
-      formatOnDisplay: false,
-      placeholderNumberType: "MOBILE",
-      separateDialCode: true,
-      utilsScript: "js/utils.js",
-    });
+    <script>
+        const phoneInputField = document.querySelector("#phone");
+        const phoneInputField2 = document.querySelector("#phone2");
+        const phoneInput = window.intlTelInput(phoneInputField,phoneInputField2, {
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        });
+    </script>
 
-  </script>
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.9/js/intlTelInput.js"></script>
@@ -912,62 +911,20 @@
       mask("#phone2");
   </script>
 
+
+
+
   <script>
-
-  var telInput = $("#phone"),
-    errorMsg = $("#error-msg"),
-    validMsg = $("#valid-msg");
-
-  // initialise plugin
-  telInput.intlTelInput({
-
-    allowExtensions: true,
-    formatOnDisplay: true,
-    autoFormat: true,
-    autoHideDialCode: true,
-    autoPlaceholder: true,
-    defaultCountry: "auto",
-    ipinfoToken: "yolo",
-
-    nationalMode: false,
-    numberType: "MOBILE",
-    //onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
-    preferredCountries: ['sa', 'ae', 'qa','om','bh','kw','ma'],
-    preventInvalidNumbers: true,
-    separateDialCode: true,
-    initialCountry: "auto",
-    geoIpLookup: function(callback) {
-    $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
-      var countryCode = (resp && resp.country) ? resp.country : "";
-      callback(countryCode);
-    });
-  },
-     utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.9/js/utils.js"
-  });
-
-  var reset = function() {
-    telInput.removeClass("error");
-    errorMsg.addClass("hide");
-    validMsg.addClass("hide");
-  };
-
-  // on blur: validate
-  telInput.blur(function() {
-    reset();
-    if ($.trim(telInput.val())) {
-      if (telInput.intlTelInput("isValidNumber")) {
-        validMsg.removeClass("hide");
-      } else {
-        telInput.addClass("error");
-        errorMsg.removeClass("hide");
+      function getIp(callback) {
+          fetch("https://ipinfo.io/json?token=<your token>", { headers: { Accept: "application/json" } })
+              .then((resp) => resp.json())
+              .catch(() => {
+                  return {
+                      country: "us",
+                  };
+              })
+              .then((resp) => callback(resp.country));
       }
-    }
-  });
-
-  // on keyup / change flag: reset
-
-
-
   </script>
 
 </body>
