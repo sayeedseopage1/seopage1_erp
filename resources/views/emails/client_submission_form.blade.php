@@ -38,7 +38,7 @@
 
             <div class="email_message">
                 <h4>Hi Seopage1,</h4>
-                <p><strong>{{$client->user_name}}</strong> has submiitted his/her details<span> on {{$data->created_at->format('Y-m-d')}} at {{$data->created_at->format('h:i:s A')}}</span> Let's check the short details below. You can check the details about this deal following <a href="erp.seopage1.net/deal-url/{{$deal->id}}">this link.</a></p>
+                <p><strong>{{$client->user_name}}</strong> has submiitted his/her details<span> on {{$data->created_at->format('Y-m-d')}} at {{$data->created_at->format('h:i:s A')}}</span> Let's check the short details below. You can check the details about this deal following <a href="erp.seopage1.net/account/deal-url/{{$deal->id}}">this link.</a></p>
             </div>
 
             <div class="email_message">
@@ -73,7 +73,7 @@
             </div>
 
             <div class="email_submits">
-                <a href="erp.seopage1.net/deal-url/{{$deal->id}}">View</a>
+                <a href="erp.seopage1.net/account/deal-url/{{$deal->id}}">View</a>
             </div>
         </div>
 
