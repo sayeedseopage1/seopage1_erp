@@ -17,6 +17,9 @@ use Illuminate\Http\Request;
 use App\Models\PMAssign;
 use App\Models\PMProject;
 use App\Models\ProjectMilestone;
+use Notification;
+use App\Notifications\MilestoneReleaseNotification;
+
 
 class PaymentController extends AccountBaseController
 {
@@ -252,6 +255,42 @@ class PaymentController extends AccountBaseController
           $project_update->status = 'finished';
           $project_update->save();
         }
+          if ($invoice_id->milestone_id != null) {
+          $milestone_id= ProjectMilestone::where('id',$invoice_id->milestone_id)->first();
+
+        //dd($project);
+        $milestones= ProjectMilestone::where('project_id',$milestone_id->project_id)->get();
+        //dd($milestones);
+        foreach ($milestones as $key => $milest) {
+          if ($milest->id == $milestone_id->id) {
+            $data= $key+1;
+            //dd($data);
+            // code...
+          }
+          // code...
+        }
+        $currency= Currency::where('id',$milestone_id->original_currency_id)->first();
+        $pm= User::where('id',$project->pm_id)->first();
+        if($milestone_id->summary != null)
+        {
+          $description= $milestone_id->summary;
+
+        }else {
+          $description = 'No Description Found';
+        }
+      
+        $client= User::where('id',$project->client_id)->first();
+        $pm= User::where('id',$project->pm_id)->first();
+
+
+         Notification::send($pm, new MilestoneReleaseNotification($milestone_id,$invoice));
+         $users= User::where('role_id',1)->get();
+         foreach ($users as $user) {
+
+
+            Notification::send($user, new MilestoneReleaseNotification($milestone_id,$invoice));
+         }
+       }
 
 
         $redirectUrl = urldecode($request->redirect_url);

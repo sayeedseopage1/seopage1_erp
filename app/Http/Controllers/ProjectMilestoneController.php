@@ -12,6 +12,9 @@ use App\Models\ProjectTimeLogBreak;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Auth;
+use Notification;
+use App\Notifications\MilestoneReleaseNotification;
+use App\Models\User;
 
 class ProjectMilestoneController extends AccountBaseController
 {
@@ -44,10 +47,15 @@ class ProjectMilestoneController extends AccountBaseController
     }
     public function CompleteMilestone(Request $request)
     {
+      $milestone_id= ProjectMilestone::where('id',$request->id)->first();
+      //dd($request);
       $milestone= ProjectMilestone::find($request->id);
       $milestone->status= "complete";
       $milestone->last_updated_by= Auth::id();
       $milestone->save();
+
+    //  dd($output);
+
       return back()->with('success','Milestone Status Updated Successfully');
     }
 
