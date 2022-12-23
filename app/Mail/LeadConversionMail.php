@@ -28,7 +28,8 @@ class LeadConversionMail extends Mailable
      */
     public function build()
     {
-      $subject = '[No Reply] New Lead Conversion';
+      $subject = '[No Reply] Lead Converted To Deal Successfully
+';
        return $this->view('emails.new_lead_conversion')->subject($subject);
     }
 }

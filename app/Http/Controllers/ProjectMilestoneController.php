@@ -13,7 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Auth;
 use Notification;
-use App\Notifications\MilestoneReleaseNotification;
+use App\Notifications\MilestoneComplete;
 use App\Models\User;
 
 class ProjectMilestoneController extends AccountBaseController
@@ -53,6 +53,19 @@ class ProjectMilestoneController extends AccountBaseController
       $milestone->status= "complete";
       $milestone->last_updated_by= Auth::id();
       $milestone->save();
+      $project= Project::where('id',$milestone->project_id)->first();
+      $milestone_count= ProjectMilestone::where('project_id',$milestone->project_id)->count();
+
+      $milestone_complete= ProjectMilestone::where('project_id',$milestone->project_id)->where('status','complete')->count();
+      //  dd($milestone_count,$milestone_complete);
+      if ($milestone_count == $milestone_complete) {
+        $users= User::where('role_id',1)->get();
+        foreach ($users as $user) {
+
+
+           Notification::send($user, new MilestoneComplete($project,$milestone));
+        }
+      }
 
     //  dd($output);
 

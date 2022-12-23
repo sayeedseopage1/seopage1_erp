@@ -19,6 +19,7 @@ use App\Models\PMProject;
 use App\Models\ProjectMilestone;
 use Notification;
 use App\Notifications\MilestoneReleaseNotification;
+use App\Notifications\ProjectCompleteNotification;
 
 
 class PaymentController extends AccountBaseController
@@ -253,7 +254,14 @@ class PaymentController extends AccountBaseController
         $project_update= Project::find($project->id);
         if ($project->due < 1) {
           $project_update->status = 'finished';
+          $project_update->completion_percent= 100;
           $project_update->save();
+          $users= User::where('role_id',1)->orWhere('role_id',4)->orWhere('role_id',6)->get();
+          foreach ($users as $user) {
+
+
+             Notification::send($user, new ProjectCompleteNotification($project));
+          }
         }
           if ($invoice_id->milestone_id != null) {
           $milestone_id= ProjectMilestone::where('id',$invoice_id->milestone_id)->first();
@@ -278,7 +286,7 @@ class PaymentController extends AccountBaseController
         }else {
           $description = 'No Description Found';
         }
-      
+
         $client= User::where('id',$project->client_id)->first();
         $pm= User::where('id',$project->pm_id)->first();
 

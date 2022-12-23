@@ -30,7 +30,7 @@ class ClientSubmitMail extends Mailable
      */
     public function build()
     {
-      $subject = '[No Reply] Client Submission';
+      $subject = '[No Reply] Client Has Submitted Form Successfully';
        return $this->view('emails.client_submission_form')->subject($subject);
     }
 }

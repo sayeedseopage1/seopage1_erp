@@ -30,11 +30,13 @@
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.status')</p>
             <div class="select-status">
                 <select class="form-control select-picker" name="status" id="status" data-live-search="true" data-size="8">
-                    <option value="not finished">@lang('modules.projects.hideFinishedProjects')</option>
+                    <option selected value="in progress">@lang('In progress')</option>
                     <option {{ request('status') == 'all' ? 'selected' : '' }} value="all">@lang('app.all')</option>
                     <option {{ request('status') == 'overdue' ? 'selected' : '' }} value="overdue">@lang('app.overdue')
                     </option>
-                    @foreach ($projectStatus as $status)
+                    <?php $p_status= App\Models\ProjectStatusSetting::where('status_name','!=','not started')->get() ?>
+                    @foreach ($p_status as $status)
+
                         <option value="{{$status->status_name}}">{{ ucfirst($status->status_name) }}</option>
                     @endforeach
                 </select>

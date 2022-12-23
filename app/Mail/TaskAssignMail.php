@@ -29,7 +29,7 @@ class TaskAssignMail extends Mailable
      */
     public function build()
     {
-      $subject = '[No Reply] New Task Assign';
+      $subject = '[No Reply] New Task Assign to you';
        return $this->view('emails.new_task_assign')->subject($subject);
     }
 }

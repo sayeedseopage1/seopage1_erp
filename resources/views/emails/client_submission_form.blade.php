@@ -33,7 +33,8 @@
             <div class="email_contents">
                 <img src="{{asset('email/img/check_mark.png')}}" alt="">
 
-                <strong>Client Details</strong>
+                <strong>Client Has Submitted Form Successfully
+</strong>
             </div>
 
             <div class="email_message">

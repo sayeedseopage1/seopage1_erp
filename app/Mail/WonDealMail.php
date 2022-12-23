@@ -31,7 +31,7 @@ class WonDealMail extends Mailable
     public function build()
     {
 
-      $subject = '[No Reply] New Won Deal';
+      $subject = '[No Reply] New Project Assigned To You';
        return $this->view('emails.new_won_deal')->subject($subject);
         //return $this->view('view.name');
     }

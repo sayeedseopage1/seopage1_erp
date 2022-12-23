@@ -45,10 +45,11 @@ class ProjectsDataTable extends BaseDataTable
         //dd($project);
         //dd($row);
 
+
         $customFieldsGroupsId = CustomFieldGroup::where('model', $project->customFieldModel)->pluck('id')->first();
         $customFields = CustomField::where('custom_field_group_id', $customFieldsGroupsId)->where('export', 1)->get();
         $datatables = datatables()->eloquent($query);
-        //dd($datatables);
+        // /dd($datatables);
 
             $datatables->addColumn('check', function ($row) {
                 return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
@@ -291,7 +292,7 @@ class ProjectsDataTable extends BaseDataTable
               //  return ucfirst($row->project_short_code);
             });
             $datatables->addColumn('project_manager', function ($row) {
-                
+
 
                 $project_manager = ucfirst($row->salutation) . ' ' . ucfirst($row->pm->name);
 
@@ -467,40 +468,42 @@ class ProjectsDataTable extends BaseDataTable
         $customFields = CustomField::where('custom_field_group_id', $customFieldsGroupsId)->where('export', 1)->get();
         $customFieldsDataMerge = [];
 
-        $data = [
-            'check' => [
-                'title' => '<input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
-                'exportable' => false,
-                'orderable' => false,
-                'searchable' => false,
-                'visible' => !in_array('client', user_roles())
-            ],
-            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
-            __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
-            __('modules.taskCode') => ['data' => 'short_code', 'name' => 'project_short_code', 'title' => __('modules.taskCode')],
-            __('modules.projects.projectName') => ['data' => 'project_name', 'name' => 'project_name', 'exportable' => false, 'title' => __('modules.projects.projectName')],
-            __('app.project') => ['data' => 'project', 'name' => 'project_name', 'visible' => false, 'title' => __('app.project')],
-              __('app.project_value') => ['data' => 'project_value', 'name' => 'project_value',  'title' => __('Project Value')],
-            __('modules.projects.members')  => ['data' => 'members', 'name' => 'members', 'exportable' => false, 'width' => '15%', 'title' => __('modules.projects.members')],
-            __('modules.projects.projectMembers')  => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.projects.projectMembers')],
-            __('modules.projects.startDate')  => ['data' => 'start_date', 'name' => 'start_date', 'visible' => false, 'title' => __('modules.projects.startDate')],
-            __('app.deadline') => ['data' => 'deadline', 'name' => 'deadline', 'title' => __('app.deadline')],
-            __('app.client') => ['data' => 'client_id', 'name' => 'client_id', 'width' => '15%', 'exportable' => false, 'title' => __('app.client')],
-            __('app.customers')  => ['data' => 'client_name', 'name' => 'client_id', 'visible' => false, 'title' => __('app.customers')],
+          $data = [
+              'check' => [
+                  'title' => '<input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
+                  'exportable' => false,
+                  'orderable' => false,
+                  'searchable' => false,
+                  'visible' => !in_array('client', user_roles())
+              ],
+              '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
+              __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+              __('modules.taskCode') => ['data' => 'short_code', 'name' => 'project_short_code', 'title' => __('modules.taskCode')],
+              __('modules.projects.projectName') => ['data' => 'project_name', 'name' => 'project_name', 'exportable' => false, 'title' => __('modules.projects.projectName')],
+              __('app.project') => ['data' => 'project', 'name' => 'project_name', 'visible' => false, 'title' => __('app.project')],
+                __('app.project_value') => ['data' => 'project_value', 'name' => 'project_value',  'title' => __('Project Value')],
+              __('modules.projects.members')  => ['data' => 'members', 'name' => 'members', 'exportable' => false, 'width' => '15%', 'title' => __('modules.projects.members')],
+              __('modules.projects.projectMembers')  => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.projects.projectMembers')],
+              __('modules.projects.startDate')  => ['data' => 'start_date', 'name' => 'start_date', 'visible' => false, 'title' => __('modules.projects.startDate')],
+              __('app.deadline') => ['data' => 'deadline', 'name' => 'deadline', 'title' => __('app.deadline')],
+              __('app.client') => ['data' => 'client_id', 'name' => 'client_id', 'width' => '15%', 'exportable' => false, 'title' => __('app.client')],
+              __('app.customers')  => ['data' => 'client_name', 'name' => 'client_id', 'visible' => false, 'title' => __('app.customers')],
 
-            __('app.client') . ' ' . __('app.email')  => ['data' => 'client_email', 'name' => 'client_id', 'visible' => false, 'title' => __('app.client') . ' ' . __('app.email')],
-              __('app.project_manager') => ['data' => 'project_manager', 'name' => 'project_manager',  'title' => __('Project Manager')],
-            __('app.progress') => ['data' => 'completion_percent', 'name' => 'completion_percent', 'exportable' => false, 'title' => __('app.progress')],
-            __('app.completion') => ['data' => 'completion_export', 'name' => 'completion_export', 'visible' => false, 'title' => __('app.completion')],
-            __('app.status') => ['data' => 'status', 'name' => 'status', 'width' => '16%', 'exportable' => false, 'title' => __('app.status')],
-            __('app.project').' '.__('app.status') => ['data' => 'project_status', 'name' => 'status', 'visible' => false, 'title' => __('app.project').' '.__('app.status')],
-            Column::computed('action', __('app.action'))
-                ->exportable(false)
-                ->printable(false)
-                ->orderable(false)
-                ->searchable(false)
-                ->addClass('text-right pr-20')
-        ];
+              __('app.client') . ' ' . __('app.email')  => ['data' => 'client_email', 'name' => 'client_id', 'visible' => false, 'title' => __('app.client') . ' ' . __('app.email')],
+                __('app.project_manager') => ['data' => 'project_manager', 'name' => 'project_manager',  'title' => __('Project Manager')],
+              __('app.progress') => ['data' => 'completion_percent', 'name' => 'completion_percent', 'exportable' => false, 'title' => __('app.progress')],
+              __('app.completion') => ['data' => 'completion_export', 'name' => 'completion_export', 'visible' => false, 'title' => __('app.completion')],
+              __('app.status') => ['data' => 'status', 'name' => 'status', 'width' => '16%', 'exportable' => false, 'title' => __('app.status')],
+              __('app.project').' '.__('app.status') => ['data' => 'project_status', 'name' => 'status', 'visible' => false, 'title' => __('app.project').' '.__('app.status')],
+              Column::computed('action', __('app.action'))
+                  ->exportable(false)
+                  ->printable(false)
+                  ->orderable(false)
+                  ->searchable(false)
+                  ->addClass('text-right pr-20')
+          ];
+
+
 
         foreach ($customFields as $customField) {
             $customFieldsData = [$customField->name => ['data' => $customField->name, 'name' => $customField->name, 'title' => $customField->name, 'visible' => false]];
@@ -510,6 +513,7 @@ class ProjectsDataTable extends BaseDataTable
 
         $datamerge = array_merge($data, $customFieldsDataMerge);
         return $datamerge;
+
     }
 
     /**

@@ -31,7 +31,7 @@
             <div class="email_contents">
                 <img src="{{asset('email/img/check_mark.png')}}" alt="">
 
-                <strong>New Lead Converted to Deal</strong>
+                <strong>Lead Converted To Deal Successfully</strong>
             </div>
 
             <div class="email_message">
