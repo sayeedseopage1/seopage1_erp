@@ -66,7 +66,7 @@ class ProjectCompleteNotification extends Notification
   </p>'
   .
   '<p>
-     <b style="color: black">' . __('Client Name') . ': '.'</b>' . '<a href="'.route('employees.show',$client->id).'">'.$client->name .'</a>'. '
+     <b style="color: black">' . __('Client Name') . ': '.'</b>' . '<a href="'.route('clients.show',$client->id).'">'.$client->name .'</a>'. '
  </p>'
    .
    '<p>

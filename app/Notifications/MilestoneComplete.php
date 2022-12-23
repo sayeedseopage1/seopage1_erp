@@ -70,12 +70,12 @@ class MilestoneComplete extends Notification
       <h1 style="color: red; text-align: center;" >' . __('All Milestone Completed') .'</b>'.'
   </h1>';
     $body= '<p>
-    All milestones are completed of this project '.'<a href="'.route('projects.show',$project->id).'">'. $project->project_name .'</a>' . ' but payment not completed fully. Let`s check the short details below. You can check the details about this project following '.'<a href="'.route('projects.show',$project->id).'">'.'this link'.'</a>'.'
+    All milestones are completed of this project '.'<a href="'.route('projects.show',$project->id).'">'. $project->project_name .'</a>' . ' but payment not completed fully. Let'. '&#39;'. 's check the short details below. You can check the details about this project following '.'<a href="'.route('projects.show',$project->id).'">'.'this link'.'</a>'.'
    </p>'
    ;
    $content =
    '<p>
-      <b style="color: black">' . __('Client Name') . ': '.'</b>' . '<a href="'.route('employees.show',$client->id).'">'.$client->name .'</a>'. '
+      <b style="color: black">' . __('Client Name') . ': '.'</b>' . '<a href="'.route('clients.show',$client->id).'">'.$client->name .'</a>'. '
   </p>' .
    '<p>
       <b style="color: black">' . __('Project Name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '

@@ -68,6 +68,8 @@ use Toastr;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use App\Models\ProjectDispute;
+use Notification;
+use App\Notifications\ProjectDisputeNotification;
 
 
 class ProjectController extends AccountBaseController
@@ -682,6 +684,12 @@ if ($pm_count < 2) {
         $project= Project::find($dispute->project_id);
         $project->status ='canceled';
         $project->save();
+        $users= User::where('role_id',1)->get();
+        foreach ($users as $user) {
+
+
+           Notification::send($user, new ProjectDisputeNotification($project));
+        }
 
         Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         //  return Redirect::route('projects.index');

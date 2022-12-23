@@ -71,7 +71,7 @@ class MilestoneReleaseNotification extends Notification
     $incomplete_milestone= ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->get();
     $complete_milestone= ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
     $currency= Currency::where('id',$milestone_id->original_currency_id)->first();
-    
+
     if($milestone_id->summary != null)
     {
       $description= $milestone_id->summary;
@@ -91,7 +91,7 @@ class MilestoneReleaseNotification extends Notification
         <h1 style="color: red; text-align: center;" >' . __('New Payment Realesed') .'</b>'.'
     </h1>';
       $body= '<p>
-        New Milestone was released on '.$this->invoice->updated_at->format('Y-m-d') .' '. 'at'.' ' . $this->invoice->created_at->format('h:i:s A') . ' '.'Let`s check the short details below. You can check all the milestones of this project by clicking View Milestone.
+        New Milestone was released on '.$this->invoice->updated_at->format('Y-m-d') .' '. 'at'.' ' . $this->invoice->created_at->format('h:i:s A') . ' '.'Let'. '&#39;'. 's check the short details below. You can check all the milestones of this project by clicking View Milestone.
      </p>'
      ;
      $remaining='';
