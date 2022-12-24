@@ -223,6 +223,7 @@ return [
         Macellan\Zip\ZipServiceProvider::class,
         Froiden\LaravelInstaller\Providers\LaravelInstallerServiceProvider::class,
         Brian2694\Toastr\ToastrServiceProvider::class,
+        Xetaio\Mentions\Providers\MentionServiceProvider::class,
     ],
 
     /*

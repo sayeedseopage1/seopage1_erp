@@ -68,6 +68,7 @@
         "tymon/jwt-auth": "dev-develop",
         "unicodeveloper/laravel-paystack": "^1.0",
         "webklex/laravel-imap": "2.4.0",
+        "xetaio/xetaravel-mentions": "^9.0",
         "yajra/laravel-datatables-buttons": "^4.10",
         "yajra/laravel-datatables-html": "^4.36",
         "yajra/laravel-datatables-oracle": "^9.14"

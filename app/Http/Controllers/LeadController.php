@@ -112,7 +112,7 @@ class LeadController extends AccountBaseController
       $deal_stage->save();
 
 
-      if ($request->deal_stage == 3) {
+      if ($request->deal_stage == 4) {
         $lead_id= Lead::where('id',$request->id)->first();
         $agent= SalesCount::where('user_id',$lead_id->added_by)->first();
         if ($agent != null) {
@@ -155,7 +155,7 @@ class LeadController extends AccountBaseController
 
 
       $deal_stage= DealStage::where('id',$request->id)->first();
-      if ($deal_stage->deal_stage == 3 && $request->won_lost == "No") {
+      if ($deal_stage->deal_stage == 4 && $request->won_lost == "No") {
             $deal= DealStage::find($request->id);
             $deal->comments=$request->comments;
             $deal->deal_status="Lost";
@@ -226,7 +226,22 @@ class LeadController extends AccountBaseController
           $deal_stage->comments= $request->comments;
           $deal_stage->deal_stage_id=$deal->deal_stage;
           $deal_stage->save();
-        }else {
+        }
+        elseif ($deal_stage->deal_stage == 3) {
+          $deal->deal_stage= $deal_stage->deal_stage+1;
+          $deal->comments=$request->comments;
+          $deal->won_lost=$request->won_lost;
+          $deal->save();
+          $deal_stage= new DealStageChange();
+          $deal_stage->lead_id= $deal->lead_id;
+          $deal_stage->deal_id= $deal->short_code;
+          $deal_stage->comments= $request->comments;
+          $deal_stage->deal_stage_id=$deal->deal_stage;
+          $deal_stage->save();
+        }
+
+
+        else {
           $deal->deal_stage= $deal_stage->deal_stage;
           $deal->comments=$request->comments;
           $deal->won_lost=$request->won_lost;
@@ -237,6 +252,7 @@ class LeadController extends AccountBaseController
           $deal_stage->comments= $request->comments;
           $deal_stage->deal_stage_id=$deal->deal_stage;
           $deal_stage->save();
+
           if (Auth::user()->role_id == 7) {
             $agent= SalesCount::where('user_id',Auth::id())->first();
             $lead_ag= SalesCount::find($agent->id);

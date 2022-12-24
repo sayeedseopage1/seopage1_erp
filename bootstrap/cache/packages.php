@@ -416,6 +416,13 @@
       'Client' => 'Webklex\\IMAP\\Facades\\Client',
     ),
   ),
+  'xetaio/xetaravel-mentions' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Xetaio\\Mentions\\Providers\\MentionServiceProvider',
+    ),
+  ),
   'yajra/laravel-datatables-buttons' => 
   array (
     'providers' => 
