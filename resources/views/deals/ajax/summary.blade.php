@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 <?php
 $deal_id=App\Models\Deal::where('deal_id',$deal->short_code)->first();
+
 $project_id= App\Models\PMProject::where('deal_id',$deal_id->id)->first();
 //dd($project_id->project_id);
 $currency_id= App\Models\Currency::where('id',$deal_id->original_currency_id)->first();
@@ -66,7 +67,7 @@ $currency_id= App\Models\Currency::where('id',$deal_id->original_currency_id)->f
                 <tr>
                   <td>
                     <div class="d-flex justify-content-center">
-                      @if(Auth::user()->role_id == 4 && $deal_id->pm_id == Auth::user()->id)
+                      @if(Auth::user()->role_id == 4 && $deal_id->pm_id == Auth::user()->id || Auth::user()->role_id == 1)
                       @if($deal_id->status == 'pending')
                       <button class="btn btn-danger mr-3"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
                         @include('contracts.modals.dealdenymodal')
@@ -369,7 +370,7 @@ $currency_id= App\Models\Currency::where('id',$deal_id->original_currency_id)->f
                       <div class="col">
                           <h4>Email</h4>
                           <br>
-                          <p>{{deal_id->user->email}}</p>
+                          <p>{{$deal_id->user->email}}</p>
 
                       </div>
 

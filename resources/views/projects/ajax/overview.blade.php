@@ -2,6 +2,7 @@
 <script src="{{ asset('vendor/jquery/Chart.min.js') }}"></script>
 <script src="{{ asset('vendor/jquery/gauge.js') }}"></script>
 <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+
 @php $editProjectPermission = user()->permission('edit_projects'); $addPaymentPermission = user()->permission('add_payments'); $projectBudgetPermission = user()->permission('view_project_budget'); $memberIds =
 $project->members->pluck('user_id')->toArray(); @endphp
 
@@ -67,7 +68,12 @@ $project->members->pluck('user_id')->toArray(); @endphp
               //dd($dispute);
 
             @endphp
+              @if($project->status == 'in progress' || $project->status == 'not started' || $project->status == 'on hold')
+
+              @if($project->dispute_status == 1)
+              @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 4)
             @if($dispute == null)
+
             <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
                 <div class="">
                     <a class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded openRightModal" href="{{ route('projects.dispute', $project->id) }}"  aria-haspopup="true" aria-expanded="false">
@@ -77,6 +83,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
                 </div>
             </div>
+
             @else
             <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
                 <div class="">
@@ -89,6 +96,31 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
 
 
+
+
+
+            @endif
+            @endif
+
+            @else
+            @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+            <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
+                <div class="">
+                  <form class="" action="{{route('project-incomplete')}}" method="post">
+                    @csrf
+                    <input type="hidden" name="id" value="{{$project->id}}">
+
+                    <button class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded" type="submit"  aria-haspopup="true" aria-expanded="false">
+                    @lang('Mark As Incomplete')
+                  </button>
+                    </form>
+
+                </div>
+            </div>
+            @endif
+
+
+            @endif
 
 
 

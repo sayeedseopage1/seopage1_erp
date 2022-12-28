@@ -834,7 +834,7 @@ if ($pm_count < 2) {
         $project->currency_id = 1;
 
         $project->hours_allocated = $request->hours_allocated;
-        $project->status = $request->status;
+        $project->status = 'in progress';
         $project->project_status= 'Accepted';
         //$project->added_by= Auth::id();
         $project->last_updated_by= Auth::id();
@@ -1885,6 +1885,14 @@ if ($pm_count < 2) {
 
 
       Toastr::success('Deliverable Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return Redirect::back();
+    }
+    public function InComplete(Request $request)
+    {
+      $project= Project::find($request->id);
+      $project->dispute_status = 1;
+      $project->save();
+      Toastr::success('Status Changed Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back();
     }
 

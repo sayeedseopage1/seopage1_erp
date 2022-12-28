@@ -347,6 +347,18 @@ class DealController extends AccountBaseController
 
         return view('deals.show', $this->data);
     }
+    public function comments(Request $request)
+    {
+      dd($request->attach);
+      $deal= new DealStageChange();
+      $deal->updated_by= Auth::id();
+      $deal->comments= $request->comment;
+      $deal->deal_stage_id= $request->deal_stage_id;
+      $deal->deal_id= $request->deal_id;
+
+      $deal->save();
+      return back()->with('status_updated', 'Status Updated!!');
+    }
 
 
 

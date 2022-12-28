@@ -259,8 +259,16 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     @endif
 
                     <div class="col-md-6 col-lg-6">
-                      <x-forms.select fieldId="project_status"
-                           :fieldLabel="__('app.project') . ' ' . __('app.status')" fieldName="status" search="true">
+                      <?php
+                        $status= App\Models\ProjectStatusSetting::where('status_name','in progress')->first();
+                        $status_name= ucfirst($status->status_name);
+
+                       ?>
+                      <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('app.project') . ' ' . __('app.status')"
+                          fieldName="status" fieldRequired="true" fieldId="project_status"
+                          :fieldPlaceholder="__('Status')" :fieldValue="$status_name" fieldReadOnly="true"/>
+                    {{--  <x-forms.select fieldId="project_status"
+                           :fieldLabel="__('app.project') . ' ' . __('app.status')" fieldName="status" search="true" fieldReadOnly="true">
                            @foreach ($projectStatus as $status)
                                <option
                                data-content="<i class='fa fa-circle mr-1 f-15' style='color:{{$status->color}}'></i>{{ ucfirst($status->status_name) }}"
@@ -270,9 +278,10 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                </option>
 
                            @endforeach
+                           <i class='fa fa-circle mr-1 f-15' style='color:{{$status->color}}'></i>{{ ucfirst($status->status_name) }}
 
 
-                       </x-forms.select>
+                       </x-forms.select> --}}
                     </div>
 
                   {{--  <div class="col-md-12 col-lg-4">

@@ -57,7 +57,7 @@ class ProjectDisputeNotification extends Notification
    </p>'
    ;
    $header= '<p>
-      <h1 style="color: red; text-align: center;" >' . __('Project Completed') .'</b>'.'
+      <h1 style="color: red; text-align: center;" >' . __('Project Dispute') .'</b>'.'
   </h1>';
     $body= '<p>'.
       'Our client '.'<a href="'.route('employees.show',$project->id).'">'.$client->name .'</a>'.' has disputed project '.'<a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a>'.' on'.' '.$project_dispute->created_at->format('Y-m-d').' '.'at'.' '

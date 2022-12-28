@@ -3,11 +3,13 @@
         <div class="modal-content">
         <div class="modal-header">
           @if($deal->deal_stage == 0)
-            <h5 class="modal-title" id="exampleModalLabel">Contact Made <span>&#8594;</span> Requirements Defined</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Contact Made <span>&#8594;</span> Qualified</h5>
 
             @elseif($deal->deal_stage == 1)
-              <h5 class="modal-title" id="exampleModalLabel">Requirements Defined <span>&#8594;</span> Proposal Made</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Qualified <span>&#8594;</span> Requirements Defined</h5>
               @elseif($deal->deal_stage == 2)
+                <h5 class="modal-title" id="exampleModalLabel">Requirements Defined<span>&#8594;</span> Proposal Made</h5>
+              @elseif($deal->deal_stage == 3)
                 <h5 class="modal-title" id="exampleModalLabel">Proposal Made <span>&#8594;</span> Negotiation Started</h5>
 
           @endif

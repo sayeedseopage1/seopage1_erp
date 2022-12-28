@@ -109,6 +109,7 @@ class LeadController extends AccountBaseController
       $deal_stage->deal_id= $deal->short_code;
       $deal_stage->comments= $request->comments;
       $deal_stage->deal_stage_id=$deal->deal_stage;
+      $deal_stage->updated_by= Auth::id();
       $deal_stage->save();
 
 
@@ -168,6 +169,7 @@ class LeadController extends AccountBaseController
             $deal_stage->deal_id= $deal->short_code;
             $deal_stage->comments= $request->comments;
             $deal_stage->deal_stage_id=$deal->deal_stage;
+            $deal_stage->updated_by= Auth::id();
             $deal_stage->save();
             // $lead_id= Lead::where('id',$deal->lead_id)->first();
             // $lead= Lead::find($lead_id->id);
@@ -197,6 +199,7 @@ class LeadController extends AccountBaseController
           $deal_stage->deal_id= $deal->short_code;
           $deal_stage->comments= $request->comments;
           $deal_stage->deal_stage_id=$deal->deal_stage;
+          $deal_stage->updated_by= Auth::id();
           $deal_stage->save();
 
           // $lead_id= Lead::where('id',$deal->lead_id)->first();
@@ -213,6 +216,7 @@ class LeadController extends AccountBaseController
           $deal_stage->deal_id= $deal->short_code;
           $deal_stage->comments= $request->comments;
           $deal_stage->deal_stage_id=$deal->deal_stage;
+          $deal_stage->updated_by= Auth::id();
           $deal_stage->save();
 
         }elseif ($deal_stage->deal_stage == 2) {
@@ -225,6 +229,7 @@ class LeadController extends AccountBaseController
           $deal_stage->deal_id= $deal->short_code;
           $deal_stage->comments= $request->comments;
           $deal_stage->deal_stage_id=$deal->deal_stage;
+          $deal_stage->updated_by= Auth::id();
           $deal_stage->save();
         }
         elseif ($deal_stage->deal_stage == 3) {
@@ -237,6 +242,7 @@ class LeadController extends AccountBaseController
           $deal_stage->deal_id= $deal->short_code;
           $deal_stage->comments= $request->comments;
           $deal_stage->deal_stage_id=$deal->deal_stage;
+          $deal_stage->updated_by= Auth::id();
           $deal_stage->save();
         }
 
@@ -251,6 +257,7 @@ class LeadController extends AccountBaseController
           $deal_stage->deal_id= $deal->short_code;
           $deal_stage->comments= $request->comments;
           $deal_stage->deal_stage_id=$deal->deal_stage;
+          $deal_stage->updated_by= Auth::id();
           $deal_stage->save();
 
           if (Auth::user()->role_id == 7) {

@@ -478,7 +478,8 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                            @if($deal->won_lost == null)
                             <h3><i class="fa-solid fa-hands-bubbles"></i> Deal Won/Lost: <span>N\A</span> </h3>
                             @else
-                           <h3><i class="fa-solid fa-hands-bubbles"></i> Deal Won/Lost: <span>23 Jan, 2023</span> <span>(10 : 20 PM)</span> </h3>
+
+                           <h3><i class="fa-solid fa-hands-bubbles"></i> Deal Won/Lost: <span>{{$deal->updated_at->format('d M, Y')}}</span> <span>({{$deal->updated_at->format('h : i A')}})</span> </h3>
                            @endif
                        </div>
                    </div>
@@ -494,8 +495,29 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                    <div class="col-md-4 text-center">
                        <div class="deal_item2">
                            <h3>Deal Status</h3><br>
-                           <a href="#" class="btn btn-success wons">Won The Deal</a>
-                           <a href="#" class="btn btn-danger loss">Lost The Deal</a>
+                           @if($deal->won_lost == null)
+
+                           @if($deal->deal_stage == 4)
+                           <a href="#" data-bs-toggle="modal" data-bs-target="#dealaddstagemodal" data-bs-whatever="@mdo" class="btn btn-success wons">Won The Deal</a>
+                           <a href="#" data-bs-toggle="modal" data-bs-target="#lostmodal" data-bs-whatever="@mdo" class="btn btn-danger loss">Lost The Deal</a>
+                           @include('contracts.modals.dealaddstagemodal')
+                         @include('contracts.modals.deallostmodal')
+                         @else
+                         N\A
+                         @endif
+
+                         @else
+                         @if($deal->won_lost == 'Yes')
+                           <div class="text-center">
+                             <h2 style="color:green;">Won</h2>
+                           </div>
+
+                       @else
+                       <div class="text-center">
+                         <h2 style="color:red;">Lost</h2>
+                       </div>
+                       @endif
+                       @endif
                        </div>
                    </div>
 
@@ -516,26 +538,32 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                                <h3>Contact Made</h3>
 
                                <div class="custom_scroling_seo">
+                                 <?php
+                                $contact_mades= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',0)->get();
+                                  ?>
+                                  @foreach($contact_mades as $contact)
                                    <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
+                                       <p>{!!$contact->comments!!} </p>
 
-                                       <div class="seopage1_attach">
+                                       <!-- <div class="seopage1_attach">
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                       </div>
+                                       </div> -->
 
                                        <div class="sbinfo">
                                            <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
+                                               <li>{{$contact->user->name}}</li>
+                                               <li>{{$contact->created_at->toFormattedDateString()}}</li>
+                                               <li>{{$contact->created_at->format('h : i A')}}</li>
+
                                            </ul>
                                        </div>
                                    </div>
 
-
+                                    @endforeach
                                </div>
+
 
                                <div class="dealstage_comments_box mt-4">
 
@@ -544,14 +572,17 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                                            <div class="comment-add">
                                                <div class="col-md-12">
-                                                   <form action="">
+                                                   <form action="{{route('post-comment')}}" method="POST">
+                                                     @csrf
+                                                     <input type="hidden" name="deal_stage_id" value="0">
+                                                     <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
                                                        <div class="form-floating mb-3">
-                                                           <textarea class="form-control" rows="3" cols="20" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
+                                                           <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
 
                                                        </div>
 
                                                        <div class="wrapper">
-                                                           <input type="file" id="file-input">
+                                                           <input type="file" id="file-input" name="attach[]" multiple>
                                                            <label for="file-input">
 
                                                              <i class="fa fa-paperclip fa-2x"></i>
@@ -575,83 +606,63 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
 
                            <div class="nopadding">
-                               <div class="deal" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
-                                   <i class="fa-solid fa-clock"></i>  <span> 1 hours Ago</span>
+                                @if($deal->deal_stage == 0)
+                               <div class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
+                             <span> Change Deal Stage</span>
                                </div>
-                               <h3>Qualified</h3>
+
+                               @if($deal->deal_stage == 0)
+                               @include('contracts.modals.dealqualifymodal2')
+
+                               @endif
+                               @elseif($deal->deal_stage == 1 || $deal->deal_stage == 2 || $deal->deal_stage == 3 || $deal->deal_stage == 4)
+                               <?php
+
+
+                                  $lead_converted_to_qualified= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',1)->first();
+                                  $lead_converted_to_qual= $lead_converted_to_qualified->created_at->diffForHumans();
+
+
+
+
+
+                                ?>
+                               <div class="deal custom-active" data-bs-whatever="@mdo">
+                                   <i class="fa-solid fa-clock"></i>  <span>     {{$lead_converted_to_qual}}</span>
+                               </div>
+                               @else
+                               <div class="deal" data-bs-whatever="@mdo">
+                                   <span>Change Deal Stage</span>
+                               </div>
+
+                            @endif
+                              <h3>Qualified</h3>
 
                                <div class="custom_scroling_seo">
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
+                                 <?php
+                                   $qualified= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',1)->get();
+                                  ?>
+                                   @foreach($qualified as $qual)
 
-                                       <div class="seopage1_attach">
+                                   <div class="details-seopage1 mb-2">
+                                       <p>{!!$qual->comments!!}</p>
+                                       <!-- <div class="seopage1_attach">
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                       </div>
-
+                                       </div> -->
                                        <div class="sbinfo">
                                            <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
+                                             <li>{{$qual->user->name}}</li>
+                                             <li>{{$qual->created_at->toFormattedDateString()}}</li>
+                                             <li>{{$qual->created_at->format('h : i A')}}</li>
 
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan khan khan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
                                            </ul>
                                        </div>
                                    </div>
 
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan khan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
+                                  @endforeach
 
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
                                </div>
 
                                <div class="dealstage_comments_box mt-4">
@@ -661,14 +672,17 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                                            <div class="comment-add">
                                                <div class="col-md-12">
-                                                   <form action="">
+                                                 <form action="{{route('post-comment')}}" method="POST">
+                                                   @csrf
+                                                   <input type="hidden" name="deal_stage_id" value="1">
+                                                   <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
                                                        <div class="form-floating mb-3">
-                                                           <textarea class="form-control" rows="3" cols="20" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
+                                                           <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
 
                                                        </div>
 
                                                        <div class="wrapper">
-                                                           <input type="file" id="file-input">
+                                                           <input type="file" id="file-input" name="attach[]" multiple>
                                                            <label for="file-input">
 
                                                              <i class="fa fa-paperclip fa-2x"></i>
@@ -692,83 +706,58 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                            <!-- nopadding  -->
 
                            <div class="nopadding">
-                               <div class="deal" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
-                                   03 hours Ago
+                               @if($deal->deal_stage == 1)
+                               <div class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
+                                   Change Deal Stage
                                </div>
+                                  @include('contracts.modals.dealqualifymodal2')
+                                  @elseif($deal->deal_stage == 2  || $deal->deal_stage == 3 || $deal->deal_stage == 4)
+                                  <?php
+
+
+                                  $lead_converted_to_req_def= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',2)->first();
+                                  $lead_converted_to_req= $lead_converted_to_req_def->created_at->diffForHumans();
+
+
+
+
+                                   ?>
+                                  <div class="deal custom-active" data-bs-whatever="@mdo">
+                                      <i class="fa-solid fa-clock"></i>  <span>     {{$lead_converted_to_req}}</span>
+                                  </div>
+                                  @else
+                                  <div class="deal" data-bs-whatever="@mdo">
+                                    <span>Change Deal Stage</span>
+                                  </div>
+
+                               @endif
+
                                <h3>Requirements Defined</h3>
 
                                <div class="custom_scroling_seo">
+                                 <?php
+                                    $req_defined= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',2)->get();
+                                  ?>
+                                 @foreach($req_defined as $req_def)
                                    <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
+                                       <p>{!!$req_def->comments!!} </p>
 
-                                       <div class="seopage1_attach">
+                                       <!-- <div class="seopage1_attach">
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                       </div>
+                                       </div> -->
 
                                        <div class="sbinfo">
                                            <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan khan khan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
+                                               <li>{{$req_def->user->name}}</li>
+                                               <li>{{$req_def->created_at->toFormattedDateString()}}</li>
+                                               <li>{{$req_def->created_at->format('h : i A')}}</li>
                                            </ul>
                                        </div>
                                    </div>
 
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan khan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
+                                  @endforeach
                                </div>
 
                                <div class="dealstage_comments_box mt-4">
@@ -778,14 +767,17 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                                            <div class="comment-add">
                                                <div class="col-md-12">
-                                                   <form action="">
+                                                 <form action="{{route('post-comment')}}" method="POST">
+                                                   @csrf
+                                                   <input type="hidden" name="deal_stage_id" value="2">
+                                                   <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
                                                        <div class="form-floating mb-3">
-                                                           <textarea class="form-control" rows="3" cols="20" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
+                                                           <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
 
                                                        </div>
 
                                                        <div class="wrapper">
-                                                           <input type="file" id="file-input">
+                                                           <input type="file" id="file-input" name="attach[]" multiple>
                                                            <label for="file-input">
 
                                                              <i class="fa fa-paperclip fa-2x"></i>
@@ -809,84 +801,64 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                            <!-- nopadding  -->
 
                            <div class="nopadding">
-                               <div class="deal" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
-                                   04 hours Ago
-                               </div>
-                               <h3>Proposal Made</h3>
+                             @if($deal->deal_stage == 2)
+                             <div class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
+                                 Change Deal Stage
+                             </div>
+                                @include('contracts.modals.dealqualifymodal2')
+
+                                @elseif($deal->deal_stage == 3  || $deal->deal_stage == 4)
+                                <?php
+
+
+
+                                   $lead_converted_to_prop_def= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',3)->first();
+                                   $lead_converted_to_prop= $lead_converted_to_prop_def->created_at->diffForHumans();
+
+
+
+
+                                 ?>
+
+
+                                <div class="deal custom-active" data-bs-whatever="@mdo">
+                                    <i class="fa-solid fa-clock"></i>  <span> {{$lead_converted_to_prop}}</span>
+                                </div>
+                                @else
+                                <div class="deal" data-bs-whatever="@mdo">
+                                   <span>Change Deal Stage</span>
+                                </div>
+                             @endif
+                                <h3>Proposal Made</h3>
 
                                <div class="custom_scroling_seo">
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
+                                 <?php
+                                  $proposal_made= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',3)->get();
+                                  ?>
 
-                                       <div class="seopage1_attach">
+                                @foreach($proposal_made as $prop)
+                                   <div class="details-seopage1 mb-2">
+                                       <p>{!!$prop->comments!!} </p>
+
+                                       <!-- <div class="seopage1_attach">
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                       </div>
+                                       </div> -->
 
                                        <div class="sbinfo">
                                            <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan khan khan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
+                                             <li>{{$prop->user->name}}</li>
+                                             <li>{{$prop->created_at->toFormattedDateString()}}</li>
+                                             <li>{{$prop->created_at->format('h : i A')}}</li>
                                            </ul>
                                        </div>
                                    </div>
 
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan khan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
+                                      @endforeach
 
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
                                </div>
+
 
                                <div class="dealstage_comments_box mt-4">
 
@@ -895,14 +867,17 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                                            <div class="comment-add">
                                                <div class="col-md-12">
-                                                   <form action="">
+                                                 <form action="{{route('post-comment')}}" method="POST">
+                                                   @csrf
+                                                   <input type="hidden" name="deal_stage_id" value="3">
+                                                   <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
                                                        <div class="form-floating mb-3">
-                                                           <textarea class="form-control" rows="3" cols="20" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
+                                                           <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
 
                                                        </div>
 
                                                        <div class="wrapper">
-                                                           <input type="file" id="file-input">
+                                                           <input type="file" id="file-input" name="attach[]" multiple>
                                                            <label for="file-input">
 
                                                              <i class="fa fa-paperclip fa-2x"></i>
@@ -930,82 +905,59 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
 
                            <div class="nopadding">
-                               <div class="deal" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
-                                   05 hours Ago
-                               </div>
+                             @if($deal->deal_stage == 3)
+                             <div class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
+                                 Change Deal Stage
+                             </div>
+                                @include('contracts.modals.dealqualifymodal2')
+
+                                @elseif($deal->deal_stage == 4)
+                                <?php
+
+
+
+                                $lead_converted_to_neg_def= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',4)->first();
+                                $lead_converted_to_neg= $lead_converted_to_neg_def->created_at->diffForHumans();
+
+
+
+
+                                 ?>
+
+
+                                <div class="deal custom-active" data-bs-whatever="@mdo">
+                                    <i class="fa-solid fa-clock"></i>  <span> {{$lead_converted_to_neg}}</span>
+                                </div>
+                                @else
+                                <div class="deal" data-bs-whatever="@mdo">
+                                     <span>Change Deal Stage</span>
+                                </div>
+                             @endif
                                <h3>Negotiation Started</h3>
                                <div class="custom_scroling_seo">
+                                 <?php
+                                  $negotiation_started= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',4)->get();
+                                  ?>
+                                 @foreach($negotiation_started as $neg)
                                    <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
+                                       <p>{!!$neg->comments!!}</p>
 
-                                       <div class="seopage1_attach">
+                                       <!-- <div class="seopage1_attach">
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
                                            <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                       </div>
+                                       </div> -->
 
                                        <div class="sbinfo">
                                            <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
+                                             <li>{{$neg->user->name}}</li>
+                                             <li>{{$neg->created_at->toFormattedDateString()}}</li>
+                                             <li>{{$neg->created_at->format('h : i A')}}</li>
                                            </ul>
                                        </div>
                                    </div>
+                                   @endforeach
 
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan khan khan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan khan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
-                                   <div class="details-seopage1 mb-2">
-                                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras non dolor sapien. </p>
-                                       <div class="sbinfo">
-                                           <ul>
-                                               <li>Riad Hasan</li>
-                                               <li>10/20/22</li>
-                                               <li>12: 20 PM</li>
-                                           </ul>
-                                       </div>
-                                   </div>
                                </div>
 
                                <div class="dealstage_comments_box mt-4">
@@ -1015,14 +967,17 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                                            <div class="comment-add">
                                                <div class="col-md-12">
-                                                   <form action="">
+                                                 <form action="{{route('post-comment')}}" method="POST">
+                                                   @csrf
+                                                   <input type="hidden" name="deal_stage_id" value="4">
+                                                   <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
                                                        <div class="form-floating mb-3">
-                                                           <textarea class="form-control" rows="3" cols="20" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
+                                                           <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
 
                                                        </div>
 
                                                        <div class="wrapper">
-                                                           <input type="file" id="file-input">
+                                                           <input type="file" id="file-input" name="attach[]" multiple>
                                                            <label for="file-input">
 
                                                              <i class="fa fa-paperclip fa-2x"></i>
@@ -1055,32 +1010,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                    <!-- modal popup -->
 
-                   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                       <div class="modal-dialog">
-                           <div class="modal-content">
-                           <div class="modal-header">
-                               <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                           </div>
-                           <div class="modal-body">
-                               <form>
-                               <div class="mb-3">
-                                   <label for="recipient-name" class="col-form-label">Recipient:</label>
-                                   <input type="text" class="form-control" id="recipient-name">
-                               </div>
-                               <div class="mb-3">
-                                   <label for="message-text" class="col-form-label">Message:</label>
-                                   <textarea class="form-control" id="message-text"></textarea>
-                               </div>
-                               </form>
-                           </div>
-                           <div class="modal-footer">
-                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                               <button type="button" class="btn btn-primary">Send message</button>
-                           </div>
-                           </div>
-                       </div>
-                   </div>
+
 
            </div>
        </section>
@@ -1209,7 +1139,7 @@ $('input[name="deal_stage"]').change(function() {
  $file.on('change', function(event){
    var fileName = $file.val().split( '\\' ).pop();
    if( fileName ){
-     console.log($file)
+  //   console.log($file)
      $labelText.text(fileName);
      $labelRemove.show();
    }else{
