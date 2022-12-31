@@ -31,10 +31,15 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                         <th>@lang('app.status')</th>
                         <th>@lang('Invoice Genereted')</th>
                         <th>@lang('Payment Release')</th>
+                        <th>@lang('Quick Action')</th>
                         <th class="text-right pr-20">@lang('app.action')</th>
                     </x-slot>
+                    @php
+                      $milestones= App\Models\ProjectMilestone::where('project_id',$project->id)->get();
 
-                    @forelse($project->milestones as $key=>$item)
+                    @endphp
+
+                    @forelse($milestones as $key=>$item)
                         <tr id="row-{{ $item->id }}">
                             <td class="pl-20">{{ $key + 1 }}</td>
                             <td>
@@ -90,6 +95,56 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
                                 @endif
                             </td>
+                            <td>
+                              <?php
+                              $task= App\Models\Task::where('milestone_id',$item->id)->where('status','incomplete')->count();
+                              $complete_task= App\Models\Task::where('milestone_id',$item->id)->where('status','complete')->count();
+                              //dd($task);
+                               ?>
+                               <form class="" action="{{route('milestone-complete')}}" method="post">
+                                 @csrf
+                                   <input type="hidden" name="id" value="{{$item->id}}">
+                               @if($task > 0)
+                                <button type="submit" disabled class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete ({{$complete_task}}/{{$task}})</button>
+                                @else
+                                @if($item->status == 'incomplete')
+
+                                     <button type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
+                                  @else
+
+                                  @if($item->invoice_created == 0)
+                                <?php
+                                $milestone_count= App\Models\ProjectMilestone::where('project_id',$project->id)->count();
+                                $complete_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
+                                $invoice_generated= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_created',1)->count();
+                              //  dd($complete_milestone, $invoice_generated);
+                                 ?>
+                                 @if($invoice_generated == ($milestone_count -1) )
+                                 <a href="/projects/q&c/{{$project->id}}"   class="btn-success rounded f-14 p-2 flex-right openRightModal">Complete Q&C</a>
+                                 @else
+
+                                  <a href="#"   class="btn-success rounded f-14 p-2 flex-right create-invoice"  data-row-id="{{ $item->id }}">Generate Invoice</a>
+                                  @endif
+
+                                    @else
+                                      <input type="hidden" id="invoice_id" value="{{$item->invoice_id}}">
+                                      @php
+                                      $invoice= App\Models\Invoice::where('id',$item->invoice_id)->first();
+                                      @endphp
+                                      @if($invoice->status == 'unpaid')
+                                    <a href="#"  class="btn-warning rounded f-14 p-2 flex-right create-payment" data-row-id="{{ $item->invoice_id }}">Add Payment</a>
+                                    @else
+                                    <i class="fa fa-circle mr-1 text-dark-green f-10"></i>
+                                  Milestone Paid
+                                    @endif
+                                    @endif
+                             @endif
+
+                               @endif
+                                 </form>
+
+
+                            </td>
                             <td class="text-right pr-20">
                                 <div class="task_view">
                                     <a href="javascript:;" data-milestone-id="{{ $item->id }}"
@@ -143,6 +198,42 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 <!-- ROW END -->
 <input type="hidden" id="project_id"  value="{{$project->id}}">
 <input type="hidden" id="client_id"  value="{{$project->client_id}}">
+<script type="text/javascript">
+
+    let project_id = document.getElementById('project_id').value;
+    let client_id =document.getElementById('client_id').value;
+
+
+
+
+    $('body').on('click', '.create-invoice', function() {
+      //id = $(this).attr("id");
+        var milestone_id = $(this).data('row-id');
+    //  alert(milestone_id);
+      var url = `{{ route('invoices.create') }}`;
+
+      string = `?project_id=${project_id}&client_id=${client_id}&milestone_id=${milestone_id}`;
+      url += string;
+
+      window.open(url);
+    });
+    $('body').on('click', '.create-payment', function() {
+      //id = $(this).attr("id");
+        var invoice_id = $(this).data('row-id');
+    //  alert(milestone_id);
+      var url = `{{ route('payments.create') }}`;
+
+      string = `?invoice_id=${invoice_id}&default_client=${client_id}`;
+      url += string;
+
+      window.open(url);
+    });
+
+
+
+
+
+</script>
 
 <script>
     $('#add-project-milestone').click(function() {

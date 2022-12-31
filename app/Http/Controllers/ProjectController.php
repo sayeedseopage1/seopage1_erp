@@ -1895,6 +1895,58 @@ if ($pm_count < 2) {
       Toastr::success('Status Changed Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back();
     }
+    public function qc($id)
+    {
+        $this->project = Project::with('client', 'members', 'members.user', 'members.user.session', 'members.user.employeeDetail.designation', 'milestones', 'milestones.currency')
+            ->withTrashed()
+            ->findOrFail($id)
+            ->withCustomFields();
+
+        $memberIds = $this->project->members->pluck('user_id')->toArray();
+
+        $this->editPermission = user()->permission('edit_projects');
+        $this->editProjectMembersPermission = user()->permission('edit_project_members');
+
+        abort_403(!(
+            $this->editPermission == 'all'
+            || ($this->editPermission == 'added' && user()->id == $this->project->added_by)
+            || ($this->editPermission == 'owned' && user()->id == $this->project->client_id && in_array('client', user_roles()))
+            || ($this->editPermission == 'owned' && in_array(user()->id, $memberIds) && in_array('employee', user_roles()))
+            || ($this->editPermission == 'both' && (user()->id == $this->project->client_id || user()->id == $this->project->added_by))
+            || ($this->editPermission == 'both' && in_array(user()->id, $memberIds) && in_array('employee', user_roles()))
+        ));
+
+        $this->pageTitle = __('Project') . ' ' . __('Q&C Form');
+
+        if (!empty($this->project->getCustomFieldGroupsWithFields())) {
+            $this->fields = $this->project->getCustomFieldGroupsWithFields()->fields;
+        }
+
+        $this->clients = User::allClients();
+        $this->categories = ProjectCategory::all();
+        $this->currencies = Currency::all();
+        $this->teams = Team::all();
+        $this->projectStatus = ProjectStatusSetting::where('status', 'active')->get();
+
+        if ($this->editPermission == 'all' || $this->editProjectMembersPermission == 'all') {
+            $this->employees = User::allEmployees(null, null, ($this->editPermission == 'all' ? 'all' : null));
+        }
+        else{
+            $this->employees = '';
+        }
+
+        if (request()->ajax()) {
+            $html = view('projects.ajax.q&c', $this->data)->render();
+            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+        }
+
+
+        abort_403(user()->permission('edit_projects') == 'added' && $this->project->added_by != user()->id);
+        $this->view = 'projects.ajax.q&c';
+
+        return view('projects.create', $this->data);
+
+    }
 
 
 

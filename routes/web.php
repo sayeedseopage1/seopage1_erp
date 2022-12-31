@@ -1111,3 +1111,5 @@ Route::post('/deals/comments', [DealController::class, 'comments'])->name('post-
 
 //project incomplete
 Route::post('/acoounts/projects/incomplete', [ProjectController::class, 'InComplete'])->name('project-incomplete');
+// project Q&C
+Route::get('/projects/q&c/{id}', [ProjectController::class, 'qc']);

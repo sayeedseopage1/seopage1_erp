@@ -30,11 +30,11 @@
           </form>
         <hr>
         @else
-          @if($milestone->invoice_id != 'null')
+          @if($milestone->invoice_created == 0)
             <a href="#"  id="create-invoice"  class="btn-primary rounded f-14 p-2 flex-right">Generate Invoice</a>
           @else
           @php
-          $invoice= App\Models\Invoice::where('milestone_id',$milestone->id)->orderBy('id','desc')->first();
+          $invoice= App\Models\Invoice::where('id',$milestone->invoice_id)->first();
           @endphp
           @if($invoice != null)
           @if ($invoice->status == 'paid')

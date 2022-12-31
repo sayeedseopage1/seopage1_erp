@@ -256,7 +256,7 @@ class PaymentController extends AccountBaseController
           $project_update->status = 'finished';
           $project_update->completion_percent= 100;
           $project_update->save();
-          $users= User::where('role_id',1)->orWhere('role_id',4)->orWhere('role_id',6)->get();
+          $users= User::where('role_id',1)->orWhere('role_id',6)->get();
           foreach ($users as $user) {
 
 

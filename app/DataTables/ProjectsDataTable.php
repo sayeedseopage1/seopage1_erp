@@ -82,6 +82,7 @@ class ProjectsDataTable extends BaseDataTable
                             ' . trans('app.edit') . '
                         </a>';
                 }
+                
 
                 if ($this->viewGanttPermission == 'all' || ($this->viewGanttPermission == 'added' && user()->id == $row->added_by) || ($this->viewGanttPermission == 'owned' && user()->id == $row->client_id)) {
                     $action .= '<a class="dropdown-item" href="' . route('projects.show', $row->id) . '?tab=gantt' . '">

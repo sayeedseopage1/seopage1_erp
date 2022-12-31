@@ -8,47 +8,11 @@
     <!-- Drag and Drop CSS -->
 
 
-    <link rel='stylesheet' href="{{ asset('vendor/css/dragula.css') }}" type='text/css' />
-    <link rel='stylesheet' href="{{ asset('vendor/css/drag.css') }}" type='text/css' />
-    <link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-colorpicker.css') }}" />
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-    <style>
-        #colorpicker .form-group {
-            width: 87%;
-        }
-
-        .b-p-tasks {
-            min-height: 100px;
-        }
-
-    </style>
-    <style>
-
-      #draggable {
-
-          width: 150px;
-
-          height: 150px;
-
-          padding: 0.5em;
-
-      }
-
-      .inner-card{
-
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
-	/* box-shadow: 3px 3px 11px rgba(0, 0, 0, 0.2); */
-  max-width: 18%;
-	margin: 12px;
-	border-radius: 5px;
-      }
-    </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+<link rel="stylesheet" href="{{asset('kanban/custom/css/style.css')}}">
 @endpush
-  <link href="{{asset('kanban/assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
-<link href="{{asset('kanban/assets/css/app.min.css')}}" rel="stylesheet" type="text/css" id="app-style"/>
+
 
 @section('filter-section')
 
@@ -86,187 +50,1263 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-12">
+        <div class="boardsContainer" id="sp1">
+            <div class="outer-wrapper">
+
+            <div class="custom_row">
+
+
+                <!-- board  -->
+                <!-- Incomplete  -->
 
                 <div class="board">
 
-                    <?php
-                    $projectStatus = App\Models\ProjectStatusSetting::where('status','active')->orderBy('priority')->get();
-                     ?>
+                    <ul class="board_list">
+                        <li class="red" style="border-left: 19px solid #D21010;"> Incomplete</li>
+                        <li>0</li>
+                    </ul>
+                    <div id="sp1-scrollbar">
 
 
-                    <div class="row mb-3 ms-2">
-                      @foreach($projectStatus as $st)
-                      <?php
-                        $projects= App\Models\Project::where('status',$st->status_name)->get();
-                        $project_count= App\Models\Project::where('status',$st->status_name)->count();
-                      ?>
-                      <div class="col-md-3 inner-card p-2 todo-item">
-                        <li class="list-group-item text-center text-uppercase">
-                            <p class="mb-0 f-15 mr-3 text-dark-grey font-weight-bold text-uppercase"><svg class="svg-inline--fa fa-circle fa-w-16 mr-2 text-yellow" style="color:{{$st->color}};;" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path></svg>
-                              <!-- <i class="fa fa-circle mr-2 text-yellow" style="color: #d21010"></i> Font Awesome fontawesome.com -->{{$st->status_name}} ({{$project_count}})
-                </p>
-                        </li>
-                          <ul class="list-group  connectedSortable" id="todo-item-drop">
-                              <h1 class="" style="opacity:0;"></h1>
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
 
 
-                            @if(!empty($projects) && $projects->count())
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
 
-                              @foreach($projects as $key=>$value)
+                            </div>
+                        </div>
 
+                        <div class="dropzone" id="yellow">
 
-                              <div item-id="{{$value->id}}" class="card mb-0">
-                                         <div class="card-body p-3">
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
 
-                                             <h6 class="mt-3" style="font-size:12px;">
-                                                 <a href="/account/projects/{{$value->id}}" class="text-body">{{Str::limit($value->project_name,30)}}</a>
-                                             </h6>
-
-                                             <a class="text-dark" href="/account/clients/{{$value->client_id}}">
-                                             <p class="mb-0"  style="font-size:10px;">
-                                                <i class="fa-solid fa-person-military-pointing fa-x"></i>
-                                                 <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
-                                                 <span class="align-middle">{{$value->client_name->name}} (Client)</span>
-                                             </p>
-                                             </a>
-                                             <a class="text-dark" href="/account/employees/{{$value->pm_id}}">
-                                             <p class="mb-0"  style="font-size:10px;">
-                                                <i class="fa-solid fa-user"></i>
-                                                 <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
-                                                 <span class="align-middle">{{$value->pm_name->name}} (PM)</span>
-                                             </p>
-                                             </a>
-                                             <a class="text-dark" href="/account/employees/{{$value->pm_id}}">
-                                             <p class="mb-2">
-                                               <i class="fa-solid fa-people-roof"></i>
-
-                                                 <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
-                                                  <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
-                                                   <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
-                                                    <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
 
 
-                                             </p>
-                                             </a>
-                                             <span class="float badge bg-light text-black"><i class="fa-solid fa-clock"></i> {{($value->deadline)->toFormattedDateString()}}</span>
-                                             <span class="float-end badge bg-warning"><i class="fa-solid fa-badge-check"></i> Tasks: 0/3</span>
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
 
 
-                                         </div> <!-- end card-body -->
-                                     </div>
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
 
-                              @endforeach
+                            </div>
+                        </div>
 
-                            @endif
+                        <div class="dropzone" id="yellow">
 
-                          </ul>
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
 
-                      </div>
-                  {{--   <div class="col-md-3 inner-card p-2 inprogress-item">
-                            <li class="list-group-item text-center" style="color:red">IN PROGRESS</li>
-                          <ul class="list-group  connectedSortable" id="inprogress-item-drop">
-                              <h1 class="" style="opacity:0;"></h1>
-
-                            @if(!empty($inprogressItem) && $inprogressItem->count())
-
-                              @foreach($inprogressItem as $key=>$value)
-
-
-                              <div item-id="{{$value->id}}" class="card mb-0">
-                                         <div class="card-body p-3">
-                                             <small class="float-end text-muted">Apr 8, 2023</small>
-                                             <span class="badge bg-danger">Deadline</span>
-
-                                             <h6 class="mb-2">
-                                                 <a href="/account/projects/229" class="text-body">{{$value->title}}</a>
-                                             </h6>
-                                             <a class="text-dark" href="/account/clients/132">
-                                             <p class="mb-0">
-
-                                                 <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
-                                                 <span class="align-middle">Sailendrah Apannah (Client)</span>
-                                             </p>
-                                             </a>
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
 
 
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
 
 
 
+                    </div>
 
-                                         </div> <!-- end card-body -->
-                                     </div>
-
-                              @endforeach
-
-                            @endif
-
-                          </ul>
-
-                      </div>
-
-                        <div class="col-md-3 inner-card p-2 complete-item">
-
-                          <li class="list-group-item text-center" style="color:green">COMPLETED</li>
-                            <ul class="list-group shadow-lg connectedSortable" id="complete-item-drop">
-                              <h1 class="" style="opacity:0;"></h1>
-
-                              @if(!empty($completeItem) && $completeItem->count())
-
-                                @foreach($completeItem as $key=>$value)
-
-                                <div item-id="{{$value->id}}" class="card mb-0">
-                                           <div class="card-body p-3">
-                                               <small class="float-end text-muted">Apr 8, 2023</small>
-                                               <span class="badge bg-danger">Deadline</span>
-
-                                               <h6 class="mb-2">
-                                                   <a href="http://127.0.0.1:8000/account/projects/229" class="text-body">{{$value->title}}</a>
-                                               </h6>
-                                               <a class="text-dark" href="http://127.0.0.1:8000/account/clients/132">
-                                               <p class="mb-0">
-
-                                                   <img src="{{asset('img/avatar.png')}}"  class="avatar-xs rounded-circle me-1 ">
-                                                   <span class="align-middle">Sailendrah Apannah (Client)</span>
-                                               </p>
-                                               </a>
+                </div>
 
 
+                <!-- board  -->
+                <!-- To Do  -->
+
+                <div class="board">
+                    <ul class="board_list">
+                        <li class="blue">To Do</li>
+                        <li>0</li>
+                    </ul>
+
+                    <div id="sp1-scrollbar">
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
 
 
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
 
 
-                                           </div> <!-- end card-body -->
-                                       </div>
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
 
 
-                                @endforeach
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
 
-                              @endif
+                            </div>
+                        </div>
 
-                            </ul>
+                        <div class="dropzone" id="yellow">
 
-                        </div> --}}
-                      @endforeach
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
 
 
                     </div>
 
 
-                </div> <!-- end .board-->
-            </div> <!-- end col -->
+                </div>
+
+                <!-- board  -->
+                <!-- Doing  -->
+
+                <div class="board">
+                    <ul class="board_list">
+                        <li class="yellows">Doing</li>
+                        <li>0</li>
+                    </ul>
+
+                    <div id="sp1-scrollbar">
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+                <!-- board  -->
+                <!-- Under Review -->
+
+                <div class="board">
+                    <ul class="board_list">
+                        <li>Under Review</li>
+                        <li>0</li>
+                    </ul>
+
+                    <div id="sp1-scrollbar">
+
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+
+                <!-- Board -->
+                <!-- Completed -->
+
+                <div class="board">
+                    <ul class="board_list">
+                        <li>Completed</li>
+                        <li>0</li>
+                    </ul>
+                    <div id="sp1-scrollbar">
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+
+                <!-- Board -->
+                <!-- Overdue -->
+
+                <div class="board">
+                    <ul class="board_list">
+                        <li>Overdue</li>
+                        <li>0</li>
+                    </ul>
+
+                    <div id="sp1-scrollbar">
+
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="dropzone" id="yellow">
+
+                            <div class="kanbanCard yellow">
+                                <div class="content">
+                                    <ul class="task_list">
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                        <!-- <li><span>#749</span></li> -->
+                                        <li> <a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li>
+                                    </ul>
+
+                                    <ul class="task_list" id="projects_sp1_padding">
+                                        <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem ipsum dolor sit amet curn...</a> </li>
+                                        <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li>
+                                    </ul>
+
+
+                                    <ul class="task_list">
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                        <li><a href="#" title="Sadik"> <img src="{{asset('kanban/custom/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                        <li><span title="Sadik, kamal, Riyaz" >12+</span></li>
+                                        <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                        <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                        <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            </div>
+
+            <!-- bar   -->
+
+            <div class="pseduo-track"></div>
         </div>
+
+
     </div>
     <!-- CONTENT WRAPPER END -->
-    <script src="{{asset('kanban/assets/js/vendor.min.js')}}"></script>
-    <script src="{{asset('kanban/assets/js/app.min.js')}}"></script>
 
-    <!-- dragula js-->
-    <script src="{{asset('kanban/assets/js/vendor/dragula.min.js')}}"></script>
-
-    <!-- demo js -->
-    <script src="{{asset('kanban/assets/js/ui/component.dragula.js')}}"></script>
 @endsection
 
 @push('scripts')
