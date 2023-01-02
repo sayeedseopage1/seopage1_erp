@@ -31,7 +31,18 @@
         <hr>
         @else
           @if($milestone->invoice_created == 0)
-            <a href="#"  id="create-invoice"  class="btn-primary rounded f-14 p-2 flex-right">Generate Invoice</a>
+          <?php
+          $milestone_count= App\Models\ProjectMilestone::where('project_id',$milestone->project_id)->count();
+          $complete_milestone= App\Models\ProjectMilestone::where('project_id',$milestone->project_id)->where('status','complete')->count();
+          $invoice_generated= App\Models\ProjectMilestone::where('project_id',$milestone->project_id)->where('status','complete')->where('invoice_created',1)->count();
+        //  dd($complete_milestone, $invoice_generated);
+           ?>
+           @if($invoice_generated == ($milestone_count -1)  && $milestone->qc_status == 0)
+           <a href="/projects/q&c/{{$milestone->project_id}}"   class="btn-success rounded f-14 p-2 flex-right">Complete Q&C</a>
+           @else
+             <a href="#"   class="btn-primary rounded f-14 p-2 flex-right create-invoice"  data-row-id="{{ $milestone->id }}">Generate Invoice</a>
+          
+            @endif
           @else
           @php
           $invoice= App\Models\Invoice::where('id',$milestone->invoice_id)->first();
@@ -147,7 +158,7 @@
     let client_id =document.getElementById('client_id').value;
     let milestone_id =document.getElementById('milestone_id').value;
     //console.log(milestone_id);
-    document.querySelector('#create-invoice').addEventListener('click', () => {
+    document.querySelector('create-invoice').addEventListener('click', () => {
       var url = `{{ route('invoices.create') }}`;
 
       string = `?project_id=${project_id}&client_id=${client_id}&milestone_id=${milestone_id}`;

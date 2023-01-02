@@ -277,12 +277,10 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                   </div>
 
 
-                <x-form-actions>
-                    <x-forms.button-primary id="save-project-form" class="mr-3" icon="check">@lang('app.save')
-                    </x-forms.button-primary>
+                  <button  class="btn-primary rounded f-14 p-2 mr-3 ml-3" type="submit" >Submit</button>
+
                     <x-forms.button-cancel :link="route('projects.index')" class="border-0">@lang('app.cancel')
                     </x-forms.button-cancel>
-                </x-form-actions>
 
             </div>
         </x-form>

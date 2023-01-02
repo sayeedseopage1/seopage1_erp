@@ -3,7 +3,7 @@
 @push('datatable-styles')
     @include('sections.daterange_css')
 @endpush
- 
+
 @push('styles')
     <style>
         .h-200 {
@@ -140,8 +140,8 @@
 @section('content')
 
     <!-- CONTENT WRAPPER START -->
-    <div class="px-4 py-0 py-lg-5  border-top-0 admin-dashboard">
-        <div class="row">
+   <div class="px-4 py-0 py-lg-5  border-top-0 admin-dashboard">
+      {{--  <div class="row">
             @if (global_setting()->system_update == 1)
                 @php
                     $updateVersionInfo = \Froiden\Envato\Functions\EnvatoUpdate::updateVersionInfo();
@@ -167,7 +167,7 @@
             @endif
 
             @include('dashboard.cron')
-        </div>
+        </div> --}} 
 
         @include($view)
     </div>

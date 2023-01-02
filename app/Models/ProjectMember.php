@@ -71,5 +71,9 @@ class ProjectMember extends Pivot
         return ProjectMember::where('project_id', $projectId)
             ->where('user_id', $userId)->first();
     }
+    public function usr()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
 }

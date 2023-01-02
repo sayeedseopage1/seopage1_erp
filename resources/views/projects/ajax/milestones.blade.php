@@ -119,8 +119,11 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 $invoice_generated= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_created',1)->count();
                               //  dd($complete_milestone, $invoice_generated);
                                  ?>
-                                 @if($invoice_generated == ($milestone_count -1) )
+
+                                 @if($invoice_generated == ($milestone_count -1) && $item->qc_status == 0)
+
                                  <a href="/projects/q&c/{{$project->id}}"   class="btn-success rounded f-14 p-2 flex-right openRightModal">Complete Q&C</a>
+                                
                                  @else
 
                                   <a href="#"   class="btn-success rounded f-14 p-2 flex-right create-invoice"  data-row-id="{{ $item->id }}">Generate Invoice</a>
