@@ -123,7 +123,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                  @if($invoice_generated == ($milestone_count -1) && $item->qc_status == 0)
 
                                  <a href="/projects/q&c/{{$project->id}}"   class="btn-success rounded f-14 p-2 flex-right openRightModal">Complete Q&C</a>
-                                
+
                                  @else
 
                                   <a href="#"   class="btn-success rounded f-14 p-2 flex-right create-invoice"  data-row-id="{{ $item->id }}">Generate Invoice</a>
@@ -135,7 +135,18 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                       $invoice= App\Models\Invoice::where('id',$item->invoice_id)->first();
                                       @endphp
                                       @if($invoice->status == 'unpaid')
+                                      @php
+                                      $invoice_count= App\Models\Invoice::where('project_id',$project->id)->where('status','paid')->count();
+                                      $milestone_count= App\Models\ProjectMilestone::where('project_id',$project->id)->count();
+                                      $complete_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
+                                      $invoice_generated= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_created',1)->count();
+                                      //dd($milestone_count,$invoice_count);
+                                      @endphp
+                                      @if($milestone_count - $invoice_count == 1 && $item->project_completion_status == 0)
+                                        <a href="/projects/project-completion/{{$project->id}}"  class="btn-success rounded f-14 p-2 flex-right openRightModal" >Project Completion Form</a>
+                                      @else
                                     <a href="#"  class="btn-warning rounded f-14 p-2 flex-right create-payment" data-row-id="{{ $item->invoice_id }}">Add Payment</a>
+                                    @endif
                                     @else
                                     <i class="fa fa-circle mr-1 text-dark-green f-10"></i>
                                   Milestone Paid
