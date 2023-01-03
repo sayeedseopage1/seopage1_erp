@@ -1990,12 +1990,17 @@ if ($pm_count < 2) {
 
     }
     public function ProjectCompletionSubmit(Request $request)
-    {
+     {
       $validated = $request->validate([
           'qc_protocol' => 'required',
-          'login_info' => 'required',
+          'login' => 'required',
+          'password' => 'required',
+          'screenshot' => 'required',
           'google_link' => 'required',
           'rating' => 'required',
+          'comments'=> 'required',
+          'comments2'=> 'required',
+          'comments3'=> 'required',
           'requirements' => 'required',
           'price' => 'required',
           'niche' => 'required',
@@ -2003,8 +2008,36 @@ if ($pm_count < 2) {
           'notify' => 'required',
           'actual_link' => 'required',
       ]);
-      dd($request);
+      //dd($request);
       $milestone= new ProjectSubmission();
+      $milestone->qc_protocol= $request->qc_protocol;
+      $milestone->milestone_id= $request->milestone_id;
+
+      $project= ProjectMilestone::where('id',$request->milestone_id)->first();
+      $milestone->project_id= $project->project_id;
+      $milestone->login= $request->login;
+      $milestone->password= $request->password;
+      $milestone->screenshot= $request->screenshot;
+      $milestone->google_link= $request->google_link;
+      $milestone->rating= $request->rating;
+      $milestone->comments= $request->comments;
+      $milestone->comments3= $request->comments3;
+      $milestone->comments2= $request->comments2;
+      $milestone->requirements= $request->requirements;
+      $milestone->price= $request->price;
+      $milestone->niche= $request->niche;
+      $milestone->dummy_link= $request->dummy_link;
+      $milestone->notify= $request-> notify;
+      $milestone->actual_link= $request->actual_link;
+      $milestone->save();
+      $milestone_update= ProjectMilestone::find($request->milestone_id);
+      $milestone_update->project_completion_status = 1;
+      $milestone_update->save();
+      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+
+        return redirect('/account/projects/'.$milestone->project_id.'?tab=milestones');
+
+
 
     }
 

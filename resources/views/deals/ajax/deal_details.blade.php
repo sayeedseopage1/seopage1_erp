@@ -29,7 +29,97 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+
+
 <style>
+/**
+* FilePond Custom Styles
+*/
+.uploadFile {
+width: 30%;
+border: none;
+color: #4D9AF8;
+font-size: 18px;
+line-height: 23px;
+overflow: hidden;
+padding: 2px 10px 4px 10px;
+position: relative;
+resize: none;
+background: transparent;
+}
+
+.uploadFile input[type="file"] {
+cursor: pointer !important;
+display: block;
+font-size: 999px;
+filter: alpha(opacity=0);
+min-height: 100%;
+min-width: 100%;
+opacity: 0;
+position: absolute;
+right: 0px;
+text-align: right;
+top: 0px;
+z-index: 1;
+}
+
+
+
+/* Custom input file   */
+
+.sp1custom_files {
+width: 62%;
+display: flex;
+float: left;
+justify-content: flex-end;
+align-items: center;
+}
+
+.sp1custom_files i {
+color: #1D82F5;
+font-size: 18px;
+cursor: pointer;
+}
+
+#files-area {
+width: 100%;
+margin: 0 auto;
+}
+.file-block{
+border-radius: 10px;
+background-color: rgba(144, 163, 203, 0.2);
+margin: 5px;
+color: initial;
+display: inline-flex;
+
+}
+
+.file-block span.name {
+padding-right: 10px;
+width: fit-content;
+display: flex;
+font-size: 13px;
+align-items: center;
+}
+.file-delete {
+display: flex;
+width: 25px;
+background-color: transparent;
+font-size: 20px;
+justify-content: center;
+margin-right: 3px;
+cursor: pointer;
+font-weight: 600;
+color: #1D89F6;
+}
+.file-delete:hover{
+background-color: rgba(144, 163, 203, 0.2);
+border-radius: 10px;  }
+
+.file-delete span{
+transform: rotate(45deg);
+}
+
     .custom_container{
 
     }
@@ -76,7 +166,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
         color: #41b4e1;
     }
     .details-seopage1 p {
-        font-size: 16px;
+        font-size: 14px;
         font-weight: normal;
         font-stretch: normal;
         font-style: normal;
@@ -132,7 +222,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
     }
 
     .nopadding {
-        padding: 0 !important;
+        padding: 3px !important;
         margin: 0 !important;
         width: 20%;
     }
@@ -217,27 +307,31 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
         align-content: space-between;
     }
     .sbinfo ul {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-content: flex-start;
-    }
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-content: flex-start;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
     .sbinfo ul li {
-        list-style: none;
-        font-family: Poppins;
-        font-size: 12px;
-        font-weight: 300;
-        font-style: normal;
-        line-height: 1.6;
-        text-align: left;
-        color: #1d82f5;
-        overflow: visible;
-        display: inline-block;
-        width: 112px;
-    }
+      list-style: none;
+      font-family: Poppins;
+      font-size: 11px;
+      font-weight: 300;
+      font-style: normal;
+      line-height: 1.6;
+      color: #1d82f5;
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      padding-right: 5px;
+}
 
 
-    .sbinfo ul li:nth-child(2) {
+    /* .sbinfo ul li:nth-child(2) {
         padding-right: 0px;
         padding-left: 5px;
         width: 60px;
@@ -246,11 +340,11 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
         padding-right: 0px;
         padding-left: 5px;
         width: 60px;
-    }
+    } */
 
     .custom_scroling_seo {
         width: 100%;
-        height: 160px;
+        max-height: 270px;
         overflow: auto;
     }
 
@@ -291,7 +385,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
         padding: 11px;
         border-radius: 7px;
         background: #F3F9FE;
-        width: 86%;
+        width: 90%;
         margin: 0 auto;
     }
 
@@ -363,7 +457,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
         padding-bottom: 5px;
     }
     .seopage1_attach a {
-        font-size: 10px;
+        font-size: 9px;
         font-family: 'Poppins';
     }
 
@@ -371,6 +465,12 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
     display: none !important;
 }
 
+
+.sp1custom_files i {
+    color: #1D82F5;
+    font-size: 18px;
+    cursor: pointer;
+}
     /* custom container */
 
     .custom_container{
@@ -425,9 +525,9 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
             margin: 5px 0;
         }
         .nopadding {
-            padding: 0 !important;
+            padding: 3px !important;
             margin: 0 !important;
-            width: 100%;
+            width: 20%;
         }
         .comments-section {
             margin-bottom: 30px;
@@ -453,6 +553,13 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
             align-items: center;
         }
     }
+
+
+.sp1custom_files i {
+    color: #1D82F5;
+    font-size: 18px;
+    cursor: pointer;
+}
 
 
 </style>
@@ -565,23 +672,43 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                                </div>
 
 
-                               <div class="dealstage_comments_box mt-4">
+                               <div class="dealstage_comments_box mt-2">
 
                                    <div class="comments-section">
                                        <div class="row">
 
                                            <div class="comment-add">
                                                <div class="col-md-12">
-                                                   <form action="{{route('post-comment')}}" method="POST">
-                                                     @csrf
-                                                     <input type="hidden" name="deal_stage_id" value="0">
-                                                     <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
+                                                 <form action="{{route('post-comment')}}" method="POST">
+                                                   @csrf
+                                                   <input type="hidden" name="deal_stage_id" value="0">
+                                                   <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
                                                        <div class="form-floating mb-3">
                                                            <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
 
                                                        </div>
-
                                                        <div class="wrapper">
+                                                         <div id="files-area">
+                                                             <span id="filesList">
+                                                                 <span id="files-names"></span>
+                                                             </span>
+                                                         </div>
+
+                                                        <div class="sp1custom_files">
+                                                            <label for="attachment">
+                                                                <i class="fa fa-paperclip"></i>
+
+                                                            </label>
+                                                            <input type="file"  accept="" id="attachment" name="attach[]" style="visibility: hidden; position: absolute;" multiple/>
+
+                                                        </div>
+
+
+
+                                                        <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                    </div>
+
+                                                       <!-- <div class="wrapper">
                                                            <input type="file" id="file-input" name="attach[]" multiple>
                                                            <label for="file-input">
 
@@ -591,7 +718,9 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                                                            <i class="fa fa-times-circle remove"></i>
                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                         </div>
+                                                         </div> -->
+
+
 
                                                    </form>
                                                </div>
@@ -665,7 +794,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                                </div>
 
-                               <div class="dealstage_comments_box mt-4">
+                               <div class="dealstage_comments_box mt-2">
 
                                    <div class="comments-section">
                                        <div class="row">
@@ -680,8 +809,28 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                                                            <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
 
                                                        </div>
-
                                                        <div class="wrapper">
+                                                         <div id="files-area">
+                                                             <span id="filesList">
+                                                                 <span id="files-names"></span>
+                                                             </span>
+                                                         </div>
+
+                                                        <div class="sp1custom_files">
+                                                            <label for="attachment">
+                                                                <i class="fa fa-paperclip"></i>
+
+                                                            </label>
+                                                            <input type="file"  accept="" id="attachment" name="attach[]" style="visibility: hidden; position: absolute;" multiple/>
+
+                                                        </div>
+
+
+
+                                                        <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                    </div>
+
+                                                       <!-- <div class="wrapper">
                                                            <input type="file" id="file-input" name="attach[]" multiple>
                                                            <label for="file-input">
 
@@ -691,7 +840,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                                                            <i class="fa fa-times-circle remove"></i>
                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                         </div>
+                                                         </div> -->
 
 
 
@@ -760,7 +909,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                                   @endforeach
                                </div>
 
-                               <div class="dealstage_comments_box mt-4">
+                               <div class="dealstage_comments_box mt-2">
 
                                    <div class="comments-section">
                                        <div class="row">
@@ -775,8 +924,28 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                                                            <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
 
                                                        </div>
-
                                                        <div class="wrapper">
+                                                         <div id="files-area">
+                                                             <span id="filesList">
+                                                                 <span id="files-names"></span>
+                                                             </span>
+                                                         </div>
+
+                                                        <div class="sp1custom_files">
+                                                            <label for="attachment">
+                                                                <i class="fa fa-paperclip"></i>
+
+                                                            </label>
+                                                            <input type="file"  accept="" id="attachment" name="attach[]" style="visibility: hidden; position: absolute;" multiple/>
+
+                                                        </div>
+
+
+
+                                                        <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                    </div>
+
+                                                       <!-- <div class="wrapper">
                                                            <input type="file" id="file-input" name="attach[]" multiple>
                                                            <label for="file-input">
 
@@ -786,7 +955,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                                                            <i class="fa fa-times-circle remove"></i>
                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                         </div>
+                                                         </div> -->
 
 
 
@@ -860,7 +1029,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                                </div>
 
 
-                               <div class="dealstage_comments_box mt-4">
+                               <div class="dealstage_comments_box mt-2">
 
                                    <div class="comments-section">
                                        <div class="row">
@@ -875,8 +1044,28 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                                                            <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
 
                                                        </div>
-
                                                        <div class="wrapper">
+                                                         <div id="files-area">
+                                                             <span id="filesList">
+                                                                 <span id="files-names"></span>
+                                                             </span>
+                                                         </div>
+
+                                                        <div class="sp1custom_files">
+                                                            <label for="attachment">
+                                                                <i class="fa fa-paperclip"></i>
+
+                                                            </label>
+                                                            <input type="file"  accept="" id="attachment" name="attach[]" style="visibility: hidden; position: absolute;" multiple/>
+
+                                                        </div>
+
+
+
+                                                        <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                    </div>
+
+                                                       <!-- <div class="wrapper">
                                                            <input type="file" id="file-input" name="attach[]" multiple>
                                                            <label for="file-input">
 
@@ -886,7 +1075,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                                                            <i class="fa fa-times-circle remove"></i>
                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                         </div>
+                                                         </div> -->
 
 
 
@@ -960,7 +1149,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                                </div>
 
-                               <div class="dealstage_comments_box mt-4">
+                               <div class="dealstage_comments_box mt-2">
 
                                    <div class="comments-section">
                                        <div class="row">
@@ -975,8 +1164,25 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                                                            <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
 
                                                        </div>
-
                                                        <div class="wrapper">
+                                                         <div id="files-area">
+                                                             <span id="filesList">
+                                                                 <span id="files-names"></span>
+                                                             </span>
+                                                         </div>
+                                                        <div class="sp1custom_files">
+                                                            <label for="attachment">
+                                                                <i class="fa fa-paperclip"></i>
+
+                                                            </label>
+                                                            <input type="file"  accept="" id="attachment" name="attach[]" style="visibility: hidden; position: absolute;" multiple/>
+
+                                                        </div>
+
+                                                        <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                    </div>
+
+                                                       <!-- <div class="wrapper">
                                                            <input type="file" id="file-input" name="attach[]" multiple>
                                                            <label for="file-input">
 
@@ -986,7 +1192,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
                                                            <i class="fa fa-times-circle remove"></i>
                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                         </div>
+                                                         </div> -->
 
 
 
@@ -1126,35 +1332,52 @@ $('input[name="deal_stage"]').change(function() {
    </script>
 
 
- <script>
-   $('document').ready(function(){
 
- var $file = $('#file-input'),
-     $label = $file.next('label'),
-     $labelText = $label.find('span'),
-     $labelRemove = $('i.remove'),
-     labelDefault = $labelText.text();
 
- // on file change
- $file.on('change', function(event){
-   var fileName = $file.val().split( '\\' ).pop();
-   if( fileName ){
-  //   console.log($file)
-     $labelText.text(fileName);
-     $labelRemove.show();
-   }else{
-     $labelText.text(labelDefault);
-     $labelRemove.hide();
-   }
- });
 
- // Remove file
- $labelRemove.on('click', function(event){
-   $file.val("");
-   $labelText.text(labelDefault);
-   $labelRemove.hide();
-   console.log($file)
- });
- })
- </script>
+
+ <!-- Permet de manipuler les fichiers de l'input file  -->
+
+<script>
+    const dt = new DataTransfer();
+
+$("#attachment").on('change', function(e){
+	for(var i = 0; i < this.files.length; i++){
+		let fileBloc = $('<span/>', {class: 'file-block'}),
+			 fileName = $('<span/>', {class: 'name', text: this.files.item(i).name});
+		fileBloc.append('<span class="file-delete"><span>+</span></span>')
+			.append(fileName);
+		$("#filesList > #files-names").append(fileBloc);
+	};
+
+
+	// Ajout des fichiers dans l'objet DataTransfer
+	for (let file of this.files) {
+		dt.items.add(file);
+	}
+	// Mise à jour des fichiers de l'input file après ajout
+	this.files = dt.files;
+
+	// EventListener pour le bouton de suppression créé
+	$('span.file-delete').click(function(){
+		let name = $(this).next('span.name').text();
+		// Supprimer l'affichage du nom de fichier
+		$(this).parent().remove();
+		for(let i = 0; i < dt.items.length; i++){
+			// Correspondance du fichier et du nom
+			if(name === dt.items[i].getAsFile().name){
+				// Suppression du fichier dans
+				dt.items.remove(i);
+				continue;
+			}
+		}
+	});
+});
+</script>
+
+
+
+
+ <
+
 @endpush

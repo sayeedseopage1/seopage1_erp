@@ -10,7 +10,7 @@ use App\DataTables\BaseDataTable;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\ProjectMilestone;
 class InvoicesDataTable extends BaseDataTable
 {
     protected $firstInvoice;
@@ -109,11 +109,28 @@ class InvoicesDataTable extends BaseDataTable
                         $this->addPaymentPermission == 'all'
                         || ($this->addPaymentPermission == 'added' && $row->added_by == user()->id)
                     ) {
+                      $invoice_id= Invoice::where('id',$row->id)->first();
+                      $milestone_id= ProjectMilestone::where('id',$invoice_id->milestone_id)->first();
+                      $invoice_count= Invoice::where('project_id',$invoice_id->project_id)->where('status','paid')->count();
+                      $milestone_count= ProjectMilestone::where('project_id',$invoice_id->project_id)->count();
+                      $complete_milestone= ProjectMilestone::where('project_id',$invoice_id->project_id)->where('status','complete')->count();
+                      $invoice_generated= ProjectMilestone::where('project_id',$invoice_id->project_id)->where('status','complete')->where('invoice_created',1)->count();
+                      if($milestone_count - $invoice_count == 1 && $milestone_id->project_completion_status == 0)
+                      {
+
+                        $action .= '<a class="dropdown-item openRightModal"
+                        data-redirect-url="'.route('invoices.index') .'" href="'. url('/projects/project-completion').'/'.$invoice_id->milestone_id. '" >
+                                    <i class="fa fa-plus mr-2"></i>
+                                    ' . trans('Project Completion Form') . '
+                                </a>';
+                      }else {
                         $action .= '<a class="dropdown-item openRightModal"
                         data-redirect-url="'.route('invoices.index') .'" href="' . route('payments.create') . '?invoice_id=' . $row->id . '&default_client='.$row->client_id.'" >
                                     <i class="fa fa-plus mr-2"></i>
                                     ' . trans('modules.payments.addPayment') . '
                                 </a>';
+                      }
+
                     }
                 }
             }

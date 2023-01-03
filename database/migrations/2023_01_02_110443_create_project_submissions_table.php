@@ -18,9 +18,15 @@ return new class extends Migration
             $table->integer('milestone_id');
             $table->integer('project_id');
             $table->integer('qc_protocol')->default(0);
-            $table->longText('login_info')->nulalble();
+            $table->string('login')->nullable();
+            $table->string('password')->nullable();
+            $table->string('screenshot')->nullable();
             $table->text('google_link')->nullable();
             $table->integer('rating')->default(5);
+            $table->longText('comments')->nullable();
+            $table->longText('comments2')->nullable();
+            $table->longText('comments3')->nullable();
+
             $table->integer('requirements')->default(0);
             $table->integer('price')->default(0);
             $table->longText('niche')->nullable();
