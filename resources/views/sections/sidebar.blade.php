@@ -203,19 +203,22 @@
                               </x-sub-menu-item>
                           @endif
                           <?php
-                          $won_deals_project= App\Models\Project::where('pm_id',Auth::id())->where('project_status','pending')->count();
-                          $won_deals=App\Models\Project::where('project_status','pending')->count();
+                          // $won_deals_project= App\Models\Project::where('pm_id',Auth::id())->where('project_status','pending')->count();
+                          // $won_deals=App\Models\Project::where('project_status','pending')->count();
+                          //
 
                            ?>
                             @if (in_array('contracts', user_modules()) && $sidebarUserPermissions['view_contract'] != 5 && $sidebarUserPermissions['view_contract'] != 'none')
                               <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
-                              @if(Auth::user()->role_id == 4)
+                            {{-- @if(Auth::user()->role_id == 4)
                                   <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals ('.$won_deals_project.')'" />
                               @elseif(Auth::user()->role_id == 1)
                                   <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals ('.$won_deals.')'" />
                                   @else
                                     <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
                               @endif
+                              --}}
+                                <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
                             @endif
                             @if (in_array('projects', user_modules()) && $sidebarUserPermissions['view_projects'] != 5 && $sidebarUserPermissions['view_projects'] != 'none')
                                 <x-sub-menu-item :link="route('projects.index')" :text="__('app.menu.projects')" />
