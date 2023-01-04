@@ -398,10 +398,10 @@ transform: rotate(45deg);
         float: right;
     }
 
-    .comments-section .btn-default:hover {
+    /* .comments-section .btn-default:hover {
         background-color: #111;
         color: #fff;
-    }
+    } */
 
     .comment_btn {
         display: inline-block;
@@ -561,6 +561,67 @@ transform: rotate(45deg);
     cursor: pointer;
 }
 
+
+
+/**
+* File  Custom Styles
+*/
+
+.btn-file {
+   position: relative;
+   overflow: hidden;
+}
+
+.btn-file input[type=file] {
+   position: absolute;
+   top: 0;
+   right: 0;
+   min-width: 100%;
+   min-height: 100%;
+   font-size: 100px;
+   text-align: right;
+   filter: alpha(opacity=0);
+   opacity: 0;
+   outline: none;
+   background: transparent;
+   cursor: pointer;
+   display: block;
+}
+
+.btn-file {
+   position: relative;
+   overflow: hidden;
+   margin: -6px 0;
+}
+
+.fileList li {
+   font-size: 12px;
+   color: #6a6a6a;
+   list-style-type: decimal;
+   font-weight: normal;
+   background: #eee;
+   margin: 3px 0;
+   border-radius: 5px;
+   padding: 3px 7px;
+   list-style-position: inside;
+   text-align: left;
+}
+
+.removeFile {
+   text-decoration: none;
+   font-weight: 700;
+   color: #ed5f5f !important;
+   float: right;
+}
+
+ul.fileList {
+   margin: 0;
+   padding: 0;
+   width: 100%;
+}
+.btn-file i:hover {
+   background: #F3F9FE !important;
+}
 
 </style>
 @endpush
@@ -1164,23 +1225,22 @@ transform: rotate(45deg);
                                                            <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
 
                                                        </div>
+
                                                        <div class="wrapper">
-                                                         <div id="files-area">
-                                                             <span id="filesList">
-                                                                 <span id="files-names"></span>
+
+                                                         <div class="files" id="files1">
+
+                                                             <span class="btn btn-default btn-file">
+                                                                 <i class="fa fa-paperclip"></i>  <input type="file" name="files1" multiple />
                                                              </span>
+                                                             <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+
+                                                             <br />
+                                                             <ul class="fileList"></ul>
+
                                                          </div>
-                                                        <div class="sp1custom_files">
-                                                            <label for="attachment">
-                                                                <i class="fa fa-paperclip"></i>
 
-                                                            </label>
-                                                            <input type="file"  accept="" id="attachment" name="attach[]" style="visibility: hidden; position: absolute;" multiple/>
-
-                                                        </div>
-
-                                                        <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                    </div>
+                                                       </div>
 
                                                        <!-- <div class="wrapper">
                                                            <input type="file" id="file-input" name="attach[]" multiple>
@@ -1335,45 +1395,105 @@ $('input[name="deal_stage"]').change(function() {
 
 
 
+ <!--  multiple attachfile upload   -->
 
- <!-- Permet de manipuler les fichiers de l'input file  -->
+ <script>
+     $.fn.fileUploader = function (filesToUpload, sectionIdentifier) {
+ var fileIdCounter = 0;
 
-<script>
-    const dt = new DataTransfer();
+ this.closest(".files").change(function (evt) {
+     var output = [];
 
-$("#attachment").on('change', function(e){
-	for(var i = 0; i < this.files.length; i++){
-		let fileBloc = $('<span/>', {class: 'file-block'}),
-			 fileName = $('<span/>', {class: 'name', text: this.files.item(i).name});
-		fileBloc.append('<span class="file-delete"><span>+</span></span>')
-			.append(fileName);
-		$("#filesList > #files-names").append(fileBloc);
-	};
+     for (var i = 0; i < evt.target.files.length; i++) {
+         fileIdCounter++;
+         var file = evt.target.files[i];
+         var fileId = sectionIdentifier + fileIdCounter;
 
+         filesToUpload.push({
+             id: fileId,
+             file: file
+         });
 
-	// Ajout des fichiers dans l'objet DataTransfer
-	for (let file of this.files) {
-		dt.items.add(file);
-	}
-	// Mise à jour des fichiers de l'input file après ajout
-	this.files = dt.files;
+         var removeLink = "<a class=\"removeFile\" href=\"#\" data-fileid=\"" + fileId + "\"> X </a>";
+         // file size file.size, " bytes. &nbsp; &nbsp; ",
+         output.push("<li><strong>", escape(file.name), "</strong> ",  removeLink, "</li> ");
+     };
 
-	// EventListener pour le bouton de suppression créé
-	$('span.file-delete').click(function(){
-		let name = $(this).next('span.name').text();
-		// Supprimer l'affichage du nom de fichier
-		$(this).parent().remove();
-		for(let i = 0; i < dt.items.length; i++){
-			// Correspondance du fichier et du nom
-			if(name === dt.items[i].getAsFile().name){
-				// Suppression du fichier dans
-				dt.items.remove(i);
-				continue;
-			}
-		}
-	});
-});
-</script>
+     $(this).children(".fileList")
+         .append(output.join(""));
+
+     //reset the input to null
+     evt.target.value = null;
+ });
+
+ $(this).on("click", ".removeFile", function (e) {
+     e.preventDefault();
+
+     var fileId = $(this).parent().children("a").data("fileid");
+
+     // loop through the files array
+     for (var i = 0; i < filesToUpload.length; ++i) {
+         if (filesToUpload[i].id === fileId)
+             filesToUpload.splice(i, 1);
+     }
+
+     $(this).parent().remove();
+ });
+
+ this.clear = function () {
+     for (var i = 0; i < filesToUpload.length; ++i) {
+         if (filesToUpload[i].id.indexOf(sectionIdentifier) >= 0)
+             filesToUpload.splice(i, 1);
+     }
+
+     $(this).children(".fileList").empty();
+ }
+
+ return this;
+ };
+
+ // file list
+
+ (function () {
+ var filesToUpload = [];
+
+ var files1Uploader = $("#files1").fileUploader(filesToUpload, "files1");
+ var files2Uploader = $("#files2").fileUploader(filesToUpload, "files2");
+ var files3Uploader = $("#files3").fileUploader(filesToUpload, "files3");
+ var files3Uploader = $("#files4").fileUploader(filesToUpload, "files4");
+ var files3Uploader = $("#files5").fileUploader(filesToUpload, "files5");
+
+ $("#uploadBtn").click(function (e) {
+     e.preventDefault();
+
+     var formData = new FormData();
+
+     for (var i = 0, len = filesToUpload.length; i < len; i++) {
+         formData.append("files", filesToUpload[i].file);
+     }
+
+     $.ajax({
+         url: "",
+         data: formData,
+         processData: false,
+         contentType: false,
+         type: "POST",
+         success: function (data) {
+             alert("DONE");
+
+             files1Uploader.clear();
+             files2Uploader.clear();
+             files3Uploader.clear();
+             files4Uploader.clear();
+             files5Uploader.clear();
+         },
+         error: function (data) {
+             alert("ERROR - " + data.responseText);
+         }
+     });
+ });
+ })()
+ </script>
 
 
 

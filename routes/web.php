@@ -1119,3 +1119,5 @@ Route::post('/acoounts/project-completion/store', [ProjectController::class, 'Pr
 
 //add project niche
 Route::post('/projects/niche-store', [ProjectController::class, 'storeNiche'])->name('add-niche');
+Route::get('/projects/niches', [ProjectController::class, 'Niche'])->name('get-niche');
+Route::delete('/projects/delete-niche/{id}', [ProjectController::class, 'deleteNiche']);

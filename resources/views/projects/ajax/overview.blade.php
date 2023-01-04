@@ -10,7 +10,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
     <div class="project-left w-100 py-0 py-lg-5 py-md-0">
         <div class="d-flex align-content-center flex-lg-row-reverse mb-4">
             @if (!$project->trashed())
-            <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
+          {{-- <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
                 @if ($editProjectPermission == 'all' || ($editProjectPermission == 'added' && $project->added_by == user()->id) || ($project->project_admin == user()->id))
                 <select class="form-control select-picker change-status height-35">
                     @foreach ($projectStatus as $status)
@@ -27,7 +27,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     {{ __('app.finished') }} @endif
                 </div>
                 @endif
-            </div>
+            </div> --}} 
 
             <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
                 <div class="dropdown">

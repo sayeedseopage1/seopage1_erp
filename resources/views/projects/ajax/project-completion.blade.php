@@ -303,6 +303,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
                     <div class="col-md-12 col-lg-12 mt-5">
                       <div class="row">
+
                         <div class="col-md-6 col-lg-6 mt-1">
 
                           <label class="" for="">Submit The Niche/Category of The Project
@@ -322,31 +323,32 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                           </div> -->
 
                           <x-forms.input-group>
-                              <select class="form-control select-picker" name="niche" id="niche"
-                                  data-live-search="true" data-size="8" validation="@error('niche') is-invalid @enderror">
-                                  <option value="">--</option>
+                              <select class="form-control select-picker" name="niche" id="option_value"
+                                  data-live-search="true" data-size="8">
 
 
-                                          <option selected value="1">Category 1
-                                          </option>
+                                   @foreach($categories as $category)
+                                  <option value="{{$category->id}}">{{$category->category_name}}</option>
+
+
+                                  @endforeach
+
+
 
                               </select>
 
 
                                   <x-slot name="append">
                                       <button  type="button"
-                                          class="btn btn-outline-secondary border-grey" data-toggle="modal" data-target="#nicheaddmodal">@lang('app.add')</button>
+                                          class="btn btn-outline-secondary border-grey" data-toggle="modal" data-target="#nicheaddmodal" type="button">@lang('app.add')</button>
                                   </x-slot>
-                                  @include('projects.modals.addnichemodal')
+
 
                           </x-forms.input-group>
+
                         </div>
 
-                            @error('niche')
-                            <div class="mt-3">
-                              <div class="alert alert-danger">{{ $message }}</div>
-                              </div>
-                            @enderror
+
                         </div>
                         <div class="col-lg-6 col-md-6 mt-1">
 
@@ -423,7 +425,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
                   <br>
 
-                  <button  class="btn-primary rounded f-14 p-2 mr-3 ml-3" id="save-project-form" type="submit" >Submit</button>
+                  <button  class="btn-primary rounded f-14 p-2 mr-3 ml-3"  type="submit" >Submit</button>
 
                     <x-forms.button-cancel :link="route('projects.index')" class="border-0">@lang('app.cancel')
                     </x-forms.button-cancel>
@@ -435,94 +437,136 @@ $createPublicProjectPermission = user()->permission('create_public_project');
     </div>
 </div>
 
+  @include('projects.modals.addnichemodal')
+    @include('projects.modals.deletenichemodal')
+@push('scripts')
+<script type="text/javascript">
+$(document).ready(function() {
+fetchniche();
+function fetchniche()
+{
+  $.ajax({
+    type: "GET",
+    url: "{{route('get-niche')}}",
 
-<script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
-<script>
-    $(document).ready(function() {
+    dataType: "json",
+    success: function (response){
+    //  console.log(response.milestones);
+      let spans= '';
+      response.categories.forEach((item)=> {
 
-
-
-
-
-        quillImageLoad('#login_info');
-          quillImageLoad('#niche');
-
-
-
-
-
-
-
-
-
-        $('#save-project-form').click(function() {
-
-            var note2 = document.getElementById('login_info').children[0].innerHTML;
-            document.getElementById('login_info-text').value = note2;
-            var note3 = document.getElementById('niche').children[0].innerHTML;
-            document.getElementById('niche-text').value = note3;
-
-
-
-
-        });
-
-
-
-
-
-
-
-
-
-        init(RIGHT_MODAL);
-
-        $(document).on('click','.add_niche',function(e){
-
-        e.preventDefault();
-        //console.log("test");
-        var data= {
-          'title': $('.category_name').val(),
-
-
-
-        }
-        //console.log(data);
-        $.ajaxSetup({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-        });
-        $.ajax({
-          type: "POST",
-          url: "{{route('add-niche')}}",
-          data: data,
-          dataType: "json",
-          success: function (response){
-            if (response.status == 400) {
-              $('#saveform_errList').html("");
-              $('#saveform_errList').addClass('alert alert-danger');
-              $.each(response.errors, function (key, err_values){
-                $('#saveform_errList').append('<li>'+err_values+'</li>');
-              });
-            }
-            else {
-                $('#saveform_errList').html("");
-                $('#success_message').addClass('alert alert-success');
-                $('#success_message').text(response.message);
-                $('#nicheaddmodal').modal('hide');
-                $('#nicheaddmodal').find('input').val("");
-
-                  fetchniche();
-
-            }
-          }
-        });
+        spans += `<tr>
+          <td>${item.id}</td>
+          <td>${item.category_name}</td>
+          <td class="text-right">
+            <button type="button" class="btn-secondary rounded f-14 p-2 delete_niche" value="${item.id}" >
+        <svg class="svg-inline--fa fa-trash fa-w-14 mr-1" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+          <path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"></path></svg><!-- <i class="fa fa-trash mr-1"></i> Font Awesome fontawesome.com -->
+    Delete
+</button></td>
+        </tr>`
       });
 
+      document.querySelector('#niche_value').innerHTML= spans;
+    
 
-    });
+    }
+  });
+}
+$(document).on('click','.delete_niche',function(e){
+  e.preventDefault();
+  var category_id= $(this).val();
+  //  console.log(category_id);
+  $('#delete_niche_id').val(category_id);
+
+  $('#deleteniche').modal('show');
+});
+$(document).on('click','.delete_niche_btn',function(e){
+  e.preventDefault();
+
+  var category_id= $('#delete_niche_id').val();
+  //console.log(category_id);
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+  $.ajax({
+    type: "DELETE",
+    url: "/projects/delete-niche/"+category_id,
+    success: function (response){
+      //console.log(response);
+      Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'Category Deleted Successfully',
+  showConfirmButton: false,
+  timer: 1500
+})
+
+
+        $('#success_message').addClass('alert alert-danger');
+      $('#success_message').text(response.message);
+      $('#deleteniche').modal('hide');
+        $('delete_niche_btn').text("Yes Delete");
+        fetchniche();
+    }
+
+  });
+
+});
+$(document).on('click','.add_niche',function(e){
+  //alert('success');
+e.preventDefault();
+$('#editmilestone').modal('show');
+//console.log("test");
+var data= {
+  'category_name': $('.category_name').val(),
 
 
 
+}
+//console.log(data);
+$.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }
+});
+$.ajax({
+  type: "POST",
+  url: "{{route('add-niche')}}",
+  data: data,
+  dataType: "json",
+  success: function (response){
+    if (response.status == 400) {
+      $('#saveform_errList').html("");
+      $('#saveform_errList').addClass('alert alert-danger');
+      $.each(response.errors, function (key, err_values){
+        $('#saveform_errList').append('<li>'+err_values+'</li>');
+      });
+    }
+    else {
+      Swal.fire({
+  position: 'top-end',
+  icon: 'success',
+  title: 'Category Added Successfully',
+  showConfirmButton: false,
+  timer: 1500
+})
+        $('#saveform_errList').html("");
+        $('#success_message').addClass('alert alert-success');
+        $('#success_message').text(response.message);
+        $('#nicheaddmodal').modal('hide');
+        $('#nicheaddmodal').find('input').val("");
+
+          fetchniche();
+
+    }
+  }
+});
+});
+});
 </script>
+
+
+@endpush

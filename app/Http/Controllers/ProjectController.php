@@ -1964,7 +1964,7 @@ if ($pm_count < 2) {
 
 
         $this->clients = User::allClients();
-        $this->categories = ProjectCategory::all();
+        $this->categories = ProjectNiche::all();
         $this->currencies = Currency::all();
         $this->teams = Team::all();
         $this->projectStatus = ProjectStatusSetting::where('status', 'active')->get();
@@ -2004,7 +2004,7 @@ if ($pm_count < 2) {
           'comments3'=> 'required',
           'requirements' => 'required',
           'price' => 'required',
-          'niche' => 'required',
+
           'dummy_link' => 'required',
           'notify' => 'required',
           'actual_link' => 'required',
@@ -2041,6 +2041,15 @@ if ($pm_count < 2) {
 
 
     }
+    public function Niche()
+    {
+        //dd($id);
+        $categories = ProjectNiche::all();
+        //dd($categories);
+        return response()->json([
+            'categories' => $categories,
+        ]);
+    }
     public function storeNiche(Request $request)
     {
         //  dd($request);
@@ -2058,12 +2067,22 @@ if ($pm_count < 2) {
             $category = new ProjectNiche();
             $category->category_name = $request->category_name;
 
-            $milestone->save();
+            $category->save();
             return response()->json([
                 'status' => 200,
-                'message' => 'Milestone Added Successfully',
+                'message' => 'Category Added Successfully',
             ]);
         }
+    }
+    public function deleteNiche($id)
+    {
+    $milestone= ProjectNiche::find($id);
+    $milestone->delete();
+    return response()->json([
+        'status' => 200,
+        'message' => 'Category Deleted Successfully',
+    ]);
+
     }
 
 
