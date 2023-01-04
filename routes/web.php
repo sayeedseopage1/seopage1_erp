@@ -1116,3 +1116,6 @@ Route::get('/projects/q&c/{id}', [ProjectController::class, 'qc']);
 //project completion form
 Route::get('/projects/project-completion/{id}', [ProjectController::class, 'ProjectCompletion']);
 Route::post('/acoounts/project-completion/store', [ProjectController::class, 'ProjectCompletionSubmit'])->name('project-completion');
+
+//add project niche
+Route::post('/projects/niche-store', [ProjectController::class, 'storeNiche'])->name('add-niche');

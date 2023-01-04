@@ -68,8 +68,8 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                     <div class="d-flex justify-content-center">
                       @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
                       @if($contract->deal->status == 'pending')
-                      <button class="btn btn-danger mr-3"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
-                        @include('contracts.modals.dealdenymodal')
+                    {{--  <button class="btn btn-danger mr-3"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
+                        @include('contracts.modals.dealdenymodal') --}}
                       <a href="/account/projects/{{$project_id->project_id}}/edit" class="btn btn-success">Accept <i class="fa-solid fa-check"></i></a>
 
                       @elseif($contract->deal->status == 'Accepted')

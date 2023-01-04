@@ -72,6 +72,7 @@ use Notification;
 use App\Notifications\ProjectDisputeNotification;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectSubmission;
+use App\Models\ProjectNiche;
 
 
 class ProjectController extends AccountBaseController
@@ -2039,6 +2040,30 @@ if ($pm_count < 2) {
 
 
 
+    }
+    public function storeNiche(Request $request)
+    {
+        //  dd($request);
+        $validator = Validator::make($request->all(), [
+            'category_name' => 'required',
+
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'errors' => $validator->messages(),
+            ]);
+        } else {
+            $category = new ProjectNiche();
+            $category->category_name = $request->category_name;
+
+            $milestone->save();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Milestone Added Successfully',
+            ]);
+        }
     }
 
 

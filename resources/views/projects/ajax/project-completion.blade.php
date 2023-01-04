@@ -142,28 +142,31 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <div class="row">
                         <div class="col-md-4 col-lg-4">
                             <input type="text" class="form-control height-35 f-14 @error('login') is-invalid @enderror" name="login" value="" placeholder="Enter email/username">
+                            @error('login')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
                         </div>
-                        @error('login')
-                        <div class="mt-3">
-                          <div class="alert alert-danger">{{ $message }}</div>
-                          </div>
-                        @enderror
+
                         <div class="col-md-4 col-lg-4">
                             <input type="text" class="form-control height-35 f-14 @error('password') is-invalid @enderror" name="password" value="" placeholder="Enter Password">
+                            @error('password')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
                         </div>
-                        @error('password')
-                        <div class="mt-3">
-                          <div class="alert alert-danger">{{ $message }}</div>
-                          </div>
-                        @enderror
+
                         <div class="col-md-4 col-lg-4">
                             <input type="text" class="form-control height-35 f-14 @error('screenshot') is-invalid @enderror" name="screenshot" value="" placeholder="Enter Verification Link. (Screenshot)">
+                            @error('screenshot')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
                         </div>
-                        @error('screenshot')
-                        <div class="mt-3">
-                          <div class="alert alert-danger">{{ $message }}</div>
-                          </div>
-                        @enderror
+
                       </div>
 
                     </div>
@@ -298,39 +301,74 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
 
 
-
                     <div class="col-md-12 col-lg-12 mt-5">
-                      <label class="" for="">Submit The Niche/Category of The Project
+                      <div class="row">
+                        <div class="col-md-6 col-lg-6 mt-1">
 
-                        <sup class="f-14 mr-1">*</sup>
-                      </label>
-                      <select class="form-control height-35 f-14 @error('niche') is-invalid @enderror mt-1" name="niche">
-                        <option value="1">Category 1</option>
-                        <option value="2">Category 2</option>
-                        <option value="3">Category 3</option>
+                          <label class="" for="">Submit The Niche/Category of The Project
 
-                      </select>
+                            <sup class="f-14 mr-1">*</sup>
+                          </label>
+                          <div class="input-group w-100">
+                          <!-- <select class="form-control height-35 f-14 @error('niche') is-invalid @enderror" name="niche">
+                            <option value="1">Category 1</option>
+                            <option value="2">Category 2</option>
+                            <option value="3">Category 3</option>
 
-                        @error('niche')
+                          </select> -->
+
+                          <!-- <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#milestoneaddmodal" type="button">Add</button>
+                          </div> -->
+
+                          <x-forms.input-group>
+                              <select class="form-control select-picker" name="niche" id="niche"
+                                  data-live-search="true" data-size="8" validation="@error('niche') is-invalid @enderror">
+                                  <option value="">--</option>
+
+
+                                          <option selected value="1">Category 1
+                                          </option>
+
+                              </select>
+
+
+                                  <x-slot name="append">
+                                      <button  type="button"
+                                          class="btn btn-outline-secondary border-grey" data-toggle="modal" data-target="#nicheaddmodal">@lang('app.add')</button>
+                                  </x-slot>
+                                  @include('projects.modals.addnichemodal')
+
+                          </x-forms.input-group>
+                        </div>
+
+                            @error('niche')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
+                        </div>
+                        <div class="col-lg-6 col-md-6 mt-1">
+
+                            <label for="">Submit The Dummy/Test Site Link <sup class="f-14 mr-1">*</sup></label>
+                              <input type="text" class="form-control height-35 f-14 @error('dummy_link') is-invalid @enderror" name="dummy_link" value="">
+
+
+
+                        </div>
+                        @error('dummy_link')
                         <div class="mt-3">
                           <div class="alert alert-danger">{{ $message }}</div>
                           </div>
                         @enderror
-                    </div>
-                    <div class="col-lg-12 col-md-12 mt-3">
-
-                        <label for="">Submit The Dummy/Test Site Link <sup class="f-14 mr-1">*</sup></label>
-                          <input type="text" class="form-control height-35 f-14 @error('dummy_link') is-invalid @enderror" name="dummy_link" value="">
 
 
-
-                    </div>
-                    @error('dummy_link')
-                    <div class="mt-3">
-                      <div class="alert alert-danger">{{ $message }}</div>
                       </div>
-                    @enderror
-                    <div class="col-lg-12 col-md-12 mt-3">
+
+                    </div>
+
+
+                    <div class="col-lg-12 col-md-12 mt-5">
                       <label for="">Did You Notify the Client About Dummy Site Removal After 2-Weeks?
 
                         <sup class="f-14 mr-1">*</sup>
@@ -438,6 +476,51 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 
         init(RIGHT_MODAL);
+
+        $(document).on('click','.add_niche',function(e){
+
+        e.preventDefault();
+        //console.log("test");
+        var data= {
+          'title': $('.category_name').val(),
+
+
+
+        }
+        //console.log(data);
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+        $.ajax({
+          type: "POST",
+          url: "{{route('add-niche')}}",
+          data: data,
+          dataType: "json",
+          success: function (response){
+            if (response.status == 400) {
+              $('#saveform_errList').html("");
+              $('#saveform_errList').addClass('alert alert-danger');
+              $.each(response.errors, function (key, err_values){
+                $('#saveform_errList').append('<li>'+err_values+'</li>');
+              });
+            }
+            else {
+                $('#saveform_errList').html("");
+                $('#success_message').addClass('alert alert-success');
+                $('#success_message').text(response.message);
+                $('#nicheaddmodal').modal('hide');
+                $('#nicheaddmodal').find('input').val("");
+
+                  fetchniche();
+
+            }
+          }
+        });
+      });
+
+
     });
 
 
