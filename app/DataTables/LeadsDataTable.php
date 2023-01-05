@@ -172,32 +172,37 @@ class LeadsDataTable extends BaseDataTable
             $datatables->addColumn('won_lost', function ($row)  {
               //dd($row);
               $won_lost= '';
-              $leadids= DealStage::all();
+              if($row->deal_status == 0){
+                $won_lost= "Not Applicable";
+              }else {
+                $leadids= DealStage::all();
 
-              foreach ($leadids as $leadid) {
-                  $nleadid= DealStage::where('lead_id',$row->id)->first();
-                  if ($nleadid == null) {
-                      $won_lost ="Not Applicable";
-                  }else {
-                    if($row->id == $leadid->lead_id)
-                    {
-                      if($leadid->deal_status == 'pending' && $leadid->won_lost == 'Yes')
+                foreach ($leadids as $leadid) {
+                    $nleadid= DealStage::where('lead_id',$row->id)->first();
+                    if ($nleadid == null) {
+                        $won_lost ="Not Applicable";
+                    }else {
+                      if($row->id == $leadid->lead_id)
                       {
-                        $won_lost= '<badge class="badge badge-success">Won</badge>';
+                        if($leadid->deal_status == 'pending' && $leadid->won_lost == 'Yes')
+                        {
+                          $won_lost= '<badge class="badge badge-success">Won</badge>';
 
 
-                      }elseif($leadid->deal_status == 'Lost'){
-                        $won_lost= '<badge class="badge badge-danger">Lost</badge>';
+                        }elseif($leadid->deal_status == 'Lost'){
+                          $won_lost= '<badge class="badge badge-danger">Lost</badge>';
 
-                    }elseif(($leadid->deal_status == 'pending' && $leadid->won_lost == 'No')|| ($leadid->deal_status == 'pending' && $leadid->won_lost == null)) {
-                      $won_lost = '<badge class="badge badge-warning">No Activity Yet</badge>';
+                      }elseif(($leadid->deal_status == 'pending' && $leadid->won_lost == 'No')|| ($leadid->deal_status == 'pending' && $leadid->won_lost == null)) {
+                        $won_lost = '<badge class="badge badge-warning">No Activity Yet</badge>';
+
+                      }
 
                     }
+                    }
 
-                  }
-                  }
-
+                }
               }
+
 
 
               return $won_lost;

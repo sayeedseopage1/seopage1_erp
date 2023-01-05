@@ -967,7 +967,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
               </div>
             </div>
             @endif
-            @if($project->project_challenge != null)
+          {{--  @if($project->project_challenge != null)
                 <div class="col-md-12 col-lg-12 mb-3">
 
                       <div class="form-group my-3">
@@ -981,16 +981,24 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
                   <br>
                 </div>
-                @else
-                <div class="col-md-12 col-lg-12 mb-3">
+                @else --}}
+                <div class="col-md-6 col-lg-6 mb-3">
 
-                      <div class="form-group my-3">
-                          <x-forms.label class="my-3" fieldId="project_challenge"
-                              :fieldLabel="__('Write down the Challenges of the Project')" fieldRequired="true">
-                          </x-forms.label>
-                          <div id="project_challenge"></div>
-                          <textarea name="project_challenge" id="project_challenge-text"
-                              class="d-none"></textarea>
+
+                      <label class="f-14 text-dark-grey mb-12 mt-3" data-label="" for="added_by">Project Challenge
+                        <sup class="f-14 mr-0 mt-3">*</sup>
+                      </label>
+                      <div class="form-group mb-0">
+                        <div class="dropdown bootstrap-select form-control select-picker show">
+                          <select class="form-control select-picker" name="project_challenge" data-size="8" tabindex="null">
+                            <option selected value="No Challenge">No Challenge</option>
+                            <option  value="Has Challenge But We Can Do It">Has Challenge But We Can Do It</option>
+                            <option  value="Has Challenge But We Cannot Do It">Has Challenge But We Cannot Do It</option>
+
+                          </select>
+
+                        </div>
+
                       </div>
 
                   <br>
@@ -999,7 +1007,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 
 
-                @endif
+              {{-- @endif --}}
 
 
                   </div>
@@ -1147,7 +1155,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
         });
 
         quillImageLoad('#project_summary');
-        quillImageLoad('#project_challenge');
+      
 
         const dp1 = datepicker('#start_date', {
             position: 'bl',
@@ -1185,8 +1193,6 @@ $createPublicProjectPermission = user()->permission('create_public_project');
         $('#save-project-form').click(function() {
             var note = document.getElementById('project_summary').children[0].innerHTML;
             document.getElementById('project_summary-text').value = note;
-            var note2 = document.getElementById('project_challenge').children[0].innerHTML;
-            document.getElementById('project_challenge-text').value = note2;
 
             const url = "{{ route('projects.update', $project->id) }}";
 
