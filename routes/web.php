@@ -1121,3 +1121,7 @@ Route::post('/acoounts/project-completion/store', [ProjectController::class, 'Pr
 Route::post('/projects/niche-store', [ProjectController::class, 'storeNiche'])->name('add-niche');
 Route::get('/projects/niches', [ProjectController::class, 'Niche'])->name('get-niche');
 Route::delete('/projects/delete-niche/{id}', [ProjectController::class, 'deleteNiche']);
+
+//top-management project accept/deny
+Route::get('/projects/accept/{id}', [ProjectController::class, 'ProjectAccept'])->name('project-accept');
+Route::get('/projects/deny/{id}', [ProjectController::class, 'ProjectDeny'])->name('project-deny');

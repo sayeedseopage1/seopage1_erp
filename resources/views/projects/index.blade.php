@@ -6,6 +6,7 @@
 
 @section('filter-section')
 <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+
     <x-filters.filter-box>
         <div
             class="select-box {{ !in_array('client', user_roles()) ? 'd-flex' : 'd-none' }} py-2  pr-2 border-right-grey border-right-grey-sm-0">
@@ -30,8 +31,8 @@
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.status')</p>
             <div class="select-status">
                 <select class="form-control select-picker" name="status" id="status" data-live-search="true" data-size="8">
-                    <option selected value="in progress">@lang('In progress')</option>
-                    <option {{ request('status') == 'all' ? 'selected' : '' }} value="all">@lang('app.all')</option>
+                    <option selected value="all">@lang('All')</option>
+                    <!-- <option {{ request('status') == 'all' ? 'selected' : '' }} value="all">@lang('app.all')</option> -->
                     <option {{ request('status') == 'overdue' ? 'selected' : '' }} value="overdue">@lang('app.overdue')
                     </option>
                     <?php $p_status= App\Models\ProjectStatusSetting::where('status_name','!=','not started')->get() ?>

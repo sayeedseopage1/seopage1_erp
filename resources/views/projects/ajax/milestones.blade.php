@@ -14,7 +14,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
           <div class="alert alert-success show mb-2" role="alert"> {{Session::get('success')}}</div>
 
           @endif
-     @if (($addProjectMilestonePermission == 'all' || $project->project_admin == user()->id) && !$project->trashed())
+     @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
             <x-forms.button-primary icon="plus" id="add-project-milestone" class="type-btn mb-3">
                 @lang('modules.projects.createMilestone')
             </x-forms.button-primary>
@@ -164,6 +164,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 <div class="task_view">
                                     <a href="javascript:;" data-milestone-id="{{ $item->id }}"
                                         class="taskView milestone-detail text-darkest-grey f-w-500">@lang('app.view')</a>
+                                          @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
                                     <div class="dropdown">
                                         <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle"
                                             type="link" id="dropdownMenuLink-{{ $item->id }}" data-toggle="dropdown"
@@ -173,24 +174,25 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                         <div class="dropdown-menu dropdown-menu-right"
                                             aria-labelledby="dropdownMenuLink-{{ $item->id }}" tabindex="0">
 
-                                            @if ($editProjectMilestonePermission == 'all' || ($editProjectMilestonePermission == 'added' && user()->id == $item->added_by))
+
                                                 <a class="dropdown-item edit-milestone" href="javascript:;"
                                                     data-row-id="{{ $item->id }}">
                                                     <i class="fa fa-edit mr-2"></i>
                                                     @lang('app.edit')
                                                 </a>
-                                            @endif
 
-                                            @if ($deleteProjectMilestonePermission == 'all' || ($deleteProjectMilestonePermission == 'added' && user()->id == $item->added_by))
+
+
                                                 <a class="dropdown-item delete-row" href="javascript:;"
                                                     data-row-id="{{ $item->id }}">
                                                     <i class="fa fa-trash mr-2"></i>
                                                     @lang('app.delete')
                                                 </a>
-                                            @endif
+
 
                                         </div>
                                     </div>
+                                      @endif
                                 </div>
 
                             </td>
@@ -276,6 +278,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
         $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
         $.ajaxModal(MODAL_XL, url);
     });
+
 
     $('.delete-row').click(function() {
 

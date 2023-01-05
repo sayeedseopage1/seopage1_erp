@@ -102,26 +102,13 @@ class HomeController extends Controller
       $client->client_email= $request->email;
       $client->client_phone= $request->client_phone;
       $client->client_whatsapp= $request->client_whatsapp;
-      $client->other_platform= $request->other_platform;
+      $client->client_skype= $request->client_skype;
+      $client->client_messenger= $request->client_messenger;
+      $client->client_telegram= $request->client_telegram;
+      $client->client_imo= $request->client_imo;
       $client->message= $request->message;
       $client->timezone= $request->timezone;
       $client->checklist= $request->check;
-      // for($count = 0; $count < count($position); $count++)
-      //           {
-      //               $insert = array(
-      //                   'code_insert' => $code_insert[$count],
-      //                   'quality'     => $quality[$count]
-      //               );
-      //               $insert_data[] = $insert;
-      //
-      //               $tool = array(
-      //                   'position'    => $position[$count],
-      //                   'code_tool'   => $code_tool[$count],
-      //                   'insert_id'   => $insert_data[$count]
-      //
-      //               );
-      //               $tool_data[] = $tool;
-      //           }
 
       $days = $request->day;
       $from = $request->from;

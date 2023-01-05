@@ -361,7 +361,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         </div>
                     </div>
 
-                    @if ($editPermission == 'all')
+                {{--   @if ($editPermission == 'all')
                         <div class="col-lg-3 col-md-6">
                             <x-forms.select  fieldId="added_by" :fieldLabel="__('app.added').' '.__('app.by')"
                                 fieldName="added_by">
@@ -375,7 +375,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                 @endforeach
                             </x-forms.select>
                         </div>
-                    @endif
+                    @endif --}}
                     <div class="col-lg-3 col-md-3">
 
                     </div>
@@ -991,9 +991,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <div class="form-group mb-0">
                         <div class="dropdown bootstrap-select form-control select-picker show">
                           <select class="form-control select-picker" name="project_challenge" data-size="8" tabindex="null">
+                            @if($project->project_challenge != null)
+                            <option selected value="{{$project->project_challenge}}">{{$project->project_challenge}}</option>
+                            @else
                             <option selected value="No Challenge">No Challenge</option>
                             <option  value="Has Challenge But We Can Do It">Has Challenge But We Can Do It</option>
                             <option  value="Has Challenge But We Cannot Do It">Has Challenge But We Cannot Do It</option>
+                            @endif
 
                           </select>
 
@@ -1155,7 +1159,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
         });
 
         quillImageLoad('#project_summary');
-      
+
 
         const dp1 = datepicker('#start_date', {
             position: 'bl',

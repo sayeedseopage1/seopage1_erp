@@ -155,7 +155,7 @@ class DealsDataTable extends BaseDataTable
                 return '<div class="media align-items-center">
 
                          <div class="media-body">
-                        <h5 class="mb-0 f-13 text-darkest-grey"><a href="/account/deals/'.$row->id .'?tab=summary">' . ucfirst($row->short_code) . '</a></h5>
+                        <h5 class="mb-0 f-13 text-darkest-grey"><a href="/account/deals/'.$row->id .'?tab=deal_details">' . ucfirst($row->short_code) . '</a></h5>
 
                          </div>
                       </div>';

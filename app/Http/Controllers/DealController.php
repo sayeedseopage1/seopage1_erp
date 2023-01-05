@@ -319,7 +319,9 @@ class DealController extends AccountBaseController
         $tab = request('tab');
 
         switch ($tab) {
-
+          case 'deal_details':
+              $this->view = 'deals.ajax.deal_details';
+              break;
             case 'files':
                 $this->view = 'deals.ajax.files';
                 break;

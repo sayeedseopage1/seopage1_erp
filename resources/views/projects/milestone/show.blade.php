@@ -13,11 +13,14 @@
   $task= App\Models\Task::where('milestone_id',$milestone->id)->where('status','incomplete')->count();
   //dd($task);
    ?>
+
    @if($task > 0)
     <h6 class="text-center text-red">You can't complete this milestone because you have some pending tasks.</h6>
     @endif
     <x-cards.data>
+
       @if($milestone->status == 'incomplete')
+      @if(Auth::user()->role_id == 4 || Auth::user()->role_id ==1)
       <form class="" action="{{route('milestone-complete')}}" method="post">
         @csrf
           <input type="hidden" name="id" value="{{$milestone->id}}">
@@ -26,6 +29,7 @@
            <button type="submit" disabled class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
            @else
         <button type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
+        @endif
         @endif
           </form>
         <hr>
@@ -41,7 +45,7 @@
            <a href="/projects/q&c/{{$milestone->project_id}}"   class="btn-success rounded f-14 p-2 flex-right">Complete Q&C</a>
            @else
              <a href="#"   class="btn-primary rounded f-14 p-2 flex-right create-invoice"  data-row-id="{{ $milestone->id }}">Generate Invoice</a>
-          
+
             @endif
           @else
           @php
@@ -64,6 +68,7 @@
 
 
       @endif
+
 
 
         <x-cards.data-row :label="__('modules.projects.milestoneTitle')" :value="$milestone->milestone_title" />

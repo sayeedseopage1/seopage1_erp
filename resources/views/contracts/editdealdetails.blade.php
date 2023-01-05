@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 <style>
 .milestone-wrapper{
-  height: auto !important; 
+  height: auto !important;
 }
 </style>
     <!-- FILTER START -->
@@ -438,8 +438,9 @@
           success: function (response){
           //  console.log(response.milestones);
             let spans= '';
+          
             response.milestones.forEach((item)=> {
-              spans += `<span class="badge badge-light mr-2">${item.milestone_title} <button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
+              spans += `<span class="badge badge-light mr-2"><a href="javascript:;" data-milestone-id="${item.id}" class="taskView milestone-detail text-darkest-grey f-w-500">${item.milestone_title} </a><button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
             });
 
             document.querySelector('#milestone_value').innerHTML= spans;
@@ -604,6 +605,14 @@
     });
 
     });
+    $('body').on('click', '.milestone-detail', function() {
+        var id = $(this).data('milestone-id');
+        var url = "{{ route('milestones.show', ':id') }}";
+        url = url.replace(':id', id);
+        $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+        $.ajaxModal(MODAL_XL, url);
+    });
+
 
     </script>
 

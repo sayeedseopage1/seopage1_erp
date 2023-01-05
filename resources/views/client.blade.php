@@ -32,6 +32,21 @@
           	width: 100% !important;
           }
     </style>
+    <style>
+      .iti {
+          position: relative;
+          display: inline-block;
+          width: 100%;
+      }
+
+      .ourfields .input-group-text {
+        width: 130px;
+    }
+    .input-group.ourfields input {
+    height: 38px !important;
+    margin-left: -2px !important;
+}
+    </style>
 
 
 </head>
@@ -83,7 +98,7 @@
                             <span id="valid-msg" class="hide">Valid</span>
                             <span id="error-msg" class="hide">Invalid number</span>
                         </div>
-                        <div class="col-md-12">
+                      {{--  <div class="col-md-12">
                             <label for="inputEmail4" class="form-label">Your WhatsApp ID (For future communication)!</label> <br>
                             <input  class="form-control mybtns" id="phone2" name="client_whatsapp" type="tel" required>
                             <span id="valid-msg" class="hide">Valid</span>
@@ -97,6 +112,40 @@
                             </div>
 
 
+                        </div> --}}
+                        <div class="col-md-12">
+                          <div class="input-group ourfields">
+                              <span class="input-group-text" id="inputGroup-sizing-default">WhatsApp  No :</span>
+                              <input type="number" name="client_whatsapp" class="form-control" aria-label="Sizing example input" placeholder="Enter Your Whats App Number" aria-describedby="inputGroup-sizing-default">
+                          </div>
+                      </div>
+
+                        <div class="col-md-12">
+                            <div class="input-group ourfields">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Skype ID:</span>
+                                <input type="text" name="client_skype" class="form-control" aria-label="Sizing example input" placeholder="Enter Your Skype Id" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="input-group ourfields">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Telegram ID:</span>
+                                <input type="text" name="client_telegram" class="form-control" aria-label="Sizing example input" placeholder="Enter Your Telegram Id" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="input-group ourfields">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Messanger ID:</span>
+                                <input type="text" name="client_messenger" class="form-control" aria-label="Sizing example input" placeholder="Enter Your Messanger Id" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="input-group ourfields">
+                                <span class="input-group-text" id="inputGroup-sizing-default">IMO No:</span>
+                                <input type="number" name="client_imo" class="form-control" aria-label="Sizing example input" placeholder="Enter Your IMO Number" aria-describedby="inputGroup-sizing-default">
+                            </div>
                         </div>
 
                         <div class="col-md-12 pb-4">

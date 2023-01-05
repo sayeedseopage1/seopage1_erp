@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Currency;
 use App\Models\Deal;
 use App\Models\User;
+use Auth;
 class ProjectsDataTable extends BaseDataTable
 {
 
@@ -68,6 +69,11 @@ class ProjectsDataTable extends BaseDataTable
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
 
                 $action .= '<a href="' . route('projects.show', [$row->id]) . '" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
+                if ($row->status == 'under review' && Auth::user()->role_id == 1) {
+                    $action .= '<a href="' . route('project-accept', [$row->id]) . '" class="dropdown-item"><i class="fa fa-check-circle mr-2"></i>' . __('Accept') . '</a>';
+
+                      $action .= '<a href="' . route('project-deny', [$row->id]) . '" class="dropdown-item"><i class="fa fa-minus-circle mr-2"></i>' . __('Deny') . '</a>';
+                }
 
                 if (
                     $this->editProjectsPermission == 'all'
@@ -82,7 +88,7 @@ class ProjectsDataTable extends BaseDataTable
                             ' . trans('app.edit') . '
                         </a>';
                 }
-                
+
 
                 if ($this->viewGanttPermission == 'all' || ($this->viewGanttPermission == 'added' && user()->id == $row->added_by) || ($this->viewGanttPermission == 'owned' && user()->id == $row->client_id)) {
                     $action .= '<a class="dropdown-item" href="' . route('projects.show', $row->id) . '?tab=gantt' . '">

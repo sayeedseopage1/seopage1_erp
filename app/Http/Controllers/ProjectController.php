@@ -73,6 +73,7 @@ use App\Notifications\ProjectDisputeNotification;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectSubmission;
 use App\Models\ProjectNiche;
+use App\Notifications\ProjectReviewNotification;
 
 
 class ProjectController extends AccountBaseController
@@ -859,6 +860,18 @@ if ($pm_count < 2) {
 
 
         $project->save();
+
+        if ($request->project_challenge != 'No Challenge') {
+        $project_update= Project::find($project->id);
+        $project_update->status= 'under review';
+        $project_update->save();
+        $users= User::where('role_id',1)->get();
+        foreach ($users as $user) {
+
+
+           Notification::send($user, new ProjectReviewNotification($project));
+        }
+        }
         $project_manager= new ProjectMember();
         $project_manager->user_id= Auth::id();
         $project_manager->project_id= $project->id;
@@ -2083,6 +2096,23 @@ if ($pm_count < 2) {
         'message' => 'Category Deleted Successfully',
     ]);
 
+    }
+    public function ProjectAccept($id)
+    {
+      $project= Project::find($id);
+      $project->status= 'in progress';
+      $project->save();
+      Toastr::success('Project Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+      return back();
+
+    }
+    public function ProjectDeny($id)
+    {
+      $project= Project::find($id);
+      $project->status= 'canceled';
+      $project->save();
+      Toastr::success('Project Canceled Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+      return back();
     }
 
 

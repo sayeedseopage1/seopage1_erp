@@ -81,6 +81,7 @@
             color: #41b4e1 !important;
             font-size: 18px;
         }
+      
     </style>
 
 @endpush
@@ -114,12 +115,24 @@
 
                       <div class="details-seopage1">
                         <h4>WhatsApp ID (For Future Communation)!</h4>
-                        <p>{!!$client->client_whatsapp!!}</p>
+                        <p>{{$client->client_whatsapp}}</p>
                       </div>
 
                       <div class="details-seopage1">
-                        <h4>Available Platform</h4>
-                        <p>{!!$client->other_platform!!}</p>
+                        <h4>Client Skype ID</h4>
+                        <p>{{$client->client_skype}}</p>
+                      </div>
+                      <div class="details-seopage1">
+                        <h4>Client Messenger ID</h4>
+                        <p>{{$client->client_messenger}}</p>
+                      </div>
+                      <div class="details-seopage1">
+                        <h4>Client Telegram ID</h4>
+                        <p>{{$client->client_telegram}}</p>
+                      </div>
+                      <div class="details-seopage1">
+                        <h4>Client IMO ID</h4>
+                        <p>{{$client->client_imo}}</p>
                       </div>
 
 

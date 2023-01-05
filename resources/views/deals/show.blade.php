@@ -16,11 +16,12 @@
             <a class="d-none close-it" href="javascript:;" id="close-client-detail" >
                 <i class="fa fa-times"></i>
             </a>
+              <x-tab :href="route('deals.show', $deal->id).'?tab=deal_details'" :text="__('Deal Stage')" class="deal_details" ajax="false"/>
             @if($deal->won_lost == 'Yes')
             <x-tab :href="route('deals.show', $deal->id).'?tab=summary'" :text="__('Summary')" class="summary" ajax="false"/>
             @endif
 
-            <x-tab :href="route('deals.show', $deal->id)" :text="__('Deal Stage')" class="deal_details" ajax="false"/>
+
 
             <x-tab :href="route('deals.show', $deal->id).'?tab=files'" :text="__('Files')" class="files" ajax="false"/>
 

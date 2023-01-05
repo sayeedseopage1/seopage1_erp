@@ -239,8 +239,10 @@ $deals= App\Models\Deal::all();
                               <a class="dropdown-item"
                                   href="deal-url/{{$deal->id}}"><i class="fa-solid fa-file"></i> @lang('Client Form')</a>
                                   @endif
+                                  @if(Auth::user()->role_id == 1 || Auth::user()->role_id== 7 || Auth::user()->role_id == 8)
                           <a class="dropdown-item"
                               href="/deals/details/edit/{{$deal->id}}"><i class="fa-solid fa-pen-to-square"></i> @lang('Edit')</a>
+                              @endif
                               {{--<a class="dropdown-item"
                                   href="/deals/details/edit/{{$deal->id}}"><i class="fa-solid fa-eye"></i> @lang('View')</a>--}}
                                 {{--  <a class="dropdown-item"

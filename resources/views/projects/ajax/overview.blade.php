@@ -10,7 +10,8 @@ $project->members->pluck('user_id')->toArray(); @endphp
     <div class="project-left w-100 py-0 py-lg-5 py-md-0">
         <div class="d-flex align-content-center flex-lg-row-reverse mb-4">
             @if (!$project->trashed())
-          {{-- <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
+            @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+           <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
                 @if ($editProjectPermission == 'all' || ($editProjectPermission == 'added' && $project->added_by == user()->id) || ($project->project_admin == user()->id))
                 <select class="form-control select-picker change-status height-35">
                     @foreach ($projectStatus as $status)
@@ -27,7 +28,8 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     {{ __('app.finished') }} @endif
                 </div>
                 @endif
-            </div> --}} 
+            </div>
+            @endif
 
             <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
                 <div class="dropdown">
@@ -39,6 +41,13 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         @if ($editProjectPermission == 'all' || ($project->project_admin == user()->id) || ($editProjectPermission == 'added' && user()->id == $project->added_by) || ($editProjectPermission == 'owned' && user()->id ==
                         $project->client_id && in_array('client', user_roles())) || ($editProjectPermission == 'owned' && in_array(user()->id, $memberIds) && in_array('employee', user_roles())) || ($editProjectPermission == 'both' &&
                         (user()->id == $project->client_id || user()->id == $project->added_by)) || ($editProjectPermission == 'both' && in_array(user()->id, $memberIds) && in_array('employee', user_roles())))
+                        @if(Auth::user()->role_id == 1 && $project->status == 'under review')
+                        <a class="dropdown-item" href="{{ route('project-accept', $project->id) }}">@lang('Accept')</a>
+                        <hr class="my-1" />
+                        <a class="dropdown-item" href="{{ route('project-deny', $project->id) }}">@lang('Deny')</a>
+                        <hr class="my-1" />
+
+                        @endif
                         <a class="dropdown-item openRightModal" href="{{ route('projects.edit', $project->id) }}">@lang('app.edit') @lang('app.project')</a>
                         <hr class="my-1" />
                         @endif @php $projectPin = $project->pinned() @endphp @if ($projectPin)

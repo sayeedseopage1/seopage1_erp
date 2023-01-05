@@ -523,7 +523,7 @@
       // Alert the copied text
       alert("Copied the text: " + copyText.value);
     }
-    
+
     $(document).ready(function() {
       fetchmilestone();
       function fetchmilestone()
@@ -537,7 +537,7 @@
           //  console.log(response.milestones);
             let spans= '';
             response.milestones.forEach((item)=> {
-              spans += `<span class="badge badge-light mr-2"><a href="#" data-toggle="modal" data-target="#milestoneviewmodal" . ${item.id}>${item.milestone_title}</a> <button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
+              spans += `<span class="badge badge-light mr-2"><a href="javascript:;" data-milestone-id="${item.id}" class="taskView milestone-detail text-darkest-grey f-w-500">${item.milestone_title} </a><button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
             });
 
             document.querySelector('#milestone_value').innerHTML= spans;
@@ -705,6 +705,13 @@
       });
     });
 
+    });
+    $('body').on('click', '.milestone-detail', function() {
+        var id = $(this).data('milestone-id');
+        var url = "{{ route('milestones.show', ':id') }}";
+        url = url.replace(':id', id);
+        $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
+        $.ajaxModal(MODAL_XL, url);
     });
     </script>
 
