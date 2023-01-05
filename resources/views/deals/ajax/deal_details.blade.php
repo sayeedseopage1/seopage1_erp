@@ -1217,7 +1217,7 @@ ul.fileList {
 
                                            <div class="comment-add">
                                                <div class="col-md-12">
-                                                 <form action="{{route('post-comment')}}" method="POST">
+                                                 <form action="{{route('post-comment')}}" method="POST" enctype="multipart/form-data">
                                                    @csrf
                                                    <input type="hidden" name="deal_stage_id" value="4">
                                                    <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
@@ -1231,7 +1231,7 @@ ul.fileList {
                                                          <div class="files" id="files1">
 
                                                              <span class="btn btn-default btn-file">
-                                                                 <i class="fa fa-paperclip"></i>  <input type="file" name="files1" multiple />
+                                                                 <i class="fa fa-paperclip"></i>  <input type="file" name="attach[]"  multiple />
                                                              </span>
                                                              <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
 
@@ -1463,41 +1463,41 @@ $('input[name="deal_stage"]').change(function() {
  var files3Uploader = $("#files4").fileUploader(filesToUpload, "files4");
  var files3Uploader = $("#files5").fileUploader(filesToUpload, "files5");
 
- $("#uploadBtn").click(function (e) {
-     e.preventDefault();
-
-     var formData = new FormData();
-
-     for (var i = 0, len = filesToUpload.length; i < len; i++) {
-         formData.append("files", filesToUpload[i].file);
-     }
-
-     $.ajax({
-         url: "",
-         data: formData,
-         processData: false,
-         contentType: false,
-         type: "POST",
-         success: function (data) {
-             alert("DONE");
-
-             files1Uploader.clear();
-             files2Uploader.clear();
-             files3Uploader.clear();
-             files4Uploader.clear();
-             files5Uploader.clear();
-         },
-         error: function (data) {
-             alert("ERROR - " + data.responseText);
-         }
-     });
- });
+ // $("#uploadBtn").click(function (e) {
+ //     e.preventDefault();
+ //
+ //     var formData = new FormData();
+ //
+ //     for (var i = 0, len = filesToUpload.length; i < len; i++) {
+ //         formData.append("files", filesToUpload[i].file);
+ //     }
+ //
+ //     $.ajax({
+ //         url: "",
+ //         data: formData,
+ //         processData: false,
+ //         contentType: false,
+ //         type: "POST",
+ //         success: function (data) {
+ //             alert("DONE");
+ //
+ //             files1Uploader.clear();
+ //             files2Uploader.clear();
+ //             files3Uploader.clear();
+ //             files4Uploader.clear();
+ //             files5Uploader.clear();
+ //         },
+ //         error: function (data) {
+ //             alert("ERROR - " + data.responseText);
+ //         }
+ //     });
+ // });
  })()
  </script>
 
 
 
 
- <
+
 
 @endpush

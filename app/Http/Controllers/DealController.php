@@ -351,7 +351,7 @@ class DealController extends AccountBaseController
     }
     public function comments(Request $request)
     {
-    //  dd($request->attach);
+      dd($request);
       $deal= new DealStageChange();
       $deal->updated_by= Auth::id();
       $deal->comments= $request->comment;

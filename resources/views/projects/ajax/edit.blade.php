@@ -123,7 +123,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     <div class="col-md-12 col-lg-12">
                         <div class="form-group my-3">
                             <x-forms.label class="my-3" fieldId="project_summary"
-                                :fieldLabel="__('modules.projects.projectSummary')" fieldRequired="true">
+                                :fieldLabel="__('Project General Guidelines')" fieldRequired="true">
                             </x-forms.label>
                             <div id="project_summary">{!! $project->project_summary !!}</div>
                             <textarea name="project_summary" id="project_summary-text"

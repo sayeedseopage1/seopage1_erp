@@ -218,13 +218,23 @@ class ProjectsDataTable extends BaseDataTable
                 if (($row->public)) {
                     $pin = '<span class="badge badge-primary"><i class="fa fa-globe"></i> ' . __('app.public') . '</span>';
                 }
+                if ($row->status == 'not started' && Auth::user()->role_id == 4) {
+                  return '<div class="media align-items-center">
+                          <div class="media-body">
+                      <h5 class="mb-0 f-13 text-darkest-grey"><a>' . ucfirst($row->project_name) . '</a></h5>
+                      <p class="mb-0">' . $pin . '</p>
+                      </div>
+                  </div>';
+                }else {
+                  return '<div class="media align-items-center">
+                          <div class="media-body">
+                      <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('projects.show', [$row->id]) . '">' . ucfirst($row->project_name) . '</a></h5>
+                      <p class="mb-0">' . $pin . '</p>
+                      </div>
+                  </div>';
+                }
 
-                return '<div class="media align-items-center">
-                        <div class="media-body">
-                    <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('projects.show', [$row->id]) . '">' . ucfirst($row->project_name) . '</a></h5>
-                    <p class="mb-0">' . $pin . '</p>
-                    </div>
-                </div>';
+
             });
             $datatables->editColumn('start_date', function ($row) {
                 return $row->start_date->format($this->global->date_format);
@@ -290,12 +300,22 @@ class ProjectsDataTable extends BaseDataTable
                 return $row->completion_percent . '% ' . __('app.complete');
             });
             $datatables->addColumn('short_code', function ($row) {
-            return  '<div class="media align-items-center">
-                      <div class="media-body">
-                  <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('projects.show', [$row->id]) . '">' . ucfirst($row->project_short_code) . '</a></h5>
+              if ($row->status == 'not started' && Auth::user()->role_id == 4){
+                return  '<div class="media align-items-center">
+                          <div class="media-body">
+                      <h5 class="mb-0 f-13 text-darkest-grey"><a>' . ucfirst($row->project_short_code) . '</a></h5>
 
-                  </div>
-              </div>';
+                      </div>
+                  </div>';
+              }else {
+                return  '<div class="media align-items-center">
+                          <div class="media-body">
+                      <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('projects.show', [$row->id]) . '">' . ucfirst($row->project_short_code) . '</a></h5>
+
+                      </div>
+                  </div>';
+              }
+
               //  return ucfirst($row->project_short_code);
             });
             $datatables->addColumn('project_manager', function ($row) {

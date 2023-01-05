@@ -308,7 +308,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 <x-cards.data>
                     <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                         <div class="col">
-                            <h4>Project Summary</h4>
+                            <h4>Project General Guidelines</h4>
                             <br>
                             <p>{!! $project->project_summary !!}</p>
 
@@ -327,7 +327,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         <div class="col">
                             <h4>Project Challenge</h4>
                             <br>
-                            <p>{!! $project->project_challenge !!}</p>
+                            <p>{{$project->project_challenge }}</p>
 
                         </div>
 
