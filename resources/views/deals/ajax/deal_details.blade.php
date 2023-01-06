@@ -459,6 +459,7 @@ transform: rotate(45deg);
     .seopage1_attach a {
         font-size: 9px;
         font-family: 'Poppins';
+        margin-right:5px;
     }
 
     svg.svg-inline--fa.fa-times-circle.fa-w-16.remove {
@@ -709,15 +710,37 @@ ul.fileList {
                                  <?php
                                 $contact_mades= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',0)->get();
                                   ?>
+
                                   @foreach($contact_mades as $contact)
                                    <div class="details-seopage1 mb-2">
                                        <p>{!!$contact->comments!!} </p>
+                                       <?php
+                                       $contactstr = $contact->attach;
 
-                                       <!-- <div class="seopage1_attach">
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                       </div> -->
+
+                                          // Create Array Out of the String, The comma ',' is the delimiter
+                                          // This would output
+                                          //       [ 1 => 1, 2 => 2, 3 => '', 4 => 4, 5 => 5, 6 => 6 ]
+                                          $contactexplodedStr = explode(',', $contactstr);
+
+                                          // Filter Array And Remove The empty element which in this case
+                                          //    3 => ''
+                                          $contactfilteredArray = $contactexplodedStr;
+                                          //dd($filteredArray);
+
+                                        ?>
+
+                                       <div class="seopage1_attach">
+                                         @foreach($contactfilteredArray as $data)
+                                         @if($data != null)
+                                           <a href="/storage/deal-files/{{$data}}" title="{{$data}}"  target="_blank"><i class="fa fa-paperclip"></i> {{Str::limit($data,20)}}</a>
+
+
+
+                                           @endif
+
+                                           @endforeach
+                                       </div>
 
                                        <div class="sbinfo">
                                            <ul>
@@ -740,7 +763,7 @@ ul.fileList {
 
                                            <div class="comment-add">
                                                <div class="col-md-12">
-                                                 <form action="{{route('post-comment')}}" method="POST">
+                                                 <form action="{{route('post-comment')}}" method="POST" enctype="multipart/form-data">
                                                    @csrf
                                                    <input type="hidden" name="deal_stage_id" value="0">
                                                    <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
@@ -749,25 +772,21 @@ ul.fileList {
 
                                                        </div>
                                                        <div class="wrapper">
-                                                         <div id="files-area">
-                                                             <span id="filesList">
-                                                                 <span id="files-names"></span>
+
+                                                         <div class="files" >
+
+                                                             <span class="btn btn-default btn-file">
+                                                                 <i class="fa fa-paperclip"></i>
+                                                                 <input type="file" name="attach[]"  multiple />
                                                              </span>
+                                                             <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+
+                                                             <br />
+                                                             <ul class="fileList"></ul>
+
                                                          </div>
 
-                                                        <div class="sp1custom_files">
-                                                            <label for="attachment">
-                                                                <i class="fa fa-paperclip"></i>
-
-                                                            </label>
-                                                            <input type="file"  accept="" id="attachment" name="attach[]" style="visibility: hidden; position: absolute;" multiple/>
-
-                                                        </div>
-
-
-
-                                                        <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                    </div>
+                                                       </div>
 
                                                        <!-- <div class="wrapper">
                                                            <input type="file" id="file-input" name="attach[]" multiple>
@@ -833,14 +852,36 @@ ul.fileList {
                                    $qualified= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',1)->get();
                                   ?>
                                    @foreach($qualified as $qual)
+                                   <?php
+                                   $qualstr = $qual->attach;
+
+
+                                      // Create Array Out of the String, The comma ',' is the delimiter
+                                      // This would output
+                                      //       [ 1 => 1, 2 => 2, 3 => '', 4 => 4, 5 => 5, 6 => 6 ]
+                                      $qualexplodedStr = explode(',', $qualstr);
+
+                                      // Filter Array And Remove The empty element which in this case
+                                      //    3 => ''
+                                      $qualfilteredArray = $qualexplodedStr;
+                                      //dd($filteredArray);
+
+                                    ?>
+
 
                                    <div class="details-seopage1 mb-2">
                                        <p>{!!$qual->comments!!}</p>
-                                       <!-- <div class="seopage1_attach">
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                       </div> -->
+                                       <div class="seopage1_attach">
+                                         @foreach($qualfilteredArray as $data)
+                                         @if($data != null)
+                                           <a href="/storage/deal-files/{{$data}}" title="{{$data}}" target="_blank"><i class="fa fa-paperclip"></i> {{Str::limit($data,20)}}</a>
+
+
+
+                                           @endif
+
+                                           @endforeach
+                                       </div>
                                        <div class="sbinfo">
                                            <ul>
                                              <li>{{$qual->user->name}}</li>
@@ -862,7 +903,7 @@ ul.fileList {
 
                                            <div class="comment-add">
                                                <div class="col-md-12">
-                                                 <form action="{{route('post-comment')}}" method="POST">
+                                                 <form action="{{route('post-comment')}}" method="POST" enctype="multipart/form-data">
                                                    @csrf
                                                    <input type="hidden" name="deal_stage_id" value="1">
                                                    <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
@@ -871,25 +912,21 @@ ul.fileList {
 
                                                        </div>
                                                        <div class="wrapper">
-                                                         <div id="files-area">
-                                                             <span id="filesList">
-                                                                 <span id="files-names"></span>
+
+                                                         <div class="files">
+
+                                                             <span class="btn btn-default btn-file">
+                                                                 <i class="fa fa-paperclip"></i>
+                                                                 <input type="file" name="attach[]"  multiple />
                                                              </span>
+                                                             <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+
+                                                             <br />
+                                                             <ul class="fileList"></ul>
+
                                                          </div>
 
-                                                        <div class="sp1custom_files">
-                                                            <label for="attachment">
-                                                                <i class="fa fa-paperclip"></i>
-
-                                                            </label>
-                                                            <input type="file"  accept="" id="attachment" name="attach[]" style="visibility: hidden; position: absolute;" multiple/>
-
-                                                        </div>
-
-
-
-                                                        <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                    </div>
+                                                       </div>
 
                                                        <!-- <div class="wrapper">
                                                            <input type="file" id="file-input" name="attach[]" multiple>
@@ -949,14 +986,35 @@ ul.fileList {
                                     $req_defined= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',2)->get();
                                   ?>
                                  @foreach($req_defined as $req_def)
+                                 <?php
+                                 $reqstr = $req_def->attach;
+
+
+                                    // Create Array Out of the String, The comma ',' is the delimiter
+                                    // This would output
+                                    //       [ 1 => 1, 2 => 2, 3 => '', 4 => 4, 5 => 5, 6 => 6 ]
+                                    $reqexplodedStr = explode(',', $reqstr);
+
+                                    // Filter Array And Remove The empty element which in this case
+                                    //    3 => ''
+                                    $reqfilteredArray = $reqexplodedStr;
+                                    //dd($filteredArray);
+
+                                  ?>
                                    <div class="details-seopage1 mb-2">
                                        <p>{!!$req_def->comments!!} </p>
 
-                                       <!-- <div class="seopage1_attach">
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                       </div> -->
+                                       <div class="seopage1_attach">
+                                         @foreach($reqfilteredArray as $data)
+                                         @if($data != null)
+                                           <a href="/storage/deal-files/{{$data}}" title="{{$data}}" target="_blank"><i class="fa fa-paperclip"></i> {{Str::limit($data,20)}}</a>
+
+
+
+                                           @endif
+
+                                           @endforeach
+                                       </div>
 
                                        <div class="sbinfo">
                                            <ul>
@@ -977,7 +1035,7 @@ ul.fileList {
 
                                            <div class="comment-add">
                                                <div class="col-md-12">
-                                                 <form action="{{route('post-comment')}}" method="POST">
+                                                 <form action="{{route('post-comment')}}" method="POST" enctype="multipart/form-data">
                                                    @csrf
                                                    <input type="hidden" name="deal_stage_id" value="2">
                                                    <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
@@ -986,26 +1044,21 @@ ul.fileList {
 
                                                        </div>
                                                        <div class="wrapper">
-                                                         <div id="files-area">
-                                                             <span id="filesList">
-                                                                 <span id="files-names"></span>
+
+                                                         <div class="files">
+
+                                                             <span class="btn btn-default btn-file">
+                                                                 <i class="fa fa-paperclip"></i>
+                                                                 <input type="file" name="attach[]"  multiple />
                                                              </span>
+                                                             <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+
+                                                             <br />
+                                                             <ul class="fileList"></ul>
+
                                                          </div>
 
-                                                        <div class="sp1custom_files">
-                                                            <label for="attachment">
-                                                                <i class="fa fa-paperclip"></i>
-
-                                                            </label>
-                                                            <input type="file"  accept="" id="attachment" name="attach[]" style="visibility: hidden; position: absolute;" multiple/>
-
-                                                        </div>
-
-
-
-                                                        <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                    </div>
-
+                                                       </div>
                                                        <!-- <div class="wrapper">
                                                            <input type="file" id="file-input" name="attach[]" multiple>
                                                            <label for="file-input">
@@ -1069,12 +1122,33 @@ ul.fileList {
                                 @foreach($proposal_made as $prop)
                                    <div class="details-seopage1 mb-2">
                                        <p>{!!$prop->comments!!} </p>
+                                       <?php
+                                       $propstr = $prop->attach;
 
-                                       <!-- <div class="seopage1_attach">
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                       </div> -->
+
+                                          // Create Array Out of the String, The comma ',' is the delimiter
+                                          // This would output
+                                          //       [ 1 => 1, 2 => 2, 3 => '', 4 => 4, 5 => 5, 6 => 6 ]
+                                          $propexplodedStr = explode(',', $propstr);
+
+                                          // Filter Array And Remove The empty element which in this case
+                                          //    3 => ''
+                                          $propfilteredArray = $propexplodedStr;
+                                          //dd($filteredArray);
+
+                                        ?>
+
+                                       <div class="seopage1_attach">
+                                         @foreach($propfilteredArray as $data)
+                                         @if($data != null)
+                                           <a href="/storage/deal-files/{{$data}}" title="{{$data}}" target="_blank"><i class="fa fa-paperclip"></i> {{Str::limit($data,20)}}</a>
+
+
+
+                                           @endif
+
+                                           @endforeach
+                                       </div>
 
                                        <div class="sbinfo">
                                            <ul>
@@ -1097,7 +1171,7 @@ ul.fileList {
 
                                            <div class="comment-add">
                                                <div class="col-md-12">
-                                                 <form action="{{route('post-comment')}}" method="POST">
+                                                 <form action="{{route('post-comment')}}" method="POST" enctype="multipart/form-data">
                                                    @csrf
                                                    <input type="hidden" name="deal_stage_id" value="3">
                                                    <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
@@ -1106,26 +1180,21 @@ ul.fileList {
 
                                                        </div>
                                                        <div class="wrapper">
-                                                         <div id="files-area">
-                                                             <span id="filesList">
-                                                                 <span id="files-names"></span>
+
+                                                         <div class="files">
+
+                                                             <span class="btn btn-default btn-file">
+                                                                 <i class="fa fa-paperclip"></i>
+                                                                 <input type="file" name="attach[]"  multiple />
                                                              </span>
+                                                             <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+
+                                                             <br />
+                                                             <ul class="fileList"></ul>
+
                                                          </div>
 
-                                                        <div class="sp1custom_files">
-                                                            <label for="attachment">
-                                                                <i class="fa fa-paperclip"></i>
-
-                                                            </label>
-                                                            <input type="file"  accept="" id="attachment" name="attach[]" style="visibility: hidden; position: absolute;" multiple/>
-
-                                                        </div>
-
-
-
-                                                        <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                    </div>
-
+                                                       </div>
                                                        <!-- <div class="wrapper">
                                                            <input type="file" id="file-input" name="attach[]" multiple>
                                                            <label for="file-input">
@@ -1191,12 +1260,33 @@ ul.fileList {
                                  @foreach($negotiation_started as $neg)
                                    <div class="details-seopage1 mb-2">
                                        <p>{!!$neg->comments!!}</p>
+                                       <?php
+                                       $negstr = $neg->attach;
 
-                                       <!-- <div class="seopage1_attach">
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                           <a href="#" target="_blank"><i class="fa fa-paperclip"></i>Attachments</a>
-                                       </div> -->
+
+                                          // Create Array Out of the String, The comma ',' is the delimiter
+                                          // This would output
+                                          //       [ 1 => 1, 2 => 2, 3 => '', 4 => 4, 5 => 5, 6 => 6 ]
+                                          $negexplodedStr = explode(',', $negstr);
+
+                                          // Filter Array And Remove The empty element which in this case
+                                          //    3 => ''
+                                          $negfilteredArray = $negexplodedStr;
+                                          //dd($filteredArray);
+
+                                        ?>
+
+                                       <div class="seopage1_attach">
+                                         @foreach($negfilteredArray as $data)
+                                         @if($data != null)
+                                           <a href="/storage/deal-files/{{$data}}" title="{{$data}}" target="_blank"><i class="fa fa-paperclip"></i> {{Str::limit($data,20)}}  </a>
+
+
+
+                                           @endif
+
+                                           @endforeach
+                                       </div>
 
                                        <div class="sbinfo">
                                            <ul>
@@ -1228,11 +1318,13 @@ ul.fileList {
 
                                                        <div class="wrapper">
 
-                                                         <div class="files" id="files1">
+                                                         <div class="files">
 
                                                              <span class="btn btn-default btn-file">
-                                                                 <i class="fa fa-paperclip"></i>  <input type="file" name="attach[]"  multiple />
+                                                                 <i class="fa fa-paperclip"></i>
+                                                                 <input type="file" name="attach[]"  multiple />
                                                              </span>
+
                                                              <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
 
                                                              <br />
@@ -1460,8 +1552,8 @@ $('input[name="deal_stage"]').change(function() {
  var files1Uploader = $("#files1").fileUploader(filesToUpload, "files1");
  var files2Uploader = $("#files2").fileUploader(filesToUpload, "files2");
  var files3Uploader = $("#files3").fileUploader(filesToUpload, "files3");
- var files3Uploader = $("#files4").fileUploader(filesToUpload, "files4");
- var files3Uploader = $("#files5").fileUploader(filesToUpload, "files5");
+ var files4Uploader = $("#files4").fileUploader(filesToUpload, "files4");
+ var files4Uploader = $("#files5").fileUploader(filesToUpload, "files5");
 
  // $("#uploadBtn").click(function (e) {
  //     e.preventDefault();

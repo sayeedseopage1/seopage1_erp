@@ -51,6 +51,7 @@ use Illuminate\Support\Facades\Redirect;
 //use SweetAlert;
 use Toastr;
 
+
 class DealController extends AccountBaseController
 {
 
@@ -351,15 +352,50 @@ class DealController extends AccountBaseController
     }
     public function comments(Request $request)
     {
-      dd($request);
       $deal= new DealStageChange();
       $deal->updated_by= Auth::id();
-      $deal->comments= $request->comment;
       $deal->deal_stage_id= $request->deal_stage_id;
       $deal->deal_id= $request->deal_id;
 
-      $deal->save();
-      return back()->with('status_updated', 'Status Updated!!');
+      if($request->comment != null)
+      {
+
+        $deal->comments= $request->comment;
+
+        //$deal->save();
+      }
+
+      if($request->hasFile('attach'))
+
+      {
+        $files = $request->file('attach');
+        $filename= null;
+      //  dd($files);
+        $value='';
+        foreach ($files as $file) {
+          $filename=null;
+          if ($file) {
+              $filename = time() . $file->getClientOriginalName();
+
+              Storage::disk('public')->putFileAs(
+                  'deal-files/',
+                  $file,
+                  $filename
+              );
+
+          }
+            $value= $value  . $filename.',';
+
+
+        }
+        //dd($value);
+
+      }
+
+       $deal->attach= $value;
+       $deal->save();
+       Toastr::success('Comment Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+      return back();
     }
 
 

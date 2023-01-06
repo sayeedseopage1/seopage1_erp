@@ -302,7 +302,7 @@ final class Versions
   'symfony/filesystem' => 'v6.0.12@a36b782dc19dce3ab7e47d4b92b13cefb3511da3',
   'symfony/yaml' => 'v6.0.12@8c68efb08b038ec02753da6f16e1601a6ed4ef17',
   'theseer/tokenizer' => '1.2.1@34a41e998c2183e22995f158c581e7b5e755ab9e',
-  'laravel/laravel' => 'dev-master@b869b4e0995119620b7680a2661122d67b2c3e64',
+  'laravel/laravel' => 'dev-master@77379ac573dfb0aa7ab4861168fdabede77b8ba3',
 );
 
     private function __construct()
