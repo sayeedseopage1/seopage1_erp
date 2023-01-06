@@ -42,10 +42,10 @@
             </div>
 
             <div class="btn-group mt-2 mt-lg-0 mt-md-0" role="group">
-                <a href="{{ route('projects.index') }}" class="btn btn-secondary f-14" data-tooltip-bottom="tooltip"
+                <a href="{{ route('projects.index') }}" class="btn btn-secondary f-14" data-tooltip-left="Projects"
                     data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
 
-                <a href="{{ route('projectboards.index') }}" class="btn btn-secondary f-14 btn-active" data-tooltip-bottom="tooltip"
+                <a href="{{ route('projectboards.index') }}" class="btn btn-secondary f-14 btn-active" data-tooltip-left="Kanban Board"
                     data-original-title="@lang('Kanban')"><i class="side-icon bi bi-kanban"></i></a>
 
             </div>

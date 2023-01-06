@@ -103,7 +103,7 @@ class DealBoardController extends AccountBaseController
 
 
 
-              
+
 
 
                 if ($request->searchText != '') {
@@ -185,11 +185,11 @@ class DealBoardController extends AccountBaseController
             $this->startDate = $startDate;
             $this->endDate = $endDate;
 
-            $view = view('leads.board.board_data', $this->data)->render();
+            $view = view('deals.board.board_data', $this->data)->render();
             return Reply::dataOnly(['view' => $view]);
         }
 
-        return view('leads.board.index', $this->data);
+        return view('deals.board.index', $this->data);
     }
 
     public function loadMore(Request $request)
@@ -212,16 +212,7 @@ class DealBoardController extends AccountBaseController
             });
         }
 
-        if ($request->followUp != 'all' && $request->followUp != '') {
-            $leads = $leads->leftJoin('lead_follow_up', 'lead_follow_up.lead_id', 'leads.id');
-
-            if ($request->followUp == 'yes') {
-                $leads->where('leads.next_follow_up', 'yes');
-            }
-            else {
-                $leads->where('leads.next_follow_up', 'no');
-            }
-        }
+        
 
         if ($request->type != 'all' && $request->type != '') {
             if ($request->type == 'lead') {
@@ -263,7 +254,7 @@ class DealBoardController extends AccountBaseController
             $loadStatus = 'show';
         }
 
-        $view = view('leads.board.load_more', $this->data)->render();
+        $view = view('deals.board.load_more', $this->data)->render();
         return Reply::dataOnly(['view' => $view, 'load_more' => $loadStatus]);
     }
 

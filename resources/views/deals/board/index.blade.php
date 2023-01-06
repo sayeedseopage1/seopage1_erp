@@ -6,9 +6,15 @@
 
 @push('styles')
     <!-- Drag and Drop CSS -->
-    <link rel='stylesheet' href="{{ asset('vendor/css/dragula.css') }}" type='text/css' />
-    <link rel='stylesheet' href="{{ asset('vendor/css/drag.css') }}" type='text/css' />
-    <link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-colorpicker.css') }}" />
+
+
+       <link rel="stylesheet" href="{{asset('deal-kanban/css/style.css')}}">
+       <link rel="stylesheet"
+     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+     integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+     crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+     <link href="https://fonts.googleapis.com/css?family=Nunito:400,500,700,800,900" rel="stylesheet">
     <style>
         #colorpicker .form-group {
             width: 87%;
@@ -17,19 +23,117 @@
         .b-p-tasks {
             min-height: 100px;
         }
+        .kanbanCard {
+	         width: 323px;
+        }
+        .board_list li:nth-child(2) {
+        	background: #E8EEF3;
+        	padding: 7px;
+        	width: auto;
+        	height: auto;
+        	line-height: 10px;
+        	border-radius: 4px;
+        	font-weight: 800;
+        }
 
+        ::-webkit-scrollbar-thumb {
+          border-radius: 6px;
+          background-color: #aaa8a8;
+          border: 1px solid #e3e8ec !important;
+      }
+
+      .board_list {
+      	width: 338px;
+      }
     </style>
 
 @endpush
 
-@php
-$addLeadPermission = user()->permission('add_lead');
-$viewLeadPermission = user()->permission('view_lead');
-@endphp
-
 @section('filter-section')
 
-    @include('leads.filters')
+    <x-filters.filter-box>
+        <!-- DATE START -->
+        <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.date')</p>
+            <div class="input-group input-daterange">
+                <input type="text"
+                    class="position-relative text-dark date-range-field form-control border-0 p-0 text-left f-14 f-w-500"
+                    id="start-date" placeholder="@lang('app.startDate')">
+                <div class="input-group-addon datePickerInput d-flex align-items-center pr-3">@lang('app.to')</div>
+                <input type="text" class="date-range-field1 text-dark form-control border-0 p-0 text-left f-14 f-w-500"
+                    id="end-date" placeholder="@lang('app.endDate')">
+            </div>
+        </div>
+        <!-- DATE END -->
+
+        <!-- SEARCH BY TASK START -->
+        <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
+            <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
+                <div class="input-group bg-grey rounded">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text border-0 bg-additional-grey">
+                            <i class="fa fa-search f-13 text-dark-grey"></i>
+                        </span>
+                    </div>
+                    <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field"
+                        placeholder="@lang('app.startTyping')">
+                </div>
+            </form>
+        </div>
+        <!-- SEARCH BY TASK END -->
+
+        <!-- RESET START -->
+        <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
+            <x-forms.button-secondary class="btn-xs d-none" id="reset-filters" icon="times-circle">
+                @lang('app.clearFilters')
+            </x-forms.button-secondary>
+        </div>
+        <!-- RESET END -->
+
+        <!-- MORE FILTERS START -->
+        <x-filters.more-filter-box>
+
+
+            <div class="more-filter-items">
+                <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">@lang('app.project')</label>
+                <div class="select-filter mb-4">
+                    <div class="select-others">
+                        <select class="form-control select-picker" name="project_id" id="project_id" data-live-search="true" data-container="body"
+                            data-size="8">
+                            <option value="all">@lang('app.all')</option>
+                            <?php
+                            $projects= App\Models\Project::all();
+                             ?>
+                            @foreach ($projects as $project)
+                                <option value="{{ $project->id }}">{{ mb_ucwords($project->project_name) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            <div class="more-filter-items">
+                <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">@lang('app.billableTask')</label>
+                <div class="select-filter mb-4">
+                    <div class="select-others">
+                        <select class="form-control select-picker" id="billable_task" data-live-search="true" data-container="body" data-size="8">
+                            <option value="all">@lang('app.all')</option>
+                            <option value="1">@lang('app.yes')</option>
+                            <option value="0">@lang('app.no')</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </x-filters.more-filter-box>
+        <!-- MORE FILTERS END -->
+    </x-filters.filter-box>
 
 @endsection
 
@@ -41,37 +145,495 @@ $viewLeadPermission = user()->permission('view_lead');
         <!-- Add Task Export Buttons Start -->
         <div class="d-block d-lg-flex d-md-flex my-3">
 
-            <x-alert type="warning" icon="info" class="d-lg-none">@lang('messages.dragDropScreenInfo')</x-alert>
+            <!-- <x-alert type="warning" icon="info" class="d-lg-none">@lang('messages.dragDropScreenInfo')</x-alert> -->
 
             <div id="table-actions" class="flex-grow-1 align-items-center">
-                @if ($addLeadPermission == 'all' || $addLeadPermission == 'added')
-                    <x-forms.link-primary :link="route('leads.create')" class="mr-3 openRightModal float-left" icon="plus">
+
+                  {{--  <x-forms.link-primary :link="route('projects.create')" class="mr-3 openRightModal float-left" icon="plus">
                         @lang('app.add')
-                        @lang('app.lead')
-                    </x-forms.link-primary>
-                @endif
-                @if (user()->permission('change_lead_status') == 'all')
-                    <x-forms.button-secondary icon="plus" id="add-column">
-                        @lang('modules.tasks.addBoardColumn')
-                    </x-forms.button-secondary>
-                @endif
+                        @lang('app.project')
+                    </x-forms.link-primary> --}}
+
+
             </div>
 
             <div class="btn-group mt-2 mt-lg-0 mt-md-0" role="group">
-                <a href="{{ route('leads.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
+                <a href="{{ route('deals.index') }}" class="btn btn-secondary f-14" data-tooltip-bottom="tooltip"
                     data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
 
-                <a href="{{ route('leadboards.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
-                    data-original-title="@lang('modules.lead.kanbanboard')"><i class="side-icon bi bi-kanban"></i></a>
+                <a href="{{ route('dealboards.index') }}" class="btn btn-secondary f-14 btn-active" data-tooltip-bottom="tooltip"
+                    data-original-title="@lang('Kanban')"><i class="side-icon bi bi-kanban"></i></a>
 
             </div>
         </div>
 
-        <div class="w-task-board-panel d-flex" id="taskboard-columns">
+        <div class="boardsContainer" id="sp1">
+        <div class="outer-wrapper">
+
+        <div class="custom_row">
+
+
+            <!-- board  -->
+            <!--  Contact Made  -->
+
+            <div class="board">
+
+                <ul class="board_list">
+                    <li class="red" style="border-left: 19px solid #D21010;"> Contact Made</li>
+                    <?php
+                    $contact_made_count= App\Models\DealStage::where('deal_stage',0)->count();
+                    $contact_made= App\Models\DealStage::where('deal_stage',0)->get();
+                     ?>
+                    <li>{{$contact_made_count}}</li>
+                </ul>
+                <div id="sp1-scrollbar">
+
+                  @foreach($contact_made as $contact)
+                    <div class="dropzone" id="yellow">
+
+                        <div class="kanbanCard yellow">
+                            <div class="content">
+                                <ul class="task_list">
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#{{$contact->short_code}}</a> </li>
+                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
+                                </ul>
+
+                                <ul class="task_list" id="projects_sp1_padding">
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{$contact_made->project_name}}</a> </li>
+                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
+                                </ul>
+
+
+                                <ul class="task_list">
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
+                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                  @endforeach
+
+
+
+
+
+                </div>
+
+            </div>
+
+
+            <!-- board  -->
+            <!-- Qualified  -->
+
+            <div class="board">
+                <ul class="board_list">
+                    <li class="blue">Qualified</li>
+                    <?php
+                    $qualified_count= App\Models\DealStage::where('deal_stage',1)->count();
+                    $qualified= App\Models\DealStage::where('deal_stage',1)->get();
+                     ?>
+                    <li>{{$qualified_count}}</li>
+                </ul>
+
+                <div id="sp1-scrollbar">
+                    @foreach($qualified as $qualify)
+                   <div class="dropzone" id="yellow">
+
+                        <div class="kanbanCard yellow">
+                            <div class="content">
+                                <ul class="task_list">
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
+                                </ul>
+
+                                <ul class="task_list" id="projects_sp1_padding">
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
+                                </ul>
+
+                                <ul class="task_list">
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
+                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="dropzone" id="yellow">
+
+                        <div class="kanbanCard yellow">
+                            <div class="content">
+                                <ul class="task_list">
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
+                                </ul>
+
+                                <ul class="task_list" id="projects_sp1_padding">
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
+                                </ul>
+
+                                <ul class="task_list">
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
+                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                    @endforeach
+
+
+                </div>
+
+
+            </div>
+
+            <!-- board  -->
+            <!-- Requirements Defined  -->
+
+            <div class="board">
+                <ul class="board_list">
+                    <li class="yellows">Requirements Defined</li>
+                    <li>0</li>
+                </ul>
+
+                <div id="sp1-scrollbar">
+
+                    <div class="dropzone" id="yellow">
+
+                        <div class="kanbanCard yellow">
+                            <div class="content">
+                                <ul class="task_list">
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
+                                </ul>
+
+                                <ul class="task_list" id="projects_sp1_padding">
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
+                                </ul>
+
+                                <ul class="task_list">
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
+                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="dropzone" id="yellow">
+
+                        <div class="kanbanCard yellow">
+                            <div class="content">
+                                <ul class="task_list">
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
+                                </ul>
+
+                                <ul class="task_list" id="projects_sp1_padding">
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
+                                </ul>
+
+                                <ul class="task_list">
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
+                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <!-- board  -->
+            <!-- Proposal Made -->
+
+            <div class="board">
+                <ul class="board_list">
+                    <li>Proposal Made</li>
+                    <li>0</li>
+                </ul>
+
+                <div id="sp1-scrollbar">
+
+                    <div class="dropzone" id="yellow">
+
+                        <div class="kanbanCard yellow">
+                            <div class="content">
+                                <ul class="task_list">
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
+                                </ul>
+
+                                <ul class="task_list" id="projects_sp1_padding">
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
+                                </ul>
+
+                                <ul class="task_list">
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
+                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="dropzone" id="yellow">
+
+                        <div class="kanbanCard yellow">
+                            <div class="content">
+                                <ul class="task_list">
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
+                                </ul>
+
+                                <ul class="task_list" id="projects_sp1_padding">
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
+                                </ul>
+
+                                <ul class="task_list">
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
+                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+            <!-- Board -->
+            <!-- Negotiation Started -->
+
+            <div class="board">
+                <ul class="board_list">
+                    <li>Negotiation Started</li>
+                    <li>0</li>
+                </ul>
+                <div id="sp1-scrollbar">
+
+                    <div class="dropzone" id="yellow">
+
+                        <div class="kanbanCard yellow">
+                            <div class="content">
+                                <ul class="task_list">
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
+                                </ul>
+
+                                <ul class="task_list" id="projects_sp1_padding">
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
+                                </ul>
+
+                                <ul class="task_list">
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
+                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="dropzone" id="yellow">
+
+                        <div class="kanbanCard yellow">
+                            <div class="content">
+                                <ul class="task_list">
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
+                                </ul>
+
+                                <ul class="task_list" id="projects_sp1_padding">
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
+                                </ul>
+
+                                <ul class="task_list">
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
+                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <!-- Board -->
+            <!-- Won -->
+
+            <div class="board">
+                <ul class="board_list">
+                    <li>Won</li>
+                    <?php
+                    $won_count= App\Models\DealStage::where('won_lost','Yes')->count();
+                    $won= App\Models\DealStage::where('won_lost','Yes')->get();
+                  //  dd($won);
+                     ?>
+                    <li>{{$won_count}}</li>
+                </ul>
+
+                <div id="sp1-scrollbar">
+                  @foreach($won as $w)
+
+                    <div class="dropzone" id="yellow">
+
+                        <div class="kanbanCard yellow">
+                            <div class="content">
+                                <ul class="task_list">
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#{{$w->short_code}}</a> </li>
+                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
+                                </ul>
+
+                                <ul class="task_list" id="projects_sp1_padding">
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{Str::limit($w->project_name,40)}}</a> </li>
+                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
+                                </ul>
+
+                                <ul class="task_list">
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
+                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                    @endforeach
+
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- Board -->
+            <!-- Lost -->
+
+            <div class="board">
+                <ul class="board_list">
+                    <li>Lost</li>
+                    <li>0</li>
+                </ul>
+
+                <div id="sp1-scrollbar">
+
+
+                    <div class="dropzone" id="yellow">
+
+                        <div class="kanbanCard yellow">
+                            <div class="content">
+                                <ul class="task_list">
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
+                                </ul>
+
+                                <ul class="task_list" id="projects_sp1_padding">
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
+                                </ul>
+
+                                <ul class="task_list">
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
+                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
+                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
+                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
+                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
+                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+        </div>
 
         </div>
+
+        <!-- bar   -->
+
+        <div class="pseduo-track"></div>
     </div>
-    <!-- CONTENT WRAPPER END -->
+
+
+
+
+    </div>
 
 @endsection
 

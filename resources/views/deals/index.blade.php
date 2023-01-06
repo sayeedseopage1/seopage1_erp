@@ -101,7 +101,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
               <a href="{{ route('deals.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
                   data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
 
-              <a href="{{ route('leadboards.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip" data-original-title="@lang('modules.lead.kanbanboard')"><i class="side-icon bi bi-kanban"></i></a>
+              <a href="{{ route('dealboards.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip" data-original-title="@lang('modules.lead.kanbanboard')"><i class="side-icon bi bi-kanban"></i></a>
           </div>
 
         </div>
