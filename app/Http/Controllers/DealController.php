@@ -357,7 +357,7 @@ class DealController extends AccountBaseController
       $deal->deal_stage_id= $request->deal_stage_id;
       $deal->deal_id= $request->deal_id;
 
-      if($request->comment != null)
+      if($request->comment != null )
       {
 
         $deal->comments= $request->comment;
@@ -390,9 +390,13 @@ class DealController extends AccountBaseController
         }
         //dd($value);
 
+      }else {
+        $value= null;
       }
 
-       $deal->attach= $value;
+         $deal->attach= $value;
+    
+
        $deal->save();
        Toastr::success('Comment Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
       return back();

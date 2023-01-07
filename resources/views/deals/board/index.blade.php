@@ -189,29 +189,53 @@
                 <div id="sp1-scrollbar">
 
                   @foreach($contact_made as $contact)
+                  <?php
+                  $client= App\Models\User::where('user_name',$contact->client_username)->first();
+                   ?>
                     <div class="dropzone" id="yellow">
 
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#{{$contact->short_code}}</a> </li>
+                                    <li> <a href="#" title="{{$contact->client_username}}">
+                                      @if($contact->client != null)
+                                      <img src="{{asset('user-uploads/avatar/'. $client->image)}}"  alt="">
+                                      @else
+                                      <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"  alt="">
+                                      @endif
+                                      {{$contact->client_username}} </a></li>
+                                    <li class="clipboard_list_sp1"> <a class="openRightModal" href="/account/deals/{{$contact->id}}">#{{$contact->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{$contact_made->project_name}}</a> </li>
+                                    <li><a href="#" title="{{$contact->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($contact->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
 
                                 <ul class="task_list">
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
-                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
-                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
-                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
-                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                    <li><a href="/account/employees/{{$contact->user->id}}" title="{{$contact->user->name}}">
+                                      @if($contact->user->image == null)
+                                      <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"
+
+                                       title="{{$contact->user->name}}" alt="">
+                                       @else
+                                       <img src="{{asset('user-uploads/avatar/'. $contact->user->image)}}"
+
+                                        title="{{$contact->user->name}}" alt="">
+
+                                       @endif
+
+                                      </a></li>
+                                      <?php
+                                      $contact_comment_count= App\Models\DealStageChange::where('deal_id',$contact->short_code)->where('deal_stage_id',0)->where('comments','!=',null)->count();
+                                      $contact_attach_count= App\Models\DealStageChange::where('deal_id',$contact->short_code)->where('deal_stage_id',0)->where('attach','!=',null)->count();
+
+                                       ?>
+                                    <li><i class="fa-regular fa-comments"></i> {{$contact_comment_count}} </li>
+                                    <li><i class="fa-solid fa-paperclip"></i> {{$contact_attach_count}} </li>
+                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> {{$contact->created_at->format('d-m-Y')}}</li>
                                 </ul>
                             </div>
 
@@ -248,13 +272,13 @@
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> {{$qualify->client_username}} </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#{{$qualify->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{Str::limit($qualify->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
@@ -271,33 +295,7 @@
                         </div>
                     </div>
 
-                    <div class="dropzone" id="yellow">
 
-                        <div class="kanbanCard yellow">
-                            <div class="content">
-                                <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
-                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
-                                </ul>
-
-                                <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
-                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
-                                </ul>
-
-                                <ul class="task_list">
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
-                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
-                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
-                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
-                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
                     @endforeach
 
 
@@ -312,23 +310,28 @@
             <div class="board">
                 <ul class="board_list">
                     <li class="yellows">Requirements Defined</li>
-                    <li>0</li>
+                    <?php
+                    $req_count= App\Models\DealStage::where('deal_stage',2)->count();
+                    $req= App\Models\DealStage::where('deal_stage',2)->get();
+                     ?>
+                    <li>{{$req_count}}</li>
                 </ul>
 
                 <div id="sp1-scrollbar">
+                  @foreach($req as $rq)
 
                     <div class="dropzone" id="yellow">
 
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> {{$rq->client_username}}</a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#{{$rq->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{Str::limit($rq->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
@@ -345,33 +348,9 @@
                         </div>
                     </div>
 
-                    <div class="dropzone" id="yellow">
+                  @endforeach
 
-                        <div class="kanbanCard yellow">
-                            <div class="content">
-                                <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
-                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
-                                </ul>
 
-                                <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
-                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
-                                </ul>
-
-                                <ul class="task_list">
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
-                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
-                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
-                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
-                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
 
 
                 </div>
@@ -384,23 +363,28 @@
             <div class="board">
                 <ul class="board_list">
                     <li>Proposal Made</li>
-                    <li>0</li>
+                    <?php
+                    $proposal_count= App\Models\DealStage::where('deal_stage',3)->count();
+                    $proposal= App\Models\DealStage::where('deal_stage',3)->get();
+                     ?>
+                    <li>{{$proposal_count}}</li>
                 </ul>
 
                 <div id="sp1-scrollbar">
+                  @foreach($proposal as $prop)
 
                     <div class="dropzone" id="yellow">
 
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> {{$prop->client_username}} </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#{{$prop->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{Str::limit($prop->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
@@ -416,34 +400,9 @@
 
                         </div>
                     </div>
+                @endforeach
 
-                    <div class="dropzone" id="yellow">
 
-                        <div class="kanbanCard yellow">
-                            <div class="content">
-                                <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
-                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
-                                </ul>
-
-                                <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
-                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
-                                </ul>
-
-                                <ul class="task_list">
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
-                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
-                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
-                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
-                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
 
 
 
@@ -457,22 +416,26 @@
             <div class="board">
                 <ul class="board_list">
                     <li>Negotiation Started</li>
-                    <li>0</li>
+                    <?php
+                    $negotiation_count= App\Models\DealStage::where('deal_stage',4)->where('won_lost',null)->count();
+                    $negotiation= App\Models\DealStage::where('deal_stage',4)->where('won_lost',null)->get();
+                     ?>
+                    <li>{{$negotiation_count}}</li>
                 </ul>
                 <div id="sp1-scrollbar">
-
+                  @foreach($negotiation as $neg)
                     <div class="dropzone" id="yellow">
 
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> {{$neg->client_username}}</a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#{{$neg->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{Str::limit($neg->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
@@ -488,34 +451,9 @@
 
                         </div>
                     </div>
+                  @endforeach
 
-                    <div class="dropzone" id="yellow">
 
-                        <div class="kanbanCard yellow">
-                            <div class="content">
-                                <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
-                                    <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
-                                </ul>
-
-                                <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
-                                    <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
-                                </ul>
-
-                                <ul class="task_list">
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
-                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
-                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
-                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
-                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
 
                 </div>
             </div>
@@ -529,8 +467,8 @@
                 <ul class="board_list">
                     <li>Won</li>
                     <?php
-                    $won_count= App\Models\DealStage::where('won_lost','Yes')->count();
-                    $won= App\Models\DealStage::where('won_lost','Yes')->get();
+                    $won_count= App\Models\Deal::count();
+                    $won= App\Models\Deal::get();
                   //  dd($won);
                      ?>
                     <li>{{$won_count}}</li>
@@ -544,8 +482,8 @@
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#{{$w->short_code}}</a> </li>
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> {{$w->client_username}} </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#{{$w->deal_id}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
@@ -582,24 +520,28 @@
             <div class="board">
                 <ul class="board_list">
                     <li>Lost</li>
-                    <li>0</li>
+                    <?php
+                    $lost_count= App\Models\DealStage::where('won_lost','No')->count();
+                    $lost=  App\Models\DealStage::where('won_lost','No')->get();
+                     ?>
+                    <li>{{$lost_count}}</li>
                 </ul>
 
                 <div id="sp1-scrollbar">
 
-
+                    @foreach($lost as $l)
                     <div class="dropzone" id="yellow">
 
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> Client Name </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#DSEOP1715P1G</a> </li>
+                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> {{$l->client_username}} </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="#">#{{$l->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> Lorem, ipsum dolor sit amet consectetur  elit...</a> </li>
+                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{$l->project_name}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
@@ -615,6 +557,7 @@
 
                         </div>
                     </div>
+                    @endforeach
 
 
 

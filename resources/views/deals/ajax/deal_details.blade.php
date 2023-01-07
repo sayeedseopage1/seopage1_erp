@@ -476,6 +476,7 @@ transform: rotate(45deg);
 
     .custom_container{
       max-width: 1440px;
+      /* max-width: 615px; */
       margin: 0 auto;
       display: block;
     }
