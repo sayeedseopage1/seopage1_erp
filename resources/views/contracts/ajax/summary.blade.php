@@ -23,6 +23,69 @@
 
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/segment7" type="text/css" />
+       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed" type="text/css" />
+
+
+
+        <link rel="stylesheet" href="{{asset('countdown/css/style.css')}}" type="text/css" />
+        <style media="screen">
+        .wrapper-timezone {
+  box-sizing: border-box;
+  max-width: 303px;
+  margin: 8px auto;
+  text-align: center;
+  background: #eee;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: -7px 0;
+  border-radius: 12px;
+}
+.clock {
+    margin: -8px 0 0 0;
+}
+.timer_text {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 9px;
+    font-family: arial;
+    margin: 1px;
+}
+.clock .column {
+    border: 3px solid  #ddd;
+    padding: 18px;
+    text-align: center;
+    display: inline-flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    background: #1f2828;
+    color: #fff;
+    width: 84px;
+    padding-bottom: 1px;
+}
+.wrapper-timezone {
+    box-sizing: border-box;
+    max-width: 282px;
+    /* max-height: 290px; */
+    margin: 8px auto;
+    text-align: center;
+    background: #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: -7px 0;
+    border-radius: 12px;
+}
+        </style>
 <?php
 $deal_id=App\Models\Deal::where('id',$contract->deal->id)->first();
 $project_id= App\Models\PMProject::where('deal_id',$contract->deal->id)->first();
@@ -64,10 +127,48 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
 
                 </tr>
                 <tr>
-                  <td>
+                  <td >
+                    @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
+                    @if($contract->deal->status == 'pending')
+                    <div class="wrapper-timezone d-flex justify-content-center">
+
+
+         <p>You have </p>
+
+         <div class="clock">
+             <!-- <div class="column days">
+                 <div class="timer" id="days"></div>
+                 <div class="timer_text">DAYS</div>
+             </div> -->
+
+             <!-- <div class="timer days">:</div> -->
+
+             <div class="column">
+                 <div class="timer" id="hours"></div>
+                 <div class="timer_text">HOURS</div>
+             </div>
+
+             <!-- <div class="timer">:</div> -->
+             <div class="column">
+                 <div class="timer" id="minutes"></div>
+                 <div class="timer_text">MINUTES</div>
+             </div>
+
+             <!-- <div class="timer">:</div> -->
+             <div class="column">
+                 <div class="timer" id="seconds"></div>
+                 <div class="timer_text">SECONDS</div>
+             </div>
+         </div>
+
+         <p>remaining for accepting the project</p>
+     </div>
+     @endif
+     @endif
                     <div class="d-flex justify-content-center">
                       @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
                       @if($contract->deal->status == 'pending')
+
                     {{--  <button class="btn btn-danger mr-3"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
                         @include('contracts.modals.dealdenymodal') --}}
                       <a href="/account/projects/{{$project_id->project_id}}/edit" class="btn btn-success">Accept <i class="fa-solid fa-check"></i></a>
@@ -87,7 +188,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                 </tr>
                 <tr class="inv-num">
                     <td class="f-14 text-dark">
-                        <p class="mt-3 mb-0">
+                        <p class="mb-0">
                             {{ mb_ucwords(global_setting()->company_name) }}<br>
                             {!! nl2br(default_address()->address) !!}<br>
                             {{ global_setting()->company_phone }}
@@ -383,3 +484,83 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
     <!-- CARD FOOTER END -->
 </div>
 <!-- INVOICE CARD END -->
+<?php
+$currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$contract->deal->award_time)->format('Y-m-d H:i:s');
+
+
+$newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addHours(48)->format('Y-m-d H:i:s');
+//dd($newDateTime);
+ ?>
+<input type="hidden" id="award_time" value="{{$newDateTime}}">
+@push('scripts')
+
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.4/moment-timezone-with-data.js"></script>
+
+
+      <script>
+
+
+
+          $(function(){
+              function timer(settings){
+                var award_time = $('#award_time').val();
+                //console.log(award_time);
+
+                  var config = {
+                      endDate:  $('#award_time').val(),
+                      timeZone: 'Asia/Dhaka',
+                      hours: $('#hours'),
+                      minutes: $('#minutes'),
+                      seconds: $('#seconds'),
+                      newSubMessage: 'and should be back online in a few minutes...'
+                  };
+                  function prependZero(number){
+                      return number < 10 ? '0' + number : number;
+                  }
+                  $.extend(true, config, settings || {});
+                  var currentTime = moment();
+                  var endDate = moment.tz(config.endDate, config.timeZone);
+                  var diffTime = endDate.valueOf() - currentTime.valueOf();
+                  var duration = moment.duration(diffTime, 'milliseconds');
+                  var days = duration.days();
+                  var interval = 1000;
+                  var subMessage = $('.sub-message');
+                  var clock = $('.clock');
+                  if(diffTime < 0){
+                      endEvent(subMessage, config.newSubMessage, clock);
+                      return;
+                  }
+                  if(days > 0){
+                      $('#days').text(prependZero(days));
+                      $('.days').css('display', 'inline-block');
+                  }
+                  var intervalID = setInterval(function(){
+                      duration = moment.duration(duration - interval, 'milliseconds');
+                      var hours = duration.hours(),
+                          minutes = duration.minutes(),
+                          seconds = duration.seconds();
+                      days = duration.days();
+                      if(hours  <= 0 && minutes <= 0 && seconds  <= 0 && days <= 0){
+                          clearInterval(intervalID);
+                          endEvent(subMessage, config.newSubMessage, clock);
+                          window.location.reload();
+                      }
+                      if(days === 0){
+                          $('.days').hide();
+                      }
+                      $('#days').text(prependZero(days));
+                      config.hours.text(prependZero(hours));
+                      config.minutes.text(prependZero(minutes));
+                      config.seconds.text(prependZero(seconds));
+                  }, interval);
+              }
+              function endEvent($el, newText, hideEl){
+                  $el.text(newText);
+                  hideEl.hide();
+              }
+              timer();
+          });
+
+      </script>
+      @endpush

@@ -1,9 +1,32 @@
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+		<link rel="stylesheet" href="{{asset('time-picker2/css/bootstrap-material-datetimepicker.css')}}" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+
+		<script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+		<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
+		<script type="text/javascript" src="{{asset('time-picker2/js/bootstrap-material-datetimepicker.js')}}"></script>
+    <style media="screen">
+    #timerss {
+    /* max-width: a; */
+    display: flex;
+    flex-direction: column;
+    margin: 8px auto;
+    /* background: aliceblue; */
+    align-items: flex-start;
+    border-radius: 7px;
+    justify-content: center;
+    /* padding: 7px; */
+    }
+    </style>
 <div class="modal fade" id="dealaddmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Create Deal</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Create Won Deal</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form class="" action="{{route('store-deals')}}" method="post">
@@ -66,6 +89,7 @@
                               <div class="alert alert-danger">{{ $message }}</div>
                               </div>
                             @enderror
+
                             <div class="mt-3">
                               <?php
                                 $currencies= App\Models\Currency::all();
@@ -87,16 +111,92 @@
                             @enderror
 
 
+                            <div class="mt-3" id="timerss">
+
+                        			<h2><strong>Project Award Time <span style="color:red;">*<span></strong></h2>
+
+                        				<input type="text" id="date-format" name="award_time" class="form-control floating-label @error('award_time') is-invalid @enderror" placeholder="Select Exact Award Time" >
+
+
+                        		</div>
+                            @error('award_time')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
+
+
+
+
 
 
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" >Create Deal</button>
+          <button type="submit" class="btn btn-primary"  value="Submit">Create Deal</button>
 
       </div>
         </form>
     </div>
   </div>
 </div>
+  @push('scripts')
+  @if (count($errors) > 0)
+  <script>
+      $( document ).ready(function() {
+          $('#dealaddmodal').modal('show');
+      });
+  </script>
+    @endif
+  <script type="text/javascript">
+  $(document).ready(function()
+  {
+    $('#date').bootstrapMaterialDatePicker
+    ({
+      time: false,
+      clearButton: true
+    });
+
+    $('#time').bootstrapMaterialDatePicker
+    ({
+      date: false,
+      shortTime: false,
+      format: 'HH:mm'
+    });
+
+    $('#date-format').bootstrapMaterialDatePicker
+    ({
+      format: 'DD MMMM YYYY HH:mm:ss'
+    });
+    $('#date-fr').bootstrapMaterialDatePicker
+    ({
+      format: 'DD/MM/YYYY HH:mm',
+      lang: 'fr',
+      weekStart: 1,
+      cancelText : 'ANNULER',
+      nowButton : true,
+      switchOnClick : true
+    });
+
+    $('#date-end').bootstrapMaterialDatePicker
+    ({
+      weekStart: 0, format: 'DD/MM/YYYY HH:mm'
+    });
+    $('#date-start').bootstrapMaterialDatePicker
+    ({
+      weekStart: 0, format: 'DD/MM/YYYY HH:mm', shortTime : true
+    }).on('change', function(e, date)
+    {
+      $('#date-end').bootstrapMaterialDatePicker('setMinDate', date);
+    });
+
+    $('#min-date').bootstrapMaterialDatePicker({ format : 'DD/MM/YYYY HH:mm', minDate : new Date() });
+
+    $.material.init()
+  });
+
+
+  </script>
+
+    @endpush

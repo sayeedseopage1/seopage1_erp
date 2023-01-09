@@ -206,12 +206,17 @@ class ContractController extends AccountBaseController
     }
     public function storeDeal(Request $request)
     {
+  //  dd($request);
+      $award_date= strtotime($request->award_time);
+      $aw_dt= date('Y-m-d H:i:s', $award_date );
+        //dd($aw_dt);
         $validated = $request->validate([
             'user_name' => 'required|unique:users|max:255',
             'client_name' => 'required',
             'project_name' => 'required',
             'amount' => 'required',
             'original_currency_id' => 'required',
+            'award_time' => 'required',
         ]);
 
 
@@ -225,6 +230,7 @@ class ContractController extends AccountBaseController
         $deal->actual_amount=  $request->amount;
         $currency= Currency::where('id',$request->original_currency_id)->first();
         //dd($currency);
+        $deal->award_time= $aw_dt;
         $deal->amount = ($request->amount)/$currency->exchange_rate;
         $deal->client_name = $request->client_name;
         $deal->client_username = $request->user_name;
