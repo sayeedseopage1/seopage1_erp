@@ -204,7 +204,7 @@
                                       <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"  alt="">
                                       @endif
                                       {{$contact->client_username}} </a></li>
-                                    <li class="clipboard_list_sp1"> <a class="openRightModal" href="/account/deals/{{$contact->id}}">#{{$contact->short_code}}</a> </li>
+                                    <li class="clipboard_list_sp1"> <a  href="/account/deals/{{$contact->id}}">#{{$contact->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
@@ -267,28 +267,37 @@
 
                 <div id="sp1-scrollbar">
                     @foreach($qualified as $qualify)
+                    <?php
+                    $client= App\Models\User::where('user_name',$qualify->client_username)->first();
+                     ?>
                    <div class="dropzone" id="yellow">
 
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> {{$qualify->client_username}} </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#{{$qualify->short_code}}</a> </li>
+                                    <li> <a href="#" title="{{$qualify->client_username}}"> @if($contact->client != null)
+                                    <img src="{{asset('user-uploads/avatar/'. $client->image)}}"  alt="">
+                                    @else
+                                    <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"  alt="">
+                                    @endif {{$qualify->client_username}} </a></li>
+                                    <li class="clipboard_list_sp1"> <a href="/account/deals/{{$qualify->id}}">#{{$qualify->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{Str::limit($qualify->project_name,40)}}</a> </li>
+                                    <li><a href="#" title="{{$qualify->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($qualify->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
                                 <ul class="task_list">
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
-                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
-                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
-                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
-                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                  <?php
+                                  $qualify_comment_count= App\Models\DealStageChange::where('deal_id',$qualify->short_code)->where('deal_stage_id',1)->where('comments','!=',null)->count();
+                                  $qualify_attach_count= App\Models\DealStageChange::where('deal_id',$qualify->short_code)->where('deal_stage_id',1)->where('attach','!=',null)->count();
+
+                                   ?>
+                                   <li><i class="fa-regular fa-comments"></i> {{$qualify_comment_count}} </li>
+                                   <li><i class="fa-solid fa-paperclip"></i> {{$qualify_attach_count}} </li>
+                                   <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> {{$qualify->created_at->format('d-m-Y')}}</li>
                                 </ul>
                             </div>
 
