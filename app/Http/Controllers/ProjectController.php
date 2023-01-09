@@ -858,7 +858,7 @@ if ($pm_count < 2) {
             $project->membersMany()->sync($request->member_id);
         }
 
-
+        $project->comments= $request->comments;
         $project->save();
 
         if ($request->project_challenge != 'No Challenge') {

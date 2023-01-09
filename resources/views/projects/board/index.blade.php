@@ -88,7 +88,7 @@
                           <div class="kanbanCard yellow">
                               <div class="content">
                                   <ul class="task_list">
-                                      <li> <a class="openRightModal" href="/account/clients/{{$project->client_id}}" title="{{$project->client_name->name}}" data-tooltip-bottom="{{$project->client_name->name}}">
+                                      <li> <a class="openRightModal"  href="/account/clients/{{$project->client_id}}" title="{{$project->client_name->name}}" data-tooltip-bottom="{{$project->client_name->name}}">
                                         @if($project->client_name->image != null)
                                         <img data-original-title="{{$project->client_name->name}}" src="{{asset('user-uploads/avatar/'. $project->client_name->image)}}"
 
@@ -102,7 +102,7 @@
                                         @endif
                                          {{$project->client_name->name}} </a></li>
                                       <!-- <li><span>#749</span></li> -->
-                                      <li> <a class="openRightModal" href="/account/employees/{{$project->pm_id}}" title="{{$project->pm_name->name}}" data-tooltip-bottom="{{$project->pm_name->name}}">
+                                      <li> <a class="openRightModal"  href="/account/employees/{{$project->pm_id}}" title="{{$project->pm_name->name}}" data-tooltip-bottom="{{$project->pm_name->name}}">
 
 
                                         @if($project->pm_name->image != null)
@@ -122,7 +122,7 @@
                                   </ul>
 
                                   <ul class="task_list" id="projects_sp1_padding">
-                                      <li><a class="openRightModal" href="/account/projects/{{$project->id}}" data-tooltip-bottom="{{$project->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($project->project_name,32)}}</a> </li>
+                                      <li><a class="openRightModal RightModal" id="RightModal" href="/account/projects/{{$project->id}}" data-tooltip-bottom="{{$project->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($project->project_name,32)}}</a> </li>
                                       <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> {{$complete_tasks}}/{{$incomplete_tasks}} </li>
                                   </ul>
 
@@ -135,7 +135,7 @@
                                      @foreach($project_members as $key => $member)
                                      @if($key < 3)
                                       <li>
-                                        <a class="openRightModal" href="/account/employees/{{$member->user_id}}" title="{{$member->usr->name}}" data-tooltip-right="{{$member->usr->name}}">
+                                        <a class="openRightModal"  href="/account/employees/{{$member->user_id}}" title="{{$member->usr->name}}" data-tooltip-right="{{$member->usr->name}}">
                                             @if($member->usr->image != null)
                                             <img src="{{asset('user-uploads/avatar/'. $member->usr->image)}}" title="{{$member->usr->name}}" alt="">
                                           @else
@@ -151,7 +151,7 @@
 
                                           @if(count($project_members) > 3)
 
-                                          <a class="openRightModal" href="/account/projects/{{$project->id}}?tab=members">
+                                          <a class="openRightModal"  href="/account/projects/{{$project->id}}?tab=members">
                                       <li><span  data-tooltip="Click to See All Members" >{{count($project_members)-3}}+</span></a></li>
                                       @endif
                                       <li><i class="fa-regular fa-comments"></i> 0 </li>
@@ -300,6 +300,20 @@ $( function() {
   });
 
 });
+
+</script>
+<script type="text/javascript">
+
+
+
+$(document).ready(function(){
+  $(".RightModal").click(function(){
+  //alert("success");
+    $(".activity").hide();
+  });
+});
+
+
 
 </script>
 

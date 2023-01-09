@@ -1379,27 +1379,8 @@ ul.fileList {
 
 
 @endsection
-<script src="sweetalert2.all.min.js"></script>
-@if(session('status_updated'))
-        <script>
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            })
 
-            Toast.fire({
-                icon: 'success',
-                title: '{{session('Lead Successfully Added')}}'
-            })
-        </script>
-    @endif
+
 <script type="text/javascript">
 Swal.fire({
   title: 'Error!',
@@ -1416,52 +1397,18 @@ Swal.fire({
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" charset="utf-8"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" charset="utf-8"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js" charset="utf-8"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
   <script type="text/javascript">
   $(document).ready(function () {
       $("#comments1").summernote();
+
   });
 
   </script>
-<script type="text/javascript">
-$(document).ready(function () {
-    $('#dealstagetable').DataTable();
-});
-</script>
-<script type="text/javascript">
-function yesnoCheck() {
-    yes1 = document.getElementById('yes')
-    //yes2 = document.getElementById('acc')
 
-    no1 = document.getElementById('other3')
-  //  no2 = document.getElementById('other4')
 
-    if (document.getElementById('yesCheck').checked) {
-        yes1.type  = 'text';
-        no1.type =  'hidden';
-    } else {
-        no1.type =  'text';
-        yes1.type =  'hidden';
-    }
 
-}
-
-</script>
-<script type="text/javascript">
-$('input[name="deal_stage"]').change(function() {
-   if($(this).is(':checked') && $(this).val() == 'yes') {
-        $('#qualifymodal').modal('show');
-   }
-});
-$('input[name="deal_stage"]').change(function() {
-   if($(this).is(':checked') && $(this).val() == 'no') {
-        $('#lostmodal').modal('show');
-   }
-});
-
-</script>
 <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
    {!! Toastr::message() !!}
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

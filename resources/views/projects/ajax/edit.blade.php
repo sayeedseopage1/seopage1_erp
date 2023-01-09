@@ -1005,8 +1005,18 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
                       </div>
 
-                  <br>
+
                 </div>
+                <div class="col-md-12 col-lg-12 mb-5">
+                    <div class="form-group">
+                        <label class="" for="">Comments</label>
+                        <div class="d-flex">
+                          <textarea name="comments" rows="6" cols="180"></textarea>
+
+                        </div>
+                    </div>
+                </div>
+                  <br>
 
 
 

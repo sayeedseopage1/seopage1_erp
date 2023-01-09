@@ -5,13 +5,18 @@
 
 @php $editProjectPermission = user()->permission('edit_projects'); $addPaymentPermission = user()->permission('add_payments'); $projectBudgetPermission = user()->permission('view_project_budget'); $memberIds =
 $project->members->pluck('user_id')->toArray(); @endphp
-
+<style media="screen">
+  .custom-css{
+    	margin-right: auto;
+      padding-top: 0 !important;
+  }
+</style>
 <div class="d-lg-flex">
-    <div class="project-left w-100 py-0 py-lg-5 py-md-0">
+    <div class="project-left w-100 py-0 py-lg-5 py-md-0" id="project-left">
         <div class="d-flex align-content-center flex-lg-row-reverse mb-4">
             @if (!$project->trashed())
             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
-           <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
+          {{-- <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
                 @if ($editProjectPermission == 'all' || ($editProjectPermission == 'added' && $project->added_by == user()->id) || ($project->project_admin == user()->id))
                 <select class="form-control select-picker change-status height-35">
                     @foreach ($projectStatus as $status)
@@ -28,7 +33,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     {{ __('app.finished') }} @endif
                 </div>
                 @endif
-            </div>
+            </div> --}}
             @endif
 
             <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
@@ -340,11 +345,11 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <!-- BUDGET VS SPENT START -->
             <div class="col-md-12">
                 <x-cards.data>
-                    <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                    <div class="row">
                         <div class="col">
-                            <h4>Freelancer Profile Link</h4>
+                            <h4>Project Comments</h4>
                             <br>
-                            <p><a href="{{ $deal->profile_link}}">{{ $deal->profile_link}}</a></p>
+                            <p>{!!$project->comments !!}</p>
 
                         </div>
 
@@ -357,11 +362,29 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <!-- BUDGET VS SPENT START -->
             <div class="col-md-12">
                 <x-cards.data>
-                    <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                    <div class="row">
+                        <div class="col">
+                            <h4>Freelancer Profile Link</h4>
+                            <br>
+                            <p><a target="_blank" href="{{ $deal->profile_link}}">{{ $deal->profile_link}}</a></p>
+
+                        </div>
+
+                    </div>
+                </x-cards.data>
+            </div>
+            <!-- BUDGET VS SPENT END -->
+        </div>
+        <div class="row mb-4" >
+            <!-- BUDGET VS SPENT START -->
+            <div class="col-md-12">
+                <x-cards.data>
+                    <div class="row">
                         <div class="col">
                             <h4>Freelancer Message Link</h4>
                             <br>
-                            <p>{!! $deal->message_link !!}</p>
+
+                            <p><a target="_blank" href="{{ $deal->message_link}}">{!! $deal->message_link !!}</a></p>
 
                         </div>
 
@@ -496,6 +519,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
                     </div>
                 </x-cards.data>
+
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>
@@ -555,7 +579,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
 
     <!-- PROJECT RIGHT START -->
-    <div class="project-right pt-0 pb-4 p-lg-0">
+    <div class="project-right pt-0 pb-4 p-lg-0 .activity" id="activity">
         <div class="bg-white">
             <!-- ACTIVITY HEADING START -->
             <div class="p-activity-heading d-flex align-items-center justify-content-between b-shadow-4 p-20">
@@ -596,6 +620,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <!-- ACTIVITY DETAIL END -->
         </div>
     </div>
+
     <!-- PROJECT RIGHT END -->
 
 
@@ -752,5 +777,30 @@ $project->members->pluck('user_id')->toArray(); @endphp
         });
     });
 </script>
+<script type="text/javascript">
+
+var list = document.getElementsByClassName("RightModal");
+if (list && list.length > 0) {
+
+  $(document).ready(function() {
+    $('#activity').hide();
+  //  $('#project-left').css({"margin-right":"auto","padding-top":"0px !important"});
+    $("#project-left").removeClass("project-left w-100 py-0 py-lg-5 py-md-0");;
+    $("#project-left").addClass("custom-css");
+
+});
+}
+
+
+// .project-left {
+// 	margin-right: auto;
+// }
+// .project-left.w-100.py-0.py-lg-5.py-md-0 {
+// 	padding-top: 0 !important;
+// }
+
+
+</script>
+
 <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
    {!! Toastr::message() !!}

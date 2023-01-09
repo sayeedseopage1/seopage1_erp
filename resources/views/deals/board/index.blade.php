@@ -179,7 +179,7 @@
             <div class="board">
 
                 <ul class="board_list">
-                    <li class="red" style="border-left: 19px solid #D21010;"> Contact Made</li>
+                    <li class="contact" style="border-left: 19px solid #D21010;"> Contact Made</li>
                     <?php
                     $contact_made_count= App\Models\DealStage::where('deal_stage',0)->count();
                     $contact_made= App\Models\DealStage::where('deal_stage',0)->get();
@@ -257,7 +257,7 @@
 
             <div class="board">
                 <ul class="board_list">
-                    <li class="blue">Qualified</li>
+                    <li class="qualify">Qualified</li>
                     <?php
                     $qualified_count= App\Models\DealStage::where('deal_stage',1)->count();
                     $qualified= App\Models\DealStage::where('deal_stage',1)->get();
@@ -275,12 +275,12 @@
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="{{$qualify->client_username}}"> @if($contact->client != null)
+                                    <li> <a href="#" title="{{$qualify->client_username}}"> @if($qualify->client != null)
                                     <img src="{{asset('user-uploads/avatar/'. $client->image)}}"  alt="">
                                     @else
                                     <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"  alt="">
                                     @endif {{$qualify->client_username}} </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="/account/deals/{{$qualify->id}}">#{{$qualify->short_code}}</a> </li>
+                                    <li class="clipboard_list_sp1"> <a  href="/account/deals/{{$qualify->id}}">#{{$qualify->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
@@ -290,6 +290,19 @@
                                 </ul>
 
                                 <ul class="task_list">
+                                  <li><a href="/account/employees/{{$qualify->user->id}}" title="{{$qualify->user->name}}">
+                                    @if($qualify->user->image == null)
+                                    <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"
+
+                                     title="{{$qualify->user->name}}" alt="">
+                                     @else
+                                     <img src="{{asset('user-uploads/avatar/'. $qualify->user->image)}}"
+
+                                      title="{{$qualify->user->name}}" alt="">
+
+                                     @endif
+
+                                    </a></li>
                                   <?php
                                   $qualify_comment_count= App\Models\DealStageChange::where('deal_id',$qualify->short_code)->where('deal_stage_id',1)->where('comments','!=',null)->count();
                                   $qualify_attach_count= App\Models\DealStageChange::where('deal_id',$qualify->short_code)->where('deal_stage_id',1)->where('attach','!=',null)->count();
@@ -318,7 +331,7 @@
 
             <div class="board">
                 <ul class="board_list">
-                    <li class="yellows">Requirements Defined</li>
+                    <li class="requirement">Requirements Defined</li>
                     <?php
                     $req_count= App\Models\DealStage::where('deal_stage',2)->count();
                     $req= App\Models\DealStage::where('deal_stage',2)->get();
@@ -328,29 +341,51 @@
 
                 <div id="sp1-scrollbar">
                   @foreach($req as $rq)
+                  <?php
+                  $client= App\Models\User::where('user_name',$rq->client_username)->first();
+                   ?>
 
                     <div class="dropzone" id="yellow">
 
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> {{$rq->client_username}}</a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#{{$rq->short_code}}</a> </li>
+                                    <li> <a href="#" title="{{$rq->client_username}}"> @if($rq->client != null)
+                                    <img src="{{asset('user-uploads/avatar/'. $client->image)}}"  alt="">
+                                    @else
+                                    <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"  alt="">
+                                    @endif {{$rq->client_username}}</a></li>
+                                    <li class="clipboard_list_sp1"> <a  href="/account/deals/{{$rq->id}}">#{{$rq->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{Str::limit($rq->project_name,40)}}</a> </li>
+                                    <li><a href="#" title="{{$rq->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($rq->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
                                 <ul class="task_list">
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
-                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
-                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
-                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
-                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                  <li><a href="/account/employees/{{$rq->user->id}}" title="{{$rq->user->name}}">
+                                    @if($rq->user->image == null)
+                                    <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"
+
+                                     title="{{$rq->user->name}}" alt="">
+                                     @else
+                                     <img src="{{asset('user-uploads/avatar/'. $rq->user->image)}}"
+
+                                      title="{{$rq->user->name}}" alt="">
+
+                                     @endif
+
+                                    </a></li>
+                                  <?php
+                                  $rq_comment_count= App\Models\DealStageChange::where('deal_id',$rq->short_code)->where('deal_stage_id',2)->where('comments','!=',null)->count();
+                                  $rq_attach_count= App\Models\DealStageChange::where('deal_id',$rq->short_code)->where('deal_stage_id',2)->where('attach','!=',null)->count();
+
+                                   ?>
+                                   <li><i class="fa-regular fa-comments"></i> {{$rq_comment_count}} </li>
+                                   <li><i class="fa-solid fa-paperclip"></i> {{$rq_attach_count}} </li>
+                                   <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> {{$rq->created_at->format('d-m-Y')}}</li>
                                 </ul>
                             </div>
 
@@ -371,7 +406,7 @@
 
             <div class="board">
                 <ul class="board_list">
-                    <li>Proposal Made</li>
+                    <li class="proposal">Proposal Made</li>
                     <?php
                     $proposal_count= App\Models\DealStage::where('deal_stage',3)->count();
                     $proposal= App\Models\DealStage::where('deal_stage',3)->get();
@@ -381,29 +416,51 @@
 
                 <div id="sp1-scrollbar">
                   @foreach($proposal as $prop)
+                  <?php
+                  $client= App\Models\User::where('user_name',$prop->client_username)->first();
+                   ?>
 
                     <div class="dropzone" id="yellow">
 
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> {{$prop->client_username}} </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#{{$prop->short_code}}</a> </li>
+                                    <li> <a href="#" title="{{$prop->client_username}}">  @if($prop->client != null)
+                                    <img src="{{asset('user-uploads/avatar/'. $client->image)}}"  alt="">
+                                    @else
+                                    <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"  alt="">
+                                    @endif {{$prop->client_username}} </a></li>
+                                    <li class="clipboard_list_sp1"> <a  href="/account/deals/{{$prop->id}}">#{{$prop->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{Str::limit($prop->project_name,40)}}</a> </li>
+                                    <li><a href="#" title="{{$prop->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($prop->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
                                 <ul class="task_list">
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
-                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
-                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
-                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
-                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                  <li><a href="/account/employees/{{$prop->user->id}}" title="{{$prop->user->name}}">
+                                    @if($prop->user->image == null)
+                                    <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"
+
+                                     title="{{$prop->user->name}}" alt="">
+                                     @else
+                                     <img src="{{asset('user-uploads/avatar/'. $prop->user->image)}}"
+
+                                      title="{{$prop->user->name}}" alt="">
+
+                                     @endif
+
+                                    </a></li>
+                                  <?php
+                                  $prop_comment_count= App\Models\DealStageChange::where('deal_id',$prop->short_code)->where('deal_stage_id',3)->where('comments','!=',null)->count();
+                                  $prop_attach_count= App\Models\DealStageChange::where('deal_id',$prop->short_code)->where('deal_stage_id',3)->where('attach','!=',null)->count();
+
+                                   ?>
+                                   <li><i class="fa-regular fa-comments"></i> {{$prop_comment_count}} </li>
+                                   <li><i class="fa-solid fa-paperclip"></i> {{$prop_attach_count}} </li>
+                                   <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> {{$prop->created_at->format('d-m-Y')}}</li>
                                 </ul>
                             </div>
 
@@ -424,7 +481,7 @@
 
             <div class="board">
                 <ul class="board_list">
-                    <li>Negotiation Started</li>
+                    <li class="negotiation">Negotiation Started</li>
                     <?php
                     $negotiation_count= App\Models\DealStage::where('deal_stage',4)->where('won_lost',null)->count();
                     $negotiation= App\Models\DealStage::where('deal_stage',4)->where('won_lost',null)->get();
@@ -433,28 +490,50 @@
                 </ul>
                 <div id="sp1-scrollbar">
                   @foreach($negotiation as $neg)
+                  <?php
+                  $client= App\Models\User::where('user_name',$neg->client_username)->first();
+                   ?>
                     <div class="dropzone" id="yellow">
 
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> {{$neg->client_username}}</a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#{{$neg->short_code}}</a> </li>
+                                    <li> <a href="#" title="{{$neg->client_username}}"> @if($neg->client != null)
+                                    <img src="{{asset('user-uploads/avatar/'. $client->image)}}"  alt="">
+                                    @else
+                                    <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"  alt="">
+                                    @endif {{$neg->client_username}}</a></li>
+                                    <li class="clipboard_list_sp1"> <a  href="/account/deals/{{$neg->id}}">#{{$neg->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{Str::limit($neg->project_name,40)}}</a> </li>
+                                    <li><a href="#" title="{{$neg->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($neg->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
                                 <ul class="task_list">
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
-                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
-                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
-                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
-                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                  <li><a href="/account/employees/{{$neg->user->id}}" title="{{$neg->user->name}}">
+                                    @if($neg->user->image == null)
+                                    <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"
+
+                                     title="{{$neg->user->name}}" alt="">
+                                     @else
+                                     <img src="{{asset('user-uploads/avatar/'. $neg->user->image)}}"
+
+                                      title="{{$neg->user->name}}" alt="">
+
+                                     @endif
+
+                                    </a></li>
+                                  <?php
+                                  $neg_comment_count= App\Models\DealStageChange::where('deal_id',$neg->short_code)->where('deal_stage_id',4)->where('comments','!=',null)->count();
+                                  $neg_attach_count= App\Models\DealStageChange::where('deal_id',$neg->short_code)->where('deal_stage_id',4)->where('attach','!=',null)->count();
+
+                                   ?>
+                                   <li><i class="fa-regular fa-comments"></i> {{$neg_comment_count}} </li>
+                                   <li><i class="fa-solid fa-paperclip"></i> {{$neg_attach_count}} </li>
+                                   <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> {{$neg->created_at->format('d-m-Y')}}</li>
                                 </ul>
                             </div>
 
@@ -474,7 +553,7 @@
 
             <div class="board">
                 <ul class="board_list">
-                    <li>Won</li>
+                    <li class="won">Won</li>
                     <?php
                     $won_count= App\Models\Deal::count();
                     $won= App\Models\Deal::get();
@@ -485,29 +564,56 @@
 
                 <div id="sp1-scrollbar">
                   @foreach($won as $w)
+                  <?php
+                  $client= App\Models\User::where('user_name',$w->client_username)->first();
+                   ?>
 
                     <div class="dropzone" id="yellow">
 
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> {{$w->client_username}} </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#{{$w->deal_id}}</a> </li>
+                                    <li> <a href="/account/clients/{{$w->client_id}}" title="{{$w->client_username}}">
+                                      @if($w->client != null)
+                                      <img src="{{asset('user-uploads/avatar/'. $client->image)}}"  alt="">
+                                      @else
+                                      <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"  alt="">
+                                      @endif {{$w->client_username}} </a></li>
+                                    <li class="clipboard_list_sp1"> <a  href="/account/contracts/{{$w->id}}">#{{$w->deal_id}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{Str::limit($w->project_name,40)}}</a> </li>
+                                  <?php
+                                  $project= App\Models\Project::where('deal_id',$w->id)->first();
+
+
+                                   ?>
+                                    <li><a href="/account/projects/{{$project->id}}" title="{{$w->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($w->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
                                 <ul class="task_list">
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
-                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
-                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
-                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
-                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                      <li><a href="/account/employees/{{$w->user->id}}" title="{{$w->user->name}}">
+                                  @if($w->user->image == null)
+                                  <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"
+
+                                   title="{{$w->user->name}}" alt="">
+                                   @else
+                                   <img src="{{asset('user-uploads/avatar/'. $w->user->image)}}"
+
+                                    title="{{$w->user->name}}" alt="">
+
+                                   @endif
+                                     </a></li>
+                                  <?php
+                                  $w_comment_count= App\Models\DealStageChange::where('deal_id',$w->deal_id)->where('deal_stage_id',4)->where('comments','!=',null)->count();
+                                  $w_attach_count= App\Models\DealStageChange::where('deal_id',$w->deal_id)->where('deal_stage_id',4)->where('attach','!=',null)->count();
+
+                                   ?>
+                                   <li><i class="fa-regular fa-comments"></i> {{$w_comment_count}} </li>
+                                   <li><i class="fa-solid fa-paperclip"></i> {{$w_attach_count}} </li>
+                                   <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> {{$w->created_at->format('d-m-Y')}}</li>
                                 </ul>
                             </div>
 
@@ -528,7 +634,7 @@
 
             <div class="board">
                 <ul class="board_list">
-                    <li>Lost</li>
+                    <li class="lost">Lost</li>
                     <?php
                     $lost_count= App\Models\DealStage::where('won_lost','No')->count();
                     $lost=  App\Models\DealStage::where('won_lost','No')->get();
@@ -539,28 +645,48 @@
                 <div id="sp1-scrollbar">
 
                     @foreach($lost as $l)
+                    <?php
+                    $client= App\Models\User::where('user_name',$l->client_username)->first();
+                     ?>
                     <div class="dropzone" id="yellow">
 
                         <div class="kanbanCard yellow">
                             <div class="content">
                                 <ul class="task_list">
-                                    <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/7.png')}}" title="Sadik" alt=""> {{$l->client_username}} </a></li>
-                                    <li class="clipboard_list_sp1"> <a href="#">#{{$l->short_code}}</a> </li>
+                                    <li> <a href="#" title="{{$l->client_username}}">
+                                      @if($l->client != null)
+                                      <img src="{{asset('user-uploads/avatar/'. $client->image)}}"  alt="">
+                                      @else
+                                      <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"  alt="">
+                                      @endif {{$l->client_username}} </a></li>
+                                    <li class="clipboard_list_sp1"> <a  href="/account/contracts/{{$l->id}}">#{{$l->short_code}}</a> </li>
                                     <!-- <li> <a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/4.png')}}" title="Sadik" alt=""> Sadik Istiak </a></li> -->
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="wordpress theme development"><i class="fa-solid fa-layer-group"></i> {{$l->project_name}}</a> </li>
+                                    <li><a href="#" title="{{$l->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($l->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
                                 <ul class="task_list">
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/11.jpg')}}" title="Sadik" alt=""> </a></li>
-                                    <li><a href="#" title="Sadik"> <img src="{{asset('deal-kanban/img/man.png')}}" title="Sadik" alt="">  </a></li>
-                                    <li><span title="Sadik, kamal, Riyaz" ><a href="">12+</a></span></li>
-                                    <li><i class="fa-regular fa-comments"></i> 15 </li>
-                                    <li><i class="fa-solid fa-paperclip"></i> 25 </li>
-                                    <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> 30-12-2022</li>
+                                  @if($l->user->image == null)
+                                  <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"
+
+                                   title="{{$l->user->name}}" alt="">
+                                   @else
+                                   <img src="{{asset('user-uploads/avatar/'. $l->user->image)}}"
+
+                                    title="{{$l->user->name}}" alt="">
+
+                                   @endif
+                                  <?php
+                                  $l_comment_count= App\Models\DealStageChange::where('deal_id',$l->deal_id)->where('deal_stage_id',4)->where('comments','!=',null)->count();
+                                  $l_attach_count= App\Models\DealStageChange::where('deal_id',$l->deal_id)->where('deal_stage_id',4)->where('attach','!=',null)->count();
+
+                                   ?>
+                                   <li><i class="fa-regular fa-comments"></i> {{$l_comment_count}} </li>
+                                   <li><i class="fa-solid fa-paperclip"></i> {{$l_attach_count}} </li>
+                                   <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> {{$l->created_at->format('d-m-Y')}}</li>
                                 </ul>
                             </div>
 
