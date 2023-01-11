@@ -118,7 +118,7 @@ class InvoicesDataTable extends BaseDataTable
                       if($milestone_count - $invoice_count == 1 && $milestone_id->project_completion_status == 0)
                       {
 
-                        $action .= '<a class="dropdown-item openRightModal"
+                        $action .= '<a class="dropdown-item"
                         data-redirect-url="'.route('invoices.index') .'" href="'. url('/projects/project-completion').'/'.$invoice_id->milestone_id. '" >
                                     <i class="fa fa-plus mr-2"></i>
                                     ' . trans('Project Completion Form') . '
