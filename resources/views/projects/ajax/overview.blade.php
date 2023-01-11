@@ -48,13 +48,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         @if ($editProjectPermission == 'all' || ($project->project_admin == user()->id) || ($editProjectPermission == 'added' && user()->id == $project->added_by) || ($editProjectPermission == 'owned' && user()->id ==
                         $project->client_id && in_array('client', user_roles())) || ($editProjectPermission == 'owned' && in_array(user()->id, $memberIds) && in_array('employee', user_roles())) || ($editProjectPermission == 'both' &&
                         (user()->id == $project->client_id || user()->id == $project->added_by)) || ($editProjectPermission == 'both' && in_array(user()->id, $memberIds) && in_array('employee', user_roles())))
-                        @if(Auth::user()->role_id == 1 && $project->status == 'under review')
-                        <a class="dropdown-item" href="{{ route('project-accept', $project->id) }}">@lang('Accept')</a>
-                        <hr class="my-1" />
-                        <a class="dropdown-item" href="{{ route('project-deny', $project->id) }}">@lang('Deny')</a>
-                        <hr class="my-1" />
 
-                        @endif
                         <a class="dropdown-item openRightModal" href="{{ route('projects.edit', $project->id) }}">@lang('app.edit') @lang('app.project')</a>
                         <hr class="my-1" />
                         @endif @php $projectPin = $project->pinned() @endphp @if ($projectPin)
@@ -66,13 +60,15 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 </div>
             </div>
               @if(Auth::user()->role_id == 1 && $project->status == 'under review')
-            <a href="{{ route('project-deny', $project->id) }}" class="btn btn-danger border height-35 f-15 px-3 py-2 text-white text-capitalize rounded" >
+            <a id="project-deny" class="btn btn-danger border height-35 f-15 px-3 py-2 text-white text-capitalize rounded" >
                 @lang('Deny')
             </a>
 
-            <a href="{{ route('project-accept', $project->id) }}" class="btn btn-primary bg-white border height-35 f-15 px-3 py-2 text-dark-grey text-capitalize rounded mr-3">
+
+            <a id="project-accept" class="btn btn-primary bg-white border height-35 f-15 px-3 py-2 text-dark-grey text-capitalize rounded mr-3">
                 @lang('Accept')
             </a>
+
             @endif
 
             @if ($projectPin)
@@ -636,8 +632,26 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
 
 </div>
+  @include('projects.modals.projectacceptmodal')
+    @include('projects.modals.projectdenymodal')
 
 <script>
+$(document).on('click','#project-accept',function(e){
+
+
+  //console.log(milestone_id);
+  $('#projectreviewmodal').modal('show');
+
+
+});
+$(document).on('click','#project-deny',function(e){
+
+
+  //console.log(milestone_id);
+  $('#projectdenymodal').modal('show');
+
+
+});
     $(document).ready(function () {
         $(".change-status").change(function () {
             var status = $(this).val();

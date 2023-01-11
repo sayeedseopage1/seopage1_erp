@@ -74,6 +74,7 @@ use App\Models\ProjectMilestone;
 use App\Models\ProjectSubmission;
 use App\Models\ProjectNiche;
 use App\Notifications\ProjectReviewNotification;
+use App\Notifications\ProjectReviewAcceptNotification;
 
 
 class ProjectController extends AccountBaseController
@@ -2097,20 +2098,37 @@ if ($pm_count < 2) {
     ]);
 
     }
-    public function ProjectAccept($id)
+    public function ProjectAccept(Request $request)
     {
-      $project= Project::find($id);
+      // /dd($request);
+      $project= Project::find($request->project_id);
       $project->status= 'in progress';
+      $project->project_status= 'Accepted';
+      $project->admin_comment= $request->admin_comment;
       $project->save();
+      $user= User::where('id',$project->pm_id)->first();
+
+
+
+         Notification::send($user, new ProjectReviewAcceptNotification($project));
+
       Toastr::success('Project Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
       return back();
 
     }
-    public function ProjectDeny($id)
+    public function ProjectDeny(Request $request)
     {
-      $project= Project::find($id);
+      //dd($request);
+      $project= Project::find($request->project_id);
       $project->status= 'canceled';
+      $project->project_status= 'Canceled';
+      $project->admin_comment= $request->admin_comment;
       $project->save();
+      $user= User::where('id',$project->pm_id)->first();
+
+
+
+        Notification::send($user, new ProjectReviewAcceptNotification($project));
       Toastr::success('Project Canceled Successfully', 'Success', ["positionClass" => "toast-top-right"]);
       return back();
     }

@@ -1123,5 +1123,5 @@ Route::get('/projects/niches', [ProjectController::class, 'Niche'])->name('get-n
 Route::delete('/projects/delete-niche/{id}', [ProjectController::class, 'deleteNiche']);
 
 //top-management project accept/deny
-Route::get('/projects/accept/{id}', [ProjectController::class, 'ProjectAccept'])->name('project-accept');
-Route::get('/projects/deny/{id}', [ProjectController::class, 'ProjectDeny'])->name('project-deny');
+Route::post('/projects/accept/', [ProjectController::class, 'ProjectAccept'])->name('project-accept');
+Route::post('/projects/deny/', [ProjectController::class, 'ProjectDeny'])->name('project-deny');
