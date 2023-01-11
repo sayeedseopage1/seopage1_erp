@@ -156,7 +156,13 @@
                                       @endif
                                       <li><i class="fa-regular fa-comments"></i> 0 </li>
                                       <li><i class="fa-solid fa-paperclip"></i> {{$project_files}} </li>
-                                      <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i> {{$project->deadline->format('d-m-Y')}}</li>
+                                      <li style="font-size: 12px;"><i class="fa-regular fa-calendar-days"></i>
+                                        @if($project->deadline != null)
+                                        {{$project->deadline->format('d-m-Y')}}
+                                        @else
+                                        No Deadline
+                                        @endif
+                                      </li>
                                   </ul>
                               </div>
 

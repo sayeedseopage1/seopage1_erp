@@ -85,6 +85,34 @@
     padding: -7px 0;
     border-radius: 12px;
 }
+.clock .column {
+	border: 3px solid #ddd;
+	padding: 18px;
+	text-align: center;
+	display: inline-flex;
+	flex-direction: column;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+	background: #a23d50;
+	color: #fff;
+	width: 84px;
+	padding-bottom: 1px;
+}
+.wrapper-timezone p {
+
+	font-size: 24px;
+
+}
+p {
+	line-height: 30px;
+	margin-top: 0;
+}
+.wrapper-timezone {
+
+	/* background: #fff; */
+
+}
         </style>
 <?php
 $deal_id=App\Models\Deal::where('id',$contract->deal->id)->first();
@@ -103,158 +131,169 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
 
         <div class="invoice-table-wrapper">
 
-            <table width="100%" class="">
-                <tr class="inv-logo-heading">
-                    <td><img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
-                            class="logo" /></td>
-                            <td>
-                              <div class="dropdown float-right">
-                                  <button class="btn f-14 px-0 py-0 text-dark-grey dropdown-toggle" type="button"
-                                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      <i class="fa fa-ellipsis-h"></i>
-                                  </button>
 
-                                  <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
-                                      aria-labelledby="dropdownMenuLink" tabindex="0">
-                                      <a class="dropdown-item"
-                                          href="/deals/details/edit/{{$contract->deal->id}}">@lang('Edit')</a>
-                                  </div>
+            <tr class="inv-logo-heading mt-3">
+                <td><img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
+                        class="logo" /></td>
+                        <td>
+                          <div class="dropdown float-right">
+                              <button class="btn f-14 px-0 py-0 text-dark-grey dropdown-toggle" type="button"
+                                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fa fa-ellipsis-h"></i>
+                              </button>
+
+                              <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
+                                  aria-labelledby="dropdownMenuLink" tabindex="0">
+                                  <a class="dropdown-item"
+                                      href="/deals/details/edit/{{$contract->deal->id}}">@lang('Edit')</a>
                               </div>
+                          </div>
 
 
-                            </td>
+                        </td>
 
 
-                </tr>
-                <tr>
-                  <td >
-                    @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
-                    @if($contract->deal->status == 'pending')
-                    <div class="wrapper-timezone d-flex justify-content-center">
+            </tr>
 
-
-         <p>You have </p>
-
-         <div class="clock">
-             <!-- <div class="column days">
-                 <div class="timer" id="days"></div>
-                 <div class="timer_text">DAYS</div>
-             </div> -->
-
-             <!-- <div class="timer days">:</div> -->
-
-             <div class="column">
-                 <div class="timer" id="hours"></div>
-                 <div class="timer_text">HOURS</div>
-             </div>
-
-             <!-- <div class="timer">:</div> -->
-             <div class="column">
-                 <div class="timer" id="minutes"></div>
-                 <div class="timer_text">MINUTES</div>
-             </div>
-
-             <!-- <div class="timer">:</div> -->
-             <div class="column">
-                 <div class="timer" id="seconds"></div>
-                 <div class="timer_text">SECONDS</div>
-             </div>
-         </div>
-
-         <p>remaining for accepting the project</p>
-     </div>
-     @endif
-     @endif
-                    <div class="d-flex justify-content-center">
-                      @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
-                      @if($contract->deal->status == 'pending')
-
-                    {{--  <button class="btn btn-danger mr-3"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
-                        @include('contracts.modals.dealdenymodal') --}}
-                      <a href="/account/projects/{{$project_id->project_id}}/edit" class="btn btn-success">Accept <i class="fa-solid fa-check"></i></a>
-
-                      @elseif($contract->deal->status == 'Accepted')
-                        <h3 class="d-flex justify-content-center" style="color:green;">{{$contract->deal->status}}</h3>
-                        @else
-                      <h3 class="d-flex justify-content-center" style="color:red;">{{$contract->deal->status}}</h3>
-
-                      @endif
-                      @else
-                          <h3 class="d-flex justify-content-center" style="color:green;">{{$contract->deal->status}}</h3>
-                      @endif
-                    </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-4">
+                  <td class="f-14 text-dark">
+                      <p class="mb-0">
+                          {{ mb_ucwords(global_setting()->company_name) }}<br>
+                          {!! nl2br(default_address()->address) !!}<br>
+                          {{ global_setting()->company_phone }}
+                      </p><br>
+                      <p class="mb-0 text-left"><span
+                              class="text-dark-grey text-capitalize">@lang("app.client")</span><br>
+                          {{ mb_ucwords($contract->deal->client_name) }}<br>
+                         {{ mb_ucwords($contract->deal->organization) }}<br>
+                        {{--  {!! nl2br($contract->client->clientDetails->address) !!}</p>--}}
                   </td>
 
-                </tr>
-                <tr class="inv-num">
-                    <td class="f-14 text-dark">
-                        <p class="mb-0">
-                            {{ mb_ucwords(global_setting()->company_name) }}<br>
-                            {!! nl2br(default_address()->address) !!}<br>
-                            {{ global_setting()->company_phone }}
-                        </p><br>
-                        <p class="mb-0 text-left"><span
-                                class="text-dark-grey text-capitalize">@lang("app.client")</span><br>
-                            {{ mb_ucwords($contract->deal->client_name) }}<br>
-                           {{ mb_ucwords($contract->deal->organization) }}<br>
-                          {{--  {!! nl2br($contract->client->clientDetails->address) !!}</p>--}}
-                    </td>
+                </div>
+                <div class="col-md-4">
+                  <?php
+                  $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
 
-                    <td align="right">
-                        <table class="inv-num-date text-dark f-13 mt-3">
-                            <tr>
-                                <td class="bg-light-grey border-right-0 f-w-500">
-                                    Deal Number</td>
-                                <td class="border-left-0">#{{ $contract->deal->deal_id }}</td>
-                            </tr>
-                            <tr>
-                                <td class="bg-light-grey border-right-0 f-w-500">
-                                    @lang('modules.projects.startDate')</td>
-                                <td class="border-left-0">{{ $contract->start_date->format(global_setting()->date_format) }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="bg-light-grey border-right-0 f-w-500">
-                                  Deal Name</td>
-                                <td class="border-left-0">{{ $contract->deal->project_name }}
-                                </td>
-                            </tr>
-                            @if ($contract->actual_amount != 0)
-                            <tr>
+                  $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $contract->deal->award_time);
+
+                  $diff_in_minutes = $from->diffInMinutes($to);
+                  //dd($diff_in_minutes,$to,$from);
+                   ?>
+                   @if($diff_in_minutes < 1230 )
+                  @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
+                  @if($contract->deal->status == 'pending')
+      <div class="wrapper-timezone d-flex justify-content-center">
+
+
+       <p>You have </p>
+
+       <div class="clock">
+
+
+           <div class="column">
+               <div class="timer" id="hours"></div>
+               <div class="timer_text">HOURS</div>
+           </div>
+
+           <!-- <div class="timer">:</div> -->
+           <div class="column">
+               <div class="timer" id="minutes"></div>
+               <div class="timer_text">MINUTES</div>
+           </div>
+
+           <!-- <div class="timer">:</div> -->
+           <div class="column">
+               <div class="timer" id="seconds"></div>
+               <div class="timer_text">SECONDS</div>
+           </div>
+       </div>
+
+       <p>remaining for accepting the project</p>
+   </div>
+   @endif
+   @endif
+   @endif
+   <div class="d-flex justify-content-center">
+
+     @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
+     @if($contract->deal->status == 'pending')
+
+   {{--  <button class="btn btn-danger mr-3"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
+       @include('contracts.modals.dealdenymodal') --}}
+       @if($diff_in_minutes < 1230 )
+     <a href="/account/projects/{{$project_id->project_id}}/edit" class="btn btn-success">Accept <i class="fa-solid fa-check"></i></a>
+     @endif
+
+     @elseif($contract->deal->status == 'Accepted')
+       <h3 class="d-flex justify-content-center" style="color:green;">{{$contract->deal->status}}</h3>
+       @else
+     <h3 class="d-flex justify-content-center" style="color:red;">{{$contract->deal->status}}</h3>
+
+     @endif
+     @else
+         <h3 class="d-flex justify-content-center" style="color:green;">{{$contract->deal->status}}</h3>
+     @endif
+   </div>
+                </div>
+                <div class="col-md-4" align="right">
+                  <td >
+                      <table  class="inv-num-date text-dark f-13 mt-3">
+                          <tr>
                               <td class="bg-light-grey border-right-0 f-w-500">
-                                Deal Value </td>
-                                <td class="border-left-0">
-                                    <h4>
-                                        {{$contract->actual_amount}}{{$contract->deal->original_currency->currency_symbol}}</h4>
-                                </td>
+                                  Deal Number</td>
+                              <td class="border-left-0">#{{ $contract->deal->deal_id }}</td>
+                          </tr>
+                          <tr>
+                              <td class="bg-light-grey border-right-0 f-w-500">
+                                  @lang('modules.projects.startDate')</td>
+                              <td class="border-left-0">{{ $contract->start_date->format(global_setting()->date_format) }}
+                              </td>
+                          </tr>
+                          <tr>
+                              <td class="bg-light-grey border-right-0 f-w-500">
+                                Deal Name</td>
+                              <td class="border-left-0">{{ $contract->deal->project_name }}
+                              </td>
+                          </tr>
+                          @if ($contract->actual_amount != 0)
+                          <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                              Deal Value </td>
+                              <td class="border-left-0">
+                                  <h4>
+                                      {{$contract->actual_amount}}{{$contract->deal->original_currency->currency_symbol}}</h4>
+                              </td>
 
 
-                            </tr>
+                          </tr>
 
 
-                            @endif
-                          {{-- @if ($contract->end_date != null)
-                                <tr>
-                                    <td class="bg-light-grey border-right-0 f-w-500">@lang('modules.contracts.endDate')
-                                    </td>
-                                    <td class="border-left-0">{{ $contract->end_date->format(global_setting()->date_format) }}
-                                    </td>
-                                </tr>
-                            @endif --}}
-                            <tr>
-                                {{--}}<td class="bg-light-grey border-right-0 f-w-500">
-                                    @lang('modules.contracts.contractType')</td>
-                                <td class="border-left-0">{{ $contract->contractType->name }}
-                                </td> --}}
-                            </tr>
-                        </table>
+                          @endif
+                        {{-- @if ($contract->end_date != null)
+                              <tr>
+                                  <td class="bg-light-grey border-right-0 f-w-500">@lang('modules.contracts.endDate')
+                                  </td>
+                                  <td class="border-left-0">{{ $contract->end_date->format(global_setting()->date_format) }}
+                                  </td>
+                              </tr>
+                          @endif --}}
+                          <tr>
+                              {{--}}<td class="bg-light-grey border-right-0 f-w-500">
+                                  @lang('modules.contracts.contractType')</td>
+                              <td class="border-left-0">{{ $contract->contractType->name }}
+                              </td> --}}
+                          </tr>
+                      </table>
 
-                    </td>
-                </tr>
-                <tr>
-                    <td height="20"></td>
-                </tr>
-            </table>
+                  </td>
+                </div>
+
+              </div>
+
+            </div>
+
 
         </div>
 
@@ -487,8 +526,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
 <?php
 $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$contract->deal->award_time)->format('Y-m-d H:i:s');
 
-
-$newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addHours(48)->format('Y-m-d H:i:s');
+$newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1230)->format('Y-m-d H:i:s');
 //dd($newDateTime);
  ?>
 <input type="hidden" id="award_time" value="{{$newDateTime}}">

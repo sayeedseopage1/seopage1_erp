@@ -56,10 +56,11 @@ class ProjectReviewNotification extends Notification
  </p>'
  ;
  $header= '<p>
-    <h1 style="color: red; text-align: center;" >' . __('Project For Review') .'</b>'.'
+    <h1 style="color: red; text-align: center;" >' . __(' Project (“'.$project->project_name.'”) Has (“Doable/Not Doable”) Challenge
+') .'</b>'.'
 </h1>';
   $body= '<p>'.
-    'You have a new Project '.'<a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a>'.' for review. Let'. '&#39;'.'s check the short details below.'
+    'New Project '.'<a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a>'.' has challenge '.$project->project_challenge.'. Let'. '&#39;'.'s check the short details below.'
 
  .'</p>'
  ;
@@ -78,6 +79,12 @@ class ProjectReviewNotification extends Notification
 </p>' .
  '<p>
     <b style="color: black">' . __('Sales Executive') . ': '.'</b>' .'<a href="'.route('employees.show',$sales_ex->id).'">'.$sales_ex->name .'</a>'. '
+</p>'.
+'<p>
+   <b style="color: black">' . __('Challenge Name') . ': '.'</b>' .'<a >'.$project->project_challenge .'</a>'. '
+</p>'.
+'<p>
+   <b style="color: black">' . __('Challenge Comment') . ': '.'</b>' .'<a >'.$project->comments .'</a>'. '
 </p>'
 
 
@@ -85,7 +92,8 @@ class ProjectReviewNotification extends Notification
 ;
 
       return (new MailMessage)
-      ->subject(__('[No Reply] You have a new Project for Review') )
+      ->subject(__('[No Reply] Project (“'.$project->project_name.'”) Has (“Doable/Not Doable”) Challenge
+') )
 
       ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
       ->markdown('mail.project.review', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);

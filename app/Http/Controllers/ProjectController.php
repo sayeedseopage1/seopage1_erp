@@ -861,7 +861,7 @@ if ($pm_count < 2) {
         $project->comments= $request->comments;
         $project->save();
 
-        if ($request->project_challenge != 'No Challenge') {
+        if ($request->project_challenge != 'No Challenge' || $request->project_challenge != 'Has Challenge But We Can Do It') {
         $project_update= Project::find($project->id);
         $project_update->status= 'under review';
         $project_update->save();

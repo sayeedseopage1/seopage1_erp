@@ -10,6 +10,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
     	margin-right: auto;
       padding-top: 0 !important;
   }
+
 </style>
 <div class="d-lg-flex">
     <div class="project-left w-100 py-0 py-lg-5 py-md-0" id="project-left">
@@ -37,6 +38,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             @endif
 
             <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
+
                 <div class="dropdown">
                     <button class="btn btn-lg bg-white border height-35 f-15 px-2 py-1 text-dark-grey text-capitalize rounded dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         @lang('app.action') <i class="icon-options-vertical icons"></i>
@@ -63,6 +65,15 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </div>
                 </div>
             </div>
+              @if(Auth::user()->role_id == 1 && $project->status == 'under review')
+            <a href="{{ route('project-deny', $project->id) }}" class="btn btn-danger border height-35 f-15 px-3 py-2 text-white text-capitalize rounded" >
+                @lang('Deny')
+            </a>
+
+            <a href="{{ route('project-accept', $project->id) }}" class="btn btn-primary bg-white border height-35 f-15 px-3 py-2 text-dark-grey text-capitalize rounded mr-3">
+                @lang('Accept')
+            </a>
+            @endif
 
             @if ($projectPin)
             <div class="align-self-center">

@@ -997,6 +997,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                             <option selected value="No Challenge">No Challenge</option>
                             <option  value="Has Challenge But We Can Do It">Has Challenge But We Can Do It</option>
                             <option  value="Has Challenge But We Cannot Do It">Has Challenge But We Cannot Do It</option>
+                            <option  value="Has Challenge, But We May/May Not be Able to Do It">Has Challenge, But We May/May Not be Able to Do It</option>
                             @endif
 
                           </select>

@@ -424,11 +424,14 @@ class ContractController extends AccountBaseController
     public function storeLeadDeal(Request $request)
     {
         //dd($request->lead_id);
+        $award_date= strtotime($request->award_time);
+        $aw_dt= date('Y-m-d H:i:s', $award_date );
         $validated = $request->validate([
             'user_name' => 'required|unique:users|max:255',
             'client_name' => 'required',
             'project_name' => 'required',
             'amount' => 'required',
+            'award_time'=> 'required',
         ]);
       //dd($request);
         $deal_stage = DealStage::where('id', $request->id)->first();
@@ -495,6 +498,7 @@ class ContractController extends AccountBaseController
         //dd($newDate);
 
         $deal->deal_creation_date = $newDate;
+        $deal->award_time= $aw_dt;
 
         $deal->start_date = $newDate;
         $deal->save();
