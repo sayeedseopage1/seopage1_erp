@@ -75,6 +75,7 @@ use App\Models\ProjectSubmission;
 use App\Models\ProjectNiche;
 use App\Notifications\ProjectReviewNotification;
 use App\Notifications\ProjectReviewAcceptNotification;
+use App\Notifications\ProjectSubmissionNotification;
 
 
 class ProjectController extends AccountBaseController
@@ -2006,7 +2007,7 @@ if ($pm_count < 2) {
     }
     public function ProjectCompletionSubmit(Request $request)
      {
-       dd($request);
+       //dd($request);
       $validated = $request->validate([
           'qc_protocol' => 'required',
 
@@ -2028,9 +2029,14 @@ if ($pm_count < 2) {
 
       $project= ProjectMilestone::where('id',$request->milestone_id)->first();
       $milestone->project_id= $project->project_id;
+      $milestone->login_yes = $request->login_yes;
+      $milestone->login_information = $request->login_information;
+
       $milestone->login= $request->login;
       $milestone->password= $request->password;
       $milestone->screenshot= $request->screenshot;
+      $milestone->drive_yes = $request->drive_yes;
+      $milestone->drive_information = $request->drive_information;
       $milestone->google_link= $request->google_link;
       $milestone->rating= $request->rating;
       $milestone->comments= $request->comments;
@@ -2039,16 +2045,29 @@ if ($pm_count < 2) {
       $milestone->requirements= $request->requirements;
       $milestone->price= $request->price;
       $milestone->niche= $request->niche;
+      $milestone->dummy_yes = $request->dummy_yes;
+      $milestone->dummy_information = $request->dummy_information;
       $milestone->dummy_link= $request->dummy_link;
       $milestone->notify= $request-> notify;
+      $milestone->actual_yes = $request->actual_yes;
+      $milestone->actual_information = $request->actual_information;
       $milestone->actual_link= $request->actual_link;
+      $milestone->status = 'pending';
       $milestone->save();
       $milestone_update= ProjectMilestone::find($request->milestone_id);
       $milestone_update->project_completion_status = 1;
       $milestone_update->save();
+      //$user= User::where('id',$project->pm_id)->first();
+
+      $users= User::where('role_id',1)->get();
+      foreach ($users as $user) {
+
+      Notification::send($user, new ProjectSubmissionNotification($project));
+    }
+
       Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
 
-        return redirect('/account/projects/'.$milestone->project_id.'?tab=milestones');
+      return redirect('/account/projects/'.$milestone->project_id.'?tab=milestones');
 
 
 

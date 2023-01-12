@@ -231,7 +231,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     <div class="col-lg-12 col-md-12 mt-3" id="drive_yes_box">
                       <label for="">
 
-                        Confirm you that you uploaded the backup folder on google drive?
+                        Did you share the updated backup with client?
                         <sup class="f-14 mr-1">*</sup>
                       </label>
                       <div class="row" >
@@ -266,7 +266,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     <div class="col-lg-12 col-md-12 mt-5">
                       <div class="row">
                         <div class="col-md-4">
-                          <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault5">
+                          <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault16">
                            Please Rate The Work Quality of Technical Team
                              <sup class="f-14 mr-1">*</sup>
                           </label>
@@ -467,16 +467,12 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
                         </div>
 
-                        <div class="col-lg-6 col-md-6 mt-1" id="dummy_box">
+                        <div class="col-lg-6 col-md-6 mt-3" id="dummy_box">
 
                             <label for="">Submit The Dummy/Test Site Link <sup class="f-14 mr-1">*</sup></label>
                               <input type="text" class="form-control height-35 f-14" name="dummy_link" value="">
 
-
-
                         </div>
-
-
 
                       </div>
 
@@ -529,7 +525,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     <div class="col-lg-12 col-md-12 mt-3" id="actual_yes_box">
                       <label for="">
 
-                        Did You share the actual site link info with client?
+                        Did You share the actual site link with client?
                         <sup class="f-14 mr-1">*</sup>
                       </label>
                       <div class="row">
@@ -588,7 +584,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 </div>
 
   @include('projects.modals.addnichemodal')
-    @include('projects.modals.deletenichemodal')
+  @include('projects.modals.deletenichemodal')
 @push('scripts')
 <script type="text/javascript">
 $(document).ready(function() {
@@ -613,7 +609,7 @@ function fetchniche()
         <svg class="svg-inline--fa fa-trash fa-w-14 mr-1" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
           <path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"></path></svg><!-- <i class="fa fa-trash mr-1"></i> Font Awesome fontawesome.com -->
     Delete
-</button></td>
+    </button></td>
         </tr>`
       });
 
@@ -708,8 +704,7 @@ $.ajax({
         $('#success_message').text(response.message);
         $('#nicheaddmodal').modal('hide');
         $('#nicheaddmodal').find('input').val("");
-
-          fetchniche();
+        fetchniche();
 
     }
   }
