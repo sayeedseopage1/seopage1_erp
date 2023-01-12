@@ -810,7 +810,7 @@ if (list && list.length > 0) {
   $(document).ready(function() {
     $('#activity').hide();
   //  $('#project-left').css({"margin-right":"auto","padding-top":"0px !important"});
-    $("#project-left").removeClass("project-left w-100 py-0 py-lg-5 py-md-0");;
+    $("#project-left").removeClass("project-left w-100 py-0 py-lg-5 py-md-0");
     $("#project-left").addClass("custom-css");
 
 });

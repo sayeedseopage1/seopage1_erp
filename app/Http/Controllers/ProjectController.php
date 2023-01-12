@@ -862,7 +862,7 @@ if ($pm_count < 2) {
         $project->comments= $request->comments;
         $project->save();
 
-        if ($request->project_challenge != 'No Challenge' || $request->project_challenge != 'Has Challenge But We Can Do It') {
+        if ($request->project_challenge != 'No Challenge') {
         $project_update= Project::find($project->id);
         $project_update->status= 'under review';
         $project_update->save();
@@ -2006,12 +2006,10 @@ if ($pm_count < 2) {
     }
     public function ProjectCompletionSubmit(Request $request)
      {
+       dd($request);
       $validated = $request->validate([
           'qc_protocol' => 'required',
-          'login' => 'required',
-          'password' => 'required',
-          'screenshot' => 'required',
-          'google_link' => 'required',
+
           'rating' => 'required',
           'comments'=> 'required',
           'comments2'=> 'required',
@@ -2019,9 +2017,9 @@ if ($pm_count < 2) {
           'requirements' => 'required',
           'price' => 'required',
 
-          'dummy_link' => 'required',
+
           'notify' => 'required',
-          'actual_link' => 'required',
+
       ]);
       //dd($request);
       $milestone= new ProjectSubmission();

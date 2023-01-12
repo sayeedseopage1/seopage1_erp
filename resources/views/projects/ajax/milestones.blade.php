@@ -144,7 +144,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                       //dd($milestone_count,$invoice_count);
                                       @endphp
                                       @if($milestone_count - $invoice_count == 1 && $item->project_completion_status == 0)
-                                        <a href="/projects/project-completion/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right openRightModal" >Project Completion Form</a>
+                                        <a href="/projects/project-completion/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right" >Project Completion Form</a>
                                       @else
                                     <a href="#"  class="btn-warning rounded f-14 p-2 flex-right create-payment" data-row-id="{{ $item->invoice_id }}">Add Payment</a>
                                     @endif
@@ -327,5 +327,6 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 
 </script>
+
 <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
    {!! Toastr::message() !!}

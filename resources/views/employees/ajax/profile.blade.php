@@ -32,12 +32,18 @@ if ($viewPermission == 'all'
 @php
 $editEmployeePermission = user()->permission('edit_employees');
 @endphp
+<style media="screen">
+  .custom-css{
+    	margin-right: auto;
+      padding-top: 0 !important;
+  }
+
+</style>
+
+<div class="d-lg-flex" id="d-flex">
 
 
-<div class="d-lg-flex">
-
-
-    <div class="project-left w-100 py-0 py-lg-5 py-md-0">
+    <div class="project-left w-100 py-0 py-lg-5 py-md-0" id="project-left2">
 
         <!-- ROW START -->
         <div class="row">
@@ -320,7 +326,7 @@ $editEmployeePermission = user()->permission('edit_employees');
     @if ($showFullProfile)
 
         <!-- PROJECT RIGHT START -->
-        <div class="project-right my-4 my-lg-0">
+        <div class="project-right my-4 my-lg-0" id="activity2">
             <div class="bg-white">
                 <!-- ACTIVITY HEADING START -->
                 <div class="p-activity-heading d-flex align-items-center justify-content-between b-shadow-4 p-20">
@@ -401,5 +407,25 @@ $editEmployeePermission = user()->permission('edit_employees');
           ...datepickerConfig
       });
     });
+
+  </script>
+  <script type="text/javascript">
+
+  var list = document.getElementsByClassName("RightModal2");
+  if (list && list.length > 0) {
+
+    $(document).ready(function() {
+      $('#activity2').hide();
+    //  $('#project-left').css({"margin-right":"auto","padding-top":"0px !important"});
+      $("#project-left2").removeClass("project-left w-100 py-0 py-lg-5 py-md-0");
+      $("#project-left2").addClass("custom-css");
+      $("#d-flex").removeClass("d-lg-flex");
+
+  });
+  }
+
+
+
+
 
   </script>

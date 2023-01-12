@@ -137,7 +137,51 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                             </div>
                           @enderror
                     </div>
-                    <div class="col-md-12 col-lg-12 mt-3">
+                    <div class="col-lg-12 col-md-12 mt-5">
+                        <div class="form-group">
+                            <div class="d-flex">
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="login_yes" name="login_yes" value="1" required>
+                                <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="">Did you collect the login information?
+                                  <sup class="f-14 mr-1">*</sup></label>
+
+
+                              </div>
+                              </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 mt-3" id="login_yes_box">
+                      <label for="">
+
+                        Did You share the login info with client?
+                        <sup class="f-14 mr-1">*</sup>
+                      </label>
+                      <div class="row" id="login">
+                        <div class="col-md-1">
+                          <div class="form-check">
+                                <input class="form-check-input" type="radio" name="login_information"  value="1">
+                                <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault3">
+                                  Yes
+                                </label>
+                              </div>
+                        </div>
+                        <div class="col-md-1">
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="login_information" value="0" >
+                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault4">
+                              No
+                            </label>
+                          </div>
+                        </div>
+
+
+                      </div>
+
+
+                    </div>
+                    <div class="col-md-12 col-lg-12 mt-3" id="login_information_box">
                       <label for="">Submit Login Info for Future Use <sup class="f-14 mr-1">*</sup></label>
                       <div class="row">
                         <div class="col-md-4 col-lg-4">
@@ -170,21 +214,59 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       </div>
 
                     </div>
-
                     <div class="col-lg-12 col-md-12 mt-5">
-                      <label for="">Attach Google Drive Backup Folder Link <sup class="f-14 mr-1">*</sup></label>
-                        <input type="text" class="form-control height-35 f-14 @error('google_link') is-invalid @enderror" name="google_link" value="">
+                        <div class="form-group">
+                            <div class="d-flex">
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="drive_yes" name="drive_yes" value="1" required>
+                                <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="">Did you upload the backup folder link in google drive?
+                                  <sup class="f-14 mr-1">*</sup></label>
+
+
+                              </div>
+                              </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 mt-3" id="drive_yes_box">
+                      <label for="">
+
+                        Confirm you that you uploaded the backup folder on google drive?
+                        <sup class="f-14 mr-1">*</sup>
+                      </label>
+                      <div class="row" >
+                        <div class="col-md-1">
+                          <div class="form-check">
+                                <input class="form-check-input" type="radio" name="drive_information"  value="1">
+                                <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault9">
+                                  Yes
+                                </label>
+                              </div>
+                        </div>
+                        <div class="col-md-1">
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="drive_information" value="0" >
+                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault10">
+                              No
+                            </label>
+                          </div>
+                        </div>
+
+
+                      </div>
+
 
                     </div>
-                    @error('google_link')
-                    <div class="mt-3">
-                      <div class="alert alert-danger">{{ $message }}</div>
-                      </div>
-                    @enderror
-                    <div class="col-lg-12 col-md-12 mt-3">
+                    <div class="col-lg-12 col-md-12 mt-5" id="drive_box">
+                      <label for="">Attach Google Drive Backup Folder Link <sup class="f-14 mr-1">*</sup></label>
+                        <input type="text" class="form-control height-35 f-14" name="google_link" value="">
+
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 mt-5">
                       <div class="row">
                         <div class="col-md-4">
-                          <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault2">
+                          <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault5">
                            Please Rate The Work Quality of Technical Team
                              <sup class="f-14 mr-1">*</sup>
                           </label>
@@ -311,16 +393,6 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                             <sup class="f-14 mr-1">*</sup>
                           </label>
                           <div class="input-group w-100">
-                          <!-- <select class="form-control height-35 f-14 @error('niche') is-invalid @enderror" name="niche">
-                            <option value="1">Category 1</option>
-                            <option value="2">Category 2</option>
-                            <option value="3">Category 3</option>
-
-                          </select> -->
-
-                          <!-- <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#milestoneaddmodal" type="button">Add</button>
-                          </div> -->
 
                           <x-forms.input-group>
                               <select class="form-control select-picker" name="niche" id="option_value"
@@ -350,19 +422,60 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 
                         </div>
-                        <div class="col-lg-6 col-md-6 mt-1">
+                        <div class="col-lg-12 col-md-12 mt-5">
+                            <div class="form-group">
+                                <div class="d-flex">
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="dummy_yes" name="dummy_yes" value="1" required>
+                                    <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="">Did you collect the dummy/test site information?
+                                      <sup class="f-14 mr-1">*</sup></label>
+
+
+                                  </div>
+                                  </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 mt-3" id="dummy_yes_box">
+                          <label for="">
+
+                            Did You share the dummy/test site link info with client?
+                            <sup class="f-14 mr-1">*</sup>
+                          </label>
+                          <div class="row">
+                            <div class="col-md-1">
+                              <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="dummy_information"  value="1">
+                                    <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault11">
+                                      Yes
+                                    </label>
+                                  </div>
+                            </div>
+                            <div class="col-md-1">
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="dummy_information" value="0" >
+                                <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault12">
+                                  No
+                                </label>
+                              </div>
+                            </div>
+
+
+                          </div>
+
+
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 mt-1" id="dummy_box">
 
                             <label for="">Submit The Dummy/Test Site Link <sup class="f-14 mr-1">*</sup></label>
-                              <input type="text" class="form-control height-35 f-14 @error('dummy_link') is-invalid @enderror" name="dummy_link" value="">
+                              <input type="text" class="form-control height-35 f-14" name="dummy_link" value="">
 
 
 
                         </div>
-                        @error('dummy_link')
-                        <div class="mt-3">
-                          <div class="alert alert-danger">{{ $message }}</div>
-                          </div>
-                        @enderror
+
 
 
                       </div>
@@ -378,7 +491,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <div class="row">
                         <div class="col-md-1">
                           <div class="form-check">
-                                <input class="form-check-input @error('notify') is-invalid @enderror" type="radio" name="notify" value="1" id="flexRadioDefault7">
+                                <input class="form-check-input" type="radio" name="notify" value="1" id="flexRadioDefault7">
                                 <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault1">
                                   Yes
                                 </label>
@@ -386,7 +499,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         </div>
                         <div class="col-md-1">
                           <div class="form-check">
-                            <input class="form-check-input @error('notify') is-invalid @enderror" type="radio" name="notify" value="0" id="flexRadioDefault8">
+                            <input class="form-check-input" type="radio" name="notify" value="0" id="flexRadioDefault8">
                             <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault2">
                               No
                             </label>
@@ -395,26 +508,63 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       </div>
 
 
-                          @error('notify')
-                          <div class="mt-3">
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            </div>
-                          @enderror
+
                     </div>
-                    <div class="col-lg-12 col-md-12 mt-3">
+
+                    <div class="col-lg-12 col-md-12 mt-5">
+                        <div class="form-group">
+                            <div class="d-flex">
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="actual_yes" name="actual_yes" value="1" required>
+                                <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="">Did you collect the actual site information?
+                                  <sup class="f-14 mr-1">*</sup></label>
+
+
+                              </div>
+                              </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 mt-3" id="actual_yes_box">
+                      <label for="">
+
+                        Did You share the actual site link info with client?
+                        <sup class="f-14 mr-1">*</sup>
+                      </label>
+                      <div class="row">
+                        <div class="col-md-1">
+                          <div class="form-check">
+                                <input class="form-check-input" type="radio" name="actual_information"  value="1">
+                                <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault12">
+                                  Yes
+                                </label>
+                              </div>
+                        </div>
+                        <div class="col-md-1">
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" name="actual_information" value="0" >
+                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault13">
+                              No
+                            </label>
+                          </div>
+                        </div>
+
+
+                      </div>
+
+
+                    </div>
+                    <div class="col-lg-12 col-md-12 mt-3" id="actual_box">
 
                         <label for="">Submit The Actual Site Link<sup class="f-14 mr-1">*</sup></label>
-                          <input type="text" class="form-control height-35 f-14 @error('actual_link') is-invalid @enderror" name="actual_link" value="">
+                          <input type="text" class="form-control height-35 f-14" name="actual_link" value="">
 
 
 
 
                     </div>
-                    @error('actual_link')
-                    <div class="mt-3">
-                      <div class="alert alert-danger">{{ $message }}</div>
-                      </div>
-                    @enderror
+
 
 
 
@@ -468,7 +618,7 @@ function fetchniche()
       });
 
       document.querySelector('#niche_value').innerHTML= spans;
-    
+
 
     }
   });
@@ -566,6 +716,136 @@ $.ajax({
 });
 });
 });
+
+
+</script>
+<script type="text/javascript">
+
+
+$(document).ready(function() {
+  $("#login_information_box").hide();
+  $("#login_yes_box").hide();
+  $("#drive_yes_box").hide();
+  $("#drive_box").hide();
+  $("#dummy_yes_box").hide();
+  $("#dummy_box").hide();
+  $("#actual_yes_box").hide();
+  $("#actual_box").hide();
+});
+$(document).ready(function() {
+  $('#login_yes').click(function() {
+
+
+      var check = $('#login_yes').is(":checked") ? true : false;
+      //console.log(check);
+      if (check == true) {
+          $('#login_yes_box').show();
+      } else {
+          $('#login_yes_box').hide();
+      }
+      // /coonsole.log(value);
+
+  });
+    $("input[name$='login_information']").click(function() {
+        var value = $(this).val();
+        // /coonsole.log(value);
+      if (value == 1) {
+        $("#login_information_box").show();
+      }else {
+          $("#login_information_box").hide();
+      }
+
+
+
+    });
+});
+
+$(document).ready(function() {
+  $('#drive_yes').click(function() {
+
+
+      var check2 = $('#drive_yes').is(":checked") ? true : false;
+      //console.log(check);
+      if (check2 == true) {
+          $('#drive_yes_box').show();
+      } else {
+          $('#drive_yes_box').hide();
+      }
+      // /coonsole.log(value);
+
+  });
+    $("input[name$='drive_information']").click(function() {
+        var value2 = $(this).val();
+        //console.log(value2);
+      if (value2 == 1) {
+        $("#drive_box").show();
+      }else {
+          $("#drive_box").hide();
+      }
+
+
+
+    });
+});
+
+$(document).ready(function() {
+  $('#dummy_yes').click(function() {
+
+
+      var check3 = $('#dummy_yes').is(":checked") ? true : false;
+      //console.log(check);
+      if (check3 == true) {
+          $('#dummy_yes_box').show();
+      } else {
+          $('#dummy_yes_box').hide();
+      }
+      // /coonsole.log(value);
+
+  });
+    $("input[name$='dummy_information']").click(function() {
+        var value3 = $(this).val();
+        //console.log(value2);
+      if (value3 == 1) {
+        $("#dummy_box").show();
+      }else {
+          $("#dummy_box").hide();
+      }
+
+
+
+    });
+});
+
+$(document).ready(function() {
+  $('#actual_yes').click(function() {
+
+
+      var check4 = $('#actual_yes').is(":checked") ? true : false;
+      //console.log(check);
+      if (check4 == true) {
+          $('#actual_yes_box').show();
+      } else {
+          $('#actual_yes_box').hide();
+      }
+      // /coonsole.log(value);
+
+  });
+    $("input[name$='actual_information']").click(function() {
+        var value4 = $(this).val();
+        //console.log(value2);
+      if (value4 == 1) {
+        $("#actual_box").show();
+      }else {
+          $("#actual_box").hide();
+      }
+
+
+
+    });
+});
+
+
+
 </script>
 
 

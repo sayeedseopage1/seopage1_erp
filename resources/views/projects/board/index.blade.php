@@ -102,7 +102,7 @@
                                         @endif
                                          {{$project->client_name->name}} </a></li>
                                       <!-- <li><span>#749</span></li> -->
-                                      <li> <a class="openRightModal"  href="/account/employees/{{$project->pm_id}}" title="{{$project->pm_name->name}}" data-tooltip-bottom="{{$project->pm_name->name}}">
+                                      <li> <a class="openRightModal RightModal2" id="RightModal2"  href="/account/employees/{{$project->pm_id}}" title="{{$project->pm_name->name}}" data-tooltip-bottom="{{$project->pm_name->name}}">
 
 
                                         @if($project->pm_name->image != null)
@@ -316,6 +316,10 @@ $(document).ready(function(){
   $(".RightModal").click(function(){
   //alert("success");
     $(".activity").hide();
+  });
+$(".RightModal2").click(function(){
+  //alert("success");
+    $(".activity2").hide();
   });
 });
 
