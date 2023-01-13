@@ -129,8 +129,8 @@ class MilestoneReleaseNotification extends Notification
     </p>'
     .
     '<p>
-         <b style="color: black">' . __('Project Manager') . ': '.'</b>' . $this->milestone->milestone_title . '
-     </p>'
+       <b style="color: black">' . __('Project Manager') . ': '.'</b>' . '<a href="'.route('employees.show',$pm->id).'">'.$pm->name .'</a>'. '
+   </p>' 
 
       .
       '<p>

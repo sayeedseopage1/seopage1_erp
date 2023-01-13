@@ -1125,3 +1125,6 @@ Route::delete('/projects/delete-niche/{id}', [ProjectController::class, 'deleteN
 //top-management project accept/deny
 Route::post('/projects/accept/', [ProjectController::class, 'ProjectAccept'])->name('project-accept');
 Route::post('/projects/deny/', [ProjectController::class, 'ProjectDeny'])->name('project-deny');
+
+//project submission accept/deny
+Route::post('/projects/submission-accept/', [ProjectController::class, 'ProjectSubmissionAccept'])->name('project-submit-accept');

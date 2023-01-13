@@ -76,6 +76,7 @@ use App\Models\ProjectNiche;
 use App\Notifications\ProjectReviewNotification;
 use App\Notifications\ProjectReviewAcceptNotification;
 use App\Notifications\ProjectSubmissionNotification;
+use App\Notifications\ProjectSubmissionAcceptNotification;
 
 
 class ProjectController extends AccountBaseController
@@ -2053,16 +2054,18 @@ if ($pm_count < 2) {
       $milestone->actual_information = $request->actual_information;
       $milestone->actual_link= $request->actual_link;
       $milestone->status = 'pending';
+
       $milestone->save();
-      $milestone_update= ProjectMilestone::find($request->milestone_id);
-      $milestone_update->project_completion_status = 1;
+      $milestone_update= ProjectMilestone::where('id',$milestone->milestone_id)->first();
+      $milestone_update->project_completion_status= 2;
       $milestone_update->save();
       //$user= User::where('id',$project->pm_id)->first();
+
 
       $users= User::where('role_id',1)->get();
       foreach ($users as $user) {
 
-      Notification::send($user, new ProjectSubmissionNotification($project));
+      Notification::send($user, new ProjectSubmissionNotification($milestone));
     }
 
       Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -2148,6 +2151,39 @@ if ($pm_count < 2) {
         Notification::send($user, new ProjectReviewAcceptNotification($project));
       Toastr::success('Project Canceled Successfully', 'Success', ["positionClass" => "toast-top-right"]);
       return back();
+    }
+    public function ProjectSubmissionAccept(Request $request)
+    {
+      $project= ProjectSubmission::find($request->id);
+      $project->admin_comment= $request->admin_comment;
+      if ($request->deny != null) {
+      $project->status= 'revision';
+    }else {
+        $project->status= 'accepted';
+    }
+    $project->save();
+    if ($request->deny != null) {
+      $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
+      $mile= ProjectMilestone::find($milestone->id);
+      $mile->project_completion_status= 0;
+      $mile->save();
+    }else {
+      $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
+      $mile= ProjectMilestone::find($milestone->id);
+      $mile->project_completion_status= 1;
+      $mile->save();
+    }
+    $project_id= Project::where('id',$project->project_id)->first();
+
+    $user= User::where('id',$project_id->pm_id)->first();
+
+
+
+      Notification::send($user, new ProjectSubmissionAcceptNotification($project_id));
+
+    Toastr::success('Project Submission Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+    return back();
+
     }
 
 

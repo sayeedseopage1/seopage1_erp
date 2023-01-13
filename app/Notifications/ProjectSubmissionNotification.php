@@ -12,16 +12,16 @@ use App\Models\User;
 class ProjectSubmissionNotification extends Notification
 {
     use Queueable;
-    protected $project;
+    protected $milestone;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($project)
+    public function __construct($milestone)
     {
-        $this->project=$project;
+        $this->milestone=$milestone;
     }
 
     /**
@@ -43,7 +43,7 @@ class ProjectSubmissionNotification extends Notification
      */
      public function toMail($notifiable)
      {
-       $project= Project::where('id',$this->project->id)->first();
+       $project= Project::where('id',$this->milestone->project_id)->first();
        $url = url('/account/projects/'. $project->id);
 
 
@@ -101,7 +101,7 @@ class ProjectSubmissionNotification extends Notification
     {
         return [
 
-            'project_id'=> $this->project['id']
+            'milestone_id'=> $this->milestone['id']
 
         ];
     }

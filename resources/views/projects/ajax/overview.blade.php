@@ -125,6 +125,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
             @else
             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+
             <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
                 <div class="">
                   <form class="" action="{{route('project-incomplete')}}" method="post">
@@ -138,6 +139,25 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
                 </div>
             </div>
+            @php
+
+            $project_submission= App\Models\ProjectSubmission::where('project_id',$project->id)->first();
+            //dd($project_submission);
+            @endphp
+            @if($project_submission != null && $project_submission->status == 'pending')
+            <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
+                <div class="">
+
+
+                    <button class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded" id="project-submission-form"  aria-haspopup="true" aria-expanded="false">
+                    @lang('Project Submission Form')
+                  </button>
+
+
+                </div>
+            </div>
+              @include('projects.modals.projectsubmissionmodal')
+            @endif
             @endif
 
 
@@ -635,6 +655,9 @@ $project->members->pluck('user_id')->toArray(); @endphp
   @include('projects.modals.projectacceptmodal')
     @include('projects.modals.projectdenymodal')
 
+
+
+
 <script>
 $(document).on('click','#project-accept',function(e){
 
@@ -649,6 +672,14 @@ $(document).on('click','#project-deny',function(e){
 
   //console.log(milestone_id);
   $('#projectdenymodal').modal('show');
+
+
+});
+$(document).on('click','#project-submission-form',function(e){
+
+
+  //console.log(milestone_id);
+  $('#ProjectSubmissionModal').modal('show');
 
 
 });

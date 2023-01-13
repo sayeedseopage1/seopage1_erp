@@ -141,12 +141,23 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                       $milestone_count= App\Models\ProjectMilestone::where('project_id',$project->id)->count();
                                       $complete_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
                                       $invoice_generated= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_created',1)->count();
+                                      $project_submission= App\Models\ProjectSubmission::where('milestone_id',$item->id)->first();
                                       //dd($milestone_count,$invoice_count);
                                       @endphp
                                       @if($milestone_count - $invoice_count == 1 && $item->project_completion_status == 0)
+
                                         <a href="/projects/project-completion/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right" >Project Completion Form</a>
-                                      @else
+
+                                      @elseif($milestone_count - $invoice_count == 1 && $item->project_completion_status == 1)
+
+
                                     <a href="#"  class="btn-warning rounded f-14 p-2 flex-right create-payment" data-row-id="{{ $item->invoice_id }}">Add Payment</a>
+                                    @else
+                                    <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                    Awaiting Approval
+                                    <br>
+                                    (Project Completion)
+
                                     @endif
                                     @else
                                     <i class="fa fa-circle mr-1 text-dark-green f-10"></i>
