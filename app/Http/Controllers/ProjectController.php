@@ -2185,6 +2185,10 @@ if ($pm_count < 2) {
     return back();
 
     }
+    public function ProjectSubmissionQC(Request $request)
+    {
+      dd($request);
+    }
 
 
 

@@ -1128,3 +1128,4 @@ Route::post('/projects/deny/', [ProjectController::class, 'ProjectDeny'])->name(
 
 //project submission accept/deny
 Route::post('/projects/submission-accept/', [ProjectController::class, 'ProjectSubmissionAccept'])->name('project-submit-accept');
+Route::post('/projects/qc-submit/', [ProjectController::class, 'ProjectSubmissionQC'])->name('submit-qc-form');

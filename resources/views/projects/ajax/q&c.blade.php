@@ -303,7 +303,8 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 			</div>
 
 
-			<form name="demo" id="demo" class="myBook">
+			<form name="demo" id="demo" class="myBook" action="{{route('submit-qc-form')}}" method="post">
+        @csrf
 
 				<!-- Step – 01:  -->
 				<!-- Step – 01:  -->
@@ -325,13 +326,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="site_https" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="site_https" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -350,13 +351,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="favicon" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="favicon" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -374,13 +375,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="webmail" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="webmail" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -399,13 +400,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="contact_form" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="contact_form" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -424,13 +425,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="social_media" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="social_media" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -450,13 +451,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="login_link" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="login_link" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -475,13 +476,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="scroll_down" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="scroll_down" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -500,13 +501,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="lorem_text" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="lorem_text" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -525,13 +526,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="logical_issues" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="logical_issues" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -550,13 +551,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="loading_speed" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="loading_speed" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -575,13 +576,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="mobile_speed" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="mobile_speed" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -643,13 +644,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="migration" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="migration" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -669,13 +670,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="links_working" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="links_working" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -695,13 +696,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="backup_plugin" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="backup_plugin" value="0        ">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -721,13 +722,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="uptime_monitoring" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="uptime_monitorig" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -747,13 +748,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="final_backup" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="final_backup" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -773,13 +774,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem">
 						<label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="slogan" value="1">
 							<div class="rad-design"></div>
 							<div class="rad-text">Yes</div>
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="rad">
+							<input type="radio" class="rad-input" name="slogan" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
