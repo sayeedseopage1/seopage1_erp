@@ -1,0 +1,46 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f9f9f9;
+
+}
+
+
+
+footer {
+  box-sizing: border-box;
+  color: #f4f4f4;
+  margin-top: 1000px;
+}
+
+footer p {
+  padding: 8em 2em;
+  background: blueviolet;
+  font-weight: bold;
+}
+
+.meu-sticky {
+  position: absolute;
+  right: 0;
+  width: 400px;
+/*   background: red; */
+}
+
+.meu-sticky .card {
+  position: sticky;
+  top: calc(100vh - 7rem);
+  background: #fff;
+  padding: 3rem;
+  color: blueviolet;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 0 30px rgba(0,0,0, .08);
+  z-index: 999;
+  width: 92%;
+  transform: translateY(-2em);
+  border-radius: 1em;
+}

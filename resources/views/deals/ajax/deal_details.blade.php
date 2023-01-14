@@ -709,7 +709,7 @@ ul.fileList {
 
                                <div class="custom_scroling_seo">
                                  <?php
-                                $contact_mades= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',0)->get();
+                                $contact_mades= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',0)->orderBy('id','desc')->get();
                                   ?>
 
                                   @foreach($contact_mades as $contact)
@@ -755,8 +755,7 @@ ul.fileList {
 
                                     @endforeach
                                </div>
-
-
+                            @if($deal->deal_stage == 0)
                                <div class="dealstage_comments_box mt-2">
 
                                    <div class="comments-section">
@@ -809,6 +808,7 @@ ul.fileList {
                                        </div>
                                    </div>
                                </div>
+                              @endif
 
                            </div>
 
@@ -850,7 +850,7 @@ ul.fileList {
 
                                <div class="custom_scroling_seo">
                                  <?php
-                                   $qualified= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',1)->get();
+                                   $qualified= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',1)->orderBy('id','desc')->get();
                                   ?>
                                    @foreach($qualified as $qual)
                                    <?php
@@ -896,7 +896,7 @@ ul.fileList {
                                   @endforeach
 
                                </div>
-
+                               @if($deal->deal_stage == 1)
                                <div class="dealstage_comments_box mt-2">
 
                                    <div class="comments-section">
@@ -949,6 +949,7 @@ ul.fileList {
                                        </div>
                                    </div>
                                </div>
+                               @endif
                            </div>
 
                            <!-- nopadding  -->
@@ -984,7 +985,7 @@ ul.fileList {
 
                                <div class="custom_scroling_seo">
                                  <?php
-                                    $req_defined= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',2)->get();
+                                    $req_defined= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',2)->orderBy('id','desc')->get();
                                   ?>
                                  @foreach($req_defined as $req_def)
                                  <?php
@@ -1028,7 +1029,7 @@ ul.fileList {
 
                                   @endforeach
                                </div>
-
+                               @if($deal->deal_stage == 2)
                                <div class="dealstage_comments_box mt-2">
 
                                    <div class="comments-section">
@@ -1080,6 +1081,7 @@ ul.fileList {
                                        </div>
                                    </div>
                                </div>
+                               @endif
                            </div>
 
                            <!-- nopadding  -->
@@ -1164,7 +1166,7 @@ ul.fileList {
 
                                </div>
 
-
+                               @if($deal->deal_stage == 3)
                                <div class="dealstage_comments_box mt-2">
 
                                    <div class="comments-section">
@@ -1216,6 +1218,7 @@ ul.fileList {
                                        </div>
                                    </div>
                                </div>
+                               @endif
 
 
                            </div>
@@ -1256,7 +1259,7 @@ ul.fileList {
                                <h3>Negotiation Started</h3>
                                <div class="custom_scroling_seo">
                                  <?php
-                                  $negotiation_started= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',4)->get();
+                                  $negotiation_started= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',4)->orderBy('id','desc')->get();
                                   ?>
                                  @foreach($negotiation_started as $neg)
                                    <div class="details-seopage1 mb-2">
@@ -1300,7 +1303,7 @@ ul.fileList {
                                    @endforeach
 
                                </div>
-
+                               @if($deal->deal_stage == 4)
                                <div class="dealstage_comments_box mt-2">
 
                                    <div class="comments-section">
@@ -1355,6 +1358,7 @@ ul.fileList {
                                        </div>
                                    </div>
                                </div>
+                               @endif
 
                            </div>
                        </div>

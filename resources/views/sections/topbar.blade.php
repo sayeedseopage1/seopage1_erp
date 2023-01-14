@@ -1,4 +1,5 @@
 <!-- HEADER START -->
+
 <header class="main-header clearfix bg-white" id="header">
     <!-- NAVBAR LEFT(MOBILE MENU COLLAPSE) START-->
     <div class="navbar-left float-left d-flex align-items-center">
@@ -28,6 +29,7 @@
     </div>
     <!-- NAVBAR LEFT(MOBILE MENU COLLAPSE) END-->
     <!-- NAVBAR RIGHT(SEARCH, ADD, NOTIFICATION, LOGOUT) START-->
+
     <div class="page-header-right float-right d-flex align-items-center">
         <ul>
             <!-- SEARCH START -->
@@ -193,8 +195,10 @@
             <!-- LOGOUT END -->
         </ul>
     </div>
+
     <!-- NAVBAR RIGHT(SEARCH, ADD, NOTIFICATION, LOGOUT) START-->
 </header>
+
 <!-- HEADER END -->
 
 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

@@ -1,0 +1,72 @@
+/* General */
+
+html {
+  font-family: "Raleway", sans-serif;
+  font-size: 18px;
+}
+
+body {
+  margin: 0 auto;
+  background-color: #e5d3e4;
+  color: #2a2329;
+  box-sizing: border-box;
+}
+
+#demo {
+  padding: 5rem 2rem;
+  border: 3px dotted #695968;
+  font-size: 3rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 5rem auto;
+  text-align: center;
+  background-color: #d2b3d0;
+}
+
+#stopWatch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  color: #000;
+  width: 60%;
+  height: 100px;
+  margin: 0 auto;
+}
+
+.btns {
+  margin-top: 3rem;
+}
+
+button {
+  outline: none;
+  border: none;
+  border-radius: 25px;
+  padding: 0.5rem 2rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #fff;
+  margin-right: 1rem;
+}
+
+button:last-of-type {
+  margin-right: 0;
+}
+
+button[disabled] {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+button#start {
+  background-color: #265b4c;
+}
+
+button#stop {
+  background-color: #31265b;
+}
+
+button#reset {
+  background-color: #913d56;
+}
