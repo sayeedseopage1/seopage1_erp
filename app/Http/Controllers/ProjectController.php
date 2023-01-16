@@ -1914,7 +1914,7 @@ if ($pm_count < 2) {
       Toastr::success('Status Changed Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back();
     }
-    public function qc($id)
+    public function qc($id,$milestone_id)
     {
         $this->project = Project::with('client', 'members', 'members.user', 'members.user.session', 'members.user.employeeDetail.designation', 'milestones', 'milestones.currency')
             ->withTrashed()
@@ -1946,6 +1946,7 @@ if ($pm_count < 2) {
         $this->currencies = Currency::all();
         $this->teams = Team::all();
         $this->projectStatus = ProjectStatusSetting::where('status', 'active')->get();
+        $this->milestone_id = $milestone_id;
 
         if ($this->editPermission == 'all' || $this->editProjectMembersPermission == 'all') {
             $this->employees = User::allEmployees(null, null, ($this->editPermission == 'all' ? 'all' : null));

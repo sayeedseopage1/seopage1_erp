@@ -124,7 +124,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
                                  @if($invoice_generated == ($milestone_count -1) && $item->qc_status == 0)
 
-                                 <a href="/projects/q&c/{{$project->id}}"   class="btn-success rounded f-14 p-2 flex-right openRightModal">Complete Q&C</a>
+                                 <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right">Complete Q&C</a>
 
                                  @else
 

@@ -8,7 +8,13 @@ $addProjectMemberPermission = user()->permission('add_project_members');
 $createPublicProjectPermission = user()->permission('create_public_project');
 
 @endphp
- <link rel="stylesheet" href="{{asset('form-wizard/css/style.css')}}">
+<link rel="stylesheet" href="{{asset('form-wizard/css/style.css')}}">
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+
+
+
 <style type="text/css">
 	/* body{background: linear-gradient(to right, #2c3b4e, #4a688a, #2c3b4e);} */
 
@@ -283,11 +289,46 @@ $createPublicProjectPermission = user()->permission('create_public_project');
     height: auto;
 
 }
+.progress-bar {
+
+	background-color: green;
+
+}
+.progress {
+
+	margin-bottom: 20px;
+}
+.progress .progress-value {
+    display: block;
+    padding: 8px 7px;
+    font-size: 12px;
+    color: #fff;
+    border-radius: 4px;
+    background: transparent;
+    border: 0px solid #000;
+    position: absolute;
+    top: -1px;
+    right: 7px;
+}
+
+.progress .progress-value:after {
+    content: "";
+    border-top: 0px solid #191919;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    position: absolute;
+    bottom: -6px;
+    left: 26%;
+}
+
+.newitem {
+	padding-bottom: 60px;
+}
 </style>
 
 <div class="container mb-5">
 	<div class="row">
-		<div class="col-md-12 col-md-offset-2" style="overflow:hidden;padding:20px">
+		<div class="col-md-8 offset-2" style="overflow:hidden;padding:20px">
 
 			<!-- <div class="progress">
 				<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" >
@@ -305,7 +346,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 			<form name="demo" id="demo" class="myBook" action="{{route('submit-qc-form')}}" method="post">
         @csrf
-
+      <input type="hidden" name="milestone_id" value="{{$milestone_id}}">
 				<!-- Step – 01:  -->
 				<!-- Step – 01:  -->
 
@@ -381,7 +422,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="webmail" value="1">
+							<input type="radio" class="rad-input" name="webmail" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -615,13 +656,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 						<div class="newitem" id="newbts">
 							<label class="rad-label" >
-								<input type="checkbox" class="rad-input" name="rad" id="ts" name="ts" value="1" required>
+								<input type="checkbox" class="rad-input" name="step_1" id="ts" name="ts" value="1" required>
 								<div class="rad-design"></div>
 								<div class="rad-text">Yes</div>
 							  </label>
 
 							  <label class="rad-label">
-								<input type="checkbox" class="rad-input" name="rad" onclick="myFunction()">
+								<input type="checkbox" class="rad-input" name="step_1" onclick="myFunction()">
 								<div class="rad-design"></div>
 								<div class="rad-text">No</div>
 							</label>
@@ -728,7 +769,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="uptime_monitorig" value="1">
+							<input type="radio" class="rad-input" name="uptime_monitorig" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>
@@ -806,7 +847,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 					<div class="newitem" id="newbts">
 						<label class="rad-label">
-							<input type="checkbox" class="rad-input" name="rad" id="ts" name="ts" value="1" required>
+							<input type="checkbox" class="rad-input" name="agree" id="ts" name="ts" value="1" required>
 							<div class="rad-design"></div>
 							<div class="rad-text">I agree</div>
 						</label>

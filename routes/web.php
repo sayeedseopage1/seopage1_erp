@@ -1112,7 +1112,7 @@ Route::post('/deals/comments', [DealController::class, 'comments'])->name('post-
 //project incomplete
 Route::post('/acoounts/projects/incomplete', [ProjectController::class, 'InComplete'])->name('project-incomplete');
 // project Q&C
-Route::get('/projects/q&c/{id}', [ProjectController::class, 'qc']);
+Route::get('/projects/q&c/{id}/{milestone_id}', [ProjectController::class, 'qc']);
 //project completion form
 Route::get('/projects/project-completion/{id}', [ProjectController::class, 'ProjectCompletion']);
 Route::post('/acoounts/project-completion/store', [ProjectController::class, 'ProjectCompletionSubmit'])->name('project-completion');
