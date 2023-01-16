@@ -27,6 +27,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 /**
  *
@@ -345,6 +346,13 @@ trait EmployeeDashboard
 
         $this->weekWiseTimelogs = ProjectTimeLog::weekWiseTimelogs($this->weekStartDate->copy()->toDateString(), $this->weekEndDate->copy()->toDateString(), user()->id);
         $this->weekWiseTimelogBreak = ProjectTimeLogBreak::weekWiseTimelogBreak($this->weekStartDate->toDateString(), $this->weekEndDate->toDateString(), user()->id);
+
+        $this->no_of_inprogress= Project::where('pm_id',Auth::id())->where('status','in progress')->count();
+        $this->no_of_canceled= Project::where('pm_id',Auth::id())->where('status','canceled')->count();
+        $this->total_project_value= Project::where('pm_id',Auth::id())->sum('project_budget');
+        $this->total_released_amount= Project::where('pm_id',Auth::id())->sum('milestone_paid');
+
+
 
         return view('dashboard.employee.index', $this->data);
     }

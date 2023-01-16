@@ -7,7 +7,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <?php
-      $project_submission= App\Models\ProjectSubmission::where('project_id',$project->id)->first();
+      $project_submission= App\Models\ProjectSubmission::where('project_id',$project->id)->orderBy('id','desc')->first();
        ?>
       <form class="" action="{{route('project-submit-accept')}}" method="post">
         @csrf

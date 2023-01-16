@@ -141,7 +141,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             @php
 
-            $project_submission= App\Models\ProjectSubmission::where('project_id',$project->id)->first();
+            $project_submission= App\Models\ProjectSubmission::where('project_id',$project->id)->orderBy('id','desc')->first();
             //dd($project_submission);
             @endphp
             @if($project_submission != null && $project_submission->status == 'pending')
@@ -167,6 +167,25 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
             @endif
             @endif
+            @endif
+            @php
+
+            $project_qc= App\Models\QCSubmission::where('project_id',$project->id)->orderBy('id','desc')->first();
+            //dd($project_submission);
+            @endphp
+            @if($project_qc != null && $project_qc->status == 'pending')
+            <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
+                <div class="">
+
+
+                    <button class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded" id="project-qc-form"  aria-haspopup="true" aria-expanded="false">
+                    @lang('Project QC Form')
+                  </button>
+
+
+                </div>
+            </div>
+              @include('projects.modals.projectqcsubmissionmodal')
             @endif
 
         </div>
@@ -680,6 +699,14 @@ $(document).on('click','#project-submission-form',function(e){
 
   //console.log(milestone_id);
   $('#ProjectSubmissionModal').modal('show');
+
+
+});
+$(document).on('click','#project-qc-form',function(e){
+
+
+  //console.log(milestone_id);
+  $('#ProjectqcSubmissionModal').modal('show');
 
 
 });

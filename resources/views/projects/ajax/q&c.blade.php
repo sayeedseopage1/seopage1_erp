@@ -743,7 +743,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 						  </label>
 
 						  <label class="rad-label">
-							<input type="radio" class="rad-input" name="backup_plugin" value="0        ">
+							<input type="radio" class="rad-input" name="backup_plugin" value="0">
 							<div class="rad-design"></div>
 							<div class="rad-text">No</div>
 						</label>

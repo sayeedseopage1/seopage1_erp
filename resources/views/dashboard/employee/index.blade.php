@@ -59,6 +59,13 @@
 @endpush
 
 @section('content')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+
     <!-- CONTENT WRAPPER START -->
     <div class="px-4 py-2 border-top-0 emp-dashboard">
         <!-- WELOCOME START -->
@@ -93,8 +100,13 @@
             <!-- WELOCOME NAME END -->
 
             <!-- CLOCK IN CLOCK OUT START -->
+            <div id="reportrange" class="mb-0" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: auto; margin:0 auto;">
+                <i class="fa fa-calendar"></i>&nbsp;
+                <span></span> <i class="fa fa-caret-down"></i>
+            </div>
             <div
                 class="ml-auto d-flex clock-in-out mb-3 mb-lg-0 mb-md-0 m mt-4 mt-lg-0 mt-md-0 justify-content-between">
+
                 <p
                     class="mb-0 text-lg-right text-md-right f-18 font-weight-bold text-dark-grey d-grid align-items-center">
                     <input type="hidden" id="current-latitude" name="current_latitude">
@@ -121,6 +133,7 @@
                     <button type="button" class="btn-danger rounded f-15 ml-4" id="clock-out"><i
                             class="icons icon-login mr-2"></i>@lang('modules.attendance.clock_out')</button>
                 @endif
+
 
                 @if (in_array('admin', user_roles()))
                     <div class="private-dash-settings d-flex align-self-center">
@@ -162,13 +175,20 @@
                         </x-form>
                     </div>
                 @endif
+
             </div>
+
             <!-- CLOCK IN CLOCK OUT END -->
         </div>
         <!-- WELOCOME END -->
          <!-- EMPLOYEE DASHBOARD DETAIL START -->
+
+
+
          <div class="row emp-dash-detail">
+
             <!-- EMP DASHBOARD INFO NOTICES START -->
+
             @if(count(array_intersect(['profile', 'shift_schedule', 'birthday', 'notices'], $activeWidgets)) > 0)
                 <div class="col-xl-5 col-lg-12 col-md-12 e-d-info-notices">
                     <div class="row">
@@ -189,7 +209,7 @@
                                     </div>
                                 </div>
 
-                                <div class="card-footer bg-white border-top-grey py-3">
+                              {{--  <div class="card-footer bg-white border-top-grey py-3">
                                     <div class="d-flex flex-wrap justify-content-between">
                                         <span>
                                             <label class="f-12 text-dark-grey mb-12 text-capitalize" for="usr">
@@ -221,11 +241,61 @@
                                             </span>
                                         @endif
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <!-- EMP DASHBOARD INFO END -->
                         @endif
+                        <div class="col-md-6">
+                            <div
+                                class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                <div class="d-block text-capitalize">
+                                    <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Project Value</h5>
+                                    <div class="d-flex">
+                                        <a href="#">
+                                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                {{ $inProcessTasks }}<span class="f-12 font-weight-normal text-lightest">
+                                                    @lang('Actual Amount') </span>
+                                            </p>
+                                        </a>
+
+                                        <a href="#">
+                                            <p class="mb-0 f-21 font-weight-bold text-red d-grid">0<span
+                                                    class="f-12 font-weight-normal text-lightest">@lang('USD Amount')</span>
+                                            </p>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="d-block">
+                                    <i class="fa fa-list text-lightest f-27"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div
+                                class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                <div class="d-block text-capitalize">
+                                    <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Project Value</h5>
+                                    <div class="d-flex">
+                                        <a href="#">
+                                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                {{ $inProcessTasks }}<span class="f-12 font-weight-normal text-lightest">
+                                                    @lang('Actual Amount') </span>
+                                            </p>
+                                        </a>
+
+                                        <a href="#">
+                                            <p class="mb-0 f-21 font-weight-bold text-red d-grid">0<span
+                                                    class="f-12 font-weight-normal text-lightest">@lang('USD Amount')</span>
+                                            </p>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="d-block">
+                                    <i class="fa fa-list text-lightest f-27"></i>
+                                </div>
+                            </div>
+                        </div>
 
                         @if (in_array('attendance', user_modules()) && in_array('shift_schedule', $activeWidgets))
                             <div class="col-sm-12">
@@ -538,6 +608,8 @@
             <!-- EMP DASHBOARD TASKS PROJECTS EVENTS START -->
             <div class="col-xl-7 col-lg-12 col-md-12 e-d-tasks-projects-events">
                 <!-- EMP DASHBOARD TASKS PROJECTS START -->
+
+                @if(Auth::user()->role_id != 4)
                 <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
                     @if (in_array('tasks', $activeWidgets))
                         <div class="col-md-6">
@@ -667,8 +739,84 @@
                         </div>
                     @endif
                 </div>
+
+                @endif
+                <!-- PROJECT MANAGER VIEW -->
+                @if(Auth::user()->role_id == 4)
                 <!-- EMP DASHBOARD TASKS PROJECTS END -->
 
+                  <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
+                    <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No of Projects</h5>
+                                <div class="d-flex">
+                                    <a href="#">
+                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                            {{ $no_of_inprogress }}<span class="f-12 font-weight-normal text-lightest">
+                                                @lang('In Progress') </span>
+                                        </p>
+                                    </a>
+
+                                    <a href="#">
+                                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{$no_of_canceled}}<span
+                                                class="f-12 font-weight-normal text-lightest">@lang('Canceled')</span>
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="d-block">
+                                <i class="fa fa-list text-lightest f-27"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Project Value</h5>
+                                <div class="d-flex">
+                                    <a href="#">
+                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                            {{ round($total_project_value,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
+                                                @lang('Amount (USD)') </span>
+                                        </p>
+                                    </a>
+
+
+                                </div>
+                            </div>
+                            <div class="d-block">
+                                <i class="fa fa-list text-lightest f-27"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Released Amount</h5>
+                                <div class="d-flex">
+                                    <a href="#">
+                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                            {{ round($total_released_amount,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
+                                                @lang('Amount (USD)') </span>
+                                        </p>
+                                    </a>
+
+
+                                </div>
+                            </div>
+                            <div class="d-block">
+                                <i class="fa fa-list text-lightest f-27"></i>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+
+                @endif
                 @if (in_array('my_task', $activeWidgets))
                 <div class="row">
                     <div class="col-sm-12">
@@ -825,6 +973,7 @@
         <script src="{{ asset('vendor/full-calendar/main.min.js') }}"></script>
         <script src="{{ asset('vendor/full-calendar/locales-all.min.js') }}"></script>
         <script>
+
             var initialLocaleCode = '{{ user()->locale }}';
             var calendarEl = document.getElementById('calendar');
 
@@ -1137,5 +1286,32 @@
 
     </script>
     @endif
-    
+    <script type="text/javascript">
+$(function() {
+
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+
+    cb(start, end);
+
+});
+</script>
+
 @endpush

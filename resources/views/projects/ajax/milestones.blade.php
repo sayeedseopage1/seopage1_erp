@@ -126,6 +126,14 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
                                  <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right">Complete Q&C</a>
 
+                                 @elseif($invoice_generated == ($milestone_count -1) && $item->qc_status == 2)
+                                 <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                 Awaiting Approval
+                                 <br>
+                                 (QC Sumission)
+                                  @elseif($invoice_generated == ($milestone_count -1) && $item->qc_status == 3)
+                                  <a class="btn btn-primary" href="#" id="project-qc-form">Need Attention</a>
+                                    @include('projects.modals.projectqcreplymodal')
                                  @else
 
                                   <a href="#"   class="btn-success rounded f-14 p-2 flex-right create-invoice"  data-row-id="{{ $item->id }}">Generate Invoice</a>
@@ -398,6 +406,14 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 	  document.getElementById("demo").innerHTML = txt;
 	}
+  $(document).on('click','#project-qc-form',function(e){
+
+
+    //console.log(milestone_id);
+    $('#ProjectqcrevisionSubmissionModal').modal('show');
+
+
+  });
 </script>
 
 
