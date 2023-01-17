@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@push('datatable-styles')
+    @include('sections.daterange_css')
+@endpush
 @push('styles')
     @if (!is_null($viewEventPermission) && $viewEventPermission != 'none')
         <link rel="stylesheet" href="{{ asset('vendor/full-calendar/main.min.css') }}">
@@ -58,16 +60,14 @@
     </style>
 @endpush
 
+
 @section('content')
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
 
 
 
     <!-- CONTENT WRAPPER START -->
-    <div class="px-4 py-2 border-top-0 emp-dashboard">
+    <div class="px-4 py-2 border-top-0">
         <!-- WELOCOME START -->
         @if (!is_null($checkTodayLeave))
             <div class="row pt-4">
@@ -100,10 +100,26 @@
             <!-- WELOCOME NAME END -->
 
             <!-- CLOCK IN CLOCK OUT START -->
-            <div id="reportrange" class="mb-0" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: auto; margin:0 auto;">
+            @if(Auth::user()->role_id == 4)
+          {{-- <div id="reportrange" class="mb-0" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: auto; margin:0 auto;">
                 <i class="fa fa-calendar"></i>&nbsp;
                 <span></span> <i class="fa fa-caret-down"></i>
+            </div> --}}
+            <div
+                class="align-items-center border-left-grey border-left-grey-sm-0 h-100 pl-4">
+
+                <div class="col-auto">
+                   <label class="sr-only" for="inlineFormInputGroup"></label>
+                   <div class="input-group mb-2">
+                     <div class="input-group-prepend">
+                       <div class="input-group-text">  <i class="fa fa-calendar-alt mr-2 f-14 text-dark-grey"></i></div>
+                     </div>
+                     <input type="text" class="form-control height-35 f-14" id="datatableRange2" placeholder="Start Date And End Date">
+                   </div>
+                 </div>
+
             </div>
+            @endif
             <div
                 class="ml-auto d-flex clock-in-out mb-3 mb-lg-0 mb-md-0 m mt-4 mt-lg-0 mt-md-0 justify-content-between">
 
@@ -246,56 +262,8 @@
                         </div>
                         <!-- EMP DASHBOARD INFO END -->
                         @endif
-                        <div class="col-md-6">
-                            <div
-                                class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                <div class="d-block text-capitalize">
-                                    <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Project Value</h5>
-                                    <div class="d-flex">
-                                        <a href="#">
-                                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                {{ $inProcessTasks }}<span class="f-12 font-weight-normal text-lightest">
-                                                    @lang('Actual Amount') </span>
-                                            </p>
-                                        </a>
+                      
 
-                                        <a href="#">
-                                            <p class="mb-0 f-21 font-weight-bold text-red d-grid">0<span
-                                                    class="f-12 font-weight-normal text-lightest">@lang('USD Amount')</span>
-                                            </p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="d-block">
-                                    <i class="fa fa-list text-lightest f-27"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div
-                                class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                <div class="d-block text-capitalize">
-                                    <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Project Value</h5>
-                                    <div class="d-flex">
-                                        <a href="#">
-                                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                {{ $inProcessTasks }}<span class="f-12 font-weight-normal text-lightest">
-                                                    @lang('Actual Amount') </span>
-                                            </p>
-                                        </a>
-
-                                        <a href="#">
-                                            <p class="mb-0 f-21 font-weight-bold text-red d-grid">0<span
-                                                    class="f-12 font-weight-normal text-lightest">@lang('USD Amount')</span>
-                                            </p>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="d-block">
-                                    <i class="fa fa-list text-lightest f-27"></i>
-                                </div>
-                            </div>
-                        </div>
 
                         @if (in_array('attendance', user_modules()) && in_array('shift_schedule', $activeWidgets))
                             <div class="col-sm-12">
@@ -745,76 +713,11 @@
                 @if(Auth::user()->role_id == 4)
                 <!-- EMP DASHBOARD TASKS PROJECTS END -->
 
-                  <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
-                    <div class="col-md-4">
-                        <div
-                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No of Projects</h5>
-                                <div class="d-flex">
-                                    <a href="#">
-                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            {{ $no_of_inprogress }}<span class="f-12 font-weight-normal text-lightest">
-                                                @lang('In Progress') </span>
-                                        </p>
-                                    </a>
+                  <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4" id="emp-dashboard">
 
-                                    <a href="#">
-                                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{$no_of_canceled}}<span
-                                                class="f-12 font-weight-normal text-lightest">@lang('Canceled')</span>
-                                        </p>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="d-block">
-                                <i class="fa fa-list text-lightest f-27"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div
-                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Project Value</h5>
-                                <div class="d-flex">
-                                    <a href="#">
-                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            {{ round($total_project_value,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
-                                                @lang('Amount (USD)') </span>
-                                        </p>
-                                    </a>
-
-
-                                </div>
-                            </div>
-                            <div class="d-block">
-                                <i class="fa fa-list text-lightest f-27"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div
-                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Released Amount</h5>
-                                <div class="d-flex">
-                                    <a href="#">
-                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            {{ round($total_released_amount,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
-                                                @lang('Amount (USD)') </span>
-                                        </p>
-                                    </a>
-
-
-                                </div>
-                            </div>
-                            <div class="d-block">
-                                <i class="fa fa-list text-lightest f-27"></i>
-                            </div>
-                        </div>
-                    </div>
+                    @include($view)
                   </div>
+
 
                 @endif
                 @if (in_array('my_task', $activeWidgets))
@@ -969,6 +872,118 @@
 @endsection
 
 @push('scripts')
+  <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
+  <script type="text/javascript">
+      $(function() {
+          var format = '{{ global_setting()->moment_format }}';
+          var startDate = "{{ $startDate->format(global_setting()->date_format) }}";
+          var endDate = "{{ $endDate->format(global_setting()->date_format) }}";
+          var picker = $('#datatableRange2');
+          var start = moment(startDate, format);
+          var end = moment(endDate, format);
+
+          function cb(start, end) {
+              $('#datatableRange2').val(start.format('{{ global_setting()->moment_date_format }}') +
+                  ' @lang("app.to") ' + end.format(
+                      '{{ global_setting()->moment_date_format }}'));
+              $('#reset-filters').removeClass('d-none');
+          }
+
+          $('#datatableRange2').daterangepicker({
+              locale: daterangeLocale,
+              linkedCalendars: false,
+              startDate: start,
+              endDate: end,
+              ranges: daterangeConfig,
+              opens: 'left',
+              parentEl: '.dashboard-header'
+          }, cb);
+
+
+          $('#datatableRange2').on('apply.daterangepicker', function(ev, picker) {
+              showTable();
+          });
+
+      });
+  </script>
+  <script type="text/javascript">
+  $(".dashboard-header").on("click", ".ajax-tab", function(event) {
+      event.preventDefault();
+
+
+      var dateRangePicker = $('#datatableRange2').data('daterangepicker');
+      var startDate = $('#datatableRange').val();
+
+      if (startDate == '') {
+          startDate = null;
+          endDate = null;
+      } else {
+          startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+          endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
+      }
+
+      const requestUrl = this.href;
+        //alert(requestUrl);
+
+      $.easyAjax({
+          url: requestUrl,
+          blockUI: true,
+          container: "#emp-dashboard",
+          historyPush: true,
+          data: {
+              startDate: startDate,
+              endDate: endDate
+          },
+          blockUI: true,
+          success: function(response) {
+              if (response.status == "success") {
+                  $('#emp-dashboard').html(response.html);
+                  init('#emp-dashboard');
+              }
+          }
+      });
+  });
+  function showTable() {
+
+
+      var dateRangePicker = $('#datatableRange2').data('daterangepicker');
+      var startDate = $('#datatableRange').val();
+
+      if (startDate == '') {
+          startDate = null;
+          endDate = null;
+      } else {
+          startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+          endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
+      }
+
+
+      const requestUrl = this.href;
+
+
+      $.easyAjax({
+          url: requestUrl,
+          blockUI: true,
+          container: "#emp-dashboard",
+          data: {
+              startDate: startDate,
+              endDate: endDate
+          },
+          blockUI: true,
+          success: function(response) {
+            //console.log(response);
+
+              if (response.status == "success") {
+
+                  $('#emp-dashboard').html(response.html);
+
+                  init('#emp-dashboard');
+              }
+          }
+      });
+  }
+
+  </script>
     @if (!is_null($viewEventPermission) && $viewEventPermission != 'none')
         <script src="{{ asset('vendor/full-calendar/main.min.js') }}"></script>
         <script src="{{ asset('vendor/full-calendar/locales-all.min.js') }}"></script>
@@ -1286,32 +1301,5 @@
 
     </script>
     @endif
-    <script type="text/javascript">
-$(function() {
-
-    var start = moment().subtract(29, 'days');
-    var end = moment();
-
-    function cb(start, end) {
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-    }
-
-    $('#reportrange').daterangepicker({
-        startDate: start,
-        endDate: end,
-        ranges: {
-           'Today': [moment(), moment()],
-           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-           'This Month': [moment().startOf('month'), moment().endOf('month')],
-           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        }
-    }, cb);
-
-    cb(start, end);
-
-});
-</script>
 
 @endpush

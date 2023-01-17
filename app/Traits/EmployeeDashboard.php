@@ -40,7 +40,12 @@ trait EmployeeDashboard
      */
     public function employeeDashboard()
     {
+      $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('startDate')) : now($this->global->timezone)->startOfMonth();
 
+      $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('endDate')) : now($this->global->timezone);
+      //dd($this->startDate, $this->endDate);
+      $startDate = $this->startDate->toDateString();
+      $endDate = $this->endDate->toDateString();
         $completedTaskColumn = TaskboardColumn::completeColumn();
         $showClockIn = AttendanceSetting::first();
 
@@ -332,6 +337,7 @@ trait EmployeeDashboard
 
         }
 
+
         $this->currentWeekDates = $currentWeekDates;
         $this->weekShifts = $weekShifts;
         $this->showClockIn = $showClockIn->show_clock_in_button;
@@ -347,14 +353,38 @@ trait EmployeeDashboard
         $this->weekWiseTimelogs = ProjectTimeLog::weekWiseTimelogs($this->weekStartDate->copy()->toDateString(), $this->weekEndDate->copy()->toDateString(), user()->id);
         $this->weekWiseTimelogBreak = ProjectTimeLogBreak::weekWiseTimelogBreak($this->weekStartDate->toDateString(), $this->weekEndDate->toDateString(), user()->id);
 
-        $this->no_of_inprogress= Project::where('pm_id',Auth::id())->where('status','in progress')->count();
-        $this->no_of_canceled= Project::where('pm_id',Auth::id())->where('status','canceled')->count();
-        $this->total_project_value= Project::where('pm_id',Auth::id())->sum('project_budget');
-        $this->total_released_amount= Project::where('pm_id',Auth::id())->sum('milestone_paid');
+
+          $this->no_of_inprogress= Project::where('pm_id',Auth::id())->where('status','in progress')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+          $this->no_of_canceled= Project::where('pm_id',Auth::id())->where('status','canceled')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+          $this->total_project_value= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('project_budget');
+          //$this->total_released_amount= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('milestone_paid');
+          //dd($this->total_released_amount);
+          $this->total_released_amount= Project::
+                          where('pm_id',Auth::id())
+                          ->where(DB::raw('DATE(created_at)'), '>=', $startDate)
+                          ->where(DB::raw('DATE(created_at)'), '<=', $endDate)
+                          ->sum('milestone_paid');
 
 
 
-        return view('dashboard.employee.index', $this->data);
+        $total_projects= Project::where('pm_id',Auth::id())->count();
+        $total_completed_project=Project::where('pm_id',Auth::id())->where('status','finished')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+        $total_canceled_project=Project::where('pm_id',Auth::id())->where('status','canceled')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+        $this->percentage_of_complete_project_count= $total_completed_project*$total_projects/100;
+        $this->percentage_of_canceled_project_count= $total_canceled_project*$total_projects/100;
+
+        $this->view = 'dashboard.ajax.project-manager';
+        if (request()->ajax()) {
+            $html = view($this->view, $this->data)->render();
+            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+        }else {
+            return view('dashboard.employee.index', $this->data);
+        }
+        //dd($this->view);
+        //dd($this->no_of_inprogress,$this->no_of_canceled, $this->total_project_value, $this->total_released_amount );
+
+
+
     }
 
     public function clockInModal()

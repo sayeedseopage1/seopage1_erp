@@ -167,7 +167,7 @@
             @endif
 
             @include('dashboard.cron')
-        </div> --}} 
+        </div> --}}
 
         @include($view)
     </div>
@@ -231,6 +231,7 @@
 
             const requestUrl = this.href;
 
+
             $.easyAjax({
                 url: requestUrl,
                 blockUI: true,
@@ -269,6 +270,7 @@
             }
 
             const requestUrl = this.href;
+              //alert(requestUrl);
 
             $.easyAjax({
                 url: requestUrl,
