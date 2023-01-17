@@ -28,6 +28,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
+use DateTime;
 
 /**
  *
@@ -367,11 +368,23 @@ trait EmployeeDashboard
 
 
 
-        $total_projects= Project::where('pm_id',Auth::id())->count();
+        $total_projects= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
         $total_completed_project=Project::where('pm_id',Auth::id())->where('status','finished')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-        $total_canceled_project=Project::where('pm_id',Auth::id())->where('status','canceled')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+        $this->total_canceled_project=Project::where('pm_id',Auth::id())->where('status','canceled')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
         $this->percentage_of_complete_project_count= $total_completed_project*$total_projects/100;
-        $this->percentage_of_canceled_project_count= $total_canceled_project*$total_projects/100;
+        $this->percentage_of_canceled_project_count= $this->total_canceled_project*$total_projects/100;
+        $project_completion= Project::where('pm_id',Auth::id())->get();
+        $this->days= 0;
+        foreach ($project_completion as $completion) {
+          $date1= new DateTime($completion['created_at']);
+          if ($completion->status == 'finished') {
+            $date2= new DateTime($completion['updated_at']);
+
+               $this->days  = $date2->diff($date1)->format('%a');
+
+          }
+
+        }
 
         $this->view = 'dashboard.ajax.project-manager';
         if (request()->ajax()) {

@@ -127,7 +127,7 @@
             <div class="d-flex">
                 <a href="#">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        {{ round($percentage_of_canceled_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
+                        {{ round($days,2) }}<span class="f-12 font-weight-normal text-lightest">
                            </span>
                     </p>
                 </a>
@@ -148,7 +148,7 @@
             <div class="d-flex">
                 <a href="#">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        {{ round($percentage_of_canceled_project_count,2) }}<span class="f-12 font-weight-normal text-lightest">
+                        {{ round($total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
                            </span>
                     </p>
                 </a>

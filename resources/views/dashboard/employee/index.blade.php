@@ -106,7 +106,7 @@
                 <span></span> <i class="fa fa-caret-down"></i>
             </div> --}}
             <div
-                class="align-items-center border-left-grey border-left-grey-sm-0 h-100 pl-4">
+                class="align-items-center border-left-grey border-left-grey-sm-0 h-100 pl-4 ml-5">
 
                 <div class="col-auto">
                    <label class="sr-only" for="inlineFormInputGroup"></label>
@@ -114,7 +114,7 @@
                      <div class="input-group-prepend">
                        <div class="input-group-text">  <i class="fa fa-calendar-alt mr-2 f-14 text-dark-grey"></i></div>
                      </div>
-                     <input type="text" class="form-control height-35 f-14" id="datatableRange2" placeholder="Start Date And End Date">
+                     <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange2" placeholder="Start Date And End Date">
                    </div>
                  </div>
 
@@ -262,7 +262,7 @@
                         </div>
                         <!-- EMP DASHBOARD INFO END -->
                         @endif
-                      
+
 
 
                         @if (in_array('attendance', user_modules()) && in_array('shift_schedule', $activeWidgets))
