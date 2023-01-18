@@ -262,6 +262,16 @@
                         </div>
                         <!-- EMP DASHBOARD INFO END -->
                         @endif
+                        @if(Auth::user()->role_id == 4)
+                        <!-- EMP DASHBOARD2 -->
+
+                          <div class="col-sm-12" id="emp-dashboard2">
+
+                            @include($view2)
+                          </div>
+
+
+                        @endif
 
 
 
@@ -978,6 +988,9 @@
                   $('#emp-dashboard').html(response.html);
 
                   init('#emp-dashboard');
+                  $('#emp-dashboard2').html(response.html);
+
+                  init('#emp-dashboard2');
               }
           }
       });

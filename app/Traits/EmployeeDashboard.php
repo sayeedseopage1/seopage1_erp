@@ -387,9 +387,11 @@ trait EmployeeDashboard
         }
 
         $this->view = 'dashboard.ajax.project-manager';
+        $this->view2 = 'dashboard.ajax.project-manager2';
         if (request()->ajax()) {
-            $html = view($this->view, $this->data)->render();
-            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+            $html = view($this->view,$this->data)->render();
+            $html2 = view($this->view2,$this->data)->render();
+            return Reply::dataOnly(['status' => 'success', 'html' => $html,'html2'=> $html2, 'title' => $this->pageTitle]);
         }else {
             return view('dashboard.employee.index', $this->data);
         }

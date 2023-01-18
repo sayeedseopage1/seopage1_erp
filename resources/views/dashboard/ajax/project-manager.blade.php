@@ -9,7 +9,7 @@
 	margin-top: 4px;
 }
 </style>
-<div class="col-md-4">
+<div class="col-md-6">
     <div
         class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
         <div class="d-block text-capitalize">
@@ -34,7 +34,7 @@
         </div>
     </div>
 </div>
-<div class="col-md-4">
+<div class="col-md-6">
     <div
         class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
         <div class="d-block text-capitalize">
@@ -56,7 +56,7 @@
     </div>
 </div>
 
-<div class="col-md-4">
+<div class="col-md-6 mt-3">
     <div
         class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
         <div class="d-block text-capitalize">
@@ -77,7 +77,7 @@
         </div>
     </div>
 </div>
-<div class="col-md-6 mb-3 emp-dashboard mt-3">
+<div class="col-md-6 mt-3">
     <div
         class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
         <div class="d-block text-capitalize">
@@ -98,7 +98,7 @@
         </div>
     </div>
 </div>
-<div class="col-md-6 mb-3 mt-3">
+<div class="col-md-6 mt-3">
     <div
         class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
         <div class="d-block text-capitalize">
@@ -119,7 +119,7 @@
         </div>
     </div>
 </div>
-<div class="col-md-6">
+<div class="col-md-6 mt-3">
     <div
         class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
         <div class="d-block text-capitalize">
@@ -140,11 +140,116 @@
         </div>
     </div>
 </div>
-<div class="col-md-6">
+<div class="col-md-6 mt-3">
     <div
         class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
         <div class="d-block text-capitalize">
             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Projects Got Canceled</h5>
+            <div class="d-flex">
+                <a href="#">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        {{ round($total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
+                           </span>
+                    </p>
+                </a>
+
+
+            </div>
+        </div>
+        <div class="d-block">
+            <i class="fa fa-list text-lightest f-27"></i>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 mt-3">
+    <div
+        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+        <div class="d-block text-capitalize">
+            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Cross/Upsell Projects</h5>
+            <div class="d-flex">
+                <a href="#">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        {{ round($total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
+                           </span>
+                    </p>
+                </a>
+
+
+            </div>
+        </div>
+        <div class="d-block">
+            <i class="fa fa-list text-lightest f-27"></i>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 mt-3">
+    <div
+        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+        <div class="d-block text-capitalize">
+            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. Payment Release Time</h5>
+            <div class="d-flex">
+                <a href="#">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        {{ round($total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
+                           </span>
+                    </p>
+                </a>
+
+
+            </div>
+        </div>
+        <div class="d-block">
+            <i class="fa fa-list text-lightest f-27"></i>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 mt-3">
+    <div
+        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+        <div class="d-block text-capitalize">
+            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Negative Feedbacks After Submission</h5>
+            <div class="d-flex">
+                <a href="#">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        {{ round($total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
+                           </span>
+                    </p>
+                </a>
+
+
+            </div>
+        </div>
+        <div class="d-block">
+            <i class="fa fa-list text-lightest f-27"></i>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 mt-3">
+    <div
+        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+        <div class="d-block text-capitalize">
+            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Projects Completed on Time</h5>
+            <div class="d-flex">
+                <a href="#">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        {{ round($total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
+                           </span>
+                    </p>
+                </a>
+
+
+            </div>
+        </div>
+        <div class="d-block">
+            <i class="fa fa-list text-lightest f-27"></i>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 mt-3">
+    <div
+        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+        <div class="d-block text-capitalize">
+            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Project on Hold</h5>
             <div class="d-flex">
                 <a href="#">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">

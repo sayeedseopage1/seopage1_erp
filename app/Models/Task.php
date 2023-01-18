@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Subtask;
 use App\Models\ProjectMilestone;
+use App\Models\TaskBoardColumn;
 
 /**
  * App\Models\Task
@@ -480,6 +481,10 @@ class Task extends BaseModel
     public function milestone()
     {
         return $this->belongsTo(ProjectMilestone::class, 'milestone_id');
+    }
+    public function stat()
+    {
+        return $this->belongsTo(TaskBoardColumn::class, 'board_column_id');
     }
 
 }
