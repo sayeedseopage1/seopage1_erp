@@ -263,7 +263,7 @@ class DealsDataTable extends BaseDataTable
                          <a href="' . route('employees.show', [$user->id]) . '">
                          <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
                            <div class="media-body">
-                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$user->id]) . '">' . ucfirst($user->name) . '</a></h5>
+                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('clients.show', [$user->id]) . '">' . ucfirst($user->name) . '</a></h5>
 
                            </div>
                         </div>';
