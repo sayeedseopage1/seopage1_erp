@@ -29,26 +29,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
 <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="{{asset('time-picker2/css/bootstrap-material-datetimepicker.css')}}" />
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-  rel="stylesheet">
 
-
-<script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
-<script type="text/javascript" src="{{asset('time-picker2/js/bootstrap-material-datetimepicker.js')}}"></script>
-<style media="screen">
-#timerss {
-/* max-width: a; */
-display: flex;
-flex-direction: column;
-margin: 8px auto;
-/* background: aliceblue; */
-align-items: flex-start;
-border-radius: 7px;
-justify-content: center;
-/* padding: 7px; */
-}
 
 <style>
 /**
@@ -1557,62 +1538,7 @@ Swal.fire({
  // });
  })()
  </script>
- @if (count($errors) > 0)
- <script>
-     $( document ).ready(function() {
-         $('#dealaddstagemodal').modal('show');
-     });
- </script>
-   @endif
-   <script type="text/javascript">
-   $(document).ready(function()
-   {
-     $('#date').bootstrapMaterialDatePicker
-     ({
-       time: false,
-       clearButton: true
-     });
-
-     $('#time').bootstrapMaterialDatePicker
-     ({
-       date: false,
-       shortTime: false,
-       format: 'HH:mm'
-     });
-
-     $('#date-format').bootstrapMaterialDatePicker
-     ({
-       format: 'DD MMMM YYYY HH:mm:ss'
-     });
-     $('#date-fr').bootstrapMaterialDatePicker
-     ({
-       format: 'DD/MM/YYYY HH:mm',
-       lang: 'fr',
-       weekStart: 1,
-       cancelText : 'ANNULER',
-       nowButton : true,
-       switchOnClick : true
-     });
-
-     $('#date-end').bootstrapMaterialDatePicker
-     ({
-       weekStart: 0, format: 'DD/MM/YYYY HH:mm'
-     });
-     $('#date-start').bootstrapMaterialDatePicker
-     ({
-       weekStart: 0, format: 'DD/MM/YYYY HH:mm', shortTime : true
-     }).on('change', function(e, date)
-     {
-       $('#date-end').bootstrapMaterialDatePicker('setMinDate', date);
-     });
-
-     $('#min-date').bootstrapMaterialDatePicker({ format : 'DD/MM/YYYY HH:mm', minDate : new Date() });
-
-     $.material.init()
-   });
-
-
-   </script>
+ 
 
 
 
