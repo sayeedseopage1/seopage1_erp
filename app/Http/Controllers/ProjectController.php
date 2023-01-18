@@ -79,7 +79,7 @@ use App\Notifications\ProjectSubmissionNotification;
 use App\Notifications\ProjectSubmissionAcceptNotification;
 use App\Models\QCSubmission;
 use App\Notifications\QCSubmissionNotification;
-use App\Notifications\QCSubmissionAcceptNotification;
+use App\Notifications\QcSubmissionAcceptNotification;
 
 
 class ProjectController extends AccountBaseController
