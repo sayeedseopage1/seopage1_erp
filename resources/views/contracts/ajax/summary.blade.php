@@ -529,6 +529,7 @@ $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$contract->dea
 $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1230)->format('Y-m-d H:i:s');
 //dd($newDateTime);
  ?>
+
 <input type="hidden" id="award_time" value="{{$newDateTime}}">
 @push('scripts')
 

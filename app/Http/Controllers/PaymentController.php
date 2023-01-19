@@ -20,6 +20,7 @@ use App\Models\ProjectMilestone;
 use Notification;
 use App\Notifications\MilestoneReleaseNotification;
 use App\Notifications\ProjectCompleteNotification;
+use DateTime;
 
 
 class PaymentController extends AccountBaseController
@@ -168,7 +169,8 @@ class PaymentController extends AccountBaseController
 
     public function store(StorePayment $request)
     {
-      //dd($request);
+
+    // /  dd($days);
         $payment = new Payment();
 
         if (!is_null($request->currency_id)) {
@@ -255,6 +257,12 @@ class PaymentController extends AccountBaseController
         if ($project->due < 1) {
           $project_update->status = 'finished';
           $project_update->completion_percent= 100;
+          //$var= Project::where('id',$request->project_id)->first();
+          $date1 = new DateTime($project['start_date']);
+          $date2 = new DateTime($request->paid_on);
+          $days  = $date2->diff($date1)->format('%a');
+          $project_update->payment_release_date = $date2;
+          $project_update->project_completion_days= $days;
           $project_update->save();
           $users= User::where('role_id',1)->orWhere('role_id',6)->get();
           foreach ($users as $user) {

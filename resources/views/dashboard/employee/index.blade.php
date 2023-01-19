@@ -206,6 +206,7 @@
             <!-- EMP DASHBOARD INFO NOTICES START -->
 
             @if(count(array_intersect(['profile', 'shift_schedule', 'birthday', 'notices'], $activeWidgets)) > 0)
+              @if(Auth::user()->role_id != 4)
                 <div class="col-xl-5 col-lg-12 col-md-12 e-d-info-notices">
                     <div class="row">
                         @if (in_array('profile', $activeWidgets))
@@ -261,16 +262,6 @@
                             </div>
                         </div>
                         <!-- EMP DASHBOARD INFO END -->
-                        @endif
-                        @if(Auth::user()->role_id == 4)
-                        <!-- EMP DASHBOARD2 -->
-
-                          <div class="col-sm-12" id="emp-dashboard2">
-
-                            @include($view2)
-                          </div>
-
-
                         @endif
 
 
@@ -579,8 +570,96 @@
                             @endisset
                         @endif
 
+
                     </div>
                 </div>
+              @else
+
+              <div class="col-xl-12 col-lg-12 col-md-12 e-d-info-notices">
+                  <div class="row">
+                      @if (in_array('profile', $activeWidgets))
+                      <!-- EMP DASHBOARD INFO START -->
+                      <div class="col-md-12">
+                          <div class="card border-0 b-shadow-4 mb-3 e-d-info">
+                              <div class="card-horizontal align-items-center">
+                                  <div class="card-img">
+                                      <img class="" src=" {{ $user->image_url }}" alt="Card image">
+                                  </div>
+                                  <div class="card-body border-0 pl-0">
+                                      <h4 class="card-title f-18 f-w-500 mb-0">{{ mb_ucwords($user->name) }}</h4>
+                                      <p class="f-14 font-weight-normal text-dark-grey mb-2">
+                                          {{ $user->employeeDetails->designation->name ?? '--' }}</p>
+                                      <p class="card-text f-12 text-lightest"> @lang('app.employeeId') :
+                                          {{ mb_strtoupper($user->employeeDetails->employee_id) }}</p>
+                                  </div>
+                              </div>
+
+                            {{--  <div class="card-footer bg-white border-top-grey py-3">
+                                  <div class="d-flex flex-wrap justify-content-between">
+                                      <span>
+                                          <label class="f-12 text-dark-grey mb-12 text-capitalize" for="usr">
+                                              @lang('app.open') @lang('app.menu.tasks') </label>
+                                          <p class="mb-0 f-18 f-w-500">
+                                              <a href="{{ route('tasks.index') . '?assignee=me' }}"
+                                                  class="text-dark">
+                                                  {{ $inProcessTasks }}
+                                              </a>
+                                          </p>
+                                      </span>
+                                      <span>
+                                          <label class="f-12 text-dark-grey mb-12 text-capitalize" for="usr">
+                                              @lang('app.menu.projects') </label>
+                                          <p class="mb-0 f-18 f-w-500">
+                                              <a href="{{ route('projects.index') . '?assignee=me&status=all' }}"
+                                                  class="text-dark">{{ $totalProjects }}</a>
+                                          </p>
+                                      </span>
+
+                                      @if (isset($totalOpenTickets))
+                                          <span>
+                                              <label class="f-12 text-dark-grey mb-12 text-capitalize" for="usr">
+                                                  @lang('modules.dashboard.totalOpenTickets') </label>
+                                              <p class="mb-0 f-18 f-w-500">
+                                                  <a href="{{ route('tickets.index') . '?agent=me&status=open' }}"
+                                                      class="text-dark">{{ $totalOpenTickets }}</a>
+                                              </p>
+                                          </span>
+                                      @endif
+                                  </div>
+                              </div> --}}
+                          </div>
+                      </div>
+                      <!-- EMP DASHBOARD INFO END -->
+                      @endif
+
+
+
+
+
+
+
+
+
+
+
+                  </div>
+              </div>
+
+              @endif
+            @endif
+            @if(Auth::user()->role_id == 4)
+            <!-- EMP DASHBOARD TASKS PROJECTS END -->
+              <div class="col-xl-12 col-lg-12 col-md-12 e-d-info-notices" id="emp-dashboard">
+                <div class="row">
+                  <div class="col-md-12">
+                      @include($view)
+                  </div>
+
+                </div>
+
+              </div>
+
+
             @endif
             <!-- EMP DASHBOARD INFO NOTICES END -->
             <!-- EMP DASHBOARD TASKS PROJECTS EVENTS START -->
@@ -720,16 +799,7 @@
 
                 @endif
                 <!-- PROJECT MANAGER VIEW -->
-                @if(Auth::user()->role_id == 4)
-                <!-- EMP DASHBOARD TASKS PROJECTS END -->
-
-                  <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4" id="emp-dashboard">
-
-                    @include($view)
-                  </div>
-
-
-                @endif
+                @if(Auth::user()->role_id != 4)
                 @if (in_array('my_task', $activeWidgets))
                 <div class="row">
                     <div class="col-sm-12">
@@ -795,8 +865,10 @@
                     </div>
                 </div>
                 @endif
+                @endif
 
                 <!-- EMP DASHBOARD EVENTS START -->
+                @if(Auth::user()->role_id != 4)
                 @if (in_array('my_calender', $activeWidgets))
                     <div class="row">
                         <div class="col-md-12">
@@ -869,6 +941,7 @@
                             </x-cards.data>
                         </div>
                     </div>
+                @endif
                 @endif
                 <!-- EMP DASHBOARD EVENTS END -->
             </div>
@@ -952,6 +1025,23 @@
               }
           }
       });
+      $.easyAjax({
+          url: requestUrl,
+          blockUI: true,
+          container: "#emp-dashboard2",
+          historyPush: true,
+          data: {
+              startDate: startDate,
+              endDate: endDate
+          },
+          blockUI: true,
+          success: function(response) {
+              if (response.status == "success") {
+                  $('#emp-dashboard2').html(response.html);
+                  init('#emp-dashboard2');
+              }
+          }
+      });
   });
   function showTable() {
 
@@ -988,9 +1078,28 @@
                   $('#emp-dashboard').html(response.html);
 
                   init('#emp-dashboard');
+
+              }
+          }
+      });
+      $.easyAjax({
+          url: requestUrl,
+          blockUI: true,
+          container: "#emp-dashboard2",
+          data: {
+              startDate: startDate,
+              endDate: endDate
+          },
+          blockUI: true,
+          success: function(response) {
+            //console.log(response);
+
+              if (response.status == "success") {
+
                   $('#emp-dashboard2').html(response.html);
 
                   init('#emp-dashboard2');
+
               }
           }
       });

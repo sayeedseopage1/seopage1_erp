@@ -32,6 +32,13 @@
     <!-- Template CSS -->
     <link type="text/css" rel="stylesheet" media="all" href="{{ asset('css/main.css') }}">
 
+
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+       integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+       crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+       <link rel="stylesheet" href="{{asset('sticky/css/style.css')}}" type="text/css" />
+
     <!-- designation hierarchy && department hierarchy -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
     <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>
@@ -246,6 +253,38 @@
             <x-app-title class="d-block d-lg-none" :pageTitle="__($pageTitle)"></x-app-title>
 
             @yield('content')
+            <?php
+            $deal_id= App\Models\Deal::where('pm_id',Auth::id())->where('status','pending')->first();
+            if ($deal_id != null) {
+              $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
+
+              $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $deal_id->award_time);
+
+              $diff_in_minutes = $from->diffInMinutes($to);
+            }
+
+             ?>
+        @if(Auth::user()->role_id == 4 && $deal_id != null && $diff_in_minutes < 1230)    <div id="mydiv">
+        <div class="wrapper-timezone2" id="mydivheader">
+            <p>New Deal Won: {{$deal_id->deal_id}}</p>
+            <div class="clock2 mb-1">
+                <div class="column">
+                    <div class="timer2" id="hours2"></div>
+                </div>
+
+                <div class="column">
+                    <div class="timer2" id="minutes2"></div>
+                </div>
+
+                <div class="column">
+                    <div class="timer2" id="seconds2"></div>
+                </div>
+            </div>
+
+            <a target="_blank" href="/account/contracts/{{$deal_id->id}}" class="Accept">View <i class="fa-regular fa-eye"></i></a>
+        </div>
+        @endif
+    </div>
 
 
         </section>
@@ -652,6 +691,139 @@
 
         });
     </script>
+
+
+
+
+
+      @if(Auth::user()->role_id == 4 && $deal_id != null && $diff_in_minutes < 1230)
+      <?php
+
+
+        if ($deal_id != null) {
+          $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$deal_id->award_time)->format('Y-m-d H:i:s');
+
+          $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1230)->format('Y-m-d H:i:s');
+        }
+       ?>
+
+
+       <input type="hidden" id="award_time2" value="{{$newDateTime}}">
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.4/moment-timezone-with-data.js"></script>
+
+
+        <script>
+            $(function(){
+                function timer(settings){
+                    var config = {
+                        endDate:  $('#award_time2').val(),
+                        timeZone: 'Asia/Dhaka',
+                        hours: $('#hours2'),
+                        minutes: $('#minutes2'),
+                        seconds: $('#seconds2'),
+                        newSubMessage: 'and should be back online in a few minutes...'
+                    };
+                    function prependZero(number){
+                        return number < 10 ? '0' + number : number;
+                    }
+                    $.extend(true, config, settings || {});
+                    var currentTime = moment();
+                    var endDate = moment.tz(config.endDate, config.timeZone);
+                    var diffTime = endDate.valueOf() - currentTime.valueOf();
+                    var duration = moment.duration(diffTime, 'milliseconds');
+                    var days = duration.days();
+                    var interval = 1000;
+                    var subMessage = $('.sub-message');
+                    var clock = $('.clock');
+                    if(diffTime < 0){
+                        endEvent(subMessage, config.newSubMessage, clock);
+                        return;
+                    }
+                    if(days > 0){
+                        $('#days').text(prependZero(days));
+                        $('.days').css('display', 'inline-block');
+                    }
+                    var intervalID = setInterval(function(){
+                        duration = moment.duration(duration - interval, 'milliseconds');
+                        var hours = duration.hours(),
+                            minutes = duration.minutes(),
+                            seconds = duration.seconds();
+                        days = duration.days();
+                        if(hours  <= 0 && minutes <= 0 && seconds  <= 0 && days <= 0){
+                            clearInterval(intervalID);
+                            endEvent(subMessage, config.newSubMessage, clock);
+                            window.location.reload();
+                        }
+                        if(days === 0){
+                            $('.days').hide();
+                        }
+                        $('#days').text(prependZero(days));
+                        config.hours.text(prependZero(hours));
+                        config.minutes.text(prependZero(minutes));
+                        config.seconds.text(prependZero(seconds));
+                    }, interval);
+                }
+                function endEvent($el, newText, hideEl){
+                    $el.text(newText);
+                    hideEl.hide();
+                }
+                timer();
+            });
+
+        </script>
+
+
+         <!-- drag  -->
+
+ <script>
+    // Make the DIV element draggable:
+    dragElement(document.getElementById("mydiv"));
+
+    function dragElement(elmnt) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    if (document.getElementById(elmnt.id + "header")) {
+        // if present, the header is where you move the DIV from:
+        document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+    } else {
+        // otherwise, move the DIV from anywhere inside the DIV:
+        elmnt.onmousedown = dragMouseDown;
+    }
+
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+    }
+    }
+ </script>
+ @endif
+
 </body>
 
 </html>

@@ -362,41 +362,53 @@ trait EmployeeDashboard
           //dd($this->total_released_amount);
           $this->total_released_amount= Project::
                           where('pm_id',Auth::id())
-                          ->where(DB::raw('DATE(created_at)'), '>=', $startDate)
-                          ->where(DB::raw('DATE(created_at)'), '<=', $endDate)
+                          ->where(DB::raw('DATE(updated_at)'), '>=', $startDate)
+                          ->where(DB::raw('DATE(updated_at)'), '<=', $endDate)
                           ->sum('milestone_paid');
 
 
 
-        $total_projects= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-        $total_completed_project=Project::where('pm_id',Auth::id())->where('status','finished')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-        $this->total_canceled_project=Project::where('pm_id',Auth::id())->where('status','canceled')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-        $this->percentage_of_complete_project_count= $total_completed_project*$total_projects/100;
-        $this->percentage_of_canceled_project_count= $this->total_canceled_project*$total_projects/100;
-        $project_completion= Project::where('pm_id',Auth::id())->get();
-        $this->days= 0;
-        foreach ($project_completion as $completion) {
-          $date1= new DateTime($completion['created_at']);
-          if ($completion->status == 'finished') {
-            $date2= new DateTime($completion['updated_at']);
+        $this->total_projects= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
+        $this->total_completed_project=Project::where('pm_id',Auth::id())->where('status','finished')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
+        $this->total_canceled_project=Project::where('pm_id',Auth::id())->where('status','canceled')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
+        $this->total_completed_project_on_time=Project::where('pm_id',Auth::id())->where('status','finished')->whereDate('payment_release_date','>=','deadline')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
+        $this->total_onhold_project=Project::where('pm_id',Auth::id())->where('status','on hold')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
+        //dd($total_completed_project_on_time);
+        if ($this->total_projects > 0) {
+        $this->percentage_of_complete_project_count= $this->total_completed_project/$this->total_projects*100;
+        $this->percentage_of_canceled_project_count= $this->total_canceled_project/$this->total_projects*100;
 
-               $this->days  = $date2->diff($date1)->format('%a');
+        $this->percentage_of_onhold_project_count= $this->total_onhold_project/$this->total_projects*100;
+      }else {
+        $this->percentage_of_complete_project_count = 0;
+        $this->percentage_of_canceled_project_count = 0;
 
-          }
+        $this->percentage_of_onhold_project_count= 0;
+      }
+      if ($this->total_completed_project > 0) {
+          $this->percentage_of_completed_ontime_project_count= $this->total_completed_project_on_time/$this->total_completed_project*100;
+      }
+      else {
+          $this->percentage_of_completed_ontime_project_count= 0;
+      }
 
-        }
+
+        $this->avg_project_completion_time= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->avg('project_completion_days');
+        $this->pm_projects= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->get();
+        $this->tasks= Task::where('added_by',Auth::id())->orderBy('id','desc')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->get();
 
         $this->view = 'dashboard.ajax.project-manager';
-        $this->view2 = 'dashboard.ajax.project-manager2';
+
         if (request()->ajax()) {
             $html = view($this->view,$this->data)->render();
-            $html2 = view($this->view2,$this->data)->render();
-            return Reply::dataOnly(['status' => 'success', 'html' => $html,'html2'=> $html2, 'title' => $this->pageTitle]);
+
+            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }else {
             return view('dashboard.employee.index', $this->data);
         }
         //dd($this->view);
         //dd($this->no_of_inprogress,$this->no_of_canceled, $this->total_project_value, $this->total_released_amount );
+
 
 
 
