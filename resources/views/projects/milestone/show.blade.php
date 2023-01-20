@@ -159,8 +159,7 @@
 </div>
 <script type="text/javascript">
 
-    let project_id = document.getElementById('project_id').value;
-    let client_id =document.getElementById('client_id').value;
+  
     let milestone_id =document.getElementById('milestone_id').value;
     //console.log(milestone_id);
     document.querySelector('create-invoice').addEventListener('click', () => {

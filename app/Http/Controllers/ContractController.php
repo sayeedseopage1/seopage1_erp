@@ -1266,4 +1266,22 @@ class ContractController extends AccountBaseController
 
         return Reply::redirect(route('contracts.show', $this->contract->id));
     }
+    public function UpdateDealID(Request $request)
+    {
+      $deal= Deal::find($request->deal_id);
+      $deal->status= 'Denied';
+      $deal->save();
+      $project_id= Project::where('deal_id',$deal->id)->first();
+      $project= Project::find($project_id->id);
+
+      $project->status = 'canceled';
+      $project->project_status= "Not Accepted";
+      $project->save();
+      return response()->json(
+            [
+                'success' => true,
+                'message' => 'Data inserted successfully'
+            ]
+        );
+    }
 }

@@ -181,7 +181,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                   $diff_in_minutes = $from->diffInMinutes($to);
                   //dd($diff_in_minutes,$to,$from);
                    ?>
-                   @if($diff_in_minutes < 1230 )
+
                   @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
                   @if($contract->deal->status == 'pending')
       <div class="wrapper-timezone d-flex justify-content-center">
@@ -214,7 +214,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
    </div>
    @endif
    @endif
-   @endif
+  
    <div class="d-flex justify-content-center">
 
      @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)

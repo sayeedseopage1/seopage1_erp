@@ -1131,3 +1131,4 @@ Route::post('/projects/submission-accept/', [ProjectController::class, 'ProjectS
 Route::post('/projects/qc-submit/', [ProjectController::class, 'ProjectSubmissionQC'])->name('submit-qc-form');
 
 Route::post('/projects/qc-submission-accept/', [ProjectController::class, 'ProjectQcSubmissionAccept'])->name('project-qc-accept');
+Route::post('/deals/update', [ContractController::class, 'UpdateDealID'])->name('update-deal-id');

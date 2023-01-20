@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
-@push('datatable-styles')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-@endpush
+
 
 @section('filter-section')
 
@@ -11,7 +8,7 @@
 
 
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
   {{-- <x-filters.filter-box>
         <!-- DATE START -->
         <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
@@ -278,8 +275,8 @@ $deals= App\Models\Deal::all();
     </div>
     <!-- CONTENT WRAPPER END -->
 
-@endsection
-<script src="sweetalert2.all.min.js"></script>
+
+
 <script type="text/javascript">
 Swal.fire({
   title: 'Error!',
@@ -296,7 +293,7 @@ $(document).ready(function() {
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" charset="utf-8"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.js" charset="utf-8"></script>
+
 
 
 
@@ -311,61 +308,6 @@ $(document).ready(function () {
 </script>
 
 
-    <script>
-
-        $('#contracts-table').on('preXhr.dt', function(e, settings, data) {
-            var dateRangePicker = $('#datatableRange').data('daterangepicker');
-            var startDate = $('#datatableRange').val();
-
-            if (startDate == '') {
-                startDate = null;
-                endDate = null;
-            } else {
-                startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
-                endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
-            }
-
-            var contract_type = $('#contract_type').val();
-            var client = $('#client').val();
-            var searchText = $('#search-text-field').val();
-            data['startDate'] = startDate;
-            data['endDate'] = endDate;
-            data['contract_type'] = contract_type;
-            data['client'] = client;
-            data['searchText'] = searchText;
-        });
-
-        $('#reset-filters').click(function() {
-            $('#filter-form')[0].reset();
-            $('.filter-box .select-picker').selectpicker("refresh");
-            $('#reset-filters').addClass('d-none');
-            showTable();
-        });
-
-        $('#quick-action-type').change(function() {
-            const actionValue = $(this).val();
-            if (actionValue != '') {
-                $('#quick-action-apply').removeAttr('disabled');
-
-                if (actionValue == 'change-status') {
-                    $('.quick-action-field').addClass('d-none');
-                    $('#change-status-action').removeClass('d-none');
-                } else {
-                    $('.quick-action-field').addClass('d-none');
-                }
-            } else {
-                $('#quick-action-apply').attr('disabled', true);
-                $('.quick-action-field').addClass('d-none');
-            }
-        });
-
-
-
-
-
-
-
-    </script>
     @if (count($errors) > 0)
     <script>
         $( document ).ready(function() {
@@ -376,3 +318,4 @@ $(document).ready(function () {
 
 
 @endpush
+@endsection

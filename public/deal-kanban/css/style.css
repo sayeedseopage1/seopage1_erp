@@ -219,6 +219,19 @@ body{
     border-radius: 20px;
 }
 
+.task_list li:nth-child(4) {
+    background: #1D82F5;
+    color: #fff;
+    padding: 3px 2px;
+    border-radius: 4px;
+}
+.task_list i {
+    margin-right: 6px;
+    color: #1D82F5;
+}
+.task_list i.fa-regular.fa-calendar-days {
+    color: #fff;
+}
 
 /* custom color  End */
 
@@ -235,9 +248,12 @@ body{
 }
 
 .clipboard_list_sp1{
-    background-color: #F2F4F7;
+    background-color: #1D82F5;
     padding: 4px;
     border-radius: 4px;
+}
+.clipboard_list_sp1 a {
+    color: #fff !important;
 }
 
 
@@ -250,7 +266,7 @@ body{
     scrollbar-color: #147cc3 #147cc3;
     scrollbar-width: thin;
     -ms-overflow-style: none;
-    max-height: 95vh;
+    max-height: 75vh;
     padding: 10px 0;
 }
 

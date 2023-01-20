@@ -111,8 +111,8 @@ body{
 }
 
 .task_list span {
-    background: #F2F4F7;
-    color: #333;
+    background: #1D82F5;
+    color: #fff;
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -141,9 +141,11 @@ body{
 }
 .task_list i {
     margin-right: 6px;
-    color: #666;
+    color: #1D82F5;
 }
-
+.task_list i.fa-regular.fa-calendar-days {
+    color: #fff;
+}
 .description i {
     margin-right: 6px;
     color: #666;
@@ -230,7 +232,12 @@ body{
     border-radius: 4px;
 }
 
-
+.content ul li:nth-child(8) {
+    background: #1D82F5;
+    color: #fff;
+    padding: 3px 2px;
+    border-radius: 4px;
+}
 /* scrollbar  */
 
 .outer-wrapper {
@@ -240,7 +247,7 @@ body{
     scrollbar-color: #147cc3 #147cc3;
     scrollbar-width: thin;
     -ms-overflow-style: none;
-    max-height: 95vh;
+    max-height: 75vh;
     padding: 10px 0;
 }
   
