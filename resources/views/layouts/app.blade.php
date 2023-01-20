@@ -746,6 +746,7 @@
 
        <input type="hidden" id="award_time2" value="{{$newDateTime}}">
         <input type="hidden" id="deal_id" value="{{$deal_id->id}}">
+        <input type="hiden" id="left_time" value="{{$diff_in_minutes}}">
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.4/moment-timezone-with-data.js"></script>
@@ -755,6 +756,7 @@
             $(function(){
                 function timer(settings){
                     var award_time = $('#award_time2').val();
+
                     var config = {
                         endDate:  $('#award_time2').val(),
                         timeZone: 'Asia/Dhaka',
@@ -775,33 +777,38 @@
                     var interval = 1000;
                     var subMessage = $('.sub-message');
                     var clock = $('.clock2');
+                    var left_time = $('#left_time').val();
                     if(diffTime < 0){
                         endEvent(subMessage, config.newSubMessage, clock);
-                        var url = window.location.href; //to get current url
+                      //to get current url
 
-                        if(url = "/"){
+                      if (left_time < 1230) {
 
-                           var deal_id = $('#deal_id').val();
-          $.ajaxSetup({
-              headers: {
-                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              }
-          });
+                             var deal_id = $('#deal_id').val();
 
-                         $.ajax({
-                             type:"POST",
-                             cache:false,
-                             url:"{{route('update-deal-id')}}",
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
-                             data:{deal_id:deal_id},
+                           $.ajax({
+                               type:"POST",
+                               cache:false,
+                               url:"{{route('update-deal-id')}}",
+
+                               data:{deal_id:deal_id},
 
 
-                           success: function(data) {
-                             window.location.reload();
+                             success: function(data) {
 
-                           }
-                         });
-                  }
+
+                             }
+                           });
+
+                      }
+
+
 
                         return;
                     }

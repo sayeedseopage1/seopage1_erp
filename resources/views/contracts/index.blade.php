@@ -4,7 +4,6 @@
 
 @section('filter-section')
 
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
 
 
@@ -97,7 +96,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
             <div id="table-actions" class="d-flex align-items-center">
                 @if ($addContractPermission == 'all' || $addContractPermission == 'added')
-                    <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#dealaddmodal"><i class="fa-solid fa-plus"></i><span> Create Won Deal</span></button>
+                    <button class="btn btn-primary" id="deal-add"  ><i class="fa-solid fa-plus"></i><span> Create Won Deal</span></button>
                     @include('contracts.modals.dealaddmodal')
                 @endif
 
@@ -278,6 +277,14 @@ $deals= App\Models\Deal::all();
 
 
 <script type="text/javascript">
+$(document).on('click','#deal-add',function(e){
+
+
+  //console.log(milestone_id);
+  $('#dealaddmodal').modal('show');
+
+
+});
 Swal.fire({
   title: 'Error!',
   text: 'Do you want to continue',
@@ -292,7 +299,7 @@ $(document).ready(function() {
   $('#whatsapp').summernote();
 });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" charset="utf-8"></script>
+
 
 
 

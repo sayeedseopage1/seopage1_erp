@@ -6,7 +6,7 @@
       rel="stylesheet">
 
 
-		<script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+
 		<script type="text/javascript" src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
 		<script type="text/javascript" src="{{asset('time-picker2/js/bootstrap-material-datetimepicker.js')}}"></script>
     <style media="screen">
@@ -133,7 +133,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary"  value="Submit">Create Deal</button>
 
       </div>
