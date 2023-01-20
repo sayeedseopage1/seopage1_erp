@@ -31,7 +31,8 @@
 
     <!-- Template CSS -->
     <link type="text/css" rel="stylesheet" media="all" href="{{ asset('css/main.css') }}">
-
+    <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css" />
+       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed" type="text/css" />
 
        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
@@ -253,21 +254,25 @@
             <x-app-title class="d-block d-lg-none" :pageTitle="__($pageTitle)"></x-app-title>
 
             @yield('content')
+            @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4)
             <?php
-            $deal_id= App\Models\Deal::where('pm_id',Auth::id())->where('status','pending')->first();
-            if ($deal_id != null) {
-              $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
+            $deal_id= App\Models\Deal::orderBy('award_time','desc')->where('pm_id',Auth::user()->id)->first();
+            if ($deal_id != null)
+            {
+               $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
 
               $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $deal_id->award_time);
 
-              $diff_in_minutes = $from->diffInMinutes($to);
+              $diff_in_minutes = $from->diffInMinutes($to);  // code...
             }
 
+            //dd($deal_id);
              ?>
-        @if(Auth::user()->role_id == 4 && $deal_id != null && $diff_in_minutes < 1230)    <div id="mydiv">
+             @if($deal_id != null && $deal_id->status == 'pending' && $diff_in_minutes < 1230)
+            <div id="mydiv">
         <div class="wrapper-timezone2" id="mydivheader">
             <p>New Deal Won: {{$deal_id->deal_id}}</p>
-            <div class="clock2 mb-1">
+            <div class="clock2">
                 <div class="column">
                     <div class="timer2" id="hours2"></div>
                 </div>
@@ -281,10 +286,13 @@
                 </div>
             </div>
 
-            <a target="_blank" href="/account/contracts/{{$deal_id->id}}" class="Accept">View <i class="fa-regular fa-eye"></i></a>
+            <a href="/account/contracts/{{$deal_id->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
         </div>
-        @endif
+
     </div>
+    @endif
+
+    @endif
 
 
         </section>
@@ -695,20 +703,16 @@
 
 
 
-
-      @if(Auth::user()->role_id == 4 && $deal_id != null && $diff_in_minutes < 1230)
+      @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4)
+      @if($deal_id != null && $deal_id->status == 'pending' && $diff_in_minutes < 1230)
       <?php
+      $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$deal_id->award_time)->format('Y-m-d H:i:s');
 
-
-        if ($deal_id != null) {
-          $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$deal_id->award_time)->format('Y-m-d H:i:s');
-
-          $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1230)->format('Y-m-d H:i:s');
-        }
+      $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1230)->format('Y-m-d H:i:s');
+      //dd($newDateTime);
        ?>
 
-
-       <input type="hidden" id="award_time2" value="{{$newDateTime}}">
+      <input type="hidden" id="award_time" value="{{$newDateTime}}">
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.4/moment-timezone-with-data.js"></script>
@@ -717,8 +721,9 @@
         <script>
             $(function(){
                 function timer(settings){
+                    var award_time = $('#award_time').val();
                     var config = {
-                        endDate:  $('#award_time2').val(),
+                      endDate:  $('#award_time').val(),
                         timeZone: 'Asia/Dhaka',
                         hours: $('#hours2'),
                         minutes: $('#minutes2'),
@@ -823,7 +828,7 @@
     }
  </script>
  @endif
-
+ @endif
 </body>
 
 </html>
