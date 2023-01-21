@@ -75,6 +75,12 @@
                                        <textarea name="description" class="form-control" id="description2" rows="3" required></textarea>
                                      </div>
                                    </div>
+                                   <div class="col-md-12 mt-3">
+                                     <div class="form-group">
+                                       <label for="exampleFormControlTextarea1">Comments <span style="color:red;">*</span></label>
+                                       <textarea name="comments" class="form-control" id="description3" rows="3" required></textarea>
+                                     </div>
+                                   </div>
 
 
 
@@ -157,6 +163,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
   $('#description2').summernote();
+  $('#description3').summernote();
 
 });
 </script>

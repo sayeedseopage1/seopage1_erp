@@ -214,7 +214,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
    </div>
    @endif
    @endif
-  
+
    <div class="d-flex justify-content-center">
 
      @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
@@ -319,7 +319,56 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
 
       <h4 class="text-center">Deal Details From Sales Team</h4>
       <hr>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Project Milestones</h4>
+                          <br>
+                          <?php
+                          $project= App\Models\Project::where('deal_id',$contract->deal->id)->first();
+                          $milestones= App\Models\ProjectMilestone::where('project_id',$project->id)->get();
+                           ?>
+                           <table class="table table-responsive table-bordered table-striped">
+     <thead class="thead-dark">
+       <tr>
+         <th scope="col">#</th>
+         <th scope="col" class="col-3 col-sm-2">Milestone Name</th>
+         <th scope="col" class="col-3 col-sm-2">Milestone Type</th>
+         <th scope="col" class="col-3 col-sm-2">Milestone Cost</th>
+          <th scope="col" class="col-6 col-md-8">Milestone Summary</th>
+       </tr>
+     </thead>
+     <tbody>
+       @foreach($milestones as $milestone)
+       <tr>
+         <th>{{$loop->index+1}}</th>
+         <td>{{$milestone->milestone_title}}</td>
+         <td>{{$milestone->milestone_type}}</td>
+         <td>{{$milestone->actual_cost}}{{$milestone->original_currency->currency_symbol}}</td>
+         <td>@if($milestone->summary != null)
+           {!!$milestone->summary!!}
+         @else
+         --
+         @endif
+        </td>
+       </tr>
+       @endforeach
 
+     </tbody>
+   </table>
+
+
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
 
       <div class="row mb-4" >
           <!-- BUDGET VS SPENT START -->

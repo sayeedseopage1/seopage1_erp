@@ -398,11 +398,13 @@ trait EmployeeDashboard
         $this->tasks= Task::where('added_by',Auth::id())->orderBy('id','desc')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->get();
 
         $this->view = 'dashboard.ajax.project-manager';
+        $this->sales_view = 'dashboard.ajax.sales_executive';
 
         if (request()->ajax()) {
             $html = view($this->view,$this->data)->render();
+            $html2 = view($this->sales_view,$this->data)->render();
 
-            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+            return Reply::dataOnly(['status' => 'success', 'html' => $html,'html2'=> $html2, 'title' => $this->pageTitle]);
         }else {
             return view('dashboard.employee.index', $this->data);
         }

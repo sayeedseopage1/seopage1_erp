@@ -100,7 +100,7 @@
             <!-- WELOCOME NAME END -->
 
             <!-- CLOCK IN CLOCK OUT START -->
-            @if(Auth::user()->role_id == 4)
+            @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 7)
           {{-- <div id="reportrange" class="mb-0" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: auto; margin:0 auto;">
                 <i class="fa fa-calendar"></i>&nbsp;
                 <span></span> <i class="fa fa-caret-down"></i>
@@ -206,7 +206,7 @@
             <!-- EMP DASHBOARD INFO NOTICES START -->
 
             @if(count(array_intersect(['profile', 'shift_schedule', 'birthday', 'notices'], $activeWidgets)) > 0)
-              @if(Auth::user()->role_id != 4)
+              @if(Auth::user()->role_id != 4 && Auth::user()->role_id != 7)
                 <div class="col-xl-5 col-lg-12 col-md-12 e-d-info-notices">
                     <div class="row">
                         @if (in_array('profile', $activeWidgets))
@@ -661,12 +661,26 @@
 
 
             @endif
+            @if(Auth::user()->role_id == 7)
+            <!-- EMP DASHBOARD TASKS PROJECTS END -->
+              <div class="col-xl-12 col-lg-12 col-md-12 e-d-info-notices" id="emp-dashboard">
+                <div class="row">
+                  <div class="col-md-12">
+                      @include($sales_view)
+                  </div>
+
+                </div>
+
+              </div>
+
+
+            @endif
             <!-- EMP DASHBOARD INFO NOTICES END -->
             <!-- EMP DASHBOARD TASKS PROJECTS EVENTS START -->
             <div class="col-xl-7 col-lg-12 col-md-12 e-d-tasks-projects-events">
                 <!-- EMP DASHBOARD TASKS PROJECTS START -->
 
-                @if(Auth::user()->role_id != 4)
+                @if(Auth::user()->role_id != 4 && Auth::user()->role_id != 7)
                 <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
                     @if (in_array('tasks', $activeWidgets))
                         <div class="col-md-6">
@@ -799,7 +813,7 @@
 
                 @endif
                 <!-- PROJECT MANAGER VIEW -->
-                @if(Auth::user()->role_id != 4)
+                @if(Auth::user()->role_id != 4 && Auth::user()->role_id != 7)
                 @if (in_array('my_task', $activeWidgets))
                 <div class="row">
                     <div class="col-sm-12">
@@ -868,7 +882,7 @@
                 @endif
 
                 <!-- EMP DASHBOARD EVENTS START -->
-                @if(Auth::user()->role_id != 4)
+                @if(Auth::user()->role_id != 4 && Auth::user()->role_id != 7)
                 @if (in_array('my_calender', $activeWidgets))
                     <div class="row">
                         <div class="col-md-12">

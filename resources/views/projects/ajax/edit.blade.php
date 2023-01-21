@@ -120,6 +120,54 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         </x-forms.input-group>
                     </div>
 
+                        <!-- BUDGET VS SPENT START -->
+                        <div class="col-md-12 mt-5">
+
+
+
+                                        <h4>Project Milestones</h4>
+                                        <br>
+                                        <?php
+
+                                        $milestones= App\Models\ProjectMilestone::where('project_id',$project->id)->get();
+                                         ?>
+                                         <table class="table table-responsive table-bordered table-striped">
+                   <thead class="thead-dark">
+                     <tr>
+                       <th scope="col">#</th>
+                       <th scope="col" class="col-3 col-sm-2">Milestone Name</th>
+                       <th scope="col" class="col-3 col-sm-2">Milestone Type</th>
+                       <th scope="col" class="col-3 col-sm-2">Milestone Cost</th>
+                        <th scope="col" class="col-6 col-md-8">Milestone Summary</th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     @foreach($milestones as $milestone)
+                     <tr>
+                       <th class="pl-20">{{$loop->index+1}}</th>
+                       <td>{{$milestone->milestone_title}}</td>
+                       <td>{{$milestone->milestone_type}}</td>
+                       <td>{{$milestone->actual_cost}}{{$milestone->original_currency->currency_symbol}}</td>
+                       <td>@if($milestone->summary != null)
+                         {!!$milestone->summary!!}
+                       @else
+                       --
+                       @endif
+                      </td>
+                     </tr>
+                     @endforeach
+
+                   </tbody>
+                 </table>
+
+
+
+
+
+
+                        </div>
+                        <!-- BUDGET VS SPENT END -->
+
                     <div class="col-md-12 col-lg-12">
                         <div class="form-group my-3">
                             <x-forms.label class="my-3" fieldId="project_summary"

@@ -178,6 +178,13 @@ class DealController extends AccountBaseController
         // $user->login= 'disable';
         // $user->email_notifications = 0;
         // $user->save();
+        $deal_stage= new DealStageChange();
+
+        $deal_stage->deal_id= $deal->short_code;
+        $deal_stage->comments= $request->comments;
+        $deal_stage->deal_stage_id=$deal->deal_stage;
+        $deal_stage->updated_by= Auth::id();
+        $deal_stage->save();
 
 
 
@@ -395,7 +402,7 @@ class DealController extends AccountBaseController
       }
 
          $deal->attach= $value;
-    
+
 
        $deal->save();
        Toastr::success('Comment Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
