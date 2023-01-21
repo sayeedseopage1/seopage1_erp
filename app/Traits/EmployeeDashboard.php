@@ -399,6 +399,12 @@ trait EmployeeDashboard
 
         $this->view = 'dashboard.ajax.project-manager';
         $this->sales_view = 'dashboard.ajax.sales_executive';
+        $firstDayofPreviousMonth = Carbon::now()->startOfMonth()->subMonthsNoOverflow()->toDateString();
+        $start_date= Carbon::parse($firstDayofPreviousMonth)->addDays(20);
+        $end_date= Carbon::parse($start_date)->addDays(30);
+        $payment_date= Carbon::parse($start_date)->addDays(40);
+        $lastDayofPreviousMonth = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->toDateString();
+      //  dd($firstDayofPreviousMonth,$lastDayofPreviousMonth,$start_date,$end_date,$payment_date);
 
         if (request()->ajax()) {
             $html = view($this->view,$this->data)->render();
