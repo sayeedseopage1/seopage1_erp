@@ -404,7 +404,14 @@ trait EmployeeDashboard
         $end_date= Carbon::parse($start_date)->addDays(30);
         $payment_date= Carbon::parse($start_date)->addDays(40);
         $lastDayofPreviousMonth = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->toDateString();
-      //  dd($firstDayofPreviousMonth,$lastDayofPreviousMonth,$start_date,$end_date,$payment_date);
+        $project_count_this_month= Project::whereBetween(DB::raw('DATE(`start_date`)'), [$start_date, $end_date])->count();
+        $project_amount_this_month= Project::whereBetween(DB::raw('DATE(`start_date`)'), [$start_date, $end_date])->sum('project_budget');
+        $finish_project_count_this_month= Project::where('status','finished')->whereBetween(DB::raw('DATE(`start_date`)'), [$start_date, $end_date])->count();
+        $finish_project_amount_this_month= Project::where('status','finished')->whereBetween(DB::raw('DATE(`start_date`)'), [$start_date, $payment_date])->sum('milestone_paid');
+        $percentage_of_project_complete_count= $finish_project_count_this_month/$project_count_this_month *100 . ('%');
+        $percentage_of_project_complete_amount= $finish_project_amount_this_month/$project_amount_this_month*100 . ('%');
+    //  dd($firstDayofPreviousMonth,$lastDayofPreviousMonth,$start_date,$end_date,$payment_date,$project_count_this_month,$finish_project_count_this_month,$finish_project_amount_this_month, $project_amount_this_month );
+    //dd($project_count_this_month,$finish_project_count_this_month,$finish_project_amount_this_month, $project_amount_this_month, $percentage_of_project_complete_count,$percentage_of_project_complete_amount  );
 
         if (request()->ajax()) {
             $html = view($this->view,$this->data)->render();
