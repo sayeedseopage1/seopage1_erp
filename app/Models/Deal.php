@@ -19,5 +19,9 @@ class Deal extends Model
       {
           return $this->belongsTo(User::class, 'added_by');
       }
-    
+      public function pm()
+    {
+        return $this->belongsTo(User::class, 'pm_id');
+    }
+
 }

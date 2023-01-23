@@ -8,7 +8,13 @@ $addProjectMemberPermission = user()->permission('add_project_members');
 $createPublicProjectPermission = user()->permission('create_public_project');
 
 @endphp
-
+<style media="screen">
+.table th, .table td {
+  padding: 0.75rem;
+  vertical-align: middle;
+  border-top: 1px solid #dee2e6;
+}
+</style>
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
 
 <div class="row">

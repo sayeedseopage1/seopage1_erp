@@ -10,6 +10,11 @@ $project->members->pluck('user_id')->toArray(); @endphp
     	margin-right: auto;
       padding-top: 0 !important;
   }
+  .table th, .table td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
+}
 
 </style>
 <div class="d-lg-flex">

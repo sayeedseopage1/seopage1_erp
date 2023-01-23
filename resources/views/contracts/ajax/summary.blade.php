@@ -20,7 +20,11 @@
         width: 400px;
         height: 150px;
     }
-
+    .table th, .table td {
+        padding: 0.75rem;
+        vertical-align: middle;
+        border-top: 1px solid #dee2e6;
+    }
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css" />
@@ -284,6 +288,12 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                                   @lang('modules.contracts.contractType')</td>
                               <td class="border-left-0">{{ $contract->contractType->name }}
                               </td> --}}
+                          </tr>
+                          <tr>
+                              <td class="bg-light-grey border-right-0 f-w-500">
+                                Project Manager</td>
+                              <td class="border-left-0"><a class="text-darkest-grey" href="/account/employees/{{$contract->deal->pm_id}}">{{ $contract->deal->pm->name }}</a>
+                              </td>
                           </tr>
                       </table>
 
