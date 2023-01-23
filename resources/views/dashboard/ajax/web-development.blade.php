@@ -15,8 +15,43 @@ $total_managers= App\Models\User::where('role_id',4)->count(); $total_lead_devel
 App\Models\Lead::where('deal_status',1)->count(); $total_won_deals= App\Models\Deal::count(); $total_leads= App\Models\Lead::count(); $total_clients= App\Models\ClientDetails::count(); $total_projects= App\Models\Project::count();
 $total_task_completed= App\Models\Task::where('status','completed')->count(); $total_due_task= App\Models\Task::where('status','!=','completed')->count(); $total_overdue_task= App\Models\Task::where('board_column_id',7)->count();
 $total_payment_release= App\Models\PMAssign::select('release_amount')->sum('release_amount'); $total_project_due= App\Models\Project::select('project_budget')->sum('project_budget'); $total_payment_due= $total_project_due -
-$total_payment_release; $project_managers= App\Models\User::where('role_id',4)->get(); $lead_developer= App\Models\User::where('role_id',6)->get(); $developer= App\Models\User::where('role_id',5)->get(); ?> {{-- Individual Project Manager
+$total_payment_release; $project_managers= App\Models\User::where('role_id',4)->get(); $lead_developer= App\Models\User::where('role_id',6)->get(); $developer= App\Models\User::where('role_id',5)->get();
+ ?>
+
+ <div class="card col-md-3 mb-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Payment Release Overview</h5></div>
+ <div class="row mt-2">
+     <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+         <x-cards.widget :title="__('Total Project Value (This Duration)')" :value="$project_amount_this_month .' USD'" icon="layer-group" />
+     </div>
+
+     <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+         <x-cards.widget :title="__('Pymt. Rel. in Current Duration (21st – 30th)')" :value="$finish_project_count_this_month" icon="layer-group" />
+     </div>
+
+     <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+         <x-cards.widget :title="__('Total Amount Rel. in Current Duration (21st – 30th)')" :value="$finish_project_amount_this_month .' USD'" icon="layer-group" />
+     </div>
+     <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+         <x-cards.widget :title="__('Amount Released (Previous Duration)')" :value="$project_amount_this_previous . ' USD'" icon="layer-group" />
+     </div>
+
+     <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+         <x-cards.widget :title="__('% of Total Amount Rel. Belongs to Current Duration')" :value="$percentage_of_project_complete_amount" icon="layer-group" />
+     </div>
+     <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+         <x-cards.widget :title="__('% of Total Amount Rel. Belongs to Previous Duration')" :value="$percentage_of_project_complete_previous_amount" icon="layer-group" />
+     </div>
+
+ </div>
+
+ <hr/>
+
+
+{{-- Individual Project Manager
 Overview--}}
+
+
+
 <div class="card col-md-4 mb-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Project Manager Combined Overview</h5></div>
 <div class="row mt-2">
     <div class="col-sm-12 col-lg-12 mt-3">

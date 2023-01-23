@@ -138,8 +138,34 @@ trait webdevelopmentDashboard
         $this->developers=User::where('role_id',5)->get();
         $this->tasks=TaskUser::with('task')->first();
 
+        $this->firstDayofPreviousMonth = Carbon::now()->startOfMonth()->subMonthsNoOverflow()->toDateString();
+        $this->start_date= Carbon::parse($this->firstDayofPreviousMonth)->addDays(20);
+        $this->end_date= Carbon::parse($this->start_date)->addDays(30);
+        $this->payment_date= Carbon::parse($this->start_date)->addDays(40);
+        $this->lastDayofPreviousMonth = Carbon::now()->subMonthsNoOverflow()->endOfMonth()->toDateString();
+        $this->project_count_this_month= Project::whereBetween(DB::raw('DATE(`start_date`)'), [$this->start_date, $this->end_date])->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
+        $this->project_amount_this_month= Project::whereBetween(DB::raw('DATE(`payment_release_date`)'), [$this->start_date, $this->end_date])->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->sum('project_budget');
+        $this->finish_project_count_this_month= Project::where('status','finished')->whereBetween(DB::raw('DATE(`start_date`)'), [$this->start_date, $this->end_date])->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
+        $this->finish_project_amount_this_month= Project::where('status','finished')->whereBetween(DB::raw('DATE(`payment_release_date`)'), [$this->start_date, $this->payment_date])->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->sum('project_budget');
+        $this->project_amount_this_previous= Project::wherenotBetween(DB::raw('DATE(`payment_release_date`)'), [$this->start_date, $this->end_date])->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->sum('project_budget');
+        if ($this->project_count_this_month == 0) {
+          $this->percentage_of_project_complete_count = 0 . ('%');
+        }else {
+              $this->percentage_of_project_complete_count= round($this->finish_project_count_this_month/$this->project_count_this_month *100,2) . ('%');
+        }
+        if ($this->project_amount_this_month == 0) {
+          $this->percentage_of_project_complete_amount =  0 . ('%');
+          $this->percentage_of_project_complete_previous_amount = 0 . ('%');
+        }else {
+            $this->percentage_of_project_complete_amount= round($this->finish_project_amount_this_month/$this->project_amount_this_month*100,2) . ('%');
+            $this->percentage_of_project_complete_previous_amount= round($this->project_amount_this_previous/$this->finish_project_amount_this_month*100,2) . ('%');
+        }
 
-        
+    //  dd($firstDayofPreviousMonth,$lastDayofPreviousMonth,$start_date,$end_date,$payment_date,$project_count_this_month,$finish_project_count_this_month,$finish_project_amount_this_month, $project_amount_this_month );
+    //dd($this->project_count_this_month,$this->finish_project_count_this_month,$this->finish_project_amount_this_month, $this->project_amount_this_month, $this->percentage_of_project_complete_count,$this->percentage_of_project_complete_amount,$this->project_amount_this_previous);
+
+
+
 
 
                            //dd($this->projectassign);
