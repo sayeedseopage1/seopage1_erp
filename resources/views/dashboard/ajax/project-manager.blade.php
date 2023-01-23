@@ -394,7 +394,7 @@
 
                                     @endif
                                       </a></td>
-                                  <td class="pl-20 text-capitalize">{{$project->deadline)}}</td>
+                                  <td class="pl-20 text-capitalize">{{$project->deadline}}</td>
                                     <td class="pl-20 text-capitalize"><div class="progress" style="height: 15px;">
                                     <div class="progress-bar f-12 bg-{{$statusColor}}" role="progressbar" style="width: {{$project->completion_percent}}%;" aria-valuenow="{{$project->completion_percent}}" aria-valuemin="0" aria-valuemax="100">{{$project->completion_percent}}%</div>
                                   </div></td>
