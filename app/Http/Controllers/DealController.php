@@ -52,6 +52,7 @@ use Illuminate\Support\Facades\Redirect;
 use Toastr;
 
 
+
 class DealController extends AccountBaseController
 {
 

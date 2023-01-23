@@ -92,16 +92,37 @@ Overview--}}
                         ${{$item->release_amount}}
                     </td>
                     <td>
-                        @if($item->project_count != 0) @php $total_release_percentage= ($item->release_amount/$item->amount)*100;
-                        @endphp {{round($total_release_percentage,2)}}% @else No Project Assign Yet @endif
+                        @if($item->project_count != 0)
+                        @php
+                        $total_release_percentage= ($item->release_amount/$item->amount)*100;
+                        @endphp
+                        {{round($total_release_percentage,2)}}%
+                        @else
+                        No Project Assign Yet
+                        @endif
                     </td>
                     <td>
-                        @if($item->project_count != 0) @php $project_cancel_count= App\Models\Project::where('pm_id',$item->pm_id)->where('status','canceled')->count(); $total_cancel_percentage=
-                        ($project_cancel_count/$item->project_count)*100; @endphp {{$total_cancel_percentage}}% @else No Project Assign Yet @endif
+                        @if($item->project_count != 0)
+                        @php $project_cancel_count= App\Models\Project::where('pm_id',$item->pm_id)->where('status','canceled')->count();
+                        $total_cancel_percentage=
+                        ($project_cancel_count/$item->project_count)*100;
+                        @endphp
+                        {{round($total_cancel_percentage,2)}}%
+                        @else
+                         No Project Assign Yet
+                         @endif
                     </td>
                     <td>
-                        @if($item->amount != 0) @php $project_cancel_amount= App\Models\Project::where('pm_id',$item->pm_id)->where('status','canceled')->sum('project_budget'); $total_cancel_amount=
-                        ($project_cancel_amount/$item->amount)*100; @endphp {{$total_cancel_amount}}% @else No Project Assign Yet @endif
+                        @if($item->amount != 0)
+                        @php
+                        $project_cancel_amount= App\Models\Project::where('pm_id',$item->pm_id)->where('status','canceled')->sum('project_budget');
+                        $total_cancel_amount=
+                        ($project_cancel_amount/$item->amount)*100;
+                        @endphp
+                        {{round($total_cancel_amount,2)}}%
+                        @else
+                         No Project Assign Yet
+                         @endif
                     </td>
                     <td>
                         No Data
@@ -306,7 +327,7 @@ Overview--}}
                     <a href="{{ route('projects.show', [$item->id]) }}" class="text-darkest-grey f-w-500">{{ ucfirst($item->project_name) }}</a>
                 </td>
                 <td>
-                  ${{ ucfirst($item->project_budget) }}
+                  ${{ ucfirst(round($item->project_budget,2)) }}
                 </td>
                 <td>
                     {{ date('d-m-Y', strtotime($item->start_date))}}
@@ -329,7 +350,7 @@ Overview--}}
                 @endif
 
                 <td>
-                    {{$item->completion_percent}}%
+                    {{round($item->completion_percent,2)}}%
                 </td>
             </tr>
 
@@ -370,7 +391,7 @@ Overview--}}
                         <a href="javascript:;" class="milestone-detail text-darkest-grey f-w-500" data-milestone-id="{{ $item->id }}">{{ ucfirst($item->milestone_title) }}</a>
                     </td>
                     <td>
-                        @if (!is_null($item->currency_id)) {{ $item->currency->currency_symbol . $item->cost }} @else {{ $item->cost }} @endif
+                        @if (!is_null($item->currency_id)) {{ $item->currency->currency_symbol . round($item->cost,2) }} @else {{ round($item->cost,2) }} @endif
                     </td>
                     <td>
                         <a href="{{ route('projects.show', [$item->project_id]) }}" class="text-darkest-grey">{{ $item->project->project_name }}</a>
@@ -599,9 +620,9 @@ Overview--}}
                         {{$sale->won_deals}}
                     </td>
                     <td>
-                        @if($sale->leads_count == 0) Not Applicable @else @php $percentage_of_conversion = ($sale->deals_count/$sale->leads_count)*100; @endphp {{round($percentage_of_conversion,3)}}% @endif
+                        @if($sale->leads_count == 0) Not Applicable @else @php $percentage_of_conversion = ($sale->deals_count/$sale->leads_count)*100; @endphp {{round($percentage_of_conversion,2)}}% @endif
                     </td>
-                    <td>@if($sale->leads_count == 0) Not Applicable @else @php $percentage_of_won_deal = ($sale->won_deals/$sale->leads_count)*100; @endphp {{round($percentage_of_won_deal,3)}}% @endif</td>
+                    <td>@if($sale->leads_count == 0) Not Applicable @else @php $percentage_of_won_deal = ($sale->won_deals/$sale->leads_count)*100; @endphp {{round($percentage_of_won_deal,2)}}% @endif</td>
 
                     <td>
                         @if($sale->avg_lead_time == null) Not Applicable @else {{round($sale->avg_lead_time,2)}} minutes @endif
@@ -692,7 +713,7 @@ Overview--}}
                     <td>
                         {{($lead->created_at)->format('Y-m-d')}}
                     </td>
-                    <td>{{$lead->value}}</td>
+                    <td>{{round($lead->value,2)}}</td>
                     <td>{{$lead->lead_status->type}}</td>
 
                     <td>{{$lead->user->name}}</td>
@@ -732,7 +753,7 @@ Overview--}}
                     <td>
                         {{($deal->updated_at)->format('Y-m-d')}}
                     </td>
-                    <td>{{$deal->value}}</td>
+                    <td>{{round($deal->value,2)}}</td>
                     <td>
                         <?php
                           $deal_id = App\Models\DealStage::where('lead_id',$deal->id)->first(); // dd($deal_id->deal_stage); ?> @if($deal_id != null) @if($deal_id->deal_stage == 0) Contact Made @elseif($deal_id->deal_stage == 1)
@@ -802,10 +823,10 @@ Overview--}}
         <x-cards.widget :title="__('Total Overdue Tasks')" :value="$total_overdue_task" icon="layer-group" />
     </div>
     <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
-        <x-cards.widget :title="__('Total Payment Released')" :value="$total_payment_release" icon="layer-group" />
+        <x-cards.widget :title="__('Total Payment Released')" :value="'USD '.round($total_payment_release,2)" icon="layer-group" />
     </div>
     <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
-        <x-cards.widget :title="__('Total Payment Due')" :value="'USD '.$total_payment_due" icon="layer-group" />
+        <x-cards.widget :title="__('Total Payment Due')" :value="'USD '.round($total_payment_due,2)" icon="layer-group" />
     </div>
 </div>
 <hr />
@@ -830,10 +851,10 @@ Overview--}}
         <x-cards.widget :title="__('New Clients')" :value="$new_clients" icon="layer-group" />
     </div>
     <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
-        <x-cards.widget :title="__('Payment Released')" :value="'$ '.$payment_release" icon="layer-group" />
+        <x-cards.widget :title="__('Payment Released')" :value="'$ '.round($payment_release,2)" icon="layer-group" />
     </div>
     <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
-        <x-cards.widget :title="__('Payment Due')" :value="'$ '.$payment_due" icon="layer-group" />
+        <x-cards.widget :title="__('Payment Due')" :value="'$ '.round($payment_due,2)" icon="layer-group" />
     </div>
     <div class="col-xl-3 col-lg-6 col-md-6 mb-3">
         <x-cards.widget :title="__('Ongoing Project')" :value="$on_going_project" icon="layer-group" />

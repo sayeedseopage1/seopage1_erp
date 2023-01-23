@@ -68,6 +68,22 @@
 
 
                             </div>
+														<?php
+														$countries= App\Models\Country::all();
+														$label= '';
+														$label .= '<strong class="form-label">Client Country</strong>'
+														 ?>
+														<div class="mb-1">
+																<x-forms.select fieldId="country" :fieldLabel="__($label)" fieldName="country"
+																		search="true"  fieldRequired="true" required>
+																		<option value="">--</option>
+																		@foreach ($countries as $item)
+																				<option data-tokens="{{ $item->iso3 }}"
+																						data-content="<span class='flag-icon flag-icon-{{ strtolower($item->iso) }} flag-icon-squared'></span> {{ $item->nicename }}"
+																						value="{{ $item->nicename }}">{{ $item->nicename }}</option>
+																		@endforeach
+																</x-forms.select>
+														</div>
 
                             <div class="mt-3">
                                 <label for="input-state-3" class="form-label"><strong>Project Name <span style="color:red;">*<span></strong></label>
@@ -79,6 +95,7 @@
                               <div class="alert alert-danger">{{ $message }}</div>
                               </div>
                             @enderror
+
                             <div class="mt-3">
                                 <label for="input-state-3" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong></label>
                                 <input name="amount" id="input-state-3" type="number" class="form-control @error('amount') is-invalid @enderror" placeholder="Enter Amount">
@@ -109,6 +126,7 @@
                               <div class="alert alert-danger">{{ $message }}</div>
                               </div>
                             @enderror
+
 
 
                             <div class="mt-3" id="timerss">

@@ -44,9 +44,9 @@ class AwardTime extends Command
 
 
        foreach ($deals as $deal) {
-         $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
+         $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
 
-         $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $deal->award_time);
+         $from = Carbon::createFromFormat('Y-m-d H:s:i', $deal->award_time);
 
          $diff_in_minutes = $from->diffInMinutes($to);
         // dd($diff_in_minutes);

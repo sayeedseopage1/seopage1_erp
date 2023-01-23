@@ -87,28 +87,70 @@
 <!-- ROW END -->
 
 <!-- ROW START -->
+<?php
+  $client_data= App\Models\ClientForm::where('client_username',$client->user_name)->first();
+  $deal_data= App\Models\Deal::where('client_id',$client->id)->first();
+  $profile = '';
+  $profile .= '<a href="'.$deal_data->profile_link.'" target="_blank" class="mb-0 text-dark-grey f-14 w-70 text-wrap">'.$deal_data->profile_link.'</a>';
+  $message = '';
+  $message .= '<a href="'.$deal_data->message_link.'" target="_blank" class="mb-0 text-dark-grey f-14 w-70 text-wrap">'.$deal_data->message_link.'</a>';
+//  dd($profile);
+ ?>
 <div class="row mt-4">
     <div class="col-xl-7 col-lg-12 col-md-12 mb-4 mb-xl-0 mb-lg-4">
         <x-cards.data :title="__('modules.client.profileInfo')">
+          @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
+            <x-cards.data-row :label="__('Username')" :value="mb_ucwords($client->user_name)" />
+
+
             <x-cards.data-row :label="__('modules.employees.fullName')" :value="mb_ucwords($client->name)" />
-
+                @endif
+                  @if(Auth::user()->role_id == 1)
             <x-cards.data-row :label="__('app.email')" :value="$client->email ?? '--'" />
+              @endif
+                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
+              <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                  <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
+                      @lang('modules.employees.gender')</p>
+                  <p class="mb-0 text-dark-grey f-14 w-70">
+                      <x-gender :gender='$client->gender' />
+                  </p>
+              </div>
+              @endif
+          {{--<x-cards.data-row :label="__('modules.client.companyName')"
+                :value="$client->clientDetails->company_name ?? '--'" /> --}}
 
-            <x-cards.data-row :label="__('modules.client.companyName')"
-                :value="$client->clientDetails->company_name ?? '--'" />
 
-            <x-cards.data-row :label="__('app.mobile')"
-                :value="($client->mobile) ? ((!is_null($client->country_id) ? '+'.$client->country->phonecode.' ' : '') . $client->mobile) : '--'" />
+                    @if(Auth::user()->role_id == 1)
+                  <x-cards.data-row :label="__('app.mobile')"
+                                :value="($client_data->client_phone) ?? '--'" />
+                  <x-cards.data-row :label="__('WhatsApp Number')"
+                                :value="($client_data->client_whatsapp) ?? '--'" />
+                  <x-cards.data-row :label="__('Skype ID')"
+                                :value="($client_data->client_skype) ?? '--'" />
+                  <x-cards.data-row :label="__('Telegram ID')"
+                                :value="($client_data->client_telegram) ?? '--'" />
+                  <x-cards.data-row :label="__('Messenger ID')"
+                                :value="($client_data->client_messenger) ?? '--'" />
+                  <x-cards.data-row :label="__('IMO ID')"
+                                :value="($client_data->client_imo) ?? '--'" />
+                  @endif
+                    @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
+                  <x-cards.data-row :label="__('Timezone')"
+                                :value="($client_data->timezone) ?? '--'" />
+                  <x-cards.data-row :label="__('Availability')"
+                                :value="($client_data->day) ?? '--'" />
+                  <x-cards.data-row :label="__('Freelancer.com User Name')"
+                                :value="($client->user_name) ?? '--'" />
+                  <x-cards.data-row :label="__('Freelancer.com Profile Link')"
+                                :value="($profile) ?? '--'" />
+                  <x-cards.data-row :label="__('Freelancer.com Message Link')"
+                                              :value="($message) ?? '--'" />
+                                              @endif
 
-            <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
-                <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
-                    @lang('modules.employees.gender')</p>
-                <p class="mb-0 text-dark-grey f-14 w-70">
-                    <x-gender :gender='$client->gender' />
-                </p>
-            </div>
 
-            <x-cards.data-row :label="__('modules.client.officePhoneNumber')"
+
+          {{-- <x-cards.data-row :label="__('modules.client.officePhoneNumber')"
                 :value="$client->clientDetails->office ?? '--'" />
 
             <x-cards.data-row :label="__('modules.client.website')" :value="$client->clientDetails->website ?? '--'" />
@@ -125,7 +167,7 @@
                 :value="$client->clientDetails->city ?? '--'" />
 
             <x-cards.data-row :label="__('modules.stripeCustomerAddress.postalCode')"
-                :value="$client->clientDetails->postal_code ?? '--'" />
+                :value="$client->clientDetails->postal_code ?? '--'" /> --}}
 
             <x-cards.data-row :label="__('app.language')"
                 :value="$clientLanguage->language_name ?? '--'" />

@@ -42,6 +42,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\SalesCount;
 use Mail;
 use App\Mail\WonDealMail;
+use App\Models\Country;
 
 
 
@@ -206,7 +207,7 @@ class ContractController extends AccountBaseController
     }
     public function storeDeal(Request $request)
     {
-  //  dd($request);
+    //dd($request);
       $award_date= strtotime($request->award_time);
       $aw_dt= date('Y-m-d H:i:s', $award_date );
         //dd($aw_dt);
@@ -265,6 +266,8 @@ class ContractController extends AccountBaseController
         $user->user_name = $request->user_name;
         $user->login= 'disable';
         $user->email_notifications = 0;
+        $country= Country::where('nicename',$request->country)->first();
+        $user->country_id= $country->id;
         $user->save();
         $role = new RoleUser();
         $role->role_id = 3;
@@ -521,13 +524,14 @@ class ContractController extends AccountBaseController
           $lead->status_id = 3;
           $lead->save();
         }
-
+        $country= Country::where('nicename',$lead->country)->first();
 
         $user = new User();
         $user->name = $request->client_name;
         $user->user_name = $request->user_name;
         $user->login= 'disable';
         $user->email_notifications = 0;
+        $user->country_id= $country->id;
         $user->save();
         $role = new RoleUser();
         $role->role_id = 3;
