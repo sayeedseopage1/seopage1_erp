@@ -39,6 +39,7 @@
        crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
        <link rel="stylesheet" href="{{asset('sticky/css/style.css')}}" type="text/css" />
+       <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
     <!-- designation hierarchy && department hierarchy -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
@@ -895,6 +896,8 @@
  </script>
  @endif
  @endif
+ <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+    {!! Toastr::message() !!}
 </body>
 
 </html>
