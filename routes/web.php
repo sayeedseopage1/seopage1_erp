@@ -981,6 +981,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('report_issues/updateOtherData/{id}', [ReportIssueController::class, 'updateOtherData'])->name('report_issues.update_other_data');
     Route::post('report_issues/refreshCount', [ReportIssueController::class, 'refreshCount'])->name('report_issues.refresh_count');
     Route::resource('report_issues', ReportIssueController::class);
+    Route::post('/report-issue/status-change/', [ReportIssueController::class, 'StatusChange'])->name('report-issue-status');
 
     // Ticket Custom Embed From
     Route::post('ticket-form/sort-fields', [TicketCustomFormController::class, 'sortFields'])->name('ticket-form.sort_fields');

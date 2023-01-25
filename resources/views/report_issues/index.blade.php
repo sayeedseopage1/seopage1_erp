@@ -41,7 +41,7 @@
 
 
 
-          
+
 
 
 
@@ -56,41 +56,48 @@ $addTicketPermission = user()->permission('add_tickets');
 @endphp
 
 @section('content')
+<?php
+$total_issues = App\Models\ReportIssue::count();
+$not_taken_into_consideration= App\Models\ReportIssue::where('status','Not Taken Into Consideration')->count();
+$open_issues= App\Models\ReportIssue::where('status','in progress')->count();
+$pending_issues= App\Models\ReportIssue::where('status','pending')->count();
+$resolved_issues= App\Models\ReportIssue::where('status','fixed')->count();
+ ?>
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper">
         <div class="row row-cols-lg-5 my-3">
 
             <div class="col mb-4">
                 <a href="javascript:;" data-status="all" class="widget-filter-status">
-                    <x-cards.widget :title="__('Total Issues')" value="0" icon="ticket-alt"
+                    <x-cards.widget :title="__('Total Issues')" value="{{$total_issues}}" icon="ticket-alt"
                         widgetId="totalTickets" />
                 </a>
             </div>
 
             <div class="col mb-4">
                 <a href="javascript:;" data-status="closed" class="widget-filter-status">
-                    <x-cards.widget :title="__('Closed Issues')" value="0" icon="ticket-alt"
+                    <x-cards.widget :title="__('Not Taken Into Consideration')" value="{{$not_taken_into_consideration}}" icon="ticket-alt"
                         widgetId="closedTickets" />
                 </a>
             </div>
 
             <div class="col mb-4">
                 <a href="javascript:;" data-status="open" class="widget-filter-status">
-                    <x-cards.widget :title="__('Open Issues')" value="0" icon="ticket-alt"
+                    <x-cards.widget :title="__('Open Issues')" value="{{$open_issues}}" icon="ticket-alt"
                         widgetId="openTickets" />
                 </a>
             </div>
 
             <div class="col mb-4">
                 <a href="javascript:;" data-status="pending" class="widget-filter-status">
-                    <x-cards.widget :title="__('Pending Issues')" value="0" icon="ticket-alt"
+                    <x-cards.widget :title="__('Pending Issues')" value="{{$pending_issues}}" icon="ticket-alt"
                         widgetId="pendingTickets" />
                 </a>
             </div>
 
             <div class="col">
                 <a href="javascript:;" data-status="resolved" class="widget-filter-status">
-                    <x-cards.widget :title="__('Resolved Issues')" value="0" icon="ticket-alt"
+                    <x-cards.widget :title="__('Resolved Issues')" value="{{$resolved_issues}}" icon="ticket-alt"
                         widgetId="resolvedTickets" />
                 </a>
             </div>

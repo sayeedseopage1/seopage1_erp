@@ -128,7 +128,7 @@ class ReportIssueDataTable extends BaseDataTable
               elseif ($row->status == 'in progress') {
                 return '<badge class="badge badge-primary">'.$row->status.'</badge>';
               }
-              elseif ($row->status == 'solved') {
+              elseif ($row->status == 'fixed') {
                 return '<badge class="badge badge-success">'.$row->status.'</badge>';
               }
               else {

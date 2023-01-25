@@ -136,6 +136,15 @@ class ReportIssueController extends AccountBaseController
 
       return redirect()->route('report_issues.index');
     }
+    public function StatusChange(Request $request)
+    {
+      $issue= ReportIssue::find($request->id);
+      $issue->status = $request->status;
+      $issue->save();
+      Toastr::success('Status Change Successfully Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+
+    return redirect()->route('report_issues.index');
+    }
 
     public function show($id)
     {
