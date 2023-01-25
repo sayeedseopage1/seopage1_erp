@@ -227,7 +227,9 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
    {{--  <button class="btn btn-danger mr-3"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
        @include('contracts.modals.dealdenymodal') --}}
        @if($diff_in_minutes < 1230 )
+       @if($contract->deal->pm_id == Auth::id() || Auth::user()->role_id == 1)
      <a href="/account/projects/{{$project_id->project_id}}/edit" class="btn btn-success">Accept <i class="fa-solid fa-check"></i></a>
+     @endif
      @endif
 
      @elseif($contract->deal->status == 'Accepted')
