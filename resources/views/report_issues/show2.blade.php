@@ -60,7 +60,7 @@
             @endif
 
                             <div class="w-100 border-top-grey d-block d-lg-flex d-md-flex justify-content-start px-4 py-3">
-                              @if(Auth::user()->role_id != 4)
+                              @if(Auth::user()->role_id == 1)
                               @if($issue->status == 'pending')
                               <form class="" action="{{route('report-issue-status')}}" method="post">
                                 @csrf
