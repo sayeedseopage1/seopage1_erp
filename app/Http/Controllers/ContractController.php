@@ -820,6 +820,7 @@ class ContractController extends AccountBaseController
 
             'message_link' => 'required',
             'profile_link'=>'required',
+            'deadline'=>'required',
 
         ]);
         //dd("hello");

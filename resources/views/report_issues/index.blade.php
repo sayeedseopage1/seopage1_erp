@@ -145,57 +145,7 @@ $resolved_issues= App\Models\ReportIssue::where('status','fixed')->count();
         <!-- Task Box Start -->
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
 
-            {{--<div id="ticket-table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-              <div class="row"><div class="col-sm-12">
-                <table class="table table-hover border-0 w-100 dataTable no-footer" id="ticket-table" role="grid" aria-describedby="ticket-table_info" style="width: 1617px;">
-                  <thead>
-                    <tr role="row">
-                      <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 78px;" aria-label="">
-                        <input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)" autocomplete="off"></th>
-                        <th title="Ticket #" class="sorting" tabindex="0" aria-controls="ticket-table" rowspan="1" colspan="1" style="width: 183px;" aria-label="Ticket #: activate to sort column ascending">Ticket #</th>
-                        <th title="Ticket Subject" class="sorting" tabindex="0" aria-controls="ticket-table" rowspan="1" colspan="1" style="width: 278px;" aria-label="Ticket Subject: activate to sort column ascending">Ticket Subject</th>
-                        <th title="Requester Name" class="sorting" tabindex="0" aria-controls="ticket-table" rowspan="1" colspan="1" style="width: 320px;" aria-label="Requester Name: activate to sort column ascending">Requester Name</th>
-                        <th title="Requested On" class="sorting_asc" tabindex="0" aria-controls="ticket-table" rowspan="1" colspan="1" style="width: 280px;" aria-sort="ascending" aria-label="Requested On: activate to sort column descending">Requested On</th>
-                        <th title="Others" class="sorting_disabled" rowspan="1" colspan="1" style="width: 125px;" aria-label="Others">Others</th>
-                        <th title="Action" class="text-right pr-20 sorting_disabled" rowspan="1" colspan="1" style="width: 145px;" aria-label="Action">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="odd">
-                        <td valign="top" colspan="7" class="dataTables_empty">No data available in table</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div id="ticket-table_processing" class="dataTables_processing card" style="display: none;">Processing...</div>
-                </div>
-              </div>
-              <div class="d-flex">
-                <div class="flex-grow-1">
-                  <div class="dataTables_length" id="ticket-table_length">
-                    <label>Show <select name="ticket-table_length" aria-controls="ticket-table" class="custom-select custom-select-sm form-control form-control-sm">
-                      <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                      <option value="100">100</option>
-                    </select>
-                    entries</label>
-                  </div>
-                </div>
-                <div>
-                  <div class="dataTables_info" id="ticket-table_info" role="status" aria-live="polite">Showing 0 to 0 of 0 entries</div>
-                </div>
-                <div>
-                  <div class="dataTables_paginate paging_simple_numbers" id="ticket-table_paginate">
-                    <ul class="pagination"><li class="paginate_button page-item previous disabled" id="ticket-table_previous"><a href="#" aria-controls="ticket-table" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-                    </li>
-                    <li class="paginate_button page-item next disabled" id="ticket-table_next">
-                      <a href="#" aria-controls="ticket-table" data-dt-idx="1" tabindex="0" class="page-link">Next</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div> --}}
+          
             {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
 
 <!-- Small modal -->

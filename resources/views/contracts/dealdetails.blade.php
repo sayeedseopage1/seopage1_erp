@@ -130,12 +130,33 @@
                               @enderror
 
                             </div>
+                            @if($deal->lead_id != null)
                             <div class="col-md-3">
                               <div class="form-group">
-                              <label for="exampleFormControlInput1">Deadline</label>
-                              <input type="date" name="deadline"  class="form-control" id="exampleFormControlInput1" placeholder="Enter deadline" >
+                              <label for="exampleFormControlInput1">Deadline<span style="color:red;">*</span></label>
+                              <input type="date" name="deadline" value="{{$deal->lead->deadline}}"  class="form-control @error('project_name') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Enter deadline" >
                               </div>
+                              @error('deadline')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
                             </div>
+                            @else
+                            <div class="col-md-3">
+                              <div class="form-group">
+                              <label for="exampleFormControlInput1">Deadline<span style="color:red;">*</span></label>
+                              <input type="date" name="deadline"  class="form-control @error('project_name') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Enter deadline" >
+                              </div>
+                              @error('deadline')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
+                            </div>
+                            @endif
+
+
 
 
                           </div>

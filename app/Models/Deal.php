@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Currency;
 use App\Models\User;
+use App\Models\Lead;
 
 class Deal extends Model
 {
@@ -23,5 +24,9 @@ class Deal extends Model
     {
         return $this->belongsTo(User::class, 'pm_id');
     }
+    public function lead()
+  {
+      return $this->belongsTo(Lead::class, 'lead_id');
+  }
 
 }
