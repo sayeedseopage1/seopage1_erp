@@ -35,8 +35,8 @@
             </div>
 
             <div class="email_message">
-                <h4>Hi {{$user->name}},</h4>
-                <p>We have won a new deal for you on <span>{{$lead->created_at->format('Y-m-d')}} at {{$lead->created_at->format('h:i:s A')}}.</span> Let's check the short details below. You can check the details about this lead following <a href="erp.seopage1.net/deal-stage-view/{{$deal->id}}">this link.</a></p>
+                <h4>Hi Admin,</h4>
+                <p>We have won a new deal for you on <span>{{$lead->created_at->format('Y-m-d')}} at {{$lead->created_at->format('h:i:s A')}}.</span> Let's check the short details below. You can check the details about this lead from the below button.</a></p>
             </div>
 
             <div class="email_message">
@@ -51,9 +51,7 @@
                 <ul>
                   <li><strong>Lead Converted on :</strong> {{$lead->updated_at->format('Y-m-d')}} at {{$lead->updated_at->format('h:i:s A')}}  </li>
                 </ul>
-                <ul>
-                  <li><strong>Project Link :</strong> <a target="_blank" href="{{$lead->project_link}}">{{$lead->project_link}}</a> </li>
-                </ul>
+              
 
 
 
@@ -64,7 +62,7 @@
             </div>
 
             <div class="email_submits">
-              
+
                 <a href="erp.seopage1.net/account/deals/{{$deal->id}}?tab=deal_details">Receive The Work</a>
             </div>
         </div>
