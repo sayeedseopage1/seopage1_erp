@@ -64,7 +64,8 @@
             </div>
 
             <div class="email_submits">
-                <a href="erp.seopage1.net/deal-stage-view/{{$deal->id}}">Receive The Work</a>
+              
+                <a href="erp.seopage1.net/account/deals/{{$deal->id}}?tab=deal_details">Receive The Work</a>
             </div>
         </div>
 
