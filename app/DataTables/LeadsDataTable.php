@@ -139,9 +139,7 @@ class LeadsDataTable extends BaseDataTable
             $datatables->addColumn('lead', function ($row) {
                 return $row->client_name;
             });
-            $datatables->addColumn('project_id', function ($row) {
-                return $row->project_id;
-            });
+
             $datatables->addColumn('project_link', function ($row) {
               //  return $row->project_link;
                 return '<a target="_blank" class="mb-0 f-13 text-darkest-grey" href="' . $row->project_link . '">' . Str::limit($row->project_link,15). '</a>';
@@ -381,7 +379,7 @@ class LeadsDataTable extends BaseDataTable
                 'bidding_seconds',
                 'bid_value',
                 'bid_value2',
-                'project_id',
+
                 'project_link',
                 'company_name',
                 'lead_status.type as statusName',
@@ -487,7 +485,7 @@ class LeadsDataTable extends BaseDataTable
             $lead = $lead->where(function ($query) {
                 $query->where('leads.client_name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('leads.company_name', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('leads.project_id', 'like', '%' . request('searchText') . '%')
+
                     ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
                     ->orWhere('leads.actual_value', 'like', '%' . request('searchText') . '%')
 
@@ -557,7 +555,7 @@ class LeadsDataTable extends BaseDataTable
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
             __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
             __('app.name') => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('app.name')],
-              __('app.project_id') => ['data' => 'project_id', 'name' => 'project_id', 'title' => __('Project ID')],
+            
                 __('app.project_link') => ['data' => 'project_link', 'name' => 'project_link', 'title' => __('Project Link')],
 
 

@@ -36,62 +36,8 @@ class ReportIssueDataTable extends BaseDataTable
             ->addColumn('check', function ($row) {
                 return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
-            // ->addColumn('action', function ($row) {
-            //
-            //     $action = '<div class="task_view">
-            //
-            //     <div class="dropdown">
-            //         <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
-            //             id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            //             <i class="icon-options-vertical icons"></i>
-            //         </a>
-            //         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
-            //
-            //   // $action .= ' <a href="' . route('deals.show', [$row->id]) . '" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
-            //
-            //     // if (!$row->signature) {
-            //     //     $action .= '<a class="dropdown-item" href="' . route('front.contract.show', $row->hash) . '" target="_blank"><i class="fa fa-link mr-2"></i>'.__('modules.proposal.publicLink').'</a>';
-            //     // }
-            //     //
-            //     // if ($this->addContractPermission == 'all' || $this->addContractPermission == 'added') {
-            //     //     $action .= '<a class="dropdown-item openRightModal" href="' . route('contracts.create') . '?id=' . $row->id . '">
-            //     //             <i class="fa fa-copy mr-2"></i>
-            //     //             ' . __('app.copy') . ' ' . __('app.menu.contract') . '
-            //     //         </a>';
-            //     // }
-            //
-            //
-            //
-            //             $action .= '<a class="dropdown-item" href="/account/report_issues/edit/'.$row->id.'">
-            //                     <i class="fa fa-edit mr-2"></i>
-            //                     ' . trans('app.edit') . '
-            //                 </a>';
-            //
-            //     //
-            //     // if (
-            //     //     $this->deleteContractPermission == 'all'
-            //     //     || ($this->deleteContractPermission == 'added' && user()->id == $row->added_by)
-            //     //     || ($this->deleteContractPermission == 'owned' && user()->id == $row->client_id)
-            //     //     || ($this->deleteContractPermission == 'both' && (user()->id == $row->client_id || user()->id == $row->added_by))
-            //     // ) {
-            //     //     $action .= '<a class="dropdown-item delete-table-row" href="javascript:;" data-deal-id="' . $row->id . '">
-            //     //             <i class="fa fa-trash mr-2"></i>
-            //     //             ' . trans('app.delete') . '
-            //     //         </a>';
-            //     // }
-            //
-            //     // $action .= '<a class="dropdown-item" href="' . route('contracts.download', $row->id) . '">
-            //     //                 <i class="fa fa-download mr-2"></i>
-            //     //                 ' . trans('app.download') . '
-            //     //             </a>';
-            //
-            //
-            //     $action .= '</div>
-            //     </div>
-            // </div>';
-            //
-            //     return $action;
-            // })
+          
+
             ->addColumn('subject', function($row) {
                 $title= '';
                 $title .= '<a href="'. route('report_issues.show', [$row->id]) . '" class="text-darkest-grey show-table-row openRightModal">'.ucfirst($row->subject).'</a>';
@@ -213,13 +159,13 @@ class ReportIssueDataTable extends BaseDataTable
             ->responsive(true)
             ->serverSide(true)
             ->stateSave(true)
-            ->processing(false)
+            ->processing(true)
             ->dom($this->domHtml)
 
             ->language(__('app.datatable'))
             ->parameters([
                 'initComplete' => 'function () {
-                   window.LaravelDataTables["deals-table"].buttons().container()
+                   window.LaravelDataTables["report_issues-table"].buttons().container()
                     .appendTo( "#table-actions")
                 }',
                 'fnDrawCallback' => 'function( oSettings ) {

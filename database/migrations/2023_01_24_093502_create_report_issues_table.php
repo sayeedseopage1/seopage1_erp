@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('screenshot')->nullable();
             $table->longText('description')->nullable();
             $table->string('status')->default('pending');
+              $table->longText('comments')->nullable();
 
             $table->timestamps();
         });

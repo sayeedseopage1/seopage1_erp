@@ -26,6 +26,7 @@ $addClientPermission = user()->permission('add_clients');
                         </div>
                     </div>
 
+
                     <div class="col-md-6 col-lg-3">
                         <x-forms.datepicker fieldId="start_date" fieldRequired="true"
                             :fieldLabel="__('modules.projects.startDate')" fieldName="start_date"

@@ -5,7 +5,11 @@
 @endpush
 
 @section('filter-section')
-
+<style media="screen">
+.pl-4, .px-4 {
+ padding-left: 0rem !important; */
+}
+</style>
     <x-filters.filter-box>
         <!-- DATE START -->
         <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
@@ -145,7 +149,7 @@ $resolved_issues= App\Models\ReportIssue::where('status','fixed')->count();
         <!-- Task Box Start -->
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
 
-          
+
             {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
 
 <!-- Small modal -->
@@ -359,4 +363,5 @@ $resolved_issues= App\Models\ReportIssue::where('status','fixed')->count();
     });
   });
     </script>
+
 @endpush

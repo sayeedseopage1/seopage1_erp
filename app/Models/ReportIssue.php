@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class ReportIssue extends Model
 {
@@ -13,7 +14,7 @@ class ReportIssue extends Model
           protected $dates = ['deleted_at'];
           protected $appends = ['created_on'];
 
-        
+
 
 
 
@@ -27,5 +28,9 @@ class ReportIssue extends Model
 
               return '';
           }
+          public function created_by()
+        {
+            return $this->belongsTo(User::class, 'user_id');
+        }
 
 }

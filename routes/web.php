@@ -169,6 +169,7 @@ use App\Http\Controllers\DealController;
 use App\Http\Controllers\DealBoardController;
 use App\Http\Controllers\ProjectBoardController;
 use App\Http\Controllers\ReportIssueController;
+use App\Http\Controllers\SuggestionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -982,6 +983,13 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('report_issues/refreshCount', [ReportIssueController::class, 'refreshCount'])->name('report_issues.refresh_count');
     Route::resource('report_issues', ReportIssueController::class);
     Route::post('/report-issue/status-change/', [ReportIssueController::class, 'StatusChange'])->name('report-issue-status');
+
+    // Suggesstion controllers
+    Route::post('suggestions/apply-quick-action', [SuggestionController::class, 'applyQuickAction'])->name('suggestions.apply_quick_action');
+    Route::post('suggestions/updateOtherData/{id}', [SuggestionController::class, 'updateOtherData'])->name('suggestions.update_other_data');
+    Route::post('suggestions/refreshCount', [SuggestionController::class, 'refreshCount'])->name('suggestions.refresh_count');
+    Route::resource('suggestions', SuggestionController::class);
+    Route::post('/suggestions/status-change/', [SuggestionController::class, 'StatusChange'])->name('suggestions-status');
 
     // Ticket Custom Embed From
     Route::post('ticket-form/sort-fields', [TicketCustomFormController::class, 'sortFields'])->name('ticket-form.sort_fields');

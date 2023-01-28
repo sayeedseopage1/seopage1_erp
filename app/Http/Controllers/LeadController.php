@@ -50,6 +50,7 @@ use Illuminate\Support\Facades\Redirect;
 use Toastr;
 use Mail;
 use App\Mail\LeadConversionMail;
+use Illuminate\Support\Facades\Validator;
 
 
 class LeadController extends AccountBaseController
@@ -461,7 +462,31 @@ class LeadController extends AccountBaseController
     }
     public function storeLead(Request $request)
     {
-      //dd($request);
+
+      $validator = Validator::make($request->all(), [
+            'client_name' => 'required|max:255',
+            'country' => 'required',
+            'project_link' => 'required|url',
+            'deadline' => 'required|date',
+            'original_currency_id' => 'required',
+            'bid_value' => 'required',
+            'bid_value2' => 'required',
+            'value' => 'required',
+            'bidding_minutes' => 'required',
+            'bidding_seconds' => 'required',
+            'description' => 'required',
+            'cover_letter' => 'required',
+            'insight_screenshot' => 'required',
+            'projectpage_screenshot' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('account/leads/create')
+                        ->withErrors($validator)
+                        ->withInput();
+          //  dd('Failed');
+        };
+
       if (Auth::user()->role_id == 7) {
 
         $sales_ex= SalesCount::where('user_id',Auth::id())->first();

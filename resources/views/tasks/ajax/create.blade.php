@@ -90,7 +90,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
 
                       @if($project != null)
                       <div class="col-md-12 col-lg-4">
-                          <x-forms.select fieldName="milestone_id" fieldId="milestone-id"
+                          <x-forms.select fieldName="milestone_id" fieldRequired="true" fieldId="milestone-id"
                               :fieldLabel="__('modules.projects.milestones')">
                               <option value="">--</option>
                               <?php

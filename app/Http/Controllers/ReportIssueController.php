@@ -112,6 +112,7 @@ class ReportIssueController extends AccountBaseController
 
     public function store(Request $request)
     {
+      //dd($request);
       $validated = $request->validate([
             'subject' => 'required',
             'page_link' => 'required',
@@ -128,7 +129,9 @@ class ReportIssueController extends AccountBaseController
       $issue->page_link = $request->page_link;
       $issue->screenshot= $request->screenshot;
       $issue->issue_type= $request->issue_type;
+      $issue->comments= $request->comments;
       $issue->save();
+
 
 
         // Save first message
@@ -138,9 +141,12 @@ class ReportIssueController extends AccountBaseController
     }
     public function StatusChange(Request $request)
     {
+      //dd($request);
       $issue= ReportIssue::find($request->id);
       $issue->status = $request->status;
+      $issue->comments= $request->comments;
       $issue->save();
+
       Toastr::success('Status Change Successfully Successfully', 'Success', ["positionClass" => "toast-top-right"]);
 
     return redirect()->route('report_issues.index');

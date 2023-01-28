@@ -143,10 +143,11 @@
              ?>
             <x-cards.data-row :label="__('Bid') . ' ' .__('Value')" :value="$value ?? '--'" />
             <x-cards.data-row :label="__('Project') . ' ' .__('Budget')" :value="$bid_value ?? '--'" />
-            <div class="col-12 px-0 pb-3 d-flex">
+            <hr>
+            <div class="col-12 px-0 pb-3">
                 <p class="mb-0 text-lightest f-14 w-30">
                     @lang('Project Description')</p>
-                <p class="mb-0 text-dark-grey f-14">
+                <p class="mb-0 text-dark-grey f-14 w-70">
                     @if (!is_null($lead->note))
                     {!! $lead->note !!}
 
@@ -156,10 +157,10 @@
                     @endif
                 </p>
             </div>
-            <div class="col-12 px-0 pb-3 d-flex">
+            <div class="col-12 px-0 pb-3 ">
                 <p class="mb-0 text-lightest f-14 w-30">
                     @lang('Cover Letter')</p>
-                <p class="text-dark-grey f-14">
+                <p class="text-dark-grey f-14 w-70">
                     @if (!is_null($lead->cover_letter))
                     {!! $lead->cover_letter!!}
 
