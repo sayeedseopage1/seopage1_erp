@@ -21,18 +21,14 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
 
                 <div class="row p-20">
 
-                    <div class="col-lg-4 col-md-6">
+                    <div class="col-lg-6 col-md-6">
                         <x-forms.text :fieldLabel="__('Project Name')" fieldName="client_name"
                             fieldId="client_name" fieldPlaceholder="" fieldRequired="true"
                             :fieldValue="$lead->client_name" />
                     </div>
 
-                    <div class="col-lg-4 col-md-6">
-                        <x-forms.text :fieldLabel="__('Project ID')" fieldName="project_id"
-                            fieldId="project_id" fieldPlaceholder="" fieldRequired="true"
-                            :fieldValue="$lead->project_id" />
-                    </div>
-                    <div class="col-lg-4 col-md-6">
+
+                    <div class="col-lg-6 col-md-6">
                         <x-forms.select fieldId="country" :fieldLabel="__('Client Country')" fieldName="country"
                             search="true"  fieldRequired="true" required>
                             @if($lead->country != null)
