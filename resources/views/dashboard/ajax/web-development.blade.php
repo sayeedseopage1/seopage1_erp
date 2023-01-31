@@ -714,7 +714,13 @@ Overview--}}
                         {{($lead->created_at)->format('Y-m-d')}}
                     </td>
                     <td>{{round($lead->value,2)}}</td>
-                    <td>{{$lead->lead_status->type}}</td>
+                    <td>
+                      @if($lead->status_id != null)
+                      {{$lead->lead_status->type}}
+                      @else
+                      --
+                      @endif
+                    </td>
 
                     <td>{{$lead->user->name}}</td>
                 </tr>

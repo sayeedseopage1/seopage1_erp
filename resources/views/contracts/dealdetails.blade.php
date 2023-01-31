@@ -610,6 +610,7 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
         });
+
         $.ajax({
           type: "PUT",
           url: "/deals/update-milestone/"+milestone_id,
@@ -735,6 +736,6 @@
         $.ajaxModal(MODAL_XL, url);
     });
     </script>
-
+    
 
 @endsection

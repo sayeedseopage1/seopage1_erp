@@ -163,8 +163,12 @@
                                 <li><i class="fa-solid fa-square-check"></i> <span>Status:</span> <b class="ssp1" style="background: #28a745;"></b> Converted to deal </li>
                               @endif
                               <li><i class="fa-regular fa-image"></i> <span>Bids Insight Page Screenshot (Full):</span> <a href="{{$lead->insight_screenshot}}" target="_blank">{{$lead->insight_screenshot}}</a> </li>
-
+                              @if($lead->bidpage_screenshot != null)
                               <li><i class="fa-regular fa-image"></i> <span>Bid Page Screenshot (Full):</span> <a href="{{$lead->bidpage_screenshot}}"target="_blank">{{$lead->bidpage_screenshot}}</a> </li>
+                              @else
+                              <li><i class="fa-regular fa-image"></i> <span>Bid Page Screenshot (Full):</span> <a>Not Submitted</a> </li>
+
+                              @endif
 
                               <li><i class="fa-regular fa-image"></i> <span>Project Page Screenshot (Full):</span> <a href="{{$lead->projectpage_screenshot}}"target="_blank">{{$lead->projectpage_screenshot}}</a> </li>
 

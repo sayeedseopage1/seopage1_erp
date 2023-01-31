@@ -88,7 +88,9 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
 @endsection
 
 @push('scripts')
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
     @include('sections.datatable_js')
+
 
     <script>
         $('#leads-table').on('preXhr.dt', function(e, settings, data) {
@@ -331,6 +333,83 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
   }
   </script>
 
+  <script>
 
+
+
+
+          $(document).ready(function() {
+            quillImageLoad('#comments');
+
+
+
+              $("#lead-convert").validate({
+
+
+                  rules: {
+                      client_username: {
+                          required: true,
+
+                      },
+
+                      profile_link: {
+                        url:true,
+                        required: true,
+
+                      },
+                      message_link: {
+                        url:true,
+                        required: true,
+
+                      },
+
+                      comments: {
+                          required: true,
+                          minlength: 10
+                      },
+
+
+                  },
+                  messages: {
+                      client_username: {
+                          required: "Client username is required"
+
+                      },
+
+                      profile_link: {
+                          required: "Profile link is required",
+                          url: "Link must be a valid url"
+
+                      },
+                      message_link: {
+                          required: "Message thread link is required",
+                          url: "Link must be a valid url"
+
+                      },
+                    comments: {
+                          required: "Comment field is required",
+                         minlength: "Comments must be minimum 10 characters"
+                      },
+
+
+                  }
+              });
+
+          });
+
+
+          $('#lead-convert-button').click(function() {
+
+              var note3 = document.getElementById('comments').children[0].innerHTML;
+                document.getElementById('comments-text').value = note3;
+
+
+         } );
+
+
+
+
+
+      </script>
 
 @endpush

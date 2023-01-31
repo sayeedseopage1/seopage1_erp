@@ -29,7 +29,9 @@ use App\DataTables\ProposalDataTable;
 use App\DataTables\LeadNotesDataTable;
 use Illuminate\Support\Facades\Artisan;
 use Maatwebsite\Excel\HeadingRowImport;
+use App\Http\Requests\Lead\StoreDealStageRequest;
 use App\Http\Requests\Lead\StoreRequest;
+
 use App\Http\Requests\Lead\UpdateRequest;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use App\Http\Requests\Admin\Employee\ImportRequest;
@@ -67,90 +69,109 @@ class LeadController extends AccountBaseController
     }
     public function DealStageChange(Request $request)
     {
-      abort_403(user()->permission('view_contract') == 'none');
+      $validator = Validator::make($request->all(), [
+          'client_username' => 'required|unique:deal_stages|max:255',
+          'profile_link' => 'required',
+          'message_link' => 'required',
+          'comments' => 'required',
 
-      if (!request()->ajax()) {
-          if (in_array('client', user_roles())) {
-              $this->clients = User::client();
+      ]);
+
+      if ($validator->fails()) {
+        return response()->json([
+              'status' => 400,
+              'errors' => $validator->messages(),
+          ]);
+      };
+
+        abort_403(user()->permission('view_contract') == 'none');
+
+
+        $lead= Lead::where('id',$request->id)->first();
+        $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $suffle = substr(str_shuffle($chars), 0, 6);
+        $message_links = $request->message_link;
+        // /dd($message_links);
+        $value= '';
+
+        if (is_array($message_links) || is_object($message_links)) {
+          foreach ($message_links as $link) {
+            //dd($d['day']);
+            $value= $value  . $link .' <br> ';
+
           }
-          else {
-              $this->clients = User::allClients();
+        }
+    // /dd($request);
+        // dd($value);
+        $deal= new DealStage();
+        $deal->short_code= 'DSEOP1'. $suffle;
+        $deal->lead_id= $lead->id;
+        $deal->status= 1;
+        $deal->deal_stage= 0;
+        $deal->comments= $request->comments;
+        $deal->profile_link= $request->profile_link;
+        $deal->message_link= $value;
+        $deal->client_username= $request->client_username;
+        $deal->currency_id= 1;
+        $deal->project_name= $lead->client_name;
+        $deal->original_currency_id= $lead->original_currency_id;
+        $deal->amount= $lead->value;
+        $deal->actual_amount= $lead->actual_value;
+        $deal->added_by= Auth::id();
+        $deal->converted_by= Auth::id();
+        $deal->save();
+        $deal_stage= new DealStageChange();
+        $deal_stage->lead_id= $lead->id;
+        $deal_stage->deal_id= $deal->short_code;
+        $deal_stage->comments= $request->comments;
+        $deal_stage->deal_stage_id=$deal->deal_stage;
+        $deal_stage->updated_by= Auth::id();
+        $deal_stage->save();
+
+
+        if ($request->deal_stage == 4) {
+          $lead_id= Lead::where('id',$request->id)->first();
+          $agent= SalesCount::where('user_id',$lead_id->added_by)->first();
+          if ($agent != null) {
+            $lead_ag= SalesCount::find($agent->id);
+
+            $lead_ag->negotiation_started= $lead_ag->negotiation_started +1;
+            $lead_ag->save();
           }
 
-          $this->contractTypes = ContractType::all();
-          $this->contractCounts = Contract::count();
-          $this->expiredCounts = Contract::where(DB::raw('DATE(`end_date`)'), '<', now()->format('Y-m-d'))->count();
-          $this->aboutToExpireCounts = Contract::where(DB::raw('DATE(`end_date`)'), '>', now()->format('Y-m-d'))
-              ->where(DB::raw('DATE(`end_date`)'), '<', now()->timezone($this->global->timezone)->addDays(7)->format('Y-m-d'))
-              ->count();
-
-      }
-      $lead= Lead::where('id',$request->id)->first();
-      $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      $suffle = substr(str_shuffle($chars), 0, 6);
-      $deal= new DealStage();
-      $deal->short_code= 'DSEOP1'. $suffle;
-      $deal->lead_id= $lead->id;
-      $deal->status= 1;
-      $deal->deal_stage= 0;
-      $deal->comments= $request->comments;
-      $deal->profile_link= $request->profile_link;
-      $deal->message_link= $request->message_link;
-      $deal->client_username= $request->client_username;
-      $deal->currency_id= 1;
-      $deal->project_name= $lead->client_name;
-      $deal->original_currency_id= $lead->original_currency_id;
-      $deal->amount= $lead->value;
-      $deal->actual_amount= $lead->actual_value;
-      $deal->added_by= Auth::id();
-      $deal->converted_by= Auth::id();
-      $deal->save();
-      $deal_stage= new DealStageChange();
-      $deal_stage->lead_id= $lead->id;
-      $deal_stage->deal_id= $deal->short_code;
-      $deal_stage->comments= $request->comments;
-      $deal_stage->deal_stage_id=$deal->deal_stage;
-      $deal_stage->updated_by= Auth::id();
-      $deal_stage->save();
+        }
+        $lead= Lead::find($lead->id);
+        $lead->deal_status=1;
+        $lead->save();
+        $lead_con_id= Lead::where('id',$request->id)->first();
+        $agent_id= SalesCount::where('user_id',$lead_con_id->added_by)->first();
+        if ($agent_id != null) {
+          $lead_ag_id= SalesCount::find($agent_id->id);
 
 
-      if ($request->deal_stage == 4) {
-        $lead_id= Lead::where('id',$request->id)->first();
-        $agent= SalesCount::where('user_id',$lead_id->added_by)->first();
-        if ($agent != null) {
-          $lead_ag= SalesCount::find($agent->id);
+          $lead_ag_id->deals_count= $lead_ag_id->deals_count +1;
+          $lead_ag_id->save();
 
-          $lead_ag->negotiation_started= $lead_ag->negotiation_started +1;
-          $lead_ag->save();
+        }
+        $users= User::where('role_id',1)->get();
+        foreach ($users as $user) {
+          Mail::to($user->email)->send(new LeadConversionMail($lead));
         }
 
-      }
-      $lead= Lead::find($lead->id);
-      $lead->deal_status=1;
-      $lead->save();
-      $lead_con_id= Lead::where('id',$request->id)->first();
-      $agent_id= SalesCount::where('user_id',$lead_con_id->added_by)->first();
-      if ($agent_id != null) {
-        $lead_ag_id= SalesCount::find($agent_id->id);
 
 
-        $lead_ag_id->deals_count= $lead_ag_id->deals_count +1;
-        $lead_ag_id->save();
-
-      }
-      $users= User::where('role_id',1)->get();
-      foreach ($users as $user) {
-        Mail::to($user->email)->send(new LeadConversionMail($lead));
-      }
+        $deal= DealStage::where('lead_id',$lead->id)->first();
+        ;
+      Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
+        return redirect('/account/deals/'.$deal->id);
 
 
+    }
 
-      $deal= DealStage::where('lead_id',$lead->id)->first();
-      Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-      return redirect('/account/deals/'.$deal->id);
+
 
         //return back()->with('status_updated', 'Lead Converted to Deal Successfully.!!');
-    }
+
     public function DealStageUpdate(Request $request)
     {
     //  dd($request);
