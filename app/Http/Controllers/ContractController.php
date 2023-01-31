@@ -426,18 +426,34 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
-        //dd($request->lead_id);
+        //dd($request);
+
+
         $award_date= strtotime($request->award_time);
         $aw_dt= date('Y-m-d H:i:s', $award_date );
+        //dd($aw_dt);
+
+
         $validated = $request->validate([
             'user_name' => 'required|unique:users|max:255',
             'client_name' => 'required',
             'project_name' => 'required',
-            'amount' => 'required',
-            'award_time'=> 'required',
+            'amount' => 'required|min:1',
+
+            // 'current_time' => 'date|date_format:d-m-Y H:i A',
+           'award_time' => 'required|date|before_or_equal:current_time',
         ]);
-      //dd($request);
+    //  dd($request);
+      $to = Carbon::parse($request->current_time);
+      $from = Carbon::parse($request->award_time);
+
+        $diff_in_minutes = $from->diffInMinutes($to);
+      if ($diff_in_minutes > 1230) {
+        return back()->with('error','The award time and current time difference should be more than 20 hours');
+      }
+      //  dd($diff_in_minutes);
         $deal_stage = DealStage::where('id', $request->id)->first();
+
 
         $deal = DealStage::find($request->id);
         //dd($deal);
@@ -474,13 +490,24 @@ class ContractController extends AccountBaseController
             }
 
         }
+        $message_links = $request->message_link;
+        // /dd($message_links);
+        $value= '';
+
+        if (is_array($message_links) || is_object($message_links)) {
+          foreach ($message_links as $link) {
+            //dd($d['day']);
+            $value= $value  . $link .' <br> ';
+
+          }
+        }
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new Deal();
         $deal->deal_id = $request->deal_id;
         $deal->project_name = $request->project_name;
         $deal->profile_link= $request->profile_link;
-        $deal->message_link= $request->message_link;
+        $deal->message_link= $value;
         $deal->original_currency_id= $request->original_currency_id;
         $deal->currency_id= 1;
         $deal->actual_amount=  $request->amount;

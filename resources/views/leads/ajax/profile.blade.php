@@ -184,7 +184,9 @@
                       <div class="deals_item_lists">
                           <p>Actions</p>
                           <ul>
+                            @if($lead->deal_status == 0)
                               <li><i class="fa-solid fa-shuffle"></i> <a href="#" data-toggle="modal" data-target="#dealstmodal" onclick="dataTableRowCheck2(' {{$lead->id}} ')" style="color: #333;font-weight: 600;font-size: 13px;">Convert To Deal </a> </li>
+                              @endif
                               <li><i class="fa-solid fa-pen-to-square"></i> <a class="openRightModal" href="{{ route('leads.edit', $lead->id) }}" style="color: #333;font-weight: 600;font-size: 13px;">Edit </a> </li>
                           {{--    <li><i class="fa-solid fa-trash-can"></i> <a class="delete-table-row" href="javascript:;" data-id="{{$lead->id}}" style="color: #333;font-weight: 600;font-size: 13px;">Delete </a> </li> --}}
 

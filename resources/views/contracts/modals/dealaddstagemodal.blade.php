@@ -39,8 +39,16 @@ justify-content: center;
 
       <div class="modal-body">
 
-
                             <div class="row">
+                                      @if(Session::has('error'))
+                                      <div class="alert alert-danger" role="alert">
+
+                                          <div class="alert-body">
+                                              {{Session::get('error')}}
+                                          </div>
+                                      </div>
+                                      @endif
+
                               <div class="col-md-6">
                                 <div class="mt-3">
                                     <label for="input-state-2" class="form-label"><strong>Deal ID <span style="color:red;">*<span></strong></label>
@@ -58,7 +66,7 @@ justify-content: center;
                                 @else
                                 <div class="mt-3">
                                     <label for="input-state-2" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong></label>
-                                    <input name="client_name"  id="input-state-2" type="text" class="form-control height-35 f-14 @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
+                                    <input name="client_name"  id="input-state-2" type="text" value="{{old('client_name')}}" class="form-control height-35 f-14 @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
 
                                 </div>
 
@@ -114,11 +122,23 @@ justify-content: center;
                               </div>
                               <div class="col-md-12">
                                 @if($deal->message_link != null)
+                                <?php
+                                $mystring = $deal->message_link;
+
+                                    $output = str_replace('<br>',' ', $mystring);
+
+                                    $output_final= (trim($output));
+                                    $data= explode("  ", $output_final);
+                                  //  dd(($data));
+
+                                 ?>
+                                 @foreach($data as $message)
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Message Link</strong></label>
-                                    <input name="message_link" value="{{$deal->message_link}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+                                    <input name="message_link[]" value="{{$message}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                 </div>
+                                @endforeach
                                 @else
 
                                 <div class="mt-3">
@@ -135,15 +155,20 @@ justify-content: center;
 
                             <div class="mt-3">
                                 <label for="input-state-3" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong></label>
-                                <input name="amount" value="{{$deal->actual_amount}}" id="input-state-3" type="number" class="form-control height-35 f-14" placeholder="Enter Amount" required>
+                                <input name="amount" value="{{$deal->actual_amount}}" id="input-state-3" min="1" type="number" class="form-control height-35 f-14 @error('amount') is-invalid @enderror" placeholder="Enter Amount" required>
 
                             </div>
+                            @error('amount')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
                               <div class="mt-3">
                                 <?php
                                   $currencies= App\Models\Currency::where('id',$deal->original_currency_id)->first();
                                  ?>
                                  <label for="input-state-3" class="form-label"><strong>Currency <span style="color:red;">*<span></strong></label>
-                            <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id">
+                            <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id" disabled>
                                 <option selected value="{{$currencies->id}}">({{$currencies->currency_code}})</option>
 
 
@@ -154,9 +179,11 @@ justify-content: center;
 
                           			<h2><strong>Project Award Time <span style="color:red;">*<span></strong></h2>
 
-                          				<input type="text" id="date-format" name="award_time" class="form-control height-35 f-14 floating-label @error('award_time') is-invalid @enderror" placeholder="Select Exact Award Time" >
-
-
+                          				<input type="text" id="date-format" name="award_time" value="{{old('award_time')}}" class="form-control height-35 f-14 floating-label @error('award_time') is-invalid @enderror" placeholder="Select Exact Award Time" >
+                                    <?php
+                                    $current_time = \Carbon\Carbon::now()->format('d-m-Y H:m:s');
+                                     ?>
+                                <input type="hidden" name="current_time" value="{{$current_time}}">
                           		</div>
                               @error('award_time')
                               <div class="mt-3">
@@ -180,7 +207,7 @@ justify-content: center;
     </div>
   </div>
 </div>
-@if (count($errors) > 0)
+@if (count($errors) > 0 || Session::has('error') )
 <script>
     $( document ).ready(function() {
         $('#dealaddstagemodal').modal('show');
@@ -205,7 +232,7 @@ justify-content: center;
 
     $('#date-format').bootstrapMaterialDatePicker
     ({
-      format: 'DD MMMM YYYY HH:mm:ss'
+      format: 'DD-MM-YYYY HH:mm:ss'
     });
     $('#date-fr').bootstrapMaterialDatePicker
     ({
@@ -236,4 +263,3 @@ justify-content: center;
 
 
   </script>
-  

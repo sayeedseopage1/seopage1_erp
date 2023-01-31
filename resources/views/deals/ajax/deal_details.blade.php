@@ -1119,7 +1119,7 @@ ul.fileList {
 
                                <div class="custom_scroling_seo">
                                  <?php
-                                  $proposal_made= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',3)->get();
+                                  $proposal_made= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',3)->orderBy('id','desc')->get();
                                   ?>
 
                                 @foreach($proposal_made as $prop)

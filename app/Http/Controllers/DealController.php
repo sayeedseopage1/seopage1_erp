@@ -360,6 +360,10 @@ class DealController extends AccountBaseController
     }
     public function comments(Request $request)
     {
+    if ($request->comment == null && $request->attach == null) {
+      Toastr::error('Please add a comment', 'Failed', ["positionClass" => "toast-top-right"]);
+     return back();
+    }else {
       $deal= new DealStageChange();
       $deal->updated_by= Auth::id();
       $deal->deal_stage_id= $request->deal_stage_id;
@@ -408,6 +412,8 @@ class DealController extends AccountBaseController
        $deal->save();
        Toastr::success('Comment Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
       return back();
+    }
+
     }
 
 
