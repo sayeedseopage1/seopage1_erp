@@ -163,6 +163,14 @@
                           <div id="success_message">
 
                           </div>
+                          @if(Session::has('error'))
+                          <div class="alert alert-danger" role="alert">
+
+                              <div class="alert-body">
+                                  {{Session::get('error')}}
+                              </div>
+                          </div>
+                          @endif
                           <div class="row">
                             <div class="col-md-3">
                               <div class="form-group">
@@ -177,7 +185,7 @@
 
                                ?>
                               <label for="exampleFormControlTextarea1">Currency <span style="color:red;">*</span></label>
-                            <select class="form-control" name="original_currency_id">
+                            <select class="form-control" name="original_currency_id" readonly>
 
 
 
@@ -290,11 +298,22 @@
 
 
                             @endif
-                              @if($deal->profile_link != null)
+                              @if($deal->message_link != null)
+                              <?php
+                              $mystring = $deal->message_link;
+
+                                  $output = str_replace('<br>',' ', $mystring);
+
+                                  $output_final= (trim($output));
+                                  $data= explode("  ", $output_final);
+                                //  dd(($data));
+
+                               ?>
+                                  @foreach($data as $message)
                             <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
-                              <input type="text" name="message_link" readonly value="{{$deal->message_link}}" class="form-control @error('message_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
+                              <input type="text" name="message_link[]" readonly value="{{$message}}" class="form-control @error('message_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
                               </div>
                               @error('message_link')
                               <div class="mt-3">
@@ -302,18 +321,45 @@
                                 </div>
                               @enderror
                             </div>
+                            @endforeach
                             @else
+
                             <div class="col-md-12">
                               <div class="form-group">
-                              <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
-                              <input type="text" name="message_link"  class="form-control @error('message_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
+                                  <label for="exampleFormControlInput1">Freelancer Message Thread Link <span style="color:red;">*</span></label>
+                                  <div class="col-md-7 dynamic-field" id="dynamic-field-1">
+
+                                             <div class="row">
+                                                 <div class="col-md-9 my-2">
+                                                     <div class="form-group">
+                                                         <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]" required/>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div>
+
+                                         <div class="col-md-3 my-2 form-group append-buttons">
+                                             <div class="clearfix">
+                                                 <button type="button" id="add-button" class="btn btn-secondary2 float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                 <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                             </div>
+                                         </div>
+
                               </div>
-                              @error('message_link')
-                              <div class="mt-3">
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                </div>
-                              @enderror
+
+
                             </div>
+
+
+
+
+
+
+                                   @error('message_link')
+                                   <div class="mt-3">
+                                     <div class="alert alert-danger">{{ $message }}</div>
+                                     </div>
+                                   @enderror
 
 
 
@@ -325,7 +371,7 @@
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.) <span style="color:red;">*</span></label>
-                                <textarea name="description2" class="form-control  @error('description2') is-invalid @enderror" id="description2" rows="3"></textarea>
+                                <textarea name="description2" class="form-control  @error('description2') is-invalid @enderror" id="description2" rows="3">{!!old('description2')!!}</textarea>
                               </div>
                             </div>
                             @error('description2')
@@ -343,7 +389,7 @@
                                   The look and feel should be better than the references.)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description3" class="form-control  @error('description3') is-invalid @enderror" id="description3" rows="3"></textarea>
+                                <textarea name="description3" class="form-control  @error('description3') is-invalid @enderror" id="description3" rows="3">{!!old('description3')!!}</textarea>
                               </div>
                             </div>
                             @error('description3')
@@ -362,7 +408,7 @@
                                                 However, none of these can be copied)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description4" class="form-control  @error('description4') is-invalid @enderror" id="description4" rows="3"></textarea>
+                                <textarea name="description4" class="form-control  @error('description4') is-invalid @enderror" id="description4" rows="3">{!!old('description4')!!}</textarea>
                               </div>
                             </div>
                             @error('description4')
@@ -380,7 +426,7 @@
                                   The client is very concerned if the booking functionality will work the way he wants.)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description5" class="form-control  @error('description5') is-invalid @enderror" id="description5" rows="3"></textarea>
+                                <textarea name="description5" class="form-control  @error('description5') is-invalid @enderror" id="description5" rows="3">{!!old('description5')!!}</textarea>
                               </div>
                             </div>
                             @error('description5')
@@ -396,7 +442,7 @@
                                 <label for="exampleFormControlTextarea1">Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description6" class="form-control  @error('description6') is-invalid @enderror" id="description6" rows="3"></textarea>
+                                <textarea name="description6" class="form-control  @error('description6') is-invalid @enderror" id="description6" rows="3">{!!old('description6')!!}</textarea>
                               </div>
                             </div>
                             @error('description6')
@@ -413,7 +459,7 @@
 
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description7" class="form-control  @error('description7') is-invalid @enderror" id="description7" rows="3"></textarea>
+                                <textarea name="description7" class="form-control  @error('description7') is-invalid @enderror" id="description7" rows="3">{!!old('description7')!!}</textarea>
                               </div>
                             </div>
                             @error('description7')
@@ -430,7 +476,7 @@
 
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description8" class="form-control  @error('description8') is-invalid @enderror" id="description8" rows="3"></textarea>
+                                <textarea name="description8" class="form-control  @error('description8') is-invalid @enderror" id="description8" rows="3">{!!old('description8')!!}</textarea>
                               </div>
                             </div>
                             @error('description8')
@@ -448,7 +494,7 @@
 
 
                                    <span style="color:red;">*</span></label>
-                                <textarea name="description9" class="form-control  @error('description9') is-invalid @enderror" id="description9" rows="3"></textarea>
+                                <textarea name="description9" class="form-control  @error('description9') is-invalid @enderror" id="description9" rows="3">{!!old('description9')!!}</textarea>
                               </div>
                             </div>
                             @error('description9')
@@ -495,9 +541,7 @@
     $(document).ready(function() {
       $('#summary3').summernote();
     });
-    $(document).ready(function() {
-      $('#message_link').summernote();
-    });
+
     $(document).ready(function() {
       $('#summary2').summernote();
     });
@@ -558,7 +602,7 @@
           //  console.log(response.milestones);
             let spans= '';
             response.milestones.forEach((item)=> {
-              spans += `<span class="badge badge-light mr-2"><a href="javascript:;" data-milestone-id="${item.id}" class="taskView milestone-detail text-darkest-grey f-w-500">${item.milestone_title} </a><button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
+              spans += `<span class="badge badge-light mr-2"><a href="javascript:;" data-milestone-id="${item.id}" class="taskView milestone-detail text-darkest-grey f-w-500">${item.milestone_title} (${item.actual_cost})</a><button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
             });
 
             document.querySelector('#milestone_value').innerHTML= spans;
@@ -736,6 +780,87 @@
         $.ajaxModal(MODAL_XL, url);
     });
     </script>
-    
+
+    @push('scripts')
+
+    <script>
+             $(document).ready(function () {
+                 var buttonAdd = $("#add-button");
+                 var buttonRemove = $("#remove-button");
+                 var className = ".dynamic-field";
+                 var count = 0;
+                 var field = "";
+                 var maxFields = 50;
+
+                 function totalFields() {
+                     return $(className).length;
+                 }
+
+                 function addNewField() {
+                     count = totalFields() + 1;
+                     field = $("#dynamic-field-1").clone();
+                     field.attr("id", "dynamic-field-" + count);
+                     field.children("label").text("Field " + count);
+                     field.find("input").val("");
+                     $(className + ":last").after($(field));
+                 }
+
+                 function removeLastField() {
+                     if (totalFields() > 1) {
+                         $(className + ":last").remove();
+                     }
+                 }
+
+                 function enableButtonRemove() {
+                     if (totalFields() === 2) {
+                         buttonRemove.removeAttr("disabled");
+                         buttonRemove.addClass("shadow-sm");
+                     }
+                 }
+
+                 function disableButtonRemove() {
+                     if (totalFields() === 1) {
+                         buttonRemove.attr("disabled", "disabled");
+                         buttonRemove.removeClass("shadow-sm");
+                     }
+                 }
+
+                 function disableButtonAdd() {
+                     if (totalFields() === maxFields) {
+                         buttonAdd.attr("disabled", "disabled");
+                         buttonAdd.removeClass("shadow-sm");
+                     }
+                 }
+
+                 function enableButtonAdd() {
+                     if (totalFields() === maxFields - 1) {
+                         buttonAdd.removeAttr("disabled");
+                         buttonAdd.addClass("shadow-sm");
+                     }
+                 }
+
+                 buttonAdd.click(function () {
+                     addNewField();
+                     enableButtonRemove();
+                     disableButtonAdd();
+                 });
+
+                 buttonRemove.click(function () {
+                     removeLastField();
+                     disableButtonRemove();
+                     enableButtonAdd();
+                 });
+             });
+         </script>
+
+
+
+
+
+
+
+
+
+    @endpush
 
 @endsection

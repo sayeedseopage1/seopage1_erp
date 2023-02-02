@@ -157,7 +157,7 @@ $deals= App\Models\Deal::all();
                   <th class="whitespace-nowrap">Project Manager</th>
 
                 <th class="whitespace-nowrap">Deal Creation Date</th>
-                  <th class="whitespace-nowrap">Client Form</th>
+                  <th class="whitespace-nowrap">Client Contact Form</th>
                 <th class="whitespace-nowrap">Action</th>
 
             </tr>

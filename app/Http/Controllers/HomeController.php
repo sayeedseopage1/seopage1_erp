@@ -58,6 +58,7 @@ use App\Mail\ClientSubmitMail;
 
 
 
+
 class HomeController extends Controller
 {
     use UniversalSearchTrait;
@@ -93,73 +94,85 @@ class HomeController extends Controller
     public function ClientForm(Request $request)
     {
 
-    //dd($request);
+
     //count($request->day);
-
-      $client = new ClientForm();
-      $client->deal_id=$request->deal_id;
-      $client->client_username= $request->user_name;
-      $client->client_email= $request->email;
-      $client->client_phone= $request->client_phone;
-      $client->client_whatsapp= $request->client_whatsapp;
-      $client->client_skype= $request->client_skype;
-      $client->client_messenger= $request->client_messenger;
-      $client->client_telegram= $request->client_telegram;
-      $client->client_imo= $request->client_imo;
-      $client->message= $request->message;
-      $client->timezone= $request->timezone;
-      $client->checklist= $request->check;
-
-      $days = $request->day;
-      $from = $request->from;
-      $to = $request->to;
-      for ($i=0; $i < count($request->day) ; $i++) {
-        $data = array(
-               'day' => $days[$i] .' '. $from[$i] . '-'. $to[$i],
-
-             );
-
-       $day[] = $data;
+      $check = ClientForm::where('deal_id',$request->deal_id)->first();
+      if ($check == null) {
+        $validated = $request->validate([
+            'user_name' =>  'required|unique:users|max:255',
+            'email' =>  'required|unique:users|max:255',
 
 
+        ]);
+          $client = new ClientForm();
+          $client->deal_id=$request->deal_id;
+          $client->client_username= $request->user_name;
+          $client->client_email= $request->email;
+          $client->client_phone= $request->client_phone;
+          $client->client_whatsapp= $request->client_whatsapp;
+          $client->client_skype= $request->client_skype;
+          $client->client_messenger= $request->client_messenger;
+          $client->client_telegram= $request->client_telegram;
+          $client->client_imo= $request->client_imo;
+          $client->message= $request->message;
+          $client->timezone= $request->timezone;
+          $client->checklist= $request->check;
+
+          $days = $request->day;
+          $from = $request->from;
+          $to = $request->to;
+          for ($i=0; $i < count($request->day) ; $i++) {
+            $data = array(
+                   'day' => $days[$i] .' '. $from[$i] . '-'. $to[$i],
+
+                 );
+
+           $day[] = $data;
+
+
+          }
+        //  Schedule::insert($insert_schedule);
+        $value= '';
+        foreach ($day as $d) {
+          //dd($d['day']);
+          $value= $value  . $d['day'].'<br> ';
+
+        }
+        //dd($value);
+        $client->day= $value;
+
+          //$client->day= $request->day[] . $request->from[] . $request->to[];
+          $client->save();
+          $deal= Deal::find($client->deal_id);
+          //dd($deal);
+          $deal->client_username=$request->user_name;
+          $deal->submission_status= 'Submitted';
+          $deal->save();
+          $usr= User::where('id',$deal->client_id)->first();
+          //dd($usr);
+          $user=User::find($usr->id);
+          $user->mobile= $request->client_phone;
+          $user->email= $request->email;
+          $user->user_name=  $request->user_name;
+          $user->save();
+          $client_details= ClientDetails::where('user_id',$deal->client_id)->first();
+          $cl= ClientDetails::find($client_details->id);
+          $cl->client_username= $request->user_name;
+          $cl->save();
+          $users= User::where('role_id',1)->orWhere('id',$deal->pm_id)->get();
+
+          foreach ($users as $user) {
+            Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
+          }
+
+
+
+              return redirect('/thankyou')->with('message','Submitted Successfully');
+      }else {
+        Toastr::error('Already Submitted the information', 'Failed', ["positionClass" => "toast-top-right"]);
+       return back();
       }
-    //  Schedule::insert($insert_schedule);
-    $value= '';
-    foreach ($day as $d) {
-      //dd($d['day']);
-      $value= $value  . $d['day'].'<br> ';
 
-    }
-    //dd($value);
-    $client->day= $value;
-
-      //$client->day= $request->day[] . $request->from[] . $request->to[];
-      $client->save();
-      $deal= Deal::find($client->deal_id);
-      //dd($deal);
-      $deal->client_username=$request->user_name;
-      $deal->submission_status= 'Submitted';
-      $deal->save();
-      $usr= User::where('id',$deal->client_id)->first();
-      //dd($usr);
-      $user=User::find($usr->id);
-      $user->mobile= $request->client_phone;
-      $user->email= $request->email;
-      $user->user_name=  $request->user_name;
-      $user->save();
-      $client_details= ClientDetails::where('user_id',$deal->client_id)->first();
-      $cl= ClientDetails::find($client_details->id);
-      $cl->client_username= $request->user_name;
-      $cl->save();
-      $users= User::where('role_id',1)->orWhere('id',$deal->pm_id)->get();
-
-      foreach ($users as $user) {
-        Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
-      }
-
-
-
-          return redirect('/thankyou')->with('message','Submitted Successfully');
     }
 
     public function agreement($hash)

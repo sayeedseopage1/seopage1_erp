@@ -468,8 +468,19 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         <div class="col">
                             <h4>Freelancer Message Link</h4>
                             <br>
+                            <?php
+                            $mystring = $deal->message_link;
 
-                            <p><a target="_blank" href="{{ $deal->message_link}}">{!! $deal->message_link !!}</a></p>
+                                $output = str_replace('<br>',' ', $mystring);
+
+                                $output_final= (trim($output));
+                                $data= explode("  ", $output_final);
+                              //  dd(($data));
+
+                             ?>
+                             @foreach($data as $message)
+                            <p><a target="_blank" href="{{ $deal->message_link}}">{{$message}}</a></p>
+                            @endforeach
 
                         </div>
 

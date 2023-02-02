@@ -40,6 +40,7 @@
 
 
                             <div class="row">
+
                               <div class="col-md-6">
                                 <div class="mt-3">
                                     <label for="input-state-2" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong></label>
@@ -134,9 +135,20 @@
                         			<h2><strong>Project Award Time <span style="color:red;">*<span></strong></h2>
 
                         				<input type="text" id="date-format" name="award_time" class="form-control floating-label @error('award_time') is-invalid @enderror" placeholder="Select Exact Award Time" >
-
+																<?php
+																$current_time = \Carbon\Carbon::now()->format('d-m-Y H:m:s');
+																 ?>
+														<input type="hidden" name="current_time" value="{{$current_time}}">
 
                         		</div>
+														@if(Session::has('error'))
+														<div class="alert alert-danger" role="alert">
+
+																<div class="alert-body">
+																		{{Session::get('error')}}
+																</div>
+														</div>
+														@endif
                             @error('award_time')
                             <div class="mt-3">
                               <div class="alert alert-danger">{{ $message }}</div>
@@ -160,7 +172,7 @@
   </div>
 </div>
   @push('scripts')
-  @if (count($errors) > 0)
+  @if (count($errors) > 0 || Session::has('error'))
   <script>
       $( document ).ready(function() {
           $('#dealaddmodal').modal('show');

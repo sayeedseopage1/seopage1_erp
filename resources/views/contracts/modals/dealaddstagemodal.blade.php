@@ -141,11 +141,25 @@ justify-content: center;
                                 @endforeach
                                 @else
 
-                                <div class="mt-3">
-                                    <label for="input-state-3" class="form-label"><strong>Message Link </strong></label>
-                                    <input name="message_link"  id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Message Link" >
 
-                                </div>
+                                <label class="mt-3" for="Client Username"><strong>Client Message Thread Link</strong></label>
+                                <div class="col-md-9 dynamic-field" id="dynamic-field-1">
+
+                                           <div class="row">
+                                               <div class="col-md-12 my-2">
+                                                   <div class="form-group">
+                                                       <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]" required/>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+
+                                       <div class="col-md-3 my-2 form-group append-buttons">
+                                           <div class="clearfix">
+                                               <button type="button" id="add-button" class="btn btn-secondary2 float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                               <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                           </div>
+                                       </div>
 
                                 @endif
                               </div>
@@ -168,7 +182,7 @@ justify-content: center;
                                   $currencies= App\Models\Currency::where('id',$deal->original_currency_id)->first();
                                  ?>
                                  <label for="input-state-3" class="form-label"><strong>Currency <span style="color:red;">*<span></strong></label>
-                            <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id" disabled>
+                            <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id" readonly>
                                 <option selected value="{{$currencies->id}}">({{$currencies->currency_code}})</option>
 
 
@@ -200,7 +214,7 @@ justify-content: center;
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" >Create Deal</button>
+          <button type="submit" class="btn btn-primary" >Create Won Deal</button>
 
       </div>
         </form>
@@ -263,3 +277,84 @@ justify-content: center;
 
 
   </script>
+  @push('scripts')
+
+  <script>
+           $(document).ready(function () {
+               var buttonAdd = $("#add-button");
+               var buttonRemove = $("#remove-button");
+               var className = ".dynamic-field";
+               var count = 0;
+               var field = "";
+               var maxFields = 50;
+
+               function totalFields() {
+                   return $(className).length;
+               }
+
+               function addNewField() {
+                   count = totalFields() + 1;
+                   field = $("#dynamic-field-1").clone();
+                   field.attr("id", "dynamic-field-" + count);
+                   field.children("label").text("Field " + count);
+                   field.find("input").val("");
+                   $(className + ":last").after($(field));
+               }
+
+               function removeLastField() {
+                   if (totalFields() > 1) {
+                       $(className + ":last").remove();
+                   }
+               }
+
+               function enableButtonRemove() {
+                   if (totalFields() === 2) {
+                       buttonRemove.removeAttr("disabled");
+                       buttonRemove.addClass("shadow-sm");
+                   }
+               }
+
+               function disableButtonRemove() {
+                   if (totalFields() === 1) {
+                       buttonRemove.attr("disabled", "disabled");
+                       buttonRemove.removeClass("shadow-sm");
+                   }
+               }
+
+               function disableButtonAdd() {
+                   if (totalFields() === maxFields) {
+                       buttonAdd.attr("disabled", "disabled");
+                       buttonAdd.removeClass("shadow-sm");
+                   }
+               }
+
+               function enableButtonAdd() {
+                   if (totalFields() === maxFields - 1) {
+                       buttonAdd.removeAttr("disabled");
+                       buttonAdd.addClass("shadow-sm");
+                   }
+               }
+
+               buttonAdd.click(function () {
+                   addNewField();
+                   enableButtonRemove();
+                   disableButtonAdd();
+               });
+
+               buttonRemove.click(function () {
+                   removeLastField();
+                   disableButtonRemove();
+                   enableButtonAdd();
+               });
+           });
+       </script>
+
+
+
+
+
+
+
+
+
+  @endpush

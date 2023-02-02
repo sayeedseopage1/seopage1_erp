@@ -15,6 +15,7 @@
 
 </head>
 <body>
+  
 <?php
   $user= App\Models\User::where('id',$data->pm_id)->first();
   $deal= App\Models\Deal::where('id',$data->deal_id)->first();

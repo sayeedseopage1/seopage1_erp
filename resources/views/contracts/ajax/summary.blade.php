@@ -407,7 +407,19 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                       <div class="col">
                           <h4>Freelancer Message Link</h4>
                           <br>
-                          <p><a target="_blank" href="{{ $contract->deal->message_link}}">{{ $contract->deal->message_link}}</a></p>
+                          <?php
+                          $mystring = $contract->deal->message_link;
+
+                              $output = str_replace('<br>',' ', $mystring);
+
+                              $output_final= (trim($output));
+                              $data= explode("  ", $output_final);
+                            //  dd(($data));
+
+                           ?>
+                           @foreach($data as $message)
+                          <p><a target="_blank" href="{{ $contract->deal->message_link}}">{{ $message}}</a></p>
+                          @endforeach
 
                       </div>
 

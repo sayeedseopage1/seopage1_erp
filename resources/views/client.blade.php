@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="{{asset('mobile/css/style.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+     <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
     <style media="screen">
     input, button {
@@ -975,6 +976,8 @@
               .then((resp) => callback(resp.country));
       }
   </script>
+  <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+     {!! Toastr::message() !!}
 
 </body>
 </html>

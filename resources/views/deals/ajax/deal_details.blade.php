@@ -1402,20 +1402,18 @@ Swal.fire({
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" charset="utf-8"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-  <script type="text/javascript">
-  $(document).ready(function () {
-      $("#comments1").summernote();
 
-  });
-
-  </script>
 
 
 
 
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
+   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+ <script type="text/javascript">
+ $(document).ready(function () {
+     $("#comments1").summernote();
+ });
+ </script>
 
 
    <script>
@@ -1537,7 +1535,6 @@ Swal.fire({
  // });
  })()
  </script>
-
 
 
 
