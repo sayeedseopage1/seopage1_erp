@@ -291,17 +291,22 @@ class DealsDataTable extends BaseDataTable
                       </div>';
             })
             ->addColumn('converted_by', function($row) {
-              $user= User::where('id',$row->converted_by)->first();
-            //  dd($row->added_by->name);
-                //return ucfirst($user->name);
-                return '<div class="media align-items-center">
-                       <a href="' . route('employees.show', [$user->id]) . '">
-                       <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
-                         <div class="media-body">
-                        <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$user->id]) . '">' . ucfirst($user->name) . '</a></h5>
+              if ($row->won_lost == 'Yes') {
+                $user= User::where('id',$row->converted_by)->first();
+              //  dd($row->added_by->name);
+                  //return ucfirst($user->name);
+                  return '<div class="media align-items-center">
+                         <a href="' . route('employees.show', [$user->id]) . '">
+                         <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
+                           <div class="media-body">
+                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$user->id]) . '">' . ucfirst($user->name) . '</a></h5>
 
-                         </div>
-                      </div>';
+                           </div>
+                        </div>';
+              }else {
+                return '--';
+              }
+
             })
             // ->editColumn('added_by.name', function ($row) {
             //     return '<div class="media align-items-center">

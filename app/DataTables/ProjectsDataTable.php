@@ -320,15 +320,19 @@ class ProjectsDataTable extends BaseDataTable
             });
             $datatables->addColumn('project_manager', function ($row) {
 
+                if ($row->pm_id != null) {
+                  $project_manager = ucfirst($row->salutation) . ' ' . ucfirst($row->pm->name);
 
-                $project_manager = ucfirst($row->salutation) . ' ' . ucfirst($row->pm->name);
+                return '<div class="media align-items-center">
+                          <div class="media-body">
+                      <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$row->pm_id]) . '">' . $project_manager . '</a></h5>
 
-              return '<div class="media align-items-center">
-                        <div class="media-body">
-                    <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$row->pm_id]) . '">' . $project_manager . '</a></h5>
+                      </div>
+                    </div>';
+                }else {
+                  return '--';
+                }
 
-                    </div>
-                  </div>';
                 //  return $row->pm->name;
             })
             ;
