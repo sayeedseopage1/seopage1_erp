@@ -169,9 +169,11 @@ $deals= App\Models\Deal::all();
           $project= App\Models\Project::where('deal_id',$deal->id)->first();
           $pm= App\Models\PMProject::where('deal_id',$deal->id)->first();
 
+          if ($pm != null) {
+            $pm_name= App\Models\User::where('id',$pm->pm_id)->first();
+          }
 
-        $pm_name= App\Models\User::where('id',$pm->pm_id)->first();
-        $client_name= App\Models\User::where('id',$pm->client_id)->first();
+        $client_name= App\Models\User::where('id',$deal->client_id)->first();
 
 
 
@@ -195,9 +197,13 @@ $deals= App\Models\Deal::all();
                 <td> <a href="/account/clients/{{$client_name->id}}">{{$deal->client_name}}</a></td>
 
                   <td>
+                    @if($deal->pm_id != null)
                     @if($pm->deal_id != null)
 
                           <a href="/account/employees/{{$pm_name->id}}">{{$pm_name->name}}</a>
+                    @endif
+                    @else
+                    --
                     @endif
 
 

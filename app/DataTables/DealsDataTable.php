@@ -237,17 +237,22 @@ class DealsDataTable extends BaseDataTable
             ->addColumn('project_manager', function($row) {
               if ($row->won_lost == 'Yes') {
                 $pm= Deal::where('deal_id',$row->short_code)->first();
-                $user= User::where('id',$pm->pm_id)->first();
-              //  dd($row->added_by->name);
-                  //return ucfirst($user->name);
-                  return '<div class="media align-items-center">
-                         <a href="' . route('employees.show', [$user->id]) . '">
-                         <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
-                           <div class="media-body">
-                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$user->id]) . '">' . ucfirst($user->name) . '</a></h5>
+                if ($pm->pm_id != null) {
+                  $user= User::where('id',$pm->pm_id)->first();
+                //  dd($row->added_by->name);
+                    //return ucfirst($user->name);
+                    return '<div class="media align-items-center">
+                           <a href="' . route('employees.show', [$user->id]) . '">
+                           <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
+                             <div class="media-body">
+                            <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$user->id]) . '">' . ucfirst($user->name) . '</a></h5>
 
-                           </div>
-                        </div>';
+                             </div>
+                          </div>';
+                }else {
+                  return '--';
+                }
+
               }else {
                 return '--';
               }

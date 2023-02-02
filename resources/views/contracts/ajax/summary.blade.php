@@ -294,8 +294,14 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                           <tr>
                               <td class="bg-light-grey border-right-0 f-w-500">
                                 Project Manager</td>
+                                @if($contract->deal->pm_id != null)
                               <td class="border-left-0"><a class="text-darkest-grey" href="/account/employees/{{$contract->deal->pm_id}}">{{ $contract->deal->pm->name }}</a>
                               </td>
+                              @else
+                              <td class="border-left-0"><a class="text-darkest-grey" href="#">--</a>
+                              </td>
+                              @endif
+
                           </tr>
                       </table>
 
