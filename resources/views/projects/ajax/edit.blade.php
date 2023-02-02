@@ -36,21 +36,21 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
 
                     <input type="hidden" id="project_id" name="project_id" value="{{ $project->id }}">
-                    <div class="col-md-6 col-lg-4">
+                    <div class="col-md-6 col-lg-6">
                         <x-forms.datepicker fieldId="start_date" fieldRequired="true"
                             :fieldLabel="__('modules.projects.startDate')" fieldName="start_date"
                             :fieldValue="$project->start_date->format(global_setting()->date_format)"
                             :fieldPlaceholder="__('placeholders.date')" />
                     </div>
 
-                    <div class="col-md-6 col-lg-4" id="deadlineBox">
+                    <div class="col-md-6 col-lg-6" id="deadlineBox">
                         <x-forms.datepicker fieldId="deadline" fieldRequired="true"
                             :fieldLabel="__('modules.projects.deadline')" fieldName="deadline"
                             :fieldValue="($project->deadline ? $project->deadline->format(global_setting()->date_format) : '')"
                             :fieldPlaceholder="__('placeholders.date')" />
                     </div>
 
-                    <div class="col-md-6 col-lg-3">
+                  {{--  <div class="col-md-6 col-lg-3">
                         <div class="form-group">
                             <div class="d-flex mt-5">
                                 <x-forms.checkbox fieldId="without_deadline"
@@ -58,7 +58,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                     :fieldLabel="__('modules.projects.withoutDeadline')" fieldName="without_deadline" />
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-4">
                         <x-forms.label class="my-3" fieldId="category_id"
                             :fieldLabel="__('modules.projects.projectCategory')">
@@ -185,7 +185,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         </div>
                     </div>
 
-                    @if ($project->public == 1 && $createPublicProjectPermission == 'all')
+              {{--     @if ($project->public == 1 && $createPublicProjectPermission == 'all')
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <div class="d-flex mt-2">
@@ -205,7 +205,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
 
 
                     @if ($project->public == 0 && $editProjectMembersPermission == 'all' || $editPermission == 'all')
@@ -394,7 +394,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                             :fieldValue="$project->hours_allocated" :fieldPlaceholder="__('placeholders.hourEstimate')" />
                     </div>
 
-                    <div class="col-md-6 col-lg-4">
+                {{--   <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                             <div class="d-flex mt-5">
                                 <x-forms.checkbox fieldId="manual_timelog"
@@ -402,7 +402,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                     == 'enable')" fieldName="manual_timelog" />
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="col-md-6 col-lg-4 d-none" id="clientNotification">
                         <div class="form-group">
@@ -461,7 +461,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                           <label class="ml-3" for="">Title</label>
                           <div class="d-flex ml-3">
 
-                            <input type="text" class="form-control height-35 f-14" name="graphics_title" value="">
+                            <input type="text" class="form-control height-35 f-14" name="graphics_title" value="" required>
                           </div>
                       </div>
                   </div>
@@ -471,7 +471,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">Quantity</label>
                       <div class="d-flex ml-3">
 
-                        <input type="text" class="form-control height-35 f-14" name="graphics_quantity" value="">
+                        <input type="text" class="form-control height-35 f-14" name="graphics_quantity" value="" required>
                       </div>
                   </div>
               </div>
@@ -480,7 +480,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">From</label>
                       <div class="d-flex ml-3">
 
-                        <input id="from_graphics" type="text" class="form-control height-35 f-14" name="graphics_from" value="">
+                        <input id="from_graphics" type="text" class="form-control height-35 f-14" name="graphics_from" value="" required>
                       </div>
                   </div>
               </div>
@@ -489,7 +489,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label class="ml-3" for="">To</label>
                       <div class="d-flex ml-3">
 
-                        <input id="to_graphics" type="text" class="form-control height-35 f-14" name="graphics_to" value="">
+                        <input id="to_graphics" type="text" class="form-control height-35 f-14" name="graphics_to" value="" required>
                       </div>
                   </div>
               </div>
@@ -497,7 +497,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                   <div class="form-group">
                       <label class="ml-3" for="">Description</label>
                       <div class="d-flex ml-3">
-                        <textarea name="graphics_deliverable_description" rows="6" cols="180"></textarea>
+                        <textarea name="graphics_deliverable_description" rows="6" cols="180" required></textarea>
 
                       </div>
                   </div>
@@ -1066,7 +1066,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     <div class="form-group">
                         <label class="" for="">Comments</label>
                         <div class="d-flex">
-                          <textarea name="comments" rows="6" cols="180"></textarea>
+                          <textarea id="comments" name="comments" rows="6" cols="180"></textarea>
 
                         </div>
                     </div>

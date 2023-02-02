@@ -29,6 +29,9 @@ class UpdateProject extends CoreRequest
         $rules = [
             'project_name' => 'required|max:150',
             'start_date' => 'required',
+            'deadline' => 'required',
+          
+
             'hours_allocated' => 'nullable|numeric',
             'client_id' => 'requiredIf:client_view_task,true',
             'project_code' => 'required|unique:projects,project_short_code,'.$this->route('project'),
@@ -40,7 +43,7 @@ class UpdateProject extends CoreRequest
 
         if ($this->project_budget != '') {
             $rules['project_budget'] = 'numeric';
-          
+
         }
 
         $project = Project::find(request()->project_id);

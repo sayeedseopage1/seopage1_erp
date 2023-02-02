@@ -10,7 +10,7 @@
 <!------ Include the above in your HEAD tag ---------->
 
 <div class="modal fade" id="markcomplete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-m">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Submit Task</h5>
@@ -23,16 +23,7 @@
 
       <div class="modal-body">
 
-            <x-forms.select fieldId="submission_type" fieldName="" :fieldLabel="__('Choose From Below')"
-                search="true">
-              {{--<option value="table" >Create Table</option>--}}
-                <option value="link">Insert Link</option>
-                <option value="text">Add Text</option>
-              {{--  <option value="list">Add List</option> --}}
-                <option value="attach">Attach File</option>
-            </x-forms.select>
 
-            <br>
 
 
 
@@ -43,13 +34,9 @@
 
 
         <div class="mb-3">
-         Submit Work Using Table
+        Submit Links
         </div>
-        <div class="">
-          <textarea id="table" name="table" rows="8" cols="60"></textarea>
-          <input type="hidden" name="submission_type" value="table">
 
-        </div>
 
       	</div>
       </div> --}}
@@ -59,9 +46,12 @@
                     fieldId="website_link" :fieldPlaceholder="__('Website/Github Link')" fieldRequired="true" />
             </div> -->
 
-            <div class="col-lg-12" id="submission_type_link">
+            <div class="mb-3">
+            Submit Links What You've Done
+            </div>
+
               <div id="row">
-                <div class="input-group m-3">
+                <div class="input-group mr-3 mt-3">
                   <div class="input-group-prepend">
                     <button class="btn btn-danger"
                       id="DeleteRow" type="button">
@@ -70,67 +60,44 @@
                     </button>
                   </div>
                   <input type="text"
-                    class="form-control m-input" name="link[]">
+                    class="form-control height-35 f-14 m-input" name="link[]">
 
                 </div>
               </div>
 
-              <div id="newinput"></div>
+              <div class="mt-3" id="newinput"></div>
               <button id="rowAdder" type="button"
-                class="btn btn-dark">
+                class="btn btn-dark mt-3">
                 <span class="bi bi-plus-square-dotted">
                 </span>
               </button>
-            </div>
 
 
 
 
-            <div class="container" id="submission_type_text">
-            <div class="row flex-column">
+
+
+            <div class="row mt-3 ml-1 mr-1">
 
 
 
-            <div class="mb-3">
+            <div class="mb-3 mt-3">
                 Describe What You've Done
             </div>
             <div class="">
-                <textarea id="text" name="text" rows="8" cols="60"></textarea>
+                <textarea id="text" name="text"></textarea>
 
 
             </div>
 
             </div>
-            </div>
-
-          {{--<div class="container" id="submission_type_list">
-            <div class="row flex-column">
 
 
 
-            <div class="mb-3">
-                Make a List of Works You've Completed
-            </div>
-            <div class="">
-                    <textarea id="list" name="list" rows="8" cols="60"></textarea>
 
 
-            </div>
 
-            </div>
-            </div> --}}
-
-            <!-- <div class="" id="submission_type_attachment">
-              Attach File or Images (If Needed)
-                <x-forms.file-multiple class="mr-0 mr-lg-2 mr-md-2"
-                    :fieldLabel="__('app.add') . ' ' .__('app.file')" fieldName="file"
-                    fieldId="task-file-upload-dropzone" />
-                <input type="hidden" name="submission" id="image_url">
-            </div>
-            <input type="hidden" name="task_id" id="taskID">
-            <input type="hidden" name="addedFiles" id="addedFiles"> -->
-            <div class="col-lg-12" id="submission_type_attachment">
-    					<div id="row2">
+    			{{--	<div id="row2">
     						<div class="input-group m-3">
     							<div class="input-group-prepend">
     								<button class="btn btn-danger"
@@ -151,7 +118,7 @@
     						<span class="bi bi-plus-square-dotted">
     						</span>
     					</button>
-    				</div>
+    			 --}}
 
 
 
@@ -273,7 +240,7 @@ $(document).ready(function() {
 
   $("#rowAdder").click(function () {
     newRowAdd =
-    '<div id="row"> <div class="input-group m-3">' +
+    '<div id="row"> <div class="input-group mr-3 mt-3">' +
     '<div class="input-group-prepend">' +
     '<button class="btn btn-danger" id="DeleteRow" type="button">' +
     '<i class="bi bi-trash"></i> </button> </div>' +
