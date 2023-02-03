@@ -95,7 +95,7 @@ $task_submission= App\Models\TaskSubmission::where('task_id',$task->id)->orderBy
 
       <div class="modal-body">
         @if($task_submission != null)
-        <hr>
+
         <h5>Submitted Work</h5>
         @foreach($task_submission as $submission)
         @if($submission->link != null)
@@ -121,6 +121,7 @@ $task_submission= App\Models\TaskSubmission::where('task_id',$task->id)->orderBy
 
         @endforeach
           @endif
+            <hr>
 
         <div class="container">
       	<div class="row flex-column">
