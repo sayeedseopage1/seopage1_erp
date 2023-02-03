@@ -59,7 +59,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                            fieldId="project_link" :fieldPlaceholder="__('Enter Project Link From Freelancer.com')" fieldRequired="true" required/>
                                    </div>
                                    <?php
-                                   $previous_date= Carbon\Carbon::now();
+                                   $previous_date= Carbon\Carbon::now()->format('Y-m-d');
                                     ?>
                                    <input type="hidden" name="" id="previousDate" value="{{$previous_date}}">
                                    <div class="col-md-4 col-lg-4 mt-3" id="deadlineBox">
@@ -135,7 +135,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                            </x-forms.label>
                                            <div id="description"></div>
                                            <textarea name="description" id="description-text"
-                                               class="d-none"></textarea>
+                                               class="d-none">{!!old('description')!!}</textarea>
                                        </div>
                                    </div>
                                    <div class="col-md-12 col-lg-12">
@@ -145,7 +145,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                            </x-forms.label>
                                            <div id="cover_letter"></div>
                                            <textarea name="cover_letter" id="cover-letter-text"
-                                               class="d-none"></textarea>
+                                               class="d-none">{!!old('cover_letter')!!}</textarea>
                                        </div>
                                    </div>
 
