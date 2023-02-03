@@ -94,6 +94,33 @@ $task_submission= App\Models\TaskSubmission::where('task_id',$task->id)->orderBy
 
 
       <div class="modal-body">
+        @if($task_submission != null)
+        <hr>
+        <h5>Submitted Work</h5>
+        @foreach($task_submission as $submission)
+        @if($submission->link != null)
+        <div class="mb-3">
+          <a href="{{$submission->link}}" target="_blank">  {{$submission->link}}</a>
+
+        </div>
+        @endif
+        @if($submission->text != null)
+        <div class="mb-3">
+
+
+           {!! $submission->text !!}
+
+        </div>
+        @endif
+        @if($submission->attach != null)
+        <div class="mb-3">
+            <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;" target="_blank" href="{{asset('storage/TaskSubmission/'.$submission->attach)}}"><i class="fa-solid fa-link"></i> {{$submission->attach}}</a></p>
+
+        </div>
+        @endif
+
+        @endforeach
+          @endif
 
         <div class="container">
       	<div class="row flex-column">
@@ -137,33 +164,7 @@ $task_submission= App\Models\TaskSubmission::where('task_id',$task->id)->orderBy
 
       	</div>
       </div>
-      @if($task_submission != null)
-      <hr>
-      <h5>Submitted Work</h5>
-      @foreach($task_submission as $submission)
-      @if($submission->link != null)
-      <div class="mb-3">
-        <a href="{{$submission->link}}" target="_blank">  {{$submission->link}}</a>
 
-      </div>
-      @endif
-      @if($submission->text != null)
-      <div class="mb-3">
-
-
-         {!! $submission->text !!}
-
-      </div>
-      @endif
-      @if($submission->attach != null)
-      <div class="mb-3">
-          <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;" target="_blank" href="{{asset('storage/TaskSubmission/'.$submission->attach)}}"><i class="fa-solid fa-link"></i> {{$submission->attach}}</a></p>
-
-      </div>
-      @endif
-
-      @endforeach
-        @endif
 
 
 
