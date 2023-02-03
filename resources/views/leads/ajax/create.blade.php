@@ -366,7 +366,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                     bid_value2: {
                         required: true,
                         number:true,
-                        greaterThan: "#bid_value"
+                        minValue: "#bid_value"
                     },
                     value: {
                         required: true,

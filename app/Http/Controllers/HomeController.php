@@ -99,8 +99,8 @@ class HomeController extends Controller
       $check = ClientForm::where('deal_id',$request->deal_id)->first();
       if ($check == null) {
         $validated = $request->validate([
-            'user_name' =>  'required|unique:users|max:255',
-            'email' =>  'required|unique:users|max:255',
+            'user_name' =>  'required',
+            'email' =>  'required',
 
 
         ]);
