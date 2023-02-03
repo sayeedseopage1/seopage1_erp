@@ -424,7 +424,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
 
                            ?>
                            @foreach($data as $message)
-                          <p><a target="_blank" href="{{ $contract->deal->message_link}}">{{ $message}}</a></p>
+                          <p><a target="_blank" href="{{ $message}}">{{ $message}}</a></p>
                           @endforeach
 
                       </div>

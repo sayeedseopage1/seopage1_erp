@@ -479,7 +479,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
                              ?>
                              @foreach($data as $message)
-                            <p><a target="_blank" href="{{ $deal->message_link}}">{{$message}}</a></p>
+                            <p><a target="_blank" href="{{ $message}}">{{$message}}</a></p>
                             @endforeach
 
                         </div>
