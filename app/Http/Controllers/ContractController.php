@@ -45,6 +45,7 @@ use App\Mail\WonDealMail;
 use App\Models\Country;
 
 use Toastr;
+use Exception;
 
 
 class ContractController extends AccountBaseController
@@ -867,14 +868,17 @@ class ContractController extends AccountBaseController
                     // //dd($clientdetail);
                     // $clientdetail->company_name= $request->organization;
                     // $clientdetail->save();
-                    return redirect('/account/contracts')->with('messages.contractAdded');
+
 
                       DB::commit();
                       // all good
                   } catch (\Exception $e) {
                       DB::rollback();
-                      // something went wrong
+                      Toastr::error('Action Failed', 'Error', ["positionClass" => "toast-top-right", 'redirectUrl']);
+                      return back();
                   }
+                    Toastr::success('Deal creation completed successfully!', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
+                    return redirect('/account/contracts');
 
 
 
@@ -1057,22 +1061,17 @@ class ContractController extends AccountBaseController
                         Mail::to($usr->email)->send(new WonDealMail($project_id));
                       }
                 }
-                // $clientdetail= ClientDetails::find($client_id->id);
-                // //dd($clientdetail);
-                // $clientdetail->company_name= $request->organization;
-                // $clientdetail->save();
-                return redirect('/account/contracts/' . $deal->id)->with('messages.contractAdded');
-
-
 
 
                 DB::commit();
                 // all good
               } catch (\Exception $e) {
                 DB::rollback();
+                Toastr::error('Something went wrong', 'Error', ["positionClass" => "toast-top-right", 'redirectUrl']);
+                return back();
                 // something went wrong
               }
-        //  dd($request->client_username);
+          return redirect('/account/contracts/' . $deal->id)->with('messages.contractAdded');
 
     }
     public function DealUrl($id)

@@ -209,6 +209,13 @@
              });
          });
      </script>
+     <script>
+       document.addEventListener("DOMContentLoaded", function() {
+         document.querySelector("form").addEventListener("submit", function() {
+           document.querySelector("#lead-convert-button").setAttribute("disabled", "disabled");
+         });
+       });
+     </script>
 
 
 
