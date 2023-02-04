@@ -226,7 +226,7 @@ class ContractController extends AccountBaseController
 
           $diff_in_minutes = $from->diffInMinutes($to);
         if ($diff_in_minutes > 1230) {
-          return back()->with('error','The award time and current time difference should be more than 20 hours');
+          return back()->with('error','The award time and current time difference should not be more than 20 hours');
         }
 
 
@@ -362,7 +362,7 @@ class ContractController extends AccountBaseController
 
         $diff_in_minutes = $from->diffInMinutes($to);
       if ($diff_in_minutes > 1230) {
-        return back()->with('error','The award time and current time difference should be more than 20 hours');
+        return back()->with('error','The award time and current time difference should not be more than 20 hours');
       }
       //  dd($diff_in_minutes);
         $deal_stage = DealStage::where('id', $request->id)->first();
