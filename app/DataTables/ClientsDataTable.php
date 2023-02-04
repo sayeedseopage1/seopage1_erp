@@ -276,7 +276,7 @@ class ClientsDataTable extends BaseDataTable
                 'searchable' => false
             ],
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => true],
-            __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+            // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
             __('app.name') => ['data' => 'name', 'name' => 'name', 'exportable' => false, 'title' => __('app.name')],
             __('app.customers')  => ['data' => 'client_name', 'name' => 'users.name', 'visible' => false, 'title' => __('app.customers')],
             __('app.email') => ['data' => 'email', 'name' => 'email', 'title' => __('app.email')],
