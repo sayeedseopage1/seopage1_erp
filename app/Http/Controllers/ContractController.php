@@ -225,7 +225,7 @@ class ContractController extends AccountBaseController
         $from = Carbon::parse($request->award_time);
 
           $diff_in_minutes = $from->diffInMinutes($to);
-        if ($diff_in_minutes > 1230) {
+        if ($diff_in_minutes > 1200) {
           return back()->with('error','The award time and current time difference should not be more than 20 hours');
         }
 
@@ -361,7 +361,7 @@ class ContractController extends AccountBaseController
       $from = Carbon::parse($request->award_time);
 
         $diff_in_minutes = $from->diffInMinutes($to);
-      if ($diff_in_minutes > 1230) {
+      if ($diff_in_minutes > 1200) {
         return back()->with('error','The award time and current time difference should not be more than 20 hours');
       }
       //  dd($diff_in_minutes);

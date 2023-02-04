@@ -605,7 +605,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
 <?php
 $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$contract->deal->award_time)->format('Y-m-d H:i:s');
 
-$newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1230)->format('Y-m-d H:i:s');
+$newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1200)->format('Y-m-d H:i:s');
 //dd($newDateTime);
  ?>
 

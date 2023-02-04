@@ -40,7 +40,7 @@
 
        <link rel="stylesheet" href="{{asset('sticky/css/style.css')}}" type="text/css" />
        <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
-       
+
 
     <!-- designation hierarchy && department hierarchy -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
@@ -267,7 +267,7 @@
               $diff_in_minutes = $from->diffInMinutes($to);
             }
              ?>
-             @if($deal_id != null && $diff_in_minutes < 1230)
+             @if($deal_id != null && $diff_in_minutes < 1200)
             <div id="mydiv">
         <div class="wrapper-timezone2" id="mydivheader">
             <p>New Deal Won: {{$deal_id->deal_id}}</p>
@@ -742,7 +742,7 @@
        <?php
        $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$deal_id->award_time)->format('Y-m-d H:i:s');
 
-       $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1230)->format('Y-m-d H:i:s');
+       $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1200)->format('Y-m-d H:i:s');
        //dd($newDateTime);
         ?>
 
@@ -784,7 +784,7 @@
                         endEvent(subMessage, config.newSubMessage, clock);
                       //to get current url
 
-                      if (left_time < 1230) {
+                      if (left_time < 1200) {
 
                              var deal_id = $('#deal_id').val();
 
