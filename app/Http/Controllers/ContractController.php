@@ -766,8 +766,10 @@ class ContractController extends AccountBaseController
                         $lead_developer->save();
                     }
 
-                    $pm_count = PMAssign::select('project_count')->min('project_count');
-                    $pm_user = PMAssign::where('project_count', $pm_count)->first();
+                    // $pm_count = PMAssign::select('project_count')->min('project_count');
+                    // $pm_user = PMAssign::where('project_count', $pm_count)->first();
+                    $pm_count = PMAssign::select('monthly_project_count')->min('monthly_project_count');
+                    $pm_user = PMAssign::where('monthly_project_count', $pm_count)->first();
                     if ($pm_count < 2) {
                         if ($pm_user != null) {
                             $pmassign = new PMProject();
@@ -791,24 +793,37 @@ class ContractController extends AccountBaseController
                             $pm_project_update = PMAssign::find($pm_project_find->id);
                             $pm_project_update->project_count = $pm_project_update->project_count + 1;
                             $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                            $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                            $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
                             $pm_project_update->save();
                         }
                     } else {
                         $items = PMAssign::all();
-                        $pm_amount = $items->min('amount');
-                        $pm_count_id = $items->min('project_count');
+                        // $pm_amount = $items->min('amount');
+                        // $pm_count_id = $items->min('project_count');
+                        //
+                        // $pm_find_id = PMAssign::where('amount', $pm_amount)->first();
+                        // $pm_min_pro = PMAssign::where('project_count', $pm_count_id)->first();
+                        // $find_rest = PMAssign::where('project_count', $pm_count_id)->get();
+                        //
+                        // $fin_min = $find_rest->min('amount');
+                        //
+                        // $final_id = PMAssign::where('amount', $fin_min)->first();
 
-                        $pm_find_id = PMAssign::where('amount', $pm_amount)->first();
-                        $pm_min_pro = PMAssign::where('project_count', $pm_count_id)->first();
-                        $find_rest = PMAssign::where('project_count', $pm_count_id)->get();
+                        $pm_amount = $items->min('monthly_project_amount');
+                        $pm_count_id = $items->min('monthly_project_count');
 
-                        $fin_min = $find_rest->min('amount');
+                        $pm_find_id = PMAssign::where('monthly_project_amount', $pm_amount)->first();
+                        $pm_min_pro = PMAssign::where('monthly_project_count', $pm_count_id)->first();
+                        $find_rest = PMAssign::where('monthly_project_count', $pm_count_id)->get();
 
-                        $final_id = PMAssign::where('amount', $fin_min)->first();
+                        $fin_min = $find_rest->min('monthly_project_amount');
+
+                        $final_id = PMAssign::where('monthly_project_amount', $fin_min)->first();
 
                         //  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
 
-                        if ($pm_find_id->project_count + 1 <= $pm_count_id * 1.5) {
+                        if ($pm_find_id->monthly_project_count + 1 <= $pm_count_id * 1.5) {
                             $pmassign = new PMProject();
                             $pmassign->project_id = $project->id;
                             $pmassign->status = 'pending';
@@ -828,6 +843,8 @@ class ContractController extends AccountBaseController
                             $pm_project_update = PMAssign::find($pm_project_find->id);
                             $pm_project_update->project_count = $pm_project_update->project_count + 1;
                             $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                            $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                            $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
                             $pm_project_update->save();
                         } else {
                             $pmassign = new PMProject();
@@ -849,6 +866,8 @@ class ContractController extends AccountBaseController
                             $pm_project_update = PMAssign::find($pm_project_find->id);
                             $pm_project_update->project_count = $pm_project_update->project_count + 1;
                             $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                            $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                            $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
                             $pm_project_update->save();
                         }
                     }
@@ -963,8 +982,10 @@ class ContractController extends AccountBaseController
                       $lead_developer->save();
                   }
 
-                  $pm_count = PMAssign::select('project_count')->min('project_count');
-                  $pm_user = PMAssign::where('project_count', $pm_count)->first();
+                  // $pm_count = PMAssign::select('project_count')->min('project_count');
+                  // $pm_user = PMAssign::where('project_count', $pm_count)->first();
+                  $pm_count = PMAssign::select('monthly_project_count')->min('monthly_project_count');
+                  $pm_user = PMAssign::where('monthly_project_count', $pm_count)->first();
                   if ($pm_count < 2) {
                       if ($pm_user != null) {
                           $pmassign = new PMProject();
@@ -988,24 +1009,37 @@ class ContractController extends AccountBaseController
                           $pm_project_update = PMAssign::find($pm_project_find->id);
                           $pm_project_update->project_count = $pm_project_update->project_count + 1;
                           $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                          $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                          $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
                           $pm_project_update->save();
                       }
                   } else {
                       $items = PMAssign::all();
-                      $pm_amount = $items->min('amount');
-                      $pm_count_id = $items->min('project_count');
+                      // $pm_amount = $items->min('amount');
+                      // $pm_count_id = $items->min('project_count');
+                      //
+                      // $pm_find_id = PMAssign::where('amount', $pm_amount)->first();
+                      // $pm_min_pro = PMAssign::where('project_count', $pm_count_id)->first();
+                      // $find_rest = PMAssign::where('project_count', $pm_count_id)->get();
+                      //
+                      // $fin_min = $find_rest->min('amount');
+                      //
+                      // $final_id = PMAssign::where('amount', $fin_min)->first();
 
-                      $pm_find_id = PMAssign::where('amount', $pm_amount)->first();
-                      $pm_min_pro = PMAssign::where('project_count', $pm_count_id)->first();
-                      $find_rest = PMAssign::where('project_count', $pm_count_id)->get();
+                      $pm_amount = $items->min('monthly_project_amount');
+                      $pm_count_id = $items->min('monthly_project_count');
 
-                      $fin_min = $find_rest->min('amount');
+                      $pm_find_id = PMAssign::where('monthly_project_amount', $pm_amount)->first();
+                      $pm_min_pro = PMAssign::where('monthly_project_count', $pm_count_id)->first();
+                      $find_rest = PMAssign::where('monthly_project_count', $pm_count_id)->get();
 
-                      $final_id = PMAssign::where('amount', $fin_min)->first();
+                      $fin_min = $find_rest->min('monthly_project_amount');
+
+                      $final_id = PMAssign::where('monthly_project_amount', $fin_min)->first();
 
                       //  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
 
-                      if ($pm_find_id->project_count + 1 <= $pm_count_id * 1.5) {
+                      if ($pm_find_id->monthly_project_count + 1 <= $pm_count_id * 1.5) {
                           $pmassign = new PMProject();
                           $pmassign->project_id = $project->id;
                           $pmassign->status = 'pending';
@@ -1025,6 +1059,8 @@ class ContractController extends AccountBaseController
                           $pm_project_update = PMAssign::find($pm_project_find->id);
                           $pm_project_update->project_count = $pm_project_update->project_count + 1;
                           $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                          $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                          $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
                           $pm_project_update->save();
                       } else {
                           $pmassign = new PMProject();
@@ -1046,6 +1082,8 @@ class ContractController extends AccountBaseController
                           $pm_project_update = PMAssign::find($pm_project_find->id);
                           $pm_project_update->project_count = $pm_project_update->project_count + 1;
                           $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                          $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                          $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
                           $pm_project_update->save();
                       }
                   }

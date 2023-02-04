@@ -54,7 +54,7 @@ class ReportIssueDataTable extends BaseDataTable
             ->addColumn('created_by', function($row) {
 
                 $pm= User::where('id',$row->user_id)->first();
-                return '<a href="/accounts/employees/'.$row->user_id.'" class="text-darkest-grey">'.ucfirst($pm->name).'</a>';
+                return '<a href="/account/employees/'.$row->user_id.'" class="text-darkest-grey">'.ucfirst($pm->name).'</a>';
 
 
 
@@ -195,7 +195,7 @@ class ReportIssueDataTable extends BaseDataTable
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => true],
 
             // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
-          
+
 
 
             __('app.subject') => ['data' => 'subject', 'name' => 'subject', 'exportable' => false, 'title' => __('Subject')],

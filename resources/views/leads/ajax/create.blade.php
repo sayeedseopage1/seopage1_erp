@@ -63,7 +63,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                                     ?>
                                    <input type="hidden" name="" id="previousDate" value="{{$previous_date}}">
                                    <div class="col-md-4 col-lg-4 mt-3" id="deadlineBox">
-                                     <label for="">Deadline</label>
+                                     <label for="">Deadline <span style="color:red;">*</span></label>
                                      <input type="date" min="{{$previous_date}}" class="form-control height-35 f-14" name="deadline" id="deadline" value="">
 
                                    </div>

@@ -250,6 +250,7 @@ class PaymentController extends AccountBaseController
           $pm= PMAssign::where('pm_id',$pmassign->pm_id)->first();
           $pmassign_update= PMAssign::find($pm->id);
           $pmassign_update->release_amount= $pmassign_update->release_amount + $milestone->cost;
+          $pmassign_update->monthly_release_amount= $pmassign_update->monthly_release_amount + $milestone->cost;
           $pmassign_update->release_date= Carbon::now()->format('Y-m-d');
           $pmassign_update->save();
         }
