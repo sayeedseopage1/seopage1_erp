@@ -42,7 +42,7 @@ class MonthlyProject extends Command
             $today_date= Carbon::today();
             //$current_date = Carbon::now()->startOfMonth();
             $firstDay =  Carbon::now()->startOfMonth();
-            $month_end= Carbon::now()->startOfMonth()->addDays(3);
+            $month_end= Carbon::now()->startOfMonth()->addDays(20);
           //  dd($today_date,$firstDay,$month_end);
             if ($today_date->equalTo($month_end)) {
           $pm_update= PmAssign::find($manager->id);
