@@ -36,7 +36,7 @@ class ReportIssueDataTable extends BaseDataTable
             ->addColumn('check', function ($row) {
                 return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
-          
+
 
             ->addColumn('subject', function($row) {
                 $title= '';
@@ -85,6 +85,7 @@ class ReportIssueDataTable extends BaseDataTable
 
 
             })
+
 
 
 
@@ -191,8 +192,10 @@ class ReportIssueDataTable extends BaseDataTable
                 'searchable' => false,
                 'visible' => !in_array('client', user_roles())
             ],
-            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
-            __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => true],
+
+            // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+          
 
 
             __('app.subject') => ['data' => 'subject', 'name' => 'subject', 'exportable' => false, 'title' => __('Subject')],

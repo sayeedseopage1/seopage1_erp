@@ -552,10 +552,10 @@ class LeadsDataTable extends BaseDataTable
                 'orderable' => false,
                 'searchable' => false
             ],
-            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
-            __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => true],
+            // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
             __('app.name') => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('app.name')],
-            
+
                 __('app.project_link') => ['data' => 'project_link', 'name' => 'project_link', 'title' => __('Project Link')],
 
 

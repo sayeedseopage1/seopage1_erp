@@ -449,8 +449,8 @@ class DealsDataTable extends BaseDataTable
                 'searchable' => false,
                 'visible' => !in_array('client', user_roles())
             ],
-            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
-            __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => true],
+            // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
 
             __('app.deal_id')  => ['data' => 'deal_id', 'name' => 'deal_id',  'title' => __('Short Code')],
             __('app.project_name') => ['data' => 'project_name', 'name' => 'project_name', 'exportable' => false, 'title' => __('Project Name')],

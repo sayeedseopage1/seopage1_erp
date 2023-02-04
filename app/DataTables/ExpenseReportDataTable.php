@@ -175,7 +175,7 @@ class ExpenseReportDataTable extends BaseDataTable
     protected function getColumns()
     {
         return [
-            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
+            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => true],
             __('modules.expenses.itemName')  => ['data' => 'item_name', 'name' => 'item_name', 'exportable' => false, 'title' => __('modules.expenses.itemName')],
             __('app.menu.itemName')  => ['data' => 'export_item_name', 'name' => 'export_item_name', 'visible' => false, 'title' => __('modules.expenses.itemName')],
             __('app.price') => ['data' => 'price', 'name' => 'price', 'title' => __('app.price')],

@@ -291,7 +291,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
 
                 </div>
                 <div class="col-lg-4 col-md-6">
-                      <button type="submit" class="btn btn-primary">Create Lead</button>
+                      <button type="submit" class="btn btn-primary submit-button"><span class="btn-txt">Create Lead<span></button>
                 </div>
                 <br>
                 <br>
@@ -459,3 +459,13 @@ $addLeadNotePermission = user()->permission('add_lead_note');
         });
 
     </script>
+    <script>
+$(document).ready(function() {
+  $("#store-lead").submit(function() {
+    $(".result").text("");
+    $(".loading-icon").removeClass("hide");
+    $(".submit-button").attr("disabled", true);
+    $(".btn-txt").text("Processing ...");
+  });
+});
+</script>

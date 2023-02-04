@@ -272,8 +272,8 @@ class PaymentsDataTable extends BaseDataTable
                 'searchable' => false,
                 'visible' => !in_array('client', user_roles())
             ],
-            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
-            __('app.id') => ['data' => 'id', 'name' => 'payments.id', 'title' => __('app.id')],
+            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => true],
+            // __('app.id') => ['data' => 'id', 'name' => 'payments.id', 'title' => __('app.id')],
             __('modules.taskCode') => ['data' => 'short_code', 'name' => 'project_short_code', 'title' => __('modules.taskCode')],
             __('app.project')  => ['data' => 'project_id', 'name' => 'project_id', 'title' => __('app.project')],
             __('app.invoice') . '#' => ['data' => 'invoice_number', 'name' => 'invoices.invoice_number', 'title' => __('app.invoice') . '#'],
