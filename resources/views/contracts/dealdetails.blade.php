@@ -225,7 +225,7 @@
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Client Name</label>
-                              <input type="text" name="client_name" value="{{$deal->client_name}}" class="form-control @error('project_name') is-invalid @enderror" id="exampleFormControlInput1" placeholder="name@example.com" >
+                              <input type="text" name="client_name" value="{{$deal->client_name}}" class="form-control @error('client_name') is-invalid @enderror" id="exampleFormControlInput1" placeholder="name@example.com" >
                               </div>
                               @error('client_name')
                               <div class="mt-3">

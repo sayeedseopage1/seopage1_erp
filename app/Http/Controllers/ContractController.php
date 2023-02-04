@@ -904,6 +904,32 @@ class ContractController extends AccountBaseController
     }
     public function updatedealDetails(Request $request)
     {
+      $validated = $request->validate([
+          'project_name' => 'required',
+          'client_name' => 'required',
+
+          'description2' => 'required',
+          'description3' => 'required',
+          'description4' => 'required',
+          'description5' => 'required',
+          'description6' => 'required',
+          'description7' => 'required',
+          'description8' => 'required',
+          'description9' => 'required',
+
+
+          'message_link' => 'required',
+          'profile_link'=>'required',
+          'deadline'=>'required',
+
+      ]);
+      //dd("hello");
+      $project_milestone= Project::where('deal_id',$request->id)->first();
+      $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
+      if ($milestone == null) {
+        //Toastr::error('Please add a Milestone', 'Failed', ["positionClass" => "toast-top-right"]);
+       return back()->with('error','Please add a Milestone');
+      }
       DB::beginTransaction();
 
               try {

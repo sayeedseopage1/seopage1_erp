@@ -105,6 +105,7 @@
                               </div>
 
 
+
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
@@ -117,8 +118,14 @@
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Project Name <span style="color:red;">*</span></label>
-                              <input type="text" name="project_name" value="{{$deal->project_name}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required>
+                              <input type="text" name="project_name" value="{{$deal->project_name}}" class="form-control @error('project_name') is-invalid @enderror" id="exampleFormControlInput1" placeholder="name@example.com" required>
                               </div>
+                              @error('project_name')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
+
 
                             </div>
                             <div class="col-md-3">
@@ -139,6 +146,14 @@
                           <div id="success_message">
 
                           </div>
+                          @if(Session::has('error'))
+                          <div class="alert alert-danger" role="alert">
+
+                              <div class="alert-body">
+                                  {{Session::get('error')}}
+                              </div>
+                          </div>
+                          @endif
                           <div class="row">
                             <div class="col-md-3">
                               <div class="form-group">
@@ -191,8 +206,13 @@
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Client Name</label>
-                              <input type="text" name="client_name" value="{{$deal->client_name}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" required>
+                              <input type="text" name="client_name" value="{{$deal->client_name}}" class="form-control @error('client_name') is-invalid @enderror" id="exampleFormControlInput1" placeholder="name@example.com" required>
                               </div>
+                              @error('client_name')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
@@ -229,8 +249,13 @@
                             <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Profile Link <span style="color:red;">*</span></label>
-                              <input type="text" value="{{$deal->profile_link}}" name="profile_link" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
+                              <input type="text" value="{{$deal->profile_link}}" name="profile_link" class="form-control @error('profile_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here" required>
                               </div>
+                              @error('profile_link')
+                              <div class="mt-3">
+                                <div class="alert alert-danger">{{ $message }}</div>
+                                </div>
+                              @enderror
                             </div>
                             <?php
                             $mystring = $deal->message_link;
@@ -258,9 +283,14 @@
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.) <span style="color:red;">*</span></label>
 
-                                <textarea name="description2" value="{{$deal->description2}}" class="form-control" id="description2" rows="3" required>{{$deal->description2}}</textarea>
+                                <textarea name="description2" value="{{$deal->description2}}" class="form-control @error('description2') is-invalid @enderror" id="description2" rows="3" required>{{$deal->description2}}</textarea>
                               </div>
                             </div>
+                            @error('description2')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -271,9 +301,14 @@
                                   The look and feel should be better than the references.)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description3}}" name="description3" class="form-control" id="description3" rows="3" required>{{$deal->description3}}</textarea>
+                                <textarea value="{{$deal->description3}}" name="description3" class="form-control @error('description3') is-invalid @enderror" id="description3" rows="3" required>{{$deal->description3}}</textarea>
                               </div>
                             </div>
+                            @error('description3')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -285,9 +320,14 @@
                                                 However, none of these can be copied)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description4}}" name="description4" class="form-control" id="description4" rows="3" required>{{$deal->description4}}</textarea>
+                                <textarea value="{{$deal->description4}}" name="description4" class="form-control @error('description4') is-invalid @enderror" id="description4" rows="3" required>{{$deal->description4}}</textarea>
                               </div>
                             </div>
+                            @error('description4')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -298,9 +338,14 @@
                                   The client is very concerned if the booking functionality will work the way he wants.)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description5}}" name="description5" class="form-control" id="description5" rows="3" required>{{$deal->description5}}</textarea>
+                                <textarea value="{{$deal->description5}}" name="description5" class="form-control @error('description5') is-invalid @enderror" id="description5" rows="3" required>{{$deal->description5}}</textarea>
                               </div>
                             </div>
+                            @error('description5')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -309,9 +354,14 @@
                                 <label for="exampleFormControlTextarea1">Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)
 
                                    <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description6}}" name="description6" class="form-control" id="description6" rows="3" required>{{$deal->description6}}</textarea>
+                                <textarea value="{{$deal->description6}}" name="description6" class="form-control  @error('description6') is-invalid @enderror" id="description6" rows="3" required>{{$deal->description6}}</textarea>
                               </div>
                             </div>
+                            @error('description6')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -321,9 +371,14 @@
 
 
                                    <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description7}}" name="description7" class="form-control" id="description7" rows="3" required>{{$deal->description7}}</textarea>
+                                <textarea value="{{$deal->description7}}" name="description7" class="form-control  @error('description7') is-invalid @enderror" id="description7" rows="3" required>{{$deal->description7}}</textarea>
                               </div>
                             </div>
+                            @error('description7')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -333,9 +388,14 @@
 
 
                                    <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description8}}" name="description8" class="form-control" id="description8" rows="3" required>{{$deal->description8}}</textarea>
+                                <textarea value="{{$deal->description8}}" name="description8" class="form-control @error('description8') is-invalid @enderror" id="description8" rows="3" required>{{$deal->description8}}</textarea>
                               </div>
                             </div>
+                            @error('description8')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
                           <div class="row">
@@ -346,9 +406,14 @@
 
 
                                    <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description9}}" name="description9" class="form-control" id="description9" rows="3" required>{{$deal->description9}}</textarea>
+                                <textarea value="{{$deal->description9}}" name="description9" class="form-control @error('description9') is-invalid @enderror" id="description9" rows="3" required>{{$deal->description9}}</textarea>
                               </div>
                             </div>
+                            @error('description9')
+                            <div class="mt-3">
+                              <div class="alert alert-danger">{{ $message }}</div>
+                              </div>
+                            @enderror
 
                           </div>
 
