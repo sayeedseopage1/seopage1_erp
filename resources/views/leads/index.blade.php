@@ -29,7 +29,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
                     </x-forms.link-primary>
                 @endif
 
-                @if ($addLeadCustomFormPermission == 'all')
+          {{--      @if ($addLeadCustomFormPermission == 'all')
                     <x-forms.button-secondary icon="pencil-alt" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" id="add-lead">
                         @lang('modules.lead.leadForm')
                     </x-forms.button-secondary>
@@ -39,7 +39,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
                     <x-forms.link-secondary :link="route('leads.import')" class="mr-3 openRightModal float-left mb-2 mb-lg-0 mb-md-0" icon="file-upload">
                         @lang('app.importExcel')
                     </x-forms.link-secondary>
-                @endif
+                @endif --}}
             </div>
 
             <x-datatable.actions>
@@ -63,8 +63,9 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
             <div class="btn-group mt-2 mt-lg-0 mt-md-0 ml-0 ml-lg-3 ml-md-3" role="group">
                 <a href="{{ route('leads.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
                     data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
-
+                  {{--
                 <a href="{{ route('leadboards.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip" data-original-title="@lang('modules.lead.kanbanboard')"><i class="side-icon bi bi-kanban"></i></a>
+                --}}
             </div>
         </div>
 
