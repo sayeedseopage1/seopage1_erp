@@ -179,7 +179,7 @@
             <div class="board">
 
                 <ul class="board_list">
-                    <li class="contact" style="border-left: 19px solid #D21010;"> Contact Made</li>
+                    <li class="contact" style="border-left: 19px solid #FFFF00;"> Contact Made</li>
                     <?php
                     $contact_made_count= App\Models\DealStage::where('deal_stage',0)->count();
                     $contact_made= App\Models\DealStage::where('deal_stage',0)->get();
@@ -257,7 +257,7 @@
 
             <div class="board">
                 <ul class="board_list">
-                    <li class="qualify">Qualified</li>
+                    <li class="qualify" style="border-left: 19px solid #10e0ef;">Qualified</li>
                     <?php
                     $qualified_count= App\Models\DealStage::where('deal_stage',1)->count();
                     $qualified= App\Models\DealStage::where('deal_stage',1)->get();
@@ -331,7 +331,7 @@
 
             <div class="board">
                 <ul class="board_list">
-                    <li class="requirement">Requirements Defined</li>
+                    <li class="requirement" style="border-left: 19px solid #0000FF;">Requirements Defined</li>
                     <?php
                     $req_count= App\Models\DealStage::where('deal_stage',2)->count();
                     $req= App\Models\DealStage::where('deal_stage',2)->get();
@@ -406,7 +406,7 @@
 
             <div class="board">
                 <ul class="board_list">
-                    <li class="proposal">Proposal Made</li>
+                    <li class="proposal" style="border-left: 19px solid #FFA500;">Proposal Made</li>
                     <?php
                     $proposal_count= App\Models\DealStage::where('deal_stage',3)->count();
                     $proposal= App\Models\DealStage::where('deal_stage',3)->get();
@@ -481,7 +481,7 @@
 
             <div class="board">
                 <ul class="board_list">
-                    <li class="negotiation">Negotiation Started</li>
+                    <li class="negotiation" style="border-left: 19px solid #A020F0;">Negotiation Started</li>
                     <?php
                     $negotiation_count= App\Models\DealStage::where('deal_stage',4)->where('won_lost',null)->count();
                     $negotiation= App\Models\DealStage::where('deal_stage',4)->where('won_lost',null)->get();
@@ -553,7 +553,7 @@
 
             <div class="board">
                 <ul class="board_list">
-                    <li class="won">Won</li>
+                    <li class="won" style="border-left: 19px solid #00aa00;">Won</li>
                     <?php
                     $won_count= App\Models\Deal::count();
                     $won= App\Models\Deal::get();
@@ -634,7 +634,7 @@
 
             <div class="board">
                 <ul class="board_list">
-                    <li class="lost">Lost</li>
+                    <li class="lost" style="border-left: 19px solid #FF0000;">Lost</li>
                     <?php
                     $lost_count= App\Models\DealStage::where('won_lost','No')->count();
                     $lost=  App\Models\DealStage::where('won_lost','No')->get();

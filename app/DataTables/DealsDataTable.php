@@ -218,23 +218,23 @@ class DealsDataTable extends BaseDataTable
                 if ($row->won_lost != null) {
                   if ($row->won_lost== 'Yes') {
 
-                    return '<badge style="background-color:#006400 !important;" class="badge badge-success">Won</badge>';
+                    return '<badge style="background-color:#00aa00 !important;" class="badge badge-success">Won</badge>';
                   }else {
-                      return '<badge style="background-color:#bf0603 !important;" class="badge badge-danger">Lost</badge>';
+                      return '<badge style="background-color:#FF0000 !important;" class="badge badge-danger">Lost</badge>';
                   }
                 }else {
                   if($row->deal_stage == 0)
                   {
-                      return '<badge class="badge badge-info">Contact Made</badge>';
+                      return '<badge style="background-color:#FFFF00 !important;" class="badge badge-info text-dark">Contact Made</badge>';
                   }elseif ($row->deal_stage == 1) {
-                  return '<badge style="background-color:#006400 !important; text-color:white !important;" class="badge badge-warning text-white">Qualified</badge>';
+                  return '<badge style="background-color:#10e0ef !important; text-color:white !important;" class="badge badge-warning text-white">Qualified</badge>';
                 }elseif($row->deal_stage == 2)
                 {
-                    return '<badge style="background-color:#ff5714 !important;" class="badge badge-info">Requirements Defined</badge>';
+                    return '<badge style="background-color:#0000FF !important;" class="badge badge-info">Requirements Defined</badge>';
                 }elseif ($row->deal_stage == 3) {
-                    return '<badge style="background-color:#e4ff1a !important;" class="badge badge-primary text-dark">Proposal Made</badge>';
+                    return '<badge style="background-color:#FFA500 !important;" class="badge badge-primary text-dark">Proposal Made</badge>';
                 }else {
-                    return '<badge style="background-color:#5603ad !important;" class="badge badge-success">Negotiation Started</badge>';
+                    return '<badge style="background-color:#A020F0 !important;" class="badge badge-success">Negotiation Started</badge>';
                 }
 
                 }
