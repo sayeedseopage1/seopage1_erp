@@ -238,3 +238,315 @@ document.getElementById('mydata').value= id;
 }
 
 </script>
+
+@push('scripts')
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+
+
+
+    <script>
+        $('#leads-table').on('preXhr.dt', function(e, settings, data) {
+
+            var dateRangePicker = $('#datatableRange').data('daterangepicker');
+            var startDate = $('#datatableRange').val();
+
+            if (startDate == '') {
+                startDate = null;
+                endDate = null;
+            } else {
+                startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+                endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
+            }
+
+            var searchText = $('#search-text-field').val();
+            var type = $('#type').val();
+            var followUp = $('#followUp').val();
+            var agent = $('#filter_agent_id').val();
+            var category_id = $('#filter_category_id').val();
+            var source_id = $('#filter_source_id').val();
+            var source_id = $('#filter_source_id').val();
+            var date_filter_on = $('#date_filter_on').val();
+
+            data['startDate'] = startDate;
+            data['endDate'] = endDate;
+            data['searchText'] = searchText;
+            data['type'] = type;
+            data['followUp'] = followUp;
+            data['agent'] = agent;
+            data['category_id'] = category_id;
+            data['source_id'] = source_id;
+            data['date_filter_on'] = date_filter_on;
+        });
+
+        const showTable = () => {
+            window.LaravelDataTables["leads-table"].draw();
+        }
+
+      
+
+        $('#quick-action-apply').click(function() {
+            const actionValue = $('#quick-action-type').val();
+            if (actionValue == 'delete') {
+                Swal.fire({
+                    title: "@lang('messages.sweetAlertTitle')",
+                    text: "@lang('messages.recoverRecord')",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    focusConfirm: false,
+                    confirmButtonText: "@lang('messages.confirmDelete')",
+                    cancelButtonText: "@lang('app.cancel')",
+                    customClass: {
+                        confirmButton: 'btn btn-primary mr-3',
+                        cancelButton: 'btn btn-secondary'
+                    },
+                    showClass: {
+                        popup: 'swal2-noanimation',
+                        backdrop: 'swal2-noanimation'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        applyQuickAction();
+                    }
+                });
+
+            } else {
+                applyQuickAction();
+            }
+        });
+
+        $('body').on('click', '.delete-table-row', function() {
+            var id = $(this).data('id');
+
+            Swal.fire({
+                title: "@lang('messages.sweetAlertTitle')",
+                text: "@lang('messages.recoverRecord')",
+                icon: 'warning',
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText: "@lang('messages.confirmDelete')",
+                cancelButtonText: "@lang('app.cancel')",
+                customClass: {
+                    confirmButton: 'btn btn-primary mr-3',
+                    cancelButton: 'btn btn-secondary'
+                },
+                showClass: {
+                    popup: 'swal2-noanimation',
+                    backdrop: 'swal2-noanimation'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+              //console.log('id');
+                if (result.isConfirmed) {
+                    var url = "{{ route('leads.destroy', ':id') }}";
+                    url = url.replace(':id', id);
+
+                    var token = "{{ csrf_token() }}";
+
+                    $.easyAjax({
+                        type: 'POST',
+                        url: url,
+                        data: {
+                            '_token': token,
+                            '_method': 'DELETE'
+                        },
+                        success: function(response) {
+                            if (response.status == "success") {
+                                showTable();
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        const applyQuickAction = () => {
+            var rowdIds = $("#leads-table input:checkbox:checked").map(function() {
+                return $(this).val();
+                //console.log= ('rowIds');
+            }).get();
+
+
+            var url = "{{ route('leads.apply_quick_action') }}?row_ids=" + rowdIds;
+
+            $.easyAjax({
+                url: url,
+                container: '#quick-action-form',
+                type: "POST",
+                disableButton: true,
+                buttonSelector: "#quick-action-apply",
+                data: $('#quick-action-form').serialize(),
+                success: function(response) {
+                    if (response.status == 'success') {
+                        showTable();
+                        resetActionButtons();
+                        deSelectAll();
+                    }
+                }
+            })
+        };
+
+        $('#leads-table').on('change', '.change-status', function() {
+            var url = "{{ route('leads.change_status') }}";
+            var token = "{{ csrf_token() }}";
+            var id = $(this).data('task-id');
+            var status = $(this).val();
+
+            if (id != "" && status != "") {
+                $.easyAjax({
+                    url: url,
+                    type: "POST",
+                    data: {
+                        '_token': token,
+                        taskId: id,
+                        status: status,
+                        sortBy: 'id'
+                    },
+                    success: function(data) {
+                        showTable();
+                        resetActionButtons();
+                        deSelectAll();
+                    }
+                });
+
+            }
+        });
+
+        function changeStatus(leadID, statusID) {
+
+            var url = "{{ route('leads.change_status') }}";
+            var token = "{{ csrf_token() }}";
+
+            $.easyAjax({
+                type: 'POST',
+                url: url,
+                data: {
+                    '_token': token,
+                    'leadID': leadID,
+                    'statusID': statusID
+                },
+                success: function(response) {
+                    if (response.status == "success") {
+                        $.easyBlockUI('#leads-table');
+                        $.easyUnblockUI('#leads-table');
+                        showTable();
+                        resetActionButtons();
+                        deSelectAll();
+                    }
+                }
+            });
+        }
+
+        function followUp(leadID) {
+            var url = '{{ route('leads.follow_up', ':id') }}';
+            url = url.replace(':id', leadID);
+
+            $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_LG, url);
+        }
+
+        $('body').on('click', '#add-lead', function() {
+            window.location.href = "{{ route('lead-form.index') }}";
+        });
+
+        $( document ).ready(function() {
+            @if (!is_null(request('start')) && !is_null(request('end')))
+            $('#datatableRange').val('{{ request('start') }}' +
+            ' @lang("app.to") ' + '{{ request('end') }}');
+            $('#datatableRange').data('daterangepicker').setStartDate("{{ request('start') }}");
+            $('#datatableRange').data('daterangepicker').setEndDate("{{ request('end') }}");
+                showTable();
+            @endif
+        });
+
+    </script>
+
+    <script>
+  function dataTableRowCheck2(id)
+  {
+     var id = id;
+
+  document.getElementById('mydata').value= id;
+  }
+  </script>
+
+  <script>
+
+
+
+
+          $(document).ready(function() {
+            quillImageLoad('#comments');
+
+
+
+              $("#lead-convert").validate({
+
+
+                  rules: {
+                      client_username: {
+                          required: true,
+
+                      },
+
+                      profile_link: {
+                        url:true,
+                        required: true,
+
+                      },
+                      message_link: {
+                        url:true,
+                        required: true,
+
+                      },
+
+                      comments: {
+                          required: true,
+                          minlength: 10
+                      },
+
+
+                  },
+                  messages: {
+                      client_username: {
+                          required: "Client username is required"
+
+                      },
+
+                      profile_link: {
+                          required: "Profile link is required",
+                          url: "Link must be a valid url"
+
+                      },
+                      message_link: {
+                          required: "Message thread link is required",
+                          url: "Link must be a valid url"
+
+                      },
+                    comments: {
+                          required: "Comment field is required",
+                         minlength: "Comments must be minimum 10 characters"
+                      },
+
+
+                  }
+              });
+
+          });
+
+
+          $('#lead-convert-button').click(function() {
+
+              var note3 = document.getElementById('comments').children[0].innerHTML;
+                document.getElementById('comments-text').value = note3;
+
+
+         } );
+
+
+
+
+
+      </script>
+
+@endpush
