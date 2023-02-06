@@ -218,12 +218,25 @@ class DealsDataTable extends BaseDataTable
                 if ($row->won_lost != null) {
                   if ($row->won_lost== 'Yes') {
 
-                    return '<badge class="badge badge-success">Won</badge>';
+                    return '<badge style="background-color:#006400 !important;" class="badge badge-success">Won</badge>';
                   }else {
-                      return '<badge class="badge badge-danger">Lost</badge>';
+                      return '<badge style="background-color:#bf0603 !important;" class="badge badge-danger">Lost</badge>';
                   }
                 }else {
-                  return '--';
+                  if($row->deal_stage == 0)
+                  {
+                      return '<badge style="background-color:#D21010 !important;" class="badge badge-danger">Contact Made</badge>';
+                  }elseif ($row->deal_stage == 1) {
+                  return '<badge style="background-color:#006400 !important; text-color:white !important;" class="badge badge-warning text-white">Qualified</badge>';
+                }elseif($row->deal_stage == 2)
+                {
+                    return '<badge style="background-color:#ff5714 !important;" class="badge badge-info">Requirements Defined</badge>';
+                }elseif ($row->deal_stage == 3) {
+                    return '<badge style="background-color:#e4ff1a !important;" class="badge badge-primary text-dark">Proposal Made</badge>';
+                }else {
+                    return '<badge style="background-color:#5603ad !important;" class="badge badge-success">Negotiation Started</badge>';
+                }
+
                 }
             })
             ->addColumn('submission_status', function($row) {
