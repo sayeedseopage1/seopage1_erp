@@ -129,7 +129,7 @@ class DealsDataTable extends BaseDataTable
                   return '<div class="media align-items-center">
 
                            <div class="media-body">
-                          <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$project->project_name.'" href="' . route('projects.show', [$project->id]) . '">' . ucfirst(Str::limit($project->project_name,15)) . '</a></h5>
+                          <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$project->project_name.'" href="' . route('deals.show', [$row->id]) . '">' . ucfirst($project->project_name) . '</a></h5>
 
                            </div>
                         </div>';
@@ -137,7 +137,7 @@ class DealsDataTable extends BaseDataTable
                   return '<div class="media align-items-center">
 
                            <div class="media-body">
-                          <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$row->project_name.'">' . ucfirst(Str::limit($row->project_name,15)) . '</a></h5>
+                          <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$row->project_name.'" href="' . route('deals.show', [$row->id]) . '">' . ucfirst($row->project_name) . '</a></h5>
 
                            </div>
                         </div>';
@@ -146,7 +146,7 @@ class DealsDataTable extends BaseDataTable
                 return '<div class="media align-items-center">
 
                          <div class="media-body">
-                        <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$row->project_name.'" >' . ucfirst(Str::limit($row->project_name,15)) . '</a></h5>
+                        <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$row->project_name.'" href="' . route('deals.show', [$row->id]) . '">' . ucfirst($row->project_name) . '</a></h5>
 
                          </div>
                       </div>';
@@ -471,21 +471,21 @@ class DealsDataTable extends BaseDataTable
             // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
 
 
-             __('app.project_name') => ['data' => 'project_name', 'name' => 'project_name', 'exportable' => false, 'title' => __('Project Name')],
-            __('app.project_name').' '.__('app.project_name') => ['data' => 'project_name', 'name' => 'project_name', 'visible' => false, 'title' => __('Project Name')],
+             __('app.project_name') => ['data' => 'project_name', 'name' => 'project_name', 'exportable' => false, 'title' => __('Deal Name')],
+            __('app.project_name').' '.__('app.project_name') => ['data' => 'project_name', 'name' => 'project_name', 'visible' => false, 'title' => __('Deal Name')],
               __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
 
           //  __('app.customers')  => ['data' => 'client_name', 'name' => 'client.name', 'visible' => false, 'title' => __('app.customers')],
             __('app.amount') => ['data' => 'amount', 'name' => 'amount', 'title' => __('Project Budget (USD)')],
             __('app.actual_amount') => ['data' => 'actual_amount', 'name' => 'actual_amount', 'title' => __('Project Budget (Original Currency)')],
-            __('app.project_manager')  => ['data' => 'project_manager', 'name' => 'project_manager', 'title' => __('Project Manager')],
+            // __('app.project_manager')  => ['data' => 'project_manager', 'name' => 'project_manager', 'title' => __('Project Manager')],
             // __('app.startDate') => ['data' => 'start_date', 'name' => 'start_date', 'title' => __('app.startDate')],
-              __('app.submission_status_manager')  => ['data' => 'submission_status', 'name' => 'submission_status', 'title' => __('Client Form')],
+              // __('app.submission_status_manager')  => ['data' => 'submission_status', 'name' => 'submission_status', 'title' => __('Client Form')],
             __('app.created_at') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('Creation Date')],
              __('app.added_by')  => ['data' => 'added_by', 'name' => 'added_by', 'title' => __('Added By')],
                 __('app.converted_by')  => ['data' => 'converted_by', 'name' => 'converted_by', 'title' => __('Closed By')],
                   __('app.status')  => ['data' => 'status', 'name' => 'status', 'title' => __('Status')],
-                      __('app.deal_id')  => ['data' => 'deal_id', 'name' => 'deal_id',  'title' => __('View')],
+                      // __('app.deal_id')  => ['data' => 'deal_id', 'name' => 'deal_id',  'title' => __('View')],
             // __('app.signature') => ['data' => 'signature', 'name' => 'signature', 'visible' => false, 'title' => __('app.signature')],
             Column::computed('action', __('app.action'))
                 ->exportable(false)
