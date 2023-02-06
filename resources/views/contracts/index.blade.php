@@ -96,8 +96,10 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
             <div id="table-actions" class="d-flex align-items-center">
                 @if ($addContractPermission == 'all' || $addContractPermission == 'added')
+                  @if(Auth::user()->role_id == 1)
                     <button class="btn btn-primary" id="deal-add"  ><i class="fa-solid fa-plus"></i><span> Create Won Deal</span></button>
                     @include('contracts.modals.dealaddmodal')
+                    @endif
                 @endif
 
             {{--  <form class="hidden" action="{{route('create-deal')}}" method="post">
