@@ -65,8 +65,14 @@
     </div>
 
             @endif
-            <hr>
 
+            <?php
+            $comments = App\Models\IssueQuery::where('issue_id',$issue->id)->get();
+            $comments_count = App\Models\IssueQuery::where('issue_id',$issue->id)->count();
+            //dd($comments);
+             ?>
+                @if($comments_count > 0)
+                  <hr>
                 <div class="col-12 px-0 pb-3 d-flex">
                     <p class="mb-0 text-lightest f-14 w-30">
                         @lang('Username')</p>
@@ -74,10 +80,7 @@
                       Comments
                     </h1>
                 </div>
-                <?php
-                $comments = App\Models\IssueQuery::where('issue_id',$issue->id)->get();
-                //dd($comments);
-                 ?>
+
                  @foreach($comments as $comment)
                 <div class="col-12 px-0 pb-3 d-flex">
                     <p class="mb-0 text-lightest f-14 w-30"><a class="text-darkest-grey" href="/account/employees/{{$comment->user_id}}" target="_blank">
@@ -87,6 +90,7 @@
                     </h1>
                 </div>
               @endforeach
+              @endif
 
                             <div class="w-100 border-top-grey d-block d-lg-flex d-md-flex justify-content-start px-4 py-3">
 
