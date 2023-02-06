@@ -18,7 +18,7 @@
 <?php
 
   $deal= App\Models\Deal::where('id',$data->deal_id)->first();
-  $user= App\Models\User::where('id',$deal->client_id)->first();
+  // $user= App\Models\User::where('id',$deal->client_id)->first();
   $client= App\Models\User::where('id',$deal->client_id)->first();
   //$row->created_at->format($this->global->date_format).$row->created_at->format('h:i:s A');
 
@@ -38,7 +38,7 @@
             </div>
 
             <div class="email_message">
-                <h4>Hi Seopage1,</h4>
+                <h4>Hi {{$user->name}},</h4>
                 <p><strong>{{$client->user_name}}</strong> has submiitted his/her details<span> on {{$data->created_at->format('Y-m-d')}} at {{$data->created_at->format('h:i:s A')}}</span> Let's check the short details below. You can check the details about this deal following <a href="erp.seopage1.net/account/deal-url/{{$deal->id}}">this link.</a></p>
             </div>
 
@@ -46,10 +46,17 @@
                 <h4 style="color: #D99218;font-weight: 700;font-size: 22px;">Client Details</h4>
                 <ul>
                     <li><strong>Client User Name on Freelancer.com:</strong> {{$data->client_username}}</li>
-                    <li><strong>Email:</strong> {{$data->client_email}}</li>
+                    @if($user->role_id == 1)
+                   <li><strong>Email:</strong> {{$data->client_email}}</li>
                     <li><strong>Phone:</strong> {{$data->client_phone}}</li>
                       <li><strong>WhatsApp:</strong> {{$data->client_whatsapp}}</li>
-                    <li><strong>Available Platform:</strong> {!!$data->other_platform!!}</li>
+                      <li><strong>Skype:</strong> {{$data->client_skype}}</li>
+                      <li><strong>Telegram:</strong> {{$data->client_telegram}}</li>
+                      <li><strong>Messenger:</strong> {{$data->client_messenger}}</li>
+                      <li><strong>Imo:</strong> {{$data->client_imo}}</li>
+
+                    @endif
+
                       <li><strong>Timezone:</strong> {{$data->timezone}}</li>
                       <li><strong>Available Time:</strong> {!!$data->day!!}</li>
                       <li><strong>Agree for Our Office Time:</strong> @if($data->message == "on")

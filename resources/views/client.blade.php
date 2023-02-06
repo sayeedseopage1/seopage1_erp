@@ -145,7 +145,7 @@
                         <div class="col-md-12">
                             <div class="input-group ourfields">
                                 <span class="input-group-text" id="inputGroup-sizing-default">IMO No:</span>
-                                <input type="number" name="client_imo" class="form-control" aria-label="Sizing example input" placeholder="Enter Your IMO Number" aria-describedby="inputGroup-sizing-default">
+                                <input type="text" name="client_imo" class="form-control" aria-label="Sizing example input" placeholder="Enter Your IMO Number" aria-describedby="inputGroup-sizing-default">
                             </div>
                         </div>
 

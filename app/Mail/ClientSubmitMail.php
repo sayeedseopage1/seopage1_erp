@@ -10,16 +10,18 @@ use Illuminate\Queue\SerializesModels;
 class ClientSubmitMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $data;
+    public $data,$user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct($data,$user)
     {
         $this->data = $data;
+        $this->user = $user;
+        // /dd($data,$user);
 
     }
 

@@ -81,7 +81,7 @@
             color: #41b4e1 !important;
             font-size: 18px;
         }
-      
+
     </style>
 
 @endpush
@@ -102,7 +102,7 @@
                         <h4>Freelancer.com User Name</h4>
                         <p>{{$client->client_username}}</p>
                       </div>
-
+                      @if(Auth::user()->role_id == 1)
                       <div class="details-seopage1">
                         <h4>Email</h4>
                         <p>{{$client->client_email}}</p>
@@ -134,6 +134,7 @@
                         <h4>Client IMO ID</h4>
                         <p>{{$client->client_imo}}</p>
                       </div>
+                      @endif
 
 
                       <div class="details-seopage1">
