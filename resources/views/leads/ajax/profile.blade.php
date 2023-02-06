@@ -148,13 +148,34 @@
                         <?php
                         $currency=App\Models\Currency::where('id',$lead->original_currency_id)->first();
                         $value= $lead->actual_value. $currency->currency_symbol;
-                        $bid_value= $lead->bid_value. $currency->currency_symbol .' - '. $lead->bid_value2. $currency->currency_symbol  ;
+                        $bid_value= $lead->bid_value. $currency->currency_symbol .' - '. $lead->bid_value2. $currency->currency_symbol;
 
                          ?>
                           <ul>
                               <li><i class="fa-solid fa-layer-group"></i> <span>Project Name:</span> {{ucwords($lead->client_name)}} </li>
 
                               <li><i class="fa-solid fa-link"></i> <span>Project Link:</span> <a href="{{$lead->project_link}}" target="_blank">{{$lead->project_link}}</a> </li>
+                              @if($lead->deal_status == 1)
+                              <?php
+                              $deal= App\Models\DealStage::where('lead_id',$lead->id)->first();
+                              $mystring = $deal->message_link;
+
+                                  $output = str_replace('<br>',' ', $mystring);
+
+                                  $output_final= (trim($output));
+                                  $data= explode("  ", $output_final);
+                               ?>
+                              <li><i class="fa-solid fa-message"></i> <span>Message Thread:</span>
+                                <br>
+                                @foreach($data as $message)
+
+                                 <span>{{$loop->index+1}}.</span><a href="{{$message}}" target="_blank">{{$message}} </a>
+                                 <br>
+                                 @endforeach
+                               </li>
+                              <li><i class="fa-solid fa-user"></i> <span>Client Name:</span> {{ucwords($deal->client_username)}} </li>
+
+                              @endif
 
                               <li><i class="fa-solid fa-globe"></i> <span>Client Country:</span> {{ucwords($lead->country)}} </li>
                               @if($lead->deal_status == 0)
