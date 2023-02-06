@@ -130,7 +130,7 @@
 </style>
 <div class="card bg-white border-0 b-shadow-4">
   <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20 ml-5">
-    <h4 class="f-18 f-w-500 mb-0">Deal Details</h4>
+    <h4 class="f-18 f-w-500 mb-0">Lead Details</h4>
   </div>
   <div class="card-body">
     <div class="row">
@@ -282,7 +282,7 @@ document.getElementById('mydata').value= id;
             window.LaravelDataTables["leads-table"].draw();
         }
 
-      
+
 
         $('#quick-action-apply').click(function() {
             const actionValue = $('#quick-action-type').val();

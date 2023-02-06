@@ -273,7 +273,13 @@ class DealsDataTable extends BaseDataTable
                            </div>
                         </div>';
               }else {
-                return '--';
+                return '<div class="media align-items-center">
+
+                           <div class="media-body">
+                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="#">' . ucfirst($row->client_username) . '</a></h5>
+
+                           </div>
+                        </div>';
               }
 
             })
