@@ -276,7 +276,7 @@ class DealsDataTable extends BaseDataTable
                 return '<div class="media align-items-center">
 
                            <div class="media-body">
-                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="#">' . ucfirst($row->client_username) . '</a></h5>
+                          <h5 class="mb-0 f-13 text-darkest-grey"><a>' . ucfirst($row->client_username) . '</a></h5>
 
                            </div>
                         </div>';
