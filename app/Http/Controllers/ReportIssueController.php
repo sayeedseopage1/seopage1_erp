@@ -21,6 +21,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\ReportIssue;
 use Toastr;
+use App\Models\IssueQuery;
+use Auth;
 
 class ReportIssueController extends AccountBaseController
 {
@@ -87,12 +89,7 @@ class ReportIssueController extends AccountBaseController
         Ticket::whereIn('id', explode(',', $request->row_ids))->delete();
     }
 
-    protected function changeBulkStatus($request)
-    {
-        abort_403(user()->permission('edit_tickets') != 'all');
 
-        Ticket::whereIn('id', explode(',', $request->row_ids))->update(['status' => $request->status]);
-    }
 
     public function create()
     {
@@ -142,12 +139,26 @@ class ReportIssueController extends AccountBaseController
     public function StatusChange(Request $request)
     {
       //dd($request);
-      $issue= ReportIssue::find($request->id);
-      $issue->status = $request->status;
-      $issue->comments= $request->comments;
-      $issue->save();
+      if ($request->status == 'reply' && $request->comments == null) {
+        Toastr::error('Please add a reply', 'Failed', ["positionClass" => "toast-top-right"]);
 
-      Toastr::success('Status Change Successfully Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+      return redirect()->route('report_issues.index');
+      }
+      $issue= ReportIssue::find($request->id);
+      if ($request->status == 'fixed' || $request->status == 'Not Taken Into Consideration') {
+      $issue->status = $request->status;
+    }else {
+      $issue->status = 'in progress';
+    }
+
+
+      $issue->save();
+      $query= new IssueQuery();
+      $query->user_id = Auth::id();
+      $query->issue_id= $issue->id;
+      $query->comments= $request->comments;
+      $query->save();
+      Toastr::success('Query submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
 
     return redirect()->route('report_issues.index');
     }

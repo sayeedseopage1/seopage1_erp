@@ -65,24 +65,33 @@
     </div>
 
             @endif
-              <x-cards.data-row :label="__('Created By')" :value="$issue->created_by->name" />
+            <hr>
+
                 <div class="col-12 px-0 pb-3 d-flex">
                     <p class="mb-0 text-lightest f-14 w-30">
-                        @lang('Comments From Developer Team')</p>
-                    <p class="text-dark-grey f-14">
-                        @if (!is_null($issue->comments))
-                        {!! $issue->comments!!}
-
-
-                        @else
-                            --
-                        @endif
-                    </p>
+                        @lang('Username')</p>
+                    <h1 class="text-dark-grey f-14">
+                      Comments
+                    </h1>
                 </div>
+                <?php
+                $comments = App\Models\IssueQuery::where('issue_id',$issue->id)->get();
+                //dd($comments);
+                 ?>
+                 @foreach($comments as $comment)
+                <div class="col-12 px-0 pb-3 d-flex">
+                    <p class="mb-0 text-lightest f-14 w-30"><a class="text-darkest-grey" href="/account/employees/{{$comment->user_id}}" target="_blank">
+                        {{$comment->user->name}}</a></p>
+                    <h1 class="text-dark-grey f-14">
+                      {!!$comment->comments!!}
+                    </h1>
+                </div>
+              @endforeach
 
                             <div class="w-100 border-top-grey d-block d-lg-flex d-md-flex justify-content-start px-4 py-3">
-                              @if(Auth::user()->role_id == 1)
+
                               @if($issue->status == 'pending')
+                                @if(Auth::user()->role_id == 1)
                               <form class="" action="{{route('report-issue-status')}}" method="post">
                                 @csrf
                                 <input type="hidden" name="id" value="{{$issue->id}}">
@@ -95,12 +104,13 @@
                             Mark As Open
                           </button>
                             </form>
+                            @endif
 
                           @elseif($issue->status == 'in progress')
                           <form id="save-contract-form" action="{{route('report-issue-status')}}" method="post">
                             @csrf
                             <input type="hidden" name="id" value="{{$issue->id}}">
-                            <input type="hidden" name="status" value="fixed">
+
                             <div class="mb-5">
                                 <label for="exampleFormControlTextarea1" class="form-label">Comments</label>
                                 <div class="mb-3">
@@ -110,24 +120,30 @@
                             </div>
                             <div class="row ml-1">
 
-
-                    <button type="submit" class="btn-primary rounded f-14 p-2 mr-3">
+                                @if(Auth::user()->role_id == 1)
+                    <button type="submit" name="status" value="fixed" class="btn-primary rounded f-14 p-2 mr-3">
                             <svg class="svg-inline--fa fa-check fa-w-16 mr-1" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="check" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg><!-- <i class="fa fa-check mr-1"></i> Font Awesome fontawesome.com -->
                         Mark As Complete
                       </button>
-                      </form>
-                      <form class="" action="{{route('report-issue-status')}}" method="post">
-                        @csrf
-                        <input type="hidden" name="id" value="{{$issue->id}}">
-                        <input type="hidden" name="status" value="Not Taken Into Consideration">
-                        
-                <button type="submit" class="btn-danger rounded f-14 p-2 mr-3">
+                      @endif
+
+
+
+                        @if(Auth::user()->role_id == 1)
+                <button type="submit" name="status" value="Not Taken Into Consideration" class="btn-danger rounded f-14 p-2 mr-3">
                       <i class="fa-solid fa-circle-xmark"></i><!-- <i class="fa fa-check mr-1"></i> Font Awesome fontawesome.com -->
                     Not Taken Into Consideration
                   </button>
-                  </form>
-                          @endif
-                          @endif
+                  @endif
+
+
+                          <button type="submit" name="status" value="reply" class="btn-success rounded f-14 p-2 mr-3">
+                                <i class="fa-solid fa-reply"></i><!-- <i class="fa fa-check mr-1"></i> Font Awesome fontawesome.com -->
+                            Reply
+                            </button>
+                            @endif
+
+                              </form>
 
 
 
