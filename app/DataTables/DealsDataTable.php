@@ -459,7 +459,7 @@ class DealsDataTable extends BaseDataTable
             // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
 
 
-            // __('app.project_name') => ['data' => 'project_name', 'name' => 'project_name', 'exportable' => false, 'title' => __('Project Name')],
+             __('app.project_name') => ['data' => 'project_name', 'name' => 'project_name', 'exportable' => false, 'title' => __('Project Name')],
             __('app.project_name').' '.__('app.project_name') => ['data' => 'project_name', 'name' => 'project_name', 'visible' => false, 'title' => __('Project Name')],
               __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
 
