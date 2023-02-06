@@ -129,27 +129,15 @@ class DealsDataTable extends BaseDataTable
                   return '<div class="media align-items-center">
 
                            <div class="media-body">
-                          <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$project->project_name.'" href="' . route('projects.show', [$project->id]) . '">' . ucfirst(Str::limit($project->project_name,15)) . '</a></h5>
+                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('projects.show', [$project->id]) . '">' . ucfirst(Str::limit($project->project_name,40)) . '</a></h5>
 
                            </div>
                         </div>';
                 }else {
-                  return '<div class="media align-items-center">
-
-                           <div class="media-body">
-                          <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$project->project_name.'">' . ucfirst(Str::limit($project->project_name,15)) . '</a></h5>
-
-                           </div>
-                        </div>';
+                  return ucfirst($row->project_name);
                 }
               }else {
-                return '<div class="media align-items-center">
-
-                         <div class="media-body">
-                        <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$project->project_name.'">' . ucfirst(Str::limit($project->project_name,15)) . '</a></h5>
-
-                         </div>
-                      </div>';
+                return ucfirst($row->project_name);
               }
 
             })
