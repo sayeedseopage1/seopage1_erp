@@ -206,7 +206,14 @@
                           <p>Actions</p>
                           <ul>
                             @if($lead->deal_status == 0)
+                            <?php
+                            $deal= App\Models\DealStage::where('lead_id',$lead->id)->first();
+
+                             ?>
                               <li><i class="fa-solid fa-shuffle"></i> <a href="#" data-toggle="modal" data-target="#dealstmodal" onclick="dataTableRowCheck2(' {{$lead->id}} ')" style="color: #333;font-weight: 600;font-size: 13px;">Convert To Deal </a> </li>
+
+                              @else
+                                <li><i class="fa-solid fa-link"></i> <a href="/account/deals/{{$deal->id}}" style="color: #333;font-weight: 600;font-size: 13px;">View Deal Stage</a> </li>
                               @endif
                               <li><i class="fa-solid fa-pen-to-square"></i> <a class="openRightModal" href="{{ route('leads.edit', $lead->id) }}" style="color: #333;font-weight: 600;font-size: 13px;">Edit </a> </li>
                           {{--    <li><i class="fa-solid fa-trash-can"></i> <a class="delete-table-row" href="javascript:;" data-id="{{$lead->id}}" style="color: #333;font-weight: 600;font-size: 13px;">Delete </a> </li> --}}
