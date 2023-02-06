@@ -225,7 +225,7 @@ class DealsDataTable extends BaseDataTable
                 }else {
                   if($row->deal_stage == 0)
                   {
-                      return '<badge style="background-color:#D21010 !important;" class="badge badge-danger">Contact Made</badge>';
+                      return '<badge class="badge badge-info">Contact Made</badge>';
                   }elseif ($row->deal_stage == 1) {
                   return '<badge style="background-color:#006400 !important; text-color:white !important;" class="badge badge-warning text-white">Qualified</badge>';
                 }elseif($row->deal_stage == 2)
