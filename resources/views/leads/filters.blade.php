@@ -51,7 +51,7 @@
     <!-- MORE FILTERS START -->
     <x-filters.more-filter-box>
 
-        <div class="more-filter-items">
+    {{--  <div class="more-filter-items">
             <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">@lang('app.dateFilterOn')</label>
             <div class="select-filter mb-4">
                 <select class="form-control select-picker" name="date_filter_on" id="date_filter_on">
@@ -59,9 +59,9 @@
                     <option value="next_follow_up_date">@lang('modules.lead.nextFollowUp')</option>
                 </select>
             </div>
-        </div>
+        </div> --}}
 
-        <div class="more-filter-items">
+      {{--  <div class="more-filter-items">
             <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">@lang('modules.lead.followUp')</label>
             <div class="select-filter mb-4">
                 <div class="select-others">
@@ -72,9 +72,24 @@
                     </select>
                 </div>
             </div>
-        </div>
-
+        </div> --}}
+          <?php
+          $sales_executives= App\Models\User::where('role_id',7)->get();
+           ?>
         <div class="more-filter-items">
+             <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">@lang('Created By')</label>
+             <div class="select-filter mb-4">
+                 <div class="select-others">
+                     <select class="form-control select-picker" data-container="body" id="sales_executive_id">
+                       @foreach($sales_executives as $row)
+                         <option value="{{$row->id}}">{{ucfirst($row->name)}}</option>
+                        @endforeach
+                     </select>
+                 </div>
+             </div>
+         </div>
+
+        {{--  <div class="more-filter-items">
             <label class="f-14 text-dark-grey mb-12 text-capitalize"
                 for="usr">@lang('modules.tickets.chooseAgents')</label>
             <div class="select-filter mb-4">
@@ -94,9 +109,9 @@
                     </select>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
-        <div class="more-filter-items">
+        {{--  <div class="more-filter-items">
             <label class="f-14 text-dark-grey mb-12 text-capitalize"
                 for="usr">@lang('modules.lead.leadCategory')</label>
             <div class="select-filter mb-4">
@@ -109,9 +124,9 @@
                     </select>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
-        <div class="more-filter-items">
+      {{--  <div class="more-filter-items">
             <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">@lang('modules.lead.leadSource')</label>
             <div class="select-filter mb-4">
                 <div class="select-others">
@@ -123,7 +138,7 @@
                     </select>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
     </x-filters.more-filter-box>
     <!-- MORE FILTERS END -->
@@ -131,7 +146,7 @@
 
 @push('scripts')
     <script>
-        $('#search-text-field, #type, #followUp, #filter_agent_id, #category_id, #filter_source_id, #date_filter_on')
+        $('#search-text-field, #type, #followUp, #sales_executive_id, #category_id, #filter_source_id, #date_filter_on')
             .on('change keyup', function() {
                 if ($('#search-text-field').val() != "") {
                     $('#reset-filters').removeClass('d-none');
@@ -142,7 +157,7 @@
                 } else if ($('#followUp').val() != "all") {
                     $('#reset-filters').removeClass('d-none');
                     showTable();
-                } else if ($('#filter_agent_id').val() != "all") {
+                } else if ($('#sales_executive_id').val() != "") {
                     $('#reset-filters').removeClass('d-none');
                     showTable();
                 } else if ($('#category_id').val() != "all") {

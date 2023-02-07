@@ -174,6 +174,24 @@ class DealsDataTable extends BaseDataTable
               }
 
             })
+            ->addColumn('project_link', function($row) {
+              //  return ucfirst($row->short_code);
+
+              if($row->lead_id != null){
+                $lead= Lead::where('id',$row->lead_id)->first();
+
+                return '<div class="media align-items-center">
+
+                         <div class="media-body">
+                        <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$lead->project_link.'" class="text-dark-grey" href="' . $lead->project_link . '" target="_blank">'.Str::limit($lead->project_link,15) .'</a></h5>
+
+                         </div>
+                      </div>';
+              }else {
+                return '--';
+              }
+
+            })
 
             // ->editColumn('subject', function ($row) {
             //     $signed = '';
@@ -359,7 +377,7 @@ class DealsDataTable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['action', 'check', 'project_name','deal_id','status','added_by','converted_by','project_manager','client_name','submission_status']);
+            ->rawColumns(['action', 'check', 'project_name','deal_id','status','added_by','converted_by','project_manager','client_name','submission_status','project_link']);
     }
 
     /**
@@ -384,7 +402,11 @@ class DealsDataTable extends BaseDataTable
 
             // ->join('users', 'users.id', '=', 'contracts.client_id')
             // ->join('client_details', 'users.id', '=', 'client_details.user_id')
-            ->select('deal_stages.*');
+            ->select('deal_stages.*')
+              ->leftJoin('leads', 'leads.id', 'deal_stages.lead_id')
+              
+                ->leftJoin('users', 'users.id', 'deal_stages.added_by')
+            ;
 
         if ($startDate !== null && $endDate !== null) {
             $model->where(function ($q) use ($startDate, $endDate) {
@@ -406,11 +428,16 @@ class DealsDataTable extends BaseDataTable
         //     $model = $model->has('signature');
         // }
 
-        if ($request->searchText != '') {
+        if ($this->request()->searchText != '') {
             $model = $model->where(function ($query) {
                 $query->where('deal_stages.project_name', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('deal_stages.short_code', 'like', '%' . request('searchText') . '%');
+                    ->orWhere('deal_stages.short_code', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('users.name', 'like', '%' . request('searchText') . '%')
 
+
+
+                  ;
             });
         }
         // if ($this->viewContractPermission == 'added') {
@@ -487,6 +514,7 @@ class DealsDataTable extends BaseDataTable
              __('app.project_name') => ['data' => 'project_name', 'name' => 'project_name', 'exportable' => false, 'title' => __('Deal Name')],
             __('app.project_name').' '.__('app.project_name') => ['data' => 'project_name', 'name' => 'project_name', 'visible' => false, 'title' => __('Deal Name')],
               __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
+                __('app.project_link')  => ['data' => 'project_link', 'name' => 'project_link', 'title' => __('Project Link')],
 
           //  __('app.customers')  => ['data' => 'client_name', 'name' => 'client.name', 'visible' => false, 'title' => __('app.customers')],
             __('app.amount') => ['data' => 'amount', 'name' => 'amount', 'title' => __('Project Budget (USD)')],

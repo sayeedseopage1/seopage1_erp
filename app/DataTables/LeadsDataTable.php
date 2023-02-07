@@ -395,27 +395,23 @@ class LeadsDataTable extends BaseDataTable
             )
             ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
             ->leftJoin('lead_agents', 'lead_agents.id', 'leads.agent_id')
-            ->leftJoin('users', 'users.id', 'lead_agents.user_id')
+            ->leftJoin('users', 'users.id', 'leads.added_by')
             ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id')
             ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
+            
 
             ;
 
-        if ($this->request()->followUp != 'all' && $this->request()->followUp != '') {
-            $lead = $lead->leftJoin('lead_follow_up', 'lead_follow_up.lead_id', 'leads.id');
+        if ($this->request()->sales_executive_id != '') {
+            $lead = $lead->leftJoin('users', 'users.id', 'leads.added_by');
 
-            if ($this->request()->followUp == 'yes') {
-                $lead = $lead->where('leads.next_follow_up', 'yes');
-            }
-            else {
-                $lead = $lead->where('leads.next_follow_up', 'no');
-            }
+
 
         }
 
         if ($this->request()->type != 'all' && $this->request()->type != '') {
 
-            if ($this->request()->type == 'lead') {
+            if ($this->request()->type == 'leads') {
                 $lead = $lead->whereNull('client_id');
             }
             else {

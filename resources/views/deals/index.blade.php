@@ -145,26 +145,31 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
             data['endDate'] = endDate;
 
             data['searchText'] = searchText;
+            //console.log(searchText);
         });
         const showTable = () => {
             window.LaravelDataTables["deals-table"].draw();
         }
 
-        // $('#client, #contract_type, #search-text-field').on('change keyup', function() {
-        //     if ($('#contract_type').val() != "all") {
-        //         $('#reset-filters').removeClass('d-none');
-        //         showTable();
-        //     } else if ($('#client').val() != "all") {
-        //         $('#reset-filters').removeClass('d-none');
-        //         showTable();
-        //     } else if ($('#search-text-field').val() != "") {
-        //         $('#reset-filters').removeClass('d-none');
-        //         showTable();
-        //     } else {
-        //         $('#reset-filters').addClass('d-none');
-        //         showTable();
-        //     }
-        // });
+        $('#project_name, #short_code, #search-text-field').on('change keyup', function() {
+            if ($('#short_code').val() != "all") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            } else if ($('#project_name').val() != "all") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            }else if ($('#project_link').val() != "all") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            }
+             else if ($('#search-text-field').val() != "") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            } else {
+                $('#reset-filters').addClass('d-none');
+                showTable();
+            }
+        });
 
         $('#reset-filters').click(function() {
             $('#filter-form')[0].reset();
