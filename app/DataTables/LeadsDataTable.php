@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\DealStage;
 use App\Models\Currency;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class LeadsDataTable extends BaseDataTable
 {
@@ -129,6 +130,7 @@ class LeadsDataTable extends BaseDataTable
                     return $row->leadAgent->user->name;
                 }
             });
+
             // $datatables->addColumn('mobile', function ($row) {
             //     if ($row->mobile != '') {
             //         return '<a href="tel:'.$row->mobile.'" class="text-darkest-grey"><u>'.$row->mobile.'</u></a>';
@@ -138,6 +140,19 @@ class LeadsDataTable extends BaseDataTable
             // });
             $datatables->addColumn('lead', function ($row) {
                 return $row->client_name;
+            });
+            $datatables->addColumn('added_by', function($row) {
+              $user= User::where('id',$row->added_by)->first();
+            //  dd($row->added_by->name);
+                //return ucfirst($user->name);
+                return '<div class="media align-items-center">
+                       <a href="' . route('employees.show', [$user->id]) . '">
+                       <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
+                         <div class="media-body">
+                        <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$user->id]) . '">' . ucfirst($user->name) . '</a></h5>
+
+                         </div>
+                      </div>';
             });
 
             $datatables->addColumn('project_link', function ($row) {
@@ -225,6 +240,7 @@ class LeadsDataTable extends BaseDataTable
                 return  '--';
                 }
             });
+
 
 
             $datatables->addColumn('status', function ($row) use ($status) {
@@ -351,7 +367,7 @@ class LeadsDataTable extends BaseDataTable
             $datatables->removeColumn('source');
             $datatables->removeColumn('next_follow_up');
             $datatables->removeColumn('statusName');
-            $datatables->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date', 'agent_name', 'check','project_link','deal_status','won_lost']);
+            $datatables->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date', 'agent_name', 'check','project_link','deal_status','won_lost','added_by']);
 
             return $datatables;
     }
@@ -398,7 +414,7 @@ class LeadsDataTable extends BaseDataTable
             ->leftJoin('users', 'users.id', 'leads.added_by')
             ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id')
             ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
-            
+
 
             ;
 
@@ -484,6 +500,7 @@ class LeadsDataTable extends BaseDataTable
 
                     ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
                     ->orWhere('leads.actual_value', 'like', '%' . request('searchText') . '%')
+                      ->orWhere('leads.added_by', 'like', '%' . request('searchText') . '%')
 
                   ;
             });
@@ -562,6 +579,12 @@ class LeadsDataTable extends BaseDataTable
 
 
             __('app.createdOn') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('app.createdOn')],
+
+                __('app.added_by') => ['data' => 'added_by', 'name' => 'added_by', 'title' => __('Created By')],
+
+
+            __('app.biding_time') => ['data' => 'bidding_time', 'name' => 'bidding_time', 'title' => __('Bidding Delay Time')],
+
             __('app.biding_time') => ['data' => 'bidding_time', 'name' => 'bidding_time', 'title' => __('Bidding Delay Time')],
 
 
