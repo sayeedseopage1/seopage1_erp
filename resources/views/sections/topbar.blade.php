@@ -33,13 +33,13 @@
     <div class="page-header-right float-right d-flex align-items-center">
         <ul>
             <!-- SEARCH START -->
-            <li>
+          {{--  <li>
                 <div class="d-flex align-items-center">
                     <a href="javascript:;" class="d-block header-icon-box open-search">
                         <i class="fa fa-search f-16 text-dark-grey"></i>
                     </a>
                 </div>
-            </li>
+            </li> --}}
             <!-- SEARCH END -->
             <!-- Sticky Note START -->
             <li>
