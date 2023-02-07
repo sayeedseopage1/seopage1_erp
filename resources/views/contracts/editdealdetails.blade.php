@@ -267,15 +267,37 @@
                               //  dd(($data));
 
                              ?>
-                               @foreach($data as $message)
+
                             <div class="col-md-12">
+                               @foreach($data as $message)
                               <div class="form-group">
+
                               <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
+
                                 <input type="text" value="{{$message}}" name="message_link[]" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
 
                               </div>
+                                @endforeach
                             </div>
-                            @endforeach
+
+                            <div class="col-md-7 dynamic-field" id="dynamic-field-1">
+
+                                       <div class="row">
+                                           <div class="col-md-9 my-2">
+                                               <div class="form-group">
+                                                   <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]" required/>
+                                               </div>
+                                           </div>
+                                       </div>
+                                   </div>
+
+                                   <div class="col-md-3 my-2 form-group append-buttons">
+                                       <div class="clearfix">
+                                           <button type="button" id="add-button" class="btn btn-secondary2 float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                           <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                       </div>
+                                   </div>
+
 
                           </div>
                           <div class="row">
@@ -463,9 +485,7 @@
       $('#summary2').summernote();
     });
 
-    $(document).ready(function() {
-      $('#message_link').summernote();
-    });
+
     $(document).ready(function() {
       $('#description').summernote();
     });
@@ -698,5 +718,86 @@
 
 
     </script>
+    @push('scripts')
+
+    <script>
+             $(document).ready(function () {
+                 var buttonAdd = $("#add-button");
+                 var buttonRemove = $("#remove-button");
+                 var className = ".dynamic-field";
+                 var count = 0;
+                 var field = "";
+                 var maxFields = 50;
+
+                 function totalFields() {
+                     return $(className).length;
+                 }
+
+                 function addNewField() {
+                     count = totalFields() + 1;
+                     field = $("#dynamic-field-1").clone();
+                     field.attr("id", "dynamic-field-" + count);
+                     field.children("label").text("Field " + count);
+                     field.find("input").val("");
+                     $(className + ":last").after($(field));
+                 }
+
+                 function removeLastField() {
+                     if (totalFields() > 1) {
+                         $(className + ":last").remove();
+                     }
+                 }
+
+                 function enableButtonRemove() {
+                     if (totalFields() === 2) {
+                         buttonRemove.removeAttr("disabled");
+                         buttonRemove.addClass("shadow-sm");
+                     }
+                 }
+
+                 function disableButtonRemove() {
+                     if (totalFields() === 1) {
+                         buttonRemove.attr("disabled", "disabled");
+                         buttonRemove.removeClass("shadow-sm");
+                     }
+                 }
+
+                 function disableButtonAdd() {
+                     if (totalFields() === maxFields) {
+                         buttonAdd.attr("disabled", "disabled");
+                         buttonAdd.removeClass("shadow-sm");
+                     }
+                 }
+
+                 function enableButtonAdd() {
+                     if (totalFields() === maxFields - 1) {
+                         buttonAdd.removeAttr("disabled");
+                         buttonAdd.addClass("shadow-sm");
+                     }
+                 }
+
+                 buttonAdd.click(function () {
+                     addNewField();
+                     enableButtonRemove();
+                     disableButtonAdd();
+                 });
+
+                 buttonRemove.click(function () {
+                     removeLastField();
+                     disableButtonRemove();
+                     enableButtonAdd();
+                 });
+             });
+         </script>
+
+
+
+
+
+
+
+
+
+    @endpush
 
 @endsection

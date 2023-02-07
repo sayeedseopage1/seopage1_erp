@@ -313,8 +313,25 @@
                             <div class="col-md-12">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
-                              <input type="text" name="message_link[]" readonly value="{{$message}}" class="form-control @error('message_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
+                              <input type="text" name="message_link[]"  value="{{$message}}" class="form-control @error('message_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here">
                               </div>
+                              <div class="col-md-7 dynamic-field" id="dynamic-field-1">
+
+                                         <div class="row">
+                                             <div class="col-md-9 my-2">
+                                                 <div class="form-group">
+                                                     <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]" required/>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+
+                                     <div class="col-md-3 my-2 form-group append-buttons">
+                                         <div class="clearfix">
+                                             <button type="button" id="add-button" class="btn btn-secondary2 float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                             <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                         </div>
+                                     </div>
                               @error('message_link')
                               <div class="mt-3">
                                 <div class="alert alert-danger">{{ $message }}</div>
