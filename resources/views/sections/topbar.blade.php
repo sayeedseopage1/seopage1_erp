@@ -83,7 +83,7 @@
 
                 <!-- ADD START -->
                 <li>
-                    <div class="add_box dropdown">
+                  {{--  <div class="add_box dropdown">
                         <a class="d-block dropdown-toggle header-icon-box" type="link" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-plus-circle f-16 text-dark-grey"></i>
@@ -138,7 +138,7 @@
                                 </a>
                             @endif
                         </div>
-                    </div>
+                    </div> --}}
                 </li>
                 <!-- ADD END -->
             @endif
