@@ -341,7 +341,9 @@ class DealsDataTable extends BaseDataTable
             })
             ->addColumn('converted_by', function($row) {
               if ($row->won_lost == 'Yes') {
-                $user= User::where('id',$row->converted_by)->first();
+
+                $deal_id = Deal::where('deal_id',$row->short_code)->first();
+                $user= User::where('id',$deal_id->added_by)->first();
               //  dd($row->added_by->name);
                   //return ucfirst($user->name);
                   return '<div class="media align-items-center">
@@ -404,7 +406,7 @@ class DealsDataTable extends BaseDataTable
             // ->join('client_details', 'users.id', '=', 'client_details.user_id')
             ->select('deal_stages.*')
               ->leftJoin('leads', 'leads.id', 'deal_stages.lead_id')
-              
+
                 ->leftJoin('users', 'users.id', 'deal_stages.added_by')
             ;
 
