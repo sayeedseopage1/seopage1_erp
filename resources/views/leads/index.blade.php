@@ -108,22 +108,16 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
             }
 
             var searchText = $('#search-text-field').val();
-            var type = $('#type').val();
-            var followUp = $('#followUp').val();
-            var agent = $('#filter_agent_id').val();
-            var category_id = $('#filter_category_id').val();
-            var source_id = $('#filter_source_id').val();
-            var source_id = $('#filter_source_id').val();
+
+
+
+
             var date_filter_on = $('#date_filter_on').val();
 
             data['startDate'] = startDate;
             data['endDate'] = endDate;
             data['searchText'] = searchText;
-            data['type'] = type;
-            data['followUp'] = followUp;
-            data['agent'] = agent;
-            data['category_id'] = category_id;
-            data['source_id'] = source_id;
+          
             data['date_filter_on'] = date_filter_on;
         });
 

@@ -379,7 +379,7 @@ class LeadsDataTable extends BaseDataTable
     public function query(Lead $model)
     {
         $currentDate = now()->format('Y-m-d');
-        $lead = $model->with(['leadAgent', 'leadAgent.user', 'category'])
+        $lead = $model->with(['leadAgent', 'leadAgent.user', 'category','user'])
             ->select(
                 'leads.id',
                 'leads.agent_id',
@@ -441,11 +441,6 @@ class LeadsDataTable extends BaseDataTable
             $lead = $lead->having(DB::raw('DATE(leads.`created_at`)'), '>=', $startDate);
         }
 
-        if ($this->request()->startDate !== null && $this->request()->startDate != 'null' && $this->request()->startDate != '' && request()->date_filter_on == 'next_follow_up_date') {
-            $startDate = Carbon::createFromFormat($this->global->date_format, $this->request()->startDate)->toDateString();
-
-            $lead = $lead->having(DB::raw('DATE(`next_follow_up_date`)'), '>=', $startDate);
-        }
 
         if ($this->request()->endDate !== null && $this->request()->endDate != 'null' && $this->request()->endDate != '' && request()->date_filter_on == 'created_at') {
             $endDate = Carbon::createFromFormat($this->global->date_format, $this->request()->endDate)->toDateString();
@@ -500,7 +495,7 @@ class LeadsDataTable extends BaseDataTable
 
                     ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
                     ->orWhere('leads.actual_value', 'like', '%' . request('searchText') . '%')
-                      ->orWhere('leads.added_by', 'like', '%' . request('searchText') . '%')
+                      ->orWhere('users.name', 'like', '%' . request('searchText') . '%')
 
                   ;
             });
