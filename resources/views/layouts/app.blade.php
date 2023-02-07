@@ -258,7 +258,7 @@
             @yield('content')
             @if(Auth::user()->role_id == 4)
             <?php
-            $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->where('pm_id',Auth::id())->first();
+            $deal_id= App\Models\Deal::where('status','pending')->orderBy('award_time','desc')->where('pm_id',Auth::id())->first();
             if ($deal_id != null) {
               $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
 
@@ -293,7 +293,7 @@
     @endif
     @if(Auth::user()->role_id == 1)
     <?php
-    $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->first();
+    $deal_id= App\Models\Deal::where('status','pending')->orderBy('award_time','desc')->first();
     if ($deal_id != null) {
       $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
 
