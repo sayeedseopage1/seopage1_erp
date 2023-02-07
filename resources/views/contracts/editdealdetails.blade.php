@@ -285,7 +285,7 @@
                                        <div class="row">
                                            <div class="col-md-9 my-2">
                                                <div class="form-group">
-                                                   <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]" required/>
+                                                   <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]"/>
                                                </div>
                                            </div>
                                        </div>
