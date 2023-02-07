@@ -378,6 +378,16 @@ class LeadsDataTable extends BaseDataTable
      */
     public function query(Lead $model)
     {
+      $startDate = null;
+      $endDate = null;
+
+      if ($this->request()->startDate !== null && $this->request()->startDate != 'null' && $this->request()->startDate != '') {
+          $startDate = Carbon::createFromFormat($this->global->date_format, $this->request()->startDate)->toDateString();
+      }
+
+      if ($this->request()->endDate !== null && $this->request()->endDate != 'null' && $this->request()->endDate != '') {
+          $endDate = Carbon::createFromFormat($this->global->date_format, $this->request()->endDate)->toDateString();
+      }
         $currentDate = now()->format('Y-m-d');
         $lead = $model->with(['leadAgent', 'leadAgent.user', 'category','user'])
             ->select(
@@ -435,22 +445,15 @@ class LeadsDataTable extends BaseDataTable
             }
         }
 
-        if ($this->request()->startDate !== null && $this->request()->startDate != 'null' && $this->request()->startDate != '' && request()->date_filter_on == 'created_at') {
-            $startDate = Carbon::createFromFormat($this->global->date_format, $this->request()->startDate)->toDateString();
+        if ($startDate !== null && $endDate !== null) {
+            $lead->where(function ($query) use ($startDate, $endDate) {
+                $query->whereBetween(DB::raw('DATE(leads.`created_at`)'), [$startDate, $endDate]);
 
-            $lead = $lead->having(DB::raw('DATE(leads.`created_at`)'), '>=', $startDate);
+                $query->orWhereBetween(DB::raw('DATE(leads.`updated_at`)'), [$startDate, $endDate]);
+            });
         }
 
 
-        if ($this->request()->endDate !== null && $this->request()->endDate != 'null' && $this->request()->endDate != '' && request()->date_filter_on == 'created_at') {
-            $endDate = Carbon::createFromFormat($this->global->date_format, $this->request()->endDate)->toDateString();
-            $lead = $lead->having(DB::raw('DATE(leads.`created_at`)'), '<=', $endDate);
-        }
-
-        if ($this->request()->endDate !== null && $this->request()->endDate != 'null' && $this->request()->endDate != '' && request()->date_filter_on == 'next_follow_up_date') {
-            $endDate = Carbon::createFromFormat($this->global->date_format, $this->request()->endDate)->toDateString();
-            $lead = $lead->having(DB::raw('DATE(`next_follow_up_date`)'), '<=', $endDate);
-        }
 
         if (($this->request()->agent != 'all' && $this->request()->agent != '') || $this->viewLeadPermission == 'added') {
             $lead = $lead->where(function ($query) {
