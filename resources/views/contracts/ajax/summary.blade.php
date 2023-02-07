@@ -228,7 +228,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
        @include('contracts.modals.dealdenymodal') --}}
        @if($diff_in_minutes < 1230 )
        @if($contract->deal->pm_id == Auth::id() || Auth::user()->role_id == 1)
-     <a href="/account/projects/{{$project_id->id}}/edit" class="btn btn-success">Accept <i class="fa-solid fa-check"></i></a>
+     <a href="/account/projects/{{$project_id->id}}/edit" class="btn btn-success">Submit Project Acceptance Form <i class="fa-solid fa-check"></i></a>
      @endif
      @endif
 

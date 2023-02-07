@@ -209,7 +209,7 @@
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="{{$contact->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($contact->project_name,40)}}</a> </li>
+                                    <li><a href="/account/deals/{{$contact->id}}" title="{{$contact->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($contact->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
@@ -285,7 +285,7 @@
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="{{$qualify->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($qualify->project_name,40)}}</a> </li>
+                                    <li><a href="/account/deals/{{$qualify->id}}" title="{{$qualify->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($qualify->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
@@ -360,7 +360,7 @@
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="{{$rq->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($rq->project_name,40)}}</a> </li>
+                                    <li><a href="/account/deals/{{$rq->id}}" title="{{$rq->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($rq->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
@@ -435,7 +435,7 @@
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="{{$prop->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($prop->project_name,40)}}</a> </li>
+                                    <li><a href="/account/deals/{{$prop->id}}" title="{{$prop->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($prop->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
@@ -508,7 +508,7 @@
                                 </ul>
 
                                 <ul class="task_list" id="projects_sp1_padding">
-                                    <li><a href="#" title="{{$neg->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($neg->project_name,40)}}</a> </li>
+                                    <li><a href="/account/deals/{{$neg->id}}" title="{{$neg->project_name}}"><i class="fa-solid fa-layer-group"></i> {{Str::limit($neg->project_name,40)}}</a> </li>
                                     <!-- <li class="clipboard_list_sp1"> <i class="fa-solid fa-clipboard-list"></i> 1/2 </li> -->
                                 </ul>
 
