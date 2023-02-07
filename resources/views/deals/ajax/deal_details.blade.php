@@ -818,7 +818,7 @@ ul.fileList {
                            <div class="nopadding">
                                 @if($deal->deal_stage == 0)
                                <div class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
-                             <span> Change Deal Stage</span>
+                             <span> Click me to Change Stage</span>
                                </div>
 
                                @if($deal->deal_stage == 0)
@@ -842,7 +842,7 @@ ul.fileList {
                                </div>
                                @else
                                <div class="deal" data-bs-whatever="@mdo">
-                                   <span>Change Deal Stage</span>
+                                   <span>Click me to Change Stage</span>
                                </div>
 
                             @endif
@@ -957,7 +957,7 @@ ul.fileList {
                            <div class="nopadding">
                                @if($deal->deal_stage == 1)
                                <div class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
-                                   Change Deal Stage
+                                   Click me to Change Stage
                                </div>
                                   @include('contracts.modals.dealqualifymodal2')
                                   @elseif($deal->deal_stage == 2  || $deal->deal_stage == 3 || $deal->deal_stage == 4)
@@ -976,7 +976,7 @@ ul.fileList {
                                   </div>
                                   @else
                                   <div class="deal" data-bs-whatever="@mdo">
-                                    <span>Change Deal Stage</span>
+                                    <span>Click me to Change Stage</span>
                                   </div>
 
                                @endif
@@ -1089,7 +1089,7 @@ ul.fileList {
                            <div class="nopadding">
                              @if($deal->deal_stage == 2)
                              <div class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
-                                 Change Deal Stage
+                                 Click me to Change Stage
                              </div>
                                 @include('contracts.modals.dealqualifymodal2')
 
@@ -1112,7 +1112,7 @@ ul.fileList {
                                 </div>
                                 @else
                                 <div class="deal" data-bs-whatever="@mdo">
-                                   <span>Change Deal Stage</span>
+                                   <span>Click me to Change Stage</span>
                                 </div>
                              @endif
                                 <h3>Proposal Made</h3>
@@ -1230,7 +1230,7 @@ ul.fileList {
                            <div class="nopadding">
                              @if($deal->deal_stage == 3)
                              <div class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
-                                 Change Deal Stage
+                                 Click me to Change Stage
                              </div>
                                 @include('contracts.modals.dealqualifymodal2')
 
@@ -1253,7 +1253,7 @@ ul.fileList {
                                 </div>
                                 @else
                                 <div class="deal" data-bs-whatever="@mdo">
-                                     <span>Change Deal Stage</span>
+                                     <span>Click me to Change Stage</span>
                                 </div>
                              @endif
                                <h3>Negotiation Started</h3>
