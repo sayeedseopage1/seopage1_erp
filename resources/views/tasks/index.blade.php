@@ -227,6 +227,8 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
         <!-- Add Task Export Buttons Start -->
         <div class="d-block d-lg-flex d-md-flex justify-content-between action-bar">
             <div id="table-actions" class="flex-grow-1 align-items-center">
+               
+                
                 @if ($addTaskPermission == 'all' || $addTaskPermission == 'added')
                     <x-forms.link-primary :link="route('tasks.create')" class="mr-3 openRightModal float-left" icon="plus">
                         @lang('app.add')

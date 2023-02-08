@@ -11,7 +11,10 @@ $projectArchived = $project->trashed();
         @if ($projectArchived)
             <x-alert type="info" icon="info-circle">@lang('messages.archivedTaskNotWork')</x-alert>
         @endif
-
+        @php
+           $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
+        @endphp
+        @if ($signature != null)
         <div class="d-flex" id="table-actions">
             @if (($addTaskPermission == 'all' || $addTaskPermission == 'added' || $project->project_admin == user()->id) && !$projectArchived)
                 <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
@@ -21,6 +24,17 @@ $projectArchived = $project->trashed();
                 </x-forms.link-primary>
             @endif
         </div>
+        
+            
+        @else
+        <div class="d-flex" id="table-actions">
+            <button id="task-disable" class="btn-primary rounded f-14 p-2 mr-3 float-left">
+                <svg class="svg-inline--fa fa-plus fa-w-14 mr-1" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path></svg><!-- <i class="fa fa-plus mr-1"></i> Font Awesome fontawesome.com -->
+            Add Task
+            </button>
+        </div>
+        @endif
+       
         <!-- Add Task Export Buttons End -->
 
 
@@ -304,6 +318,32 @@ $projectArchived = $project->trashed();
             applyQuickAction();
         }
     });
+
+    $('#task-disable').click(function() {
+        
+       
+            Swal.fire({
+                title: "@lang('You cannot assign task as client of the project did not sign the deliverables.')",
+                text: "@lang('')",
+                icon: 'error',
+                showCancelButton: true,
+                focusConfirm: false,
+                
+                cancelButtonText: "@lang('app.cancel')",
+                customClass: {
+                    confirmButton: 'btn btn-primary mr-3',
+                    cancelButton: 'btn btn-secondary'
+                },
+                showClass: {
+                    popup: 'swal2-noanimation',
+                    backdrop: 'swal2-noanimation'
+                },
+                buttonsStyling: false
+            });
+
+        } 
+    );
+
 
     const applyQuickAction = () => {
         var rowdIds = $("#allTasks-table input:checkbox:checked").map(function() {
