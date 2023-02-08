@@ -11,7 +11,7 @@ use App\DataTables\BaseDataTable;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
-use App\Models\PmAssign;
+use App\Models\PMAssign;
 
 class EmployeesDataTable extends BaseDataTable
 {
@@ -102,7 +102,7 @@ class EmployeesDataTable extends BaseDataTable
                 $user= User::where('id',$row->id)->first();
                 if($user->role_id == 4)
                 {
-                    $pmassign= PmAssign::where('pm_id',$user->id)->first();
+                    $pmassign= PMAssign::where('pm_id',$user->id)->first();
                     if($pmassign->status == 0)
                     {
                         $button= '';
