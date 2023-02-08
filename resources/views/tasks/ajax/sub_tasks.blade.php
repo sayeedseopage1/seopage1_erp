@@ -19,7 +19,12 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
     || ($addSubTaskPermission == 'both' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id))
     )
         <div class="p-20">
-
+            @if($task->project->project_status == 'Accepted')
+          
+            @php
+            $signature= App\Models\ContractSign::where('project_id',$task->project->id)->first();
+         @endphp
+         @if ($signature != null)
             <div class="row">
                 <div class="col-md-12">
                     <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task"><i
@@ -27,6 +32,19 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                         @lang('modules.tasks.subTask')</a>
                 </div>
             </div>
+            @else 
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="f-15 f-w-500" href="javascript:;" id="task-disable"><i
+                            class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
+                        @lang('modules.tasks.subTask')</a>
+                </div>
+            </div>
+
+
+           
+            @endif 
+            @endif
 
             <x-form id="save-subtask-data-form" class="d-none">
                 <input type="hidden" name="milestone_id" value="{{$task->milestone_id}}">
@@ -707,6 +725,30 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
             return selected + " {{ __('app.membersSelected') }} ";
         }
     });
+    $('#task-disable').click(function() {
+        
+       
+        Swal.fire({
+            title: "@lang('You cannot assign task as client of the project did not sign the deliverables.')",
+            text: "@lang('')",
+            icon: 'error',
+            showCancelButton: true,
+            focusConfirm: false,
+            
+            cancelButtonText: "@lang('app.cancel')",
+            customClass: {
+                confirmButton: 'btn btn-primary mr-3',
+                cancelButton: 'btn btn-secondary'
+            },
+            showClass: {
+                popup: 'swal2-noanimation',
+                backdrop: 'swal2-noanimation'
+            },
+            buttonsStyling: false
+        });
+
+    } 
+);
     $('#save-task-data-form').on('change', '#project_id', function () {
         let id = $(this).val();
         if (id === '') {

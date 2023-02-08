@@ -26,7 +26,12 @@ $addTaskPermission = ($project->project_admin == user()->id) ? 'all' : user()->p
     <div class="d-block d-lg-flex d-md-flex my-3">
 
         <x-alert type="warning" icon="info" class="d-lg-none">@lang('messages.dragDropScreenInfo')</x-alert>
-
+        @if($project->project_status == 'Accepted')
+        @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 6)
+        @php
+        $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
+     @endphp
+     @if ($signature != null)
         <div id="table-actions" class="flex-grow-1 align-items-center">
             @if (($addTaskPermission == 'all' || $addTaskPermission == 'added') && !$project->trashed())
                 <x-forms.link-primary :link="route('tasks.create').'?project_id='.$project->id"
@@ -41,6 +46,9 @@ $addTaskPermission = ($project->project_admin == user()->id) ? 'all' : user()->p
                 </x-forms.button-secondary>
             @endif
         </div>
+        @endif 
+        @endif
+        @endif
     </div>
 
     <div class="w-task-board-panel d-flex" id="taskboard-columns">
