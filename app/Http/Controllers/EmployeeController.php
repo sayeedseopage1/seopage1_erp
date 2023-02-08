@@ -921,8 +921,8 @@ class EmployeeController extends AccountBaseController
 
     public function ProjectEnable(Request $request)
     {
-        $pm_id= PmAssign::where('pm_id',$request->id)->first();
-       $assign= PmAssign::find($pm_id->id);
+        $pm_id= PMAssign::where('pm_id',$request->id)->first();
+       $assign= PMAssign::find($pm_id->id);
        if($request->project_enable == 'enable')
        {
         $assign->status = 1;
