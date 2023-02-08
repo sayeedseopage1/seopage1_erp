@@ -35,7 +35,7 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
             @else 
             <div class="row">
                 <div class="col-md-12">
-                    <a class="f-15 f-w-500" href="javascript:;" id="task-disable"><i
+                    <a class="f-15 f-w-500" href="javascript:;" id="task-disable2"><i
                             class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
                         @lang('modules.tasks.subTask')</a>
                 </div>
@@ -725,7 +725,7 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
             return selected + " {{ __('app.membersSelected') }} ";
         }
     });
-    $('#task-disable').click(function() {
+    $('#task-disable2').click(function() {
         
        
         Swal.fire({

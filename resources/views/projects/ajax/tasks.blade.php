@@ -360,6 +360,30 @@ $projectArchived = $project->trashed();
 
         } 
     );
+    $('#task-disable2').click(function() {
+        
+       
+        Swal.fire({
+            title: "@lang('You cannot assign task as client of the project did not sign the deliverables.')",
+            text: "@lang('')",
+            icon: 'error',
+            showCancelButton: true,
+            focusConfirm: false,
+            
+            cancelButtonText: "@lang('app.cancel')",
+            customClass: {
+                confirmButton: 'btn btn-primary mr-3',
+                cancelButton: 'btn btn-secondary'
+            },
+            showClass: {
+                popup: 'swal2-noanimation',
+                backdrop: 'swal2-noanimation'
+            },
+            buttonsStyling: false
+        });
+
+    } 
+);
 
 
     const applyQuickAction = () => {
