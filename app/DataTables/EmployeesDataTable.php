@@ -11,6 +11,7 @@ use App\DataTables\BaseDataTable;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
+use App\Models\PmAssign;
 
 class EmployeesDataTable extends BaseDataTable
 {
@@ -94,6 +95,45 @@ class EmployeesDataTable extends BaseDataTable
 
                 $role .= '</select>';
                 return $role;
+            });
+
+            $datatables->addColumn('project_enable', function ($row)  {
+                //dd($row->role_id);
+                $user= User::where('id',$row->id)->first();
+                if($user->role_id == 4)
+                {
+                    $pmassign= PmAssign::where('pm_id',$user->id)->first();
+                    if($pmassign->status == 0)
+                    {
+                        $button= '';
+                        $button .= '
+                        <form action="'.route('project-assign').'" method="POST">
+                        <input type="hidden" name="_token" value="'.csrf_token() .'" />
+                        <input type="hidden" name="id" value="'.$row->id .'" />
+                        <button value="enable" name="project_enable" class="btn btn-success btn-sm align-items-center mw-250">Enable</button>
+                        </form>
+                        ';
+                        return $button;
+                    }else {
+                        $button= '';
+                        $button .= '
+                        <form action="'.route('project-assign').'" method="POST">
+                        <input type="hidden" name="_token" value="'.csrf_token() .'" />
+                        <input type="hidden" name="id" value="'.$row->id .'" />
+                        <button value="disable" name="project_enable" class="btn btn-danger btn-sm align-items-center mw-250">Disable</button>
+                        </form>
+                        ';
+                        return $button;
+                    }
+                   
+                }else
+                {
+                    return '--';
+                }
+               
+
+               
+               
             });
             $datatables->addColumn('action', function ($row) {
                 $action = '<div class="task_view">
@@ -184,7 +224,7 @@ class EmployeesDataTable extends BaseDataTable
             $datatables->setRowId(function ($row) {
                 return 'row-' . $row->id;
             });
-            $datatables->rawColumns(['name', 'action', 'role', 'status', 'check']);
+            $datatables->rawColumns(['name', 'action', 'role', 'status', 'check','project_enable']);
             $datatables->removeColumn('roleId');
             $datatables->removeColumn('roleName');
             $datatables->removeColumn('current_role');
@@ -355,6 +395,7 @@ class EmployeesDataTable extends BaseDataTable
             __('app.email') => ['data' => 'email', 'name' => 'email', 'title' => __('app.email')],
             __('app.role') => ['data' => 'role', 'name' => 'role', 'width' => '20%', 'orderable' => false, 'exportable' => false, 'title' => __('app.role'), 'visible' => ($this->changeEmployeeRolePermission == 'all')],
             __('modules.employees.role') => ['data' => 'current_role_name', 'name' => 'current_role_name', 'visible' => false, 'title' => __('modules.employees.role')],
+            __('app.project_enable') => ['data' => 'project_enable', 'name' => 'project_enable', 'title' => __('Project Enable/Disable')],
             __('app.status') => ['data' => 'status', 'name' => 'status', 'title' => __('app.status')],
             Column::computed('action', __('app.action'))
                 ->exportable(false)

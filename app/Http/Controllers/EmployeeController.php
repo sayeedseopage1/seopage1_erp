@@ -52,6 +52,8 @@ use App\Models\LanguageSetting;
 use App\Models\PMAssign;
 use App\Models\SalesCount;
 use App\Models\Project;
+use Toastr;
+
 
 
 class EmployeeController extends AccountBaseController
@@ -915,6 +917,23 @@ class EmployeeController extends AccountBaseController
         Files::deleteFile($request->file, 'import-files');
 
         return Reply::successWithData(__('messages.importProcessStart'), ['batch' => $batch]);
+    }
+
+    public function ProjectEnable(Request $request)
+    {
+        $pm_id= PmAssign::where('pm_id',$request->id)->first();
+       $assign= PmAssign::find($pm_id->id);
+       if($request->project_enable == 'enable')
+       {
+        $assign->status = 1;
+
+       }else{
+        $assign->status = 0;
+       }
+       $assign->save();
+       Toastr::success('Status changed successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
+                return back();
+      
     }
 
 }

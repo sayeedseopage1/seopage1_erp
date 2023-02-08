@@ -768,8 +768,8 @@ class ContractController extends AccountBaseController
 
                     // $pm_count = PMAssign::select('project_count')->min('project_count');
                     // $pm_user = PMAssign::where('project_count', $pm_count)->first();
-                    $pm_count = PMAssign::select('monthly_project_count')->min('monthly_project_count');
-                    $pm_user = PMAssign::where('monthly_project_count', $pm_count)->first();
+                    $pm_count = PMAssign::select('monthly_project_count')->where('status',1)->min('monthly_project_count');
+                    $pm_user = PMAssign::where('monthly_project_count', $pm_count)->where('status',1)->first();
                     if ($pm_count < 2) {
                         if ($pm_user != null) {
                             $pmassign = new PMProject();
@@ -798,7 +798,7 @@ class ContractController extends AccountBaseController
                             $pm_project_update->save();
                         }
                     } else {
-                        $items = PMAssign::all();
+                        $items = PMAssign::where('status',1)->get();
                         // $pm_amount = $items->min('amount');
                         // $pm_count_id = $items->min('project_count');
                         //
@@ -1010,8 +1010,8 @@ class ContractController extends AccountBaseController
 
                   // $pm_count = PMAssign::select('project_count')->min('project_count');
                   // $pm_user = PMAssign::where('project_count', $pm_count)->first();
-                  $pm_count = PMAssign::select('monthly_project_count')->min('monthly_project_count');
-                  $pm_user = PMAssign::where('monthly_project_count', $pm_count)->first();
+                  $pm_count = PMAssign::select('monthly_project_count')->where('status',1)->min('monthly_project_count');
+                  $pm_user = PMAssign::where('monthly_project_count', $pm_count)->where('status',1)->first();
                   if ($pm_count < 2) {
                       if ($pm_user != null) {
                           $pmassign = new PMProject();
@@ -1040,7 +1040,7 @@ class ContractController extends AccountBaseController
                           $pm_project_update->save();
                       }
                   } else {
-                      $items = PMAssign::all();
+                      $items = PMAssign::where('status',1)->get();
                       // $pm_amount = $items->min('amount');
                       // $pm_count_id = $items->min('project_count');
                       //
