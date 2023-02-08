@@ -11,7 +11,7 @@ $projectArchived = $project->trashed();
         @if ($projectArchived)
             <x-alert type="info" icon="info-circle">@lang('messages.archivedTaskNotWork')</x-alert>
         @endif
-        @if(Auth::role_id == 4 || Auth::role_id == 6)
+        @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 6)
         @php
         $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
      @endphp
