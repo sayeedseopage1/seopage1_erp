@@ -136,9 +136,13 @@ justify-content: center;
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Message Link</strong></label>
                                     <input name="message_link[]" value="{{$message}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
-
+                                    
                                 </div>
+                                
                                 @endforeach
+                                
+
+                             
                                 @else
 
 
@@ -179,11 +183,15 @@ justify-content: center;
                             @enderror
                               <div class="mt-3">
                                 <?php
-                                  $currencies= App\Models\Currency::where('id',$deal->original_currency_id)->first();
+                                  $currency_active= App\Models\Currency::where('id',$deal->original_currency_id)->first();
+                                  $currencies= App\Models\Currency::all();
                                  ?>
                                  <label for="input-state-3" class="form-label"><strong>Currency <span style="color:red;">*<span></strong></label>
-                            <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id" readonly>
-                                <option selected value="{{$currencies->id}}">({{$currencies->currency_code}})</option>
+                            <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id">
+                                <option selected value="{{$currency_active->id}}">({{$currency_active->currency_code}})</option>
+                                @foreach ($currencies as $currency)
+                                <option value="{{$currency->id}}">({{$currency->currency_code}})</option>
+                                @endforeach
 
 
                               </select>
@@ -277,7 +285,7 @@ justify-content: center;
 
 
   </script>
-  @push('scripts')
+  
 
   <script>
            $(document).ready(function () {
@@ -357,4 +365,3 @@ justify-content: center;
 
 
 
-  @endpush
