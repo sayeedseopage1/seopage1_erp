@@ -440,13 +440,22 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                         <?php
 
                           $task_id= App\Models\Task::where('subtask_id',$subtask->id)->first();
+                          $task_member= App\Models\TaskUser::where('task_id',$task_id)->first();
+                          $task_user= App\Models\User::where('id',$task_member->user_id)->first();
                          ?>
 
                         <div class="card-body pt-0">
                             <div class="d-flex">
-                                @if ($subtask->assigned_to)
-                                    <x-employee-image :user="$subtask->assignedTo" />
-                                @endif
+                                <div class="taskEmployeeImg rounded-circle mr-1">
+                                    <a href="/account/employees/{{$task_user->id}}">
+                                        @if($task_user->image != null)
+                                        <img data-toggle="tooltip" data-original-title="{{$task_user->name}}" src="{{asset('user-uploads/avatar/'. $task_user->image)}}">
+                                        @else 
+                                        <img data-toggle="tooltip" data-original-title="{{$task_user->name}}" src="{{asset('user-uploads/avatar/avatar_blank.png')}}">
+
+                                        @endif
+                                    </a>
+                                </div>  
 
 
                                 <p class="card-title f-14 mr-3 text-dark flex-grow-1" id="subTask">
