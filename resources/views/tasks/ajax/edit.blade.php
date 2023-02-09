@@ -128,7 +128,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                               // $date2 = new DateTime(Carbon\Carbon::now()->addDay(1));
                                               // $days  = $date2->diff($date1)->format('%a');
 
-                                                  $d_data= "Busy Until ".$task_s->due_date->format('Y-m-d') . ' ('.$task_s->due_date. ')';
+                                                  $d_data= "Busy Until ".$task_s->due_date->format('Y-m-d') . ' ('.$task_s->due_date->format('h:i:s A'). ')';
 
 
                                             }else {
@@ -241,41 +241,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
 
                     <div class="col-md-12">
                         <div class="row">
-                          {{----}}  <div class="col-md-12 col-lg-4">
-                                <div class="form-group my-3">
-                                    <x-forms.label fieldId="task_labels" :fieldLabel="__('app.label')">
-                                    </x-forms.label>
-                                    <x-forms.input-group>
-                                        <select class="select-picker form-control" multiple name="task_labels[]"
-                                            id="task_labels" data-live-search="true" data-size="8">
-                                            @foreach ($taskLabels as $label)
-                                                @php
-                                                    $selected = '';
-                                                @endphp
-
-                                                @foreach ($task->label as $item)
-                                                    @if ($item->label_id == $label->id)
-                                                        @php
-                                                            $selected = 'selected';
-                                                        @endphp
-                                                    @endif
-                                                @endforeach
-                                                <option {{ $selected }}
-                                                    data-content="<span class='badge badge-secondary' style='background-color: {{ $label->label_color }}'>{{ $label->label_name }}</span>"
-                                                    value="{{ $label->id }}">{{ $label->label_name }}</option>
-                                            @endforeach
-                                        </select>
-
-
-                                        @if (user()->permission('task_labels') == 'all')
-                                            <x-slot name="append">
-                                                <button id="createTaskLabel" type="button"
-                                                    class="btn btn-outline-secondary border-grey">@lang('app.add')</button>
-                                            </x-slot>
-                                        @endif
-                                    </x-forms.input-group>
-                                </div>
-                            </div>
+                           
 
 
 
