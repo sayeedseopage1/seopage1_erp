@@ -20,7 +20,7 @@ $changeStatusPermission = user()->permission('change_status');
                             || ($task->project && $task->project->project_admin == user()->id)
                             )
                             <?php
-                            $extension_request= App\Models\TaskTimeExtension::where('task_id',$task->id)->first();
+                            $extension_request= App\Models\TaskTimeExtension::where('task_id',$task->id)->where('user_id','!=',Auth::id())->first();
                              ?>
                              @if($extension_request != null)
                             @if ($extension_request->status == 'pending')
