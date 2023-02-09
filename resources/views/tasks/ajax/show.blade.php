@@ -336,7 +336,7 @@ $changeStatusPermission = user()->permission('change_status');
                         </div>
                     @endif --}}
 
-                    @if (in_array('gitlab', user_modules()) && isset($gitlabIssue))
+                    {{-- @if (in_array('gitlab', user_modules()) && isset($gitlabIssue))
                         <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                             <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                                 GitLab</p>
@@ -354,14 +354,21 @@ $changeStatusPermission = user()->permission('change_status');
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
 
 
 
+                    <div class="card">
+                        <div class="body">
+                            @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                            <x-cards.data-row :label="__('app.description')" :value="!empty($task->description) ? $task->description : '--'" html="true" />
+                        @endif
 
-                    @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
-                        <x-cards.data-row :label="__('app.description')" :value="!empty($task->description) ? $task->description : '--'" html="true" />
-                    @endif
+                        </div>
+
+
+                    </div>
+                   
                   
                       <x-cards.data-row :label="__('General Guidelines')" :value="!empty($task->project->project_summary) ? $task->project->project_summary : '--'" html="true" />
 
