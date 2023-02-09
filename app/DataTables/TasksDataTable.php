@@ -624,8 +624,8 @@ class TasksDataTable extends BaseDataTable
                   'orderable' => false,
                   'searchable' => false
               ],
-              // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
-              // __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
+              __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+              __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
                 '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
               __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
               __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
@@ -654,8 +654,8 @@ class TasksDataTable extends BaseDataTable
                   'orderable' => false,
                   'searchable' => false
               ],
-            //   __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
-            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
+              __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+            // '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
               __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
               __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
               __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
