@@ -430,13 +430,13 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                 <div class="card w-100 rounded-0 border-0 subtask mb-3">
 
                     <div class="card-horizontal">
-                        <!-- <div class="d-flex">
+                         {{-- <div class="d-flex">
                             <x-forms.checkbox :fieldId="'checkbox'.$subtask->id" class="task-check"
                                 data-sub-task-id="{{ $subtask->id }}"
                                 :checked="($subtask->status == 'complete') ? true : false" fieldLabel=""
                                 :fieldName="'checkbox'.$subtask->id" />
 
-                        </div> -->
+                        </div>  --}}
                         <?php
 
                           $task_id= App\Models\Task::where('subtask_id',$subtask->id)->first();
@@ -451,7 +451,7 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
 
                                 <p class="card-title f-14 mr-3 text-dark flex-grow-1" id="subTask">
                                   @if($task_id != null)
-                                  <a class="openRightModal" href="/account/tasks/{{$task_id->id}}" style="color:black;" >{{ucfirst($subtask->title)}}</a>
+                                  <a class="openRightModal" href="/account/tasks/{{$task_id->id}}" style="color:black;" >{{ucfirst($task_id->heading)}}</a>
                                   @else
 
                                   @endif
