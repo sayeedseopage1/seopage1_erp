@@ -120,7 +120,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
 
                        ?>
                         <div class="form-group my-3">
-                            <x-forms.label fieldId="selectAssignee" :fieldLabel="__('modules.tasks.assignTo')">
+                            <x-forms.label fieldId="selectAssignee" fieldRequired="true" :fieldLabel="__('modules.tasks.assignTo')">
                             </x-forms.label>
                             <x-forms.input-group>
                                 <select class="form-control multiple-users" multiple name="user_id[]"
