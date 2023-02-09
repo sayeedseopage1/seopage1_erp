@@ -539,10 +539,21 @@ class ContractController extends AccountBaseController
     }
     public function storeMilestone(Request $request)
     {
-        //  dd($request);
+        //dd($request);
+        $total_value = $request->input('another_value') * 2;
+
+        $project = Project::where('id', $request->project_id)->first();
+        $milestone_amount = ProjectMilestone::where('project_id', $project->id)->sum('cost');
+        $check = ($project->project_budget) - ($milestone_amount);
+        // /dd($check);
+
+        // $request->validate([
+        //     'input_value' => 'required|numeric|max:' . $another_value,
+        // ]);
+    
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'cost' => 'required',
+            'cost' => 'required|numeric|max:' . $check,
 
             'project_id' => 'required',
 
@@ -596,11 +607,14 @@ class ContractController extends AccountBaseController
     }
     public function updateMilestone(Request $request, $id)
     {
-      //dd($request);
+        $projectmilestone = ProjectMilestone::where('id', $id)->first();
+        $project_id = Project::where('id', $projectmilestone->project_id)->first();
+        $milestone_amount = ProjectMilestone::where('project_id', $project_id->id)->sum('cost');
+        $check = ($project_id->project_budget) - ($milestone_amount);
+
       $validator = Validator::make($request->all(), [
           'title' => 'required',
-          'cost' => 'required',
-
+          'cost' => 'required|numeric|max:' . $check,
 
 
       ]);
