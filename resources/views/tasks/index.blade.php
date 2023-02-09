@@ -249,7 +249,7 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
                     <select name="action_type" class="form-control select-picker" id="quick-action-type" disabled>
                         <option value="">@lang('app.selectAction')</option>
                         {{-- <option value="change-status">@lang('modules.tasks.changeStatus')</option> --}}
-                        @if($Auth::user()->role_id == 1)
+                        @if(Auth::user()->role_id == 1)
                         <option value="delete">@lang('app.delete')</option>
                         @endif
                     </select>
