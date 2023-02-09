@@ -123,7 +123,7 @@ $changeStatusPermission = user()->permission('change_status');
 
 
                                      @if($extension_status != null)
-                                @if($extension_status->status == 'pending' || $extension->status != 'approved')
+                                @if($extension_status->status == 'pending' || $extension_status->status != 'approved')
 
                                 <!-- <button class="btn btn-primary" ><i class="fa-solid fa-check"></i> Submitted for Extension</button> -->
                                 <div class="d-flex justify-content-center float-right">
