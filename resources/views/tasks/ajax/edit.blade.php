@@ -128,7 +128,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                               // $date2 = new DateTime(Carbon\Carbon::now()->addDay(1));
                                               // $days  = $date2->diff($date1)->format('%a');
 
-                                                  $d_data= "Busy Until ".$task_s->due_date->format('Y-m-d') . ' ('.$task_s->due_date->format('h:i:s A'). ')';
+                                                  $d_data= "Busy Until ".$task_s->due_date->format('Y-m-d') . ' ('.$task_s->due_date. ')';
 
 
                                             }else {
@@ -241,7 +241,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
 
                     <div class="col-md-12">
                         <div class="row">
-                          {{-- <div class="col-md-12 col-lg-4">
+                          {{----}}  <div class="col-md-12 col-lg-4">
                                 <div class="form-group my-3">
                                     <x-forms.label fieldId="task_labels" :fieldLabel="__('app.label')">
                                     </x-forms.label>
@@ -275,7 +275,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                         @endif
                                     </x-forms.input-group>
                                 </div>
-                            </div> --}} 
+                            </div>
 
 
 
