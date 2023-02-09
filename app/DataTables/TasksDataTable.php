@@ -278,7 +278,7 @@ class TasksDataTable extends BaseDataTable
                 $span .= '<span class="badge badge-info">Subtask</span>';
                 }
                 else {
-                $span .= '';
+                $span .= '<span class="badge badge-primary">Parent task</span>';
                 }
 
                 return '<div class="media align-items-center">
@@ -626,7 +626,7 @@ class TasksDataTable extends BaseDataTable
               ],
               // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
               // __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
-                '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => true],
+                '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
               __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
               __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
               __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
@@ -654,7 +654,8 @@ class TasksDataTable extends BaseDataTable
                   'orderable' => false,
                   'searchable' => false
               ],
-              __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+            //   __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
               __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
               __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
               __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],

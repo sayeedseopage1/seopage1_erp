@@ -256,7 +256,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                         </div>
                     </div>
                     @if(is_null($task))
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <div class="form-group my-3">
                             <div class="d-flex">
                                 <x-forms.checkbox :fieldLabel="__('modules.tasks.dependent')" fieldName="dependent"
@@ -275,7 +275,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                                 @endforeach
                             </x-forms.select>
                         </div>
-                    </div>
+                    </div> --}}
                     @endif
 
 
