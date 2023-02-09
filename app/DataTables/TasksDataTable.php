@@ -269,7 +269,7 @@ class TasksDataTable extends BaseDataTable
                     $timer .= '<span class="badge badge-primary mr-1" data-toggle="tooltip" data-original-title="' . __('modules.projects.activeTimers') . '" ><i class="fa fa-clock"></i> ' . $row->activeTimer->timer . '</span>';
                 }
 
-                foreach ($row->subtask_id != null) {
+                if ($row->subtask_id != null) {
                     $labels .= '<span class="badge badge-secondary mr-1" style="background-color: red;">Subtask</span>';
                 }
 
