@@ -251,7 +251,12 @@ class TasksDataTable extends BaseDataTable
                 return $timeLog;
             });
             $datatables->editColumn('heading', function ($row) {
-                $labels = $private = $pin = $timer = '';
+                $labels = $private = $pin = $timer = $span= '';
+                if($row->subtask_id != null)
+                {
+                $span .= '<br>
+                    <span class="badge badge-info">Subtask</span>';
+                }
 
                 if ($row->is_private) {
                     $private = '<span class="badge badge-secondary mr-1"><i class="fa fa-lock"></i> ' . __('app.private') . '</span>';
@@ -278,11 +283,10 @@ class TasksDataTable extends BaseDataTable
                     return '<div class="media align-items-center">
                         <div class="media-body">
                     <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->heading) . '</a></h5>
-                    <p class="mb-0">' . $private . ' ' . $pin . ' ' . $timer . ' ' . $labels . '</p>
+                    <p class="mb-0">' . $private . ' ' . $pin . ' ' . $timer . ' ' . $labels . $span .'</p>
                     </div>
                         </div>
-                        <br>
-                        <span class="badge badge-info">Subtask</span>
+                        
                         '
                         ;
 
