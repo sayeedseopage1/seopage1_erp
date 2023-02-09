@@ -251,12 +251,7 @@ class TasksDataTable extends BaseDataTable
                 return $timeLog;
             });
             $datatables->editColumn('heading', function ($row) {
-                $labels = $private = $pin = $timer = $span= '';
-                if($row->subtask_id != null)
-                {
-                $span .= '<br>
-                    <span class="badge badge-info">Subtask</span>';
-                }
+                $labels = $private = $pin = $timer = '';
 
                 if ($row->is_private) {
                     $private = '<span class="badge badge-secondary mr-1"><i class="fa fa-lock"></i> ' . __('app.private') . '</span>';
@@ -274,34 +269,16 @@ class TasksDataTable extends BaseDataTable
                     $timer .= '<span class="badge badge-primary mr-1" data-toggle="tooltip" data-original-title="' . __('modules.projects.activeTimers') . '" ><i class="fa fa-clock"></i> ' . $row->activeTimer->timer . '</span>';
                 }
 
-                foreach ($row->labels as $label) {
-                    $labels .= '<span class="badge badge-secondary mr-1" style="background-color: '.$label->label_color .'">'. $label->label_name.'</span>';
+                foreach ($row->subtask_id != null) {
+                    $labels .= '<span class="badge badge-secondary mr-1" style="background-color: red;">Subtask</span>';
                 }
-                if($row->subtask_id != null)
-                {
 
-                    return '<div class="media align-items-center">
+                return '<div class="media align-items-center">
                         <div class="media-body">
                     <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->heading) . '</a></h5>
-                    <p class="mb-0">' . $private . ' ' . $pin . ' ' . $timer . ' ' . $labels . $span .'</p>
+                    <p class="mb-0">' . $private . ' ' . $pin . ' ' . $timer . ' ' . $labels . '</p>
                     </div>
-                        </div>
-                        
-                        '
-                        ;
-
-                } else {
-
-                    return '<div class="media align-items-center">
-                    <div class="media-body">
-                <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->heading) . '</a></h5>
-                <p class="mb-0">' . $private . ' ' . $pin . ' ' . $timer . ' ' . $labels . '</p>
-                </div>
-              </div>';
-
-                    }
-
-               
+                  </div>';
             });
             $datatables->editColumn('board_column', function ($row) use ($taskBoardColumns) {
                 $taskUsers = $row->users->pluck('id')->toArray();
