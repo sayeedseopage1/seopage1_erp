@@ -124,7 +124,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                             </x-forms.label>
                             <x-forms.input-group>
                                 <select class="form-control multiple-users" multiple name="user_id[]"
-                                    id="selectAssignee" data-live-search="true" data-size="8">
+                                    id="selectAssignee" fieldRequired="true" data-live-search="true" data-size="8">
 
                                     @foreach ($employees as $item)
                                         <option @if ((isset($defaultAssignee) && $defaultAssignee == $item->id) || (!is_null($task) && isset($projectMember) && in_array($item->id, $projectMember))) selected @endif
