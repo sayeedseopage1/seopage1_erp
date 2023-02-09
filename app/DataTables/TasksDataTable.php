@@ -275,7 +275,7 @@ class TasksDataTable extends BaseDataTable
             $subtask = Task::where('id', $row->id)->first();
                 if($subtask->subtask_id != null)
                 {
-                $span .= '<br><span class="badge badge-info">Subtask</span>';
+                $span .= '<span class="badge badge-info">Subtask</span>';
                 }
                 else {
                 $span .= '';
@@ -284,7 +284,7 @@ class TasksDataTable extends BaseDataTable
                 return '<div class="media align-items-center">
                         <div class="media-body">
                     <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->heading) . '</a></h5>
-                    <p class="mb-0">' . $private . ' ' . $pin . ' ' .$span.' ' . $timer . ' ' . $labels .  '</p>
+                    <p class="mb-0">' . $pin . ' ' .$span.' ' . $timer . ' ' . $labels .  '</p>
                     </div>
                   </div>';
             });
