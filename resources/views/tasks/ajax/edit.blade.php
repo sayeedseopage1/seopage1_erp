@@ -241,7 +241,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
 
                     <div class="col-md-12">
                         <div class="row">
-                            <div class="col-md-12 col-lg-4">
+                          {{-- <div class="col-md-12 col-lg-4">
                                 <div class="form-group my-3">
                                     <x-forms.label fieldId="task_labels" :fieldLabel="__('app.label')">
                                     </x-forms.label>
@@ -275,7 +275,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                         @endif
                                     </x-forms.input-group>
                                 </div>
-                            </div>
+                            </div> --}} 
 
 
 
