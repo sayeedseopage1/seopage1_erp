@@ -358,21 +358,24 @@ $changeStatusPermission = user()->permission('change_status');
 
 
 
-                    <div class="card">
-                        <div class="body">
-                            @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
-                            <x-cards.data-row :label="__('app.description')" :value="!empty($task->description) ? $task->description : '--'" html="true" />
-                        @endif
-
-                        </div>
-
-
-                    </div>
+                    
                    
                   
                       <x-cards.data-row :label="__('General Guidelines')" :value="!empty($task->project->project_summary) ? $task->project->project_summary : '--'" html="true" />
-
-
+                        <br>
+                        <div class="card">
+                            <div class="body">
+                                <br>
+                               
+                                @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                                <x-cards.data-row :label="__('app.description')" :value="!empty($task->description) ? $task->description : '--'" html="true" />
+                            @endif
+    
+                            </div>
+    
+    
+                        </div>
+                        <br>
 
                     {{-- Custom fields data --}}
                     @if (($taskSettings->custom_fields == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
