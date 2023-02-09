@@ -440,7 +440,7 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                         <?php
 
                           $task_id= App\Models\Task::where('subtask_id',$subtask->id)->first();
-                          $task_member= App\Models\TaskUser::where('task_id',$task_id)->first();
+                          $task_member= App\Models\TaskUser::where('task_id',$task_id->id)->first();
                           $task_user= App\Models\User::where('id',$task_member->user_id)->first();
                          ?>
 
