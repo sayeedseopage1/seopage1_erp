@@ -251,7 +251,7 @@ class TasksDataTable extends BaseDataTable
                 return $timeLog;
             });
             $datatables->editColumn('heading', function ($row) {
-                $labels = $private = $pin = $timer = '';
+                $labels = $private = $pin = $timer = $span = '';
 
                 if ($row->is_private) {
                     $private = '<span class="badge badge-secondary mr-1"><i class="fa fa-lock"></i> ' . __('app.private') . '</span>';
@@ -269,14 +269,22 @@ class TasksDataTable extends BaseDataTable
                     $timer .= '<span class="badge badge-primary mr-1" data-toggle="tooltip" data-original-title="' . __('modules.projects.activeTimers') . '" ><i class="fa fa-clock"></i> ' . $row->activeTimer->timer . '</span>';
                 }
 
-                if ($row->subtask_id != null) {
-                    $labels .= '<span class="badge badge-secondary mr-1" style="background-color: red;">Subtask</span>';
+                foreach ($row->labels as $label) {
+                    $labels .= '<span class="badge badge-secondary mr-1" style="background-color: '.$label->label_color .'">'. $label->label_name.'</span>';
+                }
+            $subtask = Task::where('id', $row->id)->first();
+                if($subtask->subtask_id != null)
+                {
+                $span .= '<br><span class="badge badge-info">Subtask</span>';
+                }
+                else {
+                $span .= '';
                 }
 
                 return '<div class="media align-items-center">
                         <div class="media-body">
-                    <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->heading) . '('.$labels.')</a></h5>
-                    <p class="mb-0">' . $private . ' ' . $pin . ' ' . $timer .  '</p>
+                    <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->heading) . '</a></h5>
+                    <p class="mb-0">' . $private . ' ' . $pin . ' ' . $timer . ' ' . $labels . ' ' .$span. '</p>
                     </div>
                   </div>';
             });
