@@ -272,13 +272,32 @@ class TasksDataTable extends BaseDataTable
                 foreach ($row->labels as $label) {
                     $labels .= '<span class="badge badge-secondary mr-1" style="background-color: '.$label->label_color .'">'. $label->label_name.'</span>';
                 }
+                if($row->subtask_id != null)
+                {
 
-                return '<div class="media align-items-center">
+                    return '<div class="media align-items-center">
                         <div class="media-body">
                     <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->heading) . '</a></h5>
                     <p class="mb-0">' . $private . ' ' . $pin . ' ' . $timer . ' ' . $labels . '</p>
                     </div>
-                  </div>';
+                        </div>
+                        <br>
+                        <span class="badge badge-info">Subtask</span>
+                        '
+                        ;
+
+                } else {
+
+                    return '<div class="media align-items-center">
+                    <div class="media-body">
+                <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->heading) . '</a></h5>
+                <p class="mb-0">' . $private . ' ' . $pin . ' ' . $timer . ' ' . $labels . '</p>
+                </div>
+              </div>';
+
+                    }
+
+               
             });
             $datatables->editColumn('board_column', function ($row) use ($taskBoardColumns) {
                 $taskUsers = $row->users->pluck('id')->toArray();
