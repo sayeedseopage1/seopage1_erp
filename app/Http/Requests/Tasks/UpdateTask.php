@@ -53,6 +53,7 @@ class UpdateTask extends CoreRequest
         $rules = [
             'heading' => 'required',
             'start_date' => 'required|date_format:"' . $setting->date_format . '"',
+            'due_date' => 'required|date_format:"' . $setting->date_format . '"',
             'priority' => 'required'
         ];
 

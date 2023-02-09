@@ -77,15 +77,15 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                             :fieldPlaceholder="__('placeholders.date')" />
                     </div>
 
-                    <div class="col-md-5 col-lg-3 dueDateBox"  @if($task && is_null($task->due_date)) style="display: none" @endif>
+                    <div class="col-md-5 col-lg-3 dueDateBox"  @if($task && is_null($task->due_date)) style="" @endif>
                         <x-forms.datepicker fieldId="due_date" fieldRequired="true" :fieldLabel="__('app.dueDate')"
                             fieldName="due_date" :fieldPlaceholder="__('placeholders.date')"
                             :fieldValue="(($task && $task->due_date) ? $task->due_date->format(global_setting()->date_format) : \Carbon\Carbon::now(global_setting()->timezone)->format(global_setting()->date_format))"/>
                     </div>
-                    <div class="col-md-2 col-lg-2 pt-5">
+                    {{-- <div class="col-md-2 col-lg-2 pt-5">
                         <x-forms.checkbox class="mr-0 mr-lg-2 mr-md-2" :checked="$task ? is_null($task->due_date) : ''" :fieldLabel="__('app.withoutDueDate')"
                                           fieldName="without_duedate" fieldId="without_duedate" fieldValue="yes" />
-                    </div>
+                    </div> --}}
 
 
                       @if($project != null)

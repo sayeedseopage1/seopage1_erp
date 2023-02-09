@@ -71,16 +71,16 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                             :fieldPlaceholder="__('placeholders.date')" />
                     </div>
 
-                    <div class="col-md-5 col-lg-4 dueDateBox" @if(is_null($task->due_date)) style="display: none" @endif>
+                    <div class="col-md-5 col-lg-4 dueDateBox" @if(is_null($task->due_date)) style="" @endif>
                         <x-forms.datepicker fieldId="due_date" fieldRequired="true" :fieldLabel="__('app.dueDate')"
                                             fieldName="due_date" :fieldPlaceholder="__('placeholders.date')"
                                             :fieldValue="(($task->due_date) ? $task->due_date->format(global_setting()->date_format) : '')"  />
                     </div>
 
-                    <div class="col-md-2 col-lg-2 pt-5">
+                    {{-- <div class="col-md-2 col-lg-2 pt-5">
                         <x-forms.checkbox class="mr-0 mr-lg-2 mr-md-2" :checked="is_null($task->due_date)" :fieldLabel="__('app.withoutDueDate')"
                                           fieldName="without_duedate" fieldId="without_duedate" fieldValue="yes" />
-                    </div>
+                    </div> --}}
 
 
                       <div class="col-md-12 col-lg-4">
@@ -127,9 +127,14 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                               // $date1 = new DateTime($task_s['due_date']);
                                               // $date2 = new DateTime(Carbon\Carbon::now()->addDay(1));
                                               // $days  = $date2->diff($date1)->format('%a');
+                                            if($task_s->due_date != null)
+                                            {
+                                                $d_data= "Busy Until ".$task_s->due_date->format('Y-m-d') . ' ('.$task_s->due_date->format('h:i:s A'). ')';
 
-                                                  $d_data= "Busy Until ".$task_s->due_date . ' ('.$task_s->due_date. ')';
-
+                                            }else{
+                                                $d_data ='Busy';
+                                            }
+                                                  
 
                                             }else {
                                                   $d_data=  "Open to Work";
