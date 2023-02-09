@@ -50,6 +50,7 @@ class StoreTask extends CoreRequest
         $rules = [
             'heading' => 'required',
             'milestone_id'=>'required',
+            'user_id'=>'required',
             'start_date' => 'required|date_format:"' . $setting->date_format . '"',
             'due_date' => 'required|date_format:"' . $setting->date_format . '"',
             'priority' => 'required'
