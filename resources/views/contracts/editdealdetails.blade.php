@@ -158,7 +158,7 @@
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="exampleFormControlInput1">Project Budget <span style="color:red;">*</span></label>
-                              <input type="text" name="amount" value="{{$deal->actual_amount}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
+                              <input type="text" name="amount" value="{{$deal->actual_amount}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" >
                               </div>
                             </div>
                             <div class="col-md-3">

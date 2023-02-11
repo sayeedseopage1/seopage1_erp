@@ -32,7 +32,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     <div class="col-lg-6 col-md-6">
                         <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.projectName')"
                             fieldName="project_name" fieldRequired="true" fieldId="project_name"
-                            :fieldValue="$project->project_name" :fieldPlaceholder="__('placeholders.project')" fieldReadOnly="true"/>
+                            :fieldValue="$project->project_name" :fieldPlaceholder="__('placeholders.project')" />
                     </div>
 
                     <input type="hidden" id="project_id" name="project_id" value="{{ $project->id }}">

@@ -139,6 +139,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
             <tr class="inv-logo-heading mt-3">
                 <td><img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
                         class="logo" /></td>
+                        @if(Auth::user()->role_id == 1 || Auth::user()->role_id== 7 || Auth::user()->role_id == 8)
                         <td>
                           <div class="dropdown float-right">
                               <button class="btn f-14 px-0 py-0 text-dark-grey dropdown-toggle" type="button"
@@ -155,6 +156,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
 
 
                         </td>
+                        @endif
 
 
             </tr>

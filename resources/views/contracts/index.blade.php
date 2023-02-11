@@ -133,13 +133,13 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 <?php
 
 if (Auth::user()->role_id == 4) {
-  $deals= App\Models\Deal::where('pm_id',Auth::id())->get();
+  $deals= App\Models\Deal::where('pm_id',Auth::id())->orderBy('id','desc')->get();
 }elseif(Auth::user()->role_id == 7)
 {
-  $deals= App\Models\Deal::where('added_by',Auth::id())->get();
+  $deals= App\Models\Deal::where('added_by',Auth::id())->orderBy('id','desc')->get();
 }
 else {
-$deals= App\Models\Deal::all();
+$deals= App\Models\Deal::orderBy('id','desc')->get();
 }
 
 
