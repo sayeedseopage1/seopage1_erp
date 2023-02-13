@@ -849,7 +849,7 @@ if ($pm_count < 2) {
         //$project->added_by= Auth::id();
         $project->last_updated_by= Auth::id();
         //$project_admin= User::where('role_id',6)->first();
-        $project->project_admin= Auth::id();
+        $project->project_admin= $project->pm_id;
 
         if ($request->public) {
             $project->public = 1;
