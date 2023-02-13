@@ -63,7 +63,7 @@ class TaskStatus extends Command
                 if ($days != 0) {
                   if ($from > $to){
 
-                      if($task->board_column_id != 6)
+                      if($task->board_column_id != 6 || $task->board_column_id != 4 || $task->board_column_id != 7)
                       {
                         $task_status= Task::find($task->id);
 

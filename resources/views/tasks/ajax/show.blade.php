@@ -23,7 +23,7 @@ $changeStatusPermission = user()->permission('change_status');
                             $extension_request= App\Models\TaskTimeExtension::where('task_id',$task->id)->where('user_id','!=',Auth::id())->first();
                              ?>
                              @if($extension_request != null)
-                            @if ($extension_request->status == 'pending')
+                            @if ($extension_request->status == 'pending' || $task->board_column_id != 7)
                                 <!-- <x-forms.button-primary icon="check" data-status="completed"
                                     class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
                                     @lang('modules.tasks.markComplete')
@@ -44,9 +44,11 @@ $changeStatusPermission = user()->permission('change_status');
                                 @if ($task->task_status == 'submitted' )
                                     <!-- <x-forms.button-primary icon="check" data-status="completed"
                                         class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
+                                        @if($task->board_column_id != 7)
                                         @lang('modules.tasks.markComplete')
+                                        @endif
                                     </x-forms.button-primary> -->
-                                    @if($task_user->user_id != Auth::user()->id)
+                                    @if($task->added_by == Auth::user()->id || Auth::user()->role_id == 1)
                                       <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskapprove">Approve</button>
                                       <button class="btn bg-danger mr-3 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskrevision">Need Revision</button>
 
@@ -58,8 +60,8 @@ $changeStatusPermission = user()->permission('change_status');
                                 @endif
                             @endif
 
-                            @if($task->board_column_id != 6)
-                            @if ($task->boardColumn->slug != 'completed' && !is_null($task->is_task_user))
+                            @if($task->board_column_id != 6 || $task->board_column_id != 7)
+                            @if ($task->boardColumn->slug != 'completed' && !is_null($task->is_task_user) )
                                   @if (is_null($task->userActiveTimer))
                                       <x-forms.button-secondary id="start-task-timer" icon="play">
                                           @lang('modules.timeLogs.startTimer')
@@ -87,7 +89,7 @@ $changeStatusPermission = user()->permission('change_status');
 
 
 
-                                  @if($task->status != "completed")
+                                  @if($task->status != "completed" || $task->board_column_id != 7)
 
 
                                         <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
