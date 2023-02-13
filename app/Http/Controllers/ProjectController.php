@@ -1836,6 +1836,7 @@ if ($pm_count < 2) {
     }
     public function sign(SignRequest $request, $id)
     {
+        //dd($request,$id);
         $this->project = Project::with('signature')->findOrFail($id);
 
         if ($this->project && $this->project->signature) {

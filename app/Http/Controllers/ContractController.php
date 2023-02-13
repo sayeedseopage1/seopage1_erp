@@ -1429,6 +1429,7 @@ class ContractController extends AccountBaseController
 
     public function sign(SignRequest $request, $id)
     {
+        //dd($request);
         $this->contract = Contract::with('signature')->findOrFail($id);
 
         if ($this->contract && $this->contract->signature) {

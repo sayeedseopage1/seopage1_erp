@@ -25,6 +25,10 @@ use App\Http\Requests\Admin\Contract\SignRequest;
 use App\Models\Project;
 use App\Events\SignedEvent;
 use App\Events\ProjectSignedEvent;
+use Notification;
+use App\Notifications\ClientDeliverableSignNotification;
+use App\Models\User;
+
 
 class PublicUrlController extends Controller
 {
@@ -82,7 +86,9 @@ class PublicUrlController extends Controller
     }
     public function projectSign(SignRequest $request, $id)
     {
+        //dd($request,$id);
         $this->project = Project::with('signature')->findOrFail($id);
+        //dd($this->project);
 
         if($this->project && $this->project->signature){
             return Reply::error(__('messages.alreadySigned'));
@@ -116,6 +122,13 @@ class PublicUrlController extends Controller
         $sign->save();
 
         event(new ProjectSignedEvent($this->project, $sign));
+        $users= User::where('role_id',1)->orWhere('id',$this->project->pm_id)->get();
+        $project_id = Project::where('id',$this->project->id)->first();
+       // dd($project_id);
+      foreach ($users as $user) {
+
+      Notification::send($user, new ClientDeliverableSignNotification($project_id));
+    }
 
       return Reply::redirect(route('projects.show', $this->project->id));
     }
