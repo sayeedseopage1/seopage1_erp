@@ -6,6 +6,11 @@ use Illuminate\Console\Command;
 use App\Models\Task;
 use DateTime;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\TaskUser;
+use App\Notifications\TaskSubmitNotification;
+
+use Notification;
 
 
 class TaskStatus extends Command
@@ -75,6 +80,29 @@ class TaskStatus extends Command
 
 
         }
+
+        $task_under_review= Task::where('task_status','submitted')->get();
+        foreach ($task_under_review as $tsk) {
+
+          // $date1 = new DateTime($task['due_date']);
+          // $date2 = new DateTime(Carbon::now()->addDay(1));
+          // $days  = $date2->diff($date1)->format('%a');
+          // //dd($days);
+          $task_id= Task::where('id',$tsk->id)->first();
+
+          $user= User::where('id',$tsk->added_by)->orWhere('role_id',1)->first();
+          $sender_id= TaskUser::where('task_id',$tsk->id)->first();
+          $sender= User::where('id',$sender_id->user_id)->first();
+   
+   
+   
+         Notification::send($user, new TaskSubmitNotification($task_id,$sender));
+
+
+
+
+
+  }
 
         $this->info('Task Status Changed');
 
