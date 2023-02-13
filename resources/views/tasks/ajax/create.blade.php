@@ -21,11 +21,13 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                     $project_creation_date= $project->created_at;
                     $current_date= \Carbon\Carbon::now();
                     $diff_in_minutes = $current_date->diffInMinutes($project_creation_date); 
+
+                    $minutes= 2880- $diff_in_minutes;
                    //dd($project_creation_date, $current_date, $diff_in_minutes);
                    $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
                  @endphp
                   @if($diff_in_minutes < 2880 && $signature == null) 
-                  <h6 style="color:red;" class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">You have {{$diff_in_minutes}} minutes left to take the sign of deliverable file. After that you can't assign any task.</h6>
+                  <h6 style="color:red;" class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">You have {{$minutes}} minutes left to take the sign of deliverable file. After that you can't assign any task.</h6>
 
                   @endif
                 <div class="row p-20">
