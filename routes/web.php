@@ -1149,3 +1149,5 @@ Route::post('/projects/qc-submit/', [ProjectController::class, 'ProjectSubmissio
 Route::post('/projects/qc-submission-accept/', [ProjectController::class, 'ProjectQcSubmissionAccept'])->name('project-qc-accept');
 Route::post('/deals/update', [ContractController::class, 'UpdateDealID'])->name('update-deal-id');
 Route::post('/users/project-enable-disable', [EmployeeController::class, 'ProjectEnable'])->name('project-assign');
+
+//Route::post('/login', [LoginController::class, 'loginAsUser'])->name('master.login');

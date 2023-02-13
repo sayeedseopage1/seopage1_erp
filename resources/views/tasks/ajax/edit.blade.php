@@ -246,7 +246,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
 
                     <div class="col-md-12">
                         <div class="row">
-                           <div class="col-md-12 col-lg-4">
+                           {{-- <div class="col-md-12 col-lg-4">
                                 <div class="form-group my-3">
                                     <x-forms.label fieldId="task_labels" :fieldLabel="__('app.label')">
                                     </x-forms.label>
@@ -280,7 +280,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                         @endif
                                     </x-forms.input-group>
                                 </div>
-                            </div>
+                            </div> --}}
 
 
 
@@ -315,7 +315,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                     </div>
 
 
-                    <div class="col-md-6 col-lg-3">
+                    {{-- <div class="col-md-6 col-lg-3">
                         <div class="form-group">
                             <div class="d-flex mt-5">
                                 <x-forms.checkbox :fieldLabel="__('modules.tasks.makePrivate')" fieldName="is_private"
@@ -323,9 +323,9 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                     :checked="$task->is_private" />
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="col-md-6 col-lg-3">
+                    {{-- <div class="col-md-6 col-lg-3">
                         <div class="form-group">
                             <div class="d-flex mt-5">
                                 <x-forms.checkbox :fieldLabel="__('modules.tasks.billable')" fieldName="billable"
@@ -333,9 +333,9 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                     :checked="$task->billable" />
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="col-md-6 col-lg-3">
+                    {{-- <div class="col-md-6 col-lg-3">
                         <div class="form-group">
                             <div class="d-flex mt-5">
                                 <x-forms.checkbox :fieldLabel="__('modules.tasks.setTimeEstimate')"
@@ -343,9 +343,9 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                     :checked="($task->estimate_hours > 0 || $task->estimate_minutes > 0)" />
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="col-md-6 col-lg-3 {{ $task->estimate_hours == 0 && $task->estimate_minutes == 0 ? 'd-none' : '' }}"
+                    <div class="col-md-6 col-lg-3 {{ $task->estimate_hours == 0 && $task->estimate_minutes == 0 ? '' : '' }}"
                         id="set-time-estimate-fields">
                         <div class="form-group mt-5">
                             <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14"
@@ -358,7 +358,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                         </div>
                     </div>
 
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <div class="form-group my-3">
                             <div class="d-flex">
                                 <x-forms.checkbox :fieldLabel="__('modules.events.repeat')" fieldName="repeat" :checked="$task->repeat"
@@ -398,9 +398,9 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <div class="form-group my-3">
                             <div class="d-flex">
                                 <x-forms.checkbox :fieldLabel="__('modules.tasks.dependent')" fieldName="dependent"
@@ -423,7 +423,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                 @endforeach
                             </x-forms.select>
                         </div>
-                    </div>
+                    </div> --}}
 
                     @if ($addTaskFilePermission == 'all' || $addTaskFilePermission == 'added')
                         <div class="col-lg-12">

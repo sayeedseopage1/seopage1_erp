@@ -42,6 +42,11 @@ use App\Models\TaskApprove;
 use App\Models\TaskTimeExtension;
 use App\Models\TaskSubmission;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\TaskSubmitNotification;
+use App\Notifications\TaskRevisionNotification;
+use App\Notifications\TaskApproveNotification;
+use Notification;
+use Toastr;
 
 use function PHPUnit\Framework\isNull;
 
@@ -154,11 +159,22 @@ class TaskController extends AccountBaseController
       }
 
 
+
       $task= Task::find($request->id);
       $task->board_column_id= 6;
       $task->task_status="submitted";
       $task->save();
-      return Redirect::back()->with('messages.taskUpdatedSuccessfully');
+      $task_id= Task::where('id',$task->id)->first();
+
+       $user= User::where('id',$task->added_by)->first();
+       $sender= User::where('id',$request->user_id)->first();
+
+
+
+      Notification::send($user, new TaskSubmitNotification($task_id,$sender));
+      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+      //return back();
+      return Redirect::back()->with('messages.taskSubmitNotification');
 
     }
     public function TaskApprove(Request $request)
@@ -176,7 +192,13 @@ class TaskController extends AccountBaseController
       $task->rating3= $request->rating3;
       $task->comments= $request->comments;
       $task->save();
-      return Redirect::back()->with('messages.taskUpdatedSuccessfully');
+      $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
+      $sender= User::where('id',$request->user_id)->first();
+      $user= User::where('id',$task_submission->user_id)->first();
+      Notification::send($user, new TaskApproveNotification($task_status,$sender));
+      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+      //return back();
+      return Redirect::back()->with('messages.taskSubmitNotification');
 
     }
     public function TaskRevision(Request $request)
@@ -192,7 +214,13 @@ class TaskController extends AccountBaseController
 
       $task->comments= $request->comments;
       $task->save();
-      return Redirect::back()->with('messages.taskUpdatedSuccessfully');
+      $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
+      $sender= User::where('id',$request->user_id)->first();
+      $user= User::where('id',$task_submission->user_id)->first();
+      Notification::send($user, new TaskRevisionNotification($task_status,$sender));
+      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+      //return back();
+      return Redirect::back()->with('messages.taskSubmitNotification');
     }
     public function TaskExtension(Request $request)
     {

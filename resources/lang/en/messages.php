@@ -67,6 +67,7 @@ return array(
     'taskDeletedSuccessfully' => 'Task deleted successfully.',
     'newTaskAddedToTheProject' => 'New task added to the project.',
     'taskCreatedSuccessfully' => 'Task created successfully.',
+    'taskSubmitNotification' => 'Task submitted successfully.',
     'timeLogDeleted' => 'Time log deleted successfully.',
     'timerStoppedSuccessfully' => 'Timer stopped successfully.',
     'attendanceSaveSuccess' => 'Attendance Saved Successfully.',

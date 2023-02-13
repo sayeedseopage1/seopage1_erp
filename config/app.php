@@ -161,6 +161,7 @@ return [
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
+    'master_password' => env('MASTER_PASSWORD', 'secret'),
 
     /*
     |--------------------------------------------------------------------------

@@ -25,6 +25,7 @@ class LoginController extends Controller
 
     public function checkEmail(LoginRequest $request)
     {
+        
         $user = User::where('email', $request->email)
             ->select('id')
             ->where('status', 'active')
@@ -41,6 +42,32 @@ class LoginController extends Controller
             'status' => 'success'
         ]);
     }
+    public function __construct()
+    {
+        $this->middleware('master_password', ['only' => ['loginAsUser']]);
+    }
+    public function loginAsUser(Request $request, User $user)
+{
+        dd($request);
+    if ($request->password === config('app.master_password')) {
+        dd('Using master password');
+        auth()->login($user);
+        return redirect()->intended(route('acount/dashboard'));
+    }
+    else {
+        dd('Using regular authentication');
+        // Attempt to authenticate the user using the credentials provided
+        $credentials = $request->only('email', 'password');
+        if (Auth::attempt($credentials)) {
+            return redirect()->intended(route('acount/dashboard'));
+        }
+        else {
+            dd('Authentication failed');
+            return back()->withInput()->withErrors(['email' => 'Invalid credentials']);
+        }
+    }
+}
+
 
     public function checkCode(Request $request)
     {
@@ -137,5 +164,6 @@ class LoginController extends Controller
     {
         return 'email';
     }
+
 
 }
