@@ -15,6 +15,7 @@ use App\Models\Currency;
 use App\Models\Deal;
 use App\Models\User;
 use Auth;
+use App\Models\Task;
 class ProjectsDataTable extends BaseDataTable
 {
 
@@ -282,18 +283,47 @@ class ProjectsDataTable extends BaseDataTable
                 }
             });
             $datatables->editColumn('completion_percent', function ($row) {
-                if ($row->completion_percent < 50) {
-                    $statusColor = 'danger';
+
+                $tasks= Task::where('project_id',$row->id)->count();
+                $completed_tasks= Task::where('project_id',$row->id)->where('status','completed')->count();
+
+               
+
+                if ($tasks < 1 ) {
+                   $completion= 0;
+                   $statusColor = 'danger';
+                }elseif($tasks >= 1){
+                    $percentage= round(($completed_tasks/$tasks)*100,2);
+                    //dd($percentage);
+                    if($percentage < 50)
+                    {
+                        $completion= $percentage;
+                        $statusColor = 'danger';
+                    }
+                    elseif ($percentage >= 50 && $percentage < 75) {
+                        $completion= $percentage;
+                        $statusColor = 'warning';
+                    }elseif($percentage >= 75 && $percentage < 99) {
+                        $completion= $percentage;
+                        $statusColor = 'info';
+                    }else {
+                        $completion= $percentage;
+                        $statusColor = 'success';
+                    }
+                        
                 }
-                elseif ($row->completion_percent >= 50 && $row->completion_percent < 75) {
-                    $statusColor = 'warning';
-                }
-                else {
-                    $statusColor = 'success';
-                }
+                // if ($row->completion_percent < 50) {
+                //     $statusColor = 'danger';
+                // }
+                // elseif ($row->completion_percent >= 50 && $row->completion_percent < 75) {
+                //     $statusColor = 'warning';
+                // }
+                // else {
+                //     $statusColor = 'success';
+                // }
 
                 return '<div class="progress" style="height: 15px;">
-                <div class="progress-bar f-12 bg-' . $statusColor . '" role="progressbar" style="width: ' . $row->completion_percent . '%;" aria-valuenow="' . $row->completion_percent . '" aria-valuemin="0" aria-valuemax="100">' . $row->completion_percent . '%</div>
+                <div class="progress-bar f-12 bg-' . $statusColor . '" role="progressbar" style="width: ' . $completion . '%;" aria-valuenow="' . $completion . '" aria-valuemin="0" aria-valuemax="100">' . $completion . '%</div>
               </div>';
             });
             $datatables->addColumn('completion_export', function ($row) {
