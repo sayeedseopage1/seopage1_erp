@@ -58,7 +58,7 @@ class TaskSubmitNotification extends Notification
        </p>'
        ;
        $header= '<p>
-          <h1 style="color: red; text-align: center;" >' . __('Task Sumission for '.$task->task_short_code.'') .'</b>'.'
+          <h1 style="color: red; text-align: center;" >' . __('Task Submission for '.$task->task_short_code.'') .'</b>'.'
       </h1>';
       $body= '<p>
         '.'You’ve Received a Task Submission Request '.$task->heading.' from '.$sender->name.'. To check the details, follow this link.'.
