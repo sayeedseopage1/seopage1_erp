@@ -90,13 +90,19 @@ class TaskStatus extends Command
           // //dd($days);
           $task_id= Task::where('id',$tsk->id)->first();
 
-          $user= User::where('id',$tsk->added_by)->orWhere('role_id',1)->first();
+          // $user= User::where('id',$tsk->added_by)->orWhere('role_id',1)->first();
           $sender_id= TaskUser::where('task_id',$tsk->id)->first();
           $sender= User::where('id',$sender_id->user_id)->first();
    
    
    
-         Notification::send($user, new TaskSubmitNotification($task_id,$sender));
+        //  Notification::send($user, new TaskSubmitNotification($task_id,$sender));
+         $users= User::where('role_id',1)->orWhere('id',$tsk->added_by)->get();
+
+          foreach ($users as $user) {
+            // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
+            Notification::send($user, new TaskSubmitNotification($task_id,$sender));
+          }
 
 
 
