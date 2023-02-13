@@ -20,30 +20,42 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
     )
         <div class="p-20">
             @if($task->project->project_status == 'Accepted')
-          
+            @php
+           $project_creation_date= $task->project->created_at;
+           $current_date= \Carbon\Carbon::now();
+           $diff_in_minutes = $current_date->diffInMinutes($project_creation_date); 
+          //dd($project_creation_date, $current_date, $diff_in_minutes);
+        @endphp
             @php
             $signature= App\Models\ContractSign::where('project_id',$task->project->id)->first();
          @endphp
-         @if ($signature != null)
-            <div class="row">
-                <div class="col-md-12">
-                    <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task"><i
-                            class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
-                        @lang('modules.tasks.subTask')</a>
-                </div>
+          @if($diff_in_minutes < 2880 && $signature == null) 
+          <div class="row">
+            <div class="col-md-12">
+                <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task"><i
+                        class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
+                    @lang('modules.tasks.subTask')</a>
             </div>
-            @else 
-            <div class="row">
-                <div class="col-md-12">
-                    <a class="f-15 f-w-500" href="javascript:;" id="task-disable2"><i
-                            class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
-                        @lang('modules.tasks.subTask')</a>
-                </div>
+        </div> 
+
+        @elseif($diff_in_minutes >= 2880 && $signature != null)
+        <div class="row">
+            <div class="col-md-12">
+                <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task"><i
+                        class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
+                    @lang('modules.tasks.subTask')</a>
             </div>
-
-
-           
-            @endif 
+        </div> 
+        @else 
+        <div class="row">
+            <div class="col-md-12">
+                <a class="f-15 f-w-500" href="javascript:;" id="task-disable2"><i
+                        class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
+                    @lang('modules.tasks.subTask')</a>
+            </div>
+        </div>
+          @endif
+        
             @endif
 
             <x-form id="save-subtask-data-form" class="d-none">
@@ -71,18 +83,18 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
 
 
                     <div class="col-md-6">
-                        <x-forms.datepicker fieldId="sub_task_start_date" :fieldLabel="__('app.startDate')" fieldName="start_date"
+                        <x-forms.datepicker fieldId="sub_task_start_date" fieldRequired="true" :fieldLabel="__('app.startDate')" fieldName="start_date"
                             :fieldPlaceholder="__('placeholders.date')" />
                     </div>
                       <div class="col-md-6 dueDateBox" @if($task && is_null($task->due_date)) style="display: none" @endif>
 
-                        <x-forms.datepicker fieldId="sub_task_due_date" :fieldLabel="__('app.dueDate')" fieldName="due_date"
+                        <x-forms.datepicker fieldId="sub_task_due_date" fieldRequired="true" :fieldLabel="__('app.dueDate')" fieldName="due_date"
                             :fieldPlaceholder="__('placeholders.date')" />
                     </div>
-                    <div class="col-md-2 col-lg-2 pt-5">
+                    {{-- <div class="col-md-2 col-lg-2 pt-5">
                         <x-forms.checkbox class="mr-0 mr-lg-2 mr-md-2" :checked="$task ? is_null($task->due_date) : ''" :fieldLabel="__('app.withoutDueDate')"
                                           fieldName="without_duedate" fieldId="without_duedate" fieldValue="yes" />
-                    </div>
+                    </div> --}}
 
                       </div>
                       <div class="row">
@@ -244,7 +256,7 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                       <?php
                         $taskLabels= App\Models\TaskLabelList::all();
                        ?>
-                      <div class="col-md-12 col-lg-4">
+                      {{-- <div class="col-md-12 col-lg-4">
                           <div class="form-group my-3">
                               <x-forms.label fieldId="task_labels" :fieldLabel="__('app.label')">
                               </x-forms.label>
@@ -266,7 +278,7 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                                   @endif
                               </x-forms.input-group>
                           </div>
-                      </div>
+                      </div> --}}
                       <?php
 
                         $board_column= App\Models\TaskboardColumn::where('id',2)->first();
@@ -301,7 +313,7 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                     </div>
                     <div class="row">
 
-                                          <div class="col-md-6 col-lg-3">
+                                          {{-- <div class="col-md-6 col-lg-3">
                                               <div class="form-group">
                                                   <div class="d-flex mt-5">
                                                       <x-forms.checkbox :fieldLabel="__('modules.tasks.makePrivate')" fieldName="is_private"
@@ -309,9 +321,9 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                                                           :checked="$task ? $task->is_private : ''"/>
                                                   </div>
                                               </div>
-                                          </div>
+                                          </div> --}}
 
-                                          <div class="col-md-6 col-lg-3">
+                                          {{-- <div class="col-md-6 col-lg-3">
                                               <div class="form-group">
                                                   <div class="d-flex mt-5">
                                                       <x-forms.checkbox :fieldLabel="__('modules.tasks.billable')" :checked="true"
@@ -320,9 +332,9 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                                                           :checked="''"/>
                                                   </div>
                                               </div>
-                                          </div>
+                                          </div> --}}
 
-                                          <div class="col-md-6 col-lg-3">
+                                          {{-- <div class="col-md-6 col-lg-3">
                                               <div class="form-group">
                                                   <div class="d-flex mt-5">
                                                       <x-forms.checkbox :fieldLabel="__('modules.tasks.setTimeEstimate')"
@@ -330,10 +342,12 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                                                           :checked="($task ? $task->estimate_hours > 0 || $task->estimate_minutes > 0 : '')" />
                                                   </div>
                                               </div>
-                                          </div>
+                                          </div> --}}
 
-                                          <div class="col-md-6 col-lg-3 d-none" id="set-time-estimate-fields">
+                                          <div class="col-md-6 col-lg-3" id="set-time-estimate-fields">
+                                            <label class="mt-5" for="">Set Estimate TIme</label>
                                               <div class="form-group mt-5">
+                                               
                                                   <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14"
                                                       name="estimate_hours" value="{{ $task ? $task->estimate_hours : '0'}}">
                                                   @lang('app.hrs')
@@ -347,14 +361,14 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                     </div>
                     <div class="row">
                       <div class="col-md-6">
-                          <div class="form-group my-3">
+                          {{-- <div class="form-group my-3">
                               <div class="d-flex">
                                   <x-forms.checkbox :fieldLabel="__('modules.events.repeat')" fieldName="repeat"
                                       fieldId="repeat-task" :checked="$task ? $task->repeat : ''"/>
                               </div>
-                          </div>
+                          </div> --}}
 
-                          <div class="form-group my-3 {{!is_null($task) && $task->repeat ? '' : 'd-none'}}" id="repeat-fields">
+                          {{-- <div class="form-group my-3 {{!is_null($task) && $task->repeat ? '' : 'd-none'}}" id="repeat-fields">
                               <div class="row">
                                   <div class="col-md-6 mt-3">
                                       <x-forms.label fieldId="repeatEvery" fieldRequired="true"
@@ -381,7 +395,7 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                                           :popover="__('modules.tasks.cyclesToolTip')" />
                                   </div>
                               </div>
-                          </div>
+                          </div> --}}
                       </div>
 
                     </div>

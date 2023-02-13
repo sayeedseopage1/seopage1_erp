@@ -993,6 +993,7 @@ $changeStatusPermission = user()->permission('change_status');
                         }
                     }
                 });
+                
             });
 
             // Update Task
@@ -1328,4 +1329,6 @@ $changeStatusPermission = user()->permission('change_status');
         });
 
     </script>
+
+    
 </div>
