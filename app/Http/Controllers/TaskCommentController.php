@@ -6,7 +6,12 @@ use App\Helper\Reply;
 use App\Http\Requests\Tasks\StoreTaskComment;
 use App\Models\Task;
 use App\Models\TaskComment;
-
+use App\Notifications\TaskCommentNotification;
+use Notification;
+use Auth;
+use App\Models\TaskUser;
+use App\Models\Project;
+use App\Models\User;
 class TaskCommentController extends AccountBaseController
 {
 
@@ -46,7 +51,17 @@ class TaskCommentController extends AccountBaseController
 
         $this->comments = TaskComment::with('user')->where('task_id', $request->taskId)->orderBy('id', 'desc')->get();
         $view = view('tasks.comments.show', $this->data)->render();
-
+        $task= Task::where('id',$request->taskId)->first();
+        $project= Project::where('id',$task->project_id)->first();
+        //dd($request->taskId);
+        $task_member= TaskUser::where('task_id',$request->taskId)->first();
+      $sender= User::where('id',Auth::id())->first();
+      $users= User::where('id',$task->added_by)->orWhere('id',$task_member->user_id)->orWhere('id',$project->pm_id)->get();
+      foreach ($users as $user) {
+        // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
+        Notification::send($user, new TaskCommentNotification($task,$sender));
+      }
+     
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
 
     }
