@@ -95,16 +95,22 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                               @endif
                           </x-forms.select>
                       </div>
-
+                      <?php
+                      if (Auth::user()->role_id == 4) {
+                       $project_members= App\Models\User::where('id',Auth::id())->orWhere('role_id',6)->get();
+                      } else {
+                        $project_members= $employees;
+                      }
+                      ?>
 
                     <div class="col-md-12 col-lg-6">
                         <div class="form-group my-3">
-                            <x-forms.label fieldId="selectAssignee" :fieldLabel="__('modules.tasks.assignTo')">
+                            <x-forms.label fieldId="selectAssignee" fieldRequired="true" :fieldLabel="__('modules.tasks.assignTo')">
                             </x-forms.label>
                             <x-forms.input-group>
                                 <select class="form-control multiple-users" multiple name="user_id[]"
                                     id="selectAssignee" data-live-search="true" data-size="8">
-                                    @foreach ($employees as $employee)
+                                    @foreach ($project_members as $employee)
                                         @php
                                             $selected = '';
                                         @endphp

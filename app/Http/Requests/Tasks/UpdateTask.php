@@ -54,7 +54,8 @@ class UpdateTask extends CoreRequest
             'heading' => 'required',
             'start_date' => 'required|date_format:"' . $setting->date_format . '"',
             'due_date' => 'required|date_format:"' . $setting->date_format . '"',
-            'priority' => 'required'
+            'priority' => 'required',
+            'user_id'=>'required'
         ];
 
         if(!$this->has('without_duedate'))

@@ -128,7 +128,13 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
 
                     <div class="col-md-12 col-lg-6">
                       <?php
-                      $users= App\Models\User::where('role_id',5)->get();
+                      if (Auth::user()->role_id == 4) {
+                       $project_members= App\Models\User::where('id',Auth::id())->orWhere('role_id',6)->get();
+                      } else {
+                        $project_members= $employees;
+                      }
+                      
+                    //   $users= App\Models\User::where('role_id',5)->get();
 
 
 
@@ -139,8 +145,8 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                             <x-forms.input-group>
                                 <select class="form-control multiple-users" multiple name="user_id[]"
                                     id="selectAssignee" fieldRequired="true" data-live-search="true" data-size="8">
-
-                                    @foreach ($employees as $item)
+                                    
+                                    @foreach ($project_members as $item)
                                         <option @if ((isset($defaultAssignee) && $defaultAssignee == $item->id) || (!is_null($task) && isset($projectMember) && in_array($item->id, $projectMember))) selected @endif
 
                                           <?php
