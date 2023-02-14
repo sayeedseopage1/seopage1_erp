@@ -101,7 +101,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                               <?php
                               $task= App\Models\Task::where('milestone_id',$item->id)->where('status','incomplete')->count();
                               $total_tasks=  App\Models\Task::where('milestone_id',$item->id)->count();
-                              $complete_task= App\Models\Task::where('milestone_id',$item->id)->where('status','complete')->count();
+                              $complete_task= App\Models\Task::where('milestone_id',$item->id)->where('status','completed')->count();
                               //dd($task);
                                ?>
                                <form class="" action="{{route('milestone-complete')}}" method="post">
