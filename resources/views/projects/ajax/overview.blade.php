@@ -198,8 +198,19 @@ $project->members->pluck('user_id')->toArray(); @endphp
         <div class="row">
             <!-- PROJECT PROGRESS START -->
             <div class="col-md-6 mb-4">
+                @php
+                       $tasks= App\Models\Task::where('project_id',$project->id)->count();
+                $completed_tasks= App\Models\Task::where('project_id',$project->id)->where('status','completed')->count();
+                if($tasks >= 1){
+                    $percentage= round(($completed_tasks/$tasks)*100);
+                    //dd($percentage);
+                }else
+                {
+                    $percentage= 0;
+                }
+                @endphp
                 <x-cards.data :title="__('modules.projects.projectProgress')" otherClasses="d-flex d-xl-flex d-lg-block d-md-flex  justify-content-between align-items-center">
-                    <x-gauge-chart id="progressGauge" width="100" :value="$project->completion_percent" />
+                    <div class="text-lightest">{{$percentage}}% Progress</div>
 
                     <!-- PROGRESS START DATE START -->
                     <div class="p-start-date mb-xl-0 mb-lg-3">
@@ -336,7 +347,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
         <!-- TASK STATUS AND BUDGET END -->
 
         <!-- TASK STATUS AND BUDGET START -->
-        <div class="row mb-4" >
+        {{-- <div class="row mb-4" >
             <!-- BUDGET VS SPENT START -->
             <div class="col-md-12">
                 <x-cards.data>
@@ -355,7 +366,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 </x-cards.data>
             </div>
             <!-- BUDGET VS SPENT END -->
-        </div>
+        </div> --}}
         <?php
             $deal= App\Models\Deal::where('id',$project->deal_id)->first(); ?>
         <div class="row mb-4" >

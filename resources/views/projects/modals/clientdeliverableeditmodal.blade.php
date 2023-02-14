@@ -98,7 +98,7 @@
       <div class="modal-footer">
 
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="Submit" class="btn btn-primary add_milestone" >Update Deliverable</button>
+          <button type="Submit" class="btn btn-primary" >Update Deliverable</button>
 
       </div>
       </form>
@@ -106,6 +106,7 @@
     </div>
   </div>
 </div>
+@push('scripts')
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
     $(document).ready(function() {
@@ -116,21 +117,22 @@
                 ...datepickerConfig
             });
         }
-        const dp4 = datepicker('#from{{$deliverable->id}}', {
+        const dp5 = datepicker('#from{{$deliverable->id}}', {
             position: 'bl',
 
             onSelect: (instance, date) => {
-              dp5.setMin(date);
+              dp6.setMin(date);
             },
             ...datepickerConfig
         });
-        const dp5 = datepicker('#to{{$deliverable->id}}', {
+        const dp6 = datepicker('#to{{$deliverable->id}}', {
             position: 'bl',
 
             onSelect: (instance, date) => {
-               dp4.setMax(date);
+               dp5.setMax(date);
             },
             ...datepickerConfig
         });
       });
 </script>
+@endpush
