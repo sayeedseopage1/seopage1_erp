@@ -266,9 +266,9 @@ class ProjectsDataTable extends BaseDataTable
                    
                       if ($sign != null) {
     
-                        return '<badge style="background-color:#00aa00 !important;" class="badge badge-success">Yes</badge>';
+                        return '<badge style="background-color:#00aa00 !important;" class="badge badge-success text-center">Yes</badge>';
                       }else {
-                          return '<badge style="background-color:#FF0000 !important;" class="badge badge-danger">No</badge>';
+                          return '<badge style="background-color:#FF0000 !important;" class="badge badge-danger text-center">No</badge>';
                      
                     }
                 })
@@ -293,7 +293,7 @@ class ProjectsDataTable extends BaseDataTable
                 {
                     if ($row->status == $status->status_name) {
                         $color = $status->color;
-                        return ' <i class="fa fa-circle mr-1 f-10" style="color:'.$color.'"></i>' . ucfirst($status->status_name);
+                        return ' <i class="fa fa-circle mr-1 f-10" style="color:'.$color.'"></i>' .'<span class="text-capitalize">'. ucfirst($status->status_name).'</span>';
                     }
                 }
             });
