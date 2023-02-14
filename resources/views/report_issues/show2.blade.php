@@ -68,7 +68,7 @@
 
             <?php
             $comments = App\Models\IssueQuery::where('issue_id',$issue->id)->get();
-            $comments_count = App\Models\IssueQuery::where('issue_id',$issue->id)->count();
+            $comments_count = App\Models\IssueQuery::where('issue_id',$issue->id)->where('comments','!=',null)->count();
             //dd($comments);
              ?>
                 @if($comments_count > 0)
