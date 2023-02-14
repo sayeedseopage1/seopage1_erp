@@ -229,12 +229,12 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
             <div id="table-actions" class="flex-grow-1 align-items-center">
                
                 
-                @if ($addTaskPermission == 'all' || $addTaskPermission == 'added')
+                {{-- @if ($addTaskPermission == 'all' || $addTaskPermission == 'added')
                     <x-forms.link-primary :link="route('tasks.create')" class="mr-3 openRightModal float-left" icon="plus">
                         @lang('app.add')
                         @lang('app.task')
                     </x-forms.link-primary>
-                @endif
+                @endif --}}
 
                 @if (!in_array('client', user_roles()))
                     <x-forms.button-secondary id="filter-my-task" class="mr-3 float-left" icon="user">

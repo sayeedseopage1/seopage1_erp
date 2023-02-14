@@ -225,11 +225,11 @@
                             @endif
                             {{-- @if (!in_array('client', user_roles())) --}}
                              
-                            {{-- @if (in_array('tasks', user_modules()) && $sidebarUserPermissions['view_tasks'] != 5 && $sidebarUserPermissions['view_tasks'] != 'none')
+                            @if (in_array('tasks', user_modules()) && $sidebarUserPermissions['view_tasks'] != 5 && $sidebarUserPermissions['view_tasks'] != 'none')
                               @if(Auth::user()->role_id != 4 )
                                 <x-sub-menu-item :link="route('tasks.index')" :text="__('app.menu.tasks')" />
                             @endif
-                            @endif --}}
+                            @endif
                             @if (in_array('timelogs', user_modules()) && $sidebarUserPermissions['view_timelogs'] != 5 && $sidebarUserPermissions['view_timelogs'] != 'none')
                                 <x-sub-menu-item :link="route('timelogs.index')" :text="__('app.menu.timeLogs')" />
                             @endif
