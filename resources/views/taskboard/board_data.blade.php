@@ -139,7 +139,7 @@ $changeStatusPermission = user()->permission('change_status');
 @endforeach
 
 <!-- Drag and Drop Plugin -->
-<script>
+{{-- <script>
     var arraylike = document.getElementsByClassName('b-p-tasks');
     var containers = Array.prototype.slice.call(arraylike);
     var drake = dragula({
@@ -162,7 +162,7 @@ $changeStatusPermission = user()->permission('change_status');
             container.className = container.className.replace('ex-over', '');
         });
 
-</script>
+</script> --}}
 
 <script>
     drake.on('drop', function(element, target, source, sibling) {

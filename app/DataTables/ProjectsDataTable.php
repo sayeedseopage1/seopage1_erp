@@ -305,7 +305,7 @@ class ProjectsDataTable extends BaseDataTable
                         $statusColor = 'warning';
                     }elseif($percentage >= 75 && $percentage < 99) {
                         $completion= $percentage;
-                        $statusColor = 'success';
+                        $statusColor = 'info';
                     }else {
                         $completion= $percentage;
                         $statusColor = 'success';
