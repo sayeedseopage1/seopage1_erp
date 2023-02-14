@@ -100,6 +100,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                             <td>
                               <?php
                               $task= App\Models\Task::where('milestone_id',$item->id)->where('status','incomplete')->count();
+                              $total_tasks=  App\Models\Task::where('milestone_id',$item->id)->count();
                               $complete_task= App\Models\Task::where('milestone_id',$item->id)->where('status','complete')->count();
                               //dd($task);
                                ?>
@@ -107,7 +108,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                  @csrf
                                    <input type="hidden" name="id" value="{{$item->id}}">
                                @if($task > 0)
-                                <button type="submit" disabled class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete ({{$complete_task}}/{{$task}})</button>
+                                <button type="submit" disabled class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete ({{$complete_task}}/{{$total_tasks}})</button>
                                 @else
                                 @if($item->status == 'incomplete')
 
