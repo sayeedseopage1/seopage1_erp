@@ -16,6 +16,7 @@ use App\Models\Deal;
 use App\Models\User;
 use Auth;
 use App\Models\Task;
+use App\Models\ContractSign;
 class ProjectsDataTable extends BaseDataTable
 {
 
@@ -257,6 +258,20 @@ class ProjectsDataTable extends BaseDataTable
                     return $row->client->email;
                 }
             })
+            ->addColumn('deliverable_sign', function($row) {
+
+                //  dd($row->added_by->name);
+                    //return $row->won_lost;
+                    $sign= ContractSign::where('project_id',$row->id)->first();
+                   
+                      if ($sign != null) {
+    
+                        return '<badge style="background-color:#00aa00 !important;" class="badge badge-success">Yes</badge>';
+                      }else {
+                          return '<badge style="background-color:#FF0000 !important;" class="badge badge-danger">No</badge>';
+                     
+                    }
+                })
             ->addColumn('project_status', function ($row) {
                 return $row->status;
             })
@@ -371,7 +386,7 @@ class ProjectsDataTable extends BaseDataTable
             $datatables->setRowId(function ($row) {
                 return 'row-' . $row->id;
             });
-            $datatables->rawColumns(['project_name','pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check','short_code','project_manager']);
+            $datatables->rawColumns(['project_name','pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check','short_code','project_manager','deliverable_sign']);
             $datatables->removeColumn('project_summary');
             $datatables->removeColumn('notes');
             $datatables->removeColumn('category_id');
@@ -552,6 +567,7 @@ class ProjectsDataTable extends BaseDataTable
 
               __('app.client') . ' ' . __('app.email')  => ['data' => 'client_email', 'name' => 'client_id', 'visible' => false, 'title' => __('app.client') . ' ' . __('app.email')],
                 __('app.project_manager') => ['data' => 'project_manager', 'name' => 'project_manager',  'title' => __('Project Manager')],
+                __('app.deliverable_sign') => ['data' => 'deliverable_sign', 'name' => 'deliverable_sign',  'title' => __('Deliverable Signed')],
               __('app.progress') => ['data' => 'completion_percent', 'name' => 'completion_percent', 'exportable' => false, 'title' => __('app.progress')],
               __('app.completion') => ['data' => 'completion_export', 'name' => 'completion_export', 'visible' => false, 'title' => __('app.completion')],
               __('app.status') => ['data' => 'status', 'name' => 'status', 'width' => '16%', 'exportable' => false, 'title' => __('app.status')],
