@@ -149,7 +149,7 @@ $projectArchived = $project->trashed();
                 </div>
             </form>
 
-            <x-datatable.actions class="mt-5">
+            {{-- <x-datatable.actions class="mt-5">
                 <div class="select-status mr-3 pl-3">
                     <select name="action_type" class="form-control select-picker" id="quick-action-type" disabled>
                         <option value="">@lang('app.selectAction')</option>
@@ -164,7 +164,7 @@ $projectArchived = $project->trashed();
                         @endforeach
                     </select>
                 </div>
-            </x-datatable.actions>
+            </x-datatable.actions> --}}
         </div>
 
 
