@@ -60,11 +60,11 @@ $addPaymentPermission = user()->permission('add_payments');
 
 
         <!-- Task Box Start -->
-        {{-- <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
+        <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
 
             {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
 
-            <x-datatable.actions>
+            {{-- <x-datatable.actions>
                 <div class="select-status mr-3 pl-3">
                     <select name="action_type" class="form-control select-picker" id="quick-action-type" disabled>
                         <option value="">@lang('app.selectAction')</option>
@@ -78,8 +78,8 @@ $addPaymentPermission = user()->permission('add_payments');
                         <option value="pending">@lang('app.pending')</option>
                     </select>
                 </div>
-            </x-datatable.actions>
-        </div> --}}
+            </x-datatable.actions> --}}
+        </div>
         <!-- Task Box End -->
     </div>
 </div>
