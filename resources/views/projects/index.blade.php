@@ -185,12 +185,12 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
                     <div class="select-status mr-3 pl-3">
                         <select name="action_type" class="form-control select-picker" id="quick-action-type" disabled>
                             <option value="">@lang('app.selectAction')</option>
-                            <option value="change-status">@lang('modules.tasks.changeStatus')</option>
+                            {{-- <option value="change-status">@lang('modules.tasks.changeStatus')</option> --}}
                             <option value="archive">@lang('app.archive')</option>
-                            <option value="delete">@lang('app.delete')</option>
+                            {{-- <option value="delete">@lang('app.delete')</option> --}}
                         </select>
                     </div>
-                    <div class="select-status mr-3 d-none quick-action-field" id="change-status-action">
+                    {{-- <div class="select-status mr-3 d-none quick-action-field" id="change-status-action">
                         <select name="status" class="form-control select-picker">
                             <option value="not started">@lang('app.notStarted')</option>
                             <option value="in progress">@lang('app.inProgress')</option>
@@ -198,7 +198,7 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
                             <option value="canceled">@lang('app.canceled')</option>
                             <option value="finished">@lang('app.finished')</option>
                         </select>
-                    </div>
+                    </div> --}}
                 </x-datatable.actions>
             @endif
 
