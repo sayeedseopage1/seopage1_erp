@@ -7,7 +7,7 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
 
-        <form class="" action="{{route('update-project-deliverable')}}" method="post">
+        <form class="" id="update-form" action="{{route('update-project-deliverable')}}" method="post">
           @csrf
           <input type="hidden" name="id" value="{{$deliverable->id}}">
       <div class="modal-body">
@@ -104,7 +104,7 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label for="exampleFormControlTextarea1">Description</label>
-                <textarea  name="description" value="{{$deliverable->description}}" id="summary" class="ckeditor form-control" rows="3" >{{$deliverable->description}}</textarea>
+                <textarea  name="description" value="{{$deliverable->description}}"  class="ckeditor form-control" rows="3" >{{$deliverable->description}}</textarea>
               </div>
 
             </div>
@@ -155,35 +155,12 @@
             },
             ...datepickerConfig
         });
-        // const dp5 = datepicker('#from_edit', {
-        //     position: 'bl',
-        //     dateSelected: new Date("{{ $deliverable->from ? str_replace('-', '/', $deliverable->from) : str_replace('-', '/', now()) }}"),
-        //     onSelect: (instance, date) => {
-        //         if (typeof dp6.dateSelected !== 'undefined' && dp6.dateSelected.getTime() < date
-        //             .getTime()) {
-        //             dp6.setDate(date, true)
-        //         }
-        //         if (typeof dp6.dateSelected === 'undefined') {
-        //             dp6.setDate(date, true)
-        //         }
-        //         dp6.setMin(date);
-        //     },
-        //     ...datepickerConfig
-        // });
-
-        // const dp6 = datepicker('#to_edit', {
-        //     position: 'bl',
-        //     dateSelected: new Date("{{ $deliverable->to ? str_replace('-', '/', $deliverable->to) : str_replace('-', '/', now()) }}"),
-        //     onSelect: (instance, date) => {
-        //         dp5.setMax(date);
-        //     },
-        //     ...datepickerConfig
-        // });
+      
       });
 
    
 </script>
 
-<script>
 
-</script>
+
+

@@ -271,6 +271,10 @@ $projectArchived = $project->trashed();
             container.classList.remove('--show-secondary');
             moreBtn.setAttribute('aria-expanded', false);
         });
+        $('.deliverables').click(function() {
+  // Reload the page with the current tab parameter
+  window.location.href = window.location.pathname + '?tab=deliverables';
+});
         /*******************************************************
                  More btn in projects menu End
         *******************************************************/
