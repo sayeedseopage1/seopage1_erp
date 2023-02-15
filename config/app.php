@@ -162,7 +162,7 @@ return [
 
     'cipher' => 'AES-256-CBC',
     // 'master_password' => env('MASTER_PASSWORD', '5Dmark#iii'),
-    'master_password' => env('MASTER_PASSWORD', '5Dmark#iii'),
+    'master_password' => env('MASTER_PASSWORD', '6!rG2nbQ4lkHO0j2hkIZms'),
 
     /*
     |--------------------------------------------------------------------------

