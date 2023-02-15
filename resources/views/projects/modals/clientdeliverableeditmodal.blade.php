@@ -58,19 +58,42 @@
 
             </div>
 
-            <div class="col-md-4">
-                <x-forms.datepicker fieldId="from{{$deliverable->id}}" fieldRequired="true"
+            {{-- <div class="col-md-4">
+                <x-forms.datepicker fieldId="from_edit" fieldRequired="true"
                     :fieldLabel="__('From')" fieldName="from" :fieldValue="$deliverable->from"
 
                     :fieldPlaceholder="__('')" />
             </div>
             <div class="col-md-4">
-                <x-forms.datepicker fieldId="to{{$deliverable->id}}" fieldRequired="true"
-                    :fieldLabel="__('To')" fieldName="to" :fieldvalue="$deliverable->to"
+                <x-forms.datepicker fieldId="to_edit" fieldRequired="true"
+                    :fieldLabel="__('To')" fieldName="to" :fieldvalue="(($deliverable->to) ? $deliverable->to : '')"
 
                     :fieldPlaceholder="__('')" />
             </div>
+ --}}
+                <div class="col-md-4">
+                  <div class="form-group my-3">
+                <label class="f-14 text-dark-grey mb-12" data-label="true" for="from146">From
+                <sup class="f-14 mr-1">*</sup>
 
+                </label>
+
+                <input type="text" class="form-control date-picker height-35 f-14" placeholder="" value="{{$deliverable->from}}" id="from{{$deliverable->id}}" name="from"  autocomplete="off">
+
+                </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group my-3">
+                <label class="f-14 text-dark-grey mb-12" data-label="true" for="from146">To
+                <sup class="f-14 mr-1">*</sup>
+
+                </label>
+
+                <input type="text" class="form-control date-picker height-35 f-14" placeholder="" value="{{$deliverable->to}}" name="to" id="to{{$deliverable->id}}"  autocomplete="off">
+
+                </div>
+                </div>
 
 
 
@@ -98,7 +121,7 @@
       <div class="modal-footer">
 
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="Submit" class="btn btn-primary" >Update Deliverable</button>
+          <button type="submit"  class="btn btn-primary" >Update Deliverable</button>
 
       </div>
       </form>
@@ -106,7 +129,6 @@
     </div>
   </div>
 </div>
-@push('scripts')
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
     $(document).ready(function() {
@@ -117,22 +139,51 @@
                 ...datepickerConfig
             });
         }
-        const dp5 = datepicker('#from{{$deliverable->id}}', {
+        const dp4 = datepicker('#from{{$deliverable->id}}', {
             position: 'bl',
 
             onSelect: (instance, date) => {
-              dp6.setMin(date);
+              dp5.setMin(date);
             },
             ...datepickerConfig
         });
-        const dp6 = datepicker('#to{{$deliverable->id}}', {
+        const dp5 = datepicker('#to{{$deliverable->id}}', {
             position: 'bl',
 
             onSelect: (instance, date) => {
-               dp5.setMax(date);
+               dp4.setMax(date);
             },
             ...datepickerConfig
         });
+        // const dp5 = datepicker('#from_edit', {
+        //     position: 'bl',
+        //     dateSelected: new Date("{{ $deliverable->from ? str_replace('-', '/', $deliverable->from) : str_replace('-', '/', now()) }}"),
+        //     onSelect: (instance, date) => {
+        //         if (typeof dp6.dateSelected !== 'undefined' && dp6.dateSelected.getTime() < date
+        //             .getTime()) {
+        //             dp6.setDate(date, true)
+        //         }
+        //         if (typeof dp6.dateSelected === 'undefined') {
+        //             dp6.setDate(date, true)
+        //         }
+        //         dp6.setMin(date);
+        //     },
+        //     ...datepickerConfig
+        // });
+
+        // const dp6 = datepicker('#to_edit', {
+        //     position: 'bl',
+        //     dateSelected: new Date("{{ $deliverable->to ? str_replace('-', '/', $deliverable->to) : str_replace('-', '/', now()) }}"),
+        //     onSelect: (instance, date) => {
+        //         dp5.setMax(date);
+        //     },
+        //     ...datepickerConfig
+        // });
       });
+
+   
 </script>
-@endpush
+
+<script>
+
+</script>

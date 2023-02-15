@@ -607,6 +607,7 @@ class ContractController extends AccountBaseController
     }
     public function updateMilestone(Request $request, $id)
     {
+        
         $projectmilestone = ProjectMilestone::where('id', $id)->first();
         $project_id = Project::where('id', $projectmilestone->project_id)->first();
         $milestone_amount = ProjectMilestone::where('project_id', $project_id->id)->sum('cost');

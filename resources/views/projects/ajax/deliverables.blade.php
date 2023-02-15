@@ -22,7 +22,7 @@
     }
 
 </style>
-<link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+
 
 <div class="card border-0 invoice mt-5">
   <?php
@@ -305,7 +305,3 @@ function copyLink(){
       });
 </script>
 
-
-<script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
-
-   {!! Toastr::message() !!}

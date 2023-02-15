@@ -23,7 +23,7 @@ $changeStatusPermission = user()->permission('change_status');
                             $extension_request= App\Models\TaskTimeExtension::where('task_id',$task->id)->where('user_id','!=',Auth::id())->first();
                              ?>
                              @if($extension_request != null)
-                            @if ($extension_request->status == 'pending' || $task->board_column_id != 7)
+                            @if ($extension_request->status == 'pending' )
                                 <!-- <x-forms.button-primary icon="check" data-status="completed"
                                     class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
                                     @lang('modules.tasks.markComplete')
@@ -84,7 +84,7 @@ $changeStatusPermission = user()->permission('change_status');
 
                                   @endif
                               @endif
-                                 @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 6)
+                                 @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 6 || Auth::user()->role_id == 4)
 
 
 
@@ -98,9 +98,10 @@ $changeStatusPermission = user()->permission('change_status');
 
                                             <?php
                                               $extension=App\Models\TaskTimeExtension::orderBy('id','desc')->where('task_id',$task->id)->where('user_id',Auth::id())->first();
+                                              $task_member= App\Models\TaskUser::where('task_id',$task->id)->first();
                                              ?>
                                                  @if($task->status != "completed")
-                                             @if($extension == null)
+                                             @if($extension == null && $task_member->user_id == Auth::user()->id)
                                             <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#timextension"><i class="fa-solid fa-plus"></i> Request Time Extension</button>
 
 

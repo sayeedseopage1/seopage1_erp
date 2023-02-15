@@ -275,4 +275,8 @@ $projectArchived = $project->trashed();
                  More btn in projects menu End
         *******************************************************/
     </script>
+
+
+    
+    
 @endpush

@@ -60,7 +60,7 @@
                     </button>
                   </div>
                   <input type="text"
-                    class="form-control height-35 f-14 m-input" name="link[]">
+                    class="form-control height-35 f-14 m-input" name="link[]" required>
 
                 </div>
               </div>
@@ -85,7 +85,7 @@
                 Describe What You've Done
             </div>
             <div class="">
-                <textarea id="text" name="text"></textarea>
+                <textarea id="text" name="text" required></textarea>
 
 
             </div>
