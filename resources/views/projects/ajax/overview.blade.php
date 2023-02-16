@@ -149,6 +149,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             $project_submission= App\Models\ProjectSubmission::where('project_id',$project->id)->orderBy('id','desc')->first();
             //dd($project_submission);
             @endphp
+             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
             @if($project_submission != null && $project_submission->status == 'pending')
             <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
                 <div class="">
@@ -162,6 +163,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 </div>
             </div>
               @include('projects.modals.projectsubmissionmodal')
+            @endif
             @endif
             @endif
 
