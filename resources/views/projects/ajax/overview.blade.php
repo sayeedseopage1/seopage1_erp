@@ -178,6 +178,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             $project_qc= App\Models\QCSubmission::where('project_id',$project->id)->orderBy('id','desc')->first();
             //dd($project_submission);
             @endphp
+            @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
             @if($project_qc != null && $project_qc->status == 'pending')
             <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
                 <div class="">
@@ -191,6 +192,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 </div>
             </div>
               @include('projects.modals.projectqcsubmissionmodal')
+            @endif
             @endif
 
         </div>
