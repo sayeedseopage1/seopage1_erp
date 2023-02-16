@@ -543,7 +543,7 @@ class ContractController extends AccountBaseController
         $total_value = $request->input('another_value') * 2;
 
         $project = Project::where('id', $request->project_id)->first();
-        $milestone_amount = ProjectMilestone::where('project_id', $project->id)->sum('cost');
+        $milestone_amount = ProjectMilestone::where('project_id', $project->id)->sum('actual_cost');
         $check = ($project->project_budget) - ($milestone_amount);
         // /dd($check);
 
