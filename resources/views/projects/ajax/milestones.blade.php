@@ -15,7 +15,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
           <div class="alert alert-success show mb-2" role="alert"> {{Session::get('success')}}</div>
 
           @endif
-     @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
+     @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8 || Auth::user()->role_id == 4)
             <x-forms.button-primary icon="plus" id="add-project-milestone" class="type-btn mb-3">
                 @lang('modules.projects.createMilestone')
             </x-forms.button-primary>
