@@ -65,14 +65,13 @@ $deleteTimelogPermission = user()->permission('delete_timelogs');
                                                 </a>
                                             @endif
                                         @endif
-                                                @if(Auth::user()->role_id == 1)
+
                                         @if ($editTimelogPermission == 'all' || ($editTimelogPermission == 'added' && user()->id == $item->added_by))
                                             <a class="dropdown-item openRightModal"
                                                 href="{{ route('timelogs.edit', $item->id) }}">
                                                 <i class="fa fa-edit mr-2"></i>
                                                 @lang('app.edit')
                                             </a>
-                                        @endif
                                         @endif
 
                                         @if ($deleteTimelogPermission == 'all' || ($deleteTimelogPermission == 'added' && user()->id == $item->added_by))

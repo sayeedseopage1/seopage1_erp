@@ -97,7 +97,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                       </div>
                       <?php
                       if (Auth::user()->role_id == 4) {
-                       $project_members= App\Models\User::where('id',Auth::id())->orWhere('role_id',6)->get();
+                       $project_members= App\Models\User::where('id',Auth::id())->orWhere('role_id',6)->orWhere('role_id',9)->orWhere('role_id',10)->get();
                       } else {
                         $project_members= $employees;
                       }

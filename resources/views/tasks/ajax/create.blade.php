@@ -129,7 +129,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                     <div class="col-md-12 col-lg-6">
                       <?php
                       if (Auth::user()->role_id == 4) {
-                       $project_members= App\Models\User::where('id',Auth::id())->orWhere('role_id',6)->get();
+                       $project_members= App\Models\User::where('id',Auth::id())->orWhere('role_id',6)->orWhere('role_id',9)->orWhere('role_id',10)->get();
                       } else {
                         $project_members= $employees;
                       }
