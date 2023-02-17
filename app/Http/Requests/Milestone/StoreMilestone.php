@@ -28,7 +28,9 @@ class StoreMilestone extends FormRequest
         $rules = [
             'project_id' => 'required',
             'milestone_title' => 'required',
-            'summary' => 'required'
+            'summary' => 'required',
+            'milestone-type'=>'milestone_type',
+            'currency_id'=> 'original_currency_id'
         ];
 
         if ($this->end_date !== null) {

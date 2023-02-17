@@ -47,6 +47,7 @@ use App\Notifications\TaskRevisionNotification;
 use App\Notifications\TaskApproveNotification;
 use Notification;
 use Toastr;
+use Auth;
 
 use function PHPUnit\Framework\isNull;
 
@@ -193,7 +194,7 @@ class TaskController extends AccountBaseController
       $task->comments= $request->comments;
       $task->save();
       $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
-      $sender= User::where('id',$request->user_id)->first();
+      $sender= User::where('id',Auth::id())->first();
       $user= User::where('id',$task_submission->user_id)->first();
       Notification::send($user, new TaskApproveNotification($task_status,$sender));
       Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);

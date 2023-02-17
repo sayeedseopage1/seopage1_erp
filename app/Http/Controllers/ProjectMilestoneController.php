@@ -15,6 +15,7 @@ use Auth;
 use Notification;
 use App\Notifications\MilestoneComplete;
 use App\Models\User;
+use App\Models\PMAssign;
 
 class ProjectMilestoneController extends AccountBaseController
 {
@@ -79,16 +80,21 @@ class ProjectMilestoneController extends AccountBaseController
      */
     public function store(StoreMilestone $request)
     {
-      //dd($request);
+        $currency= Currency::where('currency_code',$request->original_currency_id)->first();
+
+        dd($currency);
         $milestone = new ProjectMilestone();
         $milestone->project_id = $request->project_id;
         $milestone->milestone_title = $request->milestone_title;
         $milestone->summary = $request->summary;
+        $milestone->milestone_type = $request->milestone_type;
         $milestone->cost = ($request->cost == '') ? '0' : $request->cost;
-        $milestone->currency_id = $request->currency_id;
-        $milestone->status = $request->status;
-        $milestone->start_date = $request->start_date == null ? $request->start_date : Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
-        $milestone->end_date = $request->end_date == null ? $request->end_date : Carbon::createFromFormat($this->global->date_format, $request->end_date)->format('Y-m-d');
+        $milestone->currency_id = 1;
+        $milestone->original_currency_id = $currency->id;
+
+        //$milestone->status = $request->status;
+        // $milestone->start_date = $request->start_date == null ? $request->start_date : Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+        // $milestone->end_date = $request->end_date == null ? $request->end_date : Carbon::createFromFormat($this->global->date_format, $request->end_date)->format('Y-m-d');
         $milestone->save();
 
         $project = Project::findOrFail($request->project_id);

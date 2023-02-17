@@ -6,7 +6,11 @@
 <x-form id="addProjectMilestoneForm">
     <div class="modal-body">
         <input type="hidden" name="project_id" value="{{ $project->id }}">
-        <input type="hidden" name="currency_id" value="{{ $project->currency_id ?? global_setting()->currency_id }}">
+       @php
+           $project_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->first();
+           $currency= App\Models\Currency::where('id',$project_milestone->original_currency_id)->first();
+           //dd($currency);
+       @endphp
         <div class="row">
             <div class="col-md-6">
                 <x-forms.text fieldId="milestone_title" :fieldLabel="__('modules.projects.milestoneTitle')"
@@ -14,21 +18,38 @@
                 </x-forms.text>
             </div>
             <div class="col-md-6">
-                <x-forms.number fieldId="cost" :fieldLabel="__('modules.projects.milestoneCost')" fieldName="cost"
+                <x-forms.number fieldId="cost" :fieldLabel="__('modules.projects.milestoneCost')" fieldName="actual_cost"
                     :fieldPlaceholder="__('placeholders.price')">
                     </x-forms.text>
             </div>
             <div class="col-md-6">
+                <div class="form-group my-3">
+    <label class="f-14 text-dark-grey mb-12" data-label="" for="original_currency_id">Currency
+    
+    </label>
+
+    <input type="text" class="form-control height-35 f-14" placeholder="" readonly value="{{$currency->currency_code}}" name="original_currency_id" id="original_currency_id">
+
+    </div>
+            </div>
+
+            {{-- <div class="col-md-6">
+                <x-forms.text fieldId="original_currency_id" :fieldLabel="__('Currency')" fieldName="original_cueency_id" fieldValue="USD" fieldReadonly="true"
+                    :fieldPlaceholder="__('')">
+                    </x-forms.text>
+            </div> --}}
+            {{-- <div class="col-md-6">
                 <x-forms.select fieldId="status" :fieldLabel="__('app.status')" fieldName="status">
                     <option value="incomplete">@lang('app.incomplete')</option>
                     <option value="complete">@lang('app.complete')</option>
                 </x-forms.select>
-            </div>
+            </div> --}}
             <div class="col-md-6">
-                <x-forms.select fieldId="add_to_budget" :fieldLabel="__('modules.projects.addCostProjectBudget')"
-                    fieldName="add_to_budget">
-                    <option value="no">@lang('app.no')</option>
-                    <option value="yes">@lang('app.yes')</option>
+                <x-forms.select fieldId="milestone_type" fieldRequired="true" :fieldLabel="__('Milestone Type')"
+                    fieldName="milestone_type">
+                    <option value="Proposed Milestone">Proposed Milestone</option>
+                    <option value="Client Agreed to this Milestone">Client Agreed to this Milestone</option>
+                      <option value="Client Created this Milestone">Client Created this Milestone</option>
                 </x-forms.select>
             </div>
             <div class="col-md-12">
