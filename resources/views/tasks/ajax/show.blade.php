@@ -60,7 +60,7 @@ $changeStatusPermission = user()->permission('change_status');
                                 @endif
                             @endif
 
-                            @if($task->board_column_id != 6 || $task->board_column_id != 7)
+                            @if($task->board_column_id != 6 || $task->board_column_id != 7 || $task->task_status != 'submitted')
                             @if ($task->boardColumn->slug != 'completed' && !is_null($task->is_task_user) )
                                   @if (is_null($task->userActiveTimer))
                                       <x-forms.button-secondary id="start-task-timer" icon="play">
@@ -89,7 +89,7 @@ $changeStatusPermission = user()->permission('change_status');
 
 
 
-                                  @if($task->status != "completed" || $task->board_column_id != 7 || $task->board_column_id != 6)
+                                  @if($task->status != "completed" || $task->board_column_id != 7 || $task->task_status != 'submitted')
 
 
                                         <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
