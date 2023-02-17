@@ -16,7 +16,8 @@ use Notification;
 use App\Notifications\MilestoneComplete;
 use App\Models\User;
 use App\Models\PMAssign;
-
+use App\Models\Contract;
+use App\Models\Deal;
 class ProjectMilestoneController extends AccountBaseController
 {
 
@@ -82,28 +83,65 @@ class ProjectMilestoneController extends AccountBaseController
     {
         $currency= Currency::where('currency_code',$request->original_currency_id)->first();
 
-        dd($currency);
+        // /dd($currency);
         $milestone = new ProjectMilestone();
         $milestone->project_id = $request->project_id;
         $milestone->milestone_title = $request->milestone_title;
         $milestone->summary = $request->summary;
         $milestone->milestone_type = $request->milestone_type;
-        $milestone->cost = ($request->cost == '') ? '0' : $request->cost;
+        //$currency= Currency::where('id',$deal->original_currency_id)->first();
+        //dd($currency);
+        $milestone->cost = ($request->actual_cost)/$currency->exchange_rate;
+        $milestone->actual_cost = ($request->actual_cost == '') ? '0' : $request->actual_cost;
         $milestone->currency_id = 1;
         $milestone->original_currency_id = $currency->id;
+        //dd(($request->actual_cost)/$currency->exchange_rate, $request->actual_cost);
 
         //$milestone->status = $request->status;
         // $milestone->start_date = $request->start_date == null ? $request->start_date : Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
         // $milestone->end_date = $request->end_date == null ? $request->end_date : Carbon::createFromFormat($this->global->date_format, $request->end_date)->format('Y-m-d');
         $milestone->save();
 
-        $project = Project::findOrFail($request->project_id);
+        $project = Project::where('id',$request->project_id)->first();
 
-        if ($request->add_to_budget == 'yes') {
-            $project->project_budget = (!is_null($project->project_budget) ? ($project->project_budget + $milestone->cost) : $milestone->cost);
-            $project->currency_id = $request->currency_id;
-            $project->save();
+        $project_milestone_cost= ProjectMilestone::where('project_id',$project->id)->sum('cost');
+        if($project_milestone_cost > $project->project_budget && $project_milestone_cost-$project->project_budget > 1 )
+        {
+            $project_update= Project::find($project->id);
+            $project_update->project_budget= $project->project_budget+$milestone->cost;
+            $project_update->due= $project->due+ $milestone->cost;
+            if($project->status == 'finished')
+            {
+                $project_update->status ='in progress';
+            }
+            $project_update->save();
+            $pm_id= PMAssign::where('pm_id',$project->pm_id)->first();
+            $pm_assign= PMAssign::find($pm_id->id);
+            $pm_assign->amount= $pm_assign->amount+ $milestone->cost;
+            $pm_assign->monthly_project_amount= $pm_assign->monthly_project_amount+ $milestone->cost;
+            $pm_assign->save();
+
+            $deal_id= Deal::where('id',$project->deal_id)->first();
+            $deal= Deal::find($deal_id->id);
+            $deal->actual_amount= $deal->actual_amount+ $milestone->actual_cost;
+            $deal->amount= $deal->amount+ $milestone->cost;
+            $deal->save();
+            $contract_id= Contract::where('deal_id',$deal->id)->first();
+            $contract= Contract::find($contract_id->id);
+            $contract->actual_amount= $contract->actual_amount+ $milestone->actual_cost;
+            $contract->original_amount= $contract->original_amount+ $milestone->actual_cost;
+            $contract->amount= $contract->amount+ $milestone->cost;
+            $contract->save();
+
+           
+
         }
+
+        // if ($request->add_to_budget == 'yes') {
+        //     $project->project_budget = (!is_null($project->project_budget) ? ($project->project_budget + $milestone->cost) : $milestone->cost);
+        //     $project->currency_id = $request->currency_id;
+        //     $project->save();
+        // }
 
         $this->logProjectActivity($project->id, 'messages.newMilestoneCreated');
         return Reply::success(__('messages.milestoneSuccess'));
@@ -130,17 +168,80 @@ class ProjectMilestoneController extends AccountBaseController
      */
     public function update(StoreMilestone $request, $id)
     {
-      //dd($request);
+        $pre_cost= ProjectMilestone::where('id',$id)->first();
+    // dd($pre_cost);
+        $project_id= Project::where('id',$request->project_id)->first();
+        $project_update_price= Project::find($project_id->id);
+        $project_update_price->project_budget= $project_id->project_budget-$pre_cost->cost;
+        $project_update_price->due= $project_id->due- $pre_cost->cost;
+        
+        $project_update_price->save();
+        $pm_id_update= PMAssign::where('pm_id',$project_id->pm_id)->first();
+        $pm_assign_update= PMAssign::find($pm_id_update->id);
+        $pm_assign_update->amount= $pm_assign_update->amount- $pre_cost->cost;
+        $pm_assign_update->monthly_project_amount= $pm_assign_update->monthly_project_amount- $pre_cost->cost;
+        $pm_assign_update->save();
+
+        $deal_id_update= Deal::where('id',$project_id->deal_id)->first();
+        $deal_update= Deal::find($deal_id_update->id);
+        $deal_update->actual_amount= $deal_update->actual_amount- $pre_cost->actual_cost;
+        $deal_update->amount= $deal_update->amount- $pre_cost->cost;
+        $deal_update->save();
+        $contract_update_id= Contract::where('deal_id',$deal_update->id)->first();
+        $contract_update= Contract::find($contract_update_id->id);
+        $contract_update->actual_amount= $contract_update->actual_amount- $pre_cost->actual_cost;
+        $contract_update->original_amount= $contract_update->original_amount- $pre_cost->actual_cost;
+        $contract_update->amount= $contract_update->amount- $pre_cost->cost;
+        $contract_update->save();
+        $currency= Currency::where('currency_code',$request->original_currency_id)->first();
+      //dd($request,$id);
         $milestone = ProjectMilestone::findOrFail($id);
         $milestone->project_id = $request->project_id;
         $milestone->milestone_title = $request->milestone_title;
         $milestone->summary = $request->summary;
-        $milestone->cost = ($request->cost == '') ? '0' : $request->cost;
-        $milestone->currency_id = $request->currency_id;
-        $milestone->status = $request->status;
-        $milestone->start_date = $request->start_date == null ? $request->start_date : Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
-        $milestone->end_date = $request->end_date == null ? $request->end_date : Carbon::createFromFormat($this->global->date_format, $request->end_date)->format('Y-m-d');
+        $milestone->milestone_type= $request->milestone_type;
+        $milestone->cost = ($request->actual_cost)/$currency->exchange_rate;
+        $milestone->actual_cost = ($request->actual_cost == '') ? '0' : $request->actual_cost;
+        $milestone->currency_id = 1;
+        $milestone->original_currency_id = $currency->id;
+        // $milestone->status = $request->status;
+        // $milestone->start_date = $request->start_date == null ? $request->start_date : Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+        // $milestone->end_date = $request->end_date == null ? $request->end_date : Carbon::createFromFormat($this->global->date_format, $request->end_date)->format('Y-m-d');
         $milestone->save();
+        $project = Project::where('id',$milestone->project_id)->first();
+
+        $project_milestone_cost= ProjectMilestone::where('project_id',$project->id)->sum('cost');
+        if($project_milestone_cost > $project->project_budget && $project_milestone_cost-$project->project_budget > 1 )
+        {
+            $project_update= Project::find($project->id);
+            $project_update->project_budget= $project->project_budget+$milestone->cost;
+            $project_update->due= $project->due+ $milestone->cost;
+            if($project->status == 'finished')
+            {
+                $project_update->status ='in progress';
+            }
+            $project_update->save();
+            $pm_id= PMAssign::where('pm_id',$project->pm_id)->first();
+            $pm_assign= PMAssign::find($pm_id->id);
+            $pm_assign->amount= $pm_assign->amount+ $milestone->cost;
+            $pm_assign->monthly_project_amount= $pm_assign->monthly_project_amount+ $milestone->cost;
+            $pm_assign->save();
+
+            $deal_id= Deal::where('id',$project->deal_id)->first();
+            $deal= Deal::find($deal_id->id);
+            $deal->actual_amount= $deal->actual_amount+ $milestone->actual_cost;
+            $deal->amount= $deal->amount+ $milestone->cost;
+            $deal->save();
+            $contract_id= Contract::where('deal_id',$deal->id)->first();
+            $contract= Contract::find($contract_id->id);
+            $contract->actual_amount= $contract->actual_amount+ $milestone->actual_cost;
+            $contract->original_amount= $contract->original_amount+ $milestone->actual_cost;
+            $contract->amount= $contract->amount+ $milestone->cost;
+            $contract->save();
+
+           
+
+        }
 
         $this->logProjectActivity($milestone->project_id, 'messages.milestoneUpdated');
         return Reply::success(__('messages.milestoneSuccess'));

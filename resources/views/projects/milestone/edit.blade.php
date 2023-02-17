@@ -6,8 +6,12 @@
 <x-form id="addProjectMilestoneForm" method="PUT">
     <div class="modal-body">
         <input type="hidden" name="project_id" value="{{ $milestone->project_id }}">
-        <input type="hidden" name="currency_id"
-            value="{{ $milestone->currency_id ?? global_setting()->currency_id }}">
+        @php
+           $project_milestone= App\Models\ProjectMilestone::where('id',$milestone->id)->first();
+           $currency= App\Models\Currency::where('id',$project_milestone->original_currency_id)->first();
+           //dd($currency);
+       @endphp
+           
         <div class="row">
             <div class="col-md-4">
                 <x-forms.text fieldId="milestone_title" :fieldLabel="__('modules.projects.milestoneTitle')"
@@ -16,13 +20,31 @@
                 </x-forms.text>
             </div>
             <div class="col-md-4">
-                <x-forms.number fieldId="cost" :fieldLabel="__('modules.projects.milestoneCost')" fieldName="cost"
-                    :fieldValue="$milestone->cost" :fieldPlaceholder="__('placeholders.price')" />
+                <div class="form-group my-3">
+                    <label class="f-14 text-dark-grey mb-12" data-label="" for="actual_cost">Milestone Cost
+                    
+                    </label>
+
+                    <input type="number" class="form-control height-35 f-14" placeholder="e.g. 10000" value="{{$milestone->actual_cost
+                     }}" name="actual_cost" id="actual_cost" min="0" required >
+
+                    </div>
             </div>
             <div class="col-md-4">
-                <x-forms.select fieldId="status" :fieldLabel="__('app.status')" fieldName="status">
-                    <option @if ($milestone->status == 'incomplete') selected @endif value="incomplete">@lang('app.incomplete')</option>
-                    <option @if ($milestone->status == 'complete') selected @endif value="complete">@lang('app.complete')</option>
+                <div class="form-group my-3">
+    <label class="f-14 text-dark-grey mb-12" data-label="" for="original_currency_id">Currency
+    
+    </label>
+
+    <input type="text" class="form-control height-35 f-14" placeholder="" readonly value="{{$currency->currency_code}}" name="original_currency_id" id="original_currency_id">
+
+    </div>
+            </div>
+            <div class="col-md-12">
+                <x-forms.select fieldId="milestone_type" :fieldLabel="__('Milestone Type')" fieldName="milestone_type">
+                    <option @if ($milestone->milestone_type == 'Proposed Milestone') selected @endif value="Proposed Milestone">@lang('Proposed Milestone')</option>
+                    <option @if ($milestone->milestone_type == 'Client Agreed to this Milestone') selected @endif value="Client Agreed to this Milestone">@lang('Client Agreed to this Milestone')</option>
+                    <option @if ($milestone->milestone_type == 'Client Created this Milestone') selected @endif value="Client Created this Milestone">@lang('Client Created this Milestone')</option>
                 </x-forms.select>
             </div>
 
