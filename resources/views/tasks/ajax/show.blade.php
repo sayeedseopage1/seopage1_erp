@@ -89,7 +89,7 @@ $changeStatusPermission = user()->permission('change_status');
 
 
 
-                                  @if($task->status != "completed" || $task->board_column_id != 7)
+                                  @if($task->status != "completed" || $task->board_column_id != 7 || $task->board_column_id != 6)
 
 
                                         <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
