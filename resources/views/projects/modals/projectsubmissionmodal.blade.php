@@ -20,6 +20,11 @@
                                 <div class="card bg-white border-0 b-shadow-4">
 
                         <div class="card-body ">
+                          @if($project_submission->actual_link != null)
+                          <h6 class="text-center"> <strong>Actual Site Link: </strong><a href="{{$project_submission->actual_link}}" target="_blank">{{$project_submission->actual_link}}</a></h6>
+                          @else 
+                          <h6 class="text-center"> <strong>Dummy Site Link: </strong><a href="{{$project_submission->dummy_link}}" target="_blank">{{$project_submission->dummy_link}}</a></h6>
+                          @endif
             <table class="table align-middle mb-0 bg-white table-bordered">
     <thead class="bg-light">
       <tr>
@@ -100,6 +105,8 @@
           <p class="fw-normal mb-1">@if($project_submission->login_information == 1)
             Yes
             <br>
+            <br>
+            <strong>Link: </strong><a href="{{$project_submission->actual_link}}" target="_blank">{{$project_submission->actual_link}}</a>
             <br>
           <strong>Login: </strong>{{$project_submission->login}}
           <br>
