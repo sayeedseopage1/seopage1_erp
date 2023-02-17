@@ -2035,9 +2035,10 @@ if ($pm_count < 2) {
 
       $project= ProjectMilestone::where('id',$request->milestone_id)->first();
       $milestone->project_id= $project->project_id;
+      
       $milestone->login_yes = $request->login_yes;
       $milestone->login_information = $request->login_information;
-
+      $milestone->login_url= $request->login_url;
       $milestone->login= $request->login;
       $milestone->password= $request->password;
       $milestone->screenshot= $request->screenshot;

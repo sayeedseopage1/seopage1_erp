@@ -106,8 +106,10 @@
             Yes
             <br>
             <br>
-            <strong>Link: </strong><a href="{{$project_submission->actual_link}}" target="_blank">{{$project_submission->actual_link}}</a>
+            @if($project_submission->login_url != null)
+            <strong>Login Url: </strong><a href="{{$project_submission->login_url}}" target="_blank">{{$project_submission->login_url}}</a>
             <br>
+            @endif
           <strong>Login: </strong>{{$project_submission->login}}
           <br>
           <strong>Password: </strong>{{$project_submission->password}}
@@ -474,7 +476,7 @@
                             <label class="ml-3" for="">Comments On the Submission</label>
                           <div class="col-md-12">
 
-                            <textarea name="admin_comment" rows="8" cols="160"></textarea>
+                            <textarea name="admin_comment" rows="8" cols="120"></textarea>
 
                           </div>
 
