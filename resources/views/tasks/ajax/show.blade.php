@@ -89,7 +89,7 @@ $changeStatusPermission = user()->permission('change_status');
 
 
 
-                                  @if($task->status != "completed" || $task->board_column_id != 7 || $task->task_status != 'submitted')
+                                  @if($task->board_column_id != 6 || $task->board_column_id != 7 || $task->board_column_id != 4)
 
 
                                         <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
@@ -100,7 +100,7 @@ $changeStatusPermission = user()->permission('change_status');
                                               $extension=App\Models\TaskTimeExtension::orderBy('id','desc')->where('task_id',$task->id)->where('user_id',Auth::id())->first();
                                               $task_member= App\Models\TaskUser::where('task_id',$task->id)->first();
                                              ?>
-                                                 @if($task->status != "completed")
+                                                 @if($task->status != "completed" || $task->board_column_id != 6 || $task->board_column_id != 7)
                                              @if($extension == null && $task_member->user_id == Auth::user()->id)
                                             <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#timextension"><i class="fa-solid fa-plus"></i> Request Time Extension</button>
 
