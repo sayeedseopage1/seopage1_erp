@@ -26,7 +26,7 @@
 
 
             <option value="Graphics Design">Graphics Design</option>
-            <option value="UX Design">UX Design</option>
+            <option value="UI/UX Design">UI/UX Design</option>
             <option value="Main Page Development">Main Page Development</option>
             <option value="Secondary Page Development">Secondary Page Development</option>
             <option value="Content Creation">Content Creation</option>
@@ -34,6 +34,8 @@
             <option value="Domain/Hosting">Domain/Hosting</option>
             <option value="Products">Products</option>
             <option value="Collection">Collection</option>
+            <option value="Website design change ">Website design change </option>
+            <option value="Speed optimization">Speed optimization</option>
             <option value="Others">Others</option>
 
           </select>
