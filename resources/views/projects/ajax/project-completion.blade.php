@@ -185,7 +185,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <label for="">Submit Login Info for Future Use <sup class="f-14 mr-1">*</sup></label>
                       <div class="row">
                         <div class="col-md-4 col-lg-4">
-                            <input type="email" class="form-control height-35 f-14 @error('login') is-invalid @enderror" name="login" value="" placeholder="Enter email/username">
+                            <input type="email" class="form-control height-35 f-14 @error('login') is-invalid @enderror" name="login" value="" placeholder="Enter email">
                             @error('login')
                             <div class="mt-3">
                               <div class="alert alert-danger">{{ $message }}</div>
