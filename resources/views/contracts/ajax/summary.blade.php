@@ -262,7 +262,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                           <tr>
                             <td class="bg-light-grey border-right-0 f-w-500">
                                 @lang('Deadline')</td>
-                            <td class="border-left-0">{{ $contract->deal->deadline }}
+                            <td class="border-left-0">{{ $contract->deal->deadline->format('d-m-Y') }}
                             </td>
                         </tr>
                           <tr>
