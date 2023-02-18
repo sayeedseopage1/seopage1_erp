@@ -417,7 +417,7 @@ class AttendanceController extends AccountBaseController
     {
         $date = Carbon::parse($request->attendance_date)->format('Y-m-d');
         $clockIn = Carbon::createFromFormat('Y-m-d ' . $this->global->time_format, $date . ' ' . $request->clock_in_time, $this->global->timezone);
-        $clockIn->setTimezone('UTC');
+        $clockIn->setTimezone('UTC+6');
 
         $attendanceSettings = EmployeeShiftSchedule::with('shift')->where('user_id', $request->user_id)->where('date', $clockIn->toDateString())->first();
 
