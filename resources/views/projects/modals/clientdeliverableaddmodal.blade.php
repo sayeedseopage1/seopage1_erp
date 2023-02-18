@@ -1,4 +1,6 @@
-
+@php
+    $milestones= App\Models\ProjectMilestone::where('project_id',$project->id)->get();
+@endphp
 <div class="modal fade" id="deliverablesaddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -41,9 +43,23 @@
           </select>
           </div>
         </div>
+        <div class="col-md-6">
+          <div class="form-group">
+
+        <label for="exampleFormControlTextarea1">Milestone<span style="color:red;">*</span></label>
+      <select class="form-control height-35 f-14" name="milestone_id">
 
 
-            <div class="col-md-6">
+        @foreach($milestones as $milestone)
+        <option value="{{$milestone->id}}">{{$milestone->milestone_title}}</option>
+       @endforeach
+
+      </select>
+      </div>
+    </div>
+
+
+            <div class="col-md-12">
 
               <div class="form-group">
               <label for="exampleFormControlInput1">Deliverable Title <span style="color:red;">*</span></label>
@@ -51,21 +67,36 @@
               </div>
 
             </div>
-            <div class="col-md-4 mt-3">
+            <div class="col-md-6">
               <div class="form-group">
               <label for="exampleFormControlInput1">Quantity <span style="color:red;">*</span></label>
               <input type="text" name="quantity" class="form-control height-35 f-14 mt-1" id="exampleFormControlInput1"  required>
               </div>
 
             </div>
+            <div class="col-md-6 mt-1">
+              <div class="form-group">
+    
+            <label for="exampleFormControlTextarea1">Delivery Type<span style="color:red;">*</span></label>
+          <select class="form-control height-35 f-14" id="delivery-type">
+    
+    
+            <option>On or Before</option>
+            <option>Between</option>
+           
+          
+    
+          </select>
+          </div>
+        </div>
 
-            <div class="col-md-4">
+            <div class="col-md-6" >
                 <x-forms.datepicker fieldId="from" fieldRequired="true"
                     :fieldLabel="__('From')" fieldName="from"
 
                     :fieldPlaceholder="__('')" />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6" style="display: none;" id="to">
                 <x-forms.datepicker fieldId="to" fieldRequired="true"
                     :fieldLabel="__('To')" fieldName="to"
 
@@ -89,7 +120,7 @@
 
 
 
-        </div>
+    </div>
 
 
 
@@ -109,6 +140,22 @@
 </div>
 <script type="text/javascript">
 
+$(document).ready(function() {
+  // Listen for change event on select element
+  $('#delivery-type').change(function() {
+    // Get the selected value
+    var selectedValue = $(this).val();
 
+    // Hide all forms by default
+    $('#to').hide();
+
+    // Show the relevant form based on the selected option
+    if (selectedValue === 'Between') {
+      $('#to').show();
+    } else{
+      $('#to').hide();
+    }
+  });
+});
 
 </script>

@@ -81,6 +81,7 @@ class ProjectMilestoneController extends AccountBaseController
      */
     public function store(StoreMilestone $request)
     {
+        // /dd($request);
         $currency= Currency::where('currency_code',$request->original_currency_id)->first();
 
         // /dd($currency);
@@ -94,6 +95,7 @@ class ProjectMilestoneController extends AccountBaseController
         $milestone->cost = ($request->actual_cost)/$currency->exchange_rate;
         $milestone->actual_cost = ($request->actual_cost == '') ? '0' : $request->actual_cost;
         $milestone->currency_id = 1;
+       
         $milestone->original_currency_id = $currency->id;
         //dd(($request->actual_cost)/$currency->exchange_rate, $request->actual_cost);
 

@@ -52,6 +52,7 @@
                       <th scope="col" class="text-center">#</th>
                       <th scope="col" class="text-center">Type</th>
                       <th scope="col" class="text-center">Title</th>
+                      <th scope="col" class="text-center">Milestone</th>
                       <th scope="col" class="text-center">Quantity</th>
                       <th scope="col" class="text-center">Description</th>
                       <th scope="col" class="text-center">Estimated completion date</th>
@@ -68,9 +69,19 @@
                       <td>{{$loop->index+1}}</td>
                     <td class="text-center">{{$deliverable->deliverable_type}}</td>
                     <td class="text-center">{{$deliverable->title}}</td>
+                    @if($deliverable->milestone_id != null)
+                    <td class="text-center">{{$deliverable->milestone->milestone_title}}</td>
+                    @else 
+                    <td class="text-center">--</td>
+                    @endif
                       <td class="text-center">{{$deliverable->quantity}}</td>
                         <td class="text-center">{{$deliverable->description}}</td>
+                        @if($deliverable->to != null)
                     <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
+                    @else 
+                    <td class="text-center">On {{$deliverable->from}}</td>
+
+                    @endif
                     @if($signature == null)
                     <td class="text-center">
                       <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>

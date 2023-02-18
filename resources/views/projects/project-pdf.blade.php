@@ -347,6 +347,7 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
             <th>#</th>
             <th>Type</th>
             <th>Title</th>
+            <th>Milestone</th>
             <th>Quantity</th>
             <th>Description</th>
             <th>Estimated completion date</th>
@@ -358,9 +359,22 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
             <td>{{$loop->index+1}}</td>
             <td>{{$row->deliverable_type}}</td>
             <td>{{$row->title}}</td>
+            @if($row->milestone_id != null)
+
+            <td>{{$row->milestone->milestone_title}}</td>
+            @else 
+            <td>--</td>
+
+            @endif
+
             <td>{{$row->quantity}}</td>
             <td>{{$row->description}}</td>
+            @if($row->to != null)
           <td>Between {{$row->from}} & {{$row->to}}</td>
+          @else 
+
+          <td>On {{$row->from}}</td>
+          @endif
         </tr>
         @empty
         No Data
