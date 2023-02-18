@@ -460,7 +460,9 @@ trait EmployeeDashboard
 
     public function storeClockIn(ClockInRequest $request)
     {
+        
         $now = now();
+       // dd($now);
 
         $showClockIn = AttendanceSetting::first();
 
@@ -543,7 +545,8 @@ trait EmployeeDashboard
 
             $attendance = new Attendance();
             $attendance->user_id = $this->user->id;
-            $attendance->clock_in_time = $now;
+            $attendance->clock_in_time = $now->setTimezone('Asia/dhaka');;
+           // dd($now);
             $attendance->clock_in_ip = request()->ip();
 
             $attendance->working_from = $request->working_from;

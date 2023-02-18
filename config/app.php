@@ -105,8 +105,9 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
-    'cron_timezone' => env('CRON_TIMEZONE', 'UTC'),
+    'timezone' => env('APP_TIMEZONE', 'Asia/Dhaka'),
+    'cron_timezone' => env('CRON_TIMEZONE', 'Asia/Dhaka'),
+
 
     /*
     |--------------------------------------------------------------------------
