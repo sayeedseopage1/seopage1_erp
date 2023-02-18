@@ -68,7 +68,7 @@ class TaskStatus extends Command
                         $task_status= Task::find($task->id);
 
                         $task_status->board_column_id =7;
-                        $task_status->save();
+                      //  $task_status->save();
                     }
 
 
