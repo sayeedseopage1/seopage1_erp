@@ -81,6 +81,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('send-auto-followup-reminder')->everyMinute();
         $schedule->command('fetch-ticket-emails')->everyMinute();
         $schedule->command('add-missing-permissions')->everyThirtyMinutes();
+        $schedule->command('task:daily')->daily()->timezone(config('app.cron_timezone'));
+        $schedule->command('monthly_project_refresh:monthly')->monthly()->timezone(config('app.cron_timezone'));
+        $schedule->command('duedate:daily')->daily()->timezone(config('app.cron_timezone'));
+        $schedule->command('award_time_check:daily')->everyMinute();
         $schedule->command('daily:schedule')->everyMinute();
     }
 
