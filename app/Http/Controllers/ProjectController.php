@@ -1897,6 +1897,7 @@ if ($pm_count < 2) {
       $deliverable->quantity= $request->quantity;
       $deliverable->from= $request->from;
       $deliverable->to= $request->to;
+      $deliverable->milestone_id= $request->milestone_id;
       $deliverable->description= $request->description;
       $deliverable->save();
       Toastr::success('Deliverable Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);

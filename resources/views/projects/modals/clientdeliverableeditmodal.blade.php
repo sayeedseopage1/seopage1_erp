@@ -1,4 +1,6 @@
-
+@php
+    $milestones= App\Models\ProjectMilestone::where('project_id',$project->id)->get();
+@endphp
 <div class="modal fade" id="deliverableseditModal{{$deliverable->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -43,8 +45,35 @@
           </div>
         </div>
 
+        <div class="col-md-6">
+          <div class="form-group">
 
-            <div class="col-md-6">
+        <label for="exampleFormControlTextarea1">Milestone<span style="color:red;">*</span></label>
+      <select class="form-control height-35 f-14" name="milestone_id">
+        @if($deliverable->milestone_id != null)
+        
+        <option selected value="{{$deliverable->milestone_id}}">{{$deliverable->milestone->milestone_title}}</option>
+
+        @foreach($milestones as $milestone)
+        <option value="{{$milestone->id}}">{{$milestone->milestone_title}}</option>
+       @endforeach
+
+       @else 
+       @foreach($milestones as $milestone)
+       <option value="{{$milestone->id}}">{{$milestone->milestone_title}}</option>
+      @endforeach
+
+
+
+
+       @endif
+
+      </select>
+      </div>
+    </div>
+
+
+            <div class="col-md-12">
 
               <div class="form-group">
               <label for="exampleFormControlInput1">Deliverable Title <span style="color:red;">*</span></label>
