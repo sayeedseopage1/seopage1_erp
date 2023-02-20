@@ -494,7 +494,7 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                                                 >@lang('app.view')</a>
                                         @endif
                                         @if ($editSubTaskPermission == 'all' || ($editSubTaskPermission == 'added' && $subtask->added_by == user()->id))
-                                            <a class="dropdown-item openRightModal" href="/account/tasks/{{$task_id->id}}/edit"
+                                            <a class="dropdown-item" href="/account/tasks/{{$task_id->id}}/edit"
                                               >@lang('app.edit')</a>
                                         @endif
 

@@ -952,10 +952,7 @@ class TaskController extends AccountBaseController
             if($this->taskSettings->files == 'yes' && in_array('client', user_roles())){
                 $this->tab = 'tasks.ajax.files';
             }
-            elseif($this->taskSettings->sub_task == 'yes' && in_array('client', user_roles()))
-            {
-                $this->tab = 'tasks.ajax.sub_tasks';
-            }
+           
             elseif($this->taskSettings->comments == 'yes' && in_array('client', user_roles()))
             {
                 abort_403($this->viewTaskCommentPermission == 'none');
