@@ -439,7 +439,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                 <?php
                   $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->first();
                  ?>
-                 @if($deliverables == null)
+                 {{-- @if($deliverables == null)
                   <hr>
                   <div class="col-md-6 col-lg-3 mt-5">
                     <h5>Add Deliverables</h5>
@@ -1020,7 +1020,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                   </div>
               </div>
             </div>
-            @endif
+            @endif --}}
           {{--  @if($project->project_challenge != null)
                 <div class="col-md-12 col-lg-12 mb-3">
 
