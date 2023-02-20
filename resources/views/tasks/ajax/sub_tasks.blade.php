@@ -252,6 +252,8 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                           <textarea name="description" class="form-control" id="description" rows="3" required></textarea>
                         </div>
                       </div>
+
+                      
                     <div class="row">
                       <?php
                         $taskLabels= App\Models\TaskLabelList::all();

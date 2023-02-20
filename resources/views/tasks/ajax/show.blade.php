@@ -419,19 +419,20 @@ $changeStatusPermission = user()->permission('change_status');
                     <div class="s-b-inner s-b-notifications bg-white b-shadow-4 rounded">
 
                         <x-tab-section class="task-tabs">
+                            @if (($taskSettings->sub_task == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                            <x-tab-item class="ajax-tab" :active="(request('view') === 'sub_task'|| !request('view'))"
+                            :link="route('tasks.show', $task->id).'?view=sub_task'">
+                            @lang('modules.tasks.subTask')</x-tab-item>
+                        @endif
 
                             @if (($taskSettings->files == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
-                                <x-tab-item class="ajax-tab" :active="(request('view') === 'file' || !request('view'))"
+                                <x-tab-item class="ajax-tab" :active="(request('view') === 'file')"
                                 :link="route('tasks.show', $task->id).'?view=file'">@lang('Comment')</x-tab-item>
                             @endif
 
-                            @if (($taskSettings->sub_task == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
-                                <x-tab-item class="ajax-tab" :active="(request('view') === 'sub_task')"
-                                :link="route('tasks.show', $task->id).'?view=sub_task'">
-                                @lang('modules.tasks.subTask')</x-tab-item>
-                            @endif
+                           
 
-                          {{--  @if (($taskSettings->comments == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                           {{-- @if (($taskSettings->comments == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                                 @if ($viewTaskCommentPermission != 'none')
                                     <x-tab-item class="ajax-tab" :active="(request('view') === 'comments')"
                                         :link="route('tasks.show', $task->id).'?view=comments'">

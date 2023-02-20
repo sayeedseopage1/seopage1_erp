@@ -225,6 +225,8 @@ $deleteTaskCommentPermission = user()->permission('delete_task_comments');
         }
 
         $('#add-task-file').click(function() {
+            // var comment = document.getElementById('task-comment').children[0].innerHTML;
+            // document.getElementById('task-comment-text').value = comment;
             $(this).closest('.row').addClass('d-none');
             $('#save-taskfile-data-form').removeClass('d-none');
         });

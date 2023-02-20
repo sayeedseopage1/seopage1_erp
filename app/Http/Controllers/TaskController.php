@@ -928,8 +928,8 @@ class TaskController extends AccountBaseController
         $tab = request('view');
 
         switch ($tab) {
-        case 'sub_task':
-            $this->tab = 'tasks.ajax.sub_tasks';
+        case 'file':
+            $this->tab = 'tasks.ajax.files';
                 break;
         case 'comments':
             abort_403($this->viewTaskCommentPermission == 'none');
@@ -949,10 +949,13 @@ class TaskController extends AccountBaseController
             $this->tab = 'tasks.ajax.timelogs';
                 break;
         default:
-            if($this->taskSettings->files == 'yes' && in_array('client', user_roles())){
-                $this->tab = 'tasks.ajax.files';
+            // if($this->taskSettings->files == 'yes' && in_array('client', user_roles())){
+            //     $this->tab = 'tasks.ajax.files';
+            // }
+            if($this->taskSettings->sub_task == 'yes' && in_array('client', user_roles()))
+            {
+                $this->tab = 'tasks.ajax.sub_tasks';
             }
-           
             elseif($this->taskSettings->comments == 'yes' && in_array('client', user_roles()))
             {
                 abort_403($this->viewTaskCommentPermission == 'none');
@@ -975,7 +978,7 @@ class TaskController extends AccountBaseController
             }
             elseif(!in_array('client', user_roles()))
             {
-                $this->tab = 'tasks.ajax.files';
+                $this->tab = 'tasks.ajax.sub_tasks';
             }
             break;
         }
