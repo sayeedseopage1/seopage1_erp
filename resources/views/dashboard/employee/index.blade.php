@@ -120,7 +120,7 @@
 
             </div>
             @endif
-            <div
+            {{-- <div
                 class="ml-auto d-flex clock-in-out mb-3 mb-lg-0 mb-md-0 m mt-4 mt-lg-0 mt-md-0 justify-content-between">
 
                 <p
@@ -192,7 +192,7 @@
                     </div>
                 @endif
 
-            </div>
+            </div> --}}
 
             <!-- CLOCK IN CLOCK OUT END -->
         </div>
