@@ -104,7 +104,7 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
 
                       @if($project != null)
                       <div class="col-md-12 col-lg-4">
-                          <x-forms.select fieldName="milestone_id" fieldRequired="true" fieldId="milestone-id"
+                          <x-forms.select fieldName="milestone_id" fieldRequired="true" fieldId="milestone-id" onChange="getDependentData()"
                               :fieldLabel="__('modules.projects.milestones')">
                               <option value="">--</option>
                               <?php
@@ -123,6 +123,17 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
                               @endif
                           </x-forms.select>
                       </div>
+                      <div class="col-lg-6 col-md-6" id="deilverable-column">
+                        <div class="form-group my-3">
+                                    <label class="f-14 text-dark-grey mb-12" data-label="true" for="heading">Project Deliverable
+                                            <sup class="f-14 mr-1">*</sup>
+                                    
+                                    </label>
+
+                                    <input type="text" class="form-control height-35 f-14" placeholder="" value="" name="deliverable_id" id="deliverable" autocomplete="off" readonly>
+
+                                    </div>
+                    </div>
                       @endif
 
 
@@ -929,4 +940,37 @@ $viewMilestonePermission = user()->permission('view_project_milestones');
         });
         $('#' + id).val(checkedData);
     }
+    function getDependentData() {
+    var milestone_id = $('#milestone-id').val();
+   
+    $('#deilverable-column').show();
+    $.ajax({
+    url: '/get-deliverable/' + milestone_id,
+    method: 'GET',
+    success: function(response) {
+        $('#deilverable-column').show();
+     
+    $('#deliverable').val(response.title);
+    if(response.title == null)
+    {
+        $('#deilverable-column').hide();
+    }
+    },
+    error: function(xhr, status, error) {
+      console.log(error);
+    }
+  });
+    
+    // if (field1Value) {
+    //     $.ajax({
+    //         url: '/getDependentData',
+    //         type: 'GET',
+    //         data: {field1Value: field1Value},
+    //         success: function(data) {
+    //             // set the value of the dependent field based on the received data
+    //             $('#dependentField').val(data);
+    //         }
+    //     });
+    // }
+}
 </script>

@@ -84,7 +84,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
 
 
                       <div class="col-md-12 col-lg-4">
-                          <x-forms.select fieldName="milestone_id" fieldId="milestone-id"
+                          <x-forms.select fieldName="milestone_id" fieldId="milestone-id" onChange="getDependentData()"
                               :fieldLabel="__('modules.projects.milestones')">
                               <option value="">--</option>
                               @if ($task->project && count($task->project->milestones) > 0)
@@ -95,6 +95,33 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                               @endif
                           </x-forms.select>
                       </div>
+                      @if($task->deliverable_id == null)
+                      <div class="col-lg-6 col-md-6" id="deilverable-column">
+                        <div class="form-group my-3">
+                                    <label class="f-14 text-dark-grey mb-12" data-label="true" for="heading">Project Deliverable
+                                            <sup class="f-14 mr-1">*</sup>
+                                    
+                                    </label>
+
+                                    <input type="text" class="form-control height-35 f-14" placeholder="Enter a task title" value="" name="deliverable_id" id="deliverable" autocomplete="off" readonly>
+
+                                    </div>
+                    </div>
+                    @else 
+                   <div class="col-lg-6 col-md-6" id="deilverable-column">
+                        <div class="form-group my-3">
+                                    <label class="f-14 text-dark-grey mb-12" data-label="true" for="heading">Project Deliverable
+                                            <sup class="f-14 mr-1">*</sup>
+                                    
+                                    </label>
+
+                                    <input type="text" class="form-control height-35 f-14" placeholder="Enter a task title" value="{{$task->deliverable_id}}" name="deliverable_id" id="deliverable" autocomplete="off" readonly>
+
+                                    </div>
+                    </div>
+
+
+                    @endif
                       <?php
                       if (Auth::user()->role_id == 4) {
                        $project_members= App\Models\User::where('id',Auth::id())->orWhere('role_id',6)->orWhere('role_id',9)->orWhere('role_id',10)->get();
@@ -350,9 +377,11 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                             </div>
                         </div>
                     </div> --}}
+                    
 
                     <div class="col-md-6 col-lg-3 {{ $task->estimate_hours == 0 && $task->estimate_minutes == 0 ? '' : '' }}"
                         id="set-time-estimate-fields">
+                        <label class="mt-5" for="">Task Estimation Time</label>
                         <div class="form-group mt-5">
                             <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14"
                                 name="estimate_hours" value="{{ $task->estimate_hours }}">
@@ -869,4 +898,37 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
         });
         $('#'+id).val(checkedData);
     }
+    function getDependentData() {
+    var milestone_id = $('#milestone-id').val();
+   
+    $('#deilverable-column').show();
+    $.ajax({
+    url: '/get-deliverable/' + milestone_id,
+    method: 'GET',
+    success: function(response) {
+        $('#deilverable-column').show();
+     
+    $('#deliverable').val(response.title);
+    if(response.title == null)
+    {
+        $('#deilverable-column').hide();
+    }
+    },
+    error: function(xhr, status, error) {
+      console.log(error);
+    }
+  });
+    
+    // if (field1Value) {
+    //     $.ajax({
+    //         url: '/getDependentData',
+    //         type: 'GET',
+    //         data: {field1Value: field1Value},
+    //         success: function(data) {
+    //             // set the value of the dependent field based on the received data
+    //             $('#dependentField').val(data);
+    //         }
+    //     });
+    // }
+}
 </script>

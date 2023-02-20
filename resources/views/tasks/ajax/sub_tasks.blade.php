@@ -344,7 +344,7 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                                               </div>
                                           </div> --}}
 
-                                          <div class="col-md-6 col-lg-3" id="set-time-estimate-fields">
+                                          <div class="col-md-6 col-lg-3" >
                                             <label class="mt-5" for="">Set Estimate TIme</label>
                                               <div class="form-group mt-5">
                                                

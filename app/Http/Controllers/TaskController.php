@@ -48,7 +48,7 @@ use App\Notifications\TaskApproveNotification;
 use Notification;
 use Toastr;
 use Auth;
-
+use App\Models\ProjectDeliverable;
 use function PHPUnit\Framework\isNull;
 
 class TaskController extends AccountBaseController
@@ -489,6 +489,7 @@ class TaskController extends AccountBaseController
         $task->billable = $request->has('billable') && $request->billable ? 1 : 0;
         $task->estimate_hours = $request->estimate_hours;
         $task->estimate_minutes = $request->estimate_minutes;
+        $task->deliverable_id= $request->deliverable_id;
 
         if ($request->board_column_id) {
             $task->board_column_id = $request->board_column_id;
@@ -731,6 +732,7 @@ class TaskController extends AccountBaseController
 
     public function update(UpdateTask $request, $id)
     {
+      //  dd($request);
         $task = Task::with('users', 'label', 'project')->findOrFail($id)->withCustomFields();
         $editTaskPermission = user()->permission('edit_tasks');
         $taskUsers = $task->users->pluck('id')->toArray();
@@ -752,6 +754,7 @@ class TaskController extends AccountBaseController
         $task->due_date = $dueDate;
         $task->task_category_id = $request->category_id;
         $task->priority = $request->priority;
+        $task->deliverable_id= $request->deliverable_id;
 
         if ($request->has('board_column_id')) {
             $task->board_column_id = $request->board_column_id;
@@ -1068,6 +1071,11 @@ class TaskController extends AccountBaseController
         event(new TaskReminderEvent($task));
 
         return Reply::success('messages.reminderMailSuccess');
+    }
+    public function get_deliverable($id)
+    {
+        $deliverable= ProjectDeliverable::where('milestone_id',$id)->first();
+        return response()->json($deliverable);
     }
 
 }
