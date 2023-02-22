@@ -210,6 +210,7 @@ class ContractController extends AccountBaseController
     public function storeDeal(Request $request)
     {
     //dd($request);
+        $current_time= Carbon::now()->format('d-m-Y H:i:s' );
       $award_date= strtotime($request->award_time);
       $aw_dt= date('Y-m-d H:i:s', $award_date );
         //dd($aw_dt);
@@ -219,7 +220,7 @@ class ContractController extends AccountBaseController
             'project_name' => 'required',
             'amount' => 'required',
             'original_currency_id' => 'required',
-             'award_time' => 'required|date|before_or_equal:current_time',
+             'award_time' => 'required|date|before_or_equal:'.$current_time,
         ]);
         $to = Carbon::parse($request->current_time);
         $from = Carbon::parse($request->award_time);
@@ -339,13 +340,14 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
-        //dd($request);
+        $current_time= Carbon::now()->format('d-m-Y H:i:s' );
+       // dd($request->current_time, $request->award_time,$current_time);
 
 
         $award_date= strtotime($request->award_time);
         $aw_dt= date('Y-m-d H:i:s', $award_date );
         //dd($aw_dt);
-        
+
 
 
         $validated = $request->validate([
@@ -355,10 +357,10 @@ class ContractController extends AccountBaseController
             'amount' => 'required|min:1',
 
             // 'current_time' => 'date|date_format:d-m-Y H:i A',
-           'award_time' => 'required|date|before_or_equal:current_time',
+            'award_time' => 'required|date|before_or_equal:'.$current_time,
         ]);
     //  dd($request);
-      $to = Carbon::parse($request->current_time);
+      $to = Carbon::parse($current_time);
       $from = Carbon::parse($request->award_time);
 
         $diff_in_minutes = $from->diffInMinutes($to);

@@ -202,10 +202,7 @@ justify-content: center;
                           			<h2><strong>Project Award Time <span style="color:red;">*<span></strong></h2>
 
                           				<input type="text" id="date-format" name="award_time" value="{{old('award_time')}}" class="form-control height-35 f-14 floating-label @error('award_time') is-invalid @enderror" placeholder="Select Exact Award Time" >
-                                    <?php
-                                    $current_time = \Carbon\Carbon::now()->format('d-m-Y H:m:s');
-                                     ?>
-                                <input type="hidden" name="current_time" value="{{$current_time}}">
+                                   
                           		</div>
                               @error('award_time')
                               <div class="mt-3">
