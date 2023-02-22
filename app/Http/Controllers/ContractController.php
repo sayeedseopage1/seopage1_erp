@@ -220,7 +220,7 @@ class ContractController extends AccountBaseController
             'project_name' => 'required',
             'amount' => 'required',
             'original_currency_id' => 'required',
-             'award_time' => 'required|date|before_or_equal:'.$current_time,
+             'award_time' => 'required|date|before:'.$current_time,
         ]);
         $to = Carbon::parse($request->current_time);
         $from = Carbon::parse($request->award_time);
@@ -357,7 +357,7 @@ class ContractController extends AccountBaseController
             'amount' => 'required|min:1',
 
             // 'current_time' => 'date|date_format:d-m-Y H:i A',
-            'award_time' => 'required|date|before_or_equal:'.$current_time,
+            'award_time' => 'required|date|before:'.$current_time,
         ]);
     //  dd($request);
       $to = Carbon::parse($current_time);
