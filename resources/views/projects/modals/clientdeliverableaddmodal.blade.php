@@ -91,13 +91,13 @@
         </div>
 
             <div class="col-md-6" >
-                <x-forms.datepicker fieldId="from" fieldRequired="true"
-                    :fieldLabel="__('From')" fieldName="from_add"
+                <x-forms.datepicker fieldId="from_add" fieldRequired="true"
+                    :fieldLabel="__('From')" fieldName="from"
 
                     :fieldPlaceholder="__('')" />
             </div>
-            <div class="col-md-6" style="display: none;" id="to_add">
-                <x-forms.datepicker fieldId="to" fieldRequired="true"
+            <div class="col-md-6" style="display: none;" id="to">
+                <x-forms.datepicker fieldId="to_add" fieldRequired="true"
                     :fieldLabel="__('To')" fieldName="to"
 
                     :fieldPlaceholder="__('')" />
