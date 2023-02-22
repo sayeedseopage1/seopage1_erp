@@ -92,11 +92,11 @@
 
             <div class="col-md-6" >
                 <x-forms.datepicker fieldId="from" fieldRequired="true"
-                    :fieldLabel="__('From')" fieldName="from"
+                    :fieldLabel="__('From')" fieldName="from_add"
 
                     :fieldPlaceholder="__('')" />
             </div>
-            <div class="col-md-6" style="display: none;" id="to">
+            <div class="col-md-6" style="display: none;" id="to_add">
                 <x-forms.datepicker fieldId="to" fieldRequired="true"
                     :fieldLabel="__('To')" fieldName="to"
 
@@ -138,35 +138,7 @@
     </div>
   </div>
 </div>
-<script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
-<script>
- 
-  $(document).ready(function() {
 
-      if ($('.custom-date-picker').length > 0) {
-          datepicker('.custom-date-picker', {
-              position: 'bl',
-              ...datepickerConfig
-          });
-      }
-      const dp3 = datepicker('#from', {
-          position: 'bl',
-
-          onSelect: (instance, date) => {
-            dp4.setMin(date);
-          },
-          ...datepickerConfig
-      });
-      const dp4 = datepicker('#to', {
-          position: 'bl',
-
-          onSelect: (instance, date) => {
-             dp3.setMax(date);
-          },
-          ...datepickerConfig
-      });
-    });
-</script>
 <script type="text/javascript">
 
 $(document).ready(function() {

@@ -297,19 +297,19 @@ function copyLink(){
                 ...datepickerConfig
             });
         }
-        const dp3 = datepicker('#from', {
+        const dp1 = datepicker('#from_add', {
             position: 'bl',
 
             onSelect: (instance, date) => {
-              dp4.setMin(date);
+              dp2.setMin(date);
             },
             ...datepickerConfig
         });
-        const dp4 = datepicker('#to', {
+        const dp2 = datepicker('#to_add', {
             position: 'bl',
 
             onSelect: (instance, date) => {
-               dp3.setMax(date);
+               dp1.setMax(date);
             },
             ...datepickerConfig
         });
