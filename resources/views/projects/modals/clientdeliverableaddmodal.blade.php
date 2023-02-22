@@ -81,7 +81,7 @@
           <select class="form-control height-35 f-14" id="delivery-type">
     
     
-            <option>On or Before</option>
+            <option selected>On or Before</option>
             <option>Between</option>
            
           
