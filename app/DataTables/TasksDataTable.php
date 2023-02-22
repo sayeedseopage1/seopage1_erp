@@ -209,7 +209,7 @@ class TasksDataTable extends BaseDataTable
 
                         if (is_null($row->userActiveTimer->activeBreak)) {
                             $timerButtons = '<div class="btn-group" role="group">';
-                            $timerButtons .= '<a href="javascript:;" class="text-secondary btn border f-15 pause-timer" data-time-id="'.$row->userActiveTimer->id.'" data-toggle="tooltip" data-original-title="' . __('modules.timeLogs.pauseTimer') . '"><i class="bi bi-pause-circle-fill"></i></a>';
+                           // $timerButtons .= '<a href="javascript:;" class="text-secondary btn border f-15 pause-timer" data-time-id="'.$row->userActiveTimer->id.'" data-toggle="tooltip" data-original-title="' . __('modules.timeLogs.pauseTimer') . '"><i class="bi bi-pause-circle-fill"></i></a>';
 
                             $timerButtons .= '<a href="javascript:;" class="text-secondary btn border f-15 stop-timer" data-time-id="'.$row->userActiveTimer->id.'" data-toggle="tooltip" data-original-title="' . __('modules.timeLogs.stopTimer') . '"><i class="bi bi-stop-circle-fill"></i></a>';
                             $timerButtons .= '</div>';
