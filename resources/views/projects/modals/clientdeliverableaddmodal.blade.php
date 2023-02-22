@@ -138,6 +138,34 @@
     </div>
   </div>
 </div>
+<script>
+  <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
+  $(document).ready(function() {
+
+      if ($('.custom-date-picker').length > 0) {
+          datepicker('.custom-date-picker', {
+              position: 'bl',
+              ...datepickerConfig
+          });
+      }
+      const dp3 = datepicker('#from', {
+          position: 'bl',
+
+          onSelect: (instance, date) => {
+            dp4.setMin(date);
+          },
+          ...datepickerConfig
+      });
+      const dp4 = datepicker('#to', {
+          position: 'bl',
+
+          onSelect: (instance, date) => {
+             dp3.setMax(date);
+          },
+          ...datepickerConfig
+      });
+    });
+</script>
 <script type="text/javascript">
 
 $(document).ready(function() {
