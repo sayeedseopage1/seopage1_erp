@@ -31,6 +31,7 @@ $changeStatusPermission = user()->permission('change_status');
                                     class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
                                     @lang('modules.tasks.markComplete')
                                 </x-forms.button-primary> -->
+                                
                                   <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#extensionrequest">Extension Request</button>
 
 
@@ -63,7 +64,7 @@ $changeStatusPermission = user()->permission('change_status');
                                 @endif
                             @endif
 
-                            @if($task->board_column_id != 6 || $task->board_column_id != 7 || $task->task_status != 'submitted')
+                            @if($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision')
                             @if ($task->boardColumn->slug != 'completed' && !is_null($task->is_task_user) )
                                   @if (is_null($task->userActiveTimer))
                                       <x-forms.button-secondary id="start-task-timer" icon="play">
@@ -92,7 +93,7 @@ $changeStatusPermission = user()->permission('change_status');
 
 
 
-                                  @if($task->board_column_id != 6 || $task->board_column_id != 7 || $task->board_column_id != 4)
+                                 @if($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision')
 
                                           @if($task->status != 'completed')
                                         <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
@@ -103,7 +104,8 @@ $changeStatusPermission = user()->permission('change_status');
                                               $extension=App\Models\TaskTimeExtension::orderBy('id','desc')->where('task_id',$task->id)->where('user_id',Auth::id())->first();
                                               $task_member= App\Models\TaskUser::where('task_id',$task->id)->first();
                                              ?>
-                                                 @if($task->status != "completed" || $task->board_column_id != 6 || $task->board_column_id != 7)
+                                                
+                                                 @if($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision')
                                              @if($extension == null && $task_member->user_id == Auth::user()->id)
                                             <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#timextension"><i class="fa-solid fa-plus"></i> Request Time Extension</button>
 
