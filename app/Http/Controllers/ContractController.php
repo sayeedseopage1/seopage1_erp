@@ -345,6 +345,7 @@ class ContractController extends AccountBaseController
         $award_date= strtotime($request->award_time);
         $aw_dt= date('Y-m-d H:i:s', $award_date );
         //dd($aw_dt);
+        
 
 
         $validated = $request->validate([
