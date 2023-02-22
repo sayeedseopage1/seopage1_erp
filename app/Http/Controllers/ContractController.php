@@ -898,10 +898,10 @@ class ContractController extends AccountBaseController
                       Mail::to($user->email)->send(new WonDealMail($project_id));
 
                       //  Mail::to($test->email)->send(new WonDealMail($project));
-                        $users= User::where('role_id',1)->get();
-                        foreach ($users as $usr) {
-                          Mail::to($usr->email)->send(new WonDealMail($project_id));
-                        }
+                        // $users= User::where('role_id',1)->get();
+                        // foreach ($users as $usr) {
+                        //   Mail::to($usr->email)->send(new WonDealMail($project_id));
+                        // }
 
                     // $clientdetail= ClientDetails::find($client_id->id);
                     // //dd($clientdetail);
@@ -1140,10 +1140,10 @@ class ContractController extends AccountBaseController
                     Mail::to($user->email)->send(new WonDealMail($project_id));
 
                     //  Mail::to($test->email)->send(new WonDealMail($project));
-                      $users= User::where('role_id',1)->get();
-                      foreach ($users as $usr) {
-                        Mail::to($usr->email)->send(new WonDealMail($project_id));
-                      }
+                    //   $users= User::where('role_id',1)->get();
+                    //   foreach ($users as $usr) {
+                    //     Mail::to($usr->email)->send(new WonDealMail($project_id));
+                    //   }
                 }
 
 
