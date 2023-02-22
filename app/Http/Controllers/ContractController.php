@@ -894,6 +894,12 @@ class ContractController extends AccountBaseController
 
                     $deal_pm_id = Deal::where('id',$request->id)->first();
                       $project_id= Project::where('deal_id',$deal_pm_id->id)->first();
+
+                      $project_admin_update= Project::find($project_id->id);
+                      $project_admin_update->added_by= $project_id->pm_id;
+                      $project_admin_update->project_admin= $project_id->pm_id;
+                      $project_admin_update->save();
+
                     $user= User::where('id',$deal_pm_id->pm_id)->first();
                       Mail::to($user->email)->send(new WonDealMail($project_id));
 
@@ -1136,6 +1142,10 @@ class ContractController extends AccountBaseController
 
                   $deal_pm_id = Deal::where('id',$request->id)->first();
                     $project_id= Project::where('deal_id',$deal_pm_id->id)->first();
+                    $project_admin_update= Project::find($project_id->id);
+                    $project_admin_update->added_by= $project_id->pm_id;
+                    $project_admin_update->project_admin= $project_id->pm_id;
+                    $project_admin_update->save();
                   $user= User::where('id',$deal_pm_id->pm_id)->first();
                     Mail::to($user->email)->send(new WonDealMail($project_id));
 
