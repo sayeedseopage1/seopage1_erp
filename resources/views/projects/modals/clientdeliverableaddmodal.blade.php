@@ -138,8 +138,9 @@
     </div>
   </div>
 </div>
+<script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
-  <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
+ 
   $(document).ready(function() {
 
       if ($('.custom-date-picker').length > 0) {
