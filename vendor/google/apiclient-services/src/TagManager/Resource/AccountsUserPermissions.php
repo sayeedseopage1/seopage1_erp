@@ -25,7 +25,7 @@ use Google\Service\TagManager\UserPermission;
  * Typical usage is:
  *  <code>
  *   $tagmanagerService = new Google\Service\TagManager(...);
- *   $user_permissions = $tagmanagerService->user_permissions;
+ *   $user_permissions = $tagmanagerService->accounts_user_permissions;
  *  </code>
  */
 class AccountsUserPermissions extends \Google\Service\Resource
@@ -78,7 +78,7 @@ class AccountsUserPermissions extends \Google\Service\Resource
    * Container user access granted to each of them.
    * (user_permissions.listAccountsUserPermissions)
    *
-   * @param string $parent GTM Accounts's API relative path. Example:
+   * @param string $parent GTM Account's API relative path. Example:
    * accounts/{account_id}
    * @param array $optParams Optional parameters.
    *

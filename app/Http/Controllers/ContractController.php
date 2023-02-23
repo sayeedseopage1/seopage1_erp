@@ -616,7 +616,9 @@ class ContractController extends AccountBaseController
         $project_id = Project::where('id', $projectmilestone->project_id)->first();
         $deal= Deal::where('id',$project_id->deal_id)->first();
         $milestone_amount = ProjectMilestone::where('project_id', $project_id->id)->sum('actual_cost');
-        $check = ($deal->actual_amount) - ($milestone_amount);
+        $updated_amount= $milestone_amount - $projectmilestone->actual_cost;
+        $check = ($deal->actual_amount) - ($updated_amount);
+        //dd($check,$projectmilestone->actual_cost);
 
       $validator = Validator::make($request->all(), [
           'title' => 'required',
@@ -631,6 +633,7 @@ class ContractController extends AccountBaseController
           ]);
       } else {
           $milestone = ProjectMilestone::find($id);
+          //dd($id);
           if($milestone)
           {
 

@@ -206,6 +206,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         \App\Providers\TranslateSettingConfigProvider::class,
+      
 
 
         /*
@@ -227,6 +228,8 @@ return [
         Froiden\LaravelInstaller\Providers\LaravelInstallerServiceProvider::class,
         Brian2694\Toastr\ToastrServiceProvider::class,
         Xetaio\Mentions\Providers\MentionServiceProvider::class,
+     
+        NunoMaduro\LaravelDesktopNotifier\LaravelDesktopNotifierServiceProvider::class,
     ],
 
     /*
@@ -281,6 +284,10 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Zip' => Macellan\Zip\ZipFacade::class,
         'Toastr'  => Brian2694\Toastr\Facades\Toastr::class,
+       // 'DesktopNotifier' => NunoMaduro\LaravelDesktopNotifier\Facades\DesktopNotifier::class,
+        'DesktopNotifier' => NunoMaduro\LaravelDesktopNotifier\Facades\Notifier::class,
+       // 'DesktopNotifier' => NunoMaduro\LaravelDesktopNotifier\Facades\DesktopNotifier::class,
+
 
     ],
 

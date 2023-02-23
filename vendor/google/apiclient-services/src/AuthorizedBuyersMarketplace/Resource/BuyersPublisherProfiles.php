@@ -25,7 +25,7 @@ use Google\Service\AuthorizedBuyersMarketplace\PublisherProfile;
  * Typical usage is:
  *  <code>
  *   $authorizedbuyersmarketplaceService = new Google\Service\AuthorizedBuyersMarketplace(...);
- *   $publisherProfiles = $authorizedbuyersmarketplaceService->publisherProfiles;
+ *   $publisherProfiles = $authorizedbuyersmarketplaceService->buyers_publisherProfiles;
  *  </code>
  */
 class BuyersPublisherProfiles extends \Google\Service\Resource
@@ -45,7 +45,10 @@ class BuyersPublisherProfiles extends \Google\Service\Resource
     return $this->call('get', [$params], PublisherProfile::class);
   }
   /**
-   * Lists publisher profiles (publisherProfiles.listBuyersPublisherProfiles)
+   * Lists publisher profiles. The returned publisher profiles aren't in any
+   * defined order. The order of the results might change. A new publisher profile
+   * can appear in any place in the list of returned results.
+   * (publisherProfiles.listBuyersPublisherProfiles)
    *
    * @param string $parent Required. Parent that owns the collection of publisher
    * profiles Format: `buyers/{buyerId}`

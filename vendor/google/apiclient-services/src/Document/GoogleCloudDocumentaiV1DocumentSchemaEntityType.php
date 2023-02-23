@@ -28,16 +28,16 @@ class GoogleCloudDocumentaiV1DocumentSchemaEntityType extends \Google\Collection
    * @var string
    */
   public $displayName;
-  protected $entityTypeMetadataType = GoogleCloudDocumentaiV1EntityTypeMetadata::class;
-  protected $entityTypeMetadataDataType = '';
   protected $enumValuesType = GoogleCloudDocumentaiV1DocumentSchemaEntityTypeEnumValues::class;
   protected $enumValuesDataType = '';
+  public $enumValues;
   /**
    * @var string
    */
   public $name;
   protected $propertiesType = GoogleCloudDocumentaiV1DocumentSchemaEntityTypeProperty::class;
   protected $propertiesDataType = 'array';
+  public $properties;
 
   /**
    * @param string[]
@@ -66,20 +66,6 @@ class GoogleCloudDocumentaiV1DocumentSchemaEntityType extends \Google\Collection
   public function getDisplayName()
   {
     return $this->displayName;
-  }
-  /**
-   * @param GoogleCloudDocumentaiV1EntityTypeMetadata
-   */
-  public function setEntityTypeMetadata(GoogleCloudDocumentaiV1EntityTypeMetadata $entityTypeMetadata)
-  {
-    $this->entityTypeMetadata = $entityTypeMetadata;
-  }
-  /**
-   * @return GoogleCloudDocumentaiV1EntityTypeMetadata
-   */
-  public function getEntityTypeMetadata()
-  {
-    return $this->entityTypeMetadata;
   }
   /**
    * @param GoogleCloudDocumentaiV1DocumentSchemaEntityTypeEnumValues

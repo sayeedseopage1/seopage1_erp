@@ -22,10 +22,15 @@ class LinkedRouterApplianceInstances extends \Google\Collection
   protected $collection_key = 'instances';
   protected $instancesType = RouterApplianceInstance::class;
   protected $instancesDataType = 'array';
+  public $instances;
   /**
    * @var bool
    */
   public $siteToSiteDataTransfer;
+  /**
+   * @var string
+   */
+  public $vpcNetwork;
 
   /**
    * @param RouterApplianceInstance[]
@@ -54,6 +59,20 @@ class LinkedRouterApplianceInstances extends \Google\Collection
   public function getSiteToSiteDataTransfer()
   {
     return $this->siteToSiteDataTransfer;
+  }
+  /**
+   * @param string
+   */
+  public function setVpcNetwork($vpcNetwork)
+  {
+    $this->vpcNetwork = $vpcNetwork;
+  }
+  /**
+   * @return string
+   */
+  public function getVpcNetwork()
+  {
+    return $this->vpcNetwork;
   }
 }
 

@@ -22,12 +22,19 @@ class GoogleCloudDocumentaiV1DocumentPageTable extends \Google\Collection
   protected $collection_key = 'headerRows';
   protected $bodyRowsType = GoogleCloudDocumentaiV1DocumentPageTableTableRow::class;
   protected $bodyRowsDataType = 'array';
+  public $bodyRows;
   protected $detectedLanguagesType = GoogleCloudDocumentaiV1DocumentPageDetectedLanguage::class;
   protected $detectedLanguagesDataType = 'array';
+  public $detectedLanguages;
   protected $headerRowsType = GoogleCloudDocumentaiV1DocumentPageTableTableRow::class;
   protected $headerRowsDataType = 'array';
+  public $headerRows;
   protected $layoutType = GoogleCloudDocumentaiV1DocumentPageLayout::class;
   protected $layoutDataType = '';
+  public $layout;
+  protected $provenanceType = GoogleCloudDocumentaiV1DocumentProvenance::class;
+  protected $provenanceDataType = '';
+  public $provenance;
 
   /**
    * @param GoogleCloudDocumentaiV1DocumentPageTableTableRow[]
@@ -84,6 +91,20 @@ class GoogleCloudDocumentaiV1DocumentPageTable extends \Google\Collection
   public function getLayout()
   {
     return $this->layout;
+  }
+  /**
+   * @param GoogleCloudDocumentaiV1DocumentProvenance
+   */
+  public function setProvenance(GoogleCloudDocumentaiV1DocumentProvenance $provenance)
+  {
+    $this->provenance = $provenance;
+  }
+  /**
+   * @return GoogleCloudDocumentaiV1DocumentProvenance
+   */
+  public function getProvenance()
+  {
+    return $this->provenance;
   }
 }
 

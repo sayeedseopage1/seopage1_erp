@@ -50,9 +50,18 @@ class SQLServerSchemaManager extends AbstractSchemaManager
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated Use {@see introspectTable()} instead.
      */
     public function listTableDetails($name)
     {
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5595',
+            '%s is deprecated. Use introspectTable() instead.',
+            __METHOD__,
+        );
+
         return $this->doListTableDetails($name);
     }
 
@@ -308,13 +317,17 @@ SQL,
      */
     public function alterTable(TableDiff $tableDiff)
     {
-        if (count($tableDiff->removedColumns) > 0) {
-            foreach ($tableDiff->removedColumns as $col) {
-                foreach ($this->getColumnConstraints($tableDiff->name, $col->getName()) as $constraint) {
+        $droppedColumns = $tableDiff->getDroppedColumns();
+
+        if (count($droppedColumns) > 0) {
+            $tableName = ($tableDiff->getOldTable() ?? $tableDiff->getName($this->_platform))->getName();
+
+            foreach ($droppedColumns as $col) {
+                foreach ($this->getColumnConstraints($tableName, $col->getName()) as $constraint) {
                     $this->_conn->executeStatement(
                         sprintf(
                             'ALTER TABLE %s DROP CONSTRAINT %s',
-                            $tableDiff->name,
+                            $tableName,
                             $constraint,
                         ),
                     );

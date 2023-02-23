@@ -101,10 +101,6 @@ class CloudRun extends \Google\Service
                   'location' => 'query',
                   'type' => 'string',
                 ],
-                'force' => [
-                  'location' => 'query',
-                  'type' => 'boolean',
-                ],
                 'validateOnly' => [
                   'location' => 'query',
                   'type' => 'boolean',
@@ -356,6 +352,16 @@ class CloudRun extends \Google\Service
                 'pageToken' => [
                   'location' => 'query',
                   'type' => 'string',
+                ],
+              ],
+            ],'wait' => [
+              'path' => 'v2/{+name}:wait',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
                 ],
               ],
             ],

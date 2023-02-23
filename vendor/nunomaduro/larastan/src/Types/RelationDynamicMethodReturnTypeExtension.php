@@ -6,7 +6,6 @@ namespace NunoMaduro\Larastan\Types;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionVariant;
@@ -14,12 +13,12 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\ShouldNotHappenException;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 
 class RelationDynamicMethodReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
@@ -57,7 +56,7 @@ class RelationDynamicMethodReturnTypeExtension implements DynamicMethodReturnTyp
         $functionVariant = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
         $returnType = $functionVariant->getReturnType();
 
-        if (! $returnType instanceof ObjectType) {
+        if (! $returnType instanceof TypeWithClassName) {
             return $returnType;
         }
 
@@ -77,12 +76,13 @@ class RelationDynamicMethodReturnTypeExtension implements DynamicMethodReturnTyp
         }
 
         $argType = $scope->getType($methodCall->getArgs()[0]->value);
+        $argStrings = $argType->getConstantStrings();
 
-        if (! $argType instanceof ConstantStringType) {
+        if (count($argStrings) !== 1) {
             return $returnType;
         }
 
-        $argClassName = $argType->getValue();
+        $argClassName = $argStrings[0]->getValue();
 
         if (! $this->provider->hasClass($argClassName)) {
             $argClassName = Model::class;

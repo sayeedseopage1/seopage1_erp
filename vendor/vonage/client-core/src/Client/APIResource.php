@@ -3,7 +3,7 @@
 /**
  * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016-2020 Vonage, Inc. (http://vonage.com)
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
  * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
  */
 
@@ -11,11 +11,9 @@ declare(strict_types=1);
 
 namespace Vonage\Client;
 
-use function is_null;
-use function json_decode;
-use function json_encode;
-use function http_build_query;
 use Laminas\Diactoros\Request;
+use Psr\Log\LogLevel;
+use Vonage\Client\Credentials\Handler\BasicHandler;
 use Vonage\Entity\Filter\EmptyFilter;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -23,45 +21,39 @@ use Vonage\Entity\IterableAPICollection;
 use Vonage\Entity\Filter\FilterInterface;
 use Psr\Http\Client\ClientExceptionInterface;
 use Vonage\Client\Credentials\Handler\HandlerInterface;
+use Vonage\Logger\LoggerTrait;
+
+use function is_null;
+use function json_decode;
+use function json_encode;
+use function http_build_query;
 
 class APIResource implements ClientAwareInterface
 {
     use ClientAwareTrait;
+    use LoggerTrait;
 
     /**
-     * @var HandlerInterface
+     * @var HandlerInterface[]
      */
-    protected $authHandler;
+    protected array $authHandler = [];
 
     /**
      * Base URL that we will hit. This can be overridden from the underlying
      * client or directly on this class.
-     *
-     * @var string
      */
-    protected $baseUrl = '';
+    protected string $baseUrl = '';
 
-    /**
-     * @var string
-     */
-    protected $baseUri;
+    protected string $baseUri = '';
 
-    /**
-     * @var string
-     */
-    protected $collectionName = '';
+    protected string $collectionName = '';
 
-    /**
-     * @var IterableAPICollection
-     */
-    protected $collectionPrototype;
+    protected ?IterableAPICollection $collectionPrototype = null;
 
     /**
      * Sets flag that says to check for errors even on 200 Success
-     *
-     * @var bool
      */
-    protected $errorsOn200 = false;
+    protected bool $errorsOn200 = false;
 
     /**
      * Error handler to use when reviewing API responses
@@ -70,29 +62,37 @@ class APIResource implements ClientAwareInterface
      */
     protected $exceptionErrorHandler;
 
-    /**
-     * @var bool
-     */
-    protected $isHAL = true;
+    protected bool $isHAL = true;
 
-    /**
-     * @var RequestInterface
-     */
-    protected $lastRequest;
+    protected ?RequestInterface $lastRequest = null;
 
-    /**
-     * @var ResponseInterface
-     */
-    protected $lastResponse;
+    protected ?ResponseInterface $lastResponse = null;
 
     /**
      * Adds authentication to a request
-     * @todo Use this method when Vonage\Client no longer adds authentication
+     *
      */
-    public function addAuth(RequestInterface $request)
+    public function addAuth(RequestInterface $request): RequestInterface
     {
-        $creds = $this->getClient()->getCredentials();
-        return $this->getAuthHandler()($request, $creds);
+        $credentials = $this->getClient()->getCredentials();
+
+        if (is_array($this->getAuthHandler())) {
+            foreach ($this->getAuthHandler() as $handler) {
+                try {
+                    $request = $handler($request, $credentials);
+                    break;
+                } catch (\RuntimeException $e) {
+                    continue; // We are OK if multiple are sent but only one match
+                }
+                throw new \RuntimeException(
+                    'Unable to set credentials, please check configuration and 
+                    supplied authentication'
+                );
+            }
+            return $request;
+        }
+
+        return $this->getAuthHandler()($request, $credentials);
     }
 
     /**
@@ -229,8 +229,19 @@ class APIResource implements ClientAwareInterface
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function getAuthHandler(): ?HandlerInterface
+    public function getAuthHandler()
     {
+        // If we have not set a handler, default to Basic and issue warning.
+        if (!$this->authHandler) {
+            $this->log(
+                LogLevel::WARNING,
+                'Warning: no authorisation handler set for this Client. Defaulting to Basic which might not be
+                the correct authorisation for this API call'
+            );
+
+            return new BasicHandler();
+        }
+
         return $this->authHandler;
     }
 
@@ -305,6 +316,11 @@ class APIResource implements ClientAwareInterface
         return $this->isHAL;
     }
 
+    public function partiallyUpdate(string $id, array $body, array $headers = []): ?array
+    {
+        return $this->updateEntity('PATCH', $id, $body, $headers);
+    }
+
     public function search(?FilterInterface $filter = null, string $uri = ''): IterableAPICollection
     {
         if (is_null($filter)) {
@@ -326,8 +342,19 @@ class APIResource implements ClientAwareInterface
         return $collection;
     }
 
+    /**
+     * Set the auth handler(s). This can be a handler that extends off AbstractHandler,
+     * or an array of handlers that will attempt to resolve at runtime
+     *
+     * @param HandlerInterface|array $handler
+     *
+     * @return $this
+     */
     public function setAuthHandler($handler): self
     {
+        if (!is_array($handler)) {
+            $handler = [$handler];
+        }
         $this->authHandler = $handler;
 
         return $this;
@@ -422,11 +449,16 @@ class APIResource implements ClientAwareInterface
         return $response->getBody()->getContents();
     }
 
+    public function update(string $id, array $body, array $headers = []): ?array
+    {
+        return $this->updateEntity('PUT', $id, $body, $headers);
+    }
+
     /**
      * @throws ClientExceptionInterface
      * @throws Exception\Exception
      */
-    public function update(string $id, array $body, array $headers = []): ?array
+    protected function updateEntity(string $method, string $id, array $body, array $headers = []): ?array
     {
         if (empty($headers)) {
             $headers = ['content-type' => 'application/json'];
@@ -434,7 +466,7 @@ class APIResource implements ClientAwareInterface
 
         $request = new Request(
             $this->getBaseUrl() . $this->baseUri . '/' . $id,
-            'PUT',
+            $method,
             'php://temp',
             $headers
         );

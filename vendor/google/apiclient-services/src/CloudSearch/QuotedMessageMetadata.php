@@ -22,32 +22,49 @@ class QuotedMessageMetadata extends \Google\Collection
   protected $collection_key = 'uploadMetadata';
   protected $annotationsType = Annotation::class;
   protected $annotationsDataType = 'array';
+  public $annotations;
   protected $appProfileType = AppsDynamiteSharedAppProfile::class;
   protected $appProfileDataType = '';
+  public $appProfile;
   /**
    * @var string
    */
   public $botAttachmentState;
+  /**
+   * @var string
+   */
+  public $createTimeMicros;
   protected $creatorIdType = UserId::class;
   protected $creatorIdDataType = '';
+  public $creatorId;
+  /**
+   * @var string
+   */
+  public $lastEditTimeMicros;
   /**
    * @var string
    */
   public $lastUpdateTimeWhenQuotedMicros;
   protected $messageIdType = MessageId::class;
   protected $messageIdDataType = '';
+  public $messageId;
   /**
    * @var string
    */
   public $messageState;
   protected $retentionSettingsType = AppsDynamiteSharedRetentionSettings::class;
   protected $retentionSettingsDataType = '';
+  public $retentionSettings;
   /**
    * @var string
    */
   public $textBody;
+  protected $updaterIdType = UserId::class;
+  protected $updaterIdDataType = '';
+  public $updaterId;
   protected $uploadMetadataType = UploadMetadata::class;
   protected $uploadMetadataDataType = 'array';
+  public $uploadMetadata;
 
   /**
    * @param Annotation[]
@@ -92,6 +109,20 @@ class QuotedMessageMetadata extends \Google\Collection
     return $this->botAttachmentState;
   }
   /**
+   * @param string
+   */
+  public function setCreateTimeMicros($createTimeMicros)
+  {
+    $this->createTimeMicros = $createTimeMicros;
+  }
+  /**
+   * @return string
+   */
+  public function getCreateTimeMicros()
+  {
+    return $this->createTimeMicros;
+  }
+  /**
    * @param UserId
    */
   public function setCreatorId(UserId $creatorId)
@@ -104,6 +135,20 @@ class QuotedMessageMetadata extends \Google\Collection
   public function getCreatorId()
   {
     return $this->creatorId;
+  }
+  /**
+   * @param string
+   */
+  public function setLastEditTimeMicros($lastEditTimeMicros)
+  {
+    $this->lastEditTimeMicros = $lastEditTimeMicros;
+  }
+  /**
+   * @return string
+   */
+  public function getLastEditTimeMicros()
+  {
+    return $this->lastEditTimeMicros;
   }
   /**
    * @param string
@@ -174,6 +219,20 @@ class QuotedMessageMetadata extends \Google\Collection
   public function getTextBody()
   {
     return $this->textBody;
+  }
+  /**
+   * @param UserId
+   */
+  public function setUpdaterId(UserId $updaterId)
+  {
+    $this->updaterId = $updaterId;
+  }
+  /**
+   * @return UserId
+   */
+  public function getUpdaterId()
+  {
+    return $this->updaterId;
   }
   /**
    * @param UploadMetadata[]

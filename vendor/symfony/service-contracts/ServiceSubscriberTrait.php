@@ -12,6 +12,7 @@
 namespace Symfony\Contracts\Service;
 
 use Psr\Container\ContainerInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 
 /**
@@ -25,9 +26,6 @@ trait ServiceSubscriberTrait
     /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedServices(): array
     {
         $services = method_exists(get_parent_class(self::class) ?: '', __FUNCTION__) ? parent::getSubscribedServices() : [];
@@ -49,21 +47,23 @@ trait ServiceSubscriberTrait
                 throw new \LogicException(sprintf('Cannot use "%s" on methods without a return type in "%s::%s()".', SubscribedService::class, $method->name, self::class));
             }
 
-            $serviceId = $returnType instanceof \ReflectionNamedType ? $returnType->getName() : (string) $returnType;
+            /* @var SubscribedService $attribute */
+            $attribute = $attribute->newInstance();
+            $attribute->key ??= self::class.'::'.$method->name;
+            $attribute->type ??= $returnType instanceof \ReflectionNamedType ? $returnType->getName() : (string) $returnType;
+            $attribute->nullable = $returnType->allowsNull();
 
-            if ($returnType->allowsNull()) {
-                $serviceId = '?'.$serviceId;
+            if ($attribute->attributes) {
+                $services[] = $attribute;
+            } else {
+                $services[$attribute->key] = ($attribute->nullable ? '?' : '').$attribute->type;
             }
-
-            $services[$attribute->newInstance()->key ?? self::class.'::'.$method->name] = $serviceId;
         }
 
         return $services;
     }
 
-    /**
-     * @required
-     */
+    #[Required]
     public function setContainer(ContainerInterface $container): ?ContainerInterface
     {
         $this->container = $container;

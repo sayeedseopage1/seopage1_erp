@@ -23,6 +23,9 @@ class DateShiftConfig extends \Google\Model
    * @var string
    */
   public $cryptoKey;
+  protected $kmsWrappedType = KmsWrappedCryptoKey::class;
+  protected $kmsWrappedDataType = '';
+  public $kmsWrapped;
 
   /**
    * @param string
@@ -37,6 +40,20 @@ class DateShiftConfig extends \Google\Model
   public function getCryptoKey()
   {
     return $this->cryptoKey;
+  }
+  /**
+   * @param KmsWrappedCryptoKey
+   */
+  public function setKmsWrapped(KmsWrappedCryptoKey $kmsWrapped)
+  {
+    $this->kmsWrapped = $kmsWrapped;
+  }
+  /**
+   * @return KmsWrappedCryptoKey
+   */
+  public function getKmsWrapped()
+  {
+    return $this->kmsWrapped;
   }
 }
 

@@ -8,16 +8,14 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\Builder;
-use NunoMaduro\Larastan\Reflection\EloquentBuilderMethodReflection;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleLevelHelper;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\ErrorType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 
 /**
  * @implements \PHPStan\Rules\Rule<\PhpParser\Node\Expr\StaticCall>
@@ -50,7 +48,7 @@ class ModelPropertyStaticCallRule implements Rule
      * @param  Scope  $scope
      * @return string[]
      *
-     * @throws \PHPStan\ShouldNotHappenException|\PHPStan\Reflection\MissingMethodFromReflectionException
+     * @throws \PHPStan\ShouldNotHappenException
      */
     public function processNode(Node $node, Scope $scope): array
     {
@@ -82,10 +80,6 @@ class ModelPropertyStaticCallRule implements Rule
                 }
 
                 $currentClassReflection = $scope->getClassReflection();
-
-                if ($currentClassReflection === null) {
-                    return [];
-                }
 
                 $parentClass = $currentClassReflection->getParentClass();
 
@@ -121,19 +115,17 @@ class ModelPropertyStaticCallRule implements Rule
                 return [];
             }
 
-            if ($classType instanceof ConstantStringType) {
-                $modelClassName = $classType->getValue();
-            } elseif ($classType instanceof ObjectType) {
+            $strings = $classType->getConstantStrings();
+
+            if (count($strings) === 1) {
+                $modelClassName = $strings[0]->getValue();
+            } elseif ($classType instanceof TypeWithClassName) {
                 $modelClassName = $classType->getClassName();
             } else {
                 return [];
             }
 
             $modelReflection = $this->reflectionProvider->getClass($modelClassName);
-        }
-
-        if ($modelReflection === null) {
-            return [];
         }
 
         if (! $modelReflection->isSubclassOf(Model::class)) {
@@ -145,10 +137,6 @@ class ModelPropertyStaticCallRule implements Rule
         }
 
         $methodReflection = $modelReflection->getMethod($methodName, $scope);
-
-        if ($methodReflection instanceof EloquentBuilderMethodReflection) {
-            $methodReflection = $methodReflection->getOriginalMethodReflection();
-        }
 
         $className = $methodReflection->getDeclaringClass()->getName();
 

@@ -27,7 +27,7 @@ use Google\Service\Baremetalsolution\Operation;
  * Typical usage is:
  *  <code>
  *   $baremetalsolutionService = new Google\Service\Baremetalsolution(...);
- *   $networks = $baremetalsolutionService->networks;
+ *   $networks = $baremetalsolutionService->projects_locations_networks;
  *  </code>
  */
 class ProjectsLocationsNetworks extends \Google\Service\Resource
@@ -91,7 +91,7 @@ class ProjectsLocationsNetworks extends \Google\Service\Resource
    * @param array $optParams Optional parameters.
    *
    * @opt_param string updateMask The list of fields to update. The only currently
-   * supported fields are: `labels`, `reservations`
+   * supported fields are: `labels`, `reservations`, `vrf.vlan_attachments`
    * @return Operation
    */
   public function patch($name, Network $postBody, $optParams = [])

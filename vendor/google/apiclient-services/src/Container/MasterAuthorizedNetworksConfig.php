@@ -22,10 +22,15 @@ class MasterAuthorizedNetworksConfig extends \Google\Collection
   protected $collection_key = 'cidrBlocks';
   protected $cidrBlocksType = CidrBlock::class;
   protected $cidrBlocksDataType = 'array';
+  public $cidrBlocks;
   /**
    * @var bool
    */
   public $enabled;
+  /**
+   * @var bool
+   */
+  public $gcpPublicCidrsAccessEnabled;
 
   /**
    * @param CidrBlock[]
@@ -54,6 +59,20 @@ class MasterAuthorizedNetworksConfig extends \Google\Collection
   public function getEnabled()
   {
     return $this->enabled;
+  }
+  /**
+   * @param bool
+   */
+  public function setGcpPublicCidrsAccessEnabled($gcpPublicCidrsAccessEnabled)
+  {
+    $this->gcpPublicCidrsAccessEnabled = $gcpPublicCidrsAccessEnabled;
+  }
+  /**
+   * @return bool
+   */
+  public function getGcpPublicCidrsAccessEnabled()
+  {
+    return $this->gcpPublicCidrsAccessEnabled;
   }
 }
 

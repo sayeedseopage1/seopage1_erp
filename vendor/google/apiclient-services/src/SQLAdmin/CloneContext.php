@@ -17,14 +17,20 @@
 
 namespace Google\Service\SQLAdmin;
 
-class CloneContext extends \Google\Model
+class CloneContext extends \Google\Collection
 {
+  protected $collection_key = 'databaseNames';
   /**
    * @var string
    */
   public $allocatedIpRange;
   protected $binLogCoordinatesType = BinLogCoordinates::class;
   protected $binLogCoordinatesDataType = '';
+  public $binLogCoordinates;
+  /**
+   * @var string[]
+   */
+  public $databaseNames;
   /**
    * @var string
    */
@@ -69,6 +75,20 @@ class CloneContext extends \Google\Model
   public function getBinLogCoordinates()
   {
     return $this->binLogCoordinates;
+  }
+  /**
+   * @param string[]
+   */
+  public function setDatabaseNames($databaseNames)
+  {
+    $this->databaseNames = $databaseNames;
+  }
+  /**
+   * @return string[]
+   */
+  public function getDatabaseNames()
+  {
+    return $this->databaseNames;
   }
   /**
    * @param string

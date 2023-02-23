@@ -27,6 +27,10 @@ class Network extends \Google\Collection
   /**
    * @var string
    */
+  public $gatewayIp;
+  /**
+   * @var string
+   */
   public $id;
   /**
    * @var string
@@ -46,6 +50,7 @@ class Network extends \Google\Collection
   public $macAddress;
   protected $mountPointsType = NetworkMountPoint::class;
   protected $mountPointsDataType = 'array';
+  public $mountPoints;
   /**
    * @var string
    */
@@ -56,6 +61,7 @@ class Network extends \Google\Collection
   public $pod;
   protected $reservationsType = NetworkAddressReservation::class;
   protected $reservationsDataType = 'array';
+  public $reservations;
   /**
    * @var string
    */
@@ -74,6 +80,7 @@ class Network extends \Google\Collection
   public $vlanId;
   protected $vrfType = VRF::class;
   protected $vrfDataType = '';
+  public $vrf;
 
   /**
    * @param string
@@ -88,6 +95,20 @@ class Network extends \Google\Collection
   public function getCidr()
   {
     return $this->cidr;
+  }
+  /**
+   * @param string
+   */
+  public function setGatewayIp($gatewayIp)
+  {
+    $this->gatewayIp = $gatewayIp;
+  }
+  /**
+   * @return string
+   */
+  public function getGatewayIp()
+  {
+    return $this->gatewayIp;
   }
   /**
    * @param string

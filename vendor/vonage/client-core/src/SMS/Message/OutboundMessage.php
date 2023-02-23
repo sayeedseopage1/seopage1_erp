@@ -3,7 +3,7 @@
 /**
  * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016-2020 Vonage, Inc. (http://vonage.com)
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
  * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
  */
 
@@ -19,40 +19,15 @@ use function strlen;
 
 abstract class OutboundMessage implements Message
 {
-    /**
-     * @var ?string
-     */
-    protected $accountRef;
+    protected ?string $accountRef = null;
 
-    /**
-     * @var string
-     */
-    protected $clientRef;
+    protected ?string $clientRef = null;
 
-    /**
-     * @var ?string
-     */
-    protected $deliveryReceiptCallback;
+    protected ?string $deliveryReceiptCallback = null;
 
-    /**
-     * @var string
-     */
-    protected $from;
+    protected ?int $messageClass = null;
 
-    /**
-     * @var int
-     */
-    protected $messageClass;
-
-    /**
-     * @var bool
-     */
-    protected $requestDeliveryReceipt = true;
-
-    /**
-     * @var string
-     */
-    protected $to;
+    protected bool $requestDeliveryReceipt = true;
 
     /**
      * TTL of the SMS delivery, in milliseconds
@@ -61,17 +36,27 @@ abstract class OutboundMessage implements Message
      */
     protected $ttl = 259200000;
 
+    protected ?string $errorMessage = null;
+
     /**
      * Type of message, set by the child class
      *
      * @var string
      */
-    protected $type;
+    protected string $type;
 
-    public function __construct(string $to, string $from)
+    public function __construct(protected string $to, protected string $from)
     {
-        $this->to = $to;
-        $this->from = $from;
+    }
+
+    public function getErrorMessage(): ?string
+    {
+        return $this->errorMessage;
+    }
+
+    public function setErrorMessage(?string $errorMessage): void
+    {
+        $this->errorMessage = $errorMessage;
     }
 
     abstract public function toArray(): array;

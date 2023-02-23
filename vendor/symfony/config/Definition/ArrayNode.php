@@ -38,8 +38,6 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * Namely, you mostly have foo_bar in YAML while you have foo-bar in XML.
      * After running this method, all keys are normalized to foo_bar.
      *
@@ -148,25 +146,16 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
         return $this->ignoreExtraKeys;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setName(string $name)
     {
         $this->name = $name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasDefaultValue(): bool
     {
         return $this->addIfNotSet;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultValue(): mixed
     {
         if (!$this->hasDefaultValue()) {
@@ -203,8 +192,6 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws UnsetKeyException
      * @throws InvalidConfigurationException if the node doesn't have enough children
      */
@@ -243,7 +230,7 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
 
             try {
                 $value[$name] = $child->finalize($value[$name]);
-            } catch (UnsetKeyException $e) {
+            } catch (UnsetKeyException) {
                 unset($value[$name]);
             }
         }
@@ -251,9 +238,6 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
         return $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function validateType(mixed $value)
     {
         if (!\is_array($value) && (!$this->allowFalse || false !== $value)) {
@@ -268,8 +252,6 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws InvalidConfigurationException
      */
     protected function normalizeValue(mixed $value): mixed
@@ -285,7 +267,7 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
             if (isset($this->children[$name])) {
                 try {
                     $normalized[$name] = $this->children[$name]->normalize($val);
-                } catch (UnsetKeyException $e) {
+                } catch (UnsetKeyException) {
                 }
                 unset($value[$name]);
             } elseif (!$this->removeExtraKeys) {
@@ -346,8 +328,6 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws InvalidConfigurationException
      * @throws \RuntimeException
      */
@@ -392,9 +372,6 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
         return $leftSide;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function allowPlaceholders(): bool
     {
         return false;

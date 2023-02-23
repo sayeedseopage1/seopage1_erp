@@ -21,10 +21,16 @@ class ManagedInstanceLastAttemptErrorsErrorsErrorDetails extends \Google\Model
 {
   protected $errorInfoType = ErrorInfo::class;
   protected $errorInfoDataType = '';
+  public $errorInfo;
   protected $helpType = Help::class;
   protected $helpDataType = '';
+  public $help;
   protected $localizedMessageType = LocalizedMessage::class;
   protected $localizedMessageDataType = '';
+  public $localizedMessage;
+  protected $quotaInfoType = QuotaExceededInfo::class;
+  protected $quotaInfoDataType = '';
+  public $quotaInfo;
 
   /**
    * @param ErrorInfo
@@ -67,6 +73,20 @@ class ManagedInstanceLastAttemptErrorsErrorsErrorDetails extends \Google\Model
   public function getLocalizedMessage()
   {
     return $this->localizedMessage;
+  }
+  /**
+   * @param QuotaExceededInfo
+   */
+  public function setQuotaInfo(QuotaExceededInfo $quotaInfo)
+  {
+    $this->quotaInfo = $quotaInfo;
+  }
+  /**
+   * @return QuotaExceededInfo
+   */
+  public function getQuotaInfo()
+  {
+    return $this->quotaInfo;
   }
 }
 

@@ -390,7 +390,7 @@ abstract class AbstractSchemaManager
 
         $tables = [];
         foreach ($tableNames as $tableName) {
-            $tables[] = $this->listTableDetails($tableName);
+            $tables[] = $this->introspectTable($tableName);
         }
 
         return $tables;
@@ -432,6 +432,8 @@ abstract class AbstractSchemaManager
     }
 
     /**
+     * @deprecated Use {@see introspectTable()} instead.
+     *
      * @param string $name
      *
      * @return Table
@@ -440,6 +442,13 @@ abstract class AbstractSchemaManager
      */
     public function listTableDetails($name)
     {
+        Deprecation::trigger(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5595',
+            '%s is deprecated. Use introspectTable() instead.',
+            __METHOD__,
+        );
+
         $columns     = $this->listTableColumns($name);
         $foreignKeys = [];
 
@@ -596,6 +605,22 @@ abstract class AbstractSchemaManager
     }
 
     /**
+     * Introspects the table with the given name.
+     *
+     * @throws Exception
+     */
+    public function introspectTable(string $name): Table
+    {
+        $table = $this->listTableDetails($name);
+
+        if ($table->getColumns() === []) {
+            throw SchemaException::tableDoesNotExist($name);
+        }
+
+        return $table;
+    }
+
+    /**
      * Lists the views this connection has.
      *
      * @return View[]
@@ -682,7 +707,9 @@ abstract class AbstractSchemaManager
      */
     public function dropDatabase($database)
     {
-        $this->_execSql($this->_platform->getDropDatabaseSQL($database));
+        $this->_conn->executeStatement(
+            $this->_platform->getDropDatabaseSQL($database),
+        );
     }
 
     /**
@@ -692,7 +719,9 @@ abstract class AbstractSchemaManager
      */
     public function dropSchema(string $schemaName): void
     {
-        $this->_execSql($this->_platform->getDropSchemaSQL($schemaName));
+        $this->_conn->executeStatement(
+            $this->_platform->getDropSchemaSQL($schemaName),
+        );
     }
 
     /**
@@ -706,7 +735,9 @@ abstract class AbstractSchemaManager
      */
     public function dropTable($name)
     {
-        $this->_execSql($this->_platform->getDropTableSQL($name));
+        $this->_conn->executeStatement(
+            $this->_platform->getDropTableSQL($name),
+        );
     }
 
     /**
@@ -743,7 +774,9 @@ abstract class AbstractSchemaManager
             $table = $table->getQuotedName($this->_platform);
         }
 
-        $this->_execSql($this->_platform->getDropIndexSQL($index, $table));
+        $this->_conn->executeStatement(
+            $this->_platform->getDropIndexSQL($index, $table),
+        );
     }
 
     /**
@@ -770,7 +803,7 @@ abstract class AbstractSchemaManager
             $table = $table->getQuotedName($this->_platform);
         }
 
-        $this->_execSql($this->_platform->getDropConstraintSQL(
+        $this->_conn->executeStatement($this->_platform->getDropConstraintSQL(
             $constraint->getQuotedName($this->_platform),
             $table,
         ));
@@ -811,7 +844,9 @@ abstract class AbstractSchemaManager
             $table = $table->getQuotedName($this->_platform);
         }
 
-        $this->_execSql($this->_platform->getDropForeignKeySQL($foreignKey, $table));
+        $this->_conn->executeStatement(
+            $this->_platform->getDropForeignKeySQL($foreignKey, $table),
+        );
     }
 
     /**
@@ -825,7 +860,9 @@ abstract class AbstractSchemaManager
      */
     public function dropSequence($name)
     {
-        $this->_execSql($this->_platform->getDropSequenceSQL($name));
+        $this->_conn->executeStatement(
+            $this->_platform->getDropSequenceSQL($name),
+        );
     }
 
     /**
@@ -835,7 +872,9 @@ abstract class AbstractSchemaManager
      */
     public function dropUniqueConstraint(string $name, string $tableName): void
     {
-        $this->_execSql($this->_platform->getDropUniqueConstraintSQL($name, $tableName));
+        $this->_conn->executeStatement(
+            $this->_platform->getDropUniqueConstraintSQL($name, $tableName),
+        );
     }
 
     /**
@@ -849,7 +888,9 @@ abstract class AbstractSchemaManager
      */
     public function dropView($name)
     {
-        $this->_execSql($this->_platform->getDropViewSQL($name));
+        $this->_conn->executeStatement(
+            $this->_platform->getDropViewSQL($name),
+        );
     }
 
     /* create*() Methods */
@@ -871,7 +912,9 @@ abstract class AbstractSchemaManager
      */
     public function createDatabase($database)
     {
-        $this->_execSql($this->_platform->getCreateDatabaseSQL($database));
+        $this->_conn->executeStatement(
+            $this->_platform->getCreateDatabaseSQL($database),
+        );
     }
 
     /**
@@ -898,7 +941,9 @@ abstract class AbstractSchemaManager
      */
     public function createSequence($sequence)
     {
-        $this->_execSql($this->_platform->getCreateSequenceSQL($sequence));
+        $this->_conn->executeStatement(
+            $this->_platform->getCreateSequenceSQL($sequence),
+        );
     }
 
     /**
@@ -914,7 +959,9 @@ abstract class AbstractSchemaManager
      */
     public function createConstraint(Constraint $constraint, $table)
     {
-        $this->_execSql($this->_platform->getCreateConstraintSQL($constraint, $table));
+        $this->_conn->executeStatement(
+            $this->_platform->getCreateConstraintSQL($constraint, $table),
+        );
     }
 
     /**
@@ -928,7 +975,9 @@ abstract class AbstractSchemaManager
      */
     public function createIndex(Index $index, $table)
     {
-        $this->_execSql($this->_platform->getCreateIndexSQL($index, $table));
+        $this->_conn->executeStatement(
+            $this->_platform->getCreateIndexSQL($index, $table),
+        );
     }
 
     /**
@@ -943,7 +992,9 @@ abstract class AbstractSchemaManager
      */
     public function createForeignKey(ForeignKeyConstraint $foreignKey, $table)
     {
-        $this->_execSql($this->_platform->getCreateForeignKeySQL($foreignKey, $table));
+        $this->_conn->executeStatement(
+            $this->_platform->getCreateForeignKeySQL($foreignKey, $table),
+        );
     }
 
     /**
@@ -953,7 +1004,9 @@ abstract class AbstractSchemaManager
      */
     public function createUniqueConstraint(UniqueConstraint $uniqueConstraint, string $tableName): void
     {
-        $this->_execSql($this->_platform->getCreateUniqueConstraintSQL($uniqueConstraint, $tableName));
+        $this->_conn->executeStatement(
+            $this->_platform->getCreateUniqueConstraintSQL($uniqueConstraint, $tableName),
+        );
     }
 
     /**
@@ -965,7 +1018,12 @@ abstract class AbstractSchemaManager
      */
     public function createView(View $view)
     {
-        $this->_execSql($this->_platform->getCreateViewSQL($view->getQuotedName($this->_platform), $view->getSql()));
+        $this->_conn->executeStatement(
+            $this->_platform->getCreateViewSQL(
+                $view->getQuotedName($this->_platform),
+                $view->getSql(),
+            ),
+        );
     }
 
     /* dropAndCreate*() Methods */
@@ -1155,7 +1213,7 @@ abstract class AbstractSchemaManager
      */
     public function alterSchema(SchemaDiff $schemaDiff): void
     {
-        $this->_execSql($schemaDiff->toSql($this->_platform));
+        $this->_execSql($this->_platform->getAlterSchemaSQL($schemaDiff));
     }
 
     /**
@@ -1166,7 +1224,7 @@ abstract class AbstractSchemaManager
     public function migrateSchema(Schema $toSchema): void
     {
         $schemaDiff = $this->createComparator()
-            ->compareSchemas($this->createSchema(), $toSchema);
+            ->compareSchemas($this->introspectSchema(), $toSchema);
 
         $this->alterSchema($schemaDiff);
     }
@@ -1182,9 +1240,7 @@ abstract class AbstractSchemaManager
      */
     public function alterTable(TableDiff $tableDiff)
     {
-        foreach ($this->_platform->getAlterTableSQL($tableDiff) as $ddlQuery) {
-            $this->_execSql($ddlQuery);
-        }
+        $this->_execSql($this->_platform->getAlterTableSQL($tableDiff));
     }
 
     /**
@@ -1199,9 +1255,7 @@ abstract class AbstractSchemaManager
      */
     public function renameTable($name, $newName)
     {
-        $tableDiff          = new TableDiff($name);
-        $tableDiff->newName = $newName;
-        $this->alterTable($tableDiff);
+        $this->_execSql($this->_platform->getRenameTableSQL($name, $newName));
     }
 
     /**
@@ -1336,6 +1390,13 @@ abstract class AbstractSchemaManager
             $defaultPrevented = false;
 
             if ($eventManager !== null && $eventManager->hasListeners(Events::onSchemaColumnDefinition)) {
+                Deprecation::trigger(
+                    'doctrine/dbal',
+                    'https://github.com/doctrine/dbal/issues/5784',
+                    'Subscribing to %s events is deprecated. Use a custom schema manager instead.',
+                    Events::onSchemaColumnDefinition,
+                );
+
                 $eventArgs = new SchemaColumnDefinitionEventArgs($tableColumn, $table, $database, $this->_conn);
                 $eventManager->dispatchEvent(Events::onSchemaColumnDefinition, $eventArgs);
 
@@ -1421,6 +1482,13 @@ abstract class AbstractSchemaManager
             $defaultPrevented = false;
 
             if ($eventManager !== null && $eventManager->hasListeners(Events::onSchemaIndexDefinition)) {
+                Deprecation::trigger(
+                    'doctrine/dbal',
+                    'https://github.com/doctrine/dbal/issues/5784',
+                    'Subscribing to %s events is deprecated. Use a custom schema manager instead.',
+                    Events::onSchemaColumnDefinition,
+                );
+
                 $eventArgs = new SchemaIndexDefinitionEventArgs($data, $tableName, $this->_conn);
                 $eventManager->dispatchEvent(Events::onSchemaIndexDefinition, $eventArgs);
 
@@ -1535,6 +1603,8 @@ abstract class AbstractSchemaManager
     }
 
     /**
+     * @internal
+     *
      * @param string[]|string $sql
      *
      * @return void
@@ -1551,12 +1621,21 @@ abstract class AbstractSchemaManager
     /**
      * Creates a schema instance for the current database.
      *
+     * @deprecated Use {@link introspectSchema()} instead.
+     *
      * @return Schema
      *
      * @throws Exception
      */
     public function createSchema()
     {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5613',
+            '%s is deprecated. Use introspectSchema() instead.',
+            __METHOD__,
+        );
+
         $schemaNames = [];
 
         if ($this->_platform->supportsSchemas()) {
@@ -1572,6 +1651,16 @@ abstract class AbstractSchemaManager
         $tables = $this->listTables();
 
         return new Schema($tables, $sequences, $this->createSchemaConfig(), $schemaNames);
+    }
+
+    /**
+     * Returns a {@see Schema} instance representing the current database schema.
+     *
+     * @throws Exception
+     */
+    public function introspectSchema(): Schema
+    {
+        return $this->createSchema();
     }
 
     /**

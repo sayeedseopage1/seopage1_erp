@@ -49,12 +49,12 @@ final class AmpClientState extends ClientState
     private \Closure $clientConfigurator;
     private int $maxHostConnections;
     private int $maxPendingPushes;
-    private $logger;
+    private ?LoggerInterface $logger;
 
     public function __construct(?callable $clientConfigurator, int $maxHostConnections, int $maxPendingPushes, ?LoggerInterface &$logger)
     {
         $clientConfigurator ??= static fn (PooledHttpClient $client) => new InterceptedHttpClient($client, new RetryRequests(2));
-        $this->clientConfigurator = $clientConfigurator instanceof \Closure ? $clientConfigurator : \Closure::fromCallable($clientConfigurator);
+        $this->clientConfigurator = $clientConfigurator(...);
 
         $this->maxHostConnections = $maxHostConnections;
         $this->maxPendingPushes = $maxPendingPushes;
@@ -76,7 +76,7 @@ final class AmpClientState extends ClientState
             foreach ($options['proxy']['no_proxy'] as $rule) {
                 $dotRule = '.'.ltrim($rule, '.');
 
-                if ('*' === $rule || $host === $rule || substr($host, -\strlen($dotRule)) === $dotRule) {
+                if ('*' === $rule || $host === $rule || str_ends_with($host, $dotRule)) {
                     $options['proxy'] = null;
                     break;
                 }
@@ -200,11 +200,11 @@ final class AmpClientState extends ClientState
         if ($this->maxPendingPushes <= \count($this->pushedResponses[$authority] ?? [])) {
             $fifoUrl = key($this->pushedResponses[$authority]);
             unset($this->pushedResponses[$authority][$fifoUrl]);
-            $this->logger && $this->logger->debug(sprintf('Evicting oldest pushed response: "%s"', $fifoUrl));
+            $this->logger?->debug(sprintf('Evicting oldest pushed response: "%s"', $fifoUrl));
         }
 
         $url = (string) $request->getUri();
-        $this->logger && $this->logger->debug(sprintf('Queueing pushed response: "%s"', $url));
+        $this->logger?->debug(sprintf('Queueing pushed response: "%s"', $url));
         $this->pushedResponses[$authority][] = [$url, $deferred, $request, $response, [
             'proxy' => $options['proxy'],
             'bindto' => $options['bindto'],

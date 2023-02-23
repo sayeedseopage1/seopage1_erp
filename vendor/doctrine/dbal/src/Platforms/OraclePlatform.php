@@ -870,7 +870,9 @@ SQL
 
         $fields = [];
 
-        foreach ($diff->addedColumns as $column) {
+        $tableNameSQL = ($diff->getOldTable() ?? $diff->getName($this))->getQuotedName($this);
+
+        foreach ($diff->getAddedColumns() as $column) {
             if ($this->onSchemaAlterTableAddColumn($column, $diff, $columnSql)) {
                 continue;
             }
@@ -883,49 +885,48 @@ SQL
             }
 
             $commentsSQL[] = $this->getCommentOnColumnSQL(
-                $diff->getName($this)->getQuotedName($this),
+                $tableNameSQL,
                 $column->getQuotedName($this),
                 $comment,
             );
         }
 
         if (count($fields) > 0) {
-            $sql[] = 'ALTER TABLE ' . $diff->getName($this)->getQuotedName($this)
-                . ' ADD (' . implode(', ', $fields) . ')';
+            $sql[] = 'ALTER TABLE ' . $tableNameSQL . ' ADD (' . implode(', ', $fields) . ')';
         }
 
         $fields = [];
-        foreach ($diff->changedColumns as $columnDiff) {
+        foreach ($diff->getModifiedColumns() as $columnDiff) {
             if ($this->onSchemaAlterTableChangeColumn($columnDiff, $diff, $columnSql)) {
                 continue;
             }
 
-            $column = $columnDiff->column;
+            $newColumn = $columnDiff->getNewColumn();
 
             // Do not generate column alteration clause if type is binary and only fixed property has changed.
             // Oracle only supports binary type columns with variable length.
             // Avoids unnecessary table alteration statements.
             if (
-                $column->getType() instanceof BinaryType &&
-                $columnDiff->hasChanged('fixed') &&
+                $newColumn->getType() instanceof BinaryType &&
+                $columnDiff->hasFixedChanged() &&
                 count($columnDiff->changedProperties) === 1
             ) {
                 continue;
             }
 
-            $columnHasChangedComment = $columnDiff->hasChanged('comment');
+            $columnHasChangedComment = $columnDiff->hasCommentChanged();
 
             /**
              * Do not add query part if only comment has changed
              */
             if (! ($columnHasChangedComment && count($columnDiff->changedProperties) === 1)) {
-                $columnInfo = $column->toArray();
+                $newColumnProperties = $newColumn->toArray();
 
-                if (! $columnDiff->hasChanged('notnull')) {
-                    unset($columnInfo['notnull']);
+                if (! $columnDiff->hasNotNullChanged()) {
+                    unset($newColumnProperties['notnull']);
                 }
 
-                $fields[] = $column->getQuotedName($this) . $this->getColumnDeclarationSQL('', $columnInfo);
+                $fields[] = $newColumn->getQuotedName($this) . $this->getColumnDeclarationSQL('', $newColumnProperties);
             }
 
             if (! $columnHasChangedComment) {
@@ -933,30 +934,29 @@ SQL
             }
 
             $commentsSQL[] = $this->getCommentOnColumnSQL(
-                $diff->getName($this)->getQuotedName($this),
-                $column->getQuotedName($this),
-                $this->getColumnComment($column),
+                $tableNameSQL,
+                $newColumn->getQuotedName($this),
+                $this->getColumnComment($newColumn),
             );
         }
 
         if (count($fields) > 0) {
-            $sql[] = 'ALTER TABLE ' . $diff->getName($this)->getQuotedName($this)
-                . ' MODIFY (' . implode(', ', $fields) . ')';
+            $sql[] = 'ALTER TABLE ' . $tableNameSQL . ' MODIFY (' . implode(', ', $fields) . ')';
         }
 
-        foreach ($diff->renamedColumns as $oldColumnName => $column) {
+        foreach ($diff->getRenamedColumns() as $oldColumnName => $column) {
             if ($this->onSchemaAlterTableRenameColumn($oldColumnName, $column, $diff, $columnSql)) {
                 continue;
             }
 
             $oldColumnName = new Identifier($oldColumnName);
 
-            $sql[] = 'ALTER TABLE ' . $diff->getName($this)->getQuotedName($this) .
-                ' RENAME COLUMN ' . $oldColumnName->getQuotedName($this) . ' TO ' . $column->getQuotedName($this);
+            $sql[] = 'ALTER TABLE ' . $tableNameSQL . ' RENAME COLUMN ' . $oldColumnName->getQuotedName($this)
+                . ' TO ' . $column->getQuotedName($this);
         }
 
         $fields = [];
-        foreach ($diff->removedColumns as $column) {
+        foreach ($diff->getDroppedColumns() as $column) {
             if ($this->onSchemaAlterTableRemoveColumn($column, $diff, $columnSql)) {
                 continue;
             }
@@ -965,8 +965,7 @@ SQL
         }
 
         if (count($fields) > 0) {
-            $sql[] = 'ALTER TABLE ' . $diff->getName($this)->getQuotedName($this)
-                . ' DROP (' . implode(', ', $fields) . ')';
+            $sql[] = 'ALTER TABLE ' . $tableNameSQL . ' DROP (' . implode(', ', $fields) . ')';
         }
 
         $tableSql = [];
@@ -977,9 +976,16 @@ SQL
             $newName = $diff->getNewName();
 
             if ($newName !== false) {
+                Deprecation::trigger(
+                    'doctrine/dbal',
+                    'https://github.com/doctrine/dbal/pull/5663',
+                    'Generation of "rename table" SQL using %s is deprecated. Use getRenameTableSQL() instead.',
+                    __METHOD__,
+                );
+
                 $sql[] = sprintf(
                     'ALTER TABLE %s RENAME TO %s',
-                    $diff->getName($this)->getQuotedName($this),
+                    $tableNameSQL,
                     $newName->getQuotedName($this),
                 );
             }
@@ -1012,11 +1018,29 @@ SQL
                 $notnull = $column['notnull'] ? ' NOT NULL' : ' NULL';
             }
 
-            $unique = ! empty($column['unique']) ?
-                ' ' . $this->getUniqueFieldDeclarationSQL() : '';
+            if (! empty($column['unique'])) {
+                Deprecation::trigger(
+                    'doctrine/dbal',
+                    'https://github.com/doctrine/dbal/pull/5656',
+                    'The usage of the "unique" column property is deprecated. Use unique constraints instead.',
+                );
 
-            $check = ! empty($column['check']) ?
-                ' ' . $column['check'] : '';
+                $unique = ' ' . $this->getUniqueFieldDeclarationSQL();
+            } else {
+                $unique = '';
+            }
+
+            if (! empty($column['check'])) {
+                Deprecation::trigger(
+                    'doctrine/dbal',
+                    'https://github.com/doctrine/dbal/pull/5656',
+                    'The usage of the "check" column property is deprecated.',
+                );
+
+                $check = ' ' . $column['check'];
+            } else {
+                $check = '';
+            }
 
             $typeDecl  = $column['type']->getSQLDeclaration($column, $this);
             $columnDef = $typeDecl . $default . $notnull . $unique . $check;

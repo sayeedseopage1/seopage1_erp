@@ -21,9 +21,9 @@ use Symfony\Component\DependencyInjection\Exception\EnvParameterException;
  */
 class Compiler
 {
-    private $passConfig;
+    private PassConfig $passConfig;
     private array $log = [];
-    private $serviceReferenceGraph;
+    private ServiceReferenceGraph $serviceReferenceGraph;
 
     public function __construct()
     {
@@ -52,10 +52,10 @@ class Compiler
     public function log(CompilerPassInterface $pass, string $message)
     {
         if (str_contains($message, "\n")) {
-            $message = str_replace("\n", "\n".\get_class($pass).': ', trim($message));
+            $message = str_replace("\n", "\n".$pass::class.': ', trim($message));
         }
 
-        $this->log[] = \get_class($pass).': '.$message;
+        $this->log[] = $pass::class.': '.$message;
     }
 
     public function getLog(): array
@@ -81,7 +81,6 @@ class Compiler
 
                 if ($msg !== $resolvedMsg = $container->resolveEnvPlaceholders($msg, null, $usedEnvs)) {
                     $r = new \ReflectionProperty($prev, 'message');
-                    $r->setAccessible(true);
                     $r->setValue($prev, $resolvedMsg);
                 }
             } while ($prev = $prev->getPrevious());

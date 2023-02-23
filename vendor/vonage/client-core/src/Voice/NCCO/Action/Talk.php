@@ -3,7 +3,7 @@
 /**
  * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016-2020 Vonage, Inc. (http://vonage.com)
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
  * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
  */
 
@@ -17,53 +17,45 @@ use function is_null;
 
 class Talk implements ActionInterface
 {
-    /**
-     * @var bool
-     */
-    protected $bargeIn;
+    protected bool $bargeIn = false;
 
-    /**
-     * @var string
-     */
-    protected $language;
+    protected string $language = '';
 
-    /**
-     * @var int
-     */
-    protected $languageStyle = 0;
+    protected int $languageStyle = 0;
 
-    /**
-     * @var float
-     */
-    protected $level;
+    protected ?float $level = 0;
 
-    /**
-     * @var int
-     */
-    protected $loop;
+    protected int $loop = 1;
 
-    /**
-     * @var string
-     */
-    protected $text;
+    protected bool $premium = false;
 
-    public function __construct(string $text = null)
+    public function __construct(protected ?string $text = null)
     {
-        $this->text = $text;
     }
 
     /**
-     * @param string $text
-     * @param array{text: string, bargeIn?: bool, level?: float, loop?: int, voiceName?: string} $data
-     * @return Talk
+     * @param array{text: string, bargeIn?: bool, level?: float, style? : string, language?: string, premium?: bool, loop?: int} $data
      */
     public static function factory(string $text, array $data): Talk
     {
         $talk = new Talk($text);
 
+        if (array_key_exists('voiceName', $data)) {
+            trigger_error(
+                'voiceName is deprecated and will not be added to the NCCO',
+                E_USER_DEPRECATED
+            );
+        }
+
         if (array_key_exists('bargeIn', $data)) {
             $talk->setBargeIn(
                 filter_var($data['bargeIn'], FILTER_VALIDATE_BOOLEAN, ['flags' => FILTER_NULL_ON_FAILURE])
+            );
+        }
+
+        if (array_key_exists('premium', $data)) {
+            $talk->setPremium(
+                filter_var($data['premium'], FILTER_VALIDATE_BOOLEAN, ['flags' => FILTER_NULL_ON_FAILURE])
             );
         }
 
@@ -111,16 +103,13 @@ class Talk implements ActionInterface
     }
 
     /**
-     * @return array{action: string, bargeIn: bool, level: float, loop: int, text: string, voiceName: string}
+     * @return array{action: string, bargeIn: bool, level: float, loop: int, text: string}
      */
     public function jsonSerialize(): array
     {
         return $this->toNCCOArray();
     }
 
-    /**
-     * @return $this
-     */
     public function setBargeIn(bool $value): self
     {
         $this->bargeIn = $value;
@@ -137,9 +126,6 @@ class Talk implements ActionInterface
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function setLoop(int $times): self
     {
         $this->loop = $times;
@@ -148,7 +134,22 @@ class Talk implements ActionInterface
     }
 
     /**
-     * @return array{action: string, bargeIn: bool, level: string, loop: string, text: string, voiceName: string, language: string, style: string}
+     * @return $this
+     */
+    public function setPremium(bool $premium): self
+    {
+        $this->premium = $premium;
+
+        return $this;
+    }
+
+    public function getPremium(): bool
+    {
+        return $this->premium;
+    }
+
+    /**
+     * @return array{action: string, bargeIn: bool, level: string, loop: string, text: string, premium: string, language: string, style: string}
      */
     public function toNCCOArray(): array
     {
@@ -172,6 +173,10 @@ class Talk implements ActionInterface
         if ($this->getLanguage()) {
             $data['language'] = $this->getLanguage();
             $data['style'] = (string) $this->getLanguageStyle();
+        }
+
+        if (!is_null($this->getPremium())) {
+            $data['premium'] = $this->getPremium() ? 'true' : 'false';
         }
 
         return $data;

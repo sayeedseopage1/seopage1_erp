@@ -3,7 +3,7 @@
 /**
  * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016-2020 Vonage, Inc. (http://vonage.com)
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
  * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
  */
 
@@ -13,32 +13,27 @@ namespace Vonage\SMS\Message;
 
 class SMS extends OutboundMessage
 {
-    /**
-     * @var string
-     */
-    protected $contentId;
+    public const GSM_7_CHARSET = "\n\f\r !\"\#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_abcdefghijklmnopqrstuvwxyz{|}~ ¡£¤¥§¿ÄÅÆÇÉÑÖØÜßàäåæèéìñòöøùüΓΔΘΛΞΠΣΦΨΩ€";
+
+    protected ?string $contentId;
+
+    protected ?string $entityId;
 
     /**
      * @var string
      */
-    protected $entityId;
+    protected string $type = 'text';
 
-    /**
-     * @var string
-     */
-    protected $message;
-
-    /**
-     * @var string
-     */
-    protected $type = 'unicode';
-
-    public function __construct(string $to, string $from, string $message, string $type = 'unicode')
+    public function __construct(string $to, string $from, protected string $message, string $type = 'text')
     {
         parent::__construct($to, $from);
-
-        $this->message = $message;
         $this->setType($type);
+    }
+
+    public static function isGsm7(string $message): bool
+    {
+        $fullPattern = "/\A[" . preg_quote(self::GSM_7_CHARSET, '/') . "]*\z/";
+        return (bool)preg_match($fullPattern, $message);
     }
 
     public function getContentId(): string
@@ -61,6 +56,25 @@ class SMS extends OutboundMessage
     {
         $this->entityId = $id;
         return $this;
+    }
+
+    public function getErrorMessage(): ?string
+    {
+        if ($this->getType() === 'unicode' && self::isGsm7($this->getMessage())) {
+            $this->setErrorMessage("You are sending a message as `unicode` when it could be `text` or a
+            `text` type with unicode-only characters. This could result in increased billing - 
+            See https://developer.vonage.com/messaging/sms for details, or email support@vonage.com if you have any 
+            questions.");
+        }
+
+        if ($this->getType() === 'text' && ! self::isGsm7($this->getMessage())) {
+            $this->setErrorMessage("You are sending a message as `text` when contains unicode only 
+            characters. This could result in encoding problems with the target device - See 
+            https://developer.vonage.com/messaging/sms for details, or email support@vonage.com if you have any 
+            questions.");
+        }
+
+        return $this->errorMessage;
     }
 
     /**

@@ -38,7 +38,7 @@ use Google\Service\AndroidProvisioningPartner\UpdateDeviceMetadataRequest;
  * Typical usage is:
  *  <code>
  *   $androiddeviceprovisioningService = new Google\Service\AndroidProvisioningPartner(...);
- *   $devices = $androiddeviceprovisioningService->devices;
+ *   $devices = $androiddeviceprovisioningService->partners_devices;
  *  </code>
  */
 class PartnersDevices extends \Google\Service\Resource
@@ -122,7 +122,8 @@ class PartnersDevices extends \Google\Service\Resource
     return $this->call('get', [$params], Device::class);
   }
   /**
-   * Updates reseller metadata associated with the device. (devices.metadata)
+   * Updates reseller metadata associated with the device. Android devices only.
+   * (devices.metadata)
    *
    * @param string $metadataOwnerId Required. The owner of the newly set metadata.
    * Set this to the partner ID.
@@ -173,7 +174,7 @@ class PartnersDevices extends \Google\Service\Resource
    * Updates the reseller metadata attached to a batch of devices. This method
    * updates devices asynchronously and returns an `Operation` that can be used to
    * track progress. Read [Long‑running batch operations](/zero-touch/guides/how-
-   * it-works#operations). (devices.updateMetadataAsync)
+   * it-works#operations). Android Devices only. (devices.updateMetadataAsync)
    *
    * @param string $partnerId Required. The reseller partner ID.
    * @param UpdateDeviceMetadataInBatchRequest $postBody

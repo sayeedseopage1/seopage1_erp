@@ -21,8 +21,13 @@ class CommonFeatureSpec extends \Google\Model
 {
   protected $appdevexperienceType = AppDevExperienceFeatureSpec::class;
   protected $appdevexperienceDataType = '';
+  public $appdevexperience;
+  protected $fleetobservabilityType = FleetObservabilityFeatureSpec::class;
+  protected $fleetobservabilityDataType = '';
+  public $fleetobservability;
   protected $multiclusteringressType = MultiClusterIngressFeatureSpec::class;
   protected $multiclusteringressDataType = '';
+  public $multiclusteringress;
 
   /**
    * @param AppDevExperienceFeatureSpec
@@ -37,6 +42,20 @@ class CommonFeatureSpec extends \Google\Model
   public function getAppdevexperience()
   {
     return $this->appdevexperience;
+  }
+  /**
+   * @param FleetObservabilityFeatureSpec
+   */
+  public function setFleetobservability(FleetObservabilityFeatureSpec $fleetobservability)
+  {
+    $this->fleetobservability = $fleetobservability;
+  }
+  /**
+   * @return FleetObservabilityFeatureSpec
+   */
+  public function getFleetobservability()
+  {
+    return $this->fleetobservability;
   }
   /**
    * @param MultiClusterIngressFeatureSpec

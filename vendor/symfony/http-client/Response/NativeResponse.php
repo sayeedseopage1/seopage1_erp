@@ -43,7 +43,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
      */
     private $buffer;
 
-    private $multi;
+    private NativeClientState $multi;
     private float $pauseExpiry = 0.0;
 
     /**
@@ -66,6 +66,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         // Temporary resource to dechunk the response stream
         $this->buffer = fopen('php://temp', 'w+');
 
+        $info['original_url'] = implode('', $info['url']);
         $info['user_data'] = $options['user_data'];
         $info['max_duration'] = $options['max_duration'];
         ++$multi->responseCount;
@@ -87,9 +88,6 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         });
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getInfo(string $type = null): mixed
     {
         if (!$info = $this->finalInfo) {
@@ -127,7 +125,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
                 throw new TransportException($msg);
             }
 
-            $this->logger && $this->logger->info(sprintf('%s for "%s".', $msg, $url ?? $this->url));
+            $this->logger?->info(sprintf('%s for "%s".', $msg, $url ?? $this->url));
         });
 
         try {
@@ -163,7 +161,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
                     break;
                 }
 
-                $this->logger && $this->logger->info(sprintf('Redirecting: "%s %s"', $this->info['http_code'], $url ?? $this->url));
+                $this->logger?->info(sprintf('Redirecting: "%s %s"', $this->info['http_code'], $url ?? $this->url));
             }
         } catch (\Throwable $e) {
             $this->close();
@@ -208,18 +206,12 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
         $this->multi->hosts[$host] = 1 + ($this->multi->hosts[$host] ?? 0);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     private function close(): void
     {
         $this->canary->cancel();
         $this->handle = $this->buffer = $this->inflate = $this->onProgress = null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     private static function schedule(self $response, array &$runningResponses): void
     {
         if (!isset($runningResponses[$i = $response->multi->id])) {
@@ -236,8 +228,6 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param NativeClientState $multi
      */
     private static function perform(ClientState $multi, array &$responses = null): void
@@ -347,8 +337,6 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param NativeClientState $multi
      */
     private static function select(ClientState $multi, float $timeout): int
@@ -365,7 +353,7 @@ final class NativeResponse implements ResponseInterface, StreamableInterface
                 continue;
             }
 
-            if ($pauseExpiry && ($now ?? $now = microtime(true)) < $pauseExpiry) {
+            if ($pauseExpiry && ($now ??= microtime(true)) < $pauseExpiry) {
                 $timeout = min($timeout, $pauseExpiry - $now);
                 continue;
             }

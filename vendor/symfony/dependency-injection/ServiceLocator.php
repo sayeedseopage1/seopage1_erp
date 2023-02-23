@@ -24,18 +24,15 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  * @author Robin Chalas <robin.chalas@gmail.com>
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ServiceLocator implements ServiceProviderInterface
+class ServiceLocator implements ServiceProviderInterface, \Countable
 {
     use ServiceLocatorTrait {
         get as private doGet;
     }
 
     private ?string $externalId = null;
-    private $container = null;
+    private ?Container $container = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $id): mixed
     {
         if (!$this->externalId) {
@@ -53,7 +50,6 @@ class ServiceLocator implements ServiceProviderInterface
             }
 
             $r = new \ReflectionProperty($e, 'message');
-            $r->setAccessible(true);
             $r->setValue($e, $message);
 
             throw $e;
@@ -75,6 +71,11 @@ class ServiceLocator implements ServiceProviderInterface
         $locator->container = $container;
 
         return $locator;
+    }
+
+    public function count(): int
+    {
+        return \count($this->getProvidedServices());
     }
 
     private function createNotFoundException(string $id): NotFoundExceptionInterface

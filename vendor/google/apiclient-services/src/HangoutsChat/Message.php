@@ -22,18 +22,27 @@ class Message extends \Google\Collection
   protected $collection_key = 'cardsV2';
   protected $actionResponseType = ActionResponse::class;
   protected $actionResponseDataType = '';
+  public $actionResponse;
   protected $annotationsType = Annotation::class;
   protected $annotationsDataType = 'array';
+  public $annotations;
   /**
    * @var string
    */
   public $argumentText;
   protected $attachmentType = Attachment::class;
   protected $attachmentDataType = 'array';
+  public $attachment;
   protected $cardsType = Card::class;
   protected $cardsDataType = 'array';
+  public $cards;
   protected $cardsV2Type = CardWithId::class;
   protected $cardsV2DataType = 'array';
+  public $cardsV2;
+  /**
+   * @var string
+   */
+  public $clientAssignedMessageId;
   /**
    * @var string
    */
@@ -48,22 +57,31 @@ class Message extends \Google\Collection
   public $lastUpdateTime;
   protected $matchedUrlType = MatchedUrl::class;
   protected $matchedUrlDataType = '';
+  public $matchedUrl;
   /**
    * @var string
    */
   public $name;
   protected $senderType = User::class;
   protected $senderDataType = '';
+  public $sender;
   protected $slashCommandType = SlashCommand::class;
   protected $slashCommandDataType = '';
+  public $slashCommand;
   protected $spaceType = Space::class;
   protected $spaceDataType = '';
+  public $space;
   /**
    * @var string
    */
   public $text;
   protected $threadType = Thread::class;
   protected $threadDataType = '';
+  public $thread;
+  /**
+   * @var bool
+   */
+  public $threadReply;
 
   /**
    * @param ActionResponse
@@ -148,6 +166,20 @@ class Message extends \Google\Collection
   public function getCardsV2()
   {
     return $this->cardsV2;
+  }
+  /**
+   * @param string
+   */
+  public function setClientAssignedMessageId($clientAssignedMessageId)
+  {
+    $this->clientAssignedMessageId = $clientAssignedMessageId;
+  }
+  /**
+   * @return string
+   */
+  public function getClientAssignedMessageId()
+  {
+    return $this->clientAssignedMessageId;
   }
   /**
    * @param string
@@ -288,6 +320,20 @@ class Message extends \Google\Collection
   public function getThread()
   {
     return $this->thread;
+  }
+  /**
+   * @param bool
+   */
+  public function setThreadReply($threadReply)
+  {
+    $this->threadReply = $threadReply;
+  }
+  /**
+   * @return bool
+   */
+  public function getThreadReply()
+  {
+    return $this->threadReply;
   }
 }
 

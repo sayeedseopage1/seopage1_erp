@@ -30,6 +30,11 @@ class DatafeedStatus extends \Google\Collection
   public $datafeedId;
   protected $errorsType = DatafeedStatusError::class;
   protected $errorsDataType = 'array';
+  public $errors;
+  /**
+   * @var string
+   */
+  public $feedLabel;
   /**
    * @var string
    */
@@ -56,6 +61,7 @@ class DatafeedStatus extends \Google\Collection
   public $processingStatus;
   protected $warningsType = DatafeedStatusError::class;
   protected $warningsDataType = 'array';
+  public $warnings;
 
   /**
    * @param string
@@ -98,6 +104,20 @@ class DatafeedStatus extends \Google\Collection
   public function getErrors()
   {
     return $this->errors;
+  }
+  /**
+   * @param string
+   */
+  public function setFeedLabel($feedLabel)
+  {
+    $this->feedLabel = $feedLabel;
+  }
+  /**
+   * @return string
+   */
+  public function getFeedLabel()
+  {
+    return $this->feedLabel;
   }
   /**
    * @param string

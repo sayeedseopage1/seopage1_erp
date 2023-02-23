@@ -20,8 +20,13 @@ namespace Google\Service\CloudSearch;
 class BotInfo extends \Google\Collection
 {
   protected $collection_key = 'supportedUses';
+  /**
+   * @var string
+   */
+  public $appAllowlistStatus;
   protected $appIdType = AppId::class;
   protected $appIdDataType = '';
+  public $appId;
   /**
    * @var string
    */
@@ -46,17 +51,32 @@ class BotInfo extends \Google\Collection
    * @var string
    */
   public $status;
+  /**
+   * @var bool
+   */
+  public $supportHomeScreen;
   protected $supportUrlsType = SupportUrls::class;
   protected $supportUrlsDataType = '';
+  public $supportUrls;
   /**
    * @var string[]
    */
   public $supportedUses;
-  /**
-   * @var string
-   */
-  public $whitelistStatus;
 
+  /**
+   * @param string
+   */
+  public function setAppAllowlistStatus($appAllowlistStatus)
+  {
+    $this->appAllowlistStatus = $appAllowlistStatus;
+  }
+  /**
+   * @return string
+   */
+  public function getAppAllowlistStatus()
+  {
+    return $this->appAllowlistStatus;
+  }
   /**
    * @param AppId
    */
@@ -156,6 +176,20 @@ class BotInfo extends \Google\Collection
     return $this->status;
   }
   /**
+   * @param bool
+   */
+  public function setSupportHomeScreen($supportHomeScreen)
+  {
+    $this->supportHomeScreen = $supportHomeScreen;
+  }
+  /**
+   * @return bool
+   */
+  public function getSupportHomeScreen()
+  {
+    return $this->supportHomeScreen;
+  }
+  /**
    * @param SupportUrls
    */
   public function setSupportUrls(SupportUrls $supportUrls)
@@ -182,20 +216,6 @@ class BotInfo extends \Google\Collection
   public function getSupportedUses()
   {
     return $this->supportedUses;
-  }
-  /**
-   * @param string
-   */
-  public function setWhitelistStatus($whitelistStatus)
-  {
-    $this->whitelistStatus = $whitelistStatus;
-  }
-  /**
-   * @return string
-   */
-  public function getWhitelistStatus()
-  {
-    return $this->whitelistStatus;
   }
 }
 

@@ -24,7 +24,7 @@ use Google\Service\Recommender\GoogleCloudRecommenderV1RecommenderConfig;
  * Typical usage is:
  *  <code>
  *   $recommenderService = new Google\Service\Recommender(...);
- *   $recommenders = $recommenderService->recommenders;
+ *   $recommenders = $recommenderService->projects_locations_recommenders;
  *  </code>
  */
 class ProjectsLocationsRecommenders extends \Google\Service\Resource
@@ -37,7 +37,8 @@ class ProjectsLocationsRecommenders extends \Google\Service\Resource
    * Acceptable formats: * `projects/[PROJECT_NUMBER]/locations/[LOCATION]/recomme
    * nders/[RECOMMENDER_ID]/config` * `projects/[PROJECT_ID]/locations/[LOCATION]/
    * recommenders/[RECOMMENDER_ID]/config` * `organizations/[ORGANIZATION_ID]/loca
-   * tions/[LOCATION]/recommenders/[RECOMMENDER_ID]/config`
+   * tions/[LOCATION]/recommenders/[RECOMMENDER_ID]/config` * `billingAccounts/[BI
+   * LLING_ACCOUNT_ID]/locations/[LOCATION]/recommenders/[RECOMMENDER_ID]/config`
    * @param array $optParams Optional parameters.
    * @return GoogleCloudRecommenderV1RecommenderConfig
    */

@@ -25,7 +25,7 @@ use Google\Service\AndroidPublisher\BundlesListResponse;
  * Typical usage is:
  *  <code>
  *   $androidpublisherService = new Google\Service\AndroidPublisher(...);
- *   $bundles = $androidpublisherService->bundles;
+ *   $bundles = $androidpublisherService->edits_bundles;
  *  </code>
  */
 class EditsBundles extends \Google\Service\Resource
@@ -59,6 +59,9 @@ class EditsBundles extends \Google\Service\Resource
    * @opt_param bool ackBundleInstallationWarning Must be set to true if the app
    * bundle installation may trigger a warning on user devices (for example, if
    * installation size may be over a threshold, typically 100 MB).
+   * @opt_param string deviceTierConfigId Device tier config (DTC) to be used for
+   * generating deliverables (APKs). Contains id of the DTC or "LATEST" for last
+   * uploaded DTC.
    * @return Bundle
    */
   public function upload($packageName, $editId, $optParams = [])

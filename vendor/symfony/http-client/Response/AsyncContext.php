@@ -26,8 +26,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 final class AsyncContext
 {
     private $passthru;
-    private $client;
-    private $response;
+    private HttpClientInterface $client;
+    private ResponseInterface $response;
     private array $info = [];
     private $content;
     private int $offset;
@@ -184,9 +184,15 @@ final class AsyncContext
 
     /**
      * Replaces or removes the chunk filter iterator.
+     *
+     * @param ?callable(ChunkInterface, self): ?\Iterator $passthru
      */
     public function passthru(callable $passthru = null): void
     {
-        $this->passthru = $passthru;
+        $this->passthru = $passthru ?? static function ($chunk, $context) {
+            $context->passthru = null;
+
+            yield $chunk;
+        };
     }
 }

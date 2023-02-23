@@ -22,6 +22,7 @@ class InstanceGroupManager extends \Google\Collection
   protected $collection_key = 'versions';
   protected $autoHealingPoliciesType = InstanceGroupManagerAutoHealingPolicy::class;
   protected $autoHealingPoliciesDataType = 'array';
+  public $autoHealingPolicies;
   /**
    * @var string
    */
@@ -32,12 +33,14 @@ class InstanceGroupManager extends \Google\Collection
   public $creationTimestamp;
   protected $currentActionsType = InstanceGroupManagerActionsSummary::class;
   protected $currentActionsDataType = '';
+  public $currentActions;
   /**
    * @var string
    */
   public $description;
   protected $distributionPolicyType = DistributionPolicy::class;
   protected $distributionPolicyDataType = '';
+  public $distributionPolicy;
   /**
    * @var string
    */
@@ -61,9 +64,14 @@ class InstanceGroupManager extends \Google\Collection
   /**
    * @var string
    */
+  public $listManagedInstancesResults;
+  /**
+   * @var string
+   */
   public $name;
   protected $namedPortsType = NamedPort::class;
   protected $namedPortsDataType = 'array';
+  public $namedPorts;
   /**
    * @var string
    */
@@ -74,8 +82,10 @@ class InstanceGroupManager extends \Google\Collection
   public $selfLink;
   protected $statefulPolicyType = StatefulPolicy::class;
   protected $statefulPolicyDataType = '';
+  public $statefulPolicy;
   protected $statusType = InstanceGroupManagerStatus::class;
   protected $statusDataType = '';
+  public $status;
   /**
    * @var string[]
    */
@@ -86,8 +96,10 @@ class InstanceGroupManager extends \Google\Collection
   public $targetSize;
   protected $updatePolicyType = InstanceGroupManagerUpdatePolicy::class;
   protected $updatePolicyDataType = '';
+  public $updatePolicy;
   protected $versionsType = InstanceGroupManagerVersion::class;
   protected $versionsDataType = 'array';
+  public $versions;
   /**
    * @var string
    */
@@ -246,6 +258,20 @@ class InstanceGroupManager extends \Google\Collection
   public function getKind()
   {
     return $this->kind;
+  }
+  /**
+   * @param string
+   */
+  public function setListManagedInstancesResults($listManagedInstancesResults)
+  {
+    $this->listManagedInstancesResults = $listManagedInstancesResults;
+  }
+  /**
+   * @return string
+   */
+  public function getListManagedInstancesResults()
+  {
+    return $this->listManagedInstancesResults;
   }
   /**
    * @param string

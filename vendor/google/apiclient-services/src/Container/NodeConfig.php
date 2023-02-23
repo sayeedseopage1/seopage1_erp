@@ -22,14 +22,17 @@ class NodeConfig extends \Google\Collection
   protected $collection_key = 'taints';
   protected $acceleratorsType = AcceleratorConfig::class;
   protected $acceleratorsDataType = 'array';
+  public $accelerators;
   protected $advancedMachineFeaturesType = AdvancedMachineFeatures::class;
   protected $advancedMachineFeaturesDataType = '';
+  public $advancedMachineFeatures;
   /**
    * @var string
    */
   public $bootDiskKmsKey;
   protected $confidentialNodesType = ConfidentialNodes::class;
   protected $confidentialNodesDataType = '';
+  public $confidentialNodes;
   /**
    * @var int
    */
@@ -38,26 +41,42 @@ class NodeConfig extends \Google\Collection
    * @var string
    */
   public $diskType;
+  protected $ephemeralStorageLocalSsdConfigType = EphemeralStorageLocalSsdConfig::class;
+  protected $ephemeralStorageLocalSsdConfigDataType = '';
+  public $ephemeralStorageLocalSsdConfig;
+  protected $fastSocketType = FastSocket::class;
+  protected $fastSocketDataType = '';
+  public $fastSocket;
   protected $gcfsConfigType = GcfsConfig::class;
   protected $gcfsConfigDataType = '';
+  public $gcfsConfig;
   protected $gvnicType = VirtualNIC::class;
   protected $gvnicDataType = '';
+  public $gvnic;
   /**
    * @var string
    */
   public $imageType;
   protected $kubeletConfigType = NodeKubeletConfig::class;
   protected $kubeletConfigDataType = '';
+  public $kubeletConfig;
   /**
    * @var string[]
    */
   public $labels;
   protected $linuxNodeConfigType = LinuxNodeConfig::class;
   protected $linuxNodeConfigDataType = '';
+  public $linuxNodeConfig;
+  protected $localNvmeSsdBlockConfigType = LocalNvmeSsdBlockConfig::class;
+  protected $localNvmeSsdBlockConfigDataType = '';
+  public $localNvmeSsdBlockConfig;
   /**
    * @var int
    */
   public $localSsdCount;
+  protected $loggingConfigType = NodePoolLoggingConfig::class;
+  protected $loggingConfigDataType = '';
+  public $loggingConfig;
   /**
    * @var string
    */
@@ -84,14 +103,21 @@ class NodeConfig extends \Google\Collection
   public $preemptible;
   protected $reservationAffinityType = ReservationAffinity::class;
   protected $reservationAffinityDataType = '';
+  public $reservationAffinity;
+  /**
+   * @var string[]
+   */
+  public $resourceLabels;
   protected $sandboxConfigType = SandboxConfig::class;
   protected $sandboxConfigDataType = '';
+  public $sandboxConfig;
   /**
    * @var string
    */
   public $serviceAccount;
   protected $shieldedInstanceConfigType = ShieldedInstanceConfig::class;
   protected $shieldedInstanceConfigDataType = '';
+  public $shieldedInstanceConfig;
   /**
    * @var bool
    */
@@ -102,8 +128,13 @@ class NodeConfig extends \Google\Collection
   public $tags;
   protected $taintsType = NodeTaint::class;
   protected $taintsDataType = 'array';
+  public $taints;
+  protected $windowsNodeConfigType = WindowsNodeConfig::class;
+  protected $windowsNodeConfigDataType = '';
+  public $windowsNodeConfig;
   protected $workloadMetadataConfigType = WorkloadMetadataConfig::class;
   protected $workloadMetadataConfigDataType = '';
+  public $workloadMetadataConfig;
 
   /**
    * @param AcceleratorConfig[]
@@ -190,6 +221,34 @@ class NodeConfig extends \Google\Collection
     return $this->diskType;
   }
   /**
+   * @param EphemeralStorageLocalSsdConfig
+   */
+  public function setEphemeralStorageLocalSsdConfig(EphemeralStorageLocalSsdConfig $ephemeralStorageLocalSsdConfig)
+  {
+    $this->ephemeralStorageLocalSsdConfig = $ephemeralStorageLocalSsdConfig;
+  }
+  /**
+   * @return EphemeralStorageLocalSsdConfig
+   */
+  public function getEphemeralStorageLocalSsdConfig()
+  {
+    return $this->ephemeralStorageLocalSsdConfig;
+  }
+  /**
+   * @param FastSocket
+   */
+  public function setFastSocket(FastSocket $fastSocket)
+  {
+    $this->fastSocket = $fastSocket;
+  }
+  /**
+   * @return FastSocket
+   */
+  public function getFastSocket()
+  {
+    return $this->fastSocket;
+  }
+  /**
    * @param GcfsConfig
    */
   public function setGcfsConfig(GcfsConfig $gcfsConfig)
@@ -274,6 +333,20 @@ class NodeConfig extends \Google\Collection
     return $this->linuxNodeConfig;
   }
   /**
+   * @param LocalNvmeSsdBlockConfig
+   */
+  public function setLocalNvmeSsdBlockConfig(LocalNvmeSsdBlockConfig $localNvmeSsdBlockConfig)
+  {
+    $this->localNvmeSsdBlockConfig = $localNvmeSsdBlockConfig;
+  }
+  /**
+   * @return LocalNvmeSsdBlockConfig
+   */
+  public function getLocalNvmeSsdBlockConfig()
+  {
+    return $this->localNvmeSsdBlockConfig;
+  }
+  /**
    * @param int
    */
   public function setLocalSsdCount($localSsdCount)
@@ -286,6 +359,20 @@ class NodeConfig extends \Google\Collection
   public function getLocalSsdCount()
   {
     return $this->localSsdCount;
+  }
+  /**
+   * @param NodePoolLoggingConfig
+   */
+  public function setLoggingConfig(NodePoolLoggingConfig $loggingConfig)
+  {
+    $this->loggingConfig = $loggingConfig;
+  }
+  /**
+   * @return NodePoolLoggingConfig
+   */
+  public function getLoggingConfig()
+  {
+    return $this->loggingConfig;
   }
   /**
    * @param string
@@ -386,6 +473,20 @@ class NodeConfig extends \Google\Collection
     return $this->reservationAffinity;
   }
   /**
+   * @param string[]
+   */
+  public function setResourceLabels($resourceLabels)
+  {
+    $this->resourceLabels = $resourceLabels;
+  }
+  /**
+   * @return string[]
+   */
+  public function getResourceLabels()
+  {
+    return $this->resourceLabels;
+  }
+  /**
    * @param SandboxConfig
    */
   public function setSandboxConfig(SandboxConfig $sandboxConfig)
@@ -468,6 +569,20 @@ class NodeConfig extends \Google\Collection
   public function getTaints()
   {
     return $this->taints;
+  }
+  /**
+   * @param WindowsNodeConfig
+   */
+  public function setWindowsNodeConfig(WindowsNodeConfig $windowsNodeConfig)
+  {
+    $this->windowsNodeConfig = $windowsNodeConfig;
+  }
+  /**
+   * @return WindowsNodeConfig
+   */
+  public function getWindowsNodeConfig()
+  {
+    return $this->windowsNodeConfig;
   }
   /**
    * @param WorkloadMetadataConfig

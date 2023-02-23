@@ -26,6 +26,14 @@ class BuildConfig extends \Google\Model
   /**
    * @var string
    */
+  public $buildpackStack;
+  /**
+   * @var string
+   */
+  public $dockerRegistry;
+  /**
+   * @var string
+   */
   public $dockerRepository;
   /**
    * @var string
@@ -41,8 +49,10 @@ class BuildConfig extends \Google\Model
   public $runtime;
   protected $sourceType = Source::class;
   protected $sourceDataType = '';
+  public $source;
   protected $sourceProvenanceType = SourceProvenance::class;
   protected $sourceProvenanceDataType = '';
+  public $sourceProvenance;
   /**
    * @var string
    */
@@ -61,6 +71,34 @@ class BuildConfig extends \Google\Model
   public function getBuild()
   {
     return $this->build;
+  }
+  /**
+   * @param string
+   */
+  public function setBuildpackStack($buildpackStack)
+  {
+    $this->buildpackStack = $buildpackStack;
+  }
+  /**
+   * @return string
+   */
+  public function getBuildpackStack()
+  {
+    return $this->buildpackStack;
+  }
+  /**
+   * @param string
+   */
+  public function setDockerRegistry($dockerRegistry)
+  {
+    $this->dockerRegistry = $dockerRegistry;
+  }
+  /**
+   * @return string
+   */
+  public function getDockerRegistry()
+  {
+    return $this->dockerRegistry;
   }
   /**
    * @param string

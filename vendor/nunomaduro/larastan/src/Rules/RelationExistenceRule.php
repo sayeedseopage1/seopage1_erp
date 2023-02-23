@@ -11,14 +11,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\GeneralizePrecision;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeTraverser;
-use PHPStan\Type\UnionType;
 
 /** @implements Rule<Node\Expr\CallLike> */
 class RelationExistenceRule implements Rule
@@ -72,39 +67,36 @@ class RelationExistenceRule implements Rule
 
         $valueType = $scope->getType($args[0]->value);
 
-        if (! $valueType instanceof ConstantStringType && ! $valueType instanceof ConstantArrayType) {
-            return [];
-        }
+        /** @var ConstantStringType[] $relations */
+        $relations = [];
 
-        if ($valueType instanceof ConstantStringType) {
-            $relations = [$valueType];
-        } else {
-            if ($valueType->getKeyType()->generalize(GeneralizePrecision::lessSpecific()) instanceof IntegerType) {
-                $relations = $valueType->getValueTypes();
-            } else {
-                $relations = $valueType->getKeyTypes();
+        if ($valueType->isConstantArray()->yes()) {
+            $arrays = $valueType->getConstantArrays();
+
+            foreach ($arrays as $array) {
+                $relations = array_merge(
+                    $relations,
+                    ...array_map(function (Type $type) {
+                        return $type->getConstantStrings();
+                    }, $array->getKeyTypes()),
+                    ...array_map(function (Type $type) {
+                        return $type->getConstantStrings();
+                    }, $array->getValueTypes()),
+                );
             }
+        } else {
+            $constants = $valueType->getConstantStrings();
+
+            if ($constants === []) {
+                return [];
+            }
+
+            $relations = $constants;
         }
 
         $errors = [];
 
         foreach ($relations as $relationType) {
-            $relationType = TypeTraverser::map($relationType, static function (Type $type, callable $traverse) {
-                if ($type instanceof UnionType) {
-                    return $traverse($type);
-                }
-
-                if ($type instanceof ConstantStringType) {
-                    return $type;
-                }
-
-                return $traverse($type);
-            });
-
-            if (! $relationType instanceof ConstantStringType) {
-                continue;
-            }
-
             $relationName = explode(':', $relationType->getValue())[0];
 
             $calledOnNode = $node instanceof MethodCall ? $node->var : $node->class;
@@ -164,7 +156,7 @@ class RelationExistenceRule implements Rule
                 return [];
             }
 
-            $errors += $closure($calledOnType, $relationName, $node);
+            $errors = array_merge($errors, $closure($calledOnType, $relationName, $node));
         }
 
         return $errors;

@@ -49,8 +49,9 @@ class Cases extends \Google\Service\Resource
     return $this->call('close', [$params], CloudsupportCase::class);
   }
   /**
-   * Create a new case and associate it with the given Cloud resource.
-   * (cases.create)
+   * Create a new case and associate it with the given Cloud resource. The case
+   * object must have the following fields set: display_name, description,
+   * classification, and severity. (cases.create)
    *
    * @param string $parent Required. The name of the Cloud resource under which
    * the case should be created.
@@ -131,23 +132,20 @@ class Cases extends \Google\Service\Resource
     return $this->call('list', [$params], ListCasesResponse::class);
   }
   /**
-   * Update the specified case. Only a subset of fields (display_name,
-   * description, time_zone, subscriber_email_addresses, related_resources,
-   * severity, priority, primary_contact, and labels) can be updated.
+   * Update the specified case. Only a subset of fields can be updated.
    * (cases.patch)
    *
    * @param string $name The resource name for the case.
    * @param CloudsupportCase $postBody
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string updateMask A field that represents attributes of a case
-   * object that should be updated as part of this request. Supported values are
-   * severity, display_name, and subscriber_email_addresses. If no fields are
-   * specified, all supported fields will be updated. WARNING: If you do not
-   * provide a field mask then you may accidentally clear some fields. For
-   * example, if you leave field mask empty and do not provide a value for
-   * subscriber_email_addresses then subscriber_email_addresses will be updated to
-   * empty.
+   * @opt_param string updateMask A list of attributes of the case object that
+   * should be updated as part of this request. Supported values are severity,
+   * display_name, and subscriber_email_addresses. If no fields are specified, all
+   * supported fields are updated. WARNING: If you do not provide a field mask,
+   * then you may accidentally clear some fields. For example, if you leave field
+   * mask empty and do not provide a value for subscriber_email_addresses, then
+   * subscriber_email_addresses is updated to empty.
    * @return CloudsupportCase
    */
   public function patch($name, CloudsupportCase $postBody, $optParams = [])
@@ -173,19 +171,20 @@ class Cases extends \Google\Service\Resource
    * `P1`, `P2`, `P3`, or `P4`. You can specify multiple values for priority using
    * the `OR` operator. For example, `priority=P1 OR priority=P2`. - [DEPRECATED]
    * `severity`: The accepted values are `S0`, `S1`, `S2`, `S3`, or `S4`. -
-   * `creator.email`: The email address of the case creator. You must specify
-   * eitehr `organization` or `project`. To search across `displayName`,
-   * `description`, and comments, use a global restriction with no keyword or
-   * operator. For example, `"my search"`. To search only cases updated after a
-   * certain date, use `update_time` retricted with that particular date, time,
-   * and timezone in ISO datetime format. For example,
-   * `update_time>"2020-01-01T00:00:00-05:00"`. `update_time` only supports the
-   * greater than operator (`>`). Examples: -
+   * `creator.email`: The email address of the case creator. - `billingAccount`: A
+   * billing account in the form `billingAccounts/` You must specify eitehr
+   * `organization` or `project`. To search across `displayName`, `description`,
+   * and comments, use a global restriction with no keyword or operator. For
+   * example, `"my search"`. To search only cases updated after a certain date,
+   * use `update_time` retricted with that particular date, time, and timezone in
+   * ISO datetime format. For example, `update_time>"2020-01-01T00:00:00-05:00"`.
+   * `update_time` only supports the greater than operator (`>`). Examples: -
    * `organization="organizations/123456789"` - `project="projects/my-project-id"`
-   * - `project="projects/123456789"` - `organization="organizations/123456789"
-   * AND state=CLOSED` - `project="projects/my-project-id" AND
-   * creator.email="tester@example.com"` - `project="projects/my-project-id" AND
-   * (priority=P0 OR priority=P1)`
+   * - `project="projects/123456789"` -
+   * `billing_account="billingAccounts/123456-A0B0C0-CUZ789"` -
+   * `organization="organizations/123456789" AND state=CLOSED` -
+   * `project="projects/my-project-id" AND creator.email="tester@example.com"` -
+   * `project="projects/my-project-id" AND (priority=P0 OR priority=P1)`
    * @return SearchCasesResponse
    */
   public function search($optParams = [])

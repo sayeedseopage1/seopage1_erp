@@ -21,6 +21,11 @@ class AppsDynamiteSharedMessageInfo extends \Google\Model
 {
   protected $messageIdType = MessageId::class;
   protected $messageIdDataType = '';
+  public $messageId;
+  /**
+   * @var string
+   */
+  public $messageType;
   /**
    * @var string
    */
@@ -39,6 +44,20 @@ class AppsDynamiteSharedMessageInfo extends \Google\Model
   public function getMessageId()
   {
     return $this->messageId;
+  }
+  /**
+   * @param string
+   */
+  public function setMessageType($messageType)
+  {
+    $this->messageType = $messageType;
+  }
+  /**
+   * @return string
+   */
+  public function getMessageType()
+  {
+    return $this->messageType;
   }
   /**
    * @param string

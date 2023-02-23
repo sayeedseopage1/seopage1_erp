@@ -21,16 +21,24 @@ class GoogleCloudDocumentaiV1beta2DocumentStyle extends \Google\Model
 {
   protected $backgroundColorType = GoogleTypeColor::class;
   protected $backgroundColorDataType = '';
+  public $backgroundColor;
   protected $colorType = GoogleTypeColor::class;
   protected $colorDataType = '';
+  public $color;
+  /**
+   * @var string
+   */
+  public $fontFamily;
   protected $fontSizeType = GoogleCloudDocumentaiV1beta2DocumentStyleFontSize::class;
   protected $fontSizeDataType = '';
+  public $fontSize;
   /**
    * @var string
    */
   public $fontWeight;
   protected $textAnchorType = GoogleCloudDocumentaiV1beta2DocumentTextAnchor::class;
   protected $textAnchorDataType = '';
+  public $textAnchor;
   /**
    * @var string
    */
@@ -67,6 +75,20 @@ class GoogleCloudDocumentaiV1beta2DocumentStyle extends \Google\Model
   public function getColor()
   {
     return $this->color;
+  }
+  /**
+   * @param string
+   */
+  public function setFontFamily($fontFamily)
+  {
+    $this->fontFamily = $fontFamily;
+  }
+  /**
+   * @return string
+   */
+  public function getFontFamily()
+  {
+    return $this->fontFamily;
   }
   /**
    * @param GoogleCloudDocumentaiV1beta2DocumentStyleFontSize

@@ -24,6 +24,10 @@ class GoogleCloudRetailV2CatalogAttribute extends \Google\Model
    */
   public $dynamicFacetableOption;
   /**
+   * @var string
+   */
+  public $exactSearchableOption;
+  /**
    * @var bool
    */
   public $inUse;
@@ -35,6 +39,10 @@ class GoogleCloudRetailV2CatalogAttribute extends \Google\Model
    * @var string
    */
   public $key;
+  /**
+   * @var string
+   */
+  public $retrievableOption;
   /**
    * @var string
    */
@@ -57,6 +65,20 @@ class GoogleCloudRetailV2CatalogAttribute extends \Google\Model
   public function getDynamicFacetableOption()
   {
     return $this->dynamicFacetableOption;
+  }
+  /**
+   * @param string
+   */
+  public function setExactSearchableOption($exactSearchableOption)
+  {
+    $this->exactSearchableOption = $exactSearchableOption;
+  }
+  /**
+   * @return string
+   */
+  public function getExactSearchableOption()
+  {
+    return $this->exactSearchableOption;
   }
   /**
    * @param bool
@@ -99,6 +121,20 @@ class GoogleCloudRetailV2CatalogAttribute extends \Google\Model
   public function getKey()
   {
     return $this->key;
+  }
+  /**
+   * @param string
+   */
+  public function setRetrievableOption($retrievableOption)
+  {
+    $this->retrievableOption = $retrievableOption;
+  }
+  /**
+   * @return string
+   */
+  public function getRetrievableOption()
+  {
+    return $this->retrievableOption;
   }
   /**
    * @param string

@@ -29,7 +29,7 @@ use Google\Service\CloudRetail\GoogleLongrunningOperation;
  * Typical usage is:
  *  <code>
  *   $retailService = new Google\Service\CloudRetail(...);
- *   $userEvents = $retailService->userEvents;
+ *   $userEvents = $retailService->projects_locations_catalogs_userEvents;
  *  </code>
  */
 class ProjectsLocationsCatalogsUserEvents extends \Google\Service\Resource
@@ -47,6 +47,13 @@ class ProjectsLocationsCatalogsUserEvents extends \Google\Service\Resource
    * @opt_param string ets The event timestamp in milliseconds. This prevents
    * browser caching of otherwise identical get requests. The name is abbreviated
    * to reduce the payload bytes.
+   * @opt_param string prebuiltRule The prebuilt rule name that can convert a
+   * specific type of raw_json. For example: "ga4_bq" rule for the GA4 user event
+   * schema.
+   * @opt_param string rawJson An arbitrary serialized JSON string that contains
+   * necessary information that can comprise a user event. When this field is
+   * specified, the user_event field will be ignored. Note: line-delimited JSON is
+   * not supported, a single JSON only.
    * @opt_param string uri The URL including cgi-parameters but excluding the hash
    * fragment with a length limit of 5,000 characters. This is often more useful
    * than the referer URL, because many browsers only send the domain for 3rd
@@ -128,6 +135,12 @@ class ProjectsLocationsCatalogsUserEvents extends \Google\Service\Resource
    * `projects/1234/locations/global/catalogs/default_catalog`.
    * @param GoogleCloudRetailV2UserEvent $postBody
    * @param array $optParams Optional parameters.
+   *
+   * @opt_param bool writeAsync If set to true, the user event will be written
+   * asynchronously after validation, and the API will respond without waiting for
+   * the write. Therefore, silent failures can occur even if the API returns
+   * success. In case of silent failures, error messages can be found in
+   * Stackdriver logs.
    * @return GoogleCloudRetailV2UserEvent
    */
   public function write($parent, GoogleCloudRetailV2UserEvent $postBody, $optParams = [])

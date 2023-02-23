@@ -33,7 +33,7 @@ use Google\Service\Spanner\TestIamPermissionsResponse;
  * Typical usage is:
  *  <code>
  *   $spannerService = new Google\Service\Spanner(...);
- *   $backups = $spannerService->backups;
+ *   $backups = $spannerService->projects_instances_backups;
  *  </code>
  */
 class ProjectsInstancesBackups extends \Google\Service\Resource
@@ -45,8 +45,8 @@ class ProjectsInstancesBackups extends \Google\Service\Resource
    * of the backup. The operation is associated with the destination backup. The
    * metadata field type is CopyBackupMetadata. The response field type is Backup,
    * if successful. Cancelling the returned operation will stop the copying and
-   * delete the backup. Concurrent CopyBackup requests can run on the same source
-   * backup. (backups.copy)
+   * delete the destination backup. Concurrent CopyBackup requests can run on the
+   * same source backup. (backups.copy)
    *
    * @param string $parent Required. The name of the destination instance that
    * will contain the backup copy. Values are of the form: `projects//instances/`.

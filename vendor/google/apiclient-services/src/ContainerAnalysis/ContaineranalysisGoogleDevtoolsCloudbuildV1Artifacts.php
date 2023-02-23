@@ -19,13 +19,20 @@ namespace Google\Service\ContainerAnalysis;
 
 class ContaineranalysisGoogleDevtoolsCloudbuildV1Artifacts extends \Google\Collection
 {
-  protected $collection_key = 'images';
+  protected $collection_key = 'pythonPackages';
   /**
    * @var string[]
    */
   public $images;
+  protected $mavenArtifactsType = ContaineranalysisGoogleDevtoolsCloudbuildV1ArtifactsMavenArtifact::class;
+  protected $mavenArtifactsDataType = 'array';
+  public $mavenArtifacts;
   protected $objectsType = ContaineranalysisGoogleDevtoolsCloudbuildV1ArtifactsArtifactObjects::class;
   protected $objectsDataType = '';
+  public $objects;
+  protected $pythonPackagesType = ContaineranalysisGoogleDevtoolsCloudbuildV1ArtifactsPythonPackage::class;
+  protected $pythonPackagesDataType = 'array';
+  public $pythonPackages;
 
   /**
    * @param string[]
@@ -42,6 +49,20 @@ class ContaineranalysisGoogleDevtoolsCloudbuildV1Artifacts extends \Google\Colle
     return $this->images;
   }
   /**
+   * @param ContaineranalysisGoogleDevtoolsCloudbuildV1ArtifactsMavenArtifact[]
+   */
+  public function setMavenArtifacts($mavenArtifacts)
+  {
+    $this->mavenArtifacts = $mavenArtifacts;
+  }
+  /**
+   * @return ContaineranalysisGoogleDevtoolsCloudbuildV1ArtifactsMavenArtifact[]
+   */
+  public function getMavenArtifacts()
+  {
+    return $this->mavenArtifacts;
+  }
+  /**
    * @param ContaineranalysisGoogleDevtoolsCloudbuildV1ArtifactsArtifactObjects
    */
   public function setObjects(ContaineranalysisGoogleDevtoolsCloudbuildV1ArtifactsArtifactObjects $objects)
@@ -54,6 +75,20 @@ class ContaineranalysisGoogleDevtoolsCloudbuildV1Artifacts extends \Google\Colle
   public function getObjects()
   {
     return $this->objects;
+  }
+  /**
+   * @param ContaineranalysisGoogleDevtoolsCloudbuildV1ArtifactsPythonPackage[]
+   */
+  public function setPythonPackages($pythonPackages)
+  {
+    $this->pythonPackages = $pythonPackages;
+  }
+  /**
+   * @return ContaineranalysisGoogleDevtoolsCloudbuildV1ArtifactsPythonPackage[]
+   */
+  public function getPythonPackages()
+  {
+    return $this->pythonPackages;
   }
 }
 

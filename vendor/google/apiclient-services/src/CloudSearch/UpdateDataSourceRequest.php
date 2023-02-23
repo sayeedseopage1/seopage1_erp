@@ -21,8 +21,14 @@ class UpdateDataSourceRequest extends \Google\Model
 {
   protected $debugOptionsType = DebugOptions::class;
   protected $debugOptionsDataType = '';
+  public $debugOptions;
   protected $sourceType = DataSource::class;
   protected $sourceDataType = '';
+  public $source;
+  /**
+   * @var string
+   */
+  public $updateMask;
 
   /**
    * @param DebugOptions
@@ -51,6 +57,20 @@ class UpdateDataSourceRequest extends \Google\Model
   public function getSource()
   {
     return $this->source;
+  }
+  /**
+   * @param string
+   */
+  public function setUpdateMask($updateMask)
+  {
+    $this->updateMask = $updateMask;
+  }
+  /**
+   * @return string
+   */
+  public function getUpdateMask()
+  {
+    return $this->updateMask;
   }
 }
 

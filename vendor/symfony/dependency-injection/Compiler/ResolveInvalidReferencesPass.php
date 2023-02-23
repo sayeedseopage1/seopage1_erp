@@ -29,8 +29,8 @@ use Symfony\Component\DependencyInjection\TypedReference;
  */
 class ResolveInvalidReferencesPass implements CompilerPassInterface
 {
-    private $container;
-    private $signalingException;
+    private ContainerBuilder $container;
+    private RuntimeException $signalingException;
     private string $currentId;
 
     /**
@@ -95,7 +95,7 @@ class ResolveInvalidReferencesPass implements CompilerPassInterface
                 $value = array_values($value);
             }
         } elseif ($value instanceof Reference) {
-            if ($this->container->has($id = (string) $value)) {
+            if ($this->container->hasDefinition($id = (string) $value) ? !$this->container->getDefinition($id)->hasTag('container.excluded') : $this->container->hasAlias($id)) {
                 return $value;
             }
 

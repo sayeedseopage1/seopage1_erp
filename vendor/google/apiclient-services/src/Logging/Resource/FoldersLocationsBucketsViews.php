@@ -26,7 +26,7 @@ use Google\Service\Logging\LoggingEmpty;
  * Typical usage is:
  *  <code>
  *   $loggingService = new Google\Service\Logging(...);
- *   $views = $loggingService->views;
+ *   $views = $loggingService->folders_locations_buckets_views;
  *  </code>
  */
 class FoldersLocationsBucketsViews extends \Google\Service\Resource
@@ -41,7 +41,9 @@ class FoldersLocationsBucketsViews extends \Google\Service\Resource
    * @param LogView $postBody
    * @param array $optParams Optional parameters.
    *
-   * @opt_param string viewId Required. The id to use for this view.
+   * @opt_param string viewId Required. A client-assigned identifier such as "my-
+   * view". Identifiers are limited to 100 characters and can include only
+   * letters, digits, underscores, hyphens, and periods.
    * @return LogView
    */
   public function create($parent, LogView $postBody, $optParams = [])

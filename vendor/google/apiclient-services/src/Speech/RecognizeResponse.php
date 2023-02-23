@@ -26,6 +26,10 @@ class RecognizeResponse extends \Google\Collection
   public $requestId;
   protected $resultsType = SpeechRecognitionResult::class;
   protected $resultsDataType = 'array';
+  public $results;
+  protected $speechAdaptationInfoType = SpeechAdaptationInfo::class;
+  protected $speechAdaptationInfoDataType = '';
+  public $speechAdaptationInfo;
   /**
    * @var string
    */
@@ -58,6 +62,20 @@ class RecognizeResponse extends \Google\Collection
   public function getResults()
   {
     return $this->results;
+  }
+  /**
+   * @param SpeechAdaptationInfo
+   */
+  public function setSpeechAdaptationInfo(SpeechAdaptationInfo $speechAdaptationInfo)
+  {
+    $this->speechAdaptationInfo = $speechAdaptationInfo;
+  }
+  /**
+   * @return SpeechAdaptationInfo
+   */
+  public function getSpeechAdaptationInfo()
+  {
+    return $this->speechAdaptationInfo;
   }
   /**
    * @param string

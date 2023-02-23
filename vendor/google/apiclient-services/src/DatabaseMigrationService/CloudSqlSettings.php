@@ -30,6 +30,10 @@ class CloudSqlSettings extends \Google\Model
   /**
    * @var string
    */
+  public $availabilityType;
+  /**
+   * @var string
+   */
   public $cmekKeyName;
   /**
    * @var string
@@ -53,6 +57,7 @@ class CloudSqlSettings extends \Google\Model
   public $databaseVersion;
   protected $ipConfigType = SqlIpConfig::class;
   protected $ipConfigDataType = '';
+  public $ipConfig;
   /**
    * @var string
    */
@@ -61,6 +66,10 @@ class CloudSqlSettings extends \Google\Model
    * @var bool
    */
   public $rootPasswordSet;
+  /**
+   * @var string
+   */
+  public $secondaryZone;
   /**
    * @var string
    */
@@ -109,6 +118,20 @@ class CloudSqlSettings extends \Google\Model
   public function getAutoStorageIncrease()
   {
     return $this->autoStorageIncrease;
+  }
+  /**
+   * @param string
+   */
+  public function setAvailabilityType($availabilityType)
+  {
+    $this->availabilityType = $availabilityType;
+  }
+  /**
+   * @return string
+   */
+  public function getAvailabilityType()
+  {
+    return $this->availabilityType;
   }
   /**
    * @param string
@@ -235,6 +258,20 @@ class CloudSqlSettings extends \Google\Model
   public function getRootPasswordSet()
   {
     return $this->rootPasswordSet;
+  }
+  /**
+   * @param string
+   */
+  public function setSecondaryZone($secondaryZone)
+  {
+    $this->secondaryZone = $secondaryZone;
+  }
+  /**
+   * @return string
+   */
+  public function getSecondaryZone()
+  {
+    return $this->secondaryZone;
   }
   /**
    * @param string

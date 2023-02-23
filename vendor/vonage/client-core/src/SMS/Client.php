@@ -3,7 +3,7 @@
 /**
  * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016-2020 Vonage, Inc. (http://vonage.com)
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
  * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
  */
 
@@ -17,16 +17,14 @@ use Vonage\Client\APIResource;
 use Vonage\Client\Exception\Exception as ClientException;
 use Vonage\Client\Exception\ThrottleException;
 use Vonage\SMS\Message\Message;
+use Vonage\SMS\Message\SMS;
 
 use function sleep;
 
 class Client implements APIClient
 {
-    protected APIResource $api;
-
-    public function __construct(APIResource $api)
+    public function __construct(protected APIResource $api)
     {
-        $this->api = $api;
     }
 
     public function getAPIResource(): APIResource
@@ -40,6 +38,13 @@ class Client implements APIClient
      */
     public function send(Message $message): Collection
     {
+        if ($message->getErrorMessage()) {
+            trigger_error(
+                $message->getErrorMessage(),
+                E_USER_WARNING
+            );
+        }
+
         try {
             $response = $this->api->create($message->toArray(), '/sms/json');
 

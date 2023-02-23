@@ -109,7 +109,7 @@ class SQLServerPlatform extends AbstractPlatform
     {
         Deprecation::trigger(
             'doctrine/dbal',
-            'https://github.com/doctrine/dbal/pulls/1519',
+            'https://github.com/doctrine/dbal/pull/1519',
             'SQLServerPlatform::prefersIdentityColumns() is deprecated.',
         );
 
@@ -516,17 +516,24 @@ class SQLServerPlatform extends AbstractPlatform
         $columnSql   = [];
         $commentsSql = [];
 
-        foreach ($diff->addedColumns as $column) {
+        $table = $diff->getOldTable() ?? $diff->getName($this);
+
+        $tableName = $table->getName();
+
+        foreach ($diff->getAddedColumns() as $column) {
             if ($this->onSchemaAlterTableAddColumn($column, $diff, $columnSql)) {
                 continue;
             }
 
-            $columnDef    = $column->toArray();
-            $addColumnSql = 'ADD ' . $this->getColumnDeclarationSQL($column->getQuotedName($this), $columnDef);
-            if (isset($columnDef['default'])) {
-                $addColumnSql .= ' CONSTRAINT ' .
-                    $this->generateDefaultConstraintName($diff->name, $column->getQuotedName($this)) .
-                    $this->getDefaultValueDeclarationSQL($columnDef);
+            $columnProperties = $column->toArray();
+
+            $addColumnSql = 'ADD ' . $this->getColumnDeclarationSQL($column->getQuotedName($this), $columnProperties);
+
+            if (isset($columnProperties['default'])) {
+                $addColumnSql .= ' CONSTRAINT ' . $this->generateDefaultConstraintName(
+                    $tableName,
+                    $column->getQuotedName($this),
+                ) . $this->getDefaultValueDeclarationSQL($columnProperties);
             }
 
             $queryParts[] = $addColumnSql;
@@ -538,13 +545,13 @@ class SQLServerPlatform extends AbstractPlatform
             }
 
             $commentsSql[] = $this->getCreateColumnCommentSQL(
-                $diff->name,
+                $tableName,
                 $column->getQuotedName($this),
                 $comment,
             );
         }
 
-        foreach ($diff->removedColumns as $column) {
+        foreach ($diff->getDroppedColumns() as $column) {
             if ($this->onSchemaAlterTableRemoveColumn($column, $diff, $columnSql)) {
                 continue;
             }
@@ -552,86 +559,97 @@ class SQLServerPlatform extends AbstractPlatform
             $queryParts[] = 'DROP COLUMN ' . $column->getQuotedName($this);
         }
 
-        foreach ($diff->changedColumns as $columnDiff) {
+        foreach ($diff->getModifiedColumns() as $columnDiff) {
             if ($this->onSchemaAlterTableChangeColumn($columnDiff, $diff, $columnSql)) {
                 continue;
             }
 
-            $column     = $columnDiff->column;
-            $comment    = $this->getColumnComment($column);
-            $hasComment = ! empty($comment) || is_numeric($comment);
+            $newColumn     = $columnDiff->getNewColumn();
+            $newComment    = $this->getColumnComment($newColumn);
+            $hasNewComment = ! empty($newComment) || is_numeric($newComment);
 
-            if ($columnDiff->fromColumn instanceof Column) {
-                $fromComment    = $this->getColumnComment($columnDiff->fromColumn);
-                $hasFromComment = ! empty($fromComment) || is_numeric($fromComment);
+            $oldColumn = $columnDiff->getOldColumn();
 
-                if ($hasFromComment && $hasComment && $fromComment !== $comment) {
+            if ($oldColumn instanceof Column) {
+                $oldComment    = $this->getColumnComment($oldColumn);
+                $hasOldComment = ! empty($oldComment) || is_numeric($oldComment);
+
+                if ($hasOldComment && $hasNewComment && $oldComment !== $newComment) {
                     $commentsSql[] = $this->getAlterColumnCommentSQL(
-                        $diff->name,
-                        $column->getQuotedName($this),
-                        $comment,
+                        $tableName,
+                        $newColumn->getQuotedName($this),
+                        $newComment,
                     );
-                } elseif ($hasFromComment && ! $hasComment) {
-                    $commentsSql[] = $this->getDropColumnCommentSQL($diff->name, $column->getQuotedName($this));
-                } elseif (! $hasFromComment && $hasComment) {
+                } elseif ($hasOldComment && ! $hasNewComment) {
+                    $commentsSql[] = $this->getDropColumnCommentSQL(
+                        $tableName,
+                        $newColumn->getQuotedName($this),
+                    );
+                } elseif (! $hasOldComment && $hasNewComment) {
                     $commentsSql[] = $this->getCreateColumnCommentSQL(
-                        $diff->name,
-                        $column->getQuotedName($this),
-                        $comment,
+                        $tableName,
+                        $newColumn->getQuotedName($this),
+                        $newComment,
                     );
                 }
             }
 
             // Do not add query part if only comment has changed.
-            if ($columnDiff->hasChanged('comment') && count($columnDiff->changedProperties) === 1) {
+            if ($columnDiff->hasCommentChanged() && count($columnDiff->changedProperties) === 1) {
                 continue;
             }
 
             $requireDropDefaultConstraint = $this->alterColumnRequiresDropDefaultConstraint($columnDiff);
 
             if ($requireDropDefaultConstraint) {
-                $queryParts[] = $this->getAlterTableDropDefaultConstraintClause(
-                    $diff->name,
-                    $columnDiff->oldColumnName,
-                );
+                $oldColumn = $columnDiff->getOldColumn();
+
+                if ($oldColumn !== null) {
+                    $oldColumnName = $oldColumn->getName();
+                } else {
+                    $oldColumnName = $columnDiff->oldColumnName;
+                }
+
+                $queryParts[] = $this->getAlterTableDropDefaultConstraintClause($tableName, $oldColumnName);
             }
 
-            $columnDef = $column->toArray();
+            $columnProperties = $newColumn->toArray();
 
             $queryParts[] = 'ALTER COLUMN ' .
-                    $this->getColumnDeclarationSQL($column->getQuotedName($this), $columnDef);
+                    $this->getColumnDeclarationSQL($newColumn->getQuotedName($this), $columnProperties);
 
             if (
-                ! isset($columnDef['default'])
-                || (! $requireDropDefaultConstraint && ! $columnDiff->hasChanged('default'))
+                ! isset($columnProperties['default'])
+                || (! $requireDropDefaultConstraint && ! $columnDiff->hasDefaultChanged())
             ) {
                 continue;
             }
 
-            $queryParts[] = $this->getAlterTableAddDefaultConstraintClause($diff->name, $column);
+            $queryParts[] = $this->getAlterTableAddDefaultConstraintClause($tableName, $newColumn);
         }
 
-        foreach ($diff->renamedColumns as $oldColumnName => $column) {
-            if ($this->onSchemaAlterTableRenameColumn($oldColumnName, $column, $diff, $columnSql)) {
+        $tableNameSQL = $table->getQuotedName($this);
+
+        foreach ($diff->getRenamedColumns() as $oldColumnName => $newColumn) {
+            if ($this->onSchemaAlterTableRenameColumn($oldColumnName, $newColumn, $diff, $columnSql)) {
                 continue;
             }
 
             $oldColumnName = new Identifier($oldColumnName);
 
-            $sql[] = "sp_rename '" .
-                $diff->getName($this)->getQuotedName($this) . '.' . $oldColumnName->getQuotedName($this) .
-                "', '" . $column->getQuotedName($this) . "', 'COLUMN'";
+            $sql[] = "sp_rename '" . $tableNameSQL . '.' . $oldColumnName->getQuotedName($this) .
+                "', '" . $newColumn->getQuotedName($this) . "', 'COLUMN'";
 
             // Recreate default constraint with new column name if necessary (for future reference).
-            if ($column->getDefault() === null) {
+            if ($newColumn->getDefault() === null) {
                 continue;
             }
 
             $queryParts[] = $this->getAlterTableDropDefaultConstraintClause(
-                $diff->name,
+                $tableName,
                 $oldColumnName->getQuotedName($this),
             );
-            $queryParts[] = $this->getAlterTableAddDefaultConstraintClause($diff->name, $column);
+            $queryParts[] = $this->getAlterTableAddDefaultConstraintClause($tableName, $newColumn);
         }
 
         $tableSql = [];
@@ -641,7 +659,7 @@ class SQLServerPlatform extends AbstractPlatform
         }
 
         foreach ($queryParts as $query) {
-            $sql[] = 'ALTER TABLE ' . $diff->getName($this)->getQuotedName($this) . ' ' . $query;
+            $sql[] = 'ALTER TABLE ' . $tableNameSQL . ' ' . $query;
         }
 
         $sql = array_merge($sql, $commentsSql);
@@ -649,24 +667,14 @@ class SQLServerPlatform extends AbstractPlatform
         $newName = $diff->getNewName();
 
         if ($newName !== false) {
-            $sql[] = "sp_rename '" . $diff->getName($this)->getQuotedName($this) . "', '" . $newName->getName() . "'";
+            Deprecation::trigger(
+                'doctrine/dbal',
+                'https://github.com/doctrine/dbal/pull/5663',
+                'Generation of "rename table" SQL using %s is deprecated. Use getRenameTableSQL() instead.',
+                __METHOD__,
+            );
 
-            /**
-             * Rename table's default constraints names
-             * to match the new table name.
-             * This is necessary to ensure that the default
-             * constraints can be referenced in future table
-             * alterations as the table name is encoded in
-             * default constraints' names.
-             */
-            $sql[] = "DECLARE @sql NVARCHAR(MAX) = N''; " .
-                "SELECT @sql += N'EXEC sp_rename N''' + dc.name + ''', N''' " .
-                "+ REPLACE(dc.name, '" . $this->generateIdentifierName($diff->name) . "', " .
-                "'" . $this->generateIdentifierName($newName->getName()) . "') + ''', ''OBJECT'';' " .
-                'FROM sys.default_constraints dc ' .
-                'JOIN sys.tables tbl ON dc.parent_object_id = tbl.object_id ' .
-                "WHERE tbl.name = '" . $newName->getName() . "';" .
-                'EXEC sp_executesql @sql';
+            $sql = array_merge($sql, $this->getRenameTableSQL($tableName, $newName->getName()));
         }
 
         $sql = array_merge(
@@ -676,6 +684,38 @@ class SQLServerPlatform extends AbstractPlatform
         );
 
         return array_merge($sql, $tableSql, $columnSql);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRenameTableSQL(string $oldName, string $newName): array
+    {
+        return [
+            sprintf('sp_rename %s, %s', $this->quoteStringLiteral($oldName), $this->quoteStringLiteral($newName)),
+
+            /* Rename table's default constraints names
+             * to match the new table name.
+             * This is necessary to ensure that the default
+             * constraints can be referenced in future table
+             * alterations as the table name is encoded in
+             * default constraints' names. */
+            sprintf(
+                <<<'SQL'
+                DECLARE @sql NVARCHAR(MAX) = N'';
+                SELECT @sql += N'EXEC sp_rename N''' + dc.name + ''', N'''
+                    + REPLACE(dc.name, '%s', '%s') + ''', ''OBJECT'';'
+                    FROM sys.default_constraints dc
+                    JOIN sys.tables tbl
+                        ON dc.parent_object_id = tbl.object_id
+                    WHERE tbl.name = %s;
+                EXEC sp_executesql @sql
+                SQL,
+                $this->generateIdentifierName($oldName),
+                $this->generateIdentifierName($newName),
+                $this->quoteStringLiteral($newName),
+            ),
+        ];
     }
 
     /**
@@ -713,27 +753,29 @@ class SQLServerPlatform extends AbstractPlatform
      */
     private function alterColumnRequiresDropDefaultConstraint(ColumnDiff $columnDiff): bool
     {
+        $oldColumn = $columnDiff->getOldColumn();
+
         // We can only decide whether to drop an existing default constraint
         // if we know the original default value.
-        if (! $columnDiff->fromColumn instanceof Column) {
+        if (! $oldColumn instanceof Column) {
             return false;
         }
 
         // We only need to drop an existing default constraint if we know the
         // column was defined with a default value before.
-        if ($columnDiff->fromColumn->getDefault() === null) {
+        if ($oldColumn->getDefault() === null) {
             return false;
         }
 
         // We need to drop an existing default constraint if the column was
         // defined with a default value before and it has changed.
-        if ($columnDiff->hasChanged('default')) {
+        if ($columnDiff->hasDefaultChanged()) {
             return true;
         }
 
         // We need to drop an existing default constraint if the column was
         // defined with a default value before and the native column type has changed.
-        return $columnDiff->hasChanged('type') || $columnDiff->hasChanged('fixed');
+        return $columnDiff->hasTypeChanged() || $columnDiff->hasFixedChanged();
     }
 
     /**
@@ -1631,17 +1673,45 @@ class SQLServerPlatform extends AbstractPlatform
 
             $notnull = ! empty($column['notnull']) ? ' NOT NULL' : '';
 
-            $unique = ! empty($column['unique']) ?
-                ' ' . $this->getUniqueFieldDeclarationSQL() : '';
+            if (! empty($column['unique'])) {
+                Deprecation::trigger(
+                    'doctrine/dbal',
+                    'https://github.com/doctrine/dbal/pull/5656',
+                    'The usage of the "unique" column property is deprecated. Use unique constraints instead.',
+                );
 
-            $check = ! empty($column['check']) ?
-                ' ' . $column['check'] : '';
+                $unique = ' ' . $this->getUniqueFieldDeclarationSQL();
+            } else {
+                $unique = '';
+            }
+
+            if (! empty($column['check'])) {
+                Deprecation::trigger(
+                    'doctrine/dbal',
+                    'https://github.com/doctrine/dbal/pull/5656',
+                    'The usage of the "check" column property is deprecated.',
+                );
+
+                $check = ' ' . $column['check'];
+            } else {
+                $check = '';
+            }
 
             $typeDecl  = $column['type']->getSQLDeclaration($column, $this);
             $columnDef = $typeDecl . $collation . $notnull . $unique . $check;
         }
 
         return $name . ' ' . $columnDef;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * SQL Server does not support quoting collation identifiers.
+     */
+    public function getColumnCollationDeclarationSQL($collation)
+    {
+        return 'COLLATE ' . $collation;
     }
 
     public function columnsEqual(Column $column1, Column $column2): bool

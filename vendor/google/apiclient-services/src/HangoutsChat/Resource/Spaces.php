@@ -18,7 +18,6 @@
 namespace Google\Service\HangoutsChat\Resource;
 
 use Google\Service\HangoutsChat\ListSpacesResponse;
-use Google\Service\HangoutsChat\Message;
 use Google\Service\HangoutsChat\Space;
 
 /**
@@ -32,9 +31,18 @@ use Google\Service\HangoutsChat\Space;
 class Spaces extends \Google\Service\Resource
 {
   /**
-   * Returns a space. Requires [service account
+   * Returns a space. Requires
+   * [authentication](https://developers.google.com/chat/api/guides/auth). Fully
+   * supports [service account
    * authentication](https://developers.google.com/chat/api/guides/auth/service-
-   * accounts). (spaces.get)
+   * accounts). Supports [user
+   * authentication](https://developers.google.com/chat/api/guides/auth/users) as
+   * part of the [Google Workspace Developer Preview
+   * Program](https://developers.google.com/workspace/preview), which grants early
+   * access to certain features. [User
+   * authentication](https://developers.google.com/chat/api/guides/auth/users)
+   * requires the `chat.spaces` or `chat.spaces.readonly` authorization scope.
+   * (spaces.get)
    *
    * @param string $name Required. Resource name of the space, in the form
    * "spaces". Format: spaces/{space}
@@ -48,17 +56,30 @@ class Spaces extends \Google\Service\Resource
     return $this->call('get', [$params], Space::class);
   }
   /**
-   * Lists spaces the caller is a member of. Requires [service account
+   * Lists spaces the caller is a member of. Requires
+   * [authentication](https://developers.google.com/chat/api/guides/auth). Fully
+   * supports [service account
    * authentication](https://developers.google.com/chat/api/guides/auth/service-
-   * accounts). (spaces.listSpaces)
+   * accounts). Supports [user
+   * authentication](https://developers.google.com/chat/api/guides/auth/users) as
+   * part of the [Google Workspace Developer Preview
+   * Program](https://developers.google.com/workspace/preview), which grants early
+   * access to certain features. [User
+   * authentication](https://developers.google.com/chat/api/guides/auth/users)
+   * requires the `chat.spaces` or `chat.spaces.readonly` authorization scope.
+   * Lists spaces visible to the caller or authenticated user. Group chats and DMs
+   * aren't listed until the first message is sent. (spaces.listSpaces)
    *
    * @param array $optParams Optional parameters.
    *
-   * @opt_param int pageSize Optional. Requested page size. The value is capped at
-   * 1000. Server may return fewer results than requested. If unspecified, server
-   * will default to 100.
-   * @opt_param string pageToken Optional. A token identifying a page of results
-   * the server should return.
+   * @opt_param int pageSize Optional. The maximum number of spaces to return. The
+   * service may return fewer than this value. If unspecified, at most 100 spaces
+   * are returned. The maximum value is 1000; values above 1000 are coerced to
+   * 1000. Negative values return an INVALID_ARGUMENT error.
+   * @opt_param string pageToken Optional. A page token, received from a previous
+   * list spaces call. Provide this to retrieve the subsequent page. When
+   * paginating, the filter value should match the call that provided the page
+   * token. Passing a different value may lead to unexpected results.
    * @return ListSpacesResponse
    */
   public function listSpaces($optParams = [])
@@ -66,31 +87,6 @@ class Spaces extends \Google\Service\Resource
     $params = [];
     $params = array_merge($params, $optParams);
     return $this->call('list', [$params], ListSpacesResponse::class);
-  }
-  /**
-   * Legacy path for creating message. Calling these will result in a BadRequest
-   * response. (spaces.webhooks)
-   *
-   * @param string $parent Required. Space resource name, in the form "spaces".
-   * Example: spaces/AAAAAAAAAAA
-   * @param Message $postBody
-   * @param array $optParams Optional parameters.
-   *
-   * @opt_param string requestId Optional. A unique request ID for this message.
-   * Specifying an existing request ID returns the message created with that ID
-   * instead of creating a new message.
-   * @opt_param string threadKey Optional. Opaque thread identifier. To start or
-   * add to a thread, create a message and specify a `threadKey` instead of
-   * thread.name. (Setting thread.name has no effect.) The first message with a
-   * given `threadKey` starts a new thread. Subsequent messages with the same
-   * `threadKey` post into the same thread.
-   * @return Message
-   */
-  public function webhooks($parent, Message $postBody, $optParams = [])
-  {
-    $params = ['parent' => $parent, 'postBody' => $postBody];
-    $params = array_merge($params, $optParams);
-    return $this->call('webhooks', [$params], Message::class);
   }
 }
 

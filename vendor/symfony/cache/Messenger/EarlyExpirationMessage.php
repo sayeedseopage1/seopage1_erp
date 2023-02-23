@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ReverseContainer;
  */
 final class EarlyExpirationMessage
 {
-    private $item;
+    private CacheItem $item;
     private string $pool;
     private string|array $callback;
 
@@ -29,7 +29,7 @@ final class EarlyExpirationMessage
         try {
             $item = clone $item;
             $item->set(null);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return null;
         }
 

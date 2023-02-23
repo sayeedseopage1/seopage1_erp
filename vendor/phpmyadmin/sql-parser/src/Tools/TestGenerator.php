@@ -10,6 +10,8 @@ use PhpMyAdmin\SqlParser\Exceptions\LexerException;
 use PhpMyAdmin\SqlParser\Exceptions\ParserException;
 use PhpMyAdmin\SqlParser\Lexer;
 use PhpMyAdmin\SqlParser\Parser;
+use PhpMyAdmin\SqlParser\Token;
+use PhpMyAdmin\SqlParser\UtfString;
 use Zumba\JsonSerializer\JsonSerializer;
 
 use function file_exists;
@@ -23,6 +25,9 @@ use function mkdir;
 use function print_r;
 use function scandir;
 use function sprintf;
+use function str_contains;
+use function str_ends_with;
+use function str_replace;
 use function strpos;
 use function substr;
 
@@ -41,14 +46,12 @@ class TestGenerator
      * @param string $query the query to be analyzed
      * @param string $type  test's type (may be `lexer` or `parser`)
      *
-     * @return array
+     * @return array<string, string|Lexer|Parser|array<string, array<int, array<int, int|string|Token>>>|null>
      */
     public static function generate($query, $type = 'parser')
     {
         /**
          * Lexer used for tokenizing the query.
-         *
-         * @var Lexer
          */
         $lexer = new Lexer($query);
 
@@ -63,14 +66,14 @@ class TestGenerator
         /**
          * Lexer's errors.
          *
-         * @var array
+         * @var array<int, array<int, int|string>>
          */
         $lexerErrors = [];
 
         /**
          * Parser's errors.
          *
-         * @var array
+         * @var array<int, array<int, int|string|Token>>
          */
         $parserErrors = [];
 
@@ -129,6 +132,8 @@ class TestGenerator
      * @param string $output the output file
      * @param string $debug  the debug file
      * @param bool   $ansi   activate quotes ANSI mode
+     *
+     * @return void
      */
     public static function build($type, $input, $output, $debug = null, $ansi = false)
     {
@@ -151,7 +156,7 @@ class TestGenerator
 
         if ($ansi === true) {
             // set ANSI_QUOTES for ansi tests
-            Context::setMode('ANSI_QUOTES');
+            Context::setMode(Context::SQL_MODE_ANSI_QUOTES);
         }
 
         $mariaDbPos = strpos($input, '_mariadb_');
@@ -168,6 +173,16 @@ class TestGenerator
         $serializer = new JsonSerializer();
         // Writing test's data.
         $encoded = $serializer->serialize($test);
+
+        /**
+         * Can not decode null char in keys.
+         *
+         * @see UtfString::$asciiMap
+         */
+        if (str_contains($encoded, '"asciiMap":{"\u0000":0,"')) {
+            $encoded = str_replace('"asciiMap":{"\u0000":0,"', '"asciiMap":{"', $encoded);
+        }
+
         $encoded = json_encode(
             json_decode($encoded),
             JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION
@@ -188,6 +203,8 @@ class TestGenerator
      * @param string     $input  the input directory
      * @param string     $output the output directory
      * @param mixed|null $debug
+     *
+     * @return void
      */
     public static function buildAll($input, $output, $debug = null)
     {
@@ -217,7 +234,7 @@ class TestGenerator
 
                 // Generating tests recursively.
                 static::buildAll($inputFile, $outputFile, $debugFile);
-            } elseif (substr($inputFile, -3) === '.in') {
+            } elseif (str_ends_with($inputFile, '.in')) {
                 // Generating file names by replacing `.in` with `.out` and
                 // `.debug`.
                 $outputFile = substr($outputFile, 0, -3) . '.out';
@@ -227,16 +244,16 @@ class TestGenerator
 
                 // Building the test.
                 if (! file_exists($outputFile)) {
-                    sprintf("Building test for %s...\n", $inputFile);
+                    echo sprintf("Building test for %s...\n", $inputFile);
                     static::build(
-                        strpos($inputFile, 'lex') !== false ? 'lexer' : 'parser',
+                        str_contains($inputFile, 'lex') ? 'lexer' : 'parser',
                         $inputFile,
                         $outputFile,
                         $debugFile,
-                        strpos($inputFile, 'ansi') !== false
+                        str_contains($inputFile, 'ansi')
                     );
                 } else {
-                    sprintf("Test for %s already built!\n", $inputFile);
+                    echo sprintf("Test for %s already built!\n", $inputFile);
                 }
             }
         }

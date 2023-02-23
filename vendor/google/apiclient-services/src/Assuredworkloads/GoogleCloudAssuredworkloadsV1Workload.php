@@ -28,6 +28,13 @@ class GoogleCloudAssuredworkloadsV1Workload extends \Google\Collection
    * @var string
    */
   public $complianceRegime;
+  protected $complianceStatusType = GoogleCloudAssuredworkloadsV1WorkloadComplianceStatus::class;
+  protected $complianceStatusDataType = '';
+  public $complianceStatus;
+  /**
+   * @var string[]
+   */
+  public $compliantButDisallowedServices;
   /**
    * @var string
    */
@@ -50,6 +57,7 @@ class GoogleCloudAssuredworkloadsV1Workload extends \Google\Collection
   public $kajEnrollmentState;
   protected $kmsSettingsType = GoogleCloudAssuredworkloadsV1WorkloadKMSSettings::class;
   protected $kmsSettingsDataType = '';
+  public $kmsSettings;
   /**
    * @var string[]
    */
@@ -61,13 +69,20 @@ class GoogleCloudAssuredworkloadsV1Workload extends \Google\Collection
   /**
    * @var string
    */
+  public $partner;
+  /**
+   * @var string
+   */
   public $provisionedResourcesParent;
   protected $resourceSettingsType = GoogleCloudAssuredworkloadsV1WorkloadResourceSettings::class;
   protected $resourceSettingsDataType = 'array';
+  public $resourceSettings;
   protected $resourcesType = GoogleCloudAssuredworkloadsV1WorkloadResourceInfo::class;
   protected $resourcesDataType = 'array';
+  public $resources;
   protected $saaEnrollmentResponseType = GoogleCloudAssuredworkloadsV1WorkloadSaaEnrollmentResponse::class;
   protected $saaEnrollmentResponseDataType = '';
+  public $saaEnrollmentResponse;
 
   /**
    * @param string
@@ -96,6 +111,34 @@ class GoogleCloudAssuredworkloadsV1Workload extends \Google\Collection
   public function getComplianceRegime()
   {
     return $this->complianceRegime;
+  }
+  /**
+   * @param GoogleCloudAssuredworkloadsV1WorkloadComplianceStatus
+   */
+  public function setComplianceStatus(GoogleCloudAssuredworkloadsV1WorkloadComplianceStatus $complianceStatus)
+  {
+    $this->complianceStatus = $complianceStatus;
+  }
+  /**
+   * @return GoogleCloudAssuredworkloadsV1WorkloadComplianceStatus
+   */
+  public function getComplianceStatus()
+  {
+    return $this->complianceStatus;
+  }
+  /**
+   * @param string[]
+   */
+  public function setCompliantButDisallowedServices($compliantButDisallowedServices)
+  {
+    $this->compliantButDisallowedServices = $compliantButDisallowedServices;
+  }
+  /**
+   * @return string[]
+   */
+  public function getCompliantButDisallowedServices()
+  {
+    return $this->compliantButDisallowedServices;
   }
   /**
    * @param string
@@ -208,6 +251,20 @@ class GoogleCloudAssuredworkloadsV1Workload extends \Google\Collection
   public function getName()
   {
     return $this->name;
+  }
+  /**
+   * @param string
+   */
+  public function setPartner($partner)
+  {
+    $this->partner = $partner;
+  }
+  /**
+   * @return string
+   */
+  public function getPartner()
+  {
+    return $this->partner;
   }
   /**
    * @param string

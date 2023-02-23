@@ -13,15 +13,10 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\GeneralizePrecision;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeUtils;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 
@@ -34,7 +29,7 @@ class ModelPropertiesRuleHelper
      * @param  ClassReflection|null  $modelReflection
      * @return string[]
      *
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      */
     public function check(MethodReflection $methodReflection, Scope $scope, array $args, ?ClassReflection $modelReflection = null): array
     {
@@ -64,62 +59,74 @@ class ModelPropertiesRuleHelper
 
         $argType = $scope->getType($argValue);
 
-        if ($argType instanceof ConstantArrayType) {
+        if ($argType->isConstantArray()->yes()) {
             $errors = [];
 
-            $keyType = TypeUtils::generalizeType($argType->getKeyType(), GeneralizePrecision::lessSpecific());
+            $constantArrays = $argType->getConstantArrays();
 
-            if ($keyType instanceof IntegerType) {
-                $valueTypes = $argType->getValuesArray()->getValueTypes();
-            } elseif ($keyType instanceof StringType) {
-                $valueTypes = $argType->getKeysArray()->getValueTypes();
-            } else {
-                $valueTypes = [];
+            $valueTypes = [];
+
+            foreach ($constantArrays as $constantArray) {
+                $keyType = $constantArray->getKeyType()->generalize(GeneralizePrecision::lessSpecific());
+
+                if ($keyType->isInteger()->yes()) {
+                    $valueTypes = array_merge($valueTypes, $constantArray->getValuesArray()->getValueTypes());
+                } elseif ($keyType->isString()->yes()) {
+                    $valueTypes = array_merge($valueTypes, $constantArray->getKeysArray()->getValueTypes());
+                }
             }
 
             foreach ($valueTypes as $valueType) {
+                $strings = $valueType->getConstantStrings();
+
                 // It could be something like `DB::raw`
                 // We only want to analyze strings
-                if (! $valueType instanceof ConstantStringType) {
+                if ($strings === []) {
                     continue;
                 }
 
-                // TODO: maybe check table names and columns here. And for JSON access maybe just the column name
-                if (mb_strpos($valueType->getValue(), '.') !== false || mb_strpos($valueType->getValue(), '->') !== false) {
-                    continue;
-                }
-
-                if (! $modelType->hasProperty($valueType->getValue())->yes()) {
-                    $error = sprintf('Property \'%s\' does not exist in %s model.', $valueType->getValue(), $modelType->describe(VerbosityLevel::typeOnly()));
-
-                    if ($methodReflection->getDeclaringClass()->getName() === BelongsToMany::class) {
-                        $error .= sprintf(" If '%s' exists as a column on the pivot table, consider using 'wherePivot' or prefix the column with table name instead.", $valueType->getValue());
+                foreach ($strings as $string) {
+                    // TODO: maybe check table names and columns here. And for JSON access maybe just the column name
+                    if (mb_strpos($string->getValue(), '.') !== false || mb_strpos($string->getValue(), '->') !== false) {
+                        continue;
                     }
 
-                    $errors[] = $error;
+                    if (! $modelType->hasProperty($string->getValue())->yes()) {
+                        $error = sprintf('Property \'%s\' does not exist in %s model.', $string->getValue(), $modelType->describe(VerbosityLevel::typeOnly()));
+
+                        if ($methodReflection->getDeclaringClass()->getName() === BelongsToMany::class) {
+                            $error .= sprintf(" If '%s' exists as a column on the pivot table, consider using 'wherePivot' or prefix the column with table name instead.", $string->getValue());
+                        }
+
+                        $errors[] = $error;
+                    }
                 }
             }
 
             return $errors;
         }
 
-        if (! $argType instanceof ConstantStringType) {
+        $argStrings = $argType->getConstantStrings();
+
+        if ($argStrings === []) {
             return [];
         }
 
-        // TODO: maybe check table names and columns here. And for JSON access maybe just the column name
-        if (mb_strpos($argType->getValue(), '.') !== false || mb_strpos($argType->getValue(), '->') !== false) {
-            return [];
-        }
-
-        if (! $modelType->hasProperty($argType->getValue())->yes()) {
-            $error = sprintf('Property \'%s\' does not exist in %s model.', $argType->getValue(), $modelType->describe(VerbosityLevel::typeOnly()));
-
-            if ((new ObjectType(BelongsToMany::class))->isSuperTypeOf(ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType())->yes()) {
-                $error .= sprintf(" If '%s' exists as a column on the pivot table, consider using 'wherePivot' or prefix the column with table name instead.", $argType->getValue());
+        foreach ($argStrings as $argString) {
+            // TODO: maybe check table names and columns here. And for JSON access maybe just the column name
+            if (mb_strpos($argString->getValue(), '.') !== false || mb_strpos($argString->getValue(), '->') !== false) {
+                return [];
             }
 
-            return [$error];
+            if (! $modelType->hasProperty($argString->getValue())->yes()) {
+                $error = sprintf('Property \'%s\' does not exist in %s model.', $argString->getValue(), $modelType->describe(VerbosityLevel::typeOnly()));
+
+                if ((new ObjectType(BelongsToMany::class))->isSuperTypeOf(ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType())->yes()) {
+                    $error .= sprintf(" If '%s' exists as a column on the pivot table, consider using 'wherePivot' or prefix the column with table name instead.", $argString->getValue());
+                }
+
+                return [$error];
+            }
         }
 
         return [];
@@ -153,9 +160,9 @@ class ModelPropertiesRuleHelper
                         return [$index, new ObjectType($modelReflection->getName())];
                     }
                 }
-            } elseif ($type instanceof ArrayType) {
-                $keyType = $type->getKeyType();
-                $itemType = $type->getItemType();
+            } elseif ($type->isArray()->yes()) {
+                $keyType = $type->getIterableKeyType();
+                $itemType = $type->getIterableValueType();
 
                 if ($keyType instanceof GenericModelPropertyType) {
                     return [$index, $keyType->getGenericType()];

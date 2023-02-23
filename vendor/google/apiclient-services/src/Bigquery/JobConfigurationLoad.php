@@ -34,20 +34,31 @@ class JobConfigurationLoad extends \Google\Collection
   public $autodetect;
   protected $clusteringType = Clustering::class;
   protected $clusteringDataType = '';
+  public $clustering;
+  protected $connectionPropertiesType = ConnectionProperty::class;
+  protected $connectionPropertiesDataType = 'array';
+  public $connectionProperties;
   /**
    * @var string
    */
   public $createDisposition;
+  /**
+   * @var bool
+   */
+  public $createSession;
   /**
    * @var string[]
    */
   public $decimalTargetTypes;
   protected $destinationEncryptionConfigurationType = EncryptionConfiguration::class;
   protected $destinationEncryptionConfigurationDataType = '';
+  public $destinationEncryptionConfiguration;
   protected $destinationTableType = TableReference::class;
   protected $destinationTableDataType = '';
+  public $destinationTable;
   protected $destinationTablePropertiesType = DestinationTableProperties::class;
   protected $destinationTablePropertiesDataType = '';
+  public $destinationTableProperties;
   /**
    * @var string
    */
@@ -58,6 +69,7 @@ class JobConfigurationLoad extends \Google\Collection
   public $fieldDelimiter;
   protected $hivePartitioningOptionsType = HivePartitioningOptions::class;
   protected $hivePartitioningOptionsDataType = '';
+  public $hivePartitioningOptions;
   /**
    * @var bool
    */
@@ -76,6 +88,7 @@ class JobConfigurationLoad extends \Google\Collection
   public $nullMarker;
   protected $parquetOptionsType = ParquetOptions::class;
   protected $parquetOptionsDataType = '';
+  public $parquetOptions;
   /**
    * @var bool
    */
@@ -90,12 +103,14 @@ class JobConfigurationLoad extends \Google\Collection
   public $quote;
   protected $rangePartitioningType = RangePartitioning::class;
   protected $rangePartitioningDataType = '';
+  public $rangePartitioning;
   /**
    * @var string
    */
   public $referenceFileSchemaUri;
   protected $schemaType = TableSchema::class;
   protected $schemaDataType = '';
+  public $schema;
   /**
    * @var string
    */
@@ -122,6 +137,7 @@ class JobConfigurationLoad extends \Google\Collection
   public $sourceUris;
   protected $timePartitioningType = TimePartitioning::class;
   protected $timePartitioningDataType = '';
+  public $timePartitioning;
   /**
    * @var bool
    */
@@ -188,6 +204,20 @@ class JobConfigurationLoad extends \Google\Collection
     return $this->clustering;
   }
   /**
+   * @param ConnectionProperty[]
+   */
+  public function setConnectionProperties($connectionProperties)
+  {
+    $this->connectionProperties = $connectionProperties;
+  }
+  /**
+   * @return ConnectionProperty[]
+   */
+  public function getConnectionProperties()
+  {
+    return $this->connectionProperties;
+  }
+  /**
    * @param string
    */
   public function setCreateDisposition($createDisposition)
@@ -200,6 +230,20 @@ class JobConfigurationLoad extends \Google\Collection
   public function getCreateDisposition()
   {
     return $this->createDisposition;
+  }
+  /**
+   * @param bool
+   */
+  public function setCreateSession($createSession)
+  {
+    $this->createSession = $createSession;
+  }
+  /**
+   * @return bool
+   */
+  public function getCreateSession()
+  {
+    return $this->createSession;
   }
   /**
    * @param string[]

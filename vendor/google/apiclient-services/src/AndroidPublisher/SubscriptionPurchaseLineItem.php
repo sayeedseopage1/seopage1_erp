@@ -21,12 +21,17 @@ class SubscriptionPurchaseLineItem extends \Google\Model
 {
   protected $autoRenewingPlanType = AutoRenewingPlan::class;
   protected $autoRenewingPlanDataType = '';
+  public $autoRenewingPlan;
   /**
    * @var string
    */
   public $expiryTime;
+  protected $offerDetailsType = OfferDetails::class;
+  protected $offerDetailsDataType = '';
+  public $offerDetails;
   protected $prepaidPlanType = PrepaidPlan::class;
   protected $prepaidPlanDataType = '';
+  public $prepaidPlan;
   /**
    * @var string
    */
@@ -59,6 +64,20 @@ class SubscriptionPurchaseLineItem extends \Google\Model
   public function getExpiryTime()
   {
     return $this->expiryTime;
+  }
+  /**
+   * @param OfferDetails
+   */
+  public function setOfferDetails(OfferDetails $offerDetails)
+  {
+    $this->offerDetails = $offerDetails;
+  }
+  /**
+   * @return OfferDetails
+   */
+  public function getOfferDetails()
+  {
+    return $this->offerDetails;
   }
   /**
    * @param PrepaidPlan

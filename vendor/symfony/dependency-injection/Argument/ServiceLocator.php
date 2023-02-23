@@ -32,19 +32,17 @@ class ServiceLocator extends BaseServiceLocator
         parent::__construct($serviceMap);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $id): mixed
     {
-        return isset($this->serviceMap[$id]) ? ($this->factory)(...$this->serviceMap[$id]) : parent::get($id);
+        return match (\count($this->serviceMap[$id] ?? [])) {
+            0 => parent::get($id),
+            1 => $this->serviceMap[$id][0],
+            default => ($this->factory)(...$this->serviceMap[$id]),
+        };
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getProvidedServices(): array
     {
-        return $this->serviceTypes ?? $this->serviceTypes = array_map(function () { return '?'; }, $this->serviceMap);
+        return $this->serviceTypes ??= array_map(function () { return '?'; }, $this->serviceMap);
     }
 }

@@ -78,8 +78,14 @@ class Conversion extends \Google\Collection
   public $currencyCode;
   protected $customDimensionType = CustomDimension::class;
   protected $customDimensionDataType = 'array';
+  public $customDimension;
   protected $customMetricType = CustomMetric::class;
   protected $customMetricDataType = 'array';
+  public $customMetric;
+  /**
+   * @var string
+   */
+  public $customerId;
   /**
    * @var string
    */
@@ -372,6 +378,20 @@ class Conversion extends \Google\Collection
   public function getCustomMetric()
   {
     return $this->customMetric;
+  }
+  /**
+   * @param string
+   */
+  public function setCustomerId($customerId)
+  {
+    $this->customerId = $customerId;
+  }
+  /**
+   * @return string
+   */
+  public function getCustomerId()
+  {
+    return $this->customerId;
   }
   /**
    * @param string

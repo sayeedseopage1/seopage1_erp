@@ -28,7 +28,7 @@ use Google\Service\Essentialcontacts\GoogleProtobufEmpty;
  * Typical usage is:
  *  <code>
  *   $essentialcontactsService = new Google\Service\Essentialcontacts(...);
- *   $contacts = $essentialcontactsService->contacts;
+ *   $contacts = $essentialcontactsService->projects_contacts;
  *  </code>
  */
 class ProjectsContacts extends \Google\Service\Resource
@@ -138,7 +138,7 @@ class ProjectsContacts extends \Google\Service\Resource
    * Updates a contact. Note: A contact's email address cannot be changed.
    * (contacts.patch)
    *
-   * @param string $name The identifier for the contact. Format:
+   * @param string $name Output only. The identifier for the contact. Format:
    * {resource_type}/{resource_id}/contacts/{contact_id}
    * @param GoogleCloudEssentialcontactsV1Contact $postBody
    * @param array $optParams Optional parameters.

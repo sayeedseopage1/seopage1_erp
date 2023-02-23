@@ -121,10 +121,10 @@ abstract class AbstractUnicodeString extends AbstractString
                     $s = preg_replace("/([AUO])\u{0308}(?=\p{Ll})/u", '$1e', $s);
                     $s = str_replace(["a\u{0308}", "o\u{0308}", "u\u{0308}", "A\u{0308}", "O\u{0308}", "U\u{0308}"], ['ae', 'oe', 'ue', 'AE', 'OE', 'UE'], $s);
                 } elseif (\function_exists('transliterator_transliterate')) {
-                    if (null === $transliterator = self::$transliterators[$rule] ?? self::$transliterators[$rule] = \Transliterator::create($rule)) {
+                    if (null === $transliterator = self::$transliterators[$rule] ??= \Transliterator::create($rule)) {
                         if ('any-latin/bgn' === $rule) {
                             $rule = 'any-latin';
-                            $transliterator = self::$transliterators[$rule] ?? self::$transliterators[$rule] = \Transliterator::create($rule);
+                            $transliterator = self::$transliterators[$rule] ??= \Transliterator::create($rule);
                         }
 
                         if (null === $transliterator) {
@@ -159,7 +159,7 @@ abstract class AbstractUnicodeString extends AbstractString
     public function camel(): static
     {
         $str = clone $this;
-        $str->string = str_replace(' ', '', preg_replace_callback('/\b./u', static function ($m) use (&$i) {
+        $str->string = str_replace(' ', '', preg_replace_callback('/\b.(?![A-Z]{2,})/u', static function ($m) use (&$i) {
             return 1 === ++$i ? ('İ' === $m[0] ? 'i̇' : mb_strtolower($m[0], 'UTF-8')) : mb_convert_case($m[0], \MB_CASE_TITLE, 'UTF-8');
         }, preg_replace('/[^\pL0-9]++/u', ' ', $this->string)));
 
@@ -234,15 +234,7 @@ abstract class AbstractUnicodeString extends AbstractString
 
         try {
             if (false === $match($regexp.'u', $this->string, $matches, $flags | \PREG_UNMATCHED_AS_NULL, $offset)) {
-                $lastError = preg_last_error();
-
-                foreach (get_defined_constants(true)['pcre'] as $k => $v) {
-                    if ($lastError === $v && '_ERROR' === substr($k, -6)) {
-                        throw new RuntimeException('Matching failed with '.$k.'.');
-                    }
-                }
-
-                throw new RuntimeException('Matching failed with unknown error code.');
+                throw new RuntimeException('Matching failed with error: '.preg_last_error_msg());
             }
         } finally {
             restore_error_handler();
@@ -329,7 +321,7 @@ abstract class AbstractUnicodeString extends AbstractString
                 $lastError = preg_last_error();
 
                 foreach (get_defined_constants(true)['pcre'] as $k => $v) {
-                    if ($lastError === $v && '_ERROR' === substr($k, -6)) {
+                    if ($lastError === $v && str_ends_with($k, '_ERROR')) {
                         throw new RuntimeException('Matching failed with '.$k.'.');
                     }
                 }
@@ -467,7 +459,7 @@ abstract class AbstractUnicodeString extends AbstractString
         $width = 0;
         $s = str_replace(["\x00", "\x05", "\x07"], '', $this->string);
 
-        if (false !== strpos($s, "\r")) {
+        if (str_contains($s, "\r")) {
             $s = str_replace(["\r\n", "\r"], "\n", $s);
         }
 
@@ -558,9 +550,7 @@ abstract class AbstractUnicodeString extends AbstractString
                 return -1;
             }
 
-            if (null === self::$tableZero) {
-                self::$tableZero = require __DIR__.'/Resources/data/wcswidth_table_zero.php';
-            }
+            self::$tableZero ??= require __DIR__.'/Resources/data/wcswidth_table_zero.php';
 
             if ($codePoint >= self::$tableZero[0][0] && $codePoint <= self::$tableZero[$ubound = \count(self::$tableZero) - 1][1]) {
                 $lbound = 0;
@@ -577,9 +567,7 @@ abstract class AbstractUnicodeString extends AbstractString
                 }
             }
 
-            if (null === self::$tableWide) {
-                self::$tableWide = require __DIR__.'/Resources/data/wcswidth_table_wide.php';
-            }
+            self::$tableWide ??= require __DIR__.'/Resources/data/wcswidth_table_wide.php';
 
             if ($codePoint >= self::$tableWide[0][0] && $codePoint <= self::$tableWide[$ubound = \count(self::$tableWide) - 1][1]) {
                 $lbound = 0;

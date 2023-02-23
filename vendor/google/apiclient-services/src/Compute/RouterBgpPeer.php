@@ -30,12 +30,14 @@ class RouterBgpPeer extends \Google\Collection
   public $advertisedGroups;
   protected $advertisedIpRangesType = RouterAdvertisedIpRange::class;
   protected $advertisedIpRangesDataType = 'array';
+  public $advertisedIpRanges;
   /**
    * @var string
    */
   public $advertisedRoutePriority;
   protected $bfdType = RouterBgpPeerBfd::class;
   protected $bfdDataType = '';
+  public $bfd;
   /**
    * @var string
    */
@@ -60,6 +62,10 @@ class RouterBgpPeer extends \Google\Collection
    * @var string
    */
   public $managementType;
+  /**
+   * @var string
+   */
+  public $md5AuthenticationKeyName;
   /**
    * @var string
    */
@@ -234,6 +240,20 @@ class RouterBgpPeer extends \Google\Collection
   public function getManagementType()
   {
     return $this->managementType;
+  }
+  /**
+   * @param string
+   */
+  public function setMd5AuthenticationKeyName($md5AuthenticationKeyName)
+  {
+    $this->md5AuthenticationKeyName = $md5AuthenticationKeyName;
+  }
+  /**
+   * @return string
+   */
+  public function getMd5AuthenticationKeyName()
+  {
+    return $this->md5AuthenticationKeyName;
   }
   /**
    * @param string

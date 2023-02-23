@@ -27,15 +27,33 @@ class GoogleCloudDatacatalogV1ColumnSchema extends \Google\Collection
   /**
    * @var string
    */
+  public $defaultValue;
+  /**
+   * @var string
+   */
   public $description;
+  /**
+   * @var string
+   */
+  public $gcRule;
+  /**
+   * @var string
+   */
+  public $highestIndexingType;
   protected $lookerColumnSpecType = GoogleCloudDatacatalogV1ColumnSchemaLookerColumnSpec::class;
   protected $lookerColumnSpecDataType = '';
+  public $lookerColumnSpec;
   /**
    * @var string
    */
   public $mode;
+  /**
+   * @var int
+   */
+  public $ordinalPosition;
   protected $subcolumnsType = GoogleCloudDatacatalogV1ColumnSchema::class;
   protected $subcolumnsDataType = 'array';
+  public $subcolumns;
   /**
    * @var string
    */
@@ -58,6 +76,20 @@ class GoogleCloudDatacatalogV1ColumnSchema extends \Google\Collection
   /**
    * @param string
    */
+  public function setDefaultValue($defaultValue)
+  {
+    $this->defaultValue = $defaultValue;
+  }
+  /**
+   * @return string
+   */
+  public function getDefaultValue()
+  {
+    return $this->defaultValue;
+  }
+  /**
+   * @param string
+   */
   public function setDescription($description)
   {
     $this->description = $description;
@@ -68,6 +100,34 @@ class GoogleCloudDatacatalogV1ColumnSchema extends \Google\Collection
   public function getDescription()
   {
     return $this->description;
+  }
+  /**
+   * @param string
+   */
+  public function setGcRule($gcRule)
+  {
+    $this->gcRule = $gcRule;
+  }
+  /**
+   * @return string
+   */
+  public function getGcRule()
+  {
+    return $this->gcRule;
+  }
+  /**
+   * @param string
+   */
+  public function setHighestIndexingType($highestIndexingType)
+  {
+    $this->highestIndexingType = $highestIndexingType;
+  }
+  /**
+   * @return string
+   */
+  public function getHighestIndexingType()
+  {
+    return $this->highestIndexingType;
   }
   /**
    * @param GoogleCloudDatacatalogV1ColumnSchemaLookerColumnSpec
@@ -96,6 +156,20 @@ class GoogleCloudDatacatalogV1ColumnSchema extends \Google\Collection
   public function getMode()
   {
     return $this->mode;
+  }
+  /**
+   * @param int
+   */
+  public function setOrdinalPosition($ordinalPosition)
+  {
+    $this->ordinalPosition = $ordinalPosition;
+  }
+  /**
+   * @return int
+   */
+  public function getOrdinalPosition()
+  {
+    return $this->ordinalPosition;
   }
   /**
    * @param GoogleCloudDatacatalogV1ColumnSchema[]

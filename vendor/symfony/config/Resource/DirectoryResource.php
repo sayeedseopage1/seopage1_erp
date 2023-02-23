@@ -56,9 +56,6 @@ class DirectoryResource implements SelfCheckingResourceInterface
         return $this->pattern;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isFresh(int $timestamp): bool
     {
         if (!is_dir($this->resource)) {
@@ -84,7 +81,7 @@ class DirectoryResource implements SelfCheckingResourceInterface
             // for broken links
             try {
                 $fileMTime = $file->getMTime();
-            } catch (\RuntimeException $e) {
+            } catch (\RuntimeException) {
                 continue;
             }
 

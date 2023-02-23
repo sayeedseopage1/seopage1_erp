@@ -89,9 +89,6 @@ class PrototypedArrayNode extends ArrayNode
         $this->defaultValue = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasDefaultValue(): bool
     {
         return true;
@@ -112,8 +109,6 @@ class PrototypedArrayNode extends ArrayNode
     }
 
     /**
-     * {@inheritdoc}
-     *
      * The default value could be either explicited or derived from the prototype
      * default value.
      */
@@ -158,9 +153,6 @@ class PrototypedArrayNode extends ArrayNode
         throw new Exception('A prototyped array node cannot have concrete children.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function finalizeValue(mixed $value): mixed
     {
         if (false === $value) {
@@ -171,7 +163,7 @@ class PrototypedArrayNode extends ArrayNode
             $prototype = $this->getPrototypeForChild($k);
             try {
                 $value[$k] = $prototype->finalize($v);
-            } catch (UnsetKeyException $e) {
+            } catch (UnsetKeyException) {
                 unset($value[$k]);
             }
         }
@@ -187,8 +179,6 @@ class PrototypedArrayNode extends ArrayNode
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws DuplicateKeyException
      */
     protected function normalizeValue(mixed $value): mixed
@@ -255,9 +245,6 @@ class PrototypedArrayNode extends ArrayNode
         return $normalized;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function mergeValues(mixed $leftSide, mixed $rightSide): mixed
     {
         if (false === $rightSide) {

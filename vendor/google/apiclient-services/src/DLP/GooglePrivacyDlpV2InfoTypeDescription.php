@@ -22,6 +22,7 @@ class GooglePrivacyDlpV2InfoTypeDescription extends \Google\Collection
   protected $collection_key = 'versions';
   protected $categoriesType = GooglePrivacyDlpV2InfoTypeCategory::class;
   protected $categoriesDataType = 'array';
+  public $categories;
   /**
    * @var string
    */
@@ -34,12 +35,16 @@ class GooglePrivacyDlpV2InfoTypeDescription extends \Google\Collection
    * @var string
    */
   public $name;
+  protected $sensitivityScoreType = GooglePrivacyDlpV2SensitivityScore::class;
+  protected $sensitivityScoreDataType = '';
+  public $sensitivityScore;
   /**
    * @var string[]
    */
   public $supportedBy;
   protected $versionsType = GooglePrivacyDlpV2VersionDescription::class;
   protected $versionsDataType = 'array';
+  public $versions;
 
   /**
    * @param GooglePrivacyDlpV2InfoTypeCategory[]
@@ -96,6 +101,20 @@ class GooglePrivacyDlpV2InfoTypeDescription extends \Google\Collection
   public function getName()
   {
     return $this->name;
+  }
+  /**
+   * @param GooglePrivacyDlpV2SensitivityScore
+   */
+  public function setSensitivityScore(GooglePrivacyDlpV2SensitivityScore $sensitivityScore)
+  {
+    $this->sensitivityScore = $sensitivityScore;
+  }
+  /**
+   * @return GooglePrivacyDlpV2SensitivityScore
+   */
+  public function getSensitivityScore()
+  {
+    return $this->sensitivityScore;
   }
   /**
    * @param string[]

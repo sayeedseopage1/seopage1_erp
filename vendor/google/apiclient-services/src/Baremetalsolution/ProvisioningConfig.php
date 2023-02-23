@@ -27,6 +27,10 @@ class ProvisioningConfig extends \Google\Collection
   /**
    * @var string
    */
+  public $customId;
+  /**
+   * @var string
+   */
   public $email;
   /**
    * @var string
@@ -34,6 +38,7 @@ class ProvisioningConfig extends \Google\Collection
   public $handoverServiceAccount;
   protected $instancesType = InstanceConfig::class;
   protected $instancesDataType = 'array';
+  public $instances;
   /**
    * @var string
    */
@@ -44,6 +49,7 @@ class ProvisioningConfig extends \Google\Collection
   public $name;
   protected $networksType = NetworkConfig::class;
   protected $networksDataType = 'array';
+  public $networks;
   /**
    * @var string
    */
@@ -62,6 +68,7 @@ class ProvisioningConfig extends \Google\Collection
   public $updateTime;
   protected $volumesType = VolumeConfig::class;
   protected $volumesDataType = 'array';
+  public $volumes;
   /**
    * @var bool
    */
@@ -80,6 +87,20 @@ class ProvisioningConfig extends \Google\Collection
   public function getCloudConsoleUri()
   {
     return $this->cloudConsoleUri;
+  }
+  /**
+   * @param string
+   */
+  public function setCustomId($customId)
+  {
+    $this->customId = $customId;
+  }
+  /**
+   * @return string
+   */
+  public function getCustomId()
+  {
+    return $this->customId;
   }
   /**
    * @param string

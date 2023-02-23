@@ -22,6 +22,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\TypeWithClassName;
 
 /**
  * @internal
@@ -61,7 +62,7 @@ final class BuilderModelFindExtension implements DynamicMethodReturnTypeExtensio
 
         $model = $methodReflection->getDeclaringClass()->getActiveTemplateTypeMap()->getType('TModelClass');
 
-        if ($model === null || ! $model instanceof ObjectType) {
+        if (! $model instanceof TypeWithClassName) {
             return false;
         }
 
@@ -80,7 +81,11 @@ final class BuilderModelFindExtension implements DynamicMethodReturnTypeExtensio
         MethodReflection $methodReflection,
         MethodCall $methodCall,
         Scope $scope
-    ): Type {
+    ): ?Type {
+        if (count($methodCall->getArgs()) < 1) {
+            return null;
+        }
+
         /** @var ObjectType $model */
         $model = $methodReflection->getDeclaringClass()->getActiveTemplateTypeMap()->getType('TModelClass');
         $returnType = $methodReflection->getVariants()[0]->getReturnType();

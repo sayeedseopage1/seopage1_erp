@@ -20,7 +20,6 @@ use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\Generic\TemplateMixedType;
 use PHPStan\Type\Generic\TemplateObjectType;
 use PHPStan\Type\IntegerType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 
@@ -87,10 +86,6 @@ final class EloquentBuilderForwardsCallsExtension implements MethodsClassReflect
 
         if ($modelType instanceof TemplateObjectType) {
             $modelType = $modelType->getBound();
-
-            if ($modelType->equals(new ObjectType(Model::class))) {
-                return null;
-            }
         }
 
         if ($modelType instanceof TypeWithClassName) {
@@ -149,6 +144,11 @@ final class EloquentBuilderForwardsCallsExtension implements MethodsClassReflect
                 $returnType,
                 $parametersAcceptor->isVariadic()
             );
+        }
+
+        // Macros have their own reflection. And return type, parameters, etc. are already set with the closure.
+        if ($ref instanceof Macro) {
+            return $ref;
         }
 
         // Returning custom reflection

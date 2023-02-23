@@ -25,8 +25,18 @@ class PartnerClaim extends \Google\Model
   public $customerId;
   protected $deviceIdentifierType = DeviceIdentifier::class;
   protected $deviceIdentifierDataType = '';
+  public $deviceIdentifier;
   protected $deviceMetadataType = DeviceMetadata::class;
   protected $deviceMetadataDataType = '';
+  public $deviceMetadata;
+  /**
+   * @var string
+   */
+  public $googleWorkspaceCustomerId;
+  /**
+   * @var string
+   */
+  public $preProvisioningToken;
   /**
    * @var string
    */
@@ -73,6 +83,34 @@ class PartnerClaim extends \Google\Model
   public function getDeviceMetadata()
   {
     return $this->deviceMetadata;
+  }
+  /**
+   * @param string
+   */
+  public function setGoogleWorkspaceCustomerId($googleWorkspaceCustomerId)
+  {
+    $this->googleWorkspaceCustomerId = $googleWorkspaceCustomerId;
+  }
+  /**
+   * @return string
+   */
+  public function getGoogleWorkspaceCustomerId()
+  {
+    return $this->googleWorkspaceCustomerId;
+  }
+  /**
+   * @param string
+   */
+  public function setPreProvisioningToken($preProvisioningToken)
+  {
+    $this->preProvisioningToken = $preProvisioningToken;
+  }
+  /**
+   * @return string
+   */
+  public function getPreProvisioningToken()
+  {
+    return $this->preProvisioningToken;
   }
   /**
    * @param string

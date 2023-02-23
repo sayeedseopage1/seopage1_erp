@@ -37,9 +37,6 @@ class SASPortalTesting extends \Google\Service
   /** Read, create, update, and delete your SAS Portal data.. */
   const SASPORTAL =
       "https://www.googleapis.com/auth/sasportal";
-  /** See your primary Google Account email address. */
-  const USERINFO_EMAIL =
-      "https://www.googleapis.com/auth/userinfo.email";
 
   public $customers;
   public $customers_deployments;
@@ -121,6 +118,10 @@ class SASPortalTesting extends \Google\Service
                   'type' => 'string',
                 ],
               ],
+            ],'provisionDeployment' => [
+              'path' => 'v1alpha1/customers:provisionDeployment',
+              'httpMethod' => 'POST',
+              'parameters' => [],
             ],
           ]
         ]

@@ -64,7 +64,7 @@ class Twilio
     {
         $debugTo = $this->config->getDebugTo();
 
-        if ($debugTo !== null) {
+        if (!empty($debugTo)) {
             $to = $debugTo;
         }
 
@@ -74,6 +74,10 @@ class Twilio
 
         if ($messagingServiceSid = $this->getMessagingServiceSid($message)) {
             $params['messagingServiceSid'] = $messagingServiceSid;
+        }
+
+        if ($this->config->isShortenUrlsEnabled()) {
+            $params['ShortenUrls'] = "true";
         }
 
         if ($from = $this->getFrom($message)) {
@@ -115,6 +119,12 @@ class Twilio
      */
     protected function makeCall(TwilioCallMessage $message, ?string $to): CallInstance
     {
+        $debugTo = $this->config->getDebugTo();
+
+        if ($debugTo !== null) {
+            $to = $debugTo;
+        }
+
         $params = [
             'url' => trim($message->content),
         ];

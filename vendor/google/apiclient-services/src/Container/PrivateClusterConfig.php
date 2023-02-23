@@ -29,6 +29,7 @@ class PrivateClusterConfig extends \Google\Model
   public $enablePrivateNodes;
   protected $masterGlobalAccessConfigType = PrivateClusterMasterGlobalAccessConfig::class;
   protected $masterGlobalAccessConfigDataType = '';
+  public $masterGlobalAccessConfig;
   /**
    * @var string
    */
@@ -41,6 +42,10 @@ class PrivateClusterConfig extends \Google\Model
    * @var string
    */
   public $privateEndpoint;
+  /**
+   * @var string
+   */
+  public $privateEndpointSubnetwork;
   /**
    * @var string
    */
@@ -129,6 +134,20 @@ class PrivateClusterConfig extends \Google\Model
   public function getPrivateEndpoint()
   {
     return $this->privateEndpoint;
+  }
+  /**
+   * @param string
+   */
+  public function setPrivateEndpointSubnetwork($privateEndpointSubnetwork)
+  {
+    $this->privateEndpointSubnetwork = $privateEndpointSubnetwork;
+  }
+  /**
+   * @return string
+   */
+  public function getPrivateEndpointSubnetwork()
+  {
+    return $this->privateEndpointSubnetwork;
   }
   /**
    * @param string

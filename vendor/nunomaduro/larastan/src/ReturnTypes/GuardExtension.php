@@ -11,8 +11,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
@@ -40,7 +38,7 @@ final class GuardExtension implements DynamicMethodReturnTypeExtension
         MethodReflection $methodReflection,
         MethodCall $methodCall,
         Scope $scope
-    ): Type {
+    ): ?Type {
         $config = $this->getContainer()->get('config');
         $authModel = null;
 
@@ -50,7 +48,7 @@ final class GuardExtension implements DynamicMethodReturnTypeExtension
         }
 
         if ($authModel === null) {
-            return ParametersAcceptorSelector::selectSingle($methodReflection->getVariants())->getReturnType();
+            return null;
         }
 
         return TypeCombinator::addNull(new ObjectType($authModel));
@@ -71,11 +69,12 @@ final class GuardExtension implements DynamicMethodReturnTypeExtension
         }
 
         $guardType = $scope->getType($methodCall->var->getArgs()[0]->value);
+        $constantStrings = $guardType->getConstantStrings();
 
-        if (! $guardType instanceof ConstantStringType) {
+        if (count($constantStrings) !== 1) {
             return null;
         }
 
-        return $guardType->getValue();
+        return $constantStrings[0]->getValue();
     }
 }

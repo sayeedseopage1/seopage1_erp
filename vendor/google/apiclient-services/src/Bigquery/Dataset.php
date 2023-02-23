@@ -22,22 +22,29 @@ class Dataset extends \Google\Collection
   protected $collection_key = 'tags';
   protected $accessType = DatasetAccess::class;
   protected $accessDataType = 'array';
+  public $access;
   /**
    * @var string
    */
   public $creationTime;
   protected $datasetReferenceType = DatasetReference::class;
   protected $datasetReferenceDataType = '';
+  public $datasetReference;
   /**
    * @var string
    */
   public $defaultCollation;
   protected $defaultEncryptionConfigurationType = EncryptionConfiguration::class;
   protected $defaultEncryptionConfigurationDataType = '';
+  public $defaultEncryptionConfiguration;
   /**
    * @var string
    */
   public $defaultPartitionExpirationMs;
+  /**
+   * @var string
+   */
+  public $defaultRoundingMode;
   /**
    * @var string
    */
@@ -90,8 +97,13 @@ class Dataset extends \Google\Collection
    * @var string
    */
   public $selfLink;
+  /**
+   * @var string
+   */
+  public $storageBillingModel;
   protected $tagsType = DatasetTags::class;
   protected $tagsDataType = 'array';
+  public $tags;
 
   /**
    * @param DatasetAccess[]
@@ -176,6 +188,20 @@ class Dataset extends \Google\Collection
   public function getDefaultPartitionExpirationMs()
   {
     return $this->defaultPartitionExpirationMs;
+  }
+  /**
+   * @param string
+   */
+  public function setDefaultRoundingMode($defaultRoundingMode)
+  {
+    $this->defaultRoundingMode = $defaultRoundingMode;
+  }
+  /**
+   * @return string
+   */
+  public function getDefaultRoundingMode()
+  {
+    return $this->defaultRoundingMode;
   }
   /**
    * @param string
@@ -358,6 +384,20 @@ class Dataset extends \Google\Collection
   public function getSelfLink()
   {
     return $this->selfLink;
+  }
+  /**
+   * @param string
+   */
+  public function setStorageBillingModel($storageBillingModel)
+  {
+    $this->storageBillingModel = $storageBillingModel;
+  }
+  /**
+   * @return string
+   */
+  public function getStorageBillingModel()
+  {
+    return $this->storageBillingModel;
   }
   /**
    * @param DatasetTags[]

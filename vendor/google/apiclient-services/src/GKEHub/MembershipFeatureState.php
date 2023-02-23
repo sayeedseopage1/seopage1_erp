@@ -19,33 +19,25 @@ namespace Google\Service\GKEHub;
 
 class MembershipFeatureState extends \Google\Model
 {
-  protected $anthosvmType = AnthosVMMembershipState::class;
-  protected $anthosvmDataType = '';
   protected $appdevexperienceType = AppDevExperienceFeatureState::class;
   protected $appdevexperienceDataType = '';
+  public $appdevexperience;
   protected $configmanagementType = ConfigManagementMembershipState::class;
   protected $configmanagementDataType = '';
+  public $configmanagement;
+  protected $fleetobservabilityType = FleetObservabilityMembershipState::class;
+  protected $fleetobservabilityDataType = '';
+  public $fleetobservability;
   protected $identityserviceType = IdentityServiceMembershipState::class;
   protected $identityserviceDataType = '';
+  public $identityservice;
   protected $servicemeshType = ServiceMeshMembershipState::class;
   protected $servicemeshDataType = '';
+  public $servicemesh;
   protected $stateType = FeatureState::class;
   protected $stateDataType = '';
+  public $state;
 
-  /**
-   * @param AnthosVMMembershipState
-   */
-  public function setAnthosvm(AnthosVMMembershipState $anthosvm)
-  {
-    $this->anthosvm = $anthosvm;
-  }
-  /**
-   * @return AnthosVMMembershipState
-   */
-  public function getAnthosvm()
-  {
-    return $this->anthosvm;
-  }
   /**
    * @param AppDevExperienceFeatureState
    */
@@ -73,6 +65,20 @@ class MembershipFeatureState extends \Google\Model
   public function getConfigmanagement()
   {
     return $this->configmanagement;
+  }
+  /**
+   * @param FleetObservabilityMembershipState
+   */
+  public function setFleetobservability(FleetObservabilityMembershipState $fleetobservability)
+  {
+    $this->fleetobservability = $fleetobservability;
+  }
+  /**
+   * @return FleetObservabilityMembershipState
+   */
+  public function getFleetobservability()
+  {
+    return $this->fleetobservability;
   }
   /**
    * @param IdentityServiceMembershipState

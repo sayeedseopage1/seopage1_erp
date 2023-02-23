@@ -26,10 +26,15 @@ class Service extends \Google\Collection
   public $annotations;
   protected $endpointsType = Endpoint::class;
   protected $endpointsDataType = 'array';
+  public $endpoints;
   /**
    * @var string
    */
   public $name;
+  /**
+   * @var string
+   */
+  public $uid;
 
   /**
    * @param string[]
@@ -72,6 +77,20 @@ class Service extends \Google\Collection
   public function getName()
   {
     return $this->name;
+  }
+  /**
+   * @param string
+   */
+  public function setUid($uid)
+  {
+    $this->uid = $uid;
+  }
+  /**
+   * @return string
+   */
+  public function getUid()
+  {
+    return $this->uid;
   }
 }
 

@@ -30,6 +30,7 @@ class ResourceSearchResult extends \Google\Collection
   public $assetType;
   protected $attachedResourcesType = AttachedResource::class;
   protected $attachedResourcesDataType = 'array';
+  public $attachedResources;
   /**
    * @var string
    */
@@ -50,6 +51,10 @@ class ResourceSearchResult extends \Google\Collection
    * @var string
    */
   public $kmsKey;
+  /**
+   * @var string[]
+   */
+  public $kmsKeys;
   /**
    * @var string[]
    */
@@ -84,6 +89,7 @@ class ResourceSearchResult extends \Google\Collection
   public $project;
   protected $relationshipsType = RelatedResources::class;
   protected $relationshipsDataType = 'map';
+  public $relationships;
   /**
    * @var string
    */
@@ -106,6 +112,7 @@ class ResourceSearchResult extends \Google\Collection
   public $updateTime;
   protected $versionedResourcesType = VersionedResource::class;
   protected $versionedResourcesDataType = 'array';
+  public $versionedResources;
 
   /**
    * @param array[]
@@ -218,6 +225,20 @@ class ResourceSearchResult extends \Google\Collection
   public function getKmsKey()
   {
     return $this->kmsKey;
+  }
+  /**
+   * @param string[]
+   */
+  public function setKmsKeys($kmsKeys)
+  {
+    $this->kmsKeys = $kmsKeys;
+  }
+  /**
+   * @return string[]
+   */
+  public function getKmsKeys()
+  {
+    return $this->kmsKeys;
   }
   /**
    * @param string[]

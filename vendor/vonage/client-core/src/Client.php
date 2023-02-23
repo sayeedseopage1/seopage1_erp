@@ -3,7 +3,7 @@
 /**
  * Vonage Client Library for PHP
  *
- * @copyright Copyright (c) 2016-2020 Vonage, Inc. (http://vonage.com)
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
  * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
  */
 
@@ -11,12 +11,12 @@ declare(strict_types=1);
 
 namespace Vonage;
 
+use Composer\InstalledVersions;
 use Http\Client\HttpClient;
 use InvalidArgumentException;
 use Laminas\Diactoros\Request;
 use Laminas\Diactoros\Uri;
 use Lcobucci\JWT\Token;
-use PackageVersions\Versions;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
@@ -32,7 +32,6 @@ use Vonage\Client\Credentials\Basic;
 use Vonage\Client\Credentials\Container;
 use Vonage\Client\Credentials\CredentialsInterface;
 use Vonage\Client\Credentials\Handler\BasicHandler;
-use Vonage\Client\Credentials\Handler\KeypairHandler;
 use Vonage\Client\Credentials\Handler\SignatureBodyFormHandler;
 use Vonage\Client\Credentials\Handler\SignatureBodyHandler;
 use Vonage\Client\Credentials\Handler\SignatureQueryHandler;
@@ -40,7 +39,6 @@ use Vonage\Client\Credentials\Handler\TokenBodyFormHandler;
 use Vonage\Client\Credentials\Handler\TokenBodyHandler;
 use Vonage\Client\Credentials\Handler\TokenQueryHandler;
 use Vonage\Client\Credentials\Keypair;
-use Vonage\Client\Credentials\OAuth;
 use Vonage\Client\Credentials\SignatureSecret;
 use Vonage\Client\Exception\Exception as ClientException;
 use Vonage\Client\Factory\FactoryInterface;
@@ -57,12 +55,10 @@ use Vonage\Verify\ClientFactory as VerifyClientFactory;
 use Vonage\Verify\Verification;
 use Vonage\Voice\ClientFactory as VoiceClientFactory;
 use Vonage\Logger\{LoggerAwareInterface, LoggerTrait};
-use Vonage\Message\Client as MessageClient;
 
 use function array_key_exists;
 use function array_merge;
 use function call_user_func_array;
-use function get_class;
 use function http_build_query;
 use function implode;
 use function is_null;
@@ -133,6 +129,16 @@ class Client implements LoggerAwareInterface
     protected $options = ['show_deprecations' => false, 'debug' => false];
 
     /**
+     * @string
+     */
+    public $apiUrl;
+
+    /**
+     * @string
+     */
+    public $restUrl;
+
+    /**
      * Create a new API client using the provided credentials.
      */
     public function __construct(CredentialsInterface $credentials, $options = [], ?ClientInterface $client = null)
@@ -140,7 +146,7 @@ class Client implements LoggerAwareInterface
         if (is_null($client)) {
             // Since the user did not pass a client, try and make a client
             // using the Guzzle 6 adapter or Guzzle 7 (depending on availability)
-            list($guzzleVersion) = explode('@', Versions::getVersion('guzzlehttp/guzzle'), 1);
+            list($guzzleVersion) = explode('@', InstalledVersions::getVersion('guzzlehttp/guzzle'), 1);
             $guzzleVersion = (float) $guzzleVersion;
 
             if ($guzzleVersion >= 6.0 && $guzzleVersion < 7) {
@@ -157,15 +163,14 @@ class Client implements LoggerAwareInterface
 
         $this->setHttpClient($client);
 
-        //make sure we know how to use the credentials
+        // Make sure we know how to use the credentials
         if (
             !($credentials instanceof Container) &&
             !($credentials instanceof Basic) &&
             !($credentials instanceof SignatureSecret) &&
-            !($credentials instanceof OAuth) &&
             !($credentials instanceof Keypair)
         ) {
-            throw new RuntimeException('unknown credentials type: ' . get_class($credentials));
+            throw new RuntimeException('unknown credentials type: ' . $credentials::class);
         }
 
         $this->credentials = $credentials;
@@ -199,8 +204,6 @@ class Client implements LoggerAwareInterface
         $this->setFactory(
             new MapFactory(
                 [
-                    // Legacy namespace (used by Laravel, needs to be moved over in future
-                    'message' => MessageClient::class,
                     // Registered Services by name
                     'account' => ClientFactory::class,
                     'applications' => ApplicationClientFactory::class,
@@ -222,7 +225,7 @@ class Client implements LoggerAwareInterface
         );
 
         // Disable throwing E_USER_DEPRECATED notices by default, the user can turn it on during development
-        if (array_key_exists('show_deprecations', $this->options) && !$this->options['show_deprecations']) {
+        if (array_key_exists('show_deprecations', $this->options) && ($this->options['show_deprecations'] == true)) {
             set_error_handler(
                 static function (
                     int $errno,
@@ -289,17 +292,11 @@ class Client implements LoggerAwareInterface
      */
     public static function signRequest(RequestInterface $request, SignatureSecret $credentials): RequestInterface
     {
-        switch ($request->getHeaderLine('content-type')) {
-            case 'application/json':
-                $handler = new SignatureBodyHandler();
-                break;
-            case 'application/x-www-form-urlencoded':
-                $handler = new SignatureBodyFormHandler();
-                break;
-            default:
-                $handler = new SignatureQueryHandler();
-                break;
-        }
+        $handler = match ($request->getHeaderLine('content-type')) {
+            'application/json' => new SignatureBodyHandler(),
+            'application/x-www-form-urlencoded' => new SignatureBodyFormHandler(),
+            default => new SignatureQueryHandler(),
+        };
 
         return $handler($request, $credentials);
     }
@@ -340,7 +337,7 @@ class Client implements LoggerAwareInterface
             return $this->credentials->generateJwt($claims);
         }
 
-        throw new ClientException(get_class($this->credentials) . ' does not support JWT generation');
+        throw new ClientException($this->credentials::class . ' does not support JWT generation');
     }
 
     /**
@@ -443,25 +440,7 @@ class Client implements LoggerAwareInterface
      */
     public function send(RequestInterface $request): ResponseInterface
     {
-        if ($this->credentials instanceof Container) {
-            if ($this->needsKeypairAuthentication($request)) {
-                $handler = new KeypairHandler();
-                $request = $handler($request, $this->getCredentials());
-            } else {
-                $request = self::authRequest($request, $this->credentials->get(Basic::class));
-            }
-        } elseif ($this->credentials instanceof Keypair) {
-            $handler = new KeypairHandler();
-            $request = $handler($request, $this->getCredentials());
-        } elseif ($this->credentials instanceof SignatureSecret) {
-            $request = self::signRequest($request, $this->credentials);
-        } elseif ($this->credentials instanceof Basic) {
-            $request = self::authRequest($request, $this->credentials);
-        }
-
-        //todo: add oauth support
-
-        //allow any part of the URI to be replaced with a simple search
+        // Allow any part of the URI to be replaced with a simple search
         if (isset($this->options['url'])) {
             foreach ($this->options['url'] as $search => $replace) {
                 $uri = (string)$request->getUri();
@@ -547,7 +526,7 @@ class Client implements LoggerAwareInterface
             return $this->verify()->serialize($entity);
         }
 
-        throw new RuntimeException('unknown class `' . get_class($entity) . '``');
+        throw new RuntimeException('unknown class `' . $entity::class . '``');
     }
 
     public function __call($name, $args)
@@ -609,7 +588,7 @@ class Client implements LoggerAwareInterface
 
     protected function getVersion(): string
     {
-        return Versions::getVersion('vonage/client-core');
+        return InstalledVersions::getVersion('vonage/client-core');
     }
 
     public function getLogger(): ?LoggerInterface

@@ -22,6 +22,13 @@
       'PDF' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
     ),
   ),
+  'barryvdh/laravel-ide-helper' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
+    ),
+  ),
   'barryvdh/laravel-translation-manager' => 
   array (
     'providers' => 
@@ -316,6 +323,17 @@
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     ),
   ),
+  'nunomaduro/laravel-desktop-notifier' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'NunoMaduro\\LaravelDesktopNotifier\\LaravelDesktopNotifierServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Notifier' => 'NunoMaduro\\LaravelDesktopNotifier\\Facaces\\Notifier',
+    ),
+  ),
   'nunomaduro/termwind' => 
   array (
     'providers' => 
@@ -369,6 +387,13 @@
     'aliases' => 
     array (
       'Flare' => 'Spatie\\LaravelIgnition\\Facades\\Flare',
+    ),
+  ),
+  'spatie/laravel-ray' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Spatie\\LaravelRay\\RayServiceProvider',
     ),
   ),
   'spatie/laravel-signal-aware-command' => 

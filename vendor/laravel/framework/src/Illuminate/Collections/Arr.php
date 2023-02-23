@@ -617,7 +617,7 @@ class Arr
      *
      * @param  array  $array
      * @param  int|null  $number
-     * @param  bool|false  $preserveKeys
+     * @param  bool  $preserveKeys
      * @return mixed
      *
      * @throws \InvalidArgumentException
@@ -635,28 +635,30 @@ class Arr
         }
 
         if (is_null($number)) {
-            return $array[array_rand($array)];
+            return head(array_slice($array, random_int(0, $count - 1), 1));
         }
 
         if ((int) $number === 0) {
             return [];
         }
 
-        $keys = array_rand($array, $number);
+        $keys = array_keys($array);
+        $count = count($keys);
+        $selected = [];
 
-        $results = [];
+        for ($i = $count - 1; $i >= $count - $number; $i--) {
+            $j = random_int(0, $i);
 
-        if ($preserveKeys) {
-            foreach ((array) $keys as $key) {
-                $results[$key] = $array[$key];
+            if ($preserveKeys) {
+                $selected[$keys[$j]] = $array[$keys[$j]];
+            } else {
+                $selected[] = $array[$keys[$j]];
             }
-        } else {
-            foreach ((array) $keys as $key) {
-                $results[] = $array[$key];
-            }
+
+            $keys[$j] = $keys[$i];
         }
 
-        return $results;
+        return $selected;
     }
 
     /**
@@ -708,15 +710,29 @@ class Arr
      */
     public static function shuffle($array, $seed = null)
     {
-        if (is_null($seed)) {
-            shuffle($array);
-        } else {
+        if (! is_null($seed)) {
             mt_srand($seed);
             shuffle($array);
             mt_srand();
+
+            return $array;
         }
 
-        return $array;
+        if (empty($array)) {
+            return [];
+        }
+
+        $keys = array_keys($array);
+
+        for ($i = count($keys) - 1; $i > 0; $i--) {
+            $j = random_int(0, $i);
+            $shuffled[] = $array[$keys[$j]];
+            $keys[$j] = $keys[$i];
+        }
+
+        $shuffled[] = $array[$keys[0]];
+
+        return $shuffled;
     }
 
     /**
@@ -729,6 +745,18 @@ class Arr
     public static function sort($array, $callback = null)
     {
         return Collection::make($array)->sortBy($callback)->all();
+    }
+
+    /**
+     * Sort the array in descending order using the given callback or "dot" notation.
+     *
+     * @param  array  $array
+     * @param  callable|array|string|null  $callback
+     * @return array
+     */
+    public static function sortDesc($array, $callback = null)
+    {
+        return Collection::make($array)->sortByDesc($callback)->all();
     }
 
     /**
@@ -784,6 +812,29 @@ class Arr
     }
 
     /**
+     * Conditionally compile styles from an array into a style list.
+     *
+     * @param  array  $array
+     * @return string
+     */
+    public static function toCssStyles($array)
+    {
+        $styleList = static::wrap($array);
+
+        $styles = [];
+
+        foreach ($styleList as $class => $constraint) {
+            if (is_numeric($class)) {
+                $styles[] = Str::finish($constraint, ';');
+            } elseif ($constraint) {
+                $styles[] = Str::finish($class, ';');
+            }
+        }
+
+        return implode(' ', $styles);
+    }
+
+    /**
      * Filter the array using the given callback.
      *
      * @param  array  $array
@@ -803,9 +854,7 @@ class Arr
      */
     public static function whereNotNull($array)
     {
-        return static::where($array, function ($value) {
-            return ! is_null($value);
-        });
+        return static::where($array, fn ($value) => ! is_null($value));
     }
 
     /**

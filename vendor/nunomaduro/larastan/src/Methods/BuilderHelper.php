@@ -22,6 +22,7 @@ use PHPStan\TrinaryLogic;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\VerbosityLevel;
 
 class BuilderHelper
@@ -56,7 +57,7 @@ class BuilderHelper
     /** @var bool */
     private $checkProperties;
 
-    public function __construct(ReflectionProvider $reflectionProvider, bool $checkProperties)
+    public function __construct(ReflectionProvider $reflectionProvider, bool $checkProperties, private MacroMethodsClassReflectionExtension $macroMethodsClassReflectionExtension)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->checkProperties = $checkProperties;
@@ -133,6 +134,11 @@ class BuilderHelper
      */
     public function searchOnEloquentBuilder(ClassReflection $eloquentBuilder, string $methodName, ClassReflection $model): ?MethodReflection
     {
+        // Check for macros first
+        if ($this->macroMethodsClassReflectionExtension->hasMethod($eloquentBuilder, $methodName)) {
+            return $this->macroMethodsClassReflectionExtension->getMethod($eloquentBuilder, $methodName);
+        }
+
         // Check for local query scopes
         if (array_key_exists('scope'.ucfirst($methodName), $model->getMethodTags())) {
             $methodTag = $model->getMethodTags()['scope'.ucfirst($methodName)];
@@ -206,7 +212,7 @@ class BuilderHelper
             return EloquentBuilder::class;
         }
 
-        if ($returnType instanceof ObjectType) {
+        if ($returnType instanceof TypeWithClassName) {
             return $returnType->getClassName();
         }
 
@@ -218,7 +224,7 @@ class BuilderHelper
         try {
             $newCollectionMethod = $this->reflectionProvider->getClass($modelClassName)->getNativeMethod('newCollection');
             $returnType = ParametersAcceptorSelector::selectSingle($newCollectionMethod->getVariants())->getReturnType();
-            if ($returnType instanceof ObjectType) {
+            if ($returnType instanceof TypeWithClassName) {
                 return $returnType->getClassName();
             }
 

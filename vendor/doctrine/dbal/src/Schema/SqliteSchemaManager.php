@@ -59,9 +59,18 @@ class SqliteSchemaManager extends AbstractSchemaManager
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated Use {@see introspectTable()} instead.
      */
     public function listTableDetails($name)
     {
+        Deprecation::triggerIfCalledFromOutside(
+            'doctrine/dbal',
+            'https://github.com/doctrine/dbal/pull/5595',
+            '%s is deprecated. Use introspectTable() instead.',
+            __METHOD__,
+        );
+
         return $this->doListTableDetails($name);
     }
 
@@ -144,23 +153,13 @@ class SqliteSchemaManager extends AbstractSchemaManager
     /**
      * {@inheritdoc}
      */
-    public function renameTable($name, $newName)
-    {
-        $tableDiff            = new TableDiff($name);
-        $tableDiff->fromTable = $this->listTableDetails($name);
-        $tableDiff->newName   = $newName;
-        $this->alterTable($tableDiff);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function createForeignKey(ForeignKeyConstraint $foreignKey, $table)
     {
-        $tableDiff                     = $this->getTableDiffForAlterForeignKey($table);
-        $tableDiff->addedForeignKeys[] = $foreignKey;
+        if (! $table instanceof Table) {
+            $table = $this->listTableDetails($table);
+        }
 
-        $this->alterTable($tableDiff);
+        $this->alterTable(new TableDiff($table->getName(), [], [], [], [], [], [], $table, [$foreignKey]));
     }
 
     /**
@@ -177,10 +176,11 @@ class SqliteSchemaManager extends AbstractSchemaManager
                 . ' Use SqliteSchemaManager::dropForeignKey() and SqliteSchemaManager::createForeignKey() instead.',
         );
 
-        $tableDiff                       = $this->getTableDiffForAlterForeignKey($table);
-        $tableDiff->changedForeignKeys[] = $foreignKey;
+        if (! $table instanceof Table) {
+            $table = $this->listTableDetails($table);
+        }
 
-        $this->alterTable($tableDiff);
+        $this->alterTable(new TableDiff($table->getName(), [], [], [], [], [], [], $table, [], [$foreignKey]));
     }
 
     /**
@@ -188,10 +188,11 @@ class SqliteSchemaManager extends AbstractSchemaManager
      */
     public function dropForeignKey($foreignKey, $table)
     {
-        $tableDiff                       = $this->getTableDiffForAlterForeignKey($table);
-        $tableDiff->removedForeignKeys[] = $foreignKey;
+        if (! $table instanceof Table) {
+            $table = $this->listTableDetails($table);
+        }
 
-        $this->alterTable($tableDiff);
+        $this->alterTable(new TableDiff($table->getName(), [], [], [], [], [], [], $table, [], [], [$foreignKey]));
     }
 
     /**
@@ -496,23 +497,6 @@ class SqliteSchemaManager extends AbstractSchemaManager
                 'deferred' => $tableForeignKey['deferred'],
             ],
         );
-    }
-
-    /**
-     * @param Table|string $table
-     *
-     * @throws Exception
-     */
-    private function getTableDiffForAlterForeignKey($table): TableDiff
-    {
-        if (! $table instanceof Table) {
-            $table = $this->listTableDetails($table);
-        }
-
-        $tableDiff            = new TableDiff($table->getName());
-        $tableDiff->fromTable = $table;
-
-        return $tableDiff;
     }
 
     private function parseColumnCollationFromSQL(string $column, string $sql): ?string

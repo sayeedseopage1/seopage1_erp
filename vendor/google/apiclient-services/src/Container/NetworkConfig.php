@@ -25,8 +25,10 @@ class NetworkConfig extends \Google\Model
   public $datapathProvider;
   protected $defaultSnatStatusType = DefaultSnatStatus::class;
   protected $defaultSnatStatusDataType = '';
+  public $defaultSnatStatus;
   protected $dnsConfigType = DNSConfig::class;
   protected $dnsConfigDataType = '';
+  public $dnsConfig;
   /**
    * @var bool
    */
@@ -35,6 +37,9 @@ class NetworkConfig extends \Google\Model
    * @var bool
    */
   public $enableL4ilbSubsetting;
+  protected $gatewayApiConfigType = GatewayAPIConfig::class;
+  protected $gatewayApiConfigDataType = '';
+  public $gatewayApiConfig;
   /**
    * @var string
    */
@@ -45,6 +50,7 @@ class NetworkConfig extends \Google\Model
   public $privateIpv6GoogleAccess;
   protected $serviceExternalIpsConfigType = ServiceExternalIPsConfig::class;
   protected $serviceExternalIpsConfigDataType = '';
+  public $serviceExternalIpsConfig;
   /**
    * @var string
    */
@@ -119,6 +125,20 @@ class NetworkConfig extends \Google\Model
   public function getEnableL4ilbSubsetting()
   {
     return $this->enableL4ilbSubsetting;
+  }
+  /**
+   * @param GatewayAPIConfig
+   */
+  public function setGatewayApiConfig(GatewayAPIConfig $gatewayApiConfig)
+  {
+    $this->gatewayApiConfig = $gatewayApiConfig;
+  }
+  /**
+   * @return GatewayAPIConfig
+   */
+  public function getGatewayApiConfig()
+  {
+    return $this->gatewayApiConfig;
   }
   /**
    * @param string

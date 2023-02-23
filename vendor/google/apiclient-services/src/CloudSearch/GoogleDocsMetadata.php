@@ -21,6 +21,7 @@ class GoogleDocsMetadata extends \Google\Model
 {
   protected $aclInfoType = AclInfo::class;
   protected $aclInfoDataType = '';
+  public $aclInfo;
   /**
    * @var string
    */
@@ -33,10 +34,20 @@ class GoogleDocsMetadata extends \Google\Model
    * @var string
    */
   public $lastContentModifiedTimestamp;
+  /**
+   * @var int
+   */
+  public $numSubscribers;
+  /**
+   * @var int
+   */
+  public $numViewers;
   protected $resultInfoType = GoogleDocsResultInfo::class;
   protected $resultInfoDataType = '';
+  public $resultInfo;
   protected $typeInfoType = TypeInfo::class;
   protected $typeInfoDataType = '';
+  public $typeInfo;
 
   /**
    * @param AclInfo
@@ -93,6 +104,34 @@ class GoogleDocsMetadata extends \Google\Model
   public function getLastContentModifiedTimestamp()
   {
     return $this->lastContentModifiedTimestamp;
+  }
+  /**
+   * @param int
+   */
+  public function setNumSubscribers($numSubscribers)
+  {
+    $this->numSubscribers = $numSubscribers;
+  }
+  /**
+   * @return int
+   */
+  public function getNumSubscribers()
+  {
+    return $this->numSubscribers;
+  }
+  /**
+   * @param int
+   */
+  public function setNumViewers($numViewers)
+  {
+    $this->numViewers = $numViewers;
+  }
+  /**
+   * @return int
+   */
+  public function getNumViewers()
+  {
+    return $this->numViewers;
   }
   /**
    * @param GoogleDocsResultInfo

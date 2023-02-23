@@ -21,6 +21,7 @@ class Backup extends \Google\Model
 {
   protected $encryptionInfoType = EncryptionInfo::class;
   protected $encryptionInfoDataType = '';
+  public $encryptionInfo;
   /**
    * @var string
    */
@@ -37,6 +38,10 @@ class Backup extends \Google\Model
    * @var string
    */
   public $sizeBytes;
+  /**
+   * @var string
+   */
+  public $sourceBackup;
   /**
    * @var string
    */
@@ -119,6 +124,20 @@ class Backup extends \Google\Model
   public function getSizeBytes()
   {
     return $this->sizeBytes;
+  }
+  /**
+   * @param string
+   */
+  public function setSourceBackup($sourceBackup)
+  {
+    $this->sourceBackup = $sourceBackup;
+  }
+  /**
+   * @return string
+   */
+  public function getSourceBackup()
+  {
+    return $this->sourceBackup;
   }
   /**
    * @param string

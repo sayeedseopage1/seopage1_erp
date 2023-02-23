@@ -49,6 +49,7 @@ class ArtifactRegistry extends \Google\Service
   public $projects_locations_repositories_aptArtifacts;
   public $projects_locations_repositories_dockerImages;
   public $projects_locations_repositories_files;
+  public $projects_locations_repositories_kfpArtifacts;
   public $projects_locations_repositories_mavenArtifacts;
   public $projects_locations_repositories_npmPackages;
   public $projects_locations_repositories_packages;
@@ -123,6 +124,16 @@ class ArtifactRegistry extends \Google\Service
                   'required' => true,
                 ],
               ],
+            ],'getVpcscConfig' => [
+              'path' => 'v1/{+name}',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
             ],'list' => [
               'path' => 'v1/{+name}/locations',
               'httpMethod' => 'GET',
@@ -141,6 +152,20 @@ class ArtifactRegistry extends \Google\Service
                   'type' => 'integer',
                 ],
                 'pageToken' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+              ],
+            ],'updateVpcscConfig' => [
+              'path' => 'v1/{+name}',
+              'httpMethod' => 'PATCH',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+                'updateMask' => [
                   'location' => 'query',
                   'type' => 'string',
                 ],
@@ -391,6 +416,26 @@ class ArtifactRegistry extends \Google\Service
                 'pageToken' => [
                   'location' => 'query',
                   'type' => 'string',
+                ],
+              ],
+            ],
+          ]
+        ]
+    );
+    $this->projects_locations_repositories_kfpArtifacts = new ArtifactRegistry\Resource\ProjectsLocationsRepositoriesKfpArtifacts(
+        $this,
+        $this->serviceName,
+        'kfpArtifacts',
+        [
+          'methods' => [
+            'upload' => [
+              'path' => 'v1/{+parent}/kfpArtifacts:create',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'parent' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
                 ],
               ],
             ],

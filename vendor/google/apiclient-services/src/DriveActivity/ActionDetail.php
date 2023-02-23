@@ -19,29 +19,57 @@ namespace Google\Service\DriveActivity;
 
 class ActionDetail extends \Google\Model
 {
+  protected $appliedLabelChangeType = AppliedLabelChange::class;
+  protected $appliedLabelChangeDataType = '';
+  public $appliedLabelChange;
   protected $commentType = Comment::class;
   protected $commentDataType = '';
+  public $comment;
   protected $createType = Create::class;
   protected $createDataType = '';
+  public $create;
   protected $deleteType = Delete::class;
   protected $deleteDataType = '';
+  public $delete;
   protected $dlpChangeType = DataLeakPreventionChange::class;
   protected $dlpChangeDataType = '';
+  public $dlpChange;
   protected $editType = Edit::class;
   protected $editDataType = '';
+  public $edit;
   protected $moveType = Move::class;
   protected $moveDataType = '';
+  public $move;
   protected $permissionChangeType = PermissionChange::class;
   protected $permissionChangeDataType = '';
+  public $permissionChange;
   protected $referenceType = ApplicationReference::class;
   protected $referenceDataType = '';
+  public $reference;
   protected $renameType = Rename::class;
   protected $renameDataType = '';
+  public $rename;
   protected $restoreType = Restore::class;
   protected $restoreDataType = '';
+  public $restore;
   protected $settingsChangeType = SettingsChange::class;
   protected $settingsChangeDataType = '';
+  public $settingsChange;
 
+  /**
+   * @param AppliedLabelChange
+   */
+  public function setAppliedLabelChange(AppliedLabelChange $appliedLabelChange)
+  {
+    $this->appliedLabelChange = $appliedLabelChange;
+  }
+  /**
+   * @return AppliedLabelChange
+   */
+  public function getAppliedLabelChange()
+  {
+    return $this->appliedLabelChange;
+  }
   /**
    * @param Comment
    */

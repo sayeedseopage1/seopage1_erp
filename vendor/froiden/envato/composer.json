@@ -1,0 +1,24 @@
+{
+    "name": "froiden/envato",
+    "description": "Package for checking licencnse key and update for envato project.",
+    "authors": [
+        {
+            "name": "Rajesh Kumawat",
+            "email": "rajesh@froiden.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Froiden\\Envato\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Froiden\\Envato\\FroidenEnvatoServiceProvider"
+            ]
+        }
+    }
+}

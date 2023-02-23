@@ -109,8 +109,10 @@ class TaskStatus extends Command
 
 
   }
+   
 
         $this->info('Task Status Changed');
+        
 
       //  $use=((($user['packages']['return_percentage']*$user['packages']['price'])/100)*$sponsor_bonus['royality_bonus']/100)*$income[$i]/100;
     }

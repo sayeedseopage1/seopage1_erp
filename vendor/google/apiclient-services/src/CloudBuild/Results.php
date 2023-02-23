@@ -19,13 +19,14 @@ namespace Google\Service\CloudBuild;
 
 class Results extends \Google\Collection
 {
-  protected $collection_key = 'images';
+  protected $collection_key = 'pythonPackages';
   /**
    * @var string
    */
   public $artifactManifest;
   protected $artifactTimingType = TimeSpan::class;
   protected $artifactTimingDataType = '';
+  public $artifactTiming;
   /**
    * @var string[]
    */
@@ -36,10 +37,17 @@ class Results extends \Google\Collection
   public $buildStepOutputs;
   protected $imagesType = BuiltImage::class;
   protected $imagesDataType = 'array';
+  public $images;
+  protected $mavenArtifactsType = UploadedMavenArtifact::class;
+  protected $mavenArtifactsDataType = 'array';
+  public $mavenArtifacts;
   /**
    * @var string
    */
   public $numArtifacts;
+  protected $pythonPackagesType = UploadedPythonPackage::class;
+  protected $pythonPackagesDataType = 'array';
+  public $pythonPackages;
 
   /**
    * @param string
@@ -112,6 +120,20 @@ class Results extends \Google\Collection
     return $this->images;
   }
   /**
+   * @param UploadedMavenArtifact[]
+   */
+  public function setMavenArtifacts($mavenArtifacts)
+  {
+    $this->mavenArtifacts = $mavenArtifacts;
+  }
+  /**
+   * @return UploadedMavenArtifact[]
+   */
+  public function getMavenArtifacts()
+  {
+    return $this->mavenArtifacts;
+  }
+  /**
    * @param string
    */
   public function setNumArtifacts($numArtifacts)
@@ -124,6 +146,20 @@ class Results extends \Google\Collection
   public function getNumArtifacts()
   {
     return $this->numArtifacts;
+  }
+  /**
+   * @param UploadedPythonPackage[]
+   */
+  public function setPythonPackages($pythonPackages)
+  {
+    $this->pythonPackages = $pythonPackages;
+  }
+  /**
+   * @return UploadedPythonPackage[]
+   */
+  public function getPythonPackages()
+  {
+    return $this->pythonPackages;
   }
 }
 

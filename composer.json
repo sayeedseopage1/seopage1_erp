@@ -9,7 +9,10 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.1",
+        "illuminate/support": "^9.0|^10.0",
+        "illuminate/console": "^9.0|^10.0",
+        "jolicode/jolinotif": "^2.5",
         "authorizenet/authorizenet": "^2.0",
         "barryvdh/laravel-dompdf": "^2.0.0",
         "barryvdh/laravel-ide-helper": "^2.10",
@@ -52,6 +55,7 @@
         "magarrent/laravel-url-shortener": "^1.0",
         "mitchbred/entrust": "^2.1",
         "mollie/laravel-mollie": "^2.0",
+        "nunomaduro/laravel-desktop-notifier": "*",
         "nwidart/laravel-modules": "^9.0",
         "paragonie/random_compat": "^9.99",
         "paypal/rest-api-sdk-php": "^1.14",
@@ -81,7 +85,9 @@
         "nunomaduro/collision": "^6.1",
         "nunomaduro/larastan": "^2.1.12",
         "phpro/grumphp": "^1.4",
-        "phpunit/phpunit": "^9.5.10"
+        "phpunit/phpunit": "^9.5.10", 
+        "graham-campbell/testbench": "^5.7"
+      
     },
     "repositories": [
         {
@@ -122,7 +128,8 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "Modules\\": "Modules/"
+            "Modules\\": "Modules/",
+            "NunoMaduro\\LaravelDesktopNotifier\\": "src/"
         },
         "files": [
             "app/Helper/start.php"
@@ -130,10 +137,31 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "NunoMaduro\\Tests\\LaravelDesktopNotifier\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Nuno Maduro",
+            "email": "enunomaduro@gmail.com"
+        }
+    ],
+    
+    
+   
+    "extra": {
+        "laravel": {
+            "providers": [
+                "NunoMaduro\\LaravelDesktopNotifier\\LaravelDesktopNotifierServiceProvider"
+            ],
+            "aliases": {
+                "Notifier": "NunoMaduro\\LaravelDesktopNotifier\\Facaces\\Notifier"
+            }
         }
     },
     "minimum-stability": "dev",
+  
     "prefer-stable": true,
     "scripts": {
         "post-autoload-dump": [

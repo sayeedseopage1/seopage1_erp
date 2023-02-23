@@ -29,14 +29,15 @@ abstract class VerificationOptions {
      * @param array $channelConfiguration Channel specific configuration in json
      *                                    format.
      * @param string $appHash Your App Hash to be appended at the end of an SMS.
-     * @param string $templateSid The verification template SMS messages.
+     * @param string $templateSid The verification template SMS or Voice message.
      * @param string $templateCustomSubstitutions The values of the special
      *                                            variables declared on the message
      *                                            template.
+     * @param string $deviceIp The IP address of the client's device.
      * @return CreateVerificationOptions Options builder
      */
-    public static function create(string $customFriendlyName = Values::NONE, string $customMessage = Values::NONE, string $sendDigits = Values::NONE, string $locale = Values::NONE, string $customCode = Values::NONE, string $amount = Values::NONE, string $payee = Values::NONE, array $rateLimits = Values::ARRAY_NONE, array $channelConfiguration = Values::ARRAY_NONE, string $appHash = Values::NONE, string $templateSid = Values::NONE, string $templateCustomSubstitutions = Values::NONE): CreateVerificationOptions {
-        return new CreateVerificationOptions($customFriendlyName, $customMessage, $sendDigits, $locale, $customCode, $amount, $payee, $rateLimits, $channelConfiguration, $appHash, $templateSid, $templateCustomSubstitutions);
+    public static function create(string $customFriendlyName = Values::NONE, string $customMessage = Values::NONE, string $sendDigits = Values::NONE, string $locale = Values::NONE, string $customCode = Values::NONE, string $amount = Values::NONE, string $payee = Values::NONE, array $rateLimits = Values::ARRAY_NONE, array $channelConfiguration = Values::ARRAY_NONE, string $appHash = Values::NONE, string $templateSid = Values::NONE, string $templateCustomSubstitutions = Values::NONE, string $deviceIp = Values::NONE): CreateVerificationOptions {
+        return new CreateVerificationOptions($customFriendlyName, $customMessage, $sendDigits, $locale, $customCode, $amount, $payee, $rateLimits, $channelConfiguration, $appHash, $templateSid, $templateCustomSubstitutions, $deviceIp);
     }
 }
 
@@ -57,12 +58,13 @@ class CreateVerificationOptions extends Options {
      * @param array $channelConfiguration Channel specific configuration in json
      *                                    format.
      * @param string $appHash Your App Hash to be appended at the end of an SMS.
-     * @param string $templateSid The verification template SMS messages.
+     * @param string $templateSid The verification template SMS or Voice message.
      * @param string $templateCustomSubstitutions The values of the special
      *                                            variables declared on the message
      *                                            template.
+     * @param string $deviceIp The IP address of the client's device.
      */
-    public function __construct(string $customFriendlyName = Values::NONE, string $customMessage = Values::NONE, string $sendDigits = Values::NONE, string $locale = Values::NONE, string $customCode = Values::NONE, string $amount = Values::NONE, string $payee = Values::NONE, array $rateLimits = Values::ARRAY_NONE, array $channelConfiguration = Values::ARRAY_NONE, string $appHash = Values::NONE, string $templateSid = Values::NONE, string $templateCustomSubstitutions = Values::NONE) {
+    public function __construct(string $customFriendlyName = Values::NONE, string $customMessage = Values::NONE, string $sendDigits = Values::NONE, string $locale = Values::NONE, string $customCode = Values::NONE, string $amount = Values::NONE, string $payee = Values::NONE, array $rateLimits = Values::ARRAY_NONE, array $channelConfiguration = Values::ARRAY_NONE, string $appHash = Values::NONE, string $templateSid = Values::NONE, string $templateCustomSubstitutions = Values::NONE, string $deviceIp = Values::NONE) {
         $this->options['customFriendlyName'] = $customFriendlyName;
         $this->options['customMessage'] = $customMessage;
         $this->options['sendDigits'] = $sendDigits;
@@ -75,6 +77,7 @@ class CreateVerificationOptions extends Options {
         $this->options['appHash'] = $appHash;
         $this->options['templateSid'] = $templateSid;
         $this->options['templateCustomSubstitutions'] = $templateCustomSubstitutions;
+        $this->options['deviceIp'] = $deviceIp;
     }
 
     /**
@@ -112,7 +115,7 @@ class CreateVerificationOptions extends Options {
     }
 
     /**
-     * Locale will automatically resolve based on phone number country code for SMS, WhatsApp and call channel verifications. This parameter will override the automatic locale. [See supported languages and more information here.](https://www.twilio.com/docs/verify/supported-languages).
+     * Locale will automatically resolve based on phone number country code for SMS, WhatsApp, and call channel verifications. It will fallback to English or the template’s default translation if the selected translation is not available. This parameter will override the automatic locale resolution. [See supported languages and more information here](https://www.twilio.com/docs/verify/supported-languages).
      *
      * @param string $locale The override locale to use for the verification SMS,
      *                       WhatsApp or call
@@ -193,9 +196,9 @@ class CreateVerificationOptions extends Options {
     }
 
     /**
-     * The message [template](https://www.twilio.com/docs/verify/api/templates). If provided, will override the default template for the Service. SMS channel only.
+     * The message [template](https://www.twilio.com/docs/verify/api/templates). If provided, will override the default template for the Service. SMS and Voice channels only.
      *
-     * @param string $templateSid The verification template SMS messages.
+     * @param string $templateSid The verification template SMS or Voice message.
      * @return $this Fluent Builder
      */
     public function setTemplateSid(string $templateSid): self {
@@ -213,6 +216,17 @@ class CreateVerificationOptions extends Options {
      */
     public function setTemplateCustomSubstitutions(string $templateCustomSubstitutions): self {
         $this->options['templateCustomSubstitutions'] = $templateCustomSubstitutions;
+        return $this;
+    }
+
+    /**
+     * The IP address of the client's device. If provided, it has to be a valid IPv4 or IPv6 address.
+     *
+     * @param string $deviceIp The IP address of the client's device.
+     * @return $this Fluent Builder
+     */
+    public function setDeviceIp(string $deviceIp): self {
+        $this->options['deviceIp'] = $deviceIp;
         return $this;
     }
 

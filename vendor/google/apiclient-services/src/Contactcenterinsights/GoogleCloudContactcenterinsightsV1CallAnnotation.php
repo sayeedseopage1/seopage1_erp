@@ -21,26 +21,38 @@ class GoogleCloudContactcenterinsightsV1CallAnnotation extends \Google\Model
 {
   protected $annotationEndBoundaryType = GoogleCloudContactcenterinsightsV1AnnotationBoundary::class;
   protected $annotationEndBoundaryDataType = '';
+  public $annotationEndBoundary;
   protected $annotationStartBoundaryType = GoogleCloudContactcenterinsightsV1AnnotationBoundary::class;
   protected $annotationStartBoundaryDataType = '';
+  public $annotationStartBoundary;
   /**
    * @var int
    */
   public $channelTag;
   protected $entityMentionDataType = GoogleCloudContactcenterinsightsV1EntityMentionData::class;
   protected $entityMentionDataDataType = '';
+  public $entityMentionData;
   protected $holdDataType = GoogleCloudContactcenterinsightsV1HoldData::class;
   protected $holdDataDataType = '';
+  public $holdData;
   protected $intentMatchDataType = GoogleCloudContactcenterinsightsV1IntentMatchData::class;
   protected $intentMatchDataDataType = '';
+  public $intentMatchData;
   protected $interruptionDataType = GoogleCloudContactcenterinsightsV1InterruptionData::class;
   protected $interruptionDataDataType = '';
+  public $interruptionData;
+  protected $issueMatchDataType = GoogleCloudContactcenterinsightsV1IssueMatchData::class;
+  protected $issueMatchDataDataType = '';
+  public $issueMatchData;
   protected $phraseMatchDataType = GoogleCloudContactcenterinsightsV1PhraseMatchData::class;
   protected $phraseMatchDataDataType = '';
+  public $phraseMatchData;
   protected $sentimentDataType = GoogleCloudContactcenterinsightsV1SentimentData::class;
   protected $sentimentDataDataType = '';
+  public $sentimentData;
   protected $silenceDataType = GoogleCloudContactcenterinsightsV1SilenceData::class;
   protected $silenceDataDataType = '';
+  public $silenceData;
 
   /**
    * @param GoogleCloudContactcenterinsightsV1AnnotationBoundary
@@ -139,6 +151,20 @@ class GoogleCloudContactcenterinsightsV1CallAnnotation extends \Google\Model
   public function getInterruptionData()
   {
     return $this->interruptionData;
+  }
+  /**
+   * @param GoogleCloudContactcenterinsightsV1IssueMatchData
+   */
+  public function setIssueMatchData(GoogleCloudContactcenterinsightsV1IssueMatchData $issueMatchData)
+  {
+    $this->issueMatchData = $issueMatchData;
+  }
+  /**
+   * @return GoogleCloudContactcenterinsightsV1IssueMatchData
+   */
+  public function getIssueMatchData()
+  {
+    return $this->issueMatchData;
   }
   /**
    * @param GoogleCloudContactcenterinsightsV1PhraseMatchData

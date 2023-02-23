@@ -50,7 +50,7 @@ class AmpListener implements EventListener
 
     public function startRequest(Request $request): Promise
     {
-        $this->info['start_time'] = $this->info['start_time'] ?? microtime(true);
+        $this->info['start_time'] ??= microtime(true);
         ($this->onProgress)();
 
         return new Success();
@@ -81,7 +81,7 @@ class AmpListener implements EventListener
     {
         $host = $stream->getRemoteAddress()->getHost();
 
-        if (false !== strpos($host, ':')) {
+        if (str_contains($host, ':')) {
             $host = '['.$host.']';
         }
 

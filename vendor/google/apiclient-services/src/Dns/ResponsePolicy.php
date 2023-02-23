@@ -24,6 +24,9 @@ class ResponsePolicy extends \Google\Collection
    * @var string
    */
   public $description;
+  protected $gkeClustersType = ResponsePolicyGKECluster::class;
+  protected $gkeClustersDataType = 'array';
+  public $gkeClusters;
   /**
    * @var string
    */
@@ -32,8 +35,13 @@ class ResponsePolicy extends \Google\Collection
    * @var string
    */
   public $kind;
+  /**
+   * @var string[]
+   */
+  public $labels;
   protected $networksType = ResponsePolicyNetwork::class;
   protected $networksDataType = 'array';
+  public $networks;
   /**
    * @var string
    */
@@ -52,6 +60,20 @@ class ResponsePolicy extends \Google\Collection
   public function getDescription()
   {
     return $this->description;
+  }
+  /**
+   * @param ResponsePolicyGKECluster[]
+   */
+  public function setGkeClusters($gkeClusters)
+  {
+    $this->gkeClusters = $gkeClusters;
+  }
+  /**
+   * @return ResponsePolicyGKECluster[]
+   */
+  public function getGkeClusters()
+  {
+    return $this->gkeClusters;
   }
   /**
    * @param string
@@ -80,6 +102,20 @@ class ResponsePolicy extends \Google\Collection
   public function getKind()
   {
     return $this->kind;
+  }
+  /**
+   * @param string[]
+   */
+  public function setLabels($labels)
+  {
+    $this->labels = $labels;
+  }
+  /**
+   * @return string[]
+   */
+  public function getLabels()
+  {
+    return $this->labels;
   }
   /**
    * @param ResponsePolicyNetwork[]

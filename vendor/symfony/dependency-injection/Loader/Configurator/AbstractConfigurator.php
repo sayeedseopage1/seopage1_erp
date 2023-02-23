@@ -12,6 +12,7 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Symfony\Component\Config\Loader\ParamConfigurator;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Argument\AbstractArgument;
 use Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
@@ -31,7 +32,7 @@ abstract class AbstractConfigurator
     public static $valuePreProcessor;
 
     /** @internal */
-    protected $definition = null;
+    protected Definition|Alias|null $definition = null;
 
     public function __call(string $method, array $args)
     {
@@ -55,7 +56,7 @@ abstract class AbstractConfigurator
     /**
      * Checks that a value is valid, optionally replacing Definition and Reference configurators by their configure value.
      *
-     * @param bool $allowServices whether Definition and Reference are allowed; by default, only scalars and arrays are
+     * @param bool $allowServices whether Definition and Reference are allowed; by default, only scalars, arrays and enum are
      *
      * @return mixed the value, optionally cast to a Definition/Reference
      */
@@ -97,6 +98,7 @@ abstract class AbstractConfigurator
         switch (true) {
             case null === $value:
             case \is_scalar($value):
+            case $value instanceof \UnitEnum:
                 return $value;
 
             case $value instanceof ArgumentInterface:

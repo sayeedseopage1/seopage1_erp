@@ -26,6 +26,7 @@ class Target extends \Google\Collection
   public $annotations;
   protected $anthosClusterType = AnthosCluster::class;
   protected $anthosClusterDataType = '';
+  public $anthosCluster;
   /**
    * @var string
    */
@@ -40,8 +41,10 @@ class Target extends \Google\Collection
   public $etag;
   protected $executionConfigsType = ExecutionConfig::class;
   protected $executionConfigsDataType = 'array';
+  public $executionConfigs;
   protected $gkeType = GkeCluster::class;
   protected $gkeDataType = '';
+  public $gke;
   /**
    * @var string[]
    */
@@ -54,6 +57,9 @@ class Target extends \Google\Collection
    * @var bool
    */
   public $requireApproval;
+  protected $runType = CloudRunLocation::class;
+  protected $runDataType = '';
+  public $run;
   /**
    * @var string
    */
@@ -206,6 +212,20 @@ class Target extends \Google\Collection
   public function getRequireApproval()
   {
     return $this->requireApproval;
+  }
+  /**
+   * @param CloudRunLocation
+   */
+  public function setRun(CloudRunLocation $run)
+  {
+    $this->run = $run;
+  }
+  /**
+   * @return CloudRunLocation
+   */
+  public function getRun()
+  {
+    return $this->run;
   }
   /**
    * @param string
