@@ -15,7 +15,7 @@ use NunoMaduro\LaravelDesktopNotifier\Facades\Notifier;
 use Joli\JoliNotif\Notification;
 use Joli\JoliNotif\NotifierFactory;
 
-class AwardTime extends Command
+class AwardTime2 extends Command
 {
     /**
      * The name and signature of the console command.

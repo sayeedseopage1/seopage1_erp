@@ -70,7 +70,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
             <div id="table-actions" class="d-flex align-items-center">
                 @if ($addContractPermission == 'all' || $addContractPermission == 'added')
-                @if(Auth::user()->role_id == 1)
+                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 7)
                   <x-forms.link-primary :link="route('deals.create')" class="mr-3 openRightModal" icon="plus">
                         @lang('Create Deal')
                     </x-forms.link-primary>

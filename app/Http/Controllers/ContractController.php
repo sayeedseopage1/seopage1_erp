@@ -340,6 +340,7 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
+        //dd($request);
         $current_time= Carbon::now()->format('d-m-Y H:i:s' );
        // dd($request->current_time, $request->award_time,$current_time);
 
@@ -351,7 +352,7 @@ class ContractController extends AccountBaseController
 
 
         $validated = $request->validate([
-            'user_name' => 'required|unique:users|max:255',
+            'user_name' => 'required',
             'client_name' => 'required',
             'project_name' => 'required',
             'amount' => 'required|min:1',
@@ -467,24 +468,41 @@ class ContractController extends AccountBaseController
           $lead->status_id = 3;
           $lead->save();
         }
-        $country= Country::where('nicename',$lead->country)->first();
-
-        $user = new User();
-        $user->name = $request->client_name;
-        $user->user_name = $request->user_name;
-        $user->login= 'disable';
-        $user->email_notifications = 0;
-        $user->country_id= $country->id;
-        $user->save();
-        $role = new RoleUser();
-        $role->role_id = 3;
-        $role->user_id = $user->id;
-        $role->save();
-        $client = new ClientDetails();
-        $client->user_id = $user->id;
-
-        $client->client_username = $request->client_username;
-        $client->save();
+       
+        $user_name= User::where('user_name',$request->user_name)->first();
+        if ($user_name == null) {
+            if($lead != null)
+            {
+            $country= Country::where('nicename',$lead->country)->first();
+            }
+           
+            $user = new User();
+            $user->name = $request->client_name;
+            $user->user_name = $request->user_name;
+            $user->login= 'disable';
+            $user->email_notifications = 0;
+            if($lead != null)
+            {
+            $user->country_id= $country->id;
+            }
+           
+            $user->save();
+            $role = new RoleUser();
+            $role->role_id = 3;
+            $role->user_id = $user->id;
+            $role->save();
+            $client = new ClientDetails();
+            $client->user_id = $user->id;
+    
+            $client->client_username = $request->client_username;
+            $client->save();
+        } else {
+            $user= $user_name;
+        }
+        
+      
+       
+       
         $deal_client = Deal::find($deal->id);
         $deal_client->client_id = $user->id;
         $deal_client->save();
