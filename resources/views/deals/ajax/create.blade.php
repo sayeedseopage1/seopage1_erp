@@ -11,17 +11,56 @@
                 <div class="row p-20">
 
 
-                  <div class="col-lg-4 col-md-6">
-                           <x-forms.text :fieldLabel="__('Client Name')" fieldName="client_name"
+                  <div class="col-lg-5 col-md-6">
+                  
+                           <x-forms.text :fieldLabel="__('Client Name')" fieldName="client_name" 
                                fieldId="client_name" :fieldPlaceholder="__('Enter Client Name')" fieldRequired="true" required />
                        </div>
-                       <div class="col-lg-4 col-md-6">
+
+                       <div class="col-lg-5 col-md-6" id="client-username">
                                 <x-forms.text :fieldLabel="__('Client Username')" fieldName="client_username"
                                     fieldId="client_username" :fieldPlaceholder="__('Enter Client Username')" fieldRequired="true" required />
+                       </div>
+                       <div class="col-lg-5 col-md-6" id="client-username-select">
+                        <x-forms.label class="my-3" fieldRequired="true" fieldId="category_id"
+                            :fieldLabel="__('Client Username')">
+                        </x-forms.label>
+                        <x-forms.input-group>
+                            @php
+                                $users= App\Models\User::where('role_id',null)->get();
+                            @endphp
+                            <select class="form-control select-picker" name="client_username" id="client_username"
+                                data-live-search="true">
+                                <option value="">--</option>
+                                @foreach ($users as $user)
+                                    <option 
+                                        value="{{ $user->user_name }}">
+                                        {{ mb_ucwords($user->user_name) }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                          
+                        </x-forms.input-group>
+                    </div>
+                            <div class="col-md-6 col-lg-2 mt-1">
+                                <div class="form-group">
+                                    <div class="d-flex mt-5">
+                                        <x-forms.checkbox fieldId="existing_client"
+                                            :fieldLabel="__('Existing Client')" fieldName="existing_client" />
+                                    </div>
+                                </div>
                             </div>
-               <div class="col-lg-4 col-md-4">
+        
+                            
+
+               <div class="col-lg-6 col-md-6">
                         <x-forms.text :fieldLabel="__('Project Name')" fieldName="project_name"
                             fieldId="project_name" :fieldPlaceholder="__('Enter Project Name')" fieldRequired="true" required />
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <x-forms.text :fieldLabel="__('Project Link')" fieldName="project_link"
+                            fieldId="project_link" :fieldPlaceholder="__('Enter Project Link')" fieldRequired="true" required/>
                     </div>
 
 
@@ -54,10 +93,7 @@
                                       fieldName="amount" fieldId="amount" fieldRequired="true"/>
                               </div>
 
-                              <div class="col-lg-12 col-md-12">
-                                       <x-forms.text :fieldLabel="__('Project Link')" fieldName="project_link"
-                                           fieldId="project_link" :fieldPlaceholder="__('Enter Project Link')" fieldRequired="true" required/>
-                                   </div>
+                             
 
 
 
@@ -123,6 +159,29 @@
 
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
+  $(document).ready(function() {
+$('#client-username').show();
+$('#client-username-select').hide();
+//$('#client-username').is("");
+$('#existing_client').prop('checked', false);
+
+$('#existing_client').click(function() {
+   // alert("success");
+            var check = $('#existing_client').is(":checked") ? true : false;
+            if (check == true) {
+                $('#client-username').hide();
+                $('#client-username-select').show();
+            } else {
+                $('#client-username').show();
+                $('#client-username-select').hide();
+            }
+        });
+    });
+
+
+</script>
+<script>
+
 
 
         $('body').on('click', '.add-lead-agent', function() {

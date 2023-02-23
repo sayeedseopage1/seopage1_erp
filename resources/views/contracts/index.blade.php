@@ -196,7 +196,7 @@ $deals= App\Models\Deal::orderBy('id','desc')->get();
                 </td>
                 <td>{{$deal->actual_amount}}{{$deal->original_currency->currency_symbol}}</td>
 
-                <td> <a href="/account/clients/{{$client_name->id}}">{{$deal->client_name}}</a></td>
+                <td> <a href="/account/clients/{{$client_name->id}}">{{$deal->client_username}}</a></td>
 
                   <td>
                     @if($deal->pm_id != null)
