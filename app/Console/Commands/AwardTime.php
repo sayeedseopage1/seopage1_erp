@@ -50,7 +50,7 @@ class AwardTime extends Command
 
          $diff_in_minutes = $from->diffInMinutes($to);
         // dd($diff_in_minutes);
-         if ($diff_in_minutes >1230) {
+         if ($diff_in_minutes >1200) {
            $update_deal= Deal::find($deal->id);
            $update_deal->status= 'Denied';
            $update_deal->save();

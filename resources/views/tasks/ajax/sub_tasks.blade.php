@@ -38,7 +38,7 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
             </div>
         </div> 
 
-        @elseif($diff_in_minutes >= 2880 && $signature != null)
+        @elseif( $signature != null)
         <div class="row">
             <div class="col-md-12">
                 <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task"><i

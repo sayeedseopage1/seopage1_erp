@@ -18,7 +18,7 @@
   $user= App\Models\User::where('id',$data->added_by)->first();
   $lead= App\Models\Lead::where('id',$data->id)->first();
   $client= App\Models\User::where('id',$data->client_id)->first();
-  $deal= App\Models\DealStage::where('lead_id',$lead->id)->first()
+  $deal= App\Models\DealStage::where('lead_id',$lead->id)->first();
   //$row->created_at->format($this->global->date_format).$row->created_at->format('h:i:s A');
 
  ?>

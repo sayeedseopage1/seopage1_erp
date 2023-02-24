@@ -6,6 +6,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use App\Models\User;
+use App\Models\DealStage;
+use App\Models\Lead;
 
 class LeadConversionMail extends Mailable
 {
@@ -19,6 +22,9 @@ class LeadConversionMail extends Mailable
     public function __construct($data)
     {
           $this->data = $data;
+         
+
+
     }
 
     /**
@@ -26,9 +32,12 @@ class LeadConversionMail extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build($data)
     {
-      $subject = '[No Reply] Lead Converted To Deal Successfully
+      $lead= Lead::where('id',$data->id)->first();
+      $client= User::where('id',$data->client_id)->first();
+       $deal= DealStage::where('lead_id',$lead->id)->first();
+      $subject = 'Client:'.$deal->client_username. ' Lead Converted To Deal Successfully
 ';
        return $this->view('emails.new_lead_conversion')->subject($subject);
     }
