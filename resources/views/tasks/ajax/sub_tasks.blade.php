@@ -38,15 +38,9 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
             </div>
         </div> 
 
-        @elseif( $signature != null)
-        <div class="row">
-            <div class="col-md-12">
-                <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task"><i
-                        class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
-                    @lang('modules.tasks.subTask')</a>
-            </div>
-        </div> 
-        @else 
+        @elseif($signature == null && $diff_in_minutes > 2880)
+        
+
         <div class="row">
             <div class="col-md-12">
                 <a class="f-15 f-w-500" href="javascript:;" id="task-disable2"><i
@@ -54,6 +48,15 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
                     @lang('modules.tasks.subTask')</a>
             </div>
         </div>
+        @else 
+        <div class="row">
+            <div class="col-md-12">
+                <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task"><i
+                        class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
+                    @lang('modules.tasks.subTask')</a>
+            </div>
+        </div> 
+      
           @endif
         
             @endif
