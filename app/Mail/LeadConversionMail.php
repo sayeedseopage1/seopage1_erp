@@ -32,12 +32,13 @@ class LeadConversionMail extends Mailable
      *
      * @return $this
      */
-    public function build($data)
+    public function build()
     {
+      $data= $this->data;
       $lead= Lead::where('id',$data->id)->first();
       $client= User::where('id',$data->client_id)->first();
        $deal= DealStage::where('lead_id',$lead->id)->first();
-      $subject = 'Client:'.$deal->client_username. ' Lead Converted To Deal Successfully
+      $subject = 'Client: '.$deal->client_username. ' Lead Converted To Deal Successfully
 ';
        return $this->view('emails.new_lead_conversion')->subject($subject);
     }

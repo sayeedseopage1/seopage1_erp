@@ -3,7 +3,7 @@
   <div class="modal-dialog d-flex justify-content-center align-items-center modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Project Completion Request Form</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Project QC Submission Form</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <?php

@@ -71,6 +71,7 @@ class MilestoneReleaseNotification extends Notification
     $incomplete_milestone= ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->get();
     $complete_milestone= ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
     $currency= Currency::where('id',$milestone_id->original_currency_id)->first();
+    $incomplete_milestones= ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->count();
 
     if($milestone_id->summary != null)
     {
@@ -148,7 +149,7 @@ class MilestoneReleaseNotification extends Notification
     ;
 
         return (new MailMessage)
-              ->subject(__('[No Reply] New Milestone Released Successfully') )
+              ->subject(__(' '.$client->name.' released the '.$this->milestone->milestone_title.' milestone') )
 
               ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
               ->markdown('mail.milestone.release', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header,'remaining'=>$remaining, 'name' => mb_ucwords($notifiable->name)]);
