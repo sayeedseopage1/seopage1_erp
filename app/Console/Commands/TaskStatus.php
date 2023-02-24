@@ -97,7 +97,7 @@ class TaskStatus extends Command
    
    
         //  Notification::send($user, new TaskSubmitNotification($task_id,$sender));
-         $users= User::where('role_id',1)->orWhere('id',$tsk->added_by)->get();
+         $users= User::where('id',$tsk->added_by)->get();
 
           foreach ($users as $user) {
             // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
