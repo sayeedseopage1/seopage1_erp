@@ -173,6 +173,7 @@ class TaskController extends AccountBaseController
 
 
       Notification::send($user, new TaskSubmitNotification($task_id,$sender));
+      
       Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
       //return back();
       return Redirect::back()->with('messages.taskSubmitNotification');

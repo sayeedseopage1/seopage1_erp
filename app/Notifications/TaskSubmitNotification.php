@@ -79,7 +79,7 @@ class TaskSubmitNotification extends Notification
    ;
   
           return (new MailMessage)
-          ->subject(__('[No Reply] Task Submission Request') )
+          ->subject(__('Client '.$client->name .', Task '.$task->heading.' has been submitted For Review') )
   
           ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
           ->markdown('mail.task.task_submission', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);

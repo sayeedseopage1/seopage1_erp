@@ -80,7 +80,7 @@ class ClientDeliverableSignNotification extends Notification
    ;
  
           return (new MailMessage)
-          ->subject(__('[No Reply] Client signed deliverable') )
+          ->subject(__('Client '.$client->name.' signed the deliverables') )
  
           ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
           ->markdown('mail.project.client_deliverable_sign', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);

@@ -100,7 +100,7 @@ class MilestoneComplete extends Notification
  ;
 
         return (new MailMessage)
-        ->subject(__('[No Reply] All Milestone Completed Successfully') )
+        ->subject(__('Client '.$client->name.', all milestones released successfully') )
 
         ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
         ->markdown('mail.milestone.complete', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);

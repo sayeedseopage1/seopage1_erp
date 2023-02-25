@@ -83,7 +83,7 @@ class QcSubmissionAcceptNotification extends Notification
  ;
 
         return (new MailMessage)
-        ->subject(__('[No Reply] Project Q&C Request Received') )
+        ->subject(__('Client '.$client->name.', QC Form authorization accepted by Top Management') )
 
         ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
         ->markdown('mail.project.project_qc_accept', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);

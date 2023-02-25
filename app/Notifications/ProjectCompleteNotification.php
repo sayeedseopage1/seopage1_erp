@@ -84,7 +84,7 @@ class ProjectCompleteNotification extends Notification
  ;
 
         return (new MailMessage)
-        ->subject(__('[No Reply] Project Completed Successfully') )
+        ->subject(__('Client '.$client->name.', Project Completed Successfully') )
 
         ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
         ->markdown('mail.project.complete', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
