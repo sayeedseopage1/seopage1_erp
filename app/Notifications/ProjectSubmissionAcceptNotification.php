@@ -83,7 +83,7 @@ class ProjectSubmissionAcceptNotification extends Notification
  ;
 
         return (new MailMessage)
-        ->subject(__('[No Reply] Project Completion Request Received') )
+        ->subject(__('Client '.$client->name.', Project Submission authorization accepted') )
 
         ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
         ->markdown('mail.project.project_submission_accept', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);

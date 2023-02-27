@@ -210,7 +210,7 @@
     margin: 20px 0;
     font-size: 0.7em;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    width: 100%;
+    width: auto;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .styled-table thead tr {

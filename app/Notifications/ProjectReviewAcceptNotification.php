@@ -8,6 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Deal;
 
 class ProjectReviewAcceptNotification extends Notification
 {
@@ -49,7 +50,8 @@ class ProjectReviewAcceptNotification extends Notification
 
     $pm= User::where('id',$project->pm_id)->first();
     $client= User::where('id',$project->client_id)->first();
-    $sales_ex= User::where('id',$project->added_by)->first();
+    $deal= Deal::where('id',$project->deal_id)->first();
+    $sales_ex= User::where('id',$deal->added_by)->first();
     $user= User::where('id',$project->last_updated_by)->first();
 
     $greet= '<p>
@@ -94,7 +96,7 @@ class ProjectReviewAcceptNotification extends Notification
   ;
 
         return (new MailMessage)
-        ->subject(__('[No Reply] Top Management has (“'.$project->project_status.'”) the '.$project->project_name.'
+        ->subject(__('Client Name: '.$client->name.', Top Management has (“'.$project->project_status.'”) the '.$project->project_name.'
   ') )
 
         ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')

@@ -74,7 +74,7 @@
                         <input type="hidden" name="deal_id" value="{{$deal->id}}" />
                         <div class="col-md-12">
                             <label for="Email3" class="form-label">Please put your freelancer.com username here!</label>
-                            <input type="text" name="user_name" class="form-control @error('user_name') is-invalid @enderror"  required />
+                            <input type="text" name="user_name" value="{{$deal->client_username}}" class="form-control @error('user_name') is-invalid @enderror"  required />
                         </div>
                         @error('user_name')
                         <div class="mt-3">

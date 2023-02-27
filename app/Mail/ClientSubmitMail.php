@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use App\Models\User;
 
 class ClientSubmitMail extends Mailable
 {
@@ -32,7 +33,10 @@ class ClientSubmitMail extends Mailable
      */
     public function build()
     {
-      $subject = '[No Reply] Client Has Submitted Form Successfully';
+        $data= $this->data;
+       
+     
+      $subject = 'Client '.$data->client_username.' has submitted the Contact form successfully';
        return $this->view('emails.client_submission_form')->subject($subject);
     }
 }

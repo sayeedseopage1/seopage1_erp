@@ -8,6 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\Deal;
 
 class ProjectReviewNotification extends Notification
 {
@@ -49,7 +50,8 @@ class ProjectReviewNotification extends Notification
 
   $pm= User::where('id',$project->pm_id)->first();
   $client= User::where('id',$project->client_id)->first();
-  $sales_ex= User::where('id',$project->added_by)->first();
+  $deal= Deal::where('id',$project->deal_id)->first();
+  $sales_ex= User::where('id',$deal->added_by)->first();
 
   $greet= '<p>
      <b style="color: black">'  . '<span style="color:black">'.'Hello '.$notifiable->name. ','.'</span>'.'</b>
@@ -92,7 +94,7 @@ class ProjectReviewNotification extends Notification
 ;
 
       return (new MailMessage)
-      ->subject(__('[No Reply] Project (“'.$project->project_name.'”) Has (“Doable/Not Doable”) Challenge
+      ->subject(__('Project from Client '.$client->name.' has challenges: Needs Authorization
 ') )
 
       ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
