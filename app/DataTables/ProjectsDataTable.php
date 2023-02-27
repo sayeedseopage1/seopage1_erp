@@ -17,6 +17,7 @@ use App\Models\User;
 use Auth;
 use App\Models\Task;
 use App\Models\ContractSign;
+use App\Models\ProjectMilestone;
 class ProjectsDataTable extends BaseDataTable
 {
 
@@ -299,16 +300,16 @@ class ProjectsDataTable extends BaseDataTable
             });
             $datatables->editColumn('completion_percent', function ($row) {
 
-                $tasks= Task::where('project_id',$row->id)->count();
-                $completed_tasks= Task::where('project_id',$row->id)->where('status','completed')->count();
+                $milestones= ProjectMilestone::where('project_id',$row->id)->count();
+                $completed_milestones= ProjectMilestone::where('project_id',$row->id)->where('status','complete')->count();
 
                
 
-                if ($tasks < 1 ) {
+                if ($milestones < 1 ) {
                    $completion= 0;
                    $statusColor = 'danger';
-                }elseif($tasks >= 1){
-                    $percentage= round(($completed_tasks/$tasks)*100,2);
+                }elseif($milestones >= 1){
+                    $percentage= round(($completed_milestones/$milestones)*100,2);
                     //dd($percentage);
                     if($percentage < 50)
                     {
