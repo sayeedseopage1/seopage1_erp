@@ -297,22 +297,25 @@ function copyLink(){
                 ...datepickerConfig
             });
         }
+        
+        const today = new Date(); // get current date
         const dp1 = datepicker('#from_add', {
             position: 'bl',
-
+            minDate: today, // set minimum date to current date
             onSelect: (instance, date) => {
               dp2.setMin(date);
             },
             ...datepickerConfig
         });
+        
         const dp2 = datepicker('#to_add', {
             position: 'bl',
-
+            minDate: today, // set minimum date to current date
             onSelect: (instance, date) => {
                dp1.setMax(date);
             },
             ...datepickerConfig
         });
-      });
+    });
 </script>
 
