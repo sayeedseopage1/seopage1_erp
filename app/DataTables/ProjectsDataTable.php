@@ -249,6 +249,8 @@ class ProjectsDataTable extends BaseDataTable
 
                 return '--';
             });
+
+            
             $datatables->addColumn('client_name', function ($row) {
                 if (!is_null($row->client_id)) {
                     return $row->client->name;
@@ -342,6 +344,7 @@ class ProjectsDataTable extends BaseDataTable
                 <div class="progress-bar f-12 bg-' . $statusColor . '" role="progressbar" style="width: ' . $completion . '%;" aria-valuenow="' . $completion . '" aria-valuemin="0" aria-valuemax="100">' . $completion . '%</div>
               </div>';
             });
+           
             $datatables->addColumn('completion_export', function ($row) {
                 return $row->completion_percent . '% ' . __('app.complete');
             });
@@ -561,13 +564,14 @@ class ProjectsDataTable extends BaseDataTable
                 __('app.project_value') => ['data' => 'project_value', 'name' => 'project_value',  'title' => __('Project Value')],
               __('modules.projects.members')  => ['data' => 'members', 'name' => 'members', 'exportable' => false, 'width' => '15%', 'title' => __('modules.projects.members')],
               __('modules.projects.projectMembers')  => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.projects.projectMembers')],
-              __('modules.projects.startDate')  => ['data' => 'start_date', 'name' => 'start_date', 'visible' => false, 'title' => __('modules.projects.startDate')],
-              __('app.deadline') => ['data' => 'deadline', 'name' => 'deadline', 'title' => __('app.deadline')],
+             
               __('app.client') => ['data' => 'client_id', 'name' => 'client_id', 'width' => '15%', 'exportable' => false, 'title' => __('app.client')],
               __('app.customers')  => ['data' => 'client_name', 'name' => 'client_id', 'visible' => false, 'title' => __('app.customers')],
 
               __('app.client') . ' ' . __('app.email')  => ['data' => 'client_email', 'name' => 'client_id', 'visible' => false, 'title' => __('app.client') . ' ' . __('app.email')],
                 __('app.project_manager') => ['data' => 'project_manager', 'name' => 'project_manager',  'title' => __('Project Manager')],
+                __('modules.projects.startDate')  => ['data' => 'start_date', 'name' => 'start_date', 'visible' => true, 'title' => __('modules.projects.startDate')],
+                __('app.deadline') => ['data' => 'deadline', 'name' => 'deadline', 'title' => __('app.deadline')],
                 __('app.deliverable_sign') => ['data' => 'deliverable_sign', 'name' => 'deliverable_sign',  'title' => __('Deliverable Signed')],
               __('app.progress') => ['data' => 'completion_percent', 'name' => 'completion_percent', 'exportable' => false, 'title' => __('app.progress')],
               __('app.completion') => ['data' => 'completion_export', 'name' => 'completion_export', 'visible' => false, 'title' => __('app.completion')],
