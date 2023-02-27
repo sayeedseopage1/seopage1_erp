@@ -558,7 +558,7 @@ class ProjectsDataTable extends BaseDataTable
               ],
               '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => true],
               // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
-              __('modules.taskCode') => ['data' => 'short_code', 'name' => 'project_short_code', 'title' => __('modules.taskCode')],
+              __('modules.taskCode') => ['data' => 'short_code', 'name' => 'project_short_code','visible' => false, 'title' => __('modules.taskCode')],
               __('modules.projects.projectName') => ['data' => 'project_name', 'name' => 'project_name', 'exportable' => false, 'title' => __('modules.projects.projectName')],
               __('app.project') => ['data' => 'project', 'name' => 'project_name', 'visible' => false, 'title' => __('app.project')],
                 __('app.project_value') => ['data' => 'project_value', 'name' => 'project_value',  'title' => __('Project Value')],
