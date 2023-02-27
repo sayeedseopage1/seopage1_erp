@@ -208,9 +208,9 @@
         .styled-table {
     border-collapse: collapse;
     margin: 20px 0;
-    font-size: 0.5em;
+    font-size: 0.4em;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    width: 70%;
+    width: 100%;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 .styled-table thead tr {
