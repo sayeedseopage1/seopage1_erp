@@ -164,6 +164,7 @@ class LeadController extends AccountBaseController
         ;
       Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
         return redirect('/account/deals/'.$deal->id);
+        
 
 
     }

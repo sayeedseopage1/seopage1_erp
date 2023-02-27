@@ -137,7 +137,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                     @include('projects.modals.projectqcreplymodal')
                                  @else
 
-                                  <a href="#"   class="btn-success rounded f-14 p-2 flex-right create-invoice"  data-row-id="{{ $item->id }}">Generate Invoice</a>
+                                  <a href="#"   class="btn-success rounded f-14 p-2 flex-right create-invoice" id="{{$item->id}}"  data-row-id="{{ $item->id }}">Generate Invoice</a>
                                   @endif
 
                                     @else
@@ -254,8 +254,9 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
       string = `?project_id=${project_id}&client_id=${client_id}&milestone_id=${milestone_id}`;
       url += string;
-
+      $(this).prop("disabled", true);
       window.open(url);
+    
     });
     $('body').on('click', '.create-payment', function() {
       //id = $(this).attr("id");
@@ -267,6 +268,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
       url += string;
 
       window.open(url);
+    
     });
 
 
@@ -274,6 +276,8 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 
 </script>
+
+
 
 <script>
     $('#add-project-milestone').click(function() {

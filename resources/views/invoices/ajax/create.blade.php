@@ -434,7 +434,7 @@ $addProductPermission = user()->permission('add_product');
                                     <tr>
                                         <td class="border-bottom-0 btrr-mbl btlr">
                                             <input type="text" class="form-control f-14 border-0 w-100 item_name"
-                                                name="item_name[]" placeholder="@lang('modules.expenses.itemName')"
+                                                name="item_name[]"  placeholder="@lang('modules.expenses.itemName')"
                                                 value="{{ $item->item_name }}">
                                         </td>
                                         <td class="border-bottom-0 d-block d-lg-none d-md-none">
@@ -528,7 +528,7 @@ $addProductPermission = user()->permission('add_product');
                                 <tr>
                                     <td class="border-bottom-0 btrr-mbl btlr">
                                         <input type="text" class="form-control f-14 border-0 w-100 item_name"
-                                            name="item_name[]" placeholder="@lang('modules.expenses.itemName')">
+                                            name="item_name[]" value="{{$milest->milestone_title}}" placeholder="@lang('modules.expenses.itemName')">
                                     </td>
                                     <td class="border-bottom-0 d-block d-lg-none d-md-none">
                                         <textarea class="form-control f-14 border-0 w-100 mobile-description form-control"
@@ -550,7 +550,7 @@ $addProductPermission = user()->permission('add_product');
                                     <td class="border-bottom-0">
                                         <input type="number" min="1"
                                             class="f-14 border-0 w-100 text-right cost_per_item form-control" placeholder="0.00"
-                                            value="0" name="cost_per_item[]">
+                                            value="{{$milest->actual_cost}}" name="cost_per_item[]">
                                     </td>
                                     <td class="border-bottom-0">
                                         <div class="select-others height-35 rounded border-0">
@@ -566,7 +566,7 @@ $addProductPermission = user()->permission('add_product');
                                     </td>
                                     <td rowspan="2" align="right" valign="top" class="bg-amt-grey btrr-bbrr">
                                         <span class="amount-html">0.00</span>
-                                        <input type="hidden" class="amount" name="amount[]" value="0">
+                                        <input type="hidden" class="amount" name="amount[]" value="{{$milest->actual_cost}}">
                                     </td>
                                 </tr>
                                 <tr class="d-none d-md-table-row d-lg-table-row">
@@ -593,12 +593,12 @@ $addProductPermission = user()->permission('add_product');
 
         </div>
         <!--  ADD ITEM START-->
-        <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
+        {{-- <div class="row px-lg-4 px-md-4 px-3 pb-3 pt-0 mb-3  mt-2">
             <div class="col-md-12">
                 <a class="f-15 f-w-500" href="javascript:;" id="add-item"><i
                         class="icons icon-plus font-weight-bold mr-1"></i>@lang('modules.invoices.addItem')</a>
             </div>
-        </div>
+        </div> --}}
         <!--  ADD ITEM END-->
 
         <hr class="m-0 border-top-grey">
@@ -699,13 +699,17 @@ $addProductPermission = user()->permission('add_product');
             <div class="d-flex mb-3 mb-lg-0 mb-md-0">
 
                 <div class="inv-action dropup mr-3">
-                    <button class="btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
+                    {{-- <button class="btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         @lang('app.save')
                         <span><i class="fa fa-chevron-up f-15 text-white"></i></span>
-                    </button>
+                    </button> --}}
+                    <a class="btn-primary f-14 save-form" href="javascript:void(0);"
+                                data-type="send">
+                                <i class="fa fa-paper-plane f-w-500  mr-2 f-12"></i> @lang('app.saveSend')
+                            </a>
                     <!-- DROPDOWN - INFORMATION -->
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn" tabindex="0">
+                    {{-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuBtn" tabindex="0">
                         <li>
                             <a class="dropdown-item f-14 text-dark save-form" href="javascript:;" data-type="save">
                                 <i class="fa fa-save f-w-500 mr-2 f-11"></i> @lang('app.save')
@@ -717,7 +721,7 @@ $addProductPermission = user()->permission('add_product');
                                 <i class="fa fa-paper-plane f-w-500  mr-2 f-12"></i> @lang('app.saveSend')
                             </a>
                         </li>
-                    </ul>
+                    </ul> --}}
                 </div>
 
                 <x-forms.button-secondary data-type="draft" class="save-form mr-3">@lang('app.saveDraft')
@@ -1078,3 +1082,4 @@ $addProductPermission = user()->permission('add_product');
         $('#' + id).val(checkedData);
     }
 </script>
+
