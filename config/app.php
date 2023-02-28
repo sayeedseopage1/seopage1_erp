@@ -90,7 +90,7 @@ return [
     |
     */
 
-   
+    'url' => env('APP_URL', 'https://erp.seopage1.net'),
 
     'asset_url' => env('ASSET_URL', null),
 
