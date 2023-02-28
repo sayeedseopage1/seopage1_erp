@@ -64,9 +64,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('update-exchange-rate')->daily()->timezone(config('app.cron_timezone'));
         $schedule->command('auto-stop-timer')->dailyAt('23:59')->timezone(config('app.cron_timezone'));
         $schedule->command('send-event-reminder')->everyMinute();
-        $schedule->command('send-project-reminder')->daily()->timezone(config('app.cron_timezone'));
+       // $schedule->command('send-project-reminder')->daily()->timezone(config('app.cron_timezone'));
         $schedule->command('hide-cron-message')->everyMinute();
-        $schedule->command('send-auto-task-reminder')->daily()->timezone(config('app.cron_timezone'));
+      //  $schedule->command('send-auto-task-reminder')->daily()->timezone(config('app.cron_timezone'));
         $schedule->command('recurring-invoice-create')->daily()->timezone(config('app.cron_timezone'));
         $schedule->command('recurring-expenses-create')->daily()->timezone(config('app.cron_timezone'));
         $schedule->command('clear-null-session')->hourly();
@@ -78,7 +78,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('sync-user-permissions')->everyMinute();
         $schedule->command('create-database-backup')->hourly();
         $schedule->command('delete-database-backup')->hourly();
-        $schedule->command('send-auto-followup-reminder')->everyMinute();
+      //  $schedule->command('send-auto-followup-reminder')->everyMinute();
         $schedule->command('fetch-ticket-emails')->everyMinute();
         $schedule->command('add-missing-permissions')->everyThirtyMinutes();
         $schedule->command('task:daily')->daily()->timezone(config('app.cron_timezone'));
