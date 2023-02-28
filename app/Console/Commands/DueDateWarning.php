@@ -58,7 +58,7 @@ class DueDateWarning extends Command
 
 
                 if ($days <= 1) {
-                $users= User::where('role_id',4)->orWhere('role_id',6)->orWhere('role_id',1)->get();
+                $users= User::where('id',$project->pm_id)->orWhere('role_id',6)->orWhere('role_id',1)->get();
                 foreach ($users as $user) {
 
 
