@@ -32,7 +32,7 @@
             <div class="select-status">
                 <select class="form-control select-picker" name="status" id="status" data-live-search="true" data-size="8">
                     <option selected value="in progress">@lang('In Progress')</option>
-                    <!-- <option {{ request('status') == 'all' ? 'selected' : '' }} value="all">@lang('app.all')</option> -->
+                     <option {{ request('status') == 'all' ? 'selected' : '' }} value="all">@lang('app.all')</option> 
                     <option {{ request('status') == 'overdue' ? 'selected' : '' }} value="overdue">@lang('app.overdue')
                     </option>
                     <?php $p_status= App\Models\ProjectStatusSetting::where('status_name','!=','not started')->get() ?>

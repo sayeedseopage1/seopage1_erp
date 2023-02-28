@@ -243,11 +243,30 @@ class ProjectsDataTable extends BaseDataTable
                 return $row->start_date->format($this->global->date_format);
             });
             $datatables->editColumn('deadline', function ($row) {
-                if ($row->deadline) {
-                    return $row->deadline->format($this->global->date_format);
+               
+                if (is_null($row->deadline)) {
+                    return '--';
+                }
+                if($row->status == 'finished')
+                {
+                    return '<span style="color:green;;"><strong>' . $row->deadline->format($this->global->date_format) . '</strong></span>';
+                }else
+                {
+                    if ($row->deadline->endOfDay()->isPast()) {
+                        return '<span style="color:#d50000;"><strong>' . $row->deadline->format($this->global->date_format) . '</strong></span>';
+                    }
+                    elseif ($row->deadline->isToday()) {
+                        return '<span style="color:#ef5350;">' . __('app.today') . '</span>';
+                    }
                 }
 
-                return '--';
+               
+                // elseif($row->deadline->isToday()+1 ){
+                //     return '<span class="text-warning">' . __('Tommorow') . '</span>';
+                // }
+                return '<span >' . $row->deadline->format($this->global->date_format) . '</span>';
+
+               // return '--';
             });
 
             
@@ -390,7 +409,7 @@ class ProjectsDataTable extends BaseDataTable
             $datatables->setRowId(function ($row) {
                 return 'row-' . $row->id;
             });
-            $datatables->rawColumns(['project_name','pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check','short_code','project_manager','deliverable_sign']);
+            $datatables->rawColumns(['project_name','pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check','short_code','project_manager','deliverable_sign','deadline']);
             $datatables->removeColumn('project_summary');
             $datatables->removeColumn('notes');
             $datatables->removeColumn('category_id');
