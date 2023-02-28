@@ -13,7 +13,10 @@ use Twilio\Exceptions\TwilioException;
 use Twilio\ListResource;
 use Twilio\Options;
 use Twilio\Serialize;
+<<<<<<< HEAD
 use Twilio\Stream;
+=======
+>>>>>>> 1f8fa8284 (env)
 use Twilio\Values;
 use Twilio\Version;
 
@@ -66,6 +69,7 @@ class InsightsQuestionnairesQuestionList extends ListResource {
     }
 
     /**
+<<<<<<< HEAD
      * Streams InsightsQuestionnairesQuestionInstance records from the API as a
      * generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -160,6 +164,8 @@ class InsightsQuestionnairesQuestionList extends ListResource {
     }
 
     /**
+=======
+>>>>>>> 1f8fa8284 (env)
      * Constructs a InsightsQuestionnairesQuestionContext
      *
      * @param string $questionId Unique Question ID

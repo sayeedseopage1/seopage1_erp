@@ -110,6 +110,7 @@ class Contentwarehouse extends \Google\Service
                   'required' => true,
                 ],
               ],
+<<<<<<< HEAD
             ],'runPipeline' => [
               'path' => 'v1/{+name}:runPipeline',
               'httpMethod' => 'POST',
@@ -120,6 +121,8 @@ class Contentwarehouse extends \Google\Service
                   'required' => true,
                 ],
               ],
+=======
+>>>>>>> 1f8fa8284 (env)
             ],
           ]
         ]

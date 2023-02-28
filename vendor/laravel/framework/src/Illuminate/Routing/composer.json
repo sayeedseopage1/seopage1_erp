@@ -15,8 +15,12 @@
     ],
     "require": {
         "php": "^8.0.2",
+<<<<<<< HEAD
         "ext-filter": "*",
         "ext-hash": "*",
+=======
+        "ext-json": "*",
+>>>>>>> 1f8fa8284 (env)
         "illuminate/collections": "^9.0",
         "illuminate/container": "^9.0",
         "illuminate/contracts": "^9.0",

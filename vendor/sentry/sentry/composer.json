@@ -28,7 +28,11 @@
         "jean85/pretty-package-versions": "^1.5|^2.0.4",
         "php-http/async-client-implementation": "^1.0",
         "php-http/client-common": "^1.5|^2.0",
+<<<<<<< HEAD
         "php-http/discovery": "^1.11, <1.15",
+=======
+        "php-http/discovery": "^1.11",
+>>>>>>> 1f8fa8284 (env)
         "php-http/httplug": "^1.1|^2.0",
         "php-http/message": "^1.5",
         "psr/http-factory": "^1.0",
@@ -89,14 +93,21 @@
         "sort-packages": true,
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
+<<<<<<< HEAD
             "php-http/discovery": false,
+=======
+>>>>>>> 1f8fa8284 (env)
             "phpstan/extension-installer": true
         }
     },
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
+<<<<<<< HEAD
             "dev-master": "3.13.x-dev"
+=======
+            "dev-master": "3.12.x-dev"
+>>>>>>> 1f8fa8284 (env)
         }
     }
 }

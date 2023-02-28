@@ -17,6 +17,11 @@
 
 namespace Google\Service\Integrations\Resource;
 
+<<<<<<< HEAD
+=======
+use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaArchiveBundleRequest;
+use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaArchiveBundleResponse;
+>>>>>>> 1f8fa8284 (env)
 use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaExecuteIntegrationsRequest;
 use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaExecuteIntegrationsResponse;
 use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListIntegrationsResponse;
@@ -34,6 +39,25 @@ use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaScheduleIntegratio
 class ProjectsLocationsProductsIntegrations extends \Google\Service\Resource
 {
   /**
+<<<<<<< HEAD
+=======
+   * PROTECT WITH A VISIBILITY LABEL. THIS METHOD WILL BE MOVED TO A SEPARATE
+   * SERVICE. Soft-deletes the bundle. (integrations.archiveBundle)
+   *
+   * @param string $name Required. The bundle to archive. Format:
+   * projects/{project}/locations/{location}/integrations/{integration}
+   * @param GoogleCloudIntegrationsV1alphaArchiveBundleRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return GoogleCloudIntegrationsV1alphaArchiveBundleResponse
+   */
+  public function archiveBundle($name, GoogleCloudIntegrationsV1alphaArchiveBundleRequest $postBody, $optParams = [])
+  {
+    $params = ['name' => $name, 'postBody' => $postBody];
+    $params = array_merge($params, $optParams);
+    return $this->call('archiveBundle', [$params], GoogleCloudIntegrationsV1alphaArchiveBundleResponse::class);
+  }
+  /**
+>>>>>>> 1f8fa8284 (env)
    * Executes integrations synchronously by passing the trigger id in the request
    * body. The request is not returned until the requested executions are either
    * fulfilled or experienced an error. If the integration name is not specified

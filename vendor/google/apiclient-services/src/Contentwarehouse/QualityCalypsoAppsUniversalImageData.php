@@ -20,9 +20,12 @@ namespace Google\Service\Contentwarehouse;
 class QualityCalypsoAppsUniversalImageData extends \Google\Collection
 {
   protected $collection_key = 'screenshot';
+<<<<<<< HEAD
   protected $enhancedImageType = QualityCalypsoAppsUniversalImage::class;
   protected $enhancedImageDataType = '';
   public $enhancedImage;
+=======
+>>>>>>> 1f8fa8284 (env)
   protected $featureGraphicType = QualityCalypsoAppsUniversalImage::class;
   protected $featureGraphicDataType = '';
   public $featureGraphic;
@@ -33,6 +36,7 @@ class QualityCalypsoAppsUniversalImageData extends \Google\Collection
   /**
    * @param QualityCalypsoAppsUniversalImage
    */
+<<<<<<< HEAD
   public function setEnhancedImage(QualityCalypsoAppsUniversalImage $enhancedImage)
   {
     $this->enhancedImage = $enhancedImage;
@@ -47,6 +51,8 @@ class QualityCalypsoAppsUniversalImageData extends \Google\Collection
   /**
    * @param QualityCalypsoAppsUniversalImage
    */
+=======
+>>>>>>> 1f8fa8284 (env)
   public function setFeatureGraphic(QualityCalypsoAppsUniversalImage $featureGraphic)
   {
     $this->featureGraphic = $featureGraphic;

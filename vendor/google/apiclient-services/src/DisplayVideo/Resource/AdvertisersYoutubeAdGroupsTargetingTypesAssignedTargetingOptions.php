@@ -32,7 +32,11 @@ class AdvertisersYoutubeAdGroupsTargetingTypesAssignedTargetingOptions extends \
 {
   /**
    * Gets a single targeting option assigned to a YouTube ad group. Inherited
+<<<<<<< HEAD
    * assigned targeting options are not included. (assignedTargetingOptions.get)
+=======
+   * targeting is not included. (assignedTargetingOptions.get)
+>>>>>>> 1f8fa8284 (env)
    *
    * @param string $advertiserId Required. The ID of the advertiser the ad group
    * belongs to.
@@ -40,6 +44,7 @@ class AdvertisersYoutubeAdGroupsTargetingTypesAssignedTargetingOptions extends \
    * targeting option belongs to.
    * @param string $targetingType Required. Identifies the type of this assigned
    * targeting option. Supported targeting types include: *
+<<<<<<< HEAD
    * `TARGETING_TYPE_AGE_RANGE` * `TARGETING_TYPE_APP` *
    * `TARGETING_TYPE_APP_CATEGORY` * `TARGETING_TYPE_AUDIENCE_GROUP` *
    * `TARGETING_TYPE_CATEGORY` * `TARGETING_TYPE_GENDER` *
@@ -47,6 +52,14 @@ class AdvertisersYoutubeAdGroupsTargetingTypesAssignedTargetingOptions extends \
    * `TARGETING_TYPE_PARENTAL_STATUS` * `TARGETING_TYPE_SESSION_POSITION` *
    * `TARGETING_TYPE_URL` * `TARGETING_TYPE_YOUTUBE_CHANNEL` *
    * `TARGETING_TYPE_YOUTUBE_VIDEO`
+=======
+   * `TARGETING_TYPE_GENDER` * `TARGETING_TYPE_AGE_RANGE` *
+   * `TARGETING_TYPE_PARENTAL_STATUS` * `TARGETING_TYPE_HOUSEHOLD_INCOME` *
+   * `TARGETING_TYPE_AUDIENCE_GROUP` * `TARGETING_TYPE_URL` * `TARGETING_TYPE_APP`
+   * * `TARGETING_TYPE_APP_CATEGORY` * `TARGETING_TYPE_KEYWORD` *
+   * `TARGETING_TYPE_CATEGORY` * `TARGETING_TYPE_SESSION_POSITION` *
+   * `TARGETING_TYPE_YOUTUBE_CHANNEL` * `TARGETING_TYPE_YOUTUBE_VIDEO`
+>>>>>>> 1f8fa8284 (env)
    * @param string $assignedTargetingOptionId Required. An identifier unique to
    * the targeting type in this line item that identifies the assigned targeting
    * option being requested.
@@ -61,8 +74,13 @@ class AdvertisersYoutubeAdGroupsTargetingTypesAssignedTargetingOptions extends \
   }
   /**
    * Lists the targeting options assigned to a YouTube ad group. Inherited
+<<<<<<< HEAD
    * assigned targeting options are not included. (assignedTargetingOptions.listAd
    * vertisersYoutubeAdGroupsTargetingTypesAssignedTargetingOptions)
+=======
+   * targeting is not included. (assignedTargetingOptions.listAdvertisersYoutubeAd
+   * GroupsTargetingTypesAssignedTargetingOptions)
+>>>>>>> 1f8fa8284 (env)
    *
    * @param string $advertiserId Required. The ID of the advertiser the ad group
    * belongs to.
@@ -70,6 +88,7 @@ class AdvertisersYoutubeAdGroupsTargetingTypesAssignedTargetingOptions extends \
    * assigned targeting options for.
    * @param string $targetingType Required. Identifies the type of assigned
    * targeting options to list. Supported targeting types include: *
+<<<<<<< HEAD
    * `TARGETING_TYPE_AGE_RANGE` * `TARGETING_TYPE_APP` *
    * `TARGETING_TYPE_APP_CATEGORY` * `TARGETING_TYPE_AUDIENCE_GROUP` *
    * `TARGETING_TYPE_CATEGORY` * `TARGETING_TYPE_GENDER` *
@@ -77,6 +96,14 @@ class AdvertisersYoutubeAdGroupsTargetingTypesAssignedTargetingOptions extends \
    * `TARGETING_TYPE_PARENTAL_STATUS` * `TARGETING_TYPE_SESSION_POSITION` *
    * `TARGETING_TYPE_URL` * `TARGETING_TYPE_YOUTUBE_CHANNEL` *
    * `TARGETING_TYPE_YOUTUBE_VIDEO`
+=======
+   * `TARGETING_TYPE_GENDER` * `TARGETING_TYPE_AGE_RANGE` *
+   * `TARGETING_TYPE_PARENTAL_STATUS` * `TARGETING_TYPE_HOUSEHOLD_INCOME` *
+   * `TARGETING_TYPE_AUDIENCE_GROUP` * `TARGETING_TYPE_URL` * `TARGETING_TYPE_APP`
+   * * `TARGETING_TYPE_APP_CATEGORY` * `TARGETING_TYPE_KEYWORD` *
+   * `TARGETING_TYPE_CATEGORY` * `TARGETING_TYPE_SESSION_POSITION` *
+   * `TARGETING_TYPE_YOUTUBE_CHANNEL` * `TARGETING_TYPE_YOUTUBE_VIDEO`
+>>>>>>> 1f8fa8284 (env)
    * @param array $optParams Optional parameters.
    *
    * @opt_param string filter Allows filtering by assigned targeting option

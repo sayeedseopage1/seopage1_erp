@@ -38,12 +38,19 @@ class InsightsQuestionnairesQuestionContext extends InstanceContext {
     /**
      * Update the InsightsQuestionnairesQuestionInstance
      *
+<<<<<<< HEAD
+=======
+     * @param string $question The question.
+     * @param string $description The question description.
+     * @param string $answerSetId The answer_set for question.
+>>>>>>> 1f8fa8284 (env)
      * @param bool $allowNa Flag to enable NA for answer.
      * @param array|Options $options Optional Arguments
      * @return InsightsQuestionnairesQuestionInstance Updated
      *                                                InsightsQuestionnairesQuestionInstance
      * @throws TwilioException When an HTTP error occurs.
      */
+<<<<<<< HEAD
     public function update(bool $allowNa, array $options = []): InsightsQuestionnairesQuestionInstance {
         $options = new Values($options);
 
@@ -53,6 +60,17 @@ class InsightsQuestionnairesQuestionContext extends InstanceContext {
             'Question' => $options['question'],
             'Description' => $options['description'],
             'AnswerSetId' => $options['answerSetId'],
+=======
+    public function update(string $question, string $description, string $answerSetId, bool $allowNa, array $options = []): InsightsQuestionnairesQuestionInstance {
+        $options = new Values($options);
+
+        $data = Values::of([
+            'Question' => $question,
+            'Description' => $description,
+            'AnswerSetId' => $answerSetId,
+            'AllowNa' => Serialize::booleanToString($allowNa),
+            'CategoryId' => $options['categoryId'],
+>>>>>>> 1f8fa8284 (env)
         ]);
         $headers = Values::of(['Token' => $options['token'], ]);
 

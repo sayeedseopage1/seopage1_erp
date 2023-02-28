@@ -1,5 +1,6 @@
 # Release Notes for 9.x
 
+<<<<<<< HEAD
 ## [Unreleased](https://github.com/laravel/framework/compare/v9.52.0...9.x)
 
 
@@ -148,6 +149,9 @@
 - allow egulias/email-validator v4 ([#45649](https://github.com/laravel/framework/pull/45649))
 - Force countBy method in EloquentCollection to return base collection ([#45663](https://github.com/laravel/framework/pull/45663))
 - Allow for the collection of stubs to be published ([#45653](https://github.com/laravel/framework/pull/45653))
+=======
+## [Unreleased](https://github.com/laravel/framework/compare/v9.47.0...9.x)
+>>>>>>> 1f8fa8284 (env)
 
 
 ## [v9.47.0](https://github.com/laravel/framework/compare/v9.46.0...v9.47.0) - 2023-01-10
