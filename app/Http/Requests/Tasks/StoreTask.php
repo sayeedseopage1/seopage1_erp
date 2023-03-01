@@ -53,7 +53,9 @@ class StoreTask extends CoreRequest
             'user_id'=>'required',
             'start_date' => 'required|date_format:"' . $setting->date_format . '"',
             'due_date' => 'required|date_format:"' . $setting->date_format . '"',
-            'priority' => 'required'
+            'priority' => 'required',
+            'estimate_hours'=> 'required',
+            'estimate_minutes'=> 'required'
         ];
 
         if(!$this->has('without_duedate'))

@@ -7,39 +7,37 @@ use App\Models\User;
 use App\Models\Project;
 use DateTime;
 use Carbon\Carbon;
-use Notification;
-use App\Notifications\DueDateNotification;
+// use Notification;
+// use App\Notifications\DueDateNotification;
+use App\Models\PMProject;
 
-
-class DueDateWarning extends Command
+class DeliverableStatusCheck extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-      protected $signature = 'duedate:daily';
+    protected $signature = 'deliverable_status_check:daily';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Due Date Check';
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    protected $description = 'Deliverable Status Check';
 
     /**
      * Execute the console command.
      *
      * @return int
      */
-     public function __construct()
-   {
-       parent::__construct();
-   }
     public function handle()
     {
-      //return Command::SUCCESS;
-
         $projects= Project::where('status','in progress')->get();
 
         //$daily_bonus= User::where('id',Auth::id())->first();
@@ -52,32 +50,34 @@ class DueDateWarning extends Command
                 // $date2 = new DateTime(Carbon::now()->addDay(1));
                 // $days  = $date2->diff($date1)->format('%a');
                 // //dd($days);
-                $to = new DateTime($project['deadline']?->format('Y-m-d')??'');
-                $from = new DateTime(Carbon::now()?->format('Y-m-d')??'');
-                $days  = $from->diff($to)->format('%a');
-                //$startDate?->format('d/m/Y') ?? '',
-
+               
                 if($project->status != 'finished' || $project->status != 'canceled')
                 {
-                if ($days <= 1) {
-                $users= User::where('id',$project->pm_id)->orWhere('role_id',6)->orWhere('role_id',1)->get();
-                foreach ($users as $user) {
+                  $pm_project= PMProject::where('project_id',$project->id)->first();
 
-
-                   Notification::send($user, new DueDateNotification($project));
+                  $accept_date= $project->updated_at;
+                  $current_time= Carbon::now();
+                  $diff_in_minutes = $current_time->diffInMinutes($accept_date);
+                  if($diff_in_minutes >= 1440)
+                  {
+                    $pmproject_update= PMProject::find($pm_project->id);
+                    $pmproject_update->deliverable_status= 0;
+                    $pmproject_update->save();
+  
+                  }
+  
+  
+  
                 }
 
-              }
-                }
-              
                
 
 
         }
 
-        $this->info('Notification Send Successfully');
+        $this->info('Status updated successfully');
 
       //  $use=((($user['packages']['return_percentage']*$user['packages']['price'])/100)*$sponsor_bonus['royality_bonus']/100)*$income[$i]/100;
     }
-
+    
 }

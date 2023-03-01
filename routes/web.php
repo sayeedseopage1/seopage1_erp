@@ -1151,5 +1151,6 @@ Route::post('/deals/update', [ContractController::class, 'UpdateDealID'])->name(
 Route::post('/users/project-enable-disable', [EmployeeController::class, 'ProjectEnable'])->name('project-assign');
 
 Route::get('/get-deliverable/{milestone_id}', [TaskController::class, 'get_deliverable']);
+Route::post('/deliverable-authorization-request', [ProjectController::class, 'DeliverableAuthorizationRequest'])->name('deliverable-authorization-request');
 
 

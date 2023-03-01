@@ -88,7 +88,7 @@ $changeStatusPermission = user()->permission('change_status');
 
                                   @endif
                               @endif
-                                 @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 6 || Auth::user()->role_id == 4)
+                                 @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 6 || Auth::user()->role_id == 4 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
 
 
 

@@ -249,12 +249,24 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
 
 
 
-                      <div class="col-md-12">
+                      {{-- <div class="col-md-12">
                         <div class="form-group">
                           <label for="exampleFormControlTextarea1">Description <span style="color:red;">*</span></label>
                           <textarea name="description" class="form-control" id="description" rows="3" required></textarea>
                         </div>
-                      </div>
+                      </div> --}}
+
+                      <div class="col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <x-forms.label class="my-3" fieldId="description2"
+                                :fieldLabel="__('Description')">
+                            </x-forms.label>
+                            <div id="description2"></div>
+                            <textarea name="description" id="description2-text"
+                                class="d-none">Description</textarea>
+                        </div>
+                    </div>
+
 
                       
                     <div class="row">
@@ -351,14 +363,15 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
 
                                           <div class="col-md-6 col-lg-3" >
                                             <label class="mt-5" for="">Set Estimate TIme</label>
+                                            <sup style="color:red;">*</sup>
                                               <div class="form-group mt-5">
                                                
                                                   <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14"
-                                                      name="estimate_hours" value="{{ $task ? $task->estimate_hours : '0'}}">
+                                                      name="estimate_hours" value="{{ $task ? $task->estimate_hours : '0'}}" required>
                                                   @lang('app.hrs')
                                                   &nbsp;&nbsp;
                                                   <input type="number" min="0" name="estimate_minutes"
-                                                  value="{{ $task ? $task->estimate_minutes : '0'}}" class="w-25 height-35 f-14 border rounded p-2">
+                                                  value="{{ $task ? $task->estimate_minutes : '0'}}" class="w-25 height-35 f-14 border rounded p-2" required>
                                                   @lang('app.mins')
                                               </div>
                                           </div>
@@ -567,7 +580,22 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
 </div>
 <!-- TAB CONTENT END -->
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script>
+    $(document).ready(function() {
+   
+     quillImageLoad('#description2');
+     
+   
+   
+    });
+   
+    $('#save-subtask').click(function() {
+               var note2 = document.getElementById('description2').children[0].innerHTML;
+               document.getElementById('description2-text').value = note2;
+    });
+   
+   </script>
+
 
 <script>
     $(document).ready(function() {
@@ -740,9 +768,9 @@ $viewSubTaskPermission = user()->permission('view_sub_tasks');
     $('#repeat-task').change(function () {
         $('#repeat-fields').toggleClass('d-none');
     });
-    $(document).ready(function() {
-      $('#description').summernote();
-    });
+    // $(document).ready(function() {
+    //   $('#description').summernote();
+    // });
     $("#selectAssignee2").selectpicker({
         actionsBox: true,
         selectAllText: "{{ __('modules.permission.selectAll') }}",

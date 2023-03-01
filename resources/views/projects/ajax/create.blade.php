@@ -127,6 +127,7 @@ $addProjectNotePermission = user()->permission('add_project_note');
                             </div>
                         </div>
                     @endif
+                    
 
                     @if ($addProjectNotePermission == 'all' || $addProjectNotePermission == 'added')
                         <div class="col-md-12 col-lg-6">

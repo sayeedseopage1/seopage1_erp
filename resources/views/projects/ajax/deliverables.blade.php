@@ -32,18 +32,21 @@
   $current_time= \Carbon\Carbon::now();
   $diff_in_minutes = $current_time->diffInMinutes($accept_date);
   //dd( $diff_in_minutes);
+  $pm_project= App\Models\PMProject::where('project_id',$project->id)->first();
   
    ?>
    @if($signature == null)
    @if($project->pm_id == Auth::id())
-   @if($diff_in_minutes >1440)
+   @if($diff_in_minutes >1440 && $pm_project->deliverable_status == 0)
 
    <div class="col-md-2 mt-3">
     <button type="button" class="btn btn-primary"  disabled><i class="fas fa-plus"></i> Add Deliverable</button>
 </div>
+
 <div class="col-md-12 mt-3">
-<h6 class="text-red">You cannot add deliverables as 24 hours have been past since you accepted the project. For authorization to enable the feature click here to send approval request to top management.</h6>
+<h6 class="text-red">You cannot add deliverables as 24 hours have been past since you accepted the project. For authorization to enable the feature <a href="#"  data-toggle="modal" data-target="#deliverableauthorization">click here</a> to send approval request to top management.</h6>
 </div>
+@include('projects.modals.deliverableauthorizationmodal')
    @else 
 
    <div class="col-md-2 mt-3">

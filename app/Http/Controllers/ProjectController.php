@@ -2272,6 +2272,22 @@ if ($pm_count < 2) {
 
     }
 
+    public function DeliverableAuthorizationRequest(Request $request)
+    {
+        // //dd($request);
+        // $comments = $request->comments;
+        // $comments_without_br = str_replace('<br>', '', $comments);
+        // $explanation = explode("<p></p>", $comments_without_br);
+       //dd($explanation );
+        $validated = $request->validate([
+            'comments' => ['required','string','min:10'],
+            
+
+        ]);
+
+        dd($request->comments);
+    }
+
 
 
 
