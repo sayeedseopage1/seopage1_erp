@@ -18,6 +18,7 @@ use Auth;
 use App\Models\Task;
 use App\Models\ContractSign;
 use App\Models\ProjectMilestone;
+use App\Models\ProjectTimeLog;
 class ProjectsDataTable extends BaseDataTable
 {
 
@@ -275,6 +276,19 @@ class ProjectsDataTable extends BaseDataTable
                     return $row->client->name;
                 }
             });
+            $datatables->addColumn('hours_allocated', function ($row) {
+                $project= Project::where('id',$row->id)->first();
+                if (!is_null($project->hours_allocated)) {
+                    return $project->hours_allocated. ' hours';
+                }else{
+                    return '--';
+                }
+            });
+            $datatables->addColumn('hours_logged', function ($row) {
+                $project= Project::where('id',$row->id)->first();
+                $project_time_logs= ProjectTimeLog::where('project_id',$project->id)->sum('total_hours');
+                return $project_time_logs. ' hours';
+            });
             $datatables->addColumn('client_email', function ($row) {
                 if (!is_null($row->client_id)) {
                     return $row->client->email;
@@ -409,7 +423,7 @@ class ProjectsDataTable extends BaseDataTable
             $datatables->setRowId(function ($row) {
                 return 'row-' . $row->id;
             });
-            $datatables->rawColumns(['project_name','pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check','short_code','project_manager','deliverable_sign','deadline']);
+            $datatables->rawColumns(['project_name','pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check','short_code','project_manager','deliverable_sign','deadline','hours_allocated']);
             $datatables->removeColumn('project_summary');
             $datatables->removeColumn('notes');
             $datatables->removeColumn('category_id');
@@ -588,6 +602,8 @@ class ProjectsDataTable extends BaseDataTable
               __('app.customers')  => ['data' => 'client_name', 'name' => 'client_id', 'visible' => false, 'title' => __('app.customers')],
 
               __('app.client') . ' ' . __('app.email')  => ['data' => 'client_email', 'name' => 'client_id', 'visible' => false, 'title' => __('app.client') . ' ' . __('app.email')],
+              __('app.hours_allocated') => ['data' => 'hours_allocated', 'name' => 'hours_allocated',  'title' => __('Estimated Hours')],
+              __('app.hours_logged') => ['data' => 'hours_logged', 'name' => 'hours_logged',  'title' => __('Total Hours Logged')],
                 __('app.project_manager') => ['data' => 'project_manager', 'name' => 'project_manager',  'title' => __('Project Manager')],
                 __('modules.projects.startDate')  => ['data' => 'start_date', 'name' => 'start_date', 'visible' => true, 'title' => __('modules.projects.startDate')],
                 __('app.deadline') => ['data' => 'deadline', 'name' => 'deadline', 'title' => __('app.deadline')],

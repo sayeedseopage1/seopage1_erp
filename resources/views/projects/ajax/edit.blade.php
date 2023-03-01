@@ -390,7 +390,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
                     <div class="col-lg-4 col-md-6">
                         <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.hours_allocated')"
-                            fieldName="hours_allocated" fieldId="hours_allocated"
+                            fieldName="hours_allocated" fieldRequired="true" fieldId="hours_allocated"
                             :fieldValue="$project->hours_allocated" :fieldPlaceholder="__('placeholders.hourEstimate')" />
                     </div>
 

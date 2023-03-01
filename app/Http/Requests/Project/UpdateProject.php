@@ -32,7 +32,7 @@ class UpdateProject extends CoreRequest
             'deadline' => 'required',
           
 
-            'hours_allocated' => 'nullable|numeric',
+            'hours_allocated' => 'required|numeric',
             'client_id' => 'requiredIf:client_view_task,true',
             'project_code' => 'required|unique:projects,project_short_code,'.$this->route('project'),
         ];
