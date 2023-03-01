@@ -19,7 +19,7 @@ $projectArchived = $project->trashed();
            $diff_in_minutes = $current_date->diffInMinutes($project_creation_date); 
          // dd($project_creation_date, $current_date, $diff_in_minutes);
         @endphp
-        @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 6)
+        @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 6 || Auth::id()->role_id == 1)
         @php
         $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
      @endphp
