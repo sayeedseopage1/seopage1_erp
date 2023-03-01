@@ -387,12 +387,32 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                 class="form-control height-35 f-15 readonly-background" readonly>
                         </div>
                     </div>
-
+                    @if($project->hours_allocated == null)
                     <div class="col-lg-4 col-md-6">
                         <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.hours_allocated')"
                             fieldName="hours_allocated" fieldRequired="true" fieldId="hours_allocated"
-                            :fieldValue="$project->hours_allocated" :fieldPlaceholder="__('placeholders.hourEstimate')" />
+                             :fieldPlaceholder="__('placeholders.hourEstimate')" />
                     </div>
+                    @else 
+                    {{-- <div class="col-lg-4 col-md-6">
+                        <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.hours_allocated')"
+                            fieldName="hours_allocated" fieldRequired="true" fieldId="hours_allocated"
+                            :fieldValue="$project->hours_allocated"  :fieldPlaceholder="__('placeholders.hourEstimate')"  readonly/>
+                    </div> --}}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="form-group my-3 mr-0 mr-lg-2 mr-md-2" readonly="readonly">
+                                    <label class="f-14 text-dark-grey mb-12" data-label="true" for="hours_allocated">Hours Estimate (In Hours)
+                                            <sup class="f-14 mr-1">*</sup>
+                                    
+                                    </label>
+
+                                    <input type="number" class="form-control height-35 f-14" placeholder="e.g. 500" value="{{$project->hours_allocated}}" name="hours_allocated" id="hours_allocated" min="0" autocomplete="off" readonly>
+
+                                    </div>
+                    </div>
+                    
+
+                    @endif
 
                 {{--   <div class="col-md-6 col-lg-4">
                         <div class="form-group">
