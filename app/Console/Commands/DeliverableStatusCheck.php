@@ -62,7 +62,7 @@ class DeliverableStatusCheck extends Command
                   {
                     $pmproject_update= PMProject::find($pm_project->id);
                     $pmproject_update->deliverable_status= 0;
-                    $pmproject_update->save();
+                   // $pmproject_update->save();
   
                   }
   
