@@ -417,7 +417,7 @@ $changeStatusPermission = user()->permission('change_status');
 
             </div>
 
-            @if ((($taskSettings->files == 'yes' || $taskSettings->sub_task == 'yes' || $taskSettings->comments == 'yes'|| $taskSettings->time_logs == 'yes'|| $taskSettings->notes == 'yes' || $taskSettings->history == 'yes') && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+            @if ((($taskSettings->files == 'yes' || $taskSettings->time_logs == 'yes'|| $taskSettings->notes == 'yes' || $taskSettings->history == 'yes') && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                 <!-- TASK TABS START -->
                 <div class="bg-additional-grey rounded my-3">
 
@@ -430,10 +430,10 @@ $changeStatusPermission = user()->permission('change_status');
                             @lang('modules.tasks.subTask')</x-tab-item>
                         @endif
 
-                            @if (($taskSettings->files == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                           
                                 <x-tab-item class="ajax-tab" :active="(request('view') === 'file')"
                                 :link="route('tasks.show', $task->id).'?view=file'">@lang('Comment')</x-tab-item>
-                            @endif
+                          
 
                            
 

@@ -2285,7 +2285,7 @@ if ($pm_count < 2) {
 
         ]);
 
-        dd($request->comments);
+        dd($request);
     }
 
 

@@ -178,6 +178,10 @@
     </div>
     <!-- CARD BODY END -->
     <!-- CARD FOOTER START -->
+   @php
+       $status_check= App\Models\PMProject::where('project_id',$project->id)->first();
+   @endphp
+   @if($status_check->deliverable_status == 1)
     <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
 
         <div class="d-flex">
@@ -210,6 +214,9 @@
         </x-forms.button-cancel>
 
     </div>
+    @endif
+    
+   
     <!-- CARD FOOTER END -->
 </div>
 <!-- INVOICE CARD END -->

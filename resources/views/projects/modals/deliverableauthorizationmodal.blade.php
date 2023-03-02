@@ -7,7 +7,7 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
 
-        <form class="" action="{{route('deliverable-authorization-request')}}" method="post">
+        <form class="" action="#" method="post">
           @csrf
           <input type="hidden" name="project_id" value="{{$project->id}}">
       <div class="modal-body">
