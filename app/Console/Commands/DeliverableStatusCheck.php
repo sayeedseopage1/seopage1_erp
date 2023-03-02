@@ -10,6 +10,7 @@ use Carbon\Carbon;
 // use Notification;
 // use App\Notifications\DueDateNotification;
 use App\Models\PMProject;
+use App\Models\ContractSign;
 
 class DeliverableStatusCheck extends Command
 {
@@ -50,25 +51,36 @@ class DeliverableStatusCheck extends Command
                 // $date2 = new DateTime(Carbon::now()->addDay(1));
                 // $days  = $date2->diff($date1)->format('%a');
                 // //dd($days);
-               
-                if($project->status != 'finished' || $project->status != 'canceled')
+                $sign= ContractSign::where('project_id',$project->id)->first();
+                if($sign == null)
                 {
-                  $pm_project= PMProject::where('project_id',$project->id)->first();
 
-                  $accept_date= $project->updated_at;
-                  $current_time= Carbon::now();
-                  $diff_in_minutes = $current_time->diffInMinutes($accept_date);
-                  if($diff_in_minutes >= 1440)
+                  if($project->status != 'finished' || $project->status != 'canceled')
                   {
-                    $pmproject_update= PMProject::find($pm_project->id);
-                    $pmproject_update->deliverable_status= 0;
-                   // $pmproject_update->save();
+                    $pm_project= PMProject::where('project_id',$project->id)->first();
+                    if($pm_project->reason == null)
+                    {
+                      
+                    $accept_date= $project->updated_at;
+                    $current_time= Carbon::now();
+                    $diff_in_minutes = $current_time->diffInMinutes($accept_date);
+                    if($diff_in_minutes >= 1440)
+                    {
+                      $pmproject_update= PMProject::find($pm_project->id);
+                      $pmproject_update->deliverable_status= 0;
+                      $pmproject_update->save();
+    
+                    }
+                    }
   
+    
+    
+    
                   }
-  
-  
-  
+
                 }
+               
+               
 
                
 

@@ -7,18 +7,13 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
 
-        <form class="" action="#" method="post">
+        <form class="" action="{{route('deliverable-authorization-request')}}" method="post">
           @csrf
           <input type="hidden" name="project_id" value="{{$project->id}}">
       <div class="modal-body">
         @if($errors->has('comments'))
     <div class="alert alert-danger">{{ $errors->first('comments') }}</div>
 @endif
-
-
-
-
-
 
         <div class="col-md-12 col-lg-12">
           <div class="form-group">
@@ -31,10 +26,6 @@
           </div>
       </div>
      
-
-
-
-
 
       </div>
       <div class="modal-footer">

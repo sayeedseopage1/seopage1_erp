@@ -48,6 +48,7 @@
 </div>
 @include('projects.modals.deliverableauthorizationmodal')
    @else 
+   
 
    <div class="col-md-2 mt-3">
     <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
@@ -57,14 +58,25 @@
 
 
    @elseif(Auth::user()->role_id == 1) 
+   <div class="row">
+   <div class="col-lg-8 col-10 mt-3 ml-3">
+    <button type="button" class="btn btn-primary rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
+    @if($pm_project->deliverable_status == 0 && $pm_project->reason != null)
+    <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverableextensionacceptmodal"><i class="fas fa-check"></i> Extend Time</button>
+    @include('projects.modals.deliverableextensionacceptmodal')
+    @endif
 
-   <div class="col-md-2 mt-3">
-    <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
+   
 </div>
+
+</div>
+
+
+
 
    @endif
   
-  @include('projects.modals.clientdeliverableaddmodal')
+
   @endif
     <!-- CARD BODY START -->
     <div class="card-body">
@@ -181,7 +193,7 @@
    @php
        $status_check= App\Models\PMProject::where('project_id',$project->id)->first();
    @endphp
-   @if($status_check->deliverable_status == 1)
+   @if($status_check->deliverable_status == 1 || Auth::user()->role_id == 1)
     <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
 
         <div class="d-flex">

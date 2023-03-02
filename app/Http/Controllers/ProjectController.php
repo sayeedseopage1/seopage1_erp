@@ -80,6 +80,8 @@ use App\Notifications\ProjectSubmissionAcceptNotification;
 use App\Models\QCSubmission;
 use App\Notifications\QCSubmissionNotification;
 use App\Notifications\QcSubmissionAcceptNotification;
+use App\Notifications\ProjectDeliverableTimeExtendNotification;
+use App\Notifications\ProjectDeliverableTimeAcceptNotification;
 
 
 class ProjectController extends AccountBaseController
@@ -2285,8 +2287,52 @@ if ($pm_count < 2) {
 
         ]);
 
-        dd($request);
+        $project= PMProject::where('project_id',$request->project_id)->first();
+
+        $pm_project= PMProject::find($project->id);
+        $pm_project->reason= $request->comments;
+        $pm_project->save();
+
+        $project_id= Project::where('id',$request->project_id)->first();
+
+        $users= User::where('role_id',1)->get();
+        foreach ($users as $user) {
+            Notification::send($user, new ProjectDeliverableTimeExtendNotification($project_id));
+        }
+     
+        Toastr::success('Authorization request send Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return back();
+
+
     }
+    public function DeliverableAuthorizationAccept(Request $request)
+    {
+        // //dd($request);
+        // $comments = $request->comments;
+        // $comments_without_br = str_replace('<br>', '', $comments);
+        // $explanation = explode("<p></p>", $comments_without_br);
+       //dd($explanation );
+       
+
+        $project= PMProject::where('project_id',$request->project_id)->first();
+
+        $pm_project= PMProject::find($project->id);
+        $pm_project->deliverable_status= 1;
+        $pm_project->save();
+
+        $project_id= Project::where('id',$request->project_id)->first();
+
+        $user= User::where('id',$project_id->pm_id)->get();
+       
+            Notification::send($user, new ProjectDeliverableTimeAcceptNotification($project_id));
+       
+     
+        Toastr::success('Authorization request accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return back();
+
+
+    }
+
 
 
 
