@@ -50,6 +50,7 @@ use Toastr;
 use Auth;
 use App\Models\ProjectDeliverable;
 use function PHPUnit\Framework\isNull;
+use App\Models\TaskComment;
 
 class TaskController extends AccountBaseController
 {
@@ -210,11 +211,13 @@ class TaskController extends AccountBaseController
       $task_status->task_status="revision";
       $task_status->board_column_id=1;
       $task_status->save();
-      $task= new TaskApprove();
-      $task->user_id= $request->user_id;
+      $task= new TaskComment();
+      $task->user_id= Auth::id();
       $task->task_id= $request->task_id;
 
-      $task->comments= $request->comments;
+      $task->comment= $request->comments;
+      $task->added_by= Auth::id();
+      $task->last_updated_by= Auth::id();
       $task->save();
       $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
       $sender= User::where('id',$request->user_id)->first();
