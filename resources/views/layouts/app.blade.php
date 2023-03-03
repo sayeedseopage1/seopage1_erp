@@ -748,7 +748,7 @@
 
        <input type="hidden" id="award_time2" value="{{$newDateTime}}">
         <input type="hidden" id="deal_id" value="{{$deal_id->id}}">
-        <input type="hiden" id="left_time" value="{{$diff_in_minutes}}">
+        <input type="hidden" id="left_time" value="{{$diff_in_minutes}}">
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.4/moment-timezone-with-data.js"></script>
