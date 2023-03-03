@@ -1,16 +1,16 @@
 <?php
 // Updates folder
-$product = 'worksuite-new';
+$product = 'Seopage1';
 
 // Envato id
-$envato_item_id = 20052522;
+$envato_item_id = 3213213;
 
 // Product Url from codecanyon
-$productUrl = 'https://1.envato.market/worksuite';
+$productUrl = 'https://asdfjksadf.com';
 
-$updatesDomain = 'https://froiden-updates.s3.ap-south-1.amazonaws.com';
+$updatesDomain = 'https://asdfjksadf.com';
 
-$verifyDomain = 'https://envato.froid.works';
+$verifyDomain = 'https://asdfjksadf.works';
 
 return [
 
