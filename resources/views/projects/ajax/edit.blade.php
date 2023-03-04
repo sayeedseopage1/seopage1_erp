@@ -387,19 +387,19 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                 class="form-control height-35 f-15 readonly-background" readonly>
                         </div>
                     </div>
-                    @if($project->hours_allocated == null)
+                    {{-- @if($project->hours_allocated == null)
                     <div class="col-lg-4 col-md-6">
                         <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.hours_allocated')"
                             fieldName="hours_allocated" fieldRequired="true" fieldId="hours_allocated"
                              :fieldPlaceholder="__('placeholders.hourEstimate')" />
                     </div>
-                    @else 
+                    @else  --}}
                     {{-- <div class="col-lg-4 col-md-6">
                         <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.hours_allocated')"
                             fieldName="hours_allocated" fieldRequired="true" fieldId="hours_allocated"
                             :fieldValue="$project->hours_allocated"  :fieldPlaceholder="__('placeholders.hourEstimate')"  readonly/>
                     </div> --}}
-                    <div class="col-lg-4 col-md-6">
+                    {{-- <div class="col-lg-4 col-md-6">
                         <div class="form-group my-3 mr-0 mr-lg-2 mr-md-2" readonly="readonly">
                                     <label class="f-14 text-dark-grey mb-12" data-label="true" for="hours_allocated">Hours Estimate (In Hours)
                                             <sup class="f-14 mr-1">*</sup>
@@ -412,7 +412,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                     </div>
                     
 
-                    @endif
+                    @endif --}}
 
                 {{--   <div class="col-md-6 col-lg-4">
                         <div class="form-group">

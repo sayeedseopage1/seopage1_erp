@@ -1880,6 +1880,7 @@ if ($pm_count < 2) {
       $deliverable= new ProjectDeliverable();
       $deliverable->project_id= $request->project_id;
       $deliverable->title= $request->title;
+      $deliverable->estimation_time=$request->estimation_time;
       $deliverable->deliverable_type= $request->deliverable_type;
       $deliverable->quantity= $request->quantity;
       $deliverable->from= $request->from;
@@ -1887,26 +1888,48 @@ if ($pm_count < 2) {
       $deliverable->milestone_id= $request->milestone_id;
       $deliverable->description= $request->description;
       $deliverable->save();
+      $project_id= Project::where('id',$deliverable->project_id)->first();
+      $project= Project::find($deliverable->project_id);
+      $project->hours_allocated = $project_id->hours_allocated + $deliverable->estimation_time;
+      $project->save();
+
       Toastr::success('Deliverable Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back();
     }
     public function updateDeliverable(Request $request)
     {
+       $deliverable_id = ProjectDeliverable::where('id',$request->id)->first();
+        $project_id= Project::where('id',$deliverable_id->project_id)->first();
+        $project= Project::find($deliverable_id->project_id);
+        $project->hours_allocated = $project_id->hours_allocated - $deliverable_id->estimation_time;
+        $project->save();
       $deliverable= ProjectDeliverable::find($request->id);
+      
 
       $deliverable->title= $request->title;
       $deliverable->deliverable_type= $request->deliverable_type;
       $deliverable->quantity= $request->quantity;
       $deliverable->from= $request->from;
       $deliverable->to= $request->to;
+      $deliverable->estimation_time=$request->estimation_time;
       $deliverable->milestone_id= $request->milestone_id;
       $deliverable->description= $request->description;
       $deliverable->save();
+      $project_id_update= Project::where('id',$deliverable->project_id)->first();
+      $project_update= Project::find($project_id_update->id);
+      $project_update->hours_allocated = $project_id_update->hours_allocated + $request->estimation_time;
+      $project_update->save();
+
       Toastr::success('Deliverable Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back();
     }
     public function deleteDeliverable($id)
     {
+        $deliverable_id = ProjectDeliverable::where('id',$id)->first();
+        $project= Project::find($deliverable_id->project_id);
+        $project->hours_allocated= $project->hours_allocated - $deliverable_id->estimation_time;
+        $project->save();
+
 
       $deliverable = ProjectDeliverable::findOrFail($id)->delete();
 

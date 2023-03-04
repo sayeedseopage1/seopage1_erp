@@ -30,9 +30,10 @@ class UpdateProject extends CoreRequest
             'project_name' => 'required|max:150',
             'start_date' => 'required',
             'deadline' => 'required',
+            'project_summary'=>'required',
           
 
-            'hours_allocated' => 'required|numeric',
+            // 'hours_allocated' => 'required|numeric',
             'client_id' => 'requiredIf:client_view_task,true',
             'project_code' => 'required|unique:projects,project_short_code,'.$this->route('project'),
         ];

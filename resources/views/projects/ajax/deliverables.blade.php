@@ -66,7 +66,7 @@
     @include('projects.modals.clientdeliverableaddmodal')
     @if($pm_project->deliverable_status == 0 && $pm_project->reason != null)
     <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverableextensionacceptmodal"><i class="fas fa-check"></i> Extend Time</button>
-    @include('projects.modals.modal')
+    @include('projects.modals.deliverableextensionacceptmodal')
     @endif
 
    
@@ -100,6 +100,7 @@
                       <th scope="col" class="text-center">Type</th>
                       <th scope="col" class="text-center">Title</th>
                       <th scope="col" class="text-center">Milestone</th>
+                      <th scope="col" class="text-center">Estimation Hours</th>
                       <th scope="col" class="text-center">Quantity</th>
                       <th scope="col" class="text-center">Description</th>
                       <th scope="col" class="text-center">Estimated completion date</th>
@@ -118,6 +119,11 @@
                     <td class="text-center">{{$deliverable->title}}</td>
                     @if($deliverable->milestone_id != null)
                     <td class="text-center">{{$deliverable->milestone->milestone_title}}</td>
+                    @else 
+                    <td class="text-center">--</td>
+                    @endif
+                    @if($deliverable->estimation_time != null)
+                    <td class="text-center">{{$deliverable->estimation_time}} hours</td>
                     @else 
                     <td class="text-center">--</td>
                     @endif

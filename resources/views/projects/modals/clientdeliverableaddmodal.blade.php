@@ -69,12 +69,19 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
+              <label for="exampleFormControlInput1">Estimation Time (In Hours) <span style="color:red;">*</span></label>
+              <input type="text" name="estimation_time" class="form-control height-35 f-14 mt-1" id="exampleFormControlInput1"  required>
+              </div>
+
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
               <label for="exampleFormControlInput1">Quantity <span style="color:red;">*</span></label>
               <input type="text" name="quantity" class="form-control height-35 f-14 mt-1" id="exampleFormControlInput1"  required>
               </div>
 
             </div>
-            <div class="col-md-6 mt-1">
+            <div class="col-md-6 mt-4">
               <div class="form-group">
     
             <label for="exampleFormControlTextarea1">Delivery Type<span style="color:red;">*</span></label>
@@ -90,7 +97,7 @@
           </div>
         </div>
 
-            <div class="col-md-6" >
+            <div class="col-md-6 mt-1" >
                 <x-forms.datepicker fieldId="from_add" fieldRequired="true"
                     :fieldLabel="__('From')" fieldName="from"
 

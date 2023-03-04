@@ -81,6 +81,14 @@
               </div>
 
             </div>
+            <div class="col-md-12">
+
+              <div class="form-group">
+              <label for="exampleFormControlInput1">Estimation_time (In Hours) <span style="color:red;">*</span></label>
+              <input type="text" name="estimation_time" value="{{$deliverable->estimation_time}}" class="form-control height-35 f-14" id="exampleFormControlInput1"  Required>
+              </div>
+
+            </div>
             <div class="col-md-4 mt-3">
               <div class="form-group">
               <label for="exampleFormControlInput1">Quantity <span style="color:red;">*</span></label>

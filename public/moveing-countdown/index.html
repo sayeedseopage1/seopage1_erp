@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Downtime-timer </title>
+
+        <!-- google font  -->
+
+        <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed" type="text/css" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+        <link rel="stylesheet" href="css/style.css" type="text/css" />
+    </head>
+    <body>
+        
+        
+        <!-- timer   -->
+        <div id="mydiv">
+
+
+            <div id="mydivheader">
+
+                <div class="wrapper-timezone" id="mydivheade">  
+                    <p>New Deal Won: LKJKLOIJ475</p>
+                    <div class="clock">
+                        <div class="column">
+                            <div class="timer" id="hours"></div>
+                        </div>
+    
+                        <div class="column">
+                            <div class="timer" id="minutes"></div>
+                        </div>
+    
+                        <div class="column">
+                            <div class="timer" id="seconds"></div>
+                        </div>
+                    </div>
+                    <p style="padding: 0; margin: 0;">26th February, 02:56 PM</p>
+                    <a href="#" class="Accept">View <i class="fa-regular fa-eye"></i></a>
+                </div>
+    
+                <!-- timer 2 -->
+    
+    
+                <div class="wrapper-timezone" id="mydivheade">  
+                    <p>New Deal Won 2: LKJKLOIJ475</p>
+                    <div class="clock">
+                        <div class="column">
+                            <div class="timer" id="hours2"></div>
+                        </div>
+    
+                        <div class="column">
+                            <div class="timer" id="minutes2"></div>
+                        </div>
+    
+                        <div class="column">
+                            <div class="timer" id="seconds2"></div>
+                        </div>
+                    </div>
+                    <p style="padding: 0; margin: 0;">26th February, 02:56 PM</p>
+                    <a href="#" class="Accept">View <i class="fa-regular fa-eye"></i></a>
+                </div>
+    
+                 <!-- timer 3 --> 
+    
+                <div class="wrapper-timezone" id="mydivheade">  
+                    <p>New Deal Won 3: LKJKLOIJ475</p>
+                    <div class="clock">
+                        <div class="column">
+                            <div class="timer" id="hours3"></div>
+                        </div>
+    
+                        <div class="column">
+                            <div class="timer" id="minutes3"></div>
+                        </div>
+    
+                        <div class="column">
+                            <div class="timer" id="seconds3"></div>
+                        </div>
+                    </div>
+                    <p style="padding: 0; margin: 0;">26th February, 02:56 PM</p>
+                    <a href="#" class="Accept">View <i class="fa-regular fa-eye"></i></a>
+                </div>
+
+            </div>
+
+            
+
+
+        </div>
+
+
+
+
+        <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.4/moment-timezone-with-data.js"></script>
+ 
+        <script>
+            $(function(){
+                function timer(settings){
+                    var config = {
+                        endDate: '2023-02-25 06:00',
+                        timeZone: 'Asia/Dhaka',
+                        hours: $('#hours'),
+                        minutes: $('#minutes'),
+                        seconds: $('#seconds'),
+                        newSubMessage: 'and should be back online in a few minutes...'
+                    };
+                    function prependZero(number){
+                        return number < 10 ? '0' + number : number;
+                    }
+                    $.extend(true, config, settings || {});
+                    var currentTime = moment();
+                    var endDate = moment.tz(config.endDate, config.timeZone);
+                    var diffTime = endDate.valueOf() - currentTime.valueOf();
+                    var duration = moment.duration(diffTime, 'milliseconds');
+                    var days = duration.days();
+                    var interval = 1000;
+                    var subMessage = $('.sub-message');
+                    var clock = $('.clock');
+                    if(diffTime < 0){
+                        endEvent(subMessage, config.newSubMessage, clock);
+                        return;
+                    }
+                    if(days > 0){
+                        $('#days').text(prependZero(days));
+                        $('.days').css('display', 'inline-block');
+                    }
+                    var intervalID = setInterval(function(){
+                        duration = moment.duration(duration - interval, 'milliseconds');
+                        var hours = duration.hours(),
+                            minutes = duration.minutes(),
+                            seconds = duration.seconds();
+                        days = duration.days();
+                        if(hours  <= 0 && minutes <= 0 && seconds  <= 0 && days <= 0){
+                            clearInterval(intervalID);
+                            endEvent(subMessage, config.newSubMessage, clock);
+                            window.location.reload();
+                        }
+                        if(days === 0){
+                            $('.days').hide();
+                        }
+                        $('#days').text(prependZero(days));
+                        config.hours.text(prependZero(hours));
+                        config.minutes.text(prependZero(minutes));
+                        config.seconds.text(prependZero(seconds));
+                    }, interval);
+                }
+                function endEvent($el, newText, hideEl){
+                    $el.text(newText);
+                    hideEl.hide();
+                }
+                timer();
+            });
+
+        </script>
+        
+        <!-- timer  2 -->
+        <script>
+            $(function(){
+                function timer(settings){
+                    var config = {
+                        endDate: '2023-02-28 05:00',
+                        timeZone: 'Asia/Dhaka',
+                        hours: $('#hours2'),
+                        minutes: $('#minutes2'),
+                        seconds: $('#seconds2'),
+                        newSubMessage: 'and should be back online in a few minutes...'
+                    };
+                    function prependZero(number){
+                        return number < 10 ? '0' + number : number;
+                    }
+                    $.extend(true, config, settings || {});
+                    var currentTime = moment();
+                    var endDate = moment.tz(config.endDate, config.timeZone);
+                    var diffTime = endDate.valueOf() - currentTime.valueOf();
+                    var duration = moment.duration(diffTime, 'milliseconds');
+                    var days = duration.days();
+                    var interval = 1000;
+                    var subMessage = $('.sub-message');
+                    var clock = $('.clock');
+                    if(diffTime < 0){
+                        endEvent(subMessage, config.newSubMessage, clock);
+                        return;
+                    }
+                    if(days > 0){
+                        $('#days2').text(prependZero(days));
+                        $('.days').css('display', 'inline-block');
+                    }
+                    var intervalID = setInterval(function(){
+                        duration = moment.duration(duration - interval, 'milliseconds');
+                        var hours = duration.hours(),
+                            minutes = duration.minutes(),
+                            seconds = duration.seconds();
+                        days = duration.days();
+                        if(hours  <= 0 && minutes <= 0 && seconds  <= 0 && days <= 0){
+                            clearInterval(intervalID);
+                            endEvent(subMessage, config.newSubMessage, clock);
+                            window.location.reload();
+                        }
+                        if(days === 0){
+                            $('.days').hide();
+                        }
+                        $('#days2').text(prependZero(days));
+                        config.hours.text(prependZero(hours));
+                        config.minutes.text(prependZero(minutes));
+                        config.seconds.text(prependZero(seconds));
+                    }, interval);
+                }
+                function endEvent($el, newText, hideEl){
+                    $el.text(newText);
+                    hideEl.hide();
+                }
+                timer();
+            });
+
+        </script>
+
+        <!-- timer  3 -->
+        <script>
+            $(function(){
+                function timer(settings){
+                    var config = {
+                        endDate: '2023-02-24 00:00',
+                        timeZone: 'Asia/Dhaka',
+                        hours: $('#hours3'),
+                        minutes: $('#minutes3'),
+                        seconds: $('#seconds3'),
+                        newSubMessage: 'and should be back online in a few minutes...'
+                    };
+                    function prependZero(number){
+                        return number < 10 ? '0' + number : number;
+                    }
+                    $.extend(true, config, settings || {});
+                    var currentTime = moment();
+                    var endDate = moment.tz(config.endDate, config.timeZone);
+                    var diffTime = endDate.valueOf() - currentTime.valueOf();
+                    var duration = moment.duration(diffTime, 'milliseconds');
+                    var days = duration.days();
+                    var interval = 1000;
+                    var subMessage = $('.sub-message');
+                    var clock = $('.clock');
+                    if(diffTime < 0){
+                        endEvent(subMessage, config.newSubMessage, clock);
+                        return;
+                    }
+                    if(days > 0){
+                        $('#days3').text(prependZero(days));
+                        $('.days').css('display', 'inline-block');
+                    }
+                    var intervalID = setInterval(function(){
+                        duration = moment.duration(duration - interval, 'milliseconds');
+                        var hours = duration.hours(),
+                            minutes = duration.minutes(),
+                            seconds = duration.seconds();
+                        days = duration.days();
+                        if(hours  <= 0 && minutes <= 0 && seconds  <= 0 && days <= 0){
+                            clearInterval(intervalID);
+                            endEvent(subMessage, config.newSubMessage, clock);
+                            window.location.reload();
+                        }
+                        if(days === 0){
+                            $('.days').hide();
+                        }
+                        $('#days3').text(prependZero(days));
+                        config.hours.text(prependZero(hours));
+                        config.minutes.text(prependZero(minutes));
+                        config.seconds.text(prependZero(seconds));
+                    }, interval);
+                }
+                function endEvent($el, newText, hideEl){
+                    $el.text(newText);
+                    hideEl.hide();
+                }
+                timer();
+            });
+
+        </script>
+
+         
+
+
+         <!-- drag  -->
+
+        <script>
+            // Make the DIV element draggable:
+            dragElement(document.getElementById("mydiv"));
+
+            function dragElement(elmnt) {
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            if (document.getElementById(elmnt.id + "header")) {
+                // if present, the header is where you move the DIV from:
+                document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+            } else {
+                // otherwise, move the DIV from anywhere inside the DIV:
+                elmnt.onmousedown = dragMouseDown;
+            }
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // get the mouse cursor position at startup:
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                // call a function whenever the cursor moves:
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // calculate the new cursor position:
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // set the element's new position:
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                // stop moving when mouse button is released:
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+            }
+        </script>
+
+
+       
+
+
+
+
+    </body>
+</html>
