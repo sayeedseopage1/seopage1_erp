@@ -32,14 +32,16 @@
     <!-- Template CSS -->
     <link type="text/css" rel="stylesheet" media="all" href="{{ asset('css/main.css') }}">
     <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css" />
-       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed" type="text/css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed" type="text/css" />
 
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-       integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-       crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-       <link rel="stylesheet" href="{{asset('sticky/css/style.css')}}" type="text/css" />
-       <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+    <link rel="stylesheet" href="{{asset('moveing-countdown/css/jquery-ui.css')}}" type="text/css" />
+    <link rel="stylesheet" href="{{asset('moveing-countdown/css/style.css')}}" type="text/css" />
+
+    <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
 
     <!-- designation hierarchy && department hierarchy -->
@@ -256,77 +258,86 @@
             <x-app-title class="d-block d-lg-none" :pageTitle="__($pageTitle)"></x-app-title>
 
             @yield('content')
-            @if(Auth::user()->role_id == 4)
-            <?php
-            $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->where('pm_id',Auth::id())->first();
-            if ($deal_id != null) {
-              $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
+            @if(Auth::user()->role_id == 4 && !Request::is('account/contracts/*'))
+                @php
+                    $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->where('pm_id',Auth::id())->get();
+                @endphp
+                @if(count($deal_id) > 0)
+                    <div id="window">
+                        @foreach($deal_id as $value)
+                            @php
+                                if ($deal_id != null) {
+                                    $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
 
-              $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $deal_id->award_time);
+                                    $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $value->award_time);
 
-              $diff_in_minutes = $from->diffInMinutes($to);
-            }
-             ?>
-             @if($deal_id != null && $diff_in_minutes < 1200)
-            <div id="mydiv">
-        <div class="wrapper-timezone2" id="mydivheader">
-            <p>New Deal Won: {{$deal_id->deal_id}}</p>
-            <div class="clock2">
-                <div class="column">
-                    <div class="timer2" id="hours2"></div>
-                </div>
+                                    $diff_in_minutes = $from->diffInMinutes($to);
+                                }
+                            @endphp
+                            @if($value != null && $diff_in_minutes < 1200)
+                                <div class="wrapper-timezone" id="mydivheade">
+                                    <p>New Deal Won: {{$value->client_name}}</p>
+                                    <div class="clock">
+                                        <div class="column">
+                                            <div class="timer" id="hours_{{$value->id}}"></div>
+                                        </div>
 
-                <div class="column">
-                    <div class="timer2" id="minutes2"></div>
-                </div>
+                                        <div class="column">
+                                            <div class="timer" id="minutes_{{$value->id}}"></div>
+                                        </div>
 
-                <div class="column">
-                    <div class="timer2" id="seconds2"></div>
-                </div>
-            </div>
+                                        <div class="column">
+                                            <div class="timer" id="seconds_{{$value->id}}"></div>
+                                        </div>
+                                    </div>
+                                    <p style="padding: 0; margin: 0;">{{\Carbon\Carbon::parse($value->award_time)->addHours(20)->format('Y-m-d')}}</p>
+                                    <a href="/account/contracts/{{$value->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                @endif
+            @endif
+            @if(Auth::user()->role_id == 1 && !Request::is('account/contracts/*'))
+                @php
+                    $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->get();
+                @endphp
+                @if(count($deal_id) > 0)
+                    <div id="window">
+                        @foreach($deal_id as $value)
+                            @php
+                                if ($deal_id != null) {
+                                    $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
 
-            <a href="/account/contracts/{{$deal_id->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
-        </div>
+                                    $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $value->award_time);
 
-    </div>
-    @endif
-    @endif
-    @if(Auth::user()->role_id == 1)
-    <?php
-    $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->first();
-    if ($deal_id != null) {
-      $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
+                                    $diff_in_minutes = $from->diffInMinutes($to);
+                                }
+                            @endphp
+                            @if($value != null && $diff_in_minutes < 1200)
+                                <div class="wrapper-timezone" id="mydivheade">  
+                                    <p>New Deal Won: {{$value->client_name}}</p>
+                                    <div class="clock">
+                                        <div class="column">
+                                            <div class="timer" id="hours_{{$value->id}}"></div>
+                                        </div>
 
-      $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $deal_id->award_time);
+                                        <div class="column">
+                                            <div class="timer" id="minutes_{{$value->id}}"></div>
+                                        </div>
 
-      $diff_in_minutes = $from->diffInMinutes($to);
-    }
-     ?>
-     @if($deal_id != null)
-    <div id="mydiv">
-<div class="wrapper-timezone2" id="mydivheader">
-    <p>New Deal Won: {{$deal_id->deal_id}}</p>
-    <div class="clock2">
-        <div class="column">
-            <div class="timer2" id="hours2"></div>
-        </div>
-
-        <div class="column">
-            <div class="timer2" id="minutes2"></div>
-        </div>
-
-        <div class="column">
-            <div class="timer2" id="seconds2"></div>
-        </div>
-    </div>
-
-    <a href="/account/contracts/{{$deal_id->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
-</div>
-
-</div>
-@endif
-
-    @endif
+                                        <div class="column">
+                                            <div class="timer" id="seconds_{{$value->id}}"></div>
+                                        </div>
+                                    </div>
+                                    <p style="padding: 0; margin: 0;">{{\Carbon\Carbon::parse($value->award_time)->addHours(20)->format('Y-m-d (l), g:i A')}}</p>
+                                    <a href="/account/contracts/{{$value->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                @endif
+            @endif
 
 
         </section>
@@ -735,120 +746,113 @@
     </script>
 
 
+    <script type="text/javascript" src="{{asset('moveing-countdown/js/jquery-ui.js')}}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.4/moment-timezone-with-data.js"></script>
+    <script type="text/javascript" src="{{asset('moveing-countdown/js/custom.js')}}"></script>
+
+    @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 && !Request::is('account/contracts/*'))
+        @if(isset($deal_id) && $deal_id != null)
+            <script>
+                $(function(){
+                    $('#window').dialog({
+                        title: 'Won Deals ({{count($deal_id)}})'
+                    })
+                    function timer(key, time, settings){ 
+                        var award_time = time;
+
+                        var config = {
+                            endDate:  time,
+                            timeZone: 'Asia/Dhaka',
+                            hours: $('#hours_'+key),
+                            minutes: $('#minutes_'+key),
+                            seconds: $('#seconds_'+key),
+                            newSubMessage: 'and should be back online in a few minutes...'
+                        };
+                        function prependZero(number){
+                            return number < 10 ? '0' + number : number;
+                        }
+                        $.extend(true, config, settings || {});
+                        var currentTime = moment();
+                        var endDate = moment.tz(config.endDate, config.timeZone);
+                        var diffTime = endDate.valueOf() - currentTime.valueOf();
+                        var duration = moment.duration(diffTime, 'milliseconds');
+                        var days = duration.days();
+                        var interval = 1000;
+                        var subMessage = $('.sub-message');
+                        var clock = $('.clock2');
+                        var left_time = $('#left_time').val();
+                        if(diffTime < 0){
+                            endEvent(subMessage, config.newSubMessage, clock);
+                            if (left_time < 1200) {
+
+                                var deal_id = $('#deal_id').val();
+
+                                $.ajaxSetup({
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    }
+                                });
+
+                                $.ajax({
+                                    type:"POST",
+                                    cache:false,
+                                    url:"{{route('update-deal-id')}}",
+
+                                    data:{deal_id:deal_id},
 
 
-      @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4)
-       @if($deal_id != null)
-       <?php
-       $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$deal_id->award_time)->format('Y-m-d H:i:s');
-
-       $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1200)->format('Y-m-d H:i:s');
-       //dd($newDateTime);
-        ?>
-
-       <input type="hidden" id="award_time2" value="{{$newDateTime}}">
-        <input type="hidden" id="deal_id" value="{{$deal_id->id}}">
-        <input type="hidden" id="left_time" value="{{$diff_in_minutes}}">
-
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.4/moment-timezone-with-data.js"></script>
+                                    success: function(data) {
 
 
-        <script>
-            $(function(){
-                function timer(settings){
-                    var award_time = $('#award_time2').val();
+                                    }
+                                });
 
-                    var config = {
-                        endDate:  $('#award_time2').val(),
-                        timeZone: 'Asia/Dhaka',
-                        hours: $('#hours2'),
-                        minutes: $('#minutes2'),
-                        seconds: $('#seconds2'),
-                        newSubMessage: 'and should be back online in a few minutes...'
-                    };
-                    function prependZero(number){
-                        return number < 10 ? '0' + number : number;
-                    }
-                    $.extend(true, config, settings || {});
-                    var currentTime = moment();
-                    var endDate = moment.tz(config.endDate, config.timeZone);
-                    var diffTime = endDate.valueOf() - currentTime.valueOf();
-                    var duration = moment.duration(diffTime, 'milliseconds');
-                    var days = duration.days();
-                    var interval = 1000;
-                    var subMessage = $('.sub-message');
-                    var clock = $('.clock2');
-                    var left_time = $('#left_time').val();
-                    if(diffTime < 0){
-                        endEvent(subMessage, config.newSubMessage, clock);
-                      //to get current url
-
-                      if (left_time < 1200) {
-
-                             var deal_id = $('#deal_id').val();
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-                           $.ajax({
-                               type:"POST",
-                               cache:false,
-                               url:"{{route('update-deal-id')}}",
-
-                               data:{deal_id:deal_id},
-
-
-                             success: function(data) {
-
-
-                             }
-                           });
-
-                      }
+                            }
 
 
 
-                        return;
-                    }
-                    if(days > 0){
-                        $('#days').text(prependZero(days));
-                        $('.days').css('display', 'inline-block');
-                    }
-                    var intervalID = setInterval(function(){
-                        duration = moment.duration(duration - interval, 'milliseconds');
-                        var hours = duration.hours(),
+                            return;
+                        }
+                        if(days > 0){
+                            $('#days').text(prependZero(days));
+                            $('.days').css('display', 'inline-block');
+                        }
+                        var intervalID = setInterval(function(){
+                            duration = moment.duration(duration - interval, 'milliseconds');
+                            var hours = duration.hours(),
                             minutes = duration.minutes(),
                             seconds = duration.seconds();
-                        days = duration.days();
-                        if(hours  <= 0 && minutes <= 0 && seconds  <= 0 && days <= 0){
-                            clearInterval(intervalID);
-                            endEvent(subMessage, config.newSubMessage, clock);
-                            window.location.reload();
-                        }
-                        if(days === 0){
-                            $('.days').hide();
-                        }
-                        $('#days').text(prependZero(days));
-                        config.hours.text(prependZero(hours));
-                        config.minutes.text(prependZero(minutes));
-                        config.seconds.text(prependZero(seconds));
-                    }, interval);
-                }
-                function endEvent($el, newText, hideEl){
-                    $el.text(newText);
-                    hideEl.hide();
-                }
-                timer();
-            });
-
-        </script>
-
-
-         <!-- drag  -->
+                            days = duration.days();
+                            if(hours  <= 0 && minutes <= 0 && seconds  <= 0 && days <= 0){
+                                clearInterval(intervalID);
+                                endEvent(subMessage, config.newSubMessage, clock);
+                                window.location.reload();
+                            }
+                            if(days === 0){
+                                $('.days').hide();
+                            }
+                            $('#days').text(prependZero(days));
+                            config.hours.text(prependZero(hours));
+                            config.minutes.text(prependZero(minutes));
+                            config.seconds.text(prependZero(seconds));
+                        }, interval);
+                    }
+                    function endEvent($el, newText, hideEl){
+                        $el.text(newText);
+                        hideEl.hide();
+                    }
+                    @foreach($deal_id as $value)
+                        @php
+                            $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$value->award_time)->format('Y-m-d H:i:s');
+                            $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1200)->format('Y-m-d H:i:s');
+                        @endphp
+                        timer('{{$value->id}}', '{{$newDateTime}}');
+                    @endforeach
+                });
+            </script>
+        @endif
+    @endif
 
  <script>
     // Make the DIV element draggable:
@@ -895,8 +899,6 @@
     }
     }
  </script>
- @endif
- @endif
  <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {!! Toastr::message() !!}
 </body>
