@@ -322,6 +322,7 @@ class ContractController extends AccountBaseController
         $project->project_name = $request->project_name;
         $project->project_short_code = 'PSEOP1' . $suffle;
         $project->start_date = $newDate;
+        $project->deliverable_authorization = 0;
 
 
         $currency= Currency::where('id',$request->original_currency_id)->first();
@@ -536,6 +537,7 @@ class ContractController extends AccountBaseController
         $project->project_name = $request->project_name;
         $project->project_short_code = 'PSEOP1' . $suffle;
         $project->start_date = $newDate;
+        $project->deliverable_authorization = 0;
         $currency= Currency::where('id',$request->original_currency_id)->first();
         //dd($currency);
         $project->project_budget = ($request->amount)/$currency->exchange_rate;

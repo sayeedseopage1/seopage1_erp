@@ -1110,6 +1110,7 @@ Route::get('/projects/public/download/{id}', [PublicUrlController::class, 'proje
 Route::post('/projects/add-deliverables/', [ProjectController::class, 'projectDeliverable'])->name('add-project-deliverable');
 Route::post('/projects/update-deliverables/', [ProjectController::class, 'updateDeliverable'])->name('update-project-deliverable');
 Route::get('/projects/delete-deliverables/{id}', [ProjectController::class, 'deleteDeliverable']);
+Route::get('/projects/approve-deliverables/{id}', [ProjectController::class, 'approveDeliverable']);
 
 //projectboard
 Route::post('projectboards/collapseColumn', [ProjectBoardController::class, 'collapseColumn'])->name('projectboards.collapse_column');
