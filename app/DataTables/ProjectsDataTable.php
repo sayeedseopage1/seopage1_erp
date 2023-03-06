@@ -286,8 +286,11 @@ class ProjectsDataTable extends BaseDataTable
             });
             $datatables->addColumn('hours_logged', function ($row) {
                 $project= Project::where('id',$row->id)->first();
-                $project_time_logs= ProjectTimeLog::where('project_id',$project->id)->sum('total_hours');
-                return $project_time_logs. ' hours';
+                $project_time_logs_hours= ProjectTimeLog::where('project_id',$project->id)->sum('total_hours');
+                $project_time_logs_minutes= ProjectTimeLog::where('project_id',$project->id)->sum('total_minutes');
+                $project_time_logs=  ($project_time_logs_minutes/60);
+                $project_time_minutes = $project_time_logs_minutes%60;
+                return round($project_time_logs,0). ' hours '. round($project_time_minutes,0). ' minutes';
             });
             $datatables->addColumn('client_email', function ($row) {
                 if (!is_null($row->client_id)) {

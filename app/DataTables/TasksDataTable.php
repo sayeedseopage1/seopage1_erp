@@ -61,7 +61,7 @@ class TasksDataTable extends BaseDataTable
                 $action = '<div class="task_view">
 
                     <div class="dropdown">
-                        <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
+                        <a class="task_view_more d-flex align-items-center justify-content-cen ter dropdown-toggle" type="link"
                             id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="icon-options-vertical icons"></i>
                         </a>
