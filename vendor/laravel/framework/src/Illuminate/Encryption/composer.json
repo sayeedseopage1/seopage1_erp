@@ -15,7 +15,11 @@
     ],
     "require": {
         "php": "^8.0.2",
+<<<<<<< HEAD
         "ext-hash": "*",
+=======
+        "ext-json": "*",
+>>>>>>> 1f8fa8284 (env)
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "illuminate/contracts": "^9.0",

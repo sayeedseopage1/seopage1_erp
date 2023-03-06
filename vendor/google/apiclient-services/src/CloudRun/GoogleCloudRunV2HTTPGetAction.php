@@ -27,10 +27,13 @@ class GoogleCloudRunV2HTTPGetAction extends \Google\Collection
    * @var string
    */
   public $path;
+<<<<<<< HEAD
   /**
    * @var int
    */
   public $port;
+=======
+>>>>>>> 1f8fa8284 (env)
 
   /**
    * @param GoogleCloudRunV2HTTPHeader[]
@@ -60,6 +63,7 @@ class GoogleCloudRunV2HTTPGetAction extends \Google\Collection
   {
     return $this->path;
   }
+<<<<<<< HEAD
   /**
    * @param int
    */
@@ -74,6 +78,8 @@ class GoogleCloudRunV2HTTPGetAction extends \Google\Collection
   {
     return $this->port;
   }
+=======
+>>>>>>> 1f8fa8284 (env)
 }
 
 // Adding a class alias for backwards compatibility with the previous class name.

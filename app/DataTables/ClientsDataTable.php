@@ -11,6 +11,7 @@ use App\DataTables\BaseDataTable;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class ClientsDataTable extends BaseDataTable
 {
@@ -266,8 +267,9 @@ class ClientsDataTable extends BaseDataTable
         $customFieldsGroupsId = CustomFieldGroup::where('model', $user->clientCustomFieldModel)->pluck('id');
         $customFields = CustomField::where('custom_field_group_id', $customFieldsGroupsId)->where('export', 1)->get();
         $customFieldsDataMerge = [];
-
-        $data = [
+      if(Auth::user()->role_id == 1)
+      {
+         $data = [
             'check' => [
                 'title' => '<input type="checkbox" name="select_alField as $customField) {
                     $data[] = [$customField->name => l_table" id="select-all-table" onclick="selectAllTable(this)">',
@@ -291,6 +293,36 @@ class ClientsDataTable extends BaseDataTable
                 ->searchable(false)
                 ->addClass('text-right pr-20')
         ];
+      }else 
+      {
+       $data = [
+            'check' => [
+                'title' => '<input type="checkbox" name="select_alField as $customField) {
+                    $data[] = [$customField->name => l_table" id="select-all-table" onclick="selectAllTable(this)">',
+                'exportable' => false,
+                'orderable' => false,
+                'searchable' => false
+            ],
+            '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => true],
+            // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+            __('app.name') => ['data' => 'name', 'name' => 'name', 'exportable' => false, 'title' => __('app.name')],
+            __('app.customers')  => ['data' => 'client_name', 'name' => 'users.name', 'visible' => false, 'title' => __('app.customers')],
+            
+            __('app.addedBy') => ['data' => 'added_by', 'name' => 'added_by', 'visible' => false, 'title' => __('app.addedBy')],
+            __('app.mobile') => ['data' => 'mobile', 'name' => 'mobile', 'visible' => false, 'title' => __('app.mobile')],
+            __('app.status') => ['data' => 'status', 'name' => 'status', 'title' => __('app.status')],
+            __('app.createdAt') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('app.createdAt')],
+            Column::computed('action', __('app.action'))
+                ->exportable(false)
+                ->printable(false)
+                ->orderable(false)
+                ->searchable(false)
+                ->addClass('text-right pr-20')
+        ];
+      
+      }
+
+       
 
         foreach ($customFields as $customField) {
             $customFieldsData = [$customField->name => ['data' => $customField->name, 'name' => $customField->name, 'title' => $customField->name, 'visible' => false]];

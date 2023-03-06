@@ -20,9 +20,12 @@ namespace Google\Service\Contentwarehouse;
 class AppsPeopleOzExternalMergedpeopleapiPhoto extends \Google\Collection
 {
   protected $collection_key = 'htmlAttribution';
+<<<<<<< HEAD
   protected $decorationType = SocialGraphApiProtoDecorationOverlay::class;
   protected $decorationDataType = 'array';
   public $decoration;
+=======
+>>>>>>> 1f8fa8284 (env)
   /**
    * @var string
    */
@@ -50,9 +53,12 @@ class AppsPeopleOzExternalMergedpeopleapiPhoto extends \Google\Collection
    * @var string
    */
   public $monogramBackground;
+<<<<<<< HEAD
   protected $originalPhotoType = SocialGraphApiProtoImageReference::class;
   protected $originalPhotoDataType = '';
   public $originalPhoto;
+=======
+>>>>>>> 1f8fa8284 (env)
   protected $photoIdType = AppsPeopleOzExternalMergedpeopleapiPhotoPhotoStorageId::class;
   protected $photoIdDataType = '';
   public $photoId;
@@ -70,6 +76,7 @@ class AppsPeopleOzExternalMergedpeopleapiPhoto extends \Google\Collection
   public $viewerUrl;
 
   /**
+<<<<<<< HEAD
    * @param SocialGraphApiProtoDecorationOverlay[]
    */
   public function setDecoration($decoration)
@@ -84,6 +91,8 @@ class AppsPeopleOzExternalMergedpeopleapiPhoto extends \Google\Collection
     return $this->decoration;
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @param string
    */
   public function setEmojiAvatarUrl($emojiAvatarUrl)
@@ -182,6 +191,7 @@ class AppsPeopleOzExternalMergedpeopleapiPhoto extends \Google\Collection
     return $this->monogramBackground;
   }
   /**
+<<<<<<< HEAD
    * @param SocialGraphApiProtoImageReference
    */
   public function setOriginalPhoto(SocialGraphApiProtoImageReference $originalPhoto)
@@ -196,6 +206,8 @@ class AppsPeopleOzExternalMergedpeopleapiPhoto extends \Google\Collection
     return $this->originalPhoto;
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @param AppsPeopleOzExternalMergedpeopleapiPhotoPhotoStorageId
    */
   public function setPhotoId(AppsPeopleOzExternalMergedpeopleapiPhotoPhotoStorageId $photoId)

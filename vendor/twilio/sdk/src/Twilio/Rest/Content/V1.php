@@ -13,17 +13,26 @@ use Twilio\Domain;
 use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceContext;
 use Twilio\Rest\Content\V1\ContentList;
+<<<<<<< HEAD
 use Twilio\Rest\Content\V1\LegacyContentList;
+=======
+>>>>>>> 1f8fa8284 (env)
 use Twilio\Version;
 
 /**
  * @property ContentList $contents
+<<<<<<< HEAD
  * @property LegacyContentList $legacyContents
+=======
+>>>>>>> 1f8fa8284 (env)
  * @method \Twilio\Rest\Content\V1\ContentContext contents(string $sid)
  */
 class V1 extends Version {
     protected $_contents;
+<<<<<<< HEAD
     protected $_legacyContents;
+=======
+>>>>>>> 1f8fa8284 (env)
 
     /**
      * Construct the V1 version of Content
@@ -42,6 +51,7 @@ class V1 extends Version {
         return $this->_contents;
     }
 
+<<<<<<< HEAD
     protected function getLegacyContents(): LegacyContentList {
         if (!$this->_legacyContents) {
             $this->_legacyContents = new LegacyContentList($this);
@@ -49,6 +59,8 @@ class V1 extends Version {
         return $this->_legacyContents;
     }
 
+=======
+>>>>>>> 1f8fa8284 (env)
     /**
      * Magic getter to lazy load root resources
      *

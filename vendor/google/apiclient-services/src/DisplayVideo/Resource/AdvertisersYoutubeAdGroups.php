@@ -33,8 +33,12 @@ class AdvertisersYoutubeAdGroups extends \Google\Service\Resource
 {
   /**
    * Lists assigned targeting options for multiple YouTube ad groups across
+<<<<<<< HEAD
    * targeting types. Inherieted assigned targeting options are not included.
    * (youtubeAdGroups.bulkListAdGroupAssignedTargetingOptions)
+=======
+   * targeting types. (youtubeAdGroups.bulkListAdGroupAssignedTargetingOptions)
+>>>>>>> 1f8fa8284 (env)
    *
    * @param string $advertiserId Required. The ID of the advertiser the line items
    * belongs to.
@@ -56,7 +60,11 @@ class AdvertisersYoutubeAdGroups extends \Google\Service\Resource
    * field, a suffix "desc" should be added to the field name. Example:
    * `targetingType desc`.
    * @opt_param int pageSize Requested page size. The size must be an integer
+<<<<<<< HEAD
    * between `1` and `5000`. If unspecified, the default is `5000`. Returns error
+=======
+   * between `1` and `5000`. If unspecified, the default is '5000'. Returns error
+>>>>>>> 1f8fa8284 (env)
    * code `INVALID_ARGUMENT` if an invalid value is specified.
    * @opt_param string pageToken A token that lets the client fetch the next page
    * of results. Typically, this is the value of next_page_token returned from the

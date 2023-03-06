@@ -17,14 +17,58 @@
 
 namespace Google\Service\Contentwarehouse;
 
+<<<<<<< HEAD
 class RepositoryWebrefDetailedMentionScores extends \Google\Model
 {
+=======
+class RepositoryWebrefDetailedMentionScores extends \Google\Collection
+{
+  protected $collection_key = 'patternInfo';
+  protected $patternInfoType = RepositoryWebrefPatternInfo::class;
+  protected $patternInfoDataType = 'array';
+  public $patternInfo;
+  /**
+   * @var float
+   */
+  public $posteriorForLearning;
+>>>>>>> 1f8fa8284 (env)
   /**
    * @var float
    */
   public $resultEntityScore;
 
   /**
+<<<<<<< HEAD
+=======
+   * @param RepositoryWebrefPatternInfo[]
+   */
+  public function setPatternInfo($patternInfo)
+  {
+    $this->patternInfo = $patternInfo;
+  }
+  /**
+   * @return RepositoryWebrefPatternInfo[]
+   */
+  public function getPatternInfo()
+  {
+    return $this->patternInfo;
+  }
+  /**
+   * @param float
+   */
+  public function setPosteriorForLearning($posteriorForLearning)
+  {
+    $this->posteriorForLearning = $posteriorForLearning;
+  }
+  /**
+   * @return float
+   */
+  public function getPosteriorForLearning()
+  {
+    return $this->posteriorForLearning;
+  }
+  /**
+>>>>>>> 1f8fa8284 (env)
    * @param float
    */
   public function setResultEntityScore($resultEntityScore)

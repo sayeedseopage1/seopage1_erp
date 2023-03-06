@@ -24,7 +24,11 @@
         "ext-pcre": "*",
         "ext-json": "*",
         "ext-simplexml": "*",
+<<<<<<< HEAD
         "aws/aws-crt-php": "^1.0.4"
+=======
+        "aws/aws-crt-php": "^1.0.2"
+>>>>>>> 1f8fa8284 (env)
     },
     "require-dev": {
         "composer/composer" : "^1.10.22",
