@@ -40,6 +40,10 @@ class Integrations extends \Google\Service
 
   public $callback;
   public $connectorPlatformRegions;
+<<<<<<< HEAD
+=======
+  public $projects_locations;
+>>>>>>> 1f8fa8284 (env)
   public $projects_locations_appsScriptProjects;
   public $projects_locations_authConfigs;
   public $projects_locations_certificates;
@@ -50,11 +54,19 @@ class Integrations extends \Google\Service
   public $projects_locations_integrations_executions;
   public $projects_locations_integrations_executions_suspensions;
   public $projects_locations_integrations_versions;
+<<<<<<< HEAD
+=======
+  public $projects_locations_products;
+>>>>>>> 1f8fa8284 (env)
   public $projects_locations_products_authConfigs;
   public $projects_locations_products_certificates;
   public $projects_locations_products_integrations;
   public $projects_locations_products_integrations_executions;
   public $projects_locations_products_integrations_executions_suspensions;
+<<<<<<< HEAD
+=======
+  public $projects_locations_products_integrations_executionsnapshots;
+>>>>>>> 1f8fa8284 (env)
   public $projects_locations_products_integrations_versions;
   public $projects_locations_products_integrationtemplates_versions;
   public $projects_locations_products_sfdcInstances;
@@ -127,6 +139,29 @@ class Integrations extends \Google\Service
           ]
         ]
     );
+<<<<<<< HEAD
+=======
+    $this->projects_locations = new Integrations\Resource\ProjectsLocations(
+        $this,
+        $this->serviceName,
+        'locations',
+        [
+          'methods' => [
+            'listTaskEntities' => [
+              'path' => 'v1alpha/{+parent}:listTaskEntities',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'parent' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],
+          ]
+        ]
+    );
+>>>>>>> 1f8fa8284 (env)
     $this->projects_locations_appsScriptProjects = new Integrations\Resource\ProjectsLocationsAppsScriptProjects(
         $this,
         $this->serviceName,
@@ -617,7 +652,21 @@ class Integrations extends \Google\Service
         'versions',
         [
           'methods' => [
+<<<<<<< HEAD
             'create' => [
+=======
+            'archive' => [
+              'path' => 'v1alpha/{+name}:archive',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'create' => [
+>>>>>>> 1f8fa8284 (env)
               'path' => 'v1alpha/{+parent}/versions',
               'httpMethod' => 'POST',
               'parameters' => [
@@ -631,6 +680,19 @@ class Integrations extends \Google\Service
                   'type' => 'boolean',
                 ],
               ],
+<<<<<<< HEAD
+=======
+            ],'deactivate' => [
+              'path' => 'v1alpha/{+name}:deactivate',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+>>>>>>> 1f8fa8284 (env)
             ],'delete' => [
               'path' => 'v1alpha/{+name}',
               'httpMethod' => 'DELETE',
@@ -749,6 +811,49 @@ class Integrations extends \Google\Service
                   'required' => true,
                 ],
               ],
+<<<<<<< HEAD
+=======
+            ],'validate' => [
+              'path' => 'v1alpha/{+name}:validate',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],
+          ]
+        ]
+    );
+    $this->projects_locations_products = new Integrations\Resource\ProjectsLocationsProducts(
+        $this,
+        $this->serviceName,
+        'products',
+        [
+          'methods' => [
+            'createBundle' => [
+              'path' => 'v1alpha/{+parent}:createBundle',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'parent' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'listTaskEntities' => [
+              'path' => 'v1alpha/{+parent}:listTaskEntities',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'parent' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+>>>>>>> 1f8fa8284 (env)
             ],
           ]
         ]
@@ -943,7 +1048,21 @@ class Integrations extends \Google\Service
         'integrations',
         [
           'methods' => [
+<<<<<<< HEAD
             'execute' => [
+=======
+            'archiveBundle' => [
+              'path' => 'v1alpha/{+name}:archiveBundle',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'execute' => [
+>>>>>>> 1f8fa8284 (env)
               'path' => 'v1alpha/{+name}:execute',
               'httpMethod' => 'POST',
               'parameters' => [
@@ -1167,13 +1286,66 @@ class Integrations extends \Google\Service
           ]
         ]
     );
+<<<<<<< HEAD
+=======
+    $this->projects_locations_products_integrations_executionsnapshots = new Integrations\Resource\ProjectsLocationsProductsIntegrationsExecutionsnapshots(
+        $this,
+        $this->serviceName,
+        'executionsnapshots',
+        [
+          'methods' => [
+            'list' => [
+              'path' => 'v1alpha/{+parent}/executionsnapshots',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'parent' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+                'filter' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+                'pageSize' => [
+                  'location' => 'query',
+                  'type' => 'integer',
+                ],
+                'pageToken' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+                'readMask' => [
+                  'location' => 'query',
+                  'type' => 'string',
+                ],
+              ],
+            ],
+          ]
+        ]
+    );
+>>>>>>> 1f8fa8284 (env)
     $this->projects_locations_products_integrations_versions = new Integrations\Resource\ProjectsLocationsProductsIntegrationsVersions(
         $this,
         $this->serviceName,
         'versions',
         [
           'methods' => [
+<<<<<<< HEAD
             'create' => [
+=======
+            'archive' => [
+              'path' => 'v1alpha/{+name}:archive',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'create' => [
+>>>>>>> 1f8fa8284 (env)
               'path' => 'v1alpha/{+parent}/versions',
               'httpMethod' => 'POST',
               'parameters' => [
@@ -1187,6 +1359,19 @@ class Integrations extends \Google\Service
                   'type' => 'boolean',
                 ],
               ],
+<<<<<<< HEAD
+=======
+            ],'deactivate' => [
+              'path' => 'v1alpha/{+name}:deactivate',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+>>>>>>> 1f8fa8284 (env)
             ],'delete' => [
               'path' => 'v1alpha/{+name}',
               'httpMethod' => 'DELETE',
@@ -1221,6 +1406,19 @@ class Integrations extends \Google\Service
                   'required' => true,
                 ],
               ],
+<<<<<<< HEAD
+=======
+            ],'getBundle' => [
+              'path' => 'v1alpha/{+name}:getBundle',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+>>>>>>> 1f8fa8284 (env)
             ],'list' => [
               'path' => 'v1alpha/{+parent}/versions',
               'httpMethod' => 'GET',
@@ -1295,6 +1493,19 @@ class Integrations extends \Google\Service
                   'required' => true,
                 ],
               ],
+<<<<<<< HEAD
+=======
+            ],'updateBundle' => [
+              'path' => 'v1alpha/{+name}:updateBundle',
+              'httpMethod' => 'PATCH',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+>>>>>>> 1f8fa8284 (env)
             ],'upload' => [
               'path' => 'v1alpha/{+parent}/versions:upload',
               'httpMethod' => 'POST',
@@ -1305,6 +1516,19 @@ class Integrations extends \Google\Service
                   'required' => true,
                 ],
               ],
+<<<<<<< HEAD
+=======
+            ],'validate' => [
+              'path' => 'v1alpha/{+name}:validate',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'name' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+>>>>>>> 1f8fa8284 (env)
             ],
           ]
         ]

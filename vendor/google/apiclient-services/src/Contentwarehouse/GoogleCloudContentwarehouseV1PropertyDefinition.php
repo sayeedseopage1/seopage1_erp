@@ -17,9 +17,14 @@
 
 namespace Google\Service\Contentwarehouse;
 
+<<<<<<< HEAD
 class GoogleCloudContentwarehouseV1PropertyDefinition extends \Google\Collection
 {
   protected $collection_key = 'schemaSources';
+=======
+class GoogleCloudContentwarehouseV1PropertyDefinition extends \Google\Model
+{
+>>>>>>> 1f8fa8284 (env)
   protected $dateTimeTypeOptionsType = GoogleCloudContentwarehouseV1DateTimeTypeOptions::class;
   protected $dateTimeTypeOptionsDataType = '';
   public $dateTimeTypeOptions;
@@ -70,9 +75,12 @@ class GoogleCloudContentwarehouseV1PropertyDefinition extends \Google\Collection
    * @var string
    */
   public $retrievalImportance;
+<<<<<<< HEAD
   protected $schemaSourcesType = GoogleCloudContentwarehouseV1PropertyDefinitionSchemaSource::class;
   protected $schemaSourcesDataType = 'array';
   public $schemaSources;
+=======
+>>>>>>> 1f8fa8284 (env)
   protected $textTypeOptionsType = GoogleCloudContentwarehouseV1TextTypeOptions::class;
   protected $textTypeOptionsDataType = '';
   public $textTypeOptions;
@@ -277,6 +285,7 @@ class GoogleCloudContentwarehouseV1PropertyDefinition extends \Google\Collection
     return $this->retrievalImportance;
   }
   /**
+<<<<<<< HEAD
    * @param GoogleCloudContentwarehouseV1PropertyDefinitionSchemaSource[]
    */
   public function setSchemaSources($schemaSources)
@@ -291,6 +300,8 @@ class GoogleCloudContentwarehouseV1PropertyDefinition extends \Google\Collection
     return $this->schemaSources;
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @param GoogleCloudContentwarehouseV1TextTypeOptions
    */
   public function setTextTypeOptions(GoogleCloudContentwarehouseV1TextTypeOptions $textTypeOptions)

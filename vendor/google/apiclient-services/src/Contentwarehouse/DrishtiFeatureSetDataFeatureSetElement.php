@@ -32,12 +32,15 @@ class DrishtiFeatureSetDataFeatureSetElement extends \Google\Model
   protected $quantizedType = DrishtiQuantizedDenseFeatureData::class;
   protected $quantizedDataType = '';
   public $quantized;
+<<<<<<< HEAD
   protected $quantizedByteDenseType = DrishtiQuantizedByteDenseFeatureData::class;
   protected $quantizedByteDenseDataType = '';
   public $quantizedByteDense;
   protected $quantizedByteIndexedType = DrishtiQuantizedByteIndexedFeatureData::class;
   protected $quantizedByteIndexedDataType = '';
   public $quantizedByteIndexed;
+=======
+>>>>>>> 1f8fa8284 (env)
   protected $sparseType = DrishtiSparseFeatureData::class;
   protected $sparseDataType = '';
   public $sparse;
@@ -99,6 +102,7 @@ class DrishtiFeatureSetDataFeatureSetElement extends \Google\Model
     return $this->quantized;
   }
   /**
+<<<<<<< HEAD
    * @param DrishtiQuantizedByteDenseFeatureData
    */
   public function setQuantizedByteDense(DrishtiQuantizedByteDenseFeatureData $quantizedByteDense)
@@ -127,6 +131,8 @@ class DrishtiFeatureSetDataFeatureSetElement extends \Google\Model
     return $this->quantizedByteIndexed;
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @param DrishtiSparseFeatureData
    */
   public function setSparse(DrishtiSparseFeatureData $sparse)

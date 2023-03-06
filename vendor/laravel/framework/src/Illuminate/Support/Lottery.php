@@ -259,7 +259,11 @@ class Lottery
     }
 
     /**
+<<<<<<< HEAD
      * Set the factory that should be used to determine the lottery results.
+=======
+     * Set the factory that should be used to deterine the lottery results.
+>>>>>>> 1f8fa8284 (env)
      *
      * @param  callable  $factory
      * @return void

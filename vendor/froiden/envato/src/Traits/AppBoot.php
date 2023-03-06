@@ -360,7 +360,7 @@ trait AppBoot
                 $data['email'] = $this->appSetting->company_email;
             }
             elseif (in_array($data['itemId'], $emailArray)) {
-                $data['email'] = $this->appSetting->email;
+                $data['email'] = $this->appSetting->email; 
             }
 
             $this->curl($data);

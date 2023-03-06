@@ -34,6 +34,7 @@ abstract class InsightsQuestionnairesCategoryOptions {
 
     /**
      * @param string $token The Token HTTP request header
+<<<<<<< HEAD
      * @return ReadInsightsQuestionnairesCategoryOptions Options builder
      */
     public static function read(string $token = Values::NONE): ReadInsightsQuestionnairesCategoryOptions {
@@ -42,6 +43,8 @@ abstract class InsightsQuestionnairesCategoryOptions {
 
     /**
      * @param string $token The Token HTTP request header
+=======
+>>>>>>> 1f8fa8284 (env)
      * @return DeleteInsightsQuestionnairesCategoryOptions Options builder
      */
     public static function delete(string $token = Values::NONE): DeleteInsightsQuestionnairesCategoryOptions {
@@ -109,6 +112,7 @@ class UpdateInsightsQuestionnairesCategoryOptions extends Options {
     }
 }
 
+<<<<<<< HEAD
 class ReadInsightsQuestionnairesCategoryOptions extends Options {
     /**
      * @param string $token The Token HTTP request header
@@ -139,6 +143,8 @@ class ReadInsightsQuestionnairesCategoryOptions extends Options {
     }
 }
 
+=======
+>>>>>>> 1f8fa8284 (env)
 class DeleteInsightsQuestionnairesCategoryOptions extends Options {
     /**
      * @param string $token The Token HTTP request header

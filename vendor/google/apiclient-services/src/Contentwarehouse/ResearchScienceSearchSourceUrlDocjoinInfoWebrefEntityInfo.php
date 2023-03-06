@@ -23,6 +23,7 @@ class ResearchScienceSearchSourceUrlDocjoinInfoWebrefEntityInfo extends \Google\
   /**
    * @var string
    */
+<<<<<<< HEAD
   public $deprecatedEntityType;
   /**
    * @var string
@@ -32,6 +33,13 @@ class ResearchScienceSearchSourceUrlDocjoinInfoWebrefEntityInfo extends \Google\
    * @var string[]
    */
   public $entityCollectionType;
+=======
+  public $description;
+  /**
+   * @var string
+   */
+  public $entityType;
+>>>>>>> 1f8fa8284 (env)
   /**
    * @var string[]
    */
@@ -44,6 +52,7 @@ class ResearchScienceSearchSourceUrlDocjoinInfoWebrefEntityInfo extends \Google\
   /**
    * @param string
    */
+<<<<<<< HEAD
   public function setDeprecatedEntityType($deprecatedEntityType)
   {
     $this->deprecatedEntityType = $deprecatedEntityType;
@@ -58,6 +67,8 @@ class ResearchScienceSearchSourceUrlDocjoinInfoWebrefEntityInfo extends \Google\
   /**
    * @param string
    */
+=======
+>>>>>>> 1f8fa8284 (env)
   public function setDescription($description)
   {
     $this->description = $description;
@@ -70,6 +81,7 @@ class ResearchScienceSearchSourceUrlDocjoinInfoWebrefEntityInfo extends \Google\
     return $this->description;
   }
   /**
+<<<<<<< HEAD
    * @param string[]
    */
   public function setEntityCollectionType($entityCollectionType)
@@ -82,6 +94,20 @@ class ResearchScienceSearchSourceUrlDocjoinInfoWebrefEntityInfo extends \Google\
   public function getEntityCollectionType()
   {
     return $this->entityCollectionType;
+=======
+   * @param string
+   */
+  public function setEntityType($entityType)
+  {
+    $this->entityType = $entityType;
+  }
+  /**
+   * @return string
+   */
+  public function getEntityType()
+  {
+    return $this->entityType;
+>>>>>>> 1f8fa8284 (env)
   }
   /**
    * @param string[]

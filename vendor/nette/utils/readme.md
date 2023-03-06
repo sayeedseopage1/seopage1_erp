@@ -17,7 +17,10 @@ In package nette/utils you will find a set of [useful classes](https://doc.nette
 - [Callback](https://doc.nette.org/utils/callback) - PHP callbacks
 - [Date and Time](https://doc.nette.org/utils/datetime) - modify times and dates
 - [Filesystem](https://doc.nette.org/utils/filesystem) - copying, renaming, …
+<<<<<<< HEAD
 - [Finder](https://doc.nette.org/utils/finder) - finds files and directories
+=======
+>>>>>>> 1f8fa8284 (env)
 - [Helper Functions](https://doc.nette.org/utils/helpers)
 - [HTML elements](https://doc.nette.org/utils/html-elements) - generate HTML
 - [Images](https://doc.nette.org/utils/images) - crop, resize, rotate images
@@ -40,7 +43,10 @@ The recommended way to install is via Composer:
 composer require nette/utils
 ```
 
+<<<<<<< HEAD
 - Nette Utils 4.0 is compatible with PHP 8.0 to 8.2
+=======
+>>>>>>> 1f8fa8284 (env)
 - Nette Utils 3.2 is compatible with PHP 7.2 to 8.2
 - Nette Utils 3.1 is compatible with PHP 7.1 to 8.0
 - Nette Utils 3.0 is compatible with PHP 7.1 to 8.0

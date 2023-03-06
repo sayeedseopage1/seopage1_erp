@@ -12,6 +12,7 @@ namespace Twilio\Rest\FlexApi\V1;
 use Twilio\Options;
 use Twilio\Values;
 
+<<<<<<< HEAD
 /**
  * PLEASE NOTE that this class contains preview products that are subject to change. Use them with caution. If you currently do not have developer preview access, please contact help@twilio.com.
  */
@@ -22,11 +23,21 @@ abstract class InsightsUserRolesOptions {
      */
     public static function fetch(string $authorization = Values::NONE): FetchInsightsUserRolesOptions {
         return new FetchInsightsUserRolesOptions($authorization);
+=======
+abstract class InsightsUserRolesOptions {
+    /**
+     * @param string $token The Token HTTP request header
+     * @return FetchInsightsUserRolesOptions Options builder
+     */
+    public static function fetch(string $token = Values::NONE): FetchInsightsUserRolesOptions {
+        return new FetchInsightsUserRolesOptions($token);
+>>>>>>> 1f8fa8284 (env)
     }
 }
 
 class FetchInsightsUserRolesOptions extends Options {
     /**
+<<<<<<< HEAD
      * @param string $authorization The Authorization HTTP request header
      */
     public function __construct(string $authorization = Values::NONE) {
@@ -41,6 +52,22 @@ class FetchInsightsUserRolesOptions extends Options {
      */
     public function setAuthorization(string $authorization): self {
         $this->options['authorization'] = $authorization;
+=======
+     * @param string $token The Token HTTP request header
+     */
+    public function __construct(string $token = Values::NONE) {
+        $this->options['token'] = $token;
+    }
+
+    /**
+     * The Token HTTP request header
+     *
+     * @param string $token The Token HTTP request header
+     * @return $this Fluent Builder
+     */
+    public function setToken(string $token): self {
+        $this->options['token'] = $token;
+>>>>>>> 1f8fa8284 (env)
         return $this;
     }
 

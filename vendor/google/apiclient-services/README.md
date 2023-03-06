@@ -1,10 +1,13 @@
 Google PHP API Client Services
 ==============================
 
+<<<<<<< HEAD
 **NOTE**: please check to see if the package you'd like to install is available in our
 list of [Google cloud packages](https://cloud.google.com/php/docs/reference) first, as
 these are the recommended libraries.
 
+=======
+>>>>>>> 1f8fa8284 (env)
 ## Requirements
 
 [Google API PHP Client](https://github.com/googleapis/google-api-php-client/releases)

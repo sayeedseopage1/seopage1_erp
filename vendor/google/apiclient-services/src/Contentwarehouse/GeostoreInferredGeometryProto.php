@@ -19,6 +19,7 @@ namespace Google\Service\Contentwarehouse;
 
 class GeostoreInferredGeometryProto extends \Google\Collection
 {
+<<<<<<< HEAD
   protected $collection_key = 'definesGeometryFor';
   protected $definesGeometryForType = GeostoreFeatureIdProto::class;
   protected $definesGeometryForDataType = 'array';
@@ -26,6 +27,18 @@ class GeostoreInferredGeometryProto extends \Google\Collection
   protected $geometryCompositionType = GeostoreGeometryComposition::class;
   protected $geometryCompositionDataType = '';
   public $geometryComposition;
+=======
+  protected $collection_key = 'includesGeometryOf';
+  protected $definesGeometryForType = GeostoreFeatureIdProto::class;
+  protected $definesGeometryForDataType = 'array';
+  public $definesGeometryFor;
+  protected $excludesGeometryOfType = GeostoreFeatureIdProto::class;
+  protected $excludesGeometryOfDataType = 'array';
+  public $excludesGeometryOf;
+  protected $includesGeometryOfType = GeostoreFeatureIdProto::class;
+  protected $includesGeometryOfDataType = 'array';
+  public $includesGeometryOf;
+>>>>>>> 1f8fa8284 (env)
 
   /**
    * @param GeostoreFeatureIdProto[]
@@ -42,6 +55,7 @@ class GeostoreInferredGeometryProto extends \Google\Collection
     return $this->definesGeometryFor;
   }
   /**
+<<<<<<< HEAD
    * @param GeostoreGeometryComposition
    */
   public function setGeometryComposition(GeostoreGeometryComposition $geometryComposition)
@@ -54,6 +68,34 @@ class GeostoreInferredGeometryProto extends \Google\Collection
   public function getGeometryComposition()
   {
     return $this->geometryComposition;
+=======
+   * @param GeostoreFeatureIdProto[]
+   */
+  public function setExcludesGeometryOf($excludesGeometryOf)
+  {
+    $this->excludesGeometryOf = $excludesGeometryOf;
+  }
+  /**
+   * @return GeostoreFeatureIdProto[]
+   */
+  public function getExcludesGeometryOf()
+  {
+    return $this->excludesGeometryOf;
+  }
+  /**
+   * @param GeostoreFeatureIdProto[]
+   */
+  public function setIncludesGeometryOf($includesGeometryOf)
+  {
+    $this->includesGeometryOf = $includesGeometryOf;
+  }
+  /**
+   * @return GeostoreFeatureIdProto[]
+   */
+  public function getIncludesGeometryOf()
+  {
+    return $this->includesGeometryOf;
+>>>>>>> 1f8fa8284 (env)
   }
 }
 

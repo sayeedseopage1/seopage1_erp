@@ -12,17 +12,26 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
+<<<<<<< HEAD
         php: ['8.0', '8.1', '8.2']
         laravel: ['9.0', '10.0']
         exclude:
           - laravel: '10.0'
             php: '8.0'
+=======
+        php: ['8.0', 8.1]
+        laravel: [8, 9]
+>>>>>>> 1f8fa8284 (env)
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }}
 
     steps:
       - name: Checkout code
+<<<<<<< HEAD
         uses: actions/checkout@v3
+=======
+        uses: actions/checkout@v2
+>>>>>>> 1f8fa8284 (env)
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -38,4 +47,8 @@ jobs:
           composer update --prefer-dist --no-interaction --no-progress
 
       - name: Execute tests
+<<<<<<< HEAD
         run: vendor/bin/phpunit
+=======
+        run: vendor/bin/phpunit --verbose
+>>>>>>> 1f8fa8284 (env)

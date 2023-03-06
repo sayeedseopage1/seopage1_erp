@@ -139,6 +139,9 @@
                     <td class="text-center">
                       <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
                         <button class="btn btn primary" data-toggle="modal" data-target="#deliverablesdeleteModal{{$deliverable->id}}"><i class="fas fa-trash"></i></button>
+                        @if($deliverable->authorization == 0 && Auth::user()->role_id == 1)
+                        <button class="btn btn-success" data-toggle="modal" data-target="#deliverablesapproveModal{{$deliverable->id}}">Approve</button>
+                        @endif
 
                     </td>
                   @endif
@@ -148,6 +151,7 @@
                     @if($signature == null)
                     @include('projects.modals.clientdeliverableeditmodal')
                       @include('projects.modals.clientdeliverabledeletemodal')
+                      @include('projects.modals.clientdeliverableapprovemodal')
                       @endif
                     @empty
                     <tr>
@@ -202,7 +206,7 @@
    @php
        $status_check= App\Models\PMProject::where('project_id',$project->id)->first();
    @endphp
-   @if($status_check->deliverable_status == 1 || Auth::user()->role_id == 1)
+   @if($status_check->deliverable_status == 1 && $project->deliverable_authorization == 1 && Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
     <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
 
         <div class="d-flex">
@@ -233,6 +237,27 @@
 
         <x-forms.button-cancel :link="route('projects.index')" class="border-0">@lang('app.cancel')
         </x-forms.button-cancel>
+
+    </div>
+  
+    @else 
+
+    <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
+
+        <div class="d-flex">
+            <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
+                <button class="dropdown-toggle btn-secondary" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationModal"
+                     aria-haspopup="true" aria-expanded="false">@lang('Send for Authorization')
+                   
+                </button>
+                @include('projects.modals.deliverablefinalauthorizationmodal')
+                <!-- DROPDOWN - INFORMATION -->
+               
+            </div>
+
+        </div>
+
+        
 
     </div>
     @endif

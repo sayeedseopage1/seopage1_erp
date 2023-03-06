@@ -25,6 +25,7 @@ use Google\Service\DatabaseMigrationService\DescribeConversionWorkspaceRevisions
 use Google\Service\DatabaseMigrationService\DescribeDatabaseEntitiesResponse;
 use Google\Service\DatabaseMigrationService\ListConversionWorkspacesResponse;
 use Google\Service\DatabaseMigrationService\Operation;
+<<<<<<< HEAD
 use Google\Service\DatabaseMigrationService\Policy;
 use Google\Service\DatabaseMigrationService\RollbackConversionWorkspaceRequest;
 use Google\Service\DatabaseMigrationService\SearchBackgroundJobsResponse;
@@ -32,6 +33,11 @@ use Google\Service\DatabaseMigrationService\SeedConversionWorkspaceRequest;
 use Google\Service\DatabaseMigrationService\SetIamPolicyRequest;
 use Google\Service\DatabaseMigrationService\TestIamPermissionsRequest;
 use Google\Service\DatabaseMigrationService\TestIamPermissionsResponse;
+=======
+use Google\Service\DatabaseMigrationService\RollbackConversionWorkspaceRequest;
+use Google\Service\DatabaseMigrationService\SearchBackgroundJobsResponse;
+use Google\Service\DatabaseMigrationService\SeedConversionWorkspaceRequest;
+>>>>>>> 1f8fa8284 (env)
 
 /**
  * The "conversionWorkspaces" collection of methods.
@@ -172,7 +178,11 @@ class ProjectsLocationsConversionWorkspaces extends \Google\Service\Resource
    * @opt_param string commitId Request a specific commit id. If not specified,
    * the entities from the latest commit are returned.
    * @opt_param string filter Filter the returned entities based on AIP-160
+<<<<<<< HEAD
    * standard.
+=======
+   * standard
+>>>>>>> 1f8fa8284 (env)
    * @opt_param int pageSize The maximum number of entities to return. The service
    * may return fewer than this value.
    * @opt_param string pageToken The nextPageToken value received in the previous
@@ -181,7 +191,11 @@ class ProjectsLocationsConversionWorkspaces extends \Google\Service\Resource
    * left blank. When paginating, all other parameters provided to
    * conversionWorkspace.describeDatabaseEntities must match the call that
    * provided the page token.
+<<<<<<< HEAD
    * @opt_param string tree The tree to fetch.
+=======
+   * @opt_param string tree The tree to fetch
+>>>>>>> 1f8fa8284 (env)
    * @opt_param bool uncommitted Whether to retrieve the latest committed version
    * of the entities or the latest version. This field is ignored if a specific
    * commit_id is specified.
@@ -208,6 +222,7 @@ class ProjectsLocationsConversionWorkspaces extends \Google\Service\Resource
     return $this->call('get', [$params], ConversionWorkspace::class);
   }
   /**
+<<<<<<< HEAD
    * Gets the access control policy for a resource. Returns an empty policy if the
    * resource exists and does not have a policy set.
    * (conversionWorkspaces.getIamPolicy)
@@ -239,6 +254,8 @@ class ProjectsLocationsConversionWorkspaces extends \Google\Service\Resource
     return $this->call('getIamPolicy', [$params], Policy::class);
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * Lists conversion workspaces in a given project and location.
    * (conversionWorkspaces.listProjectsLocationsConversionWorkspaces)
    *
@@ -357,6 +374,7 @@ class ProjectsLocationsConversionWorkspaces extends \Google\Service\Resource
     $params = array_merge($params, $optParams);
     return $this->call('seed', [$params], Operation::class);
   }
+<<<<<<< HEAD
   /**
    * Sets the access control policy on the specified resource. Replaces any
    * existing policy. Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and
@@ -398,6 +416,8 @@ class ProjectsLocationsConversionWorkspaces extends \Google\Service\Resource
     $params = array_merge($params, $optParams);
     return $this->call('testIamPermissions', [$params], TestIamPermissionsResponse::class);
   }
+=======
+>>>>>>> 1f8fa8284 (env)
 }
 
 // Adding a class alias for backwards compatibility with the previous class name.

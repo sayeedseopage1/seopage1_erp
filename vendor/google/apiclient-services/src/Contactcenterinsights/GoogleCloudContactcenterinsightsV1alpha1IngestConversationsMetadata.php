@@ -28,9 +28,12 @@ class GoogleCloudContactcenterinsightsV1alpha1IngestConversationsMetadata extend
    * @var string
    */
   public $endTime;
+<<<<<<< HEAD
   protected $ingestConversationsStatsType = GoogleCloudContactcenterinsightsV1alpha1IngestConversationsMetadataIngestConversationsStats::class;
   protected $ingestConversationsStatsDataType = '';
   public $ingestConversationsStats;
+=======
+>>>>>>> 1f8fa8284 (env)
   protected $partialErrorsType = GoogleRpcStatus::class;
   protected $partialErrorsDataType = 'array';
   public $partialErrors;
@@ -67,6 +70,7 @@ class GoogleCloudContactcenterinsightsV1alpha1IngestConversationsMetadata extend
     return $this->endTime;
   }
   /**
+<<<<<<< HEAD
    * @param GoogleCloudContactcenterinsightsV1alpha1IngestConversationsMetadataIngestConversationsStats
    */
   public function setIngestConversationsStats(GoogleCloudContactcenterinsightsV1alpha1IngestConversationsMetadataIngestConversationsStats $ingestConversationsStats)
@@ -81,6 +85,8 @@ class GoogleCloudContactcenterinsightsV1alpha1IngestConversationsMetadata extend
     return $this->ingestConversationsStats;
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @param GoogleRpcStatus[]
    */
   public function setPartialErrors($partialErrors)

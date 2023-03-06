@@ -16,8 +16,11 @@ use Twilio\Values;
 use Twilio\Version;
 
 /**
+<<<<<<< HEAD
  * PLEASE NOTE that this class contains preview products that are subject to change. Use them with caution. If you currently do not have developer preview access, please contact help@twilio.com.
  *
+=======
+>>>>>>> 1f8fa8284 (env)
  * @property string $workspaceId
  * @property string $sessionExpiry
  * @property string $sessionId
