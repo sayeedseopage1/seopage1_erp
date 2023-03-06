@@ -1,0 +1,257 @@
+* {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: "Segoe UI", "Microsoft YaHei";
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+.wrapper-timezone {
+    border: none;
+    font-size: 1.3em;
+    width: 100%;
+    /* max-width: 185px; */
+    margin: 0 auto;
+    text-align: center;
+    /* background-color: #F3F9FF; */
+    background-color: #07182E;
+    position: relative;
+    bottom: 20px;
+    /* right: 10px; */
+    z-index: 9999;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 0;
+    border-radius: 5px;
+    /* opacity: .3; */
+    transition: all .3s ease-in-out;
+    background-image: url('../img/2.jpg');
+    background-size: cover;
+    background-position: center;
+}
+.wrapper-timezone:hover{
+    opacity: 1;
+}
+
+.wrapper-timezone:nth-child(2) {
+    bottom: 10px;
+}
+.wrapper-timezone:nth-child(3) {
+    bottom: 0px;
+}
+.wrapper-timezone p {
+    font-size: 10px;
+    padding-bottom: 5px;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.5px;
+}
+/* #mydiv {
+    position: fixed;
+    z-index: 9;
+    text-align: center;
+    bottom: 0px;
+    right: 10px;
+} */
+
+#mydiv {
+    position: fixed;
+    z-index: 9;
+    text-align: center;
+    bottom: 10px;
+    right: 10px;
+    padding: 15px 4px;
+    height: auto;
+    border-radius: 10px;
+    height: 260px;
+    width: 180px;
+    border: 1px solid #eee;
+    overflow-x: scroll;
+}
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  #mydiv{
+    scrollbar-width: auto;
+    scrollbar-color: #007ACC #eee;
+  }
+
+  /* Chrome, Edge, and Safari */
+  #mydiv::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  #mydiv::-webkit-scrollbar-track {
+    background: #fff;
+  }
+
+  #mydiv::-webkit-scrollbar-thumb {
+    background-color: #007ACC;
+    border-radius: 10px;
+    border: 5px solid #fff;
+  }
+
+
+/* #mydiv2{
+    position: fixed;
+    z-index: 9;
+    text-align: center;
+    bottom: 70px;
+    right: 10px;
+}
+#mydiv3{
+    position: fixed;
+    z-index: 9;
+    text-align: center;
+    bottom: 70px;
+    right: 10px;
+} */
+
+.wrapper-timezone p {
+    font-size: 10px;
+    padding-bottom: 5px;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+#mydivheader {
+    padding: 10px;
+    cursor: grab;
+    z-index: 10;
+    color: #fff;
+    width: 190px;
+    bottom: 20px;
+    right: 20px;
+}
+
+/* #mydivheader2 {
+    padding: 10px;
+    cursor: grab;
+    z-index: 10;
+    color: #fff;
+    width: 185px;
+    bottom: 50px;
+    right: 20px;
+}
+
+#mydivheader3 {
+    padding: 10px;
+    cursor: grab;
+    z-index: 10;
+    color: #fff;
+    width: 185px;
+    bottom: 150px;
+    right: 20px;
+} */
+
+.timer_text {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 12px;
+    font-family: arial;
+}
+.timer {
+    font-family: impact;
+    font-size: 22px;
+    display: inline-block;
+    vertical-align: top;
+    letter-spacing: 2px;
+}
+
+.clock {
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+.clock .column {
+    padding: 0px;
+    text-align: center;
+    display: inline-flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    /* background: #ddd; */
+    background: #fff;
+    color: #FF0000;
+    width: 50px;
+    border-radius: 2px;
+}
+
+.days {
+    display: none;
+}
+
+.wrapper-timezone p {
+    padding-top: 1px;
+    margin: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .wrapper-timezone {
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    .timer {
+        font-size: 35px;
+    }
+}
+
+a.Accept {
+    padding: 6px 10px;
+    text-decoration: none;
+    width: auto;
+    font-family: 'Roboto', sans-serif;
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #057E05;
+    border: none;
+    border-radius: 30px;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+}
+
+.ui-dialog.ui-window-options.ui-widget.ui-widget-content.ui-front.ui-draggable.ui-resizable {
+	position: absolute;
+	height: auto;
+	width: 250px;
+	/* top: 131px;
+	left: 810px;
+	display: block;
+	z-index: 101; */
+}
+.d-none {
+    display: none !important;
+}
+
+.ui-window-bar .ui-button {
+    position: absolute;
+    top: 50%;
+    width: 20px;
+    margin: -10px 0 0 0;
+    padding: 1px;
+    height: 20px;
+}
+
+.ui-window-bar .ui-window-minimize {
+    right: calc(.3em + 40px);
+}
+
+.ui-window-bar .ui-window-maximize {
+    right: calc(0.3em + 10px);
+}

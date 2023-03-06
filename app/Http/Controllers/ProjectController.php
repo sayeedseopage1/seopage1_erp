@@ -83,6 +83,9 @@ use App\Notifications\QcSubmissionAcceptNotification;
 use App\Notifications\ProjectDeliverableTimeExtendNotification;
 use App\Notifications\ProjectDeliverableTimeAcceptNotification;
 
+use App\Notifications\DeliverableOthersAuthorizationNotification;
+use App\Notifications\DeliverableOthersAuthorizationAcceptNotification;
+
 
 class ProjectController extends AccountBaseController
 {
@@ -1878,6 +1881,14 @@ if ($pm_count < 2) {
     public function projectDeliverable(Request $request)
     {
       $deliverable= new ProjectDeliverable();
+      if($request->deliverable_type == 'Others')
+      {
+      $deliverable->authorization = 0;
+      }
+      else{
+        $deliverable->authorization = 1;
+       
+      }
       $deliverable->project_id= $request->project_id;
       $deliverable->title= $request->title;
       $deliverable->estimation_time=$request->estimation_time;
@@ -1892,6 +1903,15 @@ if ($pm_count < 2) {
       $project= Project::find($deliverable->project_id);
       $project->hours_allocated = $project_id->hours_allocated + $deliverable->estimation_time;
       $project->save();
+      if($request->deliverable_type == 'Others')
+      {
+        $project_id= Project::where('id',$project->id)->first();
+
+        $users= User::where('role_id',1)->get();
+        foreach ($users as $user) {
+            Notification::send($user, new DeliverableOthersAuthorizationNotification($project_id));
+        }
+      }
 
       Toastr::success('Deliverable Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back();
@@ -1904,6 +1924,14 @@ if ($pm_count < 2) {
         $project->hours_allocated = $project_id->hours_allocated - $deliverable_id->estimation_time;
         $project->save();
       $deliverable= ProjectDeliverable::find($request->id);
+      if($request->deliverable_type == 'Others')
+      {
+      $deliverable->authorization = 0;
+      }
+      else{
+        $deliverable->authorization = 1;
+       
+      }
       
 
       $deliverable->title= $request->title;
@@ -1919,6 +1947,16 @@ if ($pm_count < 2) {
       $project_update= Project::find($project_id_update->id);
       $project_update->hours_allocated = $project_id_update->hours_allocated + $request->estimation_time;
       $project_update->save();
+      if($request->deliverable_type == 'Others')
+      {
+        $project_id= Project::where('id',$project_update->id)->first();
+
+        $users= User::where('role_id',1)->get();
+        foreach ($users as $user) {
+            Notification::send($user, new DeliverableOthersAuthorizationNotification($project_id));
+        }
+      }
+
 
       Toastr::success('Deliverable Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back();
@@ -1935,6 +1973,22 @@ if ($pm_count < 2) {
 
 
       Toastr::success('Deliverable Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return Redirect::back();
+    }
+    public function approveDeliverable($id)
+    {
+        $deliverable_id = ProjectDeliverable::where('id',$id)->first();
+        $project= ProjectDeliverable::find($deliverable_id->id);
+        $project->authorization = 1;
+        $project->save();
+        $project_id= Project::where('id',$deliverable_id->project_id)->first();
+
+        $user= User::where('id',$project_id->pm_id)->first();
+       
+            Notification::send($user, new DeliverableOthersAuthorizationAcceptNotification($project_id));
+        
+
+      Toastr::success('Approved Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back();
     }
     public function InComplete(Request $request)
