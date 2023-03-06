@@ -239,8 +239,30 @@
         </x-forms.button-cancel>
 
     </div>
+    @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
+    <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
+
+        <div class="d-flex">
+            <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
+                <button class="dropdown-toggle btn-success text-white" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal"
+                     aria-haspopup="true" aria-expanded="false">@lang('Accept Authorization')
+                   
+                </button>
+                @include('projects.modals.deliverablefinalauthorizationacceptmodal')
+                <!-- DROPDOWN - INFORMATION -->
+               
+            </div>
+
+        </div>
+
+        
+
+    </div>
+
+    @endif
   
     @else 
+    @if($project->authorization_status == 'pending')
 
     <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
 
@@ -260,6 +282,29 @@
         
 
     </div>
+    @else 
+    <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
+
+        <div class="d-flex">
+            <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
+                <button disabled class="dropdown-toggle btn-warning" type="button"
+                     aria-haspopup="true" aria-expanded="false">@lang('Awiating for approval')
+                   
+                </button>
+               
+                <!-- DROPDOWN - INFORMATION -->
+               
+            </div>
+
+        </div>
+
+        
+
+    </div>
+
+
+
+    @endif
     @endif
     
    

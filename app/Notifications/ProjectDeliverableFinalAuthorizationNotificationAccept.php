@@ -9,10 +9,9 @@ use Illuminate\Notifications\Notification;
 use App\Models\Project;
 use App\Models\User;
 
-class ProjectDeliverableFinalAuthorizationNotification extends Notification
+class ProjectDeliverableFinalAuthorizationNotificationAccept extends Notification
 {
     use Queueable;
-    protected $project;
 
     /**
      * Create a new notification instance.
@@ -56,10 +55,10 @@ class ProjectDeliverableFinalAuthorizationNotification extends Notification
        </p>'
        ;
        $header= '<p>
-          <h1 style="color: red; text-align: center;" >' . __('Deliverable authorization request for final submission '.$project->project_short_code.'') .'</b>'.'
+          <h1 style="color: red; text-align: center;" >' . __('Deliverable authorization accepted for final submission '.$project->project_short_code.'') .'</b>'.'
       </h1>';
       $body= '<p>
-        '.'Deliverable authorization request for final submission '.$project->project_short_code.'. To check the details, follow this link.'.
+        '.'Deliverable authorization accepted for final submission '.$project->project_short_code.'. To check the details, follow this link.'.
      '</p>'
      ;
      $content =
@@ -80,10 +79,10 @@ class ProjectDeliverableFinalAuthorizationNotification extends Notification
    ;
   
           return (new MailMessage)
-          ->subject(__('Client Name: '.$client->name.', Deliverable authorization request for final submission') )
+          ->subject(__('Client Name: '.$client->name.', Deliverable authorization accepted for final submission') )
   
           ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
-          ->markdown('mail.project.deliverable_final_authorization', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
+          ->markdown('mail.project.deliverable_final_authorization_accept', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
     }
 
     /**
