@@ -666,7 +666,27 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
             })
         });
 
-
+        function format(d) {
+            var html = '<h2>Sub Categories</h2><table class="col-12 rounded" style="background:red;"><thead><tr><th>#</th><th>name</th><th>action</th></tr></thead><tbody>'; 
+            html += '<tr><td>1</td><td>2</td><td><a class="btn btn-primary mr-3" href="{{env('APP_URL')}}/category/3/edit"><i class="fa fa-eye"></i></a><a class="btn btn-danger delete" href="#" onclick="xdelete()"><i class="fa fa-trash"></i></a></td></tr>';
+            html += '</tbody></table>';
+            return html;
+        }
+        $('#allTasks-table').on('click', 'td.dt-control', function () {
+            console.log('ok');
+            var tr = $(this).closest('tr');
+            table = $('#allTasks-table').dataTable();
+            var row = table.row(tr);
+     
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
     </script>
-
 @endpush
