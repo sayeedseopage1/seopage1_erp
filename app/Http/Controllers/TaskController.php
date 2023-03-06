@@ -80,7 +80,7 @@ class TaskController extends AccountBaseController
             $this->taskLabels = TaskLabelList::all();
             $this->milestones = ProjectMilestone::all();
         }
-
+        
         return $dataTable->render('tasks.index', $this->data);
     }
     public function TaskReview(Request $request)

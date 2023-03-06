@@ -46,7 +46,8 @@ $(function() {
                 $min.data("isMin", true);
                 dlg.animate({
                     height: '40px',
-                    top: $(window).height() - 50
+                    top: $(window).height() - 50,
+                    left: $(window).width() - 300,
                 }, 200);
                 dlg.find(".ui-dialog-content").hide();
             } else {
@@ -55,6 +56,7 @@ $(function() {
                 $('.minusthick').addClass('ui-icon-minusthick');
                 $min.data("isMin", false);
                 dlg.find(".ui-dialog-content").show();
+
                 dlg.animate({
                     height: ($min.data("original-size").height + 8) + "px",
                     top: $min.data("original-pos").top + "px"
@@ -94,6 +96,7 @@ $(function() {
 
     $('#window').dialog({
         draggable: true,
+        resizable: false,
         autoOpen: true,
         classes: {
             "ui-dialog": "ui-window-options",
@@ -101,12 +104,10 @@ $(function() {
         },
         modal: true,
         responsive: true,
-        position: { my: "top", at: "right" }
+        position: { my: "top", at: "right" },
+        height: 358,
+        dialogClass: 'overflow-y-scroll'
     });
 
     addButtons($(".ui-window-options"));
-
-    $("#winOpener").click(function() {
-        $("#window").dialog("open");
-    })
 });
