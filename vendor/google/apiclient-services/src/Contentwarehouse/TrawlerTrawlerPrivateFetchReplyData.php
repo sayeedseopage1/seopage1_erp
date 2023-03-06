@@ -131,10 +131,13 @@ class TrawlerTrawlerPrivateFetchReplyData extends \Google\Model
    */
   public $authenticationInfo;
   /**
+<<<<<<< HEAD
    * @var bool
    */
   public $bypassedHostOverfull;
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @var int
    */
   public $cacheAcceptableAfterDate;
@@ -521,6 +524,7 @@ class TrawlerTrawlerPrivateFetchReplyData extends \Google\Model
     return $this->authenticationInfo;
   }
   /**
+<<<<<<< HEAD
    * @param bool
    */
   public function setBypassedHostOverfull($bypassedHostOverfull)
@@ -535,6 +539,8 @@ class TrawlerTrawlerPrivateFetchReplyData extends \Google\Model
     return $this->bypassedHostOverfull;
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @param int
    */
   public function setCacheAcceptableAfterDate($cacheAcceptableAfterDate)

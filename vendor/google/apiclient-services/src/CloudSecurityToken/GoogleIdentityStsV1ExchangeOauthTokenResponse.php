@@ -22,7 +22,10 @@ class GoogleIdentityStsV1ExchangeOauthTokenResponse extends \Google\Model
   protected $internal_gapi_mappings = [
         "accessToken" => "access_token",
         "expiresIn" => "expires_in",
+<<<<<<< HEAD
         "idToken" => "id_token",
+=======
+>>>>>>> 1f8fa8284 (env)
         "refreshToken" => "refresh_token",
         "tokenType" => "token_type",
   ];
@@ -37,10 +40,13 @@ class GoogleIdentityStsV1ExchangeOauthTokenResponse extends \Google\Model
   /**
    * @var string
    */
+<<<<<<< HEAD
   public $idToken;
   /**
    * @var string
    */
+=======
+>>>>>>> 1f8fa8284 (env)
   public $refreshToken;
   /**
    * @var string
@@ -82,6 +88,7 @@ class GoogleIdentityStsV1ExchangeOauthTokenResponse extends \Google\Model
   /**
    * @param string
    */
+<<<<<<< HEAD
   public function setIdToken($idToken)
   {
     $this->idToken = $idToken;
@@ -96,6 +103,8 @@ class GoogleIdentityStsV1ExchangeOauthTokenResponse extends \Google\Model
   /**
    * @param string
    */
+=======
+>>>>>>> 1f8fa8284 (env)
   public function setRefreshToken($refreshToken)
   {
     $this->refreshToken = $refreshToken;

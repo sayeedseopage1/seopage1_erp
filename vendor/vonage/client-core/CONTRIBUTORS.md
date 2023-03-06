@@ -18,10 +18,13 @@ In no particular order, we would like to thank all the contributors who have
 helped work on this library. We truly value our open source community and the
 work that they do.
 
+<<<<<<< HEAD
 * [Ash Allen](https://github.com/ash-jc-allen)
 * [Thiago Locks](https://github.com/thiagolcks)
 * [Derick Rethans](https://github.com/derickr)
 * [Viktor Szépe](https://github.com/szepeviktor)
+=======
+>>>>>>> 1f8fa8284 (env)
 * [Christopher Lass](https://github.com/arubacao)
 * [Greg Holmes](https://github.com/GregHolmes)
 * [Vincent Klaiber](https://github.com/vinkla)

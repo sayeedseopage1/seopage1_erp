@@ -12,7 +12,10 @@ namespace Twilio\Rest\FlexApi\V1;
 use Twilio\Exceptions\TwilioException;
 use Twilio\ListResource;
 use Twilio\Options;
+<<<<<<< HEAD
 use Twilio\Stream;
+=======
+>>>>>>> 1f8fa8284 (env)
 use Twilio\Values;
 use Twilio\Version;
 
@@ -55,6 +58,7 @@ class InsightsQuestionnairesCategoryList extends ListResource {
     }
 
     /**
+<<<<<<< HEAD
      * Streams InsightsQuestionnairesCategoryInstance records from the API as a
      * generator stream.
      * This operation lazily loads records as efficiently as possible until the
@@ -144,6 +148,8 @@ class InsightsQuestionnairesCategoryList extends ListResource {
     }
 
     /**
+=======
+>>>>>>> 1f8fa8284 (env)
      * Constructs a InsightsQuestionnairesCategoryContext
      *
      * @param string $categoryId Category ID to update

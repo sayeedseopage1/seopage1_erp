@@ -2,7 +2,11 @@
   "name": "vonage/client-core",
   "type": "library",
   "description": "PHP Client for using Vonage's API.",
+<<<<<<< HEAD
   "homepage": "https://developer.vonage.com",
+=======
+  "homepage": "https://developer.nexmo.com",
+>>>>>>> 1f8fa8284 (env)
   "license": "Apache-2.0",
   "authors": [
     {
@@ -12,23 +16,42 @@
     }
   ],
   "require": {
+<<<<<<< HEAD
     "php": "~8.0 || ~8.1 || ~8.2", 
     "ext-mbstring": "*",
     "laminas/laminas-diactoros": "^2.21",
     "lcobucci/jwt": "^3.4|^4.0",
+=======
+    "php": "~7.4 || ~8.0 || ~8.1",
+    "ext-json": "*",
+    "ext-mbstring": "*",
+    "laminas/laminas-diactoros": "^2.4",
+    "lcobucci/jwt": "^3.4|^4.0",
+    "composer/package-versions-deprecated": "^1.11",
+>>>>>>> 1f8fa8284 (env)
     "psr/container": "^1.0 | ^2.0",
     "psr/http-client-implementation": "^1.0",
     "vonage/nexmo-bridge": "^0.1.0",
     "psr/log": "^1.1|^2.0|^3.0"
   },
+<<<<<<< HEAD
   "require-dev": {  
     "guzzlehttp/guzzle": ">=6",
     "helmich/phpunit-json-assert": "^3.3",
     "php-http/mock-client": "^1.4",
+=======
+  "require-dev": {
+    "php": "~7.4 || ~8.0 || ~8.1",
+    "guzzlehttp/guzzle": ">=6",
+    "helmich/phpunit-json-assert": "^3.3",
+    "php-http/mock-client": "^1.4",
+    "phpstan/phpstan": "^0.12",
+>>>>>>> 1f8fa8284 (env)
     "phpunit/phpunit": "^8.5|^9.4",
     "roave/security-advisories": "dev-latest",
     "squizlabs/php_codesniffer": "^3.5",
     "softcreatr/jsonpath": "^0.7 || ^0.8",
+<<<<<<< HEAD
     "phpspec/prophecy-phpunit": "^2.0",
     "phpstan/phpstan": "^1.9",
     "rector/rector": "^0.14.8"
@@ -39,6 +62,13 @@
     "allow-plugins": {
       "php-http/discovery": true
     }
+=======
+    "phpspec/prophecy-phpunit": "^2.0"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist"
+>>>>>>> 1f8fa8284 (env)
   },
   "autoload": {
     "psr-4": {

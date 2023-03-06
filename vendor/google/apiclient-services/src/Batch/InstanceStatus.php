@@ -19,9 +19,12 @@ namespace Google\Service\Batch;
 
 class InstanceStatus extends \Google\Model
 {
+<<<<<<< HEAD
   protected $bootDiskType = Disk::class;
   protected $bootDiskDataType = '';
   public $bootDisk;
+=======
+>>>>>>> 1f8fa8284 (env)
   /**
    * @var string
    */
@@ -36,6 +39,7 @@ class InstanceStatus extends \Google\Model
   public $taskPack;
 
   /**
+<<<<<<< HEAD
    * @param Disk
    */
   public function setBootDisk(Disk $bootDisk)
@@ -50,6 +54,8 @@ class InstanceStatus extends \Google\Model
     return $this->bootDisk;
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @param string
    */
   public function setMachineType($machineType)

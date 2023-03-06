@@ -38,10 +38,13 @@ class QualityCalypsoAppsUniversalAuLiveOpFormat extends \Google\Model
   /**
    * @var string
    */
+<<<<<<< HEAD
   public $originalImageUrl;
   /**
    * @var string
    */
+=======
+>>>>>>> 1f8fa8284 (env)
   public $squareImageUrl;
   /**
    * @var string
@@ -119,6 +122,7 @@ class QualityCalypsoAppsUniversalAuLiveOpFormat extends \Google\Model
   /**
    * @param string
    */
+<<<<<<< HEAD
   public function setOriginalImageUrl($originalImageUrl)
   {
     $this->originalImageUrl = $originalImageUrl;
@@ -133,6 +137,8 @@ class QualityCalypsoAppsUniversalAuLiveOpFormat extends \Google\Model
   /**
    * @param string
    */
+=======
+>>>>>>> 1f8fa8284 (env)
   public function setSquareImageUrl($squareImageUrl)
   {
     $this->squareImageUrl = $squareImageUrl;

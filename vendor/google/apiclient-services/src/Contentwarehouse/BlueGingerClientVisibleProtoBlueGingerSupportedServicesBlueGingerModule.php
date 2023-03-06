@@ -28,10 +28,13 @@ class BlueGingerClientVisibleProtoBlueGingerSupportedServicesBlueGingerModule ex
    * @var string[]
    */
   public $services;
+<<<<<<< HEAD
   /**
    * @var string
    */
   public $useCase;
+=======
+>>>>>>> 1f8fa8284 (env)
 
   /**
    * @param string
@@ -61,6 +64,7 @@ class BlueGingerClientVisibleProtoBlueGingerSupportedServicesBlueGingerModule ex
   {
     return $this->services;
   }
+<<<<<<< HEAD
   /**
    * @param string
    */
@@ -75,6 +79,8 @@ class BlueGingerClientVisibleProtoBlueGingerSupportedServicesBlueGingerModule ex
   {
     return $this->useCase;
   }
+=======
+>>>>>>> 1f8fa8284 (env)
 }
 
 // Adding a class alias for backwards compatibility with the previous class name.

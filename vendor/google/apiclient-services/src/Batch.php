@@ -154,6 +154,23 @@ class Batch extends \Google\Service
                   'required' => true,
                 ],
               ],
+<<<<<<< HEAD
+=======
+            ],'getIamPolicy' => [
+              'path' => 'v1/{+resource}:getIamPolicy',
+              'httpMethod' => 'GET',
+              'parameters' => [
+                'resource' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+                'options.requestedPolicyVersion' => [
+                  'location' => 'query',
+                  'type' => 'integer',
+                ],
+              ],
+>>>>>>> 1f8fa8284 (env)
             ],'list' => [
               'path' => 'v1/{+parent}/jobs',
               'httpMethod' => 'GET',
@@ -176,6 +193,29 @@ class Batch extends \Google\Service
                   'type' => 'string',
                 ],
               ],
+<<<<<<< HEAD
+=======
+            ],'setIamPolicy' => [
+              'path' => 'v1/{+resource}:setIamPolicy',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'resource' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+            ],'testIamPermissions' => [
+              'path' => 'v1/{+resource}:testIamPermissions',
+              'httpMethod' => 'POST',
+              'parameters' => [
+                'resource' => [
+                  'location' => 'path',
+                  'type' => 'string',
+                  'required' => true,
+                ],
+              ],
+>>>>>>> 1f8fa8284 (env)
             ],
           ]
         ]

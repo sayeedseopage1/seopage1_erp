@@ -21,7 +21,10 @@ class ScienceCitation extends \Google\Collection
 {
   protected $collection_key = 'unioncatalog';
   protected $internal_gapi_mappings = [
+<<<<<<< HEAD
         "abstractCitationSource" => "AbstractCitationSource",
+=======
+>>>>>>> 1f8fa8284 (env)
         "abstractDisplay" => "AbstractDisplay",
         "abstractHtml" => "AbstractHtml",
         "abstractHtmlLeftOver" => "AbstractHtmlLeftOver",
@@ -121,10 +124,13 @@ class ScienceCitation extends \Google\Collection
         "worldViewable" => "WorldViewable",
   ];
   /**
+<<<<<<< HEAD
    * @var int
    */
   public $abstractCitationSource;
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @var string
    */
   public $abstractDisplay;
@@ -545,6 +551,7 @@ class ScienceCitation extends \Google\Collection
   public $unioncatalog;
 
   /**
+<<<<<<< HEAD
    * @param int
    */
   public function setAbstractCitationSource($abstractCitationSource)
@@ -559,6 +566,8 @@ class ScienceCitation extends \Google\Collection
     return $this->abstractCitationSource;
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @param string
    */
   public function setAbstractDisplay($abstractDisplay)

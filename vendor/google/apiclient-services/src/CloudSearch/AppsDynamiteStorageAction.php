@@ -35,10 +35,13 @@ class AppsDynamiteStorageAction extends \Google\Collection
   protected $parametersType = AppsDynamiteStorageActionActionParameter::class;
   protected $parametersDataType = 'array';
   public $parameters;
+<<<<<<< HEAD
   /**
    * @var bool
    */
   public $persistValues;
+=======
+>>>>>>> 1f8fa8284 (env)
 
   /**
    * @param string
@@ -96,6 +99,7 @@ class AppsDynamiteStorageAction extends \Google\Collection
   {
     return $this->parameters;
   }
+<<<<<<< HEAD
   /**
    * @param bool
    */
@@ -110,6 +114,8 @@ class AppsDynamiteStorageAction extends \Google\Collection
   {
     return $this->persistValues;
   }
+=======
+>>>>>>> 1f8fa8284 (env)
 }
 
 // Adding a class alias for backwards compatibility with the previous class name.

@@ -17,6 +17,13 @@
 
 namespace Google\Service\Integrations\Resource;
 
+<<<<<<< HEAD
+=======
+use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaArchiveIntegrationVersionRequest;
+use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaArchiveIntegrationVersionResponse;
+use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaDeactivateIntegrationVersionRequest;
+use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaDeactivateIntegrationVersionResponse;
+>>>>>>> 1f8fa8284 (env)
 use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaDownloadIntegrationVersionResponse;
 use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaIntegrationVersion;
 use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListIntegrationVersionsResponse;
@@ -27,6 +34,11 @@ use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaTakeoverEditLockRe
 use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaUnpublishIntegrationVersionRequest;
 use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaUploadIntegrationVersionRequest;
 use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaUploadIntegrationVersionResponse;
+<<<<<<< HEAD
+=======
+use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaValidateIntegrationVersionRequest;
+use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaValidateIntegrationVersionResponse;
+>>>>>>> 1f8fa8284 (env)
 use Google\Service\Integrations\GoogleProtobufEmpty;
 
 /**
@@ -40,6 +52,32 @@ use Google\Service\Integrations\GoogleProtobufEmpty;
 class ProjectsLocationsIntegrationsVersions extends \Google\Service\Resource
 {
   /**
+<<<<<<< HEAD
+=======
+   * Soft-deletes the integration. Changes the status of the integration to
+   * ARCHIVED. If the integration being ARCHIVED is tagged as "HEAD", the tag is
+   * removed from this snapshot and set to the previous non-ARCHIVED snapshot. The
+   * PUBLISH_REQUESTED, DUE_FOR_DELETION tags are removed too. This RPC throws an
+   * exception if the version being archived is DRAFT, and if the `locked_by` user
+   * is not the same as the user performing the Archive. Audit fields updated
+   * include last_modified_timestamp, last_modified_by. Any existing lock is
+   * released when Archiving a integration. Currently, there is no unarchive
+   * mechanism. (versions.archive)
+   *
+   * @param string $name Required. The version to archive. Format: projects/{proje
+   * ct}/locations/{location}/integrations/{integration}/versions/{version}
+   * @param GoogleCloudIntegrationsV1alphaArchiveIntegrationVersionRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return GoogleCloudIntegrationsV1alphaArchiveIntegrationVersionResponse
+   */
+  public function archive($name, GoogleCloudIntegrationsV1alphaArchiveIntegrationVersionRequest $postBody, $optParams = [])
+  {
+    $params = ['name' => $name, 'postBody' => $postBody];
+    $params = array_merge($params, $optParams);
+    return $this->call('archive', [$params], GoogleCloudIntegrationsV1alphaArchiveIntegrationVersionResponse::class);
+  }
+  /**
+>>>>>>> 1f8fa8284 (env)
    * Create a integration with a draft version in the specified project.
    * (versions.create)
    *
@@ -63,6 +101,28 @@ class ProjectsLocationsIntegrationsVersions extends \Google\Service\Resource
     return $this->call('create', [$params], GoogleCloudIntegrationsV1alphaIntegrationVersion::class);
   }
   /**
+<<<<<<< HEAD
+=======
+   * Sets the status of the ACTIVE integration to SNAPSHOT with a new tag
+   * "PREVIOUSLY_PUBLISHED" after validating it. The "HEAD" and
+   * "PUBLISH_REQUESTED" tags do not change. This RPC throws an exception if the
+   * version being snapshot is not ACTIVE. Audit fields added include action,
+   * action_by, action_timestamp. (versions.deactivate)
+   *
+   * @param string $name Required. The version to deactivate. Format: projects/{pr
+   * oject}/locations/{location}/integrations/{integration}/versions/{version}
+   * @param GoogleCloudIntegrationsV1alphaDeactivateIntegrationVersionRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return GoogleCloudIntegrationsV1alphaDeactivateIntegrationVersionResponse
+   */
+  public function deactivate($name, GoogleCloudIntegrationsV1alphaDeactivateIntegrationVersionRequest $postBody, $optParams = [])
+  {
+    $params = ['name' => $name, 'postBody' => $postBody];
+    $params = array_merge($params, $optParams);
+    return $this->call('deactivate', [$params], GoogleCloudIntegrationsV1alphaDeactivateIntegrationVersionResponse::class);
+  }
+  /**
+>>>>>>> 1f8fa8284 (env)
    * Soft-deletes the integration. Changes the status of the integration to
    * ARCHIVED. If the integration being ARCHIVED is tagged as "HEAD", the tag is
    * removed from this snapshot and set to the previous non-ARCHIVED snapshot. The
@@ -260,6 +320,26 @@ class ProjectsLocationsIntegrationsVersions extends \Google\Service\Resource
     $params = array_merge($params, $optParams);
     return $this->call('upload', [$params], GoogleCloudIntegrationsV1alphaUploadIntegrationVersionResponse::class);
   }
+<<<<<<< HEAD
+=======
+  /**
+   * Validates the given integration. If the id doesn't exist, a NotFoundException
+   * is thrown. If validation fails a CanonicalCodeException is thrown. If there
+   * was no failure an empty response is returned. (versions.validate)
+   *
+   * @param string $name Required. The version to validate. Format: projects/{proj
+   * ect}/locations/{location}/integrations/{integration}/versions/{version}
+   * @param GoogleCloudIntegrationsV1alphaValidateIntegrationVersionRequest $postBody
+   * @param array $optParams Optional parameters.
+   * @return GoogleCloudIntegrationsV1alphaValidateIntegrationVersionResponse
+   */
+  public function validate($name, GoogleCloudIntegrationsV1alphaValidateIntegrationVersionRequest $postBody, $optParams = [])
+  {
+    $params = ['name' => $name, 'postBody' => $postBody];
+    $params = array_merge($params, $optParams);
+    return $this->call('validate', [$params], GoogleCloudIntegrationsV1alphaValidateIntegrationVersionResponse::class);
+  }
+>>>>>>> 1f8fa8284 (env)
 }
 
 // Adding a class alias for backwards compatibility with the previous class name.

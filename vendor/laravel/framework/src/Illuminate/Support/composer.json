@@ -15,8 +15,12 @@
     ],
     "require": {
         "php": "^8.0.2",
+<<<<<<< HEAD
         "ext-ctype": "*",
         "ext-filter": "*",
+=======
+        "ext-json": "*",
+>>>>>>> 1f8fa8284 (env)
         "ext-mbstring": "*",
         "doctrine/inflector": "^2.0",
         "illuminate/collections": "^9.0",

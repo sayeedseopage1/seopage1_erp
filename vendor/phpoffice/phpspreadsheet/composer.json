@@ -78,7 +78,11 @@
         "psr/simple-cache": "^1.0 || ^2.0 || ^3.0"
     },
     "require-dev": {
+<<<<<<< HEAD
         "dealerdirect/phpcodesniffer-composer-installer": "dev-main",
+=======
+        "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
+>>>>>>> 1f8fa8284 (env)
         "dompdf/dompdf": "^1.0 || ^2.0",
         "friendsofphp/php-cs-fixer": "^3.2",
         "mitoteam/jpgraph": "^10.2.4",

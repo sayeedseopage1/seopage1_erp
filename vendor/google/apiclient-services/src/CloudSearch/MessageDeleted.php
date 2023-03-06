@@ -19,16 +19,23 @@ namespace Google\Service\CloudSearch;
 
 class MessageDeleted extends \Google\Collection
 {
+<<<<<<< HEAD
   protected $collection_key = 'wonderCardMappings';
+=======
+  protected $collection_key = 'messageKeys';
+>>>>>>> 1f8fa8284 (env)
   protected $imapSyncMappingsType = ImapSyncDelete::class;
   protected $imapSyncMappingsDataType = 'array';
   public $imapSyncMappings;
   protected $messageKeysType = MultiKey::class;
   protected $messageKeysDataType = 'array';
   public $messageKeys;
+<<<<<<< HEAD
   protected $wonderCardMappingsType = WonderCardDelete::class;
   protected $wonderCardMappingsDataType = 'array';
   public $wonderCardMappings;
+=======
+>>>>>>> 1f8fa8284 (env)
 
   /**
    * @param ImapSyncDelete[]
@@ -58,6 +65,7 @@ class MessageDeleted extends \Google\Collection
   {
     return $this->messageKeys;
   }
+<<<<<<< HEAD
   /**
    * @param WonderCardDelete[]
    */
@@ -72,6 +80,8 @@ class MessageDeleted extends \Google\Collection
   {
     return $this->wonderCardMappings;
   }
+=======
+>>>>>>> 1f8fa8284 (env)
 }
 
 // Adding a class alias for backwards compatibility with the previous class name.

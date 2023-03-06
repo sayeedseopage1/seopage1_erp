@@ -34,8 +34,11 @@
         }
     },
     "suggest": {
+<<<<<<< HEAD
         "ext-apcu": "Required to use the APC cache driver.",
         "ext-filter": "Required to use the DynamoDb cache driver.",
+=======
+>>>>>>> 1f8fa8284 (env)
         "ext-memcached": "Required to use the memcache cache driver.",
         "illuminate/database": "Required to use the database cache driver (^9.0).",
         "illuminate/filesystem": "Required to use the file cache driver (^9.0).",

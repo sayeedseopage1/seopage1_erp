@@ -59,10 +59,13 @@ class ImageData extends \Google\Collection
    */
   public $clipartDetectorVersion;
   /**
+<<<<<<< HEAD
    * @var string
    */
   public $clusterId;
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @var int
    */
   public $codomainStrength;
@@ -498,6 +501,7 @@ class ImageData extends \Google\Collection
     return $this->clipartDetectorVersion;
   }
   /**
+<<<<<<< HEAD
    * @param string
    */
   public function setClusterId($clusterId)
@@ -512,6 +516,8 @@ class ImageData extends \Google\Collection
     return $this->clusterId;
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @param int
    */
   public function setCodomainStrength($codomainStrength)
