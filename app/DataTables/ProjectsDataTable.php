@@ -292,6 +292,7 @@ class ProjectsDataTable extends BaseDataTable
                 $project_time_logs_minutes= ProjectTimeLog::where('project_id',$project->id)->sum('total_minutes');
                 $project_time_logs=  ($project_time_logs_minutes/60);
                 $project_time_minutes = $project_time_logs_minutes%60;
+
                $currentTime = Carbon::now();
                	$totalMinutes = DB::table('project_time_logs')
                 ->where('project_id',$row->id)
@@ -315,6 +316,7 @@ class ProjectsDataTable extends BaseDataTable
                
                
                 return intval(round($project_time_logs,1))+ $active_time_hours + $add_hours . ' hrs '. $add_minutes . ' mins';
+
             });
             $datatables->addColumn('client_email', function ($row) {
                 if (!is_null($row->client_id)) {

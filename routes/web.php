@@ -1154,5 +1154,9 @@ Route::post('/users/project-enable-disable', [EmployeeController::class, 'Projec
 Route::get('/get-deliverable/{milestone_id}', [TaskController::class, 'get_deliverable']);
 Route::post('/deliverable-authorization-request', [ProjectController::class, 'DeliverableAuthorizationRequest'])->name('deliverable-authorization-request');
 Route::post('/deliverable-authorization-accept', [ProjectController::class, 'DeliverableAuthorizationAccept'])->name('deliverable-authorization-accept');
+Route::get('/projects/send-final-authorization-deliverables/{id}', [ProjectController::class, 'DeliverableFinalAuthorizationSend']);
+Route::post('/deliverable-final-authorization-accept', [ProjectController::class, 'DeliverableFinalAuthorizationAccept'])->name('deliverable-final-authorization-accept');
+
+
 
 

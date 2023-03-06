@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notification;
 use App\Models\Project;
 use App\Models\User;
 
-class ProjectDeliverableTimeAcceptNotification extends Notification
+class ProjectDeliverableFinalAuthorizationNotification extends Notification
 {
     use Queueable;
     protected $project;
@@ -56,10 +56,10 @@ class ProjectDeliverableTimeAcceptNotification extends Notification
        </p>'
        ;
        $header= '<p>
-          <h1 style="color: red; text-align: center;" >' . __('Deliverable time extension request accepted'.$project->project_short_code.'') .'</b>'.'
+          <h1 style="color: red; text-align: center;" >' . __('Deliverable authorization request for final submission '.$project->project_short_code.'') .'</b>'.'
       </h1>';
       $body= '<p>
-        '.'Top management accepted deliverable extend time Request '.$project->project_short_code.'. To check the details, follow this link.'.
+        '.'Deliverable authorization request for final submission '.$project->project_short_code.'. To check the details, follow this link.'.
      '</p>'
      ;
      $content =
@@ -80,10 +80,10 @@ class ProjectDeliverableTimeAcceptNotification extends Notification
    ;
   
           return (new MailMessage)
-          ->subject(__('Client Name: '.$client->name.', Deliverable time extension request accepted') )
+          ->subject(__('Client Name: '.$client->name.', Deliverable authorization request for final submission') )
   
           ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
-          ->markdown('mail.project.deliverable_extension_accept', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
+          ->markdown('mail.project.deliverable_final_authorization', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
     }
 
     /**
@@ -106,5 +106,4 @@ class ProjectDeliverableTimeAcceptNotification extends Notification
 
         ];
     }
-   
 }
