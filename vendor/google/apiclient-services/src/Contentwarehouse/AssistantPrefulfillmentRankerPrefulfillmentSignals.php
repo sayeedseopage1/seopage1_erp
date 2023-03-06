@@ -31,19 +31,25 @@ class AssistantPrefulfillmentRankerPrefulfillmentSignals extends \Google\Model
   /**
    * @var bool
    */
+<<<<<<< HEAD
   public $deepMediaDominant;
   /**
    * @var bool
    */
+=======
+>>>>>>> 1f8fa8284 (env)
   public $dominant;
   /**
    * @var float
    */
   public $effectiveArgSpanLength;
+<<<<<<< HEAD
   /**
    * @var bool
    */
   public $fulfillableDominantMedia;
+=======
+>>>>>>> 1f8fa8284 (env)
   public $groundabilityScore;
   protected $groundingProviderFeaturesType = AssistantGroundingRankerGroundingProviderFeatures::class;
   protected $groundingProviderFeaturesDataType = '';
@@ -66,9 +72,12 @@ class AssistantPrefulfillmentRankerPrefulfillmentSignals extends \Google\Model
    * @var int
    */
   public $kscorerRank;
+<<<<<<< HEAD
   protected $laaFeaturesType = AssistantGroundingRankerLaaFeatures::class;
   protected $laaFeaturesDataType = '';
   public $laaFeatures;
+=======
+>>>>>>> 1f8fa8284 (env)
   /**
    * @var bool
    */
@@ -142,6 +151,7 @@ class AssistantPrefulfillmentRankerPrefulfillmentSignals extends \Google\Model
   /**
    * @param bool
    */
+<<<<<<< HEAD
   public function setDeepMediaDominant($deepMediaDominant)
   {
     $this->deepMediaDominant = $deepMediaDominant;
@@ -156,6 +166,8 @@ class AssistantPrefulfillmentRankerPrefulfillmentSignals extends \Google\Model
   /**
    * @param bool
    */
+=======
+>>>>>>> 1f8fa8284 (env)
   public function setDominant($dominant)
   {
     $this->dominant = $dominant;
@@ -181,6 +193,7 @@ class AssistantPrefulfillmentRankerPrefulfillmentSignals extends \Google\Model
   {
     return $this->effectiveArgSpanLength;
   }
+<<<<<<< HEAD
   /**
    * @param bool
    */
@@ -195,6 +208,8 @@ class AssistantPrefulfillmentRankerPrefulfillmentSignals extends \Google\Model
   {
     return $this->fulfillableDominantMedia;
   }
+=======
+>>>>>>> 1f8fa8284 (env)
   public function setGroundabilityScore($groundabilityScore)
   {
     $this->groundabilityScore = $groundabilityScore;
@@ -290,6 +305,7 @@ class AssistantPrefulfillmentRankerPrefulfillmentSignals extends \Google\Model
     return $this->kscorerRank;
   }
   /**
+<<<<<<< HEAD
    * @param AssistantGroundingRankerLaaFeatures
    */
   public function setLaaFeatures(AssistantGroundingRankerLaaFeatures $laaFeatures)
@@ -304,6 +320,8 @@ class AssistantPrefulfillmentRankerPrefulfillmentSignals extends \Google\Model
     return $this->laaFeatures;
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @param bool
    */
   public function setMaskCandidateLevelFeatures($maskCandidateLevelFeatures)

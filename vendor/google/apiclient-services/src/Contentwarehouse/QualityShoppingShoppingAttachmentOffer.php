@@ -40,10 +40,13 @@ class QualityShoppingShoppingAttachmentOffer extends \Google\Collection
   protected $inferredImagesDataType = 'array';
   public $inferredImages;
   /**
+<<<<<<< HEAD
    * @var bool
    */
   public $isLensBuildable;
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @var string
    */
   public $matchingType;
@@ -150,6 +153,7 @@ class QualityShoppingShoppingAttachmentOffer extends \Google\Collection
     return $this->inferredImages;
   }
   /**
+<<<<<<< HEAD
    * @param bool
    */
   public function setIsLensBuildable($isLensBuildable)
@@ -164,6 +168,8 @@ class QualityShoppingShoppingAttachmentOffer extends \Google\Collection
     return $this->isLensBuildable;
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @param string
    */
   public function setMatchingType($matchingType)

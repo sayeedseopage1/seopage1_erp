@@ -19,6 +19,7 @@ namespace Google\Service\CloudSearch;
 
 class DynamiteMessagesScoringInfo extends \Google\Model
 {
+<<<<<<< HEAD
   /**
    * @var string
    */
@@ -126,6 +127,16 @@ class DynamiteMessagesScoringInfo extends \Google\Model
   {
     return $this->dasContactCount;
   }
+=======
+  public $finalScore;
+  public $freshnessScore;
+  public $joinedSpaceAffinityScore;
+  public $messageAgeInDays;
+  public $messageSenderAffinityScore;
+  public $topicalityScore;
+  public $unjoinedSpaceAffinityScore;
+
+>>>>>>> 1f8fa8284 (env)
   public function setFinalScore($finalScore)
   {
     $this->finalScore = $finalScore;
@@ -150,6 +161,7 @@ class DynamiteMessagesScoringInfo extends \Google\Model
   {
     return $this->joinedSpaceAffinityScore;
   }
+<<<<<<< HEAD
   public function setLastReadTimestampAgeInDays($lastReadTimestampAgeInDays)
   {
     $this->lastReadTimestampAgeInDays = $lastReadTimestampAgeInDays;
@@ -158,6 +170,8 @@ class DynamiteMessagesScoringInfo extends \Google\Model
   {
     return $this->lastReadTimestampAgeInDays;
   }
+=======
+>>>>>>> 1f8fa8284 (env)
   public function setMessageAgeInDays($messageAgeInDays)
   {
     $this->messageAgeInDays = $messageAgeInDays;
@@ -174,6 +188,7 @@ class DynamiteMessagesScoringInfo extends \Google\Model
   {
     return $this->messageSenderAffinityScore;
   }
+<<<<<<< HEAD
   /**
    * @param string
    */
@@ -202,6 +217,8 @@ class DynamiteMessagesScoringInfo extends \Google\Model
   {
     return $this->spaceMembershipCount;
   }
+=======
+>>>>>>> 1f8fa8284 (env)
   public function setTopicalityScore($topicalityScore)
   {
     $this->topicalityScore = $topicalityScore;

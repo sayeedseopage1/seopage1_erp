@@ -19,6 +19,8 @@ use App\Models\Task;
 use App\Models\ContractSign;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectTimeLog;
+use Str;
+
 class ProjectsDataTable extends BaseDataTable
 {
 
@@ -232,7 +234,7 @@ class ProjectsDataTable extends BaseDataTable
                 }else {
                   return '<div class="media align-items-center">
                           <div class="media-body">
-                      <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('projects.show', [$row->id]) . '">' . ucfirst($row->project_name) . '</a></h5>
+                      <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.ucfirst($row->project_name).'" href="' . route('projects.show', [$row->id]) . '">' . ucfirst(Str::limit($row->project_name,15)) . '</a></h5>
                       <p class="mb-0">' . $pin . '</p>
                       </div>
                   </div>';
@@ -284,13 +286,37 @@ class ProjectsDataTable extends BaseDataTable
                     return '--';
                 }
             });
-            $datatables->addColumn('hours_logged', function ($row) {
+             $datatables->addColumn('hours_logged', function ($row) {
                 $project= Project::where('id',$row->id)->first();
                 $project_time_logs_hours= ProjectTimeLog::where('project_id',$project->id)->sum('total_hours');
                 $project_time_logs_minutes= ProjectTimeLog::where('project_id',$project->id)->sum('total_minutes');
                 $project_time_logs=  ($project_time_logs_minutes/60);
                 $project_time_minutes = $project_time_logs_minutes%60;
-                return round($project_time_logs,0). ' hours '. round($project_time_minutes,0). ' minutes';
+
+               $currentTime = Carbon::now();
+               	$totalMinutes = DB::table('project_time_logs')
+                ->where('project_id',$row->id)
+                ->whereNull('end_time')
+                ->select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF('$currentTime', start_time)))/60 as total_minutes"))
+                ->value('total_minutes');
+               $active_time_hours = intval(round($totalMinutes,1)/60);
+               $active_time_minutes= intval(round($totalMinutes,1)%60);
+               $update_hours = $project_time_minutes+$active_time_minutes/60 ;
+               $update_minutes = $project_time_minutes+$active_time_minutes/60 ;
+              // $add_hours = 0;
+               if($project_time_minutes+$active_time_minutes >= 60)
+               {
+               $add_hours = intval(round(($project_time_minutes+$active_time_minutes)/60,1)) ;
+                $add_minutes = ($project_time_minutes+$active_time_minutes) % 60;
+               }else {
+               $add_hours = 0;
+                 $add_minutes = $project_time_minutes+$active_time_minutes;
+               } 
+               
+               
+               
+                return intval(round($project_time_logs,1))+ $active_time_hours + $add_hours . ' hrs '. $add_minutes . ' mins';
+
             });
             $datatables->addColumn('client_email', function ($row) {
                 if (!is_null($row->client_id)) {

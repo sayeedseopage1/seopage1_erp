@@ -26,6 +26,7 @@ abstract class InsightsQuestionnairesQuestionOptions {
 
     /**
      * @param string $categoryId Category ID
+<<<<<<< HEAD
      * @param string $question The question.
      * @param string $description The question description.
      * @param string $answerSetId The answer_set for question.
@@ -43,6 +44,13 @@ abstract class InsightsQuestionnairesQuestionOptions {
      */
     public static function read(array $categoryId = Values::ARRAY_NONE, string $token = Values::NONE): ReadInsightsQuestionnairesQuestionOptions {
         return new ReadInsightsQuestionnairesQuestionOptions($categoryId, $token);
+=======
+     * @param string $token The Token HTTP request header
+     * @return UpdateInsightsQuestionnairesQuestionOptions Options builder
+     */
+    public static function update(string $categoryId = Values::NONE, string $token = Values::NONE): UpdateInsightsQuestionnairesQuestionOptions {
+        return new UpdateInsightsQuestionnairesQuestionOptions($categoryId, $token);
+>>>>>>> 1f8fa8284 (env)
     }
 
     /**
@@ -87,6 +95,7 @@ class CreateInsightsQuestionnairesQuestionOptions extends Options {
 class UpdateInsightsQuestionnairesQuestionOptions extends Options {
     /**
      * @param string $categoryId Category ID
+<<<<<<< HEAD
      * @param string $question The question.
      * @param string $description The question description.
      * @param string $answerSetId The answer_set for question.
@@ -97,6 +106,12 @@ class UpdateInsightsQuestionnairesQuestionOptions extends Options {
         $this->options['question'] = $question;
         $this->options['description'] = $description;
         $this->options['answerSetId'] = $answerSetId;
+=======
+     * @param string $token The Token HTTP request header
+     */
+    public function __construct(string $categoryId = Values::NONE, string $token = Values::NONE) {
+        $this->options['categoryId'] = $categoryId;
+>>>>>>> 1f8fa8284 (env)
         $this->options['token'] = $token;
     }
 
@@ -112,6 +127,7 @@ class UpdateInsightsQuestionnairesQuestionOptions extends Options {
     }
 
     /**
+<<<<<<< HEAD
      * The question.
      *
      * @param string $question The question.
@@ -145,6 +161,8 @@ class UpdateInsightsQuestionnairesQuestionOptions extends Options {
     }
 
     /**
+=======
+>>>>>>> 1f8fa8284 (env)
      * The Token HTTP request header
      *
      * @param string $token The Token HTTP request header
@@ -166,6 +184,7 @@ class UpdateInsightsQuestionnairesQuestionOptions extends Options {
     }
 }
 
+<<<<<<< HEAD
 class ReadInsightsQuestionnairesQuestionOptions extends Options {
     /**
      * @param string[] $categoryId List of category Ids
@@ -209,6 +228,8 @@ class ReadInsightsQuestionnairesQuestionOptions extends Options {
     }
 }
 
+=======
+>>>>>>> 1f8fa8284 (env)
 class DeleteInsightsQuestionnairesQuestionOptions extends Options {
     /**
      * @param string $token The Token HTTP request header

@@ -58,7 +58,9 @@
         <style>
             .preloader-container {
                 margin-left: 510px;
-                width: calc(100% - 510px)
+                width: calc(100% - 510px);
+                z-index: 99999;
+                overflow: hidden;
             }
 
             .blur-code {
@@ -70,6 +72,56 @@
                 transition: filter .2s ease-out;
                 margin-right: 4px;
             }
+
+        .loader, .loader:after {
+            border-radius: 50%;
+            width: 10em;
+            height: 10em;
+        }
+
+        .loader {            
+            margin: 60px auto;
+            font-size: 10px;
+            position: relative;
+            text-indent: -9999em;
+            border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+            border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+            border-left: 1.1em solid #ffffff;
+            -webkit-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-animation: load8 1.1s infinite linear;
+            animation: load8 1.1s infinite linear;
+        }
+        @-webkit-keyframes load8 {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes load8 {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        #loadingDiv {
+            position:absolute;;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background-color:#000;
+        }
 
         </style>
     @endisset
@@ -258,7 +310,7 @@
             <x-app-title class="d-block d-lg-none" :pageTitle="__($pageTitle)"></x-app-title>
 
             @yield('content')
-            @if(Auth::user()->role_id == 4 && !Request::is('account/contracts/*'))
+            @if(Auth::user()->role_id == 4 && !Request::is('account/contracts/*') &&!Request::is('account/deals/*'))
                 @php
                     $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->where('pm_id',Auth::id())->get();
                 @endphp
@@ -298,7 +350,7 @@
                     </div>
                 @endif
             @endif
-            @if(Auth::user()->role_id == 1 && !Request::is('account/contracts/*'))
+            @if(Auth::user()->role_id == 1 && !Request::is('account/contracts/*') &&!Request::is('account/deals/*'))
                 @php
                     $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->get();
                 @endphp
@@ -504,14 +556,22 @@
     @stack('scripts')
 
     <script>
+        $(document).ready(function() {
+            $('body').append('<div style="" id="loadingDiv"><div class="loader">Loading...</div></div>');
+        })
         $(window).on('load', function() {
-            // Animate loader off screen
+            setTimeout(removeLoader, 2000);
             init();
             $(".preloader-container").fadeOut("slow", function() {
                 $(this).removeClass("d-flex");
             });
         });
-
+        function removeLoader(){
+            $( "#loadingDiv" ).fadeOut(500, function() {
+              // fadeOut complete. Remove the loading div
+              $( "#loadingDiv" ).remove(); //makes page more lightweight 
+          });  
+        }
         $('body').on('click', '.view-notification', function(event) {
             event.preventDefault();
             var id = $(this).data('notification-id');

@@ -30,9 +30,12 @@ class Repository extends \Google\Model
    * @var string
    */
   public $npmrcEnvironmentVariablesSecretVersion;
+<<<<<<< HEAD
   protected $workspaceCompilationOverridesType = WorkspaceCompilationOverrides::class;
   protected $workspaceCompilationOverridesDataType = '';
   public $workspaceCompilationOverrides;
+=======
+>>>>>>> 1f8fa8284 (env)
 
   /**
    * @param GitRemoteSettings
@@ -76,6 +79,7 @@ class Repository extends \Google\Model
   {
     return $this->npmrcEnvironmentVariablesSecretVersion;
   }
+<<<<<<< HEAD
   /**
    * @param WorkspaceCompilationOverrides
    */
@@ -90,6 +94,8 @@ class Repository extends \Google\Model
   {
     return $this->workspaceCompilationOverrides;
   }
+=======
+>>>>>>> 1f8fa8284 (env)
 }
 
 // Adding a class alias for backwards compatibility with the previous class name.

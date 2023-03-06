@@ -40,8 +40,12 @@ class ProjectsLocationsWorkstationClusters extends \Google\Service\Resource
    *
    * @opt_param bool validateOnly If set, validate the request and preview the
    * review, but do not actually apply it.
+<<<<<<< HEAD
    * @opt_param string workstationClusterId Required. ID to use for the
    * workstation cluster.
+=======
+   * @opt_param string workstationClusterId Required. ID to use for the cluster.
+>>>>>>> 1f8fa8284 (env)
    * @return Operation
    */
   public function create($parent, WorkstationCluster $postBody, $optParams = [])
@@ -53,6 +57,7 @@ class ProjectsLocationsWorkstationClusters extends \Google\Service\Resource
   /**
    * Deletes the specified workstation cluster. (workstationClusters.delete)
    *
+<<<<<<< HEAD
    * @param string $name Required. Name of the workstation cluster to delete.
    * @param array $optParams Optional parameters.
    *
@@ -63,6 +68,18 @@ class ProjectsLocationsWorkstationClusters extends \Google\Service\Resource
    * works if the workstation cluster has no configurations or workstations.
    * @opt_param bool validateOnly If set, validate the request and preview the
    * review, but do not apply it.
+=======
+   * @param string $name Required. Name of the cluster to delete.
+   * @param array $optParams Optional parameters.
+   *
+   * @opt_param string etag If set, the request will be rejected if the latest
+   * version of the cluster on the server does not have this etag.
+   * @opt_param bool force If set, any workstation configurations and workstations
+   * in the cluster will also be deleted. Otherwise, the request will work only if
+   * the cluster has no configurations or workstations.
+   * @opt_param bool validateOnly If set, validate the request and preview the
+   * review, but do not actually apply it.
+>>>>>>> 1f8fa8284 (env)
    * @return Operation
    */
   public function delete($name, $optParams = [])
@@ -109,11 +126,18 @@ class ProjectsLocationsWorkstationClusters extends \Google\Service\Resource
    * @param WorkstationCluster $postBody
    * @param array $optParams Optional parameters.
    *
+<<<<<<< HEAD
    * @opt_param bool allowMissing If set, and the workstation cluster is not
    * found, a new workstation cluster will be created. In this situation,
    * update_mask is ignored.
    * @opt_param string updateMask Required. Mask that specifies which fields in
    * the workstation cluster should be updated.
+=======
+   * @opt_param bool allowMissing If set, and the cluster is not found, a new
+   * cluster will be created. In this situation, update_mask is ignored.
+   * @opt_param string updateMask Required. Mask specifying which fields in the
+   * cluster should be updated.
+>>>>>>> 1f8fa8284 (env)
    * @opt_param bool validateOnly If set, validate the request and preview the
    * review, but do not actually apply it.
    * @return Operation

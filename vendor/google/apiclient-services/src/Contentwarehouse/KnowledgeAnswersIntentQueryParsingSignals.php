@@ -20,6 +20,7 @@ namespace Google\Service\Contentwarehouse;
 class KnowledgeAnswersIntentQueryParsingSignals extends \Google\Model
 {
   public $calibratedParsingScore;
+<<<<<<< HEAD
   /**
    * @var float
    */
@@ -28,6 +29,8 @@ class KnowledgeAnswersIntentQueryParsingSignals extends \Google\Model
    * @var float
    */
   public $inQueryMaxEffectiveArgSpanLength;
+=======
+>>>>>>> 1f8fa8284 (env)
   protected $qrewriteCallPathInfoType = NlpLoggingQRewriteClientCallPathInfo::class;
   protected $qrewriteCallPathInfoDataType = '';
   public $qrewriteCallPathInfo;
@@ -49,6 +52,7 @@ class KnowledgeAnswersIntentQueryParsingSignals extends \Google\Model
     return $this->calibratedParsingScore;
   }
   /**
+<<<<<<< HEAD
    * @param float
    */
   public function setEffectiveArgSpanLength($effectiveArgSpanLength)
@@ -77,6 +81,8 @@ class KnowledgeAnswersIntentQueryParsingSignals extends \Google\Model
     return $this->inQueryMaxEffectiveArgSpanLength;
   }
   /**
+=======
+>>>>>>> 1f8fa8284 (env)
    * @param NlpLoggingQRewriteClientCallPathInfo
    */
   public function setQrewriteCallPathInfo(NlpLoggingQRewriteClientCallPathInfo $qrewriteCallPathInfo)

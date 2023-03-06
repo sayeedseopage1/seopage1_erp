@@ -18,9 +18,15 @@
 namespace Google\Service\CloudWorkstations\Resource;
 
 use Google\Service\CloudWorkstations\CancelOperationRequest;
+<<<<<<< HEAD
 use Google\Service\CloudWorkstations\GoogleProtobufEmpty;
 use Google\Service\CloudWorkstations\ListOperationsResponse;
 use Google\Service\CloudWorkstations\Operation;
+=======
+use Google\Service\CloudWorkstations\ListOperationsResponse;
+use Google\Service\CloudWorkstations\Operation;
+use Google\Service\CloudWorkstations\WorkstationsEmpty;
+>>>>>>> 1f8fa8284 (env)
 
 /**
  * The "operations" collection of methods.
@@ -46,13 +52,21 @@ class ProjectsLocationsOperations extends \Google\Service\Resource
    * @param string $name The name of the operation resource to be cancelled.
    * @param CancelOperationRequest $postBody
    * @param array $optParams Optional parameters.
+<<<<<<< HEAD
    * @return GoogleProtobufEmpty
+=======
+   * @return WorkstationsEmpty
+>>>>>>> 1f8fa8284 (env)
    */
   public function cancel($name, CancelOperationRequest $postBody, $optParams = [])
   {
     $params = ['name' => $name, 'postBody' => $postBody];
     $params = array_merge($params, $optParams);
+<<<<<<< HEAD
     return $this->call('cancel', [$params], GoogleProtobufEmpty::class);
+=======
+    return $this->call('cancel', [$params], WorkstationsEmpty::class);
+>>>>>>> 1f8fa8284 (env)
   }
   /**
    * Deletes a long-running operation. This method indicates that the client is no
@@ -62,13 +76,21 @@ class ProjectsLocationsOperations extends \Google\Service\Resource
    *
    * @param string $name The name of the operation resource to be deleted.
    * @param array $optParams Optional parameters.
+<<<<<<< HEAD
    * @return GoogleProtobufEmpty
+=======
+   * @return WorkstationsEmpty
+>>>>>>> 1f8fa8284 (env)
    */
   public function delete($name, $optParams = [])
   {
     $params = ['name' => $name];
     $params = array_merge($params, $optParams);
+<<<<<<< HEAD
     return $this->call('delete', [$params], GoogleProtobufEmpty::class);
+=======
+    return $this->call('delete', [$params], WorkstationsEmpty::class);
+>>>>>>> 1f8fa8284 (env)
   }
   /**
    * Gets the latest state of a long-running operation. Clients can use this

@@ -50,8 +50,11 @@ class ProjectsLocationsDataScans extends \Google\Service\Resource
    * lowercase letters, numbers and hyphens. Must start with a letter. Must end
    * with a number or a letter. Must be between 1-63 characters. Must be unique
    * within the customer project / location.
+<<<<<<< HEAD
    * @opt_param bool validateOnly Optional. Only validate the request, but do not
    * perform mutations. The default is false.
+=======
+>>>>>>> 1f8fa8284 (env)
    * @return GoogleLongrunningOperation
    */
   public function create($parent, GoogleCloudDataplexV1DataScan $postBody, $optParams = [])
@@ -162,8 +165,11 @@ class ProjectsLocationsDataScans extends \Google\Service\Resource
    * @param array $optParams Optional parameters.
    *
    * @opt_param string updateMask Required. Mask of fields to update.
+<<<<<<< HEAD
    * @opt_param bool validateOnly Optional. Only validate the request, but do not
    * perform mutations. The default is false.
+=======
+>>>>>>> 1f8fa8284 (env)
    * @return GoogleLongrunningOperation
    */
   public function patch($name, GoogleCloudDataplexV1DataScan $postBody, $optParams = [])

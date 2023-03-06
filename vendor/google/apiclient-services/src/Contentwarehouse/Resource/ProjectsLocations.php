@@ -18,7 +18,10 @@
 namespace Google\Service\Contentwarehouse\Resource;
 
 use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1InitializeProjectRequest;
+<<<<<<< HEAD
 use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1RunPipelineRequest;
+=======
+>>>>>>> 1f8fa8284 (env)
 use Google\Service\Contentwarehouse\GoogleLongrunningOperation;
 
 /**
@@ -47,6 +50,7 @@ class ProjectsLocations extends \Google\Service\Resource
     $params = array_merge($params, $optParams);
     return $this->call('initialize', [$params], GoogleLongrunningOperation::class);
   }
+<<<<<<< HEAD
   /**
    * Run a predefined pipeline. (locations.runPipeline)
    *
@@ -62,6 +66,8 @@ class ProjectsLocations extends \Google\Service\Resource
     $params = array_merge($params, $optParams);
     return $this->call('runPipeline', [$params], GoogleLongrunningOperation::class);
   }
+=======
+>>>>>>> 1f8fa8284 (env)
 }
 
 // Adding a class alias for backwards compatibility with the previous class name.

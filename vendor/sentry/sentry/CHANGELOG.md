@@ -1,5 +1,6 @@
 # CHANGELOG
 
+<<<<<<< HEAD
 ## 3.13.1
 
 The Sentry SDK team is happy to announce the immediate availability of Sentry PHP SDK v3.13.1.
@@ -42,6 +43,9 @@ The Sentry SDK team is happy to announce the immediate availability of Sentry PH
     ```php
     throw new \Exception('Oh no!', 123);
     ```
+=======
+## Unreleased
+>>>>>>> 1f8fa8284 (env)
 
 ## 3.12.1 (2023-01-12)
 

@@ -22,6 +22,17 @@ class RepositoryWebrefDetailedEntityScores extends \Google\Model
   /**
    * @var float
    */
+<<<<<<< HEAD
+=======
+  public $anchorScore;
+  /**
+   * @var float
+   */
+  public $bodyScore;
+  /**
+   * @var float
+   */
+>>>>>>> 1f8fa8284 (env)
   public $connectedness;
   /**
    * @var float
@@ -50,6 +61,17 @@ class RepositoryWebrefDetailedEntityScores extends \Google\Model
   /**
    * @var float
    */
+<<<<<<< HEAD
+=======
+  public $nbScore;
+  /**
+   * @var float
+   */
+  public $newsTopicalityScore;
+  /**
+   * @var float
+   */
+>>>>>>> 1f8fa8284 (env)
   public $normalizedTopicality;
   protected $referencePageScoresType = RepositoryWebrefReferencePageScores::class;
   protected $referencePageScoresDataType = '';
@@ -62,6 +84,37 @@ class RepositoryWebrefDetailedEntityScores extends \Google\Model
   /**
    * @param float
    */
+<<<<<<< HEAD
+=======
+  public function setAnchorScore($anchorScore)
+  {
+    $this->anchorScore = $anchorScore;
+  }
+  /**
+   * @return float
+   */
+  public function getAnchorScore()
+  {
+    return $this->anchorScore;
+  }
+  /**
+   * @param float
+   */
+  public function setBodyScore($bodyScore)
+  {
+    $this->bodyScore = $bodyScore;
+  }
+  /**
+   * @return float
+   */
+  public function getBodyScore()
+  {
+    return $this->bodyScore;
+  }
+  /**
+   * @param float
+   */
+>>>>>>> 1f8fa8284 (env)
   public function setConnectedness($connectedness)
   {
     $this->connectedness = $connectedness;
@@ -160,6 +213,37 @@ class RepositoryWebrefDetailedEntityScores extends \Google\Model
   /**
    * @param float
    */
+<<<<<<< HEAD
+=======
+  public function setNbScore($nbScore)
+  {
+    $this->nbScore = $nbScore;
+  }
+  /**
+   * @return float
+   */
+  public function getNbScore()
+  {
+    return $this->nbScore;
+  }
+  /**
+   * @param float
+   */
+  public function setNewsTopicalityScore($newsTopicalityScore)
+  {
+    $this->newsTopicalityScore = $newsTopicalityScore;
+  }
+  /**
+   * @return float
+   */
+  public function getNewsTopicalityScore()
+  {
+    return $this->newsTopicalityScore;
+  }
+  /**
+   * @param float
+   */
+>>>>>>> 1f8fa8284 (env)
   public function setNormalizedTopicality($normalizedTopicality)
   {
     $this->normalizedTopicality = $normalizedTopicality;

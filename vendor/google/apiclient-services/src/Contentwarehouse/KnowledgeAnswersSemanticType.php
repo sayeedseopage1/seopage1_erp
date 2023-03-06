@@ -23,10 +23,13 @@ class KnowledgeAnswersSemanticType extends \Google\Collection
   /**
    * @var bool
    */
+<<<<<<< HEAD
   public $allowAll;
   /**
    * @var bool
    */
+=======
+>>>>>>> 1f8fa8284 (env)
   public $includesContainingIntent;
   /**
    * @var string[]
@@ -42,6 +45,7 @@ class KnowledgeAnswersSemanticType extends \Google\Collection
   /**
    * @param bool
    */
+<<<<<<< HEAD
   public function setAllowAll($allowAll)
   {
     $this->allowAll = $allowAll;
@@ -56,6 +60,8 @@ class KnowledgeAnswersSemanticType extends \Google\Collection
   /**
    * @param bool
    */
+=======
+>>>>>>> 1f8fa8284 (env)
   public function setIncludesContainingIntent($includesContainingIntent)
   {
     $this->includesContainingIntent = $includesContainingIntent;

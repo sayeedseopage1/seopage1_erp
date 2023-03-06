@@ -13,25 +13,22 @@ body {
     list-style: none;
     box-sizing: border-box;
 }
-
+.overflow-y-scroll {
+    overflow-y: scroll;
+}
 .wrapper-timezone {
     border: none;
     font-size: 1.3em;
     width: 100%;
-    /* max-width: 185px; */
     margin: 0 auto;
     text-align: center;
-    /* background-color: #F3F9FF; */
     background-color: #07182E;
     position: relative;
     bottom: 20px;
-    /* right: 10px; */
-    z-index: 9999;
     color: #fff;
     cursor: pointer;
     padding: 10px 0;
     border-radius: 5px;
-    /* opacity: .3; */
     transition: all .3s ease-in-out;
     background-image: url('../img/2.jpg');
     background-size: cover;
