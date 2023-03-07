@@ -61,7 +61,7 @@ class TasksDataTable extends BaseDataTable
                 $action = '<div class="task_view">
 
                     <div class="dropdown">
-                        <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
+                        <a class="task_view_more d-flex align-items-center justify-content-cen ter dropdown-toggle" type="link"
                             id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="icon-options-vertical icons"></i>
                         </a>
@@ -272,7 +272,7 @@ class TasksDataTable extends BaseDataTable
                 foreach ($row->labels as $label) {
                     $labels .= '<span class="badge badge-secondary mr-1" style="background-color: '.$label->label_color .'">'. $label->label_name.'</span>';
                 }
-            $subtask = Task::where('id', $row->id)->first();
+                $subtask = Task::where('id', $row->id)->first();
                 if($subtask->subtask_id != null)
                 {
                 $span .= '<span class="badge badge-info">Subtask</span>';
@@ -344,7 +344,10 @@ class TasksDataTable extends BaseDataTable
             $datatables->setRowId(function ($row) {
                 return 'row-' . $row->id;
             });
-            $datatables->rawColumns(['board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'timeLogged', 'timer']);
+            /*$datatables->addColumn('collaps_data', function ($row) {
+                return 'ok';
+            });*/
+            $datatables->rawColumns(['collaps_data', 'board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'timeLogged', 'timer']);
             $datatables->removeColumn('project_id');
             $datatables->removeColumn('image');
             $datatables->removeColumn('created_image');
@@ -646,7 +649,7 @@ class TasksDataTable extends BaseDataTable
                   ->searchable(false)
                   ->addClass('text-right pr-20')
           ];
-        }else {
+        } else {
           $data = [
               'check' => [
                   'title' => '<input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
@@ -655,6 +658,7 @@ class TasksDataTable extends BaseDataTable
                   'searchable' => false
               ],
               __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+              'collaps_data' => ['className' => 'dt-control', 'orderable' => false, 'data' => 'collaps_data', 'defaultContent' => '',],
             // '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
               __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
               __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
