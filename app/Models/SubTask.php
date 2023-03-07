@@ -61,6 +61,11 @@ class SubTask extends BaseModel
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
+    public function addedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'added_by');
+    }
+
     public function files(): HasMany
     {
         return $this->hasMany(SubTaskFile::class, 'sub_task_id');
