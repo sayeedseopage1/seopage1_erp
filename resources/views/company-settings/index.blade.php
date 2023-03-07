@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
     <!-- SETTINGS START -->
     <div class="w-100 d-flex ">
 
@@ -62,7 +61,6 @@
             </x-slot>
 
         </x-setting-card>
-
     </div>
     <!-- SETTINGS END -->
 @endsection

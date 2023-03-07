@@ -114,14 +114,6 @@
                 transform: rotate(360deg);
             }
         }
-        #loadingDiv {
-            position:absolute;;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background-color:#000;
-        }
 
         </style>
     @endisset
@@ -556,22 +548,14 @@
     @stack('scripts')
 
     <script>
-        $(document).ready(function() {
-            $('body').append('<div style="" id="loadingDiv"><div class="loader">Loading...</div></div>');
-        })
         $(window).on('load', function() {
-            setTimeout(removeLoader, 2000);
+            // setTimeout(removeLoader, 2000);
             init();
             $(".preloader-container").fadeOut("slow", function() {
                 $(this).removeClass("d-flex");
             });
         });
-        function removeLoader(){
-            $( "#loadingDiv" ).fadeOut(500, function() {
-              // fadeOut complete. Remove the loading div
-              $( "#loadingDiv" ).remove(); //makes page more lightweight 
-          });  
-        }
+
         $('body').on('click', '.view-notification', function(event) {
             event.preventDefault();
             var id = $(this).data('notification-id');

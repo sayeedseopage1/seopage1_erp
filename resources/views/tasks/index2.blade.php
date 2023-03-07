@@ -675,7 +675,7 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
 
         var table = $('#allTasks-table').dataTable();*/
 
-        /*$('#allTasks-table').on('click', '.showSubTask', function () {
+        $('#allTasks-table').on('click', '.showSubTask', function () {
             var url = $(this).attr('data-url');
             $.easyAjax({
                 url: url,
@@ -688,6 +688,6 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
                     }
                 }
             })
-        });*/
+        });
     </script>
 @endpush

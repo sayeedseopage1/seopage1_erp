@@ -105,7 +105,7 @@ $(function() {
         modal: true,
         responsive: true,
         position: { my: "top", at: "right" },
-        height: 358,
+        height: 318,
         dialogClass: 'overflow-y-scroll'
     });
 
