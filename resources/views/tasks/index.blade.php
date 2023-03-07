@@ -157,8 +157,7 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
                 <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">@lang('app.label')</label>
                 <div class="select-filter mb-4">
                     <div class="select-others">
-                        <select class="form-control select-picker" id="label" data-live-search="true" data-container="body"
-                            data-size="8">
+                        <select class="form-control select-picker" id="label" data-live-search="true" data-container="body" data-size="8">
                             <option value="all">@lang('app.all')</option>
                             @foreach ($taskLabels as $label)
                                 <option

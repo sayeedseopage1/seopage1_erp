@@ -26,7 +26,8 @@
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-icons.css') }}">
-
+    <!-- Wow js css -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/> -->
     @stack('datatable-styles')
 
     <!-- Template CSS -->
@@ -943,8 +944,20 @@
     }
     }
  </script>
+
  <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {!! Toastr::message() !!}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#search-text-field').click(function() {
+                if ($('#window').dialog('isOpen')) {
+                    $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
+                    $('#search-text-field').focus();
+                }   
+            })
+        })
+    </script>
 </body>
 
 </html>
