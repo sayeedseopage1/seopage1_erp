@@ -86,6 +86,10 @@ use App\Notifications\ProjectDeliverableTimeAcceptNotification;
 use App\Notifications\DeliverableOthersAuthorizationNotification;
 use App\Notifications\DeliverableOthersAuthorizationAcceptNotification;
 
+use App\Notifications\ProjectDeliverableFinalAuthorizationNotification;
+use App\Notifications\ProjectDeliverableFinalAuthorizationNotificationAccept;
+
+
 
 class ProjectController extends AccountBaseController
 {
@@ -2408,6 +2412,46 @@ if ($pm_count < 2) {
         return back();
 
 
+    }
+    public function DeliverableFinalAuthorizationSend($id)
+    {
+        //dd($id);
+
+       // $project= Project::where('project_id',$request->project_id)->first();
+       $project=Project::find($id);
+       $project->authorization_status = 'submitted';
+       $project->save();
+
+       
+        $project_id= Project::where('id',$id)->first();
+
+        $users= User::where('role_id',1)->get();
+        foreach ($users as $user) {
+            Notification::send($user, new ProjectDeliverableFinalAuthorizationNotification($project_id));
+        }
+     
+        Toastr::success('Authorization request send Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return back();
+
+
+    }
+    public function DeliverableFinalAuthorizationAccept(Request $request)
+    {
+        $project=Project::find($request->project_id);
+        $project->authorization_status = 'approved';
+        $project->deliverable_authorization= 1;
+        $project->save();
+ 
+        
+         $project_id= Project::where('id',$request->project_id)->first();
+ 
+         $user= User::where('id',$project->pm_id)->first();
+         
+             Notification::send($user, new ProjectDeliverableFinalAuthorizationNotificationAccept($project_id));
+        
+      
+         Toastr::success('Authorization request accepted successfully', 'Success', ["positionClass" => "toast-top-right"]);
+         return back();
     }
 
 
