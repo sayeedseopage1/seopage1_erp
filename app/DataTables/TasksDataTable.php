@@ -52,68 +52,72 @@ class TasksDataTable extends BaseDataTable
         $customFields = CustomField::where('custom_field_group_id', $customFieldsGroupsId)->where('export', 1)->get();
 
         $datatables = datatables()->eloquent($query);
+
         $datatables->addColumn('check', function ($row) {
-                return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
+            return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
         });
-            $datatables->addColumn('action', function ($row) {
-                $taskUsers = $row->users->pluck('id')->toArray();
 
-                $action = '<div class="task_view">
+        $datatables->addColumn('action', function ($row) {
+            $taskUsers = $row->users->pluck('id')->toArray();
 
-                    <div class="dropdown">
-                        <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
-                            id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="icon-options-vertical icons"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
+            $action = '<div class="task_view">
 
-                $action .= '<a href="' . route('tasks.show', [$row->id]) . '" class="dropdown-item openRightModal"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
+                <div class="dropdown">
+                    <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
+                        id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="icon-options-vertical icons"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
 
-                if ($this->editTaskPermission == 'all'
-                || ($this->editTaskPermission == 'owned' && in_array(user()->id, $taskUsers))
-                || ($this->editTaskPermission == 'added' && $row->added_by == user()->id)
-                || ($row->project_admin == user()->id)
-                || ($this->editTaskPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id))
-                || ($this->editTaskPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id || in_array('client', user_roles())))
-                || ($this->editTaskPermission == 'owned' && in_array('client', user_roles()))
-                ) {
-                    $action .= '<a class="dropdown-item openRightModal" href="' . route('tasks.edit', [$row->id]) . '">
-                                <i class="fa fa-edit mr-2"></i>
-                                ' . trans('app.edit') . '
-                            </a>';
-                }
+            $action .= '<a href="' . route('tasks.show', [$row->id]) . '" class="dropdown-item openRightModal"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
 
-                if ($this->deleteTaskPermission == 'all'
-                || ($this->deleteTaskPermission == 'owned' && in_array(user()->id, $taskUsers))
-                || ($this->deleteTaskPermission == 'added' && $row->added_by == user()->id)
-                || ($row->project_admin == user()->id)
-                || ($this->deleteTaskPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id))
-                || ($this->deleteTaskPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id || in_array('client', user_roles())))
-                || ($this->deleteTaskPermission == 'owned' && in_array('client', user_roles()))
-                ) {
-                    $action .= '<a class="dropdown-item delete-table-row" href="javascript:;" data-user-id="' . $row->id . '">
-                                <i class="fa fa-trash mr-2"></i>
-                                ' . trans('app.delete') . '
-                            </a>';
-                }
+            if ($this->editTaskPermission == 'all'
+            || ($this->editTaskPermission == 'owned' && in_array(user()->id, $taskUsers))
+            || ($this->editTaskPermission == 'added' && $row->added_by == user()->id)
+            || ($row->project_admin == user()->id)
+            || ($this->editTaskPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id))
+            || ($this->editTaskPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id || in_array('client', user_roles())))
+            || ($this->editTaskPermission == 'owned' && in_array('client', user_roles()))
+            ) {
+                $action .= '<a class="dropdown-item openRightModal" href="' . route('tasks.edit', [$row->id]) . '">
+                            <i class="fa fa-edit mr-2"></i>
+                            ' . trans('app.edit') . '
+                        </a>';
+            }
 
-                if ($this->editTaskPermission == 'all'
-                || ($this->editTaskPermission == 'owned' && in_array(user()->id, $taskUsers))
-                || ($this->editTaskPermission == 'added' && $row->added_by == user()->id)
-                || ($this->editTaskPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id))
-                ) {
-                    $action .= '<a class="dropdown-item openRightModal" href="' . route('tasks.create') . '?duplicate_task='.$row->id.'">
-                                <i class="fa fa-clone"></i>
-                                ' . trans('app.duplicate') . '
-                            </a>';
-                }
+            if ($this->deleteTaskPermission == 'all'
+            || ($this->deleteTaskPermission == 'owned' && in_array(user()->id, $taskUsers))
+            || ($this->deleteTaskPermission == 'added' && $row->added_by == user()->id)
+            || ($row->project_admin == user()->id)
+            || ($this->deleteTaskPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id))
+            || ($this->deleteTaskPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id || in_array('client', user_roles())))
+            || ($this->deleteTaskPermission == 'owned' && in_array('client', user_roles()))
+            ) {
+                $action .= '<a class="dropdown-item delete-table-row" href="javascript:;" data-user-id="' . $row->id . '">
+                            <i class="fa fa-trash mr-2"></i>
+                            ' . trans('app.delete') . '
+                        </a>';
+            }
 
-                $action .= '</div>
-                    </div>
-                </div>';
+            if ($this->editTaskPermission == 'all'
+            || ($this->editTaskPermission == 'owned' && in_array(user()->id, $taskUsers))
+            || ($this->editTaskPermission == 'added' && $row->added_by == user()->id)
+            || ($this->editTaskPermission == 'both' && (in_array(user()->id, $taskUsers) || $row->added_by == user()->id))
+            ) {
+                $action .= '<a class="dropdown-item openRightModal" href="' . route('tasks.create') . '?duplicate_task='.$row->id.'">
+                            <i class="fa fa-clone"></i>
+                            ' . trans('app.duplicate') . '
+                        </a>';
+            }
 
-                return $action;
-            });
+            $action .= '</div>
+                </div>
+            </div>';
+
+            return $action;
+        });
+
+
 
         $customFieldsId = $customFields->pluck('id');
         $fieldData = DB::table('custom_fields_data')->where('model', 'App\Models\Task')->whereIn('custom_field_id', $customFieldsId)->select('id', 'custom_field_id', 'model_id', 'value')->get();
@@ -341,13 +345,16 @@ class TasksDataTable extends BaseDataTable
 
                 return $client_name->name;
             });
+            
             $datatables->setRowId(function ($row) {
                 return 'row-' . $row->id;
             });
+
             /*$datatables->addColumn('collaps_data', function ($row) {
-                return 'ok';
+
+                return '<button class="openRightModal showSubTask" data-url="'.route('tasks.show_subtask', $row->id).'">show</button>';
             });*/
-            $datatables->rawColumns(['collaps_data', 'board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'timeLogged', 'timer']);
+            $datatables->rawColumns(['board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'timeLogged', 'timer']);
             $datatables->removeColumn('project_id');
             $datatables->removeColumn('image');
             $datatables->removeColumn('created_image');
@@ -620,66 +627,66 @@ class TasksDataTable extends BaseDataTable
         $customFields = CustomField::where('custom_field_group_id', $customFieldsGroupsId)->where('export', 1)->get();
         $customFieldsDataMerge = [];
         if (Auth::user()->role_id == 5) {
-          $data = [
-              'check' => [
-                  'title' => '<input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
-                  'exportable' => false,
-                  'orderable' => false,
-                  'searchable' => false
-              ],
-              __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
-              __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
+            $data = [
+                'check' => [
+                    'title' => '<input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
+                    'exportable' => false,
+                    'orderable' => false,
+                    'searchable' => false
+                ],
+                __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+                __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
                 // '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
-              __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
-              __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
-              __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
-              __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
-              __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
-              __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
-              __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
-              __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],
-              __('modules.tasks.assignTo') => ['data' => 'users', 'name' => 'member.name', 'exportable' => false, 'title' => __('modules.tasks.assignTo')],
-                __('app.created_at') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('Creation Date')],
-              __('app.columnStatus') => ['data' => 'board_column', 'name' => 'board_column', 'exportable' => false, 'searchable' => false, 'title' => __('app.columnStatus')],
-              __('app.task').' '.__('app.status') => ['data' => 'status', 'name' => 'board_column_id', 'visible' => false, 'title' => __('app.task')],
-              Column::computed('action', __('app.action'))
-                  ->exportable(false)
-                  ->printable(false)
-                  ->orderable(false)
-                  ->searchable(false)
-                  ->addClass('text-right pr-20')
-          ];
-        } else {
-          $data = [
-              'check' => [
-                  'title' => '<input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
-                  'exportable' => false,
-                  'orderable' => false,
-                  'searchable' => false
-              ],
-              __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
-              'collaps_data' => ['className' => 'dt-control', 'orderable' => false, 'data' => 'collaps_data', 'defaultContent' => '',],
-            // '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
-              __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
-              __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
-              __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
-              __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
-              __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
+                __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
+                __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
+                __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
+                __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
                 __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
-              __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
-              __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
-              __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],
-              __('modules.tasks.assignTo') => ['data' => 'users', 'name' => 'member.name', 'exportable' => false, 'title' => __('modules.tasks.assignTo')],
+                __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
+                __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
+                __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],
+                __('modules.tasks.assignTo') => ['data' => 'users', 'name' => 'member.name', 'exportable' => false, 'title' => __('modules.tasks.assignTo')],
                 __('app.created_at') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('Creation Date')],
-              __('app.columnStatus') => ['data' => 'board_column', 'name' => 'board_column', 'exportable' => false, 'searchable' => false, 'title' => __('app.columnStatus')],
-              __('app.task').' '.__('app.status') => ['data' => 'status', 'name' => 'board_column_id', 'visible' => false, 'title' => __('app.task')],
-              Column::computed('action', __('app.action'))
-                  ->exportable(false)
-                  ->printable(false)
-                  ->orderable(false)
-                  ->searchable(false)
-                  ->addClass('text-right pr-20')
-          ];
+                __('app.columnStatus') => ['data' => 'board_column', 'name' => 'board_column', 'exportable' => false, 'searchable' => false, 'title' => __('app.columnStatus')],
+                __('app.task').' '.__('app.status') => ['data' => 'status', 'name' => 'board_column_id', 'visible' => false, 'title' => __('app.task')],
+                Column::computed('action', __('app.action'))
+                ->exportable(false)
+                ->printable(false)
+                ->orderable(false)
+                ->searchable(false)
+                ->addClass('text-right pr-20')->make(true)
+            ];
+        } else {
+            $data = [
+                'check' => [
+                    'title' => '<input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
+                    'exportable' => false,
+                    'orderable' => false,
+                    'searchable' => false
+                ],
+                __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+                // 'collaps_data' => ['className' => 'dt-control', 'orderable' => false, 'data' => 'collaps_data', 'defaultContent' => '',],
+                // '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
+                __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
+                __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
+                __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
+                __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
+                __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
+                __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
+                __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
+                __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
+                __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],
+                __('modules.tasks.assignTo') => ['data' => 'users', 'name' => 'member.name', 'exportable' => false, 'title' => __('modules.tasks.assignTo')],
+                __('app.created_at') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('Creation Date')],
+                __('app.columnStatus') => ['data' => 'board_column', 'name' => 'board_column', 'exportable' => false, 'searchable' => false, 'title' => __('app.columnStatus')],
+                __('app.task').' '.__('app.status') => ['data' => 'status', 'name' => 'board_column_id', 'visible' => false, 'title' => __('app.task')],
+                Column::computed('action', __('app.action'))
+                ->exportable(false)
+                ->printable(false)
+                ->orderable(false)
+                ->searchable(false)
+                ->addClass('text-right pr-20')
+            ];
         }
 
 

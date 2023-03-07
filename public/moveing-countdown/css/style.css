@@ -252,3 +252,28 @@ a.Accept {
 .ui-window-bar .ui-window-maximize {
     right: calc(0.3em + 10px);
 }
+table.dataTable td.dt-control:before {
+    height: 1em;
+    width: 1em;
+    margin-top: -9px;
+    display: inline-block;
+    color: white;
+    border: 0.15em solid white;
+    border-radius: 1em;
+    box-shadow: 0 0 0.2em #444;
+    box-sizing: content-box;
+    text-align: center;
+    text-indent: 0 !important;
+    font-family: "Courier New",Courier,monospace;
+    line-height: 1em;
+    content: "+";
+    background-color: #31b131;
+}
+table.dataTable td.dt-control {
+    text-align: center;
+    cursor: pointer;
+}
+
+.wrapper-timezone:last-child {
+    margin: 30px 0px;
+}
