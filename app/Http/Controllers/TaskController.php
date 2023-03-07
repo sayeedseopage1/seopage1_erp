@@ -80,7 +80,7 @@ class TaskController extends AccountBaseController
             $this->taskLabels = TaskLabelList::all();
             $this->milestones = ProjectMilestone::all();
         }
-        
+
         return $dataTable->render('tasks.index', $this->data);
     }
     public function TaskReview(Request $request)
@@ -453,7 +453,7 @@ class TaskController extends AccountBaseController
     // @codingStandardsIgnoreLine
     public function store(StoreTask $request)
     {
-      //dd($request);
+        //dd($request);
         $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
 
         if (is_null($project) || ($project->project_admin != user()->id)) {
@@ -1082,4 +1082,16 @@ class TaskController extends AccountBaseController
         return response()->json($deliverable);
     }
 
+    public function show_subtask($id)
+    {
+        $task = Task::where('id', $id)->first();
+        // return view('tasks.ajax.showSubTask', compact('task'));
+
+        $html = view('tasks.ajax.showSubTask', compact('task'))->render();
+        return Reply::dataOnly([
+            'status' => 'success', 
+            'html' => $html, 
+            // 'title' => $this->pageTitle
+        ]);
+    }
 }
