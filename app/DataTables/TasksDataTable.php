@@ -61,7 +61,6 @@ class TasksDataTable extends BaseDataTable
             $taskUsers = $row->users->pluck('id')->toArray();
 
             $action = '<div class="task_view">
-
                 <div class="dropdown">
                     <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
                         id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
