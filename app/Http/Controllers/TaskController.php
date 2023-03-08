@@ -1085,13 +1085,11 @@ class TaskController extends AccountBaseController
     public function show_subtask($id)
     {
         $task = Task::where('id', $id)->first();
-        // return view('tasks.ajax.showSubTask', compact('task'));
 
         $html = view('tasks.ajax.showSubTask', compact('task'))->render();
         return Reply::dataOnly([
             'status' => 'success', 
             'html' => $html, 
-            // 'title' => $this->pageTitle
         ]);
     }
 }
