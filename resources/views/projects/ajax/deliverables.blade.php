@@ -24,7 +24,48 @@
 </style>
 
 
+
 <div class="card border-0 invoice mt-5">
+   <div class="col-md-12" align="right">
+     @php 
+     
+     $client= App\Models\User::where('id',$project->client_id)->first();
+      $deal= App\Models\Deal::where('id',$project->deal_id)->first();
+       $currency= App\Models\Currency::where('id',$deal->original_currency_id)->first();
+     if($project->pm_id != null)
+     {
+     $pm = App\Models\User::where('id',$project->pm_id)->first();
+     }else 
+     {
+     $pm = '--';
+     }
+     @endphp
+                  <td >
+                      <table  class="inv-num-date text-dark f-13 mt-3">
+                          <tr>
+                              <td class="bg-light-grey border-right-0 f-w-500">
+                                  Client Name</td>
+                              <td class="border-left-0">{{$client->name}}</td>
+                          </tr>
+                          
+                          <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                                Budget</td>
+                            <td class="border-left-0">{{$project->project_budget}}{{$currency->currency_symbol}}
+                            </td>
+                        </tr>
+                          <tr>
+                              <td class="bg-light-grey border-right-0 f-w-500">
+                                Project Manager</td>
+                              <td class="border-left-0">
+                                {{$pm->name}}
+                              </td>
+                          </tr>
+ 
+                      </table>
+
+                  </td>
+</div>
   <?php
   $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
   //dd($project->updated_at);
@@ -100,6 +141,7 @@
                       <th scope="col" class="text-center">Type</th>
                       <th scope="col" class="text-center">Title</th>
                       <th scope="col" class="text-center">Milestone</th>
+                       <th scope="col" class="text-center">Milestone Cost</th>
                       <th scope="col" class="text-center">Estimation Hours</th>
                       <th scope="col" class="text-center">Quantity</th>
                       <th scope="col" class="text-center">Description</th>
@@ -119,6 +161,11 @@
                     <td class="text-center">{{$deliverable->title}}</td>
                     @if($deliverable->milestone_id != null)
                     <td class="text-center">{{$deliverable->milestone->milestone_title}}</td>
+                    @else 
+                    <td class="text-center">--</td>
+                    @endif
+                       @if($deliverable->milestone_id != null)
+                    <td class="text-center">{{$deliverable->milestone->actual_cost}}{{$currency->currency_symbol}}</td>
                     @else 
                     <td class="text-center">--</td>
                     @endif
