@@ -653,7 +653,7 @@ class TasksDataTable extends BaseDataTable
                 ->printable(false)
                 ->orderable(false)
                 ->searchable(false)
-                ->addClass('text-right pr-20')->make(true)
+                ->addClass('text-right pr-20')
             ];
         } else {
             $data = [
