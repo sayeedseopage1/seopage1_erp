@@ -7,6 +7,9 @@ use App\Models\ProjectTimeLog;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
+use App\Models\Task;
+use App\Models\Project;
+use App\Models\User;
 
 class TimeLogReportDataTable extends BaseDataTable
 {
@@ -96,10 +99,23 @@ class TimeLogReportDataTable extends BaseDataTable
                 $project = '';
 
                 if (!is_null($row->project_id)) {
-                    $project .= '<a href="' . route('projects.show', [$row->project_id]) . '" class="text-darkest-grey ">' . $row->project->project_name . '</a>';
+                    $project .= '<a href="' . route('projects.show', [$row->project_id]) . '" class="text-darkest-grey">' . $row->project->project_name . '</a>';
                 }
 
                 return $project;
+            })
+          ->addColumn('client', function ($row) {
+            	$task_id = Task::where('id',$row->task_id)->first();
+            	$project_id = Project::where('id',$task_id->project_id)->first();
+            	$client= User::where('id',$project_id->client_id)->first();
+            	
+            	$client_details = '';
+
+                if (!is_null($row->project_id)) {
+                    $client_details .= '<a href="' . route('clients.show', [$client->id]) . '" class="text-darkest-grey ">' . $client->name . '</a>';
+                }
+
+                return $client_details;
             })
             ->editColumn('task', function ($row) {
 
@@ -115,7 +131,7 @@ class TimeLogReportDataTable extends BaseDataTable
                 $name = '';
 
                 if (!is_null($row->project_id) && !is_null($row->task_id)) {
-                    $name .= '<h5 class="f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->task_id]) . '" class="openRightModal">' . $row->task->heading . '</a></h5><div class="text-muted">' . $row->project->project_name . '</div>';
+                    $name .= '<h5 class="f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->task_id]) . '" class="openRightModal">' . $row->task->heading . '</a></h5><div class="">' .'<a href="' . route('projects.show', [$row->project_id]) . '" class="">' . $row->project->project_name . '</a></div>';
                 }
                 else if (!is_null($row->project_id)) {
                     $name .= '<a href="' . route('projects.show', [$row->project_id]) . '" class="text-darkest-grey ">' . $row->project->project_name . '</a>';
@@ -130,7 +146,7 @@ class TimeLogReportDataTable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['end_time', 'action', 'project', 'task', 'task_project', 'name', 'total_hours', 'total_minutes', 'check'])
+            ->rawColumns(['end_time', 'action', 'project', 'task', 'task_project', 'name', 'total_hours', 'total_minutes', 'check','client'])
             ->removeColumn('project_id')
             ->removeColumn('task_id');
     }
@@ -265,16 +281,17 @@ class TimeLogReportDataTable extends BaseDataTable
         return [
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
             __('app.id') => ['data' => 'id', 'name' => 'id', 'visible' => false, 'title' => __('app.id')],
-            __('app.project') => ['data' => 'project', 'visible' => false, 'title' => __('app.project')],
+           // __('app.project') => ['data' => 'project','name'='project',  'title' => __('app.project')],
             __('app.task') => ['data' => 'task', 'visible' => false, 'title' => __('app.task')],
             __('app.tasks') => ['data' => 'task_project', 'width' => '200', 'exportable' => false,'title' => __('app.tasks')],
             __('app.employee')  => ['data' => 'name', 'name' => 'users.name', 'exportable' => false, 'title' => __('app.employee')],
             __('app.name') => ['data' => 'employee_name', 'name' => 'name', 'visible' => false, 'title' => __('app.name')],
+           __('app.client') => ['data' => 'client', 'name' => 'client', 'title' => __('Client')],
             __('modules.timeLogs.startTime') => ['data' => 'start_time', 'name' => 'start_time', 'title' => __('modules.timeLogs.startTime')],
             __('modules.timeLogs.endTime') => ['data' => 'end_time', 'name' => 'end_time', 'title' => __('modules.timeLogs.endTime')],
             __('modules.timeLogs.totalHours') => ['data' => 'total_hours', 'name' => 'total_hours', 'title' => __('modules.timeLogs.totalHours')],
             __('modules.timeLogs.totalMinutes') => ['data' => 'total_minutes', 'visible' => false, 'title' => __('modules.timeLogs.totalMinutes')],
-            __('app.earnings') => ['data' => 'earnings', 'name' => 'earnings', 'title' => __('app.earnings')]
+         //   __('app.earnings') => ['data' => 'earnings', 'name' => 'earnings','visible'=> false, 'title' => __('app.earnings')]
         ];
     }
 
