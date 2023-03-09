@@ -25,6 +25,11 @@
         vertical-align: middle;
         border-top: 1px solid #dee2e6;
     }
+  .wrapper-timezone p {
+    font-size: 24px;
+    color: #4b4e69;
+    padding-bottom: 30px;
+}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css" />
