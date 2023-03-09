@@ -955,7 +955,67 @@
                     $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
                     $('#search-text-field').focus();
                 }   
-            })
+            });
+
+
+            @if(Session::get('timer_box_status') == 'off')
+                $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click();
+            @else 
+                $('span.ui-button-icon.ui-icon.minusthick.ui-icon-arrow-4-diag').click();
+            @endif
+
+            $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click(function(e) {
+                e.preventDefault();
+
+                @if(Session::has('timer_box_status'))
+                    @if(Session::get('timer_box_status') == 'off')
+
+                        $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
+                        @php $status = 'on'; @endphp
+                    @else 
+                        @php $status = 'off' @endphp
+                    @endif
+                @else   
+                    @php $status = 'on' @endphp
+                @endif
+
+                $.ajax({
+                    type:"GET",
+                    cache:false,
+                    url:"{{route('home.timer_session_set', 'off')}}",
+                    success: function(data) {
+
+                        console.log(data);  
+                    }
+                });
+            });
+
+            $('span.ui-button-icon.ui-icon.minusthick.ui-icon-arrow-4-diag').click(function(e) {
+                e.preventDefault();
+
+                @if(Session::has('timer_box_status'))
+                    @if(Session::get('timer_box_status') == 'off')
+
+                        $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
+                        @php $status = 'on'; @endphp
+                    @else 
+                        @php $status = 'off' @endphp
+                    @endif
+                @else   
+                    @php $status = 'on' @endphp
+                @endif
+
+                $.ajax({
+                    type:"GET",
+                    cache:false,
+                    url:"{{route('home.timer_session_set', 'on')}}",
+                    success: function(data) {
+
+                        console.log(data);  
+                    }
+                });
+            });
+
         })
     </script>
 </body>

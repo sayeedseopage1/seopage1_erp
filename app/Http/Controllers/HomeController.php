@@ -55,7 +55,7 @@ use App\Models\Deal;
 use Illuminate\Support\Facades\Redirect;
 use Mail;
 use App\Mail\ClientSubmitMail;
-
+use Session;
 
 
 
@@ -1202,4 +1202,19 @@ class HomeController extends Controller
         return Artisan::call('sync-user-permissions');
     }
 
+    public function timer_session_set($status) {
+        Session::put('timer_box_status', '');
+        if (Session::has('timer_box_status')) {
+            // $timer = Session::get('timer_box_status');
+
+            if ($status == 'on') {
+                Session::put('timer_box_status', 'on');
+            } else {
+                Session::put('timer_box_status', 'off');
+            }
+        } else {
+            // Session::put('timer_box_status', '');
+        }
+        // dd(Session::get('timer_box_status'));
+    }
 }

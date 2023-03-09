@@ -1157,7 +1157,4 @@ Route::post('/deliverable-authorization-request', [ProjectController::class, 'De
 Route::post('/deliverable-authorization-accept', [ProjectController::class, 'DeliverableAuthorizationAccept'])->name('deliverable-authorization-accept');
 Route::get('/projects/send-final-authorization-deliverables/{id}', [ProjectController::class, 'DeliverableFinalAuthorizationSend']);
 Route::post('/deliverable-final-authorization-accept', [ProjectController::class, 'DeliverableFinalAuthorizationAccept'])->name('deliverable-final-authorization-accept');
-
-
-
-
+Route::get('update/timer/box/set/{status}', [HomeController::class, 'timer_session_set'])->whereIn('status', ['on', 'off'])->name('home.timer_session_set');
