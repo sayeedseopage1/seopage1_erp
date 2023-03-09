@@ -277,37 +277,26 @@ class TasksDataTable extends BaseDataTable
                 }
                 $subtask = Task::where('id', $row->id)->first();
                 
-                $subtasks_html = '';
                 if($subtask->subtask_id != null) {
                     $span .= '<span class="badge badge-info">Subtask</span>';
                 } else {
                     $total_subtask = $row->subtasks->count();
-                    
-                    $disabled = '';
-                    if($total_subtask == 0) {
-                        $disabled = 'disabled';
-                    }
-                    
                     $span .= '<span class="badge badge-primary">Parent task</span>';
 
-                    $subtasks_html .= '<a class="openRightModal showSubTask  btn btn-info btn-sm d-flex align-items-center '.$disabled.'" href="'.route('tasks.show_subtask', $row->id).'" ';
-                    
-                    $subtasks_html .= '><i class="fa fa-eye"></i><span class="ml-1">'.$total_subtask.'</span></a>';
+                    $span .= '<button class="openRightModal showSubTask  badge badge-primary ml-3" data-url="'.route('tasks.show_subtask', $row->id).'" ';
+                    if($total_subtask == 0) {
+                        $span .= 'disabled';
+                    }
+                    $span .= '><i class="fa fa-eye"></i>'.$total_subtask.'</button>';
                 }
 
                 return '<div class="media align-items-center">
-                    <div class="media-body">
-                        <div class="row">
-                            <div class="mx-auto mx-sm-0 pb-2 pb-sm-0 align-self-center">'.$subtasks_html.'</div>
-                            <div class="col-9">
-                                <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->heading) . '</a></h5>
-                                <p class="mb-0">' . $pin . ' ' .$span.' ' . $timer . ' ' . $labels .  '</p>
-                            </div>
-                        </div>
+                        <div class="media-body">
+                    <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->heading) . '</a></h5>
+                    <p class="mb-0">' . $pin . ' ' .$span.' ' . $timer . ' ' . $labels .  '</p>
                     </div>
-                </div>';
+                  </div>';
             });
-
             $datatables->editColumn('board_column', function ($row) use ($taskBoardColumns) {
                 $taskUsers = $row->users->pluck('id')->toArray();
 
@@ -391,16 +380,10 @@ class TasksDataTable extends BaseDataTable
      */
     public function query(Task $model)
     {
-        if (in_array('admin', user_roles()) || in_array('Team Lead', user_roles()) || in_array('Lead Developer', user_roles())) {
-            $model = $model->whereNull('subtask_id');
-        } else {
-            $model = $model->whereNotNull('subtask_id');
-        }
-        
         $request = $this->request();
         $startDate = null;
         $endDate = null;
-        
+
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
             $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate)->toDateString();
         }
@@ -605,11 +588,6 @@ class TasksDataTable extends BaseDataTable
 
         if ($request->type == 'public') {
             $model->where('tasks.is_private', 0);
-        }
-
-        if (!is_null($request->subTask_id)) {
-            $model->join('sub_tasks', 'sub_tasks.task_id', '=', 'tasks.id')->where('sub_tasks.task_id', '=', $request->subTask_id);
-            //dd($model->get());
         }
 
         return $model;

@@ -45,8 +45,8 @@ $(function() {
 
                 $min.data("isMin", true);
                 dlg.animate({
-                    height: '40px',
-                    top: $(window).height() - 50,
+                    height: '45px',
+                    top: $(window).height() - 55,
                     left: $(window).width() - 300,
                 }, 200);
                 dlg.find(".ui-dialog-content").hide();

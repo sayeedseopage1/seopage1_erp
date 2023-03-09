@@ -157,7 +157,8 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
                 <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">@lang('app.label')</label>
                 <div class="select-filter mb-4">
                     <div class="select-others">
-                        <select class="form-control select-picker" id="label" data-live-search="true" data-container="body" data-size="8">
+                        <select class="form-control select-picker" id="label" data-live-search="true" data-container="body"
+                            data-size="8">
                             <option value="all">@lang('app.all')</option>
                             @foreach ($taskLabels as $label)
                                 <option
@@ -341,6 +342,9 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
             data['endDate'] = endDate;
             data['searchText'] = searchText;
             data['milestone_id'] = milestone_id;
+            @if(\Request::route()->getName() == 'tasks.show_subtask') 
+                data['subTask_id'] = '{{request()->route()->id}}';
+            @endif
         });
         const showTable = () => {
             window.LaravelDataTables["allTasks-table"].draw();
@@ -665,28 +669,19 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
             })
         });
 
-        /*function format(d) {
-            var html = '<h2>Sub Categories</h2><table class="col-12 rounded" style="background:red;"><thead><tr><th>#</th><th>name</th><th>action</th></tr></thead><tbody>'; 
-            html += '<tr><td>1</td><td>2</td><td><a class="btn btn-primary mr-3" href="{{env('APP_URL')}}/category/3/edit"><i class="fa fa-eye"></i></a><a class="btn btn-danger delete" href="#" onclick="xdelete()"><i class="fa fa-trash"></i></a></td></tr>';
-            html += '</tbody></table>';
-            return html;
-        }
-
-        var table = $('#allTasks-table').dataTable();*/
-
-        /*$('#allTasks-table').on('click', '.showSubTask', function () {
-            var url = $(this).attr('data-url');
+        $('#allTasks-table').on('click', '.showSubTask', function () {
+            event.preventDefault();
+            var url = $(this).attr('href');
+            console.log(url);
             $.easyAjax({
-                url: url,
-                // blockUI: true,
+                url: url+'/tableView',
                 type: "GET",
-                // disableButton: true,
                 success: function(response) {
                     if (response.status == 'success') {
-                        $('#right-modal-content').html(response.html);
+                        $('#right-modal-content').html(response.data);
                     }
                 }
             })
-        });*/
+        });
     </script>
 @endpush
