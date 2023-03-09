@@ -378,55 +378,57 @@ class LeadsDataTable extends BaseDataTable
      */
     public function query(Lead $model)
     {
-      $startDate = null;
-      $endDate = null;
+        $startDate = null;
+        $endDate = null;
+        $status = null;
+        // dd($this->request()->all());
 
-      if ($this->request()->startDate !== null && $this->request()->startDate != 'null' && $this->request()->startDate != '') {
-          $startDate = Carbon::createFromFormat($this->global->date_format, $this->request()->startDate)->toDateString();
-      }
+        if ($this->request()->startDate !== null && $this->request()->startDate != 'null' && $this->request()->startDate != '') {
+            $startDate = Carbon::createFromFormat($this->global->date_format, $this->request()->startDate)->toDateString();
+        }
 
-      if ($this->request()->endDate !== null && $this->request()->endDate != 'null' && $this->request()->endDate != '') {
-          $endDate = Carbon::createFromFormat($this->global->date_format, $this->request()->endDate)->toDateString();
-      }
+        if ($this->request()->endDate !== null && $this->request()->endDate != 'null' && $this->request()->endDate != '') {
+            $endDate = Carbon::createFromFormat($this->global->date_format, $this->request()->endDate)->toDateString();
+        }
         $currentDate = now()->format('Y-m-d');
         $lead = $model->with(['leadAgent', 'leadAgent.user', 'category','user'])
-            ->select(
-                'leads.id',
-                'leads.agent_id',
+        ->select(
+            'leads.id',
+            'leads.agent_id',
 
-                'leads.added_by',
-                'leads.client_id',
-                'leads.next_follow_up',
-                'leads.salutation',
-                'leads.category_id',
-                'client_name',
-                'actual_value',
-                'bidding_minutes',
-                'bidding_seconds',
-                'bid_value',
-                'bid_value2',
+            'leads.added_by',
+            'leads.client_id',
+            'leads.next_follow_up',
+            'leads.salutation',
+            'leads.category_id',
+            'client_name',
+            'actual_value',
+            'bidding_minutes',
+            'bidding_seconds',
+            'bid_value',
+            'bid_value2',
 
-                'project_link',
-                'company_name',
-                'lead_status.type as statusName',
-                'status_id',
-                'deal_status',
-                'currency_id',
-                'original_currency_id',
-                'leads.created_at',
-                'lead_sources.type as source',
-                'users.name as agent_name',
-                'users.image',
-                DB::raw("(select next_follow_up_date from lead_follow_up where lead_id = leads.id and leads.next_follow_up  = 'yes' and DATE(next_follow_up_date) >= '".$currentDate."' ORDER BY next_follow_up_date asc limit 1) as next_follow_up_date")
-            )
-            ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
-            ->leftJoin('lead_agents', 'lead_agents.id', 'leads.agent_id')
-            ->leftJoin('users', 'users.id', 'leads.added_by')
-            ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id')
-            ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
+            'project_link',
+            'company_name',
+            'lead_status.type as statusName',
+            'status_id',
+            'deal_status',
+            'currency_id',
+            'original_currency_id',
+            'leads.created_at',
+            'lead_sources.type as source',
+            'users.name as agent_name',
+            'users.image',
+            DB::raw("(select next_follow_up_date from lead_follow_up where lead_id = leads.id and leads.next_follow_up  = 'yes' and DATE(next_follow_up_date) >= '".$currentDate."' ORDER BY next_follow_up_date asc limit 1) as next_follow_up_date")
+        )
+        ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
+        ->leftJoin('lead_agents', 'lead_agents.id', 'leads.agent_id')
+        ->leftJoin('users', 'users.id', 'leads.added_by')
+        ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id')
+        ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
 
 
-            ;
+        ;
 
         if ($this->request()->sales_executive_id != '') {
             $lead = $lead->leftJoin('users', 'users.id', 'leads.added_by');
@@ -494,16 +496,23 @@ class LeadsDataTable extends BaseDataTable
         if ($this->request()->searchText != '') {
             $lead = $lead->where(function ($query) {
                 $query->where('leads.client_name', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('leads.company_name', 'like', '%' . request('searchText') . '%')
+                ->orWhere('leads.company_name', 'like', '%' . request('searchText') . '%')
 
-                    ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('leads.actual_value', 'like', '%' . request('searchText') . '%')
-                      ->orWhere('users.name', 'like', '%' . request('searchText') . '%')
+                ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
+                ->orWhere('leads.actual_value', 'like', '%' . request('searchText') . '%')
+                ->orWhere('users.name', 'like', '%' . request('searchText') . '%')
 
-                  ;
+                ;
             });
         }
-
+        // dd($this->request()->status);
+        if ($this->request()->status) {
+            if ($this->request()->status == '0') {
+                $lead = $lead->where('leads.status_id', '0');
+            } elseif ($this->request()->status == '1') {
+                $lead = $lead->where('leads.status_id', '1');
+            }
+        }
 
         return $lead->groupBy('leads.id');
     }

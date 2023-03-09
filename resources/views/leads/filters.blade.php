@@ -73,21 +73,33 @@
                 </div>
             </div>
         </div> --}}
-          <?php
-          $sales_executives= App\Models\User::where('role_id',7)->get();
-           ?>
-        <div class="more-filter-items">
-             <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">@lang('Created By')</label>
-             <div class="select-filter mb-4">
-                 <div class="select-others">
-                     <select class="form-control select-picker" data-container="body" id="sales_executive_id">
-                       @foreach($sales_executives as $row)
-                         <option value="{{$row->id}}">{{ucfirst($row->name)}}</option>
-                        @endforeach
-                     </select>
-                 </div>
-             </div>
-         </div>
+            <?php
+            $sales_executives= App\Models\User::where('role_id',7)->get();
+            ?>
+            <div class="more-filter-items">
+                <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">@lang('Created By')</label>
+                <div class="select-filter mb-4">
+                    <div class="select-others">
+                        <select class="form-control select-picker" data-container="body" id="sales_executive_id">
+                            @foreach($sales_executives as $row)
+                            <option value="{{$row->name}}">{{ucfirst($row->name)}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="more-filter-items">
+                <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">@lang('Status')</label>
+                <div class="select-filter mb-4">
+                    <div class="select-others">
+                        <select class="form-control select-picker" data-container="body" id="leads_status">
+                            <option value="1">Not Converted to Deal</option>
+                            <option value="3 ">Converted to Deal  </option>
+                        </select>
+                    </div>
+                </div>
+            </div> -->
 
         {{--  <div class="more-filter-items">
             <label class="f-14 text-dark-grey mb-12 text-capitalize"
@@ -194,5 +206,60 @@
             $('#reset-filters').addClass('d-none');
             showTable();
         });
+
+        $('#sales_executive_id').on('change', function() {
+            var sales_emp = $('#sales_executive_id :selected').val();
+            $('#search-text-field').val(sales_emp);
+            var table = $('#leads-table').DataTable();
+            table.draw();
+        });
+
+        // $('#leads_status').on('change', function() {
+        //     $.easyAjax({
+        //         url: '{{route('leads.index')}}',
+        //         type: "POST",
+        //         data: {
+        //             _token: '{{csrf_token()}}',
+        //             status: 0
+        //         },
+        //         success: function(response) {
+        //             if (response.status == 'success') {
+        //                 showTable();
+        //                 // resetActionButtons();
+        //                 // deSelectAll();
+        //             }
+        //         }
+        //     })
+        // })
+
+        /*$('#leads-table').on('preXhr.dt', function(e, settings, data) {
+
+            var dateRangePicker = $('#datatableRange').data('daterangepicker');
+            var startDate = $('#datatableRange').val();
+
+            if (startDate == '') {
+                startDate = null;
+                endDate = null;
+            } else {
+                startDate = dateRangePicker.startDate.format('DD-MM-YYYY');
+                endDate = dateRangePicker.endDate.format('DD-MM-YYYY');
+            }
+
+            var searchText = $('#search-text-field').val();
+
+
+
+
+            var date_filter_on = $('#date_filter_on').val();
+
+            data['startDate'] = startDate;
+            data['endDate'] = endDate;
+            data['searchText'] = searchText;
+            data['status'] = $('#leads_status :selected').val();
+          
+            data['date_filter_on'] = date_filter_on;
+            // showTable()
+        });*/
+        
     </script>
 @endpush
