@@ -1,8 +1,7 @@
 @extends('layouts.app')
 
 @section('filter-section')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+{{--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">--}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 <style>
 .milestone-wrapper{
@@ -92,99 +91,66 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <form method="post" action="{{route('update-deal-details')}}">
+                        <form method="post" action="{{route('update-deal-details')}}" id="update-deal">
                           @csrf
 
                           <input type="hidden" name="id" value="{{$deal->id}}">
                           <div class="row">
-
                             <div class="col-md-3">
                               <div class="form-group">
-                              <label for="exampleFormControlInput1">Deal Id</label>
-                              <input type="text" class="form-control" value="{{$deal->deal_id}}" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
+                              <label for="deal_id">Deal Id</label>
+                              <input type="text" class="form-control height-35 f-14" value="{{$deal->deal_id}}" id="deal_id" placeholder="name@example.com" readonly>
                               </div>
 
+                            </div>
+                            <div class="col-md-3">
+                              <div class="form-group">
+                              <label for="deal_creation_date">Deal Creation Date</label>
+                              <input type="text" value="{{$deal->deal_creation_date}}" class="form-control height-35 f-14" id="deal_creation_date" placeholder="name@example.com" readonly>
+                              </div>
 
 
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
-                              <label for="exampleFormControlInput1">Deal Creation Date</label>
-                              <input type="text" value="{{$deal->deal_creation_date}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
+                              <label for="project_name">Project Name <span style="color:red;">*</span></label>
+                              <input type="text" name="project_name" value="{{$deal->project_name}}" class="form-control height-35 f-14" id="project_name" placeholder="name@example.com">
+                                  <label id="projectNameError" class="error text-danger" for="project_name"></label>
                               </div>
 
 
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
-                              <label for="exampleFormControlInput1">Project Name <span style="color:red;">*</span></label>
-                              <input type="text" name="project_name" value="{{$deal->project_name}}" class="form-control @error('project_name') is-invalid @enderror" id="exampleFormControlInput1" placeholder="name@example.com" required>
+                              <label for="deadline">Deadline <span style="color:red;">*</span></label>
+                              <input type="datetime-local" name="date" value="{{ \Carbon\Carbon::parse($deal->deadline)->format('Y-m-d H:i') }}" class="form-control height-35 f-14" id="deadline" placeholder="Enter deadline" style="background: #ffffff;">
+                                  <label id="deadlineError" class="error text-danger" for="deadline"></label>
                               </div>
-                              @error('project_name')
-                              <div class="mt-3">
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                </div>
-                              @enderror
-
-
                             </div>
-                            <div class="col-md-3">
-                              <div class="form-group">
-                              <label for="exampleFormControlInput1">Deadline <span style="color:red;">*</span></label>
-                              <input type="date" name="deadline" value="{{$deal->deadline}}" class="form-control @error('deadline') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Enter deadline" >
-                              </div>
-                              @error('deadline')
-                              <div class="mt-3">
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                </div>
-                              @enderror
-                            </div>
-
-
-
                           </div>
-                          <div id="success_message">
-
-                          </div>
-                          @if(Session::has('error'))
-                          <div class="alert alert-danger" role="alert">
-
-                              <div class="alert-body">
-                                  {{Session::get('error')}}
-                              </div>
-                          </div>
-                          @endif
                           <div class="row">
                             <div class="col-md-3">
                               <div class="form-group">
-                              <label for="exampleFormControlInput1">Project Budget <span style="color:red;">*</span></label>
-                              <input type="text" name="amount" value="{{$deal->actual_amount}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" >
+                              <label for="amount">Project Budget <span style="color:red;">*</span></label>
+                              <input type="text" name="amount" value="{{$deal->actual_amount}}" class="form-control height-35 f-14" id="amount" placeholder="name@example.com" readonly>
+                                  <label id="amountError" class="error text-danger" for="amount"></label>
                               </div>
                             </div>
                             <div class="col-md-3">
                               <?php
                               $currency= App\Models\Currency::where('id',$deal->original_currency_id)->first();
-
-
                                ?>
-                              <label for="exampleFormControlTextarea1">Currency <span style="color:red;">*</span></label>
-                            <select class="form-control" name="original_currency_id">
-
-
-
+                              <label for="original_currency_id">Currency <span style="color:red;">*</span></label>
+                            <select class="form-control height-35 f-14" name="original_currency_id" id="original_currency_id">
                               <option selected value="{{$deal->original_currency->id}}">{{$deal->original_currency->currency_code}} ({{$deal->original_currency->currency_symbol}})</option>
-
+                                <label id="currencyError" class="error text-danger" for="original_currency_id"></label>
                             </select>
                             </div>
 
                             <div class="col-md-6">
                               <?php
                                 $milestones= App\Models\ProjectMilestone::where('project_id',$project_id->id)->get();
-
-
                                ?>
-
-
                                 <label for="exampleFormControlInput1">Milestones <span style="color:red;">*</span></label>
                               <div class="input-group mb-3 w-100">
                                 <div class="milestone-wrapper d-flex flex-wrap form-control" id="milestone_value"></div>
@@ -205,57 +171,38 @@
                           <div class="row">
                             <div class="col-md-3">
                               <div class="form-group">
-                              <label for="exampleFormControlInput1">Client Name</label>
-                              <input type="text" name="client_name" value="{{$deal->client_name}}" class="form-control @error('client_name') is-invalid @enderror" id="exampleFormControlInput1" placeholder="name@example.com" required>
-                              </div>
-                              @error('client_name')
-                              <div class="mt-3">
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                </div>
-                              @enderror
-                            </div>
-                            <div class="col-md-3">
-                              <div class="form-group">
-                              <label for="exampleFormControlInput1">Client Username</label>
-                              <input type="text" name="client_username" value="{{$deal->client_username}}" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" readonly>
+                              <label for="client_name">Client Name</label>
+                              <input type="text" name="client_name" value="{{$deal->client_name}}" class="form-control height-35 f-14" id="client_name" placeholder="name@example.com" required>
                               </div>
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
-                              <label for="exampleFormControlInput1">Organization</label>
-                              <input type="text" value="{{$deal->organization}}" name="organization" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" >
+                              <label for="client_username">Client Username</label>
+                              <input type="text" name="client_username" value="{{$deal->client_username}}" class="form-control height-35 f-14" id="client_username" placeholder="name@example.com" readonly>
                               </div>
                             </div>
                             <div class="col-md-3">
                               <div class="form-group">
-                              <label for="exampleFormControlInput1">Client Email</label>
-                              <input type="text" value="{{$deal->client_email}}" name="client_email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com" >
+                              <label for="organization">Organization</label>
+                              <input type="text" value="{{$deal->organization}}" name="organization" class="form-control height-35 f-14" id="organization" placeholder="Enter organization name" >
+                              </div>
+                            </div>
+                            <div class="col-md-3">
+                              <div class="form-group">
+                              <label for="client_email">Client Email</label>
+                              <input type="text" value="{{$deal->client_email}}" name="client_email" class="form-control height-35 f-14" id="client_email" placeholder="client@email.com" >
                               </div>
                             </div>
 
                           </div>
-                        {{--  <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Project Summary <span style="color:red;">*</span></label>
-                                <textarea name="description" class="form-control" id="description" rows="3" value="{{$deal->description}}" required>{{$deal->description}}</textarea>
-                              </div>
-                            </div>
-
-                          </div> --}}
-
                           <br>
                           <div class="row">
                             <div class="col-md-12">
                               <div class="form-group">
-                              <label for="exampleFormControlInput1">Freelancer Profile Link <span style="color:red;">*</span></label>
-                              <input type="text" value="{{$deal->profile_link}}" name="profile_link" class="form-control @error('profile_link') is-invalid @enderror" id="exampleFormControlInput1" placeholder="Input here" required>
+                              <label for="profile_link">Freelancer Profile Link <span style="color:red;">*</span></label>
+                              <input type="text" value="{{$deal->profile_link}}" name="profile_link" class="form-control height-35 f-14" id="profile_link" placeholder="Input here">
+                                  <label id="profileLinkError" class="error text-danger" for="profile_link"></label>
                               </div>
-                              @error('profile_link')
-                              <div class="mt-3">
-                                <div class="alert alert-danger">{{ $message }}</div>
-                                </div>
-                              @enderror
                             </div>
                             <?php
                             $mystring = $deal->message_link;
@@ -272,10 +219,9 @@
                                @foreach($data as $message)
                               <div class="form-group">
 
-                              <label for="exampleFormControlInput1">Freelancer Message Link <span style="color:red;">*</span></label>
-
-                                <input type="text" value="{{$message}}" name="message_link[]" class="form-control" id="exampleFormControlInput1" placeholder="Input here" required>
-
+                              <label for="freelancer_message_link">Freelancer Message Link <span style="color:red;">*</span></label>
+                                <input type="text" value="{{$message}}" name="message_link[]" class="form-control height-35 f-14" id="freelancer_message_link" placeholder="Input here" required>
+                                  <label id="freelancerMessageLinkError" class="error text-danger" for="freelancer_message_link"></label>
                               </div>
                                 @endforeach
                             </div>
@@ -300,220 +246,153 @@
 
 
                           </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.) <span style="color:red;">*</span></label>
-
-                                <textarea name="description2" value="{{$deal->description2}}" class="form-control @error('description2') is-invalid @enderror" id="description2" rows="3" required>{{$deal->description2}}</textarea>
-                              </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="text-dark-grey" data-label="true" for="description2Text">Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.)
+                                            <sup class="mr-1">*</sup>
+                                        </label>
+                                        <textarea name="description2" id="description2Text" class="form-control @error('description2') is-invalid @enderror">{!!$deal->description2!!}</textarea>
+                                        <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                                        <script>
+                                            CKEDITOR.replace('description2');
+                                        </script>
+                                        @error('description2')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
-                            @error('description2')
-                            <div class="mt-3">
-                              <div class="alert alert-danger">{{ $message }}</div>
-                              </div>
-                            @enderror
-
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency.
-                                  It should include home, about, his services in one page, blog, and contact.
-                                  The look and feel should be better than the references.)
-
-                                   <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description3}}" name="description3" class="form-control @error('description3') is-invalid @enderror" id="description3" rows="3" required>{{$deal->description3}}</textarea>
-                              </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="text-dark-grey" data-label="true" for="description3Text">Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency. It should include home, about, his services in one page, blog, and contact. The look and feel should be better than the references.)
+                                            <sup class="mr-1">*</sup>
+                                        </label>
+                                        <textarea name="description3" id="description3Text" class="form-control @error('description3') is-invalid @enderror">{!!$deal->description3!!}</textarea>
+                                        <script>
+                                            CKEDITOR.replace('description3');
+                                        </script>
+                                        @error('description3')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
-                            @error('description3')
-                            <div class="mt-3">
-                              <div class="alert alert-danger">{{ $message }}</div>
-                              </div>
-                            @enderror
-
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Reference websites and what the references are for (Ex: ABC.com is for the color scheme.
-                                                XYZ.com is for section layouts
-                                                DEF.com is for header & footer styling.
-                                                However, none of these can be copied)
-
-                                   <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description4}}" name="description4" class="form-control @error('description4') is-invalid @enderror" id="description4" rows="3" required>{{$deal->description4}}</textarea>
-                              </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="text-dark-grey" data-label="true" for="description4Text">Reference websites and what the references are for (Ex: ABC.com is for the color scheme. XYZ.com is for section layouts DEF.com is for header & footer styling. However, none of these can be copied)
+                                            <sup class="mr-1">*</sup>
+                                        </label>
+                                        <textarea name="description4" id="description3Text" class="form-control @error('description4') is-invalid @enderror">{!!$deal->description4!!}</textarea>
+                                        <script>
+                                            CKEDITOR.replace('description4');
+                                        </script>
+                                        @error('description4')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
-                            @error('description4')
-                            <div class="mt-3">
-                              <div class="alert alert-danger">{{ $message }}</div>
-                              </div>
-                            @enderror
-
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Any particular focus/concern of the client (Ex: 1. The client is very concerned about the
-                                  final look & feel so needs to be careful with the design 2.
-                                  The client is very concerned if the booking functionality will work the way he wants.)
-
-                                   <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description5}}" name="description5" class="form-control @error('description5') is-invalid @enderror" id="description5" rows="3" required>{{$deal->description5}}</textarea>
-                              </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="text-dark-grey" data-label="true" for="description5Text">Any particular focus/concern of the client (Ex: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work the way he wants.)
+                                            <sup class="mr-1">*</sup>
+                                        </label>
+                                        <textarea name="description5" id="description5Text" class="form-control @error('description5') is-invalid @enderror">{!!$deal->description5!!}</textarea>
+                                        <script>
+                                            CKEDITOR.replace('description5');
+                                        </script>
+                                        @error('description5')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
-                            @error('description5')
-                            <div class="mt-3">
-                              <div class="alert alert-danger">{{ $message }}</div>
-                              </div>
-                            @enderror
-
-                          </div>
                           <div class="row">
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)
-
                                    <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description6}}" name="description6" class="form-control  @error('description6') is-invalid @enderror" id="description6" rows="3" required>{{$deal->description6}}</textarea>
+                                  <textarea name="description6" id="description6Text" class="form-control @error('description6') is-invalid @enderror">{!!$deal->description6!!}</textarea>
+                                  <script>
+                                      CKEDITOR.replace('description6');
+                                  </script>
+                                  @error('description6')
+                                  <div class="text-danger">{{ $message }}</div>
+                                  @enderror
                               </div>
                             </div>
-                            @error('description6')
-                            <div class="mt-3">
-                              <div class="alert alert-danger">{{ $message }}</div>
-                              </div>
-                            @enderror
-
                           </div>
                           <div class="row">
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)
-
-
                                    <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description7}}" name="description7" class="form-control  @error('description7') is-invalid @enderror" id="description7" rows="3" required>{{$deal->description7}}</textarea>
+                                  <textarea name="description7" id="description7Text" class="form-control @error('description7') is-invalid @enderror">{!!$deal->description7!!}</textarea>
+                                  <script>
+                                      CKEDITOR.replace('description7');
+                                  </script>
+                                  @error('description7')
+                                  <div class="text-danger">{{ $message }}</div>
+                                  @enderror
                               </div>
                             </div>
-                            @error('description7')
-                            <div class="mt-3">
-                              <div class="alert alert-danger">{{ $message }}</div>
-                              </div>
-                            @enderror
-
                           </div>
                           <div class="row">
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">If there is any cross-departmental work involved in this project (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web development)
-
-
                                    <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description8}}" name="description8" class="form-control @error('description8') is-invalid @enderror" id="description8" rows="3" required>{{$deal->description8}}</textarea>
+                                  <textarea name="description8" id="description8Text" class="form-control @error('description8') is-invalid @enderror">{!!$deal->description8!!}</textarea>
+                                  <script>
+                                      CKEDITOR.replace('description8');
+                                  </script>
+                                  @error('description8')
+                                  <div class="text-danger">{{ $message }}</div>
+                                  @enderror
                               </div>
                             </div>
-                            @error('description8')
-                            <div class="mt-3">
-                              <div class="alert alert-danger">{{ $message }}</div>
-                              </div>
-                            @enderror
-
                           </div>
                           <div class="row">
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Any other notes for the project manager/technical team
-
-
-
                                    <span style="color:red;">*</span></label>
-                                <textarea value="{{$deal->description9}}" name="description9" class="form-control @error('description9') is-invalid @enderror" id="description9" rows="3" required>{{$deal->description9}}</textarea>
+                                  <textarea name="description9" id="description9Text" class="form-control @error('description9') is-invalid @enderror">{!!$deal->description9!!}</textarea>
+                                  <script>
+                                      CKEDITOR.replace('description9');
+                                  </script>
+                                  @error('description9')
+                                  <div class="text-danger">{{ $message }}</div>
+                                  @enderror
                               </div>
                             </div>
-                            @error('description9')
-                            <div class="mt-3">
-                              <div class="alert alert-danger">{{ $message }}</div>
-                              </div>
-                            @enderror
-
                           </div>
-
-
-
                           <br>
                           <div class="d-flex justify-content-center">
-                            <button class="btn btn-primary" type="submit">Update Deal Creation</button>
-
+                            <button class="btn btn-primary" type="submit" id="updateBtn">Update Deal Creation</button>
                           </div>
                         </form>
-
                     </div>
                 </div>
                 @endif
               </div>
-
               <div class="d-flex flex-column">
-
               </div>
-
-
-
-
           </div>
           <!-- CARD BODY END -->
           <!-- CARD FOOTER START -->
           <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
-
-
-
-
-
           </div>
           <!-- CARD FOOTER END -->
       </div>
     </div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-    <script>
-    $(document).ready(function() {
-      $('#summary').summernote();
-    });
-    $(document).ready(function() {
-      $('#summary3').summernote();
-    });
-    $(document).ready(function() {
-      $('#summary2').summernote();
-    });
-
-
-    $(document).ready(function() {
-      $('#description').summernote();
-    });
-    $(document).ready(function() {
-      $('#description2').summernote();
-    });
-    $(document).ready(function() {
-      $('#description3').summernote();
-    });
-    $(document).ready(function() {
-      $('#description4').summernote();
-    });
-    $(document).ready(function() {
-      $('#description5').summernote();
-    });
-    $(document).ready(function() {
-      $('#description6').summernote();
-    });
-    $(document).ready(function() {
-      $('#description7').summernote();
-    });
-    $(document).ready(function() {
-      $('#description8').summernote();
-    });
-    $(document).ready(function() {
-      $('#description9').summernote();
-    });
-    </script>
     <script type="text/javascript">
     function myFunction{{$deal->hash}}() {
       // Get the text field
@@ -624,8 +503,6 @@
             }
           }
         });
-
-
       });
 
       $(document).on('click','.delete_milestone',function(e){
@@ -789,15 +666,48 @@
                  });
              });
          </script>
+    <script>
+        const form = document.getElementById('update-deal');
+        const button = document.getElementById('updateBtn');
+        const projectName = document.getElementById('project_name');
+        const milestone = document.getElementById('milestone_value');
+        const profile_link = document.getElementById('profile_link');
+        const freelancer_message_link = document.getElementById('freelancer_message_link');
 
 
-
-
-
-
-
-
-
+        form.addEventListener('input', () => {
+            let valid = true;
+            if (projectName.value.trim() === '') {
+                valid = false;
+                projectNameError.textContent = 'Please enter the project name!';
+            } else {
+                projectNameError.textContent = '';
+            }
+            if (milestone.value.trim() === '') {
+                valid = false;
+                milestonesError.textContent = 'This fild project name!';
+            } else {
+                milestonesError.textContent = '';
+            }
+            if (profile_link.value.trim() === '') {
+                valid = false;
+                profileLinkError.textContent = 'Please enter correct project link (Freelancer.com) with https!';
+            } else {
+                profileLinkError.textContent = '';
+            }
+            if (freelancer_message_link.value.trim() === '') {
+                valid = false;
+                freelancerMessageLinkError.textContent = 'Please enter correct message link (Freelancer.com) with https!';
+            } else {
+                freelancerMessageLinkError.textContent = '';
+            }
+            button.disabled = !valid;
+        });
+    </script>
+    <script>
+        flatpickr("#deadline", {
+            dateFormat: "Y-m-d",
+        });
+    </script>
     @endpush
-
 @endsection

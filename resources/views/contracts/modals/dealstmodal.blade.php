@@ -42,98 +42,52 @@
 
 
       <div class="modal-body">
-
-                                  <div class="row">
-                                    <div class="col-md-12">
-
-                                          <label for="input-state-2" class="form-label"><strong>Status <span style="color:red;">*<span></strong></label>
-
-                                                <input readonly class="form-control height-35 f-14" value="Contact Made"  name="deal_stage"  placeholder="Contract Made" required></input>
-
-
-
-
-                                    </div>
-                                    <div class="col-md-12 mt-3">
-                                      <label for="Client Username"><strong>Client Username</strong></label>
-
-                                            <input class="form-control height-35 f-14"  name="client_username" id="client_username"  placeholder="Enter Client Username" ></input>
-
-
-                                    </div>
-                                    <div class="col-md-12 mt-3">
-                                      <label for="Client Username"><strong>Client Profile Link</strong></label>
-
-                                            <input class="form-control height-35 f-14" id="profile_link"  name="profile_link"  placeholder="Enter Profile Link"></input>
-                                    </div>
-                                  {{--  <div class="col-md-12 mt-3">
-                                      <label for="Client Username"><strong>Client Message Thread Link</strong></label>
-
-                                            <input class="form-control height-35 f-14"  name="message_link"  placeholder="Enter Message Thread Link"></input>
-                                    </div> --}}
-                                    <label class="mt-3" for="Client Username"><strong>Client Message Thread Link</strong></label>
-                                    <div class="col-md-9 dynamic-field" id="dynamic-field-1">
-
-                                               <div class="row">
-                                                   <div class="col-md-12 my-2">
-                                                       <div class="form-group">
-                                                           <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]" required/>
-                                                       </div>
-                                                   </div>
-                                               </div>
-                                           </div>
-
-                                           <div class="col-md-3 my-2 form-group append-buttons">
-                                               <div class="clearfix">
-                                                   <button type="button" id="add-button" class="btn btn-secondary2 float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                   <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                               </div>
-                                           </div>
-
-                                    <!-- <div class="col-md-12 mt-3">
-                                      <label for="floatingTextarea"><strong>Client Message Thread Link</strong></label>
-
-                                              <textarea id="message" class="form-control"  name="message_link"  placeholder="Client Message Thread Link" required></textarea>
-                                    </div> -->
-                                  {{--  <div class="col-md-12 mt-3">
-                                      <label for="floatingTextarea"><strong>Comments</strong></label>
-
-                                            <textarea id="comments" class="form-control"  name="comments"  placeholder="Leave a comment here" required="true"></textarea>
-
-
-                                    </div> --}}
-                                    <div class="col-md-12 col-lg-12 ">
-                                        <div class="form-group">
-                                            <x-forms.label class="my-3 comments" fieldId="comments"
-                                                :fieldLabel="__('Comments')" fieldRequired="true">
-                                            </x-forms.label>
-                                            <div id="comments"></div>
-                                            <textarea name="comments" id="comments-text"
-                                                class="d-none"></textarea>
-                                        </div>
-                                    </div>
-                                     <label id="textareaError" style="color:red; display: none;"></label><br>
-
-
-
-                                  </div>
-
-
-
-
-
-
-
-
-
-            </div>
-            <div class="modal-footer">
+          <div class="row">
+              <div class="col-md-12">
+                  <label for="input-state-2" class="form-label"><strong>Status <span style="color:red;">*<span></strong></label>
+                  <input readonly class="form-control height-35 f-14" value="Contact Made"  name="deal_stage"  placeholder="Contract Made" required></input>
+              </div>
+              <div class="col-md-12 mt-3">
+                  <label for="Client Username"><strong>Client Username</strong></label>
+                  <input class="form-control height-35 f-14"  name="client_username" id="client_username"  placeholder="Enter Client Username" ></input>
+              </div>
+              <div class="col-md-12 mt-3">
+                  <label for="Client Username"><strong>Client Profile Link</strong></label>
+                  <input class="form-control height-35 f-14" id="profile_link"  name="profile_link"  placeholder="Enter Profile Link"></input>
+              </div>
+              <label class="mt-3" for="Client Username"><strong>Client Message Thread Link</strong></label>
+              <div class="col-md-9 dynamic-field" id="dynamic-field-1">
+                  <div class="row">
+                      <div class="col-md-12 my-2">
+                          <div class="form-group">
+                              <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]" required/>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-3 my-2 form-group append-buttons">
+                  <div class="clearfix">
+                      <button type="button" id="add-button" class="btn btn-secondary2 float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                      <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12 ">
+                  <div class="form-group">
+                      <x-forms.label class="my-3 comments" fieldId="comments"
+                                     :fieldLabel="__('Comments')" fieldRequired="true">
+                      </x-forms.label>
+                      <div id="comments"></div>
+                      <textarea name="comments" id="comments-text" class="d-none"></textarea>
+                  </div>
+              </div>
+              <label id="textareaError" style="color:red; display: none;"></label><br>
+          </div>
+      </div>
+          <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
                 <button  id="lead-convert-button" type="submit"  class="btn btn-primary" >Convert</button>
-
             </div>
-              </form>
+      </form>
 
     </div>
   </div>

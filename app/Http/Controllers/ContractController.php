@@ -469,14 +469,14 @@ class ContractController extends AccountBaseController
           $lead->status_id = 3;
           $lead->save();
         }
-       
+
         $user_name= User::where('user_name',$request->user_name)->first();
         if ($user_name == null) {
             if($lead != null)
             {
             $country= Country::where('nicename',$lead->country)->first();
             }
-           
+
             $user = new User();
             $user->name = $request->client_name;
             $user->user_name = $request->user_name;
@@ -486,7 +486,7 @@ class ContractController extends AccountBaseController
             {
             $user->country_id= $country->id;
             }
-           
+
             $user->save();
             $role = new RoleUser();
             $role->role_id = 3;
@@ -494,16 +494,16 @@ class ContractController extends AccountBaseController
             $role->save();
             $client = new ClientDetails();
             $client->user_id = $user->id;
-    
+
             $client->client_username = $request->client_username;
             $client->save();
         } else {
             $user= $user_name;
         }
-        
-      
-       
-       
+
+
+
+
         $deal_client = Deal::find($deal->id);
         $deal_client->client_id = $user->id;
         $deal_client->save();
@@ -574,7 +574,7 @@ class ContractController extends AccountBaseController
         // $request->validate([
         //     'input_value' => 'required|numeric|max:' . $another_value,
         // ]);
-    
+
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'cost' => 'required|numeric|max:' . $check,
@@ -631,7 +631,7 @@ class ContractController extends AccountBaseController
     }
     public function updateMilestone(Request $request, $id)
     {
-        
+
         $projectmilestone = ProjectMilestone::where('id', $id)->first();
         $project_id = Project::where('id', $projectmilestone->project_id)->first();
         $deal= Deal::where('id',$project_id->deal_id)->first();
@@ -953,30 +953,31 @@ class ContractController extends AccountBaseController
     }
     public function updatedealDetails(Request $request)
     {
-      $validated = $request->validate([
-          'project_name' => 'required',
-          'client_name' => 'required',
-
-          'description2' => 'required',
-          'description3' => 'required',
-          'description4' => 'required',
-          'description5' => 'required',
-          'description6' => 'required',
-          'description7' => 'required',
-          'description8' => 'required',
-          'description9' => 'required',
-
-
-          'message_link' => 'required',
-          'profile_link'=>'required',
-          'deadline'=>'required',
-
-      ]);
+//        dd($request->all());
+        $validator = $request->validate([
+            'description2' => 'required',
+            'description3' => 'required',
+            'description4' => 'required',
+            'description5' => 'required',
+            'description6' => 'required',
+            'description7' => 'required',
+            'description8' => 'required',
+            'description9' => 'required',
+    ], [
+        'description2.required' => 'This field is required !!',
+        'description3.required' => 'This field is required !!',
+        'description4.required' => 'This field is required !!',
+        'description5.required' => 'This field is required !!',
+        'description6.required' => 'This field is required !!',
+        'description7.required' => 'This field is required !!',
+        'description8.required' => 'This field is required !!',
+        'description9.required' => 'This field is required !!',
+    ]);
       //dd("hello");
       $project_milestone= Project::where('deal_id',$request->id)->first();
       $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
       if ($milestone == null) {
-        //Toastr::error('Please add a Milestone', 'Failed', ["positionClass" => "toast-top-right"]);
+        Toastr::error('Please add a Milestone', 'Failed', ["positionClass" => "toast-top-right"]);
        return back()->with('error','Please add a Milestone');
       }
       DB::beginTransaction();
