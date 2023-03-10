@@ -23,7 +23,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
         <div class="d-block d-lg-flex d-md-flex justify-content-between action-bar">
             <div id="table-actions" class="flex-grow-1 align-items-center">
                 @if ($addLeadPermission == 'all' || $addLeadPermission == 'added')
-                    <x-forms.link-primary :link="url('/account/leads/create')" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" icon="plus">
+                    <x-forms.link-primary :link="url('/account/leads/create')" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0 " icon="plus">
                         @lang('app.add')
                         @lang('app.lead')
                     </x-forms.link-primary>
@@ -117,7 +117,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
             data['startDate'] = startDate;
             data['endDate'] = endDate;
             data['searchText'] = searchText;
-          
+
             data['date_filter_on'] = date_filter_on;
         });
 
