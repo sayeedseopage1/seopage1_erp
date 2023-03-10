@@ -1088,27 +1088,17 @@ class TaskController extends AccountBaseController
         $viewPermission = user()->permission('view_tasks');
         abort_403(!in_array($viewPermission, ['all', 'added', 'owned', 'both']));
         if (request()->ajax() && $tableView ==  'tableView') {
-            $task = Task::where('id', $id)->first();
-        
+            $task = Task::findOrFail($id);
             $project = $task->project;
             $tasks = $task->subtasks;
             $html = view('tasks.ajax.showSubTask', compact('project', 'tasks', 'task'))->render();
-
+            // dd($project, $task, $tasks);
             return Reply::dataOnly([
                 'status' => 'success', 
                 'data' => $html
             ]);
         } else {
             return redirect()->route('tasks.index');
-            /*$this->projects = Project::allProjects();
-            $this->clients = User::allClients();
-            $this->employees = User::allEmployees(null, true, ($viewPermission == 'all' ? 'all' : null));
-            $this->taskBoardStatus = TaskboardColumn::all();
-            $this->taskCategories = TaskCategory::all();
-            $this->taskLabels = TaskLabelList::all();
-            $this->milestones = ProjectMilestone::all();*/
         }
-        // dd($this->data->where);
-        //return $dataTable->render('tasks.index', $this->data);
     }
 }

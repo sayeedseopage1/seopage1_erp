@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use App\Models\LeadStatus;
+use App\Models\Scopes\OrderByDesc;
 
 /**
  * App\Models\Lead
@@ -94,7 +95,7 @@ use App\Models\LeadStatus;
  * @property-read \App\Models\LeadCategory|null $category
  * @method static \Illuminate\Database\Eloquent\Builder|Lead whereHash($value)
  */
-class Lead extends BaseModel
+class Lead extends BaseModel 
 {
     use Notifiable, HasFactory;
     use CustomFieldsTrait;
@@ -105,11 +106,17 @@ class Lead extends BaseModel
 
     protected $appends = ['image_url'];
 
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderByDesc); // assign the Scope here
+    }
+    
     public function getImageUrlAttribute()
     {
         $gravatarHash = md5(strtolower(trim($this->client_email)));
         return 'https://www.gravatar.com/avatar/' . $gravatarHash . '.png?s=200&d=mp';
     }
+
 
     /**
      * Route notifications for the mail channel.
