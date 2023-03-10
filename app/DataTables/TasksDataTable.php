@@ -613,7 +613,7 @@ class TasksDataTable extends BaseDataTable
             ->setTableId('allTasks-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->orderBy(1)
+            ->orderBy('id', 'desc')
             ->destroy(true)
             ->responsive(true)
             ->serverSide(true)
