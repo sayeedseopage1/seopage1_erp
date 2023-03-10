@@ -123,7 +123,7 @@
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="deadline">Deadline <span style="color:red;">*</span></label>
-                              <input type="datetime-local" name="date" value="{{ \Carbon\Carbon::parse($deal->deadline)->format('Y-m-d H:i') }}" class="form-control height-35 f-14" id="deadline" placeholder="Enter deadline" style="background: #ffffff;">
+                              <input type="datetime-local" name="deadline" value="{{ \Carbon\Carbon::parse($deal->deadline)->format('Y-m-d H:i') }}" class="form-control height-35 f-14" id="deadline" placeholder="Enter deadline" style="background: #ffffff;">
                                   <label id="deadlineError" class="error text-danger" for="deadline"></label>
                               </div>
                             </div>
@@ -670,7 +670,7 @@
         const form = document.getElementById('update-deal');
         const button = document.getElementById('updateBtn');
         const projectName = document.getElementById('project_name');
-        const milestone = document.getElementById('milestone_value');
+        const deadline = document.getElementById('deadline');
         const profile_link = document.getElementById('profile_link');
         const freelancer_message_link = document.getElementById('freelancer_message_link');
 
@@ -683,12 +683,13 @@
             } else {
                 projectNameError.textContent = '';
             }
-            if (milestone.value.trim() === '') {
+            if (deadline.value.trim() === '') {
                 valid = false;
-                milestonesError.textContent = 'This fild project name!';
+                deadlineError.textContent = 'Please select deadline!';
             } else {
-                milestonesError.textContent = '';
+                deadlineError.textContent = '';
             }
+           
             if (profile_link.value.trim() === '') {
                 valid = false;
                 profileLinkError.textContent = 'Please enter correct project link (Freelancer.com) with https!';

@@ -953,7 +953,7 @@ class ContractController extends AccountBaseController
     }
     public function updatedealDetails(Request $request)
     {
-//        dd($request->all());
+      //  dd($request->all());
         $validator = $request->validate([
             'description2' => 'required',
             'description3' => 'required',
@@ -1189,6 +1189,7 @@ class ContractController extends AccountBaseController
                 return back();
                 // something went wrong
               }
+            Toastr::success('Deal updated successfully', 'success', ["positionClass" => "toast-top-right"]);
           return redirect('/account/contracts/' . $deal->id)->with('messages.contractAdded');
 
     }

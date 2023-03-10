@@ -658,7 +658,7 @@ class TasksDataTable extends BaseDataTable
                     'orderable' => false,
                     'searchable' => false
                 ],
-                __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+                // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
                 __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
                 // '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
                 __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
@@ -688,7 +688,7 @@ class TasksDataTable extends BaseDataTable
                     'orderable' => false,
                     'searchable' => false
                 ],
-                __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+                // __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
                 // 'collaps_data' => ['className' => 'dt-control', 'orderable' => false, 'data' => 'collaps_data', 'defaultContent' => '',],
                 // '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
                 // __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
