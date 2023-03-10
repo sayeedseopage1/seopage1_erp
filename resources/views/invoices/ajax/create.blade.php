@@ -548,9 +548,18 @@ $addProductPermission = user()->permission('add_product');
                                             name="quantity[]">
                                     </td>
                                     <td class="border-bottom-0">
+                                        @if( $milest->status == 'complete')
                                         <input type="number" min="1"
                                             class="f-14 border-0 w-100 text-right cost_per_item form-control" placeholder="0.00"
-                                            value="{{$milest->actual_cost}}" name="cost_per_item[]">
+                                            value="{{$milest->actual_cost}}" name="cost_per_item[]" readonly>
+                                            @else 
+                                            <input type="number" min="1"
+                                            class="f-14 border-0 w-100 text-right cost_per_item form-control" placeholder="0.00"
+                                            value="" name="cost_per_item[]" >
+
+
+
+                                            @endif
                                     </td>
                                     <td class="border-bottom-0">
                                         <div class="select-others height-35 rounded border-0">
@@ -564,10 +573,21 @@ $addProductPermission = user()->permission('add_product');
                                             </select>
                                         </div>
                                     </td>
+                                    @if( $milest->status == 'complete')
                                     <td rowspan="2" align="right" valign="top" class="bg-amt-grey btrr-bbrr">
                                         <span class="amount-html">0.00</span>
                                         <input type="hidden" class="amount" name="amount[]" value="{{$milest->actual_cost}}">
                                     </td>
+                                    @else 
+                                    <td rowspan="2" align="right" valign="top" class="bg-amt-grey btrr-bbrr">
+                                        <span class="amount-html">0.00</span>
+                                        <input type="hidden" class="amount" name="amount[]" value="">
+                                    </td>
+
+
+
+                                    @endif
+                                  
                                 </tr>
                                 <tr class="d-none d-md-table-row d-lg-table-row">
                                     <td colspan="{{ $invoiceSetting->hsn_sac_code_show ? '4' : '3' }}"

@@ -152,7 +152,18 @@ class InvoiceController extends AccountBaseController
 
     public function store(StoreInvoice $request)
     {
-      //dd($request->all());
+     
+      $milestone_check = ProjectMilestone::where('id',$request->milestone_id)->first();
+      if($milestone_check->invoice_created == 1)
+      {
+        return Reply::error(__('You already created invoice for this milestone.'));
+      }
+      if($milestone_check->status == 'incomplete' && $request->total >= $milestone_check->actual_cost)
+      {
+        return Reply::error(__('You cannot insert equal amount of payment for partial payment.'));
+      }
+     // dd("Success");
+
         $redirectUrl = urldecode($request->redirect_url);
 
         if ($redirectUrl == '') {
