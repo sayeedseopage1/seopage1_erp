@@ -87,7 +87,7 @@ class LeadsDataTable extends BaseDataTable
                     || ($this->editLeadPermission == 'both' && ((!is_null($row->agent_id) && user()->id == $row->leadAgent->user->id)
                     || user()->id == $row->added_by))
                     ) {
-                    $action .= '<a class="dropdown-item openRightModal" href="' . route('leads.edit', [$row->id]) . '">
+                    $action .= '<a class="dropdown-item" href="' . route('leads.edit', [$row->id]) . '">
                                 <i class="fa fa-edit mr-2"></i>
                                 ' . trans('app.edit') . '
                             </a>';
