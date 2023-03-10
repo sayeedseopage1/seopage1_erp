@@ -29,8 +29,6 @@ class AppServiceProvider extends ServiceProvider
         if (\config('app.redirect_https')) {
             \URL::forceScheme('https');
         }
-
-
         Schema::defaultStringLength(191);
 
         Setting::observe(SettingsObserver::class);

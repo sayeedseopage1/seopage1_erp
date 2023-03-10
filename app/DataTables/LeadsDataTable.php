@@ -528,7 +528,9 @@ class LeadsDataTable extends BaseDataTable
             ->setTableId('leads-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->orderBy(1)
+
+            //->orderBy(1)
+
             ->destroy(true)
             ->responsive(true)
             ->serverSide(true)
