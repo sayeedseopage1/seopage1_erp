@@ -33,7 +33,7 @@
 							<td><a href="{{route('tasks.show', $value->task_id)}}">{{$project->project_name}}</a></td>
 							<td><a href="{{route('employees.show', $value->assignedTo->id)}}">{{$value->assignedTo->name}}</a></td>
 							<td><a href="{{route('employees.show', $value->addedBy->id)}}">{{$value->addedBy->name}}</a></td>
-							<td>{{$value}}</td>
+							<td>{{$value->start_date}}</td>
 							<td>{{$value->due_date}}</td>
 							<td>
 								@if($value->status == 'incomplete')
