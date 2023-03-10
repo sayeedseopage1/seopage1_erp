@@ -32,6 +32,7 @@
 
     <!-- Template CSS -->
     <link type="text/css" rel="stylesheet" media="all" href="{{ asset('css/main.css') }}">
+
     <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed" type="text/css" />
 
@@ -80,7 +81,7 @@
             height: 10em;
         }
 
-        .loader {            
+        .loader {
             margin: 60px auto;
             font-size: 10px;
             position: relative;
@@ -360,7 +361,7 @@
                                 }
                             @endphp
                             @if($value != null && $diff_in_minutes < 1200)
-                                <div class="wrapper-timezone" id="mydivheade">  
+                                <div class="wrapper-timezone" id="mydivheade">
                                     <p>New Deal Won: {{$value->client_name}}</p>
                                     <div class="clock">
                                         <div class="column">
@@ -803,7 +804,7 @@
                     $('#window').dialog({
                         title: 'Won Deals ({{count($deal_id)}})'
                     })
-                    function timer(key, time, settings){ 
+                    function timer(key, time, settings){
                         var award_time = time;
 
                         var config = {
@@ -954,13 +955,13 @@
                 if ($('#window').dialog('isOpen')) {
                     $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
                     $('#search-text-field').focus();
-                }   
+                }
             });
 
 
             @if(Session::get('timer_box_status') == 'off')
                 $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click();
-            @else 
+            @else
                 $('span.ui-button-icon.ui-icon.minusthick.ui-icon-arrow-4-diag').click();
             @endif
 
@@ -972,10 +973,10 @@
 
                         $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
                         @php $status = 'on'; @endphp
-                    @else 
+                    @else
                         @php $status = 'off' @endphp
                     @endif
-                @else   
+                @else
                     @php $status = 'on' @endphp
                 @endif
 
@@ -985,7 +986,7 @@
                     url:"{{route('home.timer_session_set', 'off')}}",
                     success: function(data) {
 
-                        console.log(data);  
+                        console.log(data);
                     }
                 });
             });
@@ -998,10 +999,10 @@
 
                         $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
                         @php $status = 'on'; @endphp
-                    @else 
+                    @else
                         @php $status = 'off' @endphp
                     @endif
-                @else   
+                @else
                     @php $status = 'on' @endphp
                 @endif
 
@@ -1011,7 +1012,7 @@
                     url:"{{route('home.timer_session_set', 'on')}}",
                     success: function(data) {
 
-                        console.log(data);  
+                        console.log(data);
                     }
                 });
             });
