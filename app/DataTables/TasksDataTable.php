@@ -179,7 +179,9 @@ class TasksDataTable extends BaseDataTable
 
                 return $members;
             });
-            
+            $datatables->addColumn('short_code', function ($row) {
+                return ucfirst($row->task_short_code);
+            });
             $datatables->addColumn('created_at', function ($row) {
 
               $created_at= Task::where('id',$row->id)->first();
@@ -274,7 +276,8 @@ class TasksDataTable extends BaseDataTable
                     $labels .= '<span class="badge badge-secondary mr-1" style="background-color: '.$label->label_color .'">'. $label->label_name.'</span>';
                 }
                 $subtask = Task::where('id', $row->id)->first();
-                
+
+
                 $subtasks_html = '';
                 if($subtask->subtask_id != null) {
                     $span .= '<span class="badge badge-info">Subtask</span>';
@@ -287,12 +290,10 @@ class TasksDataTable extends BaseDataTable
                     }
                     
                     $span .= '<span class="badge badge-primary">Parent task</span>';
-
                     $subtasks_html .= '<a class="openRightModal showSubTask  btn btn-info btn-sm d-flex align-items-center '.$disabled.'" href="'.route('tasks.show_subtask', $row->id).'" ';
                     
                     $subtasks_html .= '><i class="fa fa-eye"></i><span class="ml-1">'.$total_subtask.'</span></a>';
                 }
-
                 return '<div class="media align-items-center">
                     <div class="media-body">
                         <div class="row">
@@ -305,7 +306,6 @@ class TasksDataTable extends BaseDataTable
                     </div>
                 </div>';
             });
-
             $datatables->editColumn('board_column', function ($row) use ($taskBoardColumns) {
                 $taskUsers = $row->users->pluck('id')->toArray();
 
@@ -353,6 +353,7 @@ class TasksDataTable extends BaseDataTable
                     return '';
                 }
                 $client_id= Project::where('id',$row->project_id)->first();
+                //dd($client_id);
                 $client_name= User::where('id',$client_id->client_id)->first();
 
 
@@ -363,6 +364,10 @@ class TasksDataTable extends BaseDataTable
                 return 'row-' . $row->id;
             });
 
+            /*$datatables->addColumn('collaps_data', function ($row) {
+
+                return '<button class="openRightModal showSubTask" data-url="'.route('tasks.show_subtask', $row->id).'">show</button>';
+            });*/
             $datatables->rawColumns(['board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'timeLogged', 'timer']);
             $datatables->removeColumn('project_id');
             $datatables->removeColumn('image');
@@ -377,17 +382,17 @@ class TasksDataTable extends BaseDataTable
      * @return mixed
      */
     public function query(Task $model)
+
     {
         if (in_array('admin', user_roles()) || in_array('Team Lead', user_roles()) || in_array('Lead Developer', user_roles())) {
             $model = $model->whereNull('subtask_id');
         } else {
             $model = $model->whereNotNull('subtask_id');
         }
-        
         $request = $this->request();
         $startDate = null;
         $endDate = null;
-        
+
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
             $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate)->toDateString();
         }
@@ -419,7 +424,7 @@ class TasksDataTable extends BaseDataTable
 
             $model->leftJoin('users as creator_user', 'creator_user.id', '=', 'tasks.created_by')
                 ->leftJoin('task_labels', 'task_labels.task_id', '=', 'tasks.id')
-                ->selectRaw('tasks.id, tasks.added_by, projects.project_name, projects.project_admin, tasks.heading, client.name as clientName, creator_user.name as created_by, creator_user.image as created_image, tasks.board_column_id,
+                ->selectRaw('tasks.id, tasks.task_short_code, tasks.added_by, projects.project_name, projects.project_admin, tasks.heading, client.name as clientName, creator_user.name as created_by, creator_user.image as created_image, tasks.board_column_id,
              tasks.due_date, taskboard_columns.column_name as board_column, taskboard_columns.label_color,
               tasks.project_id, tasks.is_private ,( select count("id") from pinned where pinned.task_id = tasks.id and pinned.user_id = ' . user()->id . ') as pinned_task')
                 ->with('users', 'activeTimerAll', 'boardColumn', 'activeTimer', 'timeLogged', 'timeLogged.breaks', 'userActiveTimer', 'userActiveTimer.activeBreak', 'labels', 'taskUsers')
@@ -578,8 +583,8 @@ class TasksDataTable extends BaseDataTable
                 $query->where('tasks.heading', 'like', '%' . request('searchText') . '%')
                     ->orWhere('member.name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('projects.project_name', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('projects.project_short_code', 'like', '%' . request('searchText') . '%');
-                    //->orWhere('tasks.task_short_code', 'like', '%' . request('searchText') . '%');
+                    ->orWhere('projects.project_short_code', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('tasks.task_short_code', 'like', '%' . request('searchText') . '%');
             });
         }
 
@@ -593,7 +598,6 @@ class TasksDataTable extends BaseDataTable
         if ($request->type == 'public') {
             $model->where('tasks.is_private', 0);
         }
-
         if (!is_null($request->subTask_id)) {
             $model->join('sub_tasks', 'sub_tasks.task_id', '=', 'tasks.id')->where('sub_tasks.task_id', '=', $request->subTask_id);
             //dd($model->get());
@@ -613,7 +617,7 @@ class TasksDataTable extends BaseDataTable
             ->setTableId('allTasks-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->orderBy('id', 'desc')
+            ->orderBy(1)
             ->destroy(true)
             ->responsive(true)
             ->serverSide(true)
@@ -655,6 +659,7 @@ class TasksDataTable extends BaseDataTable
                     'searchable' => false
                 ],
                 __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
+                __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
                 // '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
                 __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
                 __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
@@ -684,8 +689,9 @@ class TasksDataTable extends BaseDataTable
                     'searchable' => false
                 ],
                 __('app.id') => ['data' => 'id', 'name' => 'id', 'title' => __('app.id')],
-                // 'collaps_data' => ['orderable' => false, 'data' => 'collaps_data', 'defaultContent' => '',],
+                // 'collaps_data' => ['className' => 'dt-control', 'orderable' => false, 'data' => 'collaps_data', 'defaultContent' => '',],
                 // '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
+                // __('modules.taskCode') => ['data' => 'short_code', 'name' => 'task_short_code', 'title' => __('modules.taskCode')],
                 __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
                 __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
                 __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
