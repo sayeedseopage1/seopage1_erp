@@ -117,6 +117,17 @@ class TimeLogReportDataTable extends BaseDataTable
 
                 return $client_details;
             })
+          ->addColumn('project_manager', function ($row) {
+            	$pm = User::where('id',$row->project->pm_id)->first();
+            	
+            	$project_manager = '';
+
+                if (!is_null($row->project_id)) {
+                    $project_manager .= '<a href="' . route('employees.show', [$pm->id]) . '" class="text-darkest-grey ">' . $pm->name . '</a>';
+                }
+
+                return $project_manager;
+            })
             ->editColumn('task', function ($row) {
 
                 $task = '';
@@ -146,7 +157,7 @@ class TimeLogReportDataTable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['end_time', 'action', 'project', 'task', 'task_project', 'name', 'total_hours', 'total_minutes', 'check','client'])
+            ->rawColumns(['end_time', 'action', 'project', 'task', 'task_project', 'name', 'total_hours', 'total_minutes', 'check','client','project_manager'])
             ->removeColumn('project_id')
             ->removeColumn('task_id');
     }
@@ -287,6 +298,7 @@ class TimeLogReportDataTable extends BaseDataTable
             __('app.employee')  => ['data' => 'name', 'name' => 'users.name', 'exportable' => false, 'title' => __('app.employee')],
             __('app.name') => ['data' => 'employee_name', 'name' => 'name', 'visible' => false, 'title' => __('app.name')],
            __('app.client') => ['data' => 'client', 'name' => 'client', 'title' => __('Client')],
+            __('app.project_manager') => ['data' => 'project_manager', 'name' => 'project_manager', 'title' => __('Project Manager')],
             __('modules.timeLogs.startTime') => ['data' => 'start_time', 'name' => 'start_time', 'title' => __('modules.timeLogs.startTime')],
             __('modules.timeLogs.endTime') => ['data' => 'end_time', 'name' => 'end_time', 'title' => __('modules.timeLogs.endTime')],
             __('modules.timeLogs.totalHours') => ['data' => 'total_hours', 'name' => 'total_hours', 'title' => __('modules.timeLogs.totalHours')],
