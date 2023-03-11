@@ -292,7 +292,7 @@
         <div class="d-flex">
             <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
                 <button class="dropdown-toggle btn-success text-white" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal"
-                     aria-haspopup="true" aria-expanded="false">@lang('Accept Authorization')
+                     aria-haspopup="true" aria-expanded="false">@lang('Accept')
                    
                 </button>
                 @include('projects.modals.deliverablefinalauthorizationacceptmodal')
