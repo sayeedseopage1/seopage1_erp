@@ -132,7 +132,7 @@
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="amount">Project Budget <span style="color:red;">*</span></label>
-                              <input type="text" name="amount" value="{{$deal->actual_amount}}" class="form-control height-35 f-14" id="amount" placeholder="name@example.com" readonly>
+                              <input type="text" name="amount" value="{{$deal->actual_amount}}" class="form-control height-35 f-14" id="amount" placeholder="name@example.com">
                                   <label id="amountError" class="error text-danger" for="amount"></label>
                               </div>
                             </div>
@@ -211,7 +211,7 @@
 
                                 $output_final= (trim($output));
                                 $data= explode("  ", $output_final);
-                              //  dd(($data));
+                               // dd(($data));
 
                              ?>
 
@@ -219,32 +219,27 @@
                                @foreach($data as $message)
                               <div class="form-group">
 
-                              <label for="freelancer_message_link">Freelancer Message Link <span style="color:red;">*</span></label>
-                                <input type="text" value="{{$message}}" name="message_link[]" class="form-control height-35 f-14" id="freelancer_message_link" placeholder="Input here" required>
-                                  <label id="freelancerMessageLinkError" class="error text-danger" for="freelancer_message_link"></label>
+                              <label for="freelancer_message_link">Freelancer Message Link</label>
+                                <input type="text" value="{{$message}}" name="message_link[]" class="form-control height-35 f-14" id="message_link" placeholder="Input here">
                               </div>
                                 @endforeach
                             </div>
 
                             <div class="col-md-7 dynamic-field" id="dynamic-field-1">
-
-                                       <div class="row">
-                                           <div class="col-md-9 my-2">
-                                               <div class="form-group">
-                                                   <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]"/>
-                                               </div>
-                                           </div>
-                                       </div>
-                                   </div>
-
-                                   <div class="col-md-3 my-2 form-group append-buttons">
-                                       <div class="clearfix">
-                                           <button type="button" id="add-button" class="btn btn-secondary2 float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                           <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                       </div>
-                                   </div>
-
-
+                                <div class="row">
+                                    <div class="col-md-9 my-2">
+                                        <div class="form-group">
+                                            <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                              <div class="col-md-3 my-2 form-group append-buttons">
+                                  <div class="clearfix">
+                                      <button type="button" id="add-button" class="btn btn-secondary2 float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                      <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                  </div>
+                              </div>
                           </div>
                             <div class="row">
                                 <div class="col-md-12">
@@ -252,14 +247,12 @@
                                         <label class="text-dark-grey" data-label="true" for="description2Text">Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.)
                                             <sup class="mr-1">*</sup>
                                         </label>
-                                        <textarea name="description2" id="description2Text" class="form-control @error('description2') is-invalid @enderror">{!!$deal->description2!!}</textarea>
+                                        <textarea name="description2" id="description2Text" class="form-control">{!!$deal->description2!!}</textarea>
                                         <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
                                         <script>
                                             CKEDITOR.replace('description2');
                                         </script>
-                                        @error('description2')
-                                        <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <label id="description2Error" class="error text-danger" for="description2Text"></label>
                                     </div>
                                 </div>
                             </div>
@@ -269,13 +262,11 @@
                                         <label class="text-dark-grey" data-label="true" for="description3Text">Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency. It should include home, about, his services in one page, blog, and contact. The look and feel should be better than the references.)
                                             <sup class="mr-1">*</sup>
                                         </label>
-                                        <textarea name="description3" id="description3Text" class="form-control @error('description3') is-invalid @enderror">{!!$deal->description3!!}</textarea>
+                                        <textarea name="description3" id="description3Text" class="form-control">{!!$deal->description3!!}</textarea>
                                         <script>
                                             CKEDITOR.replace('description3');
                                         </script>
-                                        @error('description3')
-                                        <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <label id="description3Error" class="error text-danger" for="description3Text"></label>
                                     </div>
                                 </div>
                             </div>
@@ -285,13 +276,11 @@
                                         <label class="text-dark-grey" data-label="true" for="description4Text">Reference websites and what the references are for (Ex: ABC.com is for the color scheme. XYZ.com is for section layouts DEF.com is for header & footer styling. However, none of these can be copied)
                                             <sup class="mr-1">*</sup>
                                         </label>
-                                        <textarea name="description4" id="description3Text" class="form-control @error('description4') is-invalid @enderror">{!!$deal->description4!!}</textarea>
+                                        <textarea name="description4" id="description4Text" class="form-control">{!!$deal->description4!!}</textarea>
                                         <script>
                                             CKEDITOR.replace('description4');
                                         </script>
-                                        @error('description4')
-                                        <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <label id="description4Error" class="error text-danger" for="description4Text"></label>
                                     </div>
                                 </div>
                             </div>
@@ -301,13 +290,11 @@
                                         <label class="text-dark-grey" data-label="true" for="description5Text">Any particular focus/concern of the client (Ex: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work the way he wants.)
                                             <sup class="mr-1">*</sup>
                                         </label>
-                                        <textarea name="description5" id="description5Text" class="form-control @error('description5') is-invalid @enderror">{!!$deal->description5!!}</textarea>
+                                        <textarea name="description5" id="description5Text" class="form-control">{!!$deal->description5!!}</textarea>
                                         <script>
                                             CKEDITOR.replace('description5');
                                         </script>
-                                        @error('description5')
-                                        <div class="text-danger">{{ $message }}</div>
-                                        @enderror
+                                        <label id="description5Error" class="error text-danger" for="description5Text"></label>
                                     </div>
                                 </div>
                             </div>
@@ -316,13 +303,11 @@
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)
                                    <span style="color:red;">*</span></label>
-                                  <textarea name="description6" id="description6Text" class="form-control @error('description6') is-invalid @enderror">{!!$deal->description6!!}</textarea>
+                                  <textarea name="description6" id="description6Text" class="form-control ">{!!$deal->description6!!}</textarea>
                                   <script>
                                       CKEDITOR.replace('description6');
                                   </script>
-                                  @error('description6')
-                                  <div class="text-danger">{{ $message }}</div>
-                                  @enderror
+                                  <label id="description6Error" class="error text-danger" for="description6Text"></label>
                               </div>
                             </div>
                           </div>
@@ -331,13 +316,11 @@
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)
                                    <span style="color:red;">*</span></label>
-                                  <textarea name="description7" id="description7Text" class="form-control @error('description7') is-invalid @enderror">{!!$deal->description7!!}</textarea>
+                                  <textarea name="description7" id="description7Text" class="form-control">{!!$deal->description7!!}</textarea>
                                   <script>
                                       CKEDITOR.replace('description7');
                                   </script>
-                                  @error('description7')
-                                  <div class="text-danger">{{ $message }}</div>
-                                  @enderror
+                                  <label id="description7Error" class="error text-danger" for="description7Text"></label>
                               </div>
                             </div>
                           </div>
@@ -346,13 +329,11 @@
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">If there is any cross-departmental work involved in this project (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web development)
                                    <span style="color:red;">*</span></label>
-                                  <textarea name="description8" id="description8Text" class="form-control @error('description8') is-invalid @enderror">{!!$deal->description8!!}</textarea>
+                                  <textarea name="description8" id="description8Text" class="form-control">{!!$deal->description8!!}</textarea>
                                   <script>
                                       CKEDITOR.replace('description8');
                                   </script>
-                                  @error('description8')
-                                  <div class="text-danger">{{ $message }}</div>
-                                  @enderror
+                                  <label id="description8Error" class="error text-danger" for="description8Text"></label>
                               </div>
                             </div>
                           </div>
@@ -361,19 +342,17 @@
                               <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Any other notes for the project manager/technical team
                                    <span style="color:red;">*</span></label>
-                                  <textarea name="description9" id="description9Text" class="form-control @error('description9') is-invalid @enderror">{!!$deal->description9!!}</textarea>
+                                  <textarea name="description9" id="description9Text" class="form-control">{!!$deal->description9!!}</textarea>
                                   <script>
                                       CKEDITOR.replace('description9');
                                   </script>
-                                  @error('description9')
-                                  <div class="text-danger">{{ $message }}</div>
-                                  @enderror
+                                  <label id="description9Error" class="error text-danger" for="description9Text"></label>
                               </div>
                             </div>
                           </div>
                           <br>
                           <div class="d-flex justify-content-center">
-                            <button class="btn btn-primary" type="submit" id="updateBtn">Update Deal Creation</button>
+                            <button class="btn btn-primary" type="submit" id="updateBtn"><span class="btn-txt">Update Deal Creation</span></button>
                           </div>
                         </form>
                     </div>
@@ -392,7 +371,7 @@
     </div>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+{{--    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>--}}
     <script type="text/javascript">
     function myFunction{{$deal->hash}}() {
       // Get the text field
@@ -409,180 +388,184 @@
       alert("Copied the text: " + copyText.value);
     }
     $(document).ready(function() {
-      fetchmilestone();
-      function fetchmilestone()
-      {
-        $.ajax({
-          type: "GET",
-          url: "/deals/milestone-get/{{$project_id->id}}",
+        fetchmilestone();
+        function fetchmilestone()
+        {
+            $.ajax({
+                type: "GET",
+                url: "/deals/milestone-get/{{$project_id->id}}",
 
-          dataType: "json",
-          success: function (response){
-          //  console.log(response.milestones);
-            let spans= '';
+                dataType: "json",
+                success: function (response){
+                    //  console.log(response.milestones);
+                    let spans= '';
 
-            response.milestones.forEach((item)=> {
-              spans += `<span class="badge badge-light mr-2"><a href="javascript:;" data-milestone-id="${item.id}" class="taskView milestone-detail text-darkest-grey f-w-500" title="${item.milestone_title}">${item.milestone_title.substr(0, 20)} (${item.actual_cost}) </a><button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
+                    response.milestones.forEach((item)=> {
+                        spans += `<span class="badge badge-light mr-2"><a href="javascript:;" data-milestone-id="${item.id}" class="taskView milestone-detail text-darkest-grey f-w-500" title="${item.milestone_title}">${item.milestone_title.substr(0, 20)} (${item.actual_cost}) </a><button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
+                    });
+
+                    document.querySelector('#milestone_value').innerHTML= spans;
+
+                }
+            });
+        }
+
+        $(document).on('click',' .edit_milestone',function(e){
+            e.preventDefault();
+            var milestone_id = $(this).val();
+            //console.log(milestone_id);
+            $('#editmilestone').modal('show');
+            $.ajax({
+                type: "GET",
+                url: "/deals/edit-milestone/"+milestone_id,
+
+                success: function(response){
+                    //console.log(response);
+                    if (response.status == 404) {
+                        $('#success_message').html("");
+                        $('#success_message').addClass('alert alert-danger');
+                        $('#success_message').text(response.message);
+                    }else {
+                        $('#title').val(response.milestone.milestone_title);
+
+                        $('#cost').val(response.milestone.actual_cost);
+                        $('#summary').val(response.milestone.summary);
+                        $('#milestone_id').val(milestone_id);
+                    }
+                }
             });
 
-            document.querySelector('#milestone_value').innerHTML= spans;
-
-          }
         });
-      }
 
-      $(document).on('click',' .edit_milestone',function(e){
-        e.preventDefault();
-        var milestone_id = $(this).val();
-        //console.log(milestone_id);
-        $('#editmilestone').modal('show');
-        $.ajax({
-          type: "GET",
-          url: "/deals/edit-milestone/"+milestone_id,
+        $(document).on('click',' .update_milestone',function(e){
+            e.preventDefault();
+            var summary = CKEDITOR.instances.summary2.getData();
 
-          success: function(response){
-            //console.log(response);
-            if (response.status == 404) {
-              $('#success_message').html("");
-              $('#success_message').addClass('alert alert-danger');
-              $('#success_message').text(response.message);
-            }else {
-              $('#title').val(response.milestone.milestone_title);
-
-                $('#cost').val(response.milestone.actual_cost);
-              $('#summary').val(response.milestone.summary);
-              $('#milestone_id').val(milestone_id);
+            var milestone_id = $('#milestone_id').val();
+            var data= {
+                'title' : $('#title').val(),
+                'cost' : $('#cost').val(),
+                'summary' : summary,
             }
-          }
-        });
-
-      });
-
-      $(document).on('click',' .update_milestone',function(e){
-        e.preventDefault();
-
-        var milestone_id = $('#milestone_id').val();
-        var data= {
-          'title' : $('#title').val(),
-          'cost' : $('#cost').val(),
-          'summary' : $('#summary').val(),
-        }
-        $.ajaxSetup({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-        });
-        $.ajax({
-          type: "PUT",
-          url: "/deals/update-milestone/"+milestone_id,
-          data: data,
-          dataType: "json",
-          success: function(response){
-          //  console.log(response);
-            if (response.status == 400) {
-              $('#updateform_errList').html("");
-              $('#updateform_errList').addClass('alert alert-danger');
-              $.each(response.errors, function (key, err_values){
-                $('#updateform_errList').append('<li>'+err_values+'</li>');
-              });
-            }
-            else if (response.status == 400)
-            {
-              $('#updateform_errList').html("");
-              $('#success_message').addClass('alert alert-success');
-              $('#success_message').text(response.message);
-            }
-
-            else{
-              $('#updateform_errList').html("");
-              $('#success_message').html("");
-              $('#success_message').addClass('alert alert-success');
-              $('#success_message').text(response.message);
-              $('#editmilestone').modal('hide');
-                fetchmilestone();
-            }
-          }
-        });
-      });
-
-      $(document).on('click','.delete_milestone',function(e){
-        e.preventDefault();
-        var milestone_id= $(this).val();
-          //console.log(milestone_id);
-        $('#delete_milestone_id').val(milestone_id);
-
-        $('#deletemilestone').modal('show');
-      });
-      $(document).on('click','.delete_milestone_btn',function(e){
-        e.preventDefault();
-        $(this).text("Deleting");
-        var milestone_id= $('#delete_milestone_id').val();
-      //  console.log(milestone_id);
-        $.ajaxSetup({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-        });
-        $.ajax({
-          type: "DELETE",
-          url: "/deals/delete-milestone/"+milestone_id,
-          success: function (response){
-            //console.log(response);
-              $('#success_message').addClass('alert alert-danger');
-            $('#success_message').text(response.message);
-            $('#deletemilestone').modal('hide');
-              $('delete_milestone_btn').text("Yes Delete");
-              fetchmilestone();
-          }
-
-        });
-
-      });
-
-      $(document).on('click','.add_milestone',function(e){
-
-      e.preventDefault();
-      //console.log("test");
-      var data= {
-        'title': $('.title').val(),
-        'cost': $('.cost').val(),
-        'summary': $('.summary').val(),
-        //'project_id': document.querySelector('.project_id').value,
-        'project_id': document.getElementById("project_id").value,
-          'original_currency_id': document.getElementById("original_currency_id").value,
-      }
-      //console.log(data);
-      $.ajaxSetup({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-      });
-      $.ajax({
-        type: "POST",
-        url: "{{route('add-milestone')}}",
-        data: data,
-        dataType: "json",
-        success: function (response){
-          if (response.status == 400) {
-            $('#saveform_errList').html("");
-            $('#saveform_errList').addClass('alert alert-danger');
-            $.each(response.errors, function (key, err_values){
-              $('#saveform_errList').append('<li>'+err_values+'</li>');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
-          }
-          else {
-              $('#saveform_errList').html("");
-              $('#success_message').addClass('alert alert-success');
-              $('#success_message').text(response.message);
-              $('#milestoneaddmodal').modal('hide');
-              $('#milestoneaddmodal').find('input').val("");
-              document.querySelector('#summary').value= '';
-                fetchmilestone();
+            $.ajax({
+                type: "PUT",
+                url: "/deals/update-milestone/"+milestone_id,
+                data: data,
+                dataType: "json",
+                success: function(response){
+                    //  console.log(response);
+                    if (response.status == 400) {
+                        $('#updateform_errList').html("");
+                        $('#updateform_errList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_values){
+                            $('#updateform_errList').append('<li>'+err_values+'</li>');
+                        });
+                    }
+                    else if (response.status == 400)
+                    {
+                        $('#updateform_errList').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                    }
 
-          }
-        }
-      });
-    });
+                    else{
+                        $('#updateform_errList').html("");
+                        $('#success_message').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#editmilestone').modal('hide');
+                        fetchmilestone();
+                    }
+                }
+            });
+
+
+        });
+
+        $(document).on('click','.delete_milestone',function(e){
+            e.preventDefault();
+            var milestone_id= $(this).val();
+            //console.log(milestone_id);
+            $('#delete_milestone_id').val(milestone_id);
+
+            $('#deletemilestone').modal('show');
+        });
+        $(document).on('click','.delete_milestone_btn',function(e){
+            e.preventDefault();
+            $(this).text("Deleting");
+            var milestone_id= $('#delete_milestone_id').val();
+            //  console.log(milestone_id);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "DELETE",
+                url: "/deals/delete-milestone/"+milestone_id,
+                success: function (response){
+                    //console.log(response);
+                    $('#success_message').addClass('alert alert-danger');
+                    $('#success_message').text(response.message);
+                    $('#deletemilestone').modal('hide');
+                    $('delete_milestone_btn').text("Yes Delete");
+                    fetchmilestone();
+                }
+
+            });
+
+        });
+
+        $(document).on('click','.add_milestone',function(e){
+
+            e.preventDefault();
+            var summary = CKEDITOR.instances.summary2.getData();
+            //console.log("test");
+            var data= {
+                'title': $('.title').val(),
+                'cost': $('.cost').val(),
+                'summary': summary,
+                //'project_id': document.querySelector('.project_id').value,
+                'project_id': document.getElementById("project_id").value,
+                'original_currency_id': document.getElementById("original_currency_id").value,
+            }
+            //console.log(data);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{route('add-milestone')}}",
+                data: data,
+                dataType: "json",
+                success: function (response){
+                    if (response.status == 400) {
+                        $('#saveform_errList').html("");
+                        $('#saveform_errList').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_values){
+                            $('#saveform_errList').append('<li>'+err_values+'</li>');
+                        });
+                    }
+                    else {
+                        $('#saveform_errList').html("");
+                        $('#success_message').addClass('alert alert-success');
+                        $('#success_message').text(response.message);
+                        $('#milestoneaddmodal').modal('hide');
+                        $('#milestoneaddmodal').find('input').val("");
+                        document.querySelector('#summary').value= '';
+                        fetchmilestone();
+
+                    }
+                }
+            });
+        });
 
     });
     $('body').on('click', '.milestone-detail', function() {
@@ -595,6 +578,88 @@
 
 
     </script>
+    <!--EDIT DEAL DETAILS START-->
+    <script>
+        $('#updateBtn').click(function(e){
+            e.preventDefault();
+            // alert('ok');
+            var description2 = CKEDITOR.instances.description2Text.getData();
+            var description3 = CKEDITOR.instances.description3Text.getData();
+            var description4 = CKEDITOR.instances.description4Text.getData();
+            var description5 = CKEDITOR.instances.description5Text.getData();
+            var description6 = CKEDITOR.instances.description6Text.getData();
+            var description7 = CKEDITOR.instances.description7Text.getData();
+            var description8 = CKEDITOR.instances.description8Text.getData();
+            var description9 = CKEDITOR.instances.description9Text.getData();
+            // console.log(description3);
+            var message_links = document.getElementsByName("message_link[]");
+            var message_links_values = [];
+            for (var i = 0; i < message_links.length; i++) {
+                message_links_values.push(message_links[i].value);
+            }
+            var data= {
+                '_token': "{{ csrf_token() }}",
+                'project_name': document.getElementById("project_name").value,
+                'deadline': document.getElementById("deadline").value,
+                'original_currency_id': document.getElementById("original_currency_id").value,
+                'amount': document.getElementById("amount").value,
+                'client_name': document.getElementById("client_name").value,
+                'organization': document.getElementById("organization").value,
+                'client_email': document.getElementById("client_email").value,
+                'profile_link': document.getElementById("profile_link").value,
+                'message_link': message_links_values,
+                'description2': description2,
+                'description3': description3,
+                'description4': description4,
+                'description5': description5,
+                'description6': description6,
+                'description7': description7,
+                'description8': description8,
+                'description9': description9,
+                'id': '{{$deal->id}}',
+            }
+            // console.log(data);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{route('update-deal-details')}}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    $('.error').html("");
+                    $(location).prop('href', '{{url('/account/contracts/')}}');
+                    toastr.success('Deal Updated Successfully');
+                },
+                error: function(error) {
+                    if (error) {
+                        $('#projectNameError').html(error.responseJSON.errors.project_name);
+                        $('#deadlineError').html(error.responseJSON.errors.deadline);
+                        $('#currencyError').html(error.responseJSON.errors.original_currency_id);
+                        $('#profileLinkError').html(error.responseJSON.errors.profile_link);
+                        $('#description2Error').html(error.responseJSON.errors.description2);
+                        $('#description3Error').html(error.responseJSON.errors.description3);
+                        $('#description4Error').html(error.responseJSON.errors.description4);
+                        $('#description5Error').html(error.responseJSON.errors.description5);
+                        $('#description6Error').html(error.responseJSON.errors.description6);
+                        $('#description7Error').html(error.responseJSON.errors.description7);
+                        $('#description8Error').html(error.responseJSON.errors.description8);
+                        $('#description9Error').html(error.responseJSON.errors.description9);
+                        if (error.responseJSON.errors.milestone_value) {
+                            {{--$(location).prop('href', '{{url('/account/contracts/')}}');--}}
+                            toastr.error('Please add a milestone!');
+                        }
+                    }
+
+                }
+            });
+        });
+
+    </script>
+    <!--ENDI DEAL DETAILS END-->
     @push('scripts')
 
     <script>
@@ -671,8 +736,9 @@
         const button = document.getElementById('updateBtn');
         const projectName = document.getElementById('project_name');
         const deadline = document.getElementById('deadline');
-        const profile_link = document.getElementById('profile_link');
-        const freelancer_message_link = document.getElementById('freelancer_message_link');
+
+        const currency  = document.getElementById('original_currency_id');
+
 
 
         form.addEventListener('input', () => {
@@ -685,29 +751,27 @@
             }
             if (deadline.value.trim() === '') {
                 valid = false;
-                deadlineError.textContent = 'Please select deadline!';
+
+                deadlineError.textContent = 'Please select project deadline from Freelancer.com!';
             } else {
                 deadlineError.textContent = '';
             }
-           
-            if (profile_link.value.trim() === '') {
+            if (currency.value.trim() === '') {
+
                 valid = false;
-                profileLinkError.textContent = 'Please enter correct project link (Freelancer.com) with https!';
+                currencyError.textContent = 'Please select correct currency!';
             } else {
-                profileLinkError.textContent = '';
+                currencyError.textContent = '';
             }
-            if (freelancer_message_link.value.trim() === '') {
-                valid = false;
-                freelancerMessageLinkError.textContent = 'Please enter correct message link (Freelancer.com) with https!';
-            } else {
-                freelancerMessageLinkError.textContent = '';
-            }
-            button.disabled = !valid;
         });
     </script>
     <script>
         flatpickr("#deadline", {
             dateFormat: "Y-m-d",
+        });
+        $("#updateBtn").on('click',function() {
+            $("#updateBtn").attr("disabled", true);
+            $(".btn-txt").text("Processing ...");
         });
     </script>
     @endpush

@@ -562,7 +562,7 @@ class ContractController extends AccountBaseController
     }
     public function storeMilestone(Request $request)
     {
-        //dd($request);
+//        dd($request->all());
         $total_value = $request->input('another_value') * 2;
 
         $project = Project::where('id', $request->project_id)->first();
@@ -631,6 +631,7 @@ class ContractController extends AccountBaseController
     }
     public function updateMilestone(Request $request, $id)
     {
+//        dd($request->all());
 
         $projectmilestone = ProjectMilestone::where('id', $id)->first();
         $project_id = Project::where('id', $projectmilestone->project_id)->first();
@@ -699,11 +700,9 @@ class ContractController extends AccountBaseController
     }
     public function storedealDetails(Request $request)
     {
-        //  dd($request->client_username);
+//        dd($request->message_link);
         $validated = $request->validate([
-            'project_name' => 'required',
-            'client_name' => 'required',
-
+            'message_link' => 'required',
             'description2' => 'required',
             'description3' => 'required',
             'description4' => 'required',
@@ -712,19 +711,21 @@ class ContractController extends AccountBaseController
             'description7' => 'required',
             'description8' => 'required',
             'description9' => 'required',
-
-
-            'message_link' => 'required',
-            'profile_link'=>'required',
-            'deadline'=>'required',
-
+        ], [
+            'description2.required' => 'This field is required!',
         ]);
         //dd("hello");
         $project_milestone= Project::where('deal_id',$request->id)->first();
         $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
         if ($milestone == null) {
-          //Toastr::error('Please add a Milestone', 'Failed', ["positionClass" => "toast-top-right"]);
-         return back()->with('error','Please add a Milestone');
+            return response()->json([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "milestone_value" => [
+                        "Milestone not found!!!."
+                    ]
+                ]
+            ], 422);
         }
         DB::beginTransaction();
 
@@ -945,8 +946,9 @@ class ContractController extends AccountBaseController
                       Toastr::error('Action Failed', 'Error', ["positionClass" => "toast-top-right", 'redirectUrl']);
                       return back();
                   }
-                    Toastr::success('Deal creation completed successfully!', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
-                    return redirect('/account/contracts');
+//                    Toastr::success('Deal creation completed successfully!', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
+//                    return redirect('/account/contracts');
+                    return response()->json(['message' => 'Deal creation completed successfully']);
 
 
 
@@ -955,6 +957,7 @@ class ContractController extends AccountBaseController
     {
       //  dd($request->all());
         $validator = $request->validate([
+            'profile_link' => 'required|url',
             'description2' => 'required',
             'description3' => 'required',
             'description4' => 'required',
@@ -963,24 +966,22 @@ class ContractController extends AccountBaseController
             'description7' => 'required',
             'description8' => 'required',
             'description9' => 'required',
-    ], [
-        'description2.required' => 'This field is required !!',
-        'description3.required' => 'This field is required !!',
-        'description4.required' => 'This field is required !!',
-        'description5.required' => 'This field is required !!',
-        'description6.required' => 'This field is required !!',
-        'description7.required' => 'This field is required !!',
-        'description8.required' => 'This field is required !!',
-        'description9.required' => 'This field is required !!',
-    ]);
-      //dd("hello");
+        ]);
+//      dd("hello");
       $project_milestone= Project::where('deal_id',$request->id)->first();
       $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
-      if ($milestone == null) {
-        Toastr::error('Please add a Milestone', 'Failed', ["positionClass" => "toast-top-right"]);
-       return back()->with('error','Please add a Milestone');
-      }
-      DB::beginTransaction();
+//      dd($milestone);
+        if ($milestone == null) {
+            return response()->json([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "milestone_value" => [
+                        "Milestone not found!!!."
+                    ]
+                ]
+            ], 422);
+        } else {
+    DB::beginTransaction();
 
               try {
                 $deal = Deal::find($request->id);
@@ -1017,6 +1018,7 @@ class ContractController extends AccountBaseController
                 $deal->description8 = $request->description8;
                 $deal->description9 = $request->description9;
                 $deal->updated_by = Auth::id();
+//                dd($deal);
                 $deal->save();
                 $project_id = Project::where('deal_id', $request->id)->first();
                 $project = Project::find($project_id->id);
@@ -1189,8 +1191,12 @@ class ContractController extends AccountBaseController
                 return back();
                 // something went wrong
               }
-            Toastr::success('Deal updated successfully', 'success', ["positionClass" => "toast-top-right"]);
-          return redirect('/account/contracts/' . $deal->id)->with('messages.contractAdded');
+
+            return response()->json(['message' => 'Deal Updated Successfully']);
+        }
+//          return redirect('/account/contracts/' . $deal->id)->with('messages.contractAdded');
+
+
 
     }
     public function DealUrl($id)
