@@ -326,6 +326,8 @@ $addLeadNotePermission = user()->permission('add_lead_note');
             url: "{{route('store-lead')}}",
             data: data,
             dataType: "json",
+            disableButton: true,
+                buttonSelector: "#submit-button",
             success: function (response) {
                 $('#store-lead').trigger("reset");
                 $('.error').html("");

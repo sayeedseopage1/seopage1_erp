@@ -559,7 +559,7 @@
                         $('#success_message').text(response.message);
                         $('#milestoneaddmodal').modal('hide');
                         $('#milestoneaddmodal').find('input').val("");
-                        document.querySelector('#summary').value= '';
+                        document.querySelector('#summary2').value= '';
                         fetchmilestone();
 
                     }
