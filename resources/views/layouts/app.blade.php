@@ -528,9 +528,9 @@
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
-    'csrfToken' => csrf_token(),
-    'user' => user(),
-]) !!};
+            'csrfToken' => csrf_token(),
+            'user' => user(),
+        ]) !!};
     </script>
 
     @stack('scripts')
@@ -888,18 +888,25 @@
             var channel = pusher.subscribe('lead-updated-channel');
             
             channel.bind('lead-updated', function(data) {
-                var options = {
-                    title: data.title,
-                    options: {
-                        body: data.body,
-                        icon: '{{URL::asset("user-uploads/app-logo/c86157272a41bea229e0dcbe2ff9715b.png")}}',
-                        lang: 'en-US',
-                        // onClick: myFunction
-                    }
-                };
-                console.log(options);
-                $("#easyNotify").easyNotify(options);
+                if (data.role_id == window.Laravel.user.role_id) {
+                    console.log('role done');
+                    var options = {
+                        title: data.title,
+                        options: {
+                            body: data.body,
+                            icon: '{{URL::asset("user-uploads/app-logo/c86157272a41bea229e0dcbe2ff9715b.png")}}',
+                            lang: 'en-US',
+                            onClick: function() {
+                                window.location.href = data.redirectUrl;
+                            }
+                        }
+                    };
+                    
+                    $("#easyNotify").easyNotify(options);
+                }
+
             });
+
         })
     </script>
 </body>
