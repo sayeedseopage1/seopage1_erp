@@ -712,7 +712,14 @@ class ContractController extends AccountBaseController
             'description8' => 'required',
             'description9' => 'required',
         ], [
-            'description2.required' => 'This field is required!',
+            'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
+            'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
+            'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
+            'description5.required' => 'Client\'s focus or concerning points are required. Please share as detailed explanation as you can!',
+            'description6.required' => 'Login details are required. Please provide all the access details of the project!',
+            'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
+            'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
+            'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
         ]);
         //dd("hello");
         $project_milestone= Project::where('deal_id',$request->id)->first();
@@ -956,8 +963,8 @@ class ContractController extends AccountBaseController
     public function updatedealDetails(Request $request)
     {
 //        dd($request->all());
-        $validator = $request->validate([
-            'profile_link' => 'required|url',
+        $validated = $request->validate([
+            'message_link' => 'required',
             'description2' => 'required',
             'description3' => 'required',
             'description4' => 'required',
@@ -966,6 +973,15 @@ class ContractController extends AccountBaseController
             'description7' => 'required',
             'description8' => 'required',
             'description9' => 'required',
+        ], [
+            'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
+            'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
+            'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
+            'description5.required' => 'Client\'s focus or concerning points are required. Please share as detailed explanation as you can!',
+            'description6.required' => 'Login details are required. Please provide all the access details of the project!',
+            'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
+            'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
+            'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
         ]);
 //      dd("hello");
       $project_milestone= Project::where('deal_id',$request->id)->first();

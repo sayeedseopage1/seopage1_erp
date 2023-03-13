@@ -375,4 +375,7 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
         // enableTime: true,
         dateFormat: "Y-m-d",
     });
+    $("#updateBtn").on('click',function() {
+        $("#updateBtn").html("Processing...");
+    });
 </script>
