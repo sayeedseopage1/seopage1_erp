@@ -736,7 +736,9 @@
         const button = document.getElementById('updateBtn');
         const projectName = document.getElementById('project_name');
         const deadline = document.getElementById('deadline');
+
         const currency  = document.getElementById('original_currency_id');
+
 
 
         form.addEventListener('input', () => {
@@ -749,11 +751,13 @@
             }
             if (deadline.value.trim() === '') {
                 valid = false;
+
                 deadlineError.textContent = 'Please select project deadline from Freelancer.com!';
             } else {
                 deadlineError.textContent = '';
             }
             if (currency.value.trim() === '') {
+
                 valid = false;
                 currencyError.textContent = 'Please select correct currency!';
             } else {

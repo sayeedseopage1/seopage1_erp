@@ -852,7 +852,7 @@ if ($pm_count < 2) {
 
         $project->currency_id = 1;
 
-        $project->hours_allocated = $request->hours_allocated;
+        $project->hours_allocated = 0;
         $project->status = 'in progress';
         $project->project_status= 'Accepted';
         //$project->added_by= Auth::id();
