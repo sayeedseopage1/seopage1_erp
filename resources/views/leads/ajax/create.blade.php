@@ -162,11 +162,11 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <input type="number" class="form-control border rounded p-2 height-35 f-14 error" name="bidding_minutes" min="1" id="bidding_minutes" placeholder="Minutes" autocomplete="off">
+                                    <input type="number" class="form-control border rounded p-2 height-35 f-14 error" name="bidding_minutes" min="1" id="bidding_minutes" placeholder="Minimum" autocomplete="off">
                                     <label id="biddingMinutesError" class="error" for="bidding_minutes"></label>
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="number" name="bidding_seconds" class="form-control height-35 f-14 border rounded p-2 error" id="bidding_seconds" placeholder="Seconds" autocomplete="off">
+                                    <input type="number" name="bidding_seconds" class="form-control height-35 f-14 border rounded p-2 error" id="bidding_seconds" placeholder="Maximum" autocomplete="off">
                                     <label id="biddingSecondsError" class="error" for="bidding_seconds"></label>
                                 </div>
                             </div>

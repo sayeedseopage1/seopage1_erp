@@ -164,7 +164,7 @@ class LeadController extends AccountBaseController
         ;
       Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
         return redirect('/account/deals/'.$deal->id);
-
+        
 
 
     }
@@ -485,9 +485,7 @@ class LeadController extends AccountBaseController
     public function storeLead(Request $request)
     {
 
-//        dd($request->all());
-
-        $request->validate([
+      $validator = Validator::make($request->all(), [
             'client_name' => 'required|max:255',
             'country' => 'required',
             'project_link' => 'required|url',
@@ -500,11 +498,16 @@ class LeadController extends AccountBaseController
             'bidding_seconds' => 'required',
             'description' => 'required',
             'cover_letter' => 'required',
-            'insight_screenshot' => 'required|url',
-            'projectpage_screenshot' => 'required|url',
+            'insight_screenshot' => 'required',
+            'projectpage_screenshot' => 'required',
         ]);
 
-
+        if ($validator->fails()) {
+            return redirect('account/leads/create')
+                        ->withErrors($validator)
+                        ->withInput();
+          //  dd('Failed');
+        };
 
       if (Auth::user()->role_id == 7) {
 
@@ -552,7 +555,6 @@ class LeadController extends AccountBaseController
       $lead->bidding_minutes= $request->bidding_minutes;
       $lead->bidding_seconds= $request->bidding_seconds;
       $lead->cover_letter= $request->cover_letter;
-      $lead->explanation= $request->explanation;
       $lead->insight_screenshot= $request->insight_screenshot;
       $lead-> bidpage_screenshot= $request-> bidpage_screenshot;
       $lead->projectpage_screenshot =$request->projectpage_screenshot;
@@ -565,12 +567,17 @@ class LeadController extends AccountBaseController
       $lead_agent->last_updated_by= Auth::id();
       $lead_agent->save();
 
+        $this->triggerPusher('lead-updated-channel', 'lead-updated', [
+            'user_id' => $this->user->id, 
+            'task_id' => '2',
+            'title' => 'test task notification',
+            'body' => 'test body description are showing'
+        ]);
+
       if ($request->get('custom_fields_data')) {
           $lead->updateCustomFieldData($request->get('custom_fields_data'));
       }
-        return response()->json([
-            'success'=>'Lead Add Successfully'
-        ],200);
+      return redirect('/account/leads/')->with('messages.LeadAddedUpdate');
 
 
 
@@ -578,22 +585,6 @@ class LeadController extends AccountBaseController
     public function updateLead(Request $request)
     {
       //dd(Auth::id());
-        $request->validate([
-            'client_name' => 'required|max:255',
-            'country' => 'required',
-            'project_link' => 'required|url',
-            'deadline' => 'required|date',
-            'original_currency_id' => 'required',
-            'bid_value' => 'required',
-            'bid_value2' => 'required',
-            'value' => 'required',
-            'bidding_minutes' => 'required',
-            'bidding_seconds' => 'required',
-            'description' => 'required',
-            'cover_letter' => 'required',
-            'insight_screenshot' => 'required|url',
-            'projectpage_screenshot' => 'required|url',
-        ]);
 
       $lead = Lead::find($request->id);
       $lead->client_name= $request->client_name;
@@ -616,15 +607,15 @@ class LeadController extends AccountBaseController
       $lead->currency_id= 1;
       $lead->bidding_minutes= $request->bidding_minutes;
       $lead->bidding_seconds= $request->bidding_seconds;
-      $lead->cover_letter= $request->cover_letter;
-      $lead->explanation= $request->explanation;
+      //$lead->cover_letter= $request->cover_letter;
       $lead->insight_screenshot= $request->insight_screenshot;
       $lead-> bidpage_screenshot= $request-> bidpage_screenshot;
       $lead->projectpage_screenshot =$request->projectpage_screenshot;
     //  $lead->agent_id =Auth::id();
       $lead->save();
-      Toastr::success('Lead Update Successfully', '', ["positionClass" => "toast-top-right", 'redirectUrl']);
       return redirect('/account/leads/')->with('messages.LeadAddedUpdate');
+
+
 
     }
     public function DealStage($id)
@@ -695,7 +686,7 @@ class LeadController extends AccountBaseController
      * @return array|void
      * @throws \Froiden\RestAPI\Exceptions\RelatedResourceNotFoundException
      */
-    public function store(StoreRequest $request)
+    /*public function store(StoreRequest $request)
     {
       //dd($request);
         $this->addPermission = user()->permission('add_lead');
@@ -767,7 +758,7 @@ class LeadController extends AccountBaseController
 
         return Reply::successWithData(__('messages.LeadAddedUpdated'), ['redirectUrl' => $redirectUrl]);
 
-    }
+    }*/
 
     /**
      * Show the form for editing the specified resource.
