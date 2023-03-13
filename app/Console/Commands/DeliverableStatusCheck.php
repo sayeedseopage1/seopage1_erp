@@ -11,6 +11,7 @@ use Carbon\Carbon;
 // use App\Notifications\DueDateNotification;
 use App\Models\PMProject;
 use App\Models\ContractSign;
+use App\Models\Deal;
 
 class DeliverableStatusCheck extends Command
 {
@@ -58,17 +59,28 @@ class DeliverableStatusCheck extends Command
                   if($project->status != 'finished' || $project->status != 'canceled')
                   {
                     $pm_project= PMProject::where('project_id',$project->id)->first();
-                    if($pm_project->reason == null)
+                    
+                    if($pm_project->reason == null )
                     {
+                     // $deal= Deal::where('deal_id',$project->deal_id)->first();
                       
-                    $accept_date= $project->updated_at;
+                    $accept_date= $project->start_date;
                     $current_time= Carbon::now();
                     $diff_in_minutes = $current_time->diffInMinutes($accept_date);
-                    if($diff_in_minutes >= 1440)
+                     
+                    if($diff_in_minutes >= 1440 )
                     {
-                      $pmproject_update= PMProject::find($pm_project->id);
+                     // dd("true");
+                       $project_id = Project::where('id',$pm_project->project_id)->first();
+                      if($project_id->deliverable_authorization == 0)
+                      {
+                       $pmproject_update= PMProject::find($pm_project->id);
                       $pmproject_update->deliverable_status= 0;
                       $pmproject_update->save();
+                        
+                       // $pm_p = PmProject::where('id',316)->first();
+                      }
+                     
     
                     }
                     }
