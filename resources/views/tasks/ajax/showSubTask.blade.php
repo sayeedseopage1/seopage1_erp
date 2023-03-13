@@ -7,7 +7,6 @@
 				<x-table class="border-0 pb-3 admin-dash-table table-hover">
 					@if(Auth::user()->role_id == 1)
 						<x-slot name="thead">
-							<th scope="col">#</th>
 							<th scope="col">Task name</th>
 							<th scope="col">Parent task</th>
 							<th scope="col">Client Name</th>
@@ -16,25 +15,22 @@
 							<th scope="col">Assigned By</th>
 							<th scope="col">Start date</th>
 							<th scope="col">Due date</th>
-							<th scope="col">Complete date</th>
 							<th scope="col">Estimated time</th>
 							<th scope="col">Hours Logged</th>
 							<th scope="col">Task Status</th>
 							<th scope="col">Parent Task Progress</th>
 							<th scope="col">Action</th>
 						</x-slot>
-
 						@forelse($tasks as $key=>$value)
 						<tr id="row-{{ $value->id }}">
-							<td><a href="{{route('tasks.show', $value->task_id)}}">{{$value->id}}</a></td>
 							<td><a href="{{route('tasks.show', $value->task_id)}}">{{$value->title}}</a></td>
 							<td><a href="{{route('tasks.show', $value->task_id)}}">{{$task->heading}}</a></td>
 							<td><a href="{{route('tasks.show', $value->task_id)}}">{{$project->client->name}}</a></td>
 							<td><a href="{{route('tasks.show', $value->task_id)}}">{{$project->project_name}}</a></td>
 							<td><a href="{{route('employees.show', $value->assignedTo->id)}}">{{$value->assignedTo->name}}</a></td>
 							<td><a href="{{route('employees.show', $value->addedBy->id)}}">{{$value->addedBy->name}}</a></td>
-							<td>{{$value->start_date->format('Y-m-d') ?? '--'}}</td>
-							<td>{{$value->due_date->format('Y-m-d') ?? '--'}}</td>
+							<td>{{$value->start_date->format('Y-m-d')}}</td>
+							<td>{{$value->due_date->format('Y-m-d')}}</td>
 							<td>{{$task->estimate_hours.' hours '.$task->estimate_minutes.' minutes'}}</td>
 							<td>
 								@php

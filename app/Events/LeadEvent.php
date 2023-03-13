@@ -25,5 +25,13 @@ class LeadEvent
         $this->notifyUser = $notifyUser;
         $this->notificationName = $notificationName;
     }
+    public function broadcastOn()
+    {
+        return ['lead-updated-channel'];
+    }
 
+    public function broadcastAs()
+    {
+        return 'lead-updated';
+    }
 }

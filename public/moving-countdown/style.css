@@ -1,0 +1,102 @@
+.timer-card {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+/*    transform: translate(-50%, -50%); */
+/*    transition: transform 0.2s ease-out; */
+    width: 300px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    cursor: grab;
+    padding: 0px 10px;
+    height: 400px;
+    overflow-y: scroll;
+    z-index: 9999;
+}
+
+.innercard {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 290px;
+    height: 190px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+    /* overflow: hidden; */
+    cursor: grab;
+    padding: 20px;
+}
+  
+.timer-card:hover {
+    cursor: grabbing;
+}
+
+.card-2 {
+    position: center;
+    background-color: #fff;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.header {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    text-align: center;
+}
+  
+.content {
+/*    padding: 10px;*/
+    text-align: center;
+}
+
+.timer-count {
+    font-size: 28px;
+    color: #ff0000;
+}
+
+.minimize-button {
+    font-size: 20px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: absolute;
+    top: 18px;
+    right: 10px;
+}
+
+.timer-card.minimized {
+    width: 300px;
+    height: 70px;
+    position: fixed;
+    bottom: 10px !important;
+    right: 10px !important;
+    overflow-y: clip;
+}
+
+.timer-card.minimized > .header {
+    background: red;
+    color: #fff;
+}
+
+.bg-timer-box {
+    background: rgb(7, 24, 46);;
+}
+
+i.fa-solid.fa-minimize, i.fa-solid.fa-expand-arrows-alt {
+    background: #adb5bd;
+    border-radius: 13%;
+    padding: 5px;
+    margin: 5px;
+}
+a.btn.btn-success.px-1.py-0.rounded.text-light {
+    background-color: #09681f;
+    border-color: #09681f;
+}

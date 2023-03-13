@@ -144,7 +144,7 @@
             @endif
 
             <!-- NOTIFICATIONS START -->
-            {{-- <li>
+            <li>
                 <div class="notification_box dropdown">
                     <a class="d-block dropdown-toggle header-icon-box show-user-notifications" type="link"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -181,7 +181,7 @@
                         @endif
                     </div>
                 </div>
-            </li> --}}
+            </li>
             <!-- NOTIFICATIONS END -->
             <!-- LOGOUT START -->
             <li>
