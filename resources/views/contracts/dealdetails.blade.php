@@ -209,6 +209,7 @@
                               </div>
 
                                 <input type="hidden" class="project_id" name="project_id" id="project_id" value="{{$project_id->id}}">
+                                  <label id="milestoneError" class="error text-danger" for=""></label>
                               @include('contracts.modals.milestoneviewmodal')
                               @include('contracts.modals.milestonecreatemodal')
                                 @include('contracts.modals.milestoneeditmodal')
@@ -525,8 +526,7 @@
 
                           <br>
                           <div class="d-flex justify-content-center">
-                              <button class="btn btn-primary" type="submit" id="createDeal"><span class="btn-txt">Complete Deal Creation</span></button>
-
+                              <button class="btn btn-primary" type="submit" id="createDeal" ><span class="btn-txt">Complete Deal Creation</span></button>
                           </div>
                         </form>
 
@@ -871,6 +871,13 @@
         } else {
             amountError.textContent = '';
         }
+        if (amount.value.trim() === '') {
+            valid = false;
+            amountError.textContent = 'Please enter the project budget!';
+        } else {
+            amountError.textContent = '';
+        }
+        button.disabled = !valid;
     });
 </script>
 <!--VALIDATION END-->
@@ -949,7 +956,7 @@
         flatpickr("input[type=datetime-local]", {});
         $("#createDeal").on('click',function() {
             $("#createDeal").attr("disabled", true);
-            $(".btn-txt").text("Processing ...");
+            // $(".btn-txt").text("Processing ...");
         })
     </script>
     @endpush
