@@ -327,12 +327,15 @@ $addLeadNotePermission = user()->permission('add_lead_note');
             data: data,
             dataType: "json",
             disableButton: true,
-                buttonSelector: "#submit-button",
+
+            buttonSelector: "#submit-button",
+
             success: function (response) {
                 $('#store-lead').trigger("reset");
                 $('.error').html("");
-                $(location).prop('href', '{{url('/account/leads/')}}');
-                toastr.success('Lead Added Successfully');
+                if (response.status == 'success') {
+                    window.location.href = response.redirectUrl;
+                }
             },
             error: function(error) {
                 if (error) {
