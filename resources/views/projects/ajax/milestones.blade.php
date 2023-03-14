@@ -98,6 +98,9 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 @endif
                             </td>
                             <td>
+                             
+
+
                               <?php
                               $task= App\Models\Task::where('milestone_id',$item->id)->where('status','incomplete')->count();
                               $total_tasks=  App\Models\Task::where('milestone_id',$item->id)->count();
@@ -109,6 +112,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                    <input type="hidden" name="id" value="{{$item->id}}">
                                @if($task > 0)
                                 <button type="submit" disabled class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete ({{$complete_task}}/{{$total_tasks}})</button>
+                                <a href="#" type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 create-partial-payment mt-3"  id="{{$item->id}}"  data-row-id="{{ $item->id }}" >Partial Payment</a>
                                 @else
                                 @if($item->status == 'incomplete')
 
@@ -242,6 +246,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
     let project_id = document.getElementById('project_id').value;
     let client_id =document.getElementById('client_id').value;
+  
 
 
 
@@ -249,6 +254,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
     $('body').on('click', '.create-invoice', function() {
       //id = $(this).attr("id");
         var milestone_id = $(this).data('row-id');
+      
     //  alert(milestone_id);
       var url = `{{ route('invoices.create') }}`;
 
@@ -267,6 +273,20 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
       string = `?invoice_id=${invoice_id}&default_client=${client_id}`;
       url += string;
 
+      window.open(url);
+    
+    });
+
+    $('body').on('click', '.create-partial-payment', function() {
+      //id = $(this).attr("id");
+        var milestone_id = $(this).data('row-id');
+       // var milestone_status = $(this).data('row-status');
+    //  alert(milestone_id);
+      var url = `{{ route('invoices.create') }}`;
+
+      string = `?project_id=${project_id}&client_id=${client_id}&milestone_id=${milestone_id}`;
+      url += string;
+      $(this).prop("disabled", true);
       window.open(url);
     
     });

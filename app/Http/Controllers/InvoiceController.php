@@ -153,7 +153,6 @@ class InvoiceController extends AccountBaseController
 
     public function store(StoreInvoice $request)
     {
-
      
       $milestone_check = ProjectMilestone::where('id',$request->milestone_id)->first();
       if($milestone_check->invoice_created == 1)
@@ -166,7 +165,6 @@ class InvoiceController extends AccountBaseController
       }
       
      // dd("Success");
-
 
         $redirectUrl = urldecode($request->redirect_url);
 
