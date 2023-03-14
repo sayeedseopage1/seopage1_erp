@@ -72,9 +72,9 @@
                 <div class="row pl-20 pr-20">
 
                     <div class="col-md-3">
-                        <x-forms.number fieldId="amount" :fieldLabel="__('modules.invoices.amount')" fieldName="amount" 
+                        <x-forms.number fieldId="amount" :fieldLabel="__('modules.invoices.amount')" fieldName="amount"
                             :fieldValue="$unpaidAmount ?? ''" :fieldPlaceholder="__('placeholders.price')"
-                            fieldRequired="true" fieldReadOnly="true"/>
+                            fieldRequired="true" />
                     </div>
 
                     <div class="col-md-3">

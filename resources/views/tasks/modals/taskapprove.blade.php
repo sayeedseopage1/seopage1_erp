@@ -100,12 +100,12 @@ $task_submission= App\Models\TaskSubmission::where('task_id',$task->id)->orderBy
         @foreach($task_submission as $submission)
         @if($submission->link != null)
         <div class="mb-3">
-          <a href="{{$submission->link}}" target="_blank">  {{$submission->link}}</a>
+          <a class="text-lowercase" href="{{$submission->link}}" target="_blank">  {{$submission->link}}</a>
 
         </div>
         @endif
         @if($submission->text != null)
-        <div class="mb-3">
+        <div class="mb-3 text-lowercase">
 
 
            {!! $submission->text !!}

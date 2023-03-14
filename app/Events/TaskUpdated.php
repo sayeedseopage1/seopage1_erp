@@ -38,5 +38,4 @@ class TaskUpdated implements ShouldBroadcast
     {
         return 'task-updated';
     }
-
 }

@@ -962,9 +962,11 @@ class ContractController extends AccountBaseController
     }
     public function updatedealDetails(Request $request)
     {
+
 //        dd($request->all());
         $validated = $request->validate([
             'message_link' => 'required',
+
             'description2' => 'required',
             'description3' => 'required',
             'description4' => 'required',
@@ -1207,9 +1209,11 @@ class ContractController extends AccountBaseController
                 return back();
                 // something went wrong
               }
+
             return response()->json(['message' => 'Deal Updated Successfully']);
         }
 //          return redirect('/account/contracts/' . $deal->id)->with('messages.contractAdded');
+
 
 
     }
