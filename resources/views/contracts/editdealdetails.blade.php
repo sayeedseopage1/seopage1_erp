@@ -397,9 +397,15 @@
                               </div>
                             </div>
                           </div>
+                            <br>
+
+                                <div class="alert alert-danger" role="alert" id="commonError">
+                                    Some fields are missing, please check again and input all required data properly!
+                                </div>
+
                           <br>
                           <div class="d-flex justify-content-center">
-                            <button class="btn btn-primary" type="submit" id="updateBtn"><span class="btn-txt">Update Deal Creation</span></button>
+                              <button type="submit" class="btn btn-primary" id="updateBtn">Update Deal Creation</button>
                           </div>
                         </form>
                     </div>
@@ -420,6 +426,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 {{--    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>--}}
     <script type="text/javascript">
+
     function myFunction{{$deal->hash}}() {
       // Get the text field
       var copyText = document.getElementById("{{$deal->hash}}");
@@ -435,6 +442,7 @@
       alert("Copied the text: " + copyText.value);
     }
     $(document).ready(function() {
+        $('#commonError').hide();
         fetchmilestone();
         function fetchmilestone()
         {
@@ -683,6 +691,9 @@
                 },
                 error: function(error) {
                     if (error) {
+                        const errorKeys = Object.keys(error.responseJSON.errors);
+                        const numErrors = errorKeys.length;
+                        // console.log(numErrors);
                         $('#projectNameError').html(error.responseJSON.errors.project_name);
                         $('#deadlineError').html(error.responseJSON.errors.deadline);
                         $('#currencyError').html(error.responseJSON.errors.original_currency_id);
@@ -695,8 +706,13 @@
                         $('#description7Error').html(error.responseJSON.errors.description7);
                         $('#description8Error').html(error.responseJSON.errors.description8);
                         $('#description9Error').html(error.responseJSON.errors.description9);
+                        if(numErrors > 0)
+                        {
+                            $('#commonError').show();
+
+                            toastr.error('Some fields are missing, please check again and input all required data properly!');
+                        }
                         if (error.responseJSON.errors.milestone_value) {
-                            {{--$(location).prop('href', '{{url('/account/contracts/')}}');--}}
                             toastr.error('Please add a milestone!');
                         }
                     }
@@ -812,10 +828,9 @@
         flatpickr("#deadline", {
             dateFormat: "Y-m-d",
         });
-        $("#updateBtn").on('click',function() {
-            $("#updateBtn").attr("disabled", true);
-            $(".btn-txt").text("Processing ...");
-        });
+        // $("#updateBtn").on('click',function() {
+        //     $("#updateBtn").html("Confirm To Update");
+        // });
     </script>
     @endpush
 @endsection

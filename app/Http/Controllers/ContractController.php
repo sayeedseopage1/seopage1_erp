@@ -964,6 +964,7 @@ class ContractController extends AccountBaseController
     {
 //        dd($request->all());
         $validated = $request->validate([
+            'project_name' => 'required',
             'message_link' => 'required',
             'description2' => 'required',
             'description3' => 'required',
@@ -974,6 +975,7 @@ class ContractController extends AccountBaseController
             'description8' => 'required',
             'description9' => 'required',
         ], [
+            'project_name.required' => 'Project name is required!',
             'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
             'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
             'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
@@ -1209,8 +1211,6 @@ class ContractController extends AccountBaseController
               }
             return response()->json(['message' => 'Deal Updated Successfully']);
         }
-//          return redirect('/account/contracts/' . $deal->id)->with('messages.contractAdded');
-
 
     }
     public function DealUrl($id)
