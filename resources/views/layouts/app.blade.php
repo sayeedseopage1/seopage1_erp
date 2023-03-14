@@ -825,61 +825,61 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-        	@if(Session::get('timer_box_status') == 'off')
-                $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click();
-            @else 
-                $('span.ui-button-icon.ui-icon.minusthick.ui-icon-arrow-4-diag').click();
-            @endif
+        	// @if(Session::get('timer_box_status') == 'off')
+            //     $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click();
+            // @else 
+            //     $('span.ui-button-icon.ui-icon.minusthick.ui-icon-arrow-4-diag').click();
+            // @endif
 
-            $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click(function(e) {
-                e.preventDefault();
+            // $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click(function(e) {
+            //     e.preventDefault();
 
-                @if(Session::has('timer_box_status'))
-                    @if(Session::get('timer_box_status') == 'off')
+            //     @if(Session::has('timer_box_status'))
+            //         @if(Session::get('timer_box_status') == 'off')
 
-                        $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
-                        @php $status = 'on'; @endphp
-                    @else 
-                        @php $status = 'off' @endphp
-                    @endif
-                @else   
-                    @php $status = 'on' @endphp
-                @endif
+            //             $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
+            //             @php $status = 'on'; @endphp
+            //         @else 
+            //             @php $status = 'off' @endphp
+            //         @endif
+            //     @else   
+            //         @php $status = 'on' @endphp
+            //     @endif
 
-                $.ajax({
-                    type:"GET",
-                    cache:false,
-                    url:"{{route('home.timer_session_set', 'off')}}",
-                    success: function(data) {
+            //     $.ajax({
+            //         type:"GET",
+            //         cache:false,
+            //         url:"{{route('home.timer_session_set', 'off')}}",
+            //         success: function(data) {
 
-                        console.log(data);  
-                    }
-                });
-            });
+            //             console.log(data);  
+            //         }
+            //     });
+            // });
 
-            $('span.ui-button-icon.ui-icon.minusthick.ui-icon-arrow-4-diag').click(function(e) {
-                e.preventDefault();
+            // $('span.ui-button-icon.ui-icon.minusthick.ui-icon-arrow-4-diag').click(function(e) {
+            //     e.preventDefault();
 
-                @if(Session::has('timer_box_status'))
-                    @if(Session::get('timer_box_status') == 'off')
+            //     @if(Session::has('timer_box_status'))
+            //         @if(Session::get('timer_box_status') == 'off')
 
-                        $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
-                        @php $status = 'on'; @endphp
-                    @else 
-                        @php $status = 'off' @endphp
-                    @endif
-                @else   
-                    @php $status = 'on' @endphp
-                @endif
+            //             $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
+            //             @php $status = 'on'; @endphp
+            //         @else 
+            //             @php $status = 'off' @endphp
+            //         @endif
+            //     @else   
+            //         @php $status = 'on' @endphp
+            //     @endif
 
-                $.ajax({
-                    type:"GET",
-                    cache:false,
-                    url:"{{route('home.timer_session_set', 'on')}}",
-                    success: function(data) {
-                    }
-                });
-            });
+            //     $.ajax({
+            //         type:"GET",
+            //         cache:false,
+            //         url:"{{route('home.timer_session_set', 'on')}}",
+            //         success: function(data) {
+            //         }
+            //     });
+            // });
         })
     </script>
     <script src="{{URL::asset('easy-notification/easyNotify.js')}}"></script>
@@ -889,7 +889,6 @@
             
             channel.bind('lead-updated', function(data) {
                 if (data.role_id == window.Laravel.user.role_id) {
-                    console.log('role done');
                     var options = {
                         title: data.title,
                         options: {
@@ -904,9 +903,7 @@
                     
                     $("#easyNotify").easyNotify(options);
                 }
-
-            });
-
+            }, channel.unbind());
         })
     </script>
 </body>
