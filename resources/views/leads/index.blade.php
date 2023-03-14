@@ -117,7 +117,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
             data['startDate'] = startDate;
             data['endDate'] = endDate;
             data['searchText'] = searchText;
-          
+
             data['date_filter_on'] = date_filter_on;
         });
 
@@ -323,6 +323,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
   function dataTableRowCheck2(id)
   {
      var id = id;
+     //console.log(id);
 
   document.getElementById('mydata').value= id;
   }

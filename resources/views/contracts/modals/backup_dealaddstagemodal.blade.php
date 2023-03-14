@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="{{asset('time-picker2/css/bootstrap-material-datetimepicker.css')}}" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
   rel="stylesheet">
 
@@ -7,7 +6,6 @@
 <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
 <script type="text/javascript" src="{{asset('time-picker2/js/bootstrap-material-datetimepicker.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <style media="screen">
 #timerss {
 /* max-width: a; */
@@ -152,7 +150,7 @@ justify-content: center;
 
                               </div>
 
-
+{{--
                                 <label class="mt-3" for="Client Username"><strong>Client Message Thread Link</strong></label>
                                 <div class="col-md-12 dynamic-field" id="dynamic-field-1">
 
@@ -163,14 +161,14 @@ justify-content: center;
                                                    </div>
                                                </div>
                                            </div>
-                                       </div>
+                                       </div> --}}
 
-                                        <div class="col-md-3 my-2 form-group append-buttons">
+                                       {{-- <div class="col-md-3 my-2 form-group append-buttons">
                                            <div class="clearfix">
                                                <button type="button" id="add-button" class="btn btn-secondary2 float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
                                                <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
                                            </div>
-                                       </div>
+                                       </div> --}}
 
                                 @endif
                               </div>
@@ -205,15 +203,10 @@ justify-content: center;
                               </div>
 
                               <div class="mt-3" id="timerss">
-                                  <label for="">Project Award Time<span style="color:red;">*<span>
-                                              <svg class="svg-inline--fa fa-question-circle fa-w-16" style="color: black" data-toggle="popover" data-placement="top" data-content="Project Award Time" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                                  </label>
-{{--                          			<h2><strong>Project Award Time <span style="color:red;">*<span></strong></h2>--}}
 
-{{--                          				<input type="text" id="date-format" name="award_time" value="{{old('award_time')}}" class="form-control height-35 f-14 floating-label @error('award_time') is-invalid @enderror" placeholder="Select Exact Award Time" >--}}
-                          				<input type="text" id="datetimepicker" placeholder="YYYY-MM-DD HH:MM" value="{{old('award_time')}}" class="form-control height-35 f-14 floating-label @error('award_time') is-invalid @enderror" style="background: #ffffff">
+                          			<h2><strong>Project Award Time <span style="color:red;">*<span></strong></h2>
+
+                          				<input type="text" id="date-format" name="award_time" value="{{old('award_time')}}" class="form-control height-35 f-14 floating-label @error('award_time') is-invalid @enderror" placeholder="Select Exact Award Time" >
 
                           		</div>
                               @error('award_time')
@@ -221,6 +214,12 @@ justify-content: center;
                                 <div class="alert alert-danger">{{ $message }}</div>
                                 </div>
                               @enderror
+
+
+
+
+
+
 
       </div>
       <div class="modal-footer">
@@ -239,19 +238,51 @@ justify-content: center;
     });
 </script>
   @endif
-<script>
-    flatpickr("input[type=datetimepicker]", {});
-</script>
   <script type="text/javascript">
   $(document).ready(function()
   {
-  // flatpickr("#datetimepicker", {
-  //     enableTime: true,
-  //     dateFormat: "Y-m-d H:i",
-  //     onChange: function(selectedDates, dateStr, instance) {
-  //         console.log("Selected date and time: ", dateStr);
-  //     }
-  // });
+    $('#date').bootstrapMaterialDatePicker
+    ({
+      time: false,
+      clearButton: true
+    });
+
+    $('#time').bootstrapMaterialDatePicker
+    ({
+      date: false,
+      shortTime: false,
+      format: 'HH:mm'
+    });
+
+    $('#date-format').bootstrapMaterialDatePicker
+    ({
+      format: 'DD-MM-YYYY HH:mm:ss'
+    });
+    $('#date-fr').bootstrapMaterialDatePicker
+    ({
+      format: 'DD/MM/YYYY HH:mm',
+      lang: 'fr',
+      weekStart: 1,
+      cancelText : 'ANNULER',
+      nowButton : true,
+      switchOnClick : true
+    });
+
+    $('#date-end').bootstrapMaterialDatePicker
+    ({
+      weekStart: 0, format: 'DD/MM/YYYY HH:mm'
+    });
+    $('#date-start').bootstrapMaterialDatePicker
+    ({
+      weekStart: 0, format: 'DD/MM/YYYY HH:mm', shortTime : true
+    }).on('change', function(e, date)
+    {
+      $('#date-end').bootstrapMaterialDatePicker('setMinDate', date);
+    });
+
+    $('#min-date').bootstrapMaterialDatePicker({ format : 'DD/MM/YYYY HH:mm', minDate : new Date() });
+
+    $.material.init()
   });
 
 
