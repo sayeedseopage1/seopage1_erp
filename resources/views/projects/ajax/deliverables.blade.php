@@ -275,7 +275,7 @@
                             <i class="fa fa-download f-w-500 mr-2 f-11"></i> @lang('app.download')
                         </a>
                         <!-- <a class="dropdown-item btn-copy" href="javascript:;" data-clipboard-text="route('front.agreement', $project->project_short_code)"><i class="fa fa-copy mr-2"></i>Copy Link</a> -->
-                          <a class="dropdown-item btn-copy"  onclick="copyLink()"  data-clipboard-text="{{$url}}/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
+                          <a class="dropdown-item btn-copy" onclick="copyLink()" data-clipboard-text="{{$url}}/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
                     </li>
                 </ul>
             </div>
@@ -360,28 +360,32 @@
 <!-- INVOICE CARD END -->
 <script src="{{ asset('vendor/jquery/clipboard.min.js') }}"></script>
 <script type="text/javascript">
-function copyLink(){
-  var clipboard = new ClipboardJS('.btn-copy');
 
-  clipboard.on('success', function(e) {
-      Swal.fire({
-          icon: 'success',
-          text: '@lang("app.copied")',
-          toast: true,
-          position: 'top-end',
-          timer: 3000,
-          timerProgressBar: true,
-          showConfirmButton: false,
-          customClass: {
-              confirmButton: 'btn btn-primary',
-          },
-          showClass: {
-              popup: 'swal2-noanimation',
-              backdrop: 'swal2-noanimation'
-          },
-      })
-  });
-}
+    function copyLink(){
+        if ($('#window').dialog('isOpen')) {
+            $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
+        }
+        var clipboard = new ClipboardJS('.btn-copy');
+
+        clipboard.on('success', function(e) {
+            Swal.fire({
+                icon: 'success',
+                text: '@lang("app.copied")',
+                toast: true,
+                position: 'top-end',
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                },
+                showClass: {
+                    popup: 'swal2-noanimation',
+                    backdrop: 'swal2-noanimation'
+                },
+            })
+        });
+    }
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>

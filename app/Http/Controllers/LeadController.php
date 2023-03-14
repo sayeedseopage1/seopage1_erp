@@ -101,7 +101,7 @@ class LeadController extends AccountBaseController
 
           }
         }
-    // /dd($request);
+        // dd($request);
         // dd($value);
         $deal= new DealStage();
         $deal->short_code= 'DSEOP1'. $suffle;
@@ -161,12 +161,18 @@ class LeadController extends AccountBaseController
 
 
         $deal= DealStage::where('lead_id',$lead->id)->first();
-        ;
-      Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
+        // add pusher with admin role id 1
+
+        $this->triggerPusher('lead-updated-channel', 'lead-updated', [
+            'user_id' => $this->user->id, 
+            'role_id' => '1',
+            'title' => 'Lead Converted Successfully',
+            'body' => 'Please check new leads',
+            'redirectUrl' => 'https://google.com'
+        ]);
+
+        Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
         return redirect('/account/deals/'.$deal->id);
-        
-
-
     }
 
 
@@ -175,11 +181,8 @@ class LeadController extends AccountBaseController
 
     public function DealStageUpdate(Request $request)
     {
-    //  dd($request);
-
-
-      $deal_stage= DealStage::where('id',$request->id)->first();
-      if ($deal_stage->deal_stage == 4 && $request->won_lost == "No") {
+        $deal_stage= DealStage::where('id',$request->id)->first();
+        if ($deal_stage->deal_stage == 4 && $request->won_lost == "No") {
             $deal= DealStage::find($request->id);
             $deal->comments=$request->comments;
             $deal->deal_status="Lost";
@@ -199,103 +202,120 @@ class LeadController extends AccountBaseController
             // $lead->status_id= 4;
             // $lead->save();
             if (Auth::user()->role_id == 7) {
-              $agent_id= SalesCount::where('user_id',Auth::id())->first();
-              $lead_ag_id= SalesCount::find($agent_id->id);
+                $agent_id= SalesCount::where('user_id',Auth::id())->first();
+                $lead_ag_id= SalesCount::find($agent_id->id);
 
-              $lead_ag_id->lost_deals= $lead_ag_id->lost_deals +1;
-              $lead_ag_id->save();
+                $lead_ag_id->lost_deals= $lead_ag_id->lost_deals +1;
+                $lead_ag_id->save();
+            }
+        } else {
+            $deal= DealStage::find($request->id);
+            $pusher_options = [
+                'user_id' => $this->user->id, 
+                'role_id' => '7',
+                'redirectUrl' => route('deals.show', $deal->id)
+            ];
+            if($deal_stage->deal_stage == 0 )
+            {
+                $deal->deal_stage= $deal_stage->deal_stage+1;
+                $deal->comments=$request->comments;
+                $deal->won_lost=$request->won_lost;
+                $deal->save();
+
+                $deal_stage= new DealStageChange();
+                $deal_stage->lead_id= $deal->lead_id;
+                $deal_stage->deal_id= $deal->short_code;
+                $deal_stage->comments= $request->comments;
+                $deal_stage->deal_stage_id=$deal->deal_stage;
+                $deal_stage->updated_by= Auth::id();
+                $deal_stage->save();
+
+                // $lead_id= Lead::where('id',$deal->lead_id)->first();
+                // $lead= Lead::find($lead_id->id);
+                // $lead->status_id= 4;
+                // $lead->save();
+
+                $pusher_options['title'] = 'Deals Qualified';
+                $pusher_options['body'] = 'Go to the deals';
+            } elseif ($deal_stage->deal_stage == 1) {
+                $deal->deal_stage= $deal_stage->deal_stage+1;
+                $deal->comments=$request->comments;
+                $deal->won_lost=$request->won_lost;
+                $deal->save();
+
+                $deal_stage= new DealStageChange();
+                $deal_stage->lead_id= $deal->lead_id;
+                $deal_stage->deal_id= $deal->short_code;
+                $deal_stage->comments= $request->comments;
+                $deal_stage->deal_stage_id=$deal->deal_stage;
+                $deal_stage->updated_by= Auth::id();
+                $deal_stage->save();
+
+                $pusher_options['title'] = 'Requirements Defined';
+                $pusher_options['body'] = 'Go to the deals';
+            } elseif ($deal_stage->deal_stage == 2) {
+                $deal->deal_stage= $deal_stage->deal_stage+1;
+                $deal->comments=$request->comments;
+                $deal->won_lost=$request->won_lost;
+                $deal->save();
+
+                $deal_stage= new DealStageChange();
+                $deal_stage->lead_id= $deal->lead_id;
+                $deal_stage->deal_id= $deal->short_code;
+                $deal_stage->comments= $request->comments;
+                $deal_stage->deal_stage_id=$deal->deal_stage;
+                $deal_stage->updated_by= Auth::id();
+                $deal_stage->save();
+
+                $pusher_options['title'] = 'Proposal Made';
+                $pusher_options['body'] = 'Go to the deals';
+            } elseif ($deal_stage->deal_stage == 3) {
+                $deal->deal_stage= $deal_stage->deal_stage+1;
+                $deal->comments=$request->comments;
+                $deal->won_lost=$request->won_lost;
+                $deal->save();
+
+                $deal_stage= new DealStageChange();
+                $deal_stage->lead_id= $deal->lead_id;
+                $deal_stage->deal_id= $deal->short_code;
+                $deal_stage->comments= $request->comments;
+                $deal_stage->deal_stage_id=$deal->deal_stage;
+                $deal_stage->updated_by= Auth::id();
+                $deal_stage->save();
+
+                $pusher_options['title'] = 'Negotiation Started';
+                $pusher_options['body'] = 'Go to the deals';
+            } else {
+                $deal->deal_stage= $deal_stage->deal_stage;
+                $deal->comments=$request->comments;
+                $deal->won_lost=$request->won_lost;
+                $deal->save();
+
+                $deal_stage= new DealStageChange();
+                $deal_stage->lead_id= $deal->lead_id;
+                $deal_stage->deal_id= $deal->short_code;
+                $deal_stage->comments= $request->comments;
+                $deal_stage->deal_stage_id=$deal->deal_stage;
+                $deal_stage->updated_by= Auth::id();
+                $deal_stage->save();
+
+                $pusher_options['title'] = 'Deals updated';
+                $pusher_options['body'] = 'Go to the deals';
+
+                if (Auth::user()->role_id == 7) {
+                    $agent= SalesCount::where('user_id',Auth::id())->first();
+                    $lead_ag= SalesCount::find($agent->id);
+
+                    $lead_ag->negotiation_started= $lead_ag->negotiation_started +1;
+                    $lead_ag->save();
+                }
             }
 
-
-
-      }else {
-        $deal= DealStage::find($request->id);
-        //dd($deal);
-        if($deal_stage->deal_stage == 0 )
-        {
-          $deal->deal_stage= $deal_stage->deal_stage+1;
-          $deal->comments=$request->comments;
-          $deal->won_lost=$request->won_lost;
-          $deal->save();
-          $deal_stage= new DealStageChange();
-          $deal_stage->lead_id= $deal->lead_id;
-          $deal_stage->deal_id= $deal->short_code;
-          $deal_stage->comments= $request->comments;
-          $deal_stage->deal_stage_id=$deal->deal_stage;
-          $deal_stage->updated_by= Auth::id();
-          $deal_stage->save();
-
-          // $lead_id= Lead::where('id',$deal->lead_id)->first();
-          // $lead= Lead::find($lead_id->id);
-          // $lead->status_id= 4;
-          // $lead->save();
-        }elseif ($deal_stage->deal_stage == 1) {
-          $deal->deal_stage= $deal_stage->deal_stage+1;
-          $deal->comments=$request->comments;
-          $deal->won_lost=$request->won_lost;
-          $deal->save();
-          $deal_stage= new DealStageChange();
-          $deal_stage->lead_id= $deal->lead_id;
-          $deal_stage->deal_id= $deal->short_code;
-          $deal_stage->comments= $request->comments;
-          $deal_stage->deal_stage_id=$deal->deal_stage;
-          $deal_stage->updated_by= Auth::id();
-          $deal_stage->save();
-
-        }elseif ($deal_stage->deal_stage == 2) {
-          $deal->deal_stage= $deal_stage->deal_stage+1;
-          $deal->comments=$request->comments;
-          $deal->won_lost=$request->won_lost;
-          $deal->save();
-          $deal_stage= new DealStageChange();
-          $deal_stage->lead_id= $deal->lead_id;
-          $deal_stage->deal_id= $deal->short_code;
-          $deal_stage->comments= $request->comments;
-          $deal_stage->deal_stage_id=$deal->deal_stage;
-          $deal_stage->updated_by= Auth::id();
-          $deal_stage->save();
-        }
-        elseif ($deal_stage->deal_stage == 3) {
-          $deal->deal_stage= $deal_stage->deal_stage+1;
-          $deal->comments=$request->comments;
-          $deal->won_lost=$request->won_lost;
-          $deal->save();
-          $deal_stage= new DealStageChange();
-          $deal_stage->lead_id= $deal->lead_id;
-          $deal_stage->deal_id= $deal->short_code;
-          $deal_stage->comments= $request->comments;
-          $deal_stage->deal_stage_id=$deal->deal_stage;
-          $deal_stage->updated_by= Auth::id();
-          $deal_stage->save();
+            $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
         }
 
-
-        else {
-          $deal->deal_stage= $deal_stage->deal_stage;
-          $deal->comments=$request->comments;
-          $deal->won_lost=$request->won_lost;
-          $deal->save();
-          $deal_stage= new DealStageChange();
-          $deal_stage->lead_id= $deal->lead_id;
-          $deal_stage->deal_id= $deal->short_code;
-          $deal_stage->comments= $request->comments;
-          $deal_stage->deal_stage_id=$deal->deal_stage;
-          $deal_stage->updated_by= Auth::id();
-          $deal_stage->save();
-
-          if (Auth::user()->role_id == 7) {
-            $agent= SalesCount::where('user_id',Auth::id())->first();
-            $lead_ag= SalesCount::find($agent->id);
-
-            $lead_ag->negotiation_started= $lead_ag->negotiation_started +1;
-            $lead_ag->save();
-          }
-
-        }
-      }
-
-
-    return back()->with('status_updated', 'Status Updated!!');
+        
+        return back()->with('status_updated', 'Status Updated!!');
     }
     public function DealStageUpdateLost(Request $request)
     {
@@ -484,11 +504,10 @@ class LeadController extends AccountBaseController
     }
     public function storeLead(Request $request)
     {
-
-      $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'client_name' => 'required|max:255',
             'country' => 'required',
-            'project_link' => 'required|url',
+            'project_link' => 'required|url|unique:leads,project_link',
             'deadline' => 'required|date',
             'original_currency_id' => 'required',
             'bid_value' => 'required',
@@ -503,77 +522,79 @@ class LeadController extends AccountBaseController
         ]);
 
         if ($validator->fails()) {
-            return redirect('account/leads/create')
-                        ->withErrors($validator)
-                        ->withInput();
-          //  dd('Failed');
+            return redirect('account/leads/create')->withErrors($validator)->withInput();
         };
 
-      if (Auth::user()->role_id == 7) {
+        if (Auth::user()->role_id == 7) {
 
-        $sales_ex= SalesCount::where('user_id',Auth::id())->first();
-        $sales_count= SalesCount::find($sales_ex->id);
+            $sales_ex= SalesCount::where('user_id',Auth::id())->first();
+            $sales_count= SalesCount::find($sales_ex->id);
 
-        $sales_count->leads_count= $sales_count->leads_count + 1;
-        if ($sales_count->last_lead_date != null) {
-          $sales_count->previous_lead_date= $sales_count->last_lead_date;
-          $date= Carbon::now();
-          $date1 = new DateTime($sales_count->previous_lead_date);
-          $date2 = new DateTime($date);
-          $difference = $date1->diff($date2);
-          //$diffInSeconds = $difference->s; //45
-          $diffInMinutes = $difference->i; //23
-        //  dd($diffInMinutes);
-         $sales_count->avg_lead_time=$diffInMinutes/$sales_count->leads_count;
+            $sales_count->leads_count= $sales_count->leads_count + 1;
+            if ($sales_count->last_lead_date != null) {
+                $sales_count->previous_lead_date= $sales_count->last_lead_date;
+                $date= Carbon::now();
+                $date1 = new DateTime($sales_count->previous_lead_date);
+                $date2 = new DateTime($date);
+                $difference = $date1->diff($date2);
+                $diffInMinutes = $difference->i;
+                $sales_count->avg_lead_time=$diffInMinutes/$sales_count->leads_count;
 
+            }
+            $currency= Currency::where('id',$request->original_currency_id)->first();
+            $val= ($request->value)/$currency->exchange_rate;
+            $sales_count->last_lead_date= Carbon::now();
+            $sales_count->lead_value= $sales_count->lead_value + $val;
+            $sales_count->save();
         }
+
+        $lead = new Lead();
+        $lead->client_name= $request->client_name;
+        $lead->project_id= $request->project_id;
+        $lead->project_link= $request->project_link;
+        $lead->actual_value= $request->value;
+        $lead->deadline= $request->deadline;
         $currency= Currency::where('id',$request->original_currency_id)->first();
-        $val= ($request->value)/$currency->exchange_rate;
-        $sales_count->last_lead_date= Carbon::now();
-        $sales_count->lead_value= $sales_count->lead_value + $val;
-        $sales_count->save();
+        $lead->value= ($request->value)/$currency->exchange_rate;
+        $lead->original_currency_id =$request->original_currency_id;
+        $lead->bid_value= $request->bid_value;
+        $lead->bid_value2= $request->bid_value2;
+        $lead->country= $request->country;
+        $lead->note= $request->description;
+        $lead->status_id= 1;
+        $lead->currency_id= 1;
+        $lead->bidding_minutes= $request->bidding_minutes;
+        $lead->bidding_seconds= $request->bidding_seconds;
+        $lead->cover_letter= $request->cover_letter;
+        $lead->insight_screenshot= $request->insight_screenshot;
+        $lead-> bidpage_screenshot= $request-> bidpage_screenshot;
+        $lead->projectpage_screenshot =$request->projectpage_screenshot;
 
-      }
-      //dd(Auth::id());
-      //dd($request);
-      $lead = new Lead();
-      $lead->client_name= $request->client_name;
+        $lead->save();
+        $lead_agent= new LeadAgent();
+        $lead_agent->user_id= Auth::id();
+        $lead_agent->status= "enabled";
+        $lead_agent->added_by= Auth::id();
+        $lead_agent->last_updated_by= Auth::id();
+        $lead_agent->save();
 
-      $lead->project_id= $request->project_id;
-      $lead->project_link= $request->project_link;
-      $lead->actual_value= $request->value;
-      $lead->deadline= $request->deadline;
-      $currency= Currency::where('id',$request->original_currency_id)->first();
-      $lead->value= ($request->value)/$currency->exchange_rate;
-      $lead->original_currency_id =$request->original_currency_id;
-      $lead->bid_value= $request->bid_value;
-      $lead->bid_value2= $request->bid_value2;
-      $lead->country= $request->country;
-      $lead->note= $request->description;
-      $lead->status_id= 1;
-      $lead->currency_id= 1;
-      $lead->bidding_minutes= $request->bidding_minutes;
-      $lead->bidding_seconds= $request->bidding_seconds;
-      $lead->cover_letter= $request->cover_letter;
-      $lead->insight_screenshot= $request->insight_screenshot;
-      $lead-> bidpage_screenshot= $request-> bidpage_screenshot;
-      $lead->projectpage_screenshot =$request->projectpage_screenshot;
+        $this->triggerPusher('lead-updated-channel', 'lead-updated', [
+            'user_id' => $this->user->id, 
+            'task_id' => '2',
+            'role_id' => '1',
+            'title' => 'New Lead added',
+            'body' => 'Please check new leads',
+            'redirectUrl' => route('leads.show', $lead->id)
+        ]);
 
-      $lead->save();
-      $lead_agent= new LeadAgent();
-      $lead_agent->user_id= Auth::id();
-      $lead_agent->status= "enabled";
-      $lead_agent->added_by= Auth::id();
-      $lead_agent->last_updated_by= Auth::id();
-      $lead_agent->save();
+        if ($request->get('custom_fields_data')) {
+            $lead->updateCustomFieldData($request->get('custom_fields_data'));
+        }
 
-      if ($request->get('custom_fields_data')) {
-          $lead->updateCustomFieldData($request->get('custom_fields_data'));
-      }
-      return redirect('/account/leads/')->with('messages.LeadAddedUpdate');
-
-
-
+        return response()->json([
+            'status' => 'success',
+            'redirectUrl' => route('leads.index')
+        ]);
     }
     public function updateLead(Request $request)
     {
@@ -679,7 +700,7 @@ class LeadController extends AccountBaseController
      * @return array|void
      * @throws \Froiden\RestAPI\Exceptions\RelatedResourceNotFoundException
      */
-    public function store(StoreRequest $request)
+    /*public function store(StoreRequest $request)
     {
       //dd($request);
         $this->addPermission = user()->permission('add_lead');
@@ -751,7 +772,7 @@ class LeadController extends AccountBaseController
 
         return Reply::successWithData(__('messages.LeadAddedUpdated'), ['redirectUrl' => $redirectUrl]);
 
-    }
+    }*/
 
     /**
      * Show the form for editing the specified resource.

@@ -39,7 +39,8 @@
     integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
     crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-    <link rel="stylesheet" href="{{asset('moving-countdown/style.css')}}" type="text/css" />
+    <link rel="stylesheet" href="{{asset('moveing-countdown/css/jquery-ui.css')}}" type="text/css" />
+    <link rel="stylesheet" href="{{asset('moveing-countdown/css/style.css')}}" type="text/css" />
 
     <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
@@ -150,6 +151,7 @@
 
     {{-- Timepicker --}}
     <script src="{{ asset('vendor/jquery/bootstrap-timepicker.min.js') }}"></script>
+
     @if ($pushSetting->status == 'active')
         <link rel="manifest" href="{{ asset('manifest.json') }}" />
         <script src="{{ asset('vendor/onesignal/OneSignalSDK.js') }}" async='async'></script>
@@ -247,10 +249,13 @@
         </script>
     @endif
 
-    @if ($pusherSettings->status)
+    @if ($pusherSettings->status && app()->environment('codecanyon'))
         <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 
         <script>
+            // Enable pusher logging - don't include this in production
+            // Pusher.logToConsole = true;
+
             var pusher = new Pusher('{{ $pusherSettings->pusher_app_key }}', {
                 cluster: '{{ $pusherSettings->pusher_cluster }}',
                 forceTLS: '{{ $pusherSettings->force_tls }}'
@@ -303,14 +308,8 @@
                     $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->where('pm_id',Auth::id())->get();
                 @endphp
                 @if(count($deal_id) > 0)
-                    <div class="timer-card">
-                    	<div class="header mt-3 rounded">
-				            <h5 class="float-start">Project Acceptance ({{$deal_id->count()}})</h5>
-				            <button class="minimize-button" onclick="minimizeCard()">
-				                <i id="handelButton" class="fa-solid fa-minimize"></i>
-				            </button>
-        				</div>
-                    	@foreach($deal_id as $value)
+                    <div id="window">
+                        @foreach($deal_id as $value)
                             @php
                                 if ($deal_id != null) {
                                     $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
@@ -321,14 +320,24 @@
                                 }
                             @endphp
                             @if($value != null && $diff_in_minutes < 1200)
-                            <div class="content">
-					            <div class="bg-timer-box my-3 rounded p-2 text-light">
-					                <p class="mb-0">New Deal Won: {{$value->client_name}}</p>
-					                <span class="timer-count font-weight-bold" id="timer">00:00:00</span>
-					                <p>{{\Carbon\Carbon::parse($value->award_time)->addHours(20)->format('Y-m-d (l), g:i A')}}</p>
-					                <a class="btn btn-success text-light rounded px-1 py-0 text-underline-none" href="/account/contracts/{{$value->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
-					            </div>
-					        </div>
+                                <div class="wrapper-timezone" id="mydivheade">
+                                    <p>New Deal Won: {{$value->client_name}}</p>
+                                    <div class="clock">
+                                        <div class="column">
+                                            <div class="timer" id="hours_{{$value->id}}"></div>
+                                        </div>
+
+                                        <div class="column">
+                                            <div class="timer" id="minutes_{{$value->id}}"></div>
+                                        </div>
+
+                                        <div class="column">
+                                            <div class="timer" id="seconds_{{$value->id}}"></div>
+                                        </div>
+                                    </div>
+                                    <p style="padding: 0; margin: 0;">{{\Carbon\Carbon::parse($value->award_time)->addHours(20)->format('Y-m-d')}}</p>
+                                    <a href="/account/contracts/{{$value->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
+                                </div>
                             @endif
                         @endforeach
                     </div>
@@ -339,14 +348,8 @@
                     $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->get();
                 @endphp
                 @if(count($deal_id) > 0)
-                    <div class="timer-card @if(\Session::get('timer_box_status') == 'off') minimized @endif">
-                    	<div class="header mt-3 rounded">
-				            <h5 class="text-left mb-0">Won deals ({{$deal_id->count()}})</h5>
-				            <button class="minimize-button" onclick="minimizeCard()">
-				                <i id="handelButton" class="fa-solid fa-minimize"></i>
-				            </button>
-        				</div>
-                    	@foreach($deal_id as $value)
+                    <div id="window">
+                        @foreach($deal_id as $value)
                             @php
                                 if ($deal_id != null) {
                                     $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
@@ -357,14 +360,24 @@
                                 }
                             @endphp
                             @if($value != null && $diff_in_minutes < 1200)
-                            <div class="content">
-					            <div class="bg-timer-box my-3 rounded p-2 text-light">
-					                <p class="mb-0">New Deal Won: {{$value->client_name}}</p>
-					                <span class="timer-count font-weight-bold" id="timer_{{$value->id}}">00:00:00</span>
-					                <p>{{\Carbon\Carbon::parse($value->award_time)->addHours(20)->format('Y-m-d (l), g:i A')}}</p>
-					                <a class="btn btn-success text-light rounded px-1 py-0 text-underline-none" href="/account/contracts/{{$value->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
-					            </div>
-					        </div>
+                                <div class="wrapper-timezone" id="mydivheade">  
+                                    <p>New Deal Won: {{$value->client_name}}</p>
+                                    <div class="clock">
+                                        <div class="column">
+                                            <div class="timer" id="hours_{{$value->id}}"></div>
+                                        </div>
+
+                                        <div class="column">
+                                            <div class="timer" id="minutes_{{$value->id}}"></div>
+                                        </div>
+
+                                        <div class="column">
+                                            <div class="timer" id="seconds_{{$value->id}}"></div>
+                                        </div>
+                                    </div>
+                                    <p style="padding: 0; margin: 0;">{{\Carbon\Carbon::parse($value->award_time)->addHours(20)->format('Y-m-d (l), g:i A')}}</p>
+                                    <a href="/account/contracts/{{$value->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
+                                </div>
                             @endif
                         @endforeach
                     </div>
@@ -376,7 +389,7 @@
         <!-- MAIN CONTAINER END -->
     </div>
     <!-- BODY WRAPPER END -->
-    <div id="easyNotify"></div>
+
     <!-- also the modal itself -->
     <div id="myModalDefault" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog d-flex justify-content-center align-items-center">
@@ -528,9 +541,9 @@
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
-            'csrfToken' => csrf_token(),
-            'user' => user(),
-        ]) !!};
+    'csrfToken' => csrf_token(),
+    'user' => user(),
+]) !!};
     </script>
 
     @stack('scripts')
@@ -776,56 +789,176 @@
 
         });
     </script>
-	
-	<script type="text/javascript" src="{{asset('moving-countdown/script.js')}}"></script>
-    <script type="text/javascript">
-        
-        @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 && !Request::is('account/contracts/*'))
-            @if(isset($deal_id) && $deal_id != null)
-                @foreach($deal_id as $value)
-                    @php
-                        $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$value->award_time)->format('Y-m-d H:i:s');
-                        $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1200)->format('Y-m-d H:i:s');
-                        $minutes = \Carbon\Carbon::parse($newDateTime)->diffInMinutes(\Carbon\Carbon::now());
-                    @endphp
 
-                    let timeInMinutes_{{$value->id}} = {{$minutes}}; // set the time in minutes dynamically
-                    const deadline_{{$value->id}} = timeInMinutes_{{$value->id}} * 60; // convert minutes to seconds
-                    let timerInterval_{{$value->id}};
-                    let timeRemaining_{{$value->id}} = deadline_{{$value->id}};
-                    let timerElement_{{$value->id}} = document.getElementById('timer_{{$value->id}}');
 
-                    // Initialize the timer
-                    updateTimer_{{$value->id}}();
+    <script type="text/javascript" src="{{asset('moveing-countdown/js/jquery-ui.js')}}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.4/moment-timezone-with-data.js"></script>
+    <script type="text/javascript" src="{{asset('moveing-countdown/js/custom.js')}}"></script>
 
-                    // Start the countdown timer
-                    timerInterval_{{$value->id}} = setInterval(function() {
-                        timeRemaining_{{$value->id}}--;
-                        updateTimer_{{$value->id}}();
+    @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 && !Request::is('account/contracts/*'))
+        @if(isset($deal_id) && $deal_id != null)
+            <script>
+                $(function(){
+                    $('#window').dialog({
+                        title: 'Won Deals ({{count($deal_id)}})'
+                    })
+                    function timer(key, time, settings){ 
+                        var award_time = time;
 
-                        // If time has run out, stop the timer
-                        if (timeRemaining_{{$value->id}} <= 0) {
-                            clearInterval(timerInterval_{{$value->id}});
+                        var config = {
+                            endDate:  time,
+                            timeZone: 'Asia/Dhaka',
+                            hours: $('#hours_'+key),
+                            minutes: $('#minutes_'+key),
+                            seconds: $('#seconds_'+key),
+                            newSubMessage: 'and should be back online in a few minutes...'
+                        };
+                        function prependZero(number){
+                            return number < 10 ? '0' + number : number;
                         }
-                    }, 1000);
+                        $.extend(true, config, settings || {});
+                        var currentTime = moment();
+                        var endDate = moment.tz(config.endDate, config.timeZone);
+                        var diffTime = endDate.valueOf() - currentTime.valueOf();
+                        var duration = moment.duration(diffTime, 'milliseconds');
+                        var days = duration.days();
+                        var interval = 1000;
+                        var subMessage = $('.sub-message');
+                        var clock = $('.clock2');
+                        var left_time = $('#left_time').val();
+                        if(diffTime < 0){
+                            endEvent(subMessage, config.newSubMessage, clock);
+                            if (left_time < 1200) {
 
-                    function updateTimer_{{$value->id}}() {
-                        let hours = Math.floor(timeRemaining_{{$value->id}} / 3600);
-                        let minutes = Math.floor((timeRemaining_{{$value->id}} % 3600) / 60);
-                        let seconds = timeRemaining_{{$value->id}} % 60;
-                        timerElement_{{$value->id}}.innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                                var deal_id = $('#deal_id').val();
+
+                                $.ajaxSetup({
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    }
+                                });
+
+                                $.ajax({
+                                    type:"POST",
+                                    cache:false,
+                                    url:"{{route('update-deal-id')}}",
+
+                                    data:{deal_id:deal_id},
+
+
+                                    success: function(data) {
+
+
+                                    }
+                                });
+
+                            }
+
+
+
+                            return;
+                        }
+                        if(days > 0){
+                            $('#days').text(prependZero(days));
+                            $('.days').css('display', 'inline-block');
+                        }
+                        var intervalID = setInterval(function(){
+                            duration = moment.duration(duration - interval, 'milliseconds');
+                            var hours = duration.hours(),
+                            minutes = duration.minutes(),
+                            seconds = duration.seconds();
+                            days = duration.days();
+                            if(hours  <= 0 && minutes <= 0 && seconds  <= 0 && days <= 0){
+                                clearInterval(intervalID);
+                                endEvent(subMessage, config.newSubMessage, clock);
+                                window.location.reload();
+                            }
+                            if(days === 0){
+                                $('.days').hide();
+                            }
+                            $('#days').text(prependZero(days));
+                            config.hours.text(prependZero(hours));
+                            config.minutes.text(prependZero(minutes));
+                            config.seconds.text(prependZero(seconds));
+                        }, interval);
                     }
-                @endforeach
-            @endif
+                    function endEvent($el, newText, hideEl){
+                        $el.text(newText);
+                        hideEl.hide();
+                    }
+                    @foreach($deal_id as $value)
+                        @php
+                            $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$value->award_time)->format('Y-m-d H:i:s');
+                            $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1200)->format('Y-m-d H:i:s');
+                        @endphp
+                        timer('{{$value->id}}', '{{$newDateTime}}');
+                    @endforeach
+                });
+            </script>
         @endif
-    </script>
+    @endif
 
-    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+ <script>
+    // Make the DIV element draggable:
+    dragElement(document.getElementById("mydiv"));
+
+    function dragElement(elmnt) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    if (document.getElementById(elmnt.id + "header")) {
+        // if present, the header is where you move the DIV from:
+        document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+    } else {
+        // otherwise, move the DIV from anywhere inside the DIV:
+        elmnt.onmousedown = dragMouseDown;
+    }
+
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+    }
+    }
+ </script>
+
+ <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {!! Toastr::message() !!}
 
     <script type="text/javascript">
         $(document).ready(function() {
-        	@if(Session::get('timer_box_status') == 'off')
+            $('#search-text-field').click(function() {
+                if ($('#window').dialog('isOpen')) {
+                    $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
+                    $('#search-text-field').focus();
+                }   
+            });
+
+
+            @if(Session::get('timer_box_status') == 'off')
                 $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click();
             @else 
                 $('span.ui-button-icon.ui-icon.minusthick.ui-icon-arrow-4-diag').click();
@@ -877,34 +1010,10 @@
                     cache:false,
                     url:"{{route('home.timer_session_set', 'on')}}",
                     success: function(data) {
+
+                        console.log(data);  
                     }
                 });
-            });
-        })
-    </script>
-    <script src="{{URL::asset('easy-notification/easyNotify.js')}}"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            var channel = pusher.subscribe('lead-updated-channel');
-            
-            channel.bind('lead-updated', function(data) {
-                if (data.role_id == window.Laravel.user.role_id) {
-                    console.log('role done');
-                    var options = {
-                        title: data.title,
-                        options: {
-                            body: data.body,
-                            icon: '{{URL::asset("user-uploads/app-logo/c86157272a41bea229e0dcbe2ff9715b.png")}}',
-                            lang: 'en-US',
-                            onClick: function() {
-                                window.location.href = data.redirectUrl;
-                            }
-                        }
-                    };
-                    
-                    $("#easyNotify").easyNotify(options);
-                }
-
             });
 
         })

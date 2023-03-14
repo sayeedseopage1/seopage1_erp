@@ -37,7 +37,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Stripe\Stripe;
 use Illuminate\Support\Facades\App;
-
+use Auth;
+use App\Models\Task;
 
 class InvoiceController extends AccountBaseController
 {
@@ -152,7 +153,19 @@ class InvoiceController extends AccountBaseController
 
     public function store(StoreInvoice $request)
     {
-      //dd($request->all());
+     
+      $milestone_check = ProjectMilestone::where('id',$request->milestone_id)->first();
+      if($milestone_check->invoice_created == 1)
+      {
+        return Reply::error(__('You already created invoice for this milestone.'));
+      }
+      if($milestone_check->status == 'incomplete' && $request->total >= $milestone_check->actual_cost)
+      {
+        return Reply::error(__('You cannot insert equal amount of payment for partial payment.'));
+      }
+      
+     // dd("Success");
+
         $redirectUrl = urldecode($request->redirect_url);
 
         if ($redirectUrl == '') {
@@ -215,10 +228,56 @@ class InvoiceController extends AccountBaseController
         $invoice->company_address_id = $request->company_address_id;
         $invoice->estimate_id = $request->estimate_id ? $request->estimate_id : null;
         $invoice->save();
+       
+
+        if($milestone_check->status == 'incomplete')
+      {
+        $milestone_up= ProjectMilestone::where('id',$request->milestone_id)->first();
+        $project_count= ProjectMilestone::where('project_id',$request->project_id)->count();
+        $currency_id= Currency::where('id',$milestone_up->original_currency_id)->first();
+        $update_milestone= ProjectMilestone::find($request->milestone_id); 
+        $update_milestone->invoice_created= 1;
+        $update_milestone->status = 'complete';
+        $update_milestone->actual_cost= $request->total;
+        $update_milestone->cost= ($request->total)/$currency_id->exchange_rate;
+       
+        $update_milestone->last_updated_by= Auth::id();
+        //$invoice->currency_id = $request->currency_id;
+
+        $update_milestone->invoice_id= $invoice->id;
+        $update_milestone->save();
+
+        $new_milestone= new ProjectMilestone();
+        $new_milestone->milestone_title= $milestone_up->milestone_title . ' ('. $project_count+1 . ')';
+        $new_milestone->milestone_type= $milestone_up->milestone_type; 
+        $new_milestone->summary= $milestone_up->summary; 
+        $new_milestone->cost= $milestone_up->cost - $update_milestone->cost;
+        $new_milestone->actual_cost= $milestone_up->actual_cost - $update_milestone->actual_cost;
+        $new_milestone->currency_id= $update_milestone->currency_id; 
+        $new_milestone->original_currency_id= $update_milestone->original_currency_id;
+        $new_milestone->invoice_created= 0; 
+        $new_milestone->status= 'incomplete';
+        $new_milestone->added_by = Auth::id();
+        $new_milestone->project_id = $update_milestone->project_id;
+        $new_milestone->save();
+
+        $tasks= Task::where('milestone_id',$milestone_up->id)->where('status','incomplete')->get();
+        foreach ($tasks as $task) {
+            $task_update= Task::find($task->id);
+            $task_update->milestone_id = $new_milestone->id;
+            $task_update->save();
+        }
+
+
+
+
+      }else
+      {
         $project_milestone= ProjectMilestone::find($request->milestone_id);
         $project_milestone->invoice_created= 1;
         $project_milestone->invoice_id= $invoice->id;
         $project_milestone->save();
+      }
 
 
         // To add custom fields data

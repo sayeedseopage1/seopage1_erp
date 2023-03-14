@@ -469,14 +469,14 @@ class ContractController extends AccountBaseController
           $lead->status_id = 3;
           $lead->save();
         }
-       
+
         $user_name= User::where('user_name',$request->user_name)->first();
         if ($user_name == null) {
             if($lead != null)
             {
             $country= Country::where('nicename',$lead->country)->first();
             }
-           
+
             $user = new User();
             $user->name = $request->client_name;
             $user->user_name = $request->user_name;
@@ -486,7 +486,7 @@ class ContractController extends AccountBaseController
             {
             $user->country_id= $country->id;
             }
-           
+
             $user->save();
             $role = new RoleUser();
             $role->role_id = 3;
@@ -494,16 +494,16 @@ class ContractController extends AccountBaseController
             $role->save();
             $client = new ClientDetails();
             $client->user_id = $user->id;
-    
+
             $client->client_username = $request->client_username;
             $client->save();
         } else {
             $user= $user_name;
         }
-        
-      
-       
-       
+
+
+
+
         $deal_client = Deal::find($deal->id);
         $deal_client->client_id = $user->id;
         $deal_client->save();
@@ -562,7 +562,7 @@ class ContractController extends AccountBaseController
     }
     public function storeMilestone(Request $request)
     {
-        //dd($request);
+//        dd($request->all());
         $total_value = $request->input('another_value') * 2;
 
         $project = Project::where('id', $request->project_id)->first();
@@ -574,7 +574,7 @@ class ContractController extends AccountBaseController
         // $request->validate([
         //     'input_value' => 'required|numeric|max:' . $another_value,
         // ]);
-    
+
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'cost' => 'required|numeric|max:' . $check,
@@ -631,7 +631,8 @@ class ContractController extends AccountBaseController
     }
     public function updateMilestone(Request $request, $id)
     {
-        
+//        dd($request->all());
+
         $projectmilestone = ProjectMilestone::where('id', $id)->first();
         $project_id = Project::where('id', $projectmilestone->project_id)->first();
         $deal= Deal::where('id',$project_id->deal_id)->first();
@@ -699,11 +700,9 @@ class ContractController extends AccountBaseController
     }
     public function storedealDetails(Request $request)
     {
-        //  dd($request->client_username);
+//        dd($request->message_link);
         $validated = $request->validate([
-            'project_name' => 'required',
-            'client_name' => 'required',
-
+            'message_link' => 'required',
             'description2' => 'required',
             'description3' => 'required',
             'description4' => 'required',
@@ -712,19 +711,28 @@ class ContractController extends AccountBaseController
             'description7' => 'required',
             'description8' => 'required',
             'description9' => 'required',
-
-
-            'message_link' => 'required',
-            'profile_link'=>'required',
-            'deadline'=>'required',
-
+        ], [
+            'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
+            'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
+            'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
+            'description5.required' => 'Client\'s focus or concerning points are required. Please share as detailed explanation as you can!',
+            'description6.required' => 'Login details are required. Please provide all the access details of the project!',
+            'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
+            'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
+            'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
         ]);
         //dd("hello");
         $project_milestone= Project::where('deal_id',$request->id)->first();
         $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
         if ($milestone == null) {
-          //Toastr::error('Please add a Milestone', 'Failed', ["positionClass" => "toast-top-right"]);
-         return back()->with('error','Please add a Milestone');
+            return response()->json([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "milestone_value" => [
+                        "Milestone not found!!!."
+                    ]
+                ]
+            ], 422);
         }
         DB::beginTransaction();
 
@@ -945,41 +953,53 @@ class ContractController extends AccountBaseController
                       Toastr::error('Action Failed', 'Error', ["positionClass" => "toast-top-right", 'redirectUrl']);
                       return back();
                   }
-                    Toastr::success('Deal creation completed successfully!', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
-                    return redirect('/account/contracts');
+//                    Toastr::success('Deal creation completed successfully!', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
+//                    return redirect('/account/contracts');
+                    return response()->json(['message' => 'Deal creation completed successfully']);
 
 
 
     }
     public function updatedealDetails(Request $request)
     {
-      $validated = $request->validate([
-          'project_name' => 'required',
-          'client_name' => 'required',
 
-          'description2' => 'required',
-          'description3' => 'required',
-          'description4' => 'required',
-          'description5' => 'required',
-          'description6' => 'required',
-          'description7' => 'required',
-          'description8' => 'required',
-          'description9' => 'required',
+//        dd($request->all());
+        $validated = $request->validate([
+            'message_link' => 'required',
 
-
-          'message_link' => 'required',
-          'profile_link'=>'required',
-          'deadline'=>'required',
-
-      ]);
-      //dd("hello");
+            'description2' => 'required',
+            'description3' => 'required',
+            'description4' => 'required',
+            'description5' => 'required',
+            'description6' => 'required',
+            'description7' => 'required',
+            'description8' => 'required',
+            'description9' => 'required',
+        ], [
+            'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
+            'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
+            'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
+            'description5.required' => 'Client\'s focus or concerning points are required. Please share as detailed explanation as you can!',
+            'description6.required' => 'Login details are required. Please provide all the access details of the project!',
+            'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
+            'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
+            'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+        ]);
+//      dd("hello");
       $project_milestone= Project::where('deal_id',$request->id)->first();
       $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
-      if ($milestone == null) {
-        //Toastr::error('Please add a Milestone', 'Failed', ["positionClass" => "toast-top-right"]);
-       return back()->with('error','Please add a Milestone');
-      }
-      DB::beginTransaction();
+//      dd($milestone);
+        if ($milestone == null) {
+            return response()->json([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "milestone_value" => [
+                        "Milestone not found!!!."
+                    ]
+                ]
+            ], 422);
+        } else {
+    DB::beginTransaction();
 
               try {
                 $deal = Deal::find($request->id);
@@ -1016,6 +1036,7 @@ class ContractController extends AccountBaseController
                 $deal->description8 = $request->description8;
                 $deal->description9 = $request->description9;
                 $deal->updated_by = Auth::id();
+//                dd($deal);
                 $deal->save();
                 $project_id = Project::where('deal_id', $request->id)->first();
                 $project = Project::find($project_id->id);
@@ -1188,7 +1209,12 @@ class ContractController extends AccountBaseController
                 return back();
                 // something went wrong
               }
-          return redirect('/account/contracts/' . $deal->id)->with('messages.contractAdded');
+
+            return response()->json(['message' => 'Deal Updated Successfully']);
+        }
+//          return redirect('/account/contracts/' . $deal->id)->with('messages.contractAdded');
+
+
 
     }
     public function DealUrl($id)

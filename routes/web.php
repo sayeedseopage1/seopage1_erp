@@ -684,7 +684,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('tasks/gantt-task-update/{id}', [TaskController::class, 'updateTaskDuration'])->name('tasks.gantt_task_update');
     Route::get('tasks/members/{id}', [TaskController::class, 'members'])->name('tasks.members');
     Route::get('tasks/project_tasks/{id}', [TaskController::class, 'projectTasks'])->name('tasks.project_tasks');
-    Route::get('tasks/show-subtask/{id}', [TaskController::class, 'show_subtask'])->name('tasks.show_subtask');
+    Route::get('tasks/show-subtask/{id}/{tableView?}', [TaskController::class, 'show_subtask'])->name('tasks.show_subtask');
 
     Route::group(
         ['prefix' => 'tasks'],
@@ -1157,7 +1157,4 @@ Route::post('/deliverable-authorization-request', [ProjectController::class, 'De
 Route::post('/deliverable-authorization-accept', [ProjectController::class, 'DeliverableAuthorizationAccept'])->name('deliverable-authorization-accept');
 Route::get('/projects/send-final-authorization-deliverables/{id}', [ProjectController::class, 'DeliverableFinalAuthorizationSend']);
 Route::post('/deliverable-final-authorization-accept', [ProjectController::class, 'DeliverableFinalAuthorizationAccept'])->name('deliverable-final-authorization-accept');
-
-
-
-
+Route::get('update/timer/box/set/{status}', [HomeController::class, 'timer_session_set'])->whereIn('status', ['on', 'off'])->name('home.timer_session_set');

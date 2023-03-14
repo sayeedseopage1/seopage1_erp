@@ -83,6 +83,8 @@ class TaskController extends AccountBaseController
 
         return $dataTable->render('tasks.index', $this->data);
     }
+
+
     public function TaskReview(Request $request)
     {
       $order= TaskSubmission::orderBy('id','desc')->where('user_id',$request->user_id)->where('task_id',$request->id)->first();
@@ -1082,14 +1084,22 @@ class TaskController extends AccountBaseController
         return response()->json($deliverable);
     }
 
-    public function show_subtask($id)
+    public function show_subtask(TasksDataTable $dataTable, $id, $tableView = null)
     {
-        $task = Task::where('id', $id)->first();
-
-        $html = view('tasks.ajax.showSubTask', compact('task'))->render();
-        return Reply::dataOnly([
-            'status' => 'success', 
-            'html' => $html, 
-        ]);
+        $viewPermission = user()->permission('view_tasks');
+        abort_403(!in_array($viewPermission, ['all', 'added', 'owned', 'both']));
+        if (request()->ajax() && $tableView ==  'tableView') {
+            $task = Task::findOrFail($id);
+            $project = $task->project;
+            $tasks = $task->subtasks;
+            $html = view('tasks.ajax.showSubTask', compact('project', 'tasks', 'task'))->render();
+            // dd($project, $task, $tasks);
+            return Reply::dataOnly([
+                'status' => 'success', 
+                'data' => $html
+            ]);
+        } else {
+            return redirect()->route('tasks.index');
+        }
     }
 }

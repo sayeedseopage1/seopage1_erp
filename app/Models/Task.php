@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Subtask;
 use App\Models\ProjectMilestone;
 use App\Models\TaskBoardColumn;
+use App\Models\Scopes\OrderByDesc;
 
 /**
  * App\Models\Task
@@ -139,6 +140,11 @@ class Task extends BaseModel
     protected $appends = ['due_on', 'create_on'];
     protected $guarded = ['id'];
     public $customFieldModel = 'App\Models\Task';
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderByDesc); // assign the Scope here
+    }
 
     public function project(): BelongsTo
     {
