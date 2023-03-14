@@ -458,4 +458,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
 
 <script>
     flatpickr("input[type=datetime-local]", {});
+    $("#submit-button").on('click',function() {
+        $("#submit-button").attr("disabled", true);
+    });
 </script>
