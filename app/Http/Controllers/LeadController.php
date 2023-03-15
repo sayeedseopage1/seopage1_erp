@@ -53,7 +53,11 @@ use Toastr;
 use Mail;
 use App\Mail\LeadConversionMail;
 use Illuminate\Support\Facades\Validator;
+
+use App\Notifications\DealUpdate;
+
 use App\Models\LeadActivity;
+
 
 
 class LeadController extends AccountBaseController
@@ -163,13 +167,18 @@ class LeadController extends AccountBaseController
 
         $deal= DealStage::where('lead_id',$lead->id)->first();
         // add pusher with admin role id 1
+        $users = User::where('role_id', '1')->get();
+
+        foreach ($users as $user) {
+            $user->notify(new DealUpdate($deal, $pusher_options));
+        }
 
         $this->triggerPusher('lead-updated-channel', 'lead-updated', [
             'user_id' => $this->user->id, 
             'role_id' => '1',
             'title' => 'Lead Converted Successfully',
-            'body' => 'Please check new leads',
-            'redirectUrl' => 'https://google.com'
+            'body' => 'Please check new deals',
+            'redirectUrl' => route('deals.show', $deal->id)
         ]);
 
         Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
@@ -311,11 +320,15 @@ class LeadController extends AccountBaseController
                     $lead_ag->save();
                 }
             }
+            $users = User::where('role_id', '7')->get();
+
+            foreach ($users as $user) {
+                $user->notify(new DealUpdate($deal, $pusher_options));
+            }
 
             $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
         }
 
-        
         return back()->with('status_updated', 'Status Updated!!');
     }
     public function DealStageUpdateLost(Request $request)

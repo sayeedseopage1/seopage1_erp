@@ -786,11 +786,12 @@
                     @php
                         $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$value->award_time)->format('Y-m-d H:i:s');
                         $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1200)->format('Y-m-d H:i:s');
-                        $minutes = \Carbon\Carbon::parse($newDateTime)->diffInMinutes(\Carbon\Carbon::now());
+                        $minutes = \Carbon\Carbon::parse($newDateTime)->diffInSeconds(\Carbon\Carbon::now());
                     @endphp
 
-                    let timeInMinutes_{{$value->id}} = {{$minutes}}; // set the time in minutes dynamically
-                    const deadline_{{$value->id}} = timeInMinutes_{{$value->id}} * 60; // convert minutes to seconds
+                    // let timeInMinutes_{{$value->id}} = {{$minutes}}; // set the time in minutes dynamically
+                    // const deadline_{{$value->id}} = timeInMinutes_{{$value->id}} * 60; // convert minutes to seconds
+                    const deadline_{{$value->id}} = {{$minutes}}; // convert minutes to seconds
                     let timerInterval_{{$value->id}};
                     let timeRemaining_{{$value->id}} = deadline_{{$value->id}};
                     let timerElement_{{$value->id}} = document.getElementById('timer_{{$value->id}}');
@@ -904,6 +905,46 @@
                     $("#easyNotify").easyNotify(options);
                 }
             }, channel.unbind());
+
+            // pusher.trigger('my-channel', 'my-event', eventData, triggerOptions, function(err, res) {
+            //     if (err) {
+            //         console.log('Error triggering event:', err);
+            //     } else {
+            //         console.log('Event triggered successfully:', res);
+            //     }
+            // });
+
+            
+            /*var eventData = {
+                message: 'Hello, world!',
+            };
+            pusher.trigger('lead-updated-channel', 'lead-updated', eventData, { unique: true });
+
+            var receivedEvents = [];
+
+            channel.bind('lead-updated', function(data) {
+                // Check if the event has already been received
+                if (receivedEvents.indexOf(data.event_id) === -1) {
+                    receivedEvents.push(data.event_id);
+
+                    // Display the notification
+                    if (data.role_id == window.Laravel.user.role_id) {
+                        var options = {
+                            title: data.title,
+                            options: {
+                                body: data.body,
+                                icon: '{{URL::asset("user-uploads/app-logo/c86157272a41bea229e0dcbe2ff9715b.png")}}'+ '?r=' + Math.random(),
+                                lang: 'en-US',
+                                onClick: function() {
+                                    window.location.href = data.redirectUrl;
+                                }
+                            }
+                        };
+
+                        $("#easyNotify").easyNotify(options);
+                    }
+                }
+            });*/
         })
     </script>
 </body>
