@@ -74,6 +74,7 @@ class LeadController extends AccountBaseController
     }
     public function DealStageChange(Request $request)
     {
+//        dd($request->all());
       $validator = Validator::make($request->all(), [
           'client_username' => 'required|unique:deal_stages|max:255',
           'profile_link' => 'required',
@@ -82,11 +83,13 @@ class LeadController extends AccountBaseController
 
       ]);
 
+
       if ($validator->fails()) {
         return response()->json([
               'status' => 400,
               'errors' => $validator->messages(),
           ]);
+//          return redirect()->back();
       };
 
         abort_403(user()->permission('view_contract') == 'none');
@@ -174,7 +177,7 @@ class LeadController extends AccountBaseController
         }
 
         $this->triggerPusher('lead-updated-channel', 'lead-updated', [
-            'user_id' => $this->user->id, 
+            'user_id' => $this->user->id,
             'role_id' => '1',
             'title' => 'Lead Converted Successfully',
             'body' => 'Please check new deals',
@@ -182,7 +185,7 @@ class LeadController extends AccountBaseController
         ]);
 
         Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
-        return redirect('/account/deals/'.$deal->id);
+        return redirect()->back();
     }
 
 
@@ -221,7 +224,7 @@ class LeadController extends AccountBaseController
         } else {
             $deal= DealStage::find($request->id);
             $pusher_options = [
-                'user_id' => $this->user->id, 
+                'user_id' => $this->user->id,
                 'role_id' => '7',
                 'redirectUrl' => route('deals.show', $deal->id)
             ];
@@ -328,6 +331,7 @@ class LeadController extends AccountBaseController
 
             $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
         }
+
 
         return back()->with('status_updated', 'Status Updated!!');
     }
@@ -593,7 +597,7 @@ class LeadController extends AccountBaseController
         $lead_agent->save();
 
         $this->triggerPusher('lead-updated-channel', 'lead-updated', [
-            'user_id' => $this->user->id, 
+            'user_id' => $this->user->id,
             'task_id' => '2',
             'role_id' => '1',
             'title' => 'New Lead added',

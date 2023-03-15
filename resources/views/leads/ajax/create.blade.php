@@ -18,7 +18,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
 
     <div class="col-sm-12">
 
-        <form action="{{route('store-lead')}}" id="store-lead" method="post">
+        <form action="#" id="store-lead" method="post">
           @csrf
 
             <div class="add-client bg-white rounded">
