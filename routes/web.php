@@ -1060,7 +1060,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 });
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
-Route::get('/deals/details/{id}', [ContractController::class, 'dealDetails']);
+Route::get('/deals/details/{id}', [ContractController::class, 'dealDetails'])->name('dealDetails');
 Route::get('/deals/details/edit/{id}', [ContractController::class, 'dealDetailsedit']);
 Route::post('/deals/details/store', [ContractController::class, 'storedealDetails'])->name('store-deal-details');
 Route::post('/deals/details/update', [ContractController::class, 'updatedealDetails'])->name('update-deal-details');
