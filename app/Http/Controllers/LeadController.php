@@ -77,7 +77,7 @@ class LeadController extends AccountBaseController
 //        dd($request->all());
       $validator = Validator::make($request->all(), [
           'client_username' => 'required|unique:deal_stages|max:255',
-          'profile_link' => 'required',
+          'profile_link' => 'required|url',
           'message_link' => 'required',
           'comments' => 'required',
 
@@ -89,7 +89,6 @@ class LeadController extends AccountBaseController
               'status' => 400,
               'errors' => $validator->messages(),
           ]);
-//          return redirect()->back();
       };
 
         abort_403(user()->permission('view_contract') == 'none');

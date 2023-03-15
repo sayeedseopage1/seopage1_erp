@@ -341,18 +341,18 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
-        //dd($request);
+//        dd($request->all());
         $current_time= Carbon::now()->format('d-m-Y H:i:s' );
        // dd($request->current_time, $request->award_time,$current_time);
 
 
         $award_date= strtotime($request->award_time);
+//        dd($award_date);
         $aw_dt= date('Y-m-d H:i:s', $award_date );
-        //dd($aw_dt);
 
 
 
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'user_name' => 'required',
             'client_name' => 'required',
             'project_name' => 'required',
@@ -361,13 +361,21 @@ class ContractController extends AccountBaseController
             // 'current_time' => 'date|date_format:d-m-Y H:i A',
             'award_time' => 'required|date|before:'.$current_time,
         ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'errors' => $validator->messages(),
+            ]);
+        };
     //  dd($request);
       $to = Carbon::parse($current_time);
       $from = Carbon::parse($request->award_time);
 
         $diff_in_minutes = $from->diffInMinutes($to);
       if ($diff_in_minutes > 1200) {
-        return back()->with('error','The award time and current time difference should not be more than 20 hours');
+          return response()->json([
+              'status'=>200,
+          ]);
       }
       //  dd($diff_in_minutes);
         $deal_stage = DealStage::where('id', $request->id)->first();
@@ -550,7 +558,11 @@ class ContractController extends AccountBaseController
         $project->public = 0;
         $project->save();
 
-        return redirect('/deals/details/' . $deal->id)->with('messages.contractAdded');
+        return response()->json([
+            'status' => 'success',
+            'redirectUrl' => route('dealDetails', $deal->id)
+        ]);
+
     }
     public function Milestone($id)
     {

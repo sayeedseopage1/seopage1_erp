@@ -1,13 +1,12 @@
 <link rel="stylesheet" href="{{asset('time-picker2/css/bootstrap-material-datetimepicker.css')}}" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{{--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">--}}
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
   rel="stylesheet">
 
 
 <script src="https://code.jquery.com/jquery-1.12.3.min.js" integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
-<script type="text/javascript" src="{{asset('time-picker2/js/bootstrap-material-datetimepicker.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+{{--<script type="text/javascript" src="{{asset('time-picker2/js/bootstrap-material-datetimepicker.js')}}"></script>--}}
 <style media="screen">
 #timerss {
 /* max-width: a; */
@@ -28,7 +27,7 @@ justify-content: center;
         <h5 class="modal-title" id="exampleModalLabel">Create Won Deal</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form class="" action="{{route('store-deals-stage')}}" method="post">
+      <form class="" action="{{route('store-deals-stage')}}" method="post" id="storeDealsStage">
         @csrf
         <?php
           $date= \Carbon\Carbon::now();
@@ -53,23 +52,23 @@ justify-content: center;
 
                               <div class="col-md-6">
                                 <div class="mt-3">
-                                    <label for="input-state-2" class="form-label"><strong>Deal ID <span style="color:red;">*<span></strong></label>
-                                    <input name="deal_id" value="{{$deal->short_code}}" readonly id="input-state-2" type="text" class="form-control height-35 f-14" placeholder="Enter Client Name" required>
+                                    <label for="deal_id" class="form-label"><strong>Deal ID <span style="color:red;">*<span></strong></label>
+                                    <input name="deal_id" value="{{$deal->short_code}}" readonly id="deal_id" type="text" class="form-control height-35 f-14" placeholder="Enter Client Name" required>
 
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 @if($deal->client_name != null)
                                 <div class="mt-3">
-                                    <label for="input-state-2" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong></label>
-                                    <input name="client_name" readonly value="{{$deal->client_name}}"   id="input-state-2" type="text" class="form-control height-35 f-14 @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
-
+                                    <label for="client_name" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong></label>
+                                    <input name="client_name" readonly value="{{$deal->client_name}}"   id="client_name" type="text" class="form-control height-35 f-14 @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
+                                    <label id="clientNameError" class="error text-danger" for=""></label>
                                 </div>
                                 @else
                                 <div class="mt-3">
                                     <label for="input-state-2" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong></label>
-                                    <input name="client_name"  id="input-state-2" type="text" value="{{old('client_name')}}" class="form-control height-35 f-14 @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
-
+                                    <input name="client_name"  id="client_name" type="text" value="{{old('client_name')}}" class="form-control height-35 f-14 @error('client_name') is-invalid @enderror" placeholder="Enter Client Name">
+                                    <label id="clientNameError" class="error text-danger" for=""></label>
                                 </div>
 
 
@@ -87,7 +86,7 @@ justify-content: center;
                               <div class="col-md-12">
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Client Username <span style="color:red;">*<span></strong></label>
-                                    <input name="user_name" id="input-state-3" readonly value="{{$deal->client_username}}" type="text" class="form-control height-35 f-14 @error('user_name') is-invalid @enderror" placeholder="Enter Client Username" >
+                                    <input name="user_name" id="user_name" readonly value="{{$deal->client_username}}" type="text" class="form-control height-35 f-14 @error('user_name') is-invalid @enderror" placeholder="Enter Client Username" >
 
                                 </div>
                                 @error('user_name')
@@ -99,8 +98,8 @@ justify-content: center;
 
                               <div class="col-md-12">
                                 <div class="mt-3">
-                                    <label for="input-state-3" class="form-label"><strong>Project Name <span style="color:red;">*<span></strong></label>
-                                    <input name="project_name" value="{{$deal->project_name}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+                                    <label for="project_name" class="form-label"><strong>Project Name <span style="color:red;">*<span></strong></label>
+                                    <input name="project_name" value="{{$deal->project_name}}" readonly id="project_name" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                 </div>
                               </div>
@@ -110,13 +109,13 @@ justify-content: center;
                                 @if($deal->profile_link != null)
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Profile Link </strong></label>
-                                    <input name="profile_link" value="{{$deal->profile_link}}" readonly id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+                                    <input name="profile_link" value="{{$deal->profile_link}}" readonly id="profile_link" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                 </div>
                                 @else
                                 <div class="mt-3">
                                     <label for="input-state-3" class="form-label"><strong>Profile Link</strong></label>
-                                    <input name="profile_link"  id="input-state-3" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" >
+                                    <input name="profile_link"  id="profile_link" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" >
 
                                 </div>
 
@@ -179,8 +178,8 @@ justify-content: center;
 
 
                             <div class="mt-3">
-                                <label for="input-state-3" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong></label>
-                                <input name="amount" value="{{$deal->actual_amount}}" id="input-state-3" min="1" type="number" class="form-control height-35 f-14 @error('amount') is-invalid @enderror" placeholder="Enter Amount" required>
+                                <label for="amount" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong></label>
+                                <input name="amount" value="{{$deal->actual_amount}}" id="amount" min="1" type="number" class="form-control height-35 f-14 @error('amount') is-invalid @enderror" placeholder="Enter Amount">
 
                             </div>
                             @error('amount')
@@ -194,7 +193,7 @@ justify-content: center;
                                   $currencies= App\Models\Currency::all();
                                  ?>
                                  <label for="input-state-3" class="form-label"><strong>Currency <span style="color:red;">*<span></strong></label>
-                            <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id">
+                            <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id" id="original_currency_id">
                                 <option selected value="{{$currency_active->id}}">({{$currency_active->currency_code}})</option>
                                 @foreach ($currencies as $currency)
                                 <option value="{{$currency->id}}">({{$currency->currency_code}})</option>
@@ -213,7 +212,7 @@ justify-content: center;
 {{--                          			<h2><strong>Project Award Time <span style="color:red;">*<span></strong></h2>--}}
 
 {{--                          				<input type="text" id="date-format" name="award_time" value="{{old('award_time')}}" class="form-control height-35 f-14 floating-label @error('award_time') is-invalid @enderror" placeholder="Select Exact Award Time" >--}}
-                          				<input type="text" id="datetimepicker" placeholder="YYYY-MM-DD HH:MM" value="{{old('award_time')}}" class="form-control height-35 f-14 floating-label @error('award_time') is-invalid @enderror" style="background: #ffffff">
+                          				<input type="datetime-local" id="datetime" name="award_time" placeholder="YYYY-MM-DD HH:MM" value="{{old('award_time')}}" class="form-control height-35 f-14 floating-label @error('award_time') is-invalid @enderror">
 
                           		</div>
                               @error('award_time')
@@ -223,9 +222,18 @@ justify-content: center;
                               @enderror
 
       </div>
+          <br>
+          <ul id="errorMsg">
+
+          </ul>
+          <br>
+{{--          <div class="alert alert-danger" role="alert" id="commonError">--}}
+{{--              The award time and current time difference should not be more than 20 hours!--}}
+{{--          </div>--}}
+          <br>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" >Create Won Deal</button>
+          <button type="button" class="btn btn-primary" id="createWonDeal">Create Won Deal</button>
 
       </div>
         </form>
@@ -240,25 +248,88 @@ justify-content: center;
 </script>
   @endif
 <script>
-    flatpickr("input[type=datetimepicker]", {});
+    var datetime = document.getElementById('datetime');
+    if (datetime.type === 'datetime-local') {
+        date.style.display = 'none';
+        time.style.display = 'none';
+
+        datetime.addEventListener('change', function() {
+            var inputDate = new Date(this.value);
+            var hours = inputDate.getHours();
+            var minutes = inputDate.getMinutes();
+
+            if (hours < 10) {
+                hours = '0' + hours;
+            }
+
+            if (minutes < 10) {
+                minutes = '0' + minutes;
+            }
+
+            this.value = inputDate.getFullYear() + '-' + ('0' + (inputDate.getMonth() + 1)).slice(-2) + '-' + ('0' + inputDate.getDate()).slice(-2) + '' + hours + ':' + minutes;
+            console.log('Formatted date:', this.value);
+        });
+    } else {
+        datetime.style.display = 'none';
+    }
 </script>
-  <script type="text/javascript">
-  $(document).ready(function()
-  {
-  // flatpickr("#datetimepicker", {
-  //     enableTime: true,
-  //     dateFormat: "Y-m-d H:i",
-  //     onChange: function(selectedDates, dateStr, instance) {
-  //         console.log("Selected date and time: ", dateStr);
-  //     }
-  // });
-  });
+<script>
+    $('#createWonDeal').click(function(e){
+        // alert('ok');
+        var data= {
+            '_token': "{{ csrf_token() }}",
+            'deal_id': document.getElementById("deal_id").value,
+            'client_name': document.getElementById("client_name").value,
+            'user_name': document.getElementById("user_name").value,
+            'project_name': document.getElementById("project_name").value,
+            'amount': document.getElementById("amount").value,
+            'original_currency_id': document.getElementById("original_currency_id").value,
+            'award_time': document.getElementById("datetime").value,
+            'id': '{{$deal->id}}',
+        }
+        // console.log(data);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "{{route('store-deals-stage')}}",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                if (response.status == 400) {
+                    $('#errorMsg').html("");
+                    $("#createWonDeal").text("Create Won Deal");
+                    $("#createWonDeal").attr("disabled", false);
+                    $('#errorMsg').addClass('alert alert-danger');
+                    $.each(response.errors, function (key, err_values){
+                        $('#errorMsg').append('<li>'+err_values+'</li>');
+                    });
+                }else{
+                    if (response.status == 200) {
+                        $("#createWonDeal").text("Create Won Deal");
+                        $("#createWonDeal").attr("disabled", false);
+                        toastr.error('The award time and current time difference should not be more than 20 hours!');
+                    };
+                    if (response.status == 'success') {
+                        window.location.href = response.redirectUrl;
+                    }
+                }
+            },
+        });
+    });
 
+</script>
 
-  </script>
-
-
-  <script>
+<script>
+    $("#createWonDeal").on('click',function() {
+        $("#createWonDeal").attr("disabled", true);
+        $("#createWonDeal").text("Processing ...");
+    })
+</script>
+<script>
            $(document).ready(function () {
                var buttonAdd = $("#add-button");
                var buttonRemove = $("#remove-button");
@@ -326,7 +397,7 @@ justify-content: center;
                    enableButtonAdd();
                });
            });
-       </script>
+</script>
 
 
 
