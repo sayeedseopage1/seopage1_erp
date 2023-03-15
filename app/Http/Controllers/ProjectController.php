@@ -1048,7 +1048,7 @@ if ($pm_count < 2) {
             // $this->logProjectActivity($project->id, 'Project updated by '.$pm_name->name);
             $log_user = Auth::user();
             foreach ($originalValues as $attribute => $originalValue) {
-                if ($attribute === 'updated_at') {
+                if ($attribute === 'updated_at' || $attribute === 'last_updated_by' ) {
                     continue;
                 }
               
@@ -1057,8 +1057,21 @@ if ($pm_count < 2) {
               
         
                 if ($originalValue != $updatedValue) {
+                    if($attribute == 'project_name')
+                    {
+                        $print= 'project name';
+                    }else{
+                        $print= $attribute;
+                    }
                     $activity = new ProjectActivity();
-                    $activity->activity= $log_user->name .' updated '.$attribute.' from '.$originalValue.' to '. $updatedValue ;
+                    if($attribute == 'project_summary')
+                    {
+                        $activity->activity= $log_user->name .' updated project summary' ;
+                    }else 
+                    {
+                        $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
+                    }
+                   
                     $activity->project_id = $project->id;
                     // $activity->attribute = $attribute;
                     // $activity->old_value = $originalValue;
@@ -1946,6 +1959,28 @@ if ($pm_count < 2) {
       $project= Project::find($deliverable->project_id);
       $project->hours_allocated = $project_id->hours_allocated + $deliverable->estimation_time;
       $project->save();
+
+      $log_user = Auth::user();
+     
+              $activity = new ProjectActivity();
+              $activity->activity= $log_user->name .' added project deliverable : '.$deliverable->title;
+            //   if($attribute == 'project_summary')
+            //   {
+            //       $activity->activity= $log_user->name .' updated project summary' ;
+            //   }else 
+            //   {
+            //       $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
+            //   }
+             
+              $activity->project_id = $project->id;
+              // $activity->attribute = $attribute;
+              // $activity->old_value = $originalValue;
+              // $activity->new_value = $updatedValue;
+              // $activity->user_id = Auth::id();
+              $activity->save();
+          
+      
+
       if($request->deliverable_type == 'Others')
       {
         $project_id= Project::where('id',$project->id)->first();
@@ -1990,6 +2025,26 @@ if ($pm_count < 2) {
       $project_update= Project::find($project_id_update->id);
       $project_update->hours_allocated = $project_id_update->hours_allocated + $request->estimation_time;
       $project_update->save();
+
+      $log_user = Auth::user();
+     
+      $activity = new ProjectActivity();
+      $activity->activity= $log_user->name .' updated project deliverable : '.$deliverable->title;
+    //   if($attribute == 'project_summary')
+    //   {
+    //       $activity->activity= $log_user->name .' updated project summary' ;
+    //   }else 
+    //   {
+    //       $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
+    //   }
+     
+      $activity->project_id = $project_update->id;
+      // $activity->attribute = $attribute;
+      // $activity->old_value = $originalValue;
+      // $activity->new_value = $updatedValue;
+      // $activity->user_id = Auth::id();
+      $activity->save();
+  
       if($request->deliverable_type == 'Others')
       {
         $project_id= Project::where('id',$project_update->id)->first();
@@ -2010,9 +2065,19 @@ if ($pm_count < 2) {
         $project= Project::find($deliverable_id->project_id);
         $project->hours_allocated= $project->hours_allocated - $deliverable_id->estimation_time;
         $project->save();
+       
+    
 
 
       $deliverable = ProjectDeliverable::findOrFail($id)->delete();
+      $log_user = Auth::user();
+     
+      $activity = new ProjectActivity();
+      $activity->activity= $log_user->name .' deleted project deliverable : '.$deliverable_id->title;
+   
+      $activity->project_id = $project->id;
+     
+      $activity->save();
 
 
       Toastr::success('Deliverable Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -2414,6 +2479,15 @@ if ($pm_count < 2) {
         $pm_project->save();
 
         $project_id= Project::where('id',$request->project_id)->first();
+        $log_user = Auth::user();
+     
+        $activity = new ProjectActivity();
+        $activity->activity= $log_user->name .' send project deliverable time extention request ';
+     
+        $activity->project_id = $request->project_id;
+       
+        $activity->save();
+  
 
         $users= User::where('role_id',1)->get();
         foreach ($users as $user) {
@@ -2441,6 +2515,14 @@ if ($pm_count < 2) {
         $pm_project->save();
 
         $project_id= Project::where('id',$request->project_id)->first();
+        $log_user = Auth::user();
+     
+        $activity = new ProjectActivity();
+        $activity->activity= 'Top management accepted project deliverable time extention request ';
+     
+        $activity->project_id = $request->project_id;
+       
+        $activity->save();
 
         $user= User::where('id',$project_id->pm_id)->get();
        
