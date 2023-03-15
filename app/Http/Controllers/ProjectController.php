@@ -783,6 +783,7 @@ if ($pm_count < 2) {
 
       //  dd($request->all());
         $project = Project::findOrFail($id);
+        $originalValues = $project->getOriginal();
         $project->project_name = $request->project_name;
         $project->project_short_code = $request->project_code;
 
@@ -875,6 +876,7 @@ if ($pm_count < 2) {
 
         $project->comments= $request->comments;
         $project->save();
+        // $this->logProjectActivity($project->id, 'Project accepted by ');
 
         if ($request->project_challenge != 'No Challenge') {
         $project_update= Project::find($project->id);
@@ -1032,8 +1034,45 @@ if ($pm_count < 2) {
         if ($request->get('custom_fields_data')) {
             $project->updateCustomFieldData($request->get('custom_fields_data'));
         }
+      
+        if($project->project_status != 'Accepted')
+        {
+            $pm_name= User::where('id',$project->pm_id)->first();
+            $this->logProjectActivity($project->id, 'Project accepted by '.$pm_name->name);
 
-        $this->logProjectActivity($project->id, 'modules.projects.projectUpdated');
+        }else 
+        {
+
+
+            // $pm_name= User::where('id',Auth::id())->first();
+            // $this->logProjectActivity($project->id, 'Project updated by '.$pm_name->name);
+            $log_user = Auth::user();
+            foreach ($originalValues as $attribute => $originalValue) {
+                if ($attribute === 'updated_at') {
+                    continue;
+                }
+              
+                $updatedValue = $project->$attribute;
+                
+              
+        
+                if ($originalValue != $updatedValue) {
+                    $activity = new ProjectActivity();
+                    $activity->activity= $log_user->name .' updated '.$attribute.' from '.$originalValue.' to '. $updatedValue ;
+                    $activity->project_id = $project->id;
+                    // $activity->attribute = $attribute;
+                    // $activity->old_value = $originalValue;
+                    // $activity->new_value = $updatedValue;
+                    // $activity->user_id = Auth::id();
+                    $activity->save();
+                }
+            }
+
+
+
+        }
+
+       
 
         $redirectUrl = urldecode($request->redirect_url);
 

@@ -53,7 +53,11 @@ use Toastr;
 use Mail;
 use App\Mail\LeadConversionMail;
 use Illuminate\Support\Facades\Validator;
+
 use App\Notifications\DealUpdate;
+
+use App\Models\LeadActivity;
+
 
 
 class LeadController extends AccountBaseController
@@ -611,6 +615,7 @@ class LeadController extends AccountBaseController
       //dd(Auth::id());
 
       $lead = Lead::find($request->id);
+      $originalValues = $lead->getOriginal();
       $lead->client_name= $request->client_name;
       $lead->deadline= $request->deadline;
 
@@ -637,6 +642,19 @@ class LeadController extends AccountBaseController
       $lead->projectpage_screenshot =$request->projectpage_screenshot;
     //  $lead->agent_id =Auth::id();
       $lead->save();
+      foreach ($originalValues as $attribute => $originalValue) {
+        $updatedValue = $lead->$attribute;
+
+        if ($originalValue != $updatedValue) {
+            $activity = new LeadActivity();
+            $activity->lead_id = $lead->id;
+            $activity->attribute = $attribute;
+            $activity->old_value = $originalValue;
+            $activity->new_value = $updatedValue;
+            $activity->user_id = Auth::id();
+            $activity->save();
+        }
+    }
       return redirect('/account/leads/')->with('messages.LeadAddedUpdate');
 
 
