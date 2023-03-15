@@ -229,7 +229,7 @@ return [
         Brian2694\Toastr\ToastrServiceProvider::class,
         Xetaio\Mentions\Providers\MentionServiceProvider::class,
      
-        NunoMaduro\LaravelDesktopNotifier\LaravelDesktopNotifierServiceProvider::class,
+        // NunoMaduro\LaravelDesktopNotifier\LaravelDesktopNotifierServiceProvider::class,
     ],
 
     /*
@@ -285,7 +285,7 @@ return [
         'Zip' => Macellan\Zip\ZipFacade::class,
         'Toastr'  => Brian2694\Toastr\Facades\Toastr::class,
        // 'DesktopNotifier' => NunoMaduro\LaravelDesktopNotifier\Facades\DesktopNotifier::class,
-        'DesktopNotifier' => NunoMaduro\LaravelDesktopNotifier\Facades\Notifier::class,
+        // 'DesktopNotifier' => NunoMaduro\LaravelDesktopNotifier\Facades\Notifier::class,
        // 'DesktopNotifier' => NunoMaduro\LaravelDesktopNotifier\Facades\DesktopNotifier::class,
 
 

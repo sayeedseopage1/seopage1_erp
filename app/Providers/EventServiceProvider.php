@@ -377,7 +377,7 @@ class EventServiceProvider extends ServiceProvider
         Project::class => [ProjectObserver::class],
         ProjectCategory::class => [ProjectCategoryObserver::class],
         ProjectFile::class => [FileUploadObserver::class],
-        ProjectMember::class => [ProjectMemberObserver::class],
+    //    / ProjectMember::class => [ProjectMemberObserver::class],
         ProjectMilestone::class => [ProjectMilestoneObserver::class],
         ProjectNote::class => [ProjectNoteObserver::class],
         ProjectRating::class => [ProjectRatingObserver::class],
@@ -404,4 +404,5 @@ class EventServiceProvider extends ServiceProvider
         UserPermission::class => [UserPermissionObserver::class],
 
     ];
+    
 }
