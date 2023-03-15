@@ -33,9 +33,6 @@
         <h5 class="modal-title"  id="exampleModalLabel">Convert Lead to Deal (Contact Made)</h5>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
-      <ul id="saveform_errList">
-
-      </ul>
       <form class="" action="{{route('deal-stage')}}" id="lead-convert" method="post">
         @csrf
         <input type="hidden"  name="id"  id="mydata">
@@ -45,22 +42,36 @@
           <div class="row">
               <div class="col-md-12">
                   <label for="input-state-2" class="form-label"><strong>Status <span style="color:red;">*<span></strong></label>
-                  <input readonly class="form-control height-35 f-14" value="Contact Made"  name="deal_stage"  placeholder="Contract Made" required></input>
+                  <input readonly class="form-control height-35 f-14" value="Contact Made"  name="deal_stage"  placeholder="Contract Made" ></input>
               </div>
               <div class="col-md-12 mt-3">
-                  <label for="Client Username"><strong>Client Username</strong></label>
+                  <label for="Client Username">
+                      <strong>Client Username<span style="color:red;">*<span></strong>
+                      <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Type Client Username" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                          <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                      </svg>
+                  </label>
                   <input class="form-control height-35 f-14"  name="client_username" id="client_username"  placeholder="Enter Client Username" ></input>
               </div>
               <div class="col-md-12 mt-3">
-                  <label for="Client Username"><strong>Client Profile Link</strong></label>
+                  <label for="Client Username">
+                      <strong>Client Profile Link<span style="color:red;">*<span></strong>
+                      <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Type profile link from Freelancer.com." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                          <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                      </svg>
+                  </label>
                   <input class="form-control height-35 f-14" id="profile_link"  name="profile_link"  placeholder="Enter Profile Link"></input>
               </div>
-              <label class="mt-3" for="Client Username"><strong>Client Message Thread Link</strong></label>
+              <label class="mt-3" for="Client Username"><strong>Client Message Thread Link</strong>
+                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Type message thread link" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                  </svg>
+              </label>
               <div class="col-md-9 dynamic-field" id="dynamic-field-1">
                   <div class="row">
                       <div class="col-md-12 my-2">
                           <div class="form-group">
-                              <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]" required/>
+                              <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]"/>
                           </div>
                       </div>
                   </div>
@@ -71,29 +82,101 @@
                       <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
                   </div>
               </div>
-              <div class="col-md-12 col-lg-12 ">
+{{--              <div class="col-md-12 col-lg-12 ">--}}
+{{--                  <div class="form-group">--}}
+{{--                      <x-forms.label class="my-3 comments" fieldId="comments"--}}
+{{--                                     :fieldLabel="__('Comments')" fieldRequired="true">--}}
+{{--                      </x-forms.label>--}}
+{{--                      <div id="comments"></div>--}}
+{{--                      <textarea name="comments" id="comments-text" class="d-none"></textarea>--}}
+{{--                  </div>--}}
+{{--              </div>--}}
+{{--              <label id="textareaError" style="color:red; display: none;"></label><br>--}}
+              <div class="col-md-12 col-lg-12">
                   <div class="form-group">
-                      <x-forms.label class="my-3 comments" fieldId="comments"
-                                     :fieldLabel="__('Comments')" fieldRequired="true">
-                      </x-forms.label>
-                      <div id="comments"></div>
-                      <textarea name="comments" id="comments-text" class="d-none"></textarea>
+                      <label class="text-dark-grey" data-label="true" for="commentsText"><strong>Comments</strong>
+                          <sup class="mr-1">*</sup>
+                          <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Comments" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                              <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                          </svg>
+                      </label>
+                      <textarea name="comments" id="commentsText" class="form-control"></textarea>
+                      <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                      <script>
+                          CKEDITOR.replace('comments');
+                      </script>
                   </div>
               </div>
-              <label id="textareaError" style="color:red; display: none;"></label><br>
+              <br>
+              <ul id="errorMsg">
+
+              </ul>
           </div>
       </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button  id="lead-convert-button" type="submit"  class="btn btn-primary" >Convert</button>
+                <button  id="lead-convert-button" type="submit"  class="btn btn-primary">Convert</button>
             </div>
       </form>
-
     </div>
   </div>
 </div>
 @push('scripts')
+    <script>
+        $('#lead-convert-button').click(function(e){
+            // alert('success');
+            var message_links = document.getElementsByName("message_link[]");
+            var message_links_values = [];
+            for (var i = 0; i < message_links.length; i++) {
+                message_links_values.push(message_links[i].value);
+            }
+            var comments = CKEDITOR.instances.commentsText.getData();
+            // console.log(message_links_values);
+            var data= {
+                '_token': "{{ csrf_token() }}",
+                'client_username': document.getElementById("client_username").value,
+                'profile_link': document.getElementById("profile_link").value,
+                'message_link': message_links_values,
+                'comments': comments,
+                'id': document.getElementById("mydata").value,
+            }
+            // console.log(data);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{route('deal-stage')}}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response.status);
+                    if (response.status == 400) {
+                        $('#errorMsg').html("");
+                        $("#lead-convert-button").text("Convert");
+                        $("#lead-convert-button").attr("disabled", false);
+                        $('#errorMsg').addClass('alert alert-danger');
+                        $.each(response.errors, function (key, err_values){
+                            $('#errorMsg').append('<li>'+err_values+'</li>');
+                        });
+                    }else{
+                        $('#lead-convert').trigger("reset");
+                        $('#dealstmodal').hide();
+                        $('.table').DataTable().ajax.reload();
+                    }
+                },
+            });
+        });
 
+    </script>
+    <script>
+        $("#lead-convert-button").on('click',function() {
+            $("#lead-convert-button").attr("disabled", true);
+            $("#lead-convert-button").text("Processing ...");
+        })
+    </script>
 <script>
          $(document).ready(function () {
              var buttonAdd = $("#add-button");
@@ -170,13 +253,4 @@
          });
        });
      </script>
-
-
-
-
-
-
-
-
-
 @endpush
