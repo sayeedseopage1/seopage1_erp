@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\ContractsDataTable;
+use App\DataTables\WonDealsDataTable;
 use App\Events\ContractSignedEvent;
 use App\Helper\Files;
 use App\Helper\Reply;
@@ -60,7 +60,7 @@ class ContractController extends AccountBaseController
         });
     }
 
-    public function index(ContractsDataTable $dataTable)
+    public function index(WonDealsDataTable $dataTable)
     {
         abort_403(user()->permission('view_contract') == 'none');
 
