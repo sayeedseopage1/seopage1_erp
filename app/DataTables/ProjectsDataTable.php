@@ -561,7 +561,7 @@ class ProjectsDataTable extends BaseDataTable
         }
 
         $model->groupBy('projects.id');
-
+        $model->orderBy('id', 'desc');
         return $model;
     }
 
@@ -576,7 +576,7 @@ class ProjectsDataTable extends BaseDataTable
             ->setTableId('projects-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->orderBy(1)
+            // ->orderBy(1)
             ->destroy(true)
             ->responsive(true)
             ->serverSide(true)

@@ -465,7 +465,7 @@ class DealsDataTable extends BaseDataTable
         //             ->orWhere('contracts.client_id', '=', user()->id);
         //     });
         // }
-
+        $model->orderBy('id', 'desc');
         return $model;
     }
 
@@ -481,7 +481,7 @@ class DealsDataTable extends BaseDataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
 
-            ->orderBy(1)
+            // ->orderBy(1)
             ->destroy(true)
             ->responsive(true)
             ->serverSide(true)
