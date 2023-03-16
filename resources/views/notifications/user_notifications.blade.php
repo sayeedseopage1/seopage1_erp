@@ -10,7 +10,6 @@
             @endif
         @endforeach
     @endif
-
 @empty
     <div class="card border-0 bg-additional-grey">
         <a class=" f-14 text-dark px-3" href="javascript:;">
@@ -21,5 +20,4 @@
             </div>
         </a>
     </div>
-
 @endforelse

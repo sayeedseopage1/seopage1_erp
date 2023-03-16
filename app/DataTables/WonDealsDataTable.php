@@ -8,8 +8,10 @@ use Yajra\DataTables\Html\Column;
 use App\DataTables\BaseDataTable;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Html\Editor\Editor;
+use \Carbon\Carbon;
 use Auth;
 use Str;
+use DB;
 
 class WonDealsDataTable extends BaseDataTable
 {
