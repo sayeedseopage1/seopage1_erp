@@ -56,10 +56,11 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
             <div id="table-actions" class="d-flex align-items-center">
                 @if ($addContractPermission == 'all' || $addContractPermission == 'added')
-                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 7)
-                  <x-forms.link-primary :link="route('deals.create')" class="mr-3" icon="plus">
-                        @lang('Create Deal')
-                    </x-forms.link-primary>
+                    @if(Auth::user()->role_id == 1)
+                        <button class="btn btn-primary mr-3" id="deal-add">
+                            <i class="fa-solid fa-plus"></i><span> Create Won Deal</span>
+                        </button>
+                    @include('contracts.modals.dealaddmodal')
                     @endif
                 @endif
             </div>
@@ -265,11 +266,13 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
     </script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script type="text/javascript">
-    $(document).ready(function() {
-      $('#description2').summernote();
-        $('#description3').summernote();
-
-    });
+        $(document).ready(function() {
+            $('#description2').summernote();
+            $('#description3').summernote();
+            
+            $('#deal-add').click(function() {
+                $('#dealaddmodal').modal('show');
+            })
+        });
     </script>
-    
 @endpush
