@@ -41,7 +41,7 @@ trait EmployeeDashboard
      */
     public function employeeDashboard()
     {
-        dd(request()->all());
+        // dd(request()->all());
       $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('startDate')) : now($this->global->timezone)->startOfMonth();
 
       $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('endDate')) : now($this->global->timezone);
