@@ -1,24 +1,24 @@
 @extends('layouts.app')
-
-
 @section('content')
-
 <div class="content-wrapper">
     <div class="row">
         <div class="col-sm-12">
             <x-cards.data padding="false" :title="__('app.newNotifications')">
                 @forelse ($user->unreadNotifications as $key => $notification)
-
                     @if(view()->exists('notifications.'.$userType.'.'.\Illuminate\Support\Str::snake(class_basename($notification->type))))
                         @include('notifications.'.$userType.'.'.\Illuminate\Support\Str::snake(class_basename($notification->type)))
+                    @else
+                        @if(view()->exists('notifications.client.'.\Illuminate\Support\Str::snake(class_basename($notification->type))))
+                            @include('notifications.client.'.\Illuminate\Support\Str::snake(class_basename($notification->type)))
+                        @else
+                            {{dd($notification)}}
+                        @endif
                     @endif
-
                     @foreach ($worksuitePlugins as $item)
                         @if(View::exists(strtolower($item).'::notifications.'.\Illuminate\Support\Str::snake(class_basename($notification->type))))
                             @include(strtolower($item).'::notifications.'.\Illuminate\Support\Str::snake(class_basename($notification->type)))
                         @endif
                     @endforeach
-
                 @empty
                     <div class="dropdown-item f-14 text-dark p-0">
                         <div class="card border-0 p-0 rounded-0">
@@ -33,7 +33,6 @@
             </x-card>
         </div>
     </div>
-
 </div>
-
 @endsection
+           
