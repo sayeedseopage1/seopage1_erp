@@ -42,7 +42,7 @@
           <div class="row">
               <div class="col-md-12">
                   <label for="input-state-2" class="form-label"><strong>Status <span style="color:red;">*<span></strong></label>
-                  <input readonly class="form-control height-35 f-14" value="Contact Made"  name="deal_stage"  placeholder="Contract Made" ></input>
+                  <input readonly class="form-control height-35 f-14" value="Contact Made"  name="deal_stage"  placeholder="Contract Made" autocomplete="off"></input>
               </div>
               <div class="col-md-12 mt-3">
                   <label for="Client Username">
@@ -51,7 +51,7 @@
                           <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                       </svg>
                   </label>
-                  <input class="form-control height-35 f-14"  name="client_username" id="client_username"  placeholder="Enter Client Username" ></input>
+                  <input class="form-control height-35 f-14"  name="client_username" id="client_username"  placeholder="Enter Client Username" autocomplete="off"></input>
               </div>
               <div class="col-md-12 mt-3">
                   <label for="Client Username">
@@ -60,7 +60,7 @@
                           <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                       </svg>
                   </label>
-                  <input class="form-control height-35 f-14" id="profile_link"  name="profile_link"  placeholder="Enter Profile Link"></input>
+                  <input class="form-control height-35 f-14" id="profile_link"  name="profile_link"  placeholder="Enter Profile Link" autocomplete="off"></input>
               </div>
               <label class="mt-3" for="Client Username"><strong>Client Message Thread Link</strong>
                   <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Type message thread link" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
@@ -71,7 +71,7 @@
                   <div class="row">
                       <div class="col-md-12 my-2">
                           <div class="form-group">
-                              <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]"/>
+                              <input type="text" id="message_link"  class="form-control height-35 f-14" placeholder="Add Link Here" name="message_link[]" autocomplete="off"/>
                           </div>
                       </div>
                   </div>
@@ -115,15 +115,20 @@
       </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button  id="lead-convert-button" type="submit"  class="btn btn-primary">Convert</button>
+                <button  id="lead-convert-button" class="btn btn-primary">Convert</button>
             </div>
       </form>
     </div>
   </div>
 </div>
 @push('scripts')
-    <script>
+    <script type="text/javascript">
+        function hello() {
+            e.preventDefault();
+            console.log('ooooo');
+        }
         $('#lead-convert-button').click(function(e){
+            e.preventDefault();
             // alert('success');
             var message_links = document.getElementsByName("message_link[]");
             var message_links_values = [];
