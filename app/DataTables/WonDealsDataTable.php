@@ -8,8 +8,10 @@ use Yajra\DataTables\Html\Column;
 use App\DataTables\BaseDataTable;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Html\Editor\Editor;
+use \Carbon\Carbon;
 use Auth;
 use Str;
+use DB;
 
 class WonDealsDataTable extends BaseDataTable
 {
@@ -43,7 +45,7 @@ class WonDealsDataTable extends BaseDataTable
                 return '<a class="openRightModal" href="'.route('contracts.show', $row->id).'">'.$row->deal_id.'</a>';
             })
             ->addColumn('project_name', function ($row) {
-                $title = Str::limit($row->project_name, 30, '...');
+                $title = Str::limit($row->project_name, 30, ' ...');
                 if ($row->status == 'Accepted') {
                     return '<a class="openRightModal" href="'.route('contracts.show', $row->id).'" title="'.$row->project_name.'">'.$title.'</a>';
                 } else {
@@ -54,11 +56,11 @@ class WonDealsDataTable extends BaseDataTable
                 return $row->actual_amount.' '.$row->original_currency->currency_symbol;
             })
             ->addColumn('client_name', function ($row) {
-                return '<a class="openRightModal" href="'.route('clients.show', $row->client_id).'">'.$row->client_name.'</a>';
+                return '<a class="openRightModal" href="'.route('clients.show', $row->client_id).'"><img src="'.$row->client->image_url.'" class="mr-3 taskEmployeeImg rounded-circle" alt="'.$row->client->name.'" title="'.$row->client->name.'">'.$row->client_name.'</a>';
             })
             ->addColumn('project_manager', function ($row) {
                 if (!is_null($row->pm_id)) {
-                    return '<a class="openRightModal" href="'.route('employees.show', $row->pm_id).'">'.$row->pm->name.'</a>';
+                    return '<a class="openRightModal" href="'.route('employees.show', $row->pm_id).'"><img src="'.$row->pm->image_url.'" class="mr-3 taskEmployeeImg rounded-circle" alt="'.$row->pm->name.'" title="'.$row->pm->name.'">'.$row->pm->name.'</a>';
                 } else {
                     return '---';
                 }
@@ -71,12 +73,12 @@ class WonDealsDataTable extends BaseDataTable
                 } elseif($row->submission_status == 'Awaiting for client Response') {
                     return '<span class="badge bg-warning">Awaiting for client Response</span>';
                 } else {
-                    return '<a class="" href="/deals/details/'.$row->id.'"><i class="fa-solid fa-eye fa-2x"></i></a>';
+                    return '<a class="text-center" href="/deals/details/'.$row->id.'"><i class="fa-solid fa-eye fa-2x"></i></a>';
                 }
             })
             ->addColumn('added_by', function ($row) {
                 if (!is_null($row->added_by)) {
-                    return '<a class="openRightModal" href="'.route('employees.show', $row->added_by).'">'.$row->addedBy->name.'</a>';
+                    return '<a class="openRightModal" href="'.route('employees.show', $row->added_by).'"><img src="'.$row->addedBy->image_url.'" class="mr-3 taskEmployeeImg rounded-circle" alt="'.$row->addedBy->name.'" title="'.$row->addedBy->name.'">'.$row->addedBy->name.'</a>';
                 } else {
                     return '---';
                 }
@@ -99,13 +101,13 @@ class WonDealsDataTable extends BaseDataTable
                     <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0" aria-labelledby="dropdownMenuLink" tabindex="0">';
 
                         if($row->submission_status == "Awaiting for client Response"){
-                            $action .= '<a class="dropdown-item" href="/account/deal-url/'.$row->id.'"><i class="fa-solid fa-file"></i>'.trans('Client Form').'</a>';
+                            $action .= '<a class="dropdown-item" href="/account/deal-url/'.$row->id.'"><i class="fa-solid fa-file mr-2"></i>'.trans('Client Form').'</a>';
                         } else {
-                            $action .= '<a class="dropdown-item" href="deal-url/'.$row->id.'"><i class="fa-solid fa-file"></i>'.trans('Client Form').'</a>';
+                            $action .= '<a class="dropdown-item" href="deal-url/'.$row->id.'"><i class="fa-solid fa-file mr-2"></i>'.trans('Client Form').'</a>';
                         }
                         
                         if(Auth::user()->role_id == 1 || Auth::user()->role_id== 7 || Auth::user()->role_id == 8) {
-                            $action .= '<a class="dropdown-item" href="/deals/details/edit/'.$row->id.'"><i class="fa-solid fa-pen-to-square"></i>'.trans('Edit').'</a>';
+                            $action .= '<a class="dropdown-item" href="/deals/details/edit/'.$row->id.'"><i class="fa-solid fa-pen-to-square mr-2"></i>'.trans('Edit').'</a>';
                         }
                     $action .= '
                     </div>
@@ -167,6 +169,15 @@ class WonDealsDataTable extends BaseDataTable
                     ->orWhere('users.name', 'like', '%' . request('searchText') . '%');
             });
         }
+        if ($request->pm_id != 'all') {
+            $model->where('pm_id', $request->pm_id);
+        }
+        if ($request->client_id != 'all') {
+            $model->where('client_id', $request->client_id);
+        }
+        if ($request->closed_by != 'all') {
+            $model->where('added_by', $request->closed_by);
+        }
 
         $model->orderBy('id', 'desc');
         return $model;
@@ -199,6 +210,7 @@ class WonDealsDataTable extends BaseDataTable
                 'fnDrawCallback' => 'function( oSettings ) {
                   //
                 }',
+                'scrollX' => true
                 /* 'buttons'      => ['excel'] */
             ])
         ->buttons(Button::make(['extend' => 'excel', 'text' => '<i class="fa fa-file-export"></i> ' . trans('app.exportExcel')]));
@@ -253,6 +265,7 @@ class WonDealsDataTable extends BaseDataTable
                 'data' => 'client_contact_form',
                 'name' => 'client_contact_form',
                 'title' => 'Client Contact Form',
+                'class' => 'text-center'
             ],
             'added_by' => [
                 'data' => 'added_by',

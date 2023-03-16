@@ -1,5 +1,11 @@
 @extends('layouts.app')
-
+@push('style')
+<style>
+    .tooltip-arrow, .red-tooltip + .tooltip > .tooltip-inner {
+        background-color: #fff;
+    }
+</style>
+@endpush
 @push('datatable-styles')
     @include('sections.datatable_css')
 @endpush
@@ -12,8 +18,7 @@
         <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.date')</p>
             <div class="select-status d-flex">
-                <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500"
-                    id="datatableRange" placeholder="@lang('placeholders.dateRange')">
+                <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange" placeholder="@lang('placeholders.dateRange')">
             </div>
         </div>
 
@@ -25,10 +30,56 @@
                             <i class="fa fa-search f-13 text-dark-grey"></i>
                         </span>
                     </div>
-                    <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field"
-                        placeholder="@lang('app.startTyping')">
+                    <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field" placeholder="@lang('app.startTyping')">
                 </div>
             </form>
+        </div>
+
+        <div class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('Project Manager')</p>
+            <div class="select-status">
+                <select class="form-control select-picker" name="pm_id" id="pm_id" data-live-search="true" data-size="8">
+                    <option selected value="all">@lang('All PM')</option>
+                    @php 
+                        $project_manager= App\Models\User::where('role_id', '4')->get()
+                    @endphp
+                    @foreach ($project_manager as $value)
+                        <option value="{{$value->id}}">{{ ucfirst($value->name) }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <div class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.clientName')</p>
+            <div class="select-status">
+                <select class="form-control select-picker" name="client_id" id="client_id" data-live-search="true"
+                    data-size="8">
+                    @if (!in_array('client', user_roles()))
+                        <option value="all">@lang('app.all')</option>
+                    @endif
+                    @foreach ($clients as $client)
+                        <option
+                            data-content="<div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $client->image_url }}' ></div> {{ ucfirst($client->name) }}"
+                            value="{{ $client->id }}">{{ ucfirst($client->name) }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <div class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('Closed By')</p>
+            <div class="select-status">
+                <select class="form-control select-picker" name="closed_by" id="closed_by" data-live-search="true" data-size="8">
+                    <option selected value="all">@lang('All')</option>
+                    @php 
+                        $project_manager= App\Models\User::whereIn('role_id', ['1', '7', '8'])->get()
+                    @endphp
+                    @foreach ($project_manager as $value)
+                        <option value="{{$value->id}}">{{ ucfirst($value->name) }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
         <!-- SEARCH BY TASK END -->
 
@@ -56,40 +107,37 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
             <div id="table-actions" class="d-flex align-items-center">
                 @if ($addContractPermission == 'all' || $addContractPermission == 'added')
-                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 7)
-                  <x-forms.link-primary :link="route('deals.create')" class="mr-3" icon="plus">
-                        @lang('Create Deal')
-                    </x-forms.link-primary>
+                    @if(Auth::user()->role_id == 1)
+                        <button class="btn btn-primary mr-3" id="deal-add">
+                            <i class="fa-solid fa-plus"></i><span> Create Won Deal</span>
+                        </button>
+                        @include('contracts.modals.dealaddmodal')
                     @endif
                 @endif
             </div>
         </div>
 
-
         <!-- Add Task Export Buttons End -->
 
         <!-- Task Box Start -->
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
-
             {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
-
         </div>
         <!-- Task Box End -->
     </div>
     <!-- CONTENT WRAPPER END -->
-
 @endsection
 
 
 @push('scripts')
     @include('sections.datatable_js')
-    
-
     <script>
-
         $('#Wondeals-table').on('preXhr.dt', function(e, settings, data) {
             var dateRangePicker = $('#datatableRange').data('daterangepicker');
             var startDate = $('#datatableRange').val();
+            var clientID = $('#client_id').val();
+            var pm_id = $('#pm_id').val();
+            var closed_by = $('#closed_by').val();
 
             if (startDate == '') {
                 startDate = null;
@@ -102,6 +150,9 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
             var searchText = $('#search-text-field').val();
             data['startDate'] = startDate;
             data['endDate'] = endDate;
+            data['client_id'] = clientID;
+            data['pm_id'] = pm_id;
+            data['closed_by'] = closed_by;
 
             data['searchText'] = searchText;
             //console.log(searchText);
@@ -110,18 +161,20 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
             window.LaravelDataTables["Wondeals-table"].draw();
         }
 
-        $('#project_name, #short_code, #search-text-field').on('change keyup', function() {
-            if ($('#short_code').val() != "all") {
+        $('#pm_id, #client_id, #closed_by, #search-text-field').on('change keyup', function() {
+            if ($('#client_id').val() != "all") {
                 $('#reset-filters').removeClass('d-none');
                 showTable();
-            } else if ($('#project_name').val() != "all") {
+            } else if ($('#pm_id').val() != "all") {
                 $('#reset-filters').removeClass('d-none');
                 showTable();
-            }else if ($('#project_link').val() != "all") {
+            } else if ($('#project_link').val() != "all") {
                 $('#reset-filters').removeClass('d-none');
                 showTable();
-            }
-             else if ($('#search-text-field').val() != "") {
+            } else if ($('#closed_by').val() != "all") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            } else if ($('#search-text-field').val() != "") {
                 $('#reset-filters').removeClass('d-none');
                 showTable();
             } else {
@@ -265,11 +318,13 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
     </script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script type="text/javascript">
-    $(document).ready(function() {
-      $('#description2').summernote();
-        $('#description3').summernote();
-
-    });
+        $(document).ready(function() {
+            $('#description2').summernote();
+            $('#description3').summernote();
+            
+            $('#deal-add').click(function() {
+                $('#dealaddmodal').modal('show');
+            })
+        });
     </script>
-    
 @endpush
