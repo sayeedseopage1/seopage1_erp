@@ -99,13 +99,13 @@ class WonDealsDataTable extends BaseDataTable
                     <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0" aria-labelledby="dropdownMenuLink" tabindex="0">';
 
                         if($row->submission_status == "Awaiting for client Response"){
-                            $action .= '<a class="dropdown-item" href="/account/deal-url/'.$row->id.'"><i class="fa-solid fa-file"></i>'.trans('Client Form').'</a>';
+                            $action .= '<a class="dropdown-item" href="/account/deal-url/'.$row->id.'"><i class="fa-solid fa-file mr-2"></i>'.trans('Client Form').'</a>';
                         } else {
-                            $action .= '<a class="dropdown-item" href="deal-url/'.$row->id.'"><i class="fa-solid fa-file"></i>'.trans('Client Form').'</a>';
+                            $action .= '<a class="dropdown-item" href="deal-url/'.$row->id.'"><i class="fa-solid fa-file mr-2"></i>'.trans('Client Form').'</a>';
                         }
                         
                         if(Auth::user()->role_id == 1 || Auth::user()->role_id== 7 || Auth::user()->role_id == 8) {
-                            $action .= '<a class="dropdown-item" href="/deals/details/edit/'.$row->id.'"><i class="fa-solid fa-pen-to-square"></i>'.trans('Edit').'</a>';
+                            $action .= '<a class="dropdown-item" href="/deals/details/edit/'.$row->id.'"><i class="fa-solid fa-pen-to-square mr-2"></i>'.trans('Edit').'</a>';
                         }
                     $action .= '
                     </div>
@@ -253,6 +253,7 @@ class WonDealsDataTable extends BaseDataTable
                 'data' => 'client_contact_form',
                 'name' => 'client_contact_form',
                 'title' => 'Client Contact Form',
+                'class' => 'text-center'
             ],
             'added_by' => [
                 'data' => 'added_by',
