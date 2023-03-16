@@ -11,7 +11,7 @@
                         @if(view()->exists('notifications.client.'.\Illuminate\Support\Str::snake(class_basename($notification->type))))
                             @include('notifications.client.'.\Illuminate\Support\Str::snake(class_basename($notification->type)))
                         @else
-                            {{dd($notification)}}
+                            @php //dd($notification); @endphp
                         @endif
                     @endif
                     @foreach ($worksuitePlugins as $item)
