@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Deal;
 use Carbon\Carbon;
 use App\Models\Lead;
 use App\Helper\Files;
@@ -15,6 +16,7 @@ use App\Jobs\ImportLeadJob;
 use App\Models\GdprSetting;
 use App\Models\LeadCategory;
 use App\Models\LeadFollowUp;
+use Illuminate\Support\Facades\Validate;
 use Illuminate\Http\Request;
 use App\Models\PurposeConsent;
 use App\DataTables\LeadsDataTable;
@@ -153,13 +155,32 @@ class DealController extends AccountBaseController
 
     public function store(Request $request)
     {
-      //  dd($request);
+        $request->validate([
+            'client_name' => 'required',
+            'client_username' => 'required',
+            'project_name' => 'required',
+            'project_link' => 'required|url',
+            'amount' => 'required',
+            'description' => 'required',
+            'comments' => 'required',
+
+        ]);
+//        dd($request);
+
       $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new DealStage();
         $deal->client_name= $request->client_name;
         $deal->short_code = 'DSEOP1' . $suffle;
-        $deal->client_username= $request->client_username;
+       // $username = Deal::find($request->client_username);
+        if ($request->client_username != null){
+
+            $deal->client_username= $request->client_username;
+        }else{
+            $deal->client_username= $request->client_username2;
+        }
+       // dd($username);
+       // $username->save();
         $deal->deal_stage= 0;
         $deal->project_name = $request->project_name;
         $deal->project_link = $request->project_link;
@@ -173,12 +194,17 @@ class DealController extends AccountBaseController
         $deal->added_by= Auth::id();
         $deal->converted_by= Auth::id();
         $deal->save();
-        // $user = new User();
-        // $user->name = $request->client_name;
-        // $user->user_name = $request->user_name;
-        // $user->login= 'disable';
-        // $user->email_notifications = 0;
-        // $user->save();
+       // $find_user= User::where('user_name',$request->coinet_username)->first();
+        if($request->client_username != null )
+        {
+             $user = new User();
+             $user->name = $request->client_name;
+             $user->user_name = $request->user_name;
+             $user->login= 'disable';
+             $user->email_notifications = 0;
+             $user->save();
+        }
+
         $deal_stage= new DealStageChange();
 
         $deal_stage->deal_id= $deal->short_code;
@@ -187,10 +213,13 @@ class DealController extends AccountBaseController
         $deal_stage->updated_by= Auth::id();
         $deal_stage->save();
 
+        return response()->json([
+            'status' => 'success',
+            'redirectUrl' => route('deals.index')
+        ]);
 
 
-
-        return redirect()->route('deals.index',__('Deals Added'));
+//        return redirect()->route('deals.index',__('Deals Added'));
     }
 
     public function edit($id)
@@ -220,6 +249,16 @@ class DealController extends AccountBaseController
 
     public function update(Request $request)
     {
+//        dd($request->all());
+        $request->validate([
+            'client_name' => 'required',
+            'client_username' => 'required',
+            'project_name' => 'required',
+            'project_link' => 'required|url',
+            'amount' => 'required',
+            'description' => 'required',
+
+        ]);
 
         $deal = DealStage::findOrFail($request->id);
         $deal->client_name= $request->client_name;
@@ -241,8 +280,12 @@ class DealController extends AccountBaseController
 
         //SweetAlert::message('Deal Updated Successfully!');
 
-         Toastr::success('Deals Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return redirect()->route('deals.index',__('Deals Updated'));
+//         Toastr::success('Deals Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+//        return redirect()->route('deals.index',__('Deals Updated'));
+        return response()->json([
+            'status' => 'success',
+            'redirectUrl' => route('deals.index')
+        ]);
     }
 
     private function storeUpdate($request, $contract)
@@ -416,7 +459,7 @@ class DealController extends AccountBaseController
 
     }
 
-    
+
 
 
 

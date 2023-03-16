@@ -18,6 +18,7 @@ use App\Models\User;
 use App\Models\PMAssign;
 use App\Models\Contract;
 use App\Models\Deal;
+use App\Models\ProjectActivity;
 class ProjectMilestoneController extends AccountBaseController
 {
 
@@ -134,6 +135,14 @@ class ProjectMilestoneController extends AccountBaseController
             $contract->original_amount= $contract->original_amount+ $milestone->actual_cost;
             $contract->amount= $contract->amount+ $milestone->cost;
             $contract->save();
+            $log_user = Auth::user();
+            $activity = new ProjectActivity();
+            $activity->activity= $milestone->milestone_title. '- New milestone added by '. $log_user->name;
+         
+            $activity->project_id = $project_update->id;
+           
+            $activity->save();
+    
 
            
 
@@ -145,7 +154,7 @@ class ProjectMilestoneController extends AccountBaseController
         //     $project->save();
         // }
 
-        $this->logProjectActivity($project->id, 'messages.newMilestoneCreated');
+       // $this->logProjectActivity($project->id, 'messages.newMilestoneCreated');
         return Reply::success(__('messages.milestoneSuccess'));
     }
 
@@ -198,6 +207,7 @@ class ProjectMilestoneController extends AccountBaseController
         $currency= Currency::where('currency_code',$request->original_currency_id)->first();
       //dd($request,$id);
         $milestone = ProjectMilestone::findOrFail($id);
+        $originalValues = $milestone->getOriginal();
         $milestone->project_id = $request->project_id;
         $milestone->milestone_title = $request->milestone_title;
         $milestone->summary = $request->summary;
@@ -240,12 +250,21 @@ class ProjectMilestoneController extends AccountBaseController
             $contract->original_amount= $contract->original_amount+ $milestone->actual_cost;
             $contract->amount= $contract->amount+ $milestone->cost;
             $contract->save();
+            $log_user = Auth::user();
+            $activity = new ProjectActivity();
+            $activity->activity= $milestone->milestone_title. '- milestone updated by '. $log_user->name;
+         
+            $activity->project_id = $project_update->id;
+           
+            $activity->save();
+
+            
 
            
 
         }
 
-        $this->logProjectActivity($milestone->project_id, 'messages.milestoneUpdated');
+       // $this->logProjectActivity($milestone->project_id, 'messages.milestoneUpdated');
         return Reply::success(__('messages.milestoneSuccess'));
     }
 
