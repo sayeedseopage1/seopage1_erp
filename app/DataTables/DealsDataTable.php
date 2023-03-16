@@ -489,6 +489,7 @@ class DealsDataTable extends BaseDataTable
                 'fnDrawCallback' => 'function( oSettings ) {
                   //
                 }',
+                'scrollX' => true
                 /* 'buttons'      => ['excel'] */
             ])
             ->buttons(Button::make(['extend' => 'excel', 'text' => '<i class="fa fa-file-export"></i> ' . trans('app.exportExcel')]));
