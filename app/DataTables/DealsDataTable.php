@@ -75,7 +75,7 @@ class DealsDataTable extends BaseDataTable
                     || ($this->editContractPermission == 'both' && (user()->id == $row->client_id || user()->id == $row->added_by))
                     ) {
                       if ($row->won_lost != 'Yes') {
-                        $action .= '<a class="dropdown-item openRightModal" href="' . route('deals.edit', [$row->id]) . '">
+                        $action .= '<a class="dropdown-item" href="' . route('deals.edit', [$row->id]) . '">
                                 <i class="fa fa-edit mr-2"></i>
                                 ' . trans('app.edit') . '
                             </a>';
@@ -187,8 +187,17 @@ class DealsDataTable extends BaseDataTable
 
                          </div>
                       </div>';
-              }else {
-                return '--';
+              }elseif($row->lead_id == null) {
+                return '<div class="media align-items-center">
+
+                         <div class="media-body">
+                        <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$row->project_link.'" class="text-dark-grey" href="' . $row->project_link . '" target="_blank">'.Str::limit($row->project_link,15) .'</a></h5>
+
+                         </div>
+                      </div>';
+              }else
+              {
+                  return '--';
               }
 
             })

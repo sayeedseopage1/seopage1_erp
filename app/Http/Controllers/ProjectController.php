@@ -2023,6 +2023,7 @@ if ($pm_count < 2) {
       $deliverable->save();
       $project_id_update= Project::where('id',$deliverable->project_id)->first();
       $project_update= Project::find($project_id_update->id);
+      $project_update->deliverable_authorization = 0;
       $project_update->hours_allocated = $project_id_update->hours_allocated + $request->estimation_time;
       $project_update->save();
 
@@ -2545,6 +2546,14 @@ if ($pm_count < 2) {
 
        
         $project_id= Project::where('id',$id)->first();
+        $log_user = Auth::user();
+     
+        $activity = new ProjectActivity();
+        $activity->activity= $log_user->name .' send project deliverable for final authorization';
+     
+        $activity->project_id = $project_id->id;
+       
+        $activity->save();
 
         $users= User::where('role_id',1)->get();
         foreach ($users as $user) {
@@ -2562,9 +2571,18 @@ if ($pm_count < 2) {
         $project->authorization_status = 'approved';
         $project->deliverable_authorization= 1;
         $project->save();
+
  
         
          $project_id= Project::where('id',$request->project_id)->first();
+         $log_user = Auth::user();
+     
+         $activity = new ProjectActivity();
+         $activity->activity= 'Top management finally authorized project deliverable';
+      
+         $activity->project_id = $project_id->id;
+        
+         $activity->save();
  
          $user= User::where('id',$project->pm_id)->first();
          
