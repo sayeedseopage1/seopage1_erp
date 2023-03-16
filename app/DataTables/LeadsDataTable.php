@@ -547,6 +547,7 @@ class LeadsDataTable extends BaseDataTable
                     });
                     $(".statusChange").selectpicker();
                 }',
+                'scrollX' => true
             ])
             ->buttons(Button::make(['extend' => 'excel', 'text' => '<i class="fa fa-file-export"></i> ' . trans('app.exportExcel')]));
     }
