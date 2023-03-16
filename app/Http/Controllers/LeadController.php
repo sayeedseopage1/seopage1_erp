@@ -74,21 +74,23 @@ class LeadController extends AccountBaseController
     }
     public function DealStageChange(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'client_username' => 'required|unique:deal_stages|max:255',
-            'profile_link' => 'required',
-            'message_link' => 'required',
-            'comments' => 'required',
+//        dd($request->all());
+      $validator = Validator::make($request->all(), [
+          'client_username' => 'required|unique:deal_stages|max:255',
+          'profile_link' => 'required',
+          'message_link' => 'required',
+          'comments' => 'required',
 
-        ]);
+      ]);
 
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'errors' => $validator->messages(),
-            ]);
-        };
+      if ($validator->fails()) {
+        return response()->json([
+              'status' => 400,
+              'errors' => $validator->messages(),
+          ]);
+//          return redirect()->back();
+      };
 
         abort_403(user()->permission('view_contract') == 'none');
 
@@ -97,14 +99,18 @@ class LeadController extends AccountBaseController
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $message_links = $request->message_link;
+        // /dd($message_links);
         $value= '';
 
         if (is_array($message_links) || is_object($message_links)) {
-            foreach ($message_links as $link) {
-                $value= $value  . $link .' <br> ';
+          foreach ($message_links as $link) {
+            //dd($d['day']);
+            $value= $value  . $link .' <br> ';
 
-            }
+          }
         }
+        // dd($request);
+        // dd($value);
         $deal= new DealStage();
         $deal->short_code= 'DSEOP1'. $suffle;
         $deal->lead_id= $lead->id;
@@ -132,14 +138,14 @@ class LeadController extends AccountBaseController
 
 
         if ($request->deal_stage == 4) {
-            $lead_id= Lead::where('id',$request->id)->first();
-            $agent= SalesCount::where('user_id',$lead_id->added_by)->first();
-            if ($agent != null) {
-                $lead_ag= SalesCount::find($agent->id);
+          $lead_id= Lead::where('id',$request->id)->first();
+          $agent= SalesCount::where('user_id',$lead_id->added_by)->first();
+          if ($agent != null) {
+            $lead_ag= SalesCount::find($agent->id);
 
-                $lead_ag->negotiation_started= $lead_ag->negotiation_started +1;
-                $lead_ag->save();
-            }
+            $lead_ag->negotiation_started= $lead_ag->negotiation_started +1;
+            $lead_ag->save();
+          }
 
         }
         $lead= Lead::find($lead->id);
@@ -148,36 +154,43 @@ class LeadController extends AccountBaseController
         $lead_con_id= Lead::where('id',$request->id)->first();
         $agent_id= SalesCount::where('user_id',$lead_con_id->added_by)->first();
         if ($agent_id != null) {
-            $lead_ag_id= SalesCount::find($agent_id->id);
+          $lead_ag_id= SalesCount::find($agent_id->id);
 
 
-            $lead_ag_id->deals_count= $lead_ag_id->deals_count +1;
-            $lead_ag_id->save();
+          $lead_ag_id->deals_count= $lead_ag_id->deals_count +1;
+          $lead_ag_id->save();
+
+        }
+        $users= User::where('role_id',1)->get();
+        foreach ($users as $user) {
+          Mail::to($user->email)->send(new LeadConversionMail($lead));
         }
 
-        $pusher_options = [
+
+
+        $deal= DealStage::where('lead_id',$lead->id)->first();
+        // add pusher with admin role id 1
+        $users = User::where('role_id', '1')->get();
+
+        foreach ($users as $user) {
+            $user->notify(new DealUpdate($deal, $pusher_options));
+        }
+
+        $this->triggerPusher('lead-updated-channel', 'lead-updated', [
             'user_id' => $this->user->id,
             'role_id' => '1',
             'title' => 'Lead Converted Successfully',
             'body' => 'Please check new deals',
             'redirectUrl' => route('deals.show', $deal->id)
-        ];
-        $users= User::where('role_id',1)->get();
-        foreach ($users as $user) {
-            Mail::to($user->email)->send(new LeadConversionMail($lead));
-            $user->notify(new DealUpdate($deal, $pusher_options));
-        }
-
-        $deal= DealStage::where('lead_id',$lead->id)->first();
-
-        $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
+        ]);
 
         Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
         return redirect()->back();
     }
 
 
-    //return back()->with('status_updated', 'Lead Converted to Deal Successfully.!!');
+
+        //return back()->with('status_updated', 'Lead Converted to Deal Successfully.!!');
 
     public function DealStageUpdate(Request $request)
     {
@@ -325,8 +338,8 @@ class LeadController extends AccountBaseController
     public function DealStageUpdateLost(Request $request)
     {
 
-        $deal= DealStage::find($request->id);
-        //dd($deal);
+      $deal= DealStage::find($request->id);
+      //dd($deal);
 
 
         $deal->comments=$request->comments;
@@ -334,15 +347,15 @@ class LeadController extends AccountBaseController
         $deal->won_lost="No";
         $deal->save();
         if (Auth::user()->role_id == 7) {
-            $agent_id= SalesCount::where('user_id',Auth::id())->first();
-            $lead_ag_id= SalesCount::find($agent_id->id);
+          $agent_id= SalesCount::where('user_id',Auth::id())->first();
+          $lead_ag_id= SalesCount::find($agent_id->id);
 
-            $lead_ag_id->lost_deals= $lead_ag_id->lost_deals +1;
-            $lead_ag_id->save();
+          $lead_ag_id->lost_deals= $lead_ag_id->lost_deals +1;
+          $lead_ag_id->save();
         }
 
 
-        return back()->with('status_updated', 'Status Updated!!');
+    return back()->with('status_updated', 'Status Updated!!');
     }
 
     public function index(LeadsDataTable $dataTable)
@@ -434,28 +447,28 @@ class LeadController extends AccountBaseController
         $tab = request('tab');
 
         switch ($tab) {
-            case 'files':
-                $this->view = 'leads.ajax.files';
+        case 'files':
+            $this->view = 'leads.ajax.files';
                 break;
-            case 'follow-up':
-                $this->view = 'leads.ajax.follow-up';
+        case 'follow-up':
+            $this->view = 'leads.ajax.follow-up';
                 break;
-            case 'proposals':
+        case 'proposals':
                 return $this->proposals();
-            case 'notes':
-                return $this->notes();
-            case 'gdpr':
+        case 'notes':
+            return $this->notes();
+        case 'gdpr':
 
-                $this->consents = PurposeConsent::with(['lead' => function ($query) use ($id) {
-                    $query->where('lead_id', $id)
-                        ->orderBy('created_at', 'desc');
-                }])->get();
+            $this->consents = PurposeConsent::with(['lead' => function ($query) use ($id) {
+                $query->where('lead_id', $id)
+                    ->orderBy('created_at', 'desc');
+            }])->get();
 
-                $this->gdpr = GdprSetting::first();
+            $this->gdpr = GdprSetting::first();
 
                 return $this->gdpr();
-            default:
-                $this->view = 'leads.ajax.profile';
+        default:
+            $this->view = 'leads.ajax.profile';
                 break;
         }
 
@@ -603,112 +616,112 @@ class LeadController extends AccountBaseController
     }
     public function updateLead(Request $request)
     {
-        //dd(Auth::id());
+      //dd(Auth::id());
 
-        $lead = Lead::find($request->id);
-        $originalValues = $lead->getOriginal();
-        $lead->client_name= $request->client_name;
-        $lead->deadline= $request->deadline;
+      $lead = Lead::find($request->id);
+      $originalValues = $lead->getOriginal();
+      $lead->client_name= $request->client_name;
+      $lead->deadline= $request->deadline;
 
-        $lead->project_id= $request->project_id;
-        $lead->project_link= $request->project_link;
-        //$lead->value= $request->value;
-        $lead->actual_value= $request->value;
-        $currency= Currency::where('id',$request->original_currency_id)->first();
-        //dd($currency);
-        $lead->value= ($request->value)/$currency->exchange_rate;
-        $lead->original_currency_id =$request->original_currency_id;
-        $lead->bid_value= $request->bid_value;
-        $lead->bid_value2= $request->bid_value2;
-        $lead->country= $request->country;
-        $lead->note= $request->description;
-        $lead->cover_letter= $request->cover_letter;
-        $lead->status_id= $request->status;
-        $lead->currency_id= 1;
-        $lead->bidding_minutes= $request->bidding_minutes;
-        $lead->bidding_seconds= $request->bidding_seconds;
-        //$lead->cover_letter= $request->cover_letter;
-        $lead->insight_screenshot= $request->insight_screenshot;
-        $lead-> bidpage_screenshot= $request-> bidpage_screenshot;
-        $lead->projectpage_screenshot =$request->projectpage_screenshot;
-        //  $lead->agent_id =Auth::id();
-        $lead->save();
-        foreach ($originalValues as $attribute => $originalValue) {
-            $updatedValue = $lead->$attribute;
+      $lead->project_id= $request->project_id;
+      $lead->project_link= $request->project_link;
+      //$lead->value= $request->value;
+      $lead->actual_value= $request->value;
+      $currency= Currency::where('id',$request->original_currency_id)->first();
+      //dd($currency);
+      $lead->value= ($request->value)/$currency->exchange_rate;
+      $lead->original_currency_id =$request->original_currency_id;
+      $lead->bid_value= $request->bid_value;
+      $lead->bid_value2= $request->bid_value2;
+      $lead->country= $request->country;
+      $lead->note= $request->description;
+      $lead->cover_letter= $request->cover_letter;
+      $lead->status_id= $request->status;
+      $lead->currency_id= 1;
+      $lead->bidding_minutes= $request->bidding_minutes;
+      $lead->bidding_seconds= $request->bidding_seconds;
+      //$lead->cover_letter= $request->cover_letter;
+      $lead->insight_screenshot= $request->insight_screenshot;
+      $lead-> bidpage_screenshot= $request-> bidpage_screenshot;
+      $lead->projectpage_screenshot =$request->projectpage_screenshot;
+    //  $lead->agent_id =Auth::id();
+      $lead->save();
+      foreach ($originalValues as $attribute => $originalValue) {
+        $updatedValue = $lead->$attribute;
 
-            if ($originalValue != $updatedValue) {
-                $activity = new LeadActivity();
-                $activity->lead_id = $lead->id;
-                $activity->attribute = $attribute;
-                $activity->old_value = $originalValue;
-                $activity->new_value = $updatedValue;
-                $activity->user_id = Auth::id();
-                $activity->save();
-            }
+        if ($originalValue != $updatedValue) {
+            $activity = new LeadActivity();
+            $activity->lead_id = $lead->id;
+            $activity->attribute = $attribute;
+            $activity->old_value = $originalValue;
+            $activity->new_value = $updatedValue;
+            $activity->user_id = Auth::id();
+            $activity->save();
         }
-        return redirect('/account/leads/')->with('messages.LeadAddedUpdate');
+    }
+      return redirect('/account/leads/')->with('messages.LeadAddedUpdate');
 
 
 
     }
     public function DealStage($id)
     {
-        abort_403(user()->permission('view_contract') == 'none');
+      abort_403(user()->permission('view_contract') == 'none');
 
-        if (!request()->ajax()) {
-            if (in_array('client', user_roles())) {
-                $this->clients = User::client();
-            }
-            else {
-                $this->clients = User::allClients();
-            }
+      if (!request()->ajax()) {
+          if (in_array('client', user_roles())) {
+              $this->clients = User::client();
+          }
+          else {
+              $this->clients = User::allClients();
+          }
 
-            $this->contractTypes = ContractType::all();
-            $this->contractCounts = Contract::count();
-            $this->expiredCounts = Contract::where(DB::raw('DATE(`end_date`)'), '<', now()->format('Y-m-d'))->count();
-            $this->aboutToExpireCounts = Contract::where(DB::raw('DATE(`end_date`)'), '>', now()->format('Y-m-d'))
-                ->where(DB::raw('DATE(`end_date`)'), '<', now()->timezone($this->global->timezone)->addDays(7)->format('Y-m-d'))
-                ->count();
+          $this->contractTypes = ContractType::all();
+          $this->contractCounts = Contract::count();
+          $this->expiredCounts = Contract::where(DB::raw('DATE(`end_date`)'), '<', now()->format('Y-m-d'))->count();
+          $this->aboutToExpireCounts = Contract::where(DB::raw('DATE(`end_date`)'), '>', now()->format('Y-m-d'))
+              ->where(DB::raw('DATE(`end_date`)'), '<', now()->timezone($this->global->timezone)->addDays(7)->format('Y-m-d'))
+              ->count();
 
-        }
-        $lead= Lead::where('id',$id)->first();
-        $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $suffle = substr(str_shuffle($chars), 0, 6);
-        $deal= new DealStage();
-        $deal->short_code= 'DSEOP1'. $suffle;
-        $deal->lead_id= $lead->id;
-        $deal->status= 1;
-        $deal->save();
-        $lead= Lead::find($lead->id);
-        $lead->deal_status=1;
-        $lead->save();
+      }
+      $lead= Lead::where('id',$id)->first();
+      $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      $suffle = substr(str_shuffle($chars), 0, 6);
+      $deal= new DealStage();
+      $deal->short_code= 'DSEOP1'. $suffle;
+      $deal->lead_id= $lead->id;
+      $deal->status= 1;
+      $deal->save();
+      $lead= Lead::find($lead->id);
+      $lead->deal_status=1;
+      $lead->save();
 
-        $deal= DealStage::where('id',$deal->id)->first();
+      $deal= DealStage::where('id',$deal->id)->first();
 
-        return back();
+      return back();
     }
     public function DealStageView($id)
     {
-        abort_403(user()->permission('view_contract') == 'none');
+      abort_403(user()->permission('view_contract') == 'none');
 
-        if (!request()->ajax()) {
-            if (in_array('client', user_roles())) {
-                $this->clients = User::client();
-            }
-            else {
-                $this->clients = User::allClients();
-            }
+      if (!request()->ajax()) {
+          if (in_array('client', user_roles())) {
+              $this->clients = User::client();
+          }
+          else {
+              $this->clients = User::allClients();
+          }
 
-            $this->contractTypes = ContractType::all();
-            $this->contractCounts = Contract::count();
-            $this->expiredCounts = Contract::where(DB::raw('DATE(`end_date`)'), '<', now()->format('Y-m-d'))->count();
-            $this->aboutToExpireCounts = Contract::where(DB::raw('DATE(`end_date`)'), '>', now()->format('Y-m-d'))
-                ->where(DB::raw('DATE(`end_date`)'), '<', now()->timezone($this->global->timezone)->addDays(7)->format('Y-m-d'))
-                ->count();
+          $this->contractTypes = ContractType::all();
+          $this->contractCounts = Contract::count();
+          $this->expiredCounts = Contract::where(DB::raw('DATE(`end_date`)'), '<', now()->format('Y-m-d'))->count();
+          $this->aboutToExpireCounts = Contract::where(DB::raw('DATE(`end_date`)'), '>', now()->format('Y-m-d'))
+              ->where(DB::raw('DATE(`end_date`)'), '<', now()->timezone($this->global->timezone)->addDays(7)->format('Y-m-d'))
+              ->count();
 
-        }
+      }
 
-        $deal= DealStage::where('lead_id',$id)->first();
+      $deal= DealStage::where('lead_id',$id)->first();
         $lead= Lead::where('id',$id)->first();
 
         return view('contracts.dealstage',$this->data,compact('deal','lead'));
@@ -808,8 +821,8 @@ class LeadController extends AccountBaseController
             || ($this->editPermission == 'added' && $this->lead->added_by == user()->id)
             || ($this->editPermission == 'owned' && !is_null( $this->lead->agent_id) && user()->id == $this->lead->leadAgent->user->id)
             || ($this->editPermission == 'both' && ((!is_null( $this->lead->agent_id) && user()->id == $this->lead->leadAgent->user->id)
-                    || user()->id == $this->lead->added_by)
-            )));
+            || user()->id == $this->lead->added_by)
+        )));
 
         $this->leadAgents = LeadAgent::with('user')->whereHas('user', function ($q) {
             $q->where('status', 'active');
@@ -851,8 +864,8 @@ class LeadController extends AccountBaseController
             || ($this->editPermission == 'added' && $lead->added_by == user()->id)
             || ($this->editPermission == 'owned' && !is_null( $lead->agent_id) && user()->id == $lead->leadAgent->user->id)
             || ($this->editPermission == 'both' && ((!is_null($lead->agent_id) && user()->id == $lead->leadAgent->user->id)
-                    || user()->id == $lead->added_by)
-            )));
+            || user()->id == $lead->added_by)
+        )));
 
         $lead->company_name = $request->company_name;
         $lead->website = $request->website;
@@ -907,8 +920,8 @@ class LeadController extends AccountBaseController
             || ($this->deletePermission == 'added' && $lead->added_by == user()->id)
             || ($this->deletePermission == 'owned' && !is_null( $lead->agent_id) && user()->id == $lead->leadAgent->user->id)
             || ($this->deletePermission == 'both' && ((!is_null($lead->agent_id) && user()->id == $lead->leadAgent->user->id)
-                    || user()->id == $lead->added_by)
-            )));
+            || user()->id == $lead->added_by)
+        )));
 
         Lead::destroy($id);
         return Reply::success(__('messages.LeadDeleted'));
@@ -935,13 +948,13 @@ class LeadController extends AccountBaseController
     public function applyQuickAction(Request $request)
     {
         switch ($request->action_type) {
-            case 'delete':
-                $this->deleteRecords($request);
+        case 'delete':
+            $this->deleteRecords($request);
                 return Reply::success(__('messages.deleteSuccess'));
-            case 'change-status':
-                $this->changeBulkStatus($request);
+        case 'change-status':
+            $this->changeBulkStatus($request);
                 return Reply::success(__('messages.statusUpdatedSuccessfully'));
-            default:
+        default:
                 return Reply::error(__('messages.selectAction'));
         }
     }
@@ -1028,7 +1041,7 @@ class LeadController extends AccountBaseController
         $this->editPermission = user()->permission('edit_lead_follow_up');
 
         abort_403(!($this->editPermission == 'all'
-            || ($this->editPermission == 'added' && $followUp->added_by == user()->id)
+        || ($this->editPermission == 'added' && $followUp->added_by == user()->id)
         ));
 
         if ($this->lead->next_follow_up != 'yes') {
