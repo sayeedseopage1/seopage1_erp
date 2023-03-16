@@ -173,7 +173,9 @@ class LeadController extends AccountBaseController
         $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
 
         Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
-        return redirect()->back();
+        return response()->json([
+            'status' => 'success'
+        ]);
     }
 
 
