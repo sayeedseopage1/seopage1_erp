@@ -1,5 +1,11 @@
 @extends('layouts.app')
-
+@push('style')
+<style>
+    .tooltip-arrow, .red-tooltip + .tooltip > .tooltip-inner {
+        background-color: #fff;
+    }
+</style>
+@endpush
 @push('datatable-styles')
     @include('sections.datatable_css')
 @endpush
