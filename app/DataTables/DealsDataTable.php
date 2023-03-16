@@ -129,7 +129,7 @@ class DealsDataTable extends BaseDataTable
                   return '<div class="media align-items-center">
 
                            <div class="media-body">
-                          <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$project->project_name.'" href="' . route('deals.show', [$row->id]) . '">' . ucfirst($project->project_name) . '</a></h5>
+                          <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.$project->project_name.'" href="' . route('deals.show', [$row->id]) . '">' . ucfirst(Str::limit($project->project_name, 30, " ...")) . '</a></h5>
 
                            </div>
                         </div>';

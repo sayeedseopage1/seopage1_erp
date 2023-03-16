@@ -45,7 +45,7 @@ class WonDealsDataTable extends BaseDataTable
                 return '<a class="openRightModal" href="'.route('contracts.show', $row->id).'">'.$row->deal_id.'</a>';
             })
             ->addColumn('project_name', function ($row) {
-                $title = Str::limit($row->project_name, 30, '...');
+                $title = Str::limit($row->project_name, 30, ' ...');
                 if ($row->status == 'Accepted') {
                     return '<a class="openRightModal" href="'.route('contracts.show', $row->id).'" title="'.$row->project_name.'">'.$title.'</a>';
                 } else {
