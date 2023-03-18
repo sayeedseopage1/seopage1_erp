@@ -399,17 +399,15 @@ class Project extends BaseModel
     }
 
     public function getActivityDescriptionForAttribute($attribute)
-{
-    switch ($attribute) {
-        case 'project_summary':
-            return 'Project Summary';
-        case 'project_name':
-            return 'Project Name';
-        // Add more cases for each attribute you want to customize
-        default:
-            return parent::getActivityDescriptionForAttribute($attribute);
+    {
+        switch ($attribute) {
+            case 'project_summary':
+                return 'Project Summary';
+            case 'project_name':
+                return 'Project Name';
+            // Add more cases for each attribute you want to customize
+            default:
+                return parent::getActivityDescriptionForAttribute($attribute);
+        }
     }
-}
-
-
 }
