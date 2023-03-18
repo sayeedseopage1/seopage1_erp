@@ -1,10 +1,10 @@
 @php
-$addProjectCategoryPermission = user()->permission('manage_project_category');
-$addEmployeePermission = user()->permission('add_employees');
-$addProjectFilePermission = user()->permission('add_project_files');
-$addPublicProjectPermission = user()->permission('create_public_project');
-$addProjectMemberPermission = user()->permission('add_project_members');
-$addProjectNotePermission = user()->permission('add_project_note');
+    $addProjectCategoryPermission = user()->permission('manage_project_category');
+    $addEmployeePermission = user()->permission('add_employees');
+    $addProjectFilePermission = user()->permission('add_project_files');
+    $addPublicProjectPermission = user()->permission('create_public_project');
+    $addProjectMemberPermission = user()->permission('add_project_members');
+    $addProjectNotePermission = user()->permission('add_project_note');
 @endphp
 
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
@@ -19,49 +19,49 @@ $addProjectNotePermission = user()->permission('add_project_note');
                 <div class="row p-20">
                     <div class="col-lg-6 col-md-6">
                         <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.taskShortCode')"
-                            fieldName="project_code" fieldRequired="true" fieldId="project_code"
-                            :fieldPlaceholder="__('placeholders.writeshortcode')" />
+                                      fieldName="project_code" fieldRequired="true" fieldId="project_code"
+                                      :fieldPlaceholder="__('placeholders.writeshortcode')" />
                     </div>
 
                     <div class="col-lg-6 col-md-6">
                         <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.projectName')"
-                            fieldName="project_name" fieldRequired="true" fieldId="project_name"
-                            :fieldPlaceholder="__('placeholders.project')"
-                            :fieldValue="$projectTemplate->project_name ?? ''" />
+                                      fieldName="project_name" fieldRequired="true" fieldId="project_name"
+                                      :fieldPlaceholder="__('placeholders.project')"
+                                      :fieldValue="$projectTemplate->project_name ?? ''" />
                     </div>
 
                     <div class="col-md-6 col-lg-4">
                         <x-forms.datepicker fieldId="start_date" fieldRequired="true"
-                            :fieldLabel="__('modules.projects.startDate')" fieldName="start_date"
-                            :fieldPlaceholder="__('placeholders.date')" />
+                                            :fieldLabel="__('modules.projects.startDate')" fieldName="start_date"
+                                            :fieldPlaceholder="__('placeholders.date')" />
                     </div>
 
                     <div class="col-md-6 col-lg-4" id="deadlineBox">
                         <x-forms.datepicker fieldId="deadline" fieldRequired="true"
-                            :fieldLabel="__('modules.projects.deadline')" fieldName="deadline"
-                            :fieldPlaceholder="__('placeholders.date')" />
+                                            :fieldLabel="__('modules.projects.deadline')" fieldName="deadline"
+                                            :fieldPlaceholder="__('placeholders.date')" />
                     </div>
 
                     <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                             <div class="d-flex mt-5">
                                 <x-forms.checkbox fieldId="without_deadline"
-                                    :fieldLabel="__('modules.projects.withoutDeadline')" fieldName="without_deadline" />
+                                                  :fieldLabel="__('modules.projects.withoutDeadline')" fieldName="without_deadline" />
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <x-forms.label class="my-3" fieldId="category_id"
-                            :fieldLabel="__('modules.projects.projectCategory')">
+                                       :fieldLabel="__('modules.projects.projectCategory')">
                         </x-forms.label>
                         <x-forms.input-group>
                             <select class="form-control select-picker" name="category_id" id="project_category_id"
-                                data-live-search="true">
+                                    data-live-search="true">
                                 <option value="">--</option>
                                 @foreach ($categories as $category)
                                     <option @if ($projectTemplate && $projectTemplate->category_id == $category->id) selected @endif
-                                        value="{{ $category->id }}">
+                                    value="{{ $category->id }}">
                                         {{ mb_ucwords($category->category_name) }}
                                     </option>
                                 @endforeach
@@ -70,7 +70,7 @@ $addProjectNotePermission = user()->permission('add_project_note');
                             @if ($addProjectCategoryPermission == 'all' || $addProjectCategoryPermission == 'added')
                                 <x-slot name="append">
                                     <button id="addProjectCategory" type="button"
-                                        class="btn btn-outline-secondary border-grey">@lang('app.add')</button>
+                                            class="btn btn-outline-secondary border-grey">@lang('app.add')</button>
                                 </x-slot>
                             @endif
                         </x-forms.input-group>
@@ -81,7 +81,7 @@ $addProjectNotePermission = user()->permission('add_project_note');
                         </x-forms.label>
                         <x-forms.input-group>
                             <select class="form-control select-picker" name="team_id" id="employee_department"
-                                data-live-search="true">
+                                    data-live-search="true">
                                 <option value="">--</option>
                                 @foreach ($teams as $team)
                                     <option value="{{ $team->id }}">{{ mb_ucwords($team->team_name) }}</option>
@@ -97,10 +97,10 @@ $addProjectNotePermission = user()->permission('add_project_note');
 
                             <input type="hidden" name="client_id" id="client_id" value="{{ $client->id }}">
                             <input type="text" value="{{ ucfirst($client->name) }}"
-                                class="form-control height-35 f-15 readonly-background" readonly>
+                                   class="form-control height-35 f-15 readonly-background" readonly>
                         @else
                             <x-client-selection-dropdown :clients="$clients" fieldRequired="false"
-                                :selected="request('default_client') ?? null" />
+                                                         :selected="request('default_client') ?? null" />
                         @endif
                     </div>
 
@@ -108,36 +108,36 @@ $addProjectNotePermission = user()->permission('add_project_note');
                         <div class="col-md-12 col-lg-6">
                             <div class="form-group my-3">
                                 <x-forms.label class="my-3" fieldId="project_summary"
-                                    :fieldLabel="__('modules.projects.projectSummary')">
+                                               :fieldLabel="__('modules.projects.projectSummary')">
                                 </x-forms.label>
                                 <div id="project_summary">{!! $projectTemplate->project_summary ?? '' !!}</div>
                                 <textarea name="project_summary" id="project_summary-text"
-                                    class="d-none">{!! $projectTemplate->project_summary ?? '' !!}</textarea>
+                                          class="d-none">{!! $projectTemplate->project_summary ?? '' !!}</textarea>
                             </div>
                         </div>
                     @else
                         <div class="col-md-12 col-lg-12">
                             <div class="form-group my-3">
                                 <x-forms.label class="my-3" fieldId="project_summary"
-                                    :fieldLabel="__('modules.projects.projectSummary')">
+                                               :fieldLabel="__('modules.projects.projectSummary')">
                                 </x-forms.label>
                                 <div id="project_summary">{!! $projectTemplate->project_summary ?? '' !!}</div>
                                 <textarea name="project_summary" id="project_summary-text"
-                                    class="d-none">{!! $projectTemplate->project_summary ?? '' !!}</textarea>
+                                          class="d-none">{!! $projectTemplate->project_summary ?? '' !!}</textarea>
                             </div>
                         </div>
                     @endif
-                    
+
 
                     @if ($addProjectNotePermission == 'all' || $addProjectNotePermission == 'added')
                         <div class="col-md-12 col-lg-6">
                             <div class="form-group my-3">
                                 <x-forms.label class="my-3" fieldId="notes"
-                                    :fieldLabel="__('modules.projects.note')">
+                                               :fieldLabel="__('modules.projects.note')">
                                 </x-forms.label>
                                 <div id="notes">{!! $projectTemplate->notes ?? '' !!}</div>
                                 <textarea name="notes" id="notes-text"
-                                class="d-none">{!! $projectTemplate->notes ?? '' !!}</textarea>
+                                          class="d-none">{!! $projectTemplate->notes ?? '' !!}</textarea>
                             </div>
                         </div>
                     @endif
@@ -147,7 +147,7 @@ $addProjectNotePermission = user()->permission('add_project_note');
                             <div class="form-group">
                                 <div class="d-flex mt-2">
                                     <x-forms.checkbox fieldId="is_public"
-                                        :fieldLabel="__('modules.projects.createPublicProject')" fieldName="public" />
+                                                      :fieldLabel="__('modules.projects.createPublicProject')" fieldName="public" />
                                 </div>
                             </div>
                         </div>
@@ -160,40 +160,40 @@ $addProjectNotePermission = user()->permission('add_project_note');
                         <div class="col-md-12" id="add_members">
                             <div class="form-group my-3">
                                 <x-forms.label class="my-3" fieldId="selectEmployee" fieldRequired="true"
-                                    :fieldLabel="__('Recommended Developers')">
+                                               :fieldLabel="__('Recommended Developers')">
                                 </x-forms.label>
                                 <x-forms.input-group>
                                     <select class="form-control multiple-users" multiple name="user_id[]"
-                                        id="selectEmployee" data-live-search="true" data-size="8">
+                                            id="selectEmployee" data-live-search="true" data-size="8">
                                         <?php
                                         $users= App\Models\User::where('role_id',5)->get();
                                         $user= App\Models\User::where('role_id',6)->first();
-                                         ?>
+                                        ?>
                                         @foreach ($users as $item)
                                             <option @if (request()->has('default_assign') && request('default_assign') == $item->id) selected @endif
-                                                @if (isset($projectTemplateMembers) && in_array($item->id, $projectTemplateMembers)) selected @endif data-content="<span class='badge badge-pill badge-light border'>
+                                            @if (isset($projectTemplateMembers) && in_array($item->id, $projectTemplateMembers)) selected @endif data-content="<span class='badge badge-pill badge-light border'>
                                                   <?php
-                                                  $task_id= App\Models\TaskUser::where('user_id',$item->id)->first();
-                                                  if($task_id != null )
-                                                  {
-                                                      $task= App\Models\Task::where('id',$task_id->task_id)->first();
-                                                      if ($task != null) {
-                                                        $d_data= "Busy Until ".$task->due_date;
-                                                      }else {
-                                                      $d_data=  "Open to Work";
-                                                      }
-
-                                                  }else {
+                                            $task_id= App\Models\TaskUser::where('user_id',$item->id)->first();
+                                            if($task_id != null )
+                                            {
+                                                $task= App\Models\Task::where('id',$task_id->task_id)->first();
+                                                if ($task != null) {
+                                                    $d_data= "Busy Until ".$task->due_date;
+                                                }else {
                                                     $d_data=  "Open to Work";
-                                                  }
-                                                // dd($task_id->task_id);
+                                                }
 
-                                                   ?>
-                                            <div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle'
-                                                    src='{{ $item->image_url }}'></div>
+                                            }else {
+                                                $d_data=  "Open to Work";
+                                            }
+                                            // dd($task_id->task_id);
+
+                                            ?>
+                                                <div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle'
+                                                        src='{{ $item->image_url }}'></div>
                                             {{ ucfirst($item->name) }} {{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}
-                                        </span>"
-                                        value="{{ $item->id }}">{{ mb_ucwords($item->name) }}  </option>
+                                                </span>"
+                                                    value="{{ $item->id }}">{{ mb_ucwords($item->name) }}  </option>
                                         @endforeach
 
                                     </select>
@@ -201,16 +201,16 @@ $addProjectNotePermission = user()->permission('add_project_note');
                                     @if ($addEmployeePermission == 'all' || $addEmployeePermission == 'added')
                                         <x-slot name="append">
                                             <button id="add-employee" type="button"
-                                                class="btn btn-outline-secondary border-grey">@lang('app.add')</button>
+                                                    class="btn btn-outline-secondary border-grey">@lang('app.add')</button>
                                         </x-slot>
                                     @endif
                                 </x-forms.input-group>
                             </div>
                         </div>
                         <div class="col-md-12">
-                          <div class="form-group my-3">
-                          <x-forms.text :fieldLabel="__('Lead Developer')" fieldName="" fieldId=""
-                              :fieldValue="$user->name" fieldReadOnly="true" />
+                            <div class="form-group my-3">
+                                <x-forms.text :fieldLabel="__('Lead Developer')" fieldName="" fieldId=""
+                                              :fieldValue="$user->name" fieldReadOnly="true" />
                             </div>
                         </div>
                     @elseif(in_array('employee', user_roles()))
@@ -229,18 +229,18 @@ $addProjectNotePermission = user()->permission('add_project_note');
                     @if ($addProjectFilePermission == 'all' || $addProjectFilePermission == 'added')
                         <div class="col-lg-12">
                             <x-forms.file-multiple class="mr-0 mr-lg-2 mr-md-2"
-                                :fieldLabel="__('app.add') . ' ' . __('app.file')" fieldName="file"
-                                fieldId="file-upload-dropzone" />
+                                                   :fieldLabel="__('app.add') . ' ' . __('app.file')" fieldName="file"
+                                                   fieldId="file-upload-dropzone" />
                             <input type="hidden" name="projectID" id="projectID">
                         </div>
                     @endif
 
                     <div class="col-lg-4">
                         <x-forms.select fieldId="currency_id" :fieldLabel="__('modules.invoices.currency')"
-                        fieldName="currency_id" search="true">
+                                        fieldName="currency_id" search="true">
                             @foreach ($currencies as $currency)
                                 <option @if (global_setting()->currency_id == $currency->id) selected @endif
-                                    value="{{ $currency->id }}">
+                                value="{{ $currency->id }}">
                                     {{ $currency->currency_symbol . ' (' . $currency->currency_code . ')' }}
                                 </option>
                             @endforeach
@@ -249,21 +249,21 @@ $addProjectNotePermission = user()->permission('add_project_note');
 
                     <div class="col-lg-4 col-md-6">
                         <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.projectBudget')"
-                            fieldName="project_budget" fieldId="project_budget"
-                            :fieldPlaceholder="__('placeholders.price')" />
+                                        fieldName="project_budget" fieldId="project_budget"
+                                        :fieldPlaceholder="__('placeholders.price')" />
                     </div>
 
                     <div class="col-lg-4 col-md-6">
                         <x-forms.number class="mr-0 mr-lg-2 mr-md-2"
-                            :fieldLabel="__('modules.projects.hours_allocated')" fieldName="hours_allocated"
-                            fieldId="hours_allocated" :fieldPlaceholder="__('placeholders.hourEstimate')" />
+                                        :fieldLabel="__('modules.projects.hours_allocated')" fieldName="hours_allocated"
+                                        fieldId="hours_allocated" :fieldPlaceholder="__('placeholders.hourEstimate')" />
                     </div>
 
                     <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                             <div class="d-flex mt-5">
                                 <x-forms.checkbox fieldId="manual_timelog"
-                                    :fieldLabel="__('modules.projects.manualTimelog')" fieldName="manual_timelog" />
+                                                  :fieldLabel="__('modules.projects.manualTimelog')" fieldName="manual_timelog" />
                             </div>
                         </div>
                     </div>
@@ -272,8 +272,8 @@ $addProjectNotePermission = user()->permission('add_project_note');
                         <div class="form-group">
                             <div class="d-flex mt-5">
                                 <x-forms.checkbox fieldId="client_task_notification"
-                                    :fieldLabel="__('modules.projects.clientTaskNotification')"
-                                    fieldName="client_task_notification" />
+                                                  :fieldLabel="__('modules.projects.clientTaskNotification')"
+                                                  fieldName="client_task_notification" />
                             </div>
                         </div>
                     </div>
@@ -284,10 +284,10 @@ $addProjectNotePermission = user()->permission('add_project_note');
                             <div class="col-md-4">
                                 @if ($field->type == 'text')
                                     <x-forms.text fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldLabel="$field->label"
-                                        fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldPlaceholder="$field->label"
-                                        :fieldRequired="$field->required === 'yes' ? true : false">
+                                                  :fieldLabel="$field->label"
+                                                  fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                  :fieldPlaceholder="$field->label"
+                                                  :fieldRequired="$field->required === 'yes' ? true : false">
                                     </x-forms.text>
                                 @elseif($field->type == 'password')
                                     <x-forms.password
@@ -307,24 +307,24 @@ $addProjectNotePermission = user()->permission('add_project_note');
                                     </x-forms.number>
                                 @elseif($field->type == 'textarea')
                                     <x-forms.textarea :fieldLabel="$field->label"
-                                        fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldRequired="$field->required === 'yes' ? true : false"
-                                        :fieldPlaceholder="$field->label">
+                                                      fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                      fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                      :fieldRequired="$field->required === 'yes' ? true : false"
+                                                      :fieldPlaceholder="$field->label">
                                     </x-forms.textarea>
                                 @elseif($field->type == 'radio')
                                     <div class="form-group my-3">
                                         <x-forms.label
                                             fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
                                             :fieldLabel="$field->label"
-                                                :fieldRequired="$field->required === 'yes' ? true : false">
+                                            :fieldRequired="$field->required === 'yes' ? true : false">
                                         </x-forms.label>
                                         <div class="d-flex">
                                             @foreach ($field->values as $key => $value)
                                                 <x-forms.radio fieldId="optionsRadios{{ $key . $field->id }}"
-                                                    :fieldLabel="$value"
-                                                    fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                                    :fieldValue="$value" :checked="$key == 0 ? true : false" />
+                                                               :fieldLabel="$value"
+                                                               fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                               :fieldValue="$value" :checked="$key == 0 ? true : false" />
                                             @endforeach
                                         </div>
                                     </div>
@@ -338,12 +338,12 @@ $addProjectNotePermission = user()->permission('add_project_note');
                                     </div>
                                 @elseif($field->type == 'date')
                                     <x-forms.datepicker custom="true"
-                                        fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldRequired="$field->required === 'yes' ? true : false"
-                                        :fieldLabel="$field->label"
-                                        fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                        :fieldValue="now()->timezone(global_setting()->timezone)->format(global_setting()->date_format)"
-                                        :fieldPlaceholder="$field->label" />
+                                                        fieldId="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                        :fieldRequired="$field->required === 'yes' ? true : false"
+                                                        :fieldLabel="$field->label"
+                                                        fieldName="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                        :fieldValue="now()->timezone(global_setting()->timezone)->format(global_setting()->date_format)"
+                                                        :fieldPlaceholder="$field->label" />
                                 @elseif($field->type == 'checkbox')
                                     <div class="form-group my-3">
                                         <x-forms.label
@@ -353,15 +353,15 @@ $addProjectNotePermission = user()->permission('add_project_note');
                                         </x-forms.label>
                                         <div class="d-flex checkbox-{{ $field->id }}">
                                             <input type="hidden"
-                                                name="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
-                                                id="{{ $field->name . '_' . $field->id }}">
+                                                   name="custom_fields_data[{{ $field->name . '_' . $field->id }}]"
+                                                   id="{{ $field->name . '_' . $field->id }}">
 
                                             @foreach ($field->values as $key => $value)
                                                 <x-forms.checkbox fieldId="optionsRadios{{ $key . $field->id }}"
-                                                    :fieldLabel="$value" fieldName="$field->name.'_'.$field->id.'[]'"
-                                                    :fieldValue="$value"
-                                                    onchange="checkboxChange('checkbox-{{ $field->id }}', '{{ $field->name . '_' . $field->id }}')"
-                                                    :fieldRequired="$field->required === 'yes' ? true : false" />
+                                                                  :fieldLabel="$value" fieldName="$field->name.'_'.$field->id.'[]'"
+                                                                  :fieldValue="$value"
+                                                                  onchange="checkboxChange('checkbox-{{ $field->id }}', '{{ $field->name . '_' . $field->id }}')"
+                                                                  :fieldRequired="$field->required === 'yes' ? true : false" />
                                             @endforeach
                                         </div>
                                     </div>
@@ -489,11 +489,11 @@ $addProjectNotePermission = user()->permission('add_project_note');
             var note = document.getElementById('project_summary').children[0].innerHTML;
             document.getElementById('project_summary-text').value = note;
 
-        if(add_project_note_permission == 'all' || add_project_note_permission == 'added') {
+            if(add_project_note_permission == 'all' || add_project_note_permission == 'added') {
 
-            var note = document.getElementById('notes').children[0].innerHTML;
-            document.getElementById('notes-text').value = note;
-        }
+                var note = document.getElementById('notes').children[0].innerHTML;
+                document.getElementById('notes-text').value = note;
+            }
 
             const url = "{{ route('projects.store') }}";
             var data = $('#save-project-data-form').serialize();
