@@ -247,32 +247,32 @@ justify-content: center;
     });
 </script>
   @endif
-<script>
-    var datetime = document.getElementById('datetime');
-    if (datetime.type === 'datetime-local') {
-        date.style.display = 'none';
-        time.style.display = 'none';
+{{--<script>--}}
+{{--    var datetime = document.getElementById('datetime');--}}
+{{--    if (datetime.type === 'datetime-local') {--}}
+{{--        date.style.display = 'none';--}}
+{{--        time.style.display = 'none';--}}
 
-        datetime.addEventListener('change', function() {
-            var inputDate = new Date(this.value);
-            var hours = inputDate.getHours();
-            var minutes = inputDate.getMinutes();
+{{--        datetime.addEventListener('change', function() {--}}
+{{--            var inputDate = new Date(this.value);--}}
+{{--            var hours = inputDate.getHours();--}}
+{{--            var minutes = inputDate.getMinutes();--}}
 
-            if (hours < 10) {
-                hours = '0' + hours;
-            }
+{{--            if (hours < 10) {--}}
+{{--                hours = '0' + hours;--}}
+{{--            }--}}
 
-            if (minutes < 10) {
-                minutes = '0' + minutes;
-            }
+{{--            if (minutes < 10) {--}}
+{{--                minutes = '0' + minutes;--}}
+{{--            }--}}
 
-            this.value = inputDate.getFullYear() + '-' + ('0' + (inputDate.getMonth() + 1)).slice(-2) + '-' + ('0' + inputDate.getDate()).slice(-2) + '' + hours + ':' + minutes;
-            console.log('Formatted date:', this.value);
-        });
-    } else {
-        datetime.style.display = 'none';
-    }
-</script>
+{{--            this.value = inputDate.getFullYear() + '-' + ('0' + (inputDate.getMonth() + 1)).slice(-2) + '-' + ('0' + inputDate.getDate()).slice(-2) + '' + hours + ':' + minutes;--}}
+{{--            console.log('Formatted date:', this.value);--}}
+{{--        });--}}
+{{--    } else {--}}
+{{--        datetime.style.display = 'none';--}}
+{{--    }--}}
+{{--</script>--}}
 <script>
     $('#createWonDeal').click(function(e){
         // alert('ok');
