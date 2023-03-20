@@ -170,6 +170,8 @@ use App\Http\Controllers\DealBoardController;
 use App\Http\Controllers\ProjectBoardController;
 use App\Http\Controllers\ReportIssueController;
 use App\Http\Controllers\SuggestionController;
+use App\Http\Controllers\SoftwareProjectController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -985,6 +987,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('report_issues', ReportIssueController::class);
     Route::post('/report-issue/status-change/', [ReportIssueController::class, 'StatusChange'])->name('report-issue-status');
 
+    // Software Development Project 
+
+
+    Route::post('software_projects/apply-quick-action', [SoftwareProjectController::class, 'applyQuickAction'])->name('software_projects.apply_quick_action');
+    Route::post('software_projects/updateOtherData/{id}', [SoftwareProjectController::class, 'updateOtherData'])->name('software_projects.update_other_data');
+    Route::post('software_projects/refreshCount', [SoftwareProjectController::class, 'refreshCount'])->name('software_projects.refresh_count');
+    Route::resource('software_projects', SoftwareProjectController::class);
+
     // Suggesstion controllers
     Route::post('suggestions/apply-quick-action', [SuggestionController::class, 'applyQuickAction'])->name('suggestions.apply_quick_action');
     Route::post('suggestions/updateOtherData/{id}', [SuggestionController::class, 'updateOtherData'])->name('suggestions.update_other_data');
@@ -1158,3 +1168,7 @@ Route::post('/deliverable-authorization-accept', [ProjectController::class, 'Del
 Route::get('/projects/send-final-authorization-deliverables/{id}', [ProjectController::class, 'DeliverableFinalAuthorizationSend']);
 Route::post('/deliverable-final-authorization-accept', [ProjectController::class, 'DeliverableFinalAuthorizationAccept'])->name('deliverable-final-authorization-accept');
 Route::get('update/timer/box/set/{status}', [HomeController::class, 'timer_session_set'])->whereIn('status', ['on', 'off'])->name('home.timer_session_set');
+
+
+
+
