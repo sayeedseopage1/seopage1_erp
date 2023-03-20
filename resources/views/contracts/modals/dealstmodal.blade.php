@@ -82,16 +82,6 @@
                       <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
                   </div>
               </div>
-{{--              <div class="col-md-12 col-lg-12 ">--}}
-{{--                  <div class="form-group">--}}
-{{--                      <x-forms.label class="my-3 comments" fieldId="comments"--}}
-{{--                                     :fieldLabel="__('Comments')" fieldRequired="true">--}}
-{{--                      </x-forms.label>--}}
-{{--                      <div id="comments"></div>--}}
-{{--                      <textarea name="comments" id="comments-text" class="d-none"></textarea>--}}
-{{--                  </div>--}}
-{{--              </div>--}}
-{{--              <label id="textareaError" style="color:red; display: none;"></label><br>--}}
               <div class="col-md-12 col-lg-12">
                   <div class="form-group">
                       <label class="text-dark-grey" data-label="true" for="commentsText"><strong>Comments</strong>

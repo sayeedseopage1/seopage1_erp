@@ -341,11 +341,18 @@ class LeadController extends AccountBaseController
     }
     public function DealStageUpdateLost(Request $request)
     {
-
+//        dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'comments' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400
+            ]);
+        };
+//        dd($request->all());
       $deal= DealStage::find($request->id);
-      //dd($deal);
-
-
+//      dd($deal);
         $deal->comments=$request->comments;
         $deal->deal_status="Lost";
         $deal->won_lost="No";
@@ -357,9 +364,10 @@ class LeadController extends AccountBaseController
           $lead_ag_id->lost_deals= $lead_ag_id->lost_deals +1;
           $lead_ag_id->save();
         }
-
-
-    return back()->with('status_updated', 'Status Updated!!');
+        return response()->json([
+            'status' => 'success'
+        ]);
+//    return back()->with('status_updated', 'Status Updated!!');
     }
 
     public function index(LeadsDataTable $dataTable)
