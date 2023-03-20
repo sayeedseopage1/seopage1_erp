@@ -116,6 +116,7 @@ class LeadsDataTable extends BaseDataTable
                                   ' . trans('Convert to Deal') . '
                               </button>';
                     }
+                    
 
 
 
