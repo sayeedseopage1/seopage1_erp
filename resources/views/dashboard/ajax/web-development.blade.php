@@ -145,7 +145,7 @@ Overview--}}
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="shadow-none">
+                    <td colspan="10" class="shadow-none">
                         <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                     </td>
                 </tr>

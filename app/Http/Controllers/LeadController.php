@@ -172,17 +172,19 @@ class LeadController extends AccountBaseController
         // add pusher with admin role id 1
         $users = User::where('role_id', '1')->get();
 
-        foreach ($users as $user) {
-            $user->notify(new DealUpdate($deal, $pusher_options));
-        }
-
-        $this->triggerPusher('lead-updated-channel', 'lead-updated', [
+        $pusher_options = [
             'user_id' => $this->user->id,
             'role_id' => '1',
             'title' => 'Lead Converted Successfully',
             'body' => 'Please check new deals',
             'redirectUrl' => route('deals.show', $deal->id)
-        ]);
+        ];
+
+        foreach ($users as $user) {
+            $user->notify(new DealUpdate($deal, $pusher_options));
+        }
+
+        $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
 
         Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
         return response()->json([

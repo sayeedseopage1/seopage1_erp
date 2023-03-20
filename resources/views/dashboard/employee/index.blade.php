@@ -56,16 +56,19 @@
             border-top-right-radius: 50%;
             border-bottom-right-radius: 50%;
         }
-
+        .hide-calender .table-condensed thead tr:nth-child(2),
+        .hide-calender .table-condensed tbody {
+/*            display: none*/
+        }
+        .hide-calender.daterangepicker {
+            width: 320px;
+        }
+        .hide-calender.monthselect {
+            width: 100% !important;
+        }
     </style>
 @endpush
-
-
 @section('content')
-
-
-
-
     <!-- CONTENT WRAPPER START -->
     <div class="px-4 py-2 border-top-0">
         <!-- WELOCOME START -->
@@ -101,24 +104,48 @@
 
             <!-- CLOCK IN CLOCK OUT START -->
             @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 7)
-          {{-- <div id="reportrange" class="mb-0" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: auto; margin:0 auto;">
-                <i class="fa fa-calendar"></i>&nbsp;
-                <span></span> <i class="fa fa-caret-down"></i>
-            </div> --}}
-            <div
-                class="align-items-center border-left-grey border-left-grey-sm-0 h-100 pl-4 ml-5">
-
+            <div class="align-items-center border-left-grey border-left-grey-sm-0 h-100 pl-4 ml-5">
                 <div class="col-auto">
-                   <label class="sr-only" for="inlineFormInputGroup"></label>
-                   <div class="input-group mb-2">
-                     <div class="input-group-prepend">
-                       <div class="input-group-text">  <i class="fa fa-calendar-alt mr-2 f-14 text-dark-grey"></i></div>
-                     </div>
-                     <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange2" placeholder="Start Date And End Date">
+                    <label class="sr-only" for="inlineFormInputGroup"></label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">  <i class="fa fa-calendar-alt mr-2 f-14 text-dark-grey"></i></div>
+                        </div>
+                        <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange2" placeholder="Start Date And End Date">
                    </div>
-                 </div>
-
+                </div>
             </div>
+            <div class="row col-12 col-sm-3 align-items-center border-left-grey border-left-grey-sm-0 h-100 pl-4 ml-5">
+                <div class="col-6">
+                    <div class="input-group w-100" style="height: 36px;">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar-alt"></i></span>
+                        </div>
+                        <select class="form-control f-14 f-w-500" id="getMonth" name="month">
+                            <option value="">Select Month</option>
+                            <option value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-4 input-group" style="height: 36px;">
+                    <input class="form-control f-14 f-w-500 text-center" type="number" id="getYear" name="year" value="2023" min="1900" max="2099">
+                </div>
+                <div class="col-2 input-group">
+                    <button class="btn btn-dark btn-sm" id="submitMonthDate"><i class="fa fa-check"></i></button>
+                </div>
+            </div>
+            
             @endif
             {{-- <div
                 class="ml-auto d-flex clock-in-out mb-3 mb-lg-0 mb-md-0 m mt-4 mt-lg-0 mt-md-0 justify-content-between">
@@ -969,157 +996,167 @@
 @endsection
 
 @push('scripts')
-  <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
-  <script type="text/javascript">
-      $(function() {
-          var format = '{{ global_setting()->moment_format }}';
-          var startDate = "{{ $startDate->format(global_setting()->date_format) }}";
-          var endDate = "{{ $endDate->format(global_setting()->date_format) }}";
-          var picker = $('#datatableRange2');
-          var start = moment(startDate, format);
-          var end = moment(endDate, format);
+<script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
+<script type="text/javascript">
 
-          function cb(start, end) {
-              $('#datatableRange2').val(start.format('{{ global_setting()->moment_date_format }}') +
-                  ' @lang("app.to") ' + end.format(
-                      '{{ global_setting()->moment_date_format }}'));
-              $('#reset-filters').removeClass('d-none');
-          }
+    $(function() {
+        var format = '{{ global_setting()->moment_format }}';
+        var startDate = "{{ $startDate->format(global_setting()->date_format) }}";
+        var endDate = "{{ $endDate->format(global_setting()->date_format) }}";
+        var picker = $('#datatableRange2');
+        var start = moment(startDate, format);
+        var end = moment(endDate, format);
 
-          $('#datatableRange2').daterangepicker({
-              locale: daterangeLocale,
-              linkedCalendars: false,
-              startDate: start,
-              endDate: end,
-              ranges: daterangeConfig,
-              opens: 'left',
-              parentEl: '.dashboard-header'
-          }, cb);
+        function cb(start, end) {
+            $('#datatableRange2').val(start.format('{{ global_setting()->moment_date_format }}') +
+                ' @lang("app.to") ' + end.format( '{{ global_setting()->moment_date_format }}'));
+            $('#reset-filters').removeClass('d-none');
+        }
+
+        $('#datatableRange2').daterangepicker({
+            locale: daterangeLocale,
+            linkedCalendars: false,
+            startDate: start,
+            endDate: end,
+            ranges: daterangeConfig,
+            opens: 'left',
+            parentEl: '.dashboard-header'
+        }, cb);
+
+        $('#submitMonthDate').click(function() {
+            showTable(true);
+        });
+
+        $('#datatableRange2').on('apply.daterangepicker', function(ev, picker) {
+            showTable();
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(".dashboard-header").on("click", ".ajax-tab", function(event) {
+        event.preventDefault();
 
 
-          $('#datatableRange2').on('apply.daterangepicker', function(ev, picker) {
-              showTable();
-          });
+        var dateRangePicker = $('#datatableRange2').data('daterangepicker');
+        var startDate = $('#datatableRange').val();
 
-      });
-  </script>
-  <script type="text/javascript">
-  $(".dashboard-header").on("click", ".ajax-tab", function(event) {
-      event.preventDefault();
+        if (startDate == '') {
+            startDate = null;
+            endDate = null;
+        } else {
+            startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+            endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
+        }
 
-
-      var dateRangePicker = $('#datatableRange2').data('daterangepicker');
-      var startDate = $('#datatableRange').val();
-
-      if (startDate == '') {
-          startDate = null;
-          endDate = null;
-      } else {
-          startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
-          endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
-      }
-
-      const requestUrl = this.href;
+        const requestUrl = this.href;
         //alert(requestUrl);
 
-      $.easyAjax({
-          url: requestUrl,
-          blockUI: true,
-          container: "#emp-dashboard",
-          historyPush: true,
-          data: {
-              startDate: startDate,
-              endDate: endDate
-          },
-          blockUI: true,
-          success: function(response) {
-              if (response.status == "success") {
-                  $('#emp-dashboard').html(response.html);
-                  init('#emp-dashboard');
-              }
-          }
-      });
-      $.easyAjax({
-          url: requestUrl,
-          blockUI: true,
-          container: "#emp-dashboard2",
-          historyPush: true,
-          data: {
-              startDate: startDate,
-              endDate: endDate
-          },
-          blockUI: true,
-          success: function(response) {
-              if (response.status == "success") {
-                  $('#emp-dashboard2').html(response.html);
-                  init('#emp-dashboard2');
-              }
-          }
-      });
-  });
-  function showTable() {
+        $.easyAjax({
+            url: requestUrl,
+            blockUI: true,
+            container: "#emp-dashboard",
+            historyPush: true,
+            data: {
+                startDate: startDate,
+                endDate: endDate
+            },
+            blockUI: true,
+            success: function(response) {
+                if (response.status == "success") {
+                    $('#emp-dashboard').html(response.html);
+                    init('#emp-dashboard');
+                }
+            }
+        });
+        $.easyAjax({
+            url: requestUrl,
+            blockUI: true,
+            container: "#emp-dashboard2",
+            historyPush: true,
+            data: {
+                startDate: startDate,
+                endDate: endDate
+            },
+            blockUI: true,
+            success: function(response) {
+                if (response.status == "success") {
+                    $('#emp-dashboard2').html(response.html);
+                    init('#emp-dashboard2');
+                }
+            }
+        });
+    });
+
+    function showTable(showMohthlyView = false) {
+        if (showMohthlyView == false) {
+            var dateRangePicker = $('#datatableRange2').data('daterangepicker');
+            var startDate = $('#datatableRange').val();
+            if (startDate == '') {
+                startDate = null;
+                endDate = null;
+            } else {
+                startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+                endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
+            }
+        } else {
+            var month = $('#getMonth :selected').val();
+            var year = $('#getYear').val();
+
+            var previousMonth = month - 1;
+            var perviousYear = year;
+            if (previousMonth == '00') {
+                previousMonth = '12';
+                perviousYear = year - 1;
+            } 
+            
+            startDate = '21-'+previousMonth+'-'+perviousYear;
+            endDate = '20-'+month+'-'+year;
+        }
+
+        const requestUrl = this.href;
 
 
-      var dateRangePicker = $('#datatableRange2').data('daterangepicker');
-      var startDate = $('#datatableRange').val();
+        $.easyAjax({
+            url: requestUrl,
+            blockUI: true,
+            container: "#emp-dashboard",
+            data: {
+                startDate: startDate,
+                endDate: endDate
+            },
+            blockUI: true,
+            success: function(response) {
 
-      if (startDate == '') {
-          startDate = null;
-          endDate = null;
-      } else {
-          startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
-          endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
-      }
+                if (response.status == "success") {
 
+                    $('#emp-dashboard').html(response.html);
 
-      const requestUrl = this.href;
+                    init('#emp-dashboard');
+                }
+            }
+        });
+        $.easyAjax({
+            url: requestUrl,
+            blockUI: true,
+            container: "#emp-dashboard2",
+            data: {
+                startDate: startDate,
+                endDate: endDate
+            },
+            blockUI: true,
+            success: function(response) {
 
+                if (response.status == "success") {
 
-      $.easyAjax({
-          url: requestUrl,
-          blockUI: true,
-          container: "#emp-dashboard",
-          data: {
-              startDate: startDate,
-              endDate: endDate
-          },
-          blockUI: true,
-          success: function(response) {
-            //console.log(response);
+                    $('#emp-dashboard2').html(response.html);
 
-              if (response.status == "success") {
+                    init('#emp-dashboard2');
 
-                  $('#emp-dashboard').html(response.html);
-
-                  init('#emp-dashboard');
-
-              }
-          }
-      });
-      $.easyAjax({
-          url: requestUrl,
-          blockUI: true,
-          container: "#emp-dashboard2",
-          data: {
-              startDate: startDate,
-              endDate: endDate
-          },
-          blockUI: true,
-          success: function(response) {
-            //console.log(response);
-
-              if (response.status == "success") {
-
-                  $('#emp-dashboard2').html(response.html);
-
-                  init('#emp-dashboard2');
-
-              }
-          }
-      });
-  }
-
-  </script>
+                }
+            }
+        });
+    }
+</script>
     @if (!is_null($viewEventPermission) && $viewEventPermission != 'none')
         <script src="{{ asset('vendor/full-calendar/main.min.js') }}"></script>
         <script src="{{ asset('vendor/full-calendar/locales-all.min.js') }}"></script>
@@ -1437,5 +1474,4 @@
 
     </script>
     @endif
-
 @endpush
