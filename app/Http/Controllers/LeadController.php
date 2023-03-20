@@ -534,10 +534,10 @@ class LeadController extends AccountBaseController
     }
     public function storeLead(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'client_name' => 'required|max:255',
             'country' => 'required',
-            'project_link' => 'required|url|unique:leads,project_link',
+            'project_link' => 'required|url',
             'deadline' => 'required|date',
             'original_currency_id' => 'required',
             'bid_value' => 'required',
@@ -547,13 +547,26 @@ class LeadController extends AccountBaseController
             'bidding_seconds' => 'required',
             'description' => 'required',
             'cover_letter' => 'required',
-            'insight_screenshot' => 'required',
-            'projectpage_screenshot' => 'required',
+            'insight_screenshot' => 'required|url',
+            'projectpage_screenshot' => 'required|url',
+        ], [
+            'client_name.required' => 'Please enter the project name!',
+            'country.required' => 'Please select client country!',
+            'project_link.required' => 'Please enter correct project link (Freelancer.com) with https!',
+            'deadline.required' => 'Please select project deadline from Freelancer.com!',
+            'original_currency_id.required' => 'Please select correct currency!',
+            'bid_value.required' => 'Please enter minimum project budget!',
+            'bid_value2.required' => 'Please enter maximum project budget!',
+            'value.required' => 'Please enter bid value!',
+            'bidding_minutes.required' => 'Please enter bidding delayed time (minutes)!',
+            'bidding_seconds.required' => 'Please enter bidding delayed time (seconds)!',
+            'description.required' => 'Copy the project description from Freelancer.com and paste it here!',
+            'cover_letter.required' => 'Copy the cover letter you submitted when placing the bid and paste it here. Do not forget to format it (If needed)!',
+            'insight_screenshot.required' => 'Please enter project insight page screenshot link (Freelancer.com) with https!',
+            'projectpage_screenshot.required' => 'Please enter project page screenshot link (Freelancer.com) with https!',
         ]);
 
-        if ($validator->fails()) {
-            return redirect('account/leads/create')->withErrors($validator)->withInput();
-        };
+
 
         if (Auth::user()->role_id == 7) {
 
@@ -567,7 +580,9 @@ class LeadController extends AccountBaseController
                 $date1 = new DateTime($sales_count->previous_lead_date);
                 $date2 = new DateTime($date);
                 $difference = $date1->diff($date2);
-                $diffInMinutes = $difference->i;
+                //$diffInSeconds = $difference->s; //45
+                $diffInMinutes = $difference->i; //23
+                //  dd($diffInMinutes);
                 $sales_count->avg_lead_time=$diffInMinutes/$sales_count->leads_count;
 
             }
@@ -576,10 +591,13 @@ class LeadController extends AccountBaseController
             $sales_count->last_lead_date= Carbon::now();
             $sales_count->lead_value= $sales_count->lead_value + $val;
             $sales_count->save();
-        }
 
+        }
+        //dd(Auth::id());
+        //dd($request);
         $lead = new Lead();
         $lead->client_name= $request->client_name;
+
         $lead->project_id= $request->project_id;
         $lead->project_link= $request->project_link;
         $lead->actual_value= $request->value;
@@ -596,6 +614,7 @@ class LeadController extends AccountBaseController
         $lead->bidding_minutes= $request->bidding_minutes;
         $lead->bidding_seconds= $request->bidding_seconds;
         $lead->cover_letter= $request->cover_letter;
+        $lead->explanation= $request->explanation;
         $lead->insight_screenshot= $request->insight_screenshot;
         $lead-> bidpage_screenshot= $request-> bidpage_screenshot;
         $lead->projectpage_screenshot =$request->projectpage_screenshot;
@@ -608,28 +627,23 @@ class LeadController extends AccountBaseController
         $lead_agent->last_updated_by= Auth::id();
         $lead_agent->save();
 
-        $this->triggerPusher('lead-updated-channel', 'lead-updated', [
-            'user_id' => $this->user->id,
-            'task_id' => '2',
-            'role_id' => '1',
-            'title' => 'New Lead added',
-            'body' => 'Please check new leads',
-            'redirectUrl' => route('leads.show', $lead->id)
-        ]);
-
         if ($request->get('custom_fields_data')) {
             $lead->updateCustomFieldData($request->get('custom_fields_data'));
         }
-
         return response()->json([
-            'status' => 'success',
-            'redirectUrl' => route('leads.index')
-        ]);
+            'success'=>'Lead Add Successfully'
+        ],200);
     }
     public function updateLead(Request $request)
     {
-      //dd(Auth::id());
-
+//        dd($request->all());
+        $request->validate([
+            'description' => 'required',
+            'cover_letter' => 'required',
+        ], [
+            'description.required' => 'Copy the project description from Freelancer.com and paste it here!',
+            'cover_letter.required' => 'Copy the cover letter you submitted when placing the bid and paste it here. Do not forget to format it (If needed)!',
+        ]);
       $lead = Lead::find($request->id);
       $originalValues = $lead->getOriginal();
       $lead->client_name= $request->client_name;
