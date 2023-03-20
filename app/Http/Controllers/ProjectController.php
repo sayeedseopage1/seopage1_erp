@@ -1034,13 +1034,13 @@ if ($pm_count < 2) {
         if ($request->get('custom_fields_data')) {
             $project->updateCustomFieldData($request->get('custom_fields_data'));
         }
-      
+
         if($project->project_status != 'Accepted')
         {
             $pm_name= User::where('id',$project->pm_id)->first();
             $this->logProjectActivity($project->id, 'Project accepted by '.$pm_name->name);
 
-        }else 
+        }else
         {
 
 
@@ -1051,11 +1051,11 @@ if ($pm_count < 2) {
                 if ($attribute === 'updated_at' || $attribute === 'last_updated_by' ) {
                     continue;
                 }
-              
+
                 $updatedValue = $project->$attribute;
-                
-              
-        
+
+
+
                 if ($originalValue != $updatedValue) {
                     if($attribute == 'project_name')
                     {
@@ -1067,11 +1067,11 @@ if ($pm_count < 2) {
                     if($attribute == 'project_summary')
                     {
                         $activity->activity= $log_user->name .' updated project summary' ;
-                    }else 
+                    }else
                     {
                         $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
                     }
-                   
+
                     $activity->project_id = $project->id;
                     // $activity->attribute = $attribute;
                     // $activity->old_value = $originalValue;
@@ -1085,7 +1085,7 @@ if ($pm_count < 2) {
 
         }
 
-       
+
 
         $redirectUrl = urldecode($request->redirect_url);
 
@@ -1936,6 +1936,20 @@ if ($pm_count < 2) {
     }
     public function projectDeliverable(Request $request)
     {
+//        dd($request->all());
+        $validate = $request->validate([
+                'deliverable_type' => 'required',
+                'milestone_id' => 'required',
+                'title' => 'required',
+                'estimation_time' => 'required',
+                'quantity' => 'required',
+                'delivery-type' => 'required',
+                'from' => 'required',
+                'to' => 'required',
+            ]
+        );
+        if ($validate) {
+
       $deliverable= new ProjectDeliverable();
       if($request->deliverable_type == 'Others')
       {
@@ -1943,7 +1957,7 @@ if ($pm_count < 2) {
       }
       else{
         $deliverable->authorization = 1;
-       
+
       }
       $deliverable->project_id= $request->project_id;
       $deliverable->title= $request->title;
@@ -1961,25 +1975,25 @@ if ($pm_count < 2) {
       $project->save();
 
       $log_user = Auth::user();
-     
+
               $activity = new ProjectActivity();
               $activity->activity= $log_user->name .' added project deliverable : '.$deliverable->title;
             //   if($attribute == 'project_summary')
             //   {
             //       $activity->activity= $log_user->name .' updated project summary' ;
-            //   }else 
+            //   }else
             //   {
             //       $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
             //   }
-             
+
               $activity->project_id = $project->id;
               // $activity->attribute = $attribute;
               // $activity->old_value = $originalValue;
               // $activity->new_value = $updatedValue;
               // $activity->user_id = Auth::id();
               $activity->save();
-          
-      
+
+
 
       if($request->deliverable_type == 'Others')
       {
@@ -1991,8 +2005,13 @@ if ($pm_count < 2) {
         }
       }
 
-      Toastr::success('Deliverable Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return Redirect::back();
+
+//      Toastr::success('Deliverable Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+//        return Redirect::back();
+            return response()->json([
+                'status'=>200,
+            ]);
+        }
     }
     public function updateDeliverable(Request $request)
     {
@@ -2008,9 +2027,9 @@ if ($pm_count < 2) {
       }
       else{
         $deliverable->authorization = 1;
-       
+
       }
-      
+
 
       $deliverable->title= $request->title;
       $deliverable->deliverable_type= $request->deliverable_type;
@@ -2028,24 +2047,24 @@ if ($pm_count < 2) {
       $project_update->save();
 
       $log_user = Auth::user();
-     
+
       $activity = new ProjectActivity();
       $activity->activity= $log_user->name .' updated project deliverable : '.$deliverable->title;
     //   if($attribute == 'project_summary')
     //   {
     //       $activity->activity= $log_user->name .' updated project summary' ;
-    //   }else 
+    //   }else
     //   {
     //       $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
     //   }
-     
+
       $activity->project_id = $project_update->id;
       // $activity->attribute = $attribute;
       // $activity->old_value = $originalValue;
       // $activity->new_value = $updatedValue;
       // $activity->user_id = Auth::id();
       $activity->save();
-  
+
       if($request->deliverable_type == 'Others')
       {
         $project_id= Project::where('id',$project_update->id)->first();
@@ -2066,18 +2085,18 @@ if ($pm_count < 2) {
         $project= Project::find($deliverable_id->project_id);
         $project->hours_allocated= $project->hours_allocated - $deliverable_id->estimation_time;
         $project->save();
-       
-    
+
+
 
 
       $deliverable = ProjectDeliverable::findOrFail($id)->delete();
       $log_user = Auth::user();
-     
+
       $activity = new ProjectActivity();
       $activity->activity= $log_user->name .' deleted project deliverable : '.$deliverable_id->title;
-   
+
       $activity->project_id = $project->id;
-     
+
       $activity->save();
 
 
@@ -2093,9 +2112,9 @@ if ($pm_count < 2) {
         $project_id= Project::where('id',$deliverable_id->project_id)->first();
 
         $user= User::where('id',$project_id->pm_id)->first();
-       
+
             Notification::send($user, new DeliverableOthersAuthorizationAcceptNotification($project_id));
-        
+
 
       Toastr::success('Approved Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back();
@@ -2225,7 +2244,7 @@ if ($pm_count < 2) {
 
       $project= ProjectMilestone::where('id',$request->milestone_id)->first();
       $milestone->project_id= $project->project_id;
-      
+
       $milestone->login_yes = $request->login_yes;
       $milestone->login_information = $request->login_information;
       $milestone->login_url= $request->login_url;
@@ -2469,7 +2488,7 @@ if ($pm_count < 2) {
        //dd($explanation );
         $validated = $request->validate([
             'comments' => ['required','string','min:10'],
-            
+
 
         ]);
 
@@ -2481,20 +2500,20 @@ if ($pm_count < 2) {
 
         $project_id= Project::where('id',$request->project_id)->first();
         $log_user = Auth::user();
-     
+
         $activity = new ProjectActivity();
         $activity->activity= $log_user->name .' send project deliverable time extention request ';
-     
+
         $activity->project_id = $request->project_id;
-       
+
         $activity->save();
-  
+
 
         $users= User::where('role_id',1)->get();
         foreach ($users as $user) {
             Notification::send($user, new ProjectDeliverableTimeExtendNotification($project_id));
         }
-     
+
         Toastr::success('Authorization request send Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
 
@@ -2507,7 +2526,7 @@ if ($pm_count < 2) {
         // $comments_without_br = str_replace('<br>', '', $comments);
         // $explanation = explode("<p></p>", $comments_without_br);
        //dd($explanation );
-       
+
 
         $project= PMProject::where('project_id',$request->project_id)->first();
 
@@ -2517,19 +2536,19 @@ if ($pm_count < 2) {
 
         $project_id= Project::where('id',$request->project_id)->first();
         $log_user = Auth::user();
-     
+
         $activity = new ProjectActivity();
         $activity->activity= 'Top management accepted project deliverable time extention request ';
-     
+
         $activity->project_id = $request->project_id;
-       
+
         $activity->save();
 
         $user= User::where('id',$project_id->pm_id)->get();
-       
+
             Notification::send($user, new ProjectDeliverableTimeAcceptNotification($project_id));
-       
-     
+
+
         Toastr::success('Authorization request accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
 
@@ -2544,22 +2563,22 @@ if ($pm_count < 2) {
        $project->authorization_status = 'submitted';
        $project->save();
 
-       
+
         $project_id= Project::where('id',$id)->first();
         $log_user = Auth::user();
-     
+
         $activity = new ProjectActivity();
         $activity->activity= $log_user->name .' send project deliverable for final authorization';
-     
+
         $activity->project_id = $project_id->id;
-       
+
         $activity->save();
 
         $users= User::where('role_id',1)->get();
         foreach ($users as $user) {
             Notification::send($user, new ProjectDeliverableFinalAuthorizationNotification($project_id));
         }
-     
+
         Toastr::success('Authorization request send Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
 
@@ -2572,23 +2591,23 @@ if ($pm_count < 2) {
         $project->deliverable_authorization= 1;
         $project->save();
 
- 
-        
+
+
          $project_id= Project::where('id',$request->project_id)->first();
          $log_user = Auth::user();
-     
+
          $activity = new ProjectActivity();
          $activity->activity= 'Top management finally authorized project deliverable';
-      
+
          $activity->project_id = $project_id->id;
-        
+
          $activity->save();
- 
+
          $user= User::where('id',$project->pm_id)->first();
-         
+
              Notification::send($user, new ProjectDeliverableFinalAuthorizationNotificationAccept($project_id));
-        
-      
+
+
          Toastr::success('Authorization request accepted successfully', 'Success', ["positionClass" => "toast-top-right"]);
          return back();
     }
