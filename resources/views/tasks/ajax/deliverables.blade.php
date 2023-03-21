@@ -137,7 +137,7 @@ $user= App\Models\User::where('id',$user_id->user_id)->first();
                                                 <i class="fa-solid fa-link"></i>
                                             </span> <br>
 
-                                            <a href="{{$row->link}}" target="_blank">{{$row->link}}</a>
+                                            <a href="{!!$row->link!!}" target="_blank">{!!$row->link!!}</a>
                                         </div>
                                     </div>
                                     @endif
