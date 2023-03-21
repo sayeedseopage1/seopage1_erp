@@ -726,7 +726,6 @@ class ContractController extends AccountBaseController
             'project_name' => 'required',
             'deadline' => 'required',
             'amount' => 'required',
-            'message_link' => 'required',
             'description2' => 'required',
             'description3' => 'required',
             'description4' => 'required',
