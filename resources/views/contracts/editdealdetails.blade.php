@@ -705,7 +705,8 @@
                     if(numErrors > 0)
                     {
                         $('#commonError').show();
-
+                        $('#updateBtn').attr("disabled", false);
+                        $('#updateBtn').html("Update Deal Creation");
                         toastr.error('Some fields are missing, please check again and input all required data properly!');
                     }
                     if(error.responseJSON.errors.project_name){
@@ -777,11 +778,11 @@
                         $('#description9Error').text(error.responseJSON.errors.description9);
                     }else{
                         $('#description9Error').text('');
-                        $('#updateBtn').attr("disabled", false);
-                        $('#updateBtn').html("Update Deal Creation");
                     }
                     if (error.responseJSON.errors.milestone_value) {
                         toastr.error('Please add a milestone!');
+                        $('#updateBtn').attr("disabled", false);
+                        $('#updateBtn').html("Update Deal Creation");
                     }
                     $('#updateBtn').attr("disabled", false);
                     $('#updateBtn').html("Update Deal Creation");
