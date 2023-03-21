@@ -42,9 +42,14 @@ $deleteTaskCommentPermission = user()->permission('delete_task_comments');
                       alt="{{ mb_ucwords(user()->name) }}">
                   <div class="media-body bg-white">
                       <div class="form-group">
-                          <div id="task-comment"></div>
-                          <textarea name="comment" class="form-control invisible d-none"
-                              id="task-comment-text"></textarea>
+                          <div id="descriptionComment"></div>
+{{--                          <textarea name="comment" class="form-control invisible d-none"--}}
+{{--                              id="task-comment-text"></textarea>--}}
+                          <textarea name="comment" id="descriptionComment" class="form-control"></textarea>
+                          <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                          <script>
+                              CKEDITOR.replace('comment');
+                          </script>
                       </div>
                   </div>
               </div>
@@ -225,8 +230,8 @@ $deleteTaskCommentPermission = user()->permission('delete_task_comments');
         }
 
         $('#add-task-file').click(function() {
-            // var comment = document.getElementById('task-comment').children[0].innerHTML;
-            // document.getElementById('task-comment-text').value = comment;
+            var comment = CKEDITOR.instances.descriptionComment.getData();
+            document.getElementById('descriptionComment').value = comment;
             $(this).closest('.row').addClass('d-none');
             $('#save-taskfile-data-form').removeClass('d-none');
         });
@@ -249,15 +254,15 @@ $deleteTaskCommentPermission = user()->permission('delete_task_comments');
         $('#add-comment').closest('.row').removeClass('d-none');
     });
 
-    if (add_task_comments == "all" || add_task_comments == "added") {
-            quillImageLoad('#task-comment');
-    }
+    // if (add_task_comments == "all" || add_task_comments == "added") {
+    //         quillImageLoad('#descriptionComment');
+    // }
 
     $(document).ready(function() {
 
         $('#submit-comment').click(function() {
-            var comment = document.getElementById('task-comment').children[0].innerHTML;
-            document.getElementById('task-comment-text').value = comment;
+            var comment = CKEDITOR.instances.descriptionComment.getData();
+            document.getElementById('descriptionComment').value = comment;
 
             var token = '{{ csrf_token() }}';
 
@@ -278,8 +283,8 @@ $deleteTaskCommentPermission = user()->permission('delete_task_comments');
                 success: function(response) {
                     if (response.status == "success") {
                         $('#comment-list').html(response.view);
-                        document.getElementById('task-comment').children[0].innerHTML = "";
-                        $('#task-comment-text').val('');
+                        CKEDITOR.instances.descriptionComment.getData();
+                        $('#descriptionComment').val('');
                     }
 
                 }
@@ -288,3 +293,4 @@ $deleteTaskCommentPermission = user()->permission('delete_task_comments');
 
     });
 </script>
+<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
