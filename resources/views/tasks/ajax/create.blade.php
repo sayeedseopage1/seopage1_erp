@@ -675,7 +675,6 @@
             }
         });
 
-        quillImageLoad('#description');
 
 
         const dp1 = datepicker('#task_start_date', {
