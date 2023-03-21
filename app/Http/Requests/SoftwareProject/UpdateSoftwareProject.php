@@ -52,14 +52,7 @@ class UpdateSoftwareProject extends CoreRequest
         return $rules;
     }
 
-    public function messages()
-    {
-        return [
-           
-            'project_code.required' => __('messages.projectCodeRequired'),
-           
-        ];
-    }
+   
 
    
 

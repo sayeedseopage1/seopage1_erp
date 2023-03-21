@@ -175,7 +175,7 @@
                     <td class="text-center">--</td>
                     @endif
                       <td class="text-center">{{$deliverable->quantity}}</td>
-                        <td class="text-center">{{$deliverable->description}}</td>
+                        <td class="text-center">{!!$deliverable->description!!}</td>
                         @if($deliverable->to != null)
                     <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
                     @else 
@@ -359,6 +359,11 @@
 </div>
 <!-- INVOICE CARD END -->
 <script src="{{ asset('vendor/jquery/clipboard.min.js') }}"></script>
+
+ 
+<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+
 <script type="text/javascript">
 
     function copyLink(){
