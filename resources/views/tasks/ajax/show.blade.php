@@ -8,9 +8,9 @@ $changeStatusPermission = user()->permission('change_status');
 
     <h3 class="heading-h1 mb-3">{{ ucfirst($task->heading) }}</h3>
     <div class="row">
-       
-      
-            
+
+
+
         <div class="col-sm-9 review-card">
             <div class="card bg-white border-0 b-shadow-4">
                 <div class="card-header bg-white  border-bottom-grey text-capitalize justify-content-between p-20">
@@ -31,7 +31,7 @@ $changeStatusPermission = user()->permission('change_status');
                                     class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
                                     @lang('modules.tasks.markComplete')
                                 </x-forms.button-primary> -->
-                                
+
                                   <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#extensionrequest">Extension Request</button>
 
 
@@ -104,7 +104,7 @@ $changeStatusPermission = user()->permission('change_status');
                                               $extension=App\Models\TaskTimeExtension::orderBy('id','desc')->where('task_id',$task->id)->where('user_id',Auth::id())->first();
                                               $task_member= App\Models\TaskUser::where('task_id',$task->id)->first();
                                              ?>
-                                                
+
                                                  @if($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision')
                                              @if($extension == null && $task_member->user_id == Auth::user()->id)
                                             <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#timextension"><i class="fa-solid fa-plus"></i> Request Time Extension</button>
@@ -366,23 +366,23 @@ $changeStatusPermission = user()->permission('change_status');
 
 
 
-                    
-                   
-                  
+
+
+
                       <x-cards.data-row :label="__('General Guidelines')" :value="!empty($task->project->project_summary) ? $task->project->project_summary : '--'" html="true" />
                         <br>
                         <div class="card">
                             <div class="body">
                                 <br>
-                                
-                               
+
+
                                 @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                                 <x-cards.data-row :label="__( ' Description')" :value="!empty($task->description) ? $task->description : '--'" html="true" />
                             @endif
-    
+
                             </div>
-    
-    
+
+
                         </div>
                         <br>
 
@@ -430,12 +430,12 @@ $changeStatusPermission = user()->permission('change_status');
                             @lang('modules.tasks.subTask')</x-tab-item>
                         @endif
 
-                           
+
                                 <x-tab-item class="ajax-tab" :active="(request('view') === 'file')"
                                 :link="route('tasks.show', $task->id).'?view=file'">@lang('Comment')</x-tab-item>
-                          
 
-                           
+
+
 
                            {{-- @if (($taskSettings->comments == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                                 @if ($viewTaskCommentPermission != 'none')
@@ -489,9 +489,9 @@ $changeStatusPermission = user()->permission('change_status');
 
             <?php
             $task_review= App\Models\TaskApprove::where('task_id',$task->id)->orderBy('id','desc')->first();
-  
+
            ?>
-  
+
           <div class="col-sm-3 review-card">
               <x-cards.data>
                   @if (($taskSettings->status == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
@@ -499,7 +499,7 @@ $changeStatusPermission = user()->permission('change_status');
                               style="color: {{ $task->boardColumn->label_color }}"></i>{{ $task->boardColumn->column_name }}
                       </p>
                   @endif
-  
+
                   @if (($taskSettings->make_private == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                       @if ($task->is_private || $pin)
                           <div class="col-12 px-0 pb-3 d-flex">
@@ -507,14 +507,14 @@ $changeStatusPermission = user()->permission('change_status');
                                   <span class='badge badge-secondary'><i class='fa fa-lock'></i>
                                       @lang('app.private')</span>&nbsp;
                               @endif
-  
+
                               @if ($pin)
                                   <span class='badge badge-success'><i class='fa fa-thumbtack'></i> @lang('app.pinned')</span>
                               @endif
                           </div>
                       @endif
                   @endif
-  
+
                   @if (($taskSettings->start_date == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                       <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                           <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('app.startDate') }}
@@ -528,7 +528,7 @@ $changeStatusPermission = user()->permission('change_status');
                           </p>
                       </div>
                   @endif
-  
+
                   @if (($taskSettings->due_date == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                       <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                           <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('app.dueDate') }}
@@ -539,7 +539,7 @@ $changeStatusPermission = user()->permission('change_status');
                               @else
                                   --
                               @endif
-  
+
                           </p>
                       </div>
                   @endif
@@ -554,12 +554,12 @@ $changeStatusPermission = user()->permission('change_status');
                               @else
                                   --
                               @endif
-  
+
                           </p>
                       </div>
                   @endif
                   @endif
-  
+
                   @if (($taskSettings->time_estimate == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                       @if ($task->estimate_hours > 0 || $task->estimate_minutes > 0)
                           <div class="col-12 px-0 pb-3 d-lg-flex d-block">
@@ -570,16 +570,16 @@ $changeStatusPermission = user()->permission('change_status');
                           </div>
                       @endif
                   @endif
-  
+
                   @php
                       $totalMinutes = $task->timeLogged->sum('total_minutes') - $breakMinutes;
                       $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-  
+
                       if ($totalMinutes % 60 > 0) {
                           $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
                       }
                   @endphp
-  
+
                   @if (($taskSettings->hours_logged == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                       <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                           <p class="mb-0 text-lightest w-50 f-14 text-capitalize">
@@ -591,19 +591,19 @@ $changeStatusPermission = user()->permission('change_status');
               </x-cards.data>
                @if($task_review != null)
               <br>
-  
+
               <x-cards.data>
                   @if (($taskSettings->status == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                       <p style="font-size:15px;" class="f-w-500 badge badge-primary">Task Review</p>
                   @endif
-  
-  
+
+
                    <?php
                    $avg=($task_review->rating+ $task_review->rating2 + $task_review->rating3)/3;
                     $avgRating = number_format($avg,1);
-  
+
                     ?>
-  
+
                       <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                           <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Deadline Meet') }}
                           </p>
@@ -621,34 +621,34 @@ $changeStatusPermission = user()->permission('change_status');
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star"></span>
-  
+
                           </p>
                           @elseif($task_review->rating == 3)
                           <p class="mb-0 w-50 f-14" style="color:orange;">
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
-  
+
                           </p>
                           @elseif($task_review->rating == 2)
                           <p class="mb-0 w-50 f-14" style="color:orange;">
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
-  
-  
+
+
                           </p>
                           @elseif($task_review->rating == 1)
                           <p class="mb-0 w-50 f-14" style="color:orange;">
                             <span class="fa fa-star checked"></span>
-  
+
                           </p>
-  
-  
+
+
                           @endif
                       </div>
-  
-  
-  
+
+
+
                       <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                           <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Submission Quality') }}
                           </p>
@@ -666,33 +666,33 @@ $changeStatusPermission = user()->permission('change_status');
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star"></span>
-  
+
                           </p>
                           @elseif($task_review->rating2 == 3)
                           <p class="mb-0 w-50 f-14" style="color:orange;">
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
-  
+
                           </p>
                           @elseif($task_review->rating2 == 2)
                           <p class="mb-0 w-50 f-14" style="color:orange;">
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
-  
-  
+
+
                           </p>
                           @elseif($task_review->rating2 == 1)
                           <p class="mb-0 w-50 f-14" style="color:orange;">
                             <span class="fa fa-star checked"></span>
-  
+
                           </p>
-  
-  
+
+
                           @endif
                       </div>
-  
-  
+
+
                       <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                           <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Req. Fullfillment') }}
                           </p>
@@ -710,32 +710,32 @@ $changeStatusPermission = user()->permission('change_status');
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star"></span>
-  
+
                           </p>
                           @elseif($task_review->rating3 == 3)
                           <p class="mb-0 w-50 f-14" style="color:orange;">
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
-  
+
                           </p>
                           @elseif($task_review->rating3 == 2)
                           <p class="mb-0 w-50 f-14" style="color:orange;">
                             <span class="fa fa-star checked"></span>
                             <span class="fa fa-star checked"></span>
-  
-  
+
+
                           </p>
                           @elseif($task_review->rating3 == 1)
                           <p class="mb-0 w-50 f-14" style="color:orange;">
                             <span class="fa fa-star checked"></span>
-  
+
                           </p>
-  
-  
+
+
                           @endif
                       </div>
-  
+
                       <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                           <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Overall Task Ratings') }}
                           </p>
@@ -743,35 +743,35 @@ $changeStatusPermission = user()->permission('change_status');
                             @for ($i =1 ; $i <= $avgRating ; $i++)
                          <span style="color: orange;" class="fa fa-star{{ ($i <= $avgRating) ? '' : '-empty' }}"></span>
                        @endfor
-  
-  
+
+
                           </p>
                       </div>
-  
-  
+
+
                       <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                           <p class="mb-0 text-lightest w-50 f-14 text-capitalize">
                               {{ __('Comments') }}
                           </p>
                           <p class="mb-0 text-dark-grey w-50 f-14">{!! $task_review->comments!!}</p>
                       </div>
-  
-  
+
+
               </x-cards.data>
                   @endif
           </div>
-          
+
 
 
 
         </div>
-        
-       
+
+
     </div>
 
 
 
-    
+
 </div>
 
 
@@ -1007,7 +1007,7 @@ $changeStatusPermission = user()->permission('change_status');
                         }
                     }
                 });
-                
+
             });
 
             // Update Task
@@ -1343,5 +1343,4 @@ $changeStatusPermission = user()->permission('change_status');
         });
 
     </script>
-
-    
+<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
