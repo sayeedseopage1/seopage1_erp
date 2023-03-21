@@ -771,6 +771,8 @@
     $('#createDeal').click(function(e){
         e.preventDefault();
         // alert('ok');
+        $('#createDeal').attr("disabled", true);
+        $('#createDeal').html("Processing...");
         var description2 = CKEDITOR.instances.description2Text.getData();
         var description3 = CKEDITOR.instances.description3Text.getData();
         var description4 = CKEDITOR.instances.description4Text.getData();
@@ -821,25 +823,87 @@
                 $('.error').html("");
                 $(location).prop('href', '{{url('/account/contracts/')}}');
                 toastr.success('Deal Create Successfully');
+                $('#createDeal').attr("disabled", false);
+                $('#createDeal').html("Complete Deal Creation");
             },
             error: function(error) {
-                if (error) {
-                    $('#projectNameError').html(error.responseJSON.errors.project_name);
-                    $('#deadlineError').html(error.responseJSON.errors.deadline);
-                    $('#currencyError').html(error.responseJSON.errors.original_currency_id);
-                    $('#messageLinkError').html(error.responseJSON.errors.message_link);
-                    $('#description2Error').html(error.responseJSON.errors.description2);
-                    $('#description3Error').html(error.responseJSON.errors.description3);
-                    $('#description4Error').html(error.responseJSON.errors.description4);
-                    $('#description5Error').html(error.responseJSON.errors.description5);
-                    $('#description6Error').html(error.responseJSON.errors.description6);
-                    $('#description7Error').html(error.responseJSON.errors.description7);
-                    $('#description8Error').html(error.responseJSON.errors.description8);
-                    $('#description9Error').html(error.responseJSON.errors.description9);
-                    if (error.responseJSON.errors.milestone_value) {
-                        toastr.error('Please add a milestone!');
-                    }
+                if(error.responseJSON.errors.project_name){
+                    $('#projectNameError').text(error.responseJSON.errors.project_name);
+                }else{
+                    $('#projectNameError').text('');
                 }
+                if(error.responseJSON.errors.deadline){
+                    $('#deadlineError').text(error.responseJSON.errors.deadline);
+                }else{
+                    $('#deadlineError').text('');
+                }
+                if(error.responseJSON.errors.original_currency_id){
+                    $('#currencyError').text(error.responseJSON.errors.original_currency_id);
+                }else{
+                    $('#currencyError').text('');
+                }
+                if(error.responseJSON.errors.amount){
+                    $('#amountError').text(error.responseJSON.errors.amount);
+                }else{
+                    $('#amountError').text('');
+                }
+                if(error.responseJSON.errors.message_link){
+                    $('#messageLinkError').text(error.responseJSON.errors.message_link);
+                }else{
+                    $('#messageLinkError').text('');
+                }
+                if(error.responseJSON.errors.message_link){
+                    $('#messageLinkError').text(error.responseJSON.errors.message_link);
+                }else{
+                    $('#messageLinkError').text('');
+                }
+                if(error.responseJSON.errors.description2){
+                    $('#description2Error').text(error.responseJSON.errors.description2);
+                }else{
+                    $('#description2Error').text('');
+                }
+                if(error.responseJSON.errors.description3){
+                    $('#description3Error').text(error.responseJSON.errors.description3);
+                }else{
+                    $('#description3Error').text('');
+                }
+                if(error.responseJSON.errors.description4){
+                    $('#description4Error').text(error.responseJSON.errors.description4);
+                }else{
+                    $('#description4Error').text('');
+                }
+                if(error.responseJSON.errors.description5){
+                    $('#description5Error').text(error.responseJSON.errors.description5);
+                }else{
+                    $('#description5Error').text('');
+                }
+                if(error.responseJSON.errors.description6){
+                    $('#description6Error').text(error.responseJSON.errors.description6);
+                }else{
+                    $('#description6Error').text('');
+                }
+                if(error.responseJSON.errors.description7){
+                    $('#description7Error').text(error.responseJSON.errors.description7);
+                }else{
+                    $('#description7Error').text('');
+                }
+                if(error.responseJSON.errors.description8){
+                    $('#description8Error').text(error.responseJSON.errors.description8);
+                }else{
+                    $('#description8Error').text('');
+                }
+                if(error.responseJSON.errors.description9){
+                    $('#description9Error').text(error.responseJSON.errors.description9);
+                }else{
+                    $('#description9Error').text('');
+                    $('#createDeal').attr("disabled", false);
+                    $('#createDeal').html("Complete Deal Creation");
+                }
+                if (error.responseJSON.errors.milestone_value) {
+                    toastr.error('Please add a milestone!');
+                }
+                $('#createDeal').attr("disabled", false);
+                $('#createDeal').html("Complete Deal Creation");
 
             }
         });
@@ -847,45 +911,6 @@
 
 </script>
 <!--ADD DEAL DETAILS END-->
-<!--VALIDATION START-->
-<script>
-    const form = document.getElementById('storeDeal');
-    const button = document.getElementById('createDeal');
-    const projectName = document.getElementById('project_name');
-    const deadline = document.getElementById('deadline');
-    const amount = document.getElementById('amount');
-
-
-    form.addEventListener('input', () => {
-        let valid = true;
-        if (projectName.value.trim() === '') {
-            valid = false;
-            projectNameError.textContent = 'Please enter the project name!';
-        } else {
-            projectNameError.textContent = '';
-        }
-        if (deadline.value.trim() === '') {
-            valid = false;
-            deadlineError.textContent = 'Please select project deadline from Freelancer.com!';
-        } else {
-            deadlineError.textContent = '';
-        }
-        if (amount.value.trim() === '') {
-            valid = false;
-            amountError.textContent = 'Please enter the project budget!';
-        } else {
-            amountError.textContent = '';
-        }
-        if (amount.value.trim() === '') {
-            valid = false;
-            amountError.textContent = 'Please enter the project budget!';
-        } else {
-            amountError.textContent = '';
-        }
-        button.disabled = !valid;
-    });
-</script>
-<!--VALIDATION END-->
     @push('scripts')
 
     <script>
