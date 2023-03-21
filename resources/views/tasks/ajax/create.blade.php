@@ -273,17 +273,19 @@
                             </x-forms.input-group>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-6" id="set-time-estimate-fields">
-                        <label for="">Task Estimation Time</label>
-                        <div class="form-group">
+                    <div class="col-md-12 col-lg-6" id="set-time-estimate-fields">
+                        <div class="form-group my-3">
+                            <label for="">Task Estimation Time</label>
+                            <div class="form-group">
 
-                            <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14"
-                                   name="estimate_hours" value="{{ $task ? $task->estimate_hours : '0'}}">
-                            @lang('app.hrs')
-                            &nbsp;&nbsp;
-                            <input type="number" min="0" name="estimate_minutes"
-                                   value="{{ $task ? $task->estimate_minutes : '0'}}" class="w-25 height-35 f-14 border rounded p-2">
-                            @lang('app.mins')
+                                <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14"
+                                       name="estimate_hours" value="{{ $task ? $task->estimate_hours : '0'}}">
+                                @lang('app.hrs')
+                                &nbsp;&nbsp;
+                                <input type="number" min="0" name="estimate_minutes"
+                                       value="{{ $task ? $task->estimate_minutes : '0'}}" class="w-25 height-35 f-14 border rounded p-2">
+                                @lang('app.mins')
+                            </div>
                         </div>
                     </div>
                     @if(is_null($task))
@@ -309,15 +311,19 @@
                         </div> --}}
                     @endif
 
-
-
-
-                    <div class="col-md-12">
-                        <div class="form-group my-3">
-                            <x-forms.label fieldId="description" :fieldLabel="__('app.description')" fieldRequired="true">
-                            </x-forms.label>
-                            <div id="description">{!! $task ? $task->description : '' !!}</div>
-                            <textarea name="description" id="description-text" class="d-none"></textarea>
+                    <div class="col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <label class="text-dark-grey" data-label="true" for="descriptionText">Description
+                                <sup class="mr-1">*</sup>
+                            </label>
+                            <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"></textarea>
+                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                            <script>
+                                CKEDITOR.replace('description');
+                            </script>
+                            @error('description')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
 
@@ -780,8 +786,8 @@
         });
 
         $('#save-more-task-form').click(function () {
-            let note = document.getElementById('description').children[0].innerHTML;
-            document.getElementById('description-text').value = note;
+            let note = CKEDITOR.instances.description.getData();
+            document.getElementById('description').value = note;
 
             const url = "{{ route('tasks.store') }}?taskId={{$task ? $task->id : ''}}";
             var data = $('#save-task-data-form').serialize() + '&add_more=true';
@@ -791,8 +797,8 @@
         });
 
         $('#save-task-form').click(function () {
-            let note = document.getElementById('description').children[0].innerHTML;
-            document.getElementById('description-text').value = note;
+            let note = CKEDITOR.instances.description.getData();
+            document.getElementById('description').value = note;
 
             const url = "{{ route('tasks.store') }}?taskId={{$task ? $task->id : ''}}";
             var data = $('#save-task-data-form').serialize();
