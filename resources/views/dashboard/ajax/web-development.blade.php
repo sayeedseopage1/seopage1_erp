@@ -11,11 +11,19 @@
 </style>
 <?php
 $total_members= App\Models\User::count();
-$total_managers= App\Models\User::where('role_id',4)->count(); $total_lead_developers= App\Models\User::where('role_id',6)->count(); $total_developers= App\Models\User::where('role_id',5)->count(); $total_deals=
-App\Models\Lead::where('deal_status',1)->count(); $total_won_deals= App\Models\Deal::count(); $total_leads= App\Models\Lead::count(); $total_clients= App\Models\ClientDetails::count(); $total_projects= App\Models\Project::count();
-$total_task_completed= App\Models\Task::where('status','completed')->count(); $total_due_task= App\Models\Task::where('status','!=','completed')->count(); $total_overdue_task= App\Models\Task::where('board_column_id',7)->count();
-$total_payment_release= App\Models\PMAssign::select('release_amount')->sum('release_amount'); $total_project_due= App\Models\Project::select('project_budget')->sum('project_budget'); $total_payment_due= $total_project_due -
-$total_payment_release; $project_managers= App\Models\User::where('role_id',4)->get(); $lead_developer= App\Models\User::where('role_id',6)->get(); $developer= App\Models\User::where('role_id',5)->get();
+$total_managers= App\Models\User::where('role_id',4)->count(); 
+$total_lead_developers= App\Models\User::where('role_id',6)->count(); 
+$total_developers= App\Models\User::where('role_id',5)->count(); 
+$total_deals= App\Models\Lead::where('deal_status',1)->count(); 
+$total_won_deals= App\Models\Deal::count(); $total_leads= App\Models\Lead::count(); 
+$total_clients= App\Models\ClientDetails::count(); $total_projects= App\Models\Project::count();
+$total_task_completed= App\Models\Task::where('status','completed')->count(); 
+$total_due_task= App\Models\Task::where('status','!=','completed')->count(); 
+$total_overdue_task= App\Models\Task::where('board_column_id',7)->count();
+$total_payment_release= App\Models\PMAssign::select('release_amount')->sum('release_amount'); 
+$total_project_due= App\Models\Project::select('project_budget')->sum('project_budget'); $total_payment_due= $total_project_due -
+$total_payment_release; $project_managers= App\Models\User::where('role_id',4)->get(); 
+$lead_developer= App\Models\User::where('role_id',6)->get(); $developer= App\Models\User::where('role_id',5)->get();
  ?>
 
  <div class="card col-md-3 mb-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Payment Release Overview</h5></div>
@@ -356,7 +364,7 @@ Overview--}}
 
             @empty
             <tr>
-                <td colspan="5" class="shadow-none">
+                <td colspan="7" class="shadow-none">
                     <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                 </td>
             </tr>
@@ -399,7 +407,7 @@ Overview--}}
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="shadow-none">
+                    <td colspan="4" class="shadow-none">
                         <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                     </td>
                 </tr>
@@ -570,7 +578,7 @@ Overview--}}
                 @empty
 
                 <tr>
-                    <td colspan="5" class="shadow-none">
+                    <td colspan="7" class="shadow-none">
                         <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                     </td>
                 </tr>
@@ -631,7 +639,7 @@ Overview--}}
                 @empty
 
                 <tr>
-                    <td colspan="5" class="shadow-none">
+                    <td colspan="10" class="shadow-none">
                         <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                     </td>
                 </tr>
@@ -678,7 +686,7 @@ Overview--}}
                 @empty
 
                 <tr>
-                    <td colspan="5" class="shadow-none">
+                    <td colspan="8" class="shadow-none">
                         <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                     </td>
                 </tr>
@@ -727,7 +735,7 @@ Overview--}}
 
                 @empty
                 <tr>
-                    <td colspan="5" class="shadow-none">
+                    <td colspan="6" class="shadow-none">
                         <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                     </td>
                 </tr>
@@ -937,7 +945,7 @@ Overview--}}
                 </tr>
 
                 <tr>
-                    <td colspan="5" class="shadow-none">
+                    <td colspan="4" class="shadow-none">
                         <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                     </td>
                 </tr>

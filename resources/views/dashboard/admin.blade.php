@@ -82,37 +82,6 @@
                     <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange2" placeholder="@lang('placeholders.dateRange')">
                 </div>
             </div>
-
-            <div class="row col-12 col-sm-5 align-items-center border-left-grey border-left-grey-sm-0 h-100 pl-4 ml-5">
-                <div class="col-6">
-                    <div class="input-group w-100" style="height: 36px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar-alt"></i></span>
-                        </div>
-                        <select class="form-control f-14 f-w-500" id="getMonth" name="month">
-                            <option value="">Select Month</option>
-                            <option value="01">January</option>
-                            <option value="02">February</option>
-                            <option value="03">March</option>
-                            <option value="04">April</option>
-                            <option value="05">May</option>
-                            <option value="06">June</option>
-                            <option value="07">July</option>
-                            <option value="08">August</option>
-                            <option value="09">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-4 input-group" style="height: 36px;">
-                    <input class="form-control f-14 f-w-500 text-center" type="number" id="getYear" name="year" value="2023" min="1900" max="2099">
-                </div>
-                <div class="col-2 input-group">
-                    <button class="btn btn-dark btn-sm" id="submitMonthDate"><i class="fa fa-check"></i></button>
-                </div>
-            </div>
             <!-- DATE END -->
             @if (isset($widgets))
             <div class="admin-dash-settings">
@@ -207,9 +176,10 @@
     <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         $(function() {
+
             var format = '{{ global_setting()->moment_format }}';
-            var startDate = "{{ $startDate->format(global_setting()->date_format) }}";
-            var endDate = "{{ $endDate->format(global_setting()->date_format) }}";
+            var startDate = "{{ $startDate->subMonths(2)->format(global_setting()->date_format) }}";
+            var endDate = "{{ $endDate->subMonths(2)->format(global_setting()->date_format) }}";
             var picker = $('#datatableRange2');
             var start = moment(startDate, format);
             var end = moment(endDate, format);
@@ -226,15 +196,18 @@
                 linkedCalendars: false,
                 startDate: start,
                 endDate: end,
-                ranges: daterangeConfig,
+                ranges: {
+                    "@lang('app.today')": [moment(), moment()],
+                    "@lang('app.last30Days')": [moment().subtract(29, 'days'), moment()],
+                    "@lang('app.thisMonth')": [moment().startOf('month').subtract(1, 'month').add(20, 'days'), moment().startOf('month').add(19, 'days')],
+                    "@lang('app.lastMonth')": [moment().startOf('month').subtract(2, 'month').add(20, 'days'), moment().startOf('month').subtract(1, 'month').add(19, 'days')],
+                    "@lang('app.last90Days')": [moment().subtract(89, 'days'), moment()],
+                    "@lang('app.last6Months')": [moment().subtract(6, 'months'), moment()],
+                    "@lang('app.last1Year')": [moment().subtract(1, 'years'), moment()]
+                },
                 opens: 'left',
-                parentEl: '.dashboard-header'
+                parentEl: '.dashboard-header',
             }, cb);
-
-            $('#submitMonthDate').click(function() {
-                showTable(true);
-            });
-
 
             $('#datatableRange2').on('apply.daterangepicker', function(ev, picker) {
                 showTable();
@@ -289,30 +262,15 @@
             }
         });
 
-        function showTable(showMohthlyView = false) {
-            if (showMohthlyView == false) {
-                var dateRangePicker = $('#datatableRange2').data('daterangepicker');
-                var startDate = $('#datatableRange').val();
-                if (startDate == '') {
-                    startDate = null;
-                    endDate = null;
-                } else {
-                    startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
-                    endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
-                }
+        function showTable() {
+            var dateRangePicker = $('#datatableRange2').data('daterangepicker');
+            var startDate = $('#datatableRange').val();
+            if (startDate == '') {
+                startDate = null;
+                endDate = null;
             } else {
-                var month = $('#getMonth :selected').val();
-                var year = $('#getYear').val();
-
-                var previousMonth = month - 1;
-                var perviousYear = year;
-                if (previousMonth == '00') {
-                    previousMonth = '12';
-                    perviousYear = year - 1;
-                } 
-                
-                startDate = '21-'+previousMonth+'-'+perviousYear;
-                endDate = '20-'+month+'-'+year;
+                startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+                endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
             }
 
             const requestUrl = this.href;

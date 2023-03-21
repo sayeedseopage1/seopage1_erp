@@ -300,7 +300,7 @@
             @yield('content')
             @if(Auth::user()->role_id == 4 && !Request::is('account/contracts/*') &&!Request::is('account/deals/*'))
                 @php
-                    $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->where('pm_id',Auth::id())->get();
+                    $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->where('pm_id', Auth::id())->get();
                 @endphp
                 @if(count($deal_id) > 0)
                     <div class="timer-card">
@@ -324,7 +324,7 @@
                             <div class="content">
 					            <div class="bg-timer-box my-3 rounded p-2 text-light">
 					                <p class="mb-0">New Deal Won: {{$value->client_name}}</p>
-					                <span class="timer-count font-weight-bold" id="timer">00:00:00</span>
+					                <span class="timer-count font-weight-bold" id="timer_{{$value->id}}">00:00:00</span>
 					                <p>{{\Carbon\Carbon::parse($value->award_time)->addHours(20)->format('Y-m-d (l), g:i A')}}</p>
 					                <a class="btn btn-success text-light rounded px-1 py-0 text-underline-none" href="/account/contracts/{{$value->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
 					            </div>
@@ -480,11 +480,8 @@
         const daterangeConfig = {
             "@lang('app.today')": [moment(), moment()],
             "@lang('app.last30Days')": [moment().subtract(29, 'days'), moment()],
-            "@lang('app.thisMonth')": [moment().startOf('month'), moment().endOf('month')],
-            "@lang('app.lastMonth')": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month')
-                .endOf(
-                    'month')
-            ],
+            "@lang('app.thisMonth')": [moment().startOf('month').subtract(1, 'month').add(21, 'days'), moment().startOf('month').add(20, 'days')],
+            "@lang('app.lastMonth')": [moment().startOf('month').subtract(2, 'month').add(21, 'days'), moment().startOf('month').subtract(1, 'month').add(20, 'days')],
             "@lang('app.last90Days')": [moment().subtract(89, 'days'), moment()],
             "@lang('app.last6Months')": [moment().subtract(6, 'months'), moment()],
             "@lang('app.last1Year')": [moment().subtract(1, 'years'), moment()]

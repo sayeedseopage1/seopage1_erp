@@ -39,35 +39,24 @@ trait webdevelopmentDashboard
 
         $this->pageTitle = 'Web Development Dashboard';
 
-        $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('startDate')) : now($this->global->timezone)->startOfMonth();
-
-        $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('endDate')) : now($this->global->timezone);
+        $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('startDate')) : now($this->global->timezone)->startOfMonth()->subMonths(1)->addDays(20);
+        $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('endDate')) : now($this->global->timezone)->startOfMonth()->addDays(19);
 
         $startDate = $this->startDate->toDateString();
         $endDate = $this->endDate->toDateString();
-
         $this->totalProject = Project::whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
         //$this->totalCanceledProject  = Project::where('status','canceled')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
-        $this->new_leads = Lead::whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])
-            ->count();
-        $this->new_deals = Lead::where('deal_status',1)->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])
-                ->count();
-        $this->new_qualified_sales = Project::where('project_status','Accepted')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])
-                        ->count();
-        $this->new_clients = ClientDetails::whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])
-                                        ->count();
-        $this->payment_release = PMAssign::select('release_amount')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])
-                                                                        ->sum('release_amount');
+        $this->new_leads = Lead::whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+        $this->new_deals = Lead::where('deal_status',1)->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+        $this->new_qualified_sales = Project::where('project_status','Accepted')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+        $this->new_clients = ClientDetails::whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+        $this->payment_release = PMAssign::select('release_amount')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->sum('release_amount');
         $this->project_budget = Project::select('project_budget')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('project_budget');
         $this->payment_due= $this->project_budget - $this->payment_release;
-        $this->on_going_project = Project::where('status','in progress')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])
-                        ->count();
-        $this->under_review = Project::where('status','under review')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])
-                                        ->count();
-        $this->on_hold = Project::where('status','on hold')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])
-                                                                        ->count();
-        $this->canceled = Project::where('status','canceled')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])
-                                                                        ->count();
+        $this->on_going_project = Project::where('status','in progress')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
+        $this->under_review = Project::where('status','under review')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
+        $this->on_hold = Project::where('status','on hold')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
+        $this->canceled = Project::where('status','canceled')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
 
         $this->payment_in_progress = Project::where('status','payment in progress')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
         $this->new_task = Task::whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])  ->count();
@@ -147,15 +136,15 @@ trait webdevelopmentDashboard
         $this->project_amount_this_month= Project::whereBetween(DB::raw('DATE(`payment_release_date`)'), [$this->start_date, $this->end_date])->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->sum('project_budget');
         $this->finish_project_count_this_month= Project::where('status','finished')->whereBetween(DB::raw('DATE(`start_date`)'), [$this->start_date, $this->end_date])->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
         $this->finish_project_amount_this_month= Project::where('status','finished')->whereBetween(DB::raw('DATE(`payment_release_date`)'), [$this->start_date, $this->payment_date])->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->sum('project_budget');
-        $this->project_amount_this_previous= Project::wherenotBetween(DB::raw('DATE(`payment_release_date`)'), [$this->start_date, $this->end_date])->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->sum('project_budget');
+        $this->project_amount_this_previous= Project::wherenotBetween(DB::raw('DATE(`payment_release_date`)'), [$this->start_date->subMonths(1), $this->end_date->subMonths(1)])->whereBetween(DB::raw('DATE(`updated_at`)'), [$this->startDate->subMonths(1), $this->endDate->subMonths(1)])->sum('project_budget');
         if ($this->project_count_this_month == 0) {
-          $this->percentage_of_project_complete_count = 0 . ('%');
+            $this->percentage_of_project_complete_count = 0 . ('%');
         }else {
-              $this->percentage_of_project_complete_count= round($this->finish_project_count_this_month/$this->project_count_this_month *100,2) . ('%');
+            $this->percentage_of_project_complete_count= round($this->finish_project_count_this_month/$this->project_count_this_month * 100, 2) . ('%');
         }
         if ($this->project_amount_this_month == 0) {
-          $this->percentage_of_project_complete_amount =  0 . ('%');
-          $this->percentage_of_project_complete_previous_amount = 0 . ('%');
+            $this->percentage_of_project_complete_amount =  0 . ('%');
+            $this->percentage_of_project_complete_previous_amount = 0 . ('%');
         }else {
             $this->percentage_of_project_complete_amount= round($this->finish_project_amount_this_month/$this->project_amount_this_month*100,2) . ('%');
             $this->percentage_of_project_complete_previous_amount= round($this->project_amount_this_previous/$this->finish_project_amount_this_month*100,2) . ('%');

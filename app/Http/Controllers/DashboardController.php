@@ -14,6 +14,8 @@ use App\Models\ProjectTimeLogBreak;
 use App\Models\Task;
 use App\Models\TaskboardColumn;
 use App\Models\Ticket;
+use App\Models\PMAssign;
+use App\Models\Project;
 use App\Traits\ClientDashboard;
 use App\Traits\ClientPanelDashboard;
 use App\Traits\CurrencyExchange;
@@ -342,4 +344,60 @@ class DashboardController extends AccountBaseController
         return $eventData;
     }
 
+    public function projectManageDetalsOnAdvanceDashboard(Request $request)
+    {
+        $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate);
+        $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate);
+
+        $project_counts= PMAssign::where('pm_id',$request->pm_id)->whereBetween('created_at', [$startDate, $endDate])->first();
+        if (!is_null($project_counts) && $project_counts->project_count != 0) {
+            $project_release_count= Project::where('pm_id',$request->pm_id)->where('due',0)->whereBetween('created_at', [$startDate, $endDate])->count();
+            if ($project_release_count != 0) {
+                $total_release_percentage= ($project_release_count / $project_counts->project_count)* 100;
+            }else {
+                $total_release_percentage=0;
+            }
+
+            $project_cancelation=  Project::where('pm_id',$request->pm_id)->where('status','canceled')->whereBetween('created_at', [$startDate, $endDate])->count();
+            if ($project_cancelation != 0) {
+                $percentage_of_project_cancelation = ($project_cancelation / $project_counts->project_count)*100;
+            }else {
+                $percentage_of_project_cancelation= 0;
+            }
+
+            $projects_on_hold= Project::where('pm_id',$request->pm_id)->where('status','on hold')->whereBetween('created_at', [$startDate, $endDate])->count();
+            if ($projects_on_hold != 0) {
+                $projects_on_hold_percentage= ($project_counts->project_count / $projects_on_hold)*100;
+            }else {
+                $projects_on_hold_percentage= 0;
+            }
+
+        }else {
+            $total_release_percentage=0;
+            $percentage_of_project_cancelation= 0;
+            $projects_on_hold_percentage= 0;
+        }
+        if (!is_null($project_counts) && $project_counts->amount != 0) {
+
+            $project_cancelation_rate=  Project::where('pm_id',$request->pm_id)->where('status','canceled')->whereBetween('created_at', [$startDate, $endDate])->sum('project_budget');
+            $percentage_of_project_cancelation_rate= ($project_cancelation_rate/$project_counts->amount)*100;
+        }else {
+
+            $percentage_of_project_cancelation_rate= 0;
+        }
+
+        $html = view('dashboard.ajax.projectManageDetalsOnAdvanceDashboard', [
+            'pm_id' => $request->pm_id,
+            'project_counts' => $project_counts,
+            'total_release_percentage' => $total_release_percentage,
+            'percentage_of_project_cancelation' => $percentage_of_project_cancelation,
+            'percentage_of_project_cancelation_rate' => $percentage_of_project_cancelation_rate,
+            'projects_on_hold_percentage' => $projects_on_hold_percentage,
+        ])->render();
+
+        return response()->json([
+            'status' => 'success',
+            'html' => $html
+        ]);
+    }
 }
