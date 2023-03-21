@@ -434,7 +434,7 @@ $projectArchived = $project->trashed();
     };
 
     $('#allTasks-table').on('click', '.showSubTask', function () {
-        var url = $(this).attr('href')+'/tableView';
+        var url = $(this).attr('href');
 
         $.easyAjax({
             url: url,

@@ -20,12 +20,15 @@
 						<th scope="col">Parent Task Progress</th>
 						<th scope="col">Action</th>
 					</x-slot>
-					@forelse($tasks as $key=>$value)
+					@forelse($tasks as $key=>$value2)
+					@php
+						$value= App\Models\Task::where('subtask_id',$value2->id)->first();
+					@endphp
 					<tr id="row-{{ $value->id }}">
 						<td><a href="{{route('tasks.show', $value->id)}}">{{$value->heading}}</a></td>
 						<td><a href="{{route('tasks.show', $task->id)}}">{{$task->heading}}</a></td>
 						<td><a href="{{route('clients.show', $project->client->id)}}">{{$project->client->name}}</a></td>
-						<td><a href="{{route('projects.show', $value->project_id)}}">{{$project->project_name}}</a></td>
+						<td><a href="{{route('projects.show', $value->project->id)}}">{{$project->project_name}}</a></td>
 						@php
 							$assignedTo = \App\Models\TaskUser::where('task_id', $value->id)->first();
 						@endphp

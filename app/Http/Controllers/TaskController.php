@@ -1090,7 +1090,8 @@ class TaskController extends AccountBaseController
             if (request()->ajax() && $tableView ==  'tableView') {
                 $task = Task::findOrFail($id);
                 $variable = Subtask::where('task_id',$task->id)->first();
-                $tasks = Task::where('subtask_id',$variable->id)->get();
+                // $tasks = Task::where('subtask_id',$variable->id)->get();
+                $tasks = $task->subtasks;
                 $project = $task->project;
                 $html = view('tasks.ajax.showSubTask', compact('project', 'tasks', 'task'))->render();
                 return Reply::dataOnly([

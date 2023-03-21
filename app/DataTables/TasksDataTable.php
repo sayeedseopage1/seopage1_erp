@@ -290,7 +290,7 @@ class TasksDataTable extends BaseDataTable
                     }
                     
                     $span .= '<span class="badge badge-primary">Parent task</span>';
-                    $subtasks_html .= '<a class="openRightModal showSubTask  btn btn-info btn-sm d-flex align-items-center '.$disabled.'" href="'.route('tasks.show_subtask', [$row->id]).'" ';
+                    $subtasks_html .= '<a class="openRightModal showSubTask  btn btn-info btn-sm d-flex align-items-center '.$disabled.'" href="'.route('tasks.show_subtask', [$row->id, 'tableView']).'" ';
                     
                     $subtasks_html .= '><i class="fa fa-eye"></i><span class="ml-1">'.$total_subtask.'</span></a>';
                 }
