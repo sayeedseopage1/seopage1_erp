@@ -255,7 +255,6 @@ public function employeeDashboard()
     ->get();
 
     $this->leadAgent = LeadAgent::where('user_id', $this->user->id)->first();
-
     if(!is_null($this->leadAgent)){
         $this->lead = Lead::with('leadAgent')->whereHas('leadAgent', function ($q) {
             $q->where('user_id', $this->user->id);
@@ -269,7 +268,18 @@ public function employeeDashboard()
             return $value->client_id != null;
         })->count();
     }
+    //sales executive data
+    $this->todayLead = Lead::where('added_by', $this->user->id)->whereDate('created_at', Carbon::today())->get();
+    $this->convertedLead = Lead::where([
+        'added_by' => $this->user->id,
+        'status_id' => 3,
+    ])->whereDate('created_at', Carbon::today())->get();
+    
+    $this->totalLeads = Lead::where('added_by', $this->user->id)->whereBetween('created_at', [$this->startDate, $this->endDate])->get();
 
+    $this->lostLeads = Lead::select('leads.*')->join('deal_stages', 'deal_stages.lead_id', '=', 'leads.id')->where('leads.added_by', $this->user->id)->whereBetween('leads.created_at', [$this->startDate, $this->endDate])->orderBy('leads.id', 'desc')->get();
+    // dd($this->lostLeads);
+    //-----------------------------------
     $now = now(global_setting()->timezone);
     $this->weekStartDate = $now->copy()->startOfWeek($showClockIn->week_start_from);
     $this->weekEndDate = $this->weekStartDate->copy()->addDays(7);

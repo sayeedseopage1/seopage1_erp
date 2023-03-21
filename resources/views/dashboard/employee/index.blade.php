@@ -115,36 +115,6 @@
                    </div>
                 </div>
             </div>
-            <div class="row col-12 col-sm-3 align-items-center border-left-grey border-left-grey-sm-0 h-100 pl-4 ml-5">
-                <div class="col-6">
-                    <div class="input-group w-100" style="height: 36px;">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar-alt"></i></span>
-                        </div>
-                        <select class="form-control f-14 f-w-500" id="getMonth" name="month">
-                            <option value="">Select Month</option>
-                            <option value="01">January</option>
-                            <option value="02">February</option>
-                            <option value="03">March</option>
-                            <option value="04">April</option>
-                            <option value="05">May</option>
-                            <option value="06">June</option>
-                            <option value="07">July</option>
-                            <option value="08">August</option>
-                            <option value="09">September</option>
-                            <option value="10">October</option>
-                            <option value="11">November</option>
-                            <option value="12">December</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-4 input-group" style="height: 36px;">
-                    <input class="form-control f-14 f-w-500 text-center" type="number" id="getYear" name="year" value="2023" min="1900" max="2099">
-                </div>
-                <div class="col-2 input-group">
-                    <button class="btn btn-dark btn-sm" id="submitMonthDate"><i class="fa fa-check"></i></button>
-                </div>
-            </div>
             
             @endif
             {{-- <div
@@ -690,7 +660,7 @@
             @endif
             @if(Auth::user()->role_id == 7)
             <!-- EMP DASHBOARD TASKS PROJECTS END -->
-              <div class="col-xl-12 col-lg-12 col-md-12 e-d-info-notices" id="emp-dashboard">
+              <div class="col-xl-12 col-lg-12 col-md-12 e-d-info-notices" id="emp-dashboard2">
                 <div class="row">
                   <div class="col-md-12">
                       @include($sales_view)
@@ -998,7 +968,10 @@
 @push('scripts')
 <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
 <script type="text/javascript">
-
+    @php
+        $startDate = \Carbon\Carbon::now()->startOfMonth()->subMonths(1)->addDays(20);
+        $endDate = \Carbon\Carbon::now()->startOfMonth()->addDays(20);
+    @endphp
     $(function() {
         var format = '{{ global_setting()->moment_format }}';
         var startDate = "{{ $startDate->format(global_setting()->date_format) }}";
@@ -1022,10 +995,6 @@
             opens: 'left',
             parentEl: '.dashboard-header'
         }, cb);
-
-        $('#submitMonthDate').click(function() {
-            showTable(true);
-        });
 
         $('#datatableRange2').on('apply.daterangepicker', function(ev, picker) {
             showTable();
@@ -1087,30 +1056,15 @@
         });
     });
 
-    function showTable(showMohthlyView = false) {
-        if (showMohthlyView == false) {
-            var dateRangePicker = $('#datatableRange2').data('daterangepicker');
-            var startDate = $('#datatableRange').val();
-            if (startDate == '') {
-                startDate = null;
-                endDate = null;
-            } else {
-                startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
-                endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
-            }
+    function showTable() {
+        var dateRangePicker = $('#datatableRange2').data('daterangepicker');
+        var startDate = $('#datatableRange').val();
+        if (startDate == '') {
+            startDate = null;
+            endDate = null;
         } else {
-            var month = $('#getMonth :selected').val();
-            var year = $('#getYear').val();
-
-            var previousMonth = month - 1;
-            var perviousYear = year;
-            if (previousMonth == '00') {
-                previousMonth = '12';
-                perviousYear = year - 1;
-            } 
-            
-            startDate = '21-'+previousMonth+'-'+perviousYear;
-            endDate = '20-'+month+'-'+year;
+            startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+            endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
         }
 
         const requestUrl = this.href;
@@ -1148,7 +1102,7 @@
 
                 if (response.status == "success") {
 
-                    $('#emp-dashboard2').html(response.html);
+                    $('#emp-dashboard2').html(response.html2);
 
                     init('#emp-dashboard2');
 

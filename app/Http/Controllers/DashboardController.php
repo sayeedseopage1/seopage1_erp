@@ -58,7 +58,6 @@ class DashboardController extends AccountBaseController
     public function index()
     {
         $this->isCheckScript();
-
         if (in_array('employee', user_roles())) {
             return $this->employeeDashboard();
         }
