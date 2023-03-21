@@ -60,12 +60,23 @@
           $label .= '<strong class="form-label">Client Country</strong>'
           ?>
           <div class="mb-1">
-              <x-forms.select fieldId="country" :fieldLabel="__($label)" fieldName="country" search="true"  fieldRequired="true" required>
-                  <option value="">--</option>
-                  @foreach ($countries as $item)
-                      <option data-tokens="{{ $item->iso3 }}" data-content="<span class='flag-icon flag-icon-{{ strtolower($item->iso) }} flag-icon-squared'></span> {{ $item->nicename }}" value="{{ $item->nicename }}">{{ $item->nicename }}</option>
-                  @endforeach
-              </x-forms.select>
+              <label class="f-14 text-dark-grey mb-12 mt-3" data-label="true" for="country"><strong class="form-label">Client Country</strong>
+                  <sup class="f-14 mr-1">*</sup>
+                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Client Country" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                  </svg>
+              </label>
+              <div class="form-group mb-0" required="required">
+                  <div class="dropdown bootstrap-select form-control select-picker">
+                      <select name="country" id="country" data-live-search="true" class="form-control select-picker" data-size="8" tabindex="null">
+                          <option value="">--</option>
+                          @foreach ($countries as $item)
+                              <option data-tokens="{{ $item->iso3 }}" data-content="<span class='flag-icon flag-icon-{{ strtolower($item->iso) }} flag-icon-squared'></span> {{ $item->nicename }}" value="{{ $item->nicename }}">{{ $item->nicename }}</option>
+                          @endforeach
+                      </select>
+                      <label id="countryError" class="error text-danger" for="country"></label>
+                  </div>
+              </div>
           </div>
           <div class="mt-3">
               <label for="input-state-3" class="form-label"><strong>Project Name <span style="color:red;">*<span></strong>
@@ -89,7 +100,11 @@
               <?php
               $currencies= App\Models\Currency::all();
               ?>
-              <label for="original_currency_id" class="form-label"><strong>Currency <span style="color:red;">*<span></strong></label>
+              <label for="original_currency_id" class="form-label"><strong>Currency <span style="color:red;">*<span></strong>
+                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Currency" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                  </svg>
+              </label>
                   <select class="form-select form-control mb-3 height-35 f-14" aria-label=".form-select-lg example" name="original_currency_id" id="original_currency_id">
                       @foreach($currencies as $currency)
                           <option value="{{$currency->id}}">({{$currency->currency_code}})</option>
@@ -97,26 +112,19 @@
                   </select>
                   <label id="currencyError" class="error text-danger" for="original_currency_id"></label>
           </div>
-{{--          <div class="mt-3" id="timerss">--}}
-{{--              <h2><strong>Project Award Time <span style="color:red;">*<span></strong></h2>--}}
-{{--              <input type="text" id="date-format" name="award_time" class="form-control floating-label height-35 f-14 @error('award_time') is-invalid @enderror" placeholder="Select Exact Award Time" >--}}
-{{--              <?php--}}
-{{--              $current_time = \Carbon\Carbon::now()->format('d-m-Y H:m:s');--}}
-{{--              ?>--}}
-{{--              <input type="hidden" name="current_time" value="{{$current_time}}">--}}
-{{--          </div>--}}
-          @if(Session::has('error'))
-              <div class="alert alert-danger" role="alert">
-                  <div class="alert-body">
-                      {{Session::get('error')}}
-                  </div>
-              </div>
-          @endif
-          @error('award_time')
-          <div class="mt-3">
-              <div class="alert alert-danger">{{ $message }}</div>
+          <div class="mt-3" id="timerss">
+              <h2><strong>Project Award Time <span style="color:red;">*<span></strong>
+                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Project Award Time" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                  </svg>
+              </h2>
+              <input type="text" id="date-format" name="award_time" class="form-control floating-label height-35 f-14 @error('award_time') is-invalid @enderror" placeholder="Select Exact Award Time" >
+              <label id="awardTimeError" class="error text-danger" for="award_time"></label>
+              <?php
+              $current_time = \Carbon\Carbon::now()->format('d-m-Y H:m:s');
+              ?>
+              <input type="hidden" name="current_time" value="{{$current_time}}">
           </div>
-          @enderror
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -131,6 +139,8 @@
           $('#storeWonDeal').click(function(e){
               // alert("success");
               e.preventDefault();
+              $('#storeWonDeal').attr("disabled", true);
+              $('#storeWonDeal').html("Processing...");
               var data= {
                   '_token': "{{ csrf_token() }}",
                   'client_name': document.getElementById("client_name").value,
@@ -139,9 +149,9 @@
                   'project_name': document.getElementById("project_name").value,
                   'amount': document.getElementById("amount").value,
                   'original_currency_id': document.getElementById("original_currency_id").value,
-                  // 'award_time': document.getElementById("date-format").value,
+                  'award_time': document.getElementById("date-format").value,
               }
-              console.log(data);
+              // console.log(data);
               $.ajaxSetup({
                   headers: {
                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -155,76 +165,53 @@
                   success: function (response) {
                       // console.log(response.status);
                       $('#storeDeals').trigger("reset");
-                      $('.error').html("");
                       if (response.status == 'success') {
-                          window.location.href = response.redirectUrl;
+
+                         window.location.href = response.redirectUrl;
                       }
+                      $('#storeWonDeal').attr("disabled", false);
+                      $('#storeWonDeal').html("Create Won Deal");
+
                   },
                   error: function(error) {
-                      if (error) {
-                          $('#clientNameError').html(error.responseJSON.errors.client_name);
-                          $('#userNameError').html(error.responseJSON.errors.user_name);
-                          // $('#countryError').html(error.responseJSON.errors.country);
-                          $('#projectNameError').html(error.responseJSON.errors.project_name);
-                          $('#amountError').html(error.responseJSON.errors.amount);
-                          $('#currencyError').html(error.responseJSON.errors.original_currency_id);
+                      if(error.responseJSON.errors.client_name){
+                          $('#clientNameError').text(error.responseJSON.errors.client_name);
+                      }else{
+                          $('#clientNameError').text('');
                       }
+                      if(error.responseJSON.errors.user_name){
+                          $('#userNameError').text(error.responseJSON.errors.user_name);
+                      }else{
+                          $('#userNameError').text('');
+                      }
+                      if(error.responseJSON.errors.country){
+                          $('#countryError').text(error.responseJSON.errors.country);
+                      }else{
+                          $('#countryError').text('');
+                      }
+                      if(error.responseJSON.errors.project_name){
+                          $('#projectNameError').text(error.responseJSON.errors.project_name);
+                      }else{
+                          $('#projectNameError').text('');
+                      }
+                      if(error.responseJSON.errors.amount){
+                          $('#amountError').text(error.responseJSON.errors.amount);
+                      }else{
+                          $('#amountError').text('');
+                      }
+                      if(error.responseJSON.errors.award_time){
+                          $('#awardTimeError').text(error.responseJSON.errors.award_time);
+                      }else{
+                          $('#awardTimeError').text('');
+                          $('#storeWonDeal').attr("disabled", false);
+                          $('#storeWonDeal').html("Create Won Deal");
+                      }
+                      $('#storeWonDeal').attr("disabled", false);
+                      $('#storeWonDeal').html("Create Won Deal");
                   }
               });
           });
 
-      </script>
-{{--      <script>--}}
-{{--          const form = document.getElementById('storeDeal');--}}
-{{--          const button = document.getElementById('storeWonDeal');--}}
-{{--          const name = document.getElementById('client_name');--}}
-{{--          const username = document.getElementById('user_name');--}}
-{{--          const projectName = document.getElementById('project_name');--}}
-{{--          const amount = document.getElementById('amount');--}}
-{{--          const currency = document.getElementById('original_currency_id');--}}
-
-
-{{--          form.addEventListener('input', () => {--}}
-{{--              let valid = true;--}}
-{{--              if (name.value.trim() === '') {--}}
-{{--                  valid = false;--}}
-{{--                  clientNameError.textContent = 'Please enter the client name!';--}}
-{{--              } else {--}}
-{{--                  clientNameError.textContent = '';--}}
-{{--              }--}}
-{{--              if (username.value.trim() === '') {--}}
-{{--                  valid = false;--}}
-{{--                  userNameError.textContent = 'Please select client user name!';--}}
-{{--              } else {--}}
-{{--                  userNameError.textContent = '';--}}
-{{--              }--}}
-{{--              if (projectName.value.trim() === '') {--}}
-{{--                  valid = false;--}}
-{{--                  projectNameError.textContent = 'Please select project name!';--}}
-{{--              } else {--}}
-{{--                  projectNameError.textContent = '';--}}
-{{--              }--}}
-{{--              if (amount.value.trim() === '') {--}}
-{{--                  valid = false;--}}
-{{--                  amountError.textContent = 'Please select project budget!';--}}
-{{--              } else {--}}
-{{--                  amountError.textContent = '';--}}
-{{--              }--}}
-{{--              if (currency.value.trim() === '') {--}}
-{{--                  valid = false;--}}
-{{--                  currencyError.textContent = 'Please select project budget!';--}}
-{{--              } else {--}}
-{{--                  currencyError.textContent = '';--}}
-{{--              }--}}
-{{--              $("#storeWonDeal").attr("disabled", false);--}}
-{{--              $("#storeWonDeal").html("Create Won Deal");--}}
-{{--          });--}}
-{{--      </script>--}}
-      <script>
-          $("#storeWonDeal").on('click',function() {
-              // $("#storeWonDeal").attr("disabled", true);
-              // $("#storeWonDeal").html("Processing...");
-          });
       </script>
   @if (count($errors) > 0 || Session::has('error'))
   <script>
