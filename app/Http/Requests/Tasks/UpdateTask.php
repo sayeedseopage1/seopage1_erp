@@ -57,7 +57,8 @@ class UpdateTask extends CoreRequest
             'priority' => 'required',
             'user_id'=>'required',
             'estimate_hours'=> 'required',
-            'estimate_minutes'=> 'required'
+            'estimate_minutes'=> 'required',
+            'description' => 'required'
         ];
 
         if(!$this->has('without_duedate'))

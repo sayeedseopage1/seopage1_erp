@@ -214,24 +214,31 @@ class ContractController extends AccountBaseController
       $award_date= strtotime($request->award_time);
       $aw_dt= date('Y-m-d H:i:s', $award_date );
         //dd($aw_dt);
-        $validated = $request->validate([
-            'user_name' => 'required|unique:users|max:255',
+        $validate = $request->validate([
+            'user_name' => 'required',
             'client_name' => 'required',
             'project_name' => 'required',
             'amount' => 'required',
-            'original_currency_id' => 'required',
-             'award_time' => 'required|date|before:'.$current_time,
+            'award_time' => 'required|date|before:'.$current_time,
         ]);
+//        if ($validate) {
         $to = Carbon::parse($request->current_time);
         $from = Carbon::parse($request->award_time);
 
           $diff_in_minutes = $from->diffInMinutes($to);
         if ($diff_in_minutes > 1200) {
-          return back()->with('error','The award time and current time difference should not be more than 20 hours');
+            return response()->json([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "award_time" => [
+                        "The award time and current time difference should not be more than 20 hours!."
+                    ]
+                ]
+            ], 422);
         }
 
 
-        //  dd($request->date);
+
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new Deal();
@@ -337,47 +344,50 @@ class ContractController extends AccountBaseController
         $project->due = $deal->amount;
         $project->save();
 
-        return redirect('/deals/details/' . $deal->id)->with('messages.contractAdded');
+        return response()->json([
+            'status' => 'success',
+            'redirectUrl' => route('dealDetails', $deal->id)
+        ]);
+//        }
     }
     public function storeLeadDeal(Request $request)
     {
 //        dd($request->all());
         $current_time= Carbon::now()->format('d-m-Y H:i:s' );
-       // dd($request->current_time, $request->award_time,$current_time);
+        // dd($request->current_time, $request->award_time,$current_time);
 
 
         $award_date= strtotime($request->award_time);
-//        dd($award_date);
         $aw_dt= date('Y-m-d H:i:s', $award_date );
+        //dd($aw_dt);
 
 
 
-        $validator = Validator::make($request->all(), [
-            'user_name' => 'required',
+        $validated = $request->validate([
+//            'user_name' => 'required',
             'client_name' => 'required',
-            'project_name' => 'required',
+//            'project_name' => 'required',
             'amount' => 'required|min:1',
 
             // 'current_time' => 'date|date_format:d-m-Y H:i A',
             'award_time' => 'required|date|before:'.$current_time,
         ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'errors' => $validator->messages(),
-            ]);
-        };
-    //  dd($request);
-      $to = Carbon::parse($current_time);
-      $from = Carbon::parse($request->award_time);
+        //  dd($request);
+        $to = Carbon::parse($current_time);
+        $from = Carbon::parse($request->award_time);
 
         $diff_in_minutes = $from->diffInMinutes($to);
-      if ($diff_in_minutes > 1200) {
-          return response()->json([
-              'status'=>200,
-          ]);
-      }
-      //  dd($diff_in_minutes);
+        if ($diff_in_minutes > 1200) {
+            return response()->json([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "award_time" => [
+                        "The award time and current time difference should not be more than 20 hours!."
+                    ]
+                ]
+            ], 422);
+        }
+        //  dd($diff_in_minutes);
         $deal_stage = DealStage::where('id', $request->id)->first();
 
 
@@ -405,13 +415,13 @@ class ContractController extends AccountBaseController
             $deal->save();
             //$lead_id = Lead::where('id', $request->lead_id)->first();
             if (Auth::id() != null) {
-              $agent = SalesCount::where('user_id', Auth::id())->first();
-              if ($agent != null) {
-                $lead_ag = SalesCount::find($agent->id);
+                $agent = SalesCount::where('user_id', Auth::id())->first();
+                if ($agent != null) {
+                    $lead_ag = SalesCount::find($agent->id);
 
-                $lead_ag->negotiation_started = $lead_ag->negotiation_started + 1;
-                $lead_ag->save();
-              }
+                    $lead_ag->negotiation_started = $lead_ag->negotiation_started + 1;
+                    $lead_ag->save();
+                }
 
             }
 
@@ -421,11 +431,11 @@ class ContractController extends AccountBaseController
         $value= '';
 
         if (is_array($message_links) || is_object($message_links)) {
-          foreach ($message_links as $link) {
-            //dd($d['day']);
-            $value= $value  . $link .' <br> ';
+            foreach ($message_links as $link) {
+                //dd($d['day']);
+                $value= $value  . $link .' <br> ';
 
-          }
+            }
         }
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
@@ -438,7 +448,7 @@ class ContractController extends AccountBaseController
         $deal->currency_id= 1;
         $deal->actual_amount=  $request->amount;
         $currency= Currency::where('id',$request->original_currency_id)->first();
-      //  dd($currency);
+        //  dd($currency);
         $deal->amount = ($request->amount)/$currency->exchange_rate;
         $deal->client_name = $request->client_name;
         $deal->client_username = $request->user_name;
@@ -449,7 +459,7 @@ class ContractController extends AccountBaseController
         $date = date('Y-m-d H:i:s');
 
         $newDate = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date)
-        ->format('Y-m-d');
+            ->format('Y-m-d');
 
         //dd($newDate);
 
@@ -460,29 +470,29 @@ class ContractController extends AccountBaseController
         $deal->save();
         //$lead_con_id = Lead::where('id', $request->lead_id)->first();
         if (Auth::id() != null) {
-          $agent_id = SalesCount::where('user_id', Auth::id())->first();
-          if ($agent_id != null) {
-            $lead_ag_id = SalesCount::find($agent_id->id);
+            $agent_id = SalesCount::where('user_id', Auth::id())->first();
+            if ($agent_id != null) {
+                $lead_ag_id = SalesCount::find($agent_id->id);
 
-            $lead_ag_id->won_deals = $lead_ag_id->won_deals + 1;
-            $lead_ag_id->deal_value = $lead_ag_id->deal_value + $deal->amount;
-            $lead_ag_id->save();
-          }
+                $lead_ag_id->won_deals = $lead_ag_id->won_deals + 1;
+                $lead_ag_id->deal_value = $lead_ag_id->deal_value + $deal->amount;
+                $lead_ag_id->save();
+            }
 
         }
 
 
         $lead = Lead::find($request->lead_id);
         if ($lead != null) {
-          $lead->status_id = 3;
-          $lead->save();
+            $lead->status_id = 3;
+            $lead->save();
         }
 
         $user_name= User::where('user_name',$request->user_name)->first();
         if ($user_name == null) {
             if($lead != null)
             {
-            $country= Country::where('nicename',$lead->country)->first();
+                $country= Country::where('nicename',$lead->country)->first();
             }
 
             $user = new User();
@@ -492,7 +502,7 @@ class ContractController extends AccountBaseController
             $user->email_notifications = 0;
             if($lead != null)
             {
-            $user->country_id= $country->id;
+                $user->country_id= $country->id;
             }
 
             $user->save();
@@ -562,7 +572,6 @@ class ContractController extends AccountBaseController
             'status' => 'success',
             'redirectUrl' => route('dealDetails', $deal->id)
         ]);
-
     }
     public function Milestone($id)
     {
@@ -714,7 +723,9 @@ class ContractController extends AccountBaseController
     {
 //        dd($request->message_link);
         $validated = $request->validate([
-            'message_link' => 'required',
+            'project_name' => 'required',
+            'deadline' => 'required',
+            'amount' => 'required',
             'description2' => 'required',
             'description3' => 'required',
             'description4' => 'required',
@@ -724,6 +735,9 @@ class ContractController extends AccountBaseController
             'description8' => 'required',
             'description9' => 'required',
         ], [
+            'project_name.required' => 'Please enter the project name!',
+            'deadline.required' => 'Please select project deadline from Freelancer.com!',
+            'amount.required' => 'Please enter the project budget!',
             'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
             'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
             'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
@@ -978,8 +992,9 @@ class ContractController extends AccountBaseController
 //        dd($request->all());
         $validated = $request->validate([
             'project_name' => 'required',
+            'deadline' => 'required',
+            'amount' => 'required',
             'message_link' => 'required',
-
             'description2' => 'required',
             'description3' => 'required',
             'description4' => 'required',
@@ -989,7 +1004,9 @@ class ContractController extends AccountBaseController
             'description8' => 'required',
             'description9' => 'required',
         ], [
-            'project_name.required' => 'Project name is required!',
+            'project_name.required' => 'Please enter the project name!',
+            'deadline.required' => 'Please select project deadline from Freelancer.com!',
+            'amount.required' => 'Please enter the project budget!',
             'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
             'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
             'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',

@@ -100,19 +100,19 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                         <div class="form-group my-3">
                                     <label class="f-14 text-dark-grey mb-12" data-label="true" for="heading">Project Deliverable
                                             <sup class="f-14 mr-1">*</sup>
-
+                                    
                                     </label>
 
                                     <input type="text" class="form-control height-35 f-14" placeholder="Enter a task title" value="" name="deliverable_id" id="deliverable" autocomplete="off" readonly>
 
                                     </div>
                     </div>
-                    @else
+                    @else 
                    <div class="col-lg-6 col-md-6" id="deilverable-column">
                         <div class="form-group my-3">
                                     <label class="f-14 text-dark-grey mb-12" data-label="true" for="heading">Project Deliverable
                                             <sup class="f-14 mr-1">*</sup>
-
+                                    
                                     </label>
 
                                     <input type="text" class="form-control height-35 f-14" placeholder="Enter a task title" value="{{$task->deliverable_id}}" name="deliverable_id" id="deliverable" autocomplete="off" readonly>
@@ -167,7 +167,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                             }else{
                                                 $d_data ='Busy';
                                             }
-
+                                                  
 
                                             }else {
                                                   $d_data=  "Open to Work";
@@ -260,21 +260,16 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                             </x-forms.input-group>
                         </div>
                     </div> --}}
-                    <div class="col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <label class="text-dark-grey" data-label="true" for="description2">Description
-                                <sup class="mr-1">*</sup>
-                            </label>
-                            <textarea name="description" id="description2" class="form-control @error('description') is-invalid @enderror">{!! $task->description !!}</textarea>
-                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
-                            <script>
-                                CKEDITOR.replace('description');
-                            </script>
-                            @error('description')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
+
+                    <div class="col-md-12">
+                        <div class="form-group my-3">
+                            <x-forms.label fieldId="description" :fieldLabel="__('app.description')" fieldRequired="true">
+                            </x-forms.label>
+                            <div id="description">{!! $task->description !!}</div>
+                            <textarea name="description" id="description-text" class="d-none"></textarea>
                         </div>
                     </div>
+
                 </div>
 
                 <!-- <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-top-grey">
@@ -382,7 +377,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                             </div>
                         </div>
                     </div> --}}
-
+                    
 
                     <div class="col-md-6 col-lg-3 {{ $task->estimate_hours == 0 && $task->estimate_minutes == 0 ? '' : '' }}"
                         id="set-time-estimate-fields">
@@ -671,7 +666,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
         });
 
 
-        // quillImageLoad('#description-text');
+        quillImageLoad('#description');
 
         const dp1 = datepicker('#task_start_date', {
             position: 'bl',
@@ -699,8 +694,8 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
         });
 
         $('#save-task-form').click(function() {
-            var note = CKEDITOR.instances.description2.getData();
-            document.getElementById('description2').value = note;
+            var note = document.getElementById('description').children[0].innerHTML;
+            document.getElementById('description-text').value = note;
 
             const url = "{{ route('tasks.update', $task->id) }}";
 
@@ -905,14 +900,14 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
     }
     function getDependentData() {
     var milestone_id = $('#milestone-id').val();
-
+   
     $('#deilverable-column').show();
     $.ajax({
     url: '/get-deliverable/' + milestone_id,
     method: 'GET',
     success: function(response) {
         $('#deilverable-column').show();
-
+     
     $('#deliverable').val(response.title);
     if(response.title == null)
     {
@@ -923,7 +918,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
       console.log(error);
     }
   });
-
+    
     // if (field1Value) {
     //     $.ajax({
     //         url: '/getDependentData',

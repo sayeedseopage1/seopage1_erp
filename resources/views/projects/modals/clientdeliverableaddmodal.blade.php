@@ -22,18 +22,18 @@
                 </svg>
             </label>
           <select class="form-control height-35 f-14" name="deliverable_type" id="deliverable_type">
-            <option value="Graphics Design">Graphics Design</option>
-            <option value="UI/UX Design">UI/UX Design</option>
-            <option value="Main Page Development">Main Page Development</option>
-            <option value="Secondary Page Development">Secondary Page Development</option>
-            <option value="Content Creation">Content Creation</option>
-            <option value="Marketing">Marketing</option>
-            <option value="Domain/Hosting">Domain/Hosting</option>
-            <option value="Products">Products</option>
-            <option value="Collection">Collection</option>
+            <option value="Graphics Design" title="All the graphic design tasks will be included here for example logo design, banner design, image design, image editing, image resize, infographic creation etc. etc.">Graphics Design</option>
+            <option value="UI/UX Design" title="All the website designs & mockups should go under UX design. For example, these should all go under UI/UX design (Right now, listed under ): https://prnt.sc/ii2PJhYaTs9J">UI/UX Design</option>
+            <option value="Main Page Development" title="All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples, of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc. ">Main Page Development</option>
+            <option value="Secondary Page Development" title="All the pages that are not money/lead generator or don’t require significant work should be listed as secondary pages. Some examples of these pages are contact (just needs a form in most cases), about (Don’t generate money/leads in most cases. Needed for information), FAQ (Needed for information), privacy policy (Generic & Needed for information), Refund policy (Generic & Needed for information)">Secondary Page Development</option>
+            <option value="Content Creation" title="Any content related deliverables will be included here. For example, writing homepage text or writing 2000 words of content for the website as per the templates we will develop. ">Content Creation</option>
+            <option value="Marketing" title="Any digital marketing deliverables will be included under this. Like, need to do on-page SEO for the 3 major pages (Home, service and property listing page) of the website after they will be developed by us, Need to run a google ads campaign after the site will be developed, Need to run a email marketing campaign after the site will be developed etc. etc. ">Marketing</option>
+            <option value="Domain/Hosting" title="Anything related to domain/hosting setup or purchase, SSL setup, hosting switch etc. will be included here. ">Domain/Hosting</option>
+            <option value="Products" title="Individual product uploading will be included here. For example, if we have to upload 30 products, you should select products, set quantity 30, and then need to write a brief description in the description field. Individual product page example: https://www.houze.com.sg/collections/bean-bag/products/houze-kashmir-bean-bag-2-sizes-4-colors">Products</option>
+            <option value="Collection" title="Collection/category pages are the pages which included all the products in that collection. For example, this: https://www.houze.com.sg/collections/storage-boxes &#10; &#10;If we have to create 10 collection/category pages, select Collection from the dropdown, set quantity 10 and then in the description, write the names of those collection pages separated by comma.">Collection</option>
             <option value="Website design change ">Website design change </option>
             <option value="Speed optimization">Speed optimization</option>
-            <option value="Others">Others</option>
+            <option value="Others" title="Anything that is not specifically mentioned above should go to others. For example, any complex functionality, speed optimization, bug fixing or anything else not mentioned specifically above. If you select others, the top management will have to check and authorize those deliverables before you can proceed further.">Others</option>
           </select>
                   <label id="deliverableError" class="text-danger" for=""></label>
           </div>
@@ -202,7 +202,7 @@ $(document).ready(function() {
             'description': description,
             'project_id': {{$project->id}},
         }
-        console.log(data);
+        // console.log(data);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -213,7 +213,6 @@ $(document).ready(function() {
             type:'POST',
             url:"{{ route('add-project-deliverable') }}",
             data:data,
-            // console.log(data),
             success:function(response){
                 // console.log(response.status);
                 if (response.status==200){

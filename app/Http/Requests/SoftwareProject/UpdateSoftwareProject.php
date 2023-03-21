@@ -4,8 +4,9 @@ namespace App\Http\Requests\SoftwareProject;
 
 use App\Http\Requests\CoreRequest;
 use App\Models\CustomField;
+use App\Models\SoftwareProject;
 
-class StoreSoftwareProject extends CoreRequest
+class UpdateSoftwareProject extends CoreRequest
 {
 
     /**
@@ -25,27 +26,34 @@ class StoreSoftwareProject extends CoreRequest
      */
     public function rules()
     {
-        $setting = global_setting();
-
         $rules = [
             'project_name' => 'required|max:150',
-            'start_date' => 'required|date_format:"' . $setting->date_format . '"',
+            'start_date' => 'required',
+            'deadline' => 'required',
+            'project_summary'=>'required',
+          
+
+            // 'hours_allocated' => 'required|numeric',
            
-           
+            'project_code' => 'required|unique:projects,project_short_code,'.$this->route('project'),
         ];
 
-      
-
         if (!$this->has('without_deadline')) {
-            $rules['deadline'] = 'required|date_format:"' . $setting->date_format . '"|after_or_equal:start_date';
+            $rules['deadline'] = 'required';
         }
 
-    //dd($rules);
+        
+        $project = SoftwareProject::find(request()->project_id);
+
        
+
+      
 
         return $rules;
     }
 
    
-    
+
+   
+
 }

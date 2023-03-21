@@ -18,6 +18,12 @@ return new class extends Migration
             $table->string('project_name')->nullable();
             $table->string('project_short_code')->nullable();
             $table->longText('project_summary')->nullable();
+            $table->date('start_date')->nulalble();
+            $table->date('deadline')->nullable();
+            $table->integer('added_by')->nullable();
+            $table->integer('last_updated_by')->nulalble();
+            $table->integer('category_id')->nulalble();
+            $table->integer('team_id')->nullable();
             $table->timestamps();
         });
     }

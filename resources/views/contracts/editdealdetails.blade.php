@@ -643,6 +643,8 @@
         $('#updateBtn').click(function(e){
             e.preventDefault();
             // alert('ok');
+            $('#updateBtn').attr("disabled", true);
+            $('#updateBtn').html("Processing...");
             var description2 = CKEDITOR.instances.description2Text.getData();
             var description3 = CKEDITOR.instances.description3Text.getData();
             var description4 = CKEDITOR.instances.description4Text.getData();
@@ -693,34 +695,97 @@
                     $('.error').html("");
                     $(location).prop('href', '{{url('/account/contracts/')}}');
                     toastr.success('Deal Updated Successfully');
+                    $('#updateBtn').attr("disabled", false);
+                    $('#updateBtn').html("Update Deal Creation");
                 },
                 error: function(error) {
-                    if (error) {
-                        const errorKeys = Object.keys(error.responseJSON.errors);
-                        const numErrors = errorKeys.length;
-                        // console.log(numErrors);
-                        $('#projectNameError').html(error.responseJSON.errors.project_name);
-                        $('#deadlineError').html(error.responseJSON.errors.deadline);
-                        $('#currencyError').html(error.responseJSON.errors.original_currency_id);
-                        $('#profileLinkError').html(error.responseJSON.errors.profile_link);
-                        $('#description2Error').html(error.responseJSON.errors.description2);
-                        $('#description3Error').html(error.responseJSON.errors.description3);
-                        $('#description4Error').html(error.responseJSON.errors.description4);
-                        $('#description5Error').html(error.responseJSON.errors.description5);
-                        $('#description6Error').html(error.responseJSON.errors.description6);
-                        $('#description7Error').html(error.responseJSON.errors.description7);
-                        $('#description8Error').html(error.responseJSON.errors.description8);
-                        $('#description9Error').html(error.responseJSON.errors.description9);
-                        if(numErrors > 0)
-                        {
-                            $('#commonError').show();
-
-                            toastr.error('Some fields are missing, please check again and input all required data properly!');
-                        }
-                        if (error.responseJSON.errors.milestone_value) {
-                            toastr.error('Please add a milestone!');
-                        }
+                    const errorKeys = Object.keys(error.responseJSON.errors);
+                    const numErrors = errorKeys.length;
+                    // console.log(numErrors);
+                    if(numErrors > 0)
+                    {
+                        $('#commonError').show();
+                        $('#updateBtn').attr("disabled", false);
+                        $('#updateBtn').html("Update Deal Creation");
+                        toastr.error('Some fields are missing, please check again and input all required data properly!');
                     }
+                    if(error.responseJSON.errors.project_name){
+                        $('#projectNameError').text(error.responseJSON.errors.project_name);
+                    }else{
+                        $('#projectNameError').text('');
+                    }
+                    if(error.responseJSON.errors.deadline){
+                        $('#deadlineError').text(error.responseJSON.errors.deadline);
+                    }else{
+                        $('#deadlineError').text('');
+                    }
+                    if(error.responseJSON.errors.original_currency_id){
+                        $('#currencyError').text(error.responseJSON.errors.original_currency_id);
+                    }else{
+                        $('#currencyError').text('');
+                    }
+                    if(error.responseJSON.errors.amount){
+                        $('#amountError').text(error.responseJSON.errors.amount);
+                    }else{
+                        $('#amountError').text('');
+                    }
+                    if(error.responseJSON.errors.message_link){
+                        $('#messageLinkError').text(error.responseJSON.errors.message_link);
+                    }else{
+                        $('#messageLinkError').text('');
+                    }
+                    if(error.responseJSON.errors.message_link){
+                        $('#messageLinkError').text(error.responseJSON.errors.message_link);
+                    }else{
+                        $('#messageLinkError').text('');
+                    }
+                    if(error.responseJSON.errors.description2){
+                        $('#description2Error').text(error.responseJSON.errors.description2);
+                    }else{
+                        $('#description2Error').text('');
+                    }
+                    if(error.responseJSON.errors.description3){
+                        $('#description3Error').text(error.responseJSON.errors.description3);
+                    }else{
+                        $('#description3Error').text('');
+                    }
+                    if(error.responseJSON.errors.description4){
+                        $('#description4Error').text(error.responseJSON.errors.description4);
+                    }else{
+                        $('#description4Error').text('');
+                    }
+                    if(error.responseJSON.errors.description5){
+                        $('#description5Error').text(error.responseJSON.errors.description5);
+                    }else{
+                        $('#description5Error').text('');
+                    }
+                    if(error.responseJSON.errors.description6){
+                        $('#description6Error').text(error.responseJSON.errors.description6);
+                    }else{
+                        $('#description6Error').text('');
+                    }
+                    if(error.responseJSON.errors.description7){
+                        $('#description7Error').text(error.responseJSON.errors.description7);
+                    }else{
+                        $('#description7Error').text('');
+                    }
+                    if(error.responseJSON.errors.description8){
+                        $('#description8Error').text(error.responseJSON.errors.description8);
+                    }else{
+                        $('#description8Error').text('');
+                    }
+                    if(error.responseJSON.errors.description9){
+                        $('#description9Error').text(error.responseJSON.errors.description9);
+                    }else{
+                        $('#description9Error').text('');
+                    }
+                    if (error.responseJSON.errors.milestone_value) {
+                        toastr.error('Please add a milestone!');
+                        $('#updateBtn').attr("disabled", false);
+                        $('#updateBtn').html("Update Deal Creation");
+                    }
+                    $('#updateBtn').attr("disabled", false);
+                    $('#updateBtn').html("Update Deal Creation");
 
                 }
             });
@@ -800,46 +865,9 @@
              });
          </script>
     <script>
-        const form = document.getElementById('update-deal');
-        const button = document.getElementById('updateBtn');
-        const projectName = document.getElementById('project_name');
-        const deadline = document.getElementById('deadline');
-
-        const currency  = document.getElementById('original_currency_id');
-
-
-
-        form.addEventListener('input', () => {
-            let valid = true;
-            if (projectName.value.trim() === '') {
-                valid = false;
-                projectNameError.textContent = 'Please enter the project name!';
-            } else {
-                projectNameError.textContent = '';
-            }
-            if (deadline.value.trim() === '') {
-                valid = false;
-
-                deadlineError.textContent = 'Please select project deadline from Freelancer.com!';
-            } else {
-                deadlineError.textContent = '';
-            }
-            if (currency.value.trim() === '') {
-
-                valid = false;
-                currencyError.textContent = 'Please select correct currency!';
-            } else {
-                currencyError.textContent = '';
-            }
-        });
-    </script>
-    <script>
         flatpickr("#deadline", {
             dateFormat: "Y-m-d",
         });
-        // $("#updateBtn").on('click',function() {
-        //     $("#updateBtn").html("Confirm To Update");
-        // });
     </script>
     @endpush
 @endsection

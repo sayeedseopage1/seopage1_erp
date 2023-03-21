@@ -40,10 +40,12 @@
 @endsection
 
 @push('scripts')
-  
+
     <script>
         const activeTab = "{{ $activeTab }}";
         $('.project-menu .' + activeTab).addClass('active');
 
     </script>
+
 @endpush
+<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>

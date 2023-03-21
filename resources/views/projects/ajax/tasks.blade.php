@@ -11,12 +11,12 @@ $projectArchived = $project->trashed();
         @if ($projectArchived)
             <x-alert type="info" icon="info-circle">@lang('messages.archivedTaskNotWork')</x-alert>
         @endif
-       
+
         @if($project->project_status == 'Accepted')
         @php
            $project_creation_date= $project->created_at;
            $current_date= \Carbon\Carbon::now();
-           $diff_in_minutes = $current_date->diffInMinutes($project_creation_date); 
+           $diff_in_minutes = $current_date->diffInMinutes($project_creation_date);
          // dd($project_creation_date, $current_date, $diff_in_minutes);
         @endphp
         @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 6 || Auth::user()->role_id == 1)
@@ -32,7 +32,7 @@ $projectArchived = $project->trashed();
                 @lang('app.task')
             </x-forms.link-primary>
         @endif
-    </div> 
+    </div>
 
     @elseif($diff_in_minutes >= 2880 && $signature == null)
     <div class="d-flex" id="table-actions">
@@ -41,9 +41,9 @@ $projectArchived = $project->trashed();
         Add Task
         </button>
     </div>
-    
 
-    @else 
+
+    @else
     <div class="d-flex" id="table-actions">
         @if (($addTaskPermission == 'all' || $addTaskPermission == 'added' || $project->project_admin == user()->id) && !$projectArchived)
             <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
@@ -53,14 +53,14 @@ $projectArchived = $project->trashed();
             </x-forms.link-primary>
         @endif
 
-    </div> 
+    </div>
 
      @endif
-    
-     
-         
-     
-     @else 
+
+
+
+
+     @else
      <div class="d-flex" id="table-actions">
         @if (($addTaskPermission == 'all' || $addTaskPermission == 'added' || $project->project_admin == user()->id) && !$projectArchived)
             <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
@@ -73,8 +73,8 @@ $projectArchived = $project->trashed();
 
         @endif
         @endif
-       
-       
+
+
         <!-- Add Task Export Buttons End -->
 
 
@@ -360,15 +360,15 @@ $projectArchived = $project->trashed();
     });
 
     $('#task-disable').click(function() {
-        
-       
+
+
             Swal.fire({
                 title: "@lang('You cannot assign task as client of the project did not sign the deliverables.')",
                 text: "@lang('')",
                 icon: 'error',
                 showCancelButton: true,
                 focusConfirm: false,
-                
+
                 cancelButtonText: "@lang('app.cancel')",
                 customClass: {
                     confirmButton: 'btn btn-primary mr-3',
@@ -381,18 +381,18 @@ $projectArchived = $project->trashed();
                 buttonsStyling: false
             });
 
-        } 
+        }
     );
     $('#task-disable2').click(function() {
-        
-       
+
+
         Swal.fire({
             title: "@lang('You cannot assign task as client of the project did not sign the deliverables.')",
             text: "@lang('')",
             icon: 'error',
             showCancelButton: true,
             focusConfirm: false,
-            
+
             cancelButtonText: "@lang('app.cancel')",
             customClass: {
                 confirmButton: 'btn btn-primary mr-3',
@@ -405,7 +405,7 @@ $projectArchived = $project->trashed();
             buttonsStyling: false
         });
 
-    } 
+    }
 );
 
 
@@ -447,3 +447,4 @@ $projectArchived = $project->trashed();
         })
     });
 </script>
+<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>

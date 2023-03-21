@@ -1,25 +1,25 @@
 @php
-$viewLeadAgentPermission = user()->permission('view_lead_agents');
-$viewLeadCategoryPermission = user()->permission('view_lead_category');
-$viewLeadSourcesPermission = user()->permission('view_lead_sources');
-$addLeadAgentPermission = user()->permission('add_lead_agent');
-$addLeadSourcesPermission = user()->permission('add_lead_sources');
-$addLeadCategoryPermission = user()->permission('add_lead_category');
-$addLeadNotePermission = user()->permission('add_lead_note');
+    $viewLeadAgentPermission = user()->permission('view_lead_agents');
+    $viewLeadCategoryPermission = user()->permission('view_lead_category');
+    $viewLeadSourcesPermission = user()->permission('view_lead_sources');
+    $addLeadAgentPermission = user()->permission('add_lead_agent');
+    $addLeadSourcesPermission = user()->permission('add_lead_sources');
+    $addLeadCategoryPermission = user()->permission('add_lead_category');
+    $addLeadNotePermission = user()->permission('add_lead_note');
 @endphp
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
 <style>
-        label.error {
-            color: #dc3545;
-            font-size: 14px;
-        }
-    </style>
+    label.error {
+        color: #dc3545;
+        font-size: 14px;
+    }
+</style>
 <div class="row">
 
     <div class="col-sm-12">
 
-        <form action="#" id="store-lead" method="post">
-          @csrf
+        <form action="{{route('store-lead')}}" id="store-lead" method="post">
+            @csrf
 
             <div class="add-client bg-white rounded">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
@@ -87,7 +87,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                     </div>
                     <!-- DEADLINE END -->
                     <!-- CURRENCY START -->
-                   <?php
+                    <?php
                     $currencies= App\Models\Currency::all();
 
                     ?>
@@ -152,7 +152,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                         </div>
                     </div>
                     <!-- BID VALUE END -->
-                   <!-- BIDDING DELAY TIME START -->
+                    <!-- BIDDING DELAY TIME START -->
                     <div class="col-md-5 mt-3" id="set-time-estimate-fields">
                         <label for="">Bidding Delay Time <span style="color:red;">*</span>
                             <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Collect the bidding delay time from Freelancer.com and enter the exact delay time here." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
@@ -162,11 +162,11 @@ $addLeadNotePermission = user()->permission('add_lead_note');
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <input type="number" class="form-control border rounded p-2 height-35 f-14 error" name="bidding_minutes" min="1" id="bidding_minutes" placeholder="Minimum" autocomplete="off">
+                                    <input type="number" class="form-control border rounded p-2 height-35 f-14 error" name="bidding_minutes" min="1" id="bidding_minutes" placeholder="Minutes" autocomplete="off">
                                     <label id="biddingMinutesError" class="error" for="bidding_minutes"></label>
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="number" name="bidding_seconds" class="form-control height-35 f-14 border rounded p-2 error" id="bidding_seconds" placeholder="Maximum" autocomplete="off">
+                                    <input type="number" name="bidding_seconds" class="form-control height-35 f-14 border rounded p-2 error" id="bidding_seconds" placeholder="Seconds" autocomplete="off">
                                     <label id="biddingSecondsError" class="error" for="bidding_seconds"></label>
                                 </div>
                             </div>
@@ -267,7 +267,7 @@ $addLeadNotePermission = user()->permission('add_lead_note');
 
                 </div>
                 <div class="col-lg-4 col-md-6">
-                      <button type="button" class="btn btn-primary" id="submit-button" disabled><span class="btn-txt">Create Lead<span></button>
+                    <button type="button" class="btn btn-primary" id="submit-button"><span class="btn-txt">Create Lead<span></button>
                 </div>
                 <br>
                 <br>
@@ -293,6 +293,8 @@ $addLeadNotePermission = user()->permission('add_lead_note');
     $('#submit-button').click(function(e){
         e.preventDefault();
         // console.log(formData);
+        $('#submit-button').attr("disabled", true);
+        $('#submit-button').html("Processing...");
         var description = CKEDITOR.instances.descriptionText.getData();
         var coverLetter = CKEDITOR.instances.coverLetterText.getData();
         var explanation = CKEDITOR.instances.explanationText.getData();
@@ -326,139 +328,98 @@ $addLeadNotePermission = user()->permission('add_lead_note');
             url: "{{route('store-lead')}}",
             data: data,
             dataType: "json",
-            disableButton: true,
-
-            buttonSelector: "#submit-button",
-
             success: function (response) {
                 $('#store-lead').trigger("reset");
                 $('.error').html("");
-                if (response.status == 'success') {
-                    window.location.href = response.redirectUrl;
-                }
+                $(location).prop('href', '{{url('/account/leads/')}}');
+                toastr.success('Lead Added Successfully');
+                $('#submit-button').attr("disabled", false);
+                $('#submit-button').html("Create Lead");
             },
             error: function(error) {
-                if (error) {
-                    $('#clientNameError').html(error.responseJSON.errors.client_name);
-                    $('#countryError').html(error.responseJSON.errors.country);
-                    $('#projectLinkError').html(error.responseJSON.errors.project_link);
-                    $('#deadLineError').html(error.responseJSON.errors.deadline);
-                    $('#currencyError').html(error.responseJSON.errors.original_currency_id);
-                    $('#bidValueError').html(error.responseJSON.errors.bid_value);
-                    $('#bidValue2Error').html(error.responseJSON.errors.bid_value2);
-                    $('#valueError').html(error.responseJSON.errors.value);
-                    $('#biddingMinutesError').html(error.responseJSON.errors.bidding_minutes);
-                    $('#biddingSecondsError').html(error.responseJSON.errors.bidding_seconds);
-                    $('#descriptionError').html(error.responseJSON.errors.description);
-                    $('#coverLetterError').html(error.responseJSON.errors.cover_letter);
-                    $('#insightScreenshotError').html(error.responseJSON.errors.insight_screenshot);
-                    $('#projectpageScreenshotError').html(error.responseJSON.errors.projectpage_screenshot);
+                // console.log(response);
+                if(error.responseJSON.errors.client_name){
+                    $('#clientNameError').text(error.responseJSON.errors.client_name);
+                }else{
+                    $('#clientNameError').text('');
                 }
+                if(error.responseJSON.errors.country){
+                    $('#countryError').text(error.responseJSON.errors.country);
+                }else{
+                    $('#countryError').text('');
+                }
+                if(error.responseJSON.errors.project_link){
+                    $('#projectLinkError').text(error.responseJSON.errors.project_link);
+                }else{
+                    $('#projectLinkError').text('');
+                }
+                if(error.responseJSON.errors.deadline){
+                    $('#deadLineError').text(error.responseJSON.errors.deadline);
+                }else{
+                    $('#deadLineError').text('');
+                }
+                if(error.responseJSON.errors.original_currency_id){
+                    $('#currencyError').text(error.responseJSON.errors.original_currency_id);
+                }else{
+                    $('#currencyError').text('');
+                }
+                if(error.responseJSON.errors.bid_value){
+                    $('#bidValueError').text(error.responseJSON.errors.bid_value);
+                }else{
+                    $('#bidValueError').text('');
+                }
+                if(error.responseJSON.errors.bid_value2){
+                    $('#bidValue2Error').text(error.responseJSON.errors.bid_value2);
+                }else{
+                    $('#bidValue2Error').text('');
+                }
+                if(error.responseJSON.errors.value){
+                    $('#valueError').text(error.responseJSON.errors.value);
+                }else{
+                    $('#valueError').text('');
+                }
+                if(error.responseJSON.errors.value){
+                    $('#valueError').text(error.responseJSON.errors.value);
+                }else{
+                    $('#valueError').text('');
+                }
+                if(error.responseJSON.errors.bidding_minutes){
+                    $('#biddingMinutesError').text(error.responseJSON.errors.bidding_minutes);
+                }else{
+                    $('#biddingMinutesError').text('');
+                }
+                if(error.responseJSON.errors.bidding_seconds){
+                    $('#biddingSecondsError').text(error.responseJSON.errors.bidding_seconds);
+                }else{
+                    $('#biddingSecondsError').text('');
+                }
+                if(error.responseJSON.errors.description){
+                    $('#descriptionError').text(error.responseJSON.errors.description);
+                }else{
+                    $('#descriptionError').text('');
+                }
+                if(error.responseJSON.errors.cover_letter){
+                    $('#coverLetterError').text(error.responseJSON.errors.cover_letter);
+                }else{
+                    $('#coverLetterError').text('');
+                }
+                if(error.responseJSON.errors.insight_screenshot){
+                    $('#insightScreenshotError').text(error.responseJSON.errors.insight_screenshot);
+                }else{
+                    $('#insightScreenshotError').text('');
+                }
+                if(error.responseJSON.errors.projectpage_screenshot){
+                    $('#projectpageScreenshotError').text(error.responseJSON.errors.projectpage_screenshot);
+                }else{
+                    $('#projectpageScreenshotError').text('');
+                }
+                $('#submit-button').attr("disabled", false);
+                $('#submit-button').html("Create Lead");
             }
         });
     });
 
 </script>
-
-<script>
-    const form = document.getElementById('store-lead');
-    const button = document.getElementById('submit-button');
-    const nameField = document.getElementById('client_name');
-    const country = document.getElementById('country');
-    const projectLink = document.getElementById('project_link');
-    const deadline = document.getElementById('deadline');
-    const currency = document.getElementById('original_currency_id');
-    const bid_value = document.getElementById('bid_value');
-    const bid_value2 = document.getElementById('bid_value2');
-    const value = document.getElementById('value');
-    const bidding_minutes = document.getElementById('bidding_minutes');
-    const bidding_seconds = document.getElementById('bidding_seconds');
-    const insight_screenshot = document.getElementById('insight_screenshot');
-    const projectpage_screenshot = document.getElementById('projectpage_screenshot');
-
-
-    form.addEventListener('input', () => {
-        let valid = true;
-        if (nameField.value.trim() === '') {
-            valid = false;
-            clientNameError.textContent = 'Please enter the project name!';
-        } else {
-            clientNameError.textContent = '';
-        }
-        if (country.value.trim() === '') {
-            valid = false;
-            countryError.textContent = 'Please select client country!';
-        } else {
-            countryError.textContent = '';
-        }
-        if (projectLink.value.trim() === '') {
-            valid = false;
-            projectLinkError.textContent = 'Please enter correct project link (Freelancer.com) with https!';
-        } else {
-            projectLinkError.textContent = '';
-        }
-        if (deadline.value.trim() === '') {
-            valid = false;
-            deadLineError.textContent = 'Please select project deadline from Freelancer.com!';
-        } else {
-            deadLineError.textContent = '';
-        }
-        if (currency.value.trim() === '') {
-            valid = false;
-            currencyError.textContent = 'Please select correct currency!';
-        } else {
-            currencyError.textContent = '';
-        }
-        if (bid_value.value.trim() === '') {
-            valid = false;
-            bidValueError.textContent = 'Please enter minimum project budget!';
-        } else {
-            bidValueError.textContent = '';
-        }
-        if (bid_value2.value.trim() === '') {
-            valid = false;
-            bidValue2Error.textContent = 'Please enter maximum project budget!';
-        } else {
-            bidValue2Error.textContent = '';
-        }
-        if (value.value.trim() === '') {
-            valid = false;
-            valueError.textContent = 'Please enter bid value!';
-        } else {
-            valueError.textContent = '';
-        }
-        if (bidding_minutes.value.trim() === '') {
-            valid = false;
-            biddingMinutesError.textContent = 'Please enter bidding delayed time (minutes)!';
-        } else {
-            biddingMinutesError.textContent = '';
-        }
-        if (bidding_seconds.value.trim() === '') {
-            valid = false;
-            biddingSecondsError.textContent = 'Please enter bidding delayed time (seconds)!';
-        } else {
-            biddingSecondsError.textContent = '';
-        }
-        if (insight_screenshot.value.trim() === '') {
-            valid = false;
-            insightScreenshotError.textContent = 'Please enter project insight page screenshot link (Freelancer.com) with https!';
-        } else {
-            insightScreenshotError.textContent = '';
-        }
-        if (projectpage_screenshot.value.trim() === '') {
-            valid = false;
-            projectpageScreenshotError.textContent = 'Please enter project page screenshot link (Freelancer.com) with https!';
-        } else {
-            projectpageScreenshotError.textContent = '';
-        }
-
-        button.disabled = !valid;
-    });
-</script>
-
 <script>
     flatpickr("input[type=datetime-local]", {});
-    $("#submit-button").on('click',function() {
-        $("#submit-button").attr("disabled", true);
-    });
 </script>
