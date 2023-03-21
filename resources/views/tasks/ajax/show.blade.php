@@ -95,8 +95,17 @@ $changeStatusPermission = user()->permission('change_status');
 
                                  @if($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision')
 
+                                          @php 
+                                          $task_time= App\Models\ProjectTimelog::orderBy('id','desc')->where('task_id',$task->id)->first();
+                                        //  / dd($task_time);
+
+                                          @endphp
+                                          @if($task_time->end_time != null)
+
                                           @if($task->status != 'completed')
+
                                         <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
+                                        @endif
                                         @endif
                                           @endif
 
