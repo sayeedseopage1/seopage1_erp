@@ -176,7 +176,6 @@
     <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         $(function() {
-
             var format = '{{ global_setting()->moment_format }}';
             var startDate = "{{ $startDate->subMonths(2)->format(global_setting()->date_format) }}";
             var endDate = "{{ $endDate->subMonths(2)->format(global_setting()->date_format) }}";

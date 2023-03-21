@@ -100,12 +100,12 @@ $changeStatusPermission = user()->permission('change_status');
                                         //  / dd($task_time);
 
                                           @endphp
-                                         
+
                                           @if($task->status != 'completed')
 
                                         <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
                                         @endif
-                                       
+
                                           @endif
 
                                             <?php

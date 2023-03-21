@@ -1086,20 +1086,20 @@ class TaskController extends AccountBaseController
 
     public function show_subtask(TasksDataTable $dataTable, $id, $tableView = null)
     {
-        $viewPermission = user()->permission('view_tasks');
-        abort_403(!in_array($viewPermission, ['all', 'added', 'owned', 'both']));
-        if (request()->ajax() && $tableView ==  'tableView') {
-            $task = Task::findOrFail($id);
-            $project = $task->project;
-            $tasks = $task->subtasks;
-            $html = view('tasks.ajax.showSubTask', compact('project', 'tasks', 'task'))->render();
-            // dd($project, $task, $tasks);
-            return Reply::dataOnly([
-                'status' => 'success', 
-                'data' => $html
-            ]);
-        } else {
-            return redirect()->route('tasks.index');
+        if (in_array(user()->role_id, [1, 4, 6])) {
+            if (request()->ajax() && $tableView ==  'tableView') {
+                $task = Task::findOrFail($id);
+                $variable = Subtask::where('task_id',$task->id)->first();
+                $tasks = Task::where('subtask_id',$variable->id)->get();
+                $project = $task->project;
+                $html = view('tasks.ajax.showSubTask', compact('project', 'tasks', 'task'))->render();
+                return Reply::dataOnly([
+                    'status' => 'success', 
+                    'data' => $html
+                ]);
+            } else {
+                return redirect()->route('tasks.index');
+            }
         }
     }
 }
