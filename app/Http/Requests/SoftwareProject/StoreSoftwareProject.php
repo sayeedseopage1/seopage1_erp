@@ -31,7 +31,7 @@ class StoreSoftwareProject extends CoreRequest
             'project_name' => 'required|max:150',
             'start_date' => 'required|date_format:"' . $setting->date_format . '"',
            
-            'project_code' => 'required|unique:projects,project_short_code',
+           
         ];
 
       
@@ -46,13 +46,6 @@ class StoreSoftwareProject extends CoreRequest
         return $rules;
     }
 
-    public function messages()
-    {
-        return [
-          
-            'project_code.required' => __('messages.projectCodeRequired'),
-        ];
-    }
-
+   
     
 }

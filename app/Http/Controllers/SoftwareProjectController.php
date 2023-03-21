@@ -382,6 +382,13 @@ class SoftwareProjectController extends AccountBaseController
            
 
             $project->save();
+            $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            $random = substr(str_shuffle($chars), 0, 12);
+        
+                $project_update= SoftwareProject::find($project->id);
+                $project_update->project_short_code = $random;
+                $project_update->save();
+               
            
 
 
@@ -643,7 +650,7 @@ class SoftwareProjectController extends AccountBaseController
         $project = SoftwareProject::findOrFail($id);
        
         $project->project_name = $request->project_name;
-        $project->project_short_code = $request->project_code;
+        //$project->project_short_code = $request->project_code;
 
         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
        
