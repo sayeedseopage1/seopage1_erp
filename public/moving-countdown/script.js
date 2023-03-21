@@ -85,7 +85,7 @@ function minimizeCard() {
     $.ajax({
         type:"GET",
         cache:false,
-        url:"http://127.0.0.1:8000/update/timer/box/set/"+status,
+        url:"/update/timer/box/set/"+status,
         success: function(data) {
         }
     });

@@ -324,7 +324,7 @@
                             <div class="content">
 					            <div class="bg-timer-box my-3 rounded p-2 text-light">
 					                <p class="mb-0">New Deal Won: {{$value->client_name}}</p>
-					                <span class="timer-count font-weight-bold" id="timer">00:00:00</span>
+					                <span class="timer-count font-weight-bold" id="timer_{{$value->id}}">00:00:00</span>
 					                <p>{{\Carbon\Carbon::parse($value->award_time)->addHours(20)->format('Y-m-d (l), g:i A')}}</p>
 					                <a class="btn btn-success text-light rounded px-1 py-0 text-underline-none" href="/account/contracts/{{$value->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
 					            </div>
