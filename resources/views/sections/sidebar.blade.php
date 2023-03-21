@@ -333,7 +333,7 @@
                       
                             <x-sub-menu-item :link="route('software_projects.index')" :text="__('app.menu.projects')" />
                        
-                        {{-- @if (!in_array('client', user_roles())) --}}
+                        
                          
                        
                             <x-sub-menu-item :link="route('tasks.index')" :text="__('app.menu.tasks')" />
@@ -341,7 +341,7 @@
                       
                             <x-sub-menu-item :link="route('timelogs.index')" :text="__('app.menu.timeLogs')" />
                        
-                        {{-- @endif --}}
+                       
                     </div>
                 </x-menu-item> --}}
 
