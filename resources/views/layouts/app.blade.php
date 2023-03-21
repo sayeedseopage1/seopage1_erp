@@ -303,7 +303,7 @@
                     $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->where('pm_id', Auth::id())->get();
                 @endphp
                 @if(count($deal_id) > 0)
-                    <div class="timer-card">
+                    <div class="timer-card @if(\Session::get('timer_box_status') == 'off') minimized @endif">
                     	<div class="header mt-3 rounded">
 				            <h5 class="float-start">Project Acceptance ({{$deal_id->count()}})</h5>
 				            <button class="minimize-button" onclick="minimizeCard()">
