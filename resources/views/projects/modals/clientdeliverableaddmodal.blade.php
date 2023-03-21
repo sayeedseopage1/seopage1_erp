@@ -202,7 +202,7 @@ $(document).ready(function() {
             'description': description,
             'project_id': {{$project->id}},
         }
-        console.log(data);
+        // console.log(data);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -213,7 +213,6 @@ $(document).ready(function() {
             type:'POST',
             url:"{{ route('add-project-deliverable') }}",
             data:data,
-            // console.log(data),
             success:function(response){
                 // console.log(response.status);
                 if (response.status==200){

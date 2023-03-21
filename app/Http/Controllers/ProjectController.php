@@ -1945,7 +1945,6 @@ if ($pm_count < 2) {
                 'quantity' => 'required',
                 'delivery-type' => 'required',
                 'from' => 'required',
-                'to' => 'required',
             ]
         );
         if ($validate) {
@@ -2005,9 +2004,6 @@ if ($pm_count < 2) {
         }
       }
 
-
-//      Toastr::success('Deliverable Added Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-//        return Redirect::back();
             return response()->json([
                 'status'=>200,
             ]);
