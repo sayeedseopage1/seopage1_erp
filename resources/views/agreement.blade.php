@@ -209,7 +209,7 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
 
                             @endif
                               <td>{{$deliverable->quantity}}</td>
-                                <td>{{$deliverable->description}}</td>
+                                <td>{!!$deliverable->description!!}</td>
                                 @if($deliverable->to != null)
                             <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
                             @else 

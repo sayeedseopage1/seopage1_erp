@@ -17,13 +17,13 @@ $addProjectNotePermission = user()->permission('add_project_note');
                     @lang('app.project') @lang('app.details')</h4>
                 <input type="hidden" name="template_id" value="{{ $projectTemplate->id ?? '' }}">
                 <div class="row p-20">
-                    <div class="col-lg-6 col-md-6">
+                    {{-- <div class="col-lg-6 col-md-6">
                         <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.taskShortCode')"
                             fieldName="project_code" fieldRequired="true" fieldId="project_code"
                             :fieldPlaceholder="__('placeholders.writeshortcode')" />
-                    </div>
+                    </div> --}}
 
-                    <div class="col-lg-6 col-md-6">
+                    <div class="col-lg-12 col-md-12">
                         <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.projectName')"
                             fieldName="project_name" fieldRequired="true" fieldId="project_name"
                             :fieldPlaceholder="__('placeholders.project')"

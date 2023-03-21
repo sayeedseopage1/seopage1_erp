@@ -2011,11 +2011,7 @@ if ($pm_count < 2) {
     }
     public function updateDeliverable(Request $request)
     {
-       $deliverable_id = ProjectDeliverable::where('id',$request->id)->first();
-        $project_id= Project::where('id',$deliverable_id->project_id)->first();
-        $project= Project::find($deliverable_id->project_id);
-        $project->hours_allocated = $project_id->hours_allocated - $deliverable_id->estimation_time;
-        $project->save();
+  
       $deliverable= ProjectDeliverable::find($request->id);
       if($request->deliverable_type == 'Others')
       {
@@ -2037,9 +2033,10 @@ if ($pm_count < 2) {
       $deliverable->description= $request->description;
       $deliverable->save();
       $project_id_update= Project::where('id',$deliverable->project_id)->first();
+      $deliverable_estimation_count = ProjectDeliverable::where('project_id',$project_id_update->id)->sum('estimation_time');
       $project_update= Project::find($project_id_update->id);
       $project_update->deliverable_authorization = 0;
-      $project_update->hours_allocated = $project_id_update->hours_allocated + $request->estimation_time;
+      $project_update->hours_allocated = $deliverable_estimation_count;
       $project_update->save();
 
       $log_user = Auth::user();
