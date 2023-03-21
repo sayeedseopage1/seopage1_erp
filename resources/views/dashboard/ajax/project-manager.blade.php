@@ -303,10 +303,10 @@
 </div>
 <div class="row mt-3 mb-3">
     <div class="col-md-6">
-        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0 h-200">
             <div class="d-block text-capitalize">
                 <h4 class="f-18 f-w-500 mb-2"><strong>Total Projects</strong></h4>
-                <x-table>
+                <x-table class="h-200">
                     <?php
                     $projects= App\Models\Project::where('pm_id',Auth::id())->orderBy('id','desc')->get();
                     ?>     
@@ -377,7 +377,7 @@
     </div>
 
     <div class="col-md-6">
-        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0 h-200">
             <div class="d-block text-capitalize">
                 <h4 class="f-18 f-w-500 mb-2"><strong>Total Tasks Assigned By Me</strong></h4>
                 <x-table>

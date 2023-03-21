@@ -300,7 +300,7 @@
             @yield('content')
             @if(Auth::user()->role_id == 4 && !Request::is('account/contracts/*') &&!Request::is('account/deals/*'))
                 @php
-                    $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->where('pm_id',Auth::id())->get();
+                    $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->where('pm_id', Auth::id())->get();
                 @endphp
                 @if(count($deal_id) > 0)
                     <div class="timer-card">
@@ -480,11 +480,8 @@
         const daterangeConfig = {
             "@lang('app.today')": [moment(), moment()],
             "@lang('app.last30Days')": [moment().subtract(29, 'days'), moment()],
-            "@lang('app.thisMonth')": [moment().startOf('month'), moment().endOf('month')],
-            "@lang('app.lastMonth')": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month')
-                .endOf(
-                    'month')
-            ],
+            "@lang('app.thisMonth')": [moment().startOf('month').subtract(1, 'month').add(21, 'days'), moment().startOf('month').add(20, 'days')],
+            "@lang('app.lastMonth')": [moment().startOf('month').subtract(2, 'month').add(21, 'days'), moment().startOf('month').subtract(1, 'month').add(20, 'days')],
             "@lang('app.last90Days')": [moment().subtract(89, 'days'), moment()],
             "@lang('app.last6Months')": [moment().subtract(6, 'months'), moment()],
             "@lang('app.last1Year')": [moment().subtract(1, 'years'), moment()]

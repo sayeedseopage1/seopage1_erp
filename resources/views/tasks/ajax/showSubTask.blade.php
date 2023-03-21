@@ -89,11 +89,11 @@
 				                </div>
 							</td>
 							<td>
-								<a href="{{route('tasks.show', $value->task_id)}}" class="btn btn-sm btn-primary">
-									<i class="fa fa-eye"></i>
+								<a href="{{route('tasks.show', $value->task_id)}}" class="text-darkest-grey">
+									<i class="fa fa-eye fa-2x"></i>
 								</a>
-								<a href="{{route('tasks.edit', $value->task_id)}}" class="btn btn-sm btn-secondary">
-									<i class="fas fa-edit"></i>
+								<a href="{{route('tasks.edit', $value->task_id)}}" class="text-darkest-grey">
+									<i class="fas fa-edit fa-2x"></i>
 								</a>
 							</td>
 						</tr>
