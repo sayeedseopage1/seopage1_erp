@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
     <x-filters.filter-box>
-        <div class="select-box {{ !in_array('client', user_roles()) ? 'd-flex' : 'd-none' }} py-2  pr-2 border-right-grey border-right-grey-sm-0">
+        {{-- <div class="select-box {{ !in_array('client', user_roles()) ? 'd-flex' : 'd-none' }} py-2  pr-2 border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.clientName')</p>
             <div class="select-status">
                 <select class="form-control select-picker" name="client_id" id="client_id" data-live-search="true"
@@ -23,9 +23,9 @@
                     @endforeach
                 </select>
             </div>
-        </div>
+        </div> --}}
 
-        <div class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
+        {{-- <div class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.status')</p>
             <div class="select-status">
                 <select class="form-control select-picker" name="status" id="status" data-live-search="true" data-size="8">
@@ -40,7 +40,7 @@
                     @endforeach
                 </select>
             </div>
-        </div>
+        </div> --}}
 
         <!-- SEARCH BY TASK START -->
         <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
@@ -220,7 +220,7 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
 
 
 
-                {{-- {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!} --}}
+                {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
 
 
         </div>
@@ -459,7 +459,7 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
                         },
                         success: function(response) {
                             if (response.status == "success") {
-                                window.LaravelDataTables["projects-table"].draw();
+                                window.LaravelDataTables["software-projects-table"].draw();
                             }
                         }
                     });
