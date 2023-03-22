@@ -269,7 +269,46 @@ public function employeeDashboard()
         })->count();
     }
     //sales executive data
-    $this->todayLead = Lead::where('added_by', $this->user->id)->whereDate('created_at', Carbon::today())->get();
+    $this->todayLead = Lead::where('added_by', Auth::id())->whereDate('created_at', Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->get();
+     $this->todayLeadcount= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+     $this->today_bid_value= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
+     if($this->todayLeadcount != 0)
+     {
+        $this->avg_bid_value= $this->today_bid_value /$this->todayLeadcount;
+     }else 
+     {
+        $this->avg_bid_value= 0;
+     }
+     $this->today_min_lead_value= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('bid_value');
+     $this->today_max_lead_value= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('bid_value2');
+     if($this->todayLeadcount != 0)
+     {
+        $this->avg_minlead_value= $this->today_min_lead_value /$this->todayLeadcount;
+        $this->avg_maxlead_value= $this->today_max_lead_value /$this->todayLeadcount;
+        $this->avg_lead_value = ($this->avg_minlead_value + $this->avg_maxlead_value)/2;
+     }else 
+     {
+        $this->avg_minlead_value= 0;
+        $this->avg_maxlead_value= 0;
+        $this->avg_lead_value= 0;
+
+     }
+     $this->todayLeadconverted= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+     $this->todayLeadconvertedValue= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
+     $this->Leadconverted= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+     $this->totalbidsValue= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
+     $this->totalleads= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+    
+     if($this->totalleads != 0)
+     {
+        $this->avg_value= $this->totalbidsValue /$this->totalleads;
+     }else 
+     {
+        $this->avg_value= 0;
+     }
+
+
+    // $this->minLeadValue= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->select('bid_value')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('');
     $this->convertedLead = Lead::where([
         'added_by' => $this->user->id,
         'status_id' => 3,
