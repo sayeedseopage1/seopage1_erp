@@ -16,6 +16,7 @@ use App\Models\RoleUser;
 use App\Models\Project;
 use Auth;
 use App\Models\User;
+use App\Models\Subtask;
 
 class TasksDataTable extends BaseDataTable
 {
@@ -250,8 +251,31 @@ class TasksDataTable extends BaseDataTable
                         $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
                     }
                 }
+                        $tas_id = Task::where('id',$row->id)->first();
+                        $subtasks = Subtask::where('task_id', $tas_id->id)->get();
+                       // dd($subtasks);
+                        $time = 0;
 
-                return $timeLog;
+                        foreach ($subtasks as $subtask) {
+                            $task = Task::where('subtask_id', $subtask->id)->first();
+                            $time += $task->timeLogged->sum('total_minutes');
+                        }
+
+                        if($subtasks == null)
+                        {
+                            return $timeLog;
+                        }else 
+                        {
+                            $timeL = intdiv($time, 60) . ' ' . __('app.hrs') . ' ';
+
+                    if ($time % 60 > 0) {
+                        $timeL .= $time % 60 . ' ' . __('app.mins');
+                    }
+                            return $timeL;
+                        }
+                                        
+
+               
             });
             $datatables->editColumn('heading', function ($row) {
                 $labels = $private = $pin = $timer = $span = '';
