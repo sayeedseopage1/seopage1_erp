@@ -248,7 +248,7 @@ class InvoiceController extends AccountBaseController
         $update_milestone->save();
 
         $new_milestone= new ProjectMilestone();
-        $new_milestone->milestone_title= $milestone_up->milestone_title . ' ('. $project_count+1 . ')';
+        $new_milestone->milestone_title= $milestone_up->milestone_title . ' (2)';
         $new_milestone->milestone_type= $milestone_up->milestone_type; 
         $new_milestone->summary= $milestone_up->summary; 
         $new_milestone->cost= $milestone_up->cost - $update_milestone->cost;
