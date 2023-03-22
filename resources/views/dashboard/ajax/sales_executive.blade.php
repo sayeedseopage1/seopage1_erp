@@ -10,12 +10,26 @@
                         </p>
                     </a>
                     <a href="">
+                        @if($todayLead->count() != 0)
                         <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{round($todayLead->sum('value') / $todayLead->count(), 2)}}%<span class="f-12 font-weight-normal text-lightest">Avg. Lead Value</span>
                         </p>
+                        @else
+                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">0%<span class="f-12 font-weight-normal text-lightest">Avg. Lead Value</span>
+                        </p>
+
+
+                        @endif
                     </a>
                     <a href="">
+                        @if($todayLead->count() != 0)
                         <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{round($todayLead->sum('bid_value') / $todayLead->count(), 2)}}%<span class="f-12 font-weight-normal text-lightest">Avg. Bid Value</span>
                         </p>
+                        @else 
+                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">0%<span class="f-12 font-weight-normal text-lightest">Avg. Bid Value</span>
+                        </p>
+
+
+                        @endif
                     </a>
                 </div>
             </div>
