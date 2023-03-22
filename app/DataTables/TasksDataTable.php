@@ -290,7 +290,7 @@ class TasksDataTable extends BaseDataTable
                     }
                     
                     $span .= '<span class="badge badge-primary">Parent task</span>';
-                    $subtasks_html .= '<a class="openRightModal showSubTask  btn btn-info btn-sm d-flex align-items-center '.$disabled.'" href="'.route('tasks.show_subtask', $row->id).'" ';
+                    $subtasks_html .= '<a class="openRightModal showSubTask  btn btn-info btn-sm d-flex align-items-center '.$disabled.'" href="'.route('tasks.show_subtask', [$row->id, 'tableView']).'" ';
                     
                     $subtasks_html .= '><i class="fa fa-eye"></i><span class="ml-1">'.$total_subtask.'</span></a>';
                 }
@@ -384,7 +384,7 @@ class TasksDataTable extends BaseDataTable
     public function query(Task $model)
 
     {
-        if (in_array('admin', user_roles()) || in_array('Team Lead', user_roles()) || in_array('Lead Developer', user_roles())) {
+        if (in_array('admin', user_roles()) || in_array('Team Lead', user_roles()) || in_array('Lead Developer', user_roles()) || in_array('Project Manager', user_roles())) {
             $model = $model->whereNull('subtask_id');
         } else {
             $model = $model->whereNotNull('subtask_id');

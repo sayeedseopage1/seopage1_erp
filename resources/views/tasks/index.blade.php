@@ -672,9 +672,8 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
         $('#allTasks-table').on('click', '.showSubTask', function () {
             event.preventDefault();
             var url = $(this).attr('href');
-            console.log(url);
             $.easyAjax({
-                url: url+'/tableView',
+                url: url,
                 type: "GET",
                 success: function(response) {
                     if (response.status == 'success') {
