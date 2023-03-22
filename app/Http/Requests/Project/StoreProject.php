@@ -33,6 +33,8 @@ class StoreProject extends CoreRequest
             'hours_allocated' => 'nullable|numeric',
             'client_id' => 'requiredIf:client_view_task,true',
             'project_code' => 'required|unique:projects,project_short_code',
+            'member_id' => 'required',
+            'project_summary' => 'required',
         ];
 
         if (!request()->public && in_array('employee', user_roles())) {

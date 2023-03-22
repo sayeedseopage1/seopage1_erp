@@ -4,6 +4,7 @@ $sendReminderPermission = user()->permission('send_reminder');
 $changeStatusPermission = user()->permission('change_status');
 @endphp
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
 <div id="task-detail-section">
 
     <h3 class="heading-h1 mb-3">{{ ucfirst($task->heading) }}</h3>
@@ -783,7 +784,6 @@ $changeStatusPermission = user()->permission('change_status');
 </div>
 
 
-
     <script src="{{ asset('vendor/jquery/clipboard.min.js') }}"></script>
     <script>
         var clipboard = new ClipboardJS('.btn-copy');
@@ -1351,4 +1351,4 @@ $changeStatusPermission = user()->permission('change_status');
         });
 
     </script>
-<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+
