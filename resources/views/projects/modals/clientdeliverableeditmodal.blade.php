@@ -13,11 +13,6 @@
                 @csrf
                 <input type="hidden" name="id" value="{{$deliverable->id}}">
                 <div class="modal-body">
-
-
-
-
-
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -77,39 +72,34 @@
 
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">Deliverable Title <span style="color:red;">*</span></label>
-                                <input type="text" name="title" value="{{$deliverable->title}}" class="form-control height-35 f-14" id="exampleFormControlInput1"  Required>
+                                <input type="text" name="title" value="{{$deliverable->title}}" class="form-control height-35 f-14 @error('title') is-invalid @enderror" id="exampleFormControlInput1">
                             </div>
+                            @error('title')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
 
                         </div>
                         <div class="col-md-12">
 
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">Estimation_time (In Hours) <span style="color:red;">*</span></label>
-                                <input type="text" name="estimation_time" value="{{$deliverable->estimation_time}}" class="form-control height-35 f-14" id="exampleFormControlInput1"  Required>
+                                <input type="text" name="estimation_time" value="{{$deliverable->estimation_time}}" class="form-control height-35 f-14 @error('estimation_time') is-invalid @enderror" id="exampleFormControlInput1" >
                             </div>
+                            @error('estimation_time')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
 
                         </div>
                         <div class="col-md-4 mt-3">
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">Quantity <span style="color:red;">*</span></label>
-                                <input type="text" name="quantity" value="{{$deliverable->quantity}}" class="form-control height-35 f-14 mt-1" id="exampleFormControlInput1"  required>
+                                <input type="text" name="quantity" value="{{$deliverable->quantity}}" class="form-control height-35 f-14 mt-1 @error('quantity') is-invalid @enderror" id="exampleFormControlInput1">
                             </div>
+                            @error('quantity')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
 
                         </div>
-
-                        {{-- <div class="col-md-4">
-                            <x-forms.datepicker fieldId="from_edit" fieldRequired="true"
-                                :fieldLabel="__('From')" fieldName="from" :fieldValue="$deliverable->from"
-
-                                :fieldPlaceholder="__('')" />
-                        </div>
-                        <div class="col-md-4">
-                            <x-forms.datepicker fieldId="to_edit" fieldRequired="true"
-                                :fieldLabel="__('To')" fieldName="to" :fieldvalue="(($deliverable->to) ? $deliverable->to : '')"
-
-                                :fieldPlaceholder="__('')" />
-                        </div>
-             --}}
                         <div class="col-md-4">
                             <div class="form-group my-3">
                                 <label class="f-14 text-dark-grey mb-12" data-label="true" for="from146">From
@@ -117,9 +107,12 @@
 
                                 </label>
 
-                                <input type="text" class="form-control date-picker height-35 f-14" placeholder="" value="{{$deliverable->from}}" id="from{{$deliverable->id}}" name="from"  autocomplete="off">
+                                <input type="text" class="form-control date-picker height-35 f-14 @error('from') is-invalid @enderror" placeholder="" value="{{$deliverable->from}}" id="from{{$deliverable->id}}" name="from"  autocomplete="off">
 
                             </div>
+                            @error('from')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="col-md-4">
@@ -129,39 +122,24 @@
 
                                 </label>
 
-                                <input type="text" class="form-control date-picker height-35 f-14" placeholder="" value="{{$deliverable->to}}" name="to" id="to{{$deliverable->id}}"  autocomplete="off">
+                                <input type="text" class="form-control date-picker height-35 f-14 @error('to') is-invalid @enderror" placeholder="" value="{{$deliverable->to}}" name="to" id="to{{$deliverable->id}}"  autocomplete="off">
 
                             </div>
+                            @error('to')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
-
-
-
-
-
-
-
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Description</label>
                                 <textarea  name="description" value="{{$deliverable->description}}"  class="ckeditor form-control" rows="3" >{{$deliverable->description}}</textarea>
                             </div>
-
                         </div>
-
-
-
                     </div>
-
-
-
-
-
                 </div>
                 <div class="modal-footer">
-
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit"  class="btn btn-primary" >Update Deliverable</button>
-
                 </div>
             </form>
 
