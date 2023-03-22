@@ -22,7 +22,7 @@
                         <div class="card-body ">
                           @if($project_submission->actual_link != null)
                           <h6 class="text-center"> <strong>Actual Site Link: </strong><a href="{{$project_submission->actual_link}}" target="_blank">{{$project_submission->actual_link}}</a></h6>
-                          @else 
+                          @else
                           <h6 class="text-center"> <strong>Dummy Site Link: </strong><a href="{{$project_submission->dummy_link}}" target="_blank">{{$project_submission->dummy_link}}</a></h6>
                           @endif
             <table class="table align-middle mb-0 bg-white table-bordered">
@@ -473,12 +473,23 @@
 
 
                           <br>
-                            <label class="ml-3" for="">Comments On the Submission</label>
-                          <div class="col-md-12">
+{{--                            <label class="ml-3" for="">Comments On the Submission</label>--}}
+{{--                          <div class="col-md-12">--}}
 
-                            <textarea name="admin_comment" rows="8" cols="120"></textarea>
+{{--                            <textarea name="admin_comment" rows="8" cols="160" style="max-width: 100%;"></textarea>--}}
 
-                          </div>
+{{--                          </div>--}}
+
+                              <div class="col-md-12 col-lg-12">
+                                  <div class="form-group">
+                                      <label class="text-dark-grey" data-label="true" for="descriptionText">Comments On the Submission</label>
+                                      <textarea name="admin_comment" id="admin_comment" class="form-control"></textarea>
+                                      <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                                      <script>
+                                          CKEDITOR.replace('admin_comment');
+                                      </script>
+                                  </div>
+                              </div>
 
                           </div>
                           </div>

@@ -87,6 +87,15 @@ class TaskController extends AccountBaseController
 
     public function TaskReview(Request $request)
     {
+        $request->validate([
+            'link' => 'required|array',
+            'link.*' => 'required|url|min:1',
+            'text' => 'required',
+        ], [
+            'link.url' => '000!',
+            'link.required' => '000!',
+            'text.required' => 'Please describe what you\'ve done !',
+        ]);
       $order= TaskSubmission::orderBy('id','desc')->where('user_id',$request->user_id)->where('task_id',$request->id)->first();
 
       if ($request->text != null) {
@@ -176,7 +185,7 @@ class TaskController extends AccountBaseController
 
 
       Notification::send($user, new TaskSubmitNotification($task_id,$sender));
-      
+
       Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
       //return back();
       return Redirect::back()->with('messages.taskSubmitNotification');
@@ -1083,7 +1092,6 @@ class TaskController extends AccountBaseController
         $deliverable= ProjectDeliverable::where('milestone_id',$id)->first();
         return response()->json($deliverable);
     }
-
     public function show_subtask(TasksDataTable $dataTable, $id, $tableView = null)
     {
         if (in_array(user()->role_id, [1, 4, 6])) {
@@ -1095,7 +1103,7 @@ class TaskController extends AccountBaseController
                 $project = $task->project;
                 $html = view('tasks.ajax.showSubTask', compact('project', 'tasks', 'task'))->render();
                 return Reply::dataOnly([
-                    'status' => 'success', 
+                    'status' => 'success',
                     'data' => $html
                 ]);
             } else {
@@ -1103,4 +1111,6 @@ class TaskController extends AccountBaseController
             }
         }
     }
+
+
 }

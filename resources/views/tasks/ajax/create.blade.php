@@ -275,15 +275,18 @@
                     </div>
                     <div class="col-md-12 col-lg-6" id="set-time-estimate-fields">
                         <div class="form-group my-3">
-                            <label for="">Task Estimation Time</label>
+                            <label for="">Task Estimation Time <sup class="mr-1">*</sup></label>
                             <div class="form-group">
-
-                                <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14"
-                                       name="estimate_hours" value="{{ $task ? $task->estimate_hours : '0'}}">
+                                <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14 @error('estimate_hours') is-invalid @enderror" name="estimate_hours">
+                                @error('estimate_hours')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                                 @lang('app.hrs')
                                 &nbsp;&nbsp;
-                                <input type="number" min="0" name="estimate_minutes"
-                                       value="{{ $task ? $task->estimate_minutes : '0'}}" class="w-25 height-35 f-14 border rounded p-2">
+                                <input type="number" min="0" name="estimate_minutes" value="{{ $task ? $task->estimate_minutes : '0'}}" class="w-25 height-35 f-14 border rounded p-2 @error('estimate_minutes') is-invalid @enderror">
+                                @error('estimate_minutes')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                                 @lang('app.mins')
                             </div>
                         </div>
