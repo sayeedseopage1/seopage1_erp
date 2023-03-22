@@ -136,11 +136,11 @@ class WonDealsDataTable extends BaseDataTable
         $startDate = null;
         $endDate = null;
         if (Auth::user()->role_id == 4) {
-            $deals = $model->where('pm_id',Auth::id());
+            $model = $model->where('pm_id',Auth::id());
         } elseif (Auth::user()->role_id == 7) {
-            $deals = $model->where('added_by',Auth::id());
+            $model = $model->where('added_by',Auth::id());
         } else {
-            $deals = $model->orderBy('id','desc');
+            $model = $model->orderBy('id','desc');
         }
 
 
