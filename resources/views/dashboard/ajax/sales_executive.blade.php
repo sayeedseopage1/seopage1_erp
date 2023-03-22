@@ -5,27 +5,28 @@
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Today's Leads</h5>
                 <div class="d-flex justify-content-between">
                     <a href="">
-                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">{{$todayLead->count()}}
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">{{$todayLeadcount}}
                             <span class="f-12 font-weight-normal text-lightest">Leads Created Today</span>
+
                         </p>
                     </a>
                     <a href="">
-                        @if($todayLead->count() != 0)
-                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{round($todayLead->sum('value') / $todayLead->count(), 2)}}%<span class="f-12 font-weight-normal text-lightest">Avg. Lead Value</span>
+                        @if($todayLeadcount != 0)
+                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{round($todayLead->sum('value') / $todayLeadcount, 2)}}$<span class="f-12 font-weight-normal text-lightest">Avg. Lead Value</span>
                         </p>
                         @else
-                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">0%<span class="f-12 font-weight-normal text-lightest">Avg. Lead Value</span>
+                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">0<span class="f-12 font-weight-normal text-lightest">Avg. Lead Value</span>
                         </p>
 
 
                         @endif
                     </a>
                     <a href="">
-                        @if($todayLead->count() != 0)
-                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{round($todayLead->sum('bid_value') / $todayLead->count(), 2)}}%<span class="f-12 font-weight-normal text-lightest">Avg. Bid Value</span>
+                        @if($todayLeadcount != 0)
+                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{round($todayLead->sum('bid_value') / $todayLeadcount, 2)}}$<span class="f-12 font-weight-normal text-lightest">Avg. Bid Value</span>
                         </p>
                         @else 
-                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">0%<span class="f-12 font-weight-normal text-lightest">Avg. Bid Value</span>
+                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">0<span class="f-12 font-weight-normal text-lightest">Avg. Bid Value</span>
                         </p>
 
 
@@ -47,7 +48,7 @@
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">{{$convertedLead->count()}}<span class="f-12 font-weight-normal text-lightest">Leads Converted Today</span></p>
                     </a>
                     <a href="">
-                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{$convertedLead->sum('value')}}<span class="f-12 font-weight-normal text-lightest">Converted Lead Value</span>
+                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{$convertedLead->sum('value')}}$<span class="f-12 font-weight-normal text-lightest">Converted Lead Value</span>
                         </p>
                     </a>
                 </div>
@@ -141,10 +142,19 @@
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. Bids Value</h5>
                 <div class="d-flex">
                     <a href="#">
+                        @if($totalLeads->count() != 0)
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{round($totalLeads->sum('bid_value') / $totalLeads->count(), 2)}}<span class="f-12 font-weight-normal text-lightest">
                             </span>
                         </p>
+                        @else 
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            0<span class="f-12 font-weight-normal text-lightest">
+                            </span>
+                        </p>
+
+
+                        @endif
                     </a>
                 </div>
             </div>
@@ -184,7 +194,16 @@
                             @php
                                 $percentage = $totalLeads->where('status_id', 3)->count() / $totalLeads->count();
                             @endphp
-                            {{round( $percentage * 100, 2 )}} %<span class="f-12 font-weight-normal text-lightest">
+                            @if($percentage != 0)
+                            {{round( $percentage * 100, 2 )}} %
+                            @else 
+                            0% 
+                            @endif
+                            
+                            <span class="f-12 font-weight-normal text-lightest">
+                               
+
+
                             </span>
                         </p>
                     </a>
@@ -205,7 +224,12 @@
                             @php
                                 $percentage = $lostLeads->where('deal_status', 'pending')->where('won_lost', 'Yes')->count() / $lostLeads->count();
                             @endphp
-                            {{round($percentage * 100, 2)}} %<span class="f-12 font-weight-normal text-lightest">
+                             @if($percentage != 0)
+                            {{round($percentage * 100, 2)}} %
+                            @else 
+                            0 
+                            @endif
+                            <span class="f-12 font-weight-normal text-lightest">
                             </span>
                         </p>
                     </a>
@@ -228,7 +252,12 @@
                             @php
                                 $percentage = $lostLeads->where('deal_status', 'Lost')->count() / $lostLeads->count();
                             @endphp
-                            {{round($percentage * 100, 2)}} %<span class="f-12 font-weight-normal text-lightest">
+                             @if($percentage != 0)
+                            {{round($percentage * 100, 2)}} %
+                            @else 
+                            0 
+                            @endif
+                            <span class="f-12 font-weight-normal text-lightest">
                             </span>
                         </p>
                     </a>

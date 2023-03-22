@@ -269,7 +269,9 @@ public function employeeDashboard()
         })->count();
     }
     //sales executive data
-    $this->todayLead = Lead::where('added_by', $this->user->id)->whereDate('created_at', Carbon::today())->get();
+    $this->todayLead = Lead::where('added_by', Auth::id())->whereDate('created_at', Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->get();
+     $this->todayLeadcount= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+    // $this->minLeadValue= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->select('bid_value')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('');
     $this->convertedLead = Lead::where([
         'added_by' => $this->user->id,
         'status_id' => 3,
