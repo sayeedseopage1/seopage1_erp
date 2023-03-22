@@ -2011,7 +2011,7 @@ if ($pm_count < 2) {
     }
     public function updateDeliverable(Request $request)
     {
-  
+
       $deliverable= ProjectDeliverable::find($request->id);
       if($request->deliverable_type == 'Others')
       {

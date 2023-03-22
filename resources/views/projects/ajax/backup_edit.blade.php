@@ -175,26 +175,43 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         <!-- BUDGET VS SPENT END -->
 
                     <div class="col-md-12 col-lg-12">
-                        <div class="form-group mt-3">
-                            <label class="text-dark-grey" data-label="true" for="description">Project General Guidelines
-                                <sup class="mr-1">*</sup>
-                            </label>
-                            <textarea name="project_summary" id="description" class="form-control @error('project_summary') is-invalid @enderror">{!! $project->project_summary !!}</textarea>
-                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
-                            <script>
-                                CKEDITOR.replace('project_summary');
-                            </script>
-                            @error('project_summary')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                        <div class="form-group my-3">
+                            <x-forms.label class="my-3" fieldId="project_summary"
+                                :fieldLabel="__('Project General Guidelines')" fieldRequired="true">
+                            </x-forms.label>
+                            <div id="project_summary">{!! $project->project_summary !!}</div>
+                            <textarea name="project_summary" id="project_summary-text"
+                                class="d-none">{!! $project->project_summary !!}</textarea>
                         </div>
                     </div>
+
+              {{--     @if ($project->public == 1 && $createPublicProjectPermission == 'all')
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="d-flex mt-2">
+                                    <x-forms.checkbox fieldId="is_private"
+                                        :fieldLabel="__('modules.projects.createPrivateProject')" fieldName="private" />
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if ($project->public == 0 && $createPublicProjectPermission == 'all')
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="d-flex mt-2">
+                                    <x-forms.checkbox fieldId="is_public"
+                                        :fieldLabel="__('modules.projects.changeToPublicProject')" fieldName="public" />
+                                </div>
+                            </div>
+                        </div>
+                    @endif --}}
 
 
                     @if ($project->public == 0 && $editProjectMembersPermission == 'all' || $editPermission == 'all')
                         <div class="col-md-12" id="edit_members">
                            <div class="form-group my-3">
-                                <x-forms.label fieldId="selectAssignee" :fieldLabel="__('Recommended Developers')">
+                                <x-forms.label fieldId="selectAssignee" :fieldLabel="__('Recommended Developers')" fieldRequired="true">
                                 </x-forms.label>
                                 <x-forms.input-group>
                                     <select class="form-control multiple-users" multiple name="member_id[]"
@@ -304,8 +321,41 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('app.project') . ' ' . __('app.status')"
                           fieldName="status" fieldRequired="true" fieldId="project_status"
                           :fieldPlaceholder="__('Status')" :fieldValue="$status_name" fieldReadOnly="true"/>
+                    {{--  <x-forms.select fieldId="project_status"
+                           :fieldLabel="__('app.project') . ' ' . __('app.status')" fieldName="status" search="true" fieldReadOnly="true">
+                           @foreach ($projectStatus as $status)
+                               <option
+                               data-content="<i class='fa fa-circle mr-1 f-15' style='color:{{$status->color}}'></i>{{ ucfirst($status->status_name) }}"
+                               @if ($project->status == $status->status_name)
+                               selected @endif
+                               value="{{$status->status_name}}">{{$status->status_name}}
+                               </option>
 
+                           @endforeach
+                           <i class='fa fa-circle mr-1 f-15' style='color:{{$status->color}}'></i>{{ ucfirst($status->status_name) }}
+
+
+                       </x-forms.select> --}}
                     </div>
+
+                  {{--  <div class="col-md-12 col-lg-4">
+                        <x-forms.range class="mr-0 mr-lg-2 mr-md-2"
+                            :disabled="($project->calculate_task_progress == 'true' ? 'true' : 'false')"
+                            :fieldLabel="__('modules.projects.projectCompletionStatus')" fieldName="completion_percent"
+                            fieldId="completion_percent" :fieldValue="$project->completion_percent" />
+                    </div>
+
+                    <div class="col-md-12 col-lg-4">
+                        <div class="form-group">
+                            <div class="d-flex mt-5">
+                                <x-forms.checkbox fieldId="calculate-task-progress"
+                                    :checked="($project->calculate_task_progress == 'true') ? true : false"
+                                    :fieldLabel="__('modules.projects.calculateTasksProgress')"
+                                    fieldName="calculate_task_progress" />
+                            </div>
+                        </div>
+                    </div> --}}
+
 
                 </div>
 
@@ -322,6 +372,12 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                               class="form-control height-35 f-15 readonly-background" readonly>
                       </div>
                   </div>
+
+                  {{-- <div class="col-lg-4 col-md-6">
+                        <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.projectBudget')"
+                            fieldName="project_budget" fieldId="project_budget" :fieldValue="$project->project_budget"
+                            :fieldPlaceholder="__('placeholders.price')" readonly/>
+                    </div> --}}
                     <div class="col-lg-4 col-md-6 mt-3">
                         <x-forms.label fieldId="project_budget" :fieldLabel="__('modules.projects.projectBudget')">
                         </x-forms.label>
@@ -331,6 +387,43 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                 class="form-control height-35 f-15 readonly-background" readonly>
                         </div>
                     </div>
+                    {{-- @if($project->hours_allocated == null)
+                    <div class="col-lg-4 col-md-6">
+                        <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.hours_allocated')"
+                            fieldName="hours_allocated" fieldRequired="true" fieldId="hours_allocated"
+                             :fieldPlaceholder="__('placeholders.hourEstimate')" />
+                    </div>
+                    @else  --}}
+                    {{-- <div class="col-lg-4 col-md-6">
+                        <x-forms.number class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.hours_allocated')"
+                            fieldName="hours_allocated" fieldRequired="true" fieldId="hours_allocated"
+                            :fieldValue="$project->hours_allocated"  :fieldPlaceholder="__('placeholders.hourEstimate')"  readonly/>
+                    </div> --}}
+                    {{-- <div class="col-lg-4 col-md-6">
+                        <div class="form-group my-3 mr-0 mr-lg-2 mr-md-2" readonly="readonly">
+                                    <label class="f-14 text-dark-grey mb-12" data-label="true" for="hours_allocated">Hours Estimate (In Hours)
+                                            <sup class="f-14 mr-1">*</sup>
+
+                                    </label>
+
+                                    <input type="number" class="form-control height-35 f-14" placeholder="e.g. 500" value="{{$project->hours_allocated}}" name="hours_allocated" id="hours_allocated" min="0" autocomplete="off" readonly>
+
+                                    </div>
+                    </div>
+
+
+                    @endif --}}
+
+                {{--   <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <div class="d-flex mt-5">
+                                <x-forms.checkbox fieldId="manual_timelog"
+                                    :fieldLabel="__('modules.projects.manualTimelog')" :checked="($project->manual_timelog
+                                    == 'enable')" fieldName="manual_timelog" />
+                            </div>
+                        </div>
+                    </div> --}}
+
                     <div class="col-md-6 col-lg-4 d-none" id="clientNotification">
                         <div class="form-group">
                             <div class="d-flex mt-5">
@@ -341,6 +434,22 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                             </div>
                         </div>
                     </div>
+
+                {{--   @if ($editPermission == 'all')
+                        <div class="col-lg-3 col-md-6">
+                            <x-forms.select  fieldId="added_by" :fieldLabel="__('app.added').' '.__('app.by')"
+                                fieldName="added_by">
+                                <option value="">--</option>
+                                @foreach ($employees as $item)
+                                    <option
+                                        @if ($project->added_by == $item->id)  selected @endif
+
+                                        data-content="<div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $item->image_url }}' ></div> {{ ucfirst($item->name) }}"
+                                        value="{{ $item->id }}">{{ mb_ucwords($item->name) }}</option>
+                                @endforeach
+                            </x-forms.select>
+                        </div>
+                    @endif --}}
                     <div class="col-lg-3 col-md-3">
 
                     </div>
@@ -350,6 +459,603 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                 <?php
                   $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->first();
                  ?>
+                 {{-- @if($deliverables == null)
+                  <hr>
+                  <div class="col-md-6 col-lg-3 mt-5">
+                    <h5>Add Deliverables</h5>
+
+                  </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex mt-5">
+                            <x-forms.checkbox fieldId="graphics_design"
+
+                                :fieldLabel="__('Graphics Design')" fieldName="graphics_design" :fieldValue="'Graphics Design'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="graphics_design_box">
+                  <div class="col-md-10 col-lg-10">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="graphics_title" value="" required>
+                          </div>
+                      </div>
+                  </div>
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="graphics_quantity" value="" required>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_graphics" type="text" class="form-control height-35 f-14" name="graphics_from" value="" required>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_graphics" type="text" class="form-control height-35 f-14" name="graphics_to" value="" required>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="graphics_deliverable_description" rows="6" cols="180" required></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+
+                  <div class="col-md-6 col-lg-3">
+                      <div class="form-group">
+                          <div class="d-flex">
+                              <x-forms.checkbox fieldId="ux_design"
+                                :checked="($project->deadline == null) ? true : false"
+
+                                  :fieldLabel="__('UX Design')" fieldName="ux_design" :fieldValue="'Ux Design'" />
+                          </div>
+                      </div>
+                  </div>
+                    <div class="row" id="UX_Box">
+                      <div class="col-md-10 col-lg-10">
+                          <div class="form-group">
+                              <label class="ml-3" for="">Title</label>
+                              <div class="d-flex ml-3">
+
+                                <input type="text" class="form-control height-35 f-14" name="ux_title" value="">
+                              </div>
+                          </div>
+                      </div>
+
+                  <div class="col-md-4 col-lg-4">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Quantity</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="ux_quantity" value="">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4 col-lg-3">
+                      <div class="form-group">
+                          <label class="ml-3" for="">From</label>
+                          <div class="d-flex ml-3">
+
+                            <input id="from" type="text" class="form-control height-35 f-14" name="ux_from" value="">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4 col-lg-3">
+                      <div class="form-group">
+                          <label class="ml-3" for="">To</label>
+                          <div class="d-flex ml-3">
+
+                            <input id="to" type="text" class="form-control height-35 f-14" name="ux_to" value="">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-12 col-lg-12">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Description</label>
+                          <div class="d-flex ml-3">
+                            <textarea name="ux_deliverable_description" rows="6" cols="180"></textarea>
+
+                          </div>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="main_page_development"
+
+                                :fieldLabel="__('Main Page Development')" fieldName="main_page_development" :fieldValue="'Main Page Development'"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="main_page_development_box">
+                  <div class="col-md-10 col-lg-10">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="main_title" value="">
+                          </div>
+                      </div>
+                  </div>
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="main_quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_main_page_development" type="text" class="form-control height-35 f-14" name="main_from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_main_page_development" type="text" class="form-control height-35 f-14" name="main_to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="main_deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="secondary_page_development"
+
+                                :fieldLabel="__('Secondary Page Development')" fieldName="secondary_page_development" :fieldValue="'Secondary Page Development'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="secondary_page_development_box">
+                  <div class="col-md-10 col-lg-10">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="secondary_title" value="">
+                          </div>
+                      </div>
+                  </div>
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="secondary_quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_secondary_page_development" type="text" class="form-control height-35 f-14" name="secondary_from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_secondary_page_development" type="text" class="form-control height-35 f-14" name="secondary_to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="secondary_deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="content_creation"
+
+                                :fieldLabel="__('Content Creation')" fieldName="content_creation" :fieldValue="'Content Creation'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="content_creation_box">
+                  <div class="col-md-10 col-lg-10">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="content_title" value="">
+                          </div>
+                      </div>
+                  </div>
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="content_quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_content_creation" type="text" class="form-control height-35 f-14" name="content_from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_content_creation" type="text" class="form-control height-35 f-14" name="content_to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="content_deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="marketing"
+
+                                :fieldLabel="__('Marketing')" fieldName="marketing" :fieldValue="'Marketing'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="marketing_box">
+                  <div class="col-md-10 col-lg-10">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="marketing_title" value="">
+                          </div>
+                      </div>
+                  </div>
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="marketing_quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_marketing" type="text" class="form-control height-35 f-14" name="marketing_from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_marketing" type="text" class="form-control height-35 f-14" name="marketing_to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="marketing_deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="domain_hosting"
+
+                                :fieldLabel="__('Domain/Hosting')" fieldName="domain_hosting" :fieldValue="'Domain/Hosting'"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="domain_hosting_box">
+                  <div class="col-md-10 col-lg-10">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="domain_title" value="">
+                          </div>
+                      </div>
+                  </div>
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="domain_quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_domain_hosting" type="text" class="form-control height-35 f-14" name="domain_from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_domain_hosting" type="text" class="form-control height-35 f-14" name="domain_to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="domain_deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="products"
+
+                                :fieldLabel="__('Products')" fieldName="products" :fieldValue="'Products'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="products_box">
+                  <div class="col-md-10 col-lg-10">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="products_title" value="">
+                          </div>
+                      </div>
+                  </div>
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="products_quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_products" type="text" class="form-control height-35 f-14" name="products_from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_products" type="text" class="form-control height-35 f-14" name="products_to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="products_deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="collection"
+
+                                :fieldLabel="__('Collection')" fieldName="collection" :fieldValue="'Collection'" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="collection_box">
+                  <div class="col-md-10 col-lg-10">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="collection_title" value="">
+                          </div>
+                      </div>
+                  </div>
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="collection_quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_collection" type="text" class="form-control height-35 f-14" name="collection_from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_collection" type="text" class="form-control height-35 f-14" name="collection_to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="collection_deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+                <div class="col-md-6 col-lg-3 mb-3">
+                    <div class="form-group">
+                        <div class="d-flex">
+                            <x-forms.checkbox fieldId="others"
+
+                                :fieldLabel="__('Others')" fieldName="others" :fieldValue="'Others'"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="others_box">
+                  <div class="col-md-10 col-lg-10">
+                      <div class="form-group">
+                          <label class="ml-3" for="">Title</label>
+                          <div class="d-flex ml-3">
+
+                            <input type="text" class="form-control height-35 f-14" name="others_title" value="">
+                          </div>
+                      </div>
+                  </div>
+
+              <div class="col-md-4 col-lg-4">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Quantity</label>
+                      <div class="d-flex ml-3">
+
+                        <input type="text" class="form-control height-35 f-14" name="others_quantity" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">From</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="from_others" type="text" class="form-control height-35 f-14" name="others_from" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-4 col-lg-3">
+                  <div class="form-group">
+                      <label class="ml-3" for="">To</label>
+                      <div class="d-flex ml-3">
+
+                        <input id="to_others" type="text" class="form-control height-35 f-14" name="others_to" value="">
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-12 col-lg-12">
+                  <div class="form-group">
+                      <label class="ml-3" for="">Description</label>
+                      <div class="d-flex ml-3">
+                        <textarea name="others_deliverable_description" rows="6" cols="180"></textarea>
+
+                      </div>
+                  </div>
+              </div>
+            </div>
+            @endif --}}
+          {{--  @if($project->project_challenge != null)
+                <div class="col-md-12 col-lg-12 mb-3">
+
+                      <div class="form-group my-3">
+                          <x-forms.label class="my-3" fieldId="project_challenge"
+                              :fieldLabel="__('Write down the Challenges of the Project')" fieldRequired="true">
+                          </x-forms.label>
+                          <div class="" id="project_challenge">{!! $project->project_challenge !!}</div>
+                          <textarea name="project_challenge" id="project_challenge-text"
+                              class="d-none">{!! $project->project_challenge !!}</textarea>
+                      </div>
+
+                  <br>
+                </div>
+                @else --}}
                 <div class="col-md-6 col-lg-6 mb-3">
 
 
@@ -542,7 +1248,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
             }
         });
 
-        // quillImageLoad('#project_summary');
+        quillImageLoad('#project_summary');
 
 
         const dp1 = datepicker('#start_date', {
@@ -579,8 +1285,8 @@ $createPublicProjectPermission = user()->permission('create_public_project');
         });
 
         $('#save-project-form').click(function() {
-            var note = CKEDITOR.instances.description.getData();
-            document.getElementById('description').value = note;
+            var note = document.getElementById('project_summary').children[0].innerHTML;
+            document.getElementById('project_summary-text').value = note;
 
             const url = "{{ route('projects.update', $project->id) }}";
 
