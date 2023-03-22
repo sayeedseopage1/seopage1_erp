@@ -684,3 +684,4 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
         });
     </script>
 @endpush
+<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>

@@ -1,5 +1,6 @@
-<h3 class="heading-h1" id="right-modal-title">Project: <a href="{{route('projects.show', $project->id)}}">{{$project->project_name}}</a></h3>
-<h3 class="f-16" id="right-modal-title">Parent Task: <a href="{{route('tasks.show', $task->id)}}">{{$task->heading}}</a></h3>
+{{-- <h3 class="heading-h1" id="right-modal-title">Project: <a href="{{route('projects.show', $project->id)}}">{{$project->project_name}}</a></h3> --}}
+{{-- <h3 class="f-16" id="right-modal-title">Parent Task: <a href="{{route('tasks.show', $task->id)}}">{{$task->heading}}</a></h3> --}}
+<h3 class="heading-h1" id="right-modal-title">Subtasks of {{$task->heading}}</a></h3>
 <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
 	<div class="dataTables_wrapper dt-bootstrap4 no-footer">
 		<div class="row mt-4">
