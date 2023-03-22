@@ -266,10 +266,10 @@ class TasksDataTable extends BaseDataTable
                             return $timeLog;
                         }else 
                         {
-                            $timeL = intdiv($time, 60) . ' ' . __('app.hrs') . ' ';
+                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
 
                     if ($time % 60 > 0) {
-                        $timeL .= $time % 60 . ' ' . __('app.mins');
+                        $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
                     }
                             return $timeL;
                         }
