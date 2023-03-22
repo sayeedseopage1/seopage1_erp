@@ -56,11 +56,7 @@
 							{{$timeLog}}
 						</td>
 						<td>
-							@if($value->status == 'incomplete')
-							<span class="badge badge-warning">{{$value->status}}</span>
-							@elseif($value->staus == 'complete')
-							<span class="badge badge-success">{{$value->status}}</span>
-							@endif
+							<i class="fa fa-circle mr-1 text-yellow" style="color:  {{$value->boardColumn->label_color}} "></i>{{$value->boardColumn->column_name}}
 						</td>
 						<td>
 							@php

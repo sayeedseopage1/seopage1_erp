@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
 use App\Models\LeadStatus;
-use App\Models\Scopes\OrderByDesc;
+// use App\Models\Scopes\OrderByDesc;
 
 /**
  * App\Models\Lead
@@ -108,7 +108,7 @@ class Lead extends BaseModel
 
     protected static function booted()
     {
-        static::addGlobalScope(new OrderByDesc); // assign the Scope here
+        // static::addGlobalScope(new OrderByDesc); // assign the Scope here
     }
     
     public function getImageUrlAttribute()
