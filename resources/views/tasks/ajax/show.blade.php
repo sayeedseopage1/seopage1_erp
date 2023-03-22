@@ -4,7 +4,7 @@ $sendReminderPermission = user()->permission('send_reminder');
 $changeStatusPermission = user()->permission('change_status');
 @endphp
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
-<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+
 <div id="task-detail-section">
 
     <h3 class="heading-h1 mb-3">{{ ucfirst($task->heading) }}</h3>
@@ -592,10 +592,54 @@ $changeStatusPermission = user()->permission('change_status');
                   @if (($taskSettings->hours_logged == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                       <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                           <p class="mb-0 text-lightest w-50 f-14 text-capitalize">
-                              {{ __('modules.employees.hoursLogged') }}
+                              {{ __('Parent task hours logged') }}
                           </p>
                           <p class="mb-0 text-dark-grey w-50 f-14">{{ $timeLog }}</p>
                       </div>
+                      @php 
+                      $tas_id = App\Models\Task::where('id',$task->id)->first();
+                        $subtasks = App\Models\Subtask::where('task_id', $tas_id->id)->get();
+                        $subtask_count= App\Models\Subtask::where('task_id', $tas_id->id)->count();
+                       // dd($subtasks);
+                        $time = 0;
+
+                        foreach ($subtasks as $subtask) {
+                            $task = App\Models\Task::where('subtask_id', $subtask->id)->first();
+                            $time += $task->timeLogged->sum('total_minutes');
+                        }
+                        $timeL = intdiv(($time), 60) . ' ' . __('app.hrs') . ' ';
+
+                        if ($time % 60 > 0) {
+                            $timeL .= ($time) % 60 . ' ' . __('app.mins');
+                        }
+                        if($subtasks != null)
+                        {
+
+                            $timeLo = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
+
+                    if ($time % 60 > 0) {
+                        $timeLo .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
+                    }
+                        }
+
+
+                        @endphp
+                        @if($subtasks != null)
+
+                      <div class="col-12 px-0 pb-3 d-lg-flex d-block">
+                          <p class="mb-0 text-lightest w-50 f-14 text-capitalize">
+                              {{ __('Subtask ('.$subtask_count.') hours logged') }}
+                          </p>
+                          <p class="mb-0 text-dark-grey w-50 f-14">{{ $timeL }}</p>
+                      </div>
+                      <div class="col-12 px-0 pb-3 d-lg-flex d-block">
+                        <p class="mb-0 text-lightest w-50 f-14 text-capitalize">
+                            {{ __('Total hours logged') }}
+                        </p>
+                        <p class="mb-0 text-dark-grey w-50 f-14">{{ $timeLo }}</p>
+                    </div>
+
+                      @endif
                   @endif
               </x-cards.data>
                @if($task_review != null)
@@ -1351,4 +1395,5 @@ $changeStatusPermission = user()->permission('change_status');
         });
 
     </script>
+    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
 

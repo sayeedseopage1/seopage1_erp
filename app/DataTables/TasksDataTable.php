@@ -16,6 +16,7 @@ use App\Models\RoleUser;
 use App\Models\Project;
 use Auth;
 use App\Models\User;
+use App\Models\Subtask;
 
 class TasksDataTable extends BaseDataTable
 {
@@ -250,8 +251,31 @@ class TasksDataTable extends BaseDataTable
                         $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
                     }
                 }
+                        $tas_id = Task::where('id',$row->id)->first();
+                        $subtasks = Subtask::where('task_id', $tas_id->id)->get();
+                       // dd($subtasks);
+                        $time = 0;
 
-                return $timeLog;
+                        foreach ($subtasks as $subtask) {
+                            $task = Task::where('subtask_id', $subtask->id)->first();
+                            $time += $task->timeLogged->sum('total_minutes');
+                        }
+
+                        if($subtasks == null)
+                        {
+                            return $timeLog;
+                        }else 
+                        {
+                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
+
+                    if ($time % 60 > 0) {
+                        $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
+                    }
+                            return $timeL;
+                        }
+                                        
+
+               
             });
             $datatables->editColumn('heading', function ($row) {
                 $labels = $private = $pin = $timer = $span = '';
@@ -280,7 +304,7 @@ class TasksDataTable extends BaseDataTable
 
                 $subtasks_html = '';
                 if($subtask->subtask_id != null) {
-                    $span .= '<span class="badge badge-info">Subtask</span>';
+                    $span .= '';
                 } else {
                     $total_subtask = $row->subtasks->count();
                     
@@ -289,10 +313,10 @@ class TasksDataTable extends BaseDataTable
                         $disabled = 'disabled';
                     }
                     
-                    $span .= '<span class="badge badge-primary">Parent task</span>';
-                    $subtasks_html .= '<a class="openRightModal showSubTask  btn btn-info btn-sm d-flex align-items-center '.$disabled.'" href="'.route('tasks.show_subtask', [$row->id, 'tableView']).'" ';
+                    $span .= '';
+                    $subtasks_html .= '<a class="openRightModal showSubTask d-flex align-items-center '.$disabled.'" href="'.route('tasks.show_subtask', [$row->id, 'tableView']).'" ';
                     
-                    $subtasks_html .= '><i class="fa fa-eye"></i><span class="ml-1">'.$total_subtask.'</span></a>';
+                    $subtasks_html .= '><i style="color:#31D2F2;" class="fa fa-eye ml-3"></i><span class="ml-1">'.$total_subtask.'</span></a>';
                 }
                 return '<div class="media align-items-center">
                     <div class="media-body">
