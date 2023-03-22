@@ -297,7 +297,7 @@
                     <tr>
                         <td>{{$loop->index+1}}</td>
                         <td class="pl-20 text-capitalize ">
-                            <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('leads.show', $value->id)}}" target="_blank">{!!html_entity_decode($value->cover_letter)!!}</a>
+                            <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('leads.show', $value->id)}}" target="_blank">{!!html_entity_decode($value->client_name)!!}</a>
                         </td>
                         <td class="pl-20 text-capitalize">{{$value->value}}</td>
                         <td class="pl-20 text-capitalize">{{$value->bid_value}}</td>
