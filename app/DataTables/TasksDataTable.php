@@ -17,6 +17,7 @@ use App\Models\Project;
 use Auth;
 use App\Models\User;
 use App\Models\Subtask;
+use App\Models\ProjectTimeLog;
 
 class TasksDataTable extends BaseDataTable
 {
@@ -182,6 +183,32 @@ class TasksDataTable extends BaseDataTable
             });
             $datatables->addColumn('short_code', function ($row) {
                 return ucfirst($row->task_short_code);
+            });
+
+            $datatables->addColumn('timer_action', function ($row) {
+
+                $time_log= ProjectTimeLog::where('project_id',$row->project_id)->where('end_time',null)->count();
+                $task_count= Task::where('project_id',$row->project_id)->count();
+                
+
+                $timer= '';
+                if($time_log > 0)
+                {
+                    if ($time_log == 1) {
+                        $count= 'task';
+                    } else {
+                        $count = 'tasks';
+                    }
+                    
+                    $timer .= '<i class="fa-solid fa-circle-play" style="color:green;"></i> ('.$time_log.' active '.$count.')';
+
+                }else 
+                {
+                    $timer .= '<i class="fa-solid fa-circle-stop" style="color:red;"></i> No active tasks';
+                }
+
+              
+                return $timer;
             });
             $datatables->addColumn('created_at', function ($row) {
 
@@ -392,7 +419,7 @@ class TasksDataTable extends BaseDataTable
 
                 return '<button class="openRightModal showSubTask" data-url="'.route('tasks.show_subtask', $row->id).'">show</button>';
             });*/
-            $datatables->rawColumns(['board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'timeLogged', 'timer']);
+            $datatables->rawColumns(['board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'timeLogged', 'timer','timer_action']);
             $datatables->removeColumn('project_id');
             $datatables->removeColumn('image');
             $datatables->removeColumn('created_image');
@@ -723,6 +750,7 @@ class TasksDataTable extends BaseDataTable
                 __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
                 __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
                 __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
+                __('timer_action').' ' => ['data' => 'timer_action', 'name' => 'timer_action',  'title' => __('Timer Active/Inactive')],
                 __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
                 __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
                 __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],

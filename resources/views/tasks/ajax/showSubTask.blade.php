@@ -8,6 +8,7 @@
 				<x-table class="border-0 pb-3 admin-dash-table table-hover">
 					<x-slot name="thead">
 						<th scope="col">Task name</th>
+						<th scope="col">Timer Active/Inactive</th>
 						<th scope="col">Parent task</th>
 						<th scope="col">Client Name</th>
 						<th scope="col">Project Name</th>
@@ -24,9 +25,20 @@
 					@forelse($tasks as $key=>$value2)
 					@php
 						$value= App\Models\Task::where('subtask_id',$value2->id)->first();
+						$time_log= App\Models\ProjectTimeLog::where('project_id',$value->project_id)->first();
 					@endphp
 					<tr id="row-{{ $value->id }}">
 						<td><a href="{{route('tasks.show', $value->id)}}">{{$value->heading}}</a></td>
+						<td>
+							@if($time_log != null && $time_log->end_time == null)
+							<i class="fa-solid fa-circle-play" style="color:green;"></i> Active
+							@else 
+							<i class="fa-solid fa-circle-stop" style="color:red;"></i> Inactive
+
+							@endif
+
+
+						</td>
 						<td><a href="{{route('tasks.show', $task->id)}}">{{$task->heading}}</a></td>
 						<td><a href="{{route('clients.show', $project->client->id)}}">{{$project->client->name}}</a></td>
 						<td><a href="{{route('projects.show', $value->project->id)}}">{{$project->project_name}}</a></td>
