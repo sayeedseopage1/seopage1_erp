@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Traits;
-
 use App\Helper\Reply;
 use App\Http\Requests\ClockIn\ClockInRequest;
 use App\Models\Attendance;
@@ -30,21 +29,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use DateTime;
-use App\Models\DealStage;
 
-/**
-*
-*/
-trait EmployeeDashboard
+trait DeveloperDashboard
 {
-
-/**
-* @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-*/
-public function employeeDashboard()
-{
-    // dd(request()->all());
-    $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('startDate')) : now($this->global->timezone)->startOfMonth();
+	public function DeveloperDashboard()
+	{
+		$this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('startDate')) : now($this->global->timezone)->startOfMonth();
 
     $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('endDate')) : now($this->global->timezone);
     $startDate = $this->startDate->toDateString();
@@ -272,59 +262,42 @@ public function employeeDashboard()
     }
     //sales executive data
     $this->todayLead = Lead::where('added_by', Auth::id())->whereDate('created_at', Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->get();
-    $this->todayLeadcount= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-    $this->today_bid_value= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
-    if($this->todayLeadcount != 0)
-    {
+     $this->todayLeadcount= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+     $this->today_bid_value= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
+     if($this->todayLeadcount != 0)
+     {
         $this->avg_bid_value= $this->today_bid_value /$this->todayLeadcount;
-    } else 
-    {
+     }else 
+     {
         $this->avg_bid_value= 0;
-    }
-    $this->today_min_lead_value= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('bid_value');
-    $this->today_max_lead_value= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('bid_value2');
-    if($this->todayLeadcount != 0)
-    {
+     }
+     $this->today_min_lead_value= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('bid_value');
+     $this->today_max_lead_value= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('bid_value2');
+     if($this->todayLeadcount != 0)
+     {
         $this->avg_minlead_value= $this->today_min_lead_value /$this->todayLeadcount;
         $this->avg_maxlead_value= $this->today_max_lead_value /$this->todayLeadcount;
         $this->avg_lead_value = ($this->avg_minlead_value + $this->avg_maxlead_value)/2;
-    }else 
-    {
+     }else 
+     {
         $this->avg_minlead_value= 0;
         $this->avg_maxlead_value= 0;
         $this->avg_lead_value= 0;
 
-    }
-    $this->todayLeadconverted= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-    $this->todayLeadconvertedValue= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
-    $this->Leadconverted= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-    $this->totalbidsValue= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
-    $this->totalleads= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-    $this->totalwondeal= DealStage::where('added_by',Auth::id())->where('won_lost','Yes')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-
-    if($this->totalleads != 0)
-    {
+     }
+     $this->todayLeadconverted= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+     $this->todayLeadconvertedValue= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
+     $this->Leadconverted= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+     $this->totalbidsValue= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
+     $this->totalleads= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+    
+     if($this->totalleads != 0)
+     {
         $this->avg_value= $this->totalbidsValue /$this->totalleads;
-    }else 
-    {
+     }else 
+     {
         $this->avg_value= 0;
-    }
-    if($this->totalleads != 0)
-    {
-        $this->percentage_of_lead_converted= ($this->Leadconverted /$this->totalleads)*100;
-
-    }else{
-        $this->percentage_of_lead_converted= 0;
-    }
-
-    if($this->Leadconverted != 0)
-    {
-        $this->percentage_of_deal_won= ($this->totalwondeal/$this->Leadconverted)*100;
-
-    }else 
-    {
-        $this->percentage_of_deal_won= 0;
-    }
+     }
 
 
     // $this->minLeadValue= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->select('bid_value')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('');
@@ -470,298 +443,16 @@ public function employeeDashboard()
     $this->pm_projects= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->get();
     $this->tasks= Task::where('added_by',Auth::id())->orderBy('id','desc')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->get();
 
-    $this->view = 'dashboard.ajax.project-manager';
-    $this->sales_view = 'dashboard.ajax.sales_executive';
-
-
-    if (request()->ajax()) {
-        $html = view($this->view,$this->data)->render();
-        $html2 = view($this->sales_view,$this->data)->render();
-
-        return Reply::dataOnly(['status' => 'success', 'html' => $html,'html2'=> $html2, 'title' => $this->pageTitle]);
-    }else {
-        return view('dashboard.employee.index', $this->data);
-    }
-}
-
-public function clockInModal()
-{
-    $showClockIn = AttendanceSetting::first();
-
-    $this->attendanceSettings = $this->attendanceShift($showClockIn);
-
-
-    $startTimestamp = now()->format('Y-m-d') . ' ' . $this->attendanceSettings->office_start_time;
-    $endTimestamp = now()->format('Y-m-d') . ' ' . $this->attendanceSettings->office_end_time;
-    $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTimestamp, $this->global->timezone);
-    $officeEndTime = Carbon::createFromFormat('Y-m-d H:i:s', $endTimestamp, $this->global->timezone);
-    $officeStartTime = $officeStartTime->setTimezone('UTC');
-    $officeEndTime = $officeEndTime->setTimezone('UTC');
-
-    if ($officeStartTime->gt($officeEndTime)) {
-        $officeEndTime->addDay();
-    }
-
-    $this->cannotLogin = false;
-
-    if ($showClockIn->employee_clock_in_out == 'yes') {
-        if (!now()->between($officeStartTime, $officeEndTime) && $showClockIn->show_clock_in_button == 'no') {
-            $this->cannotLogin = true;
-        }
-
-        if (isset($this->cannotLogin) && now()->betweenIncluded($officeStartTime->copy()->subDay(), $officeEndTime->copy()->subDay())) {
-            $this->cannotLogin = false;
-        }
-    } else {
-        $this->cannotLogin = true;
-    }
-
-
-    $this->shiftAssigned = $this->attendanceSettings;
-
-    $this->attendanceSettings = attendance_setting();
-    $this->location = CompanyAddress::all();
-
-    return view('dashboard.employee.clock_in_modal', $this->data);
-}
-
-public function storeClockIn(ClockInRequest $request)
-{
-
-    $now = now();
-// dd($now);
-
-    $showClockIn = AttendanceSetting::first();
-
-    $this->attendanceSettings = $this->attendanceShift($showClockIn);
-
-    $startTimestamp = now()->format('Y-m-d') . ' ' . $this->attendanceSettings->office_start_time;
-    $endTimestamp = now()->format('Y-m-d') . ' ' . $this->attendanceSettings->office_end_time;
-    $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $startTimestamp, $this->global->timezone);
-    $officeEndTime = Carbon::createFromFormat('Y-m-d H:i:s', $endTimestamp, $this->global->timezone);
-    $officeStartTime = $officeStartTime->setTimezone('UTC');
-    $officeEndTime = $officeEndTime->setTimezone('UTC');
-
-    if ($officeStartTime->gt($officeEndTime)) {
-        $officeEndTime->addDay();
-    }
-
-    $this->cannotLogin = false;
-    $clockInCount = Attendance::getTotalUserClockInWithTime($officeStartTime, $officeEndTime, $this->user->id);
-
-    if ($showClockIn->employee_clock_in_out == 'yes') {
-        if (!now()->between($officeStartTime, $officeEndTime) && $showClockIn->show_clock_in_button == 'no') {
-            $this->cannotLogin = true;
-        }
-
-        if ($this->cannotLogin == true && now()->betweenIncluded($officeStartTime->copy()->subDay(), $officeEndTime->copy()->subDay())) {
-            $this->cannotLogin = false;
-            $clockInCount = Attendance::getTotalUserClockInWithTime($officeStartTime->copy()->subDay(), $officeEndTime->copy()->subDay(), $this->user->id);
-        }
-    } else {
-        $this->cannotLogin = true;
-    }
-
-    if ($this->cannotLogin == true) {
-        abort(403, __('messages.permissionDenied'));
-    }
-
-// Check user by ip
-    if (attendance_setting()->ip_check == 'yes') {
-        $ips = (array)json_decode(attendance_setting()->ip_address);
-
-        if (!in_array($request->ip(), $ips)) {
-            return Reply::error(__('messages.notAnAuthorisedDevice'));
-        }
-    }
-
-// Check user by location
-    if (attendance_setting()->radius_check == 'yes') {
-        $checkRadius  = $this->isWithinRadius($request);
-
-        if (!$checkRadius) {
-            return Reply::error(__('messages.notAnValidLocation'));
-        }
-    }
-
-// Check maximum attendance in a day
-    if ($clockInCount < $this->attendanceSettings->clockin_in_day) {
-
-// Set TimeZone And Convert into timestamp
-        $currentTimestamp = $now->setTimezone('UTC');
-        $currentTimestamp = $currentTimestamp->timestamp;;
-
-// Set TimeZone And Convert into timestamp in halfday time
-        if ($this->attendanceSettings->halfday_mark_time) {
-            $halfDayTimestamp = $now->format('Y-m-d') . ' ' . $this->attendanceSettings->halfday_mark_time;
-            $halfDayTimestamp = Carbon::createFromFormat('Y-m-d H:i:s', $halfDayTimestamp, $this->global->timezone);
-            $halfDayTimestamp = $halfDayTimestamp->setTimezone('UTC');
-            $halfDayTimestamp = $halfDayTimestamp->timestamp;
-        }
-
-
-        $timestamp = $now->format('Y-m-d') . ' ' . $this->attendanceSettings->office_start_time;
-        $officeStartTime = Carbon::createFromFormat('Y-m-d H:i:s', $timestamp, $this->global->timezone);
-        $officeStartTime = $officeStartTime->setTimezone('UTC');
-
-
-        $lateTime = $officeStartTime->addMinutes($this->attendanceSettings->late_mark_duration);
-
-        $checkTodayAttendance = Attendance::where('user_id', $this->user->id)
-        ->where(DB::raw('DATE(attendances.clock_in_time)'), '=', $now->format('Y-m-d'))->first();
-
-        $attendance = new Attendance();
-        $attendance->user_id = $this->user->id;
-        $attendance->clock_in_time = $now->setTimezone('Asia/dhaka');;
-// dd($now);
-        $attendance->clock_in_ip = request()->ip();
-
-        $attendance->working_from = $request->working_from;
-        $attendance->location_id = $request->location;
-        $attendance->work_from_type = $request->work_from_type;
-
-        if ($now->gt($lateTime) && is_null($checkTodayAttendance)) {
-            $attendance->late = 'yes';
-        }
-
-$attendance->half_day = 'no'; // default halfday
-
-// Check day's first record and half day time
-if (
-    !is_null($this->attendanceSettings->halfday_mark_time)
-    && is_null($checkTodayAttendance)
-    && isset($halfDayTimestamp)
-    && ($currentTimestamp > $halfDayTimestamp)
-    && ($showClockIn->show_clock_in_button == 'no')
-) {
-    $attendance->half_day = 'yes';
-}
-
-$currentLatitude = $request->currentLatitude;
-$currentLongitude = $request->currentLongitude;
-
-if ($currentLatitude != '' && $currentLongitude != '') {
-    $attendance->latitude = $currentLatitude;
-    $attendance->longitude = $currentLongitude;
-}
-
-$attendance->employee_shift_id = $this->attendanceSettings->id;
-
-$attendance->shift_start_time = $attendance->clock_in_time->toDateString() . ' ' .$this->attendanceSettings->office_start_time;
-
-if (Carbon::parse($this->attendanceSettings->office_start_time)->gt(Carbon::parse($this->attendanceSettings->office_end_time))) {
-    $attendance->shift_end_time = $attendance->clock_in_time->addDay()->toDateString() . ' ' .$this->attendanceSettings->office_end_time;
-
-} else {
-    $attendance->shift_end_time = $attendance->clock_in_time->toDateString() . ' ' .$this->attendanceSettings->office_end_time;
-}
-
-$attendance->save();
-
-return Reply::successWithData(__('messages.attendanceSaveSuccess'), ['time' => $now->format('h:i A'), 'ip' => $attendance->clock_in_ip, 'working_from' => $attendance->working_from]);
-}
-
-return Reply::error(__('messages.maxColckIn'));
-}
-
-public function updateClockIn(Request $request)
-{
-    $now = now();
-    $attendance = Attendance::findOrFail($request->id);
-    $this->attendanceSettings = attendance_setting();
-
-    if ($this->attendanceSettings->ip_check == 'yes') {
-        $ips = (array)json_decode($this->attendanceSettings->ip_address);
-
-        if (!in_array($request->ip(), $ips)) {
-            return Reply::error(__('messages.notAnAuthorisedDevice'));
-        }
-    }
-
-    if ($this->attendanceSettings->radius_check == 'yes') {
-        $checkRadius  = $this->isWithinRadius($request);
-
-        if (!$checkRadius) {
-            return Reply::error(__('messages.notAnValidLocation'));
-        }
-    }
-
-    $attendance->clock_out_time = $now;
-    $attendance->clock_out_ip = request()->ip();
-    $attendance->save();
-
-    return Reply::success(__('messages.attendanceSaveSuccess'));
-}
-
-/**
-* Calculate distance between two geo coordinates using Haversine formula and then compare
-* it with $radius.
-*
-* If distance is less than the radius means two points are close enough hence return true.
-* Else return false.
-*
-* @param Request $request
-*
-* @return boolean
-*/
-private function isWithinRadius($request)
-{
-    $radius = attendance_setting()->radius;
-    $currentLatitude = $request->currentLatitude;
-    $currentLongitude = $request->currentLongitude;
-
-    $latFrom = deg2rad($this->global->latitude);
-    $latTo = deg2rad($currentLatitude);
-
-    $lonFrom = deg2rad($this->global->longitude);
-    $lonTo = deg2rad($currentLongitude);
-
-    $theta = $lonFrom - $lonTo;
-
-    $dist = sin($latFrom) * sin($latTo) + cos($latFrom) * cos($latTo) * cos($theta);
-    $dist = acos($dist);
-    $dist = rad2deg($dist);
-    $distance = $dist * 60 * 1.1515 * 1609.344;
-    return $distance <= $radius;
-}
-
-public function attendanceShift($defaultAttendanceSettings)
-{
-    $checkPreviousDayShift = EmployeeShiftSchedule::where('user_id', user()->id)
-    ->where('date', now(global_setting()->timezone)->subDay()->toDateString())
-    ->first();
-
-    $checkTodayShift = EmployeeShiftSchedule::where('user_id', user()->id)
-    ->where('date', now(global_setting()->timezone)->toDateString())
-    ->first();
-
-    $backDayFromDefault = Carbon::parse(now(global_setting()->timezone)->subDay()->format('Y-m-d') . ' ' . $defaultAttendanceSettings->office_start_time);
-
-    $backDayToDefault = Carbon::parse(now(global_setting()->timezone)->subDay()->format('Y-m-d') . ' ' . $defaultAttendanceSettings->office_end_time);
-
-    if ($backDayFromDefault->gt($backDayToDefault)) {
-        $backDayToDefault->addDay();
-    }
-
-    $nowTime = Carbon::createFromFormat('Y-m-d H:i:s', now(global_setting()->timezone)->toDateTimeString(), 'UTC');
-
-    if ($checkPreviousDayShift && $nowTime->betweenIncluded($checkPreviousDayShift->shift_start_time, $checkPreviousDayShift->shift_end_time)) {
-        $attendanceSettings = $checkPreviousDayShift;
-
-    } else if ($nowTime->betweenIncluded($backDayFromDefault, $backDayToDefault)) {
-        $attendanceSettings = $defaultAttendanceSettings;
-
-    } else if ($checkTodayShift &&
-        ($nowTime->betweenIncluded($checkTodayShift->shift_start_time, $checkTodayShift->shift_end_time) || $nowTime->gt($checkTodayShift->shift_end_time))
-    ) {
-        $attendanceSettings = $checkTodayShift;
-
-    } else {
-        $attendanceSettings = $defaultAttendanceSettings;
-    }
-
-    return $attendanceSettings->shift;
-
-}
-
+	    if (request()->ajax()) {
+	        $html = view('dashboard.ajax.developer', $this->data)->render();
+	        
+	        return Reply::dataOnly([
+	        	'status' => 'success', 
+	        	'html' => $html, 
+	        	'title' => $this->pageTitle
+	        ]);
+	    }else {
+	        return view('dashboard.employee.developer', $this->data);
+	    }
+	}
 }

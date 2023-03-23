@@ -16,6 +16,8 @@ use App\Models\RoleUser;
 use App\Models\Project;
 use Auth;
 use App\Models\User;
+use App\Models\Subtask;
+use App\Models\ProjectTimeLog;
 
 class TasksDataTable extends BaseDataTable
 {
@@ -182,6 +184,32 @@ class TasksDataTable extends BaseDataTable
             $datatables->addColumn('short_code', function ($row) {
                 return ucfirst($row->task_short_code);
             });
+
+            $datatables->addColumn('timer_action', function ($row) {
+
+                $time_log= ProjectTimeLog::where('project_id',$row->project_id)->where('end_time',null)->count();
+                $task_count= Task::where('project_id',$row->project_id)->count();
+                
+
+                $timer= '';
+                if($time_log > 0)
+                {
+                    if ($time_log == 1) {
+                        $count= 'task';
+                    } else {
+                        $count = 'tasks';
+                    }
+                    
+                    $timer .= '<i class="fa-solid fa-circle-play" style="color:green;"></i> ('.$time_log.' active '.$count.')';
+
+                }else 
+                {
+                    $timer .= '<i class="fa-solid fa-circle-stop" style="color:red;"></i> No active tasks';
+                }
+
+              
+                return $timer;
+            });
             $datatables->addColumn('created_at', function ($row) {
 
               $created_at= Task::where('id',$row->id)->first();
@@ -250,8 +278,31 @@ class TasksDataTable extends BaseDataTable
                         $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
                     }
                 }
+                        $tas_id = Task::where('id',$row->id)->first();
+                        $subtasks = Subtask::where('task_id', $tas_id->id)->get();
+                       // dd($subtasks);
+                        $time = 0;
 
-                return $timeLog;
+                        foreach ($subtasks as $subtask) {
+                            $task = Task::where('subtask_id', $subtask->id)->first();
+                            $time += $task->timeLogged->sum('total_minutes');
+                        }
+
+                        if($subtasks == null)
+                        {
+                            return $timeLog;
+                        }else 
+                        {
+                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
+
+                    if ($time % 60 > 0) {
+                        $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
+                    }
+                            return $timeL;
+                        }
+                                        
+
+               
             });
             $datatables->editColumn('heading', function ($row) {
                 $labels = $private = $pin = $timer = $span = '';
@@ -280,7 +331,7 @@ class TasksDataTable extends BaseDataTable
 
                 $subtasks_html = '';
                 if($subtask->subtask_id != null) {
-                    $span .= '<span class="badge badge-info">Subtask</span>';
+                    $span .= '';
                 } else {
                     $total_subtask = $row->subtasks->count();
                     
@@ -289,10 +340,10 @@ class TasksDataTable extends BaseDataTable
                         $disabled = 'disabled';
                     }
                     
-                    $span .= '<span class="badge badge-primary">Parent task</span>';
-                    $subtasks_html .= '<a class="openRightModal showSubTask  btn btn-info btn-sm d-flex align-items-center '.$disabled.'" href="'.route('tasks.show_subtask', [$row->id, 'tableView']).'" ';
+                    $span .= '';
+                    $subtasks_html .= '<a class="openRightModal showSubTask d-flex align-items-center '.$disabled.'" href="'.route('tasks.show_subtask', [$row->id, 'tableView']).'" ';
                     
-                    $subtasks_html .= '><i class="fa fa-eye"></i><span class="ml-1">'.$total_subtask.'</span></a>';
+                    $subtasks_html .= '><i style="color:#31D2F2;" class="fa fa-eye ml-3"></i><span class="ml-1">'.$total_subtask.'</span></a>';
                 }
                 return '<div class="media align-items-center">
                     <div class="media-body">
@@ -368,7 +419,7 @@ class TasksDataTable extends BaseDataTable
 
                 return '<button class="openRightModal showSubTask" data-url="'.route('tasks.show_subtask', $row->id).'">show</button>';
             });*/
-            $datatables->rawColumns(['board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'timeLogged', 'timer']);
+            $datatables->rawColumns(['board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'timeLogged', 'timer','timer_action']);
             $datatables->removeColumn('project_id');
             $datatables->removeColumn('image');
             $datatables->removeColumn('created_image');
@@ -382,10 +433,13 @@ class TasksDataTable extends BaseDataTable
      * @return mixed
      */
     public function query(Task $model)
-
     {
-        if (in_array('admin', user_roles()) || in_array('Team Lead', user_roles()) || in_array('Lead Developer', user_roles()) || in_array('Project Manager', user_roles()) || in_array('Graphics Designer', user_roles()) || in_array('Ui/Uix Designer', user_roles())) {
+
+        //dd(user_roles());
+        if (in_array('admin', user_roles()) || in_array('Team Lead', user_roles()) || in_array('Lead Developer', user_roles()) || in_array('Project Manager', user_roles()) || in_array('Graphics Designer', user_roles()) || in_array('UI/UIX Designer', user_roles())) {
+
             $model = $model->whereNull('subtask_id');
+           
         } else {
             $model = $model->whereNotNull('subtask_id');
         }
@@ -696,6 +750,7 @@ class TasksDataTable extends BaseDataTable
                 __('timer').' ' => ['data' => 'timer', 'name' => 'timer', 'exportable' => false, 'searchable' => false, 'sortable' => false, 'title' => '', 'class' => 'text-right'],
                 __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
                 __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
+                __('timer_action').' ' => ['data' => 'timer_action', 'name' => 'timer_action',  'title' => __('Timer Active/Inactive')],
                 __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
                 __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
                 __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],

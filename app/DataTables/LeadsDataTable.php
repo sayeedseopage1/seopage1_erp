@@ -514,7 +514,8 @@ class LeadsDataTable extends BaseDataTable
                 $lead = $lead->where('leads.status_id', '1');
             }
         }
-
+        
+        $lead->orderBy('id', 'desc');
         return $lead->groupBy('leads.id');
     }
 

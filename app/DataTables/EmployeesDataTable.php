@@ -12,6 +12,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
 use App\Models\PMAssign;
+use Auth;
 
 class EmployeesDataTable extends BaseDataTable
 {
@@ -99,34 +100,41 @@ class EmployeesDataTable extends BaseDataTable
 
             $datatables->addColumn('project_enable', function ($row)  {
                 //dd($row->role_id);
-                $user= User::where('id',$row->id)->first();
-                if($user->role_id == 4)
+                if(Auth::user()->role_id == 1)
                 {
-                    $pmassign= PMAssign::where('pm_id',$user->id)->first();
-                    if($pmassign->status == 0)
+                    $user= User::where('id',$row->id)->first();
+                    if($user->role_id == 4)
                     {
-                        $button= '';
-                        $button .= '
-                        <form action="'.route('project-assign').'" method="POST">
-                        <input type="hidden" name="_token" value="'.csrf_token() .'" />
-                        <input type="hidden" name="id" value="'.$row->id .'" />
-                        <button value="enable" name="project_enable" class="btn btn-success btn-sm align-items-center mw-250">Enable</button>
-                        </form>
-                        ';
-                        return $button;
-                    }else {
-                        $button= '';
-                        $button .= '
-                        <form action="'.route('project-assign').'" method="POST">
-                        <input type="hidden" name="_token" value="'.csrf_token() .'" />
-                        <input type="hidden" name="id" value="'.$row->id .'" />
-                        <button value="disable" name="project_enable" class="btn btn-danger btn-sm align-items-center mw-250">Disable</button>
-                        </form>
-                        ';
-                        return $button;
+                        $pmassign= PMAssign::where('pm_id',$user->id)->first();
+                        if($pmassign->status == 0)
+                        {
+                            $button= '';
+                            $button .= '
+                            <form action="'.route('project-assign').'" method="POST">
+                            <input type="hidden" name="_token" value="'.csrf_token() .'" />
+                            <input type="hidden" name="id" value="'.$row->id .'" />
+                            <button value="enable" name="project_enable" class="btn btn-success btn-sm align-items-center mw-250">Enable</button>
+                            </form>
+                            ';
+                            return $button;
+                        }else {
+                            $button= '';
+                            $button .= '
+                            <form action="'.route('project-assign').'" method="POST">
+                            <input type="hidden" name="_token" value="'.csrf_token() .'" />
+                            <input type="hidden" name="id" value="'.$row->id .'" />
+                            <button value="disable" name="project_enable" class="btn btn-danger btn-sm align-items-center mw-250">Disable</button>
+                            </form>
+                            ';
+                            return $button;
+                        }
+                       
+                    }else
+                    {
+                        return '--';
                     }
                    
-                }else
+                }else 
                 {
                     return '--';
                 }
