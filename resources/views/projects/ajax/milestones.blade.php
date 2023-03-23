@@ -144,7 +144,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                   $last_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->orderBy('id','desc')->first();
                                  @endphp
                                  {{-- {{dd($milestone_count-$complete_milestone)}} --}}
-                                 @if($milestone_count-$complete_milestone == 0 && $last_milestone->id == $item->id)
+                                 @if($milestone_count-$complete_milestone == 0 && $last_milestone->id == $item->id && $milestone_count != 1)
                                  <button class="btn-success rounded f-14 p-2 flex-right disabled">Generate Invoice</button>
 
                                   @else 
