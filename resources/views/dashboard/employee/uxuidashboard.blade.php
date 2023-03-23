@@ -141,7 +141,6 @@
                     @endif
                 </div>
             @endif
-
         @endif
     </div>
     <div class="accordion" id="accordionExample">
@@ -162,7 +161,7 @@
                                     <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Deadline Today</h5>
                                     <div class="d-flex justify-content-between">
                                         <a href="">
-                                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">{{$todayDeadLineTasks->count()}}</p>
+                                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">10</p>
                                         </a>
                                     </div>
                                 </div>
@@ -177,7 +176,7 @@
                                     <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Assigned To Me Today</h5>
                                     <div class="d-flex">
                                         <a href="">
-                                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">{{$todayStartTasks->count()}}</p>
+                                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">20</p>
                                         </a>
                                     </div>
                                 </div>
@@ -208,60 +207,6 @@
                                             <th>Project Deadline</th>
                                         </thead>
                                         <tbody>
-                                            @php $index = 0 @endphp
-                                            @forelse($todayDeadLineTasks as $value)
-                                            <tr>
-                                                <td>{{$index +1}}</td>
-                                                <td><a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 15, '...')}}</a></td>
-                                                <td>{{$value->start_date->format('Y-m-d')}}</td>
-                                                <td>{{$value->due_date->format('Y-m-d')}}</td>
-                                                <td>{{$value->estimate_hours}} Hours</td>
-                                                <td>
-                                                    @php
-                                                    $timeLog = '--';
-
-                                                    if($value->timeLogged) {
-                                                        $totalMinutes = $value->timeLogged->sum('total_minutes');
-
-                                                        $breakMinutes = $value->breakMinutes();
-                                                        $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                        $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                        if ($totalMinutes % 60 > 0) {
-                                                            $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                        }
-                                                    }
-
-                                                    $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
-                                                    $time = 0;
-
-
-                                                    foreach ($subtasks as $subtask) {
-                                                        $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                        $time += $task->timeLogged->sum('total_minutes');
-                                                    }
-
-                                                    if($subtasks == null) {
-                                                        echo $timeLog;
-                                                    } else {
-                                                        $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                        if ($time % 60 > 0) {
-                                                            $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
-                                                        }
-                                                        echo $timeL;
-                                                    }
-                                                    @endphp
-                                                </td>
-                                                <td><a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a></td>
-                                                <td>{{$value->project->deadline->format('Y-m-d')}}</td>
-                                            </tr>
-                                            @empty
-                                            <tr>
-                                                <td class="text-center" colspan="8">No items</td>
-                                            </tr>
-                                            @endforelse
                                         </tbody>
                                     </table>
                                 </div>
@@ -287,59 +232,6 @@
                                             <th>Project Deadline</th>
                                         </thead>
                                         <tbody>
-                                            @php $index = 0 @endphp
-                                            @forelse($todayStartTasks as $value)
-                                            <tr>
-                                                <td>{{$index +1}}</td>
-                                                <td><a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 15, '...')}}</a></td>
-                                                <td>{{$value->start_date->format('Y-m-d')}}</td>
-                                                <td>{{$value->due_date->format('Y-m-d')}}</td>
-                                                <td>{{$value->estimate_hours}} Hours</td>
-                                                <td>
-                                                    @php
-                                                    $timeLog = '--';
-
-                                                    if($value->timeLogged) {
-                                                        $totalMinutes = $value->timeLogged->sum('total_minutes');
-
-                                                        $breakMinutes = $value->breakMinutes();
-                                                        $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                        $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                        if ($totalMinutes % 60 > 0) {
-                                                            $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                        }
-                                                    }
-
-                                                    $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
-                                                    $time = 0;
-
-                                                    foreach ($subtasks as $subtask) {
-                                                        $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                        $time += $task->timeLogged->sum('total_minutes');
-                                                    }
-
-                                                    if($subtasks == null) {
-                                                        echo $timeLog;
-                                                    } else {
-                                                        $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                        if ($time % 60 > 0) {
-                                                            $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
-                                                        }
-                                                        echo $timeL;
-                                                    }
-                                                    @endphp
-                                                </td>
-                                                <td><a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a></td>
-                                                <td>{{$value->project->deadline->format('Y-m-d')}}</td>
-                                            </tr>
-                                            @empty
-                                            <tr>
-                                                <td class="text-center" colspan="8">No items</td>
-                                            </tr>
-                                            @endforelse
                                         </tbody>
                                     </table>
                                 </div>

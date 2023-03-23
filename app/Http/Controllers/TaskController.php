@@ -51,6 +51,7 @@ use Auth;
 use App\Models\ProjectDeliverable;
 use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
+use Validator;
 
 class TaskController extends AccountBaseController
 {
@@ -87,108 +88,125 @@ class TaskController extends AccountBaseController
 
     public function TaskReview(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->input(), [
             'link' => 'required|array',
             'link.*' => 'required|url|min:1',
             'text' => 'required',
         ], [
             'link.url' => '000!',
-            'link.required' => '000!',
+            'link.*.required' => 'This field are required',
             'text.required' => 'Please describe what you\'ve done !',
         ]);
-      $order= TaskSubmission::orderBy('id','desc')->where('user_id',$request->user_id)->where('task_id',$request->id)->first();
 
-      if ($request->text != null) {
-        $task_submit= new TaskSubmission();
-        $task_submit->task_id= $request->id;
-        $task_submit->user_id= $request->user_id;
-
-        //$task_submit->table=$request->table;
-        //$task_submit->list=$request->list;
-        $task_submit->text=$request->text;
-        if ($order == null) {
-          $task_submit->submission_no= 1;
-        }else {
-            $task_submit->submission_no= $order->submission_no+1;
-        }
-        $task_submit->save();
-      }
-
-    if ($request->link != null) {
-      // code...
-
-    foreach ($request->link as $lin) {
-      $task_submit= new TaskSubmission();
-      $task_submit->task_id= $request->id;
-      $task_submit->user_id= $request->user_id;
-
-      $task_submit->link=$lin;
-      if ($order == null) {
-        $task_submit->submission_no= 1;
-      }else {
-          $task_submit->submission_no= $order->submission_no+1;
-      }
-
-
-      $task_submit->save();
-
-    }
-      }
-
-    if($request->file('file') != null)
-    {
-
-
-    foreach ($request->file('file') as $att) {
-      $task_submit= new TaskSubmission();
-
-
-
-
-      $filename=null;
-      if ($att) {
-          $filename = time() . $att->getClientOriginalName();
-
-          Storage::disk('public')->putFileAs(
-              'TaskSubmission/',
-              $att,
-              $filename
-          );
-
-      }
-        $task_submit->attach= $filename;
-        $task_submit->task_id= $request->id;
-        $task_submit->user_id= $request->user_id;
-        if ($order == null) {
-          $task_submit->submission_no= 1;
-        }else {
-            $task_submit->submission_no= $order->submission_no+1;
+        $link = [];
+        foreach ($validator->errors()->toArray() as $key => $value) {
+            if (strpos($key, 'link.') !== false) {
+                $exp= explode('.', $key);
+                $link[$exp[1]] = $value[0];
+            }
         }
 
+        $errors = $validator->errors()->toArray();
+        $errors = array_merge($errors, ['link' => $link]);
 
-      $task_submit->save();
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $errors
+            ], 422);
+        }
 
-    }
-      }
+        $order= TaskSubmission::orderBy('id','desc')->where('user_id',$request->user_id)->where('task_id',$request->id)->first();
+
+        if ($request->text != null) {
+            $task_submit= new TaskSubmission();
+            $task_submit->task_id= $request->id;
+            $task_submit->user_id= $request->user_id;
+
+            //$task_submit->table=$request->table;
+            //$task_submit->list=$request->list;
+            $task_submit->text=$request->text;
+            if ($order == null) {
+                $task_submit->submission_no= 1;
+            }else {
+                $task_submit->submission_no= $order->submission_no+1;
+            }
+            $task_submit->save();
+        }
+
+        if ($request->link != null) {
+            // code...
+            foreach ($request->link as $lin) {
+                $task_submit= new TaskSubmission();
+                $task_submit->task_id= $request->id;
+                $task_submit->user_id= $request->user_id;
+
+                $task_submit->link=$lin;
+                if ($order == null) {
+                    $task_submit->submission_no= 1;
+                }else {
+                    $task_submit->submission_no= $order->submission_no+1;
+                }
+
+
+                $task_submit->save();
+
+            }
+        }
+
+        if($request->file('file') != null)
+        {
+
+
+            foreach ($request->file('file') as $att) {
+                $task_submit= new TaskSubmission();
 
 
 
-      $task= Task::find($request->id);
-      $task->board_column_id= 6;
-      $task->task_status="submitted";
-      $task->save();
-      $task_id= Task::where('id',$task->id)->first();
 
-       $user= User::where('id',$task->added_by)->first();
-       $sender= User::where('id',$request->user_id)->first();
+                $filename=null;
+                if ($att) {
+                    $filename = time() . $att->getClientOriginalName();
+
+                    Storage::disk('public')->putFileAs(
+                        'TaskSubmission/',
+                        $att,
+                        $filename
+                    );
+
+                }
+                $task_submit->attach= $filename;
+                $task_submit->task_id= $request->id;
+                $task_submit->user_id= $request->user_id;
+                if ($order == null) {
+                    $task_submit->submission_no= 1;
+                }else {
+                    $task_submit->submission_no= $order->submission_no+1;
+                }
+
+
+                $task_submit->save();
+
+            }
+        }
 
 
 
-      Notification::send($user, new TaskSubmitNotification($task_id,$sender));
+        $task= Task::find($request->id);
+        $task->board_column_id= 6;
+        $task->task_status="submitted";
+        $task->save();
+        $task_id= Task::where('id',$task->id)->first();
 
-      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-      //return back();
-      return Redirect::back()->with('messages.taskSubmitNotification');
+        $user= User::where('id',$task->added_by)->first();
+        $sender= User::where('id',$request->user_id)->first();
+
+
+
+        Notification::send($user, new TaskSubmitNotification($task_id,$sender));
+
+        Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+//return back();
+        return Redirect::back()->with('messages.taskSubmitNotification');
 
     }
     public function TaskApprove(Request $request)

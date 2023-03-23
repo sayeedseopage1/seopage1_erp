@@ -3,6 +3,7 @@
 namespace App\Traits;
 use App\Models\Leave;
 use App\Models\Holiday;
+use App\Models\DashboardWidget;
 
 trait LeadDashboard
 {
@@ -14,7 +15,10 @@ trait LeadDashboard
 		$this->viewEventPermission = user()->permission('view_events');
 	    $this->viewNoticePermission = user()->permission('view_notice');
 	    $this->editTimelogPermission = user()->permission('edit_timelogs');
-
+	    $this->widgets = DashboardWidget::where('dashboard_type', 'private-dashboard')->get();
+	    $this->activeWidgets = $this->widgets->filter(function ($value, $key) {
+	        return $value->status == '1';
+	    })->pluck('widget_name')->toArray();
 	    // Getting Attendance setting data
 
 	    if (request('start') && request('end') && !is_null($this->viewEventPermission) && $this->viewEventPermission != 'none') {
@@ -57,6 +61,8 @@ trait LeadDashboard
 	    ->first();
 	    $currentDate = now(global_setting()->timezone)->format('Y-m-d');
 	    $this->checkTodayHoliday = Holiday::where('date', $currentDate)->first();
+
+	    $this->event_filter = explode(',', user()->employeeDetails->calendar_view);
 	    
 	    if (request()->ajax()) {
 	        $html = view('dashboard.ajax.lead', $this->data)->render();
