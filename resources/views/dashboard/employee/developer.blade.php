@@ -141,6 +141,7 @@
                     @endif
                 </div>
             @endif
+
         @endif
     </div>
     <div class="accordion" id="accordionExample">
@@ -234,6 +235,7 @@
 
                                                     $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
                                                     $time = 0;
+
 
                                                     foreach ($subtasks as $subtask) {
                                                         $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();

@@ -379,10 +379,10 @@ $changeStatusPermission = user()->permission('change_status');
 
 
                       <x-cards.data-row :label="__('General Guidelines')" :value="!empty($task->project->project_summary) ? $task->project->project_summary : '--'" html="true" />
-                        <br>
+                       
                         <div class="card">
                             <div class="body">
-                                <br>
+                              
 
 
                                 @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
@@ -393,7 +393,7 @@ $changeStatusPermission = user()->permission('change_status');
 
 
                         </div>
-                        <br>
+                      
 
                     {{-- Custom fields data --}}
                     @if (($taskSettings->custom_fields == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
