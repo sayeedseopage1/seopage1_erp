@@ -30,7 +30,7 @@
 					<tr id="row-{{ $value->id }}">
 						<td><a href="{{route('tasks.show', $value->id)}}">{{$value->heading}}</a></td>
 						<td>
-							@if($time_log != null && $time_log->end_time == null)
+							@if($time_log != null && $time_log->start_time != null && $time_log->end_time == null)
 							<i class="fa-solid fa-circle-play" style="color:green;"></i> Active
 							@else 
 							<i class="fa-solid fa-circle-stop" style="color:red;"></i> Inactive
