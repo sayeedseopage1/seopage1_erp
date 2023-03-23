@@ -2011,6 +2011,15 @@ if ($pm_count < 2) {
     }
     public function updateDeliverable(Request $request)
     {
+        $validate = $request->validate([
+                'deliverable_type' => 'required',
+                'milestone_id' => 'required',
+                'title' => 'required',
+                'estimation_time' => 'required',
+                'quantity' => 'required',
+                'from' => 'required',
+            ]
+        );
 
       $deliverable= ProjectDeliverable::find($request->id);
       if($request->deliverable_type == 'Others')
@@ -2215,20 +2224,51 @@ if ($pm_count < 2) {
     }
     public function ProjectCompletionSubmit(Request $request)
      {
-       //dd($request);
+//       dd($request);
       $validated = $request->validate([
           'qc_protocol' => 'required',
-
+          'login_information' => 'required',
+          'login_url' => 'required|url',
+          'login' => 'required',
+          'password' => 'required',
+          'screenshot' => 'required|url',
+          'drive_information' => 'required',
+          'google_link' => 'required',
           'rating' => 'required',
+          'requirements' => 'required',
           'comments'=> 'required',
           'comments2'=> 'required',
           'comments3'=> 'required',
-          'requirements' => 'required',
-          'price' => 'required',
-
-
+          'dummy_yes'=> 'required',
+          'dummy_link'=> 'required',
+          'dummy_information'=> 'required',
           'notify' => 'required',
-
+          'actual_yes' => 'required',
+          'actual_information' => 'required',
+          'actual_link' => 'required',
+          'price' => 'required',
+      ], [
+          'qc_protocol.required' => '000 !!',
+          'login_information.required' => '000 !!',
+          'login_url.required' => '000 !!',
+          'login.required' => '000 !!',
+          'password.required' => '000 !!',
+          'screenshot.required' => '000 !!',
+          'drive_information.required' => '000 !!',
+          'google_link.required' => '000 !!',
+          'rating.required' => '000 !!',
+          'requirements.required' => '000 !!',
+          'comments.required' => '000 !!',
+          'comments2.required' => '000 !!',
+          'comments3.required' => '000 !!',
+          'dummy_yes.required' => '000 !!',
+          'dummy_link.required' => '000 !!',
+          'dummy_information.required' => '000 !!',
+          'notify.required' => '000 !!',
+          'actual_yes.required' => '000 !!',
+          'actual_information.required' => '000 !!',
+          'actual_link.required' => '000 !!',
+          'price.required' => '000 !!',
       ]);
       //dd($request);
       $milestone= new ProjectSubmission();
@@ -2276,9 +2316,14 @@ if ($pm_count < 2) {
       Notification::send($user, new ProjectSubmissionNotification($milestone));
     }
 
-      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+//      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
 
-      return redirect('/account/projects/'.$milestone->project_id.'?tab=milestones');
+//      return redirect('/account/projects/'.$milestone->project_id.'?tab=milestones');
+        return response()->json([
+            'status' => 'success',
+            'redirectUrl' => url('/account/projects/'.$milestone->project_id.'?tab=milestones')
+        ]);
+//        route('dealDetails', $deal->id)
 
 
 
