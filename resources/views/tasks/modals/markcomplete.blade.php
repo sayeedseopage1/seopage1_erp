@@ -112,9 +112,9 @@
                         links.push(value[0]);
                     }
                 });
-                link[10] = 'asdlfkasdf'
-                link[20] = 'asdlfkasdf'
-                console.log(link);
+                links[10] = 'asdlfkasdf'
+                links[20] = 'asdlfkasdf'
+                console.log(links);
                 $.each(links, function(key, value) {
                     $('#linkError_'+key).text(value);
                 });

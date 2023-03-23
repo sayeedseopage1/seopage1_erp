@@ -176,9 +176,13 @@
     <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         $(function() {
+            @php
+                $startDate = \Carbon\Carbon::now()->firstOfMonth();
+                $endDate = \Carbon\Carbon::now();
+            @endphp
             var format = '{{ global_setting()->moment_format }}';
-            var startDate = "{{ $startDate->subMonths(2)->format(global_setting()->date_format) }}";
-            var endDate = "{{ $endDate->subMonths(2)->format(global_setting()->date_format) }}";
+            var startDate = "{{ $startDate->format(global_setting()->date_format) }}";
+            var endDate = "{{ $endDate->format(global_setting()->date_format) }}";
             var picker = $('#datatableRange2');
             var start = moment(startDate, format);
             var end = moment(endDate, format);

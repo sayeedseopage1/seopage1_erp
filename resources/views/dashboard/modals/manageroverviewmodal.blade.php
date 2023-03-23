@@ -62,7 +62,7 @@ if ($project_counts->amount != 0) {
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
 
-                        <x-cards.widget :title="__('% of Project Got Completion')" :value="$total_release_percentage .'%'" icon="layer-group" />
+                        <x-cards.widget :title="__('% of Project Got Completion')" :value="round($total_release_percentage, 2) .'%'" icon="layer-group" />
 
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-3 mb-3" style="color:blue;">
@@ -142,8 +142,19 @@ if ($project_counts->amount != 0) {
                 ' @lang("app.to") ' + end.format(
                     '{{ global_setting()->moment_date_format }}'));
         }
-
+        
         $('#datatableRange_{{$item->pm_id}}').daterangepicker({
+            @php
+                $todayDate = \Carbon\Carbon::today()->format('d');
+                if ($todayDate > 21) {
+                    $thisMonthMoment = "moment().startOf('month').add(20, 'days'), moment().startOf('month').add(1, 'month').add(19, 'days')";
+                    $lastMonthMoment = "moment().startOf('month').subtract(1, 'month').add(20, 'days'), moment().startOf('month').add(19, 'days')";
+                } else {
+                    $thisMonthMoment = "moment().startOf('month').subtract(1, 'month').add(20, 'days'), moment().startOf('month').add(19, 'days')";
+                    $lastMonthMoment = "moment().startOf('month').subtract(2, 'month').add(20, 'days'), moment().startOf('month').subtract(1, 'month').add(19, 'days')";
+                }
+            @endphp
+            
             locale: daterangeLocale,
             linkedCalendars: false,
             startDate: moment("{{ $startDate->format(global_setting()->date_format) }}", '{{ global_setting()->moment_format }}'),
@@ -151,14 +162,13 @@ if ($project_counts->amount != 0) {
             ranges: {
                 "@lang('app.today')": [moment(), moment()],
                 "@lang('app.last30Days')": [moment().subtract(29, 'days'), moment()],
-                "@lang('app.thisMonth')": [moment().startOf('month').subtract(1, 'month').add(21, 'days'), moment().startOf('month').add(20, 'days')],
-                "@lang('app.lastMonth')": [moment().startOf('month').subtract(2, 'month').add(21, 'days'), moment().startOf('month').subtract(1, 'month').add(20, 'days')],
+                "@lang('app.thisMonth')": [{!! $thisMonthMoment !!}],
+                "@lang('app.lastMonth')": [{!! $lastMonthMoment !!}],
                 "@lang('app.last90Days')": [moment().subtract(89, 'days'), moment()],
                 "@lang('app.last6Months')": [moment().subtract(6, 'months'), moment()],
                 "@lang('app.last1Year')": [moment().subtract(1, 'years'), moment()]
             },
             opens: 'left',
-            // parentEl: '.dashboard-header',
         }, cb_{{$item->pm_id}});
 
         $('#datatableRange_{{$item->pm_id}}').on('apply.daterangepicker', function(ev, picker) {
