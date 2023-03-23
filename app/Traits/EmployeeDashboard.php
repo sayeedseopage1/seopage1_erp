@@ -30,6 +30,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use DateTime;
+use App\Models\DealStage;
 
 /**
 *
@@ -299,6 +300,7 @@ public function employeeDashboard()
     $this->Leadconverted= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
     $this->totalbidsValue= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
     $this->totalleads= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+    $this->totalwondeal= DealStage::where('added_by',Auth::id())->where('won_lost','Yes')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
 
     if($this->totalleads != 0)
     {
@@ -306,6 +308,22 @@ public function employeeDashboard()
     }else 
     {
         $this->avg_value= 0;
+    }
+    if($this->totalleads != 0)
+    {
+        $this->percentage_of_lead_converted= ($this->Leadconverted /$this->totalleads)*100;
+
+    }else{
+        $this->percentage_of_lead_converted= 0;
+    }
+
+    if($this->Leadconverted != 0)
+    {
+        $this->percentage_of_deal_won= ($this->totalwondeal/$this->Leadconverted)*100;
+
+    }else 
+    {
+        $this->percentage_of_deal_won= 0;
     }
 
 
