@@ -12,6 +12,7 @@ use \Carbon\Carbon;
 use Auth;
 use Str;
 use DB;
+use App\Models\Project;
 
 class WonDealsDataTable extends BaseDataTable
 {
@@ -47,7 +48,8 @@ class WonDealsDataTable extends BaseDataTable
             ->addColumn('project_name', function ($row) {
                 $title = Str::limit($row->project_name, 30, ' ...');
                 if ($row->status == 'Accepted') {
-                    return '<a class="openRightModal" href="'.route('contracts.show', $row->id).'" title="'.$row->project_name.'">'.$title.'</a>';
+                    $project_id= Project::where('deal_id',$row->id)->first();
+                    return '<a class="openRightModal" href="'.route('projects.show', $project_id->id).'" title="'.$row->project_name.'">'.$title.'</a>';
                 } else {
                     return '<p title="'.$row->project_name.'">'.$title.'</p>';
                 }
