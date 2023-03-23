@@ -407,7 +407,6 @@ class TasksDataTable extends BaseDataTable
      */
     public function query(Task $model)
     {
-        dd('oik');
         if (in_array('admin', user_roles()) || in_array('Team Lead', user_roles()) || in_array('Lead Developer', user_roles()) || in_array('Project Manager', user_roles()) || in_array('Graphics Designer', user_roles()) || in_array('Ui/Uix Designer', user_roles())) {
             $model = $model->whereNull('subtask_id');
         } else {

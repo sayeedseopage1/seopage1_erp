@@ -28,6 +28,8 @@ use App\Traits\TicketDashboard;
 use App\Traits\webdevelopmentDashboard;
 use App\Traits\LeadDashboard;
 use App\Traits\DeveloperDashboard;
+use App\Traits\UxUiDashboard;
+use App\Traits\GraphicsDashboard;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Froiden\Envato\Traits\AppBoot;
@@ -36,7 +38,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends AccountBaseController
 {
-    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard;
+    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard;
 
     public function __construct()
     {
@@ -63,8 +65,14 @@ class DashboardController extends AccountBaseController
         if (in_array('Lead Developer', user_roles())) {
             return $this->LeadDashboard();
         }
-        if (in_array('Developer', user_roles())) {
+        if ($this->user->role_id == 5) {
             return $this->DeveloperDashboard();
+        }
+        if ($this->user->role_id == 9) {
+            return $this->UxUiDashboard();
+        }
+        if ($this->user->role_id == 10) {
+            return $this->GraphicsDashboard();
         }
         if (in_array('employee', user_roles())) {
             return $this->employeeDashboard();

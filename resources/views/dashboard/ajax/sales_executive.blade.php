@@ -197,13 +197,7 @@
                                             @endphp
                                             
                                             {{round( $percentage * 100, 2 )}} %
-                                            
-                                            
-                                            <span class="f-12 font-weight-normal text-lightest">
-
-
-
-                                            </span>
+                                            <span class="f-12 font-weight-normal text-lightest"></span>
                                         </p>
                                     </a>
                                 </div>
@@ -251,6 +245,7 @@
                                             @php
                                             $percentage = $lostLeads->where('deal_status', 'Lost')->count() / $lostLeads->count();
                                             @endphp
+                                            $percentage = $lostLeads->where('deal_status', 'Lost')->count() / $lostLeads->count();
                                             @if($percentage != 0)
                                             {{round($percentage * 100, 2)}} %
                                             @else 

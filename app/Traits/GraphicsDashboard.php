@@ -5,12 +5,10 @@ use App\Models\Leave;
 use App\Models\Holiday;
 use App\Models\DashboardWidget;
 use App\Models\Role;
-use App\Models\Task;
-use \Carbon\Carbon;
 
-trait DeveloperDashboard
+trait GraphicsDashboard
 {
-    public function DeveloperDashboard()
+    public function GraphicsDashboard()
     {
         $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('startDate')) : now($this->global->timezone)->startOfMonth();
         $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('endDate')) : now($this->global->timezone);
@@ -67,13 +65,8 @@ trait DeveloperDashboard
 
         $this->event_filter = explode(',', user()->employeeDetails->calendar_view);
         
-        $this->tasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id);
-
-        $this->todayDeadLineTasks = $this->tasks->where('due_date', Carbon::today()->format('Y-m-d'))->get();
-        $this->todayStartTasks = $this->tasks->where('start_date', Carbon::today()->format('Y-m-d'))->get();
-
         if (request()->ajax()) {
-            $html = view('dashboard.ajax.developer', $this->data)->render();
+            $html = view('dashboard.ajax.graphics', $this->data)->render();
             
             return Reply::dataOnly([
                 'status' => 'success', 
@@ -81,7 +74,7 @@ trait DeveloperDashboard
                 'title' => $this->pageTitle
             ]);
         }else {
-            return view('dashboard.employee.developer', $this->data);
+            return view('dashboard.employee.graphics', $this->data);
         }
     }
 }
