@@ -26,6 +26,8 @@ use App\Traits\OverviewDashboard;
 use App\Traits\ProjectDashboard;
 use App\Traits\TicketDashboard;
 use App\Traits\webdevelopmentDashboard;
+use App\Traits\LeadDashboard;
+use App\Traits\DeveloperDashboard;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Froiden\Envato\Traits\AppBoot;
@@ -34,7 +36,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends AccountBaseController
 {
-    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard;
+    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard;
 
     public function __construct()
     {
@@ -58,6 +60,12 @@ class DashboardController extends AccountBaseController
     public function index()
     {
         $this->isCheckScript();
+        if (in_array('Lead Developer', user_roles())) {
+            return $this->LeadDashboard();
+        }
+        if (in_array('Developer', user_roles())) {
+            return $this->DeveloperDashboard();
+        }
         if (in_array('employee', user_roles())) {
             return $this->employeeDashboard();
         }
@@ -65,6 +73,7 @@ class DashboardController extends AccountBaseController
         if (in_array('client', user_roles())) {
             return $this->clientPanelDashboard();
         }
+
     }
 
     public function widget(Request $request, $dashboardType)

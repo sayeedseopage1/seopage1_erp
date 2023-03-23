@@ -519,7 +519,6 @@
         const DROPZONE_FILE_ALLOW = "{{ global_setting()->allowed_file_types }}";
         const DROPZONE_MAX_FILESIZE = "{{ global_setting()->allowed_file_size }}";
         Dropzone.prototype.defaultOptions.dictDefaultMessage = "{{ __('modules.projectTemplate.dropFile') }}";
-
     </script>
 
     <!-- Scripts -->
