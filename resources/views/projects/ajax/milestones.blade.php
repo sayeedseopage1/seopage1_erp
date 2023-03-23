@@ -140,8 +140,17 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                   <a class="btn btn-primary" href="#" id="project-qc-form">Need Attention</a>
                                     @include('projects.modals.projectqcreplymodal')
                                  @else
+                                 @php 
+                                  $last_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->orderBy('id','desc')->first();
+                                 @endphp
+                                 {{-- {{dd($milestone_count-$complete_milestone)}} --}}
+                                 @if($milestone_count-$complete_milestone == 0 && $last_milestone->id == $item->id)
+                                 <button class="btn-success rounded f-14 p-2 flex-right disabled">Generate Invoice</button>
+
+                                  @else 
 
                                   <a href="#"   class="btn-success rounded f-14 p-2 flex-right create-invoice" id="{{$item->id}}"  data-row-id="{{ $item->id }}">Generate Invoice</a>
+                                  @endif
                                   @endif
 
                                     @else
