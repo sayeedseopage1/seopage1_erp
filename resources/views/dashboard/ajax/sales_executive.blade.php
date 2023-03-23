@@ -194,6 +194,7 @@
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                            
                                             
+
                                             {{round( $percentage_of_lead_converted, 2 )}} %
                                             
                                             
@@ -202,6 +203,7 @@
 
 
                                             </span>
+
                                         </p>
                                     </a>
                                 </div>
@@ -244,6 +246,7 @@
                                             @php
                                             $percentage = $lostLeads->where('deal_status', 'Lost')->count() / $lostLeads->count();
                                             @endphp
+                                            $percentage = $lostLeads->where('deal_status', 'Lost')->count() / $lostLeads->count();
                                             @if($percentage != 0)
                                             {{round($percentage * 100, 2)}} %
                                             @else 
