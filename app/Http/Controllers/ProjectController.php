@@ -648,32 +648,51 @@ if ($pm_count < 2) {
     public function storeDispute(Request $request)
     {
 
-    // $validator=  $request->validate([
-    //       'client_username' => 'required',
-    //       'project_value' => 'required',
-    //       'project_name' => 'required',
-    //       'description1' => 'required',
-    //       'description2' => 'required',
-    //       'description3' => 'required',
-    //       'description4' => 'required',
-    //       'description5' => 'required',
-    //       'description6' => 'required',
-    //       'description7' => 'required',
-    //       'description8' => 'required',
-    //
-    //       'description10' => 'required',
-    //       'description11' => 'required',
-    //       'description12' => 'required',
-    //       'description13' => 'required',
-    //       'description14' => 'required',
-    //       'description15' => 'required',
-    //       'description16' => 'required',
-    //       'description17' => 'required',
-    //       'pm_name' => 'required',
-    //       'pm_email' => 'required',
-    //
-    //   ]);
-      //dd("Dispute is Valid");
+     $validator=  $request->validate([
+           'client_username' => 'required',
+           'project_value' => 'required|numeric|min:0',
+           'description1' => 'required',
+           'description2' => 'required',
+           'description3' => 'required',
+           'description4' => 'required',
+           'description5' => 'required',
+           'description6' => 'required',
+           'description7' => 'required',
+           'description8' => 'required',
+           'description10' => 'required',
+           'description11' => 'required',
+           'description12' => 'required',
+           'description13' => 'required',
+           'description14' => 'required',
+           'description15' => 'required',
+           'description16' => 'required',
+           'description17' => 'required',
+           'pm_name' => 'required',
+           'pm_email' => 'required|email',
+
+         ],[
+             'client_username.required' => 'This field is required!',
+             'project_value.required' => 'This field is required!',
+             'description1.required' => 'This field is required!',
+             'description2.required' => 'This field is required!',
+             'description3.required' => 'This field is required!',
+             'description4.required' => 'This field is required!',
+             'description5.required' => 'This field is required!',
+             'description6.required' => 'This field is required!',
+             'description7.required' => 'This field is required!',
+             'description8.required' => 'This field is required!',
+             'description10.required' => 'This field is required!',
+             'description11.required' => 'This field is required!',
+             'description12.required' => 'This field is required!',
+             'description13.required' => 'This field is required!',
+             'description14.required' => 'This field is required!',
+             'description15.required' => 'This field is required!',
+             'description16.required' => 'This field is required!',
+             'description17.required' => 'This field is required!',
+             'pm_name.required' => 'This field is required!',
+             'pm_email.required' => 'This field is required!',
+             'pm_email.email' => 'Please enter your current email for example(example@gmail.com)!',
+         ]);
 
         $dispute = new ProjectDispute();
         $dispute->client_username= $request->client_username;
@@ -710,9 +729,14 @@ if ($pm_count < 2) {
            Notification::send($user, new ProjectDisputeNotification($project));
         }
 
-        Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+//        Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         //  return Redirect::route('projects.index');
-          return redirect('/account/projects/' .$dispute->project_id);
+//          return redirect('/account/projects/' .$dispute->project_id);
+          return response()->json([
+              'status'=>200,
+              'redirectUrl' => url('/account/projects/'.$dispute->project_id)
+
+          ]);
 
 
 
@@ -2224,53 +2248,52 @@ if ($pm_count < 2) {
     }
     public function ProjectCompletionSubmit(Request $request)
      {
-//       dd($request);
-      $validated = $request->validate([
-          'qc_protocol' => 'required',
-          'login_information' => 'required',
-          'login_url' => 'required|url',
-          'login' => 'required',
-          'password' => 'required',
-          'screenshot' => 'required|url',
-          'drive_information' => 'required',
-          'google_link' => 'required',
-          'rating' => 'required',
-          'requirements' => 'required',
-          'comments'=> 'required',
-          'comments2'=> 'required',
-          'comments3'=> 'required',
-          'dummy_yes'=> 'required',
-          'dummy_link'=> 'required',
-          'dummy_information'=> 'required',
-          'notify' => 'required',
-          'actual_yes' => 'required',
-          'actual_information' => 'required',
-          'actual_link' => 'required',
-          'price' => 'required',
-      ], [
-          'qc_protocol.required' => '000 !!',
-          'login_information.required' => '000 !!',
-          'login_url.required' => '000 !!',
-          'login.required' => '000 !!',
-          'password.required' => '000 !!',
-          'screenshot.required' => '000 !!',
-          'drive_information.required' => '000 !!',
-          'google_link.required' => '000 !!',
-          'rating.required' => '000 !!',
-          'requirements.required' => '000 !!',
-          'comments.required' => '000 !!',
-          'comments2.required' => '000 !!',
-          'comments3.required' => '000 !!',
-          'dummy_yes.required' => '000 !!',
-          'dummy_link.required' => '000 !!',
-          'dummy_information.required' => '000 !!',
-          'notify.required' => '000 !!',
-          'actual_yes.required' => '000 !!',
-          'actual_information.required' => '000 !!',
-          'actual_link.required' => '000 !!',
-          'price.required' => '000 !!',
-      ]);
-      //dd($request);
+     // dd($request);
+        $validated = $request->validate([
+            'qc_protocol' => 'required',
+            'login_information' => 'required',
+            'drive_information' => 'required',
+            'rating' => 'required',
+            'requirements' => 'required',
+            'comments'=> 'required',
+            'comments2'=> 'required',
+            'comments3'=> 'required',
+            'dummy_yes'=> 'required',
+            'dummy_information'=> 'required',
+            'notify' => 'required',
+            'actual_yes' => 'required',
+            'actual_information' => 'required',
+            'price' => 'required',
+            'login_url' => 'required_if:login_information,1',
+            'login' => 'required_if:login_information,1',
+            'password' => 'required_if:login_information,1',
+            'screenshot' => 'required_if:login_information,1',
+            'google_link' => 'required_if:drive_information,1',
+            'dummy_link' => 'required_if:dummy_information,1',
+            'actual_link' => 'required_if:actual_information,1',
+        ], [
+            'qc_protocol.required' => 'This field is required. Please select Yes or No!!',
+            'login_information.required' => 'This field is required. You have mark this checkbox!!',
+            'login_url.required' => 'This field is required. Please input the login URL here!!',
+            'login.required' => 'This field is required. Please input the user id or email here!!',
+            'password.required' => 'This field is required. Please input the password here!!',
+            'screenshot.required' => 'This field is required. Please take a screenshot when you are logged in and input the screenshot link here!!',
+            'drive_information.required' => 'This field is required. Please confirm that you have uploaded the backup in Google Drive!!',
+            'google_link.required' => 'This field is required. Please input the Google Drive link here!!',
+            'rating.required' => 'This field is required. Please give rating to the technical team!!',
+            'requirements.required' => 'This field is required. Please give rating to the sales team for defining requirements!!',
+            'comments.required' => 'Comment is required. Please write you opinion about technical team!!',
+            'comments2.required' => 'Comment is required. Please write you opinion about defined requirements from sales team!!',
+            'comments3.required' => 'Comment is required. Please write you opinion about defined price from sales team!!',
+            'dummy_yes.required' => 'This field is required. Please select Yes or No',
+            'dummy_information.required' => 'This field is required.',
+            'notify.required' => 'This field is required. Please select Yes or No!!',
+            'actual_yes.required' => 'This field is required. Please select Yes or No!!',
+            'price.required' => 'This field is required. Please give rating to the sales team for defining price!!',
+            'actual_link.required' => 'This field is required. Please input the actual site link here!!',
+            'dummy_link.required' => 'This field is required. Please input the Dummy or Test site link!!',
+        ]);
+//      dd($request);
       $milestone= new ProjectSubmission();
       $milestone->qc_protocol= $request->qc_protocol;
       $milestone->milestone_id= $request->milestone_id;
