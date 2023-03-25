@@ -784,6 +784,8 @@
                                                     <span class="text-warning mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
                                                 @elseif($avgRating < 3)
                                                     <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
+                                                @else
+                                                    <span class="text-primary mt-1">0.00 <i class="fa fa-star text-warning"></i></span>
                                                 @endif
                                             </div>
                                         </div>
@@ -1244,6 +1246,8 @@
                                                     <span class="text-warning mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
                                                 @elseif($avgRating < 3)
                                                     <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
+                                                @else
+                                                    <span class="text-primary mt-1">0.00 <i class="fa fa-star text-warning"></i></span>
                                                 @endif
                                             </div>
                                         </div>
