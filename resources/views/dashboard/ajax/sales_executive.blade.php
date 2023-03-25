@@ -195,7 +195,9 @@
                                            
                                             
 
+
                                             {{round( $percentage_of_lead_converted, 2 )}}%
+
                                             
                                             
                                             <span class="f-12 font-weight-normal text-lightest">
@@ -243,9 +245,11 @@
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+
                                            
                                             {{-- $percentage = $lostLeads->where('deal_status', 'Lost')->count() / $lostLeads->count(); --}}
                                            {{round($percentage_of_deal_lost,2)}}%
+
                                             <span class="f-12 font-weight-normal text-lightest">
                                             </span>
                                         </p>
