@@ -519,12 +519,24 @@ Add an uptime monitoring plugin. Add client's email and 1-2 of our emails there,
 
 
                           <br>
-                            <label class="ml-3" for="">Comments On the Submission</label>
-                          <div class="col-md-12">
+{{--                            <label class="ml-3" for="">Comments On the Submission</label>--}}
+{{--                          <div class="col-md-12">--}}
 
-                            <textarea name="admin_comment" rows="8" cols="160"></textarea>
+{{--                            <textarea name="admin_comment" rows="8" cols="160"></textarea>--}}
 
-                          </div>
+{{--                          </div>--}}
+                            <div class="col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label class="ml-3">Comments On the Submission</label>
+                                    <textarea name="admin_comment_qc" id="admin_comment_qc" class="form-control"></textarea>
+                                    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                                    <script>
+                                        CKEDITOR.replace('admin_comment_qc',{
+                                            height: '100'
+                                        });
+                                    </script>
+                                </div>
+                            </div>
 
                           </div>
                           </div>
