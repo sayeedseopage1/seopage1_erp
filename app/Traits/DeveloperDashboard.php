@@ -7,7 +7,10 @@ use App\Models\DashboardWidget;
 use App\Models\Role;
 use App\Models\Task;
 use \Carbon\Carbon;
+
 use DB;
+
+
 
 trait DeveloperDashboard
 {
@@ -24,6 +27,7 @@ trait DeveloperDashboard
             return $value->status == '1';
         })->pluck('widget_name')->toArray();
         // Getting Attendance setting data
+
 
         if (!is_null($this->viewNoticePermission) && $this->viewNoticePermission != 'none') {
             if ($this->viewNoticePermission == 'added') {
@@ -59,6 +63,7 @@ trait DeveloperDashboard
             }
         }
         
+
         if (request('start') && request('end') && !is_null($this->viewEventPermission) && $this->viewEventPermission != 'none') {
             $eventData = array();
 
@@ -89,6 +94,7 @@ trait DeveloperDashboard
             }
 
             return $eventData;
+
         }
 
         $this->checkTodayLeave = Leave::where('status', 'approved')

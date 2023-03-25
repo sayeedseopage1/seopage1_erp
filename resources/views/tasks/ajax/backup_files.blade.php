@@ -1,10 +1,10 @@
 @php
-    $addTaskFilePermission = user()->permission('add_task_files');
-    $viewTaskFilePermission = user()->permission('view_task_files');
-    $deleteTaskFilePermission = user()->permission('delete_task_files');
-    $addTaskCommentPermission = user()->permission('add_task_comments');
-    $editTaskCommentPermission = user()->permission('edit_task_comments');
-    $deleteTaskCommentPermission = user()->permission('delete_task_comments');
+$addTaskFilePermission = user()->permission('add_task_files');
+$viewTaskFilePermission = user()->permission('view_task_files');
+$deleteTaskFilePermission = user()->permission('delete_task_files');
+$addTaskCommentPermission = user()->permission('add_task_comments');
+$editTaskCommentPermission = user()->permission('edit_task_comments');
+$deleteTaskCommentPermission = user()->permission('delete_task_comments');
 @endphp
 
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
@@ -22,47 +22,47 @@
 <!-- TAB CONTENT START -->
 <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="nav-email-tab">
 
-    @if ($addTaskCommentPermission == 'all'
-    || ($addTaskCommentPermission == 'added' && $task->added_by == user()->id)
-    || ($addTaskCommentPermission == 'owned' && in_array(user()->id, $taskUsers))
-    || ($addTaskCommentPermission == 'both' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id))
-    )
-        {{--  <div class="row p-20">
-              <div class="col-md-12">
-                  <a class="f-15 f-w-500" href="javascript:;" id="add-comment"><i
-                          class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
-                      @lang('modules.tasks.comment')</a>
+  @if ($addTaskCommentPermission == 'all'
+  || ($addTaskCommentPermission == 'added' && $task->added_by == user()->id)
+  || ($addTaskCommentPermission == 'owned' && in_array(user()->id, $taskUsers))
+  || ($addTaskCommentPermission == 'both' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id))
+  )
+    {{--  <div class="row p-20">
+          <div class="col-md-12">
+              <a class="f-15 f-w-500" href="javascript:;" id="add-comment"><i
+                      class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
+                  @lang('modules.tasks.comment')</a>
+          </div>
+      </div> --}}
+
+      <x-form id="save-comment-data-form" >
+          <div class="col-md-12 p-20 ">
+              <div class="media">
+                  <img src="{{ user()->image_url }}" class="align-self-start mr-3 taskEmployeeImg rounded"
+                      alt="{{ mb_ucwords(user()->name) }}">
+                  <div class="media-body bg-white">
+                      <div class="form-group">
+                          <div id="descriptionComment"></div>
+{{--                          <textarea name="comment" class="form-control invisible d-none"--}}
+{{--                              id="task-comment-text"></textarea>--}}
+                          <textarea name="comment" id="descriptionComment" class="form-control"></textarea>
+                          <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                          <script>
+                              CKEDITOR.replace('comment');
+                          </script>
+                      </div>
+                  </div>
               </div>
-          </div> --}}
+              <div class="w-100 justify-content-end d-flex mt-2">
+                {{--  <x-forms.button-cancel id="cancel-comment" class="border-0 mr-3">@lang('app.cancel')
+                  </x-forms.button-cancel> --}}
+                  <x-forms.button-primary id="submit-comment" icon="location-arrow">@lang('app.submit')
+                      </x-button-primary>
+              </div>
 
-        <x-form id="save-comment-data-form" >
-            <div class="col-md-12 p-20 ">
-                <div class="media">
-                    <img src="{{ user()->image_url }}" class="align-self-start mr-3 taskEmployeeImg rounded"
-                         alt="{{ mb_ucwords(user()->name) }}">
-                    <div class="media-body bg-white">
-                        <div class="form-group">
-                            <div id="descriptionComment"></div>
-                            {{--                          <textarea name="comment" class="form-control invisible d-none"--}}
-                            {{--                              id="task-comment-text"></textarea>--}}
-                            <textarea name="comment" id="descriptionComment" class="form-control"></textarea>
-                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
-                            <script>
-                                CKEDITOR.replace('comment');
-                            </script>
-                        </div>
-                    </div>
-                </div>
-                <div class="w-100 justify-content-end d-flex mt-2">
-                    {{--  <x-forms.button-cancel id="cancel-comment" class="border-0 mr-3">@lang('app.cancel')
-                      </x-forms.button-cancel> --}}
-                    <x-forms.button-primary id="submit-comment" icon="location-arrow">@lang('app.submit')
-                        </x-button-primary>
-                </div>
-
-            </div>
-        </x-form>
-    @endif
+          </div>
+      </x-form>
+  @endif
     @if ($addTaskFilePermission == 'all'
     || ($addTaskFilePermission == 'added' && $task->added_by == user()->id)
     || ($addTaskFilePermission == 'owned' && in_array(user()->id, $taskUsers))
@@ -70,12 +70,12 @@
     )
         <div class="p-20">
 
-            {{--<div class="row">
-                  <div class="col-md-12">
-                      <a class="f-15 f-w-500" href="javascript:;" id="add-task-file"><i
-                              class="icons icon-plus font-weight-bold mr-1"></i>@lang('modules.projects.uploadFile')</a>
-                  </div>
-              </div> --}}
+          {{--<div class="row">
+                <div class="col-md-12">
+                    <a class="f-15 f-w-500" href="javascript:;" id="add-task-file"><i
+                            class="icons icon-plus font-weight-bold mr-1"></i>@lang('modules.projects.uploadFile')</a>
+                </div>
+            </div> --}}
 
             <x-form id="save-taskfile-data-form" >
                 <input type="hidden" name="task_id" value="{{ $task->id }}">
@@ -83,12 +83,12 @@
                     <div class="col-md-12">
                         <x-forms.file-multiple fieldLabel="" fieldName="file[]" fieldId="task-file-upload-dropzone" />
                     </div>
-                    {{-- <div class="col-md-12">
-                          <div class="w-100 justify-content-end d-flex mt-2">
-                              <x-forms.button-cancel id="cancel-taskfile" class="border-0">@lang('app.cancel')
-                              </x-forms.button-cancel>
-                          </div>
-                      </div> --}}
+                  {{-- <div class="col-md-12">
+                        <div class="w-100 justify-content-end d-flex mt-2">
+                            <x-forms.button-cancel id="cancel-taskfile" class="border-0">@lang('app.cancel')
+                            </x-forms.button-cancel>
+                        </div>
+                    </div> --}}
                 </div>
             </x-form>
         </div>
@@ -109,20 +109,20 @@
                             </p>
                             <div class="dropdown ml-auto comment-action">
                                 <button class="btn btn-lg f-14 p-0 text-lightest text-capitalize rounded  dropdown-toggle"
-                                        type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-ellipsis-h"></i>
                                 </button>
 
                                 <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
-                                     aria-labelledby="dropdownMenuLink" tabindex="0">
+                                    aria-labelledby="dropdownMenuLink" tabindex="0">
                                     @if ($editTaskCommentPermission == 'all' || ($editTaskCommentPermission == 'added' && $comment->added_by == user()->id))
                                         <a class="cursor-pointer d-block text-dark-grey f-13 py-3 px-3 edit-comment"
-                                           href="javascript:;" data-row-id="{{ $comment->id }}">@lang('app.edit')</a>
+                                            href="javascript:;" data-row-id="{{ $comment->id }}">@lang('app.edit')</a>
                                     @endif
 
                                     @if ($deleteTaskCommentPermission == 'all' || ($deleteTaskCommentPermission == 'added' && $comment->added_by == user()->id))
                                         <a class="cursor-pointer d-block text-dark-grey f-13 pb-3 px-3 delete-comment"
-                                           data-row-id="{{ $comment->id }}" href="javascript:;">@lang('app.delete')</a>
+                                            data-row-id="{{ $comment->id }}" href="javascript:;">@lang('app.delete')</a>
                                     @endif
                                 </div>
                             </div>
@@ -155,24 +155,24 @@
                     <x-slot name="action">
                         <div class="dropdown ml-auto file-action">
                             <button class="btn btn-lg f-14 p-0 text-lightest text-capitalize rounded  dropdown-toggle"
-                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-ellipsis-h"></i>
                             </button>
 
                             <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
-                                 aria-labelledby="dropdownMenuLink" tabindex="0">
+                                aria-labelledby="dropdownMenuLink" tabindex="0">
                                 @if ($viewTaskFilePermission == 'all' || ($viewTaskFilePermission == 'added' && $file->added_by == user()->id))
                                     @if ($file->icon = 'images')
                                         <a class="cursor-pointer d-block text-dark-grey f-13 pt-3 px-3 " target="_blank"
-                                           href="{{ $file->file_url }}">@lang('app.view')</a>
+                                            href="{{ $file->file_url }}">@lang('app.view')</a>
                                     @endif
                                     <a class="cursor-pointer d-block text-dark-grey f-13 py-3 px-3 "
-                                       href="{{ route('task_files.download', md5($file->id)) }}">@lang('app.download')</a>
+                                        href="{{ route('task_files.download', md5($file->id)) }}">@lang('app.download')</a>
                                 @endif
 
                                 @if ($deleteTaskFilePermission == 'all' || ($deleteTaskFilePermission == 'added' && $file->added_by == user()->id))
                                     <a class="cursor-pointer d-block text-dark-grey f-13 pb-3 px-3 delete-file"
-                                       data-row-id="{{ $file->id }}" href="javascript:;">@lang('app.delete')</a>
+                                        data-row-id="{{ $file->id }}" href="javascript:;">@lang('app.delete')</a>
                                 @endif
                             </div>
                         </div>

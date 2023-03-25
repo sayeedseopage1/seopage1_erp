@@ -301,6 +301,9 @@ public function employeeDashboard()
     $this->totalbidsValue= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
     $this->totalleads= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
     $this->totalwondeal= DealStage::where('added_by',Auth::id())->where('won_lost','Yes')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+    $this->totalostdeal= DealStage::where('added_by',Auth::id())->where('won_lost','No')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+    $this->rejectedbyPm= Deal::where('added_by',Auth::id())->where('status','Denied')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+    //dd($this->totalostdeal);
 
     if($this->totalleads != 0)
     {
@@ -326,6 +329,25 @@ public function employeeDashboard()
         $this->percentage_of_deal_won= 0;
     }
 
+    if($this->Leadconverted != 0)
+    {
+        $this->percentage_of_deal_lost= ($this->totalostdeal/$this->Leadconverted)*100;
+
+    }else 
+    {
+        $this->percentage_of_deal_lost= 0;
+    }
+
+    if($this->totalwondeal != 0)
+    {
+        $this->percentage_of_deal_getting_rejected= ($this->rejectedbyPm/$this->totalwondeal)*100;
+
+    }else 
+    {
+        $this->percentage_of_deal_getting_rejected= 0;
+    }
+    //dd($this->percentage_of_deal_lost);
+
 
     // $this->minLeadValue= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->select('bid_value')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('');
     $this->convertedLead = Lead::where([
@@ -334,7 +356,7 @@ public function employeeDashboard()
     ])->whereDate('created_at', Carbon::today())->get();
     
     $this->totalLeads = Lead::where('added_by', $this->user->id)->whereBetween('created_at', [$this->startDate, $this->endDate])->get();
-    $this->totalDeals = Deal::where('added_by', 222)->limit(5)->get();
+    $this->totalDeals = Deal::where('added_by', $this->user->id)->whereBetween('created_at', [$this->startDate, $this->endDate])->get();
     // dd($this->totalDeals);
 
     $this->lostLeads = Lead::select('leads.*')->join('deal_stages', 'deal_stages.lead_id', '=', 'leads.id')->where('leads.added_by', $this->user->id)->whereBetween('leads.created_at', [$this->startDate, $this->endDate])->orderBy('leads.id', 'desc')->get();
