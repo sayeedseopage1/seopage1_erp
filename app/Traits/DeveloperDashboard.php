@@ -8,6 +8,10 @@ use App\Models\Role;
 use App\Models\Task;
 use \Carbon\Carbon;
 
+use DB;
+
+
+
 trait DeveloperDashboard
 {
     public function DeveloperDashboard()
@@ -23,6 +27,42 @@ trait DeveloperDashboard
             return $value->status == '1';
         })->pluck('widget_name')->toArray();
         // Getting Attendance setting data
+
+
+        if (!is_null($this->viewNoticePermission) && $this->viewNoticePermission != 'none') {
+            if ($this->viewNoticePermission == 'added') {
+                $this->notices = Notice::latest()->where('added_by', $this->user->id)
+                ->select('id', 'heading', 'created_at')
+                ->limit(10)
+                ->get();
+            }
+            elseif ($this->viewNoticePermission == 'owned') {
+                $this->notices = Notice::latest()
+                ->select('id', 'heading', 'created_at')
+                ->where(['to' => 'employee', 'department_id' => null])
+                ->orWhere(['department_id' => $this->user->employeeDetails->department_id])
+                ->limit(10)
+                ->get();
+            }
+            elseif ($this->viewNoticePermission == 'both') {
+                $this->notices = Notice::latest()
+                ->select('id', 'heading', 'created_at')
+                ->where('added_by', $this->user->id)
+                ->orWhere(function ($q) {
+                    $q->where(['to' => 'employee', 'department_id' => null])
+                    ->orWhere(['department_id' => $this->user->employeeDetails->department_id]);
+                })
+                ->limit(10)
+                ->get();
+            }
+            elseif ($this->viewNoticePermission == 'all') {
+                $this->notices = Notice::latest()
+                ->select('id', 'heading', 'created_at')
+                ->limit(10)
+                ->get();
+            }
+        }
+        
 
         if (request('start') && request('end') && !is_null($this->viewEventPermission) && $this->viewEventPermission != 'none') {
             $eventData = array();
@@ -54,6 +94,7 @@ trait DeveloperDashboard
             }
 
             return $eventData;
+
         }
 
         $this->checkTodayLeave = Leave::where('status', 'approved')
@@ -67,10 +108,69 @@ trait DeveloperDashboard
 
         $this->event_filter = explode(',', user()->employeeDetails->calendar_view);
         
-        $this->tasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id);
+        $this->tasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->get();
 
-        $this->todayDeadLineTasks = $this->tasks->where('due_date', Carbon::today()->format('Y-m-d'))->get();
-        $this->todayStartTasks = $this->tasks->where('start_date', Carbon::today()->format('Y-m-d'))->get();
+        $this->todayDeadLineTasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->where('due_date', Carbon::today()->format('Y-m-d'))->get();
+        $this->todayStartTasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->where('start_date', Carbon::today()->format('Y-m-d'))->get();
+
+        $today = Carbon::today()->format('d');
+        if ($today > 20) {
+            $startMonth = Carbon::now()->startOfMonth()->addDays(20)->toDateString(); 
+            $endMonth = Carbon::now()->startOfMonth()->addMonth(1)->addDays(19)->toDateString();  
+        } else {
+            $startMonth = Carbon::now()->startOfMonth()->subMonths(1)->addDays(20)->toDateString(); 
+            $endMonth = Carbon::now()->startOfMonth()->addDays(19)->toDateString(); 
+        }
+        
+        $this->monthlyTasks = Task::withoutGlobalScopes()->select('tasks.*')
+        ->selectRaw('SUM(task_approves.rating + task_approves.rating2 + task_approves.rating3) / 3 as totalRating')
+        ->join('task_users', 'task_users.task_id', '=', 'tasks.id')
+        ->join('task_approves', 'task_approves.task_id', '=', 'tasks.id')
+        ->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [$startMonth, $endMonth])
+        ->groupBy('tasks.id')
+        ->get();
+
+        $this->monthlyPositiveRating = 0;
+        $this->monthlyNegativeRating = 0;
+
+        foreach ($this->monthlyTasks as $key => $value) {
+            if ($value->totalRating > 3) {
+                $this->monthlyPositiveRating++;
+            } else {
+                $this->monthlyNegativeRating++;
+            }
+        }
+
+        $this->monthlyToDo = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [$startMonth, $endMonth])->where('board_column_id', 2)->get();
+        $this->monthlyDoing = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [$startMonth, $endMonth])->where('board_column_id', 3)->get();
+        $this->monthlyOverdue = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [$startMonth, $endMonth])->where('board_column_id', 7)->get();
+        $this->monthlyUnderReview = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [$startMonth, $endMonth])->where('board_column_id', 6)->get();
+
+        $this->yearlyTasks = Task::withoutGlobalScopes()->select('tasks.*')
+        ->selectRaw('SUM(task_approves.rating + task_approves.rating2 + task_approves.rating3) / 3 as totalRating')
+        ->join('task_users', 'task_users.task_id', '=', 'tasks.id')
+        ->join('task_approves', 'task_approves.task_id', '=', 'tasks.id')
+        ->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [Carbon::now()->subMonths(12), Carbon::now()])
+        ->groupBy('tasks.id')
+        ->get();
+
+        $this->yearlyPositiveRating = 0;
+        $this->yearlyNegativeRating = 0;
+
+        foreach ($this->yearlyTasks as $key => $value) {
+            if ($value->totalRating > 3) {
+                $this->yearlyPositiveRating++;
+            } else {
+                $this->yearlyNegativeRating++;
+            }
+        }
+
+        $this->yearlyToDo = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [Carbon::now()->subMonths(12), Carbon::now()])->where('board_column_id', 2)->get();
+        $this->yearlyDoing = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [Carbon::now()->subMonths(12), Carbon::now()])->where('board_column_id', 3)->get();
+        $this->yearlyOverdue = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [Carbon::now()->subMonths(12), Carbon::now()])->where('board_column_id', 7)->get();
+        $this->yearlyUnderReview = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [Carbon::now()->subMonths(12), Carbon::now()])->where('board_column_id', 6)->get();
+
+        // dd($this->yearlyTasks);
 
         if (request()->ajax()) {
             $html = view('dashboard.ajax.developer', $this->data)->render();

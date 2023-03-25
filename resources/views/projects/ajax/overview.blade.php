@@ -753,7 +753,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
     @include('projects.modals.projectdenymodal')
 
 
-
+<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
 
 <script>
 $(document).on('click','#project-accept',function(e){

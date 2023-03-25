@@ -250,12 +250,6 @@
         } else {
             clientUserNameError.textContent = '';
         }
-        // if (username2.value.trim() === '') {
-        //     valid = false;
-        //     clientUserNameError2.textContent = 'Please select client user name!';
-        // } else {
-        //     clientUserNameError2.textContent = '';
-        // }
         if (projectName.value.trim() === '') {
             valid = false;
             projectNameError.textContent = 'Please select project name!';
