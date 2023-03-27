@@ -2651,6 +2651,10 @@ if ($pm_count < 2) {
         $project->authorization_status = 'approved';
         $project->deliverable_authorization= 1;
         $project->save();
+        $pm_project= PMProject::where('project_id',$project->id)->first();
+        $pm_project_update= PMProject::find($pm_project->id);
+        $pm_project_update->deliverable_status = 1;
+        $pm_project_update->save();
 
 
 
