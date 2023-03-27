@@ -696,7 +696,7 @@ Overview--}}
 </div>
 <hr />
 {{-- Leads And Deals Overview--}}
-<div class="row">
+{{-- <div class="row">
     <div class="col-sm-12 col-lg-6 mt-3">
         <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
             <div class="card col-md-6 mt-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Active Leads Overview</h5></div>
@@ -787,7 +787,7 @@ Overview--}}
             </x-table>
         </x-cards.data>
     </div>
-</div>
+</div>-- }}
 <hr>
 
 <div class="card col-md-3 mb-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Team Overview</h5></div>
