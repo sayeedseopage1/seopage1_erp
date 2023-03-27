@@ -492,6 +492,8 @@ class Task extends BaseModel
     {
         return $this->belongsTo(TaskBoardColumn::class, 'board_column_id');
     }
+    
+
 
     /*public function review()
     {

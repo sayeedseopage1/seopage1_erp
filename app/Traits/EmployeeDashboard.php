@@ -486,11 +486,15 @@ public function employeeDashboard()
     else {
         $this->percentage_of_completed_ontime_project_count= 0;
     }
+    
 
 
     $this->avg_project_completion_time= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->avg('project_completion_days');
     $this->pm_projects= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->get();
     $this->tasks= Task::where('added_by',Auth::id())->orderBy('id','desc')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->get();
+
+    
+   
 
     $this->view = 'dashboard.ajax.project-manager';
     $this->sales_view = 'dashboard.ajax.sales_executive';

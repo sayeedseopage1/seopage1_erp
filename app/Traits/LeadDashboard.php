@@ -4,6 +4,11 @@ namespace App\Traits;
 use App\Models\Leave;
 use App\Models\Holiday;
 use App\Models\DashboardWidget;
+use DB;
+use Auth;
+use Carbon\Carbon;
+use App\Models\Task;
+use App\Models\TaskUser;
 
 trait LeadDashboard
 {
@@ -16,6 +21,19 @@ trait LeadDashboard
 	    $this->viewNoticePermission = user()->permission('view_notice');
 	    $this->editTimelogPermission = user()->permission('edit_timelogs');
 	    $this->widgets = DashboardWidget::where('dashboard_type', 'private-dashboard')->get();
+		
+		$this->today_deadline_task_assigned_to_me=DB::table('task_users')
+		->join('tasks', 'task_users.task_id', '=', 'tasks.id')->where('user_id',Auth::id())
+		->where('due_date',Carbon::today())
+	   
+		->count();
+		$this->today_deadline_task_assigned_by_me= Task::where('due_date',Carbon::today())->where('added_by',Auth::id())->count();
+		$this->total_deadline_task_assigned_to_me=DB::table('task_users')
+		->join('tasks', 'task_users.task_id', '=', 'tasks.id')->where('user_id',Auth::id())
+		->where('due_date',Carbon::today())
+	   
+		->get();
+//dd($this->today_deadline_task_assigned_to_me);
 	    $this->activeWidgets = $this->widgets->filter(function ($value, $key) {
 	        return $value->status == '1';
 	    })->pluck('widget_name')->toArray();

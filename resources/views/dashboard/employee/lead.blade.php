@@ -161,7 +161,7 @@
 		                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Deadline Today (Assigned To Me)</h5>
 		                            <div class="d-flex justify-content-between">
 		                                <a href="">
-		                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">10
+		                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">{{$today_deadline_task_assigned_to_me}}
 		                                        <!-- <span class="f-12 font-weight-normal text-lightest">Leads Created Today</span> -->
 		                                    </p>
 		                                </a>
@@ -178,7 +178,7 @@
 		                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Deadline Today (Assigned By Me)</h5>
 		                            <div class="d-flex">
 		                                <a href="">
-		                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">20
+		                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">{{$today_deadline_task_assigned_by_me}}
 		                                        <!-- <span class="f-12 font-weight-normal text-lightest">Leads Converted Today</span> -->
 		                                    </p>
 		                                </a>
@@ -210,6 +210,20 @@
 		                                    <th>Project Manager</th>
 		                                    <th>Project Deadline</th>
 		                                </thead>
+										@foreach($total_deadline_task_assigned_to_me as $row)
+										
+										<tr>
+											<td>{{$loop->index+1}}</td>
+											<td>{{$row->heading}}</td>
+											<td>{{$row->start_date}}</td>
+											<td>{{$row->due_date}}</td>
+											<td>{{$row->estimate_hours}} hours {{$row->estimate_minutes}} min</td>
+											<td></td>
+											<td>
+											</td>
+											<td></td>
+										</tr>
+										@endforeach
 		                                <tbody>
 		                                </tbody>
 		                            </table>
