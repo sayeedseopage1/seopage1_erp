@@ -6,6 +6,7 @@ use App\Helper\Reply;
 use App\Http\Requests\Tasks\StoreTaskComment;
 use App\Models\Task;
 use App\Models\TaskComment;
+use App\Models\TaskReply;
 use App\Notifications\TaskCommentNotification;
 use Illuminate\Http\Request;
 use Notification;
@@ -64,6 +65,7 @@ class TaskCommentController extends AccountBaseController
         Notification::send($user, new TaskCommentNotification($task,$sender));
       }
 
+
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
 
     }
@@ -120,17 +122,21 @@ class TaskCommentController extends AccountBaseController
     }
 
 //    COMMENT REPLY SYSTEM START
-//        public function replyStore(Request $request){
-////        dd($request->all());
-//            $replys = explode('|',$request->reply);
-//            $reply = new TaskComment();
-//            $reply->reply = json_encode($replys);
-//            $reply->task_id = $request->taskId;
-//            $reply->user_id = user()->id;
-//            $reply->id = $this->comment_id;
-//            $reply->save();
-//            dd($reply);
-//        }
+        public function replyStore(Request $request)
+        {
+//            dd($request->all());
+            $reply = new TaskReply();
+            $reply->reply = $request->reply;
+            $reply->comment_id = $request->reply_id;
+            $reply->user_id = $request->user_id;
+            $reply->task_id = $request->taskId;
+            $reply->added_by = $request->added_by;
+            $reply->last_updated_by = $request->last_updated_by;
+            $reply->save();
+            return response()->json([
+                'status'=>400,
+            ]);
+        }
 //    COMMENT REPLY SYSTEM END
 
 }

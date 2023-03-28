@@ -96,7 +96,7 @@ $changeStatusPermission = user()->permission('change_status');
 
                                  @if($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision')
 
-                                          @php 
+                                          @php
                                           $task_time= App\Models\ProjectTimelog::orderBy('id','desc')->where('task_id',$task->id)->first();
                                         //  / dd($task_time);
 
@@ -379,10 +379,10 @@ $changeStatusPermission = user()->permission('change_status');
 
 
                       <x-cards.data-row :label="__('General Guidelines')" :value="!empty($task->project->project_summary) ? $task->project->project_summary : '--'" html="true" />
-                       
+
                         <div class="card">
                             <div class="body">
-                              
+
 
 
                                 @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
@@ -393,7 +393,7 @@ $changeStatusPermission = user()->permission('change_status');
 
 
                         </div>
-                      
+
 
                     {{-- Custom fields data --}}
                     @if (($taskSettings->custom_fields == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
@@ -596,7 +596,7 @@ $changeStatusPermission = user()->permission('change_status');
                           </p>
                           <p class="mb-0 text-dark-grey w-50 f-14">{{ $timeLog }}</p>
                       </div>
-                      @php 
+                      @php
                       $tas_id = App\Models\Task::where('id',$task->id)->first();
                         $subtasks = App\Models\Subtask::where('task_id', $tas_id->id)->get();
                         $subtask_count= App\Models\Subtask::where('task_id', $tas_id->id)->count();
