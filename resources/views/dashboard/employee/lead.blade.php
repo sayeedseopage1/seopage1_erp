@@ -204,24 +204,68 @@
 		                                    <th>SL. No.</th>
 		                                    <th>Task Name</th>
 		                                    <th>Start Date</th>
-		                                    <th>End Date</th>
+		                                    
 		                                    <th>Estimated Time</th>
 		                                    <th>Hours Logged</th>
 		                                    <th>Project Manager</th>
 		                                    <th>Project Deadline</th>
+											<th>Status</th>
 		                                </thead>
 										@foreach($total_deadline_task_assigned_to_me as $row)
 										
 										<tr>
 											<td>{{$loop->index+1}}</td>
-											<td>{{$row->heading}}</td>
+											<td><a href="{{route('tasks.show', $row->id)}}" title="{{$row->heading}}" class="openRightModal">{{Str::limit($row->heading,15)}}</a></td>
 											<td>{{$row->start_date}}</td>
-											<td>{{$row->due_date}}</td>
+										
 											<td>{{$row->estimate_hours}} hours {{$row->estimate_minutes}} min</td>
-											<td></td>
 											<td>
+												@php
+												$total_minutes= App\Models\ProjectTimeLog::where('task_id',$row->id)->sum('total_minutes');
+												$timelog= '';
+													$timelog .= round($total_minutes/60,0) .' hours ';
+													$timelog .= $total_minutes%60 .' min';
+												 $subtasks = App\Models\Subtask::where('task_id', $row->id)->get();
+												
+												 $time = 0;
+												foreach ($subtasks as $subtask) {
+												$task = App\Models\Task::where('subtask_id', $subtask->id)->first();
+												$time += $task->timeLogged->sum('total_minutes');
+												
+												}
+												if($subtasks == null)
+												{
+													$timeL = $timelog;
+													
+												}else 
+												{
+													$timeL = '';
+													$timeL .= round(($total_minutes+$time)/60,0) . ' hours ';
+													$timeL .= ($total_minutes+$time)%60 . ' min';
+
+												}
+
+												@endphp
+												{{$timeL}}
+												
 											</td>
-											<td></td>
+											<td>
+												@php
+												$project= App\Models\Project::where('id',$row->project_id)->first();
+												$pm = App\Models\User::where('id',$project->pm_id)->first();
+
+												@endphp
+												<a href="{{route('employees.show', $pm->id)}}" title="{{$pm->name}}" class="openRightModal">{{Str::limit($pm->name,15)}}</a>
+												
+											</td>
+											<td>{{$project->deadline->format('Y-m-d')}}</td>
+											<td>
+												@php
+												$task_status= App\Models\TaskBoardColumn::where('id',$row->board_column_id)->first();
+												@endphp
+												
+												<span class="badge badge-light" style="color:{{$task_status->label_color}}">
+												{{$task_status->column_name}}</span></td>
 										</tr>
 										@endforeach
 		                                <tbody>
@@ -233,7 +277,7 @@
 		                <div class="col-sm-12 col-lg-6 mt-3">
 		                	<div class="card bg-white border-0 b-shadow-4">
 		                        <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20">
-		                            <h4 class="f-18 f-w-500 mb-0">Task Deadline Today (Assigned To Me) 
+		                            <h4 class="f-18 f-w-500 mb-0">Task Deadline Today (Assigned By Me) 
 		                                <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="From 01-03-2023 To 23-03-2023" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title=""><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg>
 		                            </h4>
 		                        </div>
@@ -243,12 +287,72 @@
 		                                    <th>SL. No.</th>
 			                                <th>Task Name</th>
 			                                <th>Start Date</th>
-			                                <th>End Date</th>
+			                               
 			                                <th>Estimated Time</th>
 			                                <th>Hours Logged</th>
 			                                <th>Developer</th>
 			                                <th>Project Deadline</th>
+											<th>Status</th>
 		                                </thead>
+										@foreach($total_deadline_task_assigned_by_me as $item)
+										<tr>
+											<td>{{$loop->index+1}}</td>
+											<td><a href="{{route('tasks.show', $item->id)}}" title="{{$item->heading}}" class="openRightModal">{{Str::limit($item->heading,15)}}</a></td>
+											<td>{{$item->start_date->format('Y-m-d')}}</td>
+										
+											<td>{{$item->estimate_hours}} hours {{$item->estimate_minutes}} min</td>
+											<td>
+												@php
+												$total_minutes= App\Models\ProjectTimeLog::where('task_id',$item->id)->sum('total_minutes');
+												$timelog= '';
+													$timelog .= round($total_minutes/60,0) .' hours ';
+													$timelog .= $total_minutes%60 .' min';
+												 $subtasks = App\Models\Subtask::where('task_id', $item->id)->get();
+												
+												 $time = 0;
+												foreach ($subtasks as $subtask) {
+												$task = App\Models\Task::where('subtask_id', $subtask->id)->first();
+												$time += $task->timeLogged->sum('total_minutes');
+												
+												}
+												if($subtasks == null)
+												{
+													$timeL = $timelog;
+													
+												}else 
+												{
+													$timeL = '';
+													$timeL .= round(($total_minutes+$time)/60,0) . ' hours ';
+													$timeL .= ($total_minutes+$time)%60 . ' min';
+
+												}
+
+												@endphp
+												{{$timeL}}
+												
+											</td>
+											<td>
+												@php
+												$project= App\Models\Project::where('id',$item->project_id)->first();
+												$task_user= App\Models\TaskUser::where('task_id',$item->id)->first();
+												$user = App\Models\User::where('id',$task_user->user_id)->first();
+
+												@endphp
+												<a href="{{route('employees.show', $user->id)}}" title="{{$user->name}}" class="openRightModal">{{Str::limit($user->name,10)}}</a>
+												
+											</td>
+											<td>{{$project->deadline->format('Y-m-d')}}</td>
+											<td>
+												@php
+												$task_status= App\Models\TaskBoardColumn::where('id',$item->board_column_id)->first();
+												@endphp
+												
+												<span class="badge badge-light" style="color:{{$task_status->label_color}}">
+												{{$task_status->column_name}}</span></td>
+
+
+										</tr>
+										@endforeach
 		                                <tbody>
 		                                </tbody>
 		                            </table>

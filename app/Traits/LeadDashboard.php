@@ -33,6 +33,7 @@ trait LeadDashboard
 		->where('due_date',Carbon::today())
 	   
 		->get();
+		$this->total_deadline_task_assigned_by_me= Task::where('due_date',Carbon::today())->where('added_by',Auth::id())->get();
 //dd($this->today_deadline_task_assigned_to_me);
 	    $this->activeWidgets = $this->widgets->filter(function ($value, $key) {
 	        return $value->status == '1';
