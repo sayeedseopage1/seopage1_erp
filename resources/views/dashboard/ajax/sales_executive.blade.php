@@ -112,7 +112,7 @@
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            {{$lostLeads->where('deal_status', 'Lost')->count()}}<span class="f-12 font-weight-normal text-lightest">
+                                            {{$totalostdeal}}<span class="f-12 font-weight-normal text-lightest">
                                             </span>
                                         </p>
                                     </a>
@@ -194,7 +194,10 @@
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                            
                                             
-                                            {{round( $percentage_of_lead_converted, 2 )}} %
+
+
+                                            {{round( $percentage_of_lead_converted, 2 )}}%
+
                                             
                                             
                                             <span class="f-12 font-weight-normal text-lightest">
@@ -202,6 +205,7 @@
 
 
                                             </span>
+
                                         </p>
                                     </a>
                                 </div>
@@ -219,7 +223,7 @@
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                            
-                                            {{round($percentage_of_deal_won, 2)}} %
+                                            {{round($percentage_of_deal_won, 2)}}%
                                            
                                             <span class="f-12 font-weight-normal text-lightest">
                                             </span>
@@ -241,14 +245,11 @@
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            @php
-                                            $percentage = $lostLeads->where('deal_status', 'Lost')->count() / $lostLeads->count();
-                                            @endphp
-                                            @if($percentage != 0)
-                                            {{round($percentage * 100, 2)}} %
-                                            @else 
-                                            0 
-                                            @endif
+
+                                           
+                                            {{-- $percentage = $lostLeads->where('deal_status', 'Lost')->count() / $lostLeads->count(); --}}
+                                           {{round($percentage_of_deal_lost,2)}}%
+
                                             <span class="f-12 font-weight-normal text-lightest">
                                             </span>
                                         </p>
@@ -267,7 +268,7 @@
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            0<span class="f-12 font-weight-normal text-lightest"></span>
+                                            {{$rejectedbyPm}}<span class="f-12 font-weight-normal text-lightest"></span>
                                         </p>
                                     </a>
                                 </div>
@@ -284,7 +285,7 @@
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            0 %<span class="f-12 font-weight-normal text-lightest"></span>
+                                            {{$percentage_of_deal_getting_rejected}}%<span class="f-12 font-weight-normal text-lightest"></span>
                                         </p>
                                     </a>
                                 </div>
@@ -322,7 +323,7 @@
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            {{$totalLeads->count()}}
+                                            {{$totalleads}}
                                             <span class="f-12 font-weight-normal text-lightest">
                                             </span>
                                         </p>
@@ -359,7 +360,7 @@
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            {{$lostLeads->where('deal_status', 'Lost')->count()}}<span class="f-12 font-weight-normal text-lightest">
+                                            {{$totalostdeal}}<span class="f-12 font-weight-normal text-lightest">
                                             </span>
                                         </p>
                                     </a>
@@ -420,7 +421,7 @@
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            {{$lostLeads->where('deal_status', 'pending')->where('won_lost', 'Yes')->count()}}<span class="f-12 font-weight-normal text-lightest">
+                                            {{$totalwondeal}}<span class="f-12 font-weight-normal text-lightest">
                                             </span>
                                         </p>
                                     </a>
@@ -439,11 +440,9 @@
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            @php
-                                            $percentage = $totalLeads->where('status_id', 3)->count() / $totalLeads->count();
-                                            @endphp
+                                          
                                             
-                                            {{round( $percentage * 100, 2 )}} %
+                                            {{round( $percentage_of_lead_converted, 2 )}}%
                                             
                                             
                                             <span class="f-12 font-weight-normal text-lightest">
@@ -467,14 +466,10 @@
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            @php
-                                            $percentage = $lostLeads->where('deal_status', 'pending')->where('won_lost', 'Yes')->count() / $lostLeads->count();
-                                            @endphp
-                                            @if($percentage != 0)
-                                            {{round($percentage * 100, 2)}} %
-                                            @else 
-                                            0 
-                                            @endif
+                                           
+                                            
+                                            {{round($percentage_of_deal_won, 2)}}%
+                                           
                                             <span class="f-12 font-weight-normal text-lightest">
                                             </span>
                                         </p>
@@ -495,14 +490,7 @@
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            @php
-                                            $percentage = $lostLeads->where('deal_status', 'Lost')->count() / $lostLeads->count();
-                                            @endphp
-                                            @if($percentage != 0)
-                                            {{round($percentage * 100, 2)}} %
-                                            @else 
-                                            0 
-                                            @endif
+                                            {{round($percentage_of_deal_lost,2)}}%
                                             <span class="f-12 font-weight-normal text-lightest">
                                             </span>
                                         </p>
@@ -519,13 +507,11 @@
                     <div class="col-md-4">
                         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                             <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. of Leads Converted
-                                </h5>
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Projects Got Rejected by PMs</h5>
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            0<span class="f-12 font-weight-normal text-lightest">
-                                            </span>
+                                            {{$rejectedbyPm}}<span class="f-12 font-weight-normal text-lightest"></span>
                                         </p>
                                     </a>
                                 </div>
@@ -538,82 +524,11 @@
                     <div class="col-md-4">
                         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                             <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Bids Value</h5>
-                                <div class="d-flex">
-                                    <a href="#">
-                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            0<span class="f-12 font-weight-normal text-lightest">
-                                            </span>
-                                        </p>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="d-block">
-                                <i class="fa fa-list text-lightest f-27"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-3">
-                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average Bidding Time</h5>
-                                <div class="d-flex">
-                                    <a href="#">
-                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            0<span class="f-12 font-weight-normal text-lightest"></span>
-                                        </p>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="d-block">
-                                <i class="fa fa-list text-lightest f-27"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Time Spent Between Leads</h5>
-                                <div class="d-flex">
-                                    <a href="#">
-                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            0<span class="f-12 font-weight-normal text-lightest"></span>
-                                        </p>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="d-block">
-                                <i class="fa fa-list text-lightest f-27"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
-                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Projects Got Rejected by PMs</h5>
-                                <div class="d-flex">
-                                    <a href="#">
-                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            0<span class="f-12 font-weight-normal text-lightest"></span>
-                                        </p>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="d-block">
-                                <i class="fa fa-list text-lightest f-27"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                            <div class="d-block text-capitalize">
                                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Won Deals Getting Rejected</h5>
                                 <div class="d-flex">
                                     <a href="#">
                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                            0 %<span class="f-12 font-weight-normal text-lightest"></span>
+                                            {{$percentage_of_deal_getting_rejected}}%<span class="f-12 font-weight-normal text-lightest"></span>
                                         </p>
                                     </a>
                                 </div>
@@ -623,7 +538,12 @@
                             </div>
                         </div>
                     </div>
+                   
+                    
+
+
                 </div>
+              
                 <div class="row mt-3 mb-3">
                     <div class="col-md-6">
                         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
@@ -633,7 +553,7 @@
                                     <x-slot name="thead">
                                         <th class="pl-20 text-capitalize"> SL. No</th>
                                         <th class="pl-20 text-capitalize">Lead Name</th>
-                                        <th class="pl-20 text-capitalize">Lead Budget</th>
+                                        <th class="pl-20 text-capitalize">Lead Value</th>
                                         <th class="pl-20 text-capitalize">Bid Value</th>
                                         <th class="pl-20 text-capitalize">Created Date</th>
                                         <th class="pl-20 text-capitalize">Conversion Status</th>
@@ -644,8 +564,8 @@
                                         <td class="pl-20 text-capitalize ">
                                             <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('leads.show', $value->id)}}" target="_blank">{!!html_entity_decode($value->client_name)!!}</a>
                                         </td>
-                                        <td class="pl-20 text-capitalize">{{$value->value}}</td>
-                                        <td class="pl-20 text-capitalize">{{$value->bid_value}}</td>
+                                        <td class="pl-20 text-capitalize">{{$value->bid_value}}-{{$value->bid_value2}}{{$value->original_currency->currency_symbol}}</td>
+                                        <td class="pl-20 text-capitalize">{{$value->actual_value}}{{$value->original_currency->currency_symbol}}</td>
                                         <td class="pl-20 text-capitalize">
                                             @if($value->created_at != null)
                                             {{$value->created_at->format('Y-m-d')}}
@@ -653,7 +573,15 @@
                                             --
                                             @endif
                                         </td>
-                                        <td class="pl-20 text-capitalize"><i class="fas fa-circle" style="color:{{$value->leadStatus->lable_color ?? 'red'}};"></i> {{$value->leadStatus->type ?? '--'}}</td>
+                                        <td class="pl-20 text-capitalize">
+                                            @if($value->deal_status == 0)
+                                            <i class="fas fa-circle" style="color:red;"></i> Not Converted
+                                            @else 
+                                            <i class="fas fa-circle" style="color:green;"></i> Converted
+
+                                            @endif
+                                        
+                                        </td>
                                     </tr>
                                     @empty
                                         <tr>
@@ -682,33 +610,11 @@
                                         <td class="pl-20 text-capitalize ">
                                             <a class="text-darkest-grey openRightModal" title="{{$value->project_name}}" href="{{route('deals.show', $value->id)}}" target="_blank">{{$value->project_name}}</a>
                                         </td>
-                                        <td class="pl-20 text-capitalize">{{$value->amount}}</td>
+                                        <td class="pl-20 text-capitalize">{{$value->actual_amount}}{{$value->original_currency->currency_symbol}}</td>
                                         <td class="pl-20 text-capitalize">{{$value->created_at->format('Y-m-d')}}</td>
                                         <td class="pl-20 text-capitalize">
-                                            @php
-                                            $row = $value->lead;
-                                            if ($row->won_lost != null) {
-                                                if ($row->won_lost== 'Yes') {
-                                                    echo '<badge style="background-color:#00aa00 !important;" class="badge badge-success">Won</badge>';
-                                                }else {
-                                                    echo '<badge style="background-color:#FF0000 !important;" class="badge badge-danger">Lost</badge>';
-                                                }
-                                            }else {
-                                                if($row->deal_stage == 0)
-                                                {
-                                                    echo '<badge style="background-color:#FFFF00 !important;" class="badge badge-info text-dark">Contact Made</badge>';
-                                                }elseif ($row->deal_stage == 1) {
-                                                    echo '<badge style="background-color:#10e0ef !important; text-color:white !important;" class="badge badge-warning text-white">Qualified</badge>';
-                                                }elseif($row->deal_stage == 2)
-                                                {
-                                                    echo '<badge style="background-color:#0000FF !important;" class="badge badge-info">Requirements Defined</badge>';
-                                                }elseif ($row->deal_stage == 3) {
-                                                    echo '<badge style="background-color:#FFA500 !important;" class="badge badge-primary text-dark">Proposal Made</badge>';
-                                                }else {
-                                                    echo '<badge style="background-color:#A020F0 !important;" class="badge badge-success">Negotiation Started</badge>';
-                                                }
-                                            }
-                                            @endphp
+                                            {{$value->status}}
+                                            
                                         </td>
                                     </tr>
                                     @endforeach

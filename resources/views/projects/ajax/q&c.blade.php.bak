@@ -361,13 +361,13 @@
                     <p> Did you check the site is loading with https:// or not? If not, please add SSL and confirm. </p>
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="site_https" value="1">
+                            <input type="radio" class="rad-input" name="site_https" value="1" @checked(!is_null($qcData->site_https) && $qcData->site_https)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="site_https" value="0">
+                            <input type="radio" class="rad-input" name="site_https" value="0" @checked(!is_null($qcData->site_https) && $qcData->site_https == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -382,13 +382,13 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="favicon" value="1">
+                            <input type="radio" class="rad-input" name="favicon" value="1" @checked(!is_null($qcData->favicon) && $qcData->favicon == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="favicon" value="0">
+                            <input type="radio" class="rad-input" name="favicon" value="0" @checked(!is_null($qcData->favicon) && $qcData->favicon == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -404,12 +404,12 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="webmail" value="1">
+                            <input type="radio" class="rad-input" name="webmail" value="1" @checked(!is_null($qcData->webmail) && $qcData->webmail == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="webmail" value="0">
+                            <input type="radio" class="rad-input" name="webmail" value="0" @checked(!is_null($qcData->webmail) && $qcData->webmail == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -425,13 +425,13 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="contact_form" value="1">
+                            <input type="radio" class="rad-input" name="contact_form" value="1" @checked(!is_null($qcData->contact_form) && $qcData->contact_form == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="contact_form" value="0">
+                            <input type="radio" class="rad-input" name="contact_form" value="0" @checked(!is_null($qcData->contact_form) && $qcData->contact_form == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -447,13 +447,13 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="social_media" value="1">
+                            <input type="radio" class="rad-input" name="social_media" value="1" @checked(!is_null($qcData->social_media) && $qcData->social_media == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="social_media" value="0">
+                            <input type="radio" class="rad-input" name="social_media" value="0" @checked(!is_null($qcData->social_media) && $qcData->social_media == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -470,13 +470,13 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="login_link" value="1">
+                            <input type="radio" class="rad-input" name="login_link" value="1" @checked(!is_null($qcData->login_link) && $qcData->login_link == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="login_link" value="0">
+                            <input type="radio" class="rad-input" name="login_link" value="0" @checked(!is_null($qcData->login_link) && $qcData->login_link == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -492,13 +492,13 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="scroll_down" value="1">
+                            <input type="radio" class="rad-input" name="scroll_down" value="1" @checked(!is_null($qcData->scroll_down) && $qcData->scroll_down == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="scroll_down" value="0">
+                            <input type="radio" class="rad-input" name="scroll_down" value="0" @checked(!is_null($qcData->scroll_down) && $qcData->scroll_down == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -514,12 +514,12 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="lorem_text" value="1">
+                            <input type="radio" class="rad-input" name="lorem_text" value="1" @checked(!is_null($qcData->lorem_text) && $qcData->lorem_text == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="lorem_text" value="0">
+                            <input type="radio" class="rad-input" name="lorem_text" value="0" @checked(!is_null($qcData->lorem_text) && $qcData->lorem_text == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -535,13 +535,13 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="logical_issues" value="1">
+                            <input type="radio" class="rad-input" name="logical_issues" value="1" @checked(!is_null($qcData->logical_issues) && $qcData->logical_issues == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="logical_issues" value="0">
+                            <input type="radio" class="rad-input" name="logical_issues" value="0" @checked(!is_null($qcData->logical_issues) && $qcData->logical_issues == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -557,13 +557,13 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="loading_speed" value="1">
+                            <input type="radio" class="rad-input" name="loading_speed" value="1" @checked(!is_null($qcData->loading_speed) && $qcData->loading_speed == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="loading_speed" value="0">
+                            <input type="radio" class="rad-input" name="loading_speed" value="0" @checked(!is_null($qcData->loading_speed) && $qcData->loading_speed == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -603,13 +603,13 @@
                     <p>Are You agree For Step 02</p>
                     <div class="newitem" id="newbts">
                         <label class="rad-label" >
-                            <input type="checkbox" class="rad-input" name="step_1" id="ts" name="ts" value="1" required>
+                            <input type="checkbox" class="rad-input" name="step_1" id="ts" name="ts" value="1" required  @checked(!is_null($qcData->step_1) && $qcData->step_1 == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="checkbox" class="rad-input" name="step_1" onclick="myFunction()">
+                            <input type="checkbox" class="rad-input" name="step_1" onclick="myFunction()" @checked(!is_null($qcData->step_1) && $qcData->step_1 == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -628,13 +628,13 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="migration" value="1">
+                            <input type="radio" class="rad-input" name="migration" value="1" @checked(!is_null($qcData->migration) && $qcData->migration == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="migration" value="0">
+                            <input type="radio" class="rad-input" name="migration" value="0" @checked(!is_null($qcData->migration) && $qcData->migration == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -651,13 +651,13 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="links_working" value="1">
+                            <input type="radio" class="rad-input" name="links_working" value="1" @checked(!is_null($qcData->links_working) && $qcData->links_working == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="links_working" value="0">
+                            <input type="radio" class="rad-input" name="links_working" value="0" @checked(!is_null($qcData->links_working) && $qcData->links_working == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -674,13 +674,13 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="backup_plugin" value="1">
+                            <input type="radio" class="rad-input" name="backup_plugin" value="1" @checked(!is_null($qcData->backup_plugin) && $qcData->backup_plugin == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="backup_plugin" value="0">
+                            <input type="radio" class="rad-input" name="backup_plugin" value="0" @checked(!is_null($qcData->backup_plugin) && $qcData->backup_plugin == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -698,13 +698,13 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="uptime_monitoring" value="1">
+                            <input type="radio" class="rad-input" name="uptime_monitoring" value="1" @checked(!is_null($qcData->uptime_monitoring) && $qcData->uptime_monitoring == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="uptime_monitoring" value="0">
+                            <input type="radio" class="rad-input" name="uptime_monitoring" value="0" @checked(!is_null($qcData->uptime_monitoring) && $qcData->uptime_monitoring == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -722,13 +722,13 @@
 
                     <div class="newitem">
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="final_backup" value="1">
+                            <input type="radio" class="rad-input" name="final_backup" value="1" @checked(!is_null($qcData->final_backup) && $qcData->final_backup == 1)>
                             <div class="rad-design"></div>
                             <div class="rad-text">Yes</div>
                         </label>
 
                         <label class="rad-label">
-                            <input type="radio" class="rad-input" name="final_backup" value="0">
+                            <input type="radio" class="rad-input" name="final_backup" value="0" @checked(!is_null($qcData->final_backup) && $qcData->final_backup == 0)>
                             <div class="rad-design"></div>
                             <div class="rad-text">No</div>
                         </label>
@@ -1061,7 +1061,9 @@
                 pages.first('section').show();
                 pages.find('.page-next').on('click', this.nextPage);
                 pages.find('.page-prev').on('click', this.prevPage);
-                // this.setPage(2);
+                @if(!is_null($qcData->step_1))
+                this.setPage(12)
+                @endif
                 return this;
             }
 

@@ -480,8 +480,8 @@
         const daterangeConfig = {
             "@lang('app.today')": [moment(), moment()],
             "@lang('app.last30Days')": [moment().subtract(29, 'days'), moment()],
-            "@lang('app.thisMonth')": [moment().startOf('month').subtract(1, 'month').add(21, 'days'), moment().startOf('month').add(20, 'days')],
-            "@lang('app.lastMonth')": [moment().startOf('month').subtract(2, 'month').add(21, 'days'), moment().startOf('month').subtract(1, 'month').add(20, 'days')],
+            "@lang('app.thisMonth')": [moment().startOf('month').subtract(1, 'month').add(20, 'days'), moment().startOf('month').add(19, 'days')],
+            "@lang('app.lastMonth')": [moment().startOf('month').subtract(2, 'month').add(20, 'days'), moment().startOf('month').subtract(1, 'month').add(19, 'days')],
             "@lang('app.last90Days')": [moment().subtract(89, 'days'), moment()],
             "@lang('app.last6Months')": [moment().subtract(6, 'months'), moment()],
             "@lang('app.last1Year')": [moment().subtract(1, 'years'), moment()]

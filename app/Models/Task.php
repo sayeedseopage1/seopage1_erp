@@ -492,5 +492,11 @@ class Task extends BaseModel
     {
         return $this->belongsTo(TaskBoardColumn::class, 'board_column_id');
     }
+    
 
+
+    /*public function review()
+    {
+        return $this->belongsTo(TaskApprove::class, 'task_id', 'id');
+    }*/
 }

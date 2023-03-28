@@ -105,17 +105,7 @@
                     $('#textError').text('');
                 }
 
-                var links = [];
-
-                $.each(error.responseJSON.errors, function(key, value) {
-                    if(key.indexOf('link.') === 0) {
-                        links.push(value[0]);
-                    }
-                });
-                links[10] = 'asdlfkasdf'
-                links[20] = 'asdlfkasdf'
-                console.log(links);
-                $.each(links, function(key, value) {
+                $.each(error.responseJSON.errors.link, function(key, value) {
                     $('#linkError_'+key).text(value);
                 });
 

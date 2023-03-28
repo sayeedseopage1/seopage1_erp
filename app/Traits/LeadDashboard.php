@@ -3,6 +3,13 @@
 namespace App\Traits;
 use App\Models\Leave;
 use App\Models\Holiday;
+use App\Models\DashboardWidget;
+use DB;
+use Auth;
+use Carbon\Carbon;
+use App\Models\Task;
+use App\Models\TaskUser;
+use App\Models\Project;
 
 trait LeadDashboard
 {
@@ -14,7 +21,142 @@ trait LeadDashboard
 		$this->viewEventPermission = user()->permission('view_events');
 	    $this->viewNoticePermission = user()->permission('view_notice');
 	    $this->editTimelogPermission = user()->permission('edit_timelogs');
+	    $this->widgets = DashboardWidget::where('dashboard_type', 'private-dashboard')->get();
 
+		//total task today start
+		
+		$this->today_deadline_task_assigned_to_me=DB::table('task_users')
+		->join('tasks', 'task_users.task_id', '=', 'tasks.id')->where('user_id',Auth::id())
+		->where('due_date',Carbon::today())
+	   
+		->count();
+		$this->today_deadline_task_assigned_by_me= Task::where('due_date',Carbon::today())->where('added_by',Auth::id())->count();
+		$this->total_deadline_task_assigned_to_me=DB::table('task_users')
+		->join('tasks', 'task_users.task_id', '=', 'tasks.id')->where('user_id',Auth::id())
+		->where('due_date',Carbon::today())
+	   
+		->get();
+		$this->total_deadline_task_assigned_by_me= Task::where('due_date',Carbon::today())->where('added_by',Auth::id())->get();
+		//total tasks today end
+
+
+		// total task periodic data start
+
+		$this->total_not_started_projects= Project::where('status','not started')->count();
+		$this->total_in_progress_projects= Project::where('status','in progress')->count();
+		$this->total_under_review_projects= Project::where('status','under review')->count();
+		$this->total_on_hold_projects= Project::where('status','on hold')->count();
+		$this->total_canceled_projects= Project::where('status','canceled')->count();
+		$this->total_finished_projects= Project::where('status','finished')->count();
+//dd($this->today_deadline_task_assigned_to_me);
+		$this->total_to_do_tasks= Task::where('board_column_id',2)->count();
+		$this->total_doing_tasks= Task::where('board_column_id',3)->count();
+		$this->total_overdue_tasks= Task::where('due_date','<',Carbon::today())->where('status','incomplete')->count();
+		$this->total_under_review_tasks= Task::where('board_column_id',6)->count();
+	
+	$this->total_rating = DB::table('task_users')
+    ->join('task_approves', 'task_users.task_id', '=', 'task_approves.task_id')
+    ->where('task_users.user_id', Auth::id())
+    ->selectRaw('AVG(task_approves.rating) as avg_rating, AVG(task_approves.rating2) as avg_rating2, AVG(task_approves.rating3) as avg_rating3')
+    ->first();
+
+		$this->average = ($this->total_rating->avg_rating + $this->total_rating->avg_rating2 + $this->total_rating->avg_rating3) / 3;
+		$this->negative_review = DB::table('task_users')
+    ->join('task_approves', 'task_users.task_id', '=', 'task_approves.task_id')
+    ->where('task_users.user_id', Auth::id())
+    ->selectRaw('AVG(task_approves.rating) as avg_rating, AVG(task_approves.rating2) as avg_rating2, AVG(task_approves.rating3) as avg_rating3')
+    ->groupBy('task_approves.id')
+    ->havingRaw('(avg_rating + avg_rating2 + avg_rating3) / 3 <= ?', [3])
+    ->count();
+	$this->positive_review = DB::table('task_users')
+    ->join('task_approves', 'task_users.task_id', '=', 'task_approves.task_id')
+    ->where('task_users.user_id', Auth::id())
+    ->selectRaw('AVG(task_approves.rating) as avg_rating, AVG(task_approves.rating2) as avg_rating2, AVG(task_approves.rating3) as avg_rating3')
+    ->groupBy('task_approves.id')
+    ->havingRaw('(avg_rating + avg_rating2 + avg_rating3) / 3 > ?', [3])
+    ->count();
+
+	$this->total_rating_assign_by_me = DB::table('tasks')
+    ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
+    ->where('tasks.added_by', Auth::id())
+    ->selectRaw('AVG(task_approves.rating) as avg_rating, AVG(task_approves.rating2) as avg_rating2, AVG(task_approves.rating3) as avg_rating3')
+    ->first();
+
+		$this->average_review_assign_by_me = ($this->total_rating_assign_by_me->avg_rating + $this->total_rating_assign_by_me->avg_rating2 + $this->total_rating_assign_by_me->avg_rating3) / 3;
+		
+		$this->total_deadline_task_assigned_to_me_period=DB::table('task_users')
+		->join('tasks', 'task_users.task_id', '=', 'tasks.id')->where('user_id',Auth::id())
+		
+	   
+		->orderBy('tasks.id','desc')->get();
+
+		$this->total_deadline_task_assigned_by_me_period= Task::where('added_by',Auth::id())->orderBy('tasks.id','desc')->get();
+
+
+
+
+ // total tasks periodic data end
+
+
+ // total tasks general view start 
+ $this->total_not_started_projects_general= Project::where('status','not started')->count();
+ $this->total_in_progress_projects_general= Project::where('status','in progress')->count();
+ $this->total_under_review_projects_general= Project::where('status','under review')->count();
+ $this->total_on_hold_projects_general= Project::where('status','on hold')->count();
+ $this->total_canceled_projects_general= Project::where('status','canceled')->count();
+ $this->total_finished_projects_general= Project::where('status','finished')->count();
+//dd($this->today_deadline_task_assigned_to_me);
+ $this->total_to_do_tasks_general= Task::where('board_column_id',2)->count();
+ $this->total_doing_tasks_general= Task::where('board_column_id',3)->count();
+ $this->total_overdue_tasks_general= Task::where('due_date','<',Carbon::today())->where('status','incomplete')->count();
+ $this->total_under_review_tasks_general= Task::where('board_column_id',6)->count();
+
+$this->total_rating_general = DB::table('task_users')
+->join('task_approves', 'task_users.task_id', '=', 'task_approves.task_id')
+->where('task_users.user_id', Auth::id())
+->selectRaw('AVG(task_approves.rating) as avg_rating, AVG(task_approves.rating2) as avg_rating2, AVG(task_approves.rating3) as avg_rating3')
+->first();
+
+ $this->average_general = ($this->total_rating_general->avg_rating + $this->total_rating_general->avg_rating2 + $this->total_rating_general->avg_rating3) / 3;
+ $this->negative_review_general = DB::table('task_users')
+->join('task_approves', 'task_users.task_id', '=', 'task_approves.task_id')
+->where('task_users.user_id', Auth::id())
+->selectRaw('AVG(task_approves.rating) as avg_rating, AVG(task_approves.rating2) as avg_rating2, AVG(task_approves.rating3) as avg_rating3')
+->groupBy('task_approves.id')
+->havingRaw('(avg_rating + avg_rating2 + avg_rating3) / 3 <= ?', [3])
+->count();
+$this->positive_review_general = DB::table('task_users')
+->join('task_approves', 'task_users.task_id', '=', 'task_approves.task_id')
+->where('task_users.user_id', Auth::id())
+->selectRaw('AVG(task_approves.rating) as avg_rating, AVG(task_approves.rating2) as avg_rating2, AVG(task_approves.rating3) as avg_rating3')
+->groupBy('task_approves.id')
+->havingRaw('(avg_rating + avg_rating2 + avg_rating3) / 3 > ?', [3])
+->count();
+
+$this->total_rating_assign_by_me_general = DB::table('tasks')
+->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
+->where('tasks.added_by', Auth::id())
+->selectRaw('AVG(task_approves.rating) as avg_rating, AVG(task_approves.rating2) as avg_rating2, AVG(task_approves.rating3) as avg_rating3')
+->first();
+
+ $this->average_review_assign_by_me_general = ($this->total_rating_assign_by_me_general->avg_rating + $this->total_rating_assign_by_me_general->avg_rating2 + $this->total_rating_assign_by_me_general->avg_rating3) / 3;
+ 
+ $this->total_task_assigned_to_me_general=DB::table('task_users')
+ ->join('tasks', 'task_users.task_id', '=', 'tasks.id')->where('user_id',Auth::id())
+ 
+
+ ->orderBy('tasks.id','desc')->get();
+
+ $this->total_task_assigned_by_me_general= Task::where('added_by',Auth::id())->orderBy('tasks.id','desc')->get();
+
+
+
+ // total tasks general view end
+
+
+	    $this->activeWidgets = $this->widgets->filter(function ($value, $key) {
+	        return $value->status == '1';
+	    })->pluck('widget_name')->toArray();
 	    // Getting Attendance setting data
 
 	    if (request('start') && request('end') && !is_null($this->viewEventPermission) && $this->viewEventPermission != 'none') {
@@ -57,6 +199,8 @@ trait LeadDashboard
 	    ->first();
 	    $currentDate = now(global_setting()->timezone)->format('Y-m-d');
 	    $this->checkTodayHoliday = Holiday::where('date', $currentDate)->first();
+
+	    $this->event_filter = explode(',', user()->employeeDetails->calendar_view);
 	    
 	    if (request()->ajax()) {
 	        $html = view('dashboard.ajax.lead', $this->data)->render();

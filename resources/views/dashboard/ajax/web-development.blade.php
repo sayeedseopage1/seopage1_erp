@@ -24,33 +24,32 @@ $total_payment_release= App\Models\PMAssign::select('release_amount')->sum('rele
 $total_project_due= App\Models\Project::select('project_budget')->sum('project_budget'); $total_payment_due= $total_project_due -
 $total_payment_release; $project_managers= App\Models\User::where('role_id',4)->get(); 
 $lead_developer= App\Models\User::where('role_id',6)->get(); $developer= App\Models\User::where('role_id',5)->get();
- ?>
+?>
 
- <div class="card col-md-3 mb-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Payment Release Overview</h5></div>
- <div class="row mt-2">
-     <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
-         <x-cards.widget :title="__('Total Project Value (This Duration)')" :value="$project_amount_this_month .' USD'" icon="layer-group" />
-     </div>
+<div class="card col-md-3 mb-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Payment Release Overview</h5></div>
+<div class="row mt-2">
+    <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+        <x-cards.widget :title="__('Total Project Value (This Duration)')" :value="$project_amount_this_month .' USD'" icon="layer-group" />
+    </div>
 
-     <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
-         <x-cards.widget :title="__('Pymt. Rel. in Current Duration (21st – 30th)')" :value="$finish_project_count_this_month" icon="layer-group" />
-     </div>
+    <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+        <x-cards.widget :title="__('Pymt. Rel. in Current Duration (21st – 30th)')" :value="$finish_project_count_this_month" icon="layer-group" />
+    </div>
 
-     <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
-         <x-cards.widget :title="__('Total Amount Rel. in Current Duration (21st – 30th)')" :value="$finish_project_amount_this_month .' USD'" icon="layer-group" />
-     </div>
-     <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
-         <x-cards.widget :title="__('Amount Released (Previous Duration)')" :value="$project_amount_this_previous . ' USD'" icon="layer-group" />
-     </div>
+    <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+        <x-cards.widget :title="__('Total Amount Rel. in Current Duration (21st – 30th)')" :value="$finish_project_amount_this_month .' USD'" icon="layer-group" />
+    </div>
+    <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+        <x-cards.widget :title="__('Amount Released (Previous Duration)')" :value="$project_amount_this_previous . ' USD'" icon="layer-group" />
+    </div>
 
-     <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
-         <x-cards.widget :title="__('% of Total Amount Rel. Belongs to Current Duration')" :value="$percentage_of_project_complete_amount" icon="layer-group" />
-     </div>
-     <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
-         <x-cards.widget :title="__('% of Total Amount Rel. Belongs to Previous Duration')" :value="$percentage_of_project_complete_previous_amount" icon="layer-group" />
-     </div>
-
- </div>
+    <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+        <x-cards.widget :title="__('% of Total Amount Rel. Belongs to Current Duration')" :value="$percentage_of_project_complete_amount" icon="layer-group" />
+    </div>
+    <div class="col-xl-4 col-lg-6 col-md-6 mb-3">
+        <x-cards.widget :title="__('% of Total Amount Rel. Belongs to Previous Duration')" :value="$percentage_of_project_complete_previous_amount" icon="layer-group" />
+    </div>
+</div>
 
  <hr/>
 
@@ -697,7 +696,7 @@ Overview--}}
 </div>
 <hr />
 {{-- Leads And Deals Overview--}}
-<div class="row">
+{{-- <div class="row">
     <div class="col-sm-12 col-lg-6 mt-3">
         <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
             <div class="card col-md-6 mt-3 ml-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Active Leads Overview</h5></div>
@@ -788,7 +787,7 @@ Overview--}}
             </x-table>
         </x-cards.data>
     </div>
-</div>
+</div>-- }}
 <hr>
 
 <div class="card col-md-3 mb-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Team Overview</h5></div>

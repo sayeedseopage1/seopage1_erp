@@ -37,4 +37,5 @@ class Deal extends Model
     {
         return $this->belongsTo(User::class, 'client_id')->withoutGlobalScopes(['active']);
     }
+   
 }

@@ -16,7 +16,7 @@
                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Deadline Today (Assigned To Me)</h5>
                             <div class="d-flex justify-content-between">
                                 <a href="">
-                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">10
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">{{$today_deadline_task_assigned_to_me}}
                                         <!-- <span class="f-12 font-weight-normal text-lightest">Leads Created Today</span> -->
                                     </p>
                                 </a>

@@ -10,16 +10,16 @@ use \Carbon\Carbon;
 use App\Helper\Reply;
 use DB;
 
-trait DeveloperDashboard
+trait UxUiDashboard
 {
-    public function DeveloperDashboard()
+    public function UxUiDashboard()
     {
         if (request('mode') == 'today' && request()->ajax()) {
             $this->tasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->get();
             $this->todayDeadLineTasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->where('due_date', request('startDate'))->get();
             $this->todayStartTasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->where('start_date', request('startDate'))->get();
 
-            $html = view('dashboard.ajax.developerdashboard.today', $this->data)->render();
+            $html = view('dashboard.ajax.uxuidashboard.today', $this->data)->render();
 
             return Reply::dataOnly([
                 'status' => 'success', 
@@ -57,7 +57,7 @@ trait DeveloperDashboard
             $this->monthlyOverdue = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [$startMonth, $endMonth])->where('board_column_id', 7)->get();
             $this->monthlyUnderReview = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [$startMonth, $endMonth])->where('board_column_id', 6)->get();
 
-            $html = view('dashboard.ajax.developerdashboard.month', $this->data)->render();
+            $html = view('dashboard.ajax.uxuidashboard.month', $this->data)->render();
 
             return Reply::dataOnly([
                 'status' => 'success', 
@@ -76,7 +76,7 @@ trait DeveloperDashboard
             ->where(DB::raw('DATE(start_date)'), '<', $endDate)
             ->groupBy('tasks.id')
             ->get();
-            
+
             $this->yearlyPositiveRating = 0;
             $this->yearlyNegativeRating = 0;
 
@@ -93,7 +93,7 @@ trait DeveloperDashboard
             $this->yearlyOverdue = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [$startDate, $endDate])->where('board_column_id', 7)->get();
             $this->yearlyUnderReview = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [$startDate, $endDate])->where('board_column_id', 6)->get();
 
-            $html = view('dashboard.ajax.developerdashboard.general', $this->data)->render();
+            $html = view('dashboard.ajax.uxuidashboard.general', $this->data)->render();
 
             return Reply::dataOnly([
                 'status' => 'success', 
@@ -255,7 +255,7 @@ trait DeveloperDashboard
             $this->yearlyUnderReview = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [Carbon::now()->subMonths(12), Carbon::now()])->where('board_column_id', 6)->get();
 
             if (request()->ajax()) {
-                $html = view('dashboard.ajax.developerdashboard', $this->data)->render();
+                $html = view('dashboard.ajax.uxuidashboard', $this->data)->render();
                 
                 return Reply::dataOnly([
                     'status' => 'success', 
@@ -263,7 +263,7 @@ trait DeveloperDashboard
                     'title' => $this->pageTitle
                 ]);
             } else {
-                return view('dashboard.employee.developer', $this->data);
+                return view('dashboard.employee.uxuidashboard', $this->data);
             }
         }
     }
