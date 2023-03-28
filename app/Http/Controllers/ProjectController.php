@@ -2194,6 +2194,11 @@ if ($pm_count < 2) {
             $this->employees = '';
         }
 
+        $this->qcData = QCSubmission::where([
+            'project_id' => $id,
+            'milestone_id' => $milestone_id
+        ])->first();
+
         if (request()->ajax()) {
             $html = view('projects.ajax.q&c', $this->data)->render();
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
@@ -2463,47 +2468,44 @@ if ($pm_count < 2) {
     }
     public function ProjectSubmissionQC(Request $request)
     {
-      $project = new QCSubmission();
-      $project->milestone_id= $request->milestone_id;
-      $milestone_id= ProjectMilestone::where('id',$request->milestone_id)->first();
-      $project->project_id= $milestone_id->project_id;
-      $project->favicon= $request->favicon;
-      $project->webmail= $request->webmail;
-      $project->site_https= $request->site_https;
-      $project->contact_form= $request->contact_form;
-      $project->social_media= $request->social_media;
-      $project->login_link= $request->login_link;
-      $project->scroll_down= $request->scroll_down;
-      $project->lorem_text= $request->lorem_text;
-      $project->logical_issues= $request->logical_issues;
-      $project->loading_speed= $request->loading_speed;
-      $project->migration= $request->migration;
-      $project->mobile_speed= $request->mobile_speed;
-      $project->links_working= $request->links_working;
-      $project->backup_plugin= $request->backup_plugin;
-      $project->uptime_monitoring= $request->uptime_monitoring;
-      $project->final_backup= $request->final_backup;
-      $project->slogan= $request->slogan;
-      $project->agree= $request->agree;
-      $project->step_1= $request->step_1;
-      $project->status= 'pending';
-      $project->save();
-      $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
-      $milestone_update= ProjectMilestone::find($milestone->id);
-      $milestone_update->qc_status = 2;
-      $milestone_update->save();
-      $users= User::where('role_id',1)->get();
-      foreach ($users as $user) {
+        $project = new QCSubmission();
+        $project->milestone_id= $request->milestone_id;
+        $milestone_id= ProjectMilestone::where('id',$request->milestone_id)->first();
+        $project->project_id= $milestone_id->project_id;
+        $project->favicon= $request->favicon;
+        $project->webmail= $request->webmail;
+        $project->site_https= $request->site_https;
+        $project->contact_form= $request->contact_form;
+        $project->social_media= $request->social_media;
+        $project->login_link= $request->login_link;
+        $project->scroll_down= $request->scroll_down;
+        $project->lorem_text= $request->lorem_text;
+        $project->logical_issues= $request->logical_issues;
+        $project->loading_speed= $request->loading_speed;
+        $project->migration= $request->migration;
+        $project->mobile_speed= $request->mobile_speed;
+        $project->links_working= $request->links_working;
+        $project->backup_plugin= $request->backup_plugin;
+        $project->uptime_monitoring= $request->uptime_monitoring;
+        $project->final_backup= $request->final_backup;
+        $project->slogan= $request->slogan;
+        $project->agree= $request->agree;
+        $project->step_1= $request->step_1;
+        $project->status= 'pending';
+        $project->save();
+        $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
+        $milestone_update= ProjectMilestone::find($milestone->id);
+        $milestone_update->qc_status = 2;
+        $milestone_update->save();
+        $users= User::where('role_id',1)->get();
+        foreach ($users as $user) {
 
-      Notification::send($user, new QCSubmissionNotification($milestone));
-    }
+            Notification::send($user, new QCSubmissionNotification($milestone));
+        }
 
-      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
 
-      return redirect('/account/projects/'.$milestone->project_id.'?tab=milestones');
-
-
-
+        // return redirect('/account/projects/'.$milestone->project_id.'?tab=milestones');
     }
     public function ProjectQcSubmissionAccept(Request $request)
     {
