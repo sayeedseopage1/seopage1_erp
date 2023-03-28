@@ -9,6 +9,7 @@ use Auth;
 use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\TaskUser;
+use App\Models\Project;
 
 trait LeadDashboard
 {
@@ -34,6 +35,13 @@ trait LeadDashboard
 	   
 		->get();
 		$this->total_deadline_task_assigned_by_me= Task::where('due_date',Carbon::today())->where('added_by',Auth::id())->get();
+
+		$this->total_not_started_projects= Project::where('status','not started')->count();
+		$this->total_in_progress_projects= Project::where('status','in progress')->count();
+		$this->total_under_review_projects= Project::where('status','under review')->count();
+		$this->total_on_hold_projects= Project::where('status','on hold')->count();
+		$this->total_canceled_projects= Project::where('status','canceled')->count();
+		$this->total_finished_projects= Project::where('status','finished')->count();
 //dd($this->today_deadline_task_assigned_to_me);
 	    $this->activeWidgets = $this->widgets->filter(function ($value, $key) {
 	        return $value->status == '1';

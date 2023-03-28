@@ -382,7 +382,7 @@
 	                                <div class="d-flex">
 	                                    <a href="#">
 	                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-	                                            0
+	                                            {{$total_not_started_projects}}
 	                                            <span class="f-12 font-weight-normal text-lightest"></span>
 	                                        </p>
 	                                    </a>
@@ -400,7 +400,7 @@
 	                                <div class="d-flex">
 	                                    <a href="#">
 	                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-	                                            0
+	                                            {{$total_under_review_projects}}
 	                                            <span class="f-12 font-weight-normal text-lightest"></span>
 	                                        </p>
 	                                    </a>
@@ -418,7 +418,7 @@
 	                                <div class="d-flex">
 	                                    <a href="#">
 	                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-	                                            0
+	                                            {{$total_in_progress_projects}}
 	                                            <span class="f-12 font-weight-normal text-lightest"></span>
 	                                        </p>
 	                                    </a>
@@ -438,7 +438,7 @@
 	                                <div class="d-flex">
 	                                    <a href="#">
 	                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-	                                            0
+	                                            {{$total_on_hold_projects}}
 	                                            <span class="f-12 font-weight-normal text-lightest"></span>
 	                                        </p>
 	                                    </a>
@@ -456,7 +456,7 @@
 	                                <div class="d-flex">
 	                                    <a href="#">
 	                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-	                                            0
+	                                           {{$total_canceled_projects}}
 	                                            <span class="f-12 font-weight-normal text-lightest"></span>
 	                                        </p>
 	                                    </a>
@@ -474,7 +474,7 @@
 	                                <div class="d-flex">
 	                                    <a href="#">
 	                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-	                                            0
+	                                            {{$total_finished_projects}}
 	                                            <span class="f-12 font-weight-normal text-lightest"></span>
 	                                        </p>
 	                                    </a>
