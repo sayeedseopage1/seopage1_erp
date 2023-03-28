@@ -8,6 +8,7 @@ use App\Helper\Reply;
 use App\Http\Requests\Tasks\StoreTask;
 use App\Http\Requests\Tasks\UpdateTask;
 use App\Models\BaseModel;
+use App\Models\EmployeeDetails;
 use App\Models\Pinned;
 use App\Models\Project;
 use App\Models\ProjectMember;
@@ -20,6 +21,7 @@ use App\Models\TaskboardColumn;
 use App\Models\TaskCategory;
 use App\Models\TaskLabel;
 use App\Models\TaskLabelList;
+use App\Models\TaskReply;
 use App\Models\TaskUser;
 use App\Models\User;
 use App\Traits\ProjectProgress;
@@ -51,7 +53,11 @@ use Auth;
 use App\Models\ProjectDeliverable;
 use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
+
+use function Symfony\Component\Cache\Traits\select;
+
 use Validator;
+
 
 class TaskController extends AccountBaseController
 {
@@ -865,6 +871,17 @@ class TaskController extends AccountBaseController
         $this->viewTaskCommentPermission = user()->permission('view_task_comments');
         $this->viewTaskNotePermission = user()->permission('view_task_notes');
         $this->viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
+        $this->replys =DB::table('task_replies')
+            ->join('users','task_replies.user_id','=','users.id')
+            ->select('task_replies.*','users.name','users.image','users.updated_at')
+            ->get();
+//        dd($this->replys);
+
+//         $this->details = EmployeeDetails::where('add');
+//         dd($details);
+
+
+
 
         $this->task = Task::with(['boardColumn', 'project', 'users', 'label', 'approvedTimeLogs', 'approvedTimeLogs.user', 'approvedTimeLogs.activeBreak', 'comments', 'comments.user', 'subtasks.files', 'userActiveTimer',
             'files' => function ($q) use ($viewTaskFilePermission) {

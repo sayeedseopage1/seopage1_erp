@@ -8,6 +8,7 @@
 @endphp
 
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 <style>
     .file-action {
         visibility: hidden;
@@ -215,7 +216,8 @@
                             <textarea name="comment" id="descriptionComment" class="form-control"></textarea>
                             <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
                             <script>
-                                CKEDITOR.replace('comment');
+                                CKEDITOR.replace('comment',{
+                                    height: '100'});
                             </script>
                         </div>
                     </div>
@@ -246,161 +248,118 @@
     @endif
 
     <div class="d-flex flex-wrap justify-content-between p-20" id="comment-list">
+        <h5>{{ count($task->comments) }} Comment</h5>
+        <hr>
         @forelse ($task->comments as $comment)
-                        <div class="card w-100 rounded-0 border-0 comment">
-                            <div class="card-horizontal">
-                                <div class="card-img my-1 ml-0">
-                                    <img src="{{ $comment->user->image_url }}" alt="{{ mb_ucwords($comment->user->name) }}">
-                                </div>
-                                <div class="card-body border-0 pl-0 py-1">
-                                    <div class="d-flex flex-grow-1">
-                                        <h4 class="card-title f-15 f-w-500 text-dark mr-3">{{ mb_ucwords($comment->user->name) }}</h4>
-                                        <p class="card-date f-11 text-lightest mb-0">
+            <div class="comment-thread">
+                <!-- Comment 1 start -->
+                <details open class="comment" id="comment-1">
+                    <a href="#comment-1" class="comment-border-link">
+                        <span class="sr-only">Jump to comment-1</span>
+                    </a>
+                    <summary>
+                        <div class="comment-heading">
+                            <div class="comment-voting" style="display: flex; justify-content: center; align-items: center;">
+                                <span style="font-size: 27px;"><i class="bi bi-grip-vertical"></i></span>
+                            </div>
+                            <div class="comment-info">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="{{ $comment->user->image_url }}" alt="{{ mb_ucwords($comment->user->name) }}" class="img-thumbnail rounded-circle" height="50" width="50">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{route('employees.show',$comment->user_id)}}" class="comment-author">{{ mb_ucwords($comment->user->name) }}</a>
+                                        <p style="width: 103%">
                                             {{ $comment->created_at->timezone(global_setting()->timezone)->format(global_setting()->date_format . ' ' . global_setting()->time_format) }}
                                         </p>
-                                        <div class="dropdown ml-auto comment-action">
-                                            <button class="btn btn-lg f-14 p-0 text-lightest text-capitalize rounded  dropdown-toggle"
-                                                type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fa fa-ellipsis-h"></i>
-                                            </button>
-
-                                            <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
-                                                aria-labelledby="dropdownMenuLink" tabindex="0">
-                                                @if ($editTaskCommentPermission == 'all' || ($editTaskCommentPermission == 'added' && $comment->added_by == user()->id))
-                                                    <a class="cursor-pointer d-block text-dark-grey f-13 py-3 px-3 edit-comment"
-                                                        href="javascript:;" data-row-id="{{ $comment->id }}">@lang('app.edit')</a>
-                                                @endif
-
-                                                @if ($deleteTaskCommentPermission == 'all' || ($deleteTaskCommentPermission == 'added' && $comment->added_by == user()->id))
-                                                    <a class="cursor-pointer d-block text-dark-grey f-13 pb-3 px-3 delete-comment"
-                                                        data-row-id="{{ $comment->id }}" href="javascript:;">@lang('app.delete')</a>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-text f-14 text-dark-grey text-justify ql-editor">{!! ucfirst($comment->comment) !!}
                                     </div>
                                 </div>
                             </div>
                         </div>
-{{--            <div class="comment-thread">--}}
-{{--                <!-- Comment 1 start -->--}}
-{{--                <details open class="comment" id="comment-1">--}}
-{{--                    <a href="#comment-1" class="comment-border-link">--}}
-{{--                        <span class="sr-only">Jump to comment-1</span>--}}
-{{--                    </a>--}}
-{{--                    <summary>--}}
-{{--                        <div class="comment-heading">--}}
-{{--                            <div class="comment-voting">--}}
-{{--                                <button type="button">--}}
-{{--                                    <span aria-hidden="true">&#9650;</span>--}}
-{{--                                    <span class="sr-only">Vote up</span>--}}
-{{--                                </button>--}}
-{{--                                <button type="button">--}}
-{{--                                    <span aria-hidden="true">&#9660;</span>--}}
-{{--                                    <span class="sr-only">Vote down</span>--}}
-{{--                                </button>--}}
-{{--                            </div>--}}
-{{--                            <div class="comment-info">--}}
-{{--                                <div class="row">--}}
-{{--                                    <div class="col-md-4">--}}
-{{--                                        <img src="{{ $comment->user->image_url }}" alt="{{ mb_ucwords($comment->user->name) }}" class="img-thumbnail rounded-circle" height="50" width="50">--}}
-{{--                                    </div>--}}
-{{--                                    <div class="col-md-8">--}}
-{{--                                        <a href="#" class="comment-author">{{ mb_ucwords($comment->user->name) }}</a>--}}
-{{--                                        <p style="width: 103%">--}}
-{{--                                            {{ $comment->created_at->timezone(global_setting()->timezone)->format(global_setting()->date_format . ' ' . global_setting()->time_format) }}--}}
-{{--                                        </p>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </summary>--}}
+                    </summary>
 
-{{--                    <div class="comment-body">--}}
-{{--                        <p>--}}
-{{--                            {!! ucfirst($comment->comment) !!}--}}
-{{--                        </p>--}}
-{{--                        <button type="button" data-toggle="reply-form" data-target="comment-1-reply-form" class="btn btn-primary mb-3 btn-sm">Reply</button>--}}
+                    <div class="comment-body">
+                        <p>
+                            {!! ucfirst($comment->comment) !!}
+                        </p>
+                        <a href="javascript::void(0);" onclick="reply(this)" data-toggle="reply-form" data-target="comment-1-reply-form" class="btn" style="color: #0a6fe2" data-Replyid="{{$comment->id}}">Reply</a>
+                        <!-- Reply form start -->
+                        <div style="display: none;" id="replyDiv">
+                            <form method="POST" class="reply-form d-none" id="comment-1-reply-form" action="{{route('taskReply.store')}}">
+                                @csrf
+                                <input type="hidden" name="replyId" id="replyId">
+                                <textarea name="reply" id="replyComment" class="form-control"></textarea>
+                                <script>
+                                    CKEDITOR.replace('reply',{
+                                        height: '100'
+                                    });
+                                </script>
 
-{{--                        <!-- Reply form start -->--}}
-{{--                        <form method="POST" class="reply-form d-none" id="comment-1-reply-form">--}}
-{{--                            @csrf--}}
-{{--                            <textarea name="reply" id="replyComment" class="form-control"></textarea>--}}
-{{--                            <script>--}}
-{{--                                CKEDITOR.replace('reply',{--}}
-{{--                                    height: '100'--}}
-{{--                                });--}}
-{{--                            </script>--}}
+                                <button type="submit" class="btn btn-primary mt-2 btn-sm" id="submitReply"><i class="fa fa-location-arrow mr-1"></i>Submit</button>
+                                <button type="button" data-toggle="reply-form" data-target="comment-1-reply-form" class="btn btn-primary mt-2 btn-sm">Cancel</button>
+                            </form>
+                        </div>
+                        <!-- Reply form end -->
+                    </div>
+                    @foreach($replys as $reply)
 
-{{--                            <button type="button" class="btn btn-primary mt-2 btn-sm" id="submitReply"><i class="fa fa-location-arrow mr-1"></i>Submit</button>--}}
-{{--                            <button type="button" data-toggle="reply-form" data-target="comment-1-reply-form" class="btn btn-primary mt-2 btn-sm">Cancel</button>--}}
-{{--                        </form>--}}
-{{--                        <!-- Reply form end -->--}}
-{{--                    </div>--}}
+                    <div class="replies">
+                        <!-- Comment 2 start -->
+                        <details open class="comment" id="comment-1">
+                            <a href="#comment-1" class="comment-border-link">
+                                <span class="sr-only">Jump to comment-1</span>
+                            </a>
+                            <summary>
+                                @if($reply->comment_id==$comment->id)
+                                <div class="comment-heading">
+                                    <div class="comment-voting" style="display: flex; justify-content: center; align-items: center;">
+                                        <span style="font-size: 27px; margin-right: -2px;"><i class="bi bi-grip-vertical"></i></span>
+                                    </div>
+                                    <div class="comment-info">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <img src="{{asset('/user-uploads/avatar/'.$reply->image)}}" alt="{{ mb_ucwords($reply->name) }}" class="img-thumbnail rounded-circle" height="50" width="50">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <a href="{{route('employees.show',$reply->user_id)}}" class="comment-author">{{ mb_ucwords($reply->name) }}</a>
+                                                <p style="width: 103%">
+                                                    {{date("d-m-Y h:i a",strtotime($reply->updated_at))}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+                            </summary>
 
-{{--                    <div class="replies">--}}
-{{--                        <!-- Comment 2 start -->--}}
-{{--                        <details open class="comment" id="comment-2">--}}
-{{--                            <a href="#comment-2" class="comment-border-link">--}}
-{{--                                <span class="sr-only">Jump to comment-2</span>--}}
-{{--                            </a>--}}
-{{--                            <summary>--}}
-{{--                                <div class="comment-heading">--}}
-{{--                                    <div class="comment-voting">--}}
-{{--                                        <button type="button">--}}
-{{--                                            <span aria-hidden="true">&#9650;</span>--}}
-{{--                                            <span class="sr-only">Vote up</span>--}}
-{{--                                        </button>--}}
-{{--                                        <button type="button">--}}
-{{--                                            <span aria-hidden="true">&#9660;</span>--}}
-{{--                                            <span class="sr-only">Vote down</span>--}}
-{{--                                        </button>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="comment-info">--}}
-{{--                                        <div class="row">--}}
-{{--                                            <div class="col-md-4">--}}
-{{--                                                <img src="{{ $comment->user->image_url }}" alt="{{ mb_ucwords($comment->user->name) }}" class="img-thumbnail rounded-circle" height="50" width="50">--}}
-{{--                                            </div>--}}
-{{--                                            <div class="col-md-8">--}}
-{{--                                                <a href="#" class="comment-author">{{ mb_ucwords($comment->user->name) }}</a>--}}
-{{--                                                <p style="width: 103%">--}}
-{{--                                                    {{ $comment->created_at->timezone(global_setting()->timezone)->format(global_setting()->date_format . ' ' . global_setting()->time_format) }}--}}
-{{--                                                </p>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </summary>--}}
-
-{{--                            <div class="comment-body">--}}
-{{--                                <p>--}}
-{{--                                    {!! ucfirst($comment->comment) !!}--}}
-{{--                                </p>--}}
-{{--                                <button type="button" data-toggle="reply-form" data-target="comment-2-reply-form" class="btn btn-primary mb-3 btn-sm">Reply</button>--}}
-
-{{--                                <!-- Reply form start -->--}}
-{{--                                <form method="POST" class="reply-form d-none" id="comment-2-reply-form">--}}
-{{--                                    <textarea name="reply2" id="replyComment2" class="form-control"></textarea>--}}
-{{--                                    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>--}}
-{{--                                    <script>--}}
-{{--                                        CKEDITOR.replace('reply2',{--}}
-{{--                                            height: '100'--}}
-{{--                                        });--}}
-{{--                                    </script>--}}
-{{--                                    <button type="button" class="btn btn-primary mt-2 btn-sm"><i class="fa fa-location-arrow mr-1"></i>Submit</button>--}}
-{{--                                    <button type="button" data-toggle="reply-form" data-target="comment-2-reply-form" class="btn btn-primary mt-2 btn-sm">Cancel</button>--}}
-{{--                                </form>--}}
-{{--                                <!-- Reply form end -->--}}
-{{--                            </div>--}}
-{{--                        </details>--}}
-{{--                        <!-- Comment 2 end -->--}}
-
-{{--                        <a href="#load-more">Load more replies</a>--}}
-{{--                    </div>--}}
-{{--                </details>--}}
-{{--                <!-- Comment 1 end -->--}}
-{{--            </div>--}}
+                                <div class="comment-body">
+                                    @if($reply->comment_id==$comment->id)
+                                    <p>
+                                        {!! ucfirst($reply->reply) !!}
+                                    </p>
+                                <a href="javascript::void(0);" onclick="reply(this)" data-toggle="reply-form" data-target="comment-1-reply-form" class="btn" style="color: #0a6fe2" data-Replyid="{{$comment->id}}">Reply</a>
+                                @endif
+                                <!-- Reply form start -->
+                                <form method="POST" class="reply-form d-none" id="comment-2-reply-form">
+                                    <textarea name="reply2" id="replyComment2" class="form-control"></textarea>
+                                    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                                    <script>
+                                        CKEDITOR.replace('reply2',{
+                                            height: '100'
+                                        });
+                                    </script>
+                                    <button type="button" class="btn btn-primary mt-2 btn-sm"><i class="fa fa-location-arrow mr-1"></i>Submit</button>
+                                    <button type="button" data-toggle="reply-form" data-target="comment-2-reply-form" class="btn btn-primary mt-2 btn-sm">Cancel</button>
+                                </form>
+                                <!-- Reply form end -->
+                            </div>
+                        </details>
+                        <!-- Comment 2 end -->
+                    </div>
+                    @endforeach
+                </details>
+                <!-- Comment 1 end -->
+            </div>
         @empty
             <div class="align-items-center d-flex flex-column text-lightest p-20 w-100">
                 <i class="fa fa-comment-alt f-21 w-100"></i>
@@ -456,73 +415,83 @@
     </div>
 
 </div>
-<style>
-
-</style>
 <!-- TAB CONTENT END -->
 <!-- REPLY START -->
-{{--<script>--}}
-{{--    document.addEventListener(--}}
-{{--        "click",--}}
-{{--        function(event) {--}}
-{{--            var target = event.target;--}}
-{{--            var replyForm;--}}
-{{--            if (target.matches("[data-toggle='reply-form']")) {--}}
-{{--                replyForm = document.getElementById(target.getAttribute("data-target"));--}}
-{{--                replyForm.classList.toggle("d-none");--}}
-{{--            }--}}
-{{--        },--}}
-{{--        false--}}
-{{--    );--}}
-{{--</script>--}}
-{{--<script>--}}
-{{--    var comment_id = '';--}}
-{{--    $('#submitReply').click(function(e){--}}
-{{--        // alert('ok');--}}
-{{--        e.preventDefault();--}}
-{{--        // $('#submitReply').attr("disabled", true);--}}
-{{--        // $('#submitReply').html("Sending...");--}}
-{{--        var reply = CKEDITOR.instances.replyComment.getData();--}}
-{{--        var data= {--}}
-{{--            '_token': "{{ csrf_token() }}",--}}
-{{--            'reply': reply,--}}
-{{--            'comment_id': comment_id,--}}
-{{--            taskId: '{{ $task->id }}'--}}
-{{--        }--}}
-{{--        console.log(data);--}}
-{{--        $.ajaxSetup({--}}
-{{--            headers: {--}}
-{{--                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
-{{--            }--}}
-{{--        });--}}
-{{--        $.ajax({--}}
-{{--            type: "POST",--}}
-{{--            url: "{{ route('taskReply.store') }}",--}}
-{{--            data: data,--}}
-{{--            dataType: "json",--}}
-{{--            success: function (response) {--}}
-{{--                // console.log(response.message);--}}
-{{--                $('#comment-1-reply-form').trigger("reset");--}}
-{{--                // $('#replyComment').trigger("reset");--}}
-{{--                // window.location.href=response.redirectUrl;--}}
-{{--                // $('#submitButton').attr("disabled", false);--}}
-{{--                // $('#submitButton').html("Submit");--}}
-{{--                // toastr.success('Submitted Successfully');--}}
+<script>
+    document.addEventListener(
+        "click",
+        function(event) {
+            var target = event.target;
+            var replyForm;
+            if (target.matches("[data-toggle='reply-form']")) {
+                replyForm = document.getElementById(target.getAttribute("data-target"));
+                replyForm.classList.toggle("d-none");
+            }
+        },
+        false
+    );
+    function reply(caller) {
+        var reply_id =  document.getElementById('replyId').value=$(caller).attr('data-Replyid');
+        $('#replyDiv').insertAfter($(caller));
+        $('#replyDiv').show();
+    }
+</script>
+<script>
+    $('#submitReply').click(function(e){
+        // alert('ok');
+        e.preventDefault();
+        $('#submitReply').attr("disabled", true);
+        $('#submitReply').html("Sending...");
+        var reply = CKEDITOR.instances.replyComment.getData();
+        var reply_id =  document.getElementById('replyId').value;
+        // console.log(reply_id);
+        var data= {
+            '_token': "{{ csrf_token() }}",
+            'reply': reply,
+            'user_id': '{{Auth::user()->id}}',
+            'added_by': '{{$task->added_by}}',
+            'last_updated_by': '{{$task->added_by}}',
+            taskId: '{{ $task->id }}',
+            'reply_id': reply_id,
+        }
+        // console.log(data);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "{{ route('taskReply.store') }}",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                // console.log(response.status);
+                if(response.status==400){
+                    $('#comment-1-reply-form').trigger("reset");
+                    $('#replyComment').text('');
+                    window.location.reload();
+                }
+                // $('#replyComment').trigger("reset");
+                // window.location.href=response.redirectUrl;
+                // $('#submitButton').attr("disabled", false);
+                // $('#submitButton').html("Submit");
+                // toastr.success('Submitted Successfully');
 
-{{--            },--}}
-{{--            error: function(error) {--}}
-{{--                // console.log(response);--}}
-{{--                // if(error.responseJSON.errors.qc_protocol){--}}
-{{--                //     $('#qc_protocolError').text(error.responseJSON.errors.qc_protocol);--}}
-{{--                // }else{--}}
-{{--                //     $('#qc_protocolError').text('');--}}
-{{--                // }--}}
-{{--                // $('#submitButton').attr("disabled", false);--}}
-{{--                // $('#submitButton').html("Submit");--}}
-{{--            }--}}
-{{--        });--}}
-{{--    });--}}
-{{--</script>--}}
+            },
+            error: function(error) {
+                // console.log(response);
+                // if(error.responseJSON.errors.qc_protocol){
+                //     $('#qc_protocolError').text(error.responseJSON.errors.qc_protocol);
+                // }else{
+                //     $('#qc_protocolError').text('');
+                // }
+                // $('#submitButton').attr("disabled", false);
+                // $('#submitButton').html("Submit");
+            }
+        });
+    });
+</script>
 <!-- REPLY END -->
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
@@ -618,10 +587,10 @@
                 success: function(response) {
                     // console.log(response);
                     if (response.status == "success") {
-                        // comment_id ='asd';
                         $('#comment-list').html(response.view);
                         CKEDITOR.instances.descriptionComment.getData();
                         $('#descriptionComment').val('');
+                        window.location.reload();
                     }
 
                 }
