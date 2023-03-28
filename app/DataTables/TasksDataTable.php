@@ -187,20 +187,40 @@ class TasksDataTable extends BaseDataTable
 
             $datatables->addColumn('timer_action', function ($row) {
 
-                $time_log= ProjectTimeLog::where('project_id',$row->project_id)->where('end_time',null)->count();
-                $task_count= Task::where('project_id',$row->project_id)->count();
+                $subtasks = Subtask::where('task_id', $row->id)->get();
+                $total_count = 0;
+                
+                foreach ($subtasks as $subtask) {
+                    $task = Task::where('subtask_id', $subtask->id)->first();
+                    $count = ProjectTimeLog::where('task_id', $task->id)
+                        ->where('start_time', '!=', null)
+                        ->where('end_time', null)
+                        ->count();
+                    $total_count += $count;
+                }
+                $parent_task_check= ProjectTimeLog::where('task_id',$row->id)->where('start_time','!=',null)->where('end_time',null)->count();
+                if($parent_task_check > 0)
+                {
+                    $total= $total_count + 1;
+                }else 
+                {
+                    $total= $total_count;
+                }
+
+                // $time_log= ProjectTimeLog::where('project_id',$row->project_id)->where('end_time',null)->count();
+                // $task_count= Task::where('project_id',$row->project_id)->count();
                 
 
                 $timer= '';
-                if($time_log > 0)
+                if($total > 0)
                 {
-                    if ($time_log == 1) {
+                    if ($total == 1) {
                         $count= 'task';
                     } else {
                         $count = 'tasks';
                     }
                     
-                    $timer .= '<i class="fa-solid fa-circle-play" style="color:green;"></i> ('.$time_log.' active '.$count.')';
+                    $timer .= '<i class="fa-solid fa-circle-play" style="color:green;"></i> ('.$total.' active '.$count.')';
 
                 }else 
                 {

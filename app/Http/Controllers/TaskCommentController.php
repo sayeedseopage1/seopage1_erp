@@ -6,7 +6,9 @@ use App\Helper\Reply;
 use App\Http\Requests\Tasks\StoreTaskComment;
 use App\Models\Task;
 use App\Models\TaskComment;
+use App\Models\TaskReply;
 use App\Notifications\TaskCommentNotification;
+use Illuminate\Http\Request;
 use Notification;
 use Auth;
 use App\Models\TaskUser;
@@ -48,6 +50,7 @@ class TaskCommentController extends AccountBaseController
         $comment->task_id = $request->taskId;
         $comment->user_id = user()->id;
         $comment->save();
+//        dd($comment);
 
         $this->comments = TaskComment::with('user')->where('task_id', $request->taskId)->orderBy('id', 'desc')->get();
         $view = view('tasks.comments.show', $this->data)->render();
@@ -61,7 +64,8 @@ class TaskCommentController extends AccountBaseController
         // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
         Notification::send($user, new TaskCommentNotification($task,$sender));
       }
-     
+
+
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
 
     }
@@ -116,5 +120,23 @@ class TaskCommentController extends AccountBaseController
 
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
     }
+
+//    COMMENT REPLY SYSTEM START
+        public function replyStore(Request $request)
+        {
+//            dd($request->all());
+            $reply = new TaskReply();
+            $reply->reply = $request->reply;
+            $reply->comment_id = $request->reply_id;
+            $reply->user_id = $request->user_id;
+            $reply->task_id = $request->taskId;
+            $reply->added_by = $request->added_by;
+            $reply->last_updated_by = $request->last_updated_by;
+            $reply->save();
+            return response()->json([
+                'status'=>400,
+            ]);
+        }
+//    COMMENT REPLY SYSTEM END
 
 }

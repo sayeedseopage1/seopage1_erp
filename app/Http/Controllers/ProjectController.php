@@ -2279,12 +2279,12 @@ if ($pm_count < 2) {
         ], [
             'qc_protocol.required' => 'This field is required. Please select Yes or No!!',
             'login_information.required' => 'This field is required. You have mark this checkbox!!',
-            'login_url.required' => 'This field is required. Please input the login URL here!!',
-            'login.required' => 'This field is required. Please input the user id or email here!!',
-            'password.required' => 'This field is required. Please input the password here!!',
-            'screenshot.required' => 'This field is required. Please take a screenshot when you are logged in and input the screenshot link here!!',
+            'login_url' => 'This field is required. Please input the login URL here!!',
+            'login' => 'This field is required. Please input the user id or email here!!',
+            'password' => 'This field is required. Please input the password here!!',
+            'screenshot' => 'This field is required. Please take a screenshot when you are logged in and input the screenshot link here!!',
             'drive_information.required' => 'This field is required. Please confirm that you have uploaded the backup in Google Drive!!',
-            'google_link.required' => 'This field is required. Please input the Google Drive link here!!',
+            'google_link' => 'This field is required. Please input the Google Drive link here!!',
             'rating.required' => 'This field is required. Please give rating to the technical team!!',
             'requirements.required' => 'This field is required. Please give rating to the sales team for defining requirements!!',
             'comments.required' => 'Comment is required. Please write you opinion about technical team!!',
@@ -2295,8 +2295,8 @@ if ($pm_count < 2) {
             'notify.required' => 'This field is required. Please select Yes or No!!',
             'actual_yes.required' => 'This field is required. Please select Yes or No!!',
             'price.required' => 'This field is required. Please give rating to the sales team for defining price!!',
-            'actual_link.required' => 'This field is required. Please input the actual site link here!!',
-            'dummy_link.required' => 'This field is required. Please input the Dummy or Test site link!!',
+            'actual_link' => 'This field is required. Please input the actual site link here!!',
+            'dummy_link' => 'This field is required. Please input the Dummy or Test site link!!',
         ]);
 //      dd($request);
       $milestone= new ProjectSubmission();
@@ -2525,9 +2525,9 @@ if ($pm_count < 2) {
 
     public function ProjectQcSubmissionAccept(Request $request)
     {
-    //  dd($request);
+//      dd($request->all());
       $project= QcSubmission::find($request->id);
-      $project->admin_comment= $request->admin_comment;
+      $project->admin_comment= $request->admin_comment_qc;
       if ($request->deny != null) {
       $project->status= 'revision';
     }else {
@@ -2669,6 +2669,10 @@ if ($pm_count < 2) {
         $project->authorization_status = 'approved';
         $project->deliverable_authorization= 1;
         $project->save();
+        $pm_project= PMProject::where('project_id',$project->id)->first();
+        $pm_project_update= PMProject::find($pm_project->id);
+        $pm_project_update->deliverable_status = 1;
+        $pm_project_update->save();
 
 
 

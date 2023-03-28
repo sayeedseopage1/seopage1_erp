@@ -699,6 +699,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
             Route::resource('taskComment', TaskCommentController::class);
             Route::resource('task-note', TaskNoteController::class);
+            Route::post('task-reply',[TaskCommentController::class, 'replyStore'])->name('taskReply.store');
 
             // task files routes
             Route::get('task-files/download/{id}', [TaskFileController::class, 'download'])->name('task_files.download');
@@ -988,7 +989,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('report_issues', ReportIssueController::class);
     Route::post('/report-issue/status-change/', [ReportIssueController::class, 'StatusChange'])->name('report-issue-status');
 
-    // Software Development Project 
+    // Software Development Project
 
 
     Route::post('software_projects/apply-quick-action', [SoftwareProjectController::class, 'applyQuickAction'])->name('software_projects.apply_quick_action');

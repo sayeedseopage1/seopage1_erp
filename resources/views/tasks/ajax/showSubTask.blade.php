@@ -8,6 +8,7 @@
 				<x-table class="border-0 pb-3 admin-dash-table table-hover">
 					<x-slot name="thead">
 						<th scope="col">Task name</th>
+						<th scope="col">Timer</th>
 						<th scope="col">Parent task</th>
 						<th scope="col">Client Name</th>
 						<th scope="col">Project Name</th>
@@ -26,15 +27,28 @@
 						$value= App\Models\Task::where('subtask_id',$value2->id)->first();
 					@endphp
 					<tr id="row-{{ $value->id }}">
-						<td><a href="{{route('tasks.show', $value->id)}}">{{$value->heading}}</a></td>
-						<td><a href="{{route('tasks.show', $task->id)}}">{{$task->heading}}</a></td>
-						<td><a href="{{route('clients.show', $project->client->id)}}">{{$project->client->name}}</a></td>
-						<td><a href="{{route('projects.show', $value->project->id)}}">{{$project->project_name}}</a></td>
+						<td><a class="openRightModal" title="{{$value->heading}}" href="{{route('tasks.show', $value->id)}}">{{Str::limit($value->heading,30)}}</a></td>
+						<td>
+							@php
+							$timer_check= App\Models\ProjectTimeLog::where('task_id',$value->id)->where('start_time','!=',null)->where('end_time',null)->count();
+							@endphp
+							@if($timer_check > 0)
+							<i class="fa-solid fa-circle-play" style="color:green;"></i> Active
+							@else
+							<i class="fa-solid fa-circle-stop" style="color:red;"></i> Inactive
+
+							@endif
+
+
+						</td>
+						<td><a class="openRightModal" title="{{$task->heading}}" href="{{route('tasks.show', $task->id)}}">{{Str::limit($task->heading,30)}}</a></td>
+						<td><a class="openRightModal" href="{{route('clients.show', $project->client->id)}}">{{$project->client->name}}</a></td>
+						<td><a class="openRightModal" title="{{$project->project_name}}" href="{{route('projects.show', $value->project->id)}}">{{Str::limit($project->project_name,30)}}</a></td>
 						@php
 							$assignedTo = \App\Models\TaskUser::where('task_id', $value->id)->first();
 						@endphp
-						<td><a href="{{route('employees.show', $assignedTo->user->id)}}">{{$assignedTo->user->name}}</a></td>
-						<td><a href="{{route('employees.show', $value->addedByUser->id)}}">{{$value->addedByUser->name}}</a></td>
+						<td><a class="openRightModal" href="{{route('employees.show', $assignedTo->user->id)}}">{{$assignedTo->user->name}}</a></td>
+						<td><a class="openRightModal" href="{{route('employees.show', $value->addedByUser->id)}}">{{$value->addedByUser->name}}</a></td>
 						<td>{{$value->start_date->format('Y-m-d')}}</td>
 						<td>{{$value->due_date->format('Y-m-d')}}</td>
 						<td>{{$task->estimate_hours.' hours '.$task->estimate_minutes.' minutes'}}</td>
@@ -91,10 +105,10 @@
 			                </div>
 						</td>
 						<td>
-							<a href="{{route('tasks.show', $value->id)}}" class="text-darkest-grey">
+							<a class="openRightModal" href="{{route('tasks.show', $value->id)}}" class="text-darkest-grey">
 								<i class="fa fa-eye fa-2x"></i>
 							</a>
-							<a href="{{route('tasks.edit', $value->id)}}" class="text-darkest-grey">
+							<a class="openRightModal" href="{{route('tasks.edit', $value->id)}}" class="text-darkest-grey">
 								<i class="fas fa-edit fa-2x"></i>
 							</a>
 						</td>
