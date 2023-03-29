@@ -2468,7 +2468,15 @@ if ($pm_count < 2) {
     }
     public function ProjectSubmissionQC(Request $request)
     {
-        $project = new QCSubmission();
+        $project = QCSubmission::where([
+            'milestone_id' => $request->milestone_id,
+            'project_id' => 10000000,
+        ])->first();
+        
+        if (!$project) {
+            $project = new QCSubmission();
+        }
+
         $project->milestone_id= $request->milestone_id;
         $milestone_id= ProjectMilestone::where('id',$request->milestone_id)->first();
         $project->project_id= $milestone_id->project_id;
@@ -2493,20 +2501,28 @@ if ($pm_count < 2) {
         $project->step_1= $request->step_1;
         $project->status= 'pending';
         $project->save();
+
         $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
         $milestone_update= ProjectMilestone::find($milestone->id);
         $milestone_update->qc_status = 2;
         $milestone_update->save();
-        $users= User::where('role_id',1)->get();
-        foreach ($users as $user) {
 
-            Notification::send($user, new QCSubmissionNotification($milestone));
+        if (!is_null($project->status) && $project->status == 'pending') {
+            Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+            return redirect()->back();
+        } else {
+            $users= User::where('role_id',1)->get();
+            foreach ($users as $user) {
+
+                Notification::send($user, new QCSubmissionNotification($milestone));
+            }
+
+            Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+
+            return redirect('/account/projects/'.$milestone->project_id.'?tab=milestones');
         }
-
-        Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-
-        // return redirect('/account/projects/'.$milestone->project_id.'?tab=milestones');
     }
+
     public function ProjectQcSubmissionAccept(Request $request)
     {
 //      dd($request->all());
