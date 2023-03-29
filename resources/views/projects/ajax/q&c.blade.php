@@ -339,19 +339,11 @@
     <div class="row">
         <div class="col-md-8 offset-2" style="overflow:hidden;padding:20px">
 
-            <!-- <div class="progress">
-                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" >
-                </div>
-                <span style="text-align:center">Completed: 0%</span>
-            </div> -->
-
-
             <div class="progress">
                 <div class="progress-bar progress-bar-success progress-bar-striped active" style="width: 0%;">
                     <div class="progress-value">0%</div>
                 </div>
             </div>
-
 
             <form name="demo" id="demo" class="myBook" action="{{route('submit-qc-form')}}" method="post">
                 @csrf
@@ -767,14 +759,7 @@
                 <!-- conditions -->
 
                 <section class="page" id="newsp12023">
-
                     <h4 style="text-align: center;"> Terms of Service</h4> <br/>
-
-                    <!-- <label class="radio-inline">
-                        <input type="checkbox" id="ts" name="ts" value="1" required>
-                        <label for="ts"> I agree</label>
-                    </label> -->
-
                     <div class="newitem" id="newbts">
                         <label class="rad-label">
                             <input type="checkbox" class="rad-input" name="agree" id="ts" name="ts" value="1" required>
@@ -789,435 +774,438 @@
                     <button type="submit" class="page-next btn btn-success sp1next" id="sendForm">Complete</button>
                 </section>
                 @else
-                <section class="sp1step">
-                    <h4 class="text-center" id="far"> Step – 01: Complete These Checklists Before Migration</h4> <br>
-                    <p> Did you check the site is loading with https:// or not? If not, please add SSL and confirm. </p>
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="site_https" value="1" @checked(!is_null($qcData->site_https) && $qcData->site_https == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="site_https" value="0" @checked(!is_null($qcData->site_https) && $qcData->site_https == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <div id="site-https-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
-                    <p> Did you check the site is loading with favicon or not? If not, please add and confirm.</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="favicon" value="1" @checked(!is_null($qcData->favicon) && $qcData->favicon == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="favicon" value="0" @checked(!is_null($qcData->favicon) && $qcData->favicon == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="favicon-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
-                    <p> Did you check whether the client was using web mails or not? If yes, please confirm that the webmail is working perfectly.</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="webmail" value="1" @checked(!is_null($qcData->webmail) && $qcData->webmail == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="webmail" value="0" @checked(!is_null($qcData->webmail) && $qcData->webmail == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="webmail-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
-                    <p> Did you check whether the contact forms are working properly? If not, please add your own email and test that it's working properly with captcha. After testing, add client's email.</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="contact_form" value="1" @checked(!is_null($qcData->contact_form) && $qcData->contact_form == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="contact_form" value="0" @checked(!is_null($qcData->contact_form) && $qcData->contact_form == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="contact-form-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
-                    <p>Did you check the social media links are working perfectly? If not, please check that those links are working perfectly and confirm.</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="social_media" value="1" @checked(!is_null($qcData->social_media) && $qcData->social_media == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="social_media" value="0" @checked(!is_null($qcData->social_media) && $qcData->social_media == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="social-media-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-
-                <section class="sp1step">
-                    <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
-                    <p>Did you check whether the login, register, other top bar links, and footer links are working properly or not? If not, please fix it and confirm</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="login_link" value="1" @checked(!is_null($qcData->login_link) && $qcData->login_link == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="login_link" value="0" @checked(!is_null($qcData->login_link) && $qcData->login_link == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="login-link-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
-                    <p>Visit the website and scroll down from the top to bottom for all main pages like home, about, service, product page, product category page and confirm that images and the sections are aligned properly.</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="scroll_down" value="1" @checked(!is_null($qcData->scroll_down) && $qcData->scroll_down == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="scroll_down" value="0" @checked(!is_null($qcData->scroll_down) && $qcData->scroll_down == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="scroll-down-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
-                    <p>Did you check whether there is any lorem ipsum text or not? If not, please fix them. If agreement was to keep lorem ipsum text, keep them as agreement says.</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="lorem_text" value="1" @checked(!is_null($qcData->lorem_text) && $qcData->lorem_text == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="lorem_text" value="0" @checked(!is_null($qcData->lorem_text) && $qcData->lorem_text == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="lorem-text-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
-                    <p>Did you check if there are any logical issues like need attention or not? If not checked, please check for issues and fix them. Example Issue (In this case, this form field will allow registration from people whose credit card will expire in a few months (4 months). Nobody else will be able to register/reserve a vehicle. For example, I personally have a few credit cards and the earliest expiration date is in 2024. So if I want to reserve a vehicle here, I can’t because there is no provision to pick a year after 2022. Look for such logical issues on the site, specially in the sections where there are functionalities. Screenshot: <a href="https://prnt.sc/ZCOCTbJiQorn" target="_blank">https://prnt.sc/ZCOCTbJiQorn</a></p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="logical_issues" value="1" @checked(!is_null($qcData->logical_issues) && $qcData->logical_issues == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="logical_issues" value="0" @checked(!is_null($qcData->logical_issues) && $qcData->logical_issues == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="logical-issues-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
-                    <p>Did you checked the site's loading speed? If not, run test on GTmetrix and make sure the score is more than 55 and check Pingdom tool to check the page size. Ensure that the site meet our highest standard</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="loading_speed" value="1" @checked(!is_null($qcData->loading_speed) && $qcData->loading_speed == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="loading_speed" value="0" @checked(!is_null($qcData->loading_speed) && $qcData->loading_speed == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="loading-speed-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
-                    <p>Did you check the website on mobile device or smaller screens? If not, please make sure that major pages of the site are responsive perfectly on different screen sizes. For the sections that cannot be accommodated in the mobile screen, find a way to accommodate them in a reasonable manner. For example, tables with 5–6 columns</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="mobile_speed" value="1" @checked(!is_null($qcData->mobile_speed) && $qcData->mobile_speed == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="mobile_speed" value="0" @checked(!is_null($qcData->mobile_speed) && $qcData->mobile_speed == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="mobile-speed-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <!-- alert  -->
-
-                <section class="page" id="newsp12">
-                    <h4 style="text-align: center;padding: 20px;color: #1D82F5;"> Congratulations!!! You've completed step-01 successfully.</h4><br/>
-
-                    <p>Are You agree For Step 02</p>
-                    <div class="newitem" id="newbts">
-                        <label class="rad-label" >
-                            <input type="checkbox" class="rad-input" name="step_1" id="ts" name="ts" value="1" required  @checked(!is_null($qcData->step_1) && $qcData->step_1 == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="checkbox" class="rad-input" name="step_1" onclick="myFunction()" @checked(!is_null($qcData->step_1) && $qcData->step_1 == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next">Prev</button>
-                    <button type="submit" class="page-next btn btn-success sp1next" id="sendForm">Step 02</button>
-                </section>
-                <!-- Step – 02: Start -->
-                <!-- Step – 02: Start -->
-
-                <section class="sp1step">
-                    <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
-
-                    <p>Did you check if the site was already migrated to the live server or not. If yes, make sure it is indexed and followed for search engines. Our developers normally no index a site from 2 places. One, from the “Reading” menu under “settings” where they select the option “Discourage search engines to crawl this site”. Another is robots txt. Here is its written “Disallow: /”, that means the entire site is blocked for bots. Need to remove both to make the site crawlable for the bots.</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="migration" value="1" @checked(!is_null($qcData->migration) && $qcData->migration == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="migration" value="0" @checked(!is_null($qcData->migration) && $qcData->migration == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="migration-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
-
-                    <p>Did you check if all the links are working fine or not? In many cases, we saw that there are hashtag links, and IP address links even after the site is migrated. Please run a full-site check and fix where needed.</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="links_working" value="1" @checked(!is_null($qcData->links_working) && $qcData->links_working == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="links_working" value="0" @checked(!is_null($qcData->links_working) && $qcData->links_working == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="links-working-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
-
-                    <p>Add a backup plugin that can store and send backups to clients' email once per week. Ask the client for the email where he wants the backups to be stored.</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="backup_plugin" value="1" @checked(!is_null($qcData->backup_plugin) && $qcData->backup_plugin == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="backup_plugin" value="0" @checked(!is_null($qcData->backup_plugin) && $qcData->backup_plugin == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="backup-plugin-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
-
-                    <p>Add an uptime monitoring plugin. Add client's email and 1-2 of our emails there, including <a href="mailto:developers@seopage1.net">developers@seopage1.net</a> and <a href="mailto:Rajat07me@gmail.com">Rajat07me@gmail.com</a> So both clients, and we get notified as soon as the site is down.</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="uptime_monitoring" value="1" @checked(!is_null($qcData->uptime_monitoring) && $qcData->uptime_monitoring == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="uptime_monitoring" value="0" @checked(!is_null($qcData->uptime_monitoring) && $qcData->uptime_monitoring == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="uptime-monitoring-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
-
-                    <p>Keep a backup of the final website (This may be needed in case the client comes back after a few months and claims something was not done after that thing got messed up somehow).</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="final_backup" value="1" @checked(!is_null($qcData->final_backup) && $qcData->final_backup == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="final_backup" value="0" @checked(!is_null($qcData->final_backup) && $qcData->final_backup == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="final-backup-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <section class="sp1step">
-                    <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
-
-                    <p>Fill in the site title and tagline. Go to settings>General to find this: <a href="https://prnt.sc/xFoLFQjiqiLj" target="_blank">https://prnt.sc/xFoLFQjiqiLj</a>. Put a nice title of 60 characters max in the title field (based on competitors) and a relevant tagline/slogan. For the tagline, you can check with the client or if the client asks to put any of our choice, we can just put it.</p><br>
-
-                    <div class="newitem">
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="slogan" value="1" @checked(!is_null($qcData->slogan) && $qcData->slogan == 1)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="radio" class="rad-input" name="slogan" value="0" @checked(!is_null($qcData->slogan) && $qcData->slogan == 0)>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-
-                    <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
-                    <div id="slogan-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
-                </section>
-
-                <!-- conditions -->
-
-                <section class="page" id="newsp12023">
-
-                    <h4 style="text-align: center;"> Terms of Service</h4> <br/>
-
-                    <!-- <label class="radio-inline">
-                        <input type="checkbox" id="ts" name="ts" value="1" required>
-                        <label for="ts"> I agree</label>
-                    </label> -->
-
-                    <div class="newitem" id="newbts">
-                        <label class="rad-label">
-                            <input type="checkbox" class="rad-input" name="agree" id="ts" name="ts" value="1" required>
-                            <div class="rad-design"></div>
-                            <div class="rad-text">I agree</div>
-                        </label>
-                    </div>
-
-                    <br></br>
-
-                    <button type="button" class="page-prev btn btn-danger sp1next">Prev</button>
-                    <button type="submit" class="page-next btn btn-success sp1next" id="sendForm">Complete</button>
-                </section>
+                    @if($qcData->step_1 != 1)
+                        <section class="sp1step">
+                            <h4 class="text-center" id="far"> Step – 01: Complete These Checklists Before Migration</h4> <br>
+                            <p> Did you check the site is loading with https:// or not? If not, please add SSL and confirm. </p>
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="site_https" value="1" @checked(!is_null($qcData->site_https) && $qcData->site_https == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="site_https" value="0" @checked(!is_null($qcData->site_https) && $qcData->site_https == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <div id="site-https-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
+                            <p> Did you check the site is loading with favicon or not? If not, please add and confirm.</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="favicon" value="1" @checked(!is_null($qcData->favicon) && $qcData->favicon == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="favicon" value="0" @checked(!is_null($qcData->favicon) && $qcData->favicon == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="favicon-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
+                            <p> Did you check whether the client was using web mails or not? If yes, please confirm that the webmail is working perfectly.</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="webmail" value="1" @checked(!is_null($qcData->webmail) && $qcData->webmail == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="webmail" value="0" @checked(!is_null($qcData->webmail) && $qcData->webmail == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="webmail-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
+                            <p> Did you check whether the contact forms are working properly? If not, please add your own email and test that it's working properly with captcha. After testing, add client's email.</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="contact_form" value="1" @checked(!is_null($qcData->contact_form) && $qcData->contact_form == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="contact_form" value="0" @checked(!is_null($qcData->contact_form) && $qcData->contact_form == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="contact-form-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
+                            <p>Did you check the social media links are working perfectly? If not, please check that those links are working perfectly and confirm.</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="social_media" value="1" @checked(!is_null($qcData->social_media) && $qcData->social_media == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="social_media" value="0" @checked(!is_null($qcData->social_media) && $qcData->social_media == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="social-media-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+
+                        <section class="sp1step">
+                            <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
+                            <p>Did you check whether the login, register, other top bar links, and footer links are working properly or not? If not, please fix it and confirm</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="login_link" value="1" @checked(!is_null($qcData->login_link) && $qcData->login_link == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="login_link" value="0" @checked(!is_null($qcData->login_link) && $qcData->login_link == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="login-link-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
+                            <p>Visit the website and scroll down from the top to bottom for all main pages like home, about, service, product page, product category page and confirm that images and the sections are aligned properly.</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="scroll_down" value="1" @checked(!is_null($qcData->scroll_down) && $qcData->scroll_down == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="scroll_down" value="0" @checked(!is_null($qcData->scroll_down) && $qcData->scroll_down == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="scroll-down-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
+                            <p>Did you check whether there is any lorem ipsum text or not? If not, please fix them. If agreement was to keep lorem ipsum text, keep them as agreement says.</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="lorem_text" value="1" @checked(!is_null($qcData->lorem_text) && $qcData->lorem_text == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="lorem_text" value="0" @checked(!is_null($qcData->lorem_text) && $qcData->lorem_text == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="lorem-text-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
+                            <p>Did you check if there are any logical issues like need attention or not? If not checked, please check for issues and fix them. Example Issue (In this case, this form field will allow registration from people whose credit card will expire in a few months (4 months). Nobody else will be able to register/reserve a vehicle. For example, I personally have a few credit cards and the earliest expiration date is in 2024. So if I want to reserve a vehicle here, I can’t because there is no provision to pick a year after 2022. Look for such logical issues on the site, specially in the sections where there are functionalities. Screenshot: <a href="https://prnt.sc/ZCOCTbJiQorn" target="_blank">https://prnt.sc/ZCOCTbJiQorn</a></p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="logical_issues" value="1" @checked(!is_null($qcData->logical_issues) && $qcData->logical_issues == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="logical_issues" value="0" @checked(!is_null($qcData->logical_issues) && $qcData->logical_issues == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="logical-issues-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
+                            <p>Did you checked the site's loading speed? If not, run test on GTmetrix and make sure the score is more than 55 and check Pingdom tool to check the page size. Ensure that the site meet our highest standard</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="loading_speed" value="1" @checked(!is_null($qcData->loading_speed) && $qcData->loading_speed == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="loading_speed" value="0" @checked(!is_null($qcData->loading_speed) && $qcData->loading_speed == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="loading-speed-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center"> Step – 01: Complete These Checklists Before Migration</h4> <br>
+                            <p>Did you check the website on mobile device or smaller screens? If not, please make sure that major pages of the site are responsive perfectly on different screen sizes. For the sections that cannot be accommodated in the mobile screen, find a way to accommodate them in a reasonable manner. For example, tables with 5–6 columns</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="mobile_speed" value="1" @checked(!is_null($qcData->mobile_speed) && $qcData->mobile_speed == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="mobile_speed" value="0" @checked(!is_null($qcData->mobile_speed) && $qcData->mobile_speed == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="mobile-speed-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <!-- alert  -->
+
+                        <section class="page" id="newsp12">
+                            <h4 style="text-align: center;padding: 20px;color: #1D82F5;"> Congratulations!!! You've completed step-01 successfully.</h4><br/>
+
+                            <p>Are You agree For Step 02</p>
+                            <div class="newitem" id="newbts">
+                                <label class="rad-label" >
+                                    <input type="checkbox" class="rad-input" name="step_1" id="ts" name="ts" value="1" required  @checked(!is_null($qcData->step_1) && $qcData->step_1 == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="checkbox" class="rad-input" name="step_1" onclick="myFunction()" @checked(!is_null($qcData->step_1) && $qcData->step_1 == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next">Prev</button>
+                            <button type="submit" class="page-next btn btn-success sp1next" id="sendForm">Step 02</button>
+                        </section>
+                    @else
+                        <!-- Step – 02: Start -->
+                        <!-- Step – 02: Start -->
+
+                        <section class="sp1step">
+                            <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
+
+                            <p>Did you check if the site was already migrated to the live server or not. If yes, make sure it is indexed and followed for search engines. Our developers normally no index a site from 2 places. One, from the “Reading” menu under “settings” where they select the option “Discourage search engines to crawl this site”. Another is robots txt. Here is its written “Disallow: /”, that means the entire site is blocked for bots. Need to remove both to make the site crawlable for the bots.</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="migration" value="1" @checked(!is_null($qcData->migration) && $qcData->migration == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="migration" value="0" @checked(!is_null($qcData->migration) && $qcData->migration == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <!-- <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button> -->
+                            <div id="migration-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
+
+                            <p>Did you check if all the links are working fine or not? In many cases, we saw that there are hashtag links, and IP address links even after the site is migrated. Please run a full-site check and fix where needed.</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="links_working" value="1" @checked(!is_null($qcData->links_working) && $qcData->links_working == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="links_working" value="0" @checked(!is_null($qcData->links_working) && $qcData->links_working == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="links-working-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
+
+                            <p>Add a backup plugin that can store and send backups to clients' email once per week. Ask the client for the email where he wants the backups to be stored.</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="backup_plugin" value="1" @checked(!is_null($qcData->backup_plugin) && $qcData->backup_plugin == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="backup_plugin" value="0" @checked(!is_null($qcData->backup_plugin) && $qcData->backup_plugin == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="backup-plugin-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
+
+                            <p>Add an uptime monitoring plugin. Add client's email and 1-2 of our emails there, including <a href="mailto:developers@seopage1.net">developers@seopage1.net</a> and <a href="mailto:Rajat07me@gmail.com">Rajat07me@gmail.com</a> So both clients, and we get notified as soon as the site is down.</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="uptime_monitoring" value="1" @checked(!is_null($qcData->uptime_monitoring) && $qcData->uptime_monitoring == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="uptime_monitoring" value="0" @checked(!is_null($qcData->uptime_monitoring) && $qcData->uptime_monitoring == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="uptime-monitoring-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
+
+                            <p>Keep a backup of the final website (This may be needed in case the client comes back after a few months and claims something was not done after that thing got messed up somehow).</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="final_backup" value="1" @checked(!is_null($qcData->final_backup) && $qcData->final_backup == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="final_backup" value="0" @checked(!is_null($qcData->final_backup) && $qcData->final_backup == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="final-backup-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <section class="sp1step">
+                            <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
+
+                            <p>Fill in the site title and tagline. Go to settings>General to find this: <a href="https://prnt.sc/xFoLFQjiqiLj" target="_blank">https://prnt.sc/xFoLFQjiqiLj</a>. Put a nice title of 60 characters max in the title field (based on competitors) and a relevant tagline/slogan. For the tagline, you can check with the client or if the client asks to put any of our choice, we can just put it.</p><br>
+
+                            <div class="newitem">
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="slogan" value="1" @checked(!is_null($qcData->slogan) && $qcData->slogan == 1)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="radio" class="rad-input" name="slogan" value="0" @checked(!is_null($qcData->slogan) && $qcData->slogan == 0)>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label>
+                            </div>
+
+                            <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
+                            <div id="slogan-error" class="error-message"></div>
+                            <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                        </section>
+
+                        <!-- conditions -->
+
+                        <section class="page" id="newsp12023">
+
+                            <h4 style="text-align: center;"> Terms of Service</h4> <br/>
+
+                            <!-- <label class="radio-inline">
+                                <input type="checkbox" id="ts" name="ts" value="1" required>
+                                <label for="ts"> I agree</label>
+                            </label> -->
+
+                            <div class="newitem" id="newbts">
+                                <label class="rad-label">
+                                    <input type="checkbox" class="rad-input" name="agree" id="ts" name="ts" value="1" required>
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">I agree</div>
+                                </label>
+                            </div>
+
+                            <br></br>
+
+                            <button type="button" class="page-prev btn btn-danger sp1next">Prev</button>
+                            <button type="submit" class="page-next btn btn-success sp1next" id="sendForm">Complete</button>
+                        </section>
+                    @endif
                 @endif
                 <section class="page" style="margin:auto;text-align:center">
                     Your form has been submitted.
@@ -1233,7 +1221,7 @@
 <script>
     $(document).ready(function(){
         $thing = $('#demo').book({
-            onPageChange:updateProgress,
+            onPageChange:updateProgress(@if(isset($qcData) && $qcData->step_1 == '1') '', '12', '19' @endif),
             speed: 200,
         }).validate({
             rules: {

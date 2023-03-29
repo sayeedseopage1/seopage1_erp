@@ -30,6 +30,7 @@ use App\Traits\LeadDashboard;
 use App\Traits\DeveloperDashboard;
 use App\Traits\UxUiDashboard;
 use App\Traits\GraphicsDashboard;
+use App\Traits\SalesDashboard;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Froiden\Envato\Traits\AppBoot;
@@ -38,7 +39,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends AccountBaseController
 {
-    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard;
+    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard, SalesDashboard;
 
     public function __construct()
     {
@@ -70,6 +71,9 @@ class DashboardController extends AccountBaseController
         }
         if ($this->user->role_id == 9) {
             return $this->UxUiDashboard();
+        }
+        if ($this->user->role_id == 7) {
+            return $this->SalesDashboard();
         }
         if ($this->user->role_id == 10) {
             return $this->GraphicsDashboard();

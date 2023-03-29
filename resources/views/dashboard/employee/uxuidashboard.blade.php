@@ -156,7 +156,7 @@
                 </h2>
             </div>
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="card-body">
+                <div class="card-body bg-amt-grey">
                     <div class="row my-2 text-center mx-auto">
                         <div class="col-sm-12 pb-3">
                             <div class="fc fc-media-screen fc-direction-ltr fc-theme-standard fc-liquid-hack text-center">
@@ -383,7 +383,7 @@
                 </h2>
             </div>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                <div class="card-body">
+                <div class="card-body bg-amt-grey">
                     <div class="row my-2 text-center mx-auto">
                         <div class="col-sm-12 pb-3">
                             <div class="fc fc-media-screen fc-direction-ltr fc-theme-standard fc-liquid-hack text-center">
@@ -393,7 +393,6 @@
                                             <span class="fc-icon fc-icon-chevron-left"></span>
                                         </button>
                                         <h2 class="fc-toolbar-title mx-3 monthDate"></h2>
-                                        <button class="fc-today-button fc-button fc-button-primary" type="button" disabled="">today</button>
                                         <button date-mode="month" class="fc-next-button fc-button fc-button-primary" type="button" aria-label="next">
                                             <span class="fc-icon fc-icon-chevron-right"></span>
                                         </button>
@@ -870,7 +869,7 @@
                 </h2>
             </div>
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                <div class="card-body">
+                <div class="card-body bg-amt-grey">
                     <div class="row">
                         <div class="align-items-center mx-auto h-100 pl-4 ml-5">
                             <div class="col-auto">
@@ -1656,13 +1655,14 @@
             var monthDate = moment();
 
             $('.todayDate').text(todayDate.format('dddd LL'));
-            $('.monthDate').text(monthDate.format('MMMM, YYYY'));
+            $('.monthDate').text('21st ' + moment(monthDate).format('MMMM, YYYY')+' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
+
 
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
                 if (mode == 'month') {
                     monthDate = moment(monthDate).subtract(1, 'month');
-                    $(this).next().text(monthDate.format('MMMM, YYYY'));
+                    $(this).next().text('21st ' + moment(monthDate).format('MMMM, YYYY')+ ' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
                     todayDate = moment(todayDate).subtract(1, 'days');
@@ -1677,21 +1677,18 @@
                 var mode = $(this).attr('date-mode');
                 if (mode == 'month') {
                     monthDate = moment(monthDate).add(1, 'month');
-                    $(this).prev().prev().text(monthDate.format('MMMM, YYYY'));
+                    $(this).prev().text('21st ' + moment(monthDate).format('MMMM, YYYY')+' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
-
                     todayDate = moment(todayDate).add(1, 'days');
-                    console.log(todayDate);
                     $(this).prev().prev().text(todayDate.format('dddd LL'));
                     date = todayDate
                 }
                 
                 getData(mode, $(this), date);
             });
+        });
 
-            
-        })
         function getData(mode, disableButton, date) {
             $.easyAjax({
                 url: this.href,

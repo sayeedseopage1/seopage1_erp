@@ -2470,7 +2470,7 @@ if ($pm_count < 2) {
     {
         $project = QCSubmission::where([
             'milestone_id' => $request->milestone_id,
-            'project_id' => 10000000,
+            'project_id' => $request->project_id,
         ])->first();
         
         if (!$project) {
