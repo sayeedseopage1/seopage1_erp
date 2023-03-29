@@ -131,6 +131,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
 @push('scripts')
     @include('sections.datatable_js')
+    
     <script>
         $('#Wondeals-table').on('preXhr.dt', function(e, settings, data) {
             var dateRangePicker = $('#datatableRange').data('daterangepicker');

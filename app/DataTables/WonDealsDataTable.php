@@ -43,7 +43,7 @@ class WonDealsDataTable extends BaseDataTable
                 return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
             ->addColumn('short_code', function ($row) {
-                return '<a class="openRightModal" href="'.route('contracts.show', $row->id).'">'.$row->deal_id.'</a>';
+                return '<a target="__blank" href="'.route('contracts.show', $row->id).'">'.$row->deal_id.'</a>';
             })
             ->addColumn('project_name', function ($row) {
                 $title = Str::limit($row->project_name, 30, ' ...');

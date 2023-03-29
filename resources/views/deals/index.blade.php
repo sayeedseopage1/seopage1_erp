@@ -126,8 +126,6 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
 @push('scripts')
     @include('sections.datatable_js')
-    
-
     <script>
 
         $('#deals-table').on('preXhr.dt', function(e, settings, data) {
