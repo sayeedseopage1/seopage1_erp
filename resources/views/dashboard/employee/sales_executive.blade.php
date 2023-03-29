@@ -132,7 +132,7 @@
 	        </div>
 
 	        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-	            <div class="card-body">
+	            <div class="card-body bg-amt-grey">
 	            	<div class="row my-2 text-center mx-auto">
                         <div class="col-sm-12 pb-3">
                             <div class="fc fc-media-screen fc-direction-ltr fc-theme-standard fc-liquid-hack text-center">
@@ -208,7 +208,7 @@
 	            </h2>
 	        </div>
 	        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-	            <div class="card-body">
+	            <div class="card-body bg-amt-grey">
 	            	<div class="row my-2 text-center mx-auto">
                         <div class="col-sm-12 pb-3">
                             <div class="fc fc-media-screen fc-direction-ltr fc-theme-standard fc-liquid-hack text-center">
@@ -226,7 +226,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="monthHtml">
+                    <div id="monthHtml">
 		                <div class="row">
 		                    <div class="col-md-4">
 		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
@@ -469,7 +469,7 @@
 	            </h2>
 	        </div>
 	        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-	            <div class="card-body">
+	            <div class="card-body bg-amt-grey">
 	            	<div class="row">
                         <div class="align-items-center mx-auto h-100 pl-4 ml-5">
                             <div class="col-auto">
@@ -540,7 +540,6 @@
 		                            </div>
 		                        </div>
 		                    </div>
-
 		                </div>
 		                <div class="row mt-3">
 		                    <div class="col-md-6">
@@ -792,6 +791,86 @@
 	            </div>
 	        </div>
 	    </div>
+	    <div class="row mt-3">
+        	<div class="col-md-7">
+        		<div class="card">
+        			<div class="card-body">
+        				<!-- EMP DASHBOARD EVENTS START -->
+		                @if (in_array('my_calender', $activeWidgets))
+		                    <div class="row mt-3">
+		                        <div class="col-md-12">
+		                            <x-cards.data :title="__('app.menu.myCalendar')">
+		                                <div id="calendar"></div>
+		                                <x-slot name="action">
+		                                    <div class="dropdown ml-auto calendar-action">
+		                                        <button id="event-btn" class="btn btn-lg f-14 p-0 text-lightest text-capitalize rounded  dropdown-toggle cal-event" type="button"
+		                                            aria-haspopup="true" aria-expanded="false">
+		                                            <i class="fa fa-ellipsis-h"></i>
+		                                        </button>
+
+		                                            <div id="cal-drop" class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-2">
+		                                                @if(in_array('tasks', user_modules()))
+		                                                <div class="custom-control custom-checkbox cal-filter">
+		                                                    <input type="checkbox" value="task"
+		                                                        class="form-check-input filter-check" name="calendar[]"
+		                                                        id="customCheck1" @if(in_array('task',$event_filter)) checked @endif>
+		                                                    <label
+		                                                        class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
+		                                                        for="customCheck1">@lang('app.menu.tasks')</label>
+		                                                </div>
+		                                                @endif
+		                                                @if(in_array('events', user_modules()))
+		                                                <div class="custom-control custom-checkbox cal-filter">
+		                                                    <input type="checkbox" value="events"
+		                                                        class="form-check-input filter-check" name="calendar[]"
+		                                                        id="customCheck2" @if(in_array('events',$event_filter)) checked @endif>
+		                                                    <label
+		                                                        class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
+		                                                        for="customCheck2">@lang('app.menu.Events')</label>
+		                                                </div>
+		                                                @endif
+		                                                @if(in_array('holidays', user_modules()))
+		                                                <div class="custom-control custom-checkbox cal-filter">
+		                                                    <input type="checkbox" value="holiday"
+		                                                        class="form-check-input filter-check" name="calendar[]"
+		                                                        id="customCheck3" @if(in_array('holiday',$event_filter)) checked @endif>
+		                                                    <label
+		                                                        class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
+		                                                        for="customCheck3">@lang('app.menu.holiday')</label>
+		                                                </div>
+		                                                @endif
+		                                                @if(in_array('tickets', user_modules()))
+		                                                <div class="custom-control custom-checkbox cal-filter">
+		                                                    <input type="checkbox" value="tickets"
+		                                                        class="form-check-input filter-check" name="calendar[]"
+		                                                        id="customCheck4" @if(in_array('tickets',$event_filter)) checked @endif>
+		                                                    <label
+		                                                        class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
+		                                                        for="customCheck4">@lang('app.menu.tickets')</label>
+		                                                </div>
+		                                                @endif
+		                                                @if(in_array('leaves', user_modules()))
+		                                                <div class="custom-control custom-checkbox cal-filter">
+		                                                    <input type="checkbox" value="leaves"
+		                                                        class="form-check-input filter-check" name="calendar[]"
+		                                                        id="customCheck5" @if(in_array('leaves',$event_filter)) checked @endif>
+		                                                    <label
+		                                                        class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
+		                                                        for="customCheck5">@lang('app.menu.leaves')</label>
+		                                                </div>
+		                                                @endif
+		                                            </div>
+		                                    </div>
+		                                </x-slot>
+		                            </x-cards.data>
+		                        </div>
+		                    </div>
+		                @endif
+		                <!-- EMP DASHBOARD EVENTS END -->
+        			</div>
+        		</div>
+        	</div>
+        </div>
 	</div>
 </div>
 @endsection
@@ -978,14 +1057,14 @@
             var monthDate = moment();
 
             $('.todayDate').text(todayDate.format('dddd LL'));
-            $('.monthDate').text('21 ' + monthDate.format('MMMM, YYYY')+' to 20 '+monthDate.add(1, 'month').format('MMMM, YYYY'));
+            $('.monthDate').text('21st ' + moment(monthDate).format('MMMM, YYYY')+' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
 
 
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
                 if (mode == 'month') {
                     monthDate = moment(monthDate).subtract(1, 'month');
-                    $(this).next().text('21 ' + monthDate.subtract(1, 'month').format('MMMM, YYYY')+ ' to 20 '+monthDate.add(1, 'month').format('MMMM, YYYY'));
+                    $(this).next().text('21st ' + moment(monthDate).format('MMMM, YYYY')+ ' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
                     todayDate = moment(todayDate).subtract(1, 'days');
@@ -1000,7 +1079,7 @@
                 var mode = $(this).attr('date-mode');
                 if (mode == 'month') {
                     monthDate = moment(monthDate).add(1, 'month');
-                    $(this).prev().text('21 ' + monthDate.format('MMMM, YYYY')+' to 20 '+monthDate.add(1, 'month').format('MMMM, YYYY'));
+                    $(this).prev().text('21st ' + moment(monthDate).format('MMMM, YYYY')+' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
                     todayDate = moment(todayDate).add(1, 'days');

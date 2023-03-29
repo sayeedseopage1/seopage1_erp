@@ -67,72 +67,6 @@ trait SalesDashboard
 			}
 			$this->todayLeadconverted= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereDate('created_at', request('startDate'))->count();
 			$this->todayLeadconvertedValue= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereDate('created_at', request('startDate'))->sum('value');
-			/*$this->Leadconverted= Lead::where('added_by', Auth::id())->where([
-				'deal_status' => 1,
-				'created_at' => request('startDate'),
-			])->count();
-			$this->totalbidsValue= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
-			$this->totalleads= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-			$this->totalwondeal= DealStage::where('added_by',Auth::id())->where('won_lost','Yes')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-			$this->totalostdeal= DealStage::where('added_by',Auth::id())->where('won_lost','No')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-			$this->rejectedbyPm= Deal::where('added_by',Auth::id())->where('status','Denied')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-			//dd($this->totalostdeal);
-
-			if($this->totalleads != 0) {
-				$this->avg_value= $this->totalbidsValue /$this->totalleads;
-			} else  {
-				$this->avg_value= 0;
-			}
-
-			if($this->totalleads != 0)
-			{
-				$this->percentage_of_lead_converted= ($this->Leadconverted /$this->totalleads)*100;
-
-			}else{
-				$this->percentage_of_lead_converted= 0;
-			}
-
-			if($this->Leadconverted != 0)
-			{
-				$this->percentage_of_deal_won= ($this->totalwondeal/$this->Leadconverted)*100;
-
-			}else 
-			{
-				$this->percentage_of_deal_won= 0;
-			}
-
-			if($this->Leadconverted != 0)
-			{
-				$this->percentage_of_deal_lost= ($this->totalostdeal/$this->Leadconverted)*100;
-
-			}else 
-			{
-				$this->percentage_of_deal_lost= 0;
-			}
-
-			if($this->totalwondeal != 0)
-			{
-				$this->percentage_of_deal_getting_rejected= ($this->rejectedbyPm/$this->totalwondeal)*100;
-
-			}else 
-			{
-				$this->percentage_of_deal_getting_rejected= 0;
-			}
-			//dd($this->percentage_of_deal_lost);
-
-
-			// $this->minLeadValue= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->select('bid_value')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('');
-			$this->convertedLead = Lead::where([
-				'added_by' => $this->user->id,
-				'status_id' => 3,
-			])->whereDate('created_at', Carbon::today())->get();
-
-			$this->totalLeads = Lead::where('added_by', $this->user->id)->whereBetween('created_at', [$this->startDate, $this->endDate])->get();
-			$this->totalDeals = Deal::where('added_by', $this->user->id)->whereBetween('created_at', [$this->startDate, $this->endDate])->get();
-			// dd($this->totalDeals);
-
-			$this->lostLeads = Lead::select('leads.*')->join('deal_stages', 'deal_stages.lead_id', '=', 'leads.id')->where('leads.added_by', $this->user->id)->whereBetween('leads.created_at', [$this->startDate, $this->endDate])->orderBy('leads.id', 'desc')->get();*/
-
 			$html = view('dashboard.ajax.salesexecutive.today', $this->data)->render();
 
             return Reply::dataOnly([
@@ -143,19 +77,17 @@ trait SalesDashboard
 			$date = Carbon::createFromFormat('Y-m-d', request('startDate'));
             $startDate = $date->startOfMonth()->addDays(20)->toDateString(); 
             $endDate = $date->startOfMonth()->addMonth(1)->addDays(19)->toDateString(); 
-
-			$this->todayLead = Lead::where('added_by', Auth::id())->whereDate('created_at', Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->get();
-			$this->todayLeadcount= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-			$this->today_bid_value= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
-			if($this->todayLeadcount != 0)
-			{
+            
+			$this->todayLead = Lead::where('added_by', Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->get();
+			$this->todayLeadcount= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+			$this->today_bid_value= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
+			if($this->todayLeadcount != 0) {
 				$this->avg_bid_value= $this->today_bid_value /$this->todayLeadcount;
-			} else 
-			{
+			} else {
 				$this->avg_bid_value= 0;
 			}
-			$this->today_min_lead_value= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('bid_value');
-			$this->today_max_lead_value= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('bid_value2');
+			$this->today_min_lead_value= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('bid_value');
+			$this->today_max_lead_value= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('bid_value2');
 			if($this->todayLeadcount != 0)
 			{
 				$this->avg_minlead_value= $this->today_min_lead_value /$this->todayLeadcount;
@@ -168,8 +100,8 @@ trait SalesDashboard
 				$this->avg_lead_value= 0;
 
 			}
-			$this->todayLeadconverted= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
-			$this->todayLeadconvertedValue= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereDate('created_at',Carbon::today())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
+			$this->todayLeadconverted= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
+			$this->todayLeadconvertedValue= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
 			$this->Leadconverted= Lead::where('added_by',Auth::id())->where('deal_status',1)->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
 			$this->totalbidsValue= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('value');
 			$this->totalleads= Lead::where('added_by',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
@@ -178,54 +110,42 @@ trait SalesDashboard
 			$this->rejectedbyPm= Deal::where('added_by',Auth::id())->where('status','Denied')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
 			//dd($this->totalostdeal);
 
-			if($this->totalleads != 0) {
+			if ($this->totalleads != 0) {
 				$this->avg_value= $this->totalbidsValue /$this->totalleads;
 			} else  {
 				$this->avg_value= 0;
 			}
 
-			if($this->totalleads != 0)
-			{
+			if ($this->totalleads != 0) {
 				$this->percentage_of_lead_converted= ($this->Leadconverted /$this->totalleads)*100;
 
-			}else{
+			} else {
 				$this->percentage_of_lead_converted= 0;
 			}
 
-			if($this->Leadconverted != 0)
-			{
+			if ($this->Leadconverted != 0) {
 				$this->percentage_of_deal_won= ($this->totalwondeal/$this->Leadconverted)*100;
 
-			}else 
-			{
+			} else {
 				$this->percentage_of_deal_won= 0;
 			}
 
-			if($this->Leadconverted != 0)
-			{
+			if ($this->Leadconverted != 0) {
 				$this->percentage_of_deal_lost= ($this->totalostdeal/$this->Leadconverted)*100;
-
-			}else 
-			{
+			} else {
 				$this->percentage_of_deal_lost= 0;
 			}
 
-			if($this->totalwondeal != 0)
-			{
+			if ($this->totalwondeal != 0) {
 				$this->percentage_of_deal_getting_rejected= ($this->rejectedbyPm/$this->totalwondeal)*100;
-
-			}else 
-			{
+			} else {
 				$this->percentage_of_deal_getting_rejected= 0;
 			}
-			//dd($this->percentage_of_deal_lost);
 
-
-			// $this->minLeadValue= Lead::where('added_by',Auth::id())->whereDate('created_at',Carbon::today())->select('bid_value')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('');
 			$this->convertedLead = Lead::where([
 				'added_by' => $this->user->id,
 				'status_id' => 3,
-			])->whereDate('created_at', Carbon::today())->get();
+			])->whereBetween('created_at', [$startDate, $endDate])->get();
 
 			$this->totalLeads = Lead::where('added_by', $this->user->id)->whereBetween('created_at', [$startDate, $endDate])->get();
 			$this->totalDeals = Deal::where('added_by', $this->user->id)->whereBetween('created_at', [$startDate, $endDate])->get();
