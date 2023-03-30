@@ -155,16 +155,33 @@ class DealController extends AccountBaseController
 
     public function store(Request $request)
     {
-        $request->validate([
-            'client_name' => 'required',
-            'client_username' => 'required',
-            'project_name' => 'required',
-            'project_link' => 'required|url',
-            'amount' => 'required',
-            'description' => 'required',
-            'comments' => 'required',
-
-        ]);
+        if($request->client_username2)
+        {
+            $request->validate([
+                'client_name' => 'required',
+                'client_username2' => 'required',
+                'project_name' => 'required',
+                'project_link' => 'required|url',
+                'amount' => 'required',
+                'description' => 'required',
+                'comments' => 'required',
+    
+            ]);
+        }
+        else {
+            $request->validate([
+                'client_name' => 'required',
+                'client_username' => 'required',
+                'project_name' => 'required',
+                'project_link' => 'required|url',
+                'amount' => 'required',
+                'description' => 'required',
+                'comments' => 'required',
+    
+            ]);
+            # code...
+        }
+       
 //        dd($request);
 
       $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";

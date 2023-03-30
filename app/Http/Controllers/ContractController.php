@@ -352,7 +352,7 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
-//        dd($request->all());
+      // dd($request->all());
         $current_time= Carbon::now()->format('d-m-Y H:i:s' );
         // dd($request->current_time, $request->award_time,$current_time);
 
