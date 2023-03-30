@@ -476,6 +476,47 @@ class DealController extends AccountBaseController
 
     }
 
+    public function demo_serach()
+
+    {
+
+        return view('searchDemo');
+
+    }
+
+    
+
+    /**
+
+     * Show the form for creating a new resource.
+
+     *
+
+     * @return \Illuminate\Http\Response
+
+     */
+
+    public function SearchClient(Request $request)
+
+    {
+       
+
+        $data = User::select(["name","user_name"])
+                     ->where('role_id',null)
+
+                    ->where('name', 'LIKE', '%'. $request->get('query'). '%')
+                    ->orwhere('user_name', 'LIKE', '%'. $request->get('query'). '%')
+                   
+
+                    ->get();
+        dd($data);
+
+     
+
+        return response()->json($data);
+
+    }
+
 
 
 
