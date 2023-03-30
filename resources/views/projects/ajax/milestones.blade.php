@@ -38,7 +38,6 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                     </x-slot>
                     @php
                       $milestones= App\Models\ProjectMilestone::where('project_id',$project->id)->get();
-
                     @endphp
 
                     @forelse($milestones as $key=>$item)
@@ -112,7 +111,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                    <input type="hidden" name="id" value="{{$item->id}}">
                                @if($task > 0)
                                 <button type="submit" disabled class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete ({{$complete_task}}/{{$total_tasks}})</button>
-                                <a href="#" type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 create-partial-payment mt-3"  id="{{$item->id}}"  data-row-id="{{ $item->id }}" >Partial Payment</a>
+                                <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}" type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 mt-3"  id="{{$item->id}}"  data-row-id="{{ $item->id }}" >Partial Payment</a>
                                 @else
                                 @if($item->status == 'incomplete')
 
@@ -140,15 +139,16 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                   <a class="btn btn-primary" href="#" id="project-qc-form">Need Attention</a>
                                     @include('projects.modals.projectqcreplymodal')
                                  @else
+
                                  @php 
                                   $last_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('invoice_id',null)->first();
-                                 // dd($last_milestone);
+                                    //dd($item->id == $last_milestone->id, );
                                  @endphp
-                                 @if($item->id == $last_milestone->id && $complete_milestone != $invoice_generated && $milestone_count != 1)
+                                 @if($item->id == $last_milestone->id && $complete_milestone != $invoice_generated && $milestone_count != 1 && ($complete_milestone - $invoice_generated) >= 2)
                                  <button disabled class="btn-success rounded f-14 p-2 flex-right">Generate Invoice</a>
+                                    
                                  @else
-
-                                  <a href="#"   class="btn-success rounded f-14 p-2 flex-right create-invoice" id="{{$item->id}}"  data-row-id="{{ $item->id }}">Generate Invoice</a>
+                                  <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}"   class="btn-success rounded f-14 p-2 flex-right" id="{{$item->id}}"  data-row-id="{{ $item->id }}">Generate Invoice</a>
                                   @endif
                                   @endif
 
@@ -171,9 +171,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                         <a href="/projects/project-completion/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right" >Project Completion Form</a>
 
                                       @elseif($milestone_count - $invoice_count == 1 && $item->project_completion_status == 1 || $milestone_count - $invoice_count != 1)
-
-
-                                    <a href="#"  class="btn-warning rounded f-14 p-2 flex-right create-payment" data-row-id="{{ $item->invoice_id }}">Add Payment</a>
+                                      <a href="{{route('payments.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}"  class="btn-warning rounded f-14 p-2 flex-right create-payment" data-row-id="{{ $item->invoice_id }}">Add Payment</a>
                                     @else
                                     <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                     Awaiting Approval
@@ -269,7 +267,8 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
       string = `?project_id=${project_id}&client_id=${client_id}&milestone_id=${milestone_id}`;
       url += string;
       $(this).prop("disabled", true);
-      window.open(url);
+      window.location.href = url;
+      // window.open(url);
     
     });
     $('body').on('click', '.create-payment', function() {
@@ -305,7 +304,35 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 </script>
 
-
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.complete_milestone').click(function(e) {
+            e.preventDefault();
+            Swal.fire({
+            title: "Comple milestones",
+            text: "Are you sure want to complete milestones?",
+            icon: 'warning',
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: "@lang('messages.confirm')",
+            cancelButtonText: "@lang('app.cancel')",
+            customClass: {
+                confirmButton: 'btn btn-primary mr-3',
+                cancelButton: 'btn btn-secondary'
+            },
+            showClass: {
+                popup: 'swal2-noanimation',
+                backdrop: 'swal2-noanimation'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $(this).closest("form").submit();
+            }
+        });
+        })
+    })
+</script>
 
 <script>
     $('#add-project-milestone').click(function() {

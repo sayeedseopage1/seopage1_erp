@@ -6,12 +6,11 @@ $changeStatusPermission = user()->permission('change_status');
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 
 <div id="task-detail-section">
-
-    <h3 class="heading-h1 mb-3">{{ ucfirst($task->heading) }}</h3>
+    <div class="row mx-0">
+        <a href="{{route('projects.show', $task->project_id)}}?tab=tasks"><button class="btn btn-primary mb-3">Go back</button></a> 
+        <h3 class="heading-h1 mb-3 ml-2 align-self-center">{{ ucfirst($task->heading) }}</h3>
+    </div>
     <div class="row">
-
-
-
         <div class="col-sm-9 review-card">
             <div class="card bg-white border-0 b-shadow-4">
                 <div class="card-header bg-white  border-bottom-grey text-capitalize justify-content-between p-20">
