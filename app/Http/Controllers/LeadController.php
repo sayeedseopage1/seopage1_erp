@@ -198,6 +198,9 @@ class LeadController extends AccountBaseController
 
     public function DealStageUpdate(Request $request)
     {
+        $request->validate([
+            'comments' => 'required',
+        ]);
         $deal_stage= DealStage::where('id',$request->id)->first();
         if ($deal_stage->deal_stage == 4 && $request->won_lost == "No") {
             $deal= DealStage::find($request->id);
@@ -337,7 +340,9 @@ class LeadController extends AccountBaseController
         }
 
 
-        return back()->with('status_updated', 'Status Updated!!');
+        return response()->json([
+            'status'=>400
+        ]);
     }
     public function DealStageUpdateLost(Request $request)
     {
