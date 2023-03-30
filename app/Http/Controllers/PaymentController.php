@@ -169,8 +169,6 @@ class PaymentController extends AccountBaseController
 
     public function store(StorePayment $request)
     {
-
-    // /  dd($days);
         $payment = new Payment();
 
         if (!is_null($request->currency_id)) {
@@ -313,7 +311,7 @@ class PaymentController extends AccountBaseController
         $redirectUrl = urldecode($request->redirect_url);
 
         if ($redirectUrl == '') {
-            $redirectUrl = route('payments.index');
+            $redirectUrl = route('projects.show', $request->project_id).'?tab=milestones';
         }
 
         return Reply::successWithData(__('messages.paymentSuccess'), ['redirectUrl' => $redirectUrl]);

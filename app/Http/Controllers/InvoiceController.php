@@ -153,7 +153,6 @@ class InvoiceController extends AccountBaseController
 
     public function store(StoreInvoice $request)
     {
-     
       $milestone_check = ProjectMilestone::where('id',$request->milestone_id)->first();
       if($milestone_check->invoice_created == 1)
       {
@@ -163,13 +162,10 @@ class InvoiceController extends AccountBaseController
       {
         return Reply::error(__('You cannot insert equal amount of payment for partial payment.'));
       }
-      
-     // dd("Success");
-
-        $redirectUrl = urldecode($request->redirect_url);
+      $redirectUrl = urldecode($request->redirect_url);
 
         if ($redirectUrl == '') {
-            $redirectUrl = route('invoices.index');
+            $redirectUrl = route('projects.show', $request->project_id).'?tab=milestones';
         }
 
         $items = $request->item_name;
