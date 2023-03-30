@@ -48,14 +48,13 @@
                         <th>SL. No.</th>
                         <th>Task Name</th>
                         <th>Start Date</th>
-                        
                         <th>Estimated Time</th>
                         <th>Hours Logged</th>
                         <th>Project Manager</th>
                         <th>Project Deadline</th>
 						<th>Status</th>
                     </thead>
-					@foreach($total_deadline_task_assigned_to_me as $row)
+					@forelse($total_deadline_task_assigned_to_me as $row)
 					
 					<tr>
 						<td>{{$loop->index+1}}</td>
@@ -111,7 +110,13 @@
 							<span class="badge badge-light" style="color:{{$task_status->label_color}}">
 							{{$task_status->column_name}}</span></td>
 					</tr>
-					@endforeach
+					@empty
+					<tr>
+						<td colspan="8" class="shadow-none">
+                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                        </td>
+					</tr>
+					@endforelse
                     <tbody>
                     </tbody>
                 </table>
@@ -131,14 +136,13 @@
                         <th>SL. No.</th>
                         <th>Task Name</th>
                         <th>Start Date</th>
-                       
                         <th>Estimated Time</th>
                         <th>Hours Logged</th>
                         <th>Developer</th>
                         <th>Project Deadline</th>
 						<th>Status</th>
                     </thead>
-					@foreach($total_deadline_task_assigned_by_me as $item)
+					@forelse($total_deadline_task_assigned_by_me as $item)
 					<tr>
 						<td>{{$loop->index+1}}</td>
 						<td><a href="{{route('tasks.show', $item->id)}}" title="{{$item->heading}}" class="openRightModal">{{Str::limit($item->heading,15)}}</a></td>
@@ -195,7 +199,13 @@
 							{{$task_status->column_name}}</span>
 						</td>
 					</tr>
-					@endforeach
+					@empty
+					<tr>
+						<td colspan="8" class="shadow-none">
+                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                        </td>
+					</tr>
+					@endforelse
                 </table>
             </div>
         </div>

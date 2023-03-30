@@ -64,7 +64,10 @@ $changeStatusPermission = user()->permission('change_status');
 
                                 @endif
                             @endif
-
+                            @php
+                                $val = App\Models\ProjectTimeLog::where('task_id', $task->id)->latest()->first();
+                                $task_active_id= App\Models\Task::where('id',$task->id)->first();
+                            @endphp
                             @if($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision')
                             @if ($task->boardColumn->slug != 'completed' && !is_null($task->is_task_user) )
                                   @if (is_null($task->userActiveTimer))
@@ -98,11 +101,9 @@ $changeStatusPermission = user()->permission('change_status');
 
                                           @php
                                           $task_time= App\Models\ProjectTimelog::orderBy('id','desc')->where('task_id',$task->id)->first();
-                                        //  / dd($task_time);
-
                                           @endphp
 
-                                          @if($task->status != 'completed')
+                                          @if($task->status != 'completed' && is_null($task->userActiveTimer) && $task->taskUsers->first()->user_id == Auth::id())
 
                                         <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
                                         @endif
@@ -501,7 +502,13 @@ $changeStatusPermission = user()->permission('change_status');
 
            ?>
 
-          <div class="col-sm-3 review-card">
+          
+
+
+
+
+        </div>
+        <div class="col-sm-3 review-card">
               <x-cards.data>
                   @if (($taskSettings->status == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                       <p class="f-w-500"><i class="fa fa-circle mr-1 text-yellow"
@@ -813,11 +820,6 @@ $changeStatusPermission = user()->permission('change_status');
               </x-cards.data>
                   @endif
           </div>
-
-
-
-
-        </div>
 
 
     </div>
@@ -1310,10 +1312,10 @@ $changeStatusPermission = user()->permission('change_status');
             });
 
             $('#start-task-timer').click(function() {
-                var task_id = "{{ $task->id }}";
-                var project_id = "{{ $task->project_id }}";
+                var task_id = "{{ $task_active_id->id }}";
+                var project_id = "{{ $task_active_id->project_id }}";
                 var user_id = "{{ user()->id }}";
-                var memo = "{{ $task->heading }}";
+                var memo = "{{ $task_active_id->heading }}";
                 var token = "{{ csrf_token() }}";
 
                 $.easyAjax({

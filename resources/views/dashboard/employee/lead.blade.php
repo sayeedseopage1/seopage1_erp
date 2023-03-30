@@ -230,7 +230,7 @@
 			                                    <th>Project Deadline</th>
 												<th>Status</th>
 			                                </thead>
-											@foreach($total_deadline_task_assigned_to_me as $row)
+											@forelse($total_deadline_task_assigned_to_me as $row)
 											
 											<tr>
 												<td>{{$loop->index+1}}</td>
@@ -286,7 +286,13 @@
 													<span class="badge badge-light" style="color:{{$task_status->label_color}}">
 													{{$task_status->column_name}}</span></td>
 											</tr>
-											@endforeach
+											@empty
+											<tr>
+												<td colspan="8" class="shadow-none">
+						                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+						                        </td>
+											</tr>
+											@endforelse
 			                                <tbody>
 			                                </tbody>
 			                            </table>
@@ -313,7 +319,7 @@
 				                                <th>Project Deadline</th>
 												<th>Status</th>
 			                                </thead>
-											@foreach($total_deadline_task_assigned_by_me as $item)
+											@forelse($total_deadline_task_assigned_by_me as $item)
 											<tr>
 												<td>{{$loop->index+1}}</td>
 												<td><a href="{{route('tasks.show', $item->id)}}" title="{{$item->heading}}" class="openRightModal">{{Str::limit($item->heading,15)}}</a></td>
@@ -371,7 +377,13 @@
 
 
 											</tr>
-											@endforeach
+											@empty
+											<tr>
+												<td colspan="8" class="shadow-none">
+						                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+						                        </td>
+											</tr>
+											@endforelse
 			                                <tbody>
 			                                </tbody>
 			                            </table>
@@ -687,7 +699,7 @@
 												<th>Status</th>
 						                    </thead>
 						                    <tbody>
-												@foreach($total_deadline_task_assigned_to_me_period as $row)
+												@forelse($total_deadline_task_assigned_to_me_period as $row)
 						                    	<tr>
 						                    		<td>{{$loop->index+1}}</td>
 													<td>
@@ -745,7 +757,13 @@
 														{{$task_status->column_name}}</span>
 													</td>
 						                    	</tr>
-												@endforeach
+						                    	@empty
+						                    	<tr>
+													<td colspan="8" class="shadow-none">
+							                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+							                        </td>
+												</tr>
+												@endforelse
 						                    </tbody>
 						                </table>
 						            </div>
@@ -772,7 +790,7 @@
 												<th>Status</th>
 						                    </thead>
 						                    <tbody>
-												@foreach($total_deadline_task_assigned_by_me_period as $row) 
+												@forelse($total_deadline_task_assigned_by_me_period as $row) 
 						                    	<tr>
 						                    		<td>{{$loop->index+1}}</td>
 													<td>
@@ -834,7 +852,13 @@
 														{{$task_status->column_name}}</span>
 													</td>
 						                    	</tr>
-												@endforeach
+						                    	@empty
+						                    	<tr>
+													<td colspan="8" class="shadow-none">
+							                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+							                        </td>
+												</tr>
+												@endforelse
 						                    </tbody>
 						                </table>
 						            </div>
@@ -1145,7 +1169,7 @@
 												<th>Status</th>
 			                                </thead>
 			                                <tbody>
-			                                	@foreach($total_task_assigned_to_me_general as $row)
+			                                	@forelse($total_task_assigned_to_me_general as $row)
 			                                	<tr>
 			                                		<td>{{$loop->index+1}}</td>
 													<td><a href="{{route('tasks.show', $row->id)}}" title="{{$row->heading}}" class="openRightModal">{{Str::limit($row->heading,15)}}</a></td>
@@ -1212,7 +1236,13 @@
 
 													</td>
 			                                	</tr>
-												@endforeach
+			                                	@empty
+			                                	<tr>
+													<td colspan="8" class="shadow-none">
+							                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+							                        </td>
+												</tr>
+												@endforelse
 			                                	
 			                                </tbody>
 			                            </table>
@@ -1239,7 +1269,7 @@
 												<th>Status</th>
 			                                </thead>
 			                                <tbody>
-												@foreach($total_task_assigned_by_me_general as $row) 
+												@forelse($total_task_assigned_by_me_general as $row) 
 			                                	<tr>
 			                                		<td>{{$loop->index+1}}</td>
 													<td><a href="{{route('tasks.show', $row->id)}}" title="{{$row->heading}}" class="openRightModal">{{Str::limit($row->heading,15)}}</a></td>
@@ -1307,7 +1337,13 @@
 
 													</td>
 			                                	</tr>
-												@endforeach
+			                                	@empty
+			                                	<tr>
+													<td colspan="8" class="shadow-none">
+							                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+							                        </td>
+												</tr>
+												@endforelse
 			                                	
 			                                	
 			                                </tbody>

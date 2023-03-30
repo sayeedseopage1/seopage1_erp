@@ -585,7 +585,9 @@
                                     </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6">No items !!</td>
+                                            <td colspan="6" class="shadow-none">
+                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                                            </td>
                                         </tr>
                                     @endforelse
                                 </x-table>
@@ -604,7 +606,7 @@
                                         <th class="pl-20 text-capitalize">Won Date</th>
                                         <th class="pl-20 text-capitalize">Project Status</th>
                                     </x-slot>
-                                    @foreach($totalDeals as $value)
+                                    @forelse($totalDeals as $value)
                                     <tr>
                                         <td>{{$loop->index+1}}</td>
                                         <td class="pl-20 text-capitalize ">
@@ -615,6 +617,12 @@
                                         <td class="pl-20 text-capitalize">
                                             {{$value->status}}
                                             
+                                        </td>
+                                    </tr>
+                                    @emtpy
+                                    <tr>
+                                        <td colspan="7" class="shadow-none">
+                                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                                         </td>
                                     </tr>
                                     @endforeach

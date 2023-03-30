@@ -351,6 +351,7 @@
                 <input type="hidden" name="project_id" value="{{$project->id}}">
 
                 @if(is_null($qcData))
+                <input type="hidden" name="step" value="1">
                 <section class="sp1step">
                     <h4 class="text-center" id="far"> Step – 01: Complete These Checklists Before Migration</h4> <br>
                     <p> Did you check the site is loading with https:// or not? If not, please add SSL and confirm. </p>
@@ -1039,7 +1040,7 @@
                     @else
                         <!-- Step – 02: Start -->
                         <!-- Step – 02: Start -->
-
+                        <input type="hidden" name="step" value="2">
                         <section class="sp1step">
                             <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
 
