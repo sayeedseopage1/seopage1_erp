@@ -26,8 +26,8 @@
                 <h5 class="modal-title" id="exampleModalLabel">Create Won Deal</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form class="" action="#" method="post" id="createDeal">
-                @csrf
+            <form id="createDeal">
+                
                 <?php
                 $date= \Carbon\Carbon::now();
                 ?>
@@ -280,7 +280,9 @@
             'amount': document.getElementById("amount").value,
             'original_currency_id': document.getElementById("original_currency_id").value,
             'award_time': document.getElementById("date-format").value,
+            @if($deal->lead_id != null)
             'lead_id': {{$deal->lead_id}},
+            @endif
             'date': '{{$date}}',
             'id': {{$deal->id}},
         }
