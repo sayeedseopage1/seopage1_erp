@@ -1045,7 +1045,6 @@ class TaskController extends AccountBaseController
 
 
         $this->view = 'tasks.ajax.show';
-
         return view('tasks.create', $this->data);
 
     }

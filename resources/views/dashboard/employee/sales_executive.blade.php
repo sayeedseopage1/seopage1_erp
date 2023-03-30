@@ -749,8 +749,10 @@
 		                                    </tr>
 		                                    @empty
 		                                        <tr>
-		                                            <td colspan="6">No items !!</td>
-		                                        </tr>
+													<td colspan="6" class="shadow-none">
+							                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+							                        </td>
+												</tr>
 		                                    @endforelse
 		                                </x-table>
 		                            </div>
@@ -768,7 +770,7 @@
 		                                        <th class="pl-20 text-capitalize">Won Date</th>
 		                                        <th class="pl-20 text-capitalize">Project Status</th>
 		                                    </x-slot>
-		                                    @foreach($totalDeals as $value)
+		                                    @forelse($totalDeals as $value)
 		                                    <tr>
 		                                        <td>{{$loop->index+1}}</td>
 		                                        <td class="pl-20 text-capitalize ">
@@ -781,6 +783,12 @@
 		                                            
 		                                        </td>
 		                                    </tr>
+		                                    @empty
+		                                    <tr>
+												<td colspan="5" class="shadow-none">
+						                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+						                        </td>
+											</tr>
 		                                    @endforeach
 		                                </x-table>
 		                            </div>

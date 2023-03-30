@@ -362,9 +362,8 @@ class TimelogController extends AccountBaseController
      */
     public function startTimer(StartTimer $request)
     {
-      //dd($request->task_id);
+      
       $task_status= Task::find($request->task_id);
-    //  dd($task_status);
       $task_status->task_status="in progress";
       $task_status->board_column_id= 3;
       $task_status->save();
