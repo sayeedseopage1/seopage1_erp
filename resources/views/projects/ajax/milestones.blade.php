@@ -171,7 +171,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                         <a href="/projects/project-completion/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right" >Project Completion Form</a>
 
                                       @elseif($milestone_count - $invoice_count == 1 && $item->project_completion_status == 1 || $milestone_count - $invoice_count != 1)
-                                      <a href="{{route('payments.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}"  class="btn-warning rounded f-14 p-2 flex-right create-payment" data-row-id="{{ $item->invoice_id }}">Add Payment</a>
+                                      <a href="{{route('payments.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}"  class="btn-warning rounded f-14 p-2 flex-right" data-row-id="{{ $item->invoice_id }}">Add Payment</a>
                                     @else
                                     <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                     Awaiting Approval
