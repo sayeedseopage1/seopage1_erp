@@ -94,10 +94,10 @@
                             @endif
                         </x-forms.select>
                     </div>
-
+                    
                     <div class="col-md-3">
                         <x-forms.text fieldId="transaction_id" :fieldLabel="__('modules.payments.transactionId')"
-                            fieldName="transaction_id" :fieldPlaceholder="__('placeholders.payments.transactionId')" />
+                            fieldName="transaction_id" :fieldPlaceholder="__('placeholders.payments.transactionId')" :fieldValue="strtoupper(Str::random(12))" fieldReadOnly="true"/>
                     </div>
 
                     <div class="col-md-3">
