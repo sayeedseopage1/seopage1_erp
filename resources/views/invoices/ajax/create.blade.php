@@ -728,8 +728,7 @@ $addProductPermission = user()->permission('add_product');
                 </x-forms.button-secondary>
 
             </div>
-
-            <x-forms.button-cancel :link="route('invoices.index')" class="border-0 ">@lang('app.cancel')
+            <x-forms.button-cancel :link="route('projects.show', $project->id).'?tab=milestones'" class="border-0 ">@lang('app.cancel')
             </x-forms.button-cancel>
 
         </x-form-actions>
