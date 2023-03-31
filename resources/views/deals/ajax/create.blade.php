@@ -34,7 +34,7 @@
                             <label id="clientUserNameError" class="error text-danger" for="client_username"></label>
                         </div>
                     </div>
-                    <div class="col-lg-5 col-md-6" id="client-username-select" style="">
+                    {{-- <div class="col-lg-5 col-md-6" id="client-username-select" style="">
                         <label class="f-14 text-dark-grey mb-12 my-3" data-label="true" for="category_id">Client Username
                             <sup class="f-14 mr-1">*</sup>
                             <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Select existing client" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
@@ -55,8 +55,8 @@
                                 <label id="clientUserNameError2" class="error text-danger" for="client_username2"></label>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-lg-2 mt-1">
+                    </div> --}}
+                    <!-- <div class="col-md-6 col-lg-2 mt-1">
                         <div class="form-group">
                             <div class="d-flex mt-5">
                                 <div class="form-check">
@@ -67,7 +67,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-lg-6 col-md-6">
                         <div class="form-group my-3" required="required">
                             <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_name">Project Name
@@ -170,31 +170,35 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
 <script type="text/javascript">
-
     var path = "{{ route('client-search') }}";
 
-  
-
     $('.client-search').typeahead({
-
-            source: function (query, process) {
-
-                return $.get(path, {
-
-                    query: query
-
-                }, function (data) {
-
-                    return process(data);
-
+        source: function (query, process) {
+            return $.get(path, {
+                query: query
+            }, function (data) {
+                var results = data.map(function(item){
+                    return '<div class="my-custom-typeahead" name="'+item.name+'" username="'+item.user_name+'"><button class="getData">'+ item.name +' ('+item.user_name+' )</button></div>';
                 });
+                return process(results);
+            });
+        },
+        highlighter: function (item) {
+            return item;
+        },
+        updater: function (item) {
+            var text = $(item).text(); // extract text content of button element
+            this.$element.val('text'); // set value of input field to extracted text
+            getData($(item).attr('name'), $(item).attr('username'))
+            // $('#client_username').val($(item).attr('username'));
+            return $(item).attr('name'); // return extracted text to highlighter function
+        }
+    })
 
-            }
-
-        });
-
-  
-
+    function getData(name, username) {
+        $('#client_name').val(name);
+        $('#client_username').val(username);
+    }
 </script>
 
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
@@ -209,7 +213,7 @@
             '_token': "{{ csrf_token() }}",
             'client_name': document.getElementById("client_name").value,
             'client_username': document.getElementById("client_username").value,
-            'client_username2': document.getElementById("client_username2").value,
+            // 'client_username2': document.getElementById("client_username2").value,
             'project_name': document.getElementById("project_name").value,
             'project_link': document.getElementById("project_link").value,
             'original_currency_id': document.getElementById("original_currency_id").value,
@@ -308,24 +312,22 @@
     });
 </script>
 <script>
-  $(document).ready(function() {
-$('#client-username').show();
-$('#client-username-select').hide();
-$('#existing_client').prop('checked', false);
+    // $(document).ready(function() {
+    //     $('#client-username').show();
+    //     $('#client-username-select').hide();
+    //     $('#existing_client').prop('checked', false);
 
-$('#existing_client').click(function() {
-            var check = $('#existing_client').is(":checked") ? true : false;
-            if (check == true) {
-                $('#client-username').hide();
-                $('#client-username-select').show();
-            } else {
-                $('#client-username').show();
-                $('#client-username-select').hide();
-            }
-        });
-    });
-
-
+    //     $('#existing_client').click(function() {
+    //         var check = $('#existing_client').is(":checked") ? true : false;
+    //         if (check == true) {
+    //             $('#client-username').hide();
+    //             $('#client-username-select').show();
+    //         } else {
+    //             $('#client-username').show();
+    //             $('#client-username-select').hide();
+    //         }
+    //     });
+    // });
 </script>
 <script>
 
@@ -337,10 +339,3 @@ $('#existing_client').click(function() {
         $('#'+id).val(checkedData);
     }
 </script>
-{{--<script type="text/javascript">--}}
-{{--$(document).ready(function() {--}}
-{{--  // $('#description2').summernote();--}}
-{{--  // $('#description3').summernote();--}}
-
-{{--});--}}
-{{--</script>--}}
