@@ -123,7 +123,7 @@
                 <x-form-actions>
                     <x-forms.button-primary id="save-payment-form" class="mr-3" icon="check">@lang('app.save')
                     </x-forms.button-primary>
-                    <x-forms.button-cancel :link="route('payments.index')" class="border-0">@lang('app.cancel')
+                    <x-forms.button-cancel :link="route('projects.show', $project->id).'?tab=milestones'" class="border-0">@lang('app.cancel')
                     </x-forms.button-cancel>
                 </x-form-actions>
 
