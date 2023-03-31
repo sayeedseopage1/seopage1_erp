@@ -46,6 +46,7 @@ use App\Models\Country;
 
 use Toastr;
 use Exception;
+use App\Models\EmployeeDetails;
 
 
 class ContractController extends AccountBaseController
@@ -920,8 +921,11 @@ class ContractController extends AccountBaseController
                                 $pm_project_update = PMAssign::find($pm_project_find->id);
                                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
                                 $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                                $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
                                 $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
                                 $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
+                                $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                                $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
                                 $pm_project_update->save();
                             }
                         } else {
@@ -972,6 +976,8 @@ class ContractController extends AccountBaseController
                                 $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
                                 $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
                                 $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
+                                $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                                $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
                                 $pm_project_update->save();
                             } else {
                                 $pmassign = new PMProject();
@@ -995,6 +1001,8 @@ class ContractController extends AccountBaseController
                                 $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
                                 $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
                                 $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
+                                $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                                $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
                                 $pm_project_update->save();
                             }
                         }
@@ -1017,6 +1025,30 @@ class ContractController extends AccountBaseController
                         foreach ($users as $usr) {
                           Mail::to($usr->email)->send(new WonDealMail($project_id));
                         }
+                    // $check_new_pm= User::where('id',$deal->pm_id)->first();
+                    // $new_pm = EmployeeDetails::where('user_id',$check_new_pm->id)->first();
+                    // $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
+
+                    // $from = Carbon::createFromFormat('Y-m-d H:s:i', $new_pm->joining_date);
+    
+                    // $diff_in_days = $from->diffInDays($to);
+                    // if($diff_in_days < 30)
+                    // {
+                    //     $startOfWeek = Carbon::now()->startOfWeek();
+                    //     $endOfWeek = Carbon::now()->endOfWeek();
+                    //     $new_pm_project_count= Project::where('pm_id',$new_pm->user_id)->where('created_at',[$startOfWeek, $endOfWeek])->count();
+                    //     if($new_pm_project_count > 1)
+                    //     {
+                    //         $new_pm_assign = PMAssign::where('pm_id',$new_pm->user_id)->first();
+                    //         $new_pm_status= PMAssign::find($new_pm_assign->id);
+                    //         $new_pm_status->status = 0;
+                    //         $new_pm_status->save();
+                    //     }
+                        
+                    // }
+
+
+    
 
                     // $clientdetail= ClientDetails::find($client_id->id);
                     // //dd($clientdetail);
@@ -1191,6 +1223,8 @@ class ContractController extends AccountBaseController
                           $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
                           $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
                           $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
+                          $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                          $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
                           $pm_project_update->save();
                       }
                   } else {
@@ -1241,6 +1275,8 @@ class ContractController extends AccountBaseController
                           $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
                           $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
                           $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
+                          $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                          $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
                           $pm_project_update->save();
                       } else {
                           $pmassign = new PMProject();
@@ -1264,6 +1300,8 @@ class ContractController extends AccountBaseController
                           $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
                           $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
                           $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
+                          $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                          $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
                           $pm_project_update->save();
                       }
                   }
@@ -1278,6 +1316,31 @@ class ContractController extends AccountBaseController
                     $project_admin_update->save();
                   $user= User::where('id',$deal_pm_id->pm_id)->first();
                     Mail::to($user->email)->send(new WonDealMail($project_id));
+                    // $check_new_pm= User::where('id',$deal->pm_id)->first();
+                    // $new_pm = EmployeeDetails::where('user_id',$check_new_pm->id)->first();
+                    // $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
+
+                    // $from = Carbon::createFromFormat('Y-m-d H:s:i', $new_pm->joining_date);
+    
+                    // $diff_in_days = $from->diffInDays($to);
+                    // if($diff_in_days < 30)
+                    // {
+                    //     $startOfWeek = Carbon::now()->startOfWeek();
+                    //     $endOfWeek = Carbon::now()->endOfWeek();
+                    //     $new_pm_project_count= Project::where('pm_id',$new_pm->user_id)->where('created_at',[$startOfWeek, $endOfWeek])->count();
+                    //     if($new_pm_project_count > 1)
+                    //     {
+                    //         $new_pm_assign = PMAssign::where('pm_id',$new_pm->user_id)->first();
+                    //         $new_pm_status= PMAssign::find($new_pm_assign->id);
+                    //         $new_pm_status->status = 0;
+                    //         $new_pm_status->save();
+                    //     }
+                        
+                    // }
+
+                   
+
+                
 
                     //  Mail::to($test->email)->send(new WonDealMail($project));
                     //   $users= User::where('role_id',1)->get();
