@@ -588,31 +588,10 @@
                     </div>
                     <button type="button" class="page-prev btn btn-danger sp1next ">Prev</button>
                     <div id="mobile-speed-error" class="error-message"></div>
-                    <button type="button" class="page-next btn btn-primary sp1next ">Next</button>
+                    <button type="button" class="page-next btn btn-primary sp1next" id="sendForm">Next</button>
                 </section>
 
                 <!-- alert  -->
-
-                <section class="page" id="newsp12">
-                    <h4 style="text-align: center;padding: 20px;color: #1D82F5;"> Congratulations!!! You've completed step-01 successfully.</h4><br/>
-
-                    <p>Are You agree For Step 02</p>
-                    <div class="newitem" id="newbts">
-                        <label class="rad-label" >
-                            <input type="checkbox" class="rad-input" name="step_1" id="ts" name="ts" value="1" required >
-                            <div class="rad-design"></div>
-                            <div class="rad-text">Yes</div>
-                        </label>
-
-                        <label class="rad-label">
-                            <input type="checkbox" class="rad-input" name="step_1" onclick="myFunction()">
-                            <div class="rad-design"></div>
-                            <div class="rad-text">No</div>
-                        </label>
-                    </div>
-                    <button type="button" class="page-prev btn btn-danger sp1next">Prev</button>
-                    <button type="submit" class="page-next btn btn-success sp1next" id="sendForm">Step 02</button>
-                </section>
                 <!-- Step – 02: Start -->
                 <!-- Step – 02: Start -->
 
@@ -1041,6 +1020,26 @@
                         <!-- Step – 02: Start -->
                         <!-- Step – 02: Start -->
                         <input type="hidden" name="step" value="2">
+                        <section class="page" id="newsp12">
+                            <h4 style="text-align: center;padding: 20px;color: #1D82F5;"> Congratulations!!! You've completed step-01 successfully.</h4><br/>
+
+                            <p>Are You agree For Step 02</p>
+                            <div class="newitem" id="newbts">
+                                <!-- <label class="rad-label" >
+                                    <input type="checkbox" class="rad-input" name="step_1" id="ts" name="ts" value="1" required >
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">Yes</div>
+                                </label>
+
+                                <label class="rad-label">
+                                    <input type="checkbox" class="rad-input" name="step_1" onclick="myFunction()">
+                                    <div class="rad-design"></div>
+                                    <div class="rad-text">No</div>
+                                </label> -->
+                            </div>
+                            <button type="button" class="page-prev btn btn-danger sp1next">Prev</button>
+                            <button type="button" class="page-next btn btn-success sp1next">Step 02</button>
+                        </section>
                         <section class="sp1step">
                             <h4 class="text-center">Step – 02: Complete These Checklists After Migration</h4> <br>
 
@@ -1221,8 +1220,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 <script>
     $(document).ready(function(){
+        @if(isset($qcData) && $qcData->step_1 == 1)
+            $('.progress-bar').css('width', '62%');
+            $('.progress-value').text('62%');
+        @endif
         $thing = $('#demo').book({
-            onPageChange:updateProgress(@if(isset($qcData) && $qcData->step_1 == '1') '', '12', '19' @endif),
+            onPageChange:updateProgress,
             speed: 200,
         }).validate({
             rules: {
@@ -1389,7 +1392,12 @@
         // $thing.show().booklet({startingPage: 5})
 
         /* Update progress bar whenever the page changes */
-        function updateProgress(prevPageIndex, currentPageIndex, pageCount, pageName){
+        function updateProgress(prevPageIndex, currentPageIndex, pageCount, pageName) {
+            @if(isset($qcData) && $qcData->step_1 == 1)
+                currentPageIndex = currentPageIndex + 12;
+                pageCount = pageCount + 12;
+            @endif
+
             t = (currentPageIndex / (pageCount-1)) * 100;
 
             $('.progress-bar').attr('aria-valuenow', t);
@@ -1419,7 +1427,7 @@
     function myFunction() {
         var txt;
         if (confirm("No, I Want To Do IT Later!")) {
-            txt = " You pressed Cancel!";
+            $('#demo').submit();
         }
 
         document.getElementById("demo").innerHTML = txt;
