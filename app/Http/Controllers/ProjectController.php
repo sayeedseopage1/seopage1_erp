@@ -2491,7 +2491,7 @@ if ($pm_count < 2) {
             $project->logical_issues= $request->logical_issues;
             $project->loading_speed= $request->loading_speed;
             $project->mobile_speed= $request->mobile_speed;
-            $project->step_1= $request->step_1;
+            $project->step_1= 1;
 
             if ($project->save()) {
                 Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
