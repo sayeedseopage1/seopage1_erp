@@ -155,49 +155,23 @@ class DealController extends AccountBaseController
 
     public function store(Request $request)
     {
-        if($request->client_username2)
-        {
-            $request->validate([
-                'client_name' => 'required',
-                'client_username2' => 'required',
-                'project_name' => 'required',
-                'project_link' => 'required|url',
-                'amount' => 'required',
-                'description' => 'required',
-                'comments' => 'required',
-    
-            ]);
-        }
-        else {
-            $request->validate([
-                'client_name' => 'required',
-                'client_username' => 'required',
-                'project_name' => 'required',
-                'project_link' => 'required|url',
-                'amount' => 'required',
-                'description' => 'required',
-                'comments' => 'required',
-    
-            ]);
-            # code...
-        }
-       
-//        dd($request);
+        $request->validate([
+            'client_name' => 'required',
+            'client_username' => 'required',
+            'project_name' => 'required',
+            'project_link' => 'required|url',
+            'amount' => 'required',
+            'description' => 'required',
+            'comments' => 'required',
+        ]);
 
-      $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      $suffle = substr(str_shuffle($chars), 0, 6);
+        $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new DealStage();
         $deal->client_name= $request->client_name;
         $deal->short_code = 'DSEOP1' . $suffle;
-       // $username = Deal::find($request->client_username);
-        if ($request->client_username != null){
-
-            $deal->client_username= $request->client_username;
-        }else{
-            $deal->client_username= $request->client_username2;
-        }
-       // dd($username);
-       // $username->save();
+        
+        $deal->client_username= $request->client_username;
         $deal->deal_stage= 0;
         $deal->project_name = $request->project_name;
         $deal->project_link = $request->project_link;
@@ -211,15 +185,15 @@ class DealController extends AccountBaseController
         $deal->added_by= Auth::id();
         $deal->converted_by= Auth::id();
         $deal->save();
-       // $find_user= User::where('user_name',$request->coinet_username)->first();
-        if($request->client_username != null )
+       $find_user= User::where('user_name', $request->client_username)->first();
+        if($find_user == null )
         {
-             $user = new User();
-             $user->name = $request->client_name;
-             $user->user_name = $request->user_name;
-             $user->login= 'disable';
-             $user->email_notifications = 0;
-             $user->save();
+            $user = new User();
+            $user->name = $request->client_name;
+            $user->user_name = $request->client_username;
+            $user->login= 'disable';
+            $user->email_notifications = 0;
+            $user->save();
         }
 
         $deal_stage= new DealStageChange();
@@ -502,25 +476,12 @@ class DealController extends AccountBaseController
        
 
         $data = User::select(["name","user_name"])
-                     ->where('role_id',null)
-
-                    ->where('name', 'LIKE', '%'. $request->get('query'). '%')
-                    ->orwhere('user_name', 'LIKE', '%'. $request->get('query'). '%')
-                   
-
-                    ->get();
-        dd($data);
-
+        ->where('role_id',null)
+        ->where('name', 'LIKE', '%'. $request->get('query'). '%')
+        ->orwhere('user_name', 'LIKE', '%'. $request->get('query'). '%')
+        ->get();
      
 
         return response()->json($data);
-
     }
-
-
-
-
-
-
-
 }
