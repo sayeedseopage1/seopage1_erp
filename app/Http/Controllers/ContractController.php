@@ -352,6 +352,8 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
+       
+       // dd($existing_client);
       // dd($request->all());
         $current_time= Carbon::now()->format('d-m-Y H:i:s' );
         // dd($request->current_time, $request->award_time,$current_time);
@@ -426,6 +428,7 @@ class ContractController extends AccountBaseController
             }
 
         }
+
         $message_links = $request->message_link;
         // /dd($message_links);
         $value= '';
@@ -437,6 +440,7 @@ class ContractController extends AccountBaseController
 
             }
         }
+        $existing_client= User::where('user_name',$request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new Deal();
@@ -567,18 +571,20 @@ class ContractController extends AccountBaseController
         $project->status = 'not started';
         $project->public = 0;
         $project->save();
-        if($user_name != null)
+       
+
+        if($existing_client != null)
         {
           
            
-            $find_pm_id = Project::where('client_id',$user_name->id)->orderBy('id','desc')->first();
+            $find_pm_id = Project::where('client_id',$existing_client->id)->orderBy('id','desc')->where('id','!=',$project->id)->where('pm_id','!=',null)->first();
            
             $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
 
                 $from = Carbon::createFromFormat('Y-m-d H:s:i', $find_pm_id->created_at);
 
                 $diff_in_days = $from->diffInDays($to);
-                dd($diff_in_days, $find_pm_id);
+               // dd($diff_in_days, $find_pm_id);
                 if ($diff_in_days < 90 && $find_pm_id->project_status == 'Accepted') {
                     $deal_pm_id = Deal::find($deal->id);
             $deal_pm_id->pm_id = $find_pm_id->pm_id;
@@ -586,13 +592,14 @@ class ContractController extends AccountBaseController
             $project_pm_id= Project::find($project->id);
             $project_pm_id->pm_id = $find_pm_id->pm_id;
             $project_pm_id->save();
+           // dd($project_pm_id);
 
             $pmassign = new PMProject();
             $pmassign->project_id = $project->id;
             $pmassign->status = 'pending';
             $pmassign->pm_id = $find_pm_id->pm_id;
             $pmassign->deal_id = $deal->id;
-            $pmassign->client_id = $client->id;
+            $pmassign->client_id = $existing_client->id;
             $pmassign->save();
             $pm_project_find = PMAssign::where('pm_id', $find_pm_id->pm_id)->first();
             $pm_project_update = PMAssign::find($pm_project_find->id);
