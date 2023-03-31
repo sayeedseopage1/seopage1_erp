@@ -567,6 +567,47 @@ class ContractController extends AccountBaseController
         $project->status = 'not started';
         $project->public = 0;
         $project->save();
+        if($user_name != null)
+        {
+          
+           
+            $find_pm_id = Project::where('client_id',$user_name->id)->orderBy('id','desc')->first();
+           
+            $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
+
+                $from = Carbon::createFromFormat('Y-m-d H:s:i', $find_pm_id->created_at);
+
+                $diff_in_days = $from->diffInDays($to);
+                dd($diff_in_days, $find_pm_id);
+                if ($diff_in_days < 90 && $find_pm_id->project_status == 'Accepted') {
+                    $deal_pm_id = Deal::find($deal->id);
+            $deal_pm_id->pm_id = $find_pm_id->pm_id;
+            $deal_pm_id->save();
+            $project_pm_id= Project::find($project->id);
+            $project_pm_id->pm_id = $find_pm_id->pm_id;
+            $project_pm_id->save();
+
+            $pmassign = new PMProject();
+            $pmassign->project_id = $project->id;
+            $pmassign->status = 'pending';
+            $pmassign->pm_id = $find_pm_id->pm_id;
+            $pmassign->deal_id = $deal->id;
+            $pmassign->client_id = $client->id;
+            $pmassign->save();
+            $pm_project_find = PMAssign::where('pm_id', $find_pm_id->pm_id)->first();
+            $pm_project_update = PMAssign::find($pm_project_find->id);
+            $pm_project_update->project_count = $pm_project_update->project_count + 1;
+            $pm_project_update->amount = $pm_project_update->amount + ($deal->amount /2);
+            $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+            $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+            $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->amount/2);
+            $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
+            $pm_project_update->save();
+
+         
+                }
+           
+        }
 
         return response()->json([
             'status' => 'success',
@@ -845,109 +886,113 @@ class ContractController extends AccountBaseController
 
                     // $pm_count = PMAssign::select('project_count')->min('project_count');
                     // $pm_user = PMAssign::where('project_count', $pm_count)->first();
-                    $pm_count = PMAssign::select('monthly_project_count')->where('status',1)->min('monthly_project_count');
-                    $pm_user = PMAssign::where('monthly_project_count', $pm_count)->where('status',1)->first();
-                    if ($pm_count < 2) {
-                        if ($pm_user != null) {
-                            $pmassign = new PMProject();
-                            $pmassign->project_id = $project->id;
-                            $pmassign->status = 'pending';
-                            $pmassign->pm_id = $pm_user->pm_id;
-                            $pmassign->deal_id = $deal->id;
-                            $pmassign->client_id = $client->id;
-                            $pmassign->save();
-                            $deal_assign = Deal::find($deal->id);
-                            $deal_assign->pm_id = $pm_user->pm_id;
-                            $deal_assign->save();
-                            $pm_assign_project = Project::find($project->id);
-                            $pm_assign_project->pm_id = $pmassign->pm_id;
-                            $pm_assign_project->save();
-                            //$email = $request->email;
-
-
-                            //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-                            $pm_project_find = PMAssign::where('pm_id', $pm_user->pm_id)->first();
-                            $pm_project_update = PMAssign::find($pm_project_find->id);
-                            $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                            $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
-                            $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
-                            $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
-                            $pm_project_update->save();
-                        }
-                    } else {
-                        $items = PMAssign::where('status',1)->get();
-                        // $pm_amount = $items->min('amount');
-                        // $pm_count_id = $items->min('project_count');
-                        //
-                        // $pm_find_id = PMAssign::where('amount', $pm_amount)->first();
-                        // $pm_min_pro = PMAssign::where('project_count', $pm_count_id)->first();
-                        // $find_rest = PMAssign::where('project_count', $pm_count_id)->get();
-                        //
-                        // $fin_min = $find_rest->min('amount');
-                        //
-                        // $final_id = PMAssign::where('amount', $fin_min)->first();
-
-                        $pm_amount = $items->min('monthly_project_amount');
-                        $pm_count_id = $items->min('monthly_project_count');
-
-                        $pm_find_id = PMAssign::where('monthly_project_amount', $pm_amount)->first();
-                        $pm_min_pro = PMAssign::where('monthly_project_count', $pm_count_id)->first();
-                        $find_rest = PMAssign::where('monthly_project_count', $pm_count_id)->get();
-
-                        $fin_min = $find_rest->min('monthly_project_amount');
-
-                        $final_id = PMAssign::where('monthly_project_amount', $fin_min)->first();
-
-                        //  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
-
-                        if ($pm_find_id->monthly_project_count + 1 <= $pm_count_id * 1.5) {
-                            $pmassign = new PMProject();
-                            $pmassign->project_id = $project->id;
-                            $pmassign->status = 'pending';
-                            $pmassign->deal_id = $deal->id;
-                            $pmassign->client_id = $client->id;
-                            $pmassign->pm_id = $pm_find_id->pm_id;
-                            $pmassign->save();
-                            $deal_assign = Deal::find($deal->id);
-                            $deal_assign->pm_id = $pm_find_id->pm_id;
-                            $deal_assign->save();
-                            $pm_assign_project = Project::find($project->id);
-                            $pm_assign_project->pm_id = $pmassign->pm_id;
-                            $pm_assign_project->save();
-
-                            //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-                            $pm_project_find = PMAssign::where('pm_id', $pm_find_id->pm_id)->first();
-                            $pm_project_update = PMAssign::find($pm_project_find->id);
-                            $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                            $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
-                            $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
-                            $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
-                            $pm_project_update->save();
+                    if($deal->pm_id == null)
+                    {
+                        $pm_count = PMAssign::select('monthly_project_count')->where('status',1)->min('monthly_project_count');
+                        $pm_user = PMAssign::where('monthly_project_count', $pm_count)->where('status',1)->first();
+                        if ($pm_count < 2) {
+                            if ($pm_user != null) {
+                                $pmassign = new PMProject();
+                                $pmassign->project_id = $project->id;
+                                $pmassign->status = 'pending';
+                                $pmassign->pm_id = $pm_user->pm_id;
+                                $pmassign->deal_id = $deal->id;
+                                $pmassign->client_id = $client->id;
+                                $pmassign->save();
+                                $deal_assign = Deal::find($deal->id);
+                                $deal_assign->pm_id = $pm_user->pm_id;
+                                $deal_assign->save();
+                                $pm_assign_project = Project::find($project->id);
+                                $pm_assign_project->pm_id = $pmassign->pm_id;
+                                $pm_assign_project->save();
+                                //$email = $request->email;
+    
+    
+                                //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+                                $pm_project_find = PMAssign::where('pm_id', $pm_user->pm_id)->first();
+                                $pm_project_update = PMAssign::find($pm_project_find->id);
+                                $pm_project_update->project_count = $pm_project_update->project_count + 1;
+                                $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                                $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                                $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
+                                $pm_project_update->save();
+                            }
                         } else {
-                            $pmassign = new PMProject();
-                            $pmassign->project_id = $project->id;
-                            $pmassign->status = 'pending';
-                            $pmassign->deal_id = $deal->id;
-                            $pmassign->client_id = $client->id;
-                            $pmassign->pm_id = $final_id->pm_id;
-                            $pmassign->save();
-                            $deal_assign = Deal::find($deal->id);
-                            $deal_assign->pm_id = $final_id->pm_id;
-                            $deal_assign->save();
-                            $pm_assign_project = Project::find($project->id);
-                            $pm_assign_project->pm_id = $pmassign->pm_id;
-                            $pm_assign_project->save();
-
-                            //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-                            $pm_project_find = PMAssign::where('pm_id', $final_id->pm_id)->first();
-                            $pm_project_update = PMAssign::find($pm_project_find->id);
-                            $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                            $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
-                            $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
-                            $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
-                            $pm_project_update->save();
+                            $items = PMAssign::where('status',1)->get();
+                            // $pm_amount = $items->min('amount');
+                            // $pm_count_id = $items->min('project_count');
+                            //
+                            // $pm_find_id = PMAssign::where('amount', $pm_amount)->first();
+                            // $pm_min_pro = PMAssign::where('project_count', $pm_count_id)->first();
+                            // $find_rest = PMAssign::where('project_count', $pm_count_id)->get();
+                            //
+                            // $fin_min = $find_rest->min('amount');
+                            //
+                            // $final_id = PMAssign::where('amount', $fin_min)->first();
+    
+                            $pm_amount = $items->min('monthly_project_amount');
+                            $pm_count_id = $items->min('monthly_project_count');
+    
+                            $pm_find_id = PMAssign::where('monthly_project_amount', $pm_amount)->first();
+                            $pm_min_pro = PMAssign::where('monthly_project_count', $pm_count_id)->first();
+                            $find_rest = PMAssign::where('monthly_project_count', $pm_count_id)->get();
+    
+                            $fin_min = $find_rest->min('monthly_project_amount');
+    
+                            $final_id = PMAssign::where('monthly_project_amount', $fin_min)->first();
+    
+                            //  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
+    
+                            if ($pm_find_id->monthly_project_count + 1 <= $pm_count_id * 1.5) {
+                                $pmassign = new PMProject();
+                                $pmassign->project_id = $project->id;
+                                $pmassign->status = 'pending';
+                                $pmassign->deal_id = $deal->id;
+                                $pmassign->client_id = $client->id;
+                                $pmassign->pm_id = $pm_find_id->pm_id;
+                                $pmassign->save();
+                                $deal_assign = Deal::find($deal->id);
+                                $deal_assign->pm_id = $pm_find_id->pm_id;
+                                $deal_assign->save();
+                                $pm_assign_project = Project::find($project->id);
+                                $pm_assign_project->pm_id = $pmassign->pm_id;
+                                $pm_assign_project->save();
+    
+                                //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+                                $pm_project_find = PMAssign::where('pm_id', $pm_find_id->pm_id)->first();
+                                $pm_project_update = PMAssign::find($pm_project_find->id);
+                                $pm_project_update->project_count = $pm_project_update->project_count + 1;
+                                $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                                $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                                $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
+                                $pm_project_update->save();
+                            } else {
+                                $pmassign = new PMProject();
+                                $pmassign->project_id = $project->id;
+                                $pmassign->status = 'pending';
+                                $pmassign->deal_id = $deal->id;
+                                $pmassign->client_id = $client->id;
+                                $pmassign->pm_id = $final_id->pm_id;
+                                $pmassign->save();
+                                $deal_assign = Deal::find($deal->id);
+                                $deal_assign->pm_id = $final_id->pm_id;
+                                $deal_assign->save();
+                                $pm_assign_project = Project::find($project->id);
+                                $pm_assign_project->pm_id = $pmassign->pm_id;
+                                $pm_assign_project->save();
+    
+                                //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+                                $pm_project_find = PMAssign::where('pm_id', $final_id->pm_id)->first();
+                                $pm_project_update = PMAssign::find($pm_project_find->id);
+                                $pm_project_update->project_count = $pm_project_update->project_count + 1;
+                                $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                                $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                                $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
+                                $pm_project_update->save();
+                            }
                         }
                     }
+                  
 
                     $deal_pm_id = Deal::where('id',$request->id)->first();
                       $project_id= Project::where('deal_id',$deal_pm_id->id)->first();
@@ -1111,7 +1156,8 @@ class ContractController extends AccountBaseController
 
                   // $pm_count = PMAssign::select('project_count')->min('project_count');
                   // $pm_user = PMAssign::where('project_count', $pm_count)->first();
-                  $pm_count = PMAssign::select('monthly_project_count')->where('status',1)->min('monthly_project_count');
+                  if ($deal->pm_id == null) {
+                    $pm_count = PMAssign::select('monthly_project_count')->where('status',1)->min('monthly_project_count');
                   $pm_user = PMAssign::where('monthly_project_count', $pm_count)->where('status',1)->first();
                   if ($pm_count < 2) {
                       if ($pm_user != null) {
@@ -1215,6 +1261,8 @@ class ContractController extends AccountBaseController
                       }
                   }
 
+                  }
+                 
                   $deal_pm_id = Deal::where('id',$request->id)->first();
                     $project_id= Project::where('deal_id',$deal_pm_id->id)->first();
                     $project_admin_update= Project::find($project_id->id);
