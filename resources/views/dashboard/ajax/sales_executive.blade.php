@@ -619,13 +619,13 @@
                                             
                                         </td>
                                     </tr>
-                                    @emtpy
+                                    @empty
                                     <tr>
                                         <td colspan="7" class="shadow-none">
                                             <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
                                         </td>
                                     </tr>
-                                    @endforeach
+                                    @endforelse
                                 </x-table>
                             </div>
                         </div>

@@ -8,7 +8,7 @@
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
                     @lang('Create Deal')</h4>
                 <div class="row p-20">
-                    <div class="col-lg-5 col-md-6">
+                    <div class="col-lg-6 col-md-6">
                         <div class="form-group my-3" required="required">
                             <label class="f-14 text-dark-grey mb-12" data-label="true" for="client_name">Client Name
                                 <sup class="f-14 mr-1">*</sup>
@@ -22,7 +22,7 @@
                             <div id="clientList"></div>
                         </div>
                     </div>
-                    <div class="col-lg-5 col-md-6" id="client-username">
+                    <div class="col-lg-6 col-md-6" id="client-username">
                         <div class="form-group my-3" required="required">
                             <label class="f-14 text-dark-grey mb-12" data-label="true" for="client_username">Client Username
                                 <sup class="f-14 mr-1">*</sup>

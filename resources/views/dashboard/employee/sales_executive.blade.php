@@ -789,7 +789,7 @@
 						                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
 						                        </td>
 											</tr>
-		                                    @endforeach
+		                                    @endforelse
 		                                </x-table>
 		                            </div>
 		                        </div>
