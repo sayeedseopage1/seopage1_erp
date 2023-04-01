@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="col-md-2 m-auto" title="Existing Client">
                                     <i class="fa fa-check-circle fa-2x existingClientSuccess" style="display: none;"></i>
-                                    <i class="fa fa-plus-circle fa-2x existingClientAdded" style="display: none;"></i>
+                                    <span class="existingClientAdded" style="display: none;">New Client</span>
                                 </div>
                             </div>
                             <label id="clientUserNameError" class="error text-danger" for="client_username"></label>
