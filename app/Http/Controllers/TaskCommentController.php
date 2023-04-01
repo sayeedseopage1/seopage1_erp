@@ -50,24 +50,19 @@ class TaskCommentController extends AccountBaseController
         $comment->task_id = $request->taskId;
         $comment->user_id = user()->id;
         $comment->save();
-//        dd($comment);
 
         $this->comments = TaskComment::with('user')->where('task_id', $request->taskId)->orderBy('id', 'desc')->get();
         $view = view('tasks.comments.show', $this->data)->render();
         $task= Task::where('id',$request->taskId)->first();
         $project= Project::where('id',$task->project_id)->first();
-        //dd($request->taskId);
         $task_member= TaskUser::where('task_id',$request->taskId)->first();
-      $sender= User::where('id',Auth::id())->first();
-      $users= User::where('id',$task->added_by)->orWhere('id',$task_member->user_id)->orWhere('id',$project->pm_id)->get();
-      foreach ($users as $user) {
+        $sender= User::where('id',Auth::id())->first();
+        $users= User::where('id',$task->added_by)->orWhere('id',$task_member->user_id)->orWhere('id',$project->pm_id)->get();
+        foreach ($users as $user) {
         // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
-        Notification::send($user, new TaskCommentNotification($task,$sender));
-      }
-
-
+            Notification::send($user, new TaskCommentNotification($task,$sender));
+        }
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
-
     }
 
     /**
@@ -122,21 +117,42 @@ class TaskCommentController extends AccountBaseController
     }
 
 //    COMMENT REPLY SYSTEM START
-        public function replyStore(Request $request)
-        {
-//            dd($request->all());
-            $reply = new TaskReply();
-            $reply->reply = $request->reply;
-            $reply->comment_id = $request->reply_id;
-            $reply->user_id = $request->user_id;
-            $reply->task_id = $request->taskId;
-            $reply->added_by = $request->added_by;
-            $reply->last_updated_by = $request->last_updated_by;
-            $reply->save();
+    public function replyStore(Request $request)
+    {
+        //dd($request->all());
+        $reply = new TaskReply();
+        $reply->reply = $request->reply;
+        $reply->comment_id = $request->reply_id;
+        $reply->user_id = $request->user_id;
+        $reply->task_id = $request->taskId;
+        $reply->added_by = $request->added_by;
+        $reply->last_updated_by = $request->last_updated_by;
+        if ($reply->save()) {
+            $viewTaskFilePermission = user()->permission('view_task_files');
+            $viewSubTaskPermission = user()->permission('view_sub_tasks');
+            $this->task = Task::with(['boardColumn', 'project', 'users', 'label', 'approvedTimeLogs', 'approvedTimeLogs.user', 'approvedTimeLogs.activeBreak', 'comments', 'comments.user', 'subtasks.files', 'userActiveTimer',
+            'files' => function ($q) use ($viewTaskFilePermission) {
+                if ($viewTaskFilePermission == 'added') {
+                    $q->where('added_by', user()->id);
+                }
+            },
+            'subtasks' => function ($q) use ($viewSubTaskPermission) {
+                if ($viewSubTaskPermission == 'added') {
+                    $q->where('added_by', user()->id);
+                }
+            }])
+            ->withCount('subtasks', 'files', 'comments', 'activeTimerAll')
+            ->findOrFail($request->taskId)->withCustomFields();
+
+            $this->replys =DB::table('task_replies')
+            ->join('users','task_replies.user_id','=','users.id')
+            ->select('task_replies.*','users.name','users.image','users.updated_at')
+            ->get();
+
+            $view = view('tasks.ajax.files', $this->data)->render();
             return response()->json([
                 'status'=>400,
             ]);
         }
-//    COMMENT REPLY SYSTEM END
-
+    }
 }
