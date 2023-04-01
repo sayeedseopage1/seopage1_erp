@@ -99,8 +99,8 @@ class TaskController extends AccountBaseController
             'link.*' => 'required|url|min:1',
             'text' => 'required',
         ], [
-            'link.url' => '000!',
-            'link.*.required' => 'This field are required',
+            'link.url' => 'Invalid url!',
+            'link.*.required' => 'This field is required',
             'text.required' => 'Please describe what you\'ve done !',
         ]);
 
