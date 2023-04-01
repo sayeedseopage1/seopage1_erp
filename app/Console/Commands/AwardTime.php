@@ -65,53 +65,10 @@ class AwardTime extends Command
                     $project_update->save();
                 }
             }
+            
         }
 
-        $check_new_pm= User::where('role_id',4)->orderBy('id','desc')->first();
-                    $new_pm = EmployeeDetails::where('user_id',$check_new_pm->id)->first();
                     
-                    $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
-
-                    $from = Carbon::createFromFormat('Y-m-d H:s:i', $new_pm->joining_date);
-    
-                    $diff_in_days = $from->diffInDays($to);
-                    //dd($diff_in_days);
-                    if($diff_in_days < 30)
-                    {
-                        // $startOfWeek = Carbon::now()->startOfWeek();
-                        // $endOfWeek = Carbon::now()->endOfWeek();
-                        // $new_pm_project_count= Project::where('pm_id',$check_new_pm->id)->where('start_date',Carbon::thisWeek())->count();
-                            $startOfWeek = Carbon::now()->startOfWeek();
-                            $endOfWeek = Carbon::now()->endOfWeek();
-
-                            $new_pm_project_count = Project::where('pm_id', $check_new_pm->id)
-                                ->whereBetween('start_date', [$startOfWeek, $endOfWeek])
-                                ->count();
-                       // dd($new_pm_project_count);
-                        if($new_pm_project_count > 0)
-                        {
-                            $new_pm_assign = PMAssign::where('pm_id',$new_pm->user_id)->first();
-                            $new_pm_status= PMAssign::find($new_pm_assign->id);
-                        //    / dd($new_pm_status);
-                            $new_pm_status->status = 0;
-                            $new_pm_status->save();
-                        }else{
-                            $new_pm_assign = PMAssign::where('pm_id',$new_pm->user_id)->first();
-                            $new_pm_status= PMAssign::find($new_pm_assign->id);
-                        //    / dd($new_pm_status);
-                            $new_pm_status->status = 1;
-                            $new_pm_status->save();
-
-
-                        }
-                        
-                    }else 
-                    {
-                        $new_pm_assign = PMAssign::where('pm_id',$new_pm->user_id)->first();
-                            $new_pm_status= PMAssign::find($new_pm_assign->id);
-                            $new_pm_status->status = 1;
-                            $new_pm_status->save();
-                    }
 
         $this->info('Award Time Checked and Status Changed');
     }
