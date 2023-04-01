@@ -976,7 +976,7 @@ class TaskController extends AccountBaseController
         }
 
         $tab = request('view');
-
+        
         switch ($tab) {
         case 'file':
             $this->tab = 'tasks.ajax.files';
