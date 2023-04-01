@@ -74,7 +74,7 @@
           $label= '';
           $label .= '<strong class="form-label">Client Country</strong>'
           ?>
-          <div class="mb-1">
+          <div class="mb-1 autoHideondeals">
               <label class="f-14 text-dark-grey mb-12 mt-3" data-label="true" for="country"><strong class="form-label">Client Country</strong>
                   <sup class="f-14 mr-1">*</sup>
                   <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Client Country" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
@@ -325,6 +325,7 @@
                 var results = data.map(function(item){
                     if (item.name.toLowerCase() == $('#client_username').val().toLowerCase() || item.user_name.toLowerCase() == $('#client_username').val().toLowerCase()) {
                         $('.existingClientSuccess').show();
+                        $('.autoHideondeals').hide();
                         getData(item.name, item.user_name);
                         return '';
                     } else {
@@ -340,18 +341,20 @@
         updater: function (item) {
             var text = $(item).text(); // extract text content of button element
             this.$element.val('text'); // set value of input field to extracted text
+            $('.autoHideondeals').hide();
             getData($(item).attr('name'), $(item).attr('username'))
             // $('#client_username').val($(item).attr('username'));
-            return $.trim($(item).attr('name')); // return extracted text to highlighter function
+            return $.trim($(item).attr('username')); // return extracted text to highlighter function
         }
     })
 
     function getData(name, username) {
-        $('#client_username').val(name);
-        $('#client_name').val(username);
+        $('#client_username').val(username);
+        $('#client_name').val(name);
         $('#client_name').attr('disabled','disabled');
         $('.existingClientSuccess').show();
         $('.existingClientAdded').hide();
+        exit();
     }
 </script>
 @endpush

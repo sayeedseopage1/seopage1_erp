@@ -205,13 +205,13 @@
             this.$element.val('text'); // set value of input field to extracted text
             getData($(item).attr('name'), $(item).attr('username'))
             // $('#client_username').val($(item).attr('username'));
-            return $.trim($(item).attr('name')); // return extracted text to highlighter function
+            return $.trim($(item).attr('username')); // return extracted text to highlighter function
         }
     })
 
     function getData(name, username) {
-        $('#client_username').val(name);
-        $('#client_name').val(username);
+        $('#client_username').val(username);
+        $('#client_name').val(name);
         $('#client_name').attr('disabled','disabled');
         $('.existingClientSuccess').show();
         $('.existingClientAdded').hide();
