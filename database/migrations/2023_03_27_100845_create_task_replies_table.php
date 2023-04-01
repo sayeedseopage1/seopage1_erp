@@ -19,6 +19,8 @@ return new class extends Migration
             $table->integer('comment_id');
             $table->integer('user_id');
             $table->integer('task_id');
+            $table->integer('added_by')->default(null);
+            $table->integer('last_updated_by')->default(null);
             $table->timestamps();
         });
     }
