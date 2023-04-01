@@ -185,7 +185,7 @@ class DealController extends AccountBaseController
         $deal->added_by= Auth::id();
         $deal->converted_by= Auth::id();
         $deal->save();
-       $find_user= User::where('user_name', $request->client_username)->first();
+        $find_user= User::where('user_name', $request->client_username)->first();
         if($find_user == null )
         {
             $user = new User();
