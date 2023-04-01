@@ -246,7 +246,7 @@
             <x-table>
                 <?php
                 $status= App\Models\ProjectStatusSetting::where('status','active')->orderBy('priority','asc')->get();
-                ?>     
+                ?>
                 <x-slot name="thead">
                     <th>#</th>
                     <th class="pl-20 text-capitalize">Status Name</th>
@@ -276,7 +276,7 @@
             <x-table>
                 <?php
                 $task_status= App\Models\TaskBoardColumn::orderBy('priority','asc')->get();
-                ?>     
+                ?>
                 <x-slot name="thead">
                     <th>#</th>
                     <th class="pl-20 text-capitalize">Status Name</th>
@@ -309,7 +309,7 @@
                 <x-table class="h-200">
                     <?php
                     $projects= App\Models\Project::where('pm_id',Auth::id())->orderBy('id','desc')->get();
-                    ?>     
+                    ?>
                     <x-slot name="thead">
                         <th>#</th>
 
@@ -710,8 +710,7 @@ data-time-id="{{ $myActiveTimer->activeBreak->id }}">
 </div>
 @endif
 
-<div class="row mt-3 mb-3
-">
+<div class="row mt-3 mb-3">
 
 @if (in_array('notices', $activeWidgets))
 @isset($notices)
