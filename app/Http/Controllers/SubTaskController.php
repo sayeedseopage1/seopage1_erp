@@ -41,7 +41,6 @@ class SubTaskController extends AccountBaseController
      */
     public function store(StoreSubTask $request)
     {
-      //dd($request);
         $this->addPermission = user()->permission('add_sub_tasks');
         $task = Task::findOrFail($request->task_id);
         $taskUsers = $task->users->pluck('id')->toArray();

@@ -17,49 +17,51 @@
                             <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                         </svg>
                     </div>
-                    <div id="row">
-                        <div class="input-group mr-3 mt-3">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-danger"
-                                id="DeleteRow" type="button">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                    <div class="row">
+                        <div class="col-md-9 dynamic-field" id="dynamic-field-1">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group mb-0">
+                                        <input type="text" id="field" class="form-control height-35 f-14 mb-1" placeholder="Add Link Here" name="link[]"/>
+                                        <span id="linkError_0" class="text-danger" for="link"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <input type="text" class="form-control m-input" name="link[]" id="link">
-                    </div>
-                    <label id="linkError_0" class="text-danger" for="link"></label>
-                </div>
 
-                <div class="mt-3" id="newinput"></div>
-                <button id="rowAdder" type="button"
-                class="btn btn-dark mt-3">
-                <span class="bi bi-plus-square-dotted">
-                </span>
-            </button>
-            <div class="row mt-3 ml-1 mr-1">
-                <div class="mb-3 mt-3">
-                    Describe What You've Done<sup class="f-14 mr-1 text-danger">*</sup>
-                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Describe What You've Done" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                    </svg>
+                        <div class="col-md-3 append-buttons">
+                            <div class="clearfix">
+                                <button type="button" id="add-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                <button type="button" id="remove-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ml-1 mr-1">
+                        <div class="mb-3 mt-3">
+                            Describe What You've Done<sup class="f-14 mr-1 text-danger">*</sup>
+                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Describe What You've Done" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                            </svg>
+                        </div>
+                        <div class="">
+                            <textarea name="text" id="text" class="form-control"></textarea>
+                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                            <script>
+                                CKEDITOR.replace('text',{
+                                    height :100,
+                                });
+                            </script>
+                            <label id="textError" class="text-danger" for="text"></label>
+                        </div>
+                    </div>
                 </div>
-                <div class="">
-                    <textarea name="text" id="text" class="form-control"></textarea>
-                    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
-                    <script>
-                        CKEDITOR.replace('text');
-                    </script>
-                    <label id="textError" class="text-danger" for="text"></label>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
                 </div>
-            </div>
+            </form>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
-        </div>
-    </form>
-</div>
-</div>
+    </div>
 </div>
 <script>
     $('#submitBtn').click(function(e){
@@ -118,118 +120,73 @@
 
 </script>
 <script type="text/javascript">
-    $("#submission_type").change(function() {
-        if ($(this).val() == "table") {
-            $('#submission_type_table').show();
-            $('#otherField').attr('required', '');
-            $('#otherField').attr('data-error', 'This field is required.');
-        } else {
-            $('#submission_type_table').hide();
-            $('#otherField').removeAttr('required');
-            $('#otherField').removeAttr('data-error');
+    $(document).ready(function () {
+        var buttonAdd = $("#add-button");
+        var buttonRemove = $("#remove-button");
+        var className = ".dynamic-field";
+        var count = 0;
+        var field = "";
+        var maxFields = 50;
+
+        function totalFields() {
+            return $(className).length;
         }
-        if ($(this).val() == "link") {
-            $('#submission_type_link').show();
-            $('#otherField').attr('required', '');
-            $('#otherField').attr('data-error', 'This field is required.');
-        } else {
-            $('#submission_type_link').hide();
-            $('#otherField').removeAttr('required');
-            $('#otherField').removeAttr('data-error');
+
+        function addNewField() {
+            var total = $('input[name="link[]"]').length;
+            count = totalFields() + 1;
+            field = $("#dynamic-field-1").clone();
+            field.attr("id", "dynamic-field-" + count);
+            field.children("label").attr("for", "linkError_" + 'total').text("Field " + count);
+            field.find("input").attr("id", "linkError_" + 'total').val("");
+            field.append('<span id="linkError_'+total+'" class="text-danger" for="link"></span>');
+            $(className + ":last").after($(field));
         }
-        if ($(this).val() == "text") {
-            $('#submission_type_text').show();
-            $('#otherField').attr('required', '');
-            $('#otherField').attr('data-error', 'This field is required.');
-        } else {
-            $('#submission_type_text').hide();
-            $('#otherField').removeAttr('required');
-            $('#otherField').removeAttr('data-error');
+
+        function removeLastField() {
+            if (totalFields() > 1) {
+                $(className + ":last").remove();
+            }
         }
-        if ($(this).val() == "list") {
-            $('#submission_type_list').show();
-            $('#otherField').attr('required', '');
-            $('#otherField').attr('data-error', 'This field is required.');
-        } else {
-            $('#submission_type_list').hide();
-            $('#otherField').removeAttr('required');
-            $('#otherField').removeAttr('data-error');
+
+        function enableButtonRemove() {
+            if (totalFields() === 2) {
+                buttonRemove.removeAttr("disabled");
+                buttonRemove.addClass("shadow-sm");
+            }
         }
-        if ($(this).val() == "attach") {
-            $('#submission_type_attachment').show();
-            $('#otherField').attr('required', '');
-            $('#otherField').attr('data-error', 'This field is required.');
-        } else {
-            $('#submission_type_attachment').hide();
-            $('#otherField').removeAttr('required');
-            $('#otherField').removeAttr('data-error');
+
+        function disableButtonRemove() {
+            if (totalFields() === 1) {
+                buttonRemove.attr("disabled", "disabled");
+                buttonRemove.removeClass("shadow-sm");
+            }
         }
+
+        function disableButtonAdd() {
+            if (totalFields() === maxFields) {
+                buttonAdd.attr("disabled", "disabled");
+                buttonAdd.removeClass("shadow-sm");
+            }
+        }
+
+        function enableButtonAdd() {
+            if (totalFields() === maxFields - 1) {
+                buttonAdd.removeAttr("disabled");
+                buttonAdd.addClass("shadow-sm");
+            }
+        }
+
+        buttonAdd.click(function () {
+            addNewField();
+            enableButtonRemove();
+            disableButtonAdd();
+        });
+
+        buttonRemove.click(function () {
+            removeLastField();
+            disableButtonRemove();
+            enableButtonAdd();
+        });
     });
-    $("#submission_type").trigger("change");
-
-    $(document).ready(function() {
-        $('#table').summernote({
-            toolbar: [
-
-                ['table', ['table']],
-
-                ],
-        }
-
-        );
-    });
-
-//$('#whatsapp').summernote();
-    $(document).ready(function() {
-        $('#list').summernote({
-            toolbar: [
-// [groupName, [list of button]]
-
-                ['para', ['ul','ol','paragraph']],
-                ['height', ['height']]
-                ],
-
-        }
-
-        )
-
-
-        ;
-    });
-
-</script>
-<script type="text/javascript">
-
-    $("#rowAdder").click(function () {
-        var total = $('input[name="link[]"]').length;
-        newRowAdd =
-        '<div id="row"> <div class="input-group mr-3 mt-3">' +
-        '<div class="input-group-prepend">' +
-        '<button class="btn btn-danger" id="DeleteRow" type="button">' +
-        '<i class="bi bi-trash"></i> </button> </div>' +
-        '<input type="text" name="link[]" class="form-control m-input"> ' +'</div><label id="linkError_'+total+'" class="text-danger" for="link"></label> </div>';
-
-        $('#newinput').append(newRowAdd);
-    });
-
-    $("body").on("click", "#DeleteRow", function () {
-        $(this).parents("#row").remove();
-    })
-</script>
-<script type="text/javascript">
-
-    $("#rowAdder2").click(function () {
-        newRowAdd =
-        '<div id="row"> <div class="input-group m-3">' +
-        '<div class="input-group-prepend">' +
-        '<button class="btn btn-danger" id="DeleteRow" type="button">' +
-        '<i class="bi bi-trash"></i> </button> </div>' +
-        '<input type="file" id="attach" name="file[]" class="form-control m-input"> ' +'</div> </div>';
-
-        $('#newinput2').append(newRowAdd);
-    });
-
-    $("body").on("click", "#DeleteRow2", function () {
-        $(this).parents("#row2").remove();
-    })
 </script>
