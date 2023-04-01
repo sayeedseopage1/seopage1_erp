@@ -159,7 +159,7 @@
               var data= {
                   '_token': "{{ csrf_token() }}",
                   'client_name': document.getElementById("client_name").value,
-                  'user_name': document.getElementById("user_name").value,
+                  'user_name': document.getElementById("client_username").value,
                   'country': document.getElementById("country").value,
                   'project_name': document.getElementById("project_name").value,
                   'amount': document.getElementById("amount").value,
