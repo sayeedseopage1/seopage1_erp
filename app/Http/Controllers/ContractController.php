@@ -210,7 +210,6 @@ class ContractController extends AccountBaseController
     }
     public function storeDeal(Request $request)
     {
-    //dd($request);
         $current_time= Carbon::now()->format('d-m-Y H:i:s' );
       $award_date= strtotime($request->award_time);
       $aw_dt= date('Y-m-d H:i:s', $award_date );
@@ -278,24 +277,29 @@ class ContractController extends AccountBaseController
             }
 
         }
+        $getUser = User::where('user_name', $request->user_name)->first();
+        if (is_null($getUser)) {
+            $user = new User();
+            $user->name = $request->client_name;
+            $user->user_name = $request->user_name;
+            $user->login= 'disable';
+            $user->email_notifications = 0;
+            $country= Country::where('nicename',$request->country)->first();
+            $user->country_id= $country->id;
+            $user->save();
+            $role = new RoleUser();
+            $role->role_id = 3;
+            $role->user_id = $user->id;
+            $role->save();
+            $client = new ClientDetails();
+            $client->user_id = $user->id;
 
-        $user = new User();
-        $user->name = $request->client_name;
-        $user->user_name = $request->user_name;
-        $user->login= 'disable';
-        $user->email_notifications = 0;
-        $country= Country::where('nicename',$request->country)->first();
-        $user->country_id= $country->id;
-        $user->save();
-        $role = new RoleUser();
-        $role->role_id = 3;
-        $role->user_id = $user->id;
-        $role->save();
-        $client = new ClientDetails();
-        $client->user_id = $user->id;
-
-        $client->client_username = $request->client_username;
-        $client->save();
+            $client->client_username = $request->client_username;
+            $client->save();
+        } else {
+            $user = $getUser;
+        }
+        
         $deal_client = Deal::find($deal->id);
         $deal_client->client_id = $user->id;
         $deal_client->save();
