@@ -112,12 +112,12 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                @if($task > 0)
                                 <button type="submit" disabled class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete ({{$complete_task}}/{{$total_tasks}})</button>
                                 <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}" type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 mt-3"  id="{{$item->id}}"  data-row-id="{{ $item->id }}" >Partial Payment</a>
-                                <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Cancel Milestone</button>
+                                <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone">Cancel Milestone</button>
                                 @else
                                 @if($item->status == 'incomplete')
 
                                      <button type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
-                                     <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Cancel Milestone</button>
+                                     <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone">Cancel Milestone</button>
                                   @else
 
                                   @if($item->invoice_created == 0)
@@ -311,8 +311,8 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
         $('.complete_milestone').click(function(e) {
             e.preventDefault();
             Swal.fire({
-            title: "Comple milestones",
-            text: "Are you sure want to complete milestones?",
+            title: "Complete milestone",
+            text: "Are you sure want to complete milestone?",
             icon: 'warning',
             showCancelButton: true,
             focusConfirm: false,
@@ -334,6 +334,35 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
         });
         })
     })
+</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('.cancel_milestone').click(function(e) {
+          e.preventDefault();
+          Swal.fire({
+          title: "Cancel milestone",
+          text: "Are you sure want to cancel the milestone?",
+          icon: 'error',
+          showCancelButton: true,
+          focusConfirm: false,
+          confirmButtonText: "@lang('messages.confirm')",
+          cancelButtonText: "@lang('app.cancel')",
+          customClass: {
+              confirmButton: 'btn btn-primary mr-3',
+              cancelButton: 'btn btn-secondary'
+          },
+          showClass: {
+              popup: 'swal2-noanimation',
+              backdrop: 'swal2-noanimation'
+          },
+          buttonsStyling: false
+      }).then((result) => {
+          if (result.isConfirmed) {
+              $(this).closest("form").submit();
+          }
+      });
+      })
+  })
 </script>
 
 <script>
