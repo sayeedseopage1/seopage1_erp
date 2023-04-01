@@ -112,10 +112,12 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                @if($task > 0)
                                 <button type="submit" disabled class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete ({{$complete_task}}/{{$total_tasks}})</button>
                                 <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}" type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 mt-3"  id="{{$item->id}}"  data-row-id="{{ $item->id }}" >Partial Payment</a>
+                                <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Cancel Milestone</button>
                                 @else
                                 @if($item->status == 'incomplete')
 
                                      <button type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
+                                     <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Cancel Milestone</button>
                                   @else
 
                                   @if($item->invoice_created == 0)
