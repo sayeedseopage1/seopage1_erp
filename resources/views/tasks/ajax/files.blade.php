@@ -53,7 +53,7 @@
     .comment-thread {
         width: 700px;
         max-width: 100%;
-        margin: auto;
+/*        margin: auto;*/
         padding: 0 30px;
         background-color: #fff;
         border: 1px solid transparent;

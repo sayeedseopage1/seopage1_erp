@@ -14,19 +14,6 @@
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
                     @lang('Create Deal')</h4>
                 <div class="row p-20">
-                    <div class="col-lg-6 col-md-6">
-                        <div class="form-group my-3" required="required">
-                            <label class="f-14 text-dark-grey mb-12" data-label="true" for="client_name">Client Name
-                                <sup class="f-14 mr-1">*</sup>
-                                <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Type Client Name" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                    <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                </svg>
-                            </label>
-                            <input type="text" class="typeahead form-control height-35 f-14 client-search" placeholder="Enter Client Name" value="" name="client_name" id="client_name" autocomplete="off">
-                            <label id="clientNameError" class="error text-danger" for="client_name"></label>
-                            <div id="clientList"></div>
-                        </div>
-                    </div>
                     <div class="col-lg-6 col-md-6" id="client-username">
                         <div class="form-group my-3" required="required">
                             <label class="f-14 text-dark-grey mb-12" data-label="true" for="client_username">Client Username
@@ -35,52 +22,31 @@
                                     <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                                 </svg>
                             </label>
+                            <input type="text" class="form-control height-35 f-14  client-search" placeholder="Enter Client Username" value="" name="client_username" id="client_username" autocomplete="off">
+                            <label id="clientUserNameError" class="error text-danger" for="client_username"></label>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="form-group my-3" required="required">
+                            <label class="f-14 text-dark-grey mb-12" data-label="true" for="client_name">Client Name
+                                <sup class="f-14 mr-1">*</sup>
+                                <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Type Client Name" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                    <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                </svg>
+                            </label>
                             <div class="row">
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control height-35 f-14" placeholder="Enter Client Username" value="" name="client_username" id="client_username" autocomplete="off">
+                                    <input type="text" class="typeahead form-control height-35 f-14" placeholder="Enter Client Name" value="" name="client_name" id="client_name" autocomplete="off">
                                 </div>
                                 <div class="col-md-2 m-auto" title="Existing Client">
                                     <i class="fa fa-check-circle fa-2x existingClientSuccess" style="display: none;"></i>
                                     <span class="existingClientAdded" style="display: none;">New Client</span>
                                 </div>
                             </div>
-                            <label id="clientUserNameError" class="error text-danger" for="client_username"></label>
+                            <label id="clientNameError" class="error text-danger" for="client_name"></label>
                         </div>
                     </div>
-                    {{-- <div class="col-lg-5 col-md-6" id="client-username-select" style="">
-                        <label class="f-14 text-dark-grey mb-12 my-3" data-label="true" for="category_id">Client Username
-                            <sup class="f-14 mr-1">*</sup>
-                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Select existing client" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                            </svg>
-                        </label>
-                        <div class="input-group">
-                            <div class="dropdown bootstrap-select form-control select-picker">
-                                @php
-                                    $users= App\Models\User::where('role_id',null)->get();
-                                @endphp
-                                <select class="form-control select-picker" name="client_username2" id="client_username2" data-live-search="true">
-                                    <option value="">--</option>
-                                    @foreach ($users as $user)
-                                    <option value="{{ $user->user_name }}">{{ mb_ucwords($user->user_name) }}</option>
-                                    @endforeach
-                                </select>
-                                <label id="clientUserNameError2" class="error text-danger" for="client_username2"></label>
-                            </div>
-                        </div>
-                    </div> --}}
-                    <!-- <div class="col-md-6 col-lg-2 mt-1">
-                        <div class="form-group">
-                            <div class="d-flex mt-5">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="existing_client" id="existing_client" autocomplete="off">
-                                    <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="existing_client">
-                                        Existing Client
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
+                    
                     <div class="col-lg-6 col-md-6">
                         <div class="form-group my-3" required="required">
                             <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_name">Project Name
@@ -184,28 +150,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#client_name').on('paste', function(e) {
+        $('#client_username').on('paste', function(e) {
             setTimeout(function() {
-                var trimmedValue = $('#client_name').val().trim();
+                var trimmedValue = $('#client_username').val().trim();
                 var inputVal = '';
                 trimmedValue.split('').forEach(function(char, index) {
                     setTimeout(function() {
                         inputVal += char;
-                        $('#client_name').val(inputVal);
+                        $('#client_username').val(inputVal);
                     }, index * 10); // Adjust the delay time as needed
                 });
             }, 0);
         });
     });
 
-    $('#client_name').keypress(function() {
-        $('#client_username').val('');
+    $('#client_username').keypress(function() {
+        $('#client_name').val('');
+        $('#client_name').removeAttr('disabled');
         $('.existingClientSuccess').hide();
         $('.existingClientAdded').show();
     });
 
-    $('#client_name').keyup(function() {
-        $('#client_username').val('');
+    $('#client_username').keyup(function() {
+        $('#client_name').val('');
+        $('#client_name').removeAttr('disabled');
         $('.existingClientSuccess').hide();
         $('.existingClientAdded').show();
     });
@@ -218,7 +186,7 @@
                 query: $.trim(query)
             }, function (data) {
                 var results = data.map(function(item){
-                    if (item.name.toLowerCase() == $('#client_name').val().toLowerCase() || item.user_name.toLowerCase() == $('#client_name').val().toLowerCase()) {
+                    if (item.name.toLowerCase() == $('#client_username').val().toLowerCase() || item.user_name.toLowerCase() == $('#client_username').val().toLowerCase()) {
                         $('.existingClientSuccess').show();
                         getData(item.name, item.user_name);
                         return '';
@@ -242,8 +210,9 @@
     })
 
     function getData(name, username) {
-        $('#client_name').val(name);
-        $('#client_username').val(username);
+        $('#client_username').val(name);
+        $('#client_name').val(username);
+        $('#client_name').attr('disabled','disabled');
         $('.existingClientSuccess').show();
         $('.existingClientAdded').hide();
     }
