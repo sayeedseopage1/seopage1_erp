@@ -330,4 +330,9 @@ class ProjectMilestoneController extends AccountBaseController
         return Reply::dataOnly(['status' => 'success', 'data' => $options]);
     }
 
+    public function CancelMilestone(Request $request)
+    {
+        dd($request);
+    }
+
 }
