@@ -2124,10 +2124,7 @@ if ($pm_count < 2) {
       $activity->project_id = $project->id;
 
       $activity->save();
-
-
-      Toastr::success('Deliverable Deleted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return Redirect::back();
+      return response()->json(['status'=>400]);
     }
     public function approveDeliverable($id)
     {
@@ -2472,7 +2469,7 @@ if ($pm_count < 2) {
             'milestone_id' => $request->milestone_id,
             'project_id' => $request->project_id,
         ])->first();
-        
+
         if (!$project) {
             $project = new QCSubmission();
         }
@@ -2512,7 +2509,7 @@ if ($pm_count < 2) {
                 $milestone_update->qc_status = 2;
                 $milestone_update->save();
                 $users= User::where('role_id',1)->get();
-                
+
                 foreach ($users as $user) {
                     Notification::send($user, new QCSubmissionNotification($milestone));
                 }
@@ -2635,8 +2632,6 @@ if ($pm_count < 2) {
     }
     public function DeliverableFinalAuthorizationSend($id)
     {
-        //dd($id);
-
        // $project= Project::where('project_id',$request->project_id)->first();
        $project=Project::find($id);
        $project->authorization_status = 'submitted';
@@ -2657,9 +2652,7 @@ if ($pm_count < 2) {
         foreach ($users as $user) {
             Notification::send($user, new ProjectDeliverableFinalAuthorizationNotification($project_id));
         }
-
-        Toastr::success('Authorization request send Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return back();
+        return response()->json(['status'=>400]);
 
 
     }
@@ -2689,10 +2682,8 @@ if ($pm_count < 2) {
          $user= User::where('id',$project->pm_id)->first();
 
              Notification::send($user, new ProjectDeliverableFinalAuthorizationNotificationAccept($project_id));
+             return response()->json(['status'=>400]);
 
-
-         Toastr::success('Authorization request accepted successfully', 'Success', ["positionClass" => "toast-top-right"]);
-         return back();
     }
 
 
