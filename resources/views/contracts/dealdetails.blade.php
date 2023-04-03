@@ -539,7 +539,6 @@
     </div>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-{{--    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>--}}
 
     <script type="text/javascript">
     function myFunction{{$deal->hash}}() {
@@ -658,39 +657,38 @@
 
 
         });
-
         $(document).on('click','.delete_milestone',function(e){
             e.preventDefault();
             var milestone_id= $(this).val();
-            //console.log(milestone_id);
-            $('#delete_milestone_id').val(milestone_id);
-
-            $('#deletemilestone').modal('show');
-        });
-        $(document).on('click','.delete_milestone_btn',function(e){
-            e.preventDefault();
-            $(this).text("Deleting");
-            var milestone_id= $('#delete_milestone_id').val();
-            //  console.log(milestone_id);
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be delete this item!",
+                icon: 'warning',
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/deals/delete-milestone/"+milestone_id,
+                        type: "DELETE",
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            'id':milestone_id,
+                        },
+                        success: function (response){
+                            //console.log(response);
+                            swal.fire({
+                                title: 'Deleted!',
+                                text: 'The item has been deleted successfully.',
+                                icon: 'success',
+                            })
+                            fetchmilestone();
+                        }
+                    });
                 }
             });
-            $.ajax({
-                type: "DELETE",
-                url: "/deals/delete-milestone/"+milestone_id,
-                success: function (response){
-                    //console.log(response);
-                    $('#success_message').addClass('alert alert-danger');
-                    $('#success_message').text(response.message);
-                    $('#deletemilestone').modal('hide');
-                    $('delete_milestone_btn').text("Yes Delete");
-                    fetchmilestone();
-                }
-
-            });
-
         });
 
         $(document).on('click','.add_milestone',function(e){

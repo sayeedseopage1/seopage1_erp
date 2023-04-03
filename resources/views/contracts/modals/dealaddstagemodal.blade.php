@@ -27,7 +27,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="createDeal">
-                
+
                 <?php
                 $date= \Carbon\Carbon::now();
                 ?>
@@ -49,23 +49,42 @@
                             </div>
                         @endif
 
+                            <div class="col-md-12">
+                                <div class="mt-3">
+                                    <label for="client_name" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong>
+                                        <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Type Client Name" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                            <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                        </svg>
+                                    </label>
+                                    <input name="client_name" id="client_name" type="text" class="form-control height-35 f-14" placeholder="Enter Client Name">
+                                    <label id="clientNameError" class="error text-danger" for="client_name"></label>
+                                </div>
+                            </div>
+
                         <div class="col-md-6">
                             <div class="mt-3">
-                                <label for="deal_id" class="form-label"><strong>Deal ID <span style="color:red;">*<span></strong></label>
+                                <label for="deal_id" class="form-label"><strong>Deal ID <span style="color:red;">*<span></strong>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Type Client Name" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
                                 <input name="deal_id" value="{{$deal->short_code}}" readonly id="deal_id" type="text" class="form-control height-35 f-14" placeholder="Enter Client Name" required>
-
                             </div>
                         </div>
                         <div class="col-md-6">
                             @if($deal->client_name != null)
                                 <div class="mt-3">
-                                    <label for="client_name" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong></label>
+                                    <label for="client_name" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong>
+                                        <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Client Name" data-html="true" data-trigger="hover"></i>
+                                    </label>
                                     <input name="client_name" readonly value="{{$deal->client_name}}"   id="client_name" type="text" class="form-control height-35 f-14" placeholder="Enter Client Name">
                                     <label id="clientNameError" class="text-danger" for=""></label>
                                 </div>
                             @else
                                 <div class="mt-3">
-                                    <label for="client_name" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong></label>
+                                    <label for="client_name" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong>
+                                        <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Client Name" data-html="true" data-trigger="hover"></i>
+                                    </label>
                                     <input name="client_name"  id="client_name" type="text" value="{{old('client_name')}}" class="form-control height-35 f-14 " placeholder="Enter Client Name">
                                     <label id="clientNameError" class="text-danger" for=""></label>
                                 </div>
@@ -77,7 +96,9 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mt-3">
-                                <label for="user_name" class="form-label"><strong>Client Username <span style="color:red;">*<span></strong></label>
+                                <label for="user_name" class="form-label"><strong>Client Username <span style="color:red;">*<span></strong>
+                                    <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Client Username" data-html="true" data-trigger="hover"></i>
+                                </label>
                                 <input name="user_name" id="user_name" readonly value="{{$deal->client_username}}" type="text" class="form-control height-35 f-14 @error('user_name') is-invalid @enderror" placeholder="Enter Client Username" >
 
                             </div>
@@ -90,7 +111,9 @@
 
                         <div class="col-md-12">
                             <div class="mt-3">
-                                <label for="project_name" class="form-label"><strong>Project Name <span style="color:red;">*<span></strong></label>
+                                <label for="project_name" class="form-label"><strong>Project Name <span style="color:red;">*<span></strong>
+                                    <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Project Name" data-html="true" data-trigger="hover"></i>
+                                </label>
                                 <input name="project_name" value="{{$deal->project_name}}" readonly id="project_name" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                             </div>
@@ -100,14 +123,18 @@
                         <div class="col-md-12">
                             @if($deal->profile_link != null)
                                 <div class="mt-3">
-                                    <label for="profile_link" class="form-label"><strong>Profile Link </strong></label>
-                                    <input name="profile_link" value="{{$deal->profile_link}}" readonly id="profile_link" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
+                                    <label for="profile_link" class="form-label"><strong>Profile Link </strong>
+                                        <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Profile Link" data-html="true" data-trigger="hover"></i>
+                                    </label>
+                                    <input name="profile_link" value="{{$deal->profile_link}}" readonly id="profile_link" type="text" class="form-control height-35 f-14" placeholder="Enter Client Profile Link" required>
 
                                 </div>
                             @else
                                 <div class="mt-3">
-                                    <label for="profile_link" class="form-label"><strong>Profile Link</strong></label>
-                                    <input name="profile_link"  id="profile_link" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" >
+                                    <label for="profile_link" class="form-label"><strong>Profile Link</strong>
+                                        <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Profile Link" data-html="true" data-trigger="hover"></i>
+                                    </label>
+                                    <input name="profile_link"  id="profile_link" type="text" class="form-control height-35 f-14" placeholder="Enter Client Profile Link" >
 
                                 </div>
 
@@ -127,7 +154,9 @@
                                 ?>
                                 @foreach($data as $message)
                                     <div class="mt-3">
-                                        <label for="message_link" class="form-label"><strong>Message Link</strong></label>
+                                        <label for="message_link" class="form-label"><strong>Message Link</strong>
+                                            <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Message Link" data-html="true" data-trigger="hover"></i>
+                                        </label>
                                         <input name="message_link[]" value="{{$message}}" readonly id="message_link" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
 
                                     </div>
@@ -138,7 +167,9 @@
 
                             @else
                                 <div class="mt-3">
-                                    <label for="message_link" class="form-label"><strong>Message Link</strong></label>
+                                    <label for="message_link" class="form-label"><strong>Message Link</strong>
+                                        <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Message Link" data-html="true" data-trigger="hover"></i>
+                                    </label>
                                     <input name="message_link"  id="message_link" type="text" class="form-control height-35 f-14" placeholder="Enter Message Thread Link" required>
 
                                 </div>
@@ -170,7 +201,9 @@
 
 
                     <div class="mt-3">
-                        <label for="amount" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong></label>
+                        <label for="amount" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong>
+                            <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Project Budget" data-html="true" data-trigger="hover"></i>
+                        </label>
                         <input name="amount" value="{{$deal->actual_amount}}" id="amount" min="1" type="number" class="form-control height-35 f-14" placeholder="Enter Amount">
                         <label id="amountError" class="text-danger" for=""></label>
                     </div>
@@ -179,7 +212,9 @@
                         $currency_active= App\Models\Currency::where('id',$deal->original_currency_id)->first();
                         $currencies= App\Models\Currency::all();
                         ?>
-                        <label for="original_currency_id" class="form-label"><strong>Currency <span style="color:red;">*<span></strong></label>
+                        <label for="original_currency_id" class="form-label"><strong>Currency <span style="color:red;">*<span></strong>
+                            <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Currency" data-html="true" data-trigger="hover"></i>
+                        </label>
                         <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id" id="original_currency_id">
                             <option selected value="{{$currency_active->id}}">({{$currency_active->currency_code}})</option>
                             @foreach ($currencies as $currency)
@@ -192,7 +227,9 @@
 
                     <div class="mt-3" id="timerss">
 
-                        <h2><strong>Project Award Time <span style="color:red;">*<span></strong></h2>
+                        <h2><strong>Project Award Time <span style="color:red;">*<span></strong>
+                            <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Project Award Time" data-html="true" data-trigger="hover"></i>
+                        </h2>
 
                         <input type="text" id="date-format" name="award_time" value="{{old('award_time')}}" class="form-control height-35 f-14 floating-label" placeholder="Select Exact Award Time" >
                         <label id="awardTimeError" class="text-danger" for=""></label>
@@ -402,7 +439,6 @@
         });
     });
 </script>
-
 
 
 
