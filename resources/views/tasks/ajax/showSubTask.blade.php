@@ -30,20 +30,17 @@
 						<td><a class="openRightModal" title="{{$value->heading}}" href="{{route('tasks.show', $value->id)}}">{{Str::limit($value->heading,30)}}</a></td>
 						<td>
 							@php
-							$timer_check= App\Models\ProjectTimeLog::where('task_id',$value->id)->where('start_time','!=',null)->where('end_time',null)->count();
+								$timer_check= App\Models\ProjectTimeLog::where('task_id',$value->id)->where('start_time','!=',null)->where('end_time',null)->count();
 							@endphp
 							@if($timer_check > 0)
-							<i class="fa-solid fa-circle-play" style="color:green;"></i> Active
+								<i class="fa-solid fa-circle-play" style="color:green;"></i> Active
 							@else
-							<i class="fa-solid fa-circle-stop" style="color:red;"></i> Inactive
-
+								<i class="fa-solid fa-circle-stop" style="color:red;"></i> Inactive
 							@endif
-
-
 						</td>
 						<td><a class="openRightModal" title="{{$task->heading}}" href="{{route('tasks.show', $task->id)}}">{{Str::limit($task->heading,30)}}</a></td>
 						<td><a class="openRightModal" href="{{route('clients.show', $project->client->id)}}">{{$project->client->name}}</a></td>
-						<td><a class="openRightModal" title="{{$project->project_name}}" href="{{route('projects.show', $value->project->id)}}">{{Str::limit($project->project_name,30)}}</a></td>
+						<td><a class="openRightModal" title="{{$project->project_name}}" href="{{route('projects.show', $value->project->id)}}">{{Str::limit($project->project_name, 30)}}</a></td>
 						@php
 							$assignedTo = \App\Models\TaskUser::where('task_id', $value->id)->first();
 						@endphp
@@ -51,7 +48,7 @@
 						<td><a class="openRightModal" href="{{route('employees.show', $value->addedByUser->id)}}">{{$value->addedByUser->name}}</a></td>
 						<td>{{$value->start_date->format('Y-m-d')}}</td>
 						<td>{{$value->due_date->format('Y-m-d')}}</td>
-						<td>{{$task->estimate_hours.' hours '.$task->estimate_minutes.' minutes'}}</td>
+						<td>{{$estimate_hours}} Hours {{$estimate_minutes}} minutes</td>
 						<td>
 							@php
 							$timeLog = '--';
@@ -115,7 +112,7 @@
 					</tr>
 					@empty
 					<tr>
-						<td colspan="8">
+						<td colspan="14">
 							<x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
 						</td>
 					</tr>

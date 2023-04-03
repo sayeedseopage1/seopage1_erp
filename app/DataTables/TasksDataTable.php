@@ -439,7 +439,38 @@ class TasksDataTable extends BaseDataTable
 
                 return '<button class="openRightModal showSubTask" data-url="'.route('tasks.show_subtask', $row->id).'">show</button>';
             });*/
-            $datatables->rawColumns(['board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'timeLogged', 'timer','timer_action']);
+            $datatables->editColumn('progress', function($row) {
+                $project = $row->project;
+                $milestones = $project->milestones->count();
+                $completed_milestones = $project->milestones->where('status','complete')->count();
+
+                if ($milestones < 1 ) {
+                   $completion = 0;
+                   $statusColor = 'danger';
+                } elseif ($milestones >= 1){
+                    $percentage= round(($completed_milestones/$milestones)*100, 2);
+                    if($percentage < 50)
+                    {
+                        $completion= $percentage;
+                        $statusColor = 'danger';
+                    }
+                    elseif ($percentage >= 50 && $percentage < 75) {
+                        $completion= $percentage;
+                        $statusColor = 'warning';
+                    }elseif($percentage >= 75 && $percentage < 99) {
+                        $completion= $percentage;
+                        $statusColor = 'info';
+                    }else {
+                        $completion= $percentage;
+                        $statusColor = 'success';
+                    }
+                }
+                $html = '<div class="progress" style="height: 15px;">
+                    <div class="progress-bar f-12 bg-'.$statusColor.'" role="progressbar" style="width: '.$completion.'%;" aria-valuenow="'.$completion.'" aria-valuemin="0" aria-valuemax="100">'.$completion.'%</div>
+                </div>';
+                return $html;
+            });
+            $datatables->rawColumns(['board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'timeLogged', 'timer','timer_action', 'progress']);
             $datatables->removeColumn('project_id');
             $datatables->removeColumn('image');
             $datatables->removeColumn('created_image');
@@ -781,6 +812,7 @@ class TasksDataTable extends BaseDataTable
                 __('modules.tasks.assignTo') => ['data' => 'users', 'name' => 'member.name', 'exportable' => false, 'title' => __('modules.tasks.assignTo')],
                 __('app.created_at') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('Creation Date')],
                 __('app.columnStatus') => ['data' => 'board_column', 'name' => 'board_column', 'exportable' => false, 'searchable' => false, 'title' => __('app.columnStatus')],
+                __('app.progress').' '.__('app.progress') => ['data' => 'progress', 'name' => 'progress', 'title' => __('app.progress')],
                 __('app.task').' '.__('app.status') => ['data' => 'status', 'name' => 'board_column_id', 'visible' => false, 'title' => __('app.task')],
                 Column::computed('action', __('app.action'))
                 ->exportable(false)

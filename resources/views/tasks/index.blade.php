@@ -3,7 +3,13 @@
 @push('datatable-styles')
     @include('sections.datatable_css')
 @endpush
-
+@push('styles')
+    <style type="text/css">
+        a.align-items-center.d-flex.disabled.openRightModal.showSubTask {
+            pointer-events: none;
+        }
+    </style>
+@endpush
 
 @php
 $addTaskPermission = user()->permission('add_tasks');

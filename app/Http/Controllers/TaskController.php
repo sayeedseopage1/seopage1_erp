@@ -1134,8 +1134,29 @@ class TaskController extends AccountBaseController
                 $variable = Subtask::where('task_id',$task->id)->first();
                 // $tasks = Task::where('subtask_id',$variable->id)->get();
                 $tasks = $task->subtasks;
+
+                $totalHours = $task->estimate_hours;
+                $totalMinutes = $task->estimate_minutes;
+                
+                foreach($tasks as $value) {
+                    $countTask = Task::where('subtask_id', $value->id)->first();
+                    $totalHours = $totalHours + $countTask->estimate_hours;
+                    $totalMinutes = $totalMinutes + $countTask->estimate_minutes;
+                }
+
+                if ($totalMinutes >= 60) {
+                    $hours = intval(floor($totalMinutes / 60));
+                    $minutes = $totalMinutes % 60;
+                    $totalHours = $totalHours + $hours;
+                    $totalMinutes = $minutes;
+                }
+
                 $project = $task->project;
-                $html = view('tasks.ajax.showSubTask', compact('project', 'tasks', 'task'))->render();
+                $html = view('tasks.ajax.showSubTask', compact('project', 'tasks', 'task'), [
+                    'estimate_hours' => $totalHours,
+                    'estimate_minutes' => $totalMinutes
+                ])->render();
+                
                 return Reply::dataOnly([
                     'status' => 'success',
                     'data' => $html
