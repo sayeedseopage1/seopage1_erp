@@ -1131,14 +1131,17 @@ class TaskController extends AccountBaseController
         if (in_array(user()->role_id, [1, 4, 6])) {
             if (request()->ajax() && $tableView ==  'tableView') {
                 $task = Task::findOrFail($id);
+                $project = $task->project;
                 $variable = Subtask::where('task_id',$task->id)->first();
                 // $tasks = Task::where('subtask_id',$variable->id)->get();
                 $tasks = $task->subtasks;
 
-                $totalHours = $task->estimate_hours;
-                $totalMinutes = $task->estimate_minutes;
+                $totalHours = 0;
+                // $totalHours = $task->estimate_hours;
+                // $totalMinutes = $task->estimate_minutes;
+                $totalMinutes = 0;
                 
-                foreach($tasks as $value) {
+                foreach($task->subtasks as $value) {
                     $countTask = Task::where('subtask_id', $value->id)->first();
                     $totalHours = $totalHours + $countTask->estimate_hours;
                     $totalMinutes = $totalMinutes + $countTask->estimate_minutes;

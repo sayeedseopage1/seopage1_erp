@@ -19,10 +19,9 @@
 						<th scope="col">Estimated time</th>
 						<th scope="col">Hours Logged</th>
 						<th scope="col">Task Status</th>
-						<th scope="col">Parent Task Progress</th>
 						<th scope="col">Action</th>
 					</x-slot>
-					@forelse($tasks as $key=>$value2)
+					@forelse($tasks as $key => $value2)
 					@php
 						$value= App\Models\Task::where('subtask_id',$value2->id)->first();
 					@endphp
@@ -48,7 +47,7 @@
 						<td><a class="openRightModal" href="{{route('employees.show', $value->addedByUser->id)}}">{{$value->addedByUser->name}}</a></td>
 						<td>{{$value->start_date->format('Y-m-d')}}</td>
 						<td>{{$value->due_date->format('Y-m-d')}}</td>
-						<td>{{$estimate_hours}} Hours {{$estimate_minutes}} minutes</td>
+						<td>{{$value->estimate_hours}} Hours {{$value->estimate_minutes}} minutes</td>
 						<td>
 							@php
 							$timeLog = '--';
@@ -70,37 +69,7 @@
 						<td>
 							<i class="fa fa-circle mr-1 text-yellow" style="color:  {{$value->boardColumn->label_color}} "></i>{{$value->boardColumn->column_name}}
 						</td>
-						<td>
-							@php
-							$milestones = $project->milestones->count();
-			                $completed_milestones = $project->milestones->where('status','complete')->count();
-
-			                if ($milestones < 1 ) {
-			                   $completion = 0;
-			                   $statusColor = 'danger';
-			                } elseif ($milestones >= 1){
-			                    $percentage= round(($completed_milestones/$milestones)*100, 2);
-			                    if($percentage < 50)
-			                    {
-			                        $completion= $percentage;
-			                        $statusColor = 'danger';
-			                    }
-			                    elseif ($percentage >= 50 && $percentage < 75) {
-			                        $completion= $percentage;
-			                        $statusColor = 'warning';
-			                    }elseif($percentage >= 75 && $percentage < 99) {
-			                        $completion= $percentage;
-			                        $statusColor = 'info';
-			                    }else {
-			                        $completion= $percentage;
-			                        $statusColor = 'success';
-			                    }
-			                }
-			                @endphp
-			                <div class="progress" style="height: 15px;">
-			                	<div class="progress-bar f-12 bg-{{$statusColor}}" role="progressbar" style="width: {{$completion}}%;" aria-valuenow="{{$completion}}" aria-valuemin="0" aria-valuemax="100">{{$completion}}%</div>
-			                </div>
-						</td>
+						
 						<td>
 							<a class="openRightModal" href="{{route('tasks.show', $value->id)}}" class="text-darkest-grey">
 								<i class="fa fa-eye fa-2x"></i>
