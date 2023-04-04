@@ -116,15 +116,42 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                <form class="" action="{{route('milestone-complete')}}" method="post">
                                  @csrf
                                    <input type="hidden" name="id" value="{{$item->id}}">
-        @if($task > 0)
+        @if($task > 0)            
+                            @if($item->cancelation_status == null)
                                 <button type="submit" disabled class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete ({{$complete_task}}/{{$total_tasks}})</button>
                                 <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}" type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 mt-3"  id="{{$item->id}}"  data-row-id="{{ $item->id }}" >Partial Payment</a>
                                 <button type="button" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}">Cancel Milestone</button>
-        @else
+                                @else 
+                                @if(Auth::user()->role_id == 1)
+                                <button type="submit" class="btn-success rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 approve_milestone" data-row-id="{{ $item->id }}">Approve Cancelation</button>
+              
+                                @else
+                                <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                                  Awaiting Approval
+                                                  <br>
+                                                  (Milestone Cancelation)
+                                @endif
+              
+                                @endif
+                                @else
                   @if($item->status == 'incomplete')
+
+                  @if($item->cancelation_status == null)
 
                                      <button type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
                                      <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}" >Cancel Milestone</button> 
+                  @else 
+                  @if(Auth::user()->role_id == 1)
+                  <button type="submit" class="btn-success rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 approve_milestone" data-row-id="{{ $item->id }}">Approve Cancelation</button>
+
+                  @else
+                  <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                    Awaiting Approval
+                                    <br>
+                                    (Milestone Cancelation)
+                  @endif
+
+                  @endif
                                     
                   @elseif($item->status == 'canceled')
 
@@ -269,6 +296,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 <input type="hidden" id="client_id"  value="{{$project->client_id}}">
 
 @include('projects.modals.cancel_milestone')
+@include('projects.modals.cancel_milestone_approve')
 <script type="text/javascript">
 
     let project_id = document.getElementById('project_id').value;
@@ -379,9 +407,48 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
           if (result.isConfirmed) {
           //  / var id = milestone_id;
           var milestone_id = $(this).data('row-id');
-            alert(milestone_id);
-            
+          $('#milestoneId').val(milestone_id);
+        
+           // alert(milestone_id);
+            // /var milestoneID= milestone_id.val();
             $('#cancel-milestone').modal('show');
+
+             // $(this).closest("form").submit();
+          }
+      });
+      })
+  })
+</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('.approve_milestone').click(function(e) {
+          e.preventDefault();
+          Swal.fire({
+          title: "Cancel milestone",
+          text: "Are you sure want to aprove the cacelation?",
+          icon: 'warning',
+          showCancelButton: true,
+          focusConfirm: false,
+          confirmButtonText: "@lang('messages.confirm')",
+          cancelButtonText: "@lang('app.cancel')",
+          customClass: {
+              confirmButton: 'btn btn-primary mr-3',
+              cancelButton: 'btn btn-secondary'
+          },
+          showClass: {
+              popup: 'swal2-noanimation',
+              backdrop: 'swal2-noanimation'
+          },
+          buttonsStyling: false
+      }).then((result) => {
+          if (result.isConfirmed) {
+          //  / var id = milestone_id;
+          var milestone_id = $(this).data('row-id');
+          $('#milestoneId').val(milestone_id);
+        
+           // alert(milestone_id);
+            // /var milestoneID= milestone_id.val();
+            $('#cancel-milestone-approve').modal('show');
 
              // $(this).closest("form").submit();
           }

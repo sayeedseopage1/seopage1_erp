@@ -1,5 +1,5 @@
 {{--lost modal --}}
-<div class="modal fade" id="cancel-milestone" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="cancel-milestone-approve" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
