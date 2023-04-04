@@ -2144,11 +2144,13 @@ if ($pm_count < 2) {
     }
     public function InComplete(Request $request)
     {
+//        dd($request->all());
       $project= Project::find($request->id);
       $project->dispute_status = 1;
       $project->save();
-      Toastr::success('Status Changed Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return Redirect::back();
+      return response()->json([
+          'status'=>400,
+      ]);
     }
     public function qc($id,$milestone_id)
     {

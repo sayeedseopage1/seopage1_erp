@@ -97,7 +97,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 @endif
                             </td>
                             <td>
-                             
+
 
 
                               <?php
@@ -116,8 +116,8 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 @else
                                 @if($item->status == 'incomplete')
 
-                                     <button type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
-                                     <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone">Cancel Milestone</button>
+                                     <button type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone" style="display: block; width: 100%; margin-bottom: 10px;">Mark As Complete</button>
+                                     <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" style="display: block; width: 100%; margin-bottom: 10px;">Cancel Milestone</button>
                                   @else
 
                                   @if($item->invoice_created == 0)
@@ -142,13 +142,13 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                     @include('projects.modals.projectqcreplymodal')
                                  @else
 
-                                 @php 
+                                 @php
                                   $last_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('invoice_id',null)->first();
                                     //dd($item->id == $last_milestone->id, );
                                  @endphp
                                  @if($item->id == $last_milestone->id && $complete_milestone != $invoice_generated && $milestone_count != 1 && ($complete_milestone - $invoice_generated) >= 2)
                                  <button disabled class="btn-success rounded f-14 p-2 flex-right">Generate Invoice</a>
-                                    
+
                                  @else
                                   <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}"   class="btn-success rounded f-14 p-2 flex-right" id="{{$item->id}}"  data-row-id="{{ $item->id }}">Generate Invoice</a>
                                   @endif
@@ -254,7 +254,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
     let project_id = document.getElementById('project_id').value;
     let client_id =document.getElementById('client_id').value;
-  
+
 
 
 
@@ -262,7 +262,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
     $('body').on('click', '.create-invoice', function() {
       //id = $(this).attr("id");
         var milestone_id = $(this).data('row-id');
-      
+
     //  alert(milestone_id);
       var url = `{{ route('invoices.create') }}`;
 
@@ -271,7 +271,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
       $(this).prop("disabled", true);
       window.location.href = url;
       // window.open(url);
-    
+
     });
     $('body').on('click', '.create-payment', function() {
       //id = $(this).attr("id");
@@ -283,7 +283,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
       url += string;
 
       window.open(url);
-    
+
     });
 
     $('body').on('click', '.create-partial-payment', function() {
@@ -297,7 +297,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
       url += string;
       $(this).prop("disabled", true);
       window.open(url);
-    
+
     });
 
 
