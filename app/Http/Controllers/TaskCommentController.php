@@ -14,6 +14,8 @@ use Auth;
 use App\Models\TaskUser;
 use App\Models\Project;
 use App\Models\User;
+use DB;
+
 class TaskCommentController extends AccountBaseController
 {
 
@@ -52,16 +54,21 @@ class TaskCommentController extends AccountBaseController
         $comment->save();
 
         $this->comments = TaskComment::with('user')->where('task_id', $request->taskId)->orderBy('id', 'desc')->get();
-        $view = view('tasks.comments.show', $this->data)->render();
-        $task= Task::where('id',$request->taskId)->first();
+        
+        $this->task= Task::where('id',$request->taskId)->first();
         $project= Project::where('id',$task->project_id)->first();
         $task_member= TaskUser::where('task_id',$request->taskId)->first();
         $sender= User::where('id',Auth::id())->first();
         $users= User::where('id',$task->added_by)->orWhere('id',$task_member->user_id)->orWhere('id',$project->pm_id)->get();
+        $this->replys =DB::table('task_replies')
+        ->join('users','task_replies.user_id','=','users.id')
+        ->select('task_replies.*','users.name','users.image','users.updated_at')
+        ->get();
         foreach ($users as $user) {
         // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
             Notification::send($user, new TaskCommentNotification($task,$sender));
         }
+        $view = view('tasks.ajax.all_comments', $this->data)->render();
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
     }
 
@@ -79,8 +86,31 @@ class TaskCommentController extends AccountBaseController
 
         $comment_task_id = $comment->task_id;
         $comment->delete();
+        
+        $viewTaskFilePermission = user()->permission('view_task_files');
+        $viewSubTaskPermission = user()->permission('view_sub_tasks');
+
+        $this->task = Task::with(['boardColumn', 'project', 'users', 'label', 'approvedTimeLogs', 'approvedTimeLogs.user', 'approvedTimeLogs.activeBreak', 'comments', 'comments.user', 'subtasks.files', 'userActiveTimer',
+        'files' => function ($q) use ($viewTaskFilePermission) {
+            if ($viewTaskFilePermission == 'added') {
+                $q->where('added_by', user()->id);
+            }
+        },
+        'subtasks' => function ($q) use ($viewSubTaskPermission) {
+            if ($viewSubTaskPermission == 'added') {
+                $q->where('added_by', user()->id);
+            }
+        }])
+        ->withCount('subtasks', 'files', 'comments', 'activeTimerAll')
+        ->findOrFail($comment_task_id)->withCustomFields();
+
         $this->comments = TaskComment::with('task')->where('task_id', $comment_task_id)->orderBy('id', 'desc')->get();
-        $view = view('tasks.comments.show', $this->data)->render();
+        $this->replys =DB::table('task_replies')
+        ->join('users','task_replies.user_id','=','users.id')
+        ->select('task_replies.*','users.name','users.image','users.updated_at')
+        ->get();
+
+        $view = view('tasks.ajax.all_comments', $this->data)->render();
 
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
     }
@@ -149,9 +179,11 @@ class TaskCommentController extends AccountBaseController
             ->select('task_replies.*','users.name','users.image','users.updated_at')
             ->get();
 
-            $view = view('tasks.ajax.files', $this->data)->render();
+            $view = view('tasks.ajax.all_comments', $this->data)->render();
+            //dd($view);
             return response()->json([
-                'status'=>400,
+                'status' => 400,
+                'html' => $view
             ]);
         }
     }

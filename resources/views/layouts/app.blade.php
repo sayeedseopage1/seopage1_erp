@@ -317,10 +317,14 @@
 
                                     $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $value->award_time);
 
-                                    $diff_in_minutes = $from->diffInMinutes($to);
+                                    if(\Carbon\Carbon::now()->lt($to)){
+                                        $diff_in_minutes = $from->diffInMinutes($to);
+                                    } else {
+                                        $diff_in_minutes = 0;
+                                    }
                                 }
                             @endphp
-                            @if($value != null && $diff_in_minutes < 1200)
+                            @if($value != null && $diff_in_minutes < 1200 && $diff_in_minutes > 0)
                             <div class="content">
 					            <div class="bg-timer-box my-3 rounded p-2 text-light">
 					                <p class="mb-0">New Deal Won: {{$value->client_name}}</p>
@@ -352,11 +356,15 @@
                                     $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
 
                                     $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $value->award_time);
-
-                                    $diff_in_minutes = $from->diffInMinutes($to);
+                                    
+                                    if(\Carbon\Carbon::now()->lt($to->addHours(20))){
+                                        $diff_in_minutes = $from->diffInMinutes($to);
+                                    } else {
+                                        $diff_in_minutes = 0;
+                                    }   
                                 }
                             @endphp
-                            @if($value != null && $diff_in_minutes < 1200)
+                            @if($value != null && $diff_in_minutes < 1200 && $diff_in_minutes > 0)
                             <div class="content">
 					            <div class="bg-timer-box my-3 rounded p-2 text-light">
 					                <p class="mb-0">New Deal Won: {{$value->client_name}}</p>
@@ -370,8 +378,6 @@
                     </div>
                 @endif
             @endif
-
-
         </section>
         <!-- MAIN CONTAINER END -->
     </div>

@@ -6,6 +6,7 @@ use App\Models\Holiday;
 use App\Models\DashboardWidget;
 use App\Models\Role;
 use App\Models\Task;
+use App\Models\ProjectTimeLog;
 use \Carbon\Carbon;
 use App\Helper\Reply;
 use DB;
@@ -111,7 +112,10 @@ trait UxUiDashboard
                 return $value->status == '1';
             })->pluck('widget_name')->toArray();
             // Getting Attendance setting data
-
+            $this->myActiveTimer = ProjectTimeLog::with('task', 'user', 'project', 'breaks', 'activeBreak')
+            ->where('user_id', user()->id)
+            ->whereNull('end_time')
+            ->first();
 
             if (!is_null($this->viewNoticePermission) && $this->viewNoticePermission != 'none') {
                 if ($this->viewNoticePermission == 'added') {
