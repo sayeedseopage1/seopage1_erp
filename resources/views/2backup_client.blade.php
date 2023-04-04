@@ -69,28 +69,20 @@
                 <!-- form   -->
 
 
-                <form class="row g-3" action="{{route('client-submission')}}" method="post">
+                <form class="row g-3" action="{{route('client-submission')}}" method="post" id="clientForm">
                     @csrf
                     <input type="hidden" name="deal_id" value="{{$deal->id}}" />
                     <div class="col-md-12">
                         <label for="Email3" class="form-label">Please put your freelancer.com username here!</label>
-                        <input type="text" name="user_name" value="{{$deal->client_username}}" class="form-control @error('user_name') is-invalid @enderror" readonly/>
+                        <input type="text" name="user_name" id="user_name" value="{{$deal->client_username}}" class="form-control" readonly/>
+                        <span id="user_nameError" class="text-danger"></span>
                     </div>
-                    @error('user_name')
-                    <div class="mt-3">
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    </div>
-                    @enderror
 
                     <div class="col-md-12">
                         <label for="Email3" class="form-label">Your email (For future communication)!</label>
-                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"/>
+                        <input type="email" id="email" name="email" class="form-control"/>
+                        <span id="emailError" class="text-danger"></span>
                     </div>
-                    @error('email')
-                    <div class="mt-3">
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    </div>
-                    @enderror
 
                     <div id="input-tel-parent" class="col-md-12">
                         <label for="inputEmail4" class="form-label">Phone number!</label> <br>
@@ -99,53 +91,38 @@
                         <span id="valid-msg" class="hide">Valid</span>
                         <span id="error-msg" class="hide">Invalid number</span>
                     </div>
-                    {{--  <div class="col-md-12">
-                          <label for="inputEmail4" class="form-label">Your WhatsApp ID (For future communication)!</label> <br>
-                          <input  class="form-control mybtns" id="phone2" name="client_whatsapp" type="tel" required>
-                          <span id="valid-msg" class="hide">Valid</span>
-                          <span id="error-msg" class="hide">Invalid number</span>
-
-                      </div>
-                      <div class="col-md-12">
-                          <label for="floatingTextarea"><strong>Any other instant messengers where you are mostly available (Example, skype, telegram etc.)! (optional)</strong></label>
-                          <div class="mt-3">
-                              <textarea class="form-control" name="other_platform" id="platform" placeholder="Leave a comment here"></textarea>
-                          </div>
-
-
-                      </div> --}}
                     <div class="col-md-12">
                         <div class="input-group ourfields">
                             <span class="input-group-text" id="inputGroup-sizing-default">WhatsApp  No :</span>
-                            <input type="number" name="client_whatsapp" class="form-control" aria-label="Sizing example input" placeholder="Enter Your Whats App Number" aria-describedby="inputGroup-sizing-default">
+                            <input type="number" name="client_whatsapp" id="client_whatsapp" class="form-control" aria-label="Sizing example input" placeholder="Enter Your Whats App Number" aria-describedby="inputGroup-sizing-default">
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="input-group ourfields">
                             <span class="input-group-text" id="inputGroup-sizing-default">Skype ID:</span>
-                            <input type="text" name="client_skype" class="form-control" aria-label="Sizing example input" placeholder="Enter Your Skype Id" aria-describedby="inputGroup-sizing-default">
+                            <input type="text" name="client_skype" id="client_skype" class="form-control" aria-label="Sizing example input" placeholder="Enter Your Skype Id" aria-describedby="inputGroup-sizing-default">
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="input-group ourfields">
                             <span class="input-group-text" id="inputGroup-sizing-default">Telegram ID:</span>
-                            <input type="text" name="client_telegram" class="form-control" aria-label="Sizing example input" placeholder="Enter Your Telegram Id" aria-describedby="inputGroup-sizing-default">
+                            <input type="text" name="client_telegram" id="client_telegram" class="form-control" aria-label="Sizing example input" placeholder="Enter Your Telegram Id" aria-describedby="inputGroup-sizing-default">
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="input-group ourfields">
                             <span class="input-group-text" id="inputGroup-sizing-default">Messanger ID:</span>
-                            <input type="text" name="client_messenger" class="form-control" aria-label="Sizing example input" placeholder="Enter Your Messanger Id" aria-describedby="inputGroup-sizing-default">
+                            <input type="text" name="client_messenger" id="client_messenger" class="form-control" aria-label="Sizing example input" placeholder="Enter Your Messanger Id" aria-describedby="inputGroup-sizing-default">
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="input-group ourfields">
                             <span class="input-group-text" id="inputGroup-sizing-default">IMO No:</span>
-                            <input type="text" name="client_imo" class="form-control" aria-label="Sizing example input" placeholder="Enter Your IMO Number" aria-describedby="inputGroup-sizing-default">
+                            <input type="text" name="client_imo" id="client_imo" class="form-control" aria-label="Sizing example input" placeholder="Enter Your IMO Number" aria-describedby="inputGroup-sizing-default">
                         </div>
                     </div>
 
@@ -157,7 +134,6 @@
                         </label>
                         <label for="inputState" class="form-label mt-3">Time Zone</label>
                         <select name="timezone" id="inputState" class="form-select">
-
                             <option value="Africa/Abidjan GMT+0:00" selected="selected">Africa/Abidjan GMT+0:00</option>
                             <option value="Africa/Accra GMT+0:00">Africa/Accra GMT+0:00</option>
                             <option value="Africa/Addis_Ababa GMT+3:00">Africa/Addis_Ababa GMT+3:00</option>
@@ -786,25 +762,18 @@
                             <option value="PST GMT-8:00">PST GMT-8:00</option>
                             <option value="SST GMT+11:00">SST GMT+11:00</option>
                             <option value="VST GMT+7:00">VST GMT+7:00</option>
-
                         </select>
                     </div>
-
-
-
                     <div class="col-md-12">
                         <table class="table table-bordered table-striped table-hover rowfy">
-
                             <tbody>
                             <tr>
                                 <td>
                                     <div class="col-md-12">
                                         <label for="Choose_days"  class="form-label">Choose Days</label>
                                         <select id="Choose_days" name="day[]" class="form-select">
-
                                             <option selected value="Mon-Fri">Mon-Fri</option>
                                             <option selected value="Mon-Sun">All 7 Days</option>
-
                                         </select>
                                     </div>
                                 </td>
@@ -812,7 +781,6 @@
                                     <div class="col-md-12">
                                         <label for="inputState" class="form-label">From</label>
                                         <select id="Choose_days" name="from[]" class="form-select">
-
                                             <option value="12:00 AM">12:00 AM</option>
                                             <option value="1:00 AM">01:00 AM</option>
                                             <option value="02:00 AM">02:00 AM</option>
@@ -844,7 +812,6 @@
                                     <div class="col-md-12">
                                         <label for="inputZip" class="form-label">To</label>
                                         <select id="Choose_days" name="to[]" class="form-select">
-
                                             <option value="12:00 AM">12:00 AM</option>
                                             <option value="1:00 AM">01:00 AM</option>
                                             <option value="02:00 AM">02:00 AM</option>
@@ -873,13 +840,12 @@
                                     </div>
                                 </td>
                             </tr>
-
                             </tbody>
                         </table>
                     </div>
                     <div class="col-md-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="message"  id="flexCheckDefault">
+                            <input class="form-check-input" type="checkbox" name="message"  id="messageCheck">
                             <label for="floatingTextarea">
                                 <strong>
                                     Our working hour is 8 am-5 pm Monday-Friday and 8 am-1 pm on Saturday. We are off on Sunday (We are in the Bangladeshi timezone GMAT+6). You can convert the Bangladeshi timezone to your timezone here:
@@ -894,7 +860,7 @@
                         <div class="form-check">
 
 
-                            <input class="form-check-input" type="checkbox" name="check"  id="flexCheckDefault">
+                            <input class="form-check-input" type="checkbox" name="check"  id="check">
                             <label for="floatingTextarea">
                                 <strong>
                                     Please check this box if you want to receive marketing tips, tricks, and the latest hacks from us occasionally. Rest assured, our intention will be to share useful marketing ideas with you that can get you targeted leads regularly.
@@ -904,7 +870,7 @@
                     </div>
 
                     <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary sp1submit rounded-pill py-0 px-5">Submit</button>
+                        <button type="submit" class="btn btn-primary sp1submit rounded-pill py-0 px-5" id="submitBtn">Submit</button>
                     </div>
                 </form>
 
@@ -977,7 +943,84 @@
     }
 </script>
 <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
-{!! Toastr::message() !!}
+{{--     {!! Toastr::message() !!}--}}
+
+<script>
+    $('#submitBtn').click(function(e){
+        e.preventDefault();
+        // $('#submitBtn').attr("disabled", true);
+        // $('#submitBtn').html("Processing...");
+        var days = document.getElementsByName("day[]");
+        var days_values = [];
+        for (var i = 0; i < days_values.length; i++) {
+            days_values.push(days[i].value);
+        }
+        var from = document.getElementsByName("from[]");
+        var from_value = [];
+        for (var i = 0; i < from_value.length; i++) {
+            from_value.push(from[i].value);
+        }
+        var to = document.getElementsByName("to[]");
+        var to_value = [];
+        for (var i = 0; i < to_value.length; i++) {
+            to_value.push(to[i].value);
+        }
+        console.log(days);
+        var data= {
+            '_token': "{{ csrf_token() }}",
+            'user_name': document.getElementById("user_name").value,
+            'email': document.getElementById("email").value,
+            'client_phone': document.getElementById("phone").value,
+            'client_whatsapp': document.getElementById("client_whatsapp").value,
+            'client_skype': document.getElementById("client_skype").value,
+            'client_telegram': document.getElementById("client_telegram").value,
+            'client_messenger': document.getElementById("client_messenger").value,
+            'client_imo': document.getElementById("client_imo").value,
+            'timezone': document.getElementById("inputState").value,
+            'day': days_values,
+            'from': from_value,
+            'to': to_value,
+            'message': document.getElementById("messageCheck").value,
+            'check': document.getElementById("check").value,
+            'deal_id':{{$deal->id}},
+        }
+        // console.log(data);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "{{route('client-submission')}}",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                $('#clientForm').trigger("reset");
+                {{--$(location).prop('href', '{{url('/account/leads/')}}');--}}
+                toastr.success('Lead Added Successfully');
+                $('#submitBtn').attr("disabled", false);
+                $('#submitBtn').html("Submit");
+            },
+            error: function(error) {
+                // console.log(response);
+                if(error.responseJSON.errors.user_name){
+                    $('#user_nameError').text(error.responseJSON.errors.user_name);
+                }else{
+                    $('#user_nameError').text('');
+                }
+                if(error.responseJSON.errors.email){
+                    $('#emailError').text(error.responseJSON.errors.email);
+                }else{
+                    $('#emailError').text('');
+                }
+                $('#submitBtn').attr("disabled", false);
+                $('#submitBtn').html("Submit");
+            }
+        });
+    });
+
+</script>
 
 </body>
 </html>

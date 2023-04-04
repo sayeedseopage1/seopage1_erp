@@ -93,9 +93,17 @@ class HomeController extends Controller
     }
     public function ClientForm(Request $request)
     {
+//        dd($request->all());
 
 
     //count($request->day);
+        $useName = User::where('user_name',$request->user_name)->first();
+        $findDeal = Deal::where('deal_id',$request->deal_id)->first();
+        $clientId =$findDeal->client_id;
+        if ($clientId==$useName->id){
+            Toastr::error('Something was wrong! please contact administrator', 'Failed', ["positionClass" => "toast-top-right"]);
+            return redirect()->back();
+        }else{
       $check = ClientForm::where('deal_id',$request->deal_id)->first();
       if ($check == null) {
         $validated = $request->validate([
@@ -172,6 +180,7 @@ class HomeController extends Controller
         Toastr::error('Already Submitted the information', 'Failed', ["positionClass" => "toast-top-right"]);
        return back();
       }
+    }
 
     }
 

@@ -976,7 +976,7 @@ class TaskController extends AccountBaseController
         }
 
         $tab = request('view');
-        
+
         switch ($tab) {
         case 'file':
             $this->tab = 'tasks.ajax.files';
@@ -1134,8 +1134,9 @@ class TaskController extends AccountBaseController
                 $variable = Subtask::where('task_id',$task->id)->first();
                 // $tasks = Task::where('subtask_id',$variable->id)->get();
                 $tasks = $task->subtasks;
+                $taskBoardStatus = TaskboardColumn::all();
                 $project = $task->project;
-                $html = view('tasks.ajax.showSubTask', compact('project', 'tasks', 'task'))->render();
+                $html = view('tasks.ajax.showSubTask', compact('project', 'tasks', 'task','taskBoardStatus'))->render();
                 return Reply::dataOnly([
                     'status' => 'success',
                     'data' => $html

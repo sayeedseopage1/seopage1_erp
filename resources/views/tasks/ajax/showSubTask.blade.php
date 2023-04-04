@@ -1,11 +1,59 @@
-{{-- <h3 class="heading-h1" id="right-modal-title">Project: <a href="{{route('projects.show', $project->id)}}">{{$project->project_name}}</a></h3> --}}
-{{-- <h3 class="f-16" id="right-modal-title">Parent Task: <a href="{{route('tasks.show', $task->id)}}">{{$task->heading}}</a></h3> --}}
+{{-- <h3 class="heading-h1" id="right-modal-title">Project: <a href="{{route('projects.show', $project->id)}}">{{$project->project_name}}</a></h3>--}}
+{{-- <h3 class="f-16" id="right-modal-title">Parent Task: <a href="{{route('tasks.show', $task->id)}}">{{$task->heading}}</a></h3>--}}
 <h3 class="heading-h1" id="right-modal-title">Subtasks of {{$task->heading}}</a></h3>
+ <div class="filter-box">
+     <!-- FILTER START -->
+     <form action="" id="filter-form">
+         <div class="d-lg-flex d-md-flex d-block flex-wrap filter-box bg-white client-list-filter">
+             <!-- DATE START -->
+             <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
+                 <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">Date</p>
+                 <div class="select-status d-flex">
+                     <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange" placeholder="Start Date To End Date" autocomplete="off">
+                 </div>
+             </div>
+             <!-- DATE END -->
+             <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
+                 <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">Status</p>
+                 <div class="select-status">
+                     <select class="form-control select-picker" name="status" id="status" data-live-search="true" data-size="8">
+                         <option value="not finished">Hide completed task</option>
+                         <option {{ request('status') == 'all' ? 'selected' : '' }} value="all">@lang('app.all')</option>
+                         @foreach ($taskBoardStatus as $status)
+                             <option value="{{ $status->id }}">{{ $status->slug == 'completed' || $status->slug == 'incomplete' ? __('app.' . $status->slug) : mb_ucwords($status->column_name) }}</option>
+                         @endforeach
+                     </select>
+                 </div>
+             </div>
+             <!-- SEARCH BY TASK START -->
+             <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
+                 <div class="input-group bg-grey rounded">
+                     <div class="input-group-prepend">
+                        <span class="input-group-text border-0 bg-additional-grey">
+                            <i class="fa fa-search f-13 text-dark-grey"></i>
+                        </span>
+                     </div>
+                     <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field" placeholder="Start typing to search" autocomplete="off">
+                 </div>
+             </div>
+             <!-- SEARCH BY TASK END -->
+
+             <!-- RESET START -->
+             <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
+                 <x-forms.button-secondary class="btn-xs {{ request('overdue') != 'yes' ? 'd-none' : '' }}" id="reset-filters" icon="times-circle">
+                     @lang('app.clearFilters')
+                 </x-forms.button-secondary>
+             </div>
+             <!-- RESET END -->
+         </div>
+     </form>
+     <!-- FILTER END -->
+ </div>
 <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
 	<div class="dataTables_wrapper dt-bootstrap4 no-footer">
 		<div class="row mt-4">
 			<div class="col-sm-12">
-				<x-table class="border-0 pb-3 admin-dash-table table-hover">
+				<x-table class="border-0 pb-3 admin-dash-table table-hover subTasksTable">
 					<x-slot name="thead">
 						<th scope="col">Task name</th>
 						<th scope="col">Timer</th>

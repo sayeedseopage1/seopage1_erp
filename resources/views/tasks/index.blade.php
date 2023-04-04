@@ -227,8 +227,8 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
         <!-- Add Task Export Buttons Start -->
         <div class="d-block d-lg-flex d-md-flex justify-content-between action-bar">
             <div id="table-actions" class="flex-grow-1 align-items-center">
-               
-                
+
+
                 {{-- @if ($addTaskPermission == 'all' || $addTaskPermission == 'added')
                     <x-forms.link-primary :link="route('tasks.create')" class="mr-3 openRightModal float-left" icon="plus">
                         @lang('app.add')
@@ -342,7 +342,7 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
             data['endDate'] = endDate;
             data['searchText'] = searchText;
             data['milestone_id'] = milestone_id;
-            @if(\Request::route()->getName() == 'tasks.show_subtask') 
+            @if(\Request::route()->getName() == 'tasks.show_subtask')
                 data['subTask_id'] = '{{request()->route()->id}}';
             @endif
         });
@@ -683,5 +683,26 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
             })
         });
     </script>
+
+{{--        SUB TASK SCRIPT--}}
+{{--    <script>--}}
+{{--        $(document).ready(function() {--}}
+{{--            $('#datepicker').daterangepicker({--}}
+{{--                autoUpdateInput: false,--}}
+{{--                locale: {--}}
+{{--                    cancelLabel: 'Clear'--}}
+{{--                }--}}
+{{--            });--}}
+
+{{--            $('#datepicker').on('apply.daterangepicker', function(ev, picker) {--}}
+{{--                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' to ' + picker.endDate.format('YYYY-MM-DD'));--}}
+{{--                console.log('Selected date range: ' + picker.startDate.format('YYYY-MM-DD') + ' to ' + picker.endDate.format('YYYY-MM-DD'));--}}
+{{--            });--}}
+
+{{--            $('#datepicker').on('cancel.daterangepicker', function(ev, picker) {--}}
+{{--                $(this).val('');--}}
+{{--            });--}}
+{{--        });--}}
+{{--    </script>--}}
 @endpush
 <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
