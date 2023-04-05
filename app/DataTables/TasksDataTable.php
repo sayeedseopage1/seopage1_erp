@@ -254,7 +254,7 @@ class TasksDataTable extends BaseDataTable
                     return '';
                   }else{
                     if (is_null($row->userActiveTimer)) {
-                        return '<a href="javascript:;" class="text-primary btn border f-15 start-timer" data-task-id="'.$row->id.'" data-toggle="tooltip" data-original-title="' . __('modules.timeLogs.startTimer') . '"><i class="bi bi-play-circle-fill"></i></a>';
+                        return '<a href="javascript:;" class="text-primary btn border f-15 start-timer" data-task-id="'.$row->id.'"><i class="bi bi-play-circle-fill"></i></a>';
 
                     } else {
 
@@ -262,12 +262,12 @@ class TasksDataTable extends BaseDataTable
                             $timerButtons = '<div class="btn-group" role="group">';
                            // $timerButtons .= '<a href="javascript:;" class="text-secondary btn border f-15 pause-timer" data-time-id="'.$row->userActiveTimer->id.'" data-toggle="tooltip" data-original-title="' . __('modules.timeLogs.pauseTimer') . '"><i class="bi bi-pause-circle-fill"></i></a>';
 
-                            $timerButtons .= '<a href="javascript:;" class="text-secondary btn border f-15 stop-timer" data-time-id="'.$row->userActiveTimer->id.'" data-toggle="tooltip" data-original-title="' . __('modules.timeLogs.stopTimer') . '"><i class="bi bi-stop-circle-fill"></i></a>';
+                            $timerButtons .= '<a href="javascript:;" class="text-secondary btn border f-15 stop-timer" data-time-id="'.$row->userActiveTimer->id.'"><i class="bi bi-stop-circle-fill"></i></a>';
                             $timerButtons .= '</div>';
                             return $timerButtons;
 
                         } else {
-                            return '<a href="javascript:;" class="text-secondary btn border f-15 resume-timer" data-time-id="'.$row->userActiveTimer->activeBreak->id.'" data-toggle="tooltip" data-original-title="' . __('modules.timeLogs.resumeTimer') . '"><i class="bi bi-play-circle-fill"></i></a>';
+                            return '<a href="javascript:;" class="text-secondary btn border f-15 resume-timer" data-time-id="'.$row->userActiveTimer->activeBreak->id.'"><i class="bi bi-play-circle-fill"></i></a>';
                         }
 
                     }
@@ -520,7 +520,7 @@ class TasksDataTable extends BaseDataTable
                 if ($totalHours == 0 && $totalMinutes == 0) {
                     return '---';
                 } else {
-                    return $totalHours.' Hours '.$totalMinutes.' minutes';
+                    return $totalHours.' hrs '.$totalMinutes.' mins';
                 }
             });
             $datatables->rawColumns(['board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'estimate_time', 'timeLogged', 'timer','timer_action', 'progress']);
