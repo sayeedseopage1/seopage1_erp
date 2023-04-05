@@ -241,6 +241,15 @@
 
                       <h5><strong>Cover Letter:</strong></h5>
                       <p>{!!$lead->cover_letter!!}</p>
+
+
+                        @if($lead->explanation)
+                            <h5><strong>Explanation:</strong></h5>
+                            <p>{!!$lead->explanation!!}</p>
+                        @else
+                            <h5><strong>Explanation:</strong></h5>
+                            <p class="text-danger text-center my-5">Explanation Not Submitted!</p>
+                        @endif
                     </div>
                   </div>
 

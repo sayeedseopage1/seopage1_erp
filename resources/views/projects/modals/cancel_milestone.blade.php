@@ -6,11 +6,10 @@
           <h5 class="modal-title" id="exampleModalLabel">Cancel Milestone</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form class="" action="{{route('cancel-milestone')}}" method="post">
-          @csrf
+        <form class="">
           <input type="hidden" name='milestoneId' id="milestoneId" value="">
 
-        
+
         <div class="modal-body">
           <div class="col-md-12">
             <div class="form-group">
@@ -27,7 +26,7 @@
         </div>
             <br>
             <ul id="errorMsg">
-  
+
             </ul>
             <br>
         <div class="modal-footer">
@@ -43,12 +42,12 @@
   // $(document).ready(function() {
   //   $('#comment2').summernote();
   // });
-  
+
   </script>
   <script>
       $('#cancelMilestone').click(function(e){
           e.preventDefault();
-          
+
           // alert('ok');
           var comments = CKEDITOR.instances.comment2.getData();
           var data= {
@@ -56,7 +55,7 @@
             'comments': comments,
             'milestoneId': $('#milestoneId').val(),
         }
-        
+
           //console.log(data);
           $.ajaxSetup({
               headers: {
@@ -86,7 +85,7 @@
               },
           });
       });
-  
+
   </script>
   <script>
       $("#cancelMilestone").on('click',function() {
@@ -94,4 +93,3 @@
           $("#cancelMilestone").text("Processing ...");
       })
   </script>
-  

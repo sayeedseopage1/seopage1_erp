@@ -19,9 +19,11 @@ use App\Models\PMAssign;
 use App\Models\Contract;
 use App\Models\Deal;
 use App\Models\ProjectActivity;
-use Illuminate\Support\Facades\Validator; 
+use Illuminate\Support\Facades\Validator;
 use App\Notifications\MilestoneCancelNotification;
 use App\Notifications\MilestoneCancelApproveNotification;
+use App\Notifications\ProjectCompleteNotification;
+use DateTime;
 class ProjectMilestoneController extends AccountBaseController
 {
 
@@ -53,29 +55,29 @@ class ProjectMilestoneController extends AccountBaseController
     }
     public function CompleteMilestone(Request $request)
     {
-      $milestone_id= ProjectMilestone::where('id',$request->id)->first();
-      //dd($request);
-      $milestone= ProjectMilestone::find($request->id);
-      $milestone->status= "complete";
-      $milestone->last_updated_by= Auth::id();
-      $milestone->save();
-      $project= Project::where('id',$milestone->project_id)->first();
-      $milestone_count= ProjectMilestone::where('project_id',$milestone->project_id)->count();
+        $milestone_id= ProjectMilestone::where('id',$request->id)->first();
+        //dd($request);
+        $milestone= ProjectMilestone::find($request->id);
+        $milestone->status= "complete";
+        $milestone->last_updated_by= Auth::id();
+        $milestone->save();
+        $project= Project::where('id',$milestone->project_id)->first();
+        $milestone_count= ProjectMilestone::where('project_id',$milestone->project_id)->count();
 
-      $milestone_complete= ProjectMilestone::where('project_id',$milestone->project_id)->where('status','complete')->count();
-      //  dd($milestone_count,$milestone_complete);
-      if ($milestone_count == $milestone_complete) {
-        $users= User::where('role_id',1)->get();
-        foreach ($users as $user) {
+        $milestone_complete= ProjectMilestone::where('project_id',$milestone->project_id)->where('status','complete')->count();
+        //  dd($milestone_count,$milestone_complete);
+        if ($milestone_count == $milestone_complete) {
+            $users= User::where('role_id',1)->get();
+            foreach ($users as $user) {
 
 
-           Notification::send($user, new MilestoneComplete($project,$milestone));
+                Notification::send($user, new MilestoneComplete($project,$milestone));
+            }
         }
-      }
 
-    //  dd($output);
+        //  dd($output);
 
-      return back()->with('success','Milestone Status Updated Successfully');
+        return back()->with('success','Milestone Status Updated Successfully');
     }
 
     /**
@@ -99,9 +101,9 @@ class ProjectMilestoneController extends AccountBaseController
         $milestone->cost = ($request->actual_cost)/$currency->exchange_rate;
         $milestone->actual_cost = ($request->actual_cost == '') ? '0' : $request->actual_cost;
         $milestone->currency_id = 1;
-       
+
         $milestone->original_currency_id = $currency->id;
-       
+
         $milestone->save();
 
         $project = Project::where('id',$request->project_id)->first();
@@ -137,13 +139,13 @@ class ProjectMilestoneController extends AccountBaseController
             $log_user = Auth::user();
             $activity = new ProjectActivity();
             $activity->activity= $milestone->milestone_title. '- New milestone added by '. $log_user->name;
-         
-            $activity->project_id = $project_update->id;
-           
-            $activity->save();
-    
 
-           
+            $activity->project_id = $project_update->id;
+
+            $activity->save();
+
+
+
 
         }
 
@@ -153,7 +155,7 @@ class ProjectMilestoneController extends AccountBaseController
         //     $project->save();
         // }
 
-       // $this->logProjectActivity($project->id, 'messages.newMilestoneCreated');
+        // $this->logProjectActivity($project->id, 'messages.newMilestoneCreated');
         return Reply::success(__('messages.milestoneSuccess'));
     }
 
@@ -179,12 +181,12 @@ class ProjectMilestoneController extends AccountBaseController
     public function update(StoreMilestone $request, $id)
     {
         $pre_cost= ProjectMilestone::where('id',$id)->first();
-    // dd($pre_cost);
+        // dd($pre_cost);
         $project_id= Project::where('id',$request->project_id)->first();
         $project_update_price= Project::find($project_id->id);
         $project_update_price->project_budget= $project_id->project_budget-$pre_cost->cost;
         $project_update_price->due= $project_id->due- $pre_cost->cost;
-        
+
         $project_update_price->save();
         $pm_id_update= PMAssign::where('pm_id',$project_id->pm_id)->first();
         $pm_assign_update= PMAssign::find($pm_id_update->id);
@@ -204,7 +206,7 @@ class ProjectMilestoneController extends AccountBaseController
         $contract_update->amount= $contract_update->amount- $pre_cost->cost;
         $contract_update->save();
         $currency= Currency::where('currency_code',$request->original_currency_id)->first();
-      //dd($request,$id);
+        //dd($request,$id);
         $milestone = ProjectMilestone::findOrFail($id);
         $originalValues = $milestone->getOriginal();
         $milestone->project_id = $request->project_id;
@@ -252,18 +254,18 @@ class ProjectMilestoneController extends AccountBaseController
             $log_user = Auth::user();
             $activity = new ProjectActivity();
             $activity->activity= $milestone->milestone_title. '- milestone updated by '. $log_user->name;
-         
+
             $activity->project_id = $project_update->id;
-           
+
             $activity->save();
 
-            
 
-           
+
+
 
         }
 
-       // $this->logProjectActivity($milestone->project_id, 'messages.milestoneUpdated');
+        // $this->logProjectActivity($milestone->project_id, 'messages.milestoneUpdated');
         return Reply::success(__('messages.milestoneSuccess'));
     }
 
@@ -349,36 +351,87 @@ class ProjectMilestoneController extends AccountBaseController
         foreach ($users as $user) {
 
 
-           Notification::send($user, new MilestoneCancelNotification($milestone));
+            Notification::send($user, new MilestoneCancelNotification($milestone));
         }
         return response()->json([
             'status' => 'success'
         ]);
 
-        
+
     }
     public function CancelMilestoneApprove(Request $request)
     {
-       // dd($request->milestomeId);
-        
+        // dd($request->milestomeId);
+
         $milestone_id= ProjectMilestone::where('id',$request->milestoneId)->first();
         $milestone= ProjectMilestone::find($milestone_id->id);
         $milestone->cancelation_status= 'approved';
         $milestone->status= 'canceled';
-        
+
         $milestone->save();
         $project= Project::where('id',$milestone->project_id)->first();
+        $update_project= Project::find($project->id);
+        $update_project->project_budget= $project->project_budget-$milestone->cost;
+        $update_project->due= $project->due- $milestone->cost;
+        $update_project->milestone_cancel_amount= $project->milestone_cancel_amount+ $milestone->cost;
+        $update_project->milestone_cancel_count= $project->milestone_cancel_count+ 1;
+
+        $update_project->save();
+        $pm_id= PMAssign::where('pm_id',$project->pm_id)->first();
+        $pm_assign= PMAssign::find($pm_id->id);
+        $pm_assign->amount= $pm_assign->amount- $milestone->cost;
+        $pm_assign->monthly_project_amount= $pm_assign->monthly_project_amount- $milestone->cost;
+        $pm_assign->save();
+
+        $deal_id= Deal::where('id',$project->deal_id)->first();
+        $deal= Deal::find($deal_id->id);
+        $deal->actual_amount= $deal->actual_amount- $milestone->actual_cost;
+        $deal->amount= $deal->amount- $milestone->cost;
+        $deal->save();
+        $contract_id= Contract::where('deal_id',$deal->id)->first();
+        $contract= Contract::find($contract_id->id);
+        $contract->actual_amount= $contract->actual_amount- $milestone->actual_cost;
+        $contract->original_amount= $contract->original_amount- $milestone->actual_cost;
+        $contract->amount= $contract->amount- $milestone->cost;
+        $contract->save();
         $user= User::where('id',$project->pm_id)->first();
-        
+        $log_user = Auth::user();
+        $activity = new ProjectActivity();
+        $activity->activity= $milestone->milestone_title. '- Milestone canceled by '. $user->name;
+
+        $activity->project_id = $update_project->id;
+
+        $activity->save();
+        $project_update_status= Project::find($update_project->id);
+        if ($update_project->due < 3) {
+            $project_update_status->status = 'finished';
+            $project_update_status->completion_percent= 100;
+            //$var= Project::where('id',$request->project_id)->first();
+            $date1 = new DateTime($project['start_date']);
+            $date2 = Carbon::now();
+            $days  = $date2->diff($date1)->format('%a');
+            $project_update_status->payment_release_date = $date2;
+            $project_update_status->project_completion_days= $days;
+            $project_update_status->save();
+            $users= User::where('role_id',1)->orWhere('role_id',6)->get();
+            foreach ($users as $user) {
 
 
-           Notification::send($user, new MilestoneCancelApproveNotification($milestone));
-       
+                Notification::send($user, new ProjectCompleteNotification($project));
+            }
+        }
+
+
+
+
+
+        Notification::send($user, new MilestoneCancelApproveNotification($milestone));
+
         return response()->json([
             'status' => 'success'
         ]);
 
-        
+
     }
 
 }
