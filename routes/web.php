@@ -1178,5 +1178,3 @@ Route::controller(DealController::class)->group(function(){
 });
 
 
-
-
