@@ -485,39 +485,42 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
             }
         });
 
-        window.addEventListener("load", function() {
-            var timers = document.querySelectorAll(".timer");
+        $(document).ready(function() {
+            setTimeout(function() {
+                // Code to be executed after a 5-second delay
+                var timers = document.querySelectorAll(".timer");
 
-            for (var i = 0; i < timers.length; i++) {
-                startTimer(timers[i]);
+                for (var i = 0; i < timers.length; i++) {
+                    startTimer(timers[i]);
+                }
+            }, 3000);
+
+            function startTimer(timerElement) {
+                // Extract hours, minutes, and seconds from the timer element
+                var timeParts = timerElement.innerHTML.split(":");
+                var hours = parseInt(timeParts[0]);
+                var minutes = parseInt(timeParts[1]);
+                var seconds = parseInt(timeParts[2]);
+
+                // Start the timer
+                var timerInterval = setInterval(function() {
+                    seconds++;
+
+                    if (seconds >= 60) {
+                        minutes++;
+                        seconds = 0;
+                    }
+
+                    if (minutes >= 60) {
+                        hours++;
+                        minutes = 0;
+                    }
+
+                    // Update the timer element with the new time
+                    timerElement.innerHTML = hours + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+                }, 1000);
             }
         });
-
-        function startTimer(timerElement) {
-            // Extract hours, minutes, and seconds from the timer element
-            var timeParts = timerElement.innerHTML.split(":");
-            var hours = parseInt(timeParts[0]);
-            var minutes = parseInt(timeParts[1]);
-            var seconds = parseInt(timeParts[2]);
-
-            // Start the timer
-            var timerInterval = setInterval(function() {
-                seconds++;
-
-                if (seconds >= 60) {
-                    minutes++;
-                    seconds = 0;
-                }
-
-                if (minutes >= 60) {
-                    hours++;
-                    minutes = 0;
-                }
-
-                // Update the timer element with the new time
-                timerElement.innerHTML = hours + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
-            }, 1000);
-        }
 
         $('body').on('click', '.delete-table-row', function() {
             var id = $(this).data('user-id');
