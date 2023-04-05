@@ -1179,5 +1179,3 @@ Route::controller(DealController::class)->group(function(){
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 
 
-
-

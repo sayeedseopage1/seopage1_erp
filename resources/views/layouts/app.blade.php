@@ -356,15 +356,11 @@
                                     $to = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', \Carbon\Carbon::now());
 
                                     $from = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value->award_time);
-                                    
-                                    if(\Carbon\Carbon::now()->lt($to->addHours(20))){
-                                        $diff_in_minutes = $from->diffInMinutes($to);
-                                    } else {
-                                        $diff_in_minutes = 0;
-                                    } 
+
+                                    $diff_in_minutes = $from->diffInMinutes($to);
                                 }
                             @endphp
-                            @if($value != null && $diff_in_minutes < 1200)
+                            @if($value != null && $diff_in_minutes < 1300)
                             <div class="content">
 					            <div class="bg-timer-box my-3 rounded p-2 text-light">
 					                <p class="mb-0">New Deal Won: {{$value->client_name}}</p>
@@ -788,9 +784,9 @@
                     @php
                         $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$value->award_time)->format('Y-m-d H:i:s');
                         $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1200)->format('Y-m-d H:i:s');
-                        $minutes = \Carbon\Carbon::parse($newDateTime)->diffInSeconds(\Carbon\Carbon::now());
+                        $minutes = \Carbon\Carbon::parse($newDateTime)->diffInMinutes(\Carbon\Carbon::now());
                     @endphp
-
+                    @if($minutes < 1300)
                     // let timeInMinutes_{{$value->id}} = {{$minutes}}; // set the time in minutes dynamically
                     // const deadline_{{$value->id}} = timeInMinutes_{{$value->id}} * 60; // convert minutes to seconds
                     const deadline_{{$value->id}} = {{$minutes}}; // convert minutes to seconds
@@ -818,6 +814,7 @@
                         let seconds = timeRemaining_{{$value->id}} % 60;
                         timerElement_{{$value->id}}.innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                     }
+                    @endif
                 @endforeach
             @endif
         @endif

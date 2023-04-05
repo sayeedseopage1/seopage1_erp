@@ -355,7 +355,7 @@ class TasksDataTable extends BaseDataTable
                 }
 
                 if ($row->activeTimer && $row->active_timer_all_count == 1) {
-                    $timer .= '<div class="row ml-1 mt-1"><span class="align-items-center badge badge-primary d-inline-flex mr-1" data-toggle="tooltip" data-original-title="' . __('modules.projects.activeTimers') . '" ><i class="fa fa-clock"></i> <p class="timer m-0 ml-2">' . $row->activeTimer->timer . '</p></span></div>';
+                    $timer .= '<div class="row ml-1 mt-1"><span class="align-items-center badge badge-primary d-inline-flex mr-1"><i class="fa fa-clock"></i> <p class="timer m-0 ml-2">' . $row->activeTimer->timer . '</p></span></div>';
                 }
 
                 foreach ($row->labels as $label) {
