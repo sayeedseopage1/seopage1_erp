@@ -27,6 +27,7 @@ use App\Models\User;
 use App\Traits\ProjectProgress;
 use Carbon\Carbon;
 use GrahamCampbell\GitLab\Facades\GitLab;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Helper\Files;
@@ -1144,6 +1145,30 @@ class TaskController extends AccountBaseController
             } else {
                 return redirect()->route('tasks.index');
             }
+        }
+    }
+
+
+    public function searchSubTask(Request $request){
+//        dd($request->all());
+        $subTask = SubTask::where('title','like','%'.$request->search_string.'%')->where('task_id', $request->id)->orderBy('task_id','desc');
+//        dd($subTask->get());
+        if ($subTask->count() >=1){
+//            $task = $request->id;
+//            $tasks = $task->subtasks;
+//            $taskBoardStatus = TaskboardColumn::all();
+//            $project = $task->project;
+            $html = view('tasks.ajax.showSubTask',compact( 'subTask'))->render();
+            dd($html);
+            return Reply::dataOnly([
+                'status' => 'success',
+                'data' => $html,
+
+            ]);
+        }else{
+            return response()->json([
+                'status'=>'400',
+            ]);
         }
     }
 

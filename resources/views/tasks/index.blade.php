@@ -683,26 +683,5 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
             })
         });
     </script>
-
-{{--        SUB TASK SCRIPT--}}
-{{--    <script>--}}
-{{--        $(document).ready(function() {--}}
-{{--            $('#datepicker').daterangepicker({--}}
-{{--                autoUpdateInput: false,--}}
-{{--                locale: {--}}
-{{--                    cancelLabel: 'Clear'--}}
-{{--                }--}}
-{{--            });--}}
-
-{{--            $('#datepicker').on('apply.daterangepicker', function(ev, picker) {--}}
-{{--                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' to ' + picker.endDate.format('YYYY-MM-DD'));--}}
-{{--                console.log('Selected date range: ' + picker.startDate.format('YYYY-MM-DD') + ' to ' + picker.endDate.format('YYYY-MM-DD'));--}}
-{{--            });--}}
-
-{{--            $('#datepicker').on('cancel.daterangepicker', function(ev, picker) {--}}
-{{--                $(this).val('');--}}
-{{--            });--}}
-{{--        });--}}
-{{--    </script>--}}
 @endpush
 <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>

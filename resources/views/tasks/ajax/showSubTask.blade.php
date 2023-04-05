@@ -3,13 +3,13 @@
 <h3 class="heading-h1" id="right-modal-title">Subtasks of {{$task->heading}}</a></h3>
  <div class="filter-box">
      <!-- FILTER START -->
-     <form action="" id="filter-form">
+     <form action="" id="filter-form2">
          <div class="d-lg-flex d-md-flex d-block flex-wrap filter-box bg-white client-list-filter">
              <!-- DATE START -->
              <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
                  <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">Date</p>
                  <div class="select-status d-flex">
-                     <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange" placeholder="Start Date To End Date" autocomplete="off">
+                     <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange2" placeholder="Start Date To End Date" autocomplete="off">
                  </div>
              </div>
              <!-- DATE END -->
@@ -33,14 +33,14 @@
                             <i class="fa fa-search f-13 text-dark-grey"></i>
                         </span>
                      </div>
-                     <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field" placeholder="Start typing to search" autocomplete="off">
+                     <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search2" placeholder="Start typing to search" autocomplete="off">
                  </div>
              </div>
              <!-- SEARCH BY TASK END -->
 
              <!-- RESET START -->
              <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
-                 <x-forms.button-secondary class="btn-xs {{ request('overdue') != 'yes' ? 'd-none' : '' }}" id="reset-filters" icon="times-circle">
+                 <x-forms.button-secondary class="btn-xs {{ request('overdue') != 'yes' ? 'd-none' : '' }}" id="reset-filters2" icon="times-circle">
                      @lang('app.clearFilters')
                  </x-forms.button-secondary>
              </div>
@@ -173,3 +173,110 @@
 		</div>
 	</div>
 </div>
+
+<script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
+<script type="text/javascript">
+    @php
+        $startDate = \Carbon\Carbon::now()->startOfMonth()->subMonths(1)->addDays(20);
+        $endDate = \Carbon\Carbon::now()->startOfMonth()->addDays(20);
+    @endphp
+    $(function() {
+        var format = '{{ global_setting()->moment_format }}';
+        var startDate = "{{ $startDate->format(global_setting()->date_format) }}";
+        var endDate = "{{ $endDate->format(global_setting()->date_format) }}";
+        var picker = $('#datatableRange2');
+        var start = moment(startDate, format);
+        var end = moment(endDate, format);
+
+        function cb(start, end) {
+            $('#datatableRange2').val(start.format('{{ global_setting()->moment_date_format }}') +
+                ' @lang("app.to") ' + end.format( '{{ global_setting()->moment_date_format }}'));
+            $('#reset-filters2').removeClass('d-none');
+        }
+
+        $('#datatableRange2').daterangepicker({
+            locale: daterangeLocale,
+            linkedCalendars: false,
+            startDate: start,
+            endDate: end,
+            ranges: daterangeConfig,
+            opens: 'left',
+            parentEl: '.dashboard-header'
+        }, cb);
+
+        $('#datatableRange2').on('apply.daterangepicker', function(ev, picker) {
+            showTable();
+        });
+    });
+    $('#projects-table').on('preXhr.dt', function(e, settings, data) {
+
+        var status = $('#status').val();
+        var clientID = $('#client_id').val();
+        var categoryID = $('#category_id').val();
+        var teamID = $('#team_id').val();
+        var employee_id = $('#employee_id').val();
+        var pinned = $('#pinned').val();
+        var searchText = $('#search-text-field').val();
+
+        @if (request('deadLineStartDate') && request('deadLineEndDate'))
+            deadLineStartDate = '{{ request("deadLineStartDate") }}';
+        deadLineEndDate = '{{ request("deadLineEndDate") }}'
+        @endif
+
+            data['status'] = status;
+        data['client_id'] = clientID;
+        data['pinned'] = pinned;
+        data['category_id'] = categoryID;
+        data['team_id'] = teamID;
+        data['employee_id'] = employee_id;
+        data['deadLineStartDate'] = deadLineStartDate;
+        data['deadLineEndDate'] = deadLineEndDate;
+        data['searchText'] = searchText;
+        var dateRangePicker = $('#datatableRange2').data('daterangepicker');
+        var startDate = $('#datatableRange').val();
+
+        if (startDate == '') {
+            data['startDate'] = null;
+            data['endDate'] = null;
+        } else {
+            data['startDate'] = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+            data['endDate'] = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
+        }
+
+        @if (!is_null(request('start')) && !is_null(request('end')))
+            data['startDate'] = '{{ request('start') }}';
+        data['endDate'] = '{{ request('end') }}';
+        @endif
+    });
+</script>
+<script>
+    $('#reset-filters2').click(function() {
+        $('#filter-form2')[0].reset();
+
+        $('.filter-box #status').val('not finished');
+        $('.filter-box #date_filter_on').val('start_date');
+        $('.filter-box #assignedTo').val('all');
+        $('.filter-box .select-picker').selectpicker("refresh");
+        $('#reset-filters2').addClass('d-none');
+        showTable();
+    });
+    $(document).on('keyup',function (e) {
+        e.preventDefault();
+        let search_string = $('#search2').val();
+        var url = $(this).attr('href');
+        $.ajax({
+            url:"{{route('tasks.search_subtask')}}",
+            method:'GET',
+            data:{search_string:search_string ,id:{{request('id')}}},
+            success:function (response) {
+                $('.subTasksTable').html(response);
+                if (response.status == 'success') {
+                    $('#right-modal-content').html(response.data);
+                }
+                if(response.status==400){
+                    $('.subTasksTable').html('<span class="text-danger" style="margin-left: 50%;">'+'Nothing Found!'+'</span>');
+                }
+            }
+        });
+    })
+</script>
