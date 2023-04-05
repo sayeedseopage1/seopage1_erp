@@ -368,11 +368,11 @@ class ProjectMilestoneController extends AccountBaseController
         
         $milestone->save();
         $project= Project::where('id',$milestone->project_id)->first();
-        // $user= User::where('id',$project->pm_id)->first();
+        $user= User::where('id',$project->pm_id)->first();
         
 
 
-        //    Notification::send($user, new MilestoneCancelApproveNotification($milestone));
+           Notification::send($user, new MilestoneCancelApproveNotification($milestone));
        
         return response()->json([
             'status' => 'success'

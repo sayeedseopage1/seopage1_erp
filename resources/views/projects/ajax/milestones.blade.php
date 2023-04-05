@@ -111,6 +111,9 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 $invoice_generated= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_created',1)->count();
                                 $last_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->orderBy('id','desc')->where('invoice_id',null)->first();
                                 $first_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_id',null)->first();
+                                $qc_count= App\Models\ProjectMilestone::where('project_id',$project->id)->where('qc_status',1)->count();
+                               // dd($qc_count);
+                                $project_completion_count= App\Models\ProjectMilestone::where('project_id',$project->id)->where('project_completion_status',1)->count();
                               //dd($task);
                                ?>
                                <form class="" action="{{route('milestone-complete')}}" method="post">
@@ -154,11 +157,40 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                   @endif
                                     
                   @elseif($item->status == 'canceled')
+                  @if($incomplete_milestone == 0 && $qc_count == 0 && $item->id == $last_milestone->id)
+                 
+                  @if($item->qc_status == 0)
+                        <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right">Complete Q&C</a>
+
+                        @elseif($item->qc_status == 2)
+                        <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                 Awaiting Approval
+                                 <br>
+                                 (QC Sumission)
+                    @endif
+                @elseif($incomplete_milestone == 0 && $project_completion_count == 0 && $item->id == $last_milestone->id)
+                @if($item->project_completion_status  == 0)
+
+                <a href="/projects/project-completion/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right" >Project Completion Form</a>
+                @elseif($item->project_completion_status  == 2) 
+                <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                Awaiting Approval
+                <br>
+                (Project Completion)
+
+
+                @endif
+                    
+                  @else 
+
+                  <i class="fa fa-circle mr-1 text-red f-10"></i>
+                  Canceled
+
+                  @endif
 
                   {{--  Need to check if milestone is the last milestone then qc and project completion and authorization apply in this section 
                      --}}
-                                <i class="fa fa-circle mr-1 text-red f-10"></i>
-                                Canceled
+                            
 
 
                   @else 
