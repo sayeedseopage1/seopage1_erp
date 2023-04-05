@@ -21,6 +21,7 @@ use App\Models\Deal;
 use App\Models\ProjectActivity;
 use Illuminate\Support\Facades\Validator; 
 use App\Notifications\MilestoneCancelNotification;
+use App\Notifications\MilestoneCancelApproveNotification;
 class ProjectMilestoneController extends AccountBaseController
 {
 
@@ -350,6 +351,27 @@ class ProjectMilestoneController extends AccountBaseController
 
            Notification::send($user, new MilestoneCancelNotification($milestone));
         }
+        return response()->json([
+            'status' => 'success'
+        ]);
+
+        
+    }
+    public function CancelMilestoneApprove(Request $request)
+    {
+        
+        $milestone_id= ProjectMilestone::where('id',$request->milestoneId)->first();
+        $milestone= ProjectMilestone::find($milestone_id->id);
+        $milestone->cancelation_status= 'approved';
+        
+        $milestone->save();
+        $project= Project::where('id',$milestone->project_id)->first();
+        $user= User::where('id',$project->pm_id)->first();
+        
+
+
+           Notification::send($user, new MilestoneCancelApproveNotification($milestone));
+       
         return response()->json([
             'status' => 'success'
         ]);

@@ -142,7 +142,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                      <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}" >Cancel Milestone</button> 
                   @else 
                   @if(Auth::user()->role_id == 1)
-                  <button type="submit" class="btn-success rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 approve_milestone" data-row-id="{{ $item->id }}">Approve Cancelation</button>
+                  <button type="submit" class="btn-success rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 approve_milestone" data-row-id="{{ $item->id }}" data-row-id2="{{$item->comments}}">Approve Cancelation</button>
 
                   @else
                   <i class="fa fa-circle mr-1 text-yellow f-10"></i>
@@ -444,8 +444,11 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
           if (result.isConfirmed) {
           //  / var id = milestone_id;
           var milestone_id = $(this).data('row-id');
-          //alert(milestone_id);
-          $('#milestoneId2').val(milestone_id);
+          var comments =  $(this).data('row-id2');
+         
+          $('.milestoneId').val(milestone_id);
+          $('.commentId').val(comments);
+          //$('.milestoneId').val(milestone_id);
         
            // alert(milestone_id);
             // /var milestoneID= milestone_id.val();

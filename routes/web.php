@@ -1175,5 +1175,6 @@ Route::controller(DealController::class)->group(function(){
     Route::get('search-client', 'SearchClient')->name('client-search');
 });
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
+Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
 
 

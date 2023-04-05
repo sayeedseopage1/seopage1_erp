@@ -8,15 +8,18 @@
         </div>
         <form class="" action="{{route('cancel-milestone')}}" method="post">
           @csrf
-          <input type="text" class="milestoneId" name='milestoneId'  value="">
+          <input type="hidden" class="milestoneId" name='milestoneId'  value="">
+          
 
         
-        <div class="modal-body">
+        <div class="modal-body"> 
+             
           <div class="col-md-12">
             <div class="form-group">
               <label for="exampleFormControlTextarea1">Reason given by project manager</label>
-  {{--            <textarea name="comments" class="form-control" id="comment2" rows="3" required></textarea>--}}
-                
+             {{-- <textarea name="comments" class="form-control" rows="3" required></textarea>
+                 --}}
+                 
             </div>
           </div>
         </div>
@@ -58,7 +61,7 @@
           });
           $.ajax({
               type: "POST",
-              url: "{{route('cancel-milestone')}}",
+              url: "{{route('cancel-milestone-approve')}}",
               data: data,
               dataType: "json",
               success: function (response) {
