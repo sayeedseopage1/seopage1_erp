@@ -8,7 +8,7 @@
         </div>
         <form class="" action="{{route('cancel-milestone')}}" method="post">
           @csrf
-          <input type="hidden" name='milestoneId' id="milestoneId" value="">
+          <input type="text" class="milestoneId" name='milestoneId'  value="">
 
         
         <div class="modal-body">

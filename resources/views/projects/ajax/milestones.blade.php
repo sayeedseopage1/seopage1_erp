@@ -444,7 +444,8 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
           if (result.isConfirmed) {
           //  / var id = milestone_id;
           var milestone_id = $(this).data('row-id');
-          $('#milestoneId').val(milestone_id);
+          //alert(milestone_id);
+          $('#milestoneId2').val(milestone_id);
         
            // alert(milestone_id);
             // /var milestoneID= milestone_id.val();
