@@ -688,6 +688,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/members/{id}', [TaskController::class, 'members'])->name('tasks.members');
     Route::get('tasks/project_tasks/{id}', [TaskController::class, 'projectTasks'])->name('tasks.project_tasks');
     Route::get('tasks/show-subtask/{id}/{tableView?}/{tableViews?}', [TaskController::class, 'show_subtask'])->name('tasks.show_subtask');
+    Route::get('tasks/search-subtask', [TaskController::class, 'searchSubTask'])->name('tasks.search_subtask');
 
     Route::group(
         ['prefix' => 'tasks'],
@@ -1171,7 +1172,9 @@ Route::get('/projects/send-final-authorization-deliverables/{id}', [ProjectContr
 Route::post('/deliverable-final-authorization-accept', [ProjectController::class, 'DeliverableFinalAuthorizationAccept'])->name('deliverable-final-authorization-accept');
 Route::get('update/timer/box/set/{status}', [HomeController::class, 'timer_session_set'])->whereIn('status', ['on', 'off'])->name('home.timer_session_set');
 
+
 Route::controller(DealController::class)->group(function(){
+
     Route::get('search-client', 'SearchClient')->name('client-search');
 });
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');

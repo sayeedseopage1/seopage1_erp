@@ -111,11 +111,6 @@
     <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverableextensionacceptmodal"><i class="fas fa-check"></i> Extend Time</button>
     @include('projects.modals.deliverableextensionacceptmodal')
     @endif
-   @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
-{{--      <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-id="{{ $project->id }}" id="acceptBtn">Authorization</button>--}}
-           <button class="btn btn-success rounded f-14 p-2 my-3" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal" aria-haspopup="true" aria-expanded="false" id="acceptBtn">Authorization</button>
-           @include('projects.modals.deliverablefinalauthorizationacceptmodal')
-   @endif
 
 
 </div>
@@ -288,6 +283,13 @@
             </div>
 
         </div>
+        @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
+            <div class="d-flex">
+                <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
+                    <button class="dropdown-toggle btn-success text-white" type="button" data-id="{{ $project->id }}" id="acceptBtn">@lang('Accept')</button>
+                </div>
+            </div>
+        @endif
         <x-forms.button-cancel :link="route('projects.index')" class="border-0">@lang('app.cancel')
         </x-forms.button-cancel>
 
@@ -299,9 +301,12 @@
 
         <div class="d-flex">
             <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
-                <button class="dropdown-toggle btn-success text-white" type="button" data-id="{{$project->id}}" id="sendAuthorizationBtn">@lang('Send for Authorization')
+                <button class="dropdown-toggle btn-secondary" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationModal"
+                     aria-haspopup="true" aria-expanded="false">@lang('Send for Authorization')
 
                 </button>
+                @include('projects.modals.deliverablefinalauthorizationmodal')
+                <!-- DROPDOWN - INFORMATION -->
 
             </div>
 
@@ -537,28 +542,27 @@
 </script>
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#sendAuthorizationBtn').click(function(e) {
+        $('#acceptBtn').click(function(e) {
             e.preventDefault();
             var id = $(this).attr('data-id');
-            console.log(id);
             Swal.fire({
-                title: 'Are You Sure You Want to send approval request?',
+                title: 'Do you want to accept authorization?',
                 showDenyButton: true,
                 confirmButtonText: 'Save',
                 denyButtonText: `Don't save`,
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: '/projects/send-final-authorization-deliverables/' + id,
-                        type: 'GET',
+                        url: "{{route('deliverable-final-authorization-accept')}}",
+                        type: 'POST',
                         dataType: 'JSON',
                         data: {
                             '_token': '{{ csrf_token() }}',
-                            'id':id,
+                            'project_id':{{$project->id}},
                         },
                         success: function(response) {
                             if(response.status==400){
-                                Swal.fire('Authorization request send Successfully', '', 'success');
+                                Swal.fire('Authorization request accepted successfully', '', 'success');
                                 window.location.reload();
                             }
                         },

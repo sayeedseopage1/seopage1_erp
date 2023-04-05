@@ -1,3 +1,21 @@
+<style>
+    @media only screen and (max-width: 1432px) {
+        .complete_milestone,
+        .cancel_milestone {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+    /*@media only screen and (min-width: 768px) {*/
+    /*    .complete_milestone,*/
+    /*    .cancel_milestone {*/
+    /*        display: block;*/
+    /*        margin-bottom: 10px;*/
+    /*        width: 100%;*/
+    /*    }*/
+    /*}*/
+</style>
 @php
 $addProjectMilestonePermission = ($project->project_admin == user()->id) ? 'all' : user()->permission('add_project_milestones');
 $viewProjectMilestonePermission = ($project->project_admin == user()->id) ? 'all' : user()->permission('view_project_milestones');
@@ -97,7 +115,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 @endif
                             </td>
                             <td>
-                             
+
 
 
                               <?php
@@ -119,6 +137,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                <form class="" action="{{route('milestone-complete')}}" method="post">
                                  @csrf
                                    <input type="hidden" name="id" value="{{$item->id}}">
+
         @if($task > 0)            
                             @if($item->cancelation_status == null)
                                 <button type="submit" disabled class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete ({{$complete_task}}/{{$total_tasks}})</button>
@@ -136,16 +155,19 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 @endif
               
                                 @endif
+
                                 @else
                   @if($item->status == 'incomplete')
 
                   @if($item->cancelation_status == null)
+
 
                                      <button type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
                                      <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}" >Cancel Milestone</button> 
                   @else 
                   @if(Auth::user()->role_id == 1)
                   <button type="submit" class="btn-success rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 approve_milestone" data-row-id="{{ $item->id }}" data-row-id2="{{$item->comments}}">Approve Cancelation</button>
+
 
                   @else
                   <i class="fa fa-circle mr-1 text-yellow f-10"></i>
@@ -205,6 +227,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                  <br>
                                  (QC Sumission)
 
+
                         @elseif($item->qc_status == 1 && $item->invoice_created == 0)
 
                         
@@ -215,6 +238,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
                         @elseif($item->qc_status == 1 && $item->invoice_created == 1 && $item->project_completion_status == 2)
                         <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+
                                     Awaiting Approval
                                     <br>
                                     (Project Completion)
@@ -333,7 +357,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
     let project_id = document.getElementById('project_id').value;
     let client_id =document.getElementById('client_id').value;
-  
+
 
 
 
@@ -341,7 +365,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
     $('body').on('click', '.create-invoice', function() {
       //id = $(this).attr("id");
         var milestone_id = $(this).data('row-id');
-      
+
     //  alert(milestone_id);
       var url = `{{ route('invoices.create') }}`;
 
@@ -350,7 +374,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
       $(this).prop("disabled", true);
       window.location.href = url;
       // window.open(url);
-    
+
     });
     $('body').on('click', '.create-payment', function() {
       //id = $(this).attr("id");
@@ -362,7 +386,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
       url += string;
 
       window.open(url);
-    
+
     });
 
     $('body').on('click', '.create-partial-payment', function() {
@@ -376,7 +400,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
       url += string;
       $(this).prop("disabled", true);
       window.open(url);
-    
+
     });
 
 
@@ -437,6 +461,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
           buttonsStyling: false
       }).then((result) => {
           if (result.isConfirmed) {
+
           //  / var id = milestone_id;
           var milestone_id = $(this).data('row-id');
           $('#milestoneId').val(milestone_id);
@@ -487,6 +512,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
             $('#cancel-milestone-approve').modal('show');
 
              // $(this).closest("form").submit();
+
           }
       });
       })
