@@ -46,11 +46,11 @@
           e.preventDefault();
           
           // alert('ok');
-          var comments = CKEDITOR.instances.comment3.getData();
+         
           var data= {
             '_token': "{{ csrf_token() }}",
            
-            'milestoneId': $('#milestoneId').val(),
+            'milestoneId': $('.milestoneId').val(),
         }
         
           //console.log(data);
@@ -65,29 +65,24 @@
               data: data,
               dataType: "json",
               success: function (response) {
-                  // console.log(response.status)
-                  if (response.status == 400) {
-                      $('#errorMsg').html("");
-                      $("#cancelMilestoneApprove").text("Update");
-                      $("#cancelMilestoneApprove").attr("disabled", false);
-                      toastr.error('Please submit the reason!');
-                  }else{
+                   //console.log(response.status)
+                 
                       if (response.status == 'success') {
-                        toastr.success('Cancelation request send successfully!');
+                        toastr.success('Cancelation request Accept successfully!');
                           $("#cancel-milestone-approve").modal("hide");
 
                           window.location.reload();
                       }
-                  }
+                 
               },
           });
       });
   
   </script>
   <script>
-      $("#cancelMilestone").on('click',function() {
-          $("#cancelMilestone").attr("disabled", true);
-          $("#cancelMilestone").text("Processing ...");
+      $("#cancelMilestoneApprove").on('click',function() {
+          $("#cancelMilestoneApprove").attr("disabled", true);
+          $("#cancelMilestoneApprove").text("Processing ...");
       })
   </script>
   

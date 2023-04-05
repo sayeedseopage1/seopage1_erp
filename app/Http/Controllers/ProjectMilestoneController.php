@@ -359,18 +359,20 @@ class ProjectMilestoneController extends AccountBaseController
     }
     public function CancelMilestoneApprove(Request $request)
     {
+       // dd($request->milestomeId);
         
         $milestone_id= ProjectMilestone::where('id',$request->milestoneId)->first();
         $milestone= ProjectMilestone::find($milestone_id->id);
         $milestone->cancelation_status= 'approved';
+        $milestone->status= 'canceled';
         
         $milestone->save();
         $project= Project::where('id',$milestone->project_id)->first();
-        $user= User::where('id',$project->pm_id)->first();
+        // $user= User::where('id',$project->pm_id)->first();
         
 
 
-           Notification::send($user, new MilestoneCancelApproveNotification($milestone));
+        //    Notification::send($user, new MilestoneCancelApproveNotification($milestone));
        
         return response()->json([
             'status' => 'success'
