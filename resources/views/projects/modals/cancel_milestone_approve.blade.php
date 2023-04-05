@@ -14,25 +14,18 @@
         <div class="modal-body">
           <div class="col-md-12">
             <div class="form-group">
-              <label for="exampleFormControlTextarea1">Please Describe the reason<span style="color:red;">*</span></label>
+              <label for="exampleFormControlTextarea1">Reason given by project manager</label>
   {{--            <textarea name="comments" class="form-control" id="comment2" rows="3" required></textarea>--}}
-                <textarea name="comments" id="comment2" class="form-control"></textarea>
-                <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
-                <script>
-                    CKEDITOR.replace('comments');
-                </script>
-                <label id="commentsError" class="error text-danger"></label>
+                
             </div>
           </div>
         </div>
             <br>
-            <ul id="errorMsg">
-  
-            </ul>
+           
             <br>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary close-button" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" id="cancelMilestone">Cancel Milestone</button>
+          <button type="submit" class="btn btn-primary" id="cancelMilestoneApprove">Cancel Milestone</button>
         </div>
       </form>
       </div>
@@ -46,14 +39,14 @@
   
   </script>
   <script>
-      $('#cancelMilestone').click(function(e){
+      $('#cancelMilestoneApprove').click(function(e){
           e.preventDefault();
           
           // alert('ok');
-          var comments = CKEDITOR.instances.comment2.getData();
+          var comments = CKEDITOR.instances.comment3.getData();
           var data= {
             '_token': "{{ csrf_token() }}",
-            'comments': comments,
+           
             'milestoneId': $('#milestoneId').val(),
         }
         
@@ -72,13 +65,13 @@
                   // console.log(response.status)
                   if (response.status == 400) {
                       $('#errorMsg').html("");
-                      $("#cancelMilestone").text("Update");
-                      $("#cancelMilestone").attr("disabled", false);
+                      $("#cancelMilestoneApprove").text("Update");
+                      $("#cancelMilestoneApprove").attr("disabled", false);
                       toastr.error('Please submit the reason!');
                   }else{
                       if (response.status == 'success') {
                         toastr.success('Cancelation request send successfully!');
-                          $("#cancel-milestone").modal("hide");
+                          $("#cancel-milestone-approve").modal("hide");
 
                           window.location.reload();
                       }

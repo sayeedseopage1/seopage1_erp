@@ -532,6 +532,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
     $('.close-button').click(function() {
 
       $('#cancel-milestone').modal('hide');
+      $('#cancel-milestone-approve').modal('hide');
     });
 
 
