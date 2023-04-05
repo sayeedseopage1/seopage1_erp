@@ -22,6 +22,8 @@ use App\Models\ProjectActivity;
 use Illuminate\Support\Facades\Validator; 
 use App\Notifications\MilestoneCancelNotification;
 use App\Notifications\MilestoneCancelApproveNotification;
+use App\Notifications\ProjectCompleteNotification;
+use DateTime;
 class ProjectMilestoneController extends AccountBaseController
 {
 
@@ -368,7 +370,58 @@ class ProjectMilestoneController extends AccountBaseController
         
         $milestone->save();
         $project= Project::where('id',$milestone->project_id)->first();
+        $update_project= Project::find($project->id);
+        $update_project->project_budget= $project->project_budget-$milestone->cost;
+        $update_project->due= $project->due- $milestone->cost;
+        $update_project->milestone_cancel_amount= $project->milestone_cancel_amount+ $milestone->cost;
+        $update_project->milestone_cancel_count= $project->milestone_cancel_count+ 1;
+
+        $update_project->save();
+        $pm_id= PMAssign::where('pm_id',$project->pm_id)->first();
+        $pm_assign= PMAssign::find($pm_id->id);
+        $pm_assign->amount= $pm_assign->amount- $milestone->cost;
+        $pm_assign->monthly_project_amount= $pm_assign->monthly_project_amount- $milestone->cost;
+        $pm_assign->save();
+
+        $deal_id= Deal::where('id',$project->deal_id)->first();
+        $deal= Deal::find($deal_id->id);
+        $deal->actual_amount= $deal->actual_amount- $milestone->actual_cost;
+        $deal->amount= $deal->amount- $milestone->cost;
+        $deal->save();
+        $contract_id= Contract::where('deal_id',$deal->id)->first();
+        $contract= Contract::find($contract_id->id);
+        $contract->actual_amount= $contract->actual_amount- $milestone->actual_cost;
+        $contract->original_amount= $contract->original_amount- $milestone->actual_cost;
+        $contract->amount= $contract->amount- $milestone->cost;
+        $contract->save();
         $user= User::where('id',$project->pm_id)->first();
+        $log_user = Auth::user();
+        $activity = new ProjectActivity();
+        $activity->activity= $milestone->milestone_title. '- Milestone canceled by '. $user->name;
+     
+        $activity->project_id = $update_project->id;
+       
+        $activity->save();
+        $project_update_status= Project::find($update_project->id);
+        if ($update_project->due < 3) {
+          $project_update_status->status = 'finished';
+          $project_update_status->completion_percent= 100;
+          //$var= Project::where('id',$request->project_id)->first();
+          $date1 = new DateTime($project['start_date']);
+          $date2 = Carbon::now();
+          $days  = $date2->diff($date1)->format('%a');
+          $project_update_status->payment_release_date = $date2;
+          $project_update_status->project_completion_days= $days;
+          $project_update_status->save();
+          $users= User::where('role_id',1)->orWhere('role_id',6)->get();
+          foreach ($users as $user) {
+
+
+             Notification::send($user, new ProjectCompleteNotification($project));
+          }
+        }
+
+        
         
 
 

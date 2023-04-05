@@ -6,8 +6,8 @@
           <h5 class="modal-title" id="exampleModalLabel">Cancel Milestone</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form class="" action="{{route('cancel-milestone')}}" method="post">
-          @csrf
+        <form class="" >
+         
           <input type="hidden" name='milestoneId' id="milestoneId" value="">
 
         

@@ -157,6 +157,19 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
                 </div>
             </div>
+     
+            @endif
+
+
+            @endif
+
+
+
+            @endif
+            @endif
+            @endif
+
+            
             @php
 
             $project_submission= App\Models\ProjectSubmission::where('project_id',$project->id)->orderBy('id','desc')->first();
@@ -176,16 +189,6 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 </div>
             </div>
               @include('projects.modals.projectsubmissionmodal')
-            @endif
-            @endif
-            @endif
-
-
-            @endif
-
-
-
-            @endif
             @endif
             @endif
             @php
