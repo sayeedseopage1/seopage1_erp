@@ -399,28 +399,31 @@ class ProjectMilestoneController extends AccountBaseController
         $activity = new ProjectActivity();
         $activity->activity= $milestone->milestone_title. '- Milestone canceled by '. $user->name;
 
+     
         $activity->project_id = $update_project->id;
-
+       
         $activity->save();
         $project_update_status= Project::find($update_project->id);
         if ($update_project->due < 3) {
-            $project_update_status->status = 'finished';
-            $project_update_status->completion_percent= 100;
-            //$var= Project::where('id',$request->project_id)->first();
-            $date1 = new DateTime($project['start_date']);
-            $date2 = Carbon::now();
-            $days  = $date2->diff($date1)->format('%a');
-            $project_update_status->payment_release_date = $date2;
-            $project_update_status->project_completion_days= $days;
-            $project_update_status->save();
-            $users= User::where('role_id',1)->orWhere('role_id',6)->get();
-            foreach ($users as $user) {
+          $project_update_status->status = 'finished';
+          $project_update_status->completion_percent= 100;
+          //$var= Project::where('id',$request->project_id)->first();
+          $date1 = new DateTime($project['start_date']);
+          $date2 = Carbon::now();
+          $days  = $date2->diff($date1)->format('%a');
+          $project_update_status->payment_release_date = $date2;
+          $project_update_status->project_completion_days= $days;
+          $project_update_status->save();
+          $users= User::where('role_id',1)->orWhere('role_id',6)->get();
+          foreach ($users as $user) {
 
 
-                Notification::send($user, new ProjectCompleteNotification($project));
-            }
+             Notification::send($user, new ProjectCompleteNotification($project));
+          }
         }
 
+        
+        
 
 
 

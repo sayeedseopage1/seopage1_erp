@@ -36,7 +36,7 @@ class MilestoneCancelApproveNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -67,10 +67,10 @@ class MilestoneCancelApproveNotification extends Notification
      </p>'
      ;
      $header= '<p>
-        <h1 style="color: red; text-align: center;" >' . __('You have a milestone cancel request') .'</b>'.'
+        <h1 style="color: red; text-align: center;" >' . __('Top Management accepted milestone cancel request') .'</b>'.'
     </h1>';
       $body= '<p>
-      A cancelation request sent by <strong><b>'.$pm->name.'</b></strong> for the following project '.'<a href="'.route('projects.show',$project->id).'">'. $project->project_name .'</a>' . ' but payment not completed fully. Let'. '&#39;'. 's check the short details below. You can check the details about this project following '.'<a href="'.route('projects.show',$project->id).'">'.'this link'.'</a>'.'
+      Cancelation request accepted by top management for the following project '.'<a href="'.route('projects.show',$project->id).'">'. $project->project_name .'</a>' . ' but payment not completed fully. Let'. '&#39;'. 's check the short details below. You can check the details about this project following '.'<a href="'.route('projects.show',$project->id).'">'.'this link'.'</a>'.'
      </p>'
      ;
      $content =
@@ -88,10 +88,10 @@ class MilestoneCancelApproveNotification extends Notification
    ;
   
           return (new MailMessage)
-          ->subject(__('Client '.$client->name.', a milestone cancelation request sent for approval') )
+          ->subject(__('Client '.$client->name.',  milestone cancelation request accepted by Top management') )
   
           ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
-          ->markdown('mail.milestone.cancel', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
+          ->markdown('mail.milestone.cancel_approve', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
     }
 
     /**
