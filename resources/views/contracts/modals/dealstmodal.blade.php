@@ -51,7 +51,9 @@
                           <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                       </svg>
                   </label>
-                  <input class="form-control height-35 f-14"  name="client_username" id="client_username"  placeholder="Enter Client Username" autocomplete="off"></input>
+                  <input class="form-control height-35 f-14 client-search"  name="client_username" id="client_username"  placeholder="Enter Client Username" autocomplete="off"></input>
+                  <label id="clientUsernameError" class="error text-danger" for="client_username"></label>
+
               </div>
               <div class="col-md-12 mt-3">
                   <label for="Client Username">
@@ -172,80 +174,163 @@
             $("#lead-convert-button").text("Processing ...");
         })
     </script>
-<script>
-         $(document).ready(function () {
-             var buttonAdd = $("#add-button");
-             var buttonRemove = $("#remove-button");
-             var className = ".dynamic-field";
-             var count = 0;
-             var field = "";
-             var maxFields = 50;
+    <script>
+        $(document).ready(function () {
+            var buttonAdd = $("#add-button");
+            var buttonRemove = $("#remove-button");
+            var className = ".dynamic-field";
+            var count = 0;
+            var field = "";
+            var maxFields = 50;
 
-             function totalFields() {
-                 return $(className).length;
-             }
+            function totalFields() {
+                return $(className).length;
+            }
 
-             function addNewField() {
-                 count = totalFields() + 1;
-                 field = $("#dynamic-field-1").clone();
-                 field.attr("id", "dynamic-field-" + count);
-                 field.children("label").text("Field " + count);
-                 field.find("input").val("");
-                 $(className + ":last").after($(field));
-             }
+            function addNewField() {
+                count = totalFields() + 1;
+                field = $("#dynamic-field-1").clone();
+                field.attr("id", "dynamic-field-" + count);
+                field.children("label").text("Field " + count);
+                field.find("input").val("");
+                $(className + ":last").after($(field));
+            }
 
-             function removeLastField() {
-                 if (totalFields() > 1) {
-                     $(className + ":last").remove();
-                 }
-             }
+            function removeLastField() {
+                if (totalFields() > 1) {
+                    $(className + ":last").remove();
+                }
+            }
 
-             function enableButtonRemove() {
-                 if (totalFields() === 2) {
-                     buttonRemove.removeAttr("disabled");
-                     buttonRemove.addClass("shadow-sm");
-                 }
-             }
+            function enableButtonRemove() {
+                if (totalFields() === 2) {
+                    buttonRemove.removeAttr("disabled");
+                    buttonRemove.addClass("shadow-sm");
+                }
+            }
 
-             function disableButtonRemove() {
-                 if (totalFields() === 1) {
-                     buttonRemove.attr("disabled", "disabled");
-                     buttonRemove.removeClass("shadow-sm");
-                 }
-             }
+            function disableButtonRemove() {
+                if (totalFields() === 1) {
+                    buttonRemove.attr("disabled", "disabled");
+                    buttonRemove.removeClass("shadow-sm");
+                }
+            }
 
-             function disableButtonAdd() {
-                 if (totalFields() === maxFields) {
-                     buttonAdd.attr("disabled", "disabled");
-                     buttonAdd.removeClass("shadow-sm");
-                 }
-             }
+            function disableButtonAdd() {
+                if (totalFields() === maxFields) {
+                    buttonAdd.attr("disabled", "disabled");
+                    buttonAdd.removeClass("shadow-sm");
+                }
+            }
 
-             function enableButtonAdd() {
-                 if (totalFields() === maxFields - 1) {
-                     buttonAdd.removeAttr("disabled");
-                     buttonAdd.addClass("shadow-sm");
-                 }
-             }
+            function enableButtonAdd() {
+                if (totalFields() === maxFields - 1) {
+                    buttonAdd.removeAttr("disabled");
+                    buttonAdd.addClass("shadow-sm");
+                }
+            }
 
-             buttonAdd.click(function () {
-                 addNewField();
-                 enableButtonRemove();
-                 disableButtonAdd();
-             });
+            buttonAdd.click(function () {
+                addNewField();
+                enableButtonRemove();
+                disableButtonAdd();
+            });
 
-             buttonRemove.click(function () {
-                 removeLastField();
-                 disableButtonRemove();
-                 enableButtonAdd();
-             });
-         });
-     </script>
-     <script>
-       document.addEventListener("DOMContentLoaded", function() {
-         document.querySelector("form").addEventListener("submit", function() {
-           document.querySelector("#lead-convert-button").setAttribute("disabled", "disabled");
-         });
-       });
-     </script>
+            buttonRemove.click(function () {
+                removeLastField();
+                disableButtonRemove();
+                enableButtonAdd();
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector("form").addEventListener("submit", function() {
+                document.querySelector("#lead-convert-button").setAttribute("disabled", "disabled");
+            });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#client_username').on('paste', function(e) {
+                setTimeout(function() {
+                    var trimmedValue = $('#client_username').val().trim();
+                    var inputVal = '';
+                    trimmedValue.split('').forEach(function(char, index) {
+                        setTimeout(function() {
+                            inputVal += char;
+                            $('#client_username').val(inputVal);
+                        }, index * 10); // Adjust the delay time as needed
+                    });
+                }, 0);
+            });
+        });
+        
+        $("#client_username").on('keydown', function(e) {
+            $('#clientUsernameError').text('');
+            if (e.keyCode === 32) {
+                e.preventDefault();
+                $('#clientUsernameError').text('Space not allowed!!!!');
+                return false;
+            }
+        });
+
+        $('.modal-body').click(function() {
+            $('#clientUsernameError').text('');
+        })
+
+        $('#client_username').keypress(function() {
+            $('#client_name').val('');
+            $('#client_name').removeAttr('disabled');
+            $('.existingClientSuccess').hide();
+            $('.existingClientAdded').show();
+        });
+
+        $('#client_username').keyup(function() {
+            $('#client_name').val('');
+            $('#client_name').removeAttr('disabled');
+            $('.existingClientSuccess').hide();
+            $('.existingClientAdded').show();
+        });
+
+        var path = "{{ route('client-search') }}";
+
+        $('.client-search').typeahead({
+            source: function (query, process) {
+                return $.get(path, {
+                    query: $.trim(query)
+                }, function (data) {
+                    var results = data.map(function(item){
+                        if (item.name.toLowerCase() == $('#client_username').val().toLowerCase() || item.user_name.toLowerCase() == $('#client_username').val().toLowerCase()) {
+                            $('.existingClientSuccess').show();
+                            getData(item.name, item.user_name);
+                            return '';
+                        } else {
+                            return '<div class="my-custom-typeahead" name="'+item.name+'" username="'+item.user_name+'"><button class="getData">'+ item.name +' ('+item.user_name+' )</button></div>';
+                        }
+                    });
+                    return process(results);
+                });
+            },
+            highlighter: function (item) {
+                return item;
+            },
+            updater: function (item) {
+                var text = $(item).text(); // extract text content of button element
+                this.$element.val('text'); // set value of input field to extracted text
+                getData($(item).attr('name'), $(item).attr('username'))
+                // $('#client_username').val($(item).attr('username'));
+                return $.trim($(item).attr('username')); // return extracted text to highlighter function
+            }
+        })
+
+        function getData(name, username) {
+            $('#client_username').val(username);
+            $('#client_name').val(name);
+            $('#client_name').attr('disabled','disabled');
+            $('.existingClientSuccess').show();
+            $('.existingClientAdded').hide();
+        }
+    </script>
 @endpush

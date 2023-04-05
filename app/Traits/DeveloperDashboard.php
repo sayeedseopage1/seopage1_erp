@@ -4,6 +4,7 @@ namespace App\Traits;
 use App\Models\Leave;
 use App\Models\Holiday;
 use App\Models\DashboardWidget;
+use App\Models\ProjectTimeLog;
 use App\Models\Role;
 use App\Models\Task;
 use \Carbon\Carbon;
@@ -111,7 +112,10 @@ trait DeveloperDashboard
                 return $value->status == '1';
             })->pluck('widget_name')->toArray();
             // Getting Attendance setting data
-
+            $this->myActiveTimer = ProjectTimeLog::with('task', 'user', 'project', 'breaks', 'activeBreak')
+            ->where('user_id', user()->id)
+            ->whereNull('end_time')
+            ->first();
 
             if (!is_null($this->viewNoticePermission) && $this->viewNoticePermission != 'none') {
                 if ($this->viewNoticePermission == 'added') {
@@ -147,7 +151,6 @@ trait DeveloperDashboard
                 }
             }
             
-
             if (request('start') && request('end') && !is_null($this->viewEventPermission) && $this->viewEventPermission != 'none') {
                 $eventData = array();
 

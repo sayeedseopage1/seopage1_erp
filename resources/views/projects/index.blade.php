@@ -56,6 +56,17 @@
                 </div>
             </form>
         </div>
+        <div class="align-items-center border-right-grey px-0 py-1">
+            <div class="col-auto">
+                <label class="sr-only" for="inlineFormInputGroup"></label>
+                <div class="border input-group rounded">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">  <i class="fa fa-calendar-alt mr-2 f-14 text-dark-grey"></i></div>
+                    </div>
+                    <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange2" placeholder="Start Date And End Date">
+               </div>
+            </div>
+        </div>
         <!-- SEARCH BY TASK END -->
 
         <!-- RESET START -->
@@ -232,7 +243,41 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
 
 @push('scripts')
     @include('sections.datatable_js')
+    <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
+    <script type="text/javascript">
+        @php
+            $startDate = \Carbon\Carbon::now()->startOfMonth()->subMonths(1)->addDays(20);
+            $endDate = \Carbon\Carbon::now()->startOfMonth()->addDays(20);
+        @endphp
+        $(function() {
+            var format = '{{ global_setting()->moment_format }}';
+            var startDate = "{{ $startDate->format(global_setting()->date_format) }}";
+            var endDate = "{{ $endDate->format(global_setting()->date_format) }}";
+            var picker = $('#datatableRange2');
+            var start = moment(startDate, format);
+            var end = moment(endDate, format);
 
+            function cb(start, end) {
+                $('#datatableRange2').val(start.format('{{ global_setting()->moment_date_format }}') +
+                    ' @lang("app.to") ' + end.format( '{{ global_setting()->moment_date_format }}'));
+                $('#reset-filters').removeClass('d-none');
+            }
+
+            $('#datatableRange2').daterangepicker({
+                locale: daterangeLocale,
+                linkedCalendars: false,
+                startDate: start,
+                endDate: end,
+                ranges: daterangeConfig,
+                opens: 'left',
+                parentEl: '.dashboard-header'
+            }, cb);
+
+            $('#datatableRange2').on('apply.daterangepicker', function(ev, picker) {
+                showTable();
+            });
+        });
+    </script>
     <script>
         var deadLineStartDate = '';
         var deadLineEndDate = '';
@@ -261,6 +306,17 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
             data['deadLineStartDate'] = deadLineStartDate;
             data['deadLineEndDate'] = deadLineEndDate;
             data['searchText'] = searchText;
+            var dateRangePicker = $('#datatableRange2').data('daterangepicker');
+            var startDate = $('#datatableRange').val();
+
+            if (startDate == '') {
+                data['startDate'] = null;
+                data['endDate'] = null;
+            } else {
+                data['startDate'] = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+                data['endDate'] = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
+            }
+
             @if (!is_null(request('start')) && !is_null(request('end')))
                 data['startDate'] = '{{ request('start') }}';
                 data['endDate'] = '{{ request('end') }}';
@@ -498,4 +554,3 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
     
        {!! Toastr::message() !!}
 @endpush
-<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>

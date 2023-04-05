@@ -856,7 +856,7 @@ $changeStatusPermission = user()->permission('change_status');
     <script>
         $(document).ready(function() {
 
-            var $worked = $("#active-task-timer");
+            /*var $worked = $("#active-task-timer570");
 
             function updateTimer() {
                 var myTime = $worked.html();
@@ -892,9 +892,9 @@ $changeStatusPermission = user()->permission('change_status');
                 $worked.html(ts);
                 setTimeout(updateTimer, 1000);
             }
-            if ($('#stop-task-timer').length) {
+            if ($('#stop-task-timer570').length) {
                 setTimeout(updateTimer, 1000);
-            }
+            }*/
 
             //    change task status
             $('body').on('click', '.change-task-status', function() {
@@ -1123,6 +1123,83 @@ $changeStatusPermission = user()->permission('change_status');
                                 }
                             }
                         });
+                    }
+                });
+            });
+            
+            $('body').on('click', '#submitReply', function(e) {
+                e.preventDefault();
+                $('#submitReply').attr("disabled", true);
+                $('#submitReply').html("Sending...");
+                var reply = CKEDITOR.instances.replyComment.getData();
+                var reply_id = document.getElementById('replyId').value;
+                // console.log(reply_id);
+                var data = {
+                    '_token': "{{ csrf_token() }}",
+                    'reply': reply,
+                    'user_id': '{{ Auth::user()->id }}',
+                    'added_by': '{{ $task->added_by }}',
+                    'last_updated_by': '{{ $task->added_by }}',
+                    taskId: '{{ $task->id }}',
+                    'reply_id': reply_id,
+                }
+                // console.log(data);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('taskReply.store') }}",
+                    data: data,
+                    dataType: "json",
+                    success: function(response) {
+                        // console.log(response.status);
+                        if (response.status == 400) {
+                            $('#comment-1-reply-form').trigger("reset");
+                            $('#replyComment').text('');
+
+                            $('#comment-list').html(response.html);
+                        }
+
+                    },
+                    error: function(error) {
+                        // console.log(response);
+                    }
+                });
+            });
+
+            $('body').on('click', '#submit-comment', function() {
+                var comment = CKEDITOR.instances.descriptionComment.getData();
+                document.getElementById('descriptionComment').value = comment;
+
+                var token = '{{ csrf_token() }}';
+
+                const url = "{{ route('taskComment.store') }}";
+
+                $.easyAjax({
+                    url: url,
+                    container: '#save-comment-data-form',
+                    type: "POST",
+                    disableButton: true,
+                    blockUI: true,
+                    buttonSelector: "#submit-comment",
+                    data: {
+                        '_token': token,
+                        comment: comment,
+                        taskId: '{{ $task->id }}'
+                    },
+                    success: function(response) {
+                        // console.log(response);
+                        if (response.status == "success") {
+                            $('#comment-list').html(response.view);
+                            CKEDITOR.instances.descriptionComment.getData();
+                            $('#descriptionComment').val('');
+                            $('#comment-list').html(response.html);
+                            // window.location.reload();
+                        }
+
                     }
                 });
             });

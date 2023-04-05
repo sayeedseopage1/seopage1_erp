@@ -17,7 +17,6 @@
     .file-card:hover .file-action {
         visibility: visible;
     }
-
 </style>
 <style>
     * {
@@ -213,109 +212,145 @@
     .d-none {
         display: none;
     }
-
 </style>
 
 <!-- TAB CONTENT START -->
 <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="nav-email-tab">
-
-    @if (
-        $addTaskCommentPermission == 'all' ||
-            ($addTaskCommentPermission == 'added' && $task->added_by == user()->id) ||
-            ($addTaskCommentPermission == 'owned' && in_array(user()->id, $taskUsers)) ||
-            ($addTaskCommentPermission == 'both' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id)))
-        {{--  <div class="row p-20">
-              <div class="col-md-12">
-                  <a class="f-15 f-w-500" href="javascript:;" id="add-comment"><i
-                          class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
-                      @lang('modules.tasks.comment')</a>
-              </div>
-          </div> --}}
-
-        <x-form id="save-comment-data-form">
-            <div class="col-md-12 p-20 ">
-                <div class="media">
-                    <img src="{{ user()->image_url }}" class="align-self-start mr-3 taskEmployeeImg rounded"
-                        alt="{{ mb_ucwords(user()->name) }}">
-                    <div class="media-body bg-white">
-                        <div class="form-group">
-                            <div id="descriptionComment"></div>
-                            <textarea name="comment" id="descriptionComment" class="form-control"></textarea>
-                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
-                            <script>
-                                CKEDITOR.replace('comment', {
-                                    height: '100'
-                                });
-                            </script>
-                        </div>
-                    </div>
-                </div>
-                <div class="w-100 justify-content-end d-flex mt-2">
-                    <x-forms.button-primary id="submit-comment" icon="location-arrow">@lang('app.submit')
-                        </x-button-primary>
-                </div>
-
-            </div>
-        </x-form>
-    @endif
-
-    @if (
-        $addTaskFilePermission == 'all' ||
-            ($addTaskFilePermission == 'added' && $task->added_by == user()->id) ||
-            ($addTaskFilePermission == 'owned' && in_array(user()->id, $taskUsers)) ||
-            ($addTaskFilePermission == 'both' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id)))
-        <div class="p-20">
-            <x-form id="save-taskfile-data-form">
-                <input type="hidden" name="task_id" value="{{ $task->id }}">
-                <div class="row">
-                    <div class="col-md-12">
-                        <x-forms.file-multiple fieldLabel="" fieldName="file[]" fieldId="task-file-upload-dropzone" />
-                    </div>
-                </div>
-            </x-form>
-        </div>
-    @endif
-
-    <h4 class="text-center">{{ count($task->comments) }} Comment</h4>
+	<h4 class="text-center">{{ count($task->comments) }} Comment</h4>
     <hr>
-    <div class="d-flex flex-wrap justify-content-between p-20" id="comment-list">
+    <div class="flex-wrap justify-content-between p-20" id="comment-list">
         @forelse ($task->comments as $comment)
-            <div class="card w-100 rounded-0 border-0 comment">
-                <div class="card-horizontal">
-                    <div class="card-img my-1 ml-0">
-                        <img src="{{ $comment->user->image_url }}" alt="{{ mb_ucwords($comment->user->name) }}">
-                    </div>
-                    <div class="card-body border-0 pl-0 py-1">
-                        <div class="d-flex flex-grow-1">
-                            <h4 class="card-title f-15 f-w-500 text-dark mr-3">{{ mb_ucwords($comment->user->name) }}</h4>
-                            <p class="card-date f-11 text-lightest mb-0">
-                                {{ $comment->created_at->timezone(global_setting()->timezone)->format(global_setting()->date_format . ' ' . global_setting()->time_format) }}
-                            </p>
-                            <div class="dropdown ml-auto comment-action">
-                                <button class="btn btn-lg f-14 p-0 text-lightest text-capitalize rounded  dropdown-toggle"
-                                        type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-ellipsis-h"></i>
-                                </button>
-
-                                <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
-                                     aria-labelledby="dropdownMenuLink" tabindex="0">
-                                    @if ($editTaskCommentPermission == 'all' || ($editTaskCommentPermission == 'added' && $comment->added_by == user()->id))
-                                        <a class="cursor-pointer d-block text-dark-grey f-13 py-3 px-3 edit-comment"
-                                           href="javascript:;" data-row-id="{{ $comment->id }}">@lang('app.edit')</a>
-                                    @endif
-
-                                    @if ($deleteTaskCommentPermission == 'all' || ($deleteTaskCommentPermission == 'added' && $comment->added_by == user()->id))
-                                        <a class="cursor-pointer d-block text-dark-grey f-13 pb-3 px-3 delete-comment"
-                                           data-row-id="{{ $comment->id }}" href="javascript:;">@lang('app.delete')</a>
-                                    @endif
+            <div class="comment-thread">
+                <!-- Comment 1 start -->
+                <details open class="comment" id="comment-1">
+                    <a href="#comment-1" class="comment-border-link">
+                        <span class="sr-only">Jump to comment-1</span>
+                    </a>
+                    <summary>
+                        <div class="comment-heading">
+                            <div class="comment-voting"
+                                style="display: flex; justify-content: center; align-items: center;">
+                                <span style="font-size: 27px;"><i class="bi bi-grip-vertical"></i></span>
+                            </div>
+                            <div class="comment-info">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="{{ $comment->user->image_url }}"
+                                            alt="{{ mb_ucwords($comment->user->name) }}"
+                                            class="img-thumbnail rounded-circle" height="50" width="50">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <a href="{{ route('employees.show', $comment->user_id) }}"
+                                            class="comment-author">{{ mb_ucwords($comment->user->name) }}</a>
+                                        <p style="width: 103%">
+                                            {{ $comment->created_at->timezone(global_setting()->timezone)->format(global_setting()->date_format . ' ' . global_setting()->time_format) }}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-text f-14 text-dark-grey text-justify ql-editor">{!! ucfirst($comment->comment) !!}
-                        </div>
-                    </div>
-                </div>
+                    </summary>
 
+                    <div class="comment-body">
+                        <p>
+                            {!! ucfirst($comment->comment) !!}
+                        </p>
+                        <a href="javascript::void(0);" onclick="reply(this)" data-toggle="reply-form"
+                            data-target="comment-1-reply-form" class="btn" style="color: #0a6fe2"
+                            data-Replyid="{{ $comment->id }}">Reply</a>
+                        {{--                        <a class="cursor-pointer edit-comment btn" href="javascript:;" data-row-id="{{ $comment->id }}" style="color: green;">Edit</a> --}}
+                        <a class="cursor-pointer edit-comment btn" href="javascript:;" data-row-id="{{ $comment->id }}" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal" style="color: green;">Edit</a>
+                        <a class="cursor-pointer delete-comment btn" data-row-id="{{ $comment->id }}"
+                            href="javascript:;" style="color: red;">Delete</a>
+                        <!-- Reply form start -->
+                        <div style="display: none;" id="replyDiv">
+                            <form method="POST" class="reply-form d-none" id="comment-1-reply-form"
+                                action="{{ route('taskReply.store') }}">
+                                @csrf
+                                <input type="hidden" name="replyId" id="replyId">
+                                <textarea name="reply" id="replyComment" class="form-control"></textarea>
+                                <script>
+                                    CKEDITOR.replace('reply', {
+                                        height: '100'
+                                    });
+                                </script>
+
+                                <button type="submit" class="btn btn-primary mt-2 btn-sm" id="submitReply"><i
+                                        class="fa fa-location-arrow mr-1"></i>Submit</button>
+                                <button type="button" data-toggle="reply-form" data-target="comment-1-reply-form"
+                                    class="btn btn-primary mt-2 btn-sm">Cancel</button>
+                            </form>
+                        </div>
+                        <!-- Reply form end -->
+                    </div>
+                    @foreach ($replys as $reply)
+                        <div class="replies">
+                            <!-- Comment 2 start -->
+                            <details open class="comment" id="comment-1">
+                                <a href="#comment-1" class="comment-border-link">
+                                    <span class="sr-only">Jump to comment-1</span>
+                                </a>
+                                <summary>
+                                    @if ($reply->comment_id == $comment->id)
+                                        <div class="comment-heading">
+                                            <div class="comment-voting"
+                                                style="display: flex; justify-content: center; align-items: center;">
+                                                <span style="font-size: 27px; margin-right: -2px;"><i
+                                                        class="bi bi-grip-vertical"></i></span>
+                                            </div>
+                                            <div class="comment-info">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <img src="{{ asset('/user-uploads/avatar/' . $reply->image) }}"
+                                                            alt="{{ mb_ucwords($reply->name) }}"
+                                                            class="img-thumbnail rounded-circle" height="50"
+                                                            width="50">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <a href="{{ route('employees.show', $reply->user_id) }}"
+                                                            class="comment-author">{{ mb_ucwords($reply->name) }}</a>
+                                                        <p style="width: 103%">
+                                                            {{ date('d-m-Y h:i a', strtotime($reply->updated_at)) }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </summary>
+
+                                <div class="comment-body">
+                                    @if ($reply->comment_id == $comment->id)
+                                        <p>
+                                            {!! ucfirst($reply->reply) !!}
+                                        </p>
+                                        <a href="javascript::void(0);" onclick="reply(this)" data-toggle="reply-form"
+                                            data-target="comment-1-reply-form" class="btn" style="color: #0a6fe2"
+                                            data-Replyid="{{ $comment->id }}">Reply</a>
+                                    @endif
+                                    <!-- Reply form start -->
+                                    <form method="POST" class="reply-form d-none" id="comment-2-reply-form">
+                                        <textarea name="reply2" id="replyComment2" class="form-control"></textarea>
+                                        <script>
+                                            CKEDITOR.replace('reply2', {
+                                                height: '100'
+                                            });
+                                        </script>
+                                        <button type="button" class="btn btn-primary mt-2 btn-sm"><i
+                                                class="fa fa-location-arrow mr-1"></i>Submit</button>
+                                        <button type="button" data-toggle="reply-form"
+                                            data-target="comment-2-reply-form"
+                                            class="btn btn-primary mt-2 btn-sm">Cancel</button>
+                                    </form>
+                                    <!-- Reply form end -->
+                                </div>
+                            </details>
+                            <!-- Comment 2 end -->
+                        </div>
+                    @endforeach
+                </details>
+                <!-- Comment 1 end -->
             </div>
         @empty
             <div class="align-items-center d-flex flex-column text-lightest p-20 w-100">
@@ -327,53 +362,8 @@
             </div>
         @endforelse
     </div>
-    <div class="d-flex flex-wrap p-20" id="task-file-list">
-        @forelse($task->files as $file)
-            <x-file-card :fileName="$file->filename" :dateAdded="$file->created_at->diffForHumans()">
-                @if ($file->icon == 'images')
-                    <img src="{{ $file->file_url }}">
-                @else
-                    <i class="fa {{ $file->icon }} text-lightest"></i>
-                @endif
-
-                @if ($viewTaskFilePermission == 'all' || ($viewTaskFilePermission == 'added' && $file->added_by == user()->id))
-                    <x-slot name="action">
-                        <div class="dropdown ml-auto file-action">
-                            <button class="btn btn-lg f-14 p-0 text-lightest text-capitalize rounded  dropdown-toggle"
-                                type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-ellipsis-h"></i>
-                            </button>
-
-                            <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
-                                aria-labelledby="dropdownMenuLink" tabindex="0">
-                                @if ($viewTaskFilePermission == 'all' || ($viewTaskFilePermission == 'added' && $file->added_by == user()->id))
-                                    @if ($file->icon = 'images')
-                                        <a class="cursor-pointer d-block text-dark-grey f-13 pt-3 px-3 "
-                                            target="_blank" href="{{ $file->file_url }}">@lang('app.view')</a>
-                                    @endif
-                                    <a class="cursor-pointer d-block text-dark-grey f-13 py-3 px-3 "
-                                        href="{{ route('task_files.download', md5($file->id)) }}">@lang('app.download')</a>
-                                @endif
-
-                                @if ($deleteTaskFilePermission == 'all' || ($deleteTaskFilePermission == 'added' && $file->added_by == user()->id))
-                                    <a class="cursor-pointer d-block text-dark-grey f-13 pb-3 px-3 delete-file"
-                                        data-row-id="{{ $file->id }}" href="javascript:;">@lang('app.delete')</a>
-                                @endif
-                            </div>
-                        </div>
-                    </x-slot>
-                @endif
-
-            </x-file-card>
-        @empty
-            <x-cards.no-record :message="__('messages.noFileUploaded')" icon="file" />
-        @endforelse
-
-    </div>
-
 </div>
 <!-- TAB CONTENT END -->
-
 <!-- REPLY START -->
 <script>
     document.addEventListener(
@@ -383,7 +373,9 @@
             var replyForm;
             if (target.matches("[data-toggle='reply-form']")) {
                 replyForm = document.getElementById(target.getAttribute("data-target"));
+
                 replyForm.classList.toggle("d-none");
+                console.log(replyForm.classList.toggle("d-none"));
             }
         },
         false
@@ -397,7 +389,6 @@
 </script>
 <script>
     $('.edit_comment').click(function(e) {
-        console.log($(this).attr('data-comment-id'));
         $('#commentEdit').modal("show");
     });
 </script>
@@ -447,7 +438,6 @@
     });*/
 </script>
 <!-- REPLY END -->
-
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
 <script>
@@ -488,7 +478,13 @@
                 $('#task-file-list').html(taskView);
             });
         }
-
+         $('body').on('click', '.edit-comment', function() {
+            var id = $(this).data('row-id');
+            var url = "/account/tasks/taskComment/"+id+"/edit";
+            url = url.replace(':id', id);
+            $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_LG, url);
+        });
         $('#add-task-file').click(function() {
             var comment = CKEDITOR.instances.descriptionComment.getData();
             document.getElementById('descriptionComment').value = comment;

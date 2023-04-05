@@ -313,11 +313,15 @@
                     	@foreach($deal_id as $value)
                             @php
                                 if ($deal_id != null) {
-                                    $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
+                                    $to = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', \Carbon\Carbon::now());
 
-                                    $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $value->award_time);
+                                    $from = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value->award_time);
 
-                                    $diff_in_minutes = $from->diffInMinutes($to);
+                                    if(\Carbon\Carbon::now()->lt($to)){
+                                        $diff_in_minutes = $from->diffInMinutes($to);
+                                    } else {
+                                        $diff_in_minutes = 0;
+                                    }
                                 }
                             @endphp
                             @if($value != null && $diff_in_minutes < 1200)
@@ -349,14 +353,14 @@
                     	@foreach($deal_id as $value)
                             @php
                                 if ($deal_id != null) {
-                                    $to = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', \Carbon\Carbon::now());
+                                    $to = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', \Carbon\Carbon::now());
 
-                                    $from = \Carbon\Carbon::createFromFormat('Y-m-d H:s:i', $value->award_time);
+                                    $from = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value->award_time);
 
                                     $diff_in_minutes = $from->diffInMinutes($to);
                                 }
                             @endphp
-                            @if($value != null && $diff_in_minutes < 1200)
+                            @if($value != null && $diff_in_minutes < 1300)
                             <div class="content">
 					            <div class="bg-timer-box my-3 rounded p-2 text-light">
 					                <p class="mb-0">New Deal Won: {{$value->client_name}}</p>
@@ -370,8 +374,6 @@
                     </div>
                 @endif
             @endif
-
-
         </section>
         <!-- MAIN CONTAINER END -->
     </div>
@@ -782,12 +784,13 @@
                     @php
                         $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$value->award_time)->format('Y-m-d H:i:s');
                         $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1200)->format('Y-m-d H:i:s');
-                        $minutes = \Carbon\Carbon::parse($newDateTime)->diffInSeconds(\Carbon\Carbon::now());
+                        $minutes = \Carbon\Carbon::parse($newDateTime)->diffInMinutes(\Carbon\Carbon::now());
+                        $seconds = \Carbon\Carbon::parse($newDateTime)->diffInSeconds(\Carbon\Carbon::now());
                     @endphp
-
+                    @if($minutes < 1200)
                     // let timeInMinutes_{{$value->id}} = {{$minutes}}; // set the time in minutes dynamically
                     // const deadline_{{$value->id}} = timeInMinutes_{{$value->id}} * 60; // convert minutes to seconds
-                    const deadline_{{$value->id}} = {{$minutes}}; // convert minutes to seconds
+                    const deadline_{{$value->id}} = {{$seconds}}; // convert minutes to seconds
                     let timerInterval_{{$value->id}};
                     let timeRemaining_{{$value->id}} = deadline_{{$value->id}};
                     let timerElement_{{$value->id}} = document.getElementById('timer_{{$value->id}}');
@@ -812,6 +815,7 @@
                         let seconds = timeRemaining_{{$value->id}} % 60;
                         timerElement_{{$value->id}}.innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                     }
+                    @endif
                 @endforeach
             @endif
         @endif
@@ -885,7 +889,8 @@
             var channel = pusher.subscribe('lead-updated-channel');
             
             channel.bind('lead-updated', function(data) {
-                if (data.role_id == window.Laravel.user.role_id) {
+                // console.log(data.user_id, window.Laravel.user.id, data.role_id,window.Laravel.user.role_id);
+                if (data.user_id == window.Laravel.user.id && data.role_id == window.Laravel.user.role_id) {
                     var options = {
                         title: data.title,
                         options: {
@@ -901,46 +906,6 @@
                     $("#easyNotify").easyNotify(options);
                 }
             }, channel.unbind());
-
-            // pusher.trigger('my-channel', 'my-event', eventData, triggerOptions, function(err, res) {
-            //     if (err) {
-            //         console.log('Error triggering event:', err);
-            //     } else {
-            //         console.log('Event triggered successfully:', res);
-            //     }
-            // });
-
-            
-            /*var eventData = {
-                message: 'Hello, world!',
-            };
-            pusher.trigger('lead-updated-channel', 'lead-updated', eventData, { unique: true });
-
-            var receivedEvents = [];
-
-            channel.bind('lead-updated', function(data) {
-                // Check if the event has already been received
-                if (receivedEvents.indexOf(data.event_id) === -1) {
-                    receivedEvents.push(data.event_id);
-
-                    // Display the notification
-                    if (data.role_id == window.Laravel.user.role_id) {
-                        var options = {
-                            title: data.title,
-                            options: {
-                                body: data.body,
-                                icon: '{{URL::asset("user-uploads/app-logo/c86157272a41bea229e0dcbe2ff9715b.png")}}'+ '?r=' + Math.random(),
-                                lang: 'en-US',
-                                onClick: function() {
-                                    window.location.href = data.redirectUrl;
-                                }
-                            }
-                        };
-
-                        $("#easyNotify").easyNotify(options);
-                    }
-                }
-            });*/
         })
     </script>
 </body>

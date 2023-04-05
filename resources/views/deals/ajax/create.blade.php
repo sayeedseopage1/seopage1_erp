@@ -23,7 +23,10 @@
                                 </svg>
                             </label>
                             <input type="text" class="form-control height-35 f-14  client-search" placeholder="Enter Client Username" value="" name="client_username" id="client_username" autocomplete="off">
-                            <label id="clientUserNameError" class="error text-danger" for="client_username"></label>
+
+                            <label id="clientUsernameError" class="error text-danger" for="client_username"></label>
+
+
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
@@ -163,6 +166,21 @@
             }, 0);
         });
     });
+
+    
+    $("#client_username").on('keydown', function(e) {
+        $('#clientUsernameError').text('');
+        if (e.keyCode === 32) {
+            e.preventDefault();
+            $('#clientUsernameError').text('Space not allowed!!!!');
+            return false;
+        }
+    });
+
+    $('.add-client').click(function() {
+        $('#clientUsernameError').text('');
+    })
+
 
     $('#client_username').keypress(function() {
         $('#client_name').val('');

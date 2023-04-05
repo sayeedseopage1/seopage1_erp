@@ -19,6 +19,9 @@ use App\Models\PMAssign;
 use App\Models\Contract;
 use App\Models\Deal;
 use App\Models\ProjectActivity;
+use Illuminate\Support\Facades\Validator; 
+use App\Notifications\MilestoneCancelNotification;
+use App\Notifications\MilestoneCancelApproveNotification;
 class ProjectMilestoneController extends AccountBaseController
 {
 
@@ -98,11 +101,7 @@ class ProjectMilestoneController extends AccountBaseController
         $milestone->currency_id = 1;
        
         $milestone->original_currency_id = $currency->id;
-        //dd(($request->actual_cost)/$currency->exchange_rate, $request->actual_cost);
-
-        //$milestone->status = $request->status;
-        // $milestone->start_date = $request->start_date == null ? $request->start_date : Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
-        // $milestone->end_date = $request->end_date == null ? $request->end_date : Carbon::createFromFormat($this->global->date_format, $request->end_date)->format('Y-m-d');
+       
         $milestone->save();
 
         $project = Project::where('id',$request->project_id)->first();
@@ -328,6 +327,58 @@ class ProjectMilestoneController extends AccountBaseController
         }
 
         return Reply::dataOnly(['status' => 'success', 'data' => $options]);
+    }
+
+    public function CancelMilestone(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'comments' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400
+            ]);
+        };
+        $milestone_id= ProjectMilestone::where('id',$request->milestoneId)->first();
+        $milestone= ProjectMilestone::find($milestone_id->id);
+        $milestone->cancelation_status= 'submitted';
+        $milestone->comments= $request->comments;
+        $milestone->save();
+        $project= Project::where('id',$milestone->project_id)->first();
+        $users= User::where('role_id',1)->get();
+        foreach ($users as $user) {
+
+
+           Notification::send($user, new MilestoneCancelNotification($milestone));
+        }
+        return response()->json([
+            'status' => 'success'
+        ]);
+
+        
+    }
+    public function CancelMilestoneApprove(Request $request)
+    {
+       // dd($request->milestomeId);
+        
+        $milestone_id= ProjectMilestone::where('id',$request->milestoneId)->first();
+        $milestone= ProjectMilestone::find($milestone_id->id);
+        $milestone->cancelation_status= 'approved';
+        $milestone->status= 'canceled';
+        
+        $milestone->save();
+        $project= Project::where('id',$milestone->project_id)->first();
+        // $user= User::where('id',$project->pm_id)->first();
+        
+
+
+        //    Notification::send($user, new MilestoneCancelApproveNotification($milestone));
+       
+        return response()->json([
+            'status' => 'success'
+        ]);
+
+        
     }
 
 }

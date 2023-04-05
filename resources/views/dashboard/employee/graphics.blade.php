@@ -1344,7 +1344,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <div class="row mt-3">
+                <div class="row">
                     <div class="col-md-7">
                         <!-- EMP DASHBOARD EVENTS START -->
                         @if(Auth::user()->role_id != 4 && Auth::user()->role_id != 7)
@@ -1464,6 +1464,93 @@
                                 </div>
                                 <!-- EMP DASHBOARD NOTICE END -->
                             @endisset
+                        @endif
+                        @if (!is_null($myActiveTimer))
+                            <div class="col-sm-12" id="myActiveTimerSection">
+                                <x-cards.data :title="__('modules.timeLogs.myActiveTimer')">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            {{ $myActiveTimer->start_time->timezone(global_setting()->timezone)->format('M d, Y' . ' - ' . global_setting()->time_format) }}
+                                            <p class="text-primary my-2">
+                                                @php
+                                                    $endTime = now();
+                                                    $totalHours = $endTime->diff($myActiveTimer->start_time)->format('%d') * 24 + $endTime->diff($myActiveTimer->start_time)->format('%H');
+                                                    $totalMinutes = $totalHours * 60 + $endTime->diff($myActiveTimer->start_time)->format('%i');
+
+                                                    $totalMinutes = $totalMinutes - $myActiveTimer->breaks->sum('total_minutes');
+
+                                                    $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
+
+                                                    if ($totalMinutes % 60 > 0) {
+                                                        $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
+                                                    }
+                                                @endphp
+
+                                                <strong>@lang('modules.timeLogs.totalHours'):</strong> {{ $timeLog }}
+                                            </p>
+
+                                            <ul class="list-group">
+                                                <li
+                                                    class="list-group-item d-flex justify-content-between align-items-center f-12 text-dark-grey">
+                                                    <span><i class="fa fa-clock"></i>
+                                                        @lang('modules.timeLogs.startTime')</span>
+                                                    {{ $myActiveTimer->start_time->timezone(global_setting()->timezone)->format(global_setting()->time_format) }}
+                                                </li>
+                                                <li
+                                                    class="list-group-item d-flex justify-content-between align-items-center f-12 text-dark-grey">
+                                                    <span><i class="fa fa-briefcase"></i> @lang('app.task')</span>
+                                                    <a href="{{ route('tasks.show', $myActiveTimer->task->id) }}"
+                                                        class="text-dark-grey openRightModal">{{ $myActiveTimer->task->heading }}</a>
+                                                </li>
+                                                @foreach ($myActiveTimer->breaks as $item)
+                                                    <li
+                                                        class="list-group-item d-flex justify-content-between align-items-center f-12 text-dark-grey">
+                                                        @if (!is_null($item->end_time))
+                                                            @php
+                                                                $endTime = $item->end_time;
+                                                                $totalHours = $endTime->diff($item->start_time)->format('%d') * 24 + $endTime->diff($item->start_time)->format('%H');
+                                                                $totalMinutes = $totalHours * 60 + $endTime->diff($item->start_time)->format('%i');
+
+                                                                $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
+
+                                                                if ($totalMinutes % 60 > 0) {
+                                                                    $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
+                                                                }
+                                                            @endphp
+                                                            <span><i class="fa fa-mug-hot"></i>
+                                                                @lang('modules.timeLogs.break')
+                                                                ({{ $timeLog }})
+                                                            </span>
+                                                            {{ $item->start_time->timezone(global_setting()->timezone)->format(global_setting()->time_format) . ' - ' . $item->end_time->timezone(global_setting()->timezone)->format(global_setting()->time_format) }}
+                                                        @else
+                                                            <span><i class="fa fa-mug-hot"></i>
+                                                                @lang('modules.timeLogs.break')</span>
+                                                            {{ $item->start_time->timezone(global_setting()->timezone)->format(global_setting()->time_format) }}
+                                                        @endif
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+
+                                        </div>
+                                        <div class="col-sm-12 pt-3 text-right">
+                                            @if ($editTimelogPermission == 'all' || ($editTimelogPermission == 'added' && $myActiveTimer->added_by == user()->id) || ($editTimelogPermission == 'owned' && (($myActiveTimer->project && $myActiveTimer->project->client_id == user()->id) || $myActiveTimer->user_id == user()->id)) || ($editTimelogPermission == 'both' && (($myActiveTimer->project && $myActiveTimer->project->client_id == user()->id) || $myActiveTimer->user_id == user()->id || $myActiveTimer->added_by == user()->id)))
+                                                @if (is_null($myActiveTimer->activeBreak))
+                                                    <x-forms.button-secondary icon="pause-circle"
+                                                        data-time-id="{{ $myActiveTimer->id }}" id="pause-timer-btn">
+                                                        @lang('modules.timeLogs.pauseTimer')</x-forms.button-secondary>
+                                                    <x-forms.button-primary class="ml-3 stop-active-timer"
+                                                        data-time-id="{{ $myActiveTimer->id }}" icon="stop-circle">
+                                                        @lang('modules.timeLogs.stopTimer')</x-forms.button-primary>
+                                                @else
+                                                    <x-forms.button-primary id="resume-timer-btn" icon="play-circle"
+                                                        data-time-id="{{ $myActiveTimer->activeBreak->id }}">
+                                                        @lang('modules.timeLogs.resumeTimer')</x-forms.button-primary>
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </div>
+                                </x-cards.data>
+                            </div>
                         @endif
                     </div>
                 </div>

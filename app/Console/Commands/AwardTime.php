@@ -45,7 +45,6 @@ class AwardTime extends Command
     {
         $deals = Deal::where('status','pending')->get();
 
-
         foreach ($deals as $deal) {
             if($deal->status != 'Accepted')
             {
