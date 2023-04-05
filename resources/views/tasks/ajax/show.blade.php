@@ -856,7 +856,7 @@ $changeStatusPermission = user()->permission('change_status');
     <script>
         $(document).ready(function() {
 
-            var $worked = $("#active-task-timer");
+            /*var $worked = $("#active-task-timer570");
 
             function updateTimer() {
                 var myTime = $worked.html();
@@ -892,9 +892,9 @@ $changeStatusPermission = user()->permission('change_status');
                 $worked.html(ts);
                 setTimeout(updateTimer, 1000);
             }
-            if ($('#stop-task-timer').length) {
+            if ($('#stop-task-timer570').length) {
                 setTimeout(updateTimer, 1000);
-            }
+            }*/
 
             //    change task status
             $('body').on('click', '.change-task-status', function() {

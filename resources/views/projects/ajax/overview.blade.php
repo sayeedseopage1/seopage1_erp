@@ -701,7 +701,6 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
     </div>
 
-
     <!-- PROJECT RIGHT START -->
     <div class="project-right pt-0 pb-4 p-lg-0 .activity" id="activity">
         <div class="bg-white">

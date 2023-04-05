@@ -281,14 +281,21 @@ class TasksDataTable extends BaseDataTable
             $datatables->addColumn('task', function ($row) {
                 return ucfirst($row->heading);
             });
+
             $datatables->addColumn('timeLogged', function ($row) {
 
                 $timeLog = '--';
-
-                if($row->timeLogged)
-                {
+                
+                if($row->timeLogged) {
                     $totalMinutes = $row->timeLogged->sum('total_minutes');
 
+                    foreach($row->timeLogged as $value) {
+                        if (is_null($value->end_time)) {
+                            $workingTime = $value->start_time->diffInMinutes(Carbon::now());
+                            $totalMinutes = $totalMinutes + $workingTime;
+                        }
+                    }
+                    
                     $breakMinutes = $row->breakMinutes();
                     $totalMinutes = $totalMinutes - $breakMinutes;
 
@@ -298,32 +305,40 @@ class TasksDataTable extends BaseDataTable
                         $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
                     }
                 }
-                        $tas_id = Task::where('id',$row->id)->first();
-                        $subtasks = Subtask::where('task_id', $tas_id->id)->get();
-                       // dd($subtasks);
-                        $time = 0;
 
-                        foreach ($subtasks as $subtask) {
-                            $task = Task::where('subtask_id', $subtask->id)->first();
-                            $time += $task->timeLogged->sum('total_minutes');
+                $tas_id = Task::where('id',$row->id)->first();
+                $subtasks = Subtask::where('task_id', $tas_id->id)->get();
+
+                //$time = 0;
+
+                foreach ($subtasks as $subtask) {
+                    $task = Task::where('subtask_id', $subtask->id)->first();
+                    $totalMinutes = $totalMinutes + $task->timeLogged->sum('total_minutes');
+                    
+                    foreach($task->timeLogged as $value) {
+                        if (is_null($value->end_time)) {
+                            $workingTime = $value->start_time->diffInMinutes(Carbon::now());
+                            $totalMinutes = $totalMinutes + $workingTime;
                         }
-
-                        if($subtasks == null)
-                        {
-                            return $timeLog;
-                        }else 
-                        {
-                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                    if ($time % 60 > 0) {
-                        $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
                     }
-                            return $timeL;
-                        }
-                                        
+                }
 
-               
+                if($subtasks == null) {
+                    return $timeLog;
+                } else {
+                    $timeL = intdiv(($totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
+
+                    if ($totalMinutes % 60 > 0) {
+                        $timeL .= ($totalMinutes) % 60 . ' ' . __('app.mins');
+                    }
+                    return $timeL;
+                    if ($row->id == 570) {
+                        //dd('ok');
+                    }
+                }
             });
+
+
             $datatables->editColumn('heading', function ($row) {
                 $labels = $private = $pin = $timer = $span = '';
 
@@ -340,7 +355,7 @@ class TasksDataTable extends BaseDataTable
                 }
 
                 if ($row->activeTimer && $row->active_timer_all_count == 1) {
-                    $timer .= '<span class="badge badge-primary mr-1" data-toggle="tooltip" data-original-title="' . __('modules.projects.activeTimers') . '" ><i class="fa fa-clock"></i> ' . $row->activeTimer->timer . '</span>';
+                    $timer .= '<div class="row ml-1 mt-1"><span class="align-items-center badge badge-primary d-inline-flex mr-1" data-toggle="tooltip" data-original-title="' . __('modules.projects.activeTimers') . '" ><i class="fa fa-clock"></i> <p class="timer m-0 ml-2">' . $row->activeTimer->timer . '</p></span></div>';
                 }
 
                 foreach ($row->labels as $label) {
@@ -365,7 +380,7 @@ class TasksDataTable extends BaseDataTable
                     
                     $subtasks_html .= '><i style="color:#31D2F2;" class="fa fa-eye ml-3"></i><span class="ml-1">'.$total_subtask.'</span></a>';
                 }
-                return '<div class="media align-items-center">
+                $html = '<div class="media align-items-center">
                     <div class="media-body">
                         <div class="row">
                             <div class="mx-auto mx-sm-0 pb-2 pb-sm-0 align-self-center">'.$subtasks_html.'</div>
@@ -376,6 +391,8 @@ class TasksDataTable extends BaseDataTable
                         </div>
                     </div>
                 </div>';
+
+                return $html;
             });
             $datatables->editColumn('board_column', function ($row) use ($taskBoardColumns) {
                 $taskUsers = $row->users->pluck('id')->toArray();
@@ -440,15 +457,23 @@ class TasksDataTable extends BaseDataTable
                 return '<button class="openRightModal showSubTask" data-url="'.route('tasks.show_subtask', $row->id).'">show</button>';
             });*/
             $datatables->editColumn('progress', function($row) {
-                $project = $row->project;
-                $milestones = $project->milestones->count();
-                $completed_milestones = $project->milestones->where('status','complete')->count();
+                $subtask = $row->subtasks;
+                // $milestones = $project->milestones->count();
+                // $completed_milestones = $project->milestones->where('status','complete')->count();
+                $totalComplted = 0;
 
-                if ($milestones < 1 ) {
+                foreach ($subtask as $value) {
+                    $task = Task::where('subtask_id', $value->id)->first();
+                    if ($task->status == 'completed') {
+                        $totalComplted++;
+                    }
+                }
+
+                if ($subtask->count() < 1 ) {
                    $completion = 0;
                    $statusColor = 'danger';
-                } elseif ($milestones >= 1){
-                    $percentage= round(($completed_milestones/$milestones)*100, 2);
+                } elseif ($subtask->count() >= 1){
+                    $percentage = round(($totalComplted / $subtask->count())*100, 2);
                     if($percentage < 50)
                     {
                         $completion= $percentage;
@@ -470,7 +495,33 @@ class TasksDataTable extends BaseDataTable
                 </div>';
                 return $html;
             });
-            $datatables->rawColumns(['board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'timeLogged', 'timer','timer_action', 'progress']);
+
+            $datatables->editColumn('estimate_time', function($row) {
+                $tasks = $row->subtasks;
+
+                $totalHours = $row->estimate_hours;
+                $totalMinutes = $row->estimate_minutes;
+                
+                foreach($tasks as $value) {
+                    $countTask = Task::where('subtask_id', $value->id)->first();
+                    $totalHours = $totalHours + $countTask->estimate_hours;
+                    $totalMinutes = $totalMinutes + $countTask->estimate_minutes;
+                }
+
+                if ($totalMinutes >= 60) {
+                    $hours = intval(floor($totalMinutes / 60));
+                    $minutes = $totalMinutes % 60;
+                    $totalHours = $totalHours + $hours;
+                    $totalMinutes = $minutes;
+                }
+
+                if ($totalHours == 0 && $totalMinutes == 0) {
+                    return '---';
+                } else {
+                    return $totalHours.' Hours '.$totalMinutes.' minutes';
+                }
+            });
+            $datatables->rawColumns(['board_column', 'action', 'project_name', 'clientName', 'due_date', 'users', 'heading', 'check', 'estimate_time', 'timeLogged', 'timer','timer_action', 'progress']);
             $datatables->removeColumn('project_id');
             $datatables->removeColumn('image');
             $datatables->removeColumn('created_image');
@@ -776,6 +827,7 @@ class TasksDataTable extends BaseDataTable
                 __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
                 __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
                 __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
+                __('app.estimate_time') => ['data' => 'estimate_time', 'name' => 'estimate_time', 'title' => __('Estimated Time')],
                 __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],
                 __('modules.tasks.assignTo') => ['data' => 'users', 'name' => 'member.name', 'exportable' => false, 'title' => __('modules.tasks.assignTo')],
                 __('app.created_at') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('Creation Date')],
@@ -808,6 +860,7 @@ class TasksDataTable extends BaseDataTable
                 __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
                 __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
                 __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
+                __('app.estimate_time') => ['data' => 'estimate_time', 'name' => 'estimate_time', 'title' => __('Estimated Time')],
                 __('modules.employees.hoursLogged') => ['data' => 'timeLogged', 'name' => 'timeLogged', 'title' => __('modules.employees.hoursLogged')],
                 __('modules.tasks.assignTo') => ['data' => 'users', 'name' => 'member.name', 'exportable' => false, 'title' => __('modules.tasks.assignTo')],
                 __('app.created_at') => ['data' => 'created_at', 'name' => 'created_at', 'title' => __('Creation Date')],

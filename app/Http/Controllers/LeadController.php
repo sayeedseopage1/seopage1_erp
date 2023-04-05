@@ -74,14 +74,12 @@ class LeadController extends AccountBaseController
     }
     public function DealStageChange(Request $request)
     {
-//        dd($request->all());
-      $validator = Validator::make($request->all(), [
-          'client_username' => 'required|unique:deal_stages|max:255',
-          'profile_link' => 'required',
-          'message_link' => 'required',
-          'comments' => 'required',
-
-      ]);
+        $validator = Validator::make($request->all(), [
+            'client_username' => 'required|unique:deal_stages|max:255',
+            'profile_link' => 'required',
+            'message_link' => 'required',
+            'comments' => 'required',
+        ]);
 
 
       if ($validator->fails()) {
@@ -172,19 +170,21 @@ class LeadController extends AccountBaseController
         // add pusher with admin role id 1
         $users = User::where('role_id', '1')->get();
 
-        $pusher_options = [
-            'user_id' => $this->user->id,
-            'role_id' => '1',
-            'title' => 'Lead Converted Successfully',
-            'body' => 'Please check new deals',
-            'redirectUrl' => route('deals.show', $deal->id)
-        ];
+        
 
         foreach ($users as $user) {
+            $pusher_options = [
+                'user_id' => $user->id,
+                'role_id' => 1,
+                'title' => 'Lead Converted Successfully',
+                'body' => 'Please check new deals',
+                'redirectUrl' => route('deals.show', $deal->id)
+            ];
+            
+            $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
             $user->notify(new DealUpdate($deal, $pusher_options));
         }
 
-        $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
 
         Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
         return response()->json([
@@ -230,11 +230,7 @@ class LeadController extends AccountBaseController
             }
         } else {
             $deal= DealStage::find($request->id);
-            $pusher_options = [
-                'user_id' => $this->user->id,
-                'role_id' => '7',
-                'redirectUrl' => route('deals.show', $deal->id)
-            ];
+            
             if($deal_stage->deal_stage == 0 )
             {
                 $deal->deal_stage= $deal_stage->deal_stage+1;
@@ -331,12 +327,14 @@ class LeadController extends AccountBaseController
                 }
             }
             $users = User::where('role_id', '7')->get();
-
             foreach ($users as $user) {
+                $pusher_options['user_id'] = $user->id;
+                $pusher_options['role_id'] = 7;
+                $pusher_options['redirectUrl'] = route('deals.show', $deal->id);
+
+                $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
                 $user->notify(new DealUpdate($deal, $pusher_options));
             }
-
-            $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
         }
 
 

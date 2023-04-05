@@ -1066,8 +1066,6 @@ if ($pm_count < 2) {
 
         }else
         {
-
-
             // $pm_name= User::where('id',Auth::id())->first();
             // $this->logProjectActivity($project->id, 'Project updated by '.$pm_name->name);
             $log_user = Auth::user();
