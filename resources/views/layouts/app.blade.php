@@ -785,11 +785,12 @@
                         $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$value->award_time)->format('Y-m-d H:i:s');
                         $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1200)->format('Y-m-d H:i:s');
                         $minutes = \Carbon\Carbon::parse($newDateTime)->diffInMinutes(\Carbon\Carbon::now());
+                        $seconds = \Carbon\Carbon::parse($newDateTime)->diffInSeconds(\Carbon\Carbon::now());
                     @endphp
-                    @if($minutes < 1300)
+                    @if($minutes < 1200)
                     // let timeInMinutes_{{$value->id}} = {{$minutes}}; // set the time in minutes dynamically
                     // const deadline_{{$value->id}} = timeInMinutes_{{$value->id}} * 60; // convert minutes to seconds
-                    const deadline_{{$value->id}} = {{$minutes}}; // convert minutes to seconds
+                    const deadline_{{$value->id}} = {{$seconds}}; // convert minutes to seconds
                     let timerInterval_{{$value->id}};
                     let timeRemaining_{{$value->id}} = deadline_{{$value->id}};
                     let timerElement_{{$value->id}} = document.getElementById('timer_{{$value->id}}');
