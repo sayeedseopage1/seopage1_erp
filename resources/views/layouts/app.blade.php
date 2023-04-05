@@ -324,7 +324,7 @@
                                     }
                                 }
                             @endphp
-                            @if($value != null && $diff_in_minutes < 1200 && $diff_in_minutes > 0)
+                            @if($value != null && $diff_in_minutes < 1200)
                             <div class="content">
 					            <div class="bg-timer-box my-3 rounded p-2 text-light">
 					                <p class="mb-0">New Deal Won: {{$value->client_name}}</p>
