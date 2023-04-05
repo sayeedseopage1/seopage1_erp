@@ -74,7 +74,7 @@
                     <input type="hidden" name="deal_id" value="{{$deal->id}}" />
                     <div class="col-md-12">
                         <label for="Email3" class="form-label">Please put your freelancer.com username here!</label>
-                        <input type="text" name="user_name" value="{{$deal->client_username}}" class="form-control @error('user_name') is-invalid @enderror" readonly/>
+                        <input type="text" name="user_name" value="{{$deal->client_username}}" class="form-control @error('user_name') is-invalid @enderror" />
                     </div>
                     @error('user_name')
                     <div class="mt-3">
@@ -84,7 +84,7 @@
 
                     <div class="col-md-12">
                         <label for="Email3" class="form-label">Your email (For future communication)!</label>
-                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"/>
+                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"  />
                     </div>
                     @error('email')
                     <div class="mt-3">
@@ -95,7 +95,7 @@
                     <div id="input-tel-parent" class="col-md-12">
                         <label for="inputEmail4" class="form-label">Phone number!</label> <br>
 
-                        <input  class="form-control mybtns" id="phone" name="client_phone" type="tel">
+                        <input  class="form-control mybtns" id="phone" name="client_phone" type="tel" >
                         <span id="valid-msg" class="hide">Valid</span>
                         <span id="error-msg" class="hide">Invalid number</span>
                     </div>
