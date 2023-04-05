@@ -497,10 +497,12 @@ class TasksDataTable extends BaseDataTable
             });
 
             $datatables->editColumn('estimate_time', function($row) {
-                $tasks = $row->subtasks;
+                $task = Task::find($row->id);
 
-                $totalHours = $row->estimate_hours;
-                $totalMinutes = $row->estimate_minutes;
+                $totalHours = $task->estimate_hours;
+                $totalMinutes = $task->estimate_minutes;
+                
+                $tasks = $task->subtasks;
                 
                 foreach($tasks as $value) {
                     $countTask = Task::where('subtask_id', $value->id)->first();
