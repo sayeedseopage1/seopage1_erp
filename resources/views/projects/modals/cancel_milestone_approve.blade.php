@@ -7,24 +7,18 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form class="">
-        
           <input type="hidden" class="milestoneId" name='milestoneId'  value="">
-          
+            <div class="modal-body">
 
-        
-        <div class="modal-body"> 
-             
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="exampleFormControlTextarea1">Reason given by project manager</label>
-             {{-- <textarea name="comments" class="form-control" rows="3" required></textarea>
-                 --}}
-                 
+              <div class="col-md-12">
+                <div class="form-group">
+                  <h5 for="exampleFormControlTextarea1">Reason given by project manager</h5>
+                    <p class="commentId text-justify"></p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
             <br>
-           
+
             <br>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary close-button" data-bs-dismiss="modal">Close</button>
@@ -34,25 +28,21 @@
       </div>
     </div>
   </div>
-  {{--<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>--}}
   <script>
-  // $(document).ready(function() {
-  //   $('#comment2').summernote();
-  // });
-  
+
   </script>
   <script>
       $('#cancelMilestoneApprove').click(function(e){
           e.preventDefault();
-          
+
           // alert('ok');
-         
+
           var data= {
             '_token': "{{ csrf_token() }}",
-           
+
             'milestoneId': $('.milestoneId').val(),
         }
-        
+
           //console.log(data);
           $.ajaxSetup({
               headers: {
@@ -66,18 +56,18 @@
               dataType: "json",
               success: function (response) {
                    //console.log(response.status)
-                 
+
                       if (response.status == 'success') {
                         toastr.success('Cancelation request Accept successfully!');
                           $("#cancel-milestone-approve").modal("hide");
 
                           window.location.reload();
                       }
-                 
+
               },
           });
       });
-  
+
   </script>
   <script>
       $("#cancelMilestoneApprove").on('click',function() {
@@ -85,4 +75,3 @@
           $("#cancelMilestoneApprove").text("Processing ...");
       })
   </script>
-  
