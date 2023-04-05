@@ -60,15 +60,19 @@ class TaskCommentController extends AccountBaseController
         $task_member= TaskUser::where('task_id',$request->taskId)->first();
         $sender= User::where('id',Auth::id())->first();
         $users= User::where('id',$task->added_by)->orWhere('id',$task_member->user_id)->orWhere('id',$project->pm_id)->get();
+
         $this->replys =DB::table('task_replies')
         ->join('users','task_replies.user_id','=','users.id')
         ->select('task_replies.*','users.name','users.image','users.updated_at')
         ->get();
+
         foreach ($users as $user) {
         // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
             Notification::send($user, new TaskCommentNotification($task,$sender));
         }
+
         $view = view('tasks.ajax.all_comments', $this->data)->render();
+
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
     }
 
@@ -179,8 +183,10 @@ class TaskCommentController extends AccountBaseController
             ->select('task_replies.*','users.name','users.image','users.updated_at')
             ->get();
 
+
             $view = view('tasks.ajax.all_comments', $this->data)->render();
             //dd($view);
+
             return response()->json([
                 'status' => 400,
                 'html' => $view

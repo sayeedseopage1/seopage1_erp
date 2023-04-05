@@ -150,7 +150,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     @csrf
                     <input type="hidden" name="id" value="{{$project->id}}">
 
-                    <button class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded" type="submit"  aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded" type="submit"  aria-haspopup="true" aria-expanded="false" id="markAsIncompleteBtn">
                     @lang('Mark As Incomplete')
                   </button>
                     </form>
@@ -950,16 +950,35 @@ if (list && list.length > 0) {
 
 });
 }
-
-
-// .project-left {
-// 	margin-right: auto;
-// }
-// .project-left.w-100.py-0.py-lg-5.py-md-0 {
-// 	padding-top: 0 !important;
-// }
-
-
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#markAsIncompleteBtn').click(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '{{route('project-incomplete')}}',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'id':{{$project->id}},
+                },
+                success: function(response) {
+                    if(response.status==400){
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Mark As Incomplete Done',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function() {
+                            window.location.reload();
+                        });
+                    }
+                },
+            });
+        })
+    })
 </script>
 <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
 

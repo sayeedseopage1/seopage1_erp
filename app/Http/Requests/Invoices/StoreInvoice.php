@@ -33,7 +33,7 @@ class StoreInvoice extends CoreRequest
             'invoice_number' => 'required|unique:invoices',
             'issue_date' => 'required',
             'sub_total' => 'required',
-            'total' => 'required',
+            'total' => 'required|min:0',
             'currency_id' => 'required',
         ];
 
