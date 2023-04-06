@@ -71,7 +71,7 @@ class TaskCommentController extends AccountBaseController
             Notification::send($user, new TaskCommentNotification($task,$sender));
         }
 
-        $view = view('tasks.ajax.all_comments', $this->data)->render();
+        $view = view('tasks.ajax.files', $this->data)->render();
 
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
     }
@@ -109,12 +109,41 @@ class TaskCommentController extends AccountBaseController
         ->findOrFail($comment_task_id)->withCustomFields();
 
         $this->comments = TaskComment::with('task')->where('task_id', $comment_task_id)->orderBy('id', 'desc')->get();
-        $this->replys =DB::table('task_replies')
-        ->join('users','task_replies.user_id','=','users.id')
-        ->select('task_replies.*','users.name','users.image','users.updated_at')
-        ->get();
 
-        $view = view('tasks.ajax.all_comments', $this->data)->render();
+        $view = view('tasks.ajax.files', $this->data)->render();
+
+        return Reply::dataOnly(['status' => 'success', 'view' => $view]);
+    }
+
+    public function replyDelete($id)
+    {
+        $comment = TaskReply::findOrFail($id);
+        $this->deletePermission = user()->permission('delete_task_comments');
+        abort_403(!($this->deletePermission == 'all' || ($this->deletePermission == 'added') && $comment->added_by == user()->id));
+
+        $comment_task_id = $comment->task_id;
+        $comment->delete();
+        
+        $viewTaskFilePermission = user()->permission('view_task_files');
+        $viewSubTaskPermission = user()->permission('view_sub_tasks');
+
+        $this->task = Task::with(['boardColumn', 'project', 'users', 'label', 'approvedTimeLogs', 'approvedTimeLogs.user', 'approvedTimeLogs.activeBreak', 'comments', 'comments.user', 'subtasks.files', 'userActiveTimer',
+        'files' => function ($q) use ($viewTaskFilePermission) {
+            if ($viewTaskFilePermission == 'added') {
+                $q->where('added_by', user()->id);
+            }
+        },
+        'subtasks' => function ($q) use ($viewSubTaskPermission) {
+            if ($viewSubTaskPermission == 'added') {
+                $q->where('added_by', user()->id);
+            }
+        }])
+        ->withCount('subtasks', 'files', 'comments', 'activeTimerAll')
+        ->findOrFail($comment_task_id)->withCustomFields();
+
+        $this->comments = TaskComment::with('task')->where('task_id', $comment_task_id)->orderBy('id', 'desc')->get();
+
+        $view = view('tasks.ajax.files', $this->data)->render();
 
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
     }
@@ -157,10 +186,10 @@ class TaskCommentController extends AccountBaseController
         $reply = new TaskReply();
         $reply->reply = $request->reply;
         $reply->comment_id = $request->reply_id;
-        $reply->user_id = $request->user_id;
+        $reply->user_id = $this->user->id;
         $reply->task_id = $request->taskId;
-        $reply->added_by = $request->added_by;
-        $reply->last_updated_by = $request->last_updated_by;
+        $reply->added_by = $this->user->id;
+        //$reply->last_updated_by = $request->last_updated_by;
         if ($reply->save()) {
             $viewTaskFilePermission = user()->permission('view_task_files');
             $viewSubTaskPermission = user()->permission('view_sub_tasks');
@@ -178,13 +207,9 @@ class TaskCommentController extends AccountBaseController
             ->withCount('subtasks', 'files', 'comments', 'activeTimerAll')
             ->findOrFail($request->taskId)->withCustomFields();
 
-            $this->replys =DB::table('task_replies')
-            ->join('users','task_replies.user_id','=','users.id')
-            ->select('task_replies.*','users.name','users.image','users.updated_at')
-            ->get();
+            $this->comments = $this->task->comments;
 
-
-            $view = view('tasks.ajax.all_comments', $this->data)->render();
+            $view = view('tasks.ajax.files', $this->data)->render();
             //dd($view);
 
             return response()->json([

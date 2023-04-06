@@ -42,10 +42,9 @@
             </div>
         </x-form>
     @endif
-
-
+    
     <div class="d-flex flex-wrap justify-content-between p-20" id="comment-list">
-        @forelse ($task->comments as $comment)
+        @forelse ($comments as $comment)
             <div class="card w-100 rounded-0 border-0 comment">
                 <div class="card-horizontal">
                     <div class="card-img my-1 ml-0">
