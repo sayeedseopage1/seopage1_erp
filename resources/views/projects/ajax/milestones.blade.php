@@ -481,25 +481,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
   $(document).ready(function() {
       $('.approve_milestone').click(function(e) {
           e.preventDefault();
-          Swal.fire({
-          title: "Cancel milestone",
-          text: "Are you sure want to aprove the cacelation?",
-          icon: 'warning',
-          showCancelButton: true,
-          focusConfirm: false,
-          confirmButtonText: "@lang('messages.confirm')",
-          cancelButtonText: "@lang('app.cancel')",
-          customClass: {
-              confirmButton: 'btn btn-primary mr-3',
-              cancelButton: 'btn btn-secondary'
-          },
-          showClass: {
-              popup: 'swal2-noanimation',
-              backdrop: 'swal2-noanimation'
-          },
-          buttonsStyling: false
-      }).then((result) => {
-          if (result.isConfirmed) {
+     
           //  / var id = milestone_id;
           var milestone_id = $(this).data('row-id');
           var comments =  $(this).data('row-id2');
@@ -518,10 +500,10 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
              // $(this).closest("form").submit();
 
-          }
+         
       });
-      })
-  })
+      });
+ 
 </script>
 
 <script>
