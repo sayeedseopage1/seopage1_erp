@@ -16,6 +16,9 @@
              <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
                  <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">Status</p>
                  <div class="select-status">
+                    @php
+                $taskBoardStatus= App\Models\TaskBoardColumn::all();
+                    @endphp
                      <select class="form-control select-picker" name="status" id="status" data-live-search="true" data-size="8">
                          <option value="not finished">Hide completed task</option>
                          <option {{ request('status') == 'all' ? 'selected' : '' }} value="all">@lang('app.all')</option>
@@ -231,7 +234,7 @@
         let search_string = $('#search2').val();
         var url = $(this).attr('href');
         $.ajax({
-            url:"{{route('tasks.search_subtask')}}",
+            url:"#",
             method:'GET',
             data:{search_string:search_string ,id:{{request('id')}}},
             success:function (response) {
