@@ -246,8 +246,8 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
     <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         @php
-            $startDate = \Carbon\Carbon::now()->startOfMonth()->subMonths(1)->addDays(20);
-            $endDate = \Carbon\Carbon::now()->startOfMonth()->addDays(20);
+            $startDate = \Carbon\Carbon::now()->startOfMonth()->subMonths(12)->addDays(20);
+            $endDate = \Carbon\Carbon::now()->startOfMonth()->addDays(19);
         @endphp
         $(function() {
             var format = '{{ global_setting()->moment_format }}';
@@ -258,7 +258,7 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
             var end = moment(endDate, format);
 
             function cb(start, end) {
-                $('#datatableRange2').val(start.format('{{ global_setting()->moment_date_format }}') +
+                $('#datatableRange2').val(moment(start).subtract(1, 'year').format('{{ global_setting()->moment_date_format }}') +
                     ' @lang("app.to") ' + end.format( '{{ global_setting()->moment_date_format }}'));
                 $('#reset-filters').removeClass('d-none');
             }
@@ -270,8 +270,10 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
                 endDate: end,
                 ranges: daterangeConfig,
                 opens: 'left',
-                parentEl: '.dashboard-header'
+                parentEl: '.dashboard-header',
             }, cb);
+
+            
 
             $('#datatableRange2').on('apply.daterangepicker', function(ev, picker) {
                 showTable();
@@ -281,7 +283,6 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
     <script>
         var deadLineStartDate = '';
         var deadLineEndDate = '';
-
         $('#projects-table').on('preXhr.dt', function(e, settings, data) {
 
             var status = $('#status').val();
@@ -306,6 +307,7 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
             data['deadLineStartDate'] = deadLineStartDate;
             data['deadLineEndDate'] = deadLineEndDate;
             data['searchText'] = searchText;
+            
             var dateRangePicker = $('#datatableRange2').data('daterangepicker');
             var startDate = $('#datatableRange').val();
 

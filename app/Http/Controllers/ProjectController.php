@@ -114,7 +114,6 @@ class ProjectController extends AccountBaseController
      */
     public function index(ProjectsDataTable $dataTable)
     {
-    //  dd($dataTable);
         $viewPermission = user()->permission('view_projects');
         abort_403(!in_array($viewPermission, ['all', 'added', 'owned', 'both']));
 
@@ -341,8 +340,6 @@ class ProjectController extends AccountBaseController
 
             $startDate = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
             $deadline = !$request->has('without_deadline') ? Carbon::createFromFormat($this->global->date_format, $request->deadline)->format('Y-m-d') : null;
-
-
             $project = new Project();
             $notes = new ProjectNote();
             $project->project_name = $request->project_name;
@@ -393,80 +390,77 @@ class ProjectController extends AccountBaseController
             $lead_developer_id= RoleUser::where('role_id',6)->get();
             //dd($lead_developer_id);
             foreach ($lead_developer_id as $lead) {
-              $lead_developer= new ProjectMember();
-              $lead_developer->user_id= $lead->user_id;
-              $lead_developer->project_id= $project->id;
-              $lead_developer->lead_developer_id= $lead->user_id;
-              $lead_developer->hourly_rate= 0;
-              $lead_developer->save();
+                $lead_developer= new ProjectMember();
+                $lead_developer->user_id= $lead->user_id;
+                $lead_developer->project_id= $project->id;
+                $lead_developer->lead_developer_id= $lead->user_id;
+                $lead_developer->hourly_rate= 0;
+                $lead_developer->save();
             }
 
 
-//seopage1 custom module
-$pm_count= PMAssign::select('project_count')->min('project_count');
-$pm_user= PMAssign::where('project_count',$pm_count)->first();
-if ($pm_count < 2) {
-  if ($pm_user != null) {
-    $pmassign= new PMProject();
-    $pmassign->project_id= $project->id;
-    $pmassign->status= $project->status;
-    $pmassign->pm_id= $pm_user->pm_id;
+            //seopage1 custom module
+            $pm_count= PMAssign::select('project_count')->min('project_count');
+            $pm_user= PMAssign::where('project_count',$pm_count)->first();
+            if ($pm_count < 2) {
+                if ($pm_user != null) {
+                    $pmassign= new PMProject();
+                    $pmassign->project_id= $project->id;
+                    $pmassign->status= $project->status;
+                    $pmassign->pm_id= $pm_user->pm_id;
 
-    $pmassign->save();
-  //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-    $pm_project_find= PMAssign::where('pm_id',$pm_user->pm_id)->first();
-    $pm_project_update=PMAssign::find($pm_project_find->id);
-    $pm_project_update->project_count= $pm_project_update->project_count + 1;
-    $pm_project_update->amount= $pm_project_update->amount + $project->project_budget;
-    $pm_project_update->save();
-  }
-}else {
-  $items = PMAssign::all();
-  $pm_amount=  $items->min('amount');
-  $pm_count_id=  $items->min('project_count');
+                    $pmassign->save();
+                    //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+                    $pm_project_find= PMAssign::where('pm_id',$pm_user->pm_id)->first();
+                    $pm_project_update=PMAssign::find($pm_project_find->id);
+                    $pm_project_update->project_count= $pm_project_update->project_count + 1;
+                    $pm_project_update->amount= $pm_project_update->amount + $project->project_budget;
+                    $pm_project_update->save();
+                }
+            } else {
+                $items = PMAssign::all();
+                $pm_amount=  $items->min('amount');
+                $pm_count_id=  $items->min('project_count');
 
-  $pm_find_id= PMAssign::where('amount',$pm_amount)->first();
-  $pm_min_pro= PMAssign::where('project_count',  $pm_count_id)->first();
-  $find_rest= PMAssign::where('project_count',$pm_count_id)->get();
+                $pm_find_id= PMAssign::where('amount',$pm_amount)->first();
+                $pm_min_pro= PMAssign::where('project_count',  $pm_count_id)->first();
+                $find_rest= PMAssign::where('project_count',$pm_count_id)->get();
 
-  $fin_min= $find_rest->min('amount');
+                $fin_min= $find_rest->min('amount');
 
-  $final_id= PMAssign::where('amount',$fin_min)->first();
+                $final_id= PMAssign::where('amount',$fin_min)->first();
 
-//  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
+                //  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
 
-  if (($pm_find_id->project_count +1) <= $pm_count_id*1.5) {
-    $pmassign= new PMProject();
-    $pmassign->project_id= $project->id;
-    $pmassign->status= $project->status;
+                if (($pm_find_id->project_count +1) <= $pm_count_id*1.5) {
+                    $pmassign= new PMProject();
+                    $pmassign->project_id= $project->id;
+                    $pmassign->status= $project->status;
 
-    $pmassign->pm_id= $pm_find_id->pm_id;
-    $pmassign->save();
-  //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-    $pm_project_find= PMAssign::where('pm_id',$pm_find_id->pm_id)->first();
-    $pm_project_update=PMAssign::find($pm_project_find->id);
-    $pm_project_update->project_count= $pm_project_update->project_count + 1;
-    $pm_project_update->amount= $pm_project_update->amount +$project->project_budget;
-    $pm_project_update->save();
-  }
+                    $pmassign->pm_id= $pm_find_id->pm_id;
+                    $pmassign->save();
+                    //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+                    $pm_project_find= PMAssign::where('pm_id',$pm_find_id->pm_id)->first();
+                    $pm_project_update=PMAssign::find($pm_project_find->id);
+                    $pm_project_update->project_count= $pm_project_update->project_count + 1;
+                    $pm_project_update->amount= $pm_project_update->amount +$project->project_budget;
+                    $pm_project_update->save();
+                } else {
 
+                    $pmassign= new PMProject();
+                    $pmassign->project_id= $project->id;
+                    $pmassign->status= $project->status;
 
-  else {
-
-    $pmassign= new PMProject();
-    $pmassign->project_id= $project->id;
-    $pmassign->status= $project->status;
-
-    $pmassign->pm_id=  $final_id->pm_id;
-    $pmassign->save();
-  //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-    $pm_project_find= PMAssign::where('pm_id', $final_id->pm_id)->first();
-    $pm_project_update=PMAssign::find($pm_project_find->id);
-    $pm_project_update->project_count= $pm_project_update->project_count + 1;
-    $pm_project_update->amount= $pm_project_update->amount + $project->project_budget;
-    $pm_project_update->save();
-  }
-}
+                    $pmassign->pm_id=  $final_id->pm_id;
+                    $pmassign->save();
+                    //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+                    $pm_project_find= PMAssign::where('pm_id', $final_id->pm_id)->first();
+                    $pm_project_update=PMAssign::find($pm_project_find->id);
+                    $pm_project_update->project_count= $pm_project_update->project_count + 1;
+                    $pm_project_update->amount= $pm_project_update->amount + $project->project_budget;
+                    $pm_project_update->save();
+                }
+            }
 
 
 
@@ -476,6 +470,7 @@ if ($pm_count < 2) {
 
 
             $this->logSearchEntry($project->id, $project->project_name, 'projects.show', 'project');
+
             $this->logProjectActivity($project->id, 'messages.addedAsNewProject');
 
             if ($request->template_id) {
@@ -494,8 +489,7 @@ if ($pm_count < 2) {
                     $projectTask->save();
 
                     foreach ($task->usersMany as $value) {
-                        TaskUser::create(
-                            [
+                        TaskUser::create([
                                 'user_id' => $value->id,
                                 'task_id' => $projectTask->id
                             ]
@@ -503,8 +497,7 @@ if ($pm_count < 2) {
                     }
 
                     foreach ($task->subtasks as $value) {
-                        SubTask::create(
-                            [
+                        SubTask::create([
                                 'title' => $value->title,
                                 'task_id' => $projectTask->id
                             ]
