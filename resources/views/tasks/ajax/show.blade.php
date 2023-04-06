@@ -7,7 +7,7 @@ $changeStatusPermission = user()->permission('change_status');
 
 <div id="task-detail-section">
     <div class="row mx-0">
-        <a href="{{route('projects.show', $task->project_id)}}?tab=tasks"><button class="btn btn-primary mb-3">Go back</button></a> 
+        <a href="{{route('projects.show', $task->project_id)}}?tab=tasks"><button class="btn btn-primary mb-3">Go back</button></a>
         <h3 class="heading-h1 mb-3 ml-2 align-self-center">{{ ucfirst($task->heading) }}</h3>
     </div>
     <div class="row">
@@ -501,7 +501,7 @@ $changeStatusPermission = user()->permission('change_status');
 
            ?>
 
-          
+
 
 
 

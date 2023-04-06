@@ -1,21 +1,3 @@
-<style>
-    @media only screen and (max-width: 1432px) {
-        .complete_milestone,
-        .cancel_milestone {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-    }
-    /*@media only screen and (min-width: 768px) {*/
-    /*    .complete_milestone,*/
-    /*    .cancel_milestone {*/
-    /*        display: block;*/
-    /*        margin-bottom: 10px;*/
-    /*        width: 100%;*/
-    /*    }*/
-    /*}*/
-</style>
 @php
 $addProjectMilestonePermission = ($project->project_admin == user()->id) ? 'all' : user()->permission('add_project_milestones');
 $viewProjectMilestonePermission = ($project->project_admin == user()->id) ? 'all' : user()->permission('view_project_milestones');
@@ -115,183 +97,98 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 @endif
                             </td>
                             <td>
-
+                             
 
 
                               <?php
                               $task= App\Models\Task::where('milestone_id',$item->id)->where('status','incomplete')->count();
                               $total_tasks=  App\Models\Task::where('milestone_id',$item->id)->count();
                               $complete_task= App\Models\Task::where('milestone_id',$item->id)->where('status','completed')->count();
-                              $milestone_count= App\Models\ProjectMilestone::where('project_id',$project->id)->count();
-                              $incomplete_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->count();
-                              $canceled_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','canceled')->count();
-                                $complete_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
-                                $invoice_generated= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_created',1)->count();
-                                $last_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->orderBy('id','desc')->where('invoice_id',null)->first();
-                                $first_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_id',null)->first();
-                                $qc_count= App\Models\ProjectMilestone::where('project_id',$project->id)->where('qc_status',1)->count();
-                               // dd($qc_count);
-                                $project_completion_count= App\Models\ProjectMilestone::where('project_id',$project->id)->where('project_completion_status',1)->count();
                               //dd($task);
                                ?>
                                <form class="" action="{{route('milestone-complete')}}" method="post">
                                  @csrf
                                    <input type="hidden" name="id" value="{{$item->id}}">
-
-        @if($task > 0)
-
-                            @if($item->cancelation_status == null)
+                               @if($task > 0)
                                 <button type="submit" disabled class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete ({{$complete_task}}/{{$total_tasks}})</button>
                                 <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}" type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 mt-3"  id="{{$item->id}}"  data-row-id="{{ $item->id }}" >Partial Payment</a>
-                                <button type="button" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}">Cancel Milestone</button>
+                                <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone">Cancel Milestone</button>
                                 @else
-                                @if(Auth::user()->role_id == 1)
-                                <button type="submit" class="btn-success rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 approve_milestone" data-row-id="{{ $item->id }}">Approve Cancelation</button>
-
-                                @else
-                                <i class="fa fa-circle mr-1 text-yellow f-10"></i>
-                                                  Awaiting Approval
-                                                  <br>
-                                                  (Milestone Cancelation)
-                                @endif
-
-                                @endif
-
-                                @else
-                  @if($item->status == 'incomplete')
-
-                  @if($item->cancelation_status == null)
-
+                                @if($item->status == 'incomplete')
 
                                      <button type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
-                                     <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}" >Cancel Milestone</button>
-                  @else
-                  @if(Auth::user()->role_id == 1)
-                  <button type="submit" class="btn-success rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 approve_milestone" data-row-id="{{ $item->id }}" data-row-id2="{{$item->comments}}">Approve Cancelation</button>
+                                     <button type="submit" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone">Cancel Milestone</button>
+                                  @else
 
+                                  @if($item->invoice_created == 0)
+                                <?php
+                                $milestone_count= App\Models\ProjectMilestone::where('project_id',$project->id)->count();
+                                $complete_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
+                                $invoice_generated= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_created',1)->count();
+                              //  dd($complete_milestone, $invoice_generated);
+                                 ?>
 
-                  @else
-                  <i class="fa fa-circle mr-1 text-yellow f-10"></i>
-                                    Awaiting Approval
-                                    <br>
-                                    (Milestone Cancelation)
-                  @endif
+                                 @if($invoice_generated == ($milestone_count -1) && $item->qc_status == 0)
 
-                  @endif
+                                 <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right">Complete Q&C</a>
 
-                  @elseif($item->status == 'canceled')
-                  @if($incomplete_milestone == 0 && $qc_count == 0 && $item->id == $last_milestone->id)
-
-                  @if($item->qc_status == 0)
-                        <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right">Complete Q&C</a>
-
-                        @elseif($item->qc_status == 2)
-                        <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                 @elseif($invoice_generated == ($milestone_count -1) && $item->qc_status == 2)
+                                 <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                  Awaiting Approval
                                  <br>
                                  (QC Sumission)
-                    @endif
-                @elseif($incomplete_milestone == 0 && $project_completion_count == 0 && $item->id == $last_milestone->id)
-                @if($item->project_completion_status  == 0)
+                                  @elseif($invoice_generated == ($milestone_count -1) && $item->qc_status == 3)
+                                  <a class="btn btn-primary" href="#" id="project-qc-form">Need Attention</a>
+                                    @include('projects.modals.projectqcreplymodal')
+                                 @else
 
-                <a href="/projects/project-completion/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right" >Project Completion Form</a>
-                @elseif($item->project_completion_status  == 2)
-                <i class="fa fa-circle mr-1 text-yellow f-10"></i>
-                Awaiting Approval
-                <br>
-                (Project Completion)
+                                 @php 
+                                  $last_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('invoice_id',null)->first();
+                                    //dd($item->id == $last_milestone->id, );
+                                 @endphp
+                                 @if($item->id == $last_milestone->id && $complete_milestone != $invoice_generated && $milestone_count != 1 && ($complete_milestone - $invoice_generated) >= 2)
+                                 <button disabled class="btn-success rounded f-14 p-2 flex-right">Generate Invoice</a>
+                                    
+                                 @else
+                                  <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}"   class="btn-success rounded f-14 p-2 flex-right" id="{{$item->id}}"  data-row-id="{{ $item->id }}">Generate Invoice</a>
+                                  @endif
+                                  @endif
 
+                                    @else
+                                      <input type="hidden" id="invoice_id" value="{{$item->invoice_id}}">
+                                      @php
+                                      $invoice= App\Models\Invoice::where('id',$item->invoice_id)->first();
+                                      @endphp
+                                      @if($invoice->status == 'unpaid')
+                                      @php
+                                      $invoice_count= App\Models\Invoice::where('project_id',$project->id)->where('status','paid')->count();
+                                      $milestone_count= App\Models\ProjectMilestone::where('project_id',$project->id)->count();
+                                      $complete_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
+                                      $invoice_generated= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_created',1)->count();
+                                      $project_submission= App\Models\ProjectSubmission::where('milestone_id',$item->id)->first();
+                                      //dd($milestone_count,$invoice_count);
+                                      @endphp
+                                      @if($milestone_count - $invoice_count == 1 && $item->project_completion_status == 0)
 
-                @endif
+                                        <a href="/projects/project-completion/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right" >Project Completion Form</a>
 
-                  @else
-
-                  <i class="fa fa-circle mr-1 text-red f-10"></i>
-                  Canceled
-
-                  @endif
-
-                  {{--  Need to check if milestone is the last milestone then qc and project completion and authorization apply in this section
-                     --}}
-
-
-
-                  @else
-                        @if($last_milestone != null && $incomplete_milestone == 0 && $item->id == $last_milestone->id )
-
-                        @if($item->qc_status == 0)
-                        <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right">Complete Q&C</a>
-
-                        @elseif($item->qc_status == 2)
-                        <i class="fa fa-circle mr-1 text-yellow f-10"></i>
-                                 Awaiting Approval
-                                 <br>
-                                 (QC Sumission)
-
-
-                        @elseif($item->qc_status == 1 && $item->invoice_created == 0)
-
-
-                        <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}"   class="btn-success rounded f-14 p-2 flex-right" id="{{$item->id}}"  data-row-id="{{ $item->id }}">Generate Invoice</a>
-                        @elseif($item->qc_status == 1 && $item->invoice_created == 1)
-                        <a href="/projects/project-completion/{{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right" >Project Completion Form</a>
-
-
-                        @elseif($item->qc_status == 1 && $item->invoice_created == 1 && $item->project_completion_status == 2)
-                        <i class="fa fa-circle mr-1 text-yellow f-10"></i>
-
+                                      @elseif($milestone_count - $invoice_count == 1 && $item->project_completion_status == 1 || $milestone_count - $invoice_count != 1)
+                                      <a href="{{route('payments.create')}}?invoice_id={{$item->invoice_id}}&default_client={{$project->client_id}}"  class="btn-warning rounded f-14 p-2 flex-right" data-row-id="{{ $item->invoice_id }}">Add Payment</a>
+                                    @else
+                                    <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                     Awaiting Approval
                                     <br>
                                     (Project Completion)
 
-                                    @php
-                                    $invoice_id = App\Models\Invoice::where('milestone_id',$item->invoice_id)->where('status','unpaid')->first();
-                                    @endphp
+                                    @endif
+                                    @else
+                                    <i class="fa fa-circle mr-1 text-dark-green f-10"></i>
+                                  Milestone Paid
+                                    @endif
+                                    @endif
+                             @endif
 
-                          @elseif($item->qc_status == 1 && $item->invoice_created == 1 && $item->project_completion_status == 1 && $invoice_id != null)
-
-                           <a href="{{route('payments.create')}}?invoice_id={{$item->invoice_id}}&default_client={{$project->client_id}}"  class="btn-warning rounded f-14 p-2 flex-right" data-row-id="{{ $item->invoice_id }}">Add Payment</a>
-
-                          @else
-
-                        <i class="fa fa-circle mr-1 text-dark-green f-10"></i>
-                        Milestone Paid
-
-                        @endif
-
-                        @else
-                        @if($item->invoice_created == 0)
-                        @if($complete_milestone- $invoice_generated >= 2 && $item->id != $first_milestone->id)
-                        <button disabled class="btn-success rounded f-14 p-2 flex-right">Generate Invoice</a>
-                        @else
-                        <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}"  class="btn-success rounded f-14 p-2 flex-right" id="{{$item->id}}"  data-row-id="{{ $item->id }}">Generate Invoice</a>
-
-                        @endif
-
-
-                      @elseif($item->invoice_created == 1 )
-                        @php
-                        $invoice_id = App\Models\Invoice::where('milestone_id',$item->id)->first();
-                      //  / dd($invoice_id );
-                        @endphp
-                          @if($invoice_id->status== 'unpaid')
-                       <a href="{{route('payments.create')}}?invoice_id={{$item->invoice_id}}&default_client={{$project->client_id}}"  class="btn-warning rounded f-14 p-2 flex-right" data-row-id="{{ $item->invoice_id }}">Add Payment</a>
-                        @else
-                        <i class="fa fa-circle mr-1 text-dark-green f-10"></i>
-                        Milestone Paid
-
-                        @endif
-
-
-                  @endif
-
-
-                        @endif
-
-
-                  @endif
-
-        @endif
+                               @endif
                                  </form>
 
 
@@ -352,13 +249,12 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 <input type="hidden" id="project_id"  value="{{$project->id}}">
 <input type="hidden" id="client_id"  value="{{$project->client_id}}">
 
-@include('projects.modals.cancel_milestone')
-@include('projects.modals.cancel_milestone_approve')
+
 <script type="text/javascript">
 
     let project_id = document.getElementById('project_id').value;
     let client_id =document.getElementById('client_id').value;
-
+  
 
 
 
@@ -366,7 +262,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
     $('body').on('click', '.create-invoice', function() {
       //id = $(this).attr("id");
         var milestone_id = $(this).data('row-id');
-
+      
     //  alert(milestone_id);
       var url = `{{ route('invoices.create') }}`;
 
@@ -375,7 +271,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
       $(this).prop("disabled", true);
       window.location.href = url;
       // window.open(url);
-
+    
     });
     $('body').on('click', '.create-payment', function() {
       //id = $(this).attr("id");
@@ -387,7 +283,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
       url += string;
 
       window.open(url);
-
+    
     });
 
     $('body').on('click', '.create-partial-payment', function() {
@@ -401,7 +297,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
       url += string;
       $(this).prop("disabled", true);
       window.open(url);
-
+    
     });
 
 
@@ -462,48 +358,11 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
           buttonsStyling: false
       }).then((result) => {
           if (result.isConfirmed) {
-
-          //  / var id = milestone_id;
-          var milestone_id = $(this).data('row-id');
-          $('#milestoneId').val(milestone_id);
-
-           // alert(milestone_id);
-            // /var milestoneID= milestone_id.val();
-            $('#cancel-milestone').modal('show');
-
-             // $(this).closest("form").submit();
+              $(this).closest("form").submit();
           }
       });
       })
   })
-</script>
-<script type="text/javascript">
-  $(document).ready(function() {
-      $('.approve_milestone').click(function(e) {
-          e.preventDefault();
-     
-          //  / var id = milestone_id;
-          var milestone_id = $(this).data('row-id');
-          var comments =  $(this).data('row-id2');
-
-         // console.log(comments);
-
-
-          $('.milestoneId').val(milestone_id);
-          $('.commentId').html(comments);
-
-          //$('.milestoneId').val(milestone_id);
-
-           // alert(milestone_id);
-            // /var milestoneID= milestone_id.val();
-              $('#cancel-milestone-approve').modal('show');
-
-             // $(this).closest("form").submit();
-
-         
-      });
-      });
- 
 </script>
 
 <script>
@@ -577,11 +436,6 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
             }
         });
 
-    });
-    $('.close-button').click(function() {
-
-      $('#cancel-milestone').modal('hide');
-      $('#cancel-milestone-approve').modal('hide');
     });
 
 

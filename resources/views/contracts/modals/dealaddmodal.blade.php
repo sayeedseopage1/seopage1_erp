@@ -44,7 +44,9 @@
                           </svg>
                       </label>
                       <input type="text" class="form-control height-35 f-14 client-search" placeholder="Enter Client Username" value="" name="client_username" id="client_username" autocomplete="off">
+
                       <label id="clientUsernameError" class="error text-danger" for="client_username"></label>
+
                       
                   </div>
               </div>
@@ -301,6 +303,7 @@
         });
     });
 
+
     $("#client_username").on('keydown', function(e) {
         $('#clientUsernameError').text('');
         if (e.keyCode === 32) {
@@ -313,6 +316,7 @@
     $('.modal-content').click(function() {
         $('#clientUsernameError').text('');
     });
+
 
     $('#client_username').keypress(function() {
         $('#client_name').val('');
