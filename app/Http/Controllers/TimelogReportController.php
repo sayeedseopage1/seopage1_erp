@@ -33,6 +33,26 @@ class TimelogReportController extends AccountBaseController
             $this->tasks = Task::all();
         }
 
+        
+        $users = DB::table('users')->select('id', 'name')->whereIn('role_id', [5, 9, 10])->get();
+        foreach ($users as $key => $value) {
+            $value->tasks = DB::table('project_time_logs')->select([
+                'project_time_logs.id',
+                'projects.project_name', 
+                'pm.name as project_manager', 
+                'client.name as client',
+                DB::raw('COUNT(project_time_logs.id) as time_logs_count'),
+                DB::raw('sum(project_time_logs.total_minutes) as total_minutes'),
+            ])
+            ->join('projects', 'project_time_logs.project_id', '=', 'projects.id')
+            ->join('users as pm', 'projects.pm_id', '=', 'pm.id')
+            ->join('users as client', 'projects.client_id', '=', 'client.id')
+            ->where('project_time_logs.user_id', $value->id)
+            ->groupBy('project_time_logs.project_id')
+            ->get();
+        }
+        return response()->json($users);
+        //dd($users);
         // return view('admin.reports.time-log.index', $this->data);
         return $dataTable->render('reports.timelogs.index', $this->data);
     }

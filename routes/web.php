@@ -701,6 +701,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::resource('taskComment', TaskCommentController::class);
             Route::resource('task-note', TaskNoteController::class);
             Route::post('task-reply',[TaskCommentController::class, 'replyStore'])->name('taskReply.store');
+            Route::delete('reply-delete/{id}',[TaskCommentController::class, 'replyDelete'])->name('taskReply.delete');
 
             // task files routes
             Route::get('task-files/download/{id}', [TaskFileController::class, 'download'])->name('task_files.download');

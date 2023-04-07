@@ -35,9 +35,11 @@ $projectArchived = $project->trashed();
                     <li>
                         <x-tab :href="route('projects.show', $project->id)" :text="__('Dashboard')" class="overview" />
                     </li>
+                    @if ($viewProjectMilestonePermission == 'all' || $viewProjectMilestonePermission == 'added' || ($viewProjectMilestonePermission == 'owned' && user()->id == $project->client_id))
                     <li>
                         <x-tab :href="route('projects.show', $project->id).'?tab=deliverables'" :text="__('Deliverables')" class="deliverables" />
                     </li>
+                    @endif
                     <!-- <li>
                         <x-tab :href="route('projects.show', $project->id)" :text="__('Project Details')" class="overview" />
                     </li> -->

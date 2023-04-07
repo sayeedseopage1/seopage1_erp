@@ -976,6 +976,19 @@ class TaskController extends AccountBaseController
             }
         }
 
+        $this->comments = TaskComment::with('user')->where('task_id', $id)->orderBy('id', 'desc')->get();
+        //dd($this->comments);
+        $this->task= Task::where('id',$id)->first();
+        $project= Project::where('id',$this->task->project_id)->first();
+        $task_member= TaskUser::where('task_id',$id)->first();
+        $sender= User::where('id',Auth::id())->first();
+        $users= User::where('id',$this->task->added_by)->orWhere('id',$task_member->user_id)->orWhere('id',$project->pm_id)->get();
+
+        $this->replys =DB::table('task_replies')
+        ->join('users','task_replies.user_id','=','users.id')
+        ->select('task_replies.*','users.name','users.image','users.updated_at')
+        ->get();
+
         $tab = request('view');
         
         switch ($tab) {
@@ -1181,7 +1194,7 @@ class TaskController extends AccountBaseController
         if ($subTask->count() >=1){
 //            $task = $request->id;
 //            $tasks = $task->subtasks;
-//            $taskBoardStatus = TaskboardColumn::all();
+        //    /$taskBoardStatus = TaskboardColumn::all();
 //            $project = $task->project;
             $html = view('tasks.ajax.showSubTask',compact( 'subTask'))->render();
             dd($html);
