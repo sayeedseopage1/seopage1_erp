@@ -314,9 +314,9 @@
         }
         if (username.value.trim() === '') {
             valid = false;
-            clientUserNameError.textContent = 'Please select client user name!';
+            clientUsernameError.textContent = 'Please select client user name!';
         } else {
-            clientUserNameError.textContent = '';
+            clientUsernameError.textContent = '';
         }
         if (projectName.value.trim() === '') {
             valid = false;

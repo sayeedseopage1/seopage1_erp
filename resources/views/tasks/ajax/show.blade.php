@@ -1084,7 +1084,7 @@ $changeStatusPermission = user()->permission('change_status');
             }
 
 
-            $('body').on('click', '.delete-comment', function() {
+            /*$('body').on('click', '.delete-comment', function() {
                 var id = $(this).data('row-id');
                 Swal.fire({
                     title: "@lang('messages.sweetAlertTitle')",
@@ -1210,7 +1210,7 @@ $changeStatusPermission = user()->permission('change_status');
                 url = url.replace(':id', id);
                 $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
                 $.ajaxModal(MODAL_LG, url);
-            });
+            });*/
 
             $('body').on('click', '.delete-subtask', function() {
                 var id = $(this).data('row-id');
