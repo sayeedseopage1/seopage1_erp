@@ -290,6 +290,16 @@
                                 @lang('app.mins')
                             </div>
                         </div>
+                        @php
+                            $task_estimation_hours= App\Models\Task::where('project_id',$project->id)->sum('estimate_hours');
+                            $task_estimation_minutes= App\Models\Task::where('project_id',$project->id)->sum('estimate_minutes');
+                            $toal_task_estimation_minutes= $task_estimation_hours*60 + $task_estimation_minutes;
+                            $left_minutes= $project->hours_allocated*60 - $toal_task_estimation_minutes;
+
+                            $left_in_hours = round($left_minutes/60,0);
+                            $left_in_minutes= $left_minutes%60;
+                        @endphp
+                        <h6 style="color:red;">You have {{$left_in_hours}} hours {{$left_in_minutes}} minutes remaining of estimation time</h6>
                     </div>
                     @if(is_null($task))
                         {{-- <div class="col-md-6">
@@ -398,87 +408,6 @@
                 </div>
 
 
-                {{--  <div class="col-md-6 col-lg-3">
-                      <div class="form-group">
-                          <div class="d-flex mt-5">
-                              <x-forms.checkbox :fieldLabel="__('modules.tasks.makePrivate')" fieldName="is_private"
-                                  fieldId="is_private" :popover="__('modules.tasks.privateInfo')"
-                                  :checked="$task ? $task->is_private : ''"/>
-                          </div>
-                      </div>
-                  </div> --}}
-
-                {{--  <div class="col-md-6 col-lg-3">
-                      <div class="form-group">
-                          <div class="d-flex mt-5">
-                              <x-forms.checkbox :fieldLabel="__('modules.tasks.billable')" :checked="true"
-                                  fieldName="billable" fieldId="billable"
-                                  :popover="__('modules.tasks.billableInfo')"
-                                  :checked="$task ? $task->billable : ''"/>
-                          </div>
-                      </div>
-                  </div> --}}
-
-                {{--    <div class="col-md-6 col-lg-3">
-                        <div class="form-group">
-                            <div class="d-flex mt-5">
-                                <x-forms.checkbox :fieldLabel="__('modules.tasks.setTimeEstimate')"
-                                    fieldName="set_time_estimate" fieldId="set_time_estimate"
-                                    :checked="($task ? $task->estimate_hours > 0 || $task->estimate_minutes > 0 : '')" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 col-lg-3 d-none" id="set-time-estimate-fields">
-                        <div class="form-group mt-5">
-                            <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14"
-                                name="estimate_hours" value="{{ $task ? $task->estimate_hours : '0'}}">
-                            @lang('app.hrs')
-                            &nbsp;&nbsp;
-                            <input type="number" min="0" name="estimate_minutes"
-                            value="{{ $task ? $task->estimate_minutes : '0'}}" class="w-25 height-35 f-14 border rounded p-2">
-                            @lang('app.mins')
-                        </div>
-                    </div>
-                    --}}
-
-                {{--    <div class="col-md-6">
-                        <div class="form-group my-3">
-                            <div class="d-flex">
-                                <x-forms.checkbox :fieldLabel="__('modules.events.repeat')" fieldName="repeat"
-                                    fieldId="repeat-task" :checked="$task ? $task->repeat : ''"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group my-3 {{!is_null($task) && $task->repeat ? '' : 'd-none'}}" id="repeat-fields">
-                            <div class="row">
-                                <div class="col-md-6 mt-3">
-                                    <x-forms.label fieldId="repeatEvery" fieldRequired="true"
-                                        :fieldLabel="__('modules.events.repeatEvery')">
-                                    </x-forms.label>
-                                    <x-forms.input-group>
-                                        <input type="number" min="1" name="repeat_count"
-                                            class="form-control f-14" value="{{$task ? $task->repeat_count : '1'}}">
-
-                                        <x-slot name="append">
-                                            <select name="repeat_type" class="select-picker form-control">
-                                                <option value="day" @if (!is_null($task) && $task->repeat_type == 'day') selected @endif>@lang('app.day')</option>
-                                                <option value="week" @if (!is_null($task) && $task->repeat_type == 'week') selected @endif>@lang('app.week')</option>
-                                                <option value="month" @if (!is_null($task) && $task->repeat_type == 'month') selected @endif>@lang('app.month')</option>
-                                                <option value="year" @if (!is_null($task) && $task->repeat_type == 'year') selected @endif>@lang('app.year')</option>
-                                            </select>
-                                        </x-slot>
-                                    </x-forms.input-group>
-                                </div>
-                                <div class="col-md-6">
-                                    <x-forms.number :fieldLabel="__('modules.events.cycles')" fieldName="repeat_cycles"
-                                        fieldRequired="true" :fieldValue="$task ? $task->repeat_cycles : '1'" minValue="1" fieldId="repeat_cycles"
-                                        :fieldPlaceholder="__('modules.tasks.cyclesToolTip')"
-                                        :popover="__('modules.tasks.cyclesToolTip')" />
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
 
 
 
@@ -836,6 +765,7 @@
                         }
                     }
                 }
+               
             });
         }
 
@@ -982,3 +912,9 @@
         // }
     }
 </script>
+@if(session('error'))
+    <script>
+        Toastr.error('{{ session('error') }}', 'Failed', {positionClass: 'toast-top-right'});
+    </script>
+@endif
+

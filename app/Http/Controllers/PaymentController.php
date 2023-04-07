@@ -254,7 +254,14 @@ class PaymentController extends AccountBaseController
         }
         $project_update= Project::find($project->id);
         if ($project->due < 1) {
-          $project_update->status = 'finished';
+            if($project_update->milestone_cancel_count != null)
+            {
+                $project_update->status = 'partially finished';
+            }else 
+            {
+                $project_update->status = 'finished'; 
+            }
+        
           $project_update->completion_percent= 100;
           //$var= Project::where('id',$request->project_id)->first();
           $date1 = new DateTime($project['start_date']);

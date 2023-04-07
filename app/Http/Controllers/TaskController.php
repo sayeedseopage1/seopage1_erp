@@ -54,6 +54,7 @@ use Auth;
 use App\Models\ProjectDeliverable;
 use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
+use Toaster;
 
 use function Symfony\Component\Cache\Traits\select;
 
@@ -404,6 +405,7 @@ class TaskController extends AccountBaseController
      */
     public function create()
     {
+       
         $this->addPermission = user()->permission('add_tasks');
         $this->projectShortCode = '';
         $this->project = request('task_project_id') ? Project::with('membersMany')->findOrFail(request('task_project_id')) : null;
@@ -489,7 +491,22 @@ class TaskController extends AccountBaseController
     // @codingStandardsIgnoreLine
     public function store(StoreTask $request)
     {
-        //dd($request);
+        $project_id = Project::where('id',$request->project_id)->first();
+        $task_estimation_hours= Task::where('project_id',$project_id->id)->sum('estimate_hours');
+        $task_estimation_minutes= Task::where('project_id',$project_id->id)->sum('estimate_minutes');
+        $toal_task_estimation_minutes= $task_estimation_hours*60 + $task_estimation_minutes;
+        $left_minutes= ($project_id->hours_allocated-$request->estimate_hours)*60 - ($toal_task_estimation_minutes+$request->estimate_minutes);
+
+        $left_in_hours = round($left_minutes/60,0);
+        $left_in_minutes= $left_minutes%60;
+        //dd($left_minutes);
+        if($left_minutes < 1)
+        {
+           
+           // Toastr::error('Estimate hours cannot exceed from project allocation hours!!!', 'Failed', ["positionClass" => "toast-top-right"]);
+           // return redirect()->back()->withErrors(['error' => 'Estimate hours cannot exceed from project allocation hours!!!']);
+        }
+       // dd($request);
         $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
 
         if (is_null($project) || ($project->project_admin != user()->id)) {
@@ -681,7 +698,8 @@ class TaskController extends AccountBaseController
         $redirectUrl = urldecode($request->redirect_url);
 
         if ($redirectUrl == '') {
-            $redirectUrl = route('tasks.index');
+            //$redirectUrl = url('/account/projects/418?tab=tasks');
+            $redirectUrl = route('projects.show', $request->project_id).'?tab=tasks';
         }
 
         return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['redirectUrl' => $redirectUrl, 'taskID' => $task->id]);
