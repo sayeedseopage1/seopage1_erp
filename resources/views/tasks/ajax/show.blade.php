@@ -501,11 +501,6 @@ $changeStatusPermission = user()->permission('change_status');
 
            ?>
 
-
-
-
-
-
         </div>
         <div class="col-sm-3 review-card">
               <x-cards.data>
