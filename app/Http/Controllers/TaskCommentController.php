@@ -71,7 +71,7 @@ class TaskCommentController extends AccountBaseController
             Notification::send($user, new TaskCommentNotification($task,$sender));
         }
 
-        $view = view('tasks.ajax.files', $this->data)->render();
+        $view = view('tasks.comments.show', $this->data)->render();
 
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
     }
