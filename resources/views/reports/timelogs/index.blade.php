@@ -96,11 +96,16 @@
 
 @endsection
 
+
+
 @section('content')
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper">
         <!-- Add Task Export Buttons Start -->
         <div class="d-flex flex-column">
+            
+
+
             <!-- TASK STATUS START -->
             <x-cards.data id="task-chart-card" :title="__($pageTitle)" padding="false">
             </x-cards.data>
@@ -115,7 +120,11 @@
         <!-- Task Box Start -->
         <div class="d-flex flex-column w-tables rounded mt-4 bg-white">
 
-            {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
+            {{-- {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!} --}}
+
+            {{-- Time Log Table --}}
+            <div id="timeLogTable"></div>
+            {{-- End Time Log Table --}}
 
         </div>
         <!-- Task Box End -->
@@ -123,6 +132,7 @@
     <!-- CONTENT WRAPPER END -->
 
 @endsection
+
 
 @push('scripts')
     @include('sections.datatable_js')
@@ -273,4 +283,10 @@
         pieChart();
 
     </script>
+@endpush
+
+
+
+@push("scripts")
+    <script src="/js/app.js"></script>
 @endpush

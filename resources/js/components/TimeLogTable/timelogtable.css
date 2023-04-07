@@ -1,0 +1,24 @@
+.time-log-table__tabs{
+    display: flex;
+    display: -ms-flexbox;
+    align-items: center;
+}
+
+.time-log-table__tabs > button{
+    margin-right: 16px;
+    transition: all .4s ease-in-out;
+    font-size: 14px;
+}
+
+
+.time-log-table__tabs > button.active{
+    border: 1px solid #1D82F5;
+    background: #fff;
+    color: #1D82F5;
+}
+
+
+.time-log-table__tabs > button.active{
+    background: #1D82F5;
+    color: #fff;
+}

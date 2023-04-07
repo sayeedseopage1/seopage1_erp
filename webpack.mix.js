@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,26 +11,31 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/bootstrap.js', 'public/js')
-.scripts([
-    'public/js/bootstrap.js',
-    'public/vendor/bootstrap/js/bootstrap.bundle.min.js',
-    'public/vendor/moment/moment-with-locales.min.js',
-    'public/vendor/jquery/all.min.js',
-    'public/vendor/jquery/datepicker.min.js',
-    'public/vendor/jquery/select2.min.js',
-    'public/vendor/jquery/plugins.bundle.min.js',
-    'public/vendor/jquery/scripts.bundle.min.js',
-    'public/vendor/froiden-helper/helper.js',
-    'node_modules/dropify/src/js/dropify.js',
-    'node_modules/sweetalert2/dist/sweetalert2.all.min.js',
-    'node_modules/cropperjs/dist/cropper.js',
-    'node_modules/bootstrap-select/js/bootstrap-select.js',
-    'node_modules/quill/dist/quill.min.js',
-    'node_modules/quill-emoji/dist/quill-emoji.js',
-    'resources/js/main.js',
-    'resources/js/custom.js'
-], 'public/js/main.js')
-.sass('resources/scss/main.scss', 'public/css')
-.options({processCssUrls: false})
-.sourceMaps(true, 'source-map')
+mix.js("resources/js/bootstrap.js", "public/js")
+    .scripts(
+        [
+            "public/js/bootstrap.js",
+            "public/vendor/bootstrap/js/bootstrap.bundle.min.js",
+            "public/vendor/moment/moment-with-locales.min.js",
+            "public/vendor/jquery/all.min.js",
+            "public/vendor/jquery/datepicker.min.js",
+            "public/vendor/jquery/select2.min.js",
+            "public/vendor/jquery/plugins.bundle.min.js",
+            "public/vendor/jquery/scripts.bundle.min.js",
+            "public/vendor/froiden-helper/helper.js",
+            "node_modules/dropify/src/js/dropify.js",
+            "node_modules/sweetalert2/dist/sweetalert2.all.min.js",
+            "node_modules/cropperjs/dist/cropper.js",
+            "node_modules/bootstrap-select/js/bootstrap-select.js",
+            "node_modules/quill/dist/quill.min.js",
+            "node_modules/quill-emoji/dist/quill-emoji.js",
+            "resources/js/main.js",
+            "resources/js/custom.js",
+        ],
+        "public/js/main.js"
+    )
+    .sass("resources/scss/main.scss", "public/css")
+    .options({ processCssUrls: false })
+    .sourceMaps(true, "source-map");
+
+mix.js("resources/js/app.jsx", "public/js").react();
