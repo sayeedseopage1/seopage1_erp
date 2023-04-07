@@ -405,7 +405,7 @@ class ProjectMilestoneController extends AccountBaseController
         $activity->save();
         $project_update_status= Project::find($update_project->id);
         if ($update_project->due < 3) {
-          $project_update_status->status = 'finished';
+          $project_update_status->status = 'partially finished';
           $project_update_status->completion_percent= 100;
           //$var= Project::where('id',$request->project_id)->first();
           $date1 = new DateTime($project['start_date']);

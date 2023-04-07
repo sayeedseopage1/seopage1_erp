@@ -81,7 +81,16 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                     {{ trans('app.' . $item->status) }}
                                 @else
                                     <i class="fa fa-circle mr-1 text-red f-10"></i>
+                                     @if($item->status == 'canceled')
+                                  
+                                    
+                                      <span>  {{ trans('app.' . $item->status) }}
+                                        <br>
+                                        {!!$item->comments!!}
+                                    </span>
+                                    @else
                                     {{ trans('app.' . $item->status) }}
+                                    @endif
                                 @endif
                             </td>
                             <td>
