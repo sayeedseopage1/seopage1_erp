@@ -28,7 +28,7 @@
 
 
 <div class="card border-0 invoice mt-5">
-   <div class="col-md-12" align-item="right">
+   <div class="col-md-12" align="right">
      @php
 
      $client= App\Models\User::where('id',$project->client_id)->first();

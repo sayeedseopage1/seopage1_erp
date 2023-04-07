@@ -32,7 +32,6 @@ class TimelogReportController extends AccountBaseController
             $this->projects = Project::allProjects();
             $this->tasks = Task::all();
         }
-        //$this->timelogs= 
 
         // return view('admin.reports.time-log.index', $this->data);
         return $dataTable->render('reports.timelogs.index', $this->data);
