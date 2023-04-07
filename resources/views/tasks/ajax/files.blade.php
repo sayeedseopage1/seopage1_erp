@@ -111,7 +111,7 @@
 					    <p>{!! ucfirst($comment->comment) !!}</p>
 					    <button type="button" data-toggle="reply-form" data-target="comment-{{$comment->id}}-reply-form">Reply</button>
 					    @if($comment->added_by == Auth::id())
-					    	<button type="button" class="text-danger edit-comment" comment_type="comment" data-content="{{$comment->comment}}" data-id="{{$comment->id}}">Edit</button>
+					    	<button type="button" class="text-primary edit-comment" comment_type="comment" data-content="{{$comment->comment}}" data-id="{{$comment->id}}">Edit</button>
 					    @endif
 					    <button type="button" class="text-danger delete-comment" comment_type="comment" data-id="{{$comment->id}}">Delete</button>
 
@@ -169,8 +169,8 @@
 				                        {!! ucfirst($reply->reply) !!}
 				                    </p>
 				                    <button type="button" data-toggle="reply-form" data-target="comment-{{$reply->id}}-reply-form">Reply</button>
-				                    @if($comment->added_by == Auth::id())
-								    	<button type="button" class="text-danger edit-comment" comment_type="reply" data-content="{{$reply->reply}}" data-id="{{$comment->id}}">Edit</button>
+				                    @if($reply->added_by == Auth::id())
+								    	<button type="button" class="text-primary edit-comment" comment_type="reply" data-content="{{$reply->reply}}" data-id="{{$reply->id}}">Edit</button>
 								    @endif
 				                    <button type="button" class="text-danger delete-comment" comment_type="reply" data-id="{{$reply->id}}">Delete</button>
 
@@ -239,7 +239,6 @@
                         </div>
                     </x-slot>
                 @endif
-
             </x-file-card>
         @empty
             <x-cards.no-record :message="__('messages.noFileUploaded')" icon="file" />
@@ -257,12 +256,15 @@
     			</div>
     			<div class="modal-body">
     				<form method="POST" action="" id="editForm">
-    					<textarea class="w-100" id="edit_comment" name="edit_comment" placeholder="Reply to comment" rows="4"></textarea>
+                        @csrf
+                        <input type="hidden" name="editID" id="editID" value="">
+                        <input type="hidden" name="editMode" id="editMode" value="">
+    					<textarea class="w-100" id="edit_comment" name="comment" placeholder="Reply to comment" rows="4"></textarea>
     				</form>
     			</div>
     			<div class="modal-footer">
     				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    				<button type="button" class="btn btn-primary">Save changes</button>
+    				<button type="button" class="btn btn-primary" id="commentSave">Save changes</button>
     			</div>
     		</div>
     	</div>
@@ -350,7 +352,28 @@
 
 		$('.edit-comment').click(function(e) {
 			$('#edit_comment').html($(this).data('content'));
+            $('#editID').val($(this).attr('data-id'));
+            $('#editMode').val($(this).attr('comment_type'));
 			$('#editCommentModal').modal('show');
-		})
+		});
+
+        $('#commentSave').click(function(e) {
+            e.preventDefault();
+            $('#editCommentModal').modal('hide');
+            var formData = $('#editForm').serialize();
+
+            var url = '{{route("taskComment.update", ":id")}}';
+            url = url.replace(':id', $('#editID').val());
+            $.ajax({
+                type: 'PUT',
+                url: url,
+                data: formData,
+                success: function(response) {
+                    if (response.status == "success") {
+                        $('#comment-list').html(response.view);
+                    }
+                }
+            });
+        });
 	})
 </script>
