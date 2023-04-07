@@ -33,37 +33,7 @@ class TimelogReportController extends AccountBaseController
             $this->tasks = Task::all();
         }
 
-        // $this->timelogs = ProjectTimeLog::select([
-        //     'projects.project_name', 
-        //     'pm.name as project_manager', 
-        //     'client.name as client',
-        //     DB::raw('COUNT(project_time_logs.id) as time_logs_count'),
-        //     DB::raw('sum(project_time_logs.total_minutes) as total_minutes'),
-        // ])
-        // ->join('users as u', 'project_time_logs.user_id', '=', 'u.id')
-        // ->join('projects', 'project_time_logs.project_id', '=', 'projects.id')
-        // ->join('users as pm', 'projects.pm_id', '=', 'pm.id')
-        // ->join('users as client', 'projects.client_id', '=', 'client.id')
-        // ->groupBy('project_time_logs.project_id')
-        // ->get();
-
-        // $this->timelogs = User::select([
-        //     'users.name as emp_name',
-        //     'projects.project_name', 
-        //     'pm.name as project_manager', 
-        //     'client.name as client',
-        //     DB::raw('COUNT(project_time_logs.id) as time_logs_count'),
-        //     DB::raw('sum(project_time_logs.total_minutes) as total_minutes'),
-        //     //DB::raw('select * from project_time_logs WHERE project_id = 309'),
-        // ])
-        // ->join('project_time_logs', 'users.id', 'project_time_logs.user_id')
-        // ->join('projects', 'project_time_logs.project_id', '=', 'projects.id')
-        // ->join('users as pm', 'projects.pm_id', '=', 'pm.id')
-        // ->join('users as client', 'projects.client_id', '=', 'client.id')
-        // ->whereIn('users.role_id', [5, 9, 10])
-        // ->groupBy('project_time_logs.project_id')
-        // ->get();
-
+        
         $users = DB::table('users')->select('id', 'name')->whereIn('role_id', [5, 9, 10])->get();
         foreach ($users as $key => $value) {
             $value->tasks = DB::table('project_time_logs')->select([

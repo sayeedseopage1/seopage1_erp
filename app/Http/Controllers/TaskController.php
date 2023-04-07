@@ -1194,7 +1194,7 @@ class TaskController extends AccountBaseController
         if ($subTask->count() >=1){
 //            $task = $request->id;
 //            $tasks = $task->subtasks;
-//            $taskBoardStatus = TaskboardColumn::all();
+        //    /$taskBoardStatus = TaskboardColumn::all();
 //            $project = $task->project;
             $html = view('tasks.ajax.showSubTask',compact( 'subTask'))->render();
             dd($html);
