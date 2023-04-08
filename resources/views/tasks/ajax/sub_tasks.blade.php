@@ -164,6 +164,7 @@
                             <x-forms.input-group>
                                 <select class="form-control select-picker" name="user_id"
                                         id="subTaskAssignee" data-live-search="true">
+                                    <option value="" selected>--</option>
                                     <?php
                                     $users= App\Models\User::where('role_id',5)->get();
 
@@ -209,6 +210,7 @@
                             <x-forms.input-group>
                                 <select class="form-control select-picker" name="observer_id"
                                         id="subTaskAssignee2" data-live-search="true">
+                                    <option value="" selected>--</option>
                                     <?php
                                     $users= App\Models\User::where('role_id',5)->get();
 
