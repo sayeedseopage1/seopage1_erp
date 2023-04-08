@@ -503,8 +503,8 @@ class TaskController extends AccountBaseController
         if($left_minutes < 1)
         {
            
-           // Toastr::error('Estimate hours cannot exceed from project allocation hours!!!', 'Failed', ["positionClass" => "toast-top-right"]);
-           // return redirect()->back()->withErrors(['error' => 'Estimate hours cannot exceed from project allocation hours!!!']);
+           Toastr::error('Estimate hours cannot exceed from project allocation hours!!!', 'Failed', ["positionClass" => "toast-top-right"]);
+           return redirect()->back()->withErrors(['error' => 'Estimate hours cannot exceed from project allocation hours!!!']);
         }
        // dd($request);
         $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
