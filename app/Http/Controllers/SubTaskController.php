@@ -41,6 +41,16 @@ class SubTaskController extends AccountBaseController
      */
     public function store(StoreSubTask $request)
     {
+        $check_estimation = Task::where('id',$request->task_id)->first();
+        $hours= $request->estimate_hours *60 ;
+        $minutes= $request->estimate_minutes;
+        $total_minutes= $hours+$minutes;
+        if($check_estimation->estimate_time_left_minutes - $total_minutes <= 0 )
+        {
+           // dd('true',$check_estimation->estimate_time_left_minutes -$total_minutes );
+
+           //need validation here
+        }
         $this->addPermission = user()->permission('add_sub_tasks');
         $task = Task::findOrFail($request->task_id);
         $taskUsers = $task->users->pluck('id')->toArray();
@@ -107,9 +117,7 @@ class SubTaskController extends AccountBaseController
         // $task_user->user_id= $request->user_id ? $request->user_id : null;
         //
         // $task_user->save();
-        $hours= $request->estimate_hours *60 ;
-        $minutes= $request->estimate_minutes;
-        $total_minutes= $hours+$minutes;
+       
         $parent_task= Task::where('id',$subTask->task_id)->first();
         $parent_task_update= Task::find($parent_task->id);
         $parent_task_update->estimate_time_left_minutes= $parent_task->estimate_time_left_minutes - $total_minutes;
