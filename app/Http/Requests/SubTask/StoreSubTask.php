@@ -36,7 +36,8 @@ class StoreSubTask extends FormRequest
         $rules = [
             'title' => 'required',
             'estimate_hours'=> 'required',
-            'estimate_minutes'=> 'required'
+            'estimate_minutes'=> 'required',
+            'user_id'=>'required
         ];
 
         $dueDateRule = 'nullable|date_format:"' . $setting->date_format . '"|after_or_equal:' . $startDate;

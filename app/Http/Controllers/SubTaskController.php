@@ -117,10 +117,13 @@ class SubTaskController extends AccountBaseController
         // $task_user->user_id= $request->user_id ? $request->user_id : null;
         //
         // $task_user->save();
+        $hours_s= $request->estimate_hours *60 ;
+        $minutes_s= $request->estimate_minutes;
+        $total_minutes_s= $hours_s+$minutes_s;
        
         $parent_task= Task::where('id',$subTask->task_id)->first();
         $parent_task_update= Task::find($parent_task->id);
-        $parent_task_update->estimate_time_left_minutes= $parent_task->estimate_time_left_minutes - $total_minutes;
+        $parent_task_update->estimate_time_left_minutes= $parent_task->estimate_time_left_minutes - $total_minutes_s;
         $parent_task_update->save();
 
 
