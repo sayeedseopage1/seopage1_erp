@@ -361,7 +361,7 @@
                         </div>
                     </div> --}}
 
-                    <div class="col-md-6 col-lg-3" >
+                    <div class="col-md-6 col-lg-6" >
                         <label class="mt-5" for="">Set Estimate Time</label>
                         <sup style="color:red;">*</sup>
                         <div class="form-group ">
@@ -380,6 +380,12 @@
                             @enderror
                             @lang('app.mins')
                         </div>
+                        @php
+                            $hours = round($task->estimate_time_left_minutes /60 ,0);
+                            $minutes= $task->estimate_time_left_minutes %60;
+                        @endphp
+
+                        <h6 style="color:red;">Estimation time can't exceed {{$hours}} hours {{$minutes}} minutes</h6>
                     </div>
 
                 </div>
