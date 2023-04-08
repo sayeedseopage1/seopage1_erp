@@ -104,8 +104,6 @@
         <!-- Add Task Export Buttons Start -->
         <div class="d-flex flex-column">
             
-
-
             <!-- TASK STATUS START -->
             <x-cards.data id="task-chart-card" :title="__($pageTitle)" padding="false">
             </x-cards.data>
@@ -123,7 +121,7 @@
             {{-- {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!} --}}
             {{-- {{dd(json_encode($users))}}) --}}
             
-    <!-- Add Task Export Buttons End -->
+             <!-- Add Task Export Buttons End -->
             {{-- Time Log Table --}}
             <div id="timeLogTable"></div>
             {{-- passing variable to react component from laravel --}}

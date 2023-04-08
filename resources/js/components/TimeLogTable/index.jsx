@@ -12,7 +12,7 @@ const TableTab = ({ activeTab, onClick, title, className = "" }) => {
         <button
             type="button"
             onClick={() => onClick(title.toLowerCase())}
-            className={`btn btn-sm btn-outline-primary ${isActive ? "active" : ""
+            className={`btn btn-sm btn-outline-primary mr-2 mb-2 ${isActive ? "active" : ""
                 } ${className}`}
         >
             {title}
@@ -27,7 +27,7 @@ export const TimeLogTable = () => {
 
     return (
         <div className="p-4 w-100">
-            <div className="flex items-center gap-3">
+            <div className="d-flex align-items-center flex-wrap bg-red-500">
 
                 <TableTab
                     title="Employee Wise"

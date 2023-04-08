@@ -5,23 +5,25 @@ const Pagination = () => {
     const { table } = useContext(TableContext);
 
     return (
-        <div className="drag-table__pagination">
-            Show
-            <select
-                className="drag-table__pagination-select"
-                value={table.getState().pagination.pageSize}
-                onChange={(e) => {
-                    table.setPageSize(Number(e.target.value));
-                }}
-            >
-                {[1, 10, 20, 50, 80, 100].map((pageSize) => (
-                    <option key={pageSize} value={pageSize}>
-                        {pageSize}
-                    </option>
-                ))}
-            </select>
-            entries
-            <div className="drag-table__pagination-text-group ms-auto">
+        <div className="drag-table__pagination mb-3">
+            <div>
+                Show
+                <select
+                    className="drag-table__pagination-select mx-2"
+                    value={table.getState().pagination.pageSize}
+                    onChange={(e) => {
+                        table.setPageSize(Number(e.target.value));
+                    }}
+                >
+                    {[1, 10, 20, 50, 80, 100].map((pageSize) => (
+                        <option key={pageSize} value={pageSize}>
+                            {pageSize}
+                        </option>
+                    ))}
+                </select>
+                entries
+            </div>
+            <div className="drag-table__pagination-text-group ml-md-auto">
                 <span className="drag-table__pagination-text">
                     Page{" "}
                     <strong>

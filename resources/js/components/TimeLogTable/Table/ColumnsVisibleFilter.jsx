@@ -33,7 +33,7 @@ const ColumnsVisibleFilter = () => {
     }, [isFilterOpen]);
 
     return (
-        <div className="table-column-visible " >
+        <div className="table-column-visible employee_wise_table_visible mr-2 mb-2" >
             {/* toggle */}
             <div
                 className="employee-wise__col_filter_toggle"

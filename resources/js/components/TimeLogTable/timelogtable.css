@@ -1,3 +1,6 @@
+html{
+    overflow-x: hidden !important;
+}
 .time-log-table__tabs{
     display: flex;
     display: -ms-flexbox;
@@ -28,15 +31,18 @@
 /* time log table */
 
 /* table column filter */
+.employee_wise_table_visible{
+    width: fit-content;
+}
 .employee-wise__col_filter_toggle{
     display: flex;
     display: -ms-flexbox;
     align-items: center;
-    padding: 4px;
+    padding:3px 4px;
     font-size: 14px;
     color: #1D82F5;
     border: 1px solid #1D82F5;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     transition: all .2s ease-in-out;
 }
