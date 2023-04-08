@@ -332,9 +332,6 @@ class TasksDataTable extends BaseDataTable
                         $timeL .= ($totalMinutes) % 60 . ' ' . __('app.mins');
                     }
                     return $timeL;
-                    if ($row->id == 570) {
-                        //dd('ok');
-                    }
                 }
             });
 

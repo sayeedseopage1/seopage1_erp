@@ -70,4 +70,12 @@ class ProjectMilestone extends BaseModel
     {
         return $this->belongsTo(Currency::class, 'original_currency_id');
     }
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class, 'invoice_id');
+    }
+    public function deliverables()
+    {
+        return $this->belongsTo(ProjectDeliverable::class, 'id', 'milestone_id');
+    }
 }
