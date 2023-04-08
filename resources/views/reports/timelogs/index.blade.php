@@ -7,10 +7,10 @@
 
 @section('filter-section')
 
-{{dd($users)}}
+
     <x-filters.filter-box>
         <!-- DATE START -->
-        <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
+        <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0" style="z-index: 1000">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.date')</p>
             <div class="select-status d-flex">
                 <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500"
@@ -121,11 +121,18 @@
         <div class="d-flex flex-column w-tables rounded mt-4 bg-white">
 
             {{-- {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!} --}}
-
+            {{-- {{dd(json_encode($users))}}) --}}
+            
+    <!-- Add Task Export Buttons End -->
             {{-- Time Log Table --}}
             <div id="timeLogTable"></div>
-            {{-- End Time Log Table --}}
+            {{-- passing variable to react component from laravel --}}
+            @push('scripts')
+                <script src="{{ asset('js/app.js') }}"></script>
+            @endpush    
 
+            {{-- app js --}}
+                {{-- End Time Log Table --}}
         </div>
         <!-- Task Box End -->
     </div>
@@ -286,7 +293,3 @@
 @endpush
 
 
-
-@push("scripts")
-    <script src="/js/app.js"></script>
-@endpush

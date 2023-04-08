@@ -2,6 +2,8 @@
     display: flex;
     display: -ms-flexbox;
     align-items: center;
+    flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
 }
 
 .time-log-table__tabs > button{
@@ -21,4 +23,42 @@
 .time-log-table__tabs > button.active{
     background: #1D82F5;
     color: #fff;
+}
+
+/* time log table */
+
+/* table column filter */
+.employee-wise__col_filter_toggle{
+    display: flex;
+    display: -ms-flexbox;
+    align-items: center;
+    padding: 4px;
+    font-size: 14px;
+    color: #1D82F5;
+    border: 1px solid #1D82F5;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+
+.employee-wise__col_filter_toggle:hover{
+    background: #1D82F5;
+    color: white;
+}
+
+.employee-table__dd_wrapper{
+    height: fit-content;
+    max-height: 300px;
+}
+
+
+.employee-table_filter_dd{
+    padding: 10px;
+}
+
+.table_filter_checkbox{
+    display: flex;
+    display: -ms-flexbox;
+    align-items: center;
+    font-size: 14px;
 }

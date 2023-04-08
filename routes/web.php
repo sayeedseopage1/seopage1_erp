@@ -1181,4 +1181,4 @@ Route::controller(DealController::class)->group(function(){
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
 
-
+Route::get('get-timelogs', [TimelogReportController::class, 'getTimeLog'])->name('get-timelogs');

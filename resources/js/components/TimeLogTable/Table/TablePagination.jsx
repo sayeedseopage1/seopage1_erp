@@ -14,7 +14,7 @@ const Pagination = () => {
                     table.setPageSize(Number(e.target.value));
                 }}
             >
-                {[10, 20, 50, 80, 100].map((pageSize) => (
+                {[1, 10, 20, 50, 80, 100].map((pageSize) => (
                     <option key={pageSize} value={pageSize}>
                         {pageSize}
                     </option>

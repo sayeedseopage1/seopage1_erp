@@ -3,8 +3,12 @@ import _ from "lodash";
 import React, { useState } from "react";
 import { TableContext } from "./TableContext";
 import CustomScrollbar from "../../CustomScrollbar";
+import ReactDOM from 'react-dom/client'
 
-const ColumnsVisibleFilter = ({ classes }) => {
+import { MdOutlineSettingsSuggest } from 'react-icons/md'
+
+
+const ColumnsVisibleFilter = () => {
     const { table } = React.useContext(TableContext);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -29,27 +33,19 @@ const ColumnsVisibleFilter = ({ classes }) => {
     }, [isFilterOpen]);
 
     return (
-        <div className="table-column-visible">
+        <div className="table-column-visible " >
             {/* toggle */}
             <div
-                className={`table-column-visible__toggle ${classes.filterToggle}`}
+                className="employee-wise__col_filter_toggle"
                 onClick={toggle}
             >
                 <div
-                    className={`table-column-visible__toggle-icon ${classes.filterToggleIcon}`}
+                    className="employee-wise__col_filter_icon mb-1 mr-1"
                 >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        viewBox="0 0 16 16"
-                    >
-                        <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z" />
-                    </svg>
+                    <MdOutlineSettingsSuggest />
                 </div>
                 <div
-                    className={`table-column-visible__toggle-text ${classes.filterToggleText}`}
+                    className={`table-column-visible__toggle-text`}
                 >
                     <span>Filter Columns</span>
                 </div>
@@ -58,16 +54,16 @@ const ColumnsVisibleFilter = ({ classes }) => {
             <AnimatePresence>
                 {isFilterOpen && (
                     <motion.div
-                        initial={{ opacity: 0, height: 0, y: -10 }}
-                        animate={{ opacity: 1, height: "300px", y: 0 }}
-                        exit={{ opacity: 0, height: 0, y: -10 }}
-                        className={`table-column-visible__filter ${classes.filterDropdown}`}
+                        initial={{ opacity: 0, pointerEvents: 'none', y: 15 }}
+                        animate={{ opacity: 1, pointerEvents: 'all', y: 0 }}
+                        exit={{ opacity: 0, pointerEvents: 'none', y: 15 }}
+                        className={`table-column-visible__filter employee-table__dd_wrapper`}
                     >
-                        <CustomScrollbar minH={300} maxH={300}>
-                            <div className="table-column-visible__filter-header">
+                        <CustomScrollbar maxH={'100%'}>
+                            <div className="table-column-visible__filter-header employee-table_filter_dd">
                                 {/* check all */}
                                 <div
-                                    className="table-column-visible__filter-header-check-all"
+                                    className="table-column-visible__filter-header-check-all table_filter_checkbox"
                                     onMouseDown={() =>
                                         localStorage.removeItem(
                                             "visibleColumns"
@@ -78,19 +74,21 @@ const ColumnsVisibleFilter = ({ classes }) => {
                                         {...{
                                             type: "checkbox",
                                             id: "dragTableCheckAllColumn",
+                                            className: "mb-2",
                                             checked:
                                                 table.getIsAllColumnsVisible(),
                                             onChange:
                                                 table.getToggleAllColumnsVisibilityHandler(),
                                         }}
                                     />
-                                    <label htmlFor="dragTableCheckAllColumn">
+                                    <label htmlFor="dragTableCheckAllColumn mt-1">
                                         Select All
                                     </label>
                                 </div>
 
                                 {/* check individual */}
                                 {table?.getAllLeafColumns()?.map((column) => {
+                                    if (column.id === 'employee_name') return;
                                     return (
                                         <div
                                             key={column.id}
@@ -100,6 +98,7 @@ const ColumnsVisibleFilter = ({ classes }) => {
                                                 {...{
                                                     type: "checkbox",
                                                     id: `dragTableCheckColumn-${column.id}`,
+                                                    className: 'mb-1',
                                                     checked:
                                                         column.getIsVisible(),
                                                     onChange:
@@ -108,6 +107,7 @@ const ColumnsVisibleFilter = ({ classes }) => {
                                             />
                                             <label
                                                 htmlFor={`dragTableCheckColumn-${column.id}`}
+                                                className="mt-1"
                                             >
                                                 {_.upperFirst(column.id)}
                                             </label>
@@ -124,3 +124,12 @@ const ColumnsVisibleFilter = ({ classes }) => {
 };
 
 export default ColumnsVisibleFilter;
+
+
+const DOMRef = document.getElementById('employeeWiseTableColumnFilterBar');
+if (DOMRef) {
+    const root = ReactDOM.createRoot(DOMRef);
+    root.render(
+        <ColumnsVisibleFilter />
+    )
+}

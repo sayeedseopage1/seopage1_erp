@@ -1,15 +1,13 @@
 import * as React from "react";
 
-import { TableContext, TableStateProvider } from "./TableContext";
+import { TableContext } from "./TableContext";
 import TableHeader from "./TableHeader";
 import { DndProvider } from "react-dnd/dist";
 import { HTML5Backend } from "react-dnd-html5-backend/dist";
-
-import "./table.css";
 import { flexRender } from "@tanstack/react-table";
 import ColumnsVisibleFilter from "./ColumnsVisibleFilter";
 import Pagination from "./TablePagination";
-import CustomScrollbar from "../../CustomScrollbar";
+import '../../Table/table.css'
 
 const classNames = {
     tableClass: "",
@@ -25,7 +23,7 @@ const classNames = {
     filterDropdownItem: "",
 };
 
-const DataTable = ({ data, columns, visibleColumns, classes = classNames }) => {
+const DataTable = ({ data, columns, visibleColumns, classes = classNames, tableName, subRows }) => {
 
     const {
         table,
@@ -33,6 +31,7 @@ const DataTable = ({ data, columns, visibleColumns, classes = classNames }) => {
         setTableData,
         setColumnOrder,
         setColumnVisibility,
+        // setSubRows
     } = React.useContext(TableContext);
 
     // memories the columns and data
@@ -60,10 +59,19 @@ const DataTable = ({ data, columns, visibleColumns, classes = classNames }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // sub row change
+    // React.useEffect(() => {
+    //     if (subRows) {
+    //         setSubRows(subRows)
+    //     } else setSubRows(
+    //         row => row.subRows
+    //     )
+    // }, [])
+
     // set the column order
     React.useEffect(() => {
         // check if the column order is set in local storage
-        const columnOrderFromLocalStorage = localStorage.getItem("columnOrder");
+        const columnOrderFromLocalStorage = localStorage.getItem(`${tableName}ColumnOrder`);
         if (columnOrderFromLocalStorage) {
             setColumnOrder(JSON.parse(columnOrderFromLocalStorage));
         } else {
@@ -76,15 +84,11 @@ const DataTable = ({ data, columns, visibleColumns, classes = classNames }) => {
     if (!data) return null;
     return (
         <div className="drag-table-container">
-            <div className={`drag-table__filter-bar ${classes.filterBarClass}`}>
-                {/* <ColumnsVisibleFilter classes={classes} /> */}
-            </div>
-
             <div className="drag-table__wrapper">
                 {/* drag table */}
                 {!table ? null : (
                     <DndProvider backend={HTML5Backend}>
-                        <table className="drag-table">
+                        <table className="table">
                             <thead>
                                 {table
                                     ?.getHeaderGroups()
@@ -106,13 +110,14 @@ const DataTable = ({ data, columns, visibleColumns, classes = classNames }) => {
                                 {table?.getRowModel()?.rows?.map((row) => (
                                     <React.Fragment key={row.id}>
                                         <tr
-                                            className="drag-table_row"
+                                            className="drag-table_row text-primary"
                                             style={{
 
                                                 background: row.subRows
                                                     ?.length
-                                                    ? "#e0e0e0"
+                                                    ? "#F8F8F8"
                                                     : "none",
+
                                             }}
                                         >
                                             {row
@@ -123,12 +128,16 @@ const DataTable = ({ data, columns, visibleColumns, classes = classNames }) => {
                                                         .getValue() ? (
                                                         <td
                                                             key={cell.id}
-                                                            className="drag-table_cell"
+                                                            className="drag-table_cell px-2"
                                                             rowSpan={
                                                                 row.subRows
                                                                     ?.length + 1
                                                             }
-                                                            style={{ borderBottom: "3px solid red", }}
+                                                            style={{
+                                                                borderBottom: row.subRows?.length ? "2px solid #AAD1FC" : '',
+                                                                minWidth: '160px',
+                                                                fontSize: '12px'
+                                                            }}
                                                         >
                                                             {flexRender(
                                                                 cell.column
@@ -141,42 +150,46 @@ const DataTable = ({ data, columns, visibleColumns, classes = classNames }) => {
                                                 )}
                                         </tr>
 
-                                        {row.subRows?.map((subRow, subRowIndex) => (
-                                            <tr
-                                                key={subRow.id}
-                                                className="drag-table_row"
-                                            >
-                                                {subRow.getVisibleCells()?.map(
-                                                    (cell, index) =>
-                                                        !row
-                                                            .getVisibleCells()
-                                                            ?.find(
-                                                                (parentCell) =>
-                                                                    parentCell.id ===
-                                                                    cell.id
-                                                            ) &&
-                                                        (cell
-                                                            .getContext()
-                                                            .getValue() ? (
-                                                            <td
-                                                                key={cell.id}
-                                                                className="drag-table_cell"
-                                                                style={{
-                                                                    borderBottom: subRowIndex === row.subRows.length - 1 ? '3px solid red' : ''
-                                                                }}
-                                                            >
+                                        {
+                                            row.subRows?.map((subRow, subRowIndex) => (
+                                                <tr
+                                                    key={subRow.id}
+                                                    className="drag-table_row"
+                                                >
+                                                    {subRow.getVisibleCells()?.map(
+                                                        (cell, index) =>
+                                                            !row
+                                                                .getVisibleCells()
+                                                                ?.find(
+                                                                    (parentCell) =>
+                                                                        parentCell.id ===
+                                                                        cell.id
+                                                                ) &&
+                                                            (cell
+                                                                .getContext()
+                                                                .getValue() ? (
+                                                                <td
+                                                                    key={cell.id}
+                                                                    className="drag-table_cell text-primary px-2"
+                                                                    style={{
+                                                                        borderBottom: subRowIndex === row.subRows.length - 1 ? '2px solid #AAD1FC' : '1px solid #E7EFFC',
+                                                                        minWidth: '160px',
+                                                                        fontSize: '12px'
+                                                                    }}
+                                                                >
 
-                                                                {flexRender(
-                                                                    cell.column
-                                                                        .columnDef
-                                                                        .cell,
-                                                                    cell.getContext()
-                                                                )}
-                                                            </td>
-                                                        ) : null)
-                                                )}
-                                            </tr>
-                                        ))}
+                                                                    {flexRender(
+                                                                        cell.column
+                                                                            .columnDef
+                                                                            .cell,
+                                                                        cell.getContext()
+                                                                    )}
+                                                                </td>
+                                                            ) : null)
+                                                    )}
+                                                </tr>
+                                            ))
+                                        }
                                     </React.Fragment>
                                 ))}
                             </tbody>
@@ -193,14 +206,4 @@ const DataTable = ({ data, columns, visibleColumns, classes = classNames }) => {
     );
 };
 
-const Table = ({ data, columns, visibleColumns }) => (
-    <TableStateProvider>
-        <DataTable
-            data={data}
-            columns={columns}
-            visibleColumns={visibleColumns}
-        />
-    </TableStateProvider>
-);
-
-export default Table;
+export default DataTable;

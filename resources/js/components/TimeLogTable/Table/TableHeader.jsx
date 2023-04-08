@@ -9,7 +9,7 @@ const TableHeader = ({ header, table }) => {
 
     const reorderColumn = (draggedColumnId, targetColumnId, columnOrder) => {
 
-        console.log('old col:', columnOrder)
+
         columnOrder.splice(
             columnOrder.indexOf(targetColumnId),
             0,
@@ -24,6 +24,7 @@ const TableHeader = ({ header, table }) => {
     const [, drop] = useDrop({
         accept: "column",
         drop: (draggedColumn) => {
+
             // reorder the columns
             const newColumnOrder = reorderColumn(
                 draggedColumn.id,
@@ -32,7 +33,7 @@ const TableHeader = ({ header, table }) => {
             );
             // save to local storage
             setColumnOrder(newColumnOrder);
-            localStorage.setItem("columnOrder", JSON.stringify(newColumnOrder));
+            localStorage.setItem(`${tableName}ColumnOrder`, JSON.stringify(newColumnOrder));
         },
     });
 
@@ -49,24 +50,19 @@ const TableHeader = ({ header, table }) => {
         <th
             ref={drop}
             colSpan={column.colSpan}
-            className="drag-table__header"
-            style={{ opacity: isDragging ? 0 : 1 }}
+            className="drag-table__header py-3 text-primary bg-white "
+            style={{
+                opacity: isDragging ? 0 : 1,
+                borderBottom: '2px solid #AAD1FC',
+                minWidth: '160px',
+                fontSize: '12px'
+            }}
         >
-            <div ref={previewRef} className="drag-table__header-wrapper">
-                <div ref={dragRef} className="drag-table__header-drag" />
-                <div className="drag-table__header-content">
-                    {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                        )}
-                </div>
-
+            <div ref={previewRef} className="drag-table__header-wrapper d-flex align-items-center pr-5">
                 {/* sort */}
                 <div
                     {...{
-                        className: "drag-table__header-sort",
+                        className: "drag-table__header-sort left-0 pr-1",
                         onClick: header.column.getToggleSortingHandler(),
                     }}
                 >
@@ -87,6 +83,25 @@ const TableHeader = ({ header, table }) => {
                         </>
                     )}
                 </div>
+                <div className="position-relative">
+                    <div ref={header.column.id === 'employee_name' ? null : dragRef} className="drag-table__header-drag"
+
+                        style={{
+                            cursor: header.column.id === 'employee_name' ? 'default' : 'move',
+                            userSelect: 'none'
+                        }}
+                    />
+                    <div className="drag-table__header-content">
+                        {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                            )}
+                    </div>
+                </div>
+
+
             </div>
         </th>
     );

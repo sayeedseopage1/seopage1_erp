@@ -10,8 +10,8 @@ const mix = require("laravel-mix");
  | file for the application as well as bundling up all the JS files.
  |
  */
-
-mix.js("resources/js/bootstrap.js", "public/js")
+mix.js("resources/js/app.jsx", "public/js")
+    .react()
     .scripts(
         [
             "public/js/bootstrap.js",
@@ -37,5 +37,3 @@ mix.js("resources/js/bootstrap.js", "public/js")
     .sass("resources/scss/main.scss", "public/css")
     .options({ processCssUrls: false })
     .sourceMaps(true, "source-map");
-
-mix.js("resources/js/app.jsx", "public/js").react();

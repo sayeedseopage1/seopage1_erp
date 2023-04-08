@@ -30,7 +30,12 @@ export const TableStateProvider = ({ children }) => {
         id: false,
     });
     const [sorting, setSorting] = React.useState([]);
-    const [expanded, setExpanded] = React.useState({});
+    const [expanded, setExpanded] = React.useState(true);
+    const [pagination, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 1
+    });
+    // const [subRows, setSubRows] = React.useState(row => row.subRows);
 
     // get row id
     const getRowId = React.useCallback((row) => row.id, []);
@@ -39,15 +44,15 @@ export const TableStateProvider = ({ children }) => {
         data: tableData,
         columns: tableColumns,
         state: {
-            expanded,
+            pagination,
             sorting,
             columnOrder,
             columnVisibility,
             rowSelection: selectedRows,
         },
         getRowId,
-        getSubRows: (row) => row.task,
-        paginateExpandedRows: true,
+        getSubRows: row => row.tasks,
+        onPaginationChange: setPagination,
         enableExpanding: true,
         onSortingChange: setSorting,
         getExpandedRowModel: getExpandedRowModel(),
@@ -57,8 +62,8 @@ export const TableStateProvider = ({ children }) => {
         onColumnVisibilityChange: setColumnVisibility,
         getFilteredRowModel: getFilteredRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        paginateExpandedRows: true,
         onRowSelectionChange: setSelectedRows,
+        paginateExpandedRows: true,
     });
 
     return (

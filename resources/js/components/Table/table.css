@@ -8,6 +8,7 @@
     gap : 10px;
     width: 100%;
     height: 100%;
+    position: relative;
 }
 
 /* filter bar */
@@ -64,14 +65,13 @@
     border-radius: 5px;
     min-width: 100%;
     box-shadow:  0 0 10px 0 rgb(0 0 0 / 10%);
-    z-index: 100;
+    z-index: 1;
     display: flex;
     display: -ms-flexbox;
     display: -webkit-flex;
     flex-direction: column;
     -ms-flex-direction: column;
     -webkit-flex-direction: column;
-    gap: 10px;
     align-items: flex-start;
     -ms-align-items: flex-start;
     -webkit-align-items: flex-start;
@@ -82,7 +82,7 @@
 .table-column-visible__filter-header-check-all,
 .table-column-visible__filter-header-check-individual{
     width:fit-content;
-    padding: 6px;
+    padding: 3px;
     border-radius: 5px;
     display: flex;
     display: -ms-flexbox;
@@ -90,7 +90,7 @@
     flex-direction: row;
     -ms-flex-direction: row;
     -webkit-flex-direction: row;
-    gap : 5px;
+    gap: 5px;
     align-items: center;
     -ms-align-items: center;
     -webkit-align-items: center;
@@ -121,7 +121,7 @@
 .drag-table__header{
     color: #a7a9ab;
     background: rgb(0 0 0 / 3%);
-    padding: 16px;
+    padding: 20px 16px;
     position: relative;
     min-width: 60px;
     max-width: 100px !important;
@@ -154,21 +154,19 @@
     top: 0;
     left: 0;
     opacity: 0;
-    z-index: 2;
 }
 
 .drag-table__header-content{
     white-space: nowrap;
-    margin-right: 16px;
+    margin-left: 16px;
 }
 
 .drag-table__header-sort{
     color:rgb(0 0 0 / 30%);
     position: absolute;
     top: 50%;
-    right: 10px;
+    left: 0;
     transform: translateY(-50%);
-    z-index: 3;
     cursor: pointer;
     padding: 6px;
 }
@@ -193,20 +191,20 @@
 
 
 .drag-table_cell{
-    padding: 10px;
+    padding: 10px 24px;
     border-collapse: collapse;
     min-width: 60px;
     max-width: 200px !important;
     word-break: break-all;
     border-bottom: 1px solid rgb(0 0 0 / 5%);
 }
-
+/* 
 .drag-table_row:nth-child(even){
     background: rgb(0 0 0 / 2%);
-}
+} */
 
 .drag-table_row:hover{
-    background:rgb(0 0 0 / 5%)
+    background:rgb(0 0 0 / 2%);
 }
 
 
