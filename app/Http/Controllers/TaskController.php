@@ -405,7 +405,7 @@ class TaskController extends AccountBaseController
      */
     public function create()
     {
-       
+
         $this->addPermission = user()->permission('add_tasks');
         $this->projectShortCode = '';
         $this->project = request('task_project_id') ? Project::with('membersMany')->findOrFail(request('task_project_id')) : null;
@@ -502,9 +502,14 @@ class TaskController extends AccountBaseController
         //dd($left_minutes);
         if($left_minutes < 1)
         {
-           
-           Toastr::error('Estimate hours cannot exceed from project allocation hours!!!', 'Failed', ["positionClass" => "toast-top-right"]);
-           return redirect()->back()->withErrors(['error' => 'Estimate hours cannot exceed from project allocation hours!!!']);
+            return response()->json([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "estimate_hours" => [
+                        "Estimate hours cannot exceed from project allocation hours !"
+                    ]
+                ]
+            ], 422);
         }
        // dd($request);
         $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
@@ -1013,7 +1018,7 @@ class TaskController extends AccountBaseController
         ->get();
 
         $tab = request('view');
-        
+
         switch ($tab) {
         case 'file':
             $this->tab = 'tasks.ajax.files';
@@ -1178,7 +1183,7 @@ class TaskController extends AccountBaseController
                 // $totalHours = $task->estimate_hours;
                 // $totalMinutes = $task->estimate_minutes;
                 $totalMinutes = 0;
-                
+
                 foreach($task->subtasks as $value) {
                     $countTask = Task::where('subtask_id', $value->id)->first();
                     $totalHours = $totalHours + $countTask->estimate_hours;
@@ -1197,7 +1202,7 @@ class TaskController extends AccountBaseController
                     'estimate_hours' => $totalHours,
                     'estimate_minutes' => $totalMinutes
                 ])->render();
-                
+
 
                 return Reply::dataOnly([
                     'status' => 'success',
