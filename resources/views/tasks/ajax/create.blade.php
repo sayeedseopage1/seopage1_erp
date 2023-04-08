@@ -277,13 +277,13 @@
                         <div class="form-group my-3">
                             <label for="">Task Estimation Time <sup class="mr-1">*</sup></label>
                             <div class="form-group">
-                                <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14 @error('estimate_hours') is-invalid @enderror" name="estimate_hours">
+                                <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14 @error('estimate_hours') is-invalid @enderror" name="estimate_hours" id="estimate_hours">
                                 @error('estimate_hours')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                                 @lang('app.hrs')
                                 &nbsp;&nbsp;
-                                <input type="number" min="0" name="estimate_minutes" value="{{ $task ? $task->estimate_minutes : '0'}}" class="w-25 height-35 f-14 border rounded p-2 @error('estimate_minutes') is-invalid @enderror">
+                                <input type="number" min="0" name="estimate_minutes" value="{{ $task ? $task->estimate_minutes : '0'}}" class="w-25 height-35 f-14 border rounded p-2 @error('estimate_minutes') is-invalid @enderror" id="estimate_minutes">
                                 @error('estimate_minutes')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -765,7 +765,7 @@
                         }
                     }
                 }
-               
+
             });
         }
 
@@ -911,6 +911,43 @@
         //     });
         // }
     }
+
+    $('#save-task-form').click(function(e){
+        var data= {
+            '_token': "{{ csrf_token() }}",
+            'estimate_hours': document.getElementById("estimate_hours").value,
+            'estimate_minutes': document.getElementById("estimate_minutes").value,
+        }
+        // console.log(data);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "{{route('tasks.store')}}",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                $('#estimate_hours').trigger("reset");
+                $('#estimate_minutes').trigger("reset");
+                {{--$(location).prop('href', '{{url('/account/leads/')}}');--}}
+            },
+            error: function(error) {
+                console.log(response.error);
+                // console.log(response);
+                // if(error.responseJSON.errors.client_name){
+                //     $('#clientNameError').text(error.responseJSON.errors.client_name);
+                // }else{
+                //     $('#clientNameError').text('');
+                // }
+                if (error.responseJSON.errors.estimate_hours) {
+                    toastr.error('Estimate hours cannot exceed from project allocation hours');
+                }
+            }
+        });
+    });
 </script>
 @if(session('error'))
     <script>
