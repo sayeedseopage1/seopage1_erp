@@ -65,6 +65,7 @@ class SubTaskController extends AccountBaseController
         $subTask->assigned_to = $request->user_id ? $request->user_id : null;
 
         $subTask->save();
+        
         $task_id= Task::where('id',$request->task_id)->first();
         $task_s= new Task();
         $task_s->task_short_code= $task_id->task_short_code .'-'.$subTask->id;
@@ -84,6 +85,10 @@ class SubTaskController extends AccountBaseController
       $task_s->estimate_minutes = $request->estimate_minutes;
       $task_s->repeat = $request->repeat ? 1 : 0;
       $task_s->milestone_id= $request->milestone_id;
+      $total_hours= $request->estimate_hours *60;
+        $total_minutes= $request->estimate_minutes;
+        $total_in_minutes= $total_hours+ $total_minutes;
+        $task_s->estimate_time_left_minutes= $total_in_minutes;
 
       if ($request->has('repeat')) {
           $task_s->repeat_count = $request->repeat_count;
@@ -102,6 +107,13 @@ class SubTaskController extends AccountBaseController
         // $task_user->user_id= $request->user_id ? $request->user_id : null;
         //
         // $task_user->save();
+        $hours= $request->estimate_hours *60 ;
+        $minutes= $request->estimate_minutes;
+        $total_minutes= $hours+$minutes;
+        $parent_task= Task::where('id',$subTask->task_id)->first();
+        $parent_task_update= Task::find($parent_task->id);
+        $parent_task_update->estimate_time_left_minutes= $parent_task->estimate_time_left_minutes - $total_minutes;
+        $parent_task_update->save();
 
 
         $task = $subTask->task;

@@ -494,8 +494,8 @@ class TaskController extends AccountBaseController
         $project_id = Project::where('id',$request->project_id)->first();
         $task_estimation_hours= Task::where('project_id',$project_id->id)->sum('estimate_hours');
         $task_estimation_minutes= Task::where('project_id',$project_id->id)->sum('estimate_minutes');
-        $toal_task_estimation_minutes= $task_estimation_hours*60 + $task_estimation_minutes;
-        $left_minutes= ($project_id->hours_allocated-$request->estimate_hours)*60 - ($toal_task_estimation_minutes+$request->estimate_minutes);
+        $total_task_estimation_minutes= $task_estimation_hours*60 + $task_estimation_minutes;
+        $left_minutes= ($project_id->hours_allocated-$request->estimate_hours)*60 - ($total_task_estimation_minutes+$request->estimate_minutes);
 
         $left_in_hours = round($left_minutes/60,0);
         $left_in_minutes= $left_minutes%60;
@@ -570,6 +570,11 @@ class TaskController extends AccountBaseController
             $task->repeat_cycles = $request->repeat_cycles;
         }
         $task->task_status= "pending";
+        $total_hours= $request->estimate_hours *60;
+        $total_minutes= $request->estimate_minutes;
+        $total_in_minutes= $total_hours+ $total_minutes;
+        $task->estimate_time_left_minutes= $total_in_minutes;
+
 
         $task->save();
 
