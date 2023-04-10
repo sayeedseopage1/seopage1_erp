@@ -239,11 +239,9 @@
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
     $('#submitButton').click(function(e){
-        // alert("success");
         e.preventDefault();
         var description = CKEDITOR.instances.description.getData();
         var comments = CKEDITOR.instances.comments.getData();
-        // console.log(comments);
         var data= {
             '_token': "{{ csrf_token() }}",
             'client_name': document.getElementById("client_name").value,
@@ -256,7 +254,6 @@
             'description': description,
             'comments': comments,
         }
-        // console.log(data);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -268,7 +265,6 @@
             data: data,
             dataType: "json",
             success: function (response) {
-                // console.log(response.status);
                 $('#createDeal').trigger("reset");
                 $('.error').html("");
                 if (response.status == 'success') {
@@ -300,12 +296,13 @@
     const projectName = document.getElementById('project_name');
     const projectLink = document.getElementById('project_link');
     const amount = document.getElementById('amount');
-    // const description = document.getElementById('description');
-    // const comments = document.getElementById('comments');
-
+    // const description = CKEDITOR.instances.description.getData();
+    // const comment = CKEDITOR.instances.comments;
+   
 
     form.addEventListener('input', () => {
         let valid = true;
+        console.log(description);
         if (name.value.trim() === '') {
             valid = false;
             clientNameError.textContent = 'Please enter the client name!';
@@ -336,14 +333,46 @@
         } else {
             amountError.textContent = '';
         }
-        $("#submitButton").attr("disabled", false);
-        // button.disabled = !valid;
+        /*if (description.getData().trim() === '') {
+            valid = false;
+            descriptionError.textContent = 'Please enter description!';
+        } else {
+            descriptionError.textContent = '';
+        }
+        if (comment.getData().trim() === '') {
+            valid = false;
+            commentsError.textContent = 'Please enter comments!';
+        } else {
+            commentsError.textContent = '';
+        }*/
+        // $("#submitButton").attr("disabled", false);
+        const button = document.getElementById('submitButton');
+        button.disabled = !valid;
     });
+
+    /*const editorElement = document.getElementById('description');
+    const commentsError = document.getElementById('descriptionError');
+
+    editorElement.addEventListener('input', () => {
+        const editorValue = editorElement.value.trim();
+        let valid = true;
+
+        if (editorValue === '') {
+            valid = false;
+            commentsError.textContent = 'Please enter comments!';
+        } else {
+            commentsError.textContent = '';
+        }
+
+        // Disable or enable the submit button based on the validation result
+        const button = document.getElementById('submitButton');
+        button.disabled = !valid;
+    });*/
 </script>
 <script>
     $("#submitButton").on('click',function() {
-        $("#submitButton").attr("disabled", true);
-        $("#submitButton").html("Processing...");
+        // $("#submitButton").attr("disabled", true);
+        // $("#submitButton").html("Processing...");
     });
 </script>
 <script>
