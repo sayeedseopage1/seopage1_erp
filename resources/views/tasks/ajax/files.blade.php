@@ -43,8 +43,6 @@ $deleteTaskCommentPermission = user()->permission('delete_task_comments');
                   <div class="media-body bg-white">
                       <div class="form-group">
                           <div id="descriptionComment"></div>
-{{--                          <textarea name="comment" class="form-control invisible d-none"--}}
-{{--                              id="task-comment-text"></textarea>--}}
                           <textarea name="comment" id="descriptionComment" class="form-control"></textarea>
                           <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
                           <script>

@@ -22,6 +22,7 @@ use App\Models\TaskCategory;
 use App\Models\TaskLabel;
 use App\Models\TaskLabelList;
 use App\Models\TaskReply;
+use App\Models\TaskRevision;
 use App\Models\TaskUser;
 use App\Models\User;
 use App\Traits\ProjectProgress;
@@ -219,6 +220,17 @@ class TaskController extends AccountBaseController
     }
     public function TaskApprove(Request $request)
     {
+        $request->validate([
+            'rating' => 'required',
+            'rating2' => 'required',
+            'rating3' => 'required',
+            'comments' => 'required',
+        ], [
+            'rating.required' => 'This field is required!',
+            'rating2.required' => 'This field is required!',
+            'rating3.required' => 'This field is required!',
+            'comments.required' => 'This field is required!',
+        ]);
       $task_status= Task::find($request->task_id);
       $task_status->status= "completed";
       $task_status->task_status="approved";
@@ -236,13 +248,19 @@ class TaskController extends AccountBaseController
       $sender= User::where('id',Auth::id())->first();
       $user= User::where('id',$task_submission->user_id)->first();
       Notification::send($user, new TaskApproveNotification($task_status,$sender));
-      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-      //return back();
-      return Redirect::back()->with('messages.taskSubmitNotification');
+        return response()->json([
+            'status'=>200,
+    ]);
 
     }
     public function TaskRevision(Request $request)
     {
+//        dd($request->all());
+        $request->validate([
+            'comments2' => 'required',
+        ], [
+            'comments2.required' => 'This field is required!',
+        ]);
       $task_status= Task::find($request->task_id);
       $task_status->status= "incomplete";
       $task_status->task_status="revision";
@@ -252,17 +270,35 @@ class TaskController extends AccountBaseController
       $task->user_id= Auth::id();
       $task->task_id= $request->task_id;
 
-      $task->comment= $request->comments;
+      $task->comment= $request->comments2;
       $task->added_by= Auth::id();
       $task->last_updated_by= Auth::id();
       $task->save();
+
+        $task_revision = new TaskRevision();
+        $task_revision->task_id = $request->task_id;
+        if ($task_status->subtask_id !=null) {
+        $task_revision->subtask_id = $task_status->subtask_id;
+        }
+        $task_revision->comment = $request->comments2;
+        $task_revision->project_id = $task_status->project_id;
+        $task_revision->added_by = Auth::id();
+        $taskRevisionFind = TaskRevision::where('task_id',$task_status->id)->first();
+        if ($taskRevisionFind !=null){
+            $newRevision = TaskRevision::find($taskRevisionFind->id);
+            $newRevision->revision_no = $taskRevisionFind->revision_no+1;
+            $newRevision->save();
+        }
+        $task_revision->save();
+
+
       $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
       $sender= User::where('id',$request->user_id)->first();
       $user= User::where('id',$task_submission->user_id)->first();
       Notification::send($user, new TaskRevisionNotification($task_status,$sender));
-      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-      //return back();
-      return Redirect::back()->with('messages.taskSubmitNotification');
+        return response()->json([
+            'status'=>200,
+        ]);
     }
     public function TaskExtension(Request $request)
     {
@@ -625,6 +661,7 @@ class TaskController extends AccountBaseController
                         $subTaskData->start_date = $subTasks->start_date;
                         $subTaskData->due_date = $subTasks->due_date;
                     }
+
 
                     $subTaskData->assigned_to = $subTasks->assigned_to;
 

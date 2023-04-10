@@ -813,7 +813,7 @@ $changeStatusPermission = user()->permission('change_status');
                   @endif
           </div>
         </div>
-        
+
 
 
     </div>
@@ -1121,7 +1121,7 @@ $changeStatusPermission = user()->permission('change_status');
                     }
                 });
             });
-            
+
             $('body').on('click', '#submitReply', function(e) {
                 e.preventDefault();
                 $('#submitReply').attr("disabled", true);
@@ -1468,5 +1468,6 @@ $changeStatusPermission = user()->permission('change_status');
         });
 
     </script>
+
     <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
 

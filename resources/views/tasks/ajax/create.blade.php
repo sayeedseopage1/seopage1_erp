@@ -918,7 +918,6 @@
             'estimate_hours': document.getElementById("estimate_hours").value,
             'estimate_minutes': document.getElementById("estimate_minutes").value,
         }
-        // console.log(data);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -932,16 +931,8 @@
             success: function (response) {
                 $('#estimate_hours').trigger("reset");
                 $('#estimate_minutes').trigger("reset");
-                {{--$(location).prop('href', '{{url('/account/leads/')}}');--}}
             },
             error: function(error) {
-                console.log(response.error);
-                // console.log(response);
-                // if(error.responseJSON.errors.client_name){
-                //     $('#clientNameError').text(error.responseJSON.errors.client_name);
-                // }else{
-                //     $('#clientNameError').text('');
-                // }
                 if (error.responseJSON.errors.estimate_hours) {
                     toastr.error('Estimate hours cannot exceed from project allocation hours');
                 }
