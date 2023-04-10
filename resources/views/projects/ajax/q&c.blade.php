@@ -1410,13 +1410,48 @@
         /* form's submit button */
         $('#sendForm').on('click', function(e){
             e.preventDefault();
-
             if ($('#demo').valid()){
                 $('#demo').submit();
+                /*Swal.fire({
+                    title: 'Complete 1st step?',
+                    text: 'Are you sure you want to complete 1st step',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    focusConfirm: false,
+                    confirmButtonText: 'submit',
+                    cancelButtonText: "@lang('app.cancel')",
+                    customClass: {
+                        confirmButton: 'btn btn-primary mr-3',
+                        cancelButton: 'btn btn-secondary'
+                    },
+                    showClass: {
+                        popup: 'swal2-noanimation',
+                        backdrop: 'swal2-noanimation'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // console.log('asdfdasfsaf');
+                        
+                    }
+                });*/
             }
         });
-
-
+        
+        @if(Session::has('qc_step1_success'))
+            Swal.fire({
+                title: '1st step submission Done',
+                text: 'Please complete 2nd step',
+                icon: 'success',
+                focusConfirm: false,
+                // cancelButtonText: "@lang('ok')",
+                customClass: {
+                    confirmButton: 'btn btn-primary mr-3',
+                    // cancelButton: 'btn btn-secondary'
+                },
+                buttonsStyling: false
+            });
+        @endif
     }); // end document ready
 
 </script>

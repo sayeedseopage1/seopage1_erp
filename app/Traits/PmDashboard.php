@@ -131,9 +131,185 @@ trait PmDashboard
                 'html' => $html, 
             ]);
         } else if (request('mode') == 'month' && request()->ajax()) {
-            
+            $date = Carbon::createFromFormat('Y-m-d', request('startDate'));
+
+            $this->startMonth = $date->startOfMonth()->addDays(20)->toDateString(); 
+            $this->endMonth = $date->startOfMonth()->addMonth(1)->addDays(19)->toDateString(); 
+
+            $this->month_project_deadline = Project::where([
+                'pm_id' => $this->user->id,
+            ])->whereBetween('deadline', [$this->startMonth, $this->endMonth])->get();
+
+            $this->month_milestoe_to_be_completed = Project::select('tasks.*')
+            ->join('tasks', 'projects.id', 'tasks.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'tasks.status' => 'completed',
+            ])
+            ->whereBetween('tasks.updated_at', [$this->startMonth, $this->endMonth])
+            ->count();
+
+            $this->month_tasks_under_review = Project::select('tasks.*')
+            ->join('tasks', 'projects.id', 'tasks.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'tasks.board_column_id' => 6,
+                'tasks.added_by' => $this->user->id
+            ])
+            ->whereBetween('tasks.updated_at', [$this->startMonth, $this->endMonth])
+            ->count();
+
+            $this->month_tasks_deadline = Project::select('tasks.*')
+            ->join('tasks', 'projects.id', 'tasks.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'tasks.added_by' => $this->user->id
+            ])
+            ->whereBetween('tasks.due_date', [$this->startMonth, $this->endMonth])
+            ->count();
+
+            $this->month_completed_milestone = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.status' => 'complete',
+            ])
+            ->whereBetween('project_milestones.updated_at', [$this->startMonth, $this->endMonth])
+            ->count();
+
+            $this->month_invoice_created = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->join('invoices', 'project_milestones.invoice_id', 'invoices.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.invoice_created' => 1,
+            ])
+            ->whereBetween('invoices.created_at', [$this->startMonth, $this->endMonth])
+            ->count();
+
+            $this->month_payment_release = Project::join('payments', 'projects.id', 'payments.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+            ])
+            ->whereBetween('payments.paid_on', [$this->startMonth, $this->endMonth])
+            ->sum('payments.amount');
+
+            $this->month_qc_required_submission = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.qc_status' => 0,
+                'project_milestones.status' => 'complete'
+            ])
+            ->groupBy('project_milestones.project_id')
+            ->count();
+
+            $this->month_completion_form_required_submission = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.project_completion_status' => 0,
+            ])
+            ->whereBetween('project_milestones.updated_at', [$this->startMonth, $this->endMonth])
+            ->count();
+
+            $this->month_project_status = Project::where([
+                'pm_id' => $this->user->id,
+                'status' => 'in progress',
+            ])->whereBetween('updated_at', [$this->startMonth, $this->endMonth])->get();
+
+
+            $html = view('dashboard.ajax.pmdashboard.month', $this->data)->render();
+
+            return Reply::dataOnly([
+                'status' => 'success', 
+                'html' => $html, 
+            ]); 
         } else if (request('mode') == 'general' && request()->ajax()) {
-            
+            $startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('startDate')) : now($this->global->timezone)->startOfMonth();
+            $endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('endDate')) : now($this->global->timezone);
+
+            $this->general_project_deadline = Project::where([
+                'pm_id' => $this->user->id,
+            ])->whereBetween('deadline', [$startDate, $endDate])->get();
+
+            $this->general_milestoe_to_be_completed = Project::select('tasks.*')
+            ->join('tasks', 'projects.id', 'tasks.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'tasks.status' => 'completed',
+            ])
+            ->whereBetween('tasks.updated_at', [$startDate, $endDate])
+            ->count();
+
+            $this->general_tasks_under_review = Project::select('tasks.*')
+            ->join('tasks', 'projects.id', 'tasks.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'tasks.board_column_id' => 6,
+                'tasks.added_by' => $this->user->id
+            ])
+            ->whereBetween('tasks.updated_at', [$startDate, $endDate])
+            ->count();
+
+            $this->general_tasks_deadline = Project::select('tasks.*')
+            ->join('tasks', 'projects.id', 'tasks.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'tasks.added_by' => $this->user->id
+            ])
+            ->whereBetween('tasks.due_date', [$startDate, $endDate])
+            ->count();
+
+            $this->general_completed_milestone = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.status' => 'complete',
+            ])
+            ->whereBetween('project_milestones.updated_at', [$startDate, $endDate])
+            ->count();
+
+            $this->general_invoice_created = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->join('invoices', 'project_milestones.invoice_id', 'invoices.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.invoice_created' => 1,
+            ])
+            ->whereBetween('invoices.created_at', [$startDate, $endDate])
+            ->count();
+
+            $this->general_payment_release = Project::join('payments', 'projects.id', 'payments.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+            ])
+            ->whereBetween('payments.paid_on', [$startDate, $endDate])
+            ->sum('payments.amount');
+
+            $this->general_qc_required_submission = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.qc_status' => 0,
+                'project_milestones.status' => 'complete'
+            ])
+            ->groupBy('project_milestones.project_id')
+            ->count();
+
+            $this->general_completion_form_required_submission = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.project_completion_status' => 0,
+            ])
+            ->whereBetween('project_milestones.updated_at', [$startDate, $endDate])
+            ->count();
+
+            $this->general_project_status = Project::where([
+                'pm_id' => $this->user->id,
+                'status' => 'in progress',
+            ])->whereBetween('updated_at', [$startDate, $endDate])->get();
+
+
+            $html = view('dashboard.ajax.pmdashboard.general', $this->data)->render();
+
+            return Reply::dataOnly([
+                'status' => 'success', 
+                'html' => $html, 
+            ]); 
         } else {
             $this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('startDate')) : now($this->global->timezone)->startOfMonth();
             $this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('endDate')) : now($this->global->timezone);
@@ -142,9 +318,11 @@ trait PmDashboard
             $this->viewNoticePermission = user()->permission('view_notice');
             $this->editTimelogPermission = user()->permission('edit_timelogs');
             $this->widgets = DashboardWidget::where('dashboard_type', 'private-dashboard')->get();
+            
             $this->activeWidgets = $this->widgets->filter(function ($value, $key) {
                 return $value->status == '1';
             })->pluck('widget_name')->toArray();
+            
             // Getting Attendance setting data
             $this->myActiveTimer = ProjectTimeLog::with('task', 'user', 'project', 'breaks', 'activeBreak')
             ->where('user_id', user()->id)
@@ -317,7 +495,184 @@ trait PmDashboard
                 'status' => 'in progress',
                 'updated_at' => Carbon::today()
             ])->get();
+            /*----------------------End today data-------------------------*/
 
+
+            /*-----------------------Month data--------------------------*/
+            $today = Carbon::today()->format('d');
+            if ($today > 20) {
+                $startMonth = Carbon::now()->startOfMonth()->addDays(20)->toDateString(); 
+                $endMonth = Carbon::now()->startOfMonth()->addMonth(1)->addDays(19)->toDateString();  
+            } else {
+                $startMonth = Carbon::now()->startOfMonth()->subMonths(1)->addDays(20)->toDateString(); 
+                $endMonth = Carbon::now()->startOfMonth()->addDays(19)->toDateString(); 
+            }
+
+            $this->month_project_deadline = Project::where([
+                'pm_id' => $this->user->id,
+            ])->whereBetween('deadline', [$startMonth, $endMonth])->get();
+
+            $this->month_milestoe_to_be_completed = Project::select('tasks.*')
+            ->join('tasks', 'projects.id', 'tasks.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'tasks.status' => 'completed',
+            ])
+            ->whereBetween('tasks.updated_at', [$startMonth, $endMonth])
+            ->count();
+
+            $this->month_tasks_under_review = Project::select('tasks.*')
+            ->join('tasks', 'projects.id', 'tasks.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'tasks.board_column_id' => 6,
+                'tasks.added_by' => $this->user->id
+            ])
+            ->whereBetween('tasks.updated_at', [$startMonth, $endMonth])
+            ->count();
+
+            $this->month_tasks_deadline = Project::select('tasks.*')
+            ->join('tasks', 'projects.id', 'tasks.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'tasks.added_by' => $this->user->id
+            ])
+            ->whereBetween('tasks.due_date', [$startMonth, $endMonth])
+            ->count();
+
+            $this->month_completed_milestone = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.status' => 'complete',
+            ])
+            ->whereBetween('project_milestones.updated_at', [$startMonth, $endMonth])
+            ->count();
+
+            $this->month_invoice_created = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->join('invoices', 'project_milestones.invoice_id', 'invoices.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.invoice_created' => 1,
+            ])
+            ->whereBetween('invoices.created_at', [$startMonth, $endMonth])
+            ->count();
+
+            $this->month_payment_release = Project::join('payments', 'projects.id', 'payments.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+            ])
+            ->whereBetween('payments.paid_on', [$startMonth, $endMonth])
+            ->sum('payments.amount');
+
+            $this->month_qc_required_submission = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.qc_status' => 0,
+                'project_milestones.status' => 'complete'
+            ])
+            ->groupBy('project_milestones.project_id')
+            ->count();
+
+            $this->month_completion_form_required_submission = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.project_completion_status' => 0,
+            ])
+            ->whereBetween('project_milestones.updated_at', [$startMonth, $endMonth])
+            ->count();
+
+            $this->month_project_status = Project::where([
+                'pm_id' => $this->user->id,
+                'status' => 'in progress',
+            ])->whereBetween('updated_at', [$startMonth, $endMonth])->get();
+
+
+
+            /*-------------------------Month data end----------------------------*/
+
+            /*-----------------------------General view start------------------------------------*/
+            $startYears = Carbon::now()->subMonths(12);
+            $endYears = Carbon::now();
+
+            $this->general_project_deadline = Project::where([
+                'pm_id' => $this->user->id,
+            ])->whereBetween('deadline', [$startYears, $endYears])->get();
+
+            $this->general_milestoe_to_be_completed = Project::select('tasks.*')
+            ->join('tasks', 'projects.id', 'tasks.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'tasks.status' => 'completed',
+            ])
+            ->whereBetween('tasks.updated_at', [$startYears, $endYears])
+            ->count();
+
+            $this->general_tasks_under_review = Project::select('tasks.*')
+            ->join('tasks', 'projects.id', 'tasks.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'tasks.board_column_id' => 6,
+                'tasks.added_by' => $this->user->id
+            ])
+            ->whereBetween('tasks.updated_at', [$startYears, $endYears])
+            ->count();
+
+            $this->general_tasks_deadline = Project::select('tasks.*')
+            ->join('tasks', 'projects.id', 'tasks.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'tasks.added_by' => $this->user->id
+            ])
+            ->whereBetween('tasks.due_date', [$startYears, $endYears])
+            ->count();
+
+            $this->general_completed_milestone = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.status' => 'complete',
+            ])
+            ->whereBetween('project_milestones.updated_at', [$startYears, $endYears])
+            ->count();
+
+            $this->general_invoice_created = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->join('invoices', 'project_milestones.invoice_id', 'invoices.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.invoice_created' => 1,
+            ])
+            ->whereBetween('invoices.created_at', [$startYears, $endYears])
+            ->count();
+
+            $this->general_payment_release = Project::join('payments', 'projects.id', 'payments.project_id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+            ])
+            ->whereBetween('payments.paid_on', [$startYears, $endYears])
+            ->sum('payments.amount');
+
+            $this->general_qc_required_submission = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.qc_status' => 0,
+                'project_milestones.status' => 'complete'
+            ])
+            ->groupBy('project_milestones.project_id')
+            ->count();
+
+            $this->general_completion_form_required_submission = Project::join('project_milestones', 'projects.id', 'project_milestones.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.project_completion_status' => 0,
+            ])
+            ->whereBetween('project_milestones.updated_at', [$startYears, $endYears])
+            ->count();
+
+            $this->general_project_status = Project::where([
+                'pm_id' => $this->user->id,
+                'status' => 'in progress',
+            ])->whereBetween('updated_at', [$startYears, $endYears])->get();
+
+            /*-----------------------------General view end------------------------------------*/
             //dd($this->today_project_status);
 
             //dd($this->today_tasks_under_review, Carbon::today()->subDay(16));

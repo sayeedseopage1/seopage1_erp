@@ -2484,8 +2484,7 @@ class ProjectController extends AccountBaseController
             $project->step_1= 1;
 
             if ($project->save()) {
-                Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-                return redirect()->back();
+                return redirect()->route('qc_form', [$request->project_id, $request->milestone_id])->with('qc_step1_success', 'success');
             }
         } elseif ($request->step == '2') {
             $project->migration= $request->migration;
