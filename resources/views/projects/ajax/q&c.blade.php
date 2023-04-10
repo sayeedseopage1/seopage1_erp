@@ -1469,24 +1469,6 @@
     }
 </script>
 
-<!-- radio   -->
-
-<script>
-    $("input[name='select']").change(function() {
-        var selectedOption = $("input[name='select']:checked").val();
-        $.ajax({
-            type: "POST",
-            url: "save-to-db.php",
-            data: { option: selectedOption },
-            success: function(response) {
-                console.log(response);
-            }
-        });
-    });
-</script>
-
-<!-- step  -->
-
 <script>
     (function($){
         $.fn.book = function(options){
