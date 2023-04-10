@@ -5,7 +5,7 @@ const Pagination = () => {
     const { table } = useContext(TableContext);
 
     return (
-        <div className="drag-table__pagination mb-3">
+        <div className="drag-table__pagination pb-5">
             <div>
                 Show
                 <select
@@ -24,16 +24,17 @@ const Pagination = () => {
                 entries
             </div>
             <div className="drag-table__pagination-text-group ml-md-auto">
-                <span className="drag-table__pagination-text">
+                <span className="drag-table__pagination-text" >
                     Page{" "}
                     <strong>
                         {table.getState().pagination.pageIndex + 1} of{" "}
                         {table.getPageCount()}
                     </strong>
+                    |
                 </span>
 
-                <span className="drag-table__pagination-text">
-                    | Go to page:{" "}
+                <span className="drag-table__pagination-text d-sm-block">
+                    Go to page:{" "}
                     <input
                         className="drag-table__pagination-input"
                         type="number"

@@ -1,4 +1,4 @@
-html{
+/* html{
     overflow-x: hidden !important;
 }
 .time-log-table__tabs{
@@ -31,10 +31,10 @@ html{
 /* time log table */
 
 /* table column filter */
-.employee_wise_table_visible{
+/* .employee_wise_table_visible{
     width: fit-content;
-}
-.employee-wise__col_filter_toggle{
+} */
+/* .employee-wise__col_filter_toggle{
     display: flex;
     display: -ms-flexbox;
     align-items: center;
@@ -60,11 +60,11 @@ html{
 
 .employee-table_filter_dd{
     padding: 10px;
-}
-
+} */ 
+/* 
 .table_filter_checkbox{
     display: flex;
     display: -ms-flexbox;
     align-items: center;
     font-size: 14px;
-}
+} */

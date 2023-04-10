@@ -1,4 +1,4 @@
-.drag-table-container{
+/* .drag-table-container{
     display: flex;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -9,10 +9,10 @@
     width: 100%;
     height: 100%;
     position: relative;
-}
+} */
 
 /* filter bar */
-.drag-table__filter-bar{
+/* .drag-table__filter-bar{
     display: flex;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -28,10 +28,10 @@
     -webkit-justify-content: flex-end;
     width: 100%;
     height: 50px;
-}
+} */
 
 /* filter */
-.table-column-visible{
+/* .table-column-visible{
     position: relative;
 }
 
@@ -197,20 +197,20 @@
     max-width: 200px !important;
     word-break: break-all;
     border-bottom: 1px solid rgb(0 0 0 / 5%);
-}
+} */
 /* 
 .drag-table_row:nth-child(even){
     background: rgb(0 0 0 / 2%);
 } */
 
-.drag-table_row:hover{
+/* .drag-table_row:hover{
     background:rgb(0 0 0 / 2%);
 }
-
+ */
 
 
 /* pagination */
-.drag-table__pagination{
+/* .drag-table__pagination{
     display: flex;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -288,4 +288,4 @@
     padding: 6px 10px;
     border-radius: 6px;
     border: 1px solid rgb(0 0 0 / 20%);
-}
+} */

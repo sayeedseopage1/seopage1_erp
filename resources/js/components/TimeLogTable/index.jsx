@@ -1,69 +1,61 @@
-import * as React from "react";
-import ReactDOM from "react-dom/client";
-import "./timelogtable.css";
+import React from "react";
+import ReactDOM from 'react-dom/client'
 import EmployeeWiseTable from "./EmployeeWiseTable";
-import { TableStateProvider } from './Table/TableContext'
-import ColumnsVisibleFilter from "./Table/ColumnsVisibleFilter";
-
-const TableTab = ({ activeTab, onClick, title, className = "" }) => {
-    const isActive = activeTab === title.toLowerCase();
-
-    return (
-        <button
-            type="button"
-            onClick={() => onClick(title.toLowerCase())}
-            className={`btn btn-sm btn-outline-primary mr-2 mb-2 ${isActive ? "active" : ""
-                } ${className}`}
-        >
-            {title}
-        </button>
-    );
-};
-
-export const TimeLogTable = () => {
-    const [activeTable, setActiveTable] = React.useState("employee wise");
+import data from './data.json'
+import styled from 'styled-components';
 
 
+const tabs = [
+    "Employee Wise",
+    "Project Wise",
+    "Task Wise"
+]
+
+const TimeLogTable = () => {
+    const [activeTab, setActiveTab] = React.useState('Employee Wise');
 
     return (
-        <div className="p-4 w-100">
-            <div className="d-flex align-items-center flex-wrap bg-red-500">
-
-                <TableTab
-                    title="Employee Wise"
-                    activeTab={activeTable}
-                    onClick={(v) => setActiveTable(v)}
-                />
-
-                <TableTab
-                    title="Project Wise"
-                    activeTab={activeTable}
-                    onClick={(v) => setActiveTable(v)}
-                />
-
-                <TableTab
-                    title="Task Wise"
-                    className="mr-md-auto"
-                    activeTab={activeTable}
-                    onClick={(v) => setActiveTable(v)}
-                />
-
-                <ColumnsVisibleFilter />
-                <TableTab
-                    title="Export"
-                    activeTab={""}
-                    onClick={(v) => setActiveTable(v)}
-                />
-
-            </div>
-
-            {/* table container */}
-            <div className="time-log-table__container py-4">
-                {activeTable === "employee wise" ? <EmployeeWiseTable tableName="employeeWiseTimeLog" subRows={row => row.tasks} /> : null}
-            </div>
+        <div>
+            <Tabs>
+                {tabs.map(tab => (
+                    <Tab
+                        key={tab}
+                        className={activeTab === tab ? 'active' : ''}
+                        onClick={() => setActiveTab(tab)}
+                    >{tab}</Tab>
+                ))}
+                <Tab className="ml-md-auto" id="columnFilterId">Filter</Tab>
+                <Tab>Export</Tab>
+            </Tabs>
+            <EmployeeWiseTable data={data} columnFilterButtonId="columnFilterId" />
         </div>
-    );
-};
+    )
+}
+
+
+const Tabs = styled.div`
+    display: flex;
+    align-items: center;   
+    flex-wrap: wrap; 
+    gap: 8px;
+    padding: 10px;
+`;
+
+const Tab = styled.button`
+    padding: 6px 12px;
+    border: 1.5px solid #1D82F5;
+    color: #1D82F5;
+    border-radius: 6px;
+    background: #fff;
+    &.active{
+        background: #1D82F5;
+        color: #FFFFFF;
+    }
+    &:hover{
+        background: #ECF0F4;
+    }
+`
+
 
 
 const timeLogTableContainer = document.getElementById("timeLogTable");
@@ -72,9 +64,7 @@ if (timeLogTableContainer) {
     const root = ReactDOM.createRoot(timeLogTableContainer);
     root.render(
         <React.StrictMode>
-            <TableStateProvider>
-                <TimeLogTable />
-            </TableStateProvider>
+            <TimeLogTable />
         </React.StrictMode>
     );
 }

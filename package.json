@@ -46,6 +46,7 @@
         "react-popper": "^2.3.0",
         "react-scripts": "^5.0.1",
         "signature_pad": "^3.0.0-beta.4",
+        "styled-components": "^5.3.9",
         "sweetalert2": "^10.12.0"
     }
 }
