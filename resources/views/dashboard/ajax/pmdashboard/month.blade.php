@@ -426,7 +426,7 @@
     <div class="col-md-4">
         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Projects Deadline Month</h5>
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Projects Deadline Of this Month</h5>
                 <div class="d-flex">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
@@ -479,7 +479,7 @@
     <div class="col-md-4">
         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Deadline Month (Assigned By Me)</h5>
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Deadline Of this Month (Assigned By Me)</h5>
                 <div class="d-flex">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
@@ -496,7 +496,7 @@
     <div class="col-md-4">
         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Completed Month</h5>
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Completed Of this Month</h5>
                 <div class="d-flex">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
@@ -513,7 +513,7 @@
     <div class="col-md-4">
         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Invoice Created Month</h5>
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Invoice Created Of this Month</h5>
                 <div class="d-flex">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
@@ -532,7 +532,7 @@
     <div class="col-md-4">
         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Payment Released Month</h5>
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Payment Released Of this Month</h5>
                 <div class="d-flex">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
