@@ -639,7 +639,7 @@
                                                                             
                                                                             foreach($task->timeLogged as $value) {
                                                                                 if (is_null($value->end_time)) {
-                                                                                    $workingTime = $value->start_time->diffInMinutes(Carbon::now());
+                                                                                    $workingTime = $value->start_time->diffInMinutes(\Carbon\Carbon::now());
                                                                                     $totalMinutes = $totalMinutes + $workingTime;
                                                                                 }
                                                                             }
@@ -1297,7 +1297,7 @@
                                                                             
                                                                             foreach($task->timeLogged as $value) {
                                                                                 if (is_null($value->end_time)) {
-                                                                                    $workingTime = $value->start_time->diffInMinutes(Carbon::now());
+                                                                                    $workingTime = $value->start_time->diffInMinutes(\Carbon\Carbon::now());
                                                                                     $totalMinutes = $totalMinutes + $workingTime;
                                                                                 }
                                                                             }
@@ -1947,7 +1947,7 @@
                                                                             
                                                                             foreach($task->timeLogged as $value) {
                                                                                 if (is_null($value->end_time)) {
-                                                                                    $workingTime = $value->start_time->diffInMinutes(Carbon::now());
+                                                                                    $workingTime = $value->start_time->diffInMinutes(\Carbon\Carbon::now());
                                                                                     $totalMinutes = $totalMinutes + $workingTime;
                                                                                 }
                                                                             }
