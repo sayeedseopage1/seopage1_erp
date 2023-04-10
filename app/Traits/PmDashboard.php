@@ -214,6 +214,24 @@ trait PmDashboard
                 'status' => 'in progress',
             ])->whereBetween('updated_at', [$this->startMonth, $this->endMonth])->get();
 
+            $this->month_partially_finished_project = Project::where([
+                'pm_id' => $this->user->id,
+                'status' => 'finished'
+            ])->whereBetween('updated_at', [$this->startMonth, $this->endMonth])->get();
+
+            $this->month_project_milestone = Project::where([
+                'pm_id' => $this->user->id
+            ])->whereBetween('updated_at', [$this->startMonth, $this->endMonth])->get();            
+
+            $this->month_total_milestone_count = 0;
+            $this->month_qc_pending_count = 0;
+            $this->month_completion_pending_count = 0;
+
+            foreach ($this->month_project_milestone as $value) {
+                $this->month_total_milestone_count = $this->month_total_milestone_count + $value->milestones()->count();
+                $this->month_qc_pending_count = $this->month_qc_pending_count + $value->milestones->where('qc_status', 2)->count();
+                $this->month_completion_pending_count = $this->month_completion_pending_count + $value->milestones->where('project_completion_status', 2)->count();
+            }
 
             $html = view('dashboard.ajax.pmdashboard.month', $this->data)->render();
 
@@ -303,6 +321,24 @@ trait PmDashboard
                 'status' => 'in progress',
             ])->whereBetween('updated_at', [$startDate, $endDate])->get();
 
+            $this->general_partially_finished_project = Project::where([
+                'pm_id' => $this->user->id,
+                'status' => 'finished'
+            ])->whereBetween('updated_at', [$startDate, $endDate])->get();
+
+            $this->general_project_milestone = Project::where([
+                'pm_id' => $this->user->id
+            ])->whereBetween('updated_at', [$startDate, $endDate])->get();            
+
+            $this->general_total_milestone_count = 0;
+            $this->general_qc_pending_count = 0;
+            $this->general_completion_pending_count = 0;
+
+            foreach ($this->general_project_milestone as $value) {
+                $this->general_total_milestone_count = $this->general_total_milestone_count + $value->milestones()->count();
+                $this->general_qc_pending_count = $this->general_qc_pending_count + $value->milestones->where('qc_status', 2)->count();
+                $this->general_completion_pending_count = $this->general_completion_pending_count + $value->milestones->where('project_completion_status', 2)->count();
+            }
 
             $html = view('dashboard.ajax.pmdashboard.general', $this->data)->render();
 
@@ -586,8 +622,39 @@ trait PmDashboard
                 'status' => 'in progress',
             ])->whereBetween('updated_at', [$startMonth, $endMonth])->get();
 
+            $this->month_partially_finished_project = Project::where([
+                'pm_id' => $this->user->id,
+                'status' => 'finished'
+            ])->whereBetween('updated_at', [$startMonth, $endMonth])->get();
+
+            $this->month_project_milestone = Project::where([
+                'pm_id' => $this->user->id
+            ])->whereBetween('updated_at', [$startMonth, $endMonth])->get();            
+
+            $this->month_total_milestone_count = 0;
+            $this->month_qc_pending_count = 0;
+            $this->month_completion_pending_count = 0;
+
+            foreach ($this->month_project_milestone as $value) {
+                $this->month_total_milestone_count = $this->month_total_milestone_count + $value->milestones()->count();
+                $this->month_qc_pending_count = $this->month_qc_pending_count + $value->milestones->where('qc_status', 2)->count();
+                $this->month_completion_pending_count = $this->month_completion_pending_count + $value->milestones->where('project_completion_status', 2)->count();
+            }
 
 
+            /*$this->month_total_milestone = Project::join('project_milestones', 'projects.milestone_id', 'project_milestones.id')
+            ->join('invoices', 'project_milestones.invoice_id', 'invoices.id')
+            ->where([
+                'projects.pm_id' => $this->user->id,
+                'project_milestones.status' => 'complete',
+                'invoices.status' => 'paid'
+            ])->whereBetween('invoices.updated_at', [$startMonth, $endMonth])->get();
+            dd($this->month_total_milestone);
+            $this->month_total_milestone_release = 0;
+
+            foreach ($this->month_total_milestone as $value) {
+                
+            }*/
             /*-------------------------Month data end----------------------------*/
 
             /*-----------------------------General view start------------------------------------*/
@@ -671,6 +738,26 @@ trait PmDashboard
                 'pm_id' => $this->user->id,
                 'status' => 'in progress',
             ])->whereBetween('updated_at', [$startYears, $endYears])->get();
+
+            $this->general_partially_finished_project = Project::where([
+                'pm_id' => $this->user->id,
+                'status' => 'finished'
+            ])->whereBetween('updated_at', [$startYears, $endYears])->get();
+
+            $this->general_project_milestone = Project::where([
+                'pm_id' => $this->user->id
+            ])->whereBetween('updated_at', [$startYears, $endYears])->get();            
+
+            $this->general_total_milestone_count = 0;
+            $this->general_qc_pending_count = 0;
+            $this->general_completion_pending_count = 0;
+
+            foreach ($this->general_project_milestone as $value) {
+                $this->general_total_milestone_count = $this->general_total_milestone_count + $value->milestones()->count();
+                $this->general_qc_pending_count = $this->general_qc_pending_count + $value->milestones->where('qc_status', 2)->count();
+                $this->general_completion_pending_count = $this->general_completion_pending_count + $value->milestones->where('project_completion_status', 2)->count();
+            }
+
 
             /*-----------------------------General view end------------------------------------*/
             //dd($this->today_project_status);
