@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import _, { update } from 'lodash';
 import styled from 'styled-components';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider, useDrag, useDrop, useDragLayer } from 'react-dnd';
+import { EmployeeWiseTableContext } from '.';
+import './table.css'
 
 
 
@@ -19,11 +21,45 @@ const subColumns = [
 
 // pivot table
 const EmployeeWiseTable = ({ data, columnFilterButtonId }) => {
-    const [sortConfig, setSortConfig] = useState({});
-    const [nPageRows, setNPageRows] = useState(10);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [columnOrder, setColumnOrder] = useState(subColumns.map((item) => item.key));
-    const [filterColumn, setFilterColumn] = useState([]);
+    // const [sortConfig, setSortConfig] = useState({});
+    // const [nPageRows, setNPageRows] = useState(10);
+    // const [currentPage, setCurrentPage] = useState(1);
+    // const [columnOrder, setColumnOrder] = useState(subColumns.map((item) => item.key));
+    // const [filterColumn, setFilterColumn] = useState([]);
+    const {
+        setColumns,
+        setSubColumns,
+        sortConfig,
+        setSortConfig,
+        nPageRows,
+        setNPageRows,
+        currentPage,
+        setCurrentPage,
+        columnOrder,
+        setColumnOrder,
+        filterColumn,
+        setFilterColumn
+    } = React.useContext(EmployeeWiseTableContext);
+
+    React.useEffect(() => {
+        setSubColumns(subColumns)
+        const columnOrderFromLocalStore = localStorage.getItem('employeWiseTableColumnOrder');
+        const filterColumnFromLocalStore = localStorage.getItem('employeeWiseTableColumnFilter');
+
+        if (columnOrderFromLocalStore) {
+            setColumnOrder(JSON.parse(columnOrderFromLocalStore))
+        } else {
+            setColumnOrder(subColumns.map((item) => item.key))
+        }
+
+        if (filterColumnFromLocalStore) {
+            setFilterColumn(JSON.parse(filterColumnFromLocalStore));
+        } else {
+            setFilterColumn([])
+        }
+
+
+    }, [])
 
     // pagination
     const paginate = (data, currentPage, nPaginate) => {
@@ -86,10 +122,24 @@ const EmployeeWiseTable = ({ data, columnFilterButtonId }) => {
                             <div>
                                 <div onClick={() => requestSort(column.key)}>
                                     {/* {sortConfig.key === column.key ? (sortConfig.direction === 'asc' ? '▲' : '▼') : '0'} */}
-                                    {sortConfig.key === column.key ?
+                                    {/* {sortConfig.key === column.key ?
                                         <SortIcon sort={sortConfig.direction} />
                                         :
                                         <SortIcon />
+                                    } */}
+                                    {
+                                        sortConfig.key === column.key ? (
+                                            sortConfig.direction === 'asc' ? <>
+                                                <span className="table_asc_dec asc" ></span>
+                                            </> : <>
+                                                <span className="table_asc_dec dec" ></span>
+                                            </>
+
+                                        ) : (
+                                            <>
+                                                <span className="table_asc_dec"></span>
+                                            </>
+                                        )
                                     }
                                 </div>
                                 {column.label}
@@ -165,7 +215,7 @@ const EmployeeWiseTable = ({ data, columnFilterButtonId }) => {
 
     return (
         <TableContainer>
-            <ColumnFilter columns={columnOrder} filterColumn={filterColumn} setFilterColumn={setFilterColumn} root={columnFilterButtonId} />
+            {/* <ColumnFilter columns={columnOrder} filterColumn={filterColumn} setFilterColumn={setFilterColumn} root={columnFilterButtonId} /> */}
 
             <TableWrapper>
                 {/* table */}
@@ -216,7 +266,9 @@ const DragAbleHeader = ({ column, sort, columns, columnOrder, setColumnOrder, re
 
         drop: (item, monitor) => {
             if (item.column !== column) {
-                setColumnOrder(reOrder(item.column, column));
+                const reOrderColumn = reOrder(item.column, column)
+                setColumnOrder(reOrderColumn);
+                localStorage.setItem('employeWiseTableColumnOrder', JSON.stringify(reOrderColumn))
             }
         },
     });
@@ -227,14 +279,14 @@ const DragAbleHeader = ({ column, sort, columns, columnOrder, setColumnOrder, re
         <th key={column} ref={ref} style={{ opacity: isDragging ? 0 : 1 }}>
             <div>
                 <div onClick={() => requestSort(column)}>
-                    {/* {sort.key === column ? (sort.direction === 'asc' ? '▲' : '▼') : '0'} */}
-                    {sort.key === column ?
-                        (
-                            <SortIcon sort={sort.direction} />
+                    {
+                        sort.key === column ? (
+                            sort.direction === 'asc' ?
+                                <span className="table_asc_dec asc"></span>
+                                :
+                                <span className="table_asc_dec dec"></span>
                         ) : (
-                            <>
-                                <SortIcon />
-                            </>
+                            <span className="table_asc_dec"></span>
                         )
                     }
 
@@ -430,6 +482,7 @@ const TableWrapper = styled.div`
       font-weight: normal;
       white-space: nowrap;
       min-width: 120px;
+      cursor: move;
       border-bottom:  2px solid #AAD1FC;
       div {
         display: flex;
@@ -462,29 +515,33 @@ const TableWrapper = styled.div`
 
 // sort 
 const SortIcon = styled.span`
-  width: 10px;
-  height: 10px;
-  color: black;
-  display: block;
-  position: relative;
-  &:before,
-  &:after{
-    border: 4px solid transparent;
-    content: "";
-    display: block;
-    height: 0;
-    right: 5px;
-    top: 50%;
-    position: absolute;
-    width: 0;
-  };
+//   width: 10px;
+//   height: 10px;
+//   color: black;
+//   display: block;
+//   position: relative;
+//   &:before,
+//   &:after{
+//     border: 4px solid transparent;
+//     content: "";
+//     display: block;
+//     height: 0;
+//     right: 5px;
+//     top: 50%;
+//     position: absolute;
+//     width: 0;
+//   };
+//   &:before{
+//     border-bottom-color: ${props => props.sort === 'asc' ? '#666' : '#ddd'};
+// 	  margin-top: -9px;
+//   };
+//   &:after{
+//     border-top-color: ${props => props.sort === 'dec' ? '#666' : '#ddd'};
+// 	  margin-top: 1px;
+//   }
+
   &:before{
-    border-bottom-color: ${props => props.sort === 'asc' ? '#666' : '#ddd'};
-	  margin-top: -9px;
-  };
-  &:after{
-    border-top-color: ${props => props.sort === 'dec' ? '#666' : '#ddd'};
-	  margin-top: 1px;
+    content: "\2191"
   }
 
 `;
@@ -528,6 +585,7 @@ const PaginationContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
   padding: 20px;
   box-sizing: border-box;
@@ -557,6 +615,7 @@ const PaginationGroup = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 `;
 
 const EntriesPerPage = styled.div`
@@ -569,7 +628,8 @@ const EntriesPerPage = styled.div`
 const PaginationButtons = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; 
+  padding: 10px 0;
 `;
 const PreviousBtn = styled.button`
   padding: 6px;
