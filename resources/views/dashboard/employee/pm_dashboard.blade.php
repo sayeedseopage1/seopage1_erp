@@ -1205,8 +1205,8 @@
                                                                 <td class="pl-20 text-capitalize ">
                                                                     <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->client->name ?? 'N/A'}}" href="{{route('clients.show', $value->client_id ?? 0)}}" target="_blank">{{\Str::limit($value->client->name ?? 'N/A', 20, ' ...')}}</a>
                                                                 </td>
-                                                                <td class="pl-20 text-capitalize">{{$task->start_date->format('Y-m-d') ?? '---'}}</td>
-                                                                <td class="pl-20 text-capitalize">{{$task->due_date->format('Y-m-d') ?? '---'}}</td>
+                                                                <td class="pl-20 text-capitalize">{{$task->start_date ?? '---'}}</td>
+                                                                <td class="pl-20 text-capitalize">{{$task->due_date ?? '---'}}</td>
                                                                 <td class="pl-20 text-capitalize">
                                                                     @php
                                                                         $row = $task;

@@ -492,8 +492,8 @@ class TaskController extends AccountBaseController
     public function store(StoreTask $request)
     {
         $project_id = Project::where('id',$request->project_id)->first();
-        $task_estimation_hours= Task::where('project_id',$project_id->id)->sum('estimate_hours');
-        $task_estimation_minutes= Task::where('project_id',$project_id->id)->sum('estimate_minutes');
+        $task_estimation_hours= Task::where('project_id',$project_id->id)->where('subtask_id',null)->sum('estimate_hours');
+        $task_estimation_minutes= Task::where('project_id',$project_id->id)->where('subtask_id',null)->sum('estimate_minutes');
         $total_task_estimation_minutes= $task_estimation_hours*60 + $task_estimation_minutes;
         $left_minutes= ($project_id->hours_allocated-$request->estimate_hours)*60 - ($total_task_estimation_minutes+$request->estimate_minutes);
 
