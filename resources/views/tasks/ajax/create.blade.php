@@ -291,8 +291,8 @@
                             </div>
                         </div>
                         @php
-                            $task_estimation_hours= App\Models\Task::where('project_id',$project->id)->where('subtask_id',null)->sum('estimate_hours');
-                            $task_estimation_minutes= App\Models\Task::where('project_id',$project->id)->where('subtask_id',null)->sum('estimate_minutes');
+                            $task_estimation_hours= App\Models\Task::where('project_id',$project->id)->sum('estimate_hours');
+                            $task_estimation_minutes= App\Models\Task::where('project_id',$project->id)->sum('estimate_minutes');
                             $toal_task_estimation_minutes= $task_estimation_hours*60 + $task_estimation_minutes;
                             $left_minutes= $project->hours_allocated*60 - $toal_task_estimation_minutes;
 
