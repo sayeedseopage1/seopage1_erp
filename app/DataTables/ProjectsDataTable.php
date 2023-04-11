@@ -356,10 +356,23 @@ class ProjectsDataTable extends BaseDataTable
 
                 foreach($projectStatus as $status)
                 {
-                    if ($row->status == $status->status_name) {
-                        $color = $status->color;
-                        return ' <i class="fa fa-circle mr-1 f-10" style="color:'.$color.'"></i>' .'<span class="text-capitalize">'. ucfirst($status->status_name).'</span>';
-                    }
+                    $var= Project::where('id',$row->id)->first();
+                    
+                        if ($row->status == $status->status_name) {
+                            $color = $status->color;
+                            $text = '';
+                            if($row->status == 'partially finished')
+                            {
+                               
+                                $text .= $var->milestone_cancel_count . ' milestone was canceled $'.$var->milestone_cancel_amount . '';
+                            }else 
+                            {
+                                $text = '';
+                            }
+                            return ' <i class="fa fa-circle mr-1 f-10" style="color:'.$color.'"></i>' .'<span class="text-capitalize" title="'.$text.'">'. ucfirst($status->status_name).'</span>';
+                        }
+                   
+                    
                 }
             });
             $datatables->editColumn('completion_percent', function ($row) {

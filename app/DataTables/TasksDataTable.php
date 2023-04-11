@@ -382,7 +382,7 @@ class TasksDataTable extends BaseDataTable
                         <div class="row">
                             <div class="mx-auto mx-sm-0 pb-2 pb-sm-0 align-self-center">'.$subtasks_html.'</div>
                             <div class="col-9">
-                                <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->heading) . '</a></h5>
+                                <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="">' . ucfirst($row->heading) . '</a></h5>
                                 <p class="mb-0">' . $pin . ' ' .$span.' ' . $timer . ' ' . $labels .  '</p>
                             </div>
                         </div>

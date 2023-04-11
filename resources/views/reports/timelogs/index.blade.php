@@ -7,7 +7,7 @@
 
 @section('filter-section')
 
-{{dd($users)}}
+
     <x-filters.filter-box>
         <!-- DATE START -->
         <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">

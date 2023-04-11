@@ -575,7 +575,7 @@
                                 <ul class="task_list">
                                     <li> <a href="/account/clients/{{$w->client_id}}" title="{{$w->client_username}}">
                                       @if($w->client != null)
-                                      <img src="{{asset('user-uploads/avatar/'. $client->image)}}"  alt="">
+                                      <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"  alt="">
                                       @else
                                       <img src="{{asset('user-uploads/avatar/avatar_blank.png')}}"  alt="">
                                       @endif {{$w->client_username}} </a></li>
