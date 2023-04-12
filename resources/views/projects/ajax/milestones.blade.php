@@ -182,7 +182,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
                                 @else
                                 <div class="progress" style="height: 15px;">
-                                    <div class="progress-bar f-12 bg-{{$statusColor}}" role="progressbar" style="width:{{$completion}}%;" aria-valuenow="{{$completion}}" aria-valuemin="0" aria-valuemax="100">{{$completion}}%</div>
+                                    <div class="progress-bar f-12 bg-{{$statusColor}}" role="progressbar" style="width:{{$completion}}%;" aria-valuenow="{{$completion}}" aria-valuemin="0" aria-valuemax="100">{{$completion}}% ({{$completed_tasks}}/{{$tasks}})</div>
                                   </div>
                                   @endif
 
