@@ -499,13 +499,13 @@ class TasksDataTable extends BaseDataTable
                 $totalHours = $task->estimate_hours;
                 $totalMinutes = $task->estimate_minutes;
                 
-                $tasks = $task->subtasks;
+                // $tasks = $task->subtasks;
                 
-                foreach($tasks as $value) {
-                    $countTask = Task::where('subtask_id', $value->id)->first();
-                    $totalHours = $totalHours + $countTask->estimate_hours;
-                    $totalMinutes = $totalMinutes + $countTask->estimate_minutes;
-                }
+                // foreach($tasks as $value) {
+                //     $countTask = Task::where('subtask_id', $value->id)->first();
+                //     $totalHours = $totalHours + $countTask->estimate_hours;
+                //     $totalMinutes = $totalMinutes + $countTask->estimate_minutes;
+                // }
 
                 if ($totalMinutes >= 60) {
                     $hours = intval(floor($totalMinutes / 60));
@@ -515,7 +515,7 @@ class TasksDataTable extends BaseDataTable
                 }
 
                 if ($totalHours == 0 && $totalMinutes == 0) {
-                    return '---';
+                    return '--';
                 } else {
                     return $totalHours.' hrs '.$totalMinutes.' mins';
                 }

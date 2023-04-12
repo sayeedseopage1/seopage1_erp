@@ -1443,8 +1443,8 @@ class ProjectController extends AccountBaseController
             $data[$count] = [
                 'id' => 'task-' . $task->id,
                 'name' => ucfirst($task->heading),
-                'start' => ((!is_null($task->start_date)) ? $task->start_date->format('Y-m-d') : ((!is_null($task->due_date)) ? $task->due_date->format('Y-m-d') : null)),
-                'end' => (!is_null($task->due_date)) ? $task->due_date->format('Y-m-d') : $task->start_date->format('Y-m-d'),
+                'start' => ((!is_null($task->start_date)) ? $task->start_date : ((!is_null($task->due_date)) ? $task->due_date : null)),
+                'end' => (!is_null($task->due_date)) ? $task->due_date : $task->start_date,
                 'progress' => 0,
                 'bg_color' => $task->boardColumn->label_color,
                 'taskid' => $task->id,
