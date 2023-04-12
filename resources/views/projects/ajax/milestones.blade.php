@@ -177,9 +177,14 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                             }
 
                                 @endphp
+                                @if($tasks == 0)
+                                No tasks
+
+                                @else
                                 <div class="progress" style="height: 15px;">
                                     <div class="progress-bar f-12 bg-{{$statusColor}}" role="progressbar" style="width:{{$completion}}%;" aria-valuenow="{{$completion}}" aria-valuemin="0" aria-valuemax="100">{{$completion}}%</div>
                                   </div>
+                                  @endif
 
 
 
