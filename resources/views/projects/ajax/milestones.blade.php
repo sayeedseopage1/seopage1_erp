@@ -51,7 +51,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                         <th>@lang('app.status')</th>
                         <th>@lang('Invoice Genereted')</th>
                         <th>@lang('Payment Release')</th>
-                        {{-- <th>@lang('Quick Action')</th> --}}
+                        <th>@lang('Progress')</th>
                         <th class="text-right pr-20">@lang('app.action')</th>
                     </x-slot>
                     @php
@@ -147,12 +147,44 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
                                 @endif
                             </td>
-                            {{-- <td>
+                            <td>
+                                @php
+                                    $tasks= App\Models\Task::where('milestone_id',$item->id)->count();
+                                    $completed_tasks= App\Models\Task::where('milestone_id',$item->id)->where('status','completed')->count();
+                                    if ($tasks < 1 ) {
+                                            $completion= 0;
+                                            $statusColor = 'danger';
+                                            }
+                                            elseif($tasks >= 1){
+                                                $percentage= round(($completed_tasks/$tasks)*100,2);
+                                                //dd($percentage);
+                                                if($percentage < 50)
+                                                {
+                                                    $completion= $percentage;
+                                                    $statusColor = 'danger';
+                                                }
+                                                elseif ($percentage >= 50 && $percentage < 75) {
+                                                    $completion= $percentage;
+                                                    $statusColor = 'warning';
+                                                }elseif($percentage >= 75 && $percentage < 99) {
+                                                    $completion= $percentage;
+                                                    $statusColor = 'info';
+                                                }else {
+                                                    $completion= $percentage;
+                                                    $statusColor = 'success';
+                                                }
+                                                    
+                                            }
+
+                                @endphp
+                                <div class="progress" style="height: 15px;">
+                                    <div class="progress-bar f-12 bg-{{$statusColor}}" role="progressbar" style="width:{{$completion}}%;" aria-valuenow="{{$completion}}" aria-valuemin="0" aria-valuemax="100">{{$completion}}%</div>
+                                  </div>
 
 
 
   
-                            </td> --}}
+                            </td>
                             <td class="text-right pr-20">
                                 <div class="task_view">
                                     <a href="javascript:;" data-milestone-id="{{ $item->id }}"
