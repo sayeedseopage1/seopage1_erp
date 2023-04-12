@@ -244,47 +244,132 @@
 }
 
 .sp1_ins_sell_dm--card {
-    min-width: 650px;
+    width: 600px;
+    box-sizing: border-box;
+}
+
+.sp1_ins_sell_dm--card>.card-header {
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .sp1_ins_sell_dm--card_body {
     height: fit-content;
-    padding: 0;
+    padding: 0 10px;
 }
 
 
-.ps1_ins_sell_dm--entities {
+.sp1_ins_sell_dm--entities {
     display: flex;
     flex-direction: column;
     min-height: 300px;
     gap: 10px;
     border-right: 1px solid rgb(0 0 0 / 10%);
     padding: 16px;
+    height: 100%;
 }
 
-.ps1_ins_sell_dm--entity {
+.sp1_ins_sell_dm--entities>span {
+    display: block;
+    font-weight: 600;
+    font-size: 11px;
+    color: #555;
+}
+
+.sp1_ins_sell_dm--entity {
     width: 100%;
     display: flex;
     align-items: center;
-    font-size: 16px;
+    font-size: 14px;
     gap: 10px;
     border-radius: 4px;
     text-align: left;
     padding: 16px;
+    cursor: pointer;
 }
 
-.ps1_ins_sell_dm--entity>i {
+.sp1_ins_sell_dm--entity>i {
     font-size: 20px;
 }
 
-.ps1_ins_sell_dm--entity:hover {
+.sp1_ins_sell_dm--entity:hover {
     background: rgb(0 0 0 / 3%);
 }
 
-.ps1_ins_sell_dm--entity.active {
+.sp1_ins_sell_dm--entity:active {
+    background: #1382f1;
+    color: #fff;
+}
+
+.sp1_ins_sell_dm--entity.active {
     color: #1382f1;
     background: #f5faff;
     font-weight: 500;
 }
+
+.sp1_ins_sell_dm--types {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 16px;
+}
+
+.sp1_ins_sell_dm--types>span {
+    display: block;
+    font-weight: 600;
+    font-size: 11px;
+    color: #555;
+}
+
+.sp1_ins_sell_dm--type {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.sp1_ins_sell_dm--type>div {
+    width: 80%
+}
+
+.sp1_ins_sell_dm--type>div>span {
+    font-size: 14px;
+}
+
+.sp1_ins_sell_dm--type>div>div {
+    padding: 0;
+}
+
+.sp1_ins_sell_dm--type>div>div {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+
+.sp1_ins_sell_dm--type:hover {
+    cursor: pointer;
+    background: rgb(0 0 0 / 3%);
+}
+
+.sp1_ins_sell_dm--type:active {
+    background: #1382f1;
+    color: #fff;
+}
+
+.sp1_ins_sell_dm--type.active {
+    color: #1382f1;
+    background: #f5faff;
+    font-weight: 500;
+}
+
+.sp1_ins_sell_dm--type.active>div>span {
+    font-weight: 600;
+}
+
+
 
 /* =========== End Modal =========== */

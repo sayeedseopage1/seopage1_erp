@@ -3,7 +3,10 @@ import ReactDOM from 'react-dom/client';
 import Sidebar from './Sidebar';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import './insights.css';
-import SellsDashboardModal from './SellsDashboardModal';
+import SalesDashboardModal from './SalesDashboardModal';
+import { Provider } from 'react-redux';
+import { store } from './services/store';
+
 
 const Insights = () => {
     return (
@@ -12,7 +15,7 @@ const Insights = () => {
             <main className='flex-grow-1 p-5'>
                 <Outlet />
             </main>
-            <SellsDashboardModal />
+            <SalesDashboardModal />
         </div>
     )
 }
@@ -24,15 +27,17 @@ if (container) {
 
     root.render(
         <React.StrictMode>
-            <BrowserRouter basename='/account/insights'>
-                <Routes>
-                    <Route path="/" element={<Insights />}>
-                        <Route path="/dashboard/:id" element={<h5>My Dashboard</h5>} />
-                        <Route path="/goals/:id" element={<h5>My Dashboard</h5>} />
-                        <Route path="/reports/:id" element={<h5>My Dashboard</h5>} />
-                    </Route>
-                </Routes>
-            </BrowserRouter>
+            <Provider store={store}>
+                <BrowserRouter basename='/account/insights'>
+                    <Routes>
+                        <Route path="/" element={<Insights />}>
+                            <Route path="/dashboard/:id" element={<h5>My Dashboard</h5>} />
+                            <Route path="/goals/:id" element={<h5>My Dashboard</h5>} />
+                            <Route path="/reports/:id" element={<h5>My Dashboard</h5>} />
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
+            </Provider>
         </React.StrictMode>
     )
 }

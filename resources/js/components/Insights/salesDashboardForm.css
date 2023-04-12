@@ -1,0 +1,38 @@
+.sp1_sell_df--container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    -ms-flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.sp1_sell_df--item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.sp1_sell_df--title {
+    width: 180px;
+    text-align: right;
+    font-size: 16px;
+}
+
+.sp1_sell_df--control {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    font-size: 16px;
+}
+
+.sp1_sell_df--datepicker {
+    background: transparent;
+}
+
+.react-datepicker__tab-loop__start {
+    gap: 0 !important;
+    display: none;
+}

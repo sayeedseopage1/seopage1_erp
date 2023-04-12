@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 
-const Modal = ({ isOpen, close, children }) => {
+const Modal = ({ isOpen, children }) => {
     const [render, setRender] = useState(false);
     let dom = document.getElementById('insights-container-modal');
     if (!isOpen && dom) return null;
