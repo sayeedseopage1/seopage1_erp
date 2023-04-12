@@ -2526,22 +2526,25 @@ class ProjectController extends AccountBaseController
     if ($request->deny != null) {
       $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
       $mile= ProjectMilestone::find($milestone->id);
-      $mile->qc_status= 3;
+      $mile->qc_status= 0;
       $mile->save();
+      $project_id= Project::where('id',$project->project_id)->first();
+
+      $user= User::where('id',$project_id->pm_id)->first();
+  
+  
+  
+        Notification::send($user, new QcSubmissionAcceptNotification($project_id));
+  
+      $qc_submission= QcSubmission::find($request->id);
+      $qc_submission->delete();
     }else {
       $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
       $mile= ProjectMilestone::find($milestone->id);
       $mile->qc_status= 1;
       $mile->save();
     }
-    $project_id= Project::where('id',$project->project_id)->first();
-
-    $user= User::where('id',$project_id->pm_id)->first();
-
-
-
-      Notification::send($user, new QcSubmissionAcceptNotification($project_id));
-
+   
     Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
     return back();
 

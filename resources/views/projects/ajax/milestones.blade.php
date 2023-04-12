@@ -62,8 +62,32 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                         <tr id="row-{{ $item->id }}">
                             <td class="pl-20">{{ $key + 1 }}</td>
                             <td>
+                               
                                 <a href="javascript:;" class="milestone-detail text-darkest-grey f-w-500"
-                                    data-milestone-id="{{ $item->id }}">{{ ucfirst($item->milestone_title) }}</a>
+                                    data-milestone-id="{{ $item->id }}">{{ ucfirst($item->milestone_title) }} 
+                                   
+                                @if($item->qc_status == 2)
+                                <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                               Awaiting Approval
+                                               <br>
+                                               (QC Sumission)
+
+                                @endif
+                                @if($item->project_completion_status == 2)
+                                <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                              Awaiting Approval
+                              <br>
+                              (Project Completion)
+
+                                @endif
+                                @if($item->cancelation_status == 'submitted')
+                                <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                                                Awaiting Approval
+                                                                <br>
+                                                                (Milestone Cancelation)
+                                @endif
+                               
+                                </a>
                             </td>
                             <td>
                                 @if (!is_null($item->original_currency_id))
@@ -151,7 +175,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                             $canceled_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','canceled')->count();
                                             $complete_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
                                             $invoice_generated= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_created',1)->count();
-                                            $last_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->orderBy('id','desc')->where('invoice_id',null)->first();
+                                            $last_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->orderBy('id','desc')->first();
                                             $first_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_id',null)->first();
                                             $qc_count= App\Models\ProjectMilestone::where('project_id',$project->id)->where('qc_status',1)->count();
                                              // dd($qc_count);
@@ -175,10 +199,10 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                                 @endif
                                               @else
                                               @if($item->cancelation_status == 'submitted')
-                                              <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                              {{-- <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                                                 Awaiting Approval
                                                                 <br>
-                                                                (Milestone Cancelation)
+                                                                (Milestone Cancelation) --}}
                                             @endif
                                               @endif
               
@@ -201,10 +225,10 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
                                 @endif
                                 @else
-                                <i class="fa fa-circle mr-1 text-yellow f-10 mr-2"></i>
+                                {{-- <i class="fa fa-circle mr-1 text-yellow f-10 mr-2"></i>
                                                   Awaiting Approval
                                                   <br>
-                                                  (Milestone Cancelation)
+                                                  (Milestone Cancelation) --}}
                                 @endif
               
                                 @endif
@@ -216,20 +240,20 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                       <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="dropdown-item">Complete Q&C</a>
               
                                       @elseif($item->qc_status == 2)
-                                      <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                      {{-- <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                                Awaiting Approval
                                                <br>
-                                               (QC Sumission)
+                                               (QC Sumission) --}}
                                   @endif
                               @elseif($incomplete_milestone == 0 && $project_completion_count == 0 && $item->id == $last_milestone->id)
                               @if($item->project_completion_status  == 0)
               
                               <a href="/projects/project-completion/{{$item->id}}"  class="dropdown-item" >Project Completion Form</a>
                               @elseif($item->project_completion_status  == 2)
-                              <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                              {{-- <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                               Awaiting Approval
                               <br>
-                              (Project Completion)
+                              (Project Completion) --}}
               
               
                               @endif
@@ -249,27 +273,27 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                       <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="dropdown-item">Complete Q&C</a>
               
                                       @elseif($item->qc_status == 2)
-                                      <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                      {{-- <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                                Awaiting Approval
                                                <br>
-                                               (QC Sumission)
+                                               (QC Sumission) --}}
               
               
                                       @elseif($item->qc_status == 1 && $item->invoice_created == 0)
               
               
                                       <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}"   class="dropdown-item" id="{{$item->id}}"  data-row-id="{{ $item->id }}">Generate Invoice</a>
-                                      @elseif($item->qc_status == 1 && $item->invoice_created == 1)
+                                      @elseif($item->qc_status == 1 && $item->invoice_created == 1 && $item->project_completion_status == 0)
                                       <a href="/projects/project-completion/{{$item->id}}"  class="dropdown-item" >Project Completion Form</a>
               
               
                                       @elseif($item->qc_status == 1 && $item->invoice_created == 1 && $item->project_completion_status == 2)
-                                      <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                      {{-- <i class="fa fa-circle mr-1 text-yellow f-10"></i>
               
                                                   Awaiting Approval
                                                   <br>
                                                   (Project Completion)
-              
+               --}}
                                                   @php
                                                   $invoice_id = App\Models\Invoice::where('milestone_id',$item->invoice_id)->where('status','unpaid')->first();
                                                   @endphp
