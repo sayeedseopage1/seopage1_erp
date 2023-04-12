@@ -10440,7 +10440,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var Sidebar = function Sidebar() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("My Dashboard"),
     _useState2 = _slicedToArray(_useState, 2),
@@ -11143,11 +11142,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
-/* harmony import */ var react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-dnd-html5-backend */ "./node_modules/react-dnd-html5-backend/dist/index.js");
-/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/core/DndProvider.js");
-/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDrag/useDrag.js");
-/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDrop/useDrop.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDrag/useDrag.js");
+/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDrop/useDrop.js");
 /* harmony import */ var ___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! . */ "./resources/js/components/TimeLogTable/index.jsx");
 /* harmony import */ var _table_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./table.css */ "./resources/js/components/TimeLogTable/table.css");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
@@ -11172,38 +11169,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
-
-
-var columns = [{
-  key: 'name',
-  label: 'Employee Name'
-}];
-var subColumns = [{
-  key: 'project_name',
-  label: 'Project Name'
-}, {
-  key: 'client',
-  label: 'Client'
-}, {
-  key: 'project_manager',
-  label: 'Project Manager'
-}, {
-  key: 'number_of_session',
-  label: 'Number of Session'
-}, {
-  key: 'total_minutes',
-  label: 'Total Track Time'
-}];
-
 // pivot table
+
+
+
 var EmployeeWiseTable = function EmployeeWiseTable(_ref) {
   var data = _ref.data,
-    columnFilterButtonId = _ref.columnFilterButtonId;
-  // const [sortConfig, setSortConfig] = useState({});
-  // const [nPageRows, setNPageRows] = useState(10);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [columnOrder, setColumnOrder] = useState(subColumns.map((item) => item.key));
-  // const [filterColumn, setFilterColumn] = useState([]);
+    columns = _ref.columns,
+    subColumns = _ref.subColumns;
   var _React$useContext = react__WEBPACK_IMPORTED_MODULE_0___default().useContext(___WEBPACK_IMPORTED_MODULE_3__.EmployeeWiseTableContext),
     setColumns = _React$useContext.setColumns,
     setSubColumns = _React$useContext.setSubColumns,
@@ -11219,17 +11192,17 @@ var EmployeeWiseTable = function EmployeeWiseTable(_ref) {
     setFilterColumn = _React$useContext.setFilterColumn;
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     setSubColumns(subColumns);
-    var columnOrderFromLocalStore = localStorage.getItem('employeWiseTableColumnOrder');
+    var columnOrderFromLocalStore = localStorage.getItem('employeeWiseTableColumnOrder');
     var filterColumnFromLocalStore = localStorage.getItem('employeeWiseTableColumnFilter');
     if (columnOrderFromLocalStore) {
-      setColumnOrder(JSON.parse(columnOrderFromLocalStore));
+      setColumnOrder(_toConsumableArray(JSON.parse(columnOrderFromLocalStore)));
     } else {
-      setColumnOrder(subColumns.map(function (item) {
+      setColumnOrder(_toConsumableArray(subColumns.map(function (item) {
         return item.key;
-      }));
+      })));
     }
     if (filterColumnFromLocalStore) {
-      setFilterColumn(JSON.parse(filterColumnFromLocalStore));
+      setFilterColumn(_toConsumableArray(JSON.parse(filterColumnFromLocalStore)));
     } else {
       setFilterColumn([]);
     }
@@ -11291,46 +11264,43 @@ var EmployeeWiseTable = function EmployeeWiseTable(_ref) {
 
   // prepare header
   var prepareHeader = function prepareHeader() {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_dnd__WEBPACK_IMPORTED_MODULE_6__.DndProvider, {
-      backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_7__.HTML5Backend,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
-        style: {
-          borderBottom: '2px solid #AAD1FC'
-        },
-        children: [columns.map(function (column) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-                onClick: function onClick() {
-                  return requestSort(column.key);
-                },
-                children: sortConfig.key === column.key ? sortConfig.direction === 'asc' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                    className: "table_asc_dec asc"
-                  })
-                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                    className: "table_asc_dec dec"
-                  })
-                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                    className: "table_asc_dec"
-                  })
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+      style: {
+        borderBottom: '2px solid #AAD1FC'
+      },
+      children: [columns.map(function (column) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+              onClick: function onClick() {
+                return requestSort(column.key);
+              },
+              children: sortConfig.key === column.key ? sortConfig.direction === 'asc' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                  className: "table_asc_dec asc"
                 })
-              }), column.label]
-            })
-          }, column.key);
-        }), lodash__WEBPACK_IMPORTED_MODULE_2___default().without.apply((lodash__WEBPACK_IMPORTED_MODULE_2___default()), [columnOrder].concat(_toConsumableArray(filterColumn))).map(function (column) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DragAbleHeader, {
-            column: column,
-            sort: sortConfig,
-            columns: subColumns,
-            columnOrder: columnOrder,
-            setColumnOrder: setColumnOrder,
-            requestSort: requestSort
-          }, column);
-        })]
-      })
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                  className: "table_asc_dec dec"
+                })
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                  className: "table_asc_dec"
+                })
+              })
+            }), column.label]
+          })
+        }, column.key);
+      }), lodash__WEBPACK_IMPORTED_MODULE_2___default().without.apply((lodash__WEBPACK_IMPORTED_MODULE_2___default()), [columnOrder].concat(_toConsumableArray(filterColumn))).map(function (column) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DragAbleHeader, {
+          column: column,
+          sort: sortConfig,
+          columns: subColumns,
+          columnOrder: columnOrder,
+          setColumnOrder: setColumnOrder,
+          requestSort: requestSort
+        }, column);
+      })]
     });
   };
 
@@ -11410,6 +11380,7 @@ var EmployeeWiseTable = function EmployeeWiseTable(_ref) {
 
 /* ========== DRAG ABLE COLUMN ============== */
 var DragAbleHeader = function DragAbleHeader(_ref2) {
+  var _columns$find;
   var column = _ref2.column,
     sort = _ref2.sort,
     columns = _ref2.columns,
@@ -11421,7 +11392,7 @@ var DragAbleHeader = function DragAbleHeader(_ref2) {
     columnOrder.splice(columnOrder.indexOf(target), 0, columnOrder.splice(columnOrder.indexOf(curr), 1)[0]);
     return _toConsumableArray(columnOrder);
   };
-  var _useDrag = (0,react_dnd__WEBPACK_IMPORTED_MODULE_8__.useDrag)({
+  var _useDrag = (0,react_dnd__WEBPACK_IMPORTED_MODULE_6__.useDrag)({
       type: 'column',
       item: {
         column: column
@@ -11437,7 +11408,7 @@ var DragAbleHeader = function DragAbleHeader(_ref2) {
     drag = _useDrag2[1];
 
   // drop
-  var _useDrop = (0,react_dnd__WEBPACK_IMPORTED_MODULE_9__.useDrop)({
+  var _useDrop = (0,react_dnd__WEBPACK_IMPORTED_MODULE_7__.useDrop)({
       accept: 'column',
       hover: function hover(item, monitor) {
         var dragIndex = columnOrder.indexOf(item.column);
@@ -11447,8 +11418,13 @@ var DragAbleHeader = function DragAbleHeader(_ref2) {
         if (item.column !== column) {
           var reOrderColumn = reOrder(item.column, column);
           setColumnOrder(reOrderColumn);
-          localStorage.setItem('employeWiseTableColumnOrder', JSON.stringify(reOrderColumn));
+          localStorage.setItem('employeeWiseTableColumnOrder', JSON.stringify(reOrderColumn));
         }
+      },
+      collect: function collect(monitor) {
+        return {
+          isOver: !!monitor.isOver()
+        };
       }
     }),
     _useDrop2 = _slicedToArray(_useDrop, 2),
@@ -11458,7 +11434,8 @@ var DragAbleHeader = function DragAbleHeader(_ref2) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
     ref: ref,
     style: {
-      opacity: isDragging ? 0 : 1
+      opacity: isDragging ? 0 : 1,
+      background: isOver ? 'rgb(0 0 0 / 5%)' : ''
     },
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
@@ -11476,9 +11453,9 @@ var DragAbleHeader = function DragAbleHeader(_ref2) {
         style: {
           position: 'relative'
         },
-        children: columns.find(function (item) {
+        children: (_columns$find = columns.find(function (item) {
           return item.key === column;
-        }).label
+        })) === null || _columns$find === void 0 ? void 0 : _columns$find.label
       })]
     })
   }, column);
@@ -11655,42 +11632,618 @@ var Pagination = function Pagination(_ref4) {
 };
 
 // ========= styled ============
-var TableContainer = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  max-width: 100%;\n  overflow: hidden;\n"])));
-var TableWrapper = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  padding: 20px;\n  box-sizing: border-box;\n  background: #fff;\n  width: 100%;\n  max-width: 100%;\n  overflow: hidden;\n  overflow-x: auto;\n  border-radius: 16px;\n  table {\n    border-collapse: collapse;\n    border-spacing: 0;\n    font-size: 14px;\n    color: #1d82f5;\n    tr {\n      &:hover {\n        background-color: #f9fbfd;\n      }\n    }\n    th {\n      background-color: #fff;\n      padding: 16px 10px;\n      text-align: left;\n      font-weight: normal;\n      white-space: nowrap;\n      min-width: 120px;\n      cursor: move;\n      border-bottom:  2px solid #AAD1FC;\n      div {\n        display: flex;\n        align-items: center;\n        gap: 5px;\n        white-space: nowrap;\n      }\n    }\n    td {\n      padding: 16px 10px;\n      text-align: left;\n      min-height: 120px;\n      border-bottom: 1px solid #E7EFFC;\n    }\n  }\n  .pagination {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    margin-top: 20px;\n    button {\n      padding: 10px;\n      margin: 0 10px;\n      border: none;\n      background-color: #f2f2f2;\n      cursor: pointer;\n    }\n  }\n"])));
+var TableContainer = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  max-width: 100%;\n  overflow: hidden;\n"])));
+var TableWrapper = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  padding: 20px;\n  box-sizing: border-box;\n  background: #fff;\n  width: 100%;\n  max-width: 100%;\n  overflow: hidden;\n  overflow-x: auto;\n  border-radius: 16px;\n  table {\n    border-collapse: collapse;\n    border-spacing: 0;\n    font-size: 14px;\n    color: #1d82f5;\n    tr {\n      &:hover {\n        background-color: #f9fbfd;\n      }\n    }\n    th {\n      background-color: #fff;\n      padding: 16px 10px;\n      text-align: left;\n      font-weight: normal;\n      white-space: nowrap;\n      min-width: 120px;\n      cursor: move;\n      border-bottom:  2px solid #AAD1FC;\n      div {\n        display: flex;\n        align-items: center;\n        gap: 5px;\n        white-space: nowrap;\n      }\n    }\n    td {\n      padding: 16px 10px;\n      text-align: left;\n      min-height: 120px;\n      border-bottom: 1px solid #E7EFFC;\n    }\n  }\n  .pagination {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    margin-top: 20px;\n    button {\n      padding: 10px;\n      margin: 0 10px;\n      border: none;\n      background-color: #f2f2f2;\n      cursor: pointer;\n    }\n  }\n"])));
 
 // sort 
-var SortIcon = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].span(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n//   width: 10px;\n//   height: 10px;\n//   color: black;\n//   display: block;\n//   position: relative;\n//   &:before,\n//   &:after{\n//     border: 4px solid transparent;\n//     content: \"\";\n//     display: block;\n//     height: 0;\n//     right: 5px;\n//     top: 50%;\n//     position: absolute;\n//     width: 0;\n//   };\n//   &:before{\n//     border-bottom-color: ", ";\n// \t  margin-top: -9px;\n//   };\n//   &:after{\n//     border-top-color: ", void 0], ["\n//   width: 10px;\n//   height: 10px;\n//   color: black;\n//   display: block;\n//   position: relative;\n//   &:before,\n//   &:after{\n//     border: 4px solid transparent;\n//     content: \"\";\n//     display: block;\n//     height: 0;\n//     right: 5px;\n//     top: 50%;\n//     position: absolute;\n//     width: 0;\n//   };\n//   &:before{\n//     border-bottom-color: ", ";\n// \t  margin-top: -9px;\n//   };\n//   &:after{\n//     border-top-color: ", ";\n// \t  margin-top: 1px;\n//   }\n\n  &:before{\n    content: \"\\2191\"\n  }\n\n"])), function (props) {
+var SortIcon = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].span(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n//   width: 10px;\n//   height: 10px;\n//   color: black;\n//   display: block;\n//   position: relative;\n//   &:before,\n//   &:after{\n//     border: 4px solid transparent;\n//     content: \"\";\n//     display: block;\n//     height: 0;\n//     right: 5px;\n//     top: 50%;\n//     position: absolute;\n//     width: 0;\n//   };\n//   &:before{\n//     border-bottom-color: ", ";\n// \t  margin-top: -9px;\n//   };\n//   &:after{\n//     border-top-color: ", void 0], ["\n//   width: 10px;\n//   height: 10px;\n//   color: black;\n//   display: block;\n//   position: relative;\n//   &:before,\n//   &:after{\n//     border: 4px solid transparent;\n//     content: \"\";\n//     display: block;\n//     height: 0;\n//     right: 5px;\n//     top: 50%;\n//     position: absolute;\n//     width: 0;\n//   };\n//   &:before{\n//     border-bottom-color: ", ";\n// \t  margin-top: -9px;\n//   };\n//   &:after{\n//     border-top-color: ", ";\n// \t  margin-top: 1px;\n//   }\n\n  &:before{\n    content: \"\\2191\"\n  }\n\n"])), function (props) {
   return props.sort === 'asc' ? '#666' : '#ddd';
 }, function (props) {
   return props.sort === 'dec' ? '#666' : '#ddd';
 });
-var EmployeeProfileTd = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].td(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n  background: #f8f8f8;\n  &:hover: {\n    background: #f8f8f8;\n  }\n"])));
-var EmployeeProfile = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: center;\n  align-items: center;\n"])));
-var EmployeeProfileImage = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["\n  width: 35px;\n  height: 35px;\n  border-radius: 50%;\n  background-color: #ccc;\n"])));
-var EmployeeProfileName = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: flex-start;\n  margin-left: 10px;\n  span {\n    font-size: 12px;\n    font-weight: 500;\n    color: #000;\n    &:first-child {\n      font-size: 14px;\n      font-weight: 600;\n      color: #1d82f5;\n    }\n  }\n"])));
-var PaginationContainer = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  flex-wrap: wrap;\n  align-items: center;\n  padding: 20px;\n  box-sizing: border-box;\n  font-size: 14px;\n"])));
-var SelectParPage = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].select(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["\n  padding: 4px;\n  font-size: 12px;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  color: rgb(0 0 0 / 60%);\n  background: #fff;\n  margin: 0 6px;\n  option {\n    padding: 6px;\n    font-size: 12px;\n    border-radius: 5px;\n  }\n\n  &:focus {\n    outline: none;\n  }\n"])));
-var PaginationGroup = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject10 || (_templateObject10 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  flex-wrap: wrap;\n"])));
-var EntriesPerPage = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject11 || (_templateObject11 = _taggedTemplateLiteral(["\n  color: rgb(0 0 0 / 40%)\n  margin-right: 10px;\n  font-size: 14px;\n  margin-right: 10px;\n"])));
-var PaginationButtons = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject12 || (_templateObject12 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: center;\n  align-items: center; \n  padding: 10px 0;\n"])));
-var PreviousBtn = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].button(_templateObject13 || (_templateObject13 = _taggedTemplateLiteral(["\n  padding: 6px;\n  font-size: 12px;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  color: #000;\n  background: #fff;\n  &:hover {\n    background: #eaf0f7;\n    color: #1d82f5;\n  }\n  &:active {\n    background: #1d82f5;\n    color: #fff;\n  }\n  &:disabled {\n    background: #f3f3f3;\n    color: #ccc;\n  }\n"])));
-var NextBtn = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].button(_templateObject14 || (_templateObject14 = _taggedTemplateLiteral(["\n  padding: 6px;\n  font-size: 12px;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  color: #000;\n  background: #fff;\n  &:hover {\n    background: #eaf0f7;\n    color: #1d82f5;\n  }\n  &:active {\n    background: #1d82f5;\n    color: #fff;\n  }\n  &:disabled {\n    background: #f3f3f3;\n    color: #ccc;\n  }\n"])));
+var EmployeeProfileTd = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].td(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n  background: #f8f8f8;\n  &:hover: {\n    background: #f8f8f8;\n  }\n"])));
+var EmployeeProfile = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: center;\n  align-items: center;\n"])));
+var EmployeeProfileImage = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["\n  width: 35px;\n  height: 35px;\n  border-radius: 50%;\n  background-color: #ccc;\n"])));
+var EmployeeProfileName = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: flex-start;\n  margin-left: 10px;\n  span {\n    font-size: 12px;\n    font-weight: 500;\n    color: #000;\n    &:first-child {\n      font-size: 14px;\n      font-weight: 600;\n      color: #1d82f5;\n    }\n  }\n"])));
+var PaginationContainer = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  flex-wrap: wrap;\n  align-items: center;\n  padding: 20px;\n  box-sizing: border-box;\n  font-size: 14px;\n"])));
+var SelectParPage = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].select(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["\n  padding: 4px;\n  font-size: 12px;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  color: rgb(0 0 0 / 60%);\n  background: #fff;\n  margin: 0 6px;\n  option {\n    padding: 6px;\n    font-size: 12px;\n    border-radius: 5px;\n  }\n\n  &:focus {\n    outline: none;\n  }\n"])));
+var PaginationGroup = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject10 || (_templateObject10 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  flex-wrap: wrap;\n"])));
+var EntriesPerPage = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject11 || (_templateObject11 = _taggedTemplateLiteral(["\n  color: rgb(0 0 0 / 40%)\n  margin-right: 10px;\n  font-size: 14px;\n  margin-right: 10px;\n"])));
+var PaginationButtons = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject12 || (_templateObject12 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: center;\n  align-items: center; \n  padding: 10px 0;\n"])));
+var PreviousBtn = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].button(_templateObject13 || (_templateObject13 = _taggedTemplateLiteral(["\n  padding: 6px;\n  font-size: 12px;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  color: #000;\n  background: #fff;\n  &:hover {\n    background: #eaf0f7;\n    color: #1d82f5;\n  }\n  &:active {\n    background: #1d82f5;\n    color: #fff;\n  }\n  &:disabled {\n    background: #f3f3f3;\n    color: #ccc;\n  }\n"])));
+var NextBtn = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].button(_templateObject14 || (_templateObject14 = _taggedTemplateLiteral(["\n  padding: 6px;\n  font-size: 12px;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  color: #000;\n  background: #fff;\n  &:hover {\n    background: #eaf0f7;\n    color: #1d82f5;\n  }\n  &:active {\n    background: #1d82f5;\n    color: #fff;\n  }\n  &:disabled {\n    background: #f3f3f3;\n    color: #ccc;\n  }\n"])));
 // pagination styled
-var PaginateNumber = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject15 || (_templateObject15 = _taggedTemplateLiteral(["\n  width: 16px;\n  height: 16px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  padding: 16px;\n  margin: 0 6px;\n  border: none;\n  font-size: 14px;\n  background: ", ";\n  color: ", ";\n  cursor: pointer;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  &:hover {\n    background: #eaf0f7;\n    color: #1d82f5;\n  }\n"])), function (props) {
+var PaginateNumber = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject15 || (_templateObject15 = _taggedTemplateLiteral(["\n  width: 16px;\n  height: 16px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  padding: 16px;\n  margin: 0 6px;\n  border: none;\n  font-size: 14px;\n  background: ", ";\n  color: ", ";\n  cursor: pointer;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  &:hover {\n    background: #eaf0f7;\n    color: #1d82f5;\n  }\n"])), function (props) {
   return props.className === 'active' ? '#1d82f5' : '#fff';
 }, function (props) {
   return props.className === 'active' ? '#fff' : '#000';
 });
 
 // column Filter
-var ColumnFilterWrapper = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject16 || (_templateObject16 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  gap: 10px;\n  margin: 10px 0;\n  position: relative;\n"])));
-var ColumnFilterButton = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].button(_templateObject17 || (_templateObject17 = _taggedTemplateLiteral(["\n  padding: 6px;\n  font-size: 12px;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  color: #000;\n  background: #fff;\n  position: relative;\n  cursor: pointer;\n"])));
-var ColumnFilterDropdown = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject18 || (_templateObject18 = _taggedTemplateLiteral(["\n  position: absolute;\n  top: 30px;\n  left: 0;\n  width: 100%;\n  min-width: fit-content;\n  background: #fff;\n  border: 1px solid #eaf0f7;\n  border-radius: 5px;\n  padding: 10px;\n  box-sizing: border-box;\n"])));
-var ColumnFilterCheckbox = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject19 || (_templateObject19 = _taggedTemplateLiteral(["\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  margin: 10px 0;\n  input {\n    cursor: pointer;\n  }\n  label {\n    font-size: 12px;\n    font-weight: 500;\n    white-space: nowrap;\n    cursor: pointer;\n  }\n"])));
+var ColumnFilterWrapper = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject16 || (_templateObject16 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  gap: 10px;\n  margin: 10px 0;\n  position: relative;\n"])));
+var ColumnFilterButton = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].button(_templateObject17 || (_templateObject17 = _taggedTemplateLiteral(["\n  padding: 6px;\n  font-size: 12px;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  color: #000;\n  background: #fff;\n  position: relative;\n  cursor: pointer;\n"])));
+var ColumnFilterDropdown = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject18 || (_templateObject18 = _taggedTemplateLiteral(["\n  position: absolute;\n  top: 30px;\n  left: 0;\n  width: 100%;\n  min-width: fit-content;\n  background: #fff;\n  border: 1px solid #eaf0f7;\n  border-radius: 5px;\n  padding: 10px;\n  box-sizing: border-box;\n"])));
+var ColumnFilterCheckbox = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].div(_templateObject19 || (_templateObject19 = _taggedTemplateLiteral(["\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  margin: 10px 0;\n  input {\n    cursor: pointer;\n  }\n  label {\n    font-size: 12px;\n    font-weight: 500;\n    white-space: nowrap;\n    cursor: pointer;\n  }\n"])));
 
 // drag and drop
 // style when drag
-var DragAbleTH = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].th(_templateObject20 || (_templateObject20 = _taggedTemplateLiteral(["\n    opacity: ", ";\n    background: ", ";} \n"])), function (props) {
+var DragAbleTH = styled_components__WEBPACK_IMPORTED_MODULE_8__["default"].th(_templateObject20 || (_templateObject20 = _taggedTemplateLiteral(["\n    opacity: ", ";\n    background: ", ";} \n"])), function (props) {
+  return props.isDragging ? 0.5 : 1;
+}, function (props) {
+  return props.isDragging ? 'red' : '#fff';
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/TimeLogTable/ProjectWiseTable.jsx":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/TimeLogTable/ProjectWiseTable.jsx ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDrag/useDrag.js");
+/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDrop/useDrop.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! . */ "./resources/js/components/TimeLogTable/index.jsx");
+/* harmony import */ var _table_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./table.css */ "./resources/js/components/TimeLogTable/table.css");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15, _templateObject16, _templateObject17, _templateObject18, _templateObject19, _templateObject20;
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+
+
+
+
+
+
+// pivot table
+
+
+
+var ProjectWiseTable = function ProjectWiseTable(_ref) {
+  var data = _ref.data,
+    columns = _ref.columns,
+    subColumns = _ref.subColumns;
+  var _React$useContext = react__WEBPACK_IMPORTED_MODULE_0___default().useContext(___WEBPACK_IMPORTED_MODULE_2__.EmployeeWiseTableContext),
+    setSubColumns = _React$useContext.setSubColumns,
+    sortConfig = _React$useContext.sortConfig,
+    setSortConfig = _React$useContext.setSortConfig,
+    nPageRows = _React$useContext.nPageRows,
+    setNPageRows = _React$useContext.setNPageRows,
+    currentPage = _React$useContext.currentPage,
+    setCurrentPage = _React$useContext.setCurrentPage,
+    columnOrder = _React$useContext.columnOrder,
+    setColumnOrder = _React$useContext.setColumnOrder,
+    filterColumn = _React$useContext.filterColumn,
+    setFilterColumn = _React$useContext.setFilterColumn;
+
+  /* ================ Initial State ==================== */
+  react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
+    setSubColumns(subColumns);
+    var columnOrderFromLocalStore = localStorage.getItem('projectWiseTableColumnOrder');
+    var filterColumnFromLocalStore = localStorage.getItem('projectWiseTableColumnFilter');
+    if (columnOrderFromLocalStore) {
+      setColumnOrder(_toConsumableArray(JSON.parse(columnOrderFromLocalStore)));
+    } else {
+      setColumnOrder(_toConsumableArray(subColumns.map(function (item) {
+        return item.key;
+      })));
+    }
+    if (filterColumnFromLocalStore) {
+      setFilterColumn(_toConsumableArray(JSON.parse(filterColumnFromLocalStore)));
+    } else {
+      setFilterColumn([]);
+    }
+  }, [columns, subColumns]);
+  /* ================ End Initial State ==================== */
+
+  /*================== Pagination =====================*/
+  var paginate = function paginate(data, currentPage, nPaginate) {
+    if (data.length <= nPaginate) return data;
+    var startIndex = (currentPage - 1) * nPaginate;
+    return data.slice(startIndex, startIndex + nPaginate);
+  };
+  /*================== End Pagination =====================*/
+
+  // column filter
+  var requestColumnFilter = function requestColumnFilter(key) {
+    if (typeof key === 'string') {
+      var index = columnOrder.indexOf(key);
+      if (index > -1) {
+        columnOrder.splice(index, 1);
+      } else {
+        columnOrder.push(key);
+      }
+      setColumnOrder(_toConsumableArray(columnOrder));
+    } else {
+      setColumnOrder(key);
+    }
+  };
+
+  /*======================== SORT ========================*/
+  var sort = function sort(data, sortConfig) {
+    if (!sortConfig) {
+      return data;
+    }
+    return _toConsumableArray(data).sort(function (a, b) {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  };
+  // SORT REQUEST
+  var requestSort = function requestSort(key) {
+    var direction = 'asc';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'dec';
+    }
+    setSortConfig({
+      key: key,
+      direction: direction
+    });
+  };
+
+  /*======================== End SORT ========================*/
+
+  // prepare header
+  var prepareHeader = function prepareHeader() {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+      style: {
+        borderBottom: '2px solid #AAD1FC'
+      },
+      children: [columns.map(function (column) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              onClick: function onClick() {
+                return requestSort(column.key);
+              },
+              children: sortConfig.key === column.key ? sortConfig.direction === 'asc' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                  className: "table_asc_dec asc"
+                })
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                  className: "table_asc_dec dec"
+                })
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                  className: "table_asc_dec"
+                })
+              })
+            }), column.label]
+          })
+        }, column.key);
+      }), lodash__WEBPACK_IMPORTED_MODULE_1___default().without.apply((lodash__WEBPACK_IMPORTED_MODULE_1___default()), [columnOrder].concat(_toConsumableArray(filterColumn))).map(function (column) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(DragAbleHeader, {
+          column: column,
+          sort: sortConfig,
+          columns: subColumns,
+          columnOrder: columnOrder,
+          setColumnOrder: setColumnOrder,
+          requestSort: requestSort
+        }, column);
+      })]
+    });
+  };
+
+  /* =============== PREPARE ROWS =================== */
+  var prepareRows = function prepareRows() {
+    var rows = [];
+    var sortedData = sort(data, sortConfig);
+    var paginatedData = paginate(sortedData, currentPage, nPageRows);
+
+    /* =============== Data group by Project ID =================== */
+    var groupedData = paginatedData.reduce(function (r, a) {
+      r[a.project_id] = [].concat(_toConsumableArray(r[a.project_id] || []), [a]);
+      return r;
+    }, {});
+    /* ================ End Data Grouping ================== */
+    var _loop = function _loop() {
+      var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+        key = _Object$entries$_i[0],
+        value = _Object$entries$_i[1];
+      rows.push( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("tr", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(EmployeeProfileTd, {
+            rowSpan: value.length + 1,
+            style: {
+              borderBottom: '2px solid #AAD1FC'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(EmployeeProfile, {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(EmployeeProfileName, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                  children: value[0].project_name
+                })
+              })
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(EmployeeProfileTd, {
+            rowSpan: value.length + 1,
+            style: {
+              borderBottom: '2px solid #AAD1FC',
+              borderLeft: '2px solid #fff',
+              borderRight: '2px solid #fff'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(EmployeeProfile, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(EmployeeProfileImage, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(EmployeeProfileName, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                  className: "white-space",
+                  children: value[0].client
+                })
+              })]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(EmployeeProfileTd, {
+            rowSpan: value.length + 1,
+            style: {
+              borderBottom: '2px solid #AAD1FC'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(EmployeeProfile, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(EmployeeProfileImage, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(EmployeeProfileName, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                  className: "white-space",
+                  children: value[0].project_manager
+                })
+              })]
+            })
+          })]
+        }, key), value.map(function (item, index) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tr", {
+              children: lodash__WEBPACK_IMPORTED_MODULE_1___default().without.apply((lodash__WEBPACK_IMPORTED_MODULE_1___default()), [columnOrder].concat(_toConsumableArray(filterColumn))).map(function (column) {
+                return column === 'name' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                  style: {
+                    borderBottom: value.length - 1 === index ? '2px solid #AAD1FC' : '1px solid #E7EFFC'
+                  },
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                    className: "white-space",
+                    children: item[column]
+                  })
+                }, column) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("td", {
+                  style: {
+                    borderBottom: value.length - 1 === index ? '2px solid #AAD1FC' : '1px solid #E7EFFC'
+                  },
+                  children: item[column]
+                }, column);
+              })
+            })
+          }, index);
+        })]
+      }, key));
+    };
+    for (var _i = 0, _Object$entries = Object.entries(groupedData); _i < _Object$entries.length; _i++) {
+      _loop();
+    }
+    return rows;
+  };
+  /* =============== END PREPARE ROWS =================== */
+
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(TableContainer, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(TableWrapper, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("table", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("thead", {
+          children: prepareHeader()
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("tbody", {
+          children: prepareRows()
+        })]
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(Pagination, {
+      data: data,
+      nPageRows: nPageRows,
+      currentPage: currentPage,
+      setCurrentPage: setCurrentPage,
+      setNPageRows: setNPageRows
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ProjectWiseTable);
+
+/* ========== DRAG ABLE COLUMN ============== */
+var DragAbleHeader = function DragAbleHeader(_ref2) {
+  var _columns$find;
+  var column = _ref2.column,
+    sort = _ref2.sort,
+    columns = _ref2.columns,
+    columnOrder = _ref2.columnOrder,
+    setColumnOrder = _ref2.setColumnOrder,
+    requestSort = _ref2.requestSort;
+  var ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var reOrder = function reOrder(curr, target) {
+    columnOrder.splice(columnOrder.indexOf(target), 0, columnOrder.splice(columnOrder.indexOf(curr), 1)[0]);
+    return _toConsumableArray(columnOrder);
+  };
+  var _useDrag = (0,react_dnd__WEBPACK_IMPORTED_MODULE_5__.useDrag)({
+      type: 'column',
+      item: {
+        column: column
+      },
+      collect: function collect(monitor) {
+        return {
+          isDragging: !!monitor.isDragging()
+        };
+      }
+    }),
+    _useDrag2 = _slicedToArray(_useDrag, 2),
+    isDragging = _useDrag2[0].isDragging,
+    drag = _useDrag2[1];
+
+  // drop
+  var _useDrop = (0,react_dnd__WEBPACK_IMPORTED_MODULE_6__.useDrop)({
+      accept: 'column',
+      hover: function hover(item, monitor) {
+        var dragIndex = columnOrder.indexOf(item.column);
+        var hoverIndex = columnOrder.indexOf(column);
+      },
+      drop: function drop(item, monitor) {
+        if (item.column !== column) {
+          var reOrderColumn = reOrder(item.column, column);
+          setColumnOrder(reOrderColumn);
+          localStorage.setItem('projectWiseTableColumnOrder', JSON.stringify(reOrderColumn));
+        }
+      }
+    }),
+    _useDrop2 = _slicedToArray(_useDrop, 2),
+    isOver = _useDrop2[0].isOver,
+    drop = _useDrop2[1];
+  drag(drop(ref));
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("th", {
+    ref: ref,
+    style: {
+      opacity: isDragging ? 0 : 1
+    },
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        onClick: function onClick() {
+          return requestSort(column);
+        },
+        children: sort.key === column ? sort.direction === 'asc' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          className: "table_asc_dec asc"
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          className: "table_asc_dec dec"
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          className: "table_asc_dec"
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        style: {
+          position: 'relative'
+        },
+        children: (_columns$find = columns.find(function (item) {
+          return item.key === column;
+        })) === null || _columns$find === void 0 ? void 0 : _columns$find.label
+      })]
+    })
+  }, column);
+};
+
+// column filter dropdown
+var ColumnFilter = function ColumnFilter(_ref3) {
+  var columns = _ref3.columns,
+    filterColumn = _ref3.filterColumn,
+    setFilterColumn = _ref3.setFilterColumn,
+    root = _ref3.root;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    isOpen = _useState2[0],
+    setIsOpen = _useState2[1];
+  var filterRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+
+  // outside click
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var handleClickOutside = function handleClickOutside(event) {
+      if (filterRef.current && !filterRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener('mousedown', handleClickOutside);
+    return function () {
+      window.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [filterRef]);
+
+  // handle toggle
+  var handleToggle = function handleToggle() {
+    setIsOpen(!isOpen);
+  };
+
+  // handle filter
+  var handleFilter = function handleFilter(e) {
+    if (e.target.checked) {
+      setFilterColumn(filterColumn.filter(function (item) {
+        return item !== e.target.value;
+      }));
+    } else {
+      setFilterColumn([].concat(_toConsumableArray(filterColumn), [e.target.value]));
+    }
+  };
+
+  // handle all filter
+  var handleAllFilter = function handleAllFilter(e) {
+    if (e.target.checked) {
+      setFilterColumn([]);
+    } else {
+      setFilterColumn(columns);
+    }
+  };
+  var content = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(ColumnFilterWrapper, {
+    ref: filterRef,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(ColumnFilterButton, {
+      onClick: handleToggle,
+      children: "Column Filter"
+    }), isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(ColumnFilterDropdown, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(ColumnFilterCheckbox, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+          type: "checkbox",
+          id: "all",
+          checked: filterColumn.length === 0,
+          value: "all",
+          onChange: handleAllFilter
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+          htmlFor: "all",
+          children: "Select All"
+        })]
+      }), columns.map(function (column) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(ColumnFilterCheckbox, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+            type: "checkbox",
+            checked: !filterColumn.includes(column),
+            id: column,
+            value: column,
+            onChange: handleFilter
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+            htmlFor: column,
+            children: lodash__WEBPACK_IMPORTED_MODULE_1___default().startCase(column)
+          })]
+        }, column);
+      })]
+    })]
+  });
+  return content;
+};
+
+// pagination
+var Pagination = function Pagination(_ref4) {
+  var data = _ref4.data,
+    nPageRows = _ref4.nPageRows,
+    currentPage = _ref4.currentPage,
+    setCurrentPage = _ref4.setCurrentPage,
+    setNPageRows = _ref4.setNPageRows;
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState4 = _slicedToArray(_useState3, 2),
+    pageNumbers = _useState4[0],
+    setPageNumbers = _useState4[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var pageNumbers = [];
+    for (var i = 1; i <= Math.ceil(data.length / nPageRows); i++) {
+      pageNumbers.push(i);
+    }
+    setPageNumbers(pageNumbers);
+  }, [data, nPageRows]);
+  var handleClick = function handleClick(e) {
+    setCurrentPage(Number(e.target.id));
+  };
+  var previousPage = function previousPage() {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  var nextPage = function nextPage() {
+    if (currentPage < pageNumbers.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  var handleSelectChange = function handleSelectChange(e) {
+    setNPageRows(e.target.value);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(PaginationContainer, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+        htmlFor: "nPageRows",
+        children: "Show"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(SelectParPage, {
+        name: "nPageRows",
+        id: "nPageRows",
+        onChange: handleSelectChange,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+          value: 10,
+          children: "10"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+          value: 20,
+          children: "20"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+          value: 30,
+          children: "30"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("option", {
+          value: 40,
+          children: "40"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+        htmlFor: "nPageRows",
+        children: "entries"
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(PaginationGroup, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(EntriesPerPage, {
+        children: ["Showing ", currentPage * nPageRows - nPageRows + 1, " to", ' ', currentPage * nPageRows > data.length ? data.length : currentPage * nPageRows, " of ", data.length, " entries"]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(PaginationButtons, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(PreviousBtn, {
+          disabled: currentPage === 1 ? true : false,
+          onClick: previousPage,
+          children: "Previous"
+        }), pageNumbers.map(function (number) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(PaginateNumber, {
+            id: number,
+            onClick: handleClick,
+            className: currentPage === number ? 'active' : '',
+            children: number
+          }, number);
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(NextBtn, {
+          disabled: currentPage === pageNumbers.length ? true : false,
+          onClick: nextPage,
+          children: "Next"
+        })]
+      })]
+    })]
+  });
+};
+
+// ========= styled ============
+var TableContainer = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  max-width: 100%;\n  overflow: hidden;\n"])));
+var TableWrapper = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  padding: 20px;\n  box-sizing: border-box;\n  background: #fff;\n  width: 100%;\n  max-width: 100%;\n  overflow: hidden;\n  overflow-x: auto;\n  border-radius: 16px;\n  table {\n    border-collapse: collapse;\n    border-spacing: 0;\n    font-size: 14px;\n    color: #1d82f5;\n    tr {\n      &:hover {\n        background-color: #f9fbfd;\n      }\n    }\n    th {\n      background-color: #fff;\n      padding: 16px 10px;\n      text-align: left;\n      font-weight: normal;\n      white-space: nowrap;\n      min-width: 120px;\n      cursor: move;\n      border-bottom:  2px solid #AAD1FC;\n      div {\n        display: flex;\n        align-items: center;\n        gap: 5px;\n        white-space: nowrap;\n      }\n    }\n    td {\n      padding: 16px 10px;\n      text-align: left;\n      min-height: 120px;\n      border-bottom: 1px solid #E7EFFC;\n    }\n  }\n  .pagination {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    margin-top: 20px;\n    button {\n      padding: 10px;\n      margin: 0 10px;\n      border: none;\n      background-color: #f2f2f2;\n      cursor: pointer;\n    }\n  }\n"])));
+
+// sort 
+var SortIcon = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].span(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n//   width: 10px;\n//   height: 10px;\n//   color: black;\n//   display: block;\n//   position: relative;\n//   &:before,\n//   &:after{\n//     border: 4px solid transparent;\n//     content: \"\";\n//     display: block;\n//     height: 0;\n//     right: 5px;\n//     top: 50%;\n//     position: absolute;\n//     width: 0;\n//   };\n//   &:before{\n//     border-bottom-color: ", ";\n// \t  margin-top: -9px;\n//   };\n//   &:after{\n//     border-top-color: ", void 0], ["\n//   width: 10px;\n//   height: 10px;\n//   color: black;\n//   display: block;\n//   position: relative;\n//   &:before,\n//   &:after{\n//     border: 4px solid transparent;\n//     content: \"\";\n//     display: block;\n//     height: 0;\n//     right: 5px;\n//     top: 50%;\n//     position: absolute;\n//     width: 0;\n//   };\n//   &:before{\n//     border-bottom-color: ", ";\n// \t  margin-top: -9px;\n//   };\n//   &:after{\n//     border-top-color: ", ";\n// \t  margin-top: 1px;\n//   }\n\n  &:before{\n    content: \"\\2191\"\n  }\n\n"])), function (props) {
+  return props.sort === 'asc' ? '#666' : '#ddd';
+}, function (props) {
+  return props.sort === 'dec' ? '#666' : '#ddd';
+});
+var EmployeeProfileTd = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].td(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n  background: #f8f8f8;\n  &:hover: {\n    background: #f8f8f8;\n  }\n"])));
+var EmployeeProfile = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: center;\n  align-items: center;\n"])));
+var EmployeeProfileImage = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["\n  width: 35px;\n  height: 35px;\n  border-radius: 50%;\n  background-color: #ccc;\n"])));
+var EmployeeProfileName = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: flex-start;\n  margin-left: 10px;\n  span {\n    font-size: 12px;\n    font-weight: 500;\n    color: #000;\n    &.white-space{\n        white-space: nowrap;\n    }\n    &:first-child {\n      font-size: 14px;\n      font-weight: 600;\n      color: #1d82f5;\n    }\n  }\n"])));
+var PaginationContainer = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  flex-wrap: wrap;\n  align-items: center;\n  padding: 20px;\n  box-sizing: border-box;\n  font-size: 14px;\n"])));
+var SelectParPage = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].select(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["\n  padding: 4px;\n  font-size: 12px;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  color: rgb(0 0 0 / 60%);\n  background: #fff;\n  margin: 0 6px;\n  option {\n    padding: 6px;\n    font-size: 12px;\n    border-radius: 5px;\n  }\n\n  &:focus {\n    outline: none;\n  }\n"])));
+var PaginationGroup = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject10 || (_templateObject10 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  flex-wrap: wrap;\n"])));
+var EntriesPerPage = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject11 || (_templateObject11 = _taggedTemplateLiteral(["\n  color: rgb(0 0 0 / 40%)\n  margin-right: 10px;\n  font-size: 14px;\n  margin-right: 10px;\n"])));
+var PaginationButtons = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject12 || (_templateObject12 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: center;\n  align-items: center; \n  padding: 10px 0;\n"])));
+var PreviousBtn = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].button(_templateObject13 || (_templateObject13 = _taggedTemplateLiteral(["\n  padding: 6px;\n  font-size: 12px;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  color: #000;\n  background: #fff;\n  &:hover {\n    background: #eaf0f7;\n    color: #1d82f5;\n  }\n  &:active {\n    background: #1d82f5;\n    color: #fff;\n  }\n  &:disabled {\n    background: #f3f3f3;\n    color: #ccc;\n  }\n"])));
+var NextBtn = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].button(_templateObject14 || (_templateObject14 = _taggedTemplateLiteral(["\n  padding: 6px;\n  font-size: 12px;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  color: #000;\n  background: #fff;\n  &:hover {\n    background: #eaf0f7;\n    color: #1d82f5;\n  }\n  &:active {\n    background: #1d82f5;\n    color: #fff;\n  }\n  &:disabled {\n    background: #f3f3f3;\n    color: #ccc;\n  }\n"])));
+// pagination styled
+var PaginateNumber = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject15 || (_templateObject15 = _taggedTemplateLiteral(["\n  width: 16px;\n  height: 16px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  padding: 16px;\n  margin: 0 6px;\n  border: none;\n  font-size: 14px;\n  background: ", ";\n  color: ", ";\n  cursor: pointer;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  &:hover {\n    background: #eaf0f7;\n    color: #1d82f5;\n  }\n"])), function (props) {
+  return props.className === 'active' ? '#1d82f5' : '#fff';
+}, function (props) {
+  return props.className === 'active' ? '#fff' : '#000';
+});
+
+// column Filter
+var ColumnFilterWrapper = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject16 || (_templateObject16 = _taggedTemplateLiteral(["\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  gap: 10px;\n  margin: 10px 0;\n  position: relative;\n"])));
+var ColumnFilterButton = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].button(_templateObject17 || (_templateObject17 = _taggedTemplateLiteral(["\n  padding: 6px;\n  font-size: 12px;\n  border-radius: 5px;\n  border: 1px solid #eaf0f7;\n  color: #000;\n  background: #fff;\n  position: relative;\n  cursor: pointer;\n"])));
+var ColumnFilterDropdown = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject18 || (_templateObject18 = _taggedTemplateLiteral(["\n  position: absolute;\n  top: 30px;\n  left: 0;\n  width: 100%;\n  min-width: fit-content;\n  background: #fff;\n  border: 1px solid #eaf0f7;\n  border-radius: 5px;\n  padding: 10px;\n  box-sizing: border-box;\n"])));
+var ColumnFilterCheckbox = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject19 || (_templateObject19 = _taggedTemplateLiteral(["\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  margin: 10px 0;\n  input {\n    cursor: pointer;\n  }\n  label {\n    font-size: 12px;\n    font-weight: 500;\n    white-space: nowrap;\n    cursor: pointer;\n  }\n"])));
+
+// drag and drop
+// style when drag
+var DragAbleTH = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].th(_templateObject20 || (_templateObject20 = _taggedTemplateLiteral(["\n    opacity: ", ";\n    background: ", ";} \n"])), function (props) {
   return props.isDragging ? 0.5 : 1;
 }, function (props) {
   return props.isDragging ? 'red' : '#fff';
@@ -11714,10 +12267,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
 /* harmony import */ var _EmployeeWiseTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./EmployeeWiseTable */ "./resources/js/components/TimeLogTable/EmployeeWiseTable.jsx");
 /* harmony import */ var _data_json__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./data.json */ "./resources/js/components/TimeLogTable/data.json");
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
 /* harmony import */ var _ColumnFilterButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ColumnFilterButton */ "./resources/js/components/TimeLogTable/ColumnFilterButton.jsx");
 /* harmony import */ var _table_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./table.css */ "./resources/js/components/TimeLogTable/table.css");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-dnd-html5-backend */ "./node_modules/react-dnd-html5-backend/dist/index.js");
+/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/core/DndProvider.js");
+/* harmony import */ var _ProjectWiseTable__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ProjectWiseTable */ "./resources/js/components/TimeLogTable/ProjectWiseTable.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 var _templateObject, _templateObject2;
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
@@ -11726,6 +12282,9 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
 
 
 
@@ -11758,7 +12317,7 @@ var EmployeeWiseTableProvider = function EmployeeWiseTableProvider(_ref) {
     _useState10 = _slicedToArray(_useState9, 2),
     currentPage = _useState10[0],
     setCurrentPage = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(),
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState12 = _slicedToArray(_useState11, 2),
     columnOrder = _useState12[0],
     setColumnOrder = _useState12[1];
@@ -11766,7 +12325,7 @@ var EmployeeWiseTableProvider = function EmployeeWiseTableProvider(_ref) {
     _useState14 = _slicedToArray(_useState13, 2),
     filterColumn = _useState14[0],
     setFilterColumn = _useState14[1];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(EmployeeWiseTableContext.Provider, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(EmployeeWiseTableContext.Provider, {
     value: {
       columns: columns,
       setColumns: setColumns,
@@ -11787,38 +12346,92 @@ var EmployeeWiseTableProvider = function EmployeeWiseTableProvider(_ref) {
   });
 };
 var tabs = ["Employee Wise", "Project Wise", "Task Wise"];
+
+// project wise table columns
+var projectWiseTableConfig = {
+  columns: [{
+    key: 'project_name',
+    label: 'Project Name'
+  }, {
+    key: 'client',
+    label: 'Client'
+  }, {
+    key: 'project_manager',
+    label: 'Project Manager'
+  }],
+  subColumns: [{
+    key: 'name',
+    label: 'Employee Name'
+  }, {
+    key: 'number_of_session',
+    label: 'Number of Session'
+  }, {
+    key: 'total_minutes',
+    label: 'Total Track Time'
+  }]
+};
+
+// employee wise table config
+var employeeWiseTableConfig = {
+  columns: [{
+    key: 'name',
+    label: 'Employee Name'
+  }],
+  subColumns: [{
+    key: 'project_name',
+    label: 'Project Name'
+  }, {
+    key: 'client',
+    label: 'Client'
+  }, {
+    key: 'project_manager',
+    label: 'Project Manager'
+  }, {
+    key: 'number_of_session',
+    label: 'Number of Session'
+  }, {
+    key: 'total_minutes',
+    label: 'Total Track Time'
+  }]
+};
 var TimeLogTable = function TimeLogTable() {
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState('Employee Wise'),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     activeTab = _React$useState2[0],
     setActiveTab = _React$useState2[1];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(Tabs, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_dnd__WEBPACK_IMPORTED_MODULE_8__.DndProvider, {
+    backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_9__.HTML5Backend,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(Tabs, {
       children: [tabs.map(function (tab) {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(Tab, {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(Tab, {
           className: activeTab === tab ? 'active' : '',
           onClick: function onClick() {
             return setActiveTab(tab);
           },
           children: tab
         }, tab);
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_ColumnFilterButton__WEBPACK_IMPORTED_MODULE_4__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(Tab, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_ColumnFilterButton__WEBPACK_IMPORTED_MODULE_4__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(Tab, {
         children: "Export"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_EmployeeWiseTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    }), activeTab === 'Employee Wise' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_EmployeeWiseTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
       data: _data_json__WEBPACK_IMPORTED_MODULE_3__,
-      columnFilterButtonId: "columnFilterId"
-    })]
+      columns: employeeWiseTableConfig.columns,
+      subColumns: employeeWiseTableConfig.subColumns
+    }) : activeTab === 'Project Wise' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_ProjectWiseTable__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      data: _data_json__WEBPACK_IMPORTED_MODULE_3__,
+      columns: projectWiseTableConfig.columns,
+      subColumns: projectWiseTableConfig.subColumns
+    }) : null]
   });
 };
-var Tabs = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    display: flex;\n    align-items: center;   \n    flex-wrap: wrap; \n    gap: 8px;\n    padding: 20px;\n"])));
-var Tab = styled_components__WEBPACK_IMPORTED_MODULE_7__["default"].button(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    padding: 6px 12px;\n    border: 1.5px solid #1D82F5;\n    color: #1D82F5;\n    border-radius: 6px;\n    background: #fff;\n    &.active{\n        background: #1D82F5;\n        color: #FFFFFF;\n    }\n    &:hover{\n        background: #ECF0F4;\n        color: #1D82F5;\n    }\n"])));
+var Tabs = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    display: flex;\n    align-items: center;   \n    flex-wrap: wrap; \n    gap: 8px;\n    padding: 20px;\n"])));
+var Tab = styled_components__WEBPACK_IMPORTED_MODULE_10__["default"].button(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    padding: 6px 12px;\n    border: 1.5px solid #1D82F5;\n    color: #1D82F5;\n    border-radius: 6px;\n    background: #fff;\n    &.active{\n        background: #1D82F5;\n        color: #FFFFFF;\n    }\n    &:hover{\n        background: #ECF0F4;\n        color: #1D82F5;\n    }\n"])));
 var timeLogTableContainer = document.getElementById("timeLogTable");
 if (timeLogTableContainer) {
   var root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(timeLogTableContainer);
-  root.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(EmployeeWiseTableProvider, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(TimeLogTable, {})
+  root.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(EmployeeWiseTableProvider, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(TimeLogTable, {})
     })
   }));
 }
@@ -80557,7 +81170,7 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('[{"id":"1","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"2","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"3","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"4","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"5","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"6","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"7","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"8","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"9","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"10","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"11","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"40","total_minutes":350},{"id":"12","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"13","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"14","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"15","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"16","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"17","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"18","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"19","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"20","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"21","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"22","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"50","total_minutes":350},{"id":"23","employee_id":"104","name":"Rafy Osman","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"24","employee_id":"104","name":"Rafy Osman","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"25","employee_id":"104","name":"Rafy Osman","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"26","employee_id":"104","name":"Rafy Osman","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"27","employee_id":"104","name":"Rafy Osman","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"28","employee_id":"104","name":"Rafy Osman","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"29","employee_id":"104","name":"Rafy Osman","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"30","employee_id":"105","name":"Mirazul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"31","employee_id":"105","name":"Mirazul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"32","employee_id":"105","name":"Mirazul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"33","employee_id":"105","name":"Mirazul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"34","employee_id":"105","name":"Mirazul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"35","employee_id":"105","name":"Mirazul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"36","employee_id":"105","name":"Mirazul Islam","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350}]');
+module.exports = JSON.parse('[{"id":"1","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_id":"p1","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"2","employee_id":"101","name":"Rahim Robin","project_id":"p1","role":"SEO Expert","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"3","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_id":"p1","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"4","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_id":"p2","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"5","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_id":"p2","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"6","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_id":"p3","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"7","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_id":"p1","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"8","employee_id":"101","name":"Rahim Robin","role":"SEO Expert","project_id":"p1","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"9","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_id":"p1","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"10","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_id":"p1","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"11","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_id":"p1","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"40","total_minutes":350},{"id":"12","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_id":"p1","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"13","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_id":"p3","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"14","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_id":"p4","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"15","employee_id":"102","name":"Hillol Seopage!","role":"Developer","project_id":"p4","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"16","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_id":"p4","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"17","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_id":"p4","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"18","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_id":"p6","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"19","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_id":"p3","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"20","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_id":"p8","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"21","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_id":"p9","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"22","employee_id":"103","name":"Rakibul Islam","role":"Developer","project_id":"p10","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"50","total_minutes":350},{"id":"23","employee_id":"104","name":"Rafy Osman","role":"Developer","project_id":"p2","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"24","employee_id":"104","name":"Rafy Osman","role":"Developer","project_id":"p3","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"25","employee_id":"104","name":"Rafy Osman","role":"Developer","project_id":"p3","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"26","employee_id":"104","name":"Rafy Osman","role":"Developer","project_id":"p4","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"27","employee_id":"104","name":"Rafy Osman","role":"Developer","project_id":"p4","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"28","employee_id":"104","name":"Rafy Osman","project_id":"p4","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"29","employee_id":"104","name":"Rafy Osman","project_id":"p4","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"30","employee_id":"105","name":"Mirazul Islam","project_id":"p4","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"31","employee_id":"105","name":"Mirazul Islam","project_id":"p4","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"32","employee_id":"105","name":"Mirazul Islam","project_id":"p4","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"33","employee_id":"105","name":"Mirazul Islam","project_id":"p4","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"34","employee_id":"105","name":"Mirazul Islam","project_id":"p4","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"35","employee_id":"105","name":"Mirazul Islam","project_id":"p4","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350},{"id":"36","employee_id":"105","name":"Mirazul Islam","project_id":"p4","role":"Developer","project_name":"Wp Website Design & Development","client":"Rafy Osman","project_manager":"Abdur Rahman","number_of_session":"61","total_minutes":350}]');
 
 /***/ })
 

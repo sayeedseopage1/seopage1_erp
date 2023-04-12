@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import Accordion from "../../UI/Accordion";
 import React, { useState } from "react";
 import Dropdown from "../../UI/Dropdown";

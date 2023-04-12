@@ -125,9 +125,7 @@
             {{-- Time Log Table --}}
             <div id="timeLogTable"></div>
             {{-- passing variable to react component from laravel --}}
-            @push('scripts')
-                <script src="{{ asset('js/app.js') }}"></script>
-            @endpush    
+           
 
             {{-- app js --}}
                 {{-- End Time Log Table --}}

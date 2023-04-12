@@ -1,18 +1,17 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import ReactDOM from 'react-dom';
-import _, { update } from 'lodash';
+import _ from 'lodash';
 import styled from 'styled-components';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider, useDrag, useDrop, useDragLayer } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 import { EmployeeWiseTableContext } from '.';
 import './table.css'
 
 
+
+
 // pivot table
-const EmployeeWiseTable = ({ data, columns, subColumns }) => {
+const ProjectWiseTable = ({ data, columns, subColumns }) => {
 
     const {
-        setColumns,
         setSubColumns,
         sortConfig,
         setSortConfig,
@@ -26,10 +25,11 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
         setFilterColumn
     } = React.useContext(EmployeeWiseTableContext);
 
+    /* ================ Initial State ==================== */
     React.useEffect(() => {
-        setSubColumns(subColumns)
-        const columnOrderFromLocalStore = localStorage.getItem('employeeWiseTableColumnOrder');
-        const filterColumnFromLocalStore = localStorage.getItem('employeeWiseTableColumnFilter');
+        setSubColumns(subColumns);
+        const columnOrderFromLocalStore = localStorage.getItem('projectWiseTableColumnOrder');
+        const filterColumnFromLocalStore = localStorage.getItem('projectWiseTableColumnFilter');
 
         if (columnOrderFromLocalStore) {
             setColumnOrder([...JSON.parse(columnOrderFromLocalStore)])
@@ -42,14 +42,16 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
         } else {
             setFilterColumn([])
         }
-    }, [])
+    }, [columns, subColumns])
+    /* ================ End Initial State ==================== */
 
-    // pagination
+    /*================== Pagination =====================*/
     const paginate = (data, currentPage, nPaginate) => {
         if (data.length <= nPaginate) return data;
         const startIndex = (currentPage - 1) * nPaginate;
         return data.slice(startIndex, startIndex + nPaginate);
     };
+    /*================== End Pagination =====================*/
 
     // column filter
     const requestColumnFilter = (key) => {
@@ -90,10 +92,8 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
         setSortConfig({ key, direction });
     };
 
-    /*======================== DRAG & DROP ========================*/
-    // COLUMN DRAG & DROP
+    /*======================== End SORT ========================*/
 
-    /*======================== END DRAG & DROP ========================*/
 
     // prepare header
     const prepareHeader = () => {
@@ -103,7 +103,6 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
                     <th key={column.key}>
                         <div>
                             <div onClick={() => requestSort(column.key)}>
-
                                 {
                                     sortConfig.key === column.key ? (
                                         sortConfig.direction === 'asc' ? <>
@@ -140,30 +139,60 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
         );
     };
 
-    // prepare rows
+
+    /* =============== PREPARE ROWS =================== */
     const prepareRows = () => {
         const rows = [];
         const sortedData = sort(data, sortConfig);
         const paginatedData = paginate(sortedData, currentPage, nPageRows);
-        // if rows have same name then group all rows with same name in one row and show all project details in one row
+
+        /* =============== Data group by Project ID =================== */
         const groupedData = paginatedData.reduce((r, a) => {
-            r[a.name] = [...(r[a.name] || []), a];
+            r[a.project_id] = [...(r[a.project_id] || []), a];
             return r;
         }, {});
+        /* ================ End Data Grouping ================== */
 
-        // console.log(groupedData)
+
         for (const [key, value] of Object.entries(groupedData)) {
             rows.push(
                 <React.Fragment key={key}>
                     <tr key={key}>
+                        {/* project name */}
+                        <EmployeeProfileTd
+                            rowSpan={value.length + 1}
+                            style={{ borderBottom: '2px solid #AAD1FC' }}>
+                            <EmployeeProfile>
+                                <EmployeeProfileName>
+                                    <span>{value[0].project_name}</span>
+                                </EmployeeProfileName>
+                            </EmployeeProfile>
+                        </EmployeeProfileTd>
+
+                        {/* client */}
+                        <EmployeeProfileTd
+                            rowSpan={value.length + 1}
+                            style={{
+                                borderBottom: '2px solid #AAD1FC',
+                                borderLeft: '2px solid #fff',
+                                borderRight: '2px solid #fff'
+                            }}>
+                            <EmployeeProfile>
+                                <EmployeeProfileImage />
+                                <EmployeeProfileName>
+                                    <span className='white-space'>{value[0].client}</span>
+                                </EmployeeProfileName>
+                            </EmployeeProfile>
+                        </EmployeeProfileTd>
+
+                        {/* Project Manager */}
                         <EmployeeProfileTd
                             rowSpan={value.length + 1}
                             style={{ borderBottom: '2px solid #AAD1FC' }}>
                             <EmployeeProfile>
                                 <EmployeeProfileImage />
                                 <EmployeeProfileName>
-                                    <span>{key}</span>
-                                    <span>{value[0].role}</span>
+                                    <span className='white-space'>{value[0].project_manager}</span>
                                 </EmployeeProfileName>
                             </EmployeeProfile>
                         </EmployeeProfileTd>
@@ -174,9 +203,19 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
                             <React.Fragment key={index}>
                                 <tr >
                                     {_.without(columnOrder, ...filterColumn).map((column) => (
-                                        <td key={column}
-                                            style={{ borderBottom: value.length - 1 === index ? '2px solid #AAD1FC' : '1px solid #E7EFFC' }}
-                                        >{item[column]}</td>
+                                        column === 'name' ?
+                                            <td
+                                                key={column}
+                                                style={{ borderBottom: value.length - 1 === index ? '2px solid #AAD1FC' : '1px solid #E7EFFC' }}
+                                            >
+                                                <span className='white-space'>{item[column]}</span>
+                                            </td>
+                                            : <td
+                                                key={column}
+                                                style={{ borderBottom: value.length - 1 === index ? '2px solid #AAD1FC' : '1px solid #E7EFFC' }}
+                                            >
+                                                {item[column]}
+                                            </td>
                                     ))}
                                 </tr>
                             </React.Fragment>
@@ -187,7 +226,9 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
         }
 
         return rows;
+
     };
+    /* =============== END PREPARE ROWS =================== */
 
     return (
         <TableContainer>
@@ -212,7 +253,7 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
         </TableContainer>
     );
 };
-export default EmployeeWiseTable;
+export default ProjectWiseTable;
 
 /* ========== DRAG ABLE COLUMN ============== */
 const DragAbleHeader = ({ column, sort, columns, columnOrder, setColumnOrder, requestSort }) => {
@@ -244,19 +285,15 @@ const DragAbleHeader = ({ column, sort, columns, columnOrder, setColumnOrder, re
             if (item.column !== column) {
                 const reOrderColumn = reOrder(item.column, column)
                 setColumnOrder(reOrderColumn);
-                localStorage.setItem('employeeWiseTableColumnOrder', JSON.stringify(reOrderColumn))
+                localStorage.setItem('projectWiseTableColumnOrder', JSON.stringify(reOrderColumn))
             }
         },
-
-        collect: monitor => ({
-            isOver: !!monitor.isOver()
-        })
     });
 
     drag(drop(ref));
 
     return (
-        <th key={column} ref={ref} style={{ opacity: isDragging ? 0 : 1, background: isOver ? 'rgb(0 0 0 / 5%)' : '' }}>
+        <th key={column} ref={ref} style={{ opacity: isDragging ? 0 : 1 }}>
             <div>
                 <div onClick={() => requestSort(column)}>
                     {
@@ -553,6 +590,9 @@ const EmployeeProfileName = styled.div`
     font-size: 12px;
     font-weight: 500;
     color: #000;
+    &.white-space{
+        white-space: nowrap;
+    }
     &:first-child {
       font-size: 14px;
       font-weight: 600;

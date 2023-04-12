@@ -5,6 +5,9 @@ import data from './data.json'
 import styled from 'styled-components';
 import ColumnFilter from "./ColumnFilterButton";
 import './table.css';
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
+import ProjectWiseTable from "./ProjectWiseTable";
 
 export const EmployeeWiseTableContext = React.createContext();
 
@@ -14,7 +17,7 @@ const EmployeeWiseTableProvider = ({ children }) => {
     const [sortConfig, setSortConfig] = useState({});
     const [nPageRows, setNPageRows] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
-    const [columnOrder, setColumnOrder] = useState();
+    const [columnOrder, setColumnOrder] = useState([]);
     const [filterColumn, setFilterColumn] = useState([]);
 
 
@@ -49,12 +52,42 @@ const tabs = [
     "Task Wise"
 ]
 
+
+// project wise table columns
+const projectWiseTableConfig = {
+    columns: [
+        { key: 'project_name', label: 'Project Name' },
+        { key: 'client', label: 'Client' },
+        { key: 'project_manager', label: 'Project Manager' },
+    ],
+    subColumns: [
+        { key: 'name', label: 'Employee Name' },
+        { key: 'number_of_session', label: 'Number of Session' },
+        { key: 'total_minutes', label: 'Total Track Time' },
+    ]
+}
+
+// employee wise table config
+const employeeWiseTableConfig = {
+    columns: [{ key: 'name', label: 'Employee Name' }],
+    subColumns: [
+        { key: 'project_name', label: 'Project Name' },
+        { key: 'client', label: 'Client' },
+        { key: 'project_manager', label: 'Project Manager' },
+        { key: 'number_of_session', label: 'Number of Session' },
+        { key: 'total_minutes', label: 'Total Track Time' },
+    ]
+}
+
+
+
+
 const TimeLogTable = () => {
     const [activeTab, setActiveTab] = React.useState('Employee Wise');
 
 
     return (
-        <div>
+        <DndProvider backend={HTML5Backend}>
             <Tabs>
                 {tabs.map(tab => (
                     <Tab
@@ -66,8 +99,17 @@ const TimeLogTable = () => {
                 <ColumnFilter />
                 <Tab>Export</Tab>
             </Tabs>
-            <EmployeeWiseTable data={data} columnFilterButtonId="columnFilterId" />
-        </div>
+            {
+                activeTab === 'Employee Wise' ?
+                    <EmployeeWiseTable data={data}
+                        columns={employeeWiseTableConfig.columns}
+                        subColumns={employeeWiseTableConfig.subColumns}
+                    />
+                    : activeTab === 'Project Wise' ?
+                        <ProjectWiseTable data={data} columns={projectWiseTableConfig.columns} subColumns={projectWiseTableConfig.subColumns} />
+                        : null
+            }
+        </DndProvider>
     )
 }
 

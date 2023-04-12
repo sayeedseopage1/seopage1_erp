@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Table from "../Table";
+import Table from "../Table.backup";
 import { LeadTableColumnsHead } from "./LeadTableColumnsHead";
 
 const LeadTable = (props) => {
