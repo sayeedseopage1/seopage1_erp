@@ -22,7 +22,7 @@ const Sidebar = () => {
     // handle sales dashboard modal
     const handleSalesDashboardModal = (e, type, data) => {
         e.preventDefault();
-        dispatch(openModal({ type, data }))
+        dispatch(openModal({ type, data }));
     };
     // end handling sales dashboard modal
 
@@ -52,13 +52,19 @@ const Sidebar = () => {
                 </div>
                 {/* dropdown */}
                 <Dropdown>
-                    <Dropdown.Toggle icon={false} className="sp1_ins_sidebar--action-icon">
+                    <Dropdown.Toggle
+                        icon={false}
+                        className="sp1_ins_sidebar--action-icon"
+                    >
                         {/* action */}
                         <div className="sp1_ins_sidebar--action-btn">
                             <i className="fa-solid fa-plus" />
                         </div>
                     </Dropdown.Toggle>
-                    <Dropdown.Menu asModal={true} className="sp1_ins_sidebar--action-dd-menu sp1_ins_sidebar--search-box-dd-menu">
+                    <Dropdown.Menu
+                        asModal={true}
+                        className="sp1_ins_sidebar--action-dd-menu sp1_ins_sidebar--search-box-dd-menu"
+                    >
                         <Link
                             to="#"
                             onClick={(e) =>
@@ -104,19 +110,26 @@ const Sidebar = () => {
                                 className="sp1_ins_sidebar--acc-title"
                                 onClick={toggle}
                             >
-                                <span>Dashboard</span>
+                                <span>Dashboards</span>
                                 <i
-                                    className={`fa-solid fa-chevron-${isOpen ? "down" : "right"
-                                        }`}
+                                    className={`fa-solid fa-chevron-${
+                                        isOpen ? "down" : "right"
+                                    }`}
                                 />
                             </div>
 
                             {/* dropdown */}
                             <Dropdown>
-                                <Dropdown.Toggle icon={false} className="sp1_ins_sidebar--action-icon">
+                                <Dropdown.Toggle
+                                    icon={false}
+                                    className="sp1_ins_sidebar--action-icon"
+                                >
                                     <i className="fa-solid fa-ellipsis" />
                                 </Dropdown.Toggle>
-                                <Dropdown.Menu asModal={true} className="sp1_ins_sidebar--action-dd-menu">
+                                <Dropdown.Menu
+                                    asModal={true}
+                                    className="sp1_ins_sidebar--action-dd-menu"
+                                >
                                     <Link to="#">
                                         <i className="fa-solid fa-plus" />
                                         Dashboard
@@ -151,10 +164,11 @@ const Sidebar = () => {
                                                 className="sp1_ins_sidebar--acc-title section"
                                             >
                                                 <i
-                                                    className={`fa-solid fa-chevron-${isOpen
-                                                        ? "down"
-                                                        : "right"
-                                                        }`}
+                                                    className={`fa-solid fa-chevron-${
+                                                        isOpen
+                                                            ? "down"
+                                                            : "right"
+                                                    }`}
                                                     style={{ fontSize: "10px" }}
                                                 />
                                                 <span>My Dashboards</span>
@@ -162,10 +176,16 @@ const Sidebar = () => {
 
                                             {/* dropdown */}
                                             <Dropdown>
-                                                <Dropdown.Toggle icon={false} className="sp1_ins_sidebar--action-icon">
+                                                <Dropdown.Toggle
+                                                    icon={false}
+                                                    className="sp1_ins_sidebar--action-icon"
+                                                >
                                                     <i className="fa-solid fa-ellipsis" />
                                                 </Dropdown.Toggle>
-                                                <Dropdown.Menu asModal={true} className="sp1_ins_sidebar--action-dd-menu">
+                                                <Dropdown.Menu
+                                                    asModal={true}
+                                                    className="sp1_ins_sidebar--action-dd-menu"
+                                                >
                                                     <Link to="#">
                                                         <i className="fa-solid fa-plus" />
                                                         Dashboard
@@ -233,17 +253,24 @@ const Sidebar = () => {
                             >
                                 <span>Goals</span>
                                 <i
-                                    className={`fa-solid fa-chevron-${isOpen ? "down" : "right"
-                                        }`}
+                                    className={`fa-solid fa-chevron-${
+                                        isOpen ? "down" : "right"
+                                    }`}
                                 />
                             </div>
 
                             {/* dropdown */}
                             <Dropdown>
-                                <Dropdown.Toggle icon={false} className="sp1_ins_sidebar--action-icon">
+                                <Dropdown.Toggle
+                                    icon={false}
+                                    className="sp1_ins_sidebar--action-icon"
+                                >
                                     <i className="fa-solid fa-ellipsis" />
                                 </Dropdown.Toggle>
-                                <Dropdown.Menu asModal={true} className="sp1_ins_sidebar--action-dd-menu">
+                                <Dropdown.Menu
+                                    asModal={true}
+                                    className="sp1_ins_sidebar--action-dd-menu"
+                                >
                                     <Link to="#">
                                         <i className="fa-solid fa-plus" />
                                         Dashboard
@@ -278,10 +305,11 @@ const Sidebar = () => {
                                                 className="sp1_ins_sidebar--acc-title section"
                                             >
                                                 <i
-                                                    className={`fa-solid fa-chevron-${isOpen
-                                                        ? "down"
-                                                        : "right"
-                                                        }`}
+                                                    className={`fa-solid fa-chevron-${
+                                                        isOpen
+                                                            ? "down"
+                                                            : "right"
+                                                    }`}
                                                     style={{ fontSize: "10px" }}
                                                 />
                                                 <span>{goal.section}</span>
@@ -289,10 +317,16 @@ const Sidebar = () => {
 
                                             {/* dropdown */}
                                             <Dropdown>
-                                                <Dropdown.Toggle icon={false} className="sp1_ins_sidebar--action-icon">
+                                                <Dropdown.Toggle
+                                                    icon={false}
+                                                    className="sp1_ins_sidebar--action-icon"
+                                                >
                                                     <i className="fa-solid fa-ellipsis" />
                                                 </Dropdown.Toggle>
-                                                <Dropdown.Menu asModal={true} className="sp1_ins_sidebar--action-dd-menu">
+                                                <Dropdown.Menu
+                                                    asModal={true}
+                                                    className="sp1_ins_sidebar--action-dd-menu"
+                                                >
                                                     <Link to="#">
                                                         <i className="fa-solid fa-plus" />
                                                         Goal
@@ -363,17 +397,24 @@ const Sidebar = () => {
                             >
                                 <span>Reports</span>
                                 <i
-                                    className={`fa-solid fa-chevron-${isOpen ? "down" : "right"
-                                        }`}
+                                    className={`fa-solid fa-chevron-${
+                                        isOpen ? "down" : "right"
+                                    }`}
                                 />
                             </div>
 
                             {/* dropdown */}
                             <Dropdown>
-                                <Dropdown.Toggle icon={false} className="sp1_ins_sidebar--action-icon">
+                                <Dropdown.Toggle
+                                    icon={false}
+                                    className="sp1_ins_sidebar--action-icon"
+                                >
                                     <i className="fa-solid fa-ellipsis" />
                                 </Dropdown.Toggle>
-                                <Dropdown.Menu asModal={true} className="sp1_ins_sidebar--action-dd-menu">
+                                <Dropdown.Menu
+                                    asModal={true}
+                                    className="sp1_ins_sidebar--action-dd-menu"
+                                >
                                     <Link to="#">
                                         <i className="fa-solid fa-plus" />
                                         Dashboard
@@ -408,10 +449,11 @@ const Sidebar = () => {
                                                 className="sp1_ins_sidebar--acc-title section"
                                             >
                                                 <i
-                                                    className={`fa-solid fa-chevron-${isOpen
-                                                        ? "down"
-                                                        : "right"
-                                                        }`}
+                                                    className={`fa-solid fa-chevron-${
+                                                        isOpen
+                                                            ? "down"
+                                                            : "right"
+                                                    }`}
                                                     style={{ fontSize: "10px" }}
                                                 />
                                                 <span>{report.section}</span>
@@ -419,10 +461,16 @@ const Sidebar = () => {
 
                                             {/* dropdown */}
                                             <Dropdown>
-                                                <Dropdown.Toggle icon={false} className="sp1_ins_sidebar--action-icon">
+                                                <Dropdown.Toggle
+                                                    icon={false}
+                                                    className="sp1_ins_sidebar--action-icon"
+                                                >
                                                     <i className="fa-solid fa-ellipsis" />
                                                 </Dropdown.Toggle>
-                                                <Dropdown.Menu asModal={true} className="sp1_ins_sidebar--action-dd-menu">
+                                                <Dropdown.Menu
+                                                    asModal={true}
+                                                    className="sp1_ins_sidebar--action-dd-menu"
+                                                >
                                                     <Link to="#">
                                                         <i className="fa-solid fa-plus" />
                                                         Dashboard

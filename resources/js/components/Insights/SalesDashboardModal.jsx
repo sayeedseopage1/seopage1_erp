@@ -24,6 +24,8 @@ const SellsDashboardModal = () => {
     const close = () => {
         dispatch(closeModal());
         setActiveEntry("");
+        setActiveType("");
+        setIsOpenForm(false);
     };
 
     // get entries
@@ -75,7 +77,14 @@ const SellsDashboardModal = () => {
                     <div className="card sp1_ins_sell_dm--card">
                         {/* header */}
                         <div className="card-header">
-                            Add {type} {type === "goal" ? "1/2" : ""}
+                            Add {type}{" "}
+                            {type === "goal"
+                                ? `${
+                                      isOpenForm
+                                          ? `2/2 - ${activeEntry} ${activeType}`
+                                          : "1/2"
+                                  }`
+                                : ""}
                             <button
                                 type="button"
                                 className="close"
@@ -87,142 +96,156 @@ const SellsDashboardModal = () => {
                         </div>
                         {/* end header */}
                         <div className="card-body sp1_ins_sell_dm--card_body">
-                            {isOpenForm ?
-                                <SalesDashboardForm />
-                                : (
-                                    <div className="row">
-                                        {/* entities  */}
-                                        <div className="col p-0">
-                                            <div className="sp1_ins_sell_dm--entities">
-                                                <span>CHOOSE ENTRIES</span>
-                                                {getEntries(modalData)?.map(
-                                                    (entry) => (
-                                                        <div
-                                                            key={`${entry.name
-                                                                }-${Math.random()}`}
-                                                            className={`sp1_ins_sell_dm--entity${activeEntry ===
+                            {isOpenForm ? (
+                                <SalesDashboardForm
+                                    entry={activeEntry}
+                                    entryType={activeType}
+                                />
+                            ) : (
+                                <div className="row">
+                                    {/* entities  */}
+                                    <div className="col p-0">
+                                        <div className="sp1_ins_sell_dm--entities">
+                                            <span>CHOOSE ENTRIES</span>
+                                            {getEntries(modalData)?.map(
+                                                (entry) => (
+                                                    <div
+                                                        key={`${
+                                                            entry.name
+                                                        }-${Math.random()}`}
+                                                        className={`sp1_ins_sell_dm--entity${
+                                                            activeEntry ===
+                                                            entry.name
+                                                                ? " active"
+                                                                : ""
+                                                        }`}
+                                                        onClick={() => {
+                                                            setActiveEntry(
                                                                 entry.name
-                                                                ? " active"
-                                                                : ""
-                                                                }`}
-                                                            onClick={() => {
-                                                                setActiveEntry(
-                                                                    entry.name
-                                                                );
-                                                                setActiveType("");
-                                                            }}
-                                                        >
-                                                            {renderIcon(entry.type)}
-                                                            <span>
-                                                                {entry.name}
-                                                            </span>
-                                                            {activeEntry ===
-                                                                entry.name ? (
-                                                                <i
-                                                                    className="fa-solid fa-chevron-right ml-auto "
-                                                                    style={{
-                                                                        fontSize:
-                                                                            "14px",
-                                                                    }}
-                                                                />
-                                                            ) : null}
-                                                        </div>
-                                                    )
-                                                )}
-                                            </div>
-                                        </div>
-                                        {/* end entity */}
-
-                                        {/* choose type */}
-                                        <div className="col p-0">
-                                            <div className="sp1_ins_sell_dm--types">
-                                                <span>
-                                                    CHOOSE{" "}
-                                                    {activeEntry.toUpperCase()}{" "}
-                                                    TYPES
-                                                </span>
-                                                {activeEntry &&
-                                                    getTypeByEntry(
-                                                        modalData,
-                                                        activeEntry
-                                                    )?.map((type) => (
-                                                        <div
-                                                            key={Math.random()}
-                                                            onClick={() =>
-                                                                setActiveType(
-                                                                    type.title
-                                                                )
-                                                            }
-                                                            className={`sp1_ins_sell_dm--type${activeType ===
-                                                                type.title
-                                                                ? " active"
-                                                                : ""
-                                                                }`}
-                                                        >
-                                                            <div>
-                                                                <span>
-                                                                    {type.title}
-                                                                </span>
-                                                                <div>
-                                                                    {type.subtitle}
-                                                                </div>
-                                                            </div>
-
+                                                            );
+                                                            setActiveType("");
+                                                        }}
+                                                    >
+                                                        {renderIcon(entry.type)}
+                                                        <span>
+                                                            {entry.name}
+                                                        </span>
+                                                        {activeEntry ===
+                                                        entry.name ? (
                                                             <i
-                                                                className={`fa-solid fa-check`}
+                                                                className="fa-solid fa-chevron-right ml-auto "
                                                                 style={{
-                                                                    opacity:
-                                                                        activeType ===
-                                                                            type.title
-                                                                            ? "1"
-                                                                            : "0",
+                                                                    fontSize:
+                                                                        "14px",
                                                                 }}
                                                             />
-                                                        </div>
-                                                    ))}
-                                            </div>
+                                                        ) : null}
+                                                    </div>
+                                                )
+                                            )}
                                         </div>
-                                        {/* end choose type */}
                                     </div>
-                                )}
+                                    {/* end entity */}
+
+                                    {/* choose type */}
+                                    <div className="col p-0">
+                                        <div className="sp1_ins_sell_dm--types">
+                                            <span>
+                                                CHOOSE{" "}
+                                                {activeEntry.toUpperCase()}{" "}
+                                                TYPES
+                                            </span>
+                                            {activeEntry &&
+                                                getTypeByEntry(
+                                                    modalData,
+                                                    activeEntry
+                                                )?.map((type) => (
+                                                    <div
+                                                        key={Math.random()}
+                                                        onClick={() =>
+                                                            setActiveType(
+                                                                type.title
+                                                            )
+                                                        }
+                                                        className={`sp1_ins_sell_dm--type${
+                                                            activeType ===
+                                                            type.title
+                                                                ? " active"
+                                                                : ""
+                                                        }`}
+                                                    >
+                                                        <div>
+                                                            <span>
+                                                                {type.title}
+                                                            </span>
+                                                            <div>
+                                                                {type.subtitle}
+                                                            </div>
+                                                        </div>
+
+                                                        <i
+                                                            className={`fa-solid fa-check`}
+                                                            style={{
+                                                                opacity:
+                                                                    activeType ===
+                                                                    type.title
+                                                                        ? "1"
+                                                                        : "0",
+                                                            }}
+                                                        />
+                                                    </div>
+                                                ))}
+                                        </div>
+                                    </div>
+                                    {/* end choose type */}
+                                </div>
+                            )}
                         </div>
 
                         <div className="card-footer d-flex align-items-center justify-content-end">
-                            {type === 'goal' && isOpenForm ?
-                                <button onClick={() => setIsOpenForm(false)}
+                            {type === "goal" && isOpenForm ? (
+                                <button
+                                    onClick={() => setIsOpenForm(false)}
                                     className="btn btn-sm btn-outline-secondary mr-auto d-flex align-items-center"
                                 >
-                                    <i className="bi bi-arrow-left-short" style={{ fontSize: '18px' }}></i>
+                                    <i
+                                        className="bi bi-arrow-left-short"
+                                        style={{ fontSize: "18px" }}
+                                    ></i>
                                     Previous
                                 </button>
-                                : null}
+                            ) : null}
                             <button
                                 onClick={close}
                                 className="btn btn-sm btn-outline-secondary mr-2"
                             >
                                 Close
                             </button>
-                            {type === 'goal' ? isOpenForm ? (
-                                <button
-                                    className="btn btn-sm btn-success"
-                                    disabled={!activeType}
-                                >
-                                    Save
-                                </button>
+                            {type === "goal" ? (
+                                isOpenForm ? (
+                                    <button
+                                        className="btn btn-sm btn-success"
+                                        disabled={!activeType}
+                                    >
+                                        Save
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => setIsOpenForm(true)}
+                                        className="btn btn-sm btn-success"
+                                        disabled={!activeType}
+                                    >
+                                        Continue
+                                    </button>
+                                )
                             ) : (
                                 <button
-                                    onClick={() => setIsOpenForm(true)}
                                     className="btn btn-sm btn-success"
                                     disabled={!activeType}
                                 >
                                     Continue
                                 </button>
-                            ) : <button
-                                className="btn btn-sm btn-success"
-                                disabled={!activeType}
-                            >
-                                Continue
-                            </button>}
+                            )}
                         </div>
                     </div>
                 </div>
