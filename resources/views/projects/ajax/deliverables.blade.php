@@ -25,9 +25,8 @@
 <!-- SweetAlert -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 
-
-
 <div class="card border-0 invoice mt-5">
+
    <div class="col-md-12" align="right">
      @php
 
@@ -67,6 +66,7 @@
                       </table>
 
                   </td>
+    
 </div>
   <?php
   $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
@@ -156,56 +156,124 @@
                       @if($signature == null)
                       <th scope="col" class="text-center">Action</th>
                       @endif
-
-
                     </tr>
                   </thead>
                   <tbody >
                     @forelse($deliverables as $deliverable)
                     <tr>
-                      <td>{{$loop->index+1}}</td>
-                    <td class="text-center">{{$deliverable->deliverable_type}}</td>
-                    <td class="text-center">{{$deliverable->title}}</td>
-                    @if($deliverable->milestone_id != null)
-                    <td class="text-center">{{$deliverable->milestone->milestone_title}}</td>
-                    @else
-                    <td class="text-center">--</td>
-                    @endif
-                       @if($deliverable->milestone_id != null)
-                    <td class="text-center">{{$deliverable->milestone->actual_cost}}{{$currency->currency_symbol}}</td>
-                    @else
-                    <td class="text-center">--</td>
-                    @endif
-                    @if($deliverable->estimation_time != null)
-                    <td class="text-center">{{$deliverable->estimation_time}} hours</td>
-                    @else
-                    <td class="text-center">--</td>
-                    @endif
-                      <td class="text-center">{{$deliverable->quantity}}</td>
-                        <td class="text-center">{!!$deliverable->description!!}</td>
-                        @if($deliverable->to != null)
-                    <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
-                    @else
-                    <td class="text-center">On {{$deliverable->from}}</td>
-
-                    @endif
-                    @if($signature == null)
-                    <td class="text-center">
-                      <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn primary deleteDeliverable" data-id="{{ $deliverable->id }}"><i class="fas fa-trash"></i></button>
-                        @if($deliverable->authorization == 0 && Auth::user()->role_id == 1)
-                        <button class="btn btn-success" data-toggle="modal" data-target="#deliverablesapproveModal{{$deliverable->id}}">Approve</button>
+                        <td>{{$loop->index+1}}</td>
+                        <td class="text-center">
+                            @php
+                                $data = \App\models\DelivarableColumnEdit::where([
+                                    'delivarable_id' => $deliverable->id,
+                                    'column_name' => 'type',
+                                ])->latest()->first();
+                            @endphp
+                            @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                                <i class="fa fa-lightbulb text-warning" title="Admin request to {{$data->comment}}"></i>
+                            @endif
+                            {{$deliverable->deliverable_type}}
+                        </td>
+                        <td class="text-center">
+                            @php
+                                $data = \App\models\DelivarableColumnEdit::where([
+                                    'delivarable_id' => $deliverable->id,
+                                    'column_name' => 'title',
+                                ])->latest()->first();
+                            @endphp
+                            @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                                <i class="fa fa-lightbulb text-warning" title="Admin request to {{$data->comment}}"></i>
+                            @endif
+                            {{$deliverable->title}}
+                        </td>
+                        @if($deliverable->milestone_id != null)
+                            <td class="text-center">{{$deliverable->milestone->milestone_title}}</td>
+                        @else
+                            <td class="text-center">--</td>
                         @endif
-
-                    </td>
-                  @endif
-
-
+                        @if($deliverable->milestone_id != null)
+                            <td class="text-center">{{$deliverable->milestone->actual_cost}}{{$currency->currency_symbol}}</td>
+                        @else
+                            <td class="text-center">--</td>
+                        @endif
+                        @if($deliverable->estimation_time != null)
+                            <td class="text-center">
+                                @php
+                                    $data = \App\models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'estimation_hours',
+                                    ])->latest()->first();
+                                @endphp
+                                
+                                @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                                    <i class="fa fa-lightbulb text-warning" title="Admin request to {{$data->comment}}"></i>
+                                @endif
+                                {{$deliverable->estimation_time}} hours
+                            </td>
+                        @else
+                            <td class="text-center">--</td>
+                        @endif
+                        <td class="text-center">
+                            @php
+                                $data = \App\models\DelivarableColumnEdit::where([
+                                    'delivarable_id' => $deliverable->id,
+                                    'column_name' => 'quantity',
+                                ])->latest()->first();
+                            @endphp
+                            
+                            @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                                <i class="fa fa-lightbulb text-warning" title="Admin request to {{$data->comment}}"></i>
+                            @endif
+                            {{$deliverable->quantity}}
+                        </td>
+                        <td class="text-center">
+                            @php
+                                $data = \App\models\DelivarableColumnEdit::where([
+                                    'delivarable_id' => $deliverable->id,
+                                    'column_name' => 'description',
+                                ])->latest()->first();
+                            @endphp
+                            @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                                <i class="fa fa-lightbulb text-warning" title="Admin request to {{$data->comment}}"></i>
+                            @endif
+                            {!!$deliverable->description!!}
+                        </td>
+                        @if($deliverable->to != null)
+                            <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
+                        @else
+                            <td class="text-center">
+                                @php
+                                    $data = \App\models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'estimation_completed_date',
+                                    ])->latest()->first();
+                                @endphp
+                                
+                                @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                                    <i class="fa fa-lightbulb text-warning" title="Admin request to {{$data->comment}}"></i>
+                                @endif
+                                On {{$deliverable->from}}
+                            </td>
+                        @endif
+                        @if($signature == null)
+                        <td class="text-center">
+                            @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
+                            <button class="btn" data-toggle="modal" data-target="#deliverable_edit_permission"><i class="fa fa-plus"></i></button>
+                            @endif
+                          <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn primary deleteDeliverable" data-id="{{ $deliverable->id }}"><i class="fas fa-trash"></i></button>
+                            @if($deliverable->authorization == 0 && Auth::user()->role_id == 1)
+                            <button class="btn btn-success" data-toggle="modal" data-target="#deliverablesapproveModal{{$deliverable->id}}">Approve</button>
+                            @endif
+                        </td>
+                        @endif
                     </tr>
                     @if($signature == null)
-                    @include('projects.modals.clientdeliverableeditmodal')
-                      @include('projects.modals.clientdeliverabledeletemodal')
-                      @include('projects.modals.clientdeliverableapprovemodal')
+                        @include('projects.modals.clientdeliverableeditmodal')
+                        @include('projects.modals.clientdeliverabledeletemodal')
+                         @include('projects.modals.clientdeliverableapprovemodal')
+                         @include('projects.modals.deliverable_edit_permission')
+
                       @endif
                     @empty
                     <tr>
@@ -544,16 +612,10 @@
             Swal.fire({
                 title: 'Are You Sure You Want to send approval request?',
                 showDenyButton: true,
-                confirmButtonText: 'Send',
-                denyButtonText: `Cancel`,
+                confirmButtonText: 'Save',
+                denyButtonText: `Don't save`,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    
-                  //  $('#sendAuthorizationBtn').attr('disabled','disabld');
-                    $("#sendAuthorizationBtn").attr("disabled", true);
-                    $("#sendAuthorizationBtn").html("Processing...");
-
-
                     $.ajax({
                         url: '/projects/send-final-authorization-deliverables/' + id,
                         type: 'GET',

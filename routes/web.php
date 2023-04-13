@@ -1126,6 +1126,7 @@ Route::post('/projects/add-deliverables/', [ProjectController::class, 'projectDe
 Route::post('/projects/update-deliverables/', [ProjectController::class, 'updateDeliverable'])->name('update-project-deliverable');
 Route::get('/projects/delete-deliverables/{id}', [ProjectController::class, 'deleteDeliverable']);
 Route::get('/projects/approve-deliverables/{id}', [ProjectController::class, 'approveDeliverable']);
+Route::post('/projects/set/column/permissions', [ProjectController::class, 'set_column_edit_permission'])->name('deliverables_edit_permission');
 
 //projectboard
 Route::post('projectboards/collapseColumn', [ProjectBoardController::class, 'collapseColumn'])->name('projectboards.collapse_column');

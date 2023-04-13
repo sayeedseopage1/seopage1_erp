@@ -55,6 +55,7 @@ use App\Models\PMProject;
 use App\Models\PMAssign;
 use App\Models\Deal;
 use App\Models\RoleUser;
+use App\Models\DelivarableColumnEdit;
 use Auth;
 use App\Models\Lead;
 use Response;
@@ -2678,8 +2679,18 @@ class ProjectController extends AccountBaseController
 
     }
 
+    public function set_column_edit_permission(Request $request)
+    {
+        if (count($request->permission_column) == count($request->data)) {
+            foreach ($request->permission_column as $key => $value) {
+                $data = new DelivarableColumnEdit();
+                $data->delivarable_id = $request->deliverable_id;
+                $data->column_name = $request->permission_column[$key];
+                $data->comment = $request->data[$key];
+                $data->save();
+            }
 
-
-
-
+            return redirect()->back();
+        } 
+    }
 }
