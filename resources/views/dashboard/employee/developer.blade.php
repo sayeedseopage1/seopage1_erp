@@ -404,7 +404,7 @@
                     <div id="monthHtml">
                         <h4>Total Tasks (Status wise)</h4>
                         <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                     <div class="d-block text-capitalize">
                                         <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">To Do</h5>
@@ -422,7 +422,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                     <div class="d-block text-capitalize">
                                         <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Doing</h5>
@@ -440,7 +440,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                     <div class="d-block text-capitalize">
                                         <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Overdue</h5>
@@ -458,7 +458,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-4">
                                 <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                     <div class="d-block text-capitalize">
                                         <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Under Review</h5>
@@ -473,6 +476,45 @@
                                     </div>
                                     <div class="d-block">
                                         <i class="fa fa-list text-lightest f-27"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                    <div class="w-100 d-block text-capitalize">
+                                        <h5 class="f-15 f-w-500 text-darkest-grey">Reviews</h5>
+                                        <div class="d-flex justify-content-between">
+                                            <a href="">
+                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5 text-center">{{$monthlyPositiveRating}}
+                                                    <span class="f-12 font-weight-normal text-lightest">Positive Review</span>
+                                                </p>
+                                            </a>
+                                            <div class="col-md-4 mx-auto">
+                                                <div class="text-center px-2 border border-danger rounded f-15 f-w-500">Avarage Rating<br>
+                                                    @php
+                                                        $totalRating = $monthlyTasks->sum('totalRating');
+                                                        $avgRating = 0;
+                                                        if($totalRating > 0) {
+                                                            $avgRating = round($totalRating / $monthlyTasks->count(), 2);
+                                                        }
+                                                    @endphp
+                                                    @if($avgRating <= 5 && $avgRating >= 4)
+                                                        <span class="text-success mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
+                                                    @elseif($avgRating <= 4 && $avgRating >= 3)
+                                                        <span class="text-warning mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
+                                                    @elseif($avgRating <= 3)
+                                                        <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
+                                                    @else
+                                                        <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <a href="">
+                                                <p class="mb-0 f-21 font-weight-bold text-red d-grid text-center">{{$monthlyNegativeRating}}
+                                                    <span class="f-12 font-weight-normal text-lightest">Negative Review</span>
+                                                </p>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -814,47 +856,7 @@
                             </div>
                         </div>
                         <div class="row mt-3">
-                            <div class="col-md-6">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="w-100 d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Reviews</h5>
-                                        <div class="row">
-                                            <div class="col-md-4 mx-auto">
-                                                <div class="text-center px-2 border border-danger rounded f-15 f-w-500">Avarage Rating<br>
-                                                    @php
-                                                        $totalRating = $monthlyTasks->sum('totalRating');
-                                                        $avgRating = 0;
-                                                        if($totalRating > 0) {
-                                                            $avgRating = round($totalRating / $monthlyTasks->count(), 2);
-                                                        }
-                                                    @endphp
-                                                    @if($avgRating <= 5 && $avgRating >= 4)
-                                                        <span class="text-success mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @elseif($avgRating <= 4 && $avgRating >= 3)
-                                                        <span class="text-warning mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @elseif($avgRating <= 3)
-                                                        <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @else
-                                                        <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <a href="">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5 text-center">{{$monthlyPositiveRating}}
-                                                    <span class="f-12 font-weight-normal text-lightest">Positive Review</span>
-                                                </p>
-                                            </a>
-                                            <a href="">
-                                                <p class="mb-0 f-21 font-weight-bold text-red d-grid text-center">{{$monthlyNegativeRating}}
-                                                    <span class="f-12 font-weight-normal text-lightest">Negative Review</span>
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
