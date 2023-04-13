@@ -15362,8 +15362,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+// table context 
+
 
 var EmployeeWiseTableContext = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createContext();
+
+// table State/Context provider 
 var EmployeeWiseTableProvider = function EmployeeWiseTableProvider(_ref) {
   var children = _ref.children;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
@@ -15414,7 +15418,11 @@ var EmployeeWiseTableProvider = function EmployeeWiseTableProvider(_ref) {
     children: children
   });
 };
+// table context/state provider end
+
+// tabs
 var tabs = ["Employee Wise", "Project Wise", "Task Wise"];
+// tabs end
 
 // project wise table columns
 var projectWiseTableConfig = {
@@ -15465,7 +15473,6 @@ var employeeWiseTableConfig = {
 };
 
 // task wise table config
-
 var taskWiseTableConfig = {
   columns: [{
     key: 'task',
@@ -15494,6 +15501,8 @@ var taskWiseTableConfig = {
     label: 'Total Track Time'
   }]
 };
+
+// log table 
 var TimeLogTable = function TimeLogTable() {
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState('Employee Wise'),
     _React$useState2 = _slicedToArray(_React$useState, 2),
@@ -15533,7 +15542,11 @@ var TimeLogTable = function TimeLogTable() {
 };
 var Tabs = styled_components__WEBPACK_IMPORTED_MODULE_11__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    display: flex;\n    align-items: center;   \n    flex-wrap: wrap; \n    gap: 8px;\n    padding: 20px;\n"])));
 var Tab = styled_components__WEBPACK_IMPORTED_MODULE_11__["default"].button(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    padding: 6px 12px;\n    border: 1.5px solid #1D82F5;\n    color: #1D82F5;\n    border-radius: 6px;\n    background: #fff;\n    &.active{\n        background: #1D82F5;\n        color: #FFFFFF;\n    }\n    &:hover{\n        background: #ECF0F4;\n        color: #1D82F5;\n    }\n"])));
+
+// get time log table container
 var timeLogTableContainer = document.getElementById("timeLogTable");
+
+// if container exist, render time log table 
 if (timeLogTableContainer) {
   var root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(timeLogTableContainer);
   root.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), {

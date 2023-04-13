@@ -10,8 +10,11 @@ import { DndProvider } from "react-dnd";
 import ProjectWiseTable from "./ProjectWiseTable";
 import TaskWiseTable from "./TaskWiseTable";
 
+
+// table context 
 export const EmployeeWiseTableContext = React.createContext();
 
+// table State/Context provider 
 const EmployeeWiseTableProvider = ({ children }) => {
     const [columns, setColumns] = useState([]);
     const [subColumns, setSubColumns] = useState([]);
@@ -20,7 +23,6 @@ const EmployeeWiseTableProvider = ({ children }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [columnOrder, setColumnOrder] = useState([]);
     const [filterColumn, setFilterColumn] = useState([]);
-
 
     return (
         <EmployeeWiseTableContext.Provider
@@ -46,13 +48,15 @@ const EmployeeWiseTableProvider = ({ children }) => {
         </EmployeeWiseTableContext.Provider>
     )
 }
+// table context/state provider end
 
+// tabs
 const tabs = [
     "Employee Wise",
     "Project Wise",
     "Task Wise"
 ]
-
+// tabs end
 
 // project wise table columns
 const projectWiseTableConfig = {
@@ -81,7 +85,6 @@ const employeeWiseTableConfig = {
 }
 
 // task wise table config
-
 const taskWiseTableConfig = {
     columns: [
         { key: 'task', label: 'Task' },
@@ -97,11 +100,7 @@ const taskWiseTableConfig = {
     ]
 }
 
-
-
-
-
-
+// log table 
 const TimeLogTable = () => {
     const [activeTab, setActiveTab] = React.useState('Employee Wise');
 
@@ -163,9 +162,10 @@ const Tab = styled.button`
 `
 
 
-
+// get time log table container
 const timeLogTableContainer = document.getElementById("timeLogTable");
 
+// if container exist, render time log table 
 if (timeLogTableContainer) {
     const root = ReactDOM.createRoot(timeLogTableContainer);
     root.render(
