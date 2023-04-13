@@ -639,7 +639,7 @@ class ContractController extends AccountBaseController
                 $diff_in_days = $from->diffInDays($to);
                // dd($diff_in_days, $find_pm_id);
                 if ($diff_in_days < 90) {
-                    $deal_pm_id = Deal::find($deal->id);
+            $deal_pm_id = Deal::find($deal->id);
             $deal_pm_id->pm_id = $find_pm_id->pm_id;
             $deal_pm_id->save();
             $project_pm_id= Project::find($project->id);
