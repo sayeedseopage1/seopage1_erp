@@ -149,8 +149,8 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                             </td>
                             <td>
                                 @php
-                                    $tasks= App\Models\Task::where('milestone_id',$item->id)->count();
-                                    $completed_tasks= App\Models\Task::where('milestone_id',$item->id)->where('status','completed')->count();
+                                    $tasks= App\Models\Task::where('milestone_id',$item->id)->where('subtask_id',null)->count();
+                                    $completed_tasks= App\Models\Task::where('milestone_id',$item->id)->where('subtask_id',null)->where('status','completed')->count();
                                     if ($tasks < 1 ) {
                                             $completion= 0;
                                             $statusColor = 'danger';
@@ -182,8 +182,10 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
                                 @else
                                 <div class="progress" style="height: 15px;">
-                                    <div class="progress-bar f-12 bg-{{$statusColor}}" role="progressbar" style="width:{{$completion}}%;" aria-valuenow="{{$completion}}" aria-valuemin="0" aria-valuemax="100">{{$completion}}% ({{$completed_tasks}}/{{$tasks}})</div>
+                                    <div class="progress-bar f-12 bg-{{$statusColor}}" role="progressbar" style="width:{{$completion}}%;" aria-valuenow="{{$completion}}" aria-valuemin="0" aria-valuemax="100">{{$completion}}%  ({{$completed_tasks}}/{{$tasks}})</div> 
+                                   
                                   </div>
+                                
                                   @endif
 
 
