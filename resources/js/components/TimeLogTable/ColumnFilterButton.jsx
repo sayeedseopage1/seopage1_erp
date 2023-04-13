@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { EmployeeWiseTableContext } from ".";
 
 // column filter dropdown
-const ColumnFilter = () => {
+const ColumnFilter = ({ table }) => {
     const {
         columnOrder, filterColumn, setFilterColumn
     } = React.useContext(EmployeeWiseTableContext)
@@ -35,12 +35,12 @@ const ColumnFilter = () => {
         if (e.target.checked) {
             const newFilterColumn = filterColumn.filter((item) => item !== e.target.value);
             setFilterColumn(newFilterColumn);
-            localStorage.setItem('employeeWiseTableColumnFilter', JSON.stringify(newFilterColumn))
+            localStorage.setItem(`${table}WiseTableColumnFilter`, JSON.stringify(newFilterColumn))
         } else {
 
             const newFilterColumn = [...filterColumn, e.target.value];
             setFilterColumn(newFilterColumn);
-            localStorage.setItem('employeeWiseTableColumnFilter', JSON.stringify(newFilterColumn))
+            localStorage.setItem(`${table}WiseTableColumnFilter`, JSON.stringify(newFilterColumn))
         }
     };
 
@@ -48,10 +48,10 @@ const ColumnFilter = () => {
     const handleAllFilter = (e) => {
         if (e.target.checked) {
             setFilterColumn([]);
-            localStorage.removeItem('employeeWiseTableColumnFilter');
+            localStorage.removeItem(`${table}WiseTableColumnFilter`);
         } else {
             setFilterColumn(columnOrder);
-            localStorage.setItem('employeeWiseTableColumnFilter', JSON.stringify(columnOrder))
+            localStorage.setItem(`${table}WiseTableColumnFilter`, JSON.stringify(columnOrder))
         }
     };
 

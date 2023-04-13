@@ -9,7 +9,7 @@ import './table.css'
 
 
 // pivot table
-const ProjectWiseTable = ({ data, columns, subColumns }) => {
+const TaskWiseTable = ({ data, columns, subColumns }) => {
 
     const {
         setSubColumns,
@@ -28,8 +28,8 @@ const ProjectWiseTable = ({ data, columns, subColumns }) => {
     /* ================ Initial State ==================== */
     React.useEffect(() => {
         setSubColumns(subColumns);
-        const columnOrderFromLocalStore = localStorage.getItem('projectWiseTableColumnOrder');
-        const filterColumnFromLocalStore = localStorage.getItem('projectWiseTableColumnFilter');
+        const columnOrderFromLocalStore = localStorage.getItem('taskWiseTableColumnOrder');
+        const filterColumnFromLocalStore = localStorage.getItem('taskWiseTableColumnFilter');
 
         if (columnOrderFromLocalStore) {
             setColumnOrder([...JSON.parse(columnOrderFromLocalStore)])
@@ -148,7 +148,7 @@ const ProjectWiseTable = ({ data, columns, subColumns }) => {
 
         /* =============== Data group by Project ID =================== */
         const groupedData = paginatedData.reduce((r, a) => {
-            r[a.project_id] = [...(r[a.project_id] || []), a];
+            r[a.task_id] = [...(r[a.task_id] || []), a];
             return r;
         }, {});
         /* ================ End Data Grouping ================== */
@@ -158,10 +158,24 @@ const ProjectWiseTable = ({ data, columns, subColumns }) => {
             rows.push(
                 <React.Fragment key={key}>
                     <tr key={key}>
-                        {/* project name */}
+                        {/* task name */}
                         <EmployeeProfileTd
                             rowSpan={value.length + 1}
                             style={{ borderBottom: '2px solid #AAD1FC' }}>
+                            <EmployeeProfile>
+                                <EmployeeProfileName>
+                                    <span>{value[0].task_name}</span>
+                                </EmployeeProfileName>
+                            </EmployeeProfile>
+                        </EmployeeProfileTd>
+                        {/* project name */}
+                        <EmployeeProfileTd
+                            rowSpan={value.length + 1}
+                            style={{
+                                borderBottom: '2px solid #AAD1FC',
+                                borderLeft: '2px solid #fff',
+                                borderRight: '2px solid #fff'
+                            }}>
                             <EmployeeProfile>
                                 <EmployeeProfileName>
                                     <span>{value[0].project_name}</span>
@@ -253,7 +267,7 @@ const ProjectWiseTable = ({ data, columns, subColumns }) => {
         </TableContainer>
     );
 };
-export default ProjectWiseTable;
+export default TaskWiseTable;
 
 /* ========== DRAG ABLE COLUMN ============== */
 const DragAbleHeader = ({ column, sort, columns, columnOrder, setColumnOrder, requestSort }) => {
@@ -285,7 +299,7 @@ const DragAbleHeader = ({ column, sort, columns, columnOrder, setColumnOrder, re
             if (item.column !== column) {
                 const reOrderColumn = reOrder(item.column, column)
                 setColumnOrder(reOrderColumn);
-                localStorage.setItem('projectWiseTableColumnOrder', JSON.stringify(reOrderColumn))
+                localStorage.setItem('taskWiseTableColumnOrder', JSON.stringify(reOrderColumn))
             }
         },
     });

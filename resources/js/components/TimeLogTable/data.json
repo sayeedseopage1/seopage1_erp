@@ -9,7 +9,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "2",
@@ -21,7 +25,12 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
+
     },
     {
         "id": "3",
@@ -33,7 +42,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "4",
@@ -45,7 +58,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "5",
@@ -57,7 +74,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "6",
@@ -69,7 +90,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "7",
@@ -81,7 +106,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "8",
@@ -93,7 +122,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "9",
@@ -105,7 +138,11 @@
         "project_id": "p1",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "1",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "10",
@@ -117,7 +154,11 @@
         "project_id": "p1",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "1",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "11",
@@ -129,7 +170,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "40",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "12",
@@ -141,7 +186,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "13",
@@ -153,7 +202,11 @@
         "project_id": "p3",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "14",
@@ -165,7 +218,11 @@
         "project_id": "p4",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "15",
@@ -177,7 +234,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "16",
@@ -189,7 +250,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "17",
@@ -201,7 +266,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "18",
@@ -213,7 +282,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "19",
@@ -225,7 +298,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "20",
@@ -237,7 +314,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "2",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "21",
@@ -249,7 +330,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "22",
@@ -261,7 +346,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "50",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "23",
@@ -273,7 +362,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "24",
@@ -285,7 +378,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "25",
@@ -297,7 +394,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "26",
@@ -309,7 +410,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "27",
@@ -321,7 +426,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "28",
@@ -333,7 +442,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "29",
@@ -345,7 +458,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "30",
@@ -357,7 +474,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "31",
@@ -369,7 +490,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "32",
@@ -381,7 +506,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "33",
@@ -393,7 +522,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "34",
@@ -405,7 +538,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "35",
@@ -417,7 +554,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     },
     {
         "id": "36",
@@ -429,7 +570,11 @@
         "client": "Rafy Osman",
         "project_manager": "Abdur Rahman",
         "number_of_session": "61",
-        "total_minutes": 350
+        "total_minutes": 350,
+        "task_id": "3",
+        "task_name": "Spanish Translate",
+        "task_start": "03:10 pm",
+        "task_end": "03:10 pm"
     }
 ]
 

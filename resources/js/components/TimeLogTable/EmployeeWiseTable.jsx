@@ -100,7 +100,7 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
         return (
             <tr style={{ borderBottom: '2px solid #AAD1FC' }}>
                 {columns.map((column) => (
-                    <th key={column.key}>
+                    <th key={column.key} style={{ cursor: 'default' }}>
                         <div>
                             <div onClick={() => requestSort(column.key)}>
 

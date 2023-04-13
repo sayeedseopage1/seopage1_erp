@@ -8,6 +8,7 @@ import './table.css';
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import ProjectWiseTable from "./ProjectWiseTable";
+import TaskWiseTable from "./TaskWiseTable";
 
 export const EmployeeWiseTableContext = React.createContext();
 
@@ -79,11 +80,32 @@ const employeeWiseTableConfig = {
     ]
 }
 
+// task wise table config
+
+const taskWiseTableConfig = {
+    columns: [
+        { key: 'task', label: 'Task' },
+        { key: 'project_name', label: 'Project Name' },
+        { key: 'client', label: 'Client' },
+        { key: 'project_manager', label: 'Project Manager' },
+    ],
+    subColumns: [
+        { key: 'name', label: 'Employee Name' },
+        { key: 'task_start', label: 'Start Time' },
+        { key: 'task_end', label: 'End Time' },
+        { key: 'total_minutes', label: 'Total Track Time' },
+    ]
+}
+
+
+
 
 
 
 const TimeLogTable = () => {
     const [activeTab, setActiveTab] = React.useState('Employee Wise');
+
+    const activeTableNamespace = activeTab === "Employee Wise" ? 'employee' : activeTab === "Project Wise" ? 'project' : activeTab === "Task Wise" ? 'task' : ''
 
 
     return (
@@ -96,7 +118,7 @@ const TimeLogTable = () => {
                         onClick={() => setActiveTab(tab)}
                     >{tab}</Tab>
                 ))}
-                <ColumnFilter />
+                <ColumnFilter table={activeTableNamespace} />
                 <Tab>Export</Tab>
             </Tabs>
             {
@@ -107,7 +129,9 @@ const TimeLogTable = () => {
                     />
                     : activeTab === 'Project Wise' ?
                         <ProjectWiseTable data={data} columns={projectWiseTableConfig.columns} subColumns={projectWiseTableConfig.subColumns} />
-                        : null
+                        : activeTab === 'Task Wise' ?
+                            <TaskWiseTable data={data} columns={taskWiseTableConfig.columns} subColumns={taskWiseTableConfig.subColumns} />
+                            : null
             }
         </DndProvider>
     )
