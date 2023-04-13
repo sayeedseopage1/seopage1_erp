@@ -45,6 +45,7 @@ $changeStatusPermission = user()->permission('change_status');
                               $task_user= App\Models\TaskSubmission::orderBy('id','desc')->where('task_id',$task->id)->first();
                             //  dd($task_user->user_id,Auth::user()->id);
                              ?>
+
                                 @if ($task->task_status == 'submitted' )
                                     <!-- <x-forms.button-primary icon="check" data-status="completed"
                                         class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
@@ -52,17 +53,29 @@ $changeStatusPermission = user()->permission('change_status');
                                         @lang('modules.tasks.markComplete')
                                         @endif
                                     </x-forms.button-primary> -->
-                                    @if($task->added_by == Auth::user()->id || Auth::user()->role_id == 1)
-                                      <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskapprove">Approve</button>
-                                      <button class="btn bg-danger mr-3 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskrevision">Need Revision</button>
 
-                                      @include('tasks.modals.taskapprove')
-                                      @include('tasks.modals.taskrevision')
-                                    @endif
+                                        @if($task->added_by == Auth::user()->id || Auth::user()->role_id == 1)
+                                          <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskapprove">Approve</button>
+                                          <button class="btn bg-danger mr-3 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskrevision">Need Revision</button>
 
-
+                                          @include('tasks.modals.taskapprove')
+                                          @include('tasks.modals.taskrevision')
+                                        @endif
                                 @endif
                             @endif
+
+                            @if(Auth::user()->role_id==4)
+                                @if($task->board_column_id == 8)
+                                    <button class="btn btn-success mr-2 mb-2 mb-lg-0 mb-md-0" id="submit_task_for_client_approval">Submit Task for Client Approval</button>
+                                @endif
+                            @endif
+
+                                @if($task->board_column_id == 9)
+                                    <button class="btn btn-success mr-2 mb-2 mb-lg-0 mb-md-0" id="client_approve_task">Client Approved Task</button>
+                                    <button class="btn btn-danger mr-2 mb-2 mb-lg-0 mb-md-0" data-toggle="modal" data-target="#task_client_has_revision">Client Has Revision</button>
+                                    @include('tasks.modals.task_client_has_revision')
+                                @endif
+
                             @php
                                 $val = App\Models\ProjectTimeLog::where('task_id', $task->id)->latest()->first();
                                 $task_active_id= App\Models\Task::where('id',$task->id)->first();
@@ -1467,6 +1480,93 @@ $changeStatusPermission = user()->permission('change_status');
             init(RIGHT_MODAL);
         });
 
+        // SUBMIT TASK FOR CLIENT APPROVE
+        $('#submit_task_for_client_approval').click(function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be submit task for client approval!",
+                icon: 'warning',
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText: "Yes",
+                cancelButtonText: "Cancel",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '{{route('tasks.client_approval')}}',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            'task_id':'{{ $task_active_id->id }}',
+                        },
+                        success: function(response) {
+                            if(response.status==400){
+                                swal.fire({
+                                    title: 'Client Approval!',
+                                    text: 'Client approval successfully.',
+                                    icon: 'success',
+                                }).then(function() {
+                                    window.location.reload();
+                                });
+                            }
+                        },
+                        error: function(response) {
+                            swal.fire({
+                                title: 'Error!',
+                                text: 'An error occurred while client approval.',
+                                icon: 'error',
+                            });
+                        }
+                    });
+                }
+            });
+        })
+
+        // CLIENT APPROVE TASK
+        $('#client_approve_task').click(function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be client approved task",
+                icon: 'warning',
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText: "Yes",
+                cancelButtonText: "Cancel",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '{{route('tasks.client_approved_task')}}',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            'task_id':'{{ $task_active_id->id }}',
+                        },
+                        success: function(response) {
+                            if(response.status==200){
+                                swal.fire({
+                                    title: 'Client Approved Task!',
+                                    text: 'Client approved task successfully.',
+                                    icon: 'success',
+                                }).then(function() {
+                                    window.location.reload();
+                                });
+                            }
+                        },
+                        error: function(response) {
+                            swal.fire({
+                                title: 'Error!',
+                                text: 'An error occurred while client approved task.',
+                                icon: 'error',
+                            });
+                        }
+                    });
+                }
+            });
+        })
     </script>
 
     <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>

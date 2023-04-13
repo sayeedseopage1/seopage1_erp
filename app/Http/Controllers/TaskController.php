@@ -53,6 +53,7 @@ use Notification;
 use Toastr;
 use Auth;
 use App\Models\ProjectDeliverable;
+use function _PHPStan_7d6f0f6a4\React\Promise\all;
 use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
 use Toaster;
@@ -214,7 +215,6 @@ class TaskController extends AccountBaseController
         Notification::send($user, new TaskSubmitNotification($task_id,$sender));
 
         Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-//return back();
         return Redirect::back()->with('messages.taskSubmitNotification');
 
     }
@@ -231,11 +231,14 @@ class TaskController extends AccountBaseController
             'rating3.required' => 'This field is required!',
             'comments.required' => 'This field is required!',
         ]);
+
       $task_status= Task::find($request->task_id);
-      $task_status->status= "completed";
-      $task_status->task_status="approved";
-      $task_status->board_column_id=4;
+//      $task_status->status= "completed";
+      $task_status->task_status="awaiting client approval";
+      $task_status->board_column_id=8;
       $task_status->save();
+
+
       $task= new TaskApprove();
       $task->user_id= $request->user_id;
       $task->task_id= $request->task_id;
@@ -244,6 +247,7 @@ class TaskController extends AccountBaseController
       $task->rating3= $request->rating3;
       $task->comments= $request->comments;
       $task->save();
+
       $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
       $sender= User::where('id',Auth::id())->first();
       $user= User::where('id',$task_submission->user_id)->first();
@@ -251,6 +255,7 @@ class TaskController extends AccountBaseController
         return response()->json([
             'status'=>200,
     ]);
+
 
     }
     public function TaskRevision(Request $request)
@@ -283,12 +288,16 @@ class TaskController extends AccountBaseController
         $task_revision->comment = $request->comments2;
         $task_revision->project_id = $task_status->project_id;
         $task_revision->added_by = Auth::id();
-        $taskRevisionFind = TaskRevision::where('task_id',$task_status->id)->first();
-        if ($taskRevisionFind !=null){
-            $newRevision = TaskRevision::find($taskRevisionFind->id);
-            $newRevision->revision_no = $taskRevisionFind->revision_no+1;
-            $newRevision->save();
+        $taskRevisionFind = TaskRevision::where('task_id',$task_status->id)->orderBy('id','desc')->get();
+        foreach ($taskRevisionFind as $taskRevision) {
+            $taskRevision->revision_no = $taskRevision->revision_no + 1;
+            $taskRevision->save();
         }
+//        if ($taskRevisionFind !=null){
+//            $newRevision = TaskRevision::find($taskRevisionFind->id);
+//            $newRevision->revision_no = $taskRevisionFind->revision_no+1;
+//            $newRevision->save();
+//        }
         $task_revision->save();
 
 
@@ -1262,7 +1271,7 @@ class TaskController extends AccountBaseController
         //    /$taskBoardStatus = TaskboardColumn::all();
 //            $project = $task->project;
             $html = view('tasks.ajax.showSubTask',compact( 'subTask'))->render();
-            dd($html);
+//            dd($html);
             return Reply::dataOnly([
                 'status' => 'success',
                 'data' => $html,
@@ -1275,5 +1284,59 @@ class TaskController extends AccountBaseController
         }
     }
 
+//    CLIENT APPROVAL SECTION
+    public function clientApproval(Request $request){
+        $task_status= Task::find($request->task_id);
+        $task_status->task_status="submit task to client approval";
+        $task_status->board_column_id=9;
+        $task_status->save();
+        return response()->json([
+            'status'=>400,
+        ]);
+    }
+
+//    CLIENT APPROVED TASK SECTION
+    public function clientApprovedTask(Request $request){
+        $task_status= Task::find($request->task_id);
+        $task_status->status= "completed";
+        $task_status->board_column_id=4;
+        $task_status->save();
+        return response()->json([
+            'status'=>200,
+        ]);
+    }
+
+//    CLIENT HAS REVISION
+    public function clientHasRevision(Request $request){
+//        dd($request->all());
+        $request->validate([
+            'comments3' => 'required',
+        ], [
+            'comments3.required' => 'This field is required!',
+        ]);
+        $task_status= Task::find($request->task_id);
+//        $task_status->status= "incomplete";
+        $task_status->task_status="revision";
+        $task_status->board_column_id=1;
+        $task_status->save();
+
+        $task_revision = new TaskRevision();
+        $task_revision->task_id = $request->task_id;
+        if ($task_status->subtask_id !=null) {
+            $task_revision->subtask_id = $task_status->subtask_id;
+        }
+        $task_revision->comment = $request->comments3;
+        $task_revision->project_id = $task_status->project_id;
+        $task_revision->added_by = Auth::id();
+        $taskRevisionFind = TaskRevision::where('task_id',$task_status->id)->orderBy('id','desc')->get();
+        foreach ($taskRevisionFind as $taskRevision) {
+            $taskRevision->revision_no = $taskRevision->revision_no + 1;
+            $taskRevision->save();
+        }
+        $task_revision->save();
+        return response()->json([
+            'status'=>200,
+        ]);
+    }
 
 }

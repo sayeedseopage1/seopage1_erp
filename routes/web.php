@@ -690,6 +690,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/show-subtask/{id}/{tableView?}/{tableViews?}', [TaskController::class, 'show_subtask'])->name('tasks.show_subtask');
     Route::get('tasks/search-subtask', [TaskController::class, 'searchSubTask'])->name('tasks.search_subtask');
 
+    // SUBMIT TASK FOR CLIENT APPROVAL
+    Route::post('tasks/client-approval', [TaskController::class, 'clientApproval'])->name('tasks.client_approval');
+    Route::post('tasks/client-approved-task', [TaskController::class, 'clientApprovedTask'])->name('tasks.client_approved_task');
+    Route::post('tasks/client-has-revision-task', [TaskController::class, 'clientHasRevision'])->name('tasks.client_has_revision');
+
     Route::group(
         ['prefix' => 'tasks'],
         function () {
