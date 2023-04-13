@@ -89,6 +89,25 @@
     <div class="col-md-4">
         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Canceled Today</h5>
+                <div class="d-flex">
+                    <a href="#">
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            {{$today_canceled_milestone}}<span class="f-12 font-weight-normal text-lightest"></span>
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-4">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Invoice Created Today</h5>
                 <div class="d-flex">
                     <a href="#">
@@ -103,8 +122,6 @@
             </div>
         </div>
     </div>
-</div>
-<div class="row mt-3">
     <div class="col-md-4">
         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
@@ -139,6 +156,8 @@
             </div>
         </div>
     </div>
+</div>
+<div class="row mt-3">
     <div class="col-md-4">
         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
@@ -147,6 +166,40 @@
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{$today_completion_form_required_submission}}<span class="f-12 font-weight-normal text-lightest"></span>
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Completion Form Pending Approval</h5>
+                <div class="d-flex">
+                    <a href="#">
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            {{$completion_form_pending}}<span class="f-12 font-weight-normal text-lightest"></span>
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">QC Form Pending Approval</h5>
+                <div class="d-flex">
+                    <a href="#">
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            {{$qc_form_pending}}<span class="f-12 font-weight-normal text-lightest"></span>
                         </p>
                     </a>
                 </div>

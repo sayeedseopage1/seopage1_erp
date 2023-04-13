@@ -1740,15 +1740,24 @@
         $(document).ready(function() {
             var todayDate = moment();
             var monthDate = moment();
-
+            
             $('.todayDate').text(todayDate.format('dddd LL'));
-            $('.monthDate').text('21st ' + moment(monthDate).format('MMMM, YYYY')+' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
 
+            var todayOnlyDate = moment(todayDate).format('DD');
+            if (todayOnlyDate > 21) {
+                $('.monthDate').text('21st ' + moment(monthDate).format('MMMM, YYYY')+' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
+            } else {
+                $('.monthDate').text('21st ' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY')+' to 20th '+moment(monthDate).startOf('month').add(20, 'day').format('MMMM, YYYY'));
+            }
 
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
                 if (mode == 'month') {
-                    monthDate = moment(monthDate).subtract(1, 'month');
+                    if(todayOnlyDate > 21) {
+                        monthDate = moment(monthDate).subtract(1, 'month');
+                    } else {
+                        monthDate = moment(monthDate).subtract(2, 'month');
+                    }
                     $(this).next().text('21st ' + moment(monthDate).format('MMMM, YYYY')+ ' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
@@ -1774,6 +1783,10 @@
                 
                 getData(mode, $(this), date);
             });
+
+            $('.fc-today-button').click(function() {
+                todayDate = moment();
+            })
         });
 
         function getData(mode, disableButton, date) {
