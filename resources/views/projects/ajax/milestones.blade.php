@@ -340,6 +340,14 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                         @elseif($item->qc_status == 1 && $item->invoice_created == 1 && $item->project_completion_status == 1 && $invoice_id != null)
               
                                          <a href="{{route('payments.create')}}?invoice_id={{$item->invoice_id}}&default_client={{$project->client_id}}"  class="dropdown-item" data-row-id="{{ $item->invoice_id }}">Add Payment</a>
+
+                                         @else 
+                                         <i class="fa fa-circle mr-1 text-green f-10"></i>
+              
+                                                 Paid
+
+
+                                         
               
                                       
               

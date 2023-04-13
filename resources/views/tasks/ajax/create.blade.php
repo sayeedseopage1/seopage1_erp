@@ -8,7 +8,12 @@
 @endphp
 
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
+<style>
+.w-25 {
+    width: 43% !important;
+}
 
+</style>
 <div class="row">
     <div class="col-sm-12">
         <x-form id="save-task-data-form">
@@ -210,7 +215,7 @@
                             </x-forms.input-group>
                         </div>
                     </div>
-                    <div class="col-md-12 col-lg-6">
+                    <div class="col-md-12 col-lg-4">
                         <?php
                         $users= App\Models\User::where('role_id',5)->get();
 
@@ -278,7 +283,7 @@
                     <div class="col-md-12 col-lg-6" id="set-time-estimate-fields">
                         <div class="form-group my-3">
                             <label for="">Task Estimation Time <sup class="mr-1">*</sup></label>
-                            <div class="form-group">
+                            <div class="form-group mt-1">
                                 <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14 @error('estimate_hours') is-invalid @enderror" name="estimate_hours" id="estimate_hours">
                                 @error('estimate_hours')
                                 <div class="text-danger">{{ $message }}</div>
@@ -302,6 +307,10 @@
                             $left_in_minutes= $left_minutes%60;
                         @endphp
                         <h6 style="color:red;">You have {{$left_in_hours}} hours {{$left_in_minutes}} minutes remaining of estimation time</h6>
+                    </div>
+                    <div class="col-md-12 col-lg-2 mt-5">
+                        <button class="btn btn-outline-secondary add_extenstion_request" type="button">Make Extension Request</button>
+                       
                     </div>
                     @if(is_null($task))
                         {{-- <div class="col-md-6">
@@ -532,7 +541,7 @@
     </div>
 </div>
 
-
+@include('tasks.modals.estimateextensionmodal')
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
 
@@ -950,6 +959,12 @@
             }
         });
     });
+
+    $(document).on('click','.add_extenstion_request',function(e){
+       // alert("success");
+
+        $("#estimationextensionrequest").modal('show');
+});
 </script>
 @if(session('error'))
     <script>
