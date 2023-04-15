@@ -453,8 +453,6 @@ public function employeeDashboard()
     $this->no_of_inprogress= Project::where('pm_id',Auth::id())->where('status','in progress')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
     $this->no_of_canceled= Project::where('pm_id',Auth::id())->where('status','canceled')->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->count();
     $this->total_project_value= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('project_budget');
-//$this->total_released_amount= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`created_at`)'), [$startDate, $endDate])->sum('milestone_paid');
-//dd($this->total_released_amount);
     $this->total_released_amount= Project::
     where('pm_id',Auth::id())
     ->where(DB::raw('DATE(updated_at)'), '>=', $startDate)

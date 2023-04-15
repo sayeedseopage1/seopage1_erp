@@ -4,11 +4,14 @@ namespace App\Traits;
 use App\Models\Leave;
 use App\Models\Holiday;
 use App\Models\DashboardWidget;
+use App\Models\AttendanceSetting;
 use App\Models\ProjectTimeLog;
+use App\Models\ProjectTimeLogBreak;
 use App\Models\Role;
 use App\Models\Task;
 use \Carbon\Carbon;
 use App\Helper\Reply;
+use Carbon\CarbonPeriod;
 use DB;
 
 trait DeveloperDashboard
@@ -184,6 +187,18 @@ trait DeveloperDashboard
 
             }
 
+            /*-----------------------------------*/
+            $showClockIn = AttendanceSetting::first();
+            $this->showClockIn = AttendanceSetting::first();
+            $now = now(global_setting()->timezone);
+            $this->weekStartDate = $now->copy()->startOfWeek($showClockIn->week_start_from);
+            $this->weekEndDate = $this->weekStartDate->copy()->addDays(7);
+            $this->weekPeriod = CarbonPeriod::create($this->weekStartDate, $this->weekStartDate->copy()->addDays(6));
+            $this->weekWiseTimelogs = ProjectTimeLog::weekWiseTimelogs($this->weekStartDate->copy()->toDateString(), $this->weekEndDate->copy()->toDateString(), user()->id);
+            $this->weekWiseTimelogBreak = ProjectTimeLogBreak::weekWiseTimelogBreak($this->weekStartDate->toDateString(), $this->weekEndDate->toDateString(), user()->id);
+            $this->dateWiseTimelogs = ProjectTimeLog::dateWiseTimelogs(now()->toDateString(), user()->id);
+            $this->dateWiseTimelogBreak = ProjectTimeLogBreak::dateWiseTimelogBreak(now()->toDateString(), user()->id);
+            
             $this->checkTodayLeave = Leave::where('status', 'approved')
             ->select('id')
             ->where('leave_date', now(global_setting()->timezone)->toDateString())

@@ -250,6 +250,25 @@
                                 <div class="col-md-4">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Canceled Today</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{$today_canceled_milestone}}<span class="f-12 font-weight-normal text-lightest"></span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Invoice Created Today</h5>
                                             <div class="d-flex">
                                                 <a href="#">
@@ -264,8 +283,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
                                 <div class="col-md-4">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
@@ -300,6 +317,8 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row mt-3">
                                 <div class="col-md-4">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
@@ -308,6 +327,40 @@
                                                 <a href="#">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                                         {{$today_completion_form_required_submission}}<span class="f-12 font-weight-normal text-lightest"></span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Completion Form Pending Approval</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{$completion_form_pending}}<span class="f-12 font-weight-normal text-lightest"></span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">QC Form Pending Approval</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{$qc_form_pending}}<span class="f-12 font-weight-normal text-lightest"></span>
                                                     </p>
                                                 </a>
                                             </div>
@@ -683,7 +736,7 @@
                 <div class="card-header" id="headingTwo">
                     <h2 class="mb-0">
                         <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Project Manager ({{\Carbon\Carbon::now()->firstOfMonth()->addDays(20)->toFormattedDateString()}} to {{\Carbon\Carbon::now()->firstOfMonth()->addMonths(1)->addDays(19)->toFormattedDateString()}} Update)
+                            Project Manager Monthly Cycle Update (21st - 20th)
                         </button>
                     </h2>
                 </div>
@@ -708,7 +761,241 @@
                         </div>
                         <div id="monthHtml">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No of Projects</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ $month_no_of_inprogress }}<span class="f-12 font-weight-normal text-lightest">
+                                                        @lang('In Progress') </span>
+                                                    </p>
+                                                </a>
+
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{$month_no_of_canceled}}<span
+                                                        class="f-12 font-weight-normal text-lightest">@lang('Canceled')</span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Project Value</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($month_total_project_value,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
+                                                        @lang('Amount (USD)') </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Released Amount</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($month_total_released_amount,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
+                                                        @lang('Amount (USD)') </span>
+                                                    </p>
+                                                </a>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% Projects Got Completed/Money Released</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($month_percentage_of_complete_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% Projects Got Canceled</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($month_percentage_of_canceled_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average Project Completion Time</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($month_avg_project_completion_time,2) }} Days<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Projects Got Canceled</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($month_total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Cross/Upsell Projects</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        0<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. Payment Release Time</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($month_avg_project_completion_time,2) }} Days<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Negative Feedbacks After Submission</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($month_total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Projects Completed on Time</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        0%<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Project on Hold</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($month_percentage_of_onhold_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Projects Deadline Of this Month</h5>
@@ -725,7 +1012,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Waiting To be Completed</h5>
@@ -742,7 +1029,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Tasks Under Review (Assigned By Me)</h5>
@@ -759,9 +1046,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Deadline Of this Month (Assigned By Me)</h5>
@@ -778,7 +1063,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Completed Of this Month</h5>
@@ -795,7 +1082,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Invoice Created Of this Month</h5>
@@ -812,16 +1099,14 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Payment Released Of this Month</h5>
                                             <div class="d-flex">
                                                 <a href="#">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_payment_release}}<span class="f-12 font-weight-normal text-lightest"></span>
+                                                        {{round($month_payment_release, 2)}}$<span class="f-12 font-weight-normal text-lightest"></span>
                                                     </p>
                                                 </a>
                                             </div>
@@ -831,7 +1116,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">QC Form (Required Submission)</h5>
@@ -848,7 +1133,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Completion Form (Required Submission)</h5>
@@ -865,9 +1152,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Partially Finished Projects</h5>
@@ -884,7 +1169,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Milestone</h5>
@@ -901,14 +1186,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Released</h5>
                                             <div class="d-flex">
                                                 <a href="#">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_project_milestone->sum('milestone_paid')}} $<span class="f-12 font-weight-normal text-lightest"></span>
+                                                        {{$month_project_milestone_total}} $<span class="f-12 font-weight-normal text-lightest"></span>
                                                     </p>
                                                 </a>
                                             </div>
@@ -920,7 +1205,7 @@
                                 </div>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Canceled</h5>
@@ -937,7 +1222,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">QC Form Pending Approval</h5>
@@ -954,7 +1239,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Completion Form Pending Approval</h5>
@@ -1362,7 +1647,241 @@
                         </div>
                         <div id="generalHtml">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No of Projects</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ $general_no_of_inprogress }}<span class="f-12 font-weight-normal text-lightest">
+                                                        @lang('In Progress') </span>
+                                                    </p>
+                                                </a>
+
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{$general_no_of_canceled}}<span
+                                                        class="f-12 font-weight-normal text-lightest">@lang('Canceled')</span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Project Value</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($general_total_project_value,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
+                                                        @lang('Amount (USD)') </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Released Amount</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($general_total_released_amount,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
+                                                        @lang('Amount (USD)') </span>
+                                                    </p>
+                                                </a>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% Projects Got Completed/Money Released</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($general_percentage_of_complete_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% Projects Got Canceled</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($general_percentage_of_canceled_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average Project Completion Time</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($general_avg_project_completion_time,2) }} Days<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Projects Got Canceled</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($general_total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Cross/Upsell Projects</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        0<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. Payment Release Time</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($general_avg_project_completion_time,2) }} Days<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Negative Feedbacks After Submission</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($general_total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Projects Completed on Time</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        0%<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                        <div class="d-block text-capitalize">
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Project on Hold</h5>
+                                            <div class="d-flex">
+                                                <a href="#">
+                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                                        {{ round($general_percentage_of_onhold_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
+                                                        </span>
+                                                    </p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="d-block">
+                                            <i class="fa fa-list text-lightest f-27"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Projects Deadline Of this Month</h5>
@@ -1379,7 +1898,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Waiting To be Completed</h5>
@@ -1396,7 +1915,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Tasks Under Review (Assigned By Me)</h5>
@@ -1413,12 +1932,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Deadline general (Assigned By Me)</h5>
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Deadline Of this Month (Assigned By Me)</h5>
                                             <div class="d-flex">
                                                 <a href="#">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
@@ -1432,10 +1949,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Completed general</h5>
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Completed Of this Month</h5>
                                             <div class="d-flex">
                                                 <a href="#">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
@@ -1449,10 +1968,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Invoice Created general</h5>
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Invoice Created Of this Month</h5>
                                             <div class="d-flex">
                                                 <a href="#">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
@@ -1466,16 +1985,14 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Payment Released general</h5>
+                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Payment Released Of this Month</h5>
                                             <div class="d-flex">
                                                 <a href="#">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_payment_release}}<span class="f-12 font-weight-normal text-lightest"></span>
+                                                        {{round($general_payment_release, 2)}}$<span class="f-12 font-weight-normal text-lightest"></span>
                                                     </p>
                                                 </a>
                                             </div>
@@ -1485,7 +2002,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">QC Form (Required Submission)</h5>
@@ -1502,7 +2019,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Completion Form (Required Submission)</h5>
@@ -1519,9 +2038,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Partially Finished Projects</h5>
@@ -1538,7 +2055,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Milestone</h5>
@@ -1555,14 +2072,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Released</h5>
                                             <div class="d-flex">
                                                 <a href="#">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_project_milestone->sum('milestone_paid')}} $<span class="f-12 font-weight-normal text-lightest"></span>
+                                                        {{$general_project_milestone_total}} $<span class="f-12 font-weight-normal text-lightest"></span>
                                                     </p>
                                                 </a>
                                             </div>
@@ -1574,7 +2091,7 @@
                                 </div>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Canceled</h5>
@@ -1591,7 +2108,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">QC Form Pending Approval</h5>
@@ -1608,7 +2125,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Completion Form Pending Approval</h5>
@@ -1642,6 +2159,7 @@
                                                     <th class="pl-20 text-capitalize">Milestones (Payment)</th>
                                                     <th class="pl-20 text-capitalize">Start Date</th>
                                                     <th class="pl-20 text-capitalize">Deadline</th>
+                                                    <th class="pl-20 text-capitalize">Actual Completion Date</th>
                                                     <th class="pl-20 text-capitalize">Progress</th>
                                                     <th class="pl-20 text-capitalize">Status</th>
                                                 </thead>
@@ -1686,6 +2204,9 @@
                                                         </td>
                                                         <td class="pl-20 text-capitalize">{{$value->start_date->format('Y-m-d')}}</td>
                                                         <td class="pl-20 text-capitalize">{{$value->deadline->format('Y-m-d')}}</td>
+                                                        <td>
+                                                            need fix here
+                                                        </td>
                                                         <td>
                                                             @php
                                                                 $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();
@@ -2651,13 +3172,17 @@
             if (todayOnlyDate > 21) {
                 $('.monthDate').text('21st ' + moment(monthDate).format('MMMM, YYYY')+' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
             } else {
-                $('.monthDate').text('21st ' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY')+' to 20th '+moment(monthDate).add(20, 'day').format('MMMM, YYYY'));
+                $('.monthDate').text('21st ' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY')+' to 20th '+moment(monthDate).startOf('month').add(20, 'day').format('MMMM, YYYY'));
             }
 
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
                 if (mode == 'month') {
-                    monthDate = moment(monthDate).subtract(1, 'month');
+                    if(todayOnlyDate > 21) {
+                        monthDate = moment(monthDate).subtract(1, 'month');
+                    } else {
+                        monthDate = moment(monthDate).subtract(2, 'month');
+                    }
                     $(this).next().text('21st ' + moment(monthDate).format('MMMM, YYYY')+ ' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
@@ -2683,6 +3208,10 @@
                 
                 getData(mode, $(this), date);
             });
+
+            $('.fc-today-button').click(function() {
+                todayDate = moment();
+            })
         });
 
         function getData(mode, disableButton, date) {
