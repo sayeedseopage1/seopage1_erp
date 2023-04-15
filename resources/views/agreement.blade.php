@@ -160,8 +160,8 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
                                         class="text-dark-grey text-capitalize">@lang("app.client")</span><br>
                                         {{ mb_ucwords($project->client->name) }}<br>
                                           {{ mb_ucwords($project->client->email) }}<br>
-                                        {{ mb_ucwords($project->client->clientDetails->company_name) }}<br>
-                                        {!! nl2br($project->client->clientDetails->address) !!}</p>
+                                       
+                                      
                             </td>
 
                         </tr>
