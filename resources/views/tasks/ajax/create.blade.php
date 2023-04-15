@@ -309,7 +309,7 @@
                         <h6 style="color:red;">You have {{$left_in_hours}} hours {{$left_in_minutes}} minutes remaining of estimation time</h6>
                     </div>
                     <div class="col-md-12 col-lg-2 mt-5">
-                        <button class="btn btn-outline-secondary add_extenstion_request" type="button">Make Extension Request</button>
+                        {{-- <button class="btn btn-outline-secondary add_extenstion_request" type="button">Make Extension Request</button> --}}
                        
                     </div>
                     @if(is_null($task))
@@ -341,7 +341,7 @@
                                 <sup class="mr-1">*</sup>
                             </label>
                             <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"></textarea>
-                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                            <script src="http://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
                             <script>
                                 CKEDITOR.replace('description');
                             </script>

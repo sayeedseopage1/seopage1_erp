@@ -73,7 +73,7 @@
                                 </svg>
                             </label>
                             <textarea  name="summary"  id="summary2" class="form-control" rows="3" ></textarea>
-                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                            <script src="http://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
                             <script>
                                 CKEDITOR.replace('summary2');
                             </script>
