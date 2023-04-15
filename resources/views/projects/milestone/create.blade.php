@@ -78,7 +78,7 @@
 {{--                        </svg>--}}
 {{--                    </label>--}}
 {{--                    <textarea name="summary" id="summary" class="form-control"></textarea>--}}
-{{--                    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>--}}
+{{--                   <script src="//cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>--}}
 {{--                    <script>--}}
 {{--                        CKEDITOR.replace('summary');--}}
 {{--                    </script>--}}

@@ -367,7 +367,7 @@
                                         </svg>
                                     </label>
                                     <textarea name="description2" id="description2Text" class="form-control">{!!old('description2')!!}</textarea>
-                                    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                                   <script src="//cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
                                     <script>
                                         CKEDITOR.replace('description2');
                                     </script>

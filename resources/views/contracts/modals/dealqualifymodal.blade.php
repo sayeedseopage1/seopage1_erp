@@ -1,5 +1,5 @@
 @push('datatable-styles')
-    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+   <script src="//cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
 @endpush
 {{--qulaify modal --}}
 <div class="modal fade" id="qualifymodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -71,7 +71,7 @@
 </div>
 @include('contracts.modals.dealaddstagemodal')
 @push('scripts')
-    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+   <script src="//cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
 <script>
 $(document).ready(function() {
   $('#comment').summernote();
