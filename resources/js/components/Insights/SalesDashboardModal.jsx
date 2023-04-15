@@ -1,6 +1,9 @@
 import Modal from "../UI/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { openModal, closeModal } from "./services/salesDashboardModalSlice";
+import {
+    openModal,
+    closeModal,
+} from "./services/modals/salesDashboardModalSlice";
 import { useEffect, useState } from "react";
 import SalesDashboardForm from "./SalesDashboardForm";
 

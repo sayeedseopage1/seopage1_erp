@@ -7,6 +7,7 @@
     font-size: 15px;
     box-sizing: border-box;
     width: 250px;
+    position: relative;
 }
 
 .sp1_ins_sidebar--search-wrapper {
@@ -15,6 +16,11 @@
     width: 100%;
     padding: 10px 16px;
     gap: 16px;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    left: 0;
+    background: #fff;
 }
 
 .sp1_ins_sidebar--search-box {
@@ -70,8 +76,6 @@
     background: #057837;
     cursor: pointer;
 }
-
-
 
 
 /* toggle */

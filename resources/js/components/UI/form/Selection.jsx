@@ -16,6 +16,7 @@ const Selection = ({
     removeAble = false,
     multiple = false,
     enableAllSelection = false,
+    children,
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [filteredOptions, setFilteredOptions] = useState(options);
@@ -225,6 +226,11 @@ const Selection = ({
                               ))
                             : null}
                     </ul>
+
+                    {children(
+                        (v) => setDefaultHoverEffect(v),
+                        defaultHoverEffect
+                    )}
                 </div>
             ) : null}
         </div>

@@ -109,7 +109,7 @@
     color: #fff;
 }
 
-
+.sp1_selection--options>.sp1_selection--option.hover>i,
 .sp1_selection--options>.sp1_selection--option:hover>i {
     color: #fff;
 }

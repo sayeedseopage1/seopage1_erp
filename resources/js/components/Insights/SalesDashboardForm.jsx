@@ -132,6 +132,7 @@ const SalesDashboardForm = ({ entry, entryType }) => {
                             customInput={<DateInput />}
                         />
                         <button
+                            onClick={() => setDurationEnd(null)}
                             className="sp1_clear_time"
                             aria-describedby="clearEndDate"
                         >
