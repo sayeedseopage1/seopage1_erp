@@ -185,7 +185,7 @@ $addLeadCategoryPermission = user()->permission('add_lead_category');
                                 </svg>
                             </label>
                             <textarea name="description" id="descriptionText" class="form-control  @error('description') is-invalid @enderror">{!!$lead->note!!}</textarea>
-                            <script src="http://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
                             <script>
                                 CKEDITOR.replace('description');
                             </script>

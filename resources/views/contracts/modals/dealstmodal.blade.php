@@ -93,7 +93,7 @@
                           </svg>
                       </label>
                       <textarea name="comments" id="commentsText" class="form-control"></textarea>
-                      <script src="http://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                      <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
                       <script>
                           CKEDITOR.replace('comments');
                       </script>

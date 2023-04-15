@@ -278,7 +278,7 @@
                                             </svg>
                                         </label>
                                         <textarea name="description2" id="description2Text" class="form-control">{!!$deal->description2!!}</textarea>
-                                        <script src="http://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                                        <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
                                         <script>
                                             CKEDITOR.replace('description2');
                                         </script>

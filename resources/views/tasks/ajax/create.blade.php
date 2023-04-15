@@ -341,7 +341,9 @@
                                 <sup class="mr-1">*</sup>
                             </label>
                             <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"></textarea>
-                            <script src="http://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                            
+                       
                             <script>
                                 CKEDITOR.replace('description');
                             </script>

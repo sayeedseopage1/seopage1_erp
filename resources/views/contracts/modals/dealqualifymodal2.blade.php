@@ -22,7 +22,7 @@
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Comments</label>
                         <textarea name="comments" id="comments1" class="form-control"></textarea>
-                        <script src="http://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                        <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
                         <script>
                             CKEDITOR.replace('comments',{
                                 height: '100'
@@ -41,7 +41,7 @@
     </div>
 </div>
 
-<script src="http://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
 <script>
     $('#submitBtn').click(function(e){
         // alert('ok');

@@ -180,7 +180,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                 <sup class="mr-1">*</sup>
                             </label>
                             <textarea name="project_summary" id="description" class="form-control @error('project_summary') is-invalid @enderror">{!! $project->project_summary !!}</textarea>
-                            <script src="http://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
                             <script>
                                 CKEDITOR.replace('project_summary');
                             </script>

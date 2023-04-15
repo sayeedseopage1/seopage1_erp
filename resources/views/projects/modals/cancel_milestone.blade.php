@@ -19,7 +19,7 @@
               <label for="exampleFormControlTextarea1">Please Describe the reason<span style="color:red;">*</span></label>
   {{--            <textarea name="comments" class="form-control" id="comment2" rows="3" required></textarea>--}}
                 <textarea name="comments" id="comment2" class="form-control"></textarea>
-                <script src="http://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
                 <script>
                     CKEDITOR.replace('comments');
                 </script>
