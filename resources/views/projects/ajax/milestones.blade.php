@@ -136,7 +136,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                               $canceled_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','canceled')->count();
                               $complete_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
                               $invoice_generated= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_created',1)->count();
-                              $last_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->orderBy('id','desc')->where('invoice_id',null)->first();
+                              $last_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->orderBy('id','desc')->first();
                               $first_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','complete')->where('invoice_id',null)->first();
                               $qc_count= App\Models\ProjectMilestone::where('project_id',$project->id)->where('qc_status',1)->count();
                                // dd($qc_count);
@@ -155,7 +155,12 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 <button type="button" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}">Cancel Milestone</button>
                                 @else
                                 @if(Auth::user()->role_id == 1)
+                                @if($item->cancelation_status == 'submitted')
                                 <button type="submit" class="btn-success btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 approve_milestone" data-row-id="{{ $item->id }}">Approve Cancelation</button>
+                                @elseif($item->cancelation_status == 'approved')
+                                <i class="fa fa-circle mr-1 text-red f-10"></i>
+                                                 Canceled
+                                @endif
 
                                 @else
                                 <i class="fa fa-circle mr-1 text-yellow f-10"></i>
@@ -176,7 +181,13 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                      <button type="submit" class="btn-danger btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}" >Cancel Milestone</button>
                   @else
                   @if(Auth::user()->role_id == 1)
-                  <button type="submit" class="btn-success btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 approve_milestone" data-row-id="{{ $item->id }}" data-row-id2="{{$item->comments}}">Approve Cancelation</button>
+                  
+                  @if($item->cancelation_status == 'submitted')
+                                <button type="submit" class="btn-success btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 approve_milestone" data-row-id="{{ $item->id }}">Approve Cancelation</button>
+                                @elseif($item->cancelation_status == 'approved')
+                                <i class="fa fa-circle mr-1 text-red f-10"></i>
+                                                 Canceled
+                                @endif
 
 
                   @else
