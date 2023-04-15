@@ -74,7 +74,7 @@
                                 </svg>
                             </label>
                             <textarea  name="summary" id="summary1" class="form-control" rows="3" ></textarea>
-                           <script src="//cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+                           <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                             <script>
                                 CKEDITOR.replace('summary1');
                             </script>

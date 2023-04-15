@@ -511,7 +511,7 @@
                         <th class="pl-20 text-capitalize">Milestones (Payment)</th>
                         <th class="pl-20 text-capitalize">Start Date</th>
                         <th class="pl-20 text-capitalize">Deadline</th>
-                        <th class="pl-20 text-capitalize">Actual Completion Date</th>
+                        {{-- <th class="pl-20 text-capitalize">Actual Completion Date</th> --}}
                         <th class="pl-20 text-capitalize">Progress</th>
                         <th class="pl-20 text-capitalize">Status</th>
                     </thead>
@@ -554,11 +554,9 @@
                                     echo '('.$totalPaymentComplete.' / '.$value->milestones->count().')';
                                 @endphp
                             </td>
-                            <td class="pl-20 text-capitalize">{{$value->start_date->format('Y-m-d')}}</td>
-                            <td class="pl-20 text-capitalize">{{$value->deadline->format('Y-m-d')}}</td>
-                            <td>
-                                need fix here
-                            </td>
+                            <td class="pl-20 text-capitalize">{{$value->start_date}}</td>
+                            <td class="pl-20 text-capitalize">{{$value->deadline}}</td>
+                           
                             <td>
                                 @php
                                     $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();

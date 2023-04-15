@@ -22,7 +22,7 @@
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Comments</label>
                         <textarea name="comments" id="comments1" class="form-control"></textarea>
-                       <script src="//cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+                       <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                         <script>
                             CKEDITOR.replace('comments',{
                                 height: '100'

@@ -86,7 +86,7 @@
                                 </svg>
                             </label>
                             <textarea name="description" value="{{$deal->description}}" id="description" class="form-control">{!!$deal->description!!}</textarea>
-                           <script src="//cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+                           <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                             <script>
                                 CKEDITOR.replace('description');
                             </script>

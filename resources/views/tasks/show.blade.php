@@ -28,7 +28,7 @@
 @endsection
 
 @push('styles')
-   <script src="//cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+   <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('vendor/jquery/frappe-charts.min.iife.js') }}"></script>
 @endpush
 

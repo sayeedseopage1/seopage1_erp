@@ -484,7 +484,7 @@
                                   <div class="form-group">
                                       <label class="text-dark-grey" data-label="true" for="descriptionText">Comments On the Submission</label>
                                       <textarea name="admin_comment" id="admin_comment" class="form-control"></textarea>
-                                     <script src="//cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+                                     <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                                       <script>
                                           CKEDITOR.replace('admin_comment',{
                                               height: '100'
