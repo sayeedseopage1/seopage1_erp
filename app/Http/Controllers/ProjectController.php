@@ -2027,74 +2027,107 @@ class ProjectController extends AccountBaseController
     }
     public function updateDeliverable(Request $request)
     {
+        //dd($request->all());
         $validate = $request->validate([
-                'deliverable_type' => 'required',
-                'milestone_id' => 'required',
-                'title' => 'required',
-                'estimation_time' => 'required',
-                'quantity' => 'required',
-                'from' => 'required',
-            ]
-        );
+            'deliverable_type' => 'required_unless:authrization_after_edit,true',
+            'milestone_id' => 'required_unless:authrization_after_edit,true',
+            'title' => 'required_unless:authrization_after_edit,true',
+            'estimation_time' => 'required_unless:authrization_after_edit,true',
+            'quantity' => 'required_unless:authrization_after_edit,true',
+            'from' => 'required_unless:authrization_after_edit,true',
+        ]);
+        $deliverable= ProjectDeliverable::find($request->id);
 
-      $deliverable= ProjectDeliverable::find($request->id);
-      if($request->deliverable_type == 'Others')
-      {
-      $deliverable->authorization = 0;
-      }
-      else{
-        $deliverable->authorization = 1;
-
-      }
-
-
-      $deliverable->title= $request->title;
-      $deliverable->deliverable_type= $request->deliverable_type;
-      $deliverable->quantity= $request->quantity;
-      $deliverable->from= $request->from;
-      $deliverable->to= $request->to;
-      $deliverable->estimation_time=$request->estimation_time;
-      $deliverable->milestone_id= $request->milestone_id;
-      $deliverable->description= $request->description;
-      $deliverable->save();
-      $project_id_update= Project::where('id',$deliverable->project_id)->first();
-      $deliverable_estimation_count = ProjectDeliverable::where('project_id',$project_id_update->id)->sum('estimation_time');
-      $project_update= Project::find($project_id_update->id);
-      $project_update->deliverable_authorization = 0;
-      $project_update->hours_allocated = $deliverable_estimation_count;
-      $project_update->save();
-
-      $log_user = Auth::user();
-
-      $activity = new ProjectActivity();
-      $activity->activity= $log_user->name .' updated project deliverable : '.$deliverable->title;
-    //   if($attribute == 'project_summary')
-    //   {
-    //       $activity->activity= $log_user->name .' updated project summary' ;
-    //   }else
-    //   {
-    //       $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
-    //   }
-
-      $activity->project_id = $project_update->id;
-      // $activity->attribute = $attribute;
-      // $activity->old_value = $originalValue;
-      // $activity->new_value = $updatedValue;
-      // $activity->user_id = Auth::id();
-      $activity->save();
-
-      if($request->deliverable_type == 'Others')
-      {
-        $project_id= Project::where('id',$project_update->id)->first();
-
-        $users= User::where('role_id',1)->get();
-        foreach ($users as $user) {
-            Notification::send($user, new DeliverableOthersAuthorizationNotification($project_id));
+        if($request->deliverable_type == 'Others') {
+            $deliverable->authorization = 0;
+        } else {
+            $deliverable->authorization = 1;
         }
-      }
 
+        if ($request->authrization_after_edit == 'true') {
+            if($request->description) {
+                $data = DelivarableColumnEdit::where([
+                    'delivarable_id' => $deliverable->id,
+                    'column_name' => 'description',
+                    'status' => '0'
+                ])->latest()->first();
+                if ($data) {
+                    $data->old_data = $deliverable->description;
+                    $data->status = '1';
+                    $data->save();
+                }
+            }
+            if($request->title) {
+                $data = DelivarableColumnEdit::where([
+                    'delivarable_id' => $deliverable->id,
+                    'column_name' => 'title',
+                    'status' => '0'
+                ])->latest()->first();
+                if ($data) {
+                    $data->old_data = $deliverable->title;
+                    $data->status = '1';
+                    $data->save();
+                }
+            }
+            if($request->deliverable_type) {
+                $data = DelivarableColumnEdit::where([
+                    'delivarable_id' => $deliverable->id,
+                    'column_name' => 'deliverable_type',
+                    'status' => '0'
+                ])->latest()->first();
+                if ($data) {
+                    $data->old_data = $deliverable->deliverable_type;
+                    $data->status = '1';
+                    $data->save();
+                }
+            }
+        }
 
-      Toastr::success('Deliverable Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        $deliverable->title = $request->title ?? $deliverable->title;
+        $deliverable->deliverable_type = $request->deliverable_type ?? $deliverable->deliverable_type;
+        $deliverable->quantity = $request->quantity ?? $deliverable->quantity;
+        $deliverable->from = $request->from ?? $deliverable->from;
+        $deliverable->to = $request->to ?? $deliverable->to;
+        $deliverable->estimation_time = $request->estimation_time ?? $deliverable->estimation_time;
+        $deliverable->milestone_id = $request->milestone_id ?? $deliverable->milestone_id;
+        $deliverable->description = $request->description ?? $deliverable->description;
+        $deliverable->save();
+        $project_id_update= Project::where('id',$deliverable->project_id)->first();
+        $deliverable_estimation_count = ProjectDeliverable::where('project_id',$project_id_update->id)->sum('estimation_time');
+        $project_update= Project::find($project_id_update->id);
+        $project_update->deliverable_authorization = 0;
+        $project_update->hours_allocated = $deliverable_estimation_count;
+        $project_update->save();
+
+        $log_user = Auth::user();
+
+        $activity = new ProjectActivity();
+        $activity->activity= $log_user->name .' updated project deliverable : '.$deliverable->title;
+        //   if($attribute == 'project_summary')
+        //   {
+        //       $activity->activity= $log_user->name .' updated project summary' ;
+        //   }else
+        //   {
+        //       $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
+        //   }
+
+        $activity->project_id = $project_update->id;
+        // $activity->attribute = $attribute;
+        // $activity->old_value = $originalValue;
+        // $activity->new_value = $updatedValue;
+        // $activity->user_id = Auth::id();
+        $activity->save();
+
+        if($request->deliverable_type == 'Others') {
+            $project_id= Project::where('id',$project_update->id)->first();
+
+            $users= User::where('role_id',1)->get();
+            foreach ($users as $user) {
+                Notification::send($user, new DeliverableOthersAuthorizationNotification($project_id));
+            }
+        }
+
+        Toastr::success('Deliverable Updated Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back();
     }
     public function deleteDeliverable($id)

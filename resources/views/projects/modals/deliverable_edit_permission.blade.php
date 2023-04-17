@@ -1,4 +1,4 @@
-<div class="modal fade" id="deliverable_edit_permission" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="deliverable_edit_permission{{$deliverable->id}}" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 	<div class="modal-dialog modal-xl">
 		<form method="post" action="{{route('deliverables_edit_permission')}}">
 			<div class="modal-content">
@@ -15,11 +15,10 @@
 						<div class="row clone-row">
 							<div class="col-sm-4">
 								<div class="form-group">
-									<select class="form-control" name="permission_column[]">
+									<select class="form-control w-100" name="permission_column[]" id="columnRow">
 										<option value="">Select column</option>
 										<option value="type">Type</option>
 										<option value="title">Title</option>
-										<option value="milestone">Milestone</option>
 										<option value="milestone_cost">Milestone Cost</option>
 										<option value="estimation_hours">Estimation Hours</option>
 										<option value="quantity">Quantity</option>
@@ -38,13 +37,13 @@
 							</div>
 						</div>
 					</div>
-					<div class="row">
+					<div class="row mx-0">
 						<button type="button" class="btn btn-success add-row">+</button>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-primary">Understood</button>
+					<button type="submit" class="btn btn-primary">Submit</button>
 				</div>
 			</div>
 		</form>
@@ -58,10 +57,13 @@
 			row.removeClass('clone-row');
 			$('.parent-row').append(row);
 		});
-
 		// remove row
 		$('.parent-row').on('click', '.remove-row', function() {
 			$(this).closest('.row').remove();
 		});
+
+		//$("#myDropdown option[value='option-value']").hide().prop('disabled', true);
+
+		// Refresh the Select2 dropdown to reflect the changes
 	});
 </script>

@@ -12,6 +12,7 @@
             <form class="" id="update-form" action="{{route('update-project-deliverable')}}" method="post">
                 @csrf
                 <input type="hidden" name="id" value="{{$deliverable->id}}">
+                <input type="hidden" name="authrization_after_edit" value="true">
                 <div class="modal-body">
                     <div class="row">
                         @php
@@ -20,7 +21,7 @@
                                 'column_name' => 'type',
                             ])->latest()->first();
                         @endphp
-                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1 || $project->authorization_status == 'pending')
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Deliverable Type<span style="color:red;">*</span></label>
@@ -45,10 +46,10 @@
                         @php
                             $data = \App\models\DelivarableColumnEdit::where([
                                 'delivarable_id' => $deliverable->id,
-                                'column_name' => 'title',
+                                'column_name' => 'milestone',
                             ])->latest()->first();
                         @endphp
-                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1 || $project->authorization_status == 'pending')
                         <div class="col-md-6">
                             <div class="form-group">
 
@@ -71,10 +72,10 @@
                         @php
                             $data = \App\models\DelivarableColumnEdit::where([
                                 'delivarable_id' => $deliverable->id,
-                                'column_name' => 'milestone',
+                                'column_name' => 'title',
                             ])->latest()->first();
                         @endphp
-                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1 || $project->authorization_status == 'pending')
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">Deliverable Title <span style="color:red;">*</span></label>
@@ -91,10 +92,10 @@
                                 'column_name' => 'estimation_hours',
                             ])->latest()->first();
                         @endphp
-                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1 || $project->authorization_status == 'pending')
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="exampleFormControlInput1">Estimation_time (In Hours) <span style="color:red;">*</span></label>
+                                <label for="exampleFormControlInput1">Estimation Time (In Hours) <span style="color:red;">*</span></label>
                                 <input type="text" name="estimation_time" value="{{$deliverable->estimation_time}}" class="form-control height-35 f-14 @error('estimation_time') is-invalid @enderror" id="exampleFormControlInput1" >
                             </div>
                             @error('estimation_time')
@@ -108,7 +109,7 @@
                                 'column_name' => 'quantity',
                             ])->latest()->first();
                         @endphp
-                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1 || $project->authorization_status == 'pending')
                         <div class="col-md-4 mt-3">
                             <div class="form-group">
                                 <label for="exampleFormControlInput1">Quantity <span style="color:red;">*</span></label>
@@ -125,7 +126,7 @@
                                 'column_name' => 'estimation_completed_date',
                             ])->latest()->first();
                         @endphp
-                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1 || $project->authorization_status == 'pending')
                         <div class="col-md-4">
                             <div class="form-group my-3">
                                 <label class="f-14 text-dark-grey mb-12" data-label="true" for="from146">From
@@ -162,7 +163,7 @@
                                 'column_name' => 'description',
                             ])->latest()->first();
                         @endphp
-                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1)
+                        @if($data && $data->status == '0' && \Auth::user()->role_id != 1 || $project->authorization_status == 'pending')
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Description</label>
