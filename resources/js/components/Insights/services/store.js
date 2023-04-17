@@ -5,6 +5,7 @@ import dashboardsReducer from "./dashboardsSlice";
 import reportsReducer from "./reportsSlice";
 import goalsReducer from "./goalsSlice";
 import sectionModalReducer from "./modals/sectionModalSlice";
+import goalFormModalReducer from "./modals/goalFormModalSlice";
 
 // store
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
         sectionModal: sectionModalReducer,
         salesDashboardModal: salesDashboardModalReducer,
         createDashboardModal: newDashboardCreatingModalReducer,
+        goalFormModal: goalFormModalReducer,
     },
     devTools: process.env.NODE_ENV !== "production",
 });

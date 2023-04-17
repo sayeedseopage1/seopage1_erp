@@ -1,6 +1,14 @@
-import './input.css';
+import "./input.css";
 
-const Input = ({ type = "text", className, value, onChange, placeholder = "", ...props }) => {
+const Input = ({
+    type = "text",
+    className = "",
+    value,
+    onChange,
+    onBlur,
+    placeholder = "",
+    ...props
+}) => {
     return (
         <input
             type={type}
@@ -8,8 +16,9 @@ const Input = ({ type = "text", className, value, onChange, placeholder = "", ..
             className={`sp1_input ${className}`}
             value={value}
             onChange={onChange}
+            onBlur={(e) => (onBlur ? onBlur(e) : null)}
             {...props}
         />
-    )
-}
-export default Input
+    );
+};
+export default Input;

@@ -28,6 +28,7 @@
         "bootstrap-select": "^1.13.18",
         "chart.js": "^4.2.1",
         "cropperjs": "^1.5.12",
+        "dayjs": "^1.11.7",
         "dropify": "^0.2.2",
         "flag-icon-css": "^4.1.7",
         "framer-motion": "^10.10.0",

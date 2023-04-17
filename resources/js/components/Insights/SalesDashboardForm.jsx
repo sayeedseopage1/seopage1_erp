@@ -3,11 +3,16 @@ import { BiRepeat } from "react-icons/bi";
 import Selection from "../UI/form/Selection";
 import "react-datepicker/dist/react-datepicker.css";
 import "./salesDashboardForm.css";
-import { forwardRef, useState } from "react";
+import React, { forwardRef, useState } from "react";
 import Radio from "../UI/form/Radio";
 import Input from "../UI/form/Input";
 import Checkbox from "../UI/form/Cheeckbox";
-import React from "react";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import quarterOfYear from "dayjs/plugin/quarterOfYear";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import WeekOfYear from "dayjs/plugin/weekOfYear";
+import _ from "lodash";
 
 const SalesDashboardForm = ({ entry, entryType }) => {
     // ui
@@ -24,12 +29,215 @@ const SalesDashboardForm = ({ entry, entryType }) => {
     const [tracking, setTracking] = useState("");
     const [trackingType, setTrackingType] = useState("value");
     const [dealStage, setDealStage] = useState("Contact Mode");
+    const [recurring, setRecurring] = useState([]);
+
+    const [period, setPeriod] = useState([]);
 
     React.useEffect(() => {
         if (!durationEnd) {
             setPeriodFilter(false);
         }
     }, [durationEnd]);
+
+    // time period control
+    React.useEffect(() => {
+        dayjs.extend(utc);
+        dayjs.extend(quarterOfYear);
+        dayjs.extend(isSameOrBefore);
+        dayjs.extend(WeekOfYear);
+        // yearly
+        const yearly = () => {
+            let years = [];
+            const yearStart = dayjs(durationStart).startOf("year");
+            const yearEnd = dayjs(durationEnd).endOf("year");
+            let current = yearStart;
+
+            while (current <= yearEnd) {
+                years.push({
+                    title: `${current.format("YYYY")}`,
+                    start: dayjs(durationStart).format(),
+                    end: dayjs(durationEnd).format(),
+                });
+                current = dayjs(current).add(1, "year");
+            }
+
+            setPeriod([...years]);
+        };
+
+        // quarterly
+        const quarterly = () => {
+            let quarters = [];
+            const qs = dayjs(durationStart).startOf("quarter");
+            const qe = dayjs(durationEnd).endOf("quarter");
+
+            let curr = qs;
+            while (curr <= qe) {
+                const quarterNumber = dayjs(curr).quarter(); // number of quarter
+                let quarterStart = dayjs(curr).format(); // get first date of a quarter start
+                let quarterEnd = dayjs(curr)
+                    .quarter(quarterNumber)
+                    .endOf("quarter")
+                    .format(); // get last date of a quarter end
+
+                /*
+                 ** if quarter start date less then or equal
+                 ** duration start date then start date is duration start date
+                 ** else start date is quarter start date
+                 */
+                quarterStart = dayjs(quarterStart).isSameOrBefore(durationStart)
+                    ? dayjs(durationStart).format()
+                    : quarterStart;
+
+                /*
+                 ** if duration end date less then or equal
+                 ** duration end date then end date is duration end date
+                 ** else end date is quarter end date
+                 */
+                quarterEnd = dayjs(durationEnd).isSameOrBefore(quarterEnd)
+                    ? dayjs(durationEnd).format()
+                    : quarterEnd;
+
+                // create title for period
+                const title = `Q${quarterNumber} (${dayjs(quarterStart).format(
+                    `MMM DD`
+                )} - ${dayjs(quarterEnd).format("MMM DD")}, ${dayjs(
+                    quarterEnd
+                ).format("YYYY")})`;
+
+                // push quarters
+                quarters.push({
+                    quarterNumber,
+                    title,
+                    start: quarterStart,
+                    end: quarterEnd,
+                });
+
+                curr = dayjs(curr).add(1, "quarter");
+            }
+
+            setPeriod([...quarters]);
+        };
+
+        // divide by month
+        const monthly = () => {
+            const months = [];
+            const ms = dayjs(durationStart).startOf("month");
+            const me = dayjs(durationEnd).endOf("month");
+
+            let curr = ms;
+
+            while (curr <= me) {
+                let monthStartDay = dayjs(curr).format();
+                let monthEndDay = dayjs(curr).endOf("month").format();
+
+                /*
+                 ** if monthStartDay less then or equal
+                 ** duration start date then return duration start
+                 ** else return monthStartDay
+                 */
+
+                monthStartDay = dayjs(monthStartDay).isSameOrBefore(
+                    durationStart
+                )
+                    ? dayjs(durationStart).format()
+                    : monthStartDay;
+
+                /*
+                 ** if duration end less then or equal
+                 ** monthEndDay date then return duration end
+                 ** else return monthEndDay
+                 */
+
+                monthEndDay = dayjs(durationEnd).isSameOrBefore(monthEndDay)
+                    ? dayjs(durationEnd).format()
+                    : monthEndDay;
+
+                // push month
+                months.push({
+                    title: dayjs(curr).format("MMM YYYY"),
+                    start: monthStartDay,
+                    end: monthEndDay,
+                });
+
+                curr = dayjs(curr).add(1, "month");
+            }
+
+            setPeriod([...months]);
+        };
+
+        // weekly
+        const weekly = () => {
+            const weeks = [];
+            const ws = dayjs(durationStart).startOf("week");
+            const we = dayjs(durationEnd).endOf("week");
+
+            let curr = ws;
+            while (curr <= we) {
+                const weekNumber = dayjs(curr).week();
+                let weekStart = dayjs(curr).format();
+                let weekEnd = dayjs(curr).endOf("week").format();
+
+                /*
+                 ** if week start less then or equal
+                 ** duration start then return duration start
+                 ** else return week start
+                 */
+                weekStart = dayjs(weekStart).isSameOrBefore(durationStart)
+                    ? durationStart
+                    : weekStart;
+
+                /*
+                 ** if duration end less then or equal
+                 ** week end then return duration end
+                 ** else return week end
+                 */
+                weekEnd = dayjs(durationEnd).isSameOrBefore(weekEnd)
+                    ? durationEnd
+                    : weekEnd;
+
+                // title
+                const title = `Week ${weekNumber} (${dayjs(weekStart).format(
+                    "MMM DD"
+                )} - ${dayjs(weekEnd).format("MMM DD")}, ${dayjs(
+                    weekEnd
+                ).format("YYYY")})`;
+
+                // push
+                weeks.push({
+                    title,
+                    start: weekStart,
+                    end: weekEnd,
+                });
+
+                curr = dayjs(curr).add(1, "week");
+            }
+
+            setPeriod([...weeks]);
+        };
+
+        if (durationEnd) {
+            if (_.toLower(frequency) === "monthly") {
+                monthly();
+            } else if (_.toLower(frequency) === "quarterly") {
+                quarterly();
+            } else if (_.toLower(frequency) === "yearly") {
+                yearly();
+            } else if (_.toLower(frequency) === "weekly") {
+                weekly();
+            }
+        }
+    }, [durationEnd, frequency, durationStart]);
+    // end time period control
+
+    // handle recurring
+    const handleRecurringChange = (value, period) => {
+        setRecurring((prevState) => [...prevState, { ...period, value }]);
+    };
+
+    // handle on save
+    const handleSave = () => {
+        console.log(recurring);
+    };
 
     return (
         <div className="sp1_sell_df--container">
@@ -176,6 +384,7 @@ const SalesDashboardForm = ({ entry, entryType }) => {
                             value={tracking}
                             onChange={(e) => setTracking(e.target.value)}
                             placeholder="Insert value"
+                            className="w-auto"
                         />
                         {periodFilter ? (
                             <button className="btn btn-sm btn-light text-primary font-weight-bold">
@@ -223,56 +432,22 @@ const SalesDashboardForm = ({ entry, entryType }) => {
                                 </div>
                             </div>
 
-                            {/* period item */}
-                            <div className="sp1_sell_df--control time_period mb-3">
-                                <div className="sp1_sell_df--period">
-                                    April-2023
+                            {period?.map((p) => (
+                                <div
+                                    key={Math.random()}
+                                    className="sp1_sell_df--control time_period mb-3"
+                                >
+                                    <div className="sp1_sell_df--period">
+                                        {p.title}
+                                    </div>
+                                    <PeriodInput
+                                        period={p}
+                                        handleRecurringChange={
+                                            handleRecurringChange
+                                        }
+                                    />
                                 </div>
-                                <Input
-                                    type="number"
-                                    value={tracking}
-                                    className="sp1_sell_df--period-input"
-                                    onChange={(e) =>
-                                        setTracking(e.target.value)
-                                    }
-                                    placeholder="Insert value"
-                                />
-                            </div>
-                            {/* end period item */}
-
-                            {/* period item */}
-                            <div className="sp1_sell_df--control time_period mb-3">
-                                <div className="sp1_sell_df--period">
-                                    April-2023
-                                </div>
-                                <Input
-                                    type="number"
-                                    value={tracking}
-                                    className="sp1_sell_df--period-input"
-                                    onChange={(e) =>
-                                        setTracking(e.target.value)
-                                    }
-                                    placeholder="Insert value"
-                                />
-                            </div>
-                            {/* end period item */}
-
-                            {/* period item */}
-                            <div className="sp1_sell_df--control time_period mb-3">
-                                <div className="sp1_sell_df--period">
-                                    April-2023
-                                </div>
-                                <Input
-                                    type="number"
-                                    value={tracking}
-                                    className="sp1_sell_df--period-input"
-                                    onChange={(e) =>
-                                        setTracking(e.target.value)
-                                    }
-                                    placeholder="Insert value"
-                                />
-                            </div>
-                            {/* end period item */}
+                            ))}
                         </React.Fragment>
                     ) : null}
                 </div>
@@ -283,6 +458,26 @@ const SalesDashboardForm = ({ entry, entryType }) => {
 };
 
 export default SalesDashboardForm;
+
+// period input
+export const PeriodInput = ({ handleRecurringChange, period }) => {
+    const [value, setValue] = useState("");
+
+    const handleOnBlur = () => {
+        handleRecurringChange(value, period);
+    };
+
+    return (
+        <Input
+            type="number"
+            value={value}
+            className="sp1_sell_df--period-input"
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Insert value"
+            onBlur={handleOnBlur}
+        />
+    );
+};
 
 const DateInput = forwardRef(
     ({ value, placeholder, onClick, ...props }, ref) => (

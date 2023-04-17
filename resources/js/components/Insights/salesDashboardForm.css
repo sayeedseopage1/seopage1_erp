@@ -69,7 +69,7 @@
 }
 
 .sp1_sell_df--period-input {
-    width: 130px;
+    width: 100px !important;
 }
 
 .sp1_sell_df--control.time_period::before {

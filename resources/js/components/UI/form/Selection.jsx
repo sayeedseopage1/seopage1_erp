@@ -227,10 +227,11 @@ const Selection = ({
                             : null}
                     </ul>
 
-                    {children(
-                        (v) => setDefaultHoverEffect(v),
-                        defaultHoverEffect
-                    )}
+                    {children &&
+                        children(
+                            (v) => setDefaultHoverEffect(v),
+                            defaultHoverEffect
+                        )}
                 </div>
             ) : null}
         </div>

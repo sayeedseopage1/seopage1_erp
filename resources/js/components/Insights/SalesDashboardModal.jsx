@@ -6,8 +6,9 @@ import {
 } from "./services/modals/salesDashboardModalSlice";
 import { useEffect, useState } from "react";
 import SalesDashboardForm from "./SalesDashboardForm";
+import { openGoalFormModal } from "./services/modals/goalFormModalSlice";
 
-const SellsDashboardModal = () => {
+const SellsDashboardModal = ({ goalModalIsOpen }) => {
     const { isOpen, modalData, type } = useSelector(
         (state) => state.salesDashboardModal
     );
@@ -72,6 +73,8 @@ const SellsDashboardModal = () => {
                 return <i className="bi bi-calendar-event" />;
         }
     };
+
+    if (goalModalIsOpen) return null;
 
     return (
         <Modal isOpen={isOpen}>
@@ -234,7 +237,16 @@ const SellsDashboardModal = () => {
                                     </button>
                                 ) : (
                                     <button
-                                        onClick={() => setIsOpenForm(true)}
+                                        onClick={() =>
+                                            dispatch(
+                                                openGoalFormModal({
+                                                    title: `Add 2/2 - ${activeEntry} ${activeType}`,
+                                                    entry: activeEntry,
+                                                    entryType: activeType,
+                                                    showPrevious: true,
+                                                })
+                                            )
+                                        }
                                         className="btn btn-sm btn-success"
                                         disabled={!activeType}
                                     >
