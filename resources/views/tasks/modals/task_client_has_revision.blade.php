@@ -45,7 +45,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
+                    <button type="submit" class="btn btn-primary" name="client_has_revision" id="submitBtn">Submit</button>
 
                 </div>
             </form>
@@ -60,11 +60,13 @@
         $('#submitBtn').attr("disabled", true);
         $('#submitBtn').html("Processing...");
         var comments3 = CKEDITOR.instances.comments3.getData();
+        var status = this.name;
         var data= {
             '_token': "{{ csrf_token() }}",
             'comments3': comments3,
             'task_id': {{$task->id}},
             'user_id': {{$task->last_updated_by}},
+            'revision_status': status,
         }
         $.ajaxSetup({
             headers: {

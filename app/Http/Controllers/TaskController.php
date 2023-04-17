@@ -14,6 +14,7 @@ use App\Models\Project;
 use App\Models\ProjectMember;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectTimeLogBreak;
+use App\Models\Role;
 use App\Models\SubTask;
 use App\Models\SubTaskFile;
 use App\Models\Task;
@@ -58,6 +59,7 @@ use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
 use Toaster;
 
+use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
 
 use Validator;
@@ -274,7 +276,6 @@ class TaskController extends AccountBaseController
       $task= new TaskComment();
       $task->user_id= Auth::id();
       $task->task_id= $request->task_id;
-
       $task->comment= $request->comments2;
       $task->added_by= Auth::id();
       $task->last_updated_by= Auth::id();
@@ -286,6 +287,7 @@ class TaskController extends AccountBaseController
         $task_revision->subtask_id = $task_status->subtask_id;
         }
         $task_revision->comment = $request->comments2;
+        $task_revision->revision_status = $request->revision_status;
         $task_revision->project_id = $task_status->project_id;
         $task_revision->added_by = Auth::id();
         $taskRevisionFind = TaskRevision::where('task_id',$task_status->id)->orderBy('id','desc')->get();
@@ -299,6 +301,16 @@ class TaskController extends AccountBaseController
 //            $newRevision->save();
 //        }
         $task_revision->save();
+        $parentTask = Subtask::where('task_id',$request->task_id)->get();
+//        dd($parentTask);
+        foreach ($parentTask as $subtask){
+            $subTask = Task::where('subtask_id',$subtask->id)->first();
+            $updateTask = Task::find($subTask->id);
+            $updateTask->status= "incomplete";
+            $updateTask->task_status= "revision";
+            $updateTask->board_column_id=1;
+            $updateTask->save();
+        }
 
 
       $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
@@ -1297,10 +1309,19 @@ class TaskController extends AccountBaseController
 
 //    CLIENT APPROVED TASK SECTION
     public function clientApprovedTask(Request $request){
+
         $task_status= Task::find($request->task_id);
         $task_status->status= "completed";
         $task_status->board_column_id=4;
         $task_status->save();
+        $parentTask = Subtask::where('task_id',$request->task_id)->get();
+        foreach ($parentTask as $subtask){
+            $subTask = Task::where('subtask_id',$subtask->id)->first();
+            $updateTask = Task::find($subTask->id);
+            $updateTask->status= "completed";
+            $updateTask->board_column_id=4;
+            $updateTask->save();
+        }
         return response()->json([
             'status'=>200,
         ]);
@@ -1315,7 +1336,6 @@ class TaskController extends AccountBaseController
             'comments3.required' => 'This field is required!',
         ]);
         $task_status= Task::find($request->task_id);
-//        $task_status->status= "incomplete";
         $task_status->task_status="revision";
         $task_status->board_column_id=1;
         $task_status->save();
@@ -1326,12 +1346,24 @@ class TaskController extends AccountBaseController
             $task_revision->subtask_id = $task_status->subtask_id;
         }
         $task_revision->comment = $request->comments3;
+        $task_revision->revision_status = $request->revision_status;
+
         $task_revision->project_id = $task_status->project_id;
         $task_revision->added_by = Auth::id();
         $taskRevisionFind = TaskRevision::where('task_id',$task_status->id)->orderBy('id','desc')->get();
         foreach ($taskRevisionFind as $taskRevision) {
             $taskRevision->revision_no = $taskRevision->revision_no + 1;
             $taskRevision->save();
+        }
+        $parentTask = Subtask::where('task_id',$request->task_id)->get();
+//        dd($parentTask);
+        foreach ($parentTask as $subtask){
+            $subTask = Task::where('subtask_id',$subtask->id)->first();
+            $updateTask = Task::find($subTask->id);
+            $updateTask->status= "incomplete";
+            $updateTask->task_status= "revision";
+            $updateTask->board_column_id=1;
+            $updateTask->save();
         }
         $task_revision->save();
         return response()->json([

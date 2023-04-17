@@ -69,12 +69,13 @@ $changeStatusPermission = user()->permission('change_status');
                                     <button class="btn btn-success mr-2 mb-2 mb-lg-0 mb-md-0" id="submit_task_for_client_approval">Submit Task for Client Approval</button>
                                 @endif
                             @endif
-
+                            @if(Auth::user()->role_id==4)
                                 @if($task->board_column_id == 9)
                                     <button class="btn btn-success mr-2 mb-2 mb-lg-0 mb-md-0" id="client_approve_task">Client Approved Task</button>
                                     <button class="btn btn-danger mr-2 mb-2 mb-lg-0 mb-md-0" data-toggle="modal" data-target="#task_client_has_revision">Client Has Revision</button>
                                     @include('tasks.modals.task_client_has_revision')
                                 @endif
+                            @endif
 
                             @php
                                 $val = App\Models\ProjectTimeLog::where('task_id', $task->id)->latest()->first();
@@ -117,7 +118,29 @@ $changeStatusPermission = user()->permission('change_status');
 
                                           @if($task->status != 'completed' && is_null($task->userActiveTimer) && $task->taskUsers->first()->user_id == Auth::id())
 
-                                        <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
+                                          @php
+                                          $subtasks = \App\Models\Subtask::where('task_id',$task->id)->get();
+                                          //  dd($subtasks);
+                                            $subtask_incompleted_count= 0;
+                                            foreach ($subtasks as $sub)
+                                                {
+
+                                                    $subtask_check= App\Models\Task::where('subtask_id',$sub->id)->where('board_column_id',8)->count();
+                                                    $subtask_incompleted_count= $subtask_incompleted_count+ $subtask_check;
+
+                                                }
+                                           // $subtask_completed_count= $subtask_check;
+                                            // dd($subtask_completed_count, $subtasks->count());
+
+                                          @endphp
+
+                                          @if(Auth::user()->role_id== 6 && $subtasks->count() !=  $subtask_incompleted_count)
+
+                                            <button class="btn-secondary rounded f-14 p-2 my-3 disabled" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
+                                          @else
+
+                                            <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
+                                          @endif
                                         @endif
 
                                           @endif
@@ -135,6 +158,11 @@ $changeStatusPermission = user()->permission('change_status');
 
                                             @endif
                                                 @endif
+
+                                            @if(Auth::user()->role_id== 6 && $task->status=='incomplete')
+                                                <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#revision"> Revision</button>
+                                                @include('tasks.modals.revision')
+                                            @endif
 
 
 

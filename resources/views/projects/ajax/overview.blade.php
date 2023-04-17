@@ -157,19 +157,19 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
                 </div>
             </div>
-     
-            @endif
-
 
             @endif
 
 
+            @endif
+
+
 
             @endif
             @endif
             @endif
 
-            
+
             @php
 
             $project_submission= App\Models\ProjectSubmission::where('project_id',$project->id)->orderBy('id','desc')->first();
@@ -954,33 +954,48 @@ if (list && list.length > 0) {
 });
 }
 </script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#markAsIncompleteBtn').click(function(e) {
-            e.preventDefault();
-            $.ajax({
-                url: '{{route('project-incomplete')}}',
-                type: 'POST',
-                dataType: 'JSON',
-                data: {
-                    '_token': '{{ csrf_token() }}',
-                    'id':{{$project->id}},
-                },
-                success: function(response) {
-                    if(response.status==400){
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: 'success',
-                            title: 'Mark As Incomplete Done',
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(function() {
-                            window.location.reload();
+<script>
+    $('#markAsIncompleteBtn').click(function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be mark as incomplete!",
+            icon: 'warning',
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: "Yes",
+            cancelButtonText: "Cancel",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{route('project-incomplete')}}',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'id':{{$project->id}},
+                    },
+                    success: function(response) {
+                        if(response.status==400){
+                            swal.fire({
+                                title: 'success!',
+                                text: 'Mark As Incomplete Done',
+                                icon: 'success',
+                            }).then(function() {
+                                window.location.reload();
+                            });
+                        }
+                    },
+                    error: function(response) {
+                        swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred while mark as incomplete.',
+                            icon: 'error',
                         });
                     }
-                },
-            });
-        })
+                });
+            }
+        });
     })
 </script>
 <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>

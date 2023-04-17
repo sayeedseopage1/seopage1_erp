@@ -291,4 +291,3 @@ $deleteTaskCommentPermission = user()->permission('delete_task_comments');
 
     });
 </script>
-<script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
