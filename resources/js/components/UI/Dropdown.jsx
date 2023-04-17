@@ -26,7 +26,7 @@ const Toggle = ({ children, className, icon = true }) => {
 };
 
 const Menu = ({ children, className, asModal = false, ...props }) => {
-    const { isOpen, close, toggleRef, targetRef, setTargetRef } =
+    const { isOpen, close, onClickHide, toggleRef, targetRef, setTargetRef } =
         useContext(DropdownContext);
     const ref = useRef(null);
 
@@ -68,7 +68,7 @@ const Menu = ({ children, className, asModal = false, ...props }) => {
         <Modal isOpen={isOpen} close={close}>
             <div ref={ref}>
                 <div
-                    onClick={close}
+                    onClick={() => (onClickHide ? close() : null)}
                     ref={setTargetRef}
                     className={className}
                     style={styles.popper}
@@ -93,7 +93,7 @@ const Menu = ({ children, className, asModal = false, ...props }) => {
     ) : null;
 };
 
-const Dropdown = ({ children, className }) => {
+const Dropdown = ({ children, className, onClickHide = true }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [toggleRef, setToggleRef] = useState(null);
     const [targetRef, setTargetRef] = useState(null);
@@ -115,6 +115,7 @@ const Dropdown = ({ children, className }) => {
                 setToggleRef,
                 targetRef,
                 setTargetRef,
+                onClickHide,
             }}
         >
             <div className={className}>{children}</div>
