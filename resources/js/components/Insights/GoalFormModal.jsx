@@ -20,6 +20,7 @@ import _ from "lodash";
 import PeriodInput from "./PeriodInput";
 import axios from "axios";
 import AssigneeForDropdown from "./components/AssigneeForDropdown";
+import CustomScrollbar from "../UI/CustomScrollbar";
 
 const GoalFormModal = ({ isOpen }) => {
     const { title, entry, entryType, edit, showPrevious } = useSelector(
@@ -27,6 +28,7 @@ const GoalFormModal = ({ isOpen }) => {
     );
 
     const dispatch = useDispatch();
+    const [saving, setSaving] = useState(false);
 
     const [periodFilter, setPeriodFilter] = useState(false);
 
@@ -45,6 +47,9 @@ const GoalFormModal = ({ isOpen }) => {
     const [trackingType, setTrackingType] = useState("value");
     const [dealStage, setDealStage] = useState("Contact Mode");
     const [recurring, setRecurring] = useState([]);
+    const [dealType, setDealType] = useState("");
+    const [goalType, setGoalType] = useState("");
+    const [pointAchievement, setPointAchievement] = useState(0);
 
     const [period, setPeriod] = useState([]);
 
@@ -253,6 +258,7 @@ const GoalFormModal = ({ isOpen }) => {
     // handle on save
     const handleSave = async (e) => {
         e.preventDefault();
+        setSaving(true);
         const data = {
             assigneeType,
             assigneeFor,
@@ -265,11 +271,15 @@ const GoalFormModal = ({ isOpen }) => {
             trackingType,
             dealStage,
             recurring,
+            dealType,
+            goalType,
+            pointAchievement,
         };
 
-        let response = await axios.post("/account/insights", data);
-
-        console.log(response);
+        await axios.post("/account/insights", data).then((res) => {
+            setSaving(false);
+            console.log(res);
+        });
     };
 
     // close modal
@@ -380,6 +390,16 @@ const GoalFormModal = ({ isOpen }) => {
                                                 "Yearly",
                                             ]}
                                         />
+
+                                        <Selection
+                                            value={dealType}
+                                            onSelected={setDealType}
+                                            options={[
+                                                "New Client",
+                                                "Existing Client",
+                                            ]}
+                                            placeholder="Deal Type"
+                                        />
                                     </div>
                                 </div>
                                 {/* end item */}
@@ -433,6 +453,24 @@ const GoalFormModal = ({ isOpen }) => {
                                 </div>
                                 {/* end item */}
 
+                                <div className="sp1_sell_df--item">
+                                    <div className="sp1_sell_df--title">
+                                        Points Achievement
+                                    </div>
+                                    <div className="sp1_sell_df--control pt-2">
+                                        <Input
+                                            type="number"
+                                            value={pointAchievement}
+                                            onChange={(e) =>
+                                                setPointAchievement(
+                                                    e.target.value
+                                                )
+                                            }
+                                            placeholder="Point Achievement"
+                                            className="w-100"
+                                        />
+                                    </div>
+                                </div>
                                 {/* item */}
                                 <div className="sp1_sell_df--item">
                                     <div className="sp1_sell_df--title">
@@ -479,7 +517,12 @@ const GoalFormModal = ({ isOpen }) => {
                                                 className="w-auto"
                                             />
                                             {periodFilter ? (
-                                                <button className="btn btn-sm btn-light text-primary font-weight-bold">
+                                                <button
+                                                    className="btn btn-sm btn-light text-primary font-weight-bold"
+                                                    style={{
+                                                        whiteSpace: "nowrap",
+                                                    }}
+                                                >
                                                     Apply to all
                                                 </button>
                                             ) : (
@@ -497,6 +540,17 @@ const GoalFormModal = ({ isOpen }) => {
                                                     />
                                                 </div>
                                             )}
+
+                                            <Selection
+                                                value={goalType}
+                                                onSelected={setGoalType}
+                                                options={[
+                                                    "Minimum",
+                                                    "Milestone",
+                                                ]}
+                                                placeholder="Goal Type"
+                                                optionClassName="mb-0"
+                                            />
                                         </div>
                                         <div
                                             className="mt-2"
@@ -517,38 +571,40 @@ const GoalFormModal = ({ isOpen }) => {
                                                 label="Specify individual period goals"
                                             />
                                         </div>
-                                        {periodFilter ? (
-                                            <React.Fragment>
-                                                <div className="d-flex align-items-center justify-content-between mt-3 mb-1">
-                                                    <div className="">
-                                                        Period
-                                                    </div>
-                                                    <div className="sp1_sell_df--period-input">
-                                                        {trackingType ===
-                                                        "value"
-                                                            ? `Value, ${currency}`
-                                                            : "Count"}
-                                                    </div>
-                                                </div>
-
-                                                {period?.map((p) => (
-                                                    <div
-                                                        key={p.title}
-                                                        className="sp1_sell_df--control time_period mb-3"
-                                                    >
-                                                        <div className="sp1_sell_df--period">
-                                                            {p.title}
+                                        <CustomScrollbar minH={0} maxH={400}>
+                                            {periodFilter ? (
+                                                <React.Fragment>
+                                                    <div className="d-flex align-items-center justify-content-between mt-3 mb-1">
+                                                        <div className="">
+                                                            Period
                                                         </div>
-                                                        <PeriodInput
-                                                            period={p}
-                                                            handleRecurringChange={
-                                                                handleRecurringChange
-                                                            }
-                                                        />
+                                                        <div className="sp1_sell_df--period-input">
+                                                            {trackingType ===
+                                                            "value"
+                                                                ? `Value, ${currency}`
+                                                                : "Count"}
+                                                        </div>
                                                     </div>
-                                                ))}
-                                            </React.Fragment>
-                                        ) : null}
+
+                                                    {period?.map((p) => (
+                                                        <div
+                                                            key={p.title}
+                                                            className="sp1_sell_df--control time_period mb-3"
+                                                        >
+                                                            <div className="sp1_sell_df--period">
+                                                                {p.title}
+                                                            </div>
+                                                            <PeriodInput
+                                                                period={p}
+                                                                handleRecurringChange={
+                                                                    handleRecurringChange
+                                                                }
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </React.Fragment>
+                                            ) : null}
+                                        </CustomScrollbar>
                                     </div>
                                 </div>
                                 {/* end item */}
@@ -582,7 +638,7 @@ const GoalFormModal = ({ isOpen }) => {
                                 onClick={handleSave}
                                 className="btn btn-sm btn-success"
                             >
-                                Save
+                                {saving ? "Saving" : "Save"}
                             </button>
                         </div>
                     </div>
