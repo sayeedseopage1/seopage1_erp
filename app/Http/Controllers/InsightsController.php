@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\user;
 
 class InsightsController extends AccountBaseController
 {
@@ -23,6 +24,14 @@ class InsightsController extends AccountBaseController
     public function index()
     {
         return view('insights.insights', $this->data);
+    }
+    public function getusers(Request $request)
+    {
+        
+        $users = User::where('role_id',7)->orWhere('role_id',8)->get();
+       
+        
+         return response()->json($users);
     }
 
     /**
