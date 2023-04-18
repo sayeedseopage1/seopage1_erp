@@ -181,6 +181,9 @@
                             @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
                                 <x-sub-menu-item :link="route('departments.index')" :text="__('app.menu.department')" />
                             @endif
+                            @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
+                            <x-sub-menu-item :link="route('teams.index')" :text="__('Team')" />
+                        @endif
                         </div>
                     </x-menu-item>
                 @endif
