@@ -1190,6 +1190,7 @@ Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'Ca
 
 Route::get('get-timelogs', [TimelogReportController::class, 'getTimeLog'])->name('get-timelogs');
 Route::get('get-users', [InsightsController::class, 'getusers'])->name('get-users');
+Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams');
 
 
 //Team Routes 
