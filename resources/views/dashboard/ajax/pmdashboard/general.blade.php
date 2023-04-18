@@ -650,7 +650,7 @@
                                     </td>
                                     <td class="pl-20 text-capitalize">{{$milestone->cost}} $</td>
                                     <td class="pl-20 text-capitalize">
-                                        ({{$milestone->tasks->where('status', 'tasks')->count()}} / {{$milestone->tasks->count()}})
+                                        ({{$milestone->tasks->where('status', 'completed')->count()}} / {{$milestone->tasks->count()}})
                                     </td>
                                     <td class="pl-20 text-capitalize">
                                         @if($milestone->invoice_created == 1)
@@ -707,8 +707,8 @@
                         <th class="pl-20 text-capitalize">Status</th>
                     </thead>
                     <tbody>
-                        @forelse($general_project_status as $value)
-                            @foreach($value->tasks as $task)
+                        @forelse($general_task_status as $task)
+                          
                                 <tr>
                                     <td>{{$loop->index+1}}</td>
                                     <td class="pl-20 text-capitalize ">
@@ -721,10 +721,10 @@
                                         <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->deliverables->title ?? 'N/A'}}" href="{{route('projects.show', $value->id)}}?tab=deliverables" target="_blank">{{\Str::limit($task->milestone->deliverables->title ?? 'N/A', 20, ' ...')}}</a>
                                     </td>
                                     <td class="pl-20 text-capitalize ">
-                                        <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('projects.show', $value->id)}}" target="_blank">{{\Str::limit($value->project_name, 20, ' ...')}}</a>
+                                        <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->project->project_name}}" href="{{route('projects.show', $task->project_id)}}" target="_blank">{{\Str::limit($task->project->project_name, 20, ' ...')}}</a>
                                     </td>
                                     <td class="pl-20 text-capitalize ">
-                                        <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->client->name ?? 'N/A'}}" href="{{route('clients.show', $value->client_id ?? 0)}}" target="_blank">{{\Str::limit($value->client->name ?? 'N/A', 20, ' ...')}}</a>
+                                        <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->project->client->name ?? 'N/A'}}" href="{{route('clients.show', $task->project->client_id ?? 0)}}" target="_blank">{{\Str::limit($task->project->client->name ?? 'N/A', 20, ' ...')}}</a>
                                     </td>
                                     <td class="pl-20 text-capitalize">{{$task->start_date->format('Y-m-d') ?? '---'}}</td>
                                     <td class="pl-20 text-capitalize">{{$task->due_date->format('Y-m-d') ?? '---'}}</td>
@@ -840,7 +840,7 @@
                                         <i class="fa fa-circle mr-1 text-yellow" style="color: {{$row->boardColumn->label_color}};"></i>{{$row->boardColumn->column_name}}
                                     </td>
                                 </tr>
-                            @endforeach
+                           
                         @empty
                             <tr>
                                 <td colspan="12" class="shadow-none">
