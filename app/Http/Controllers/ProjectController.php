@@ -1444,8 +1444,8 @@ class ProjectController extends AccountBaseController
             $data[$count] = [
                 'id' => 'task-' . $task->id,
                 'name' => ucfirst($task->heading),
-                'start' => ((!is_null($task->start_date)) ? $task->start_date->format('Y-m-d') : ((!is_null($task->due_date)) ? $task->due_date->format('Y-m-d') : null)),
-                'end' => (!is_null($task->due_date)) ? $task->due_date->format('Y-m-d') : $task->start_date->format('Y-m-d'),
+                'start' => ((!is_null($task->start_date)) ? $task->start_date : ((!is_null($task->due_date)) ? $task->due_date : null)),
+                'end' => (!is_null($task->due_date)) ? $task->due_date : $task->start_date,
                 'progress' => 0,
                 'bg_color' => $task->boardColumn->label_color,
                 'taskid' => $task->id,
@@ -2615,22 +2615,25 @@ class ProjectController extends AccountBaseController
     if ($request->deny != null) {
       $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
       $mile= ProjectMilestone::find($milestone->id);
-      $mile->qc_status= 3;
+      $mile->qc_status= 0;
       $mile->save();
+      $project_id= Project::where('id',$project->project_id)->first();
+
+      $user= User::where('id',$project_id->pm_id)->first();
+  
+  
+  
+        Notification::send($user, new QcSubmissionAcceptNotification($project_id));
+  
+      $qc_submission= QcSubmission::find($request->id);
+      $qc_submission->delete();
     }else {
       $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
       $mile= ProjectMilestone::find($milestone->id);
       $mile->qc_status= 1;
       $mile->save();
     }
-    $project_id= Project::where('id',$project->project_id)->first();
-
-    $user= User::where('id',$project_id->pm_id)->first();
-
-
-
-      Notification::send($user, new QcSubmissionAcceptNotification($project_id));
-
+   
     Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
     return back();
 

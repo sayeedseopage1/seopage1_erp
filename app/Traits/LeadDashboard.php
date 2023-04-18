@@ -160,7 +160,7 @@ trait LeadDashboard
 	 		->whereBetween('due_date', [$startDate, $endDate])
 	 		->orderBy('tasks.id','desc')->get();
 
-	 		$this->total_task_assigned_by_me_general= Task::where('added_by',Auth::id())->whereBetween('due_date', [$startDate, $endDate])->orderBy('tasks.id','desc')->get();
+	 		$this->total_task_assigned_by_me_general= Task::where('added_by',Auth::id())->where('status','!=','completed')->whereBetween('due_date', [$startDate, $endDate])->orderBy('tasks.id','desc')->get();
 	 		$html = view('dashboard.ajax.leaddeveloper.general', $this->data)->render();
 
             return Reply::dataOnly([
@@ -168,6 +168,7 @@ trait LeadDashboard
                 'html' => $html, 
             ]);
 		} else {
+
 
 			$this->startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('startDate')) : now($this->global->timezone)->startOfMonth();
 			$this->endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('endDate')) : now($this->global->timezone);
@@ -244,9 +245,9 @@ trait LeadDashboard
 			->join('tasks', 'task_users.task_id', '=', 'tasks.id')->where('user_id',Auth::id())
 			
 		   
-			->orderBy('tasks.id','desc')->get();
+			->orderBy('tasks.id','desc')->where('tasks.status','!=','completed')->get();
 
-			$this->total_deadline_task_assigned_by_me_period= Task::where('added_by',Auth::id())->orderBy('tasks.id','desc')->get();
+			$this->total_deadline_task_assigned_by_me_period= Task::where('added_by',Auth::id())->orderBy('tasks.id','desc')->where('tasks.status','!=','completed')->get();
 
 			// total tasks periodic data end
 
@@ -298,9 +299,9 @@ trait LeadDashboard
 	 
 	 		$this->total_task_assigned_to_me_general=DB::table('task_users')
 	 		->join('tasks', 'task_users.task_id', '=', 'tasks.id')->where('user_id',Auth::id())
-	 		->orderBy('tasks.id','desc')->get();
+	 		->orderBy('tasks.id','desc')->where('status','!=','completed')->get();
 
-	 		$this->total_task_assigned_by_me_general= Task::where('added_by',Auth::id())->orderBy('tasks.id','desc')->get();
+	 		$this->total_task_assigned_by_me_general= Task::where('added_by',Auth::id())->orderBy('tasks.id','desc')->where('status','!=','completed')->get();
 
 
 

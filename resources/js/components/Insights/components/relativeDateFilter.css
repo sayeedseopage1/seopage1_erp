@@ -1,0 +1,55 @@
+.sp1_rdf--container {
+    position: relative;
+}
+
+.sp1_rdf--toggle {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 4px 10px;
+    border: 1px solid #ccc;
+    width: fit-content;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 2px rgb(0 0 0 / 10%);
+}
+
+.sp1_rdf--menu {
+    background: #fff;
+    width: 250px;
+    border-radius: 6px;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 15%);
+}
+
+.sp1_rdf--menu-title {
+    background-color: #f0f0f0;
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+.sp1_rdf--menu-list {
+    display: flex;
+    display: -ms-flexbox;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 10px;
+}
+
+.sp1_rdf--menu-list>li {
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sp1_rdf--menu-list>li.hover,
+.sp1_rdf--menu-list>li:hover {
+    color: #fff;
+    background-color: #1d82f5;
+}
+
+
+.sp1_rdf--custom {
+    border-top: 1px solid #ccc;
+}

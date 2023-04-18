@@ -266,7 +266,7 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
                                 <sup class="mr-1">*</sup>
                             </label>
                             <textarea name="description" id="description2" class="form-control @error('description') is-invalid @enderror">{!! $task->description !!}</textarea>
-                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                           <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                             <script>
                                 CKEDITOR.replace('description');
                             </script>

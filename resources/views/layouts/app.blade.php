@@ -48,6 +48,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
     <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>
     <script src="https://code.jscharting.com/latest/jscharting.js"></script>
+   
 
     <title>@lang($pageTitle)</title>
     <meta name="msapplication-TileColor" content="#ffffff">
@@ -884,6 +885,7 @@
         })
     </script>
     <script src="{{URL::asset('easy-notification/easyNotify.js')}}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             var channel = pusher.subscribe('lead-updated-channel');

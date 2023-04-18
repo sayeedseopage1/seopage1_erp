@@ -171,6 +171,7 @@ use App\Http\Controllers\ProjectBoardController;
 use App\Http\Controllers\ReportIssueController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\SoftwareProjectController;
+use App\Http\Controllers\InsightsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -461,6 +462,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
         Route::resource('employee-shifts', EmployeeShiftController::class);
     });
+
+
 
     /* Setting menu routes ends here */
     Route::resource('company-settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
@@ -1069,6 +1072,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('update-settings', UpdateAppController::class);
 
     Route::resource('search', SearchController::class);
+    Route::get('/insights/{any}', [InsightsController::class,'index'])->where('any', '.*');
+    Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
+
 
 
 });
@@ -1182,4 +1188,5 @@ Route::controller(DealController::class)->group(function(){
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
 
-
+Route::get('get-timelogs', [TimelogReportController::class, 'getTimeLog'])->name('get-timelogs');
+Route::get('get-users', [InsightController::class, 'getusers'])->name('get-users');

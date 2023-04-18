@@ -843,7 +843,7 @@
                                 </div>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% Projects Got Canceled</h5>
@@ -861,7 +861,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average Project Completion Time</h5>
@@ -879,7 +879,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                {{-- <div class="col-md-3">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Projects Got Canceled</h5>
@@ -896,8 +896,8 @@
                                             <i class="fa fa-list text-lightest f-27"></i>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
+                                </div> --}}
+                                <div class="col-md-4">
                                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                         <div class="d-block text-capitalize">
                                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Cross/Upsell Projects</h5>
@@ -1273,7 +1273,7 @@
                                                     <th class="pl-20 text-capitalize">Milestones (Payment)</th>
                                                     <th class="pl-20 text-capitalize">Start Date</th>
                                                     <th class="pl-20 text-capitalize">Deadline</th>
-                                                    <th class="pl-20 text-capitalize">Actual Completion Date</th>
+                                                   
                                                     <th class="pl-20 text-capitalize">Progress</th>
                                                     <th class="pl-20 text-capitalize">Status</th>
                                                 </thead>
@@ -1318,9 +1318,7 @@
                                                         </td>
                                                         <td class="pl-20 text-capitalize">{{$value->start_date->format('Y-m-d')}}</td>
                                                         <td class="pl-20 text-capitalize">{{$value->deadline->format('Y-m-d')}}</td>
-                                                        <td>
-                                                            need fix here
-                                                        </td>
+                                                        
                                                         <td>
                                                             @php
                                                                 $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();
@@ -1414,7 +1412,7 @@
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize">{{$milestone->cost}} $</td>
                                                                 <td class="pl-20 text-capitalize">
-                                                                    ({{$milestone->tasks->where('status', 'tasks')->count()}} / {{$milestone->tasks->count()}})
+                                                                    ({{$milestone->tasks->where('status', 'completed')->count()}} / {{$milestone->tasks->count()}})
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize">
                                                                     @if($milestone->invoice_created == 1)
@@ -1471,8 +1469,8 @@
                                                     <th class="pl-20 text-capitalize">Status</th>
                                                 </thead>
                                                 <tbody>
-                                                    @forelse($month_project_status as $value)
-                                                        @foreach($value->tasks as $task)
+                                                    @forelse($month_task_status as $task)
+                                                    
                                                             <tr>
                                                                 <td>{{$loop->index+1}}</td>
                                                                 <td class="pl-20 text-capitalize ">
@@ -1485,10 +1483,10 @@
                                                                     <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->deliverables->title ?? 'N/A'}}" href="{{route('projects.show', $value->id)}}?tab=deliverables" target="_blank">{{\Str::limit($task->milestone->deliverables->title ?? 'N/A', 20, ' ...')}}</a>
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('projects.show', $value->id)}}" target="_blank">{{\Str::limit($value->project_name, 20, ' ...')}}</a>
+                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->project->project_name}}" href="{{route('projects.show', $task->project_id)}}" target="_blank">{{\Str::limit($task->project->project_name, 20, ' ...')}}</a>
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->client->name ?? 'N/A'}}" href="{{route('clients.show', $value->client_id ?? 0)}}" target="_blank">{{\Str::limit($value->client->name ?? 'N/A', 20, ' ...')}}</a>
+                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->project->client->name ?? 'N/A'}}" href="{{route('clients.show', $task->project->client_id ?? 0)}}" target="_blank">{{\Str::limit($task->project->client->name ?? 'N/A', 20, ' ...')}}</a>
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize">{{$task->start_date ?? '---'}}</td>
                                                                 <td class="pl-20 text-capitalize">{{$task->due_date ?? '---'}}</td>
@@ -1604,7 +1602,7 @@
                                                                     <i class="fa fa-circle mr-1 text-yellow" style="color: {{$row->boardColumn->label_color}};"></i>{{$row->boardColumn->column_name}}
                                                                 </td>
                                                             </tr>
-                                                        @endforeach
+                                                        
                                                     @empty
                                                         <tr>
                                                             <td colspan="12" class="shadow-none">
@@ -2159,7 +2157,7 @@
                                                     <th class="pl-20 text-capitalize">Milestones (Payment)</th>
                                                     <th class="pl-20 text-capitalize">Start Date</th>
                                                     <th class="pl-20 text-capitalize">Deadline</th>
-                                                    <th class="pl-20 text-capitalize">Actual Completion Date</th>
+                                                  
                                                     <th class="pl-20 text-capitalize">Progress</th>
                                                     <th class="pl-20 text-capitalize">Status</th>
                                                 </thead>
@@ -2204,9 +2202,7 @@
                                                         </td>
                                                         <td class="pl-20 text-capitalize">{{$value->start_date->format('Y-m-d')}}</td>
                                                         <td class="pl-20 text-capitalize">{{$value->deadline->format('Y-m-d')}}</td>
-                                                        <td>
-                                                            need fix here
-                                                        </td>
+                                                        
                                                         <td>
                                                             @php
                                                                 $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();
@@ -2300,7 +2296,7 @@
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize">{{$milestone->cost}} $</td>
                                                                 <td class="pl-20 text-capitalize">
-                                                                    ({{$milestone->tasks->where('status', 'tasks')->count()}} / {{$milestone->tasks->count()}})
+                                                                    ({{$milestone->tasks->where('status', 'completed')->count()}} / {{$milestone->tasks->count()}})
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize">
                                                                     @if($milestone->invoice_created == 1)
@@ -2357,8 +2353,8 @@
                                                     <th class="pl-20 text-capitalize">Status</th>
                                                 </thead>
                                                 <tbody>
-                                                    @forelse($general_project_status as $value)
-                                                        @foreach($value->tasks as $task)
+                                                    @forelse($general_task_status as $task)
+                                                       
                                                             <tr>
                                                                 <td>{{$loop->index+1}}</td>
                                                                 <td class="pl-20 text-capitalize ">
@@ -2371,10 +2367,10 @@
                                                                     <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->deliverables->title ?? 'N/A'}}" href="{{route('projects.show', $value->id)}}?tab=deliverables" target="_blank">{{\Str::limit($task->milestone->deliverables->title ?? 'N/A', 20, ' ...')}}</a>
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('projects.show', $value->id)}}" target="_blank">{{\Str::limit($value->project_name, 20, ' ...')}}</a>
+                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->project->project_name}}" href="{{route('projects.show', $task->project->id)}}" target="_blank">{{\Str::limit($task->project->project_name, 20, ' ...')}}</a>
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->client->name ?? 'N/A'}}" href="{{route('clients.show', $value->client_id ?? 0)}}" target="_blank">{{\Str::limit($value->client->name ?? 'N/A', 20, ' ...')}}</a>
+                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->project->client->name ?? 'N/A'}}" href="{{route('clients.show', $task->project->client_id ?? 0)}}" target="_blank">{{\Str::limit($task->project->client->name ?? 'N/A', 20, ' ...')}}</a>
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize">{{$task->start_date ?? '---'}}</td>
                                                                 <td class="pl-20 text-capitalize">{{$task->due_date ?? '---'}}</td>
@@ -2490,7 +2486,7 @@
                                                                     <i class="fa fa-circle mr-1 text-yellow" style="color: {{$row->boardColumn->label_color}};"></i>{{$row->boardColumn->column_name}}
                                                                 </td>
                                                             </tr>
-                                                        @endforeach
+                                                       
                                                     @empty
                                                         <tr>
                                                             <td colspan="12" class="shadow-none">
@@ -2509,216 +2505,7 @@
                 </div>
             </div>   
         </div>
-        {{--<div class="row">
-            <div class="col-md-7">
-                <!-- EMP DASHBOARD EVENTS START -->
-                @if(Auth::user()->role_id != 4 && Auth::user()->role_id != 7)
-                @if (in_array('my_calender', $activeWidgets))
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <x-cards.data :title="__('app.menu.myCalendar')">
-                                <div id="calendar"></div>
-                                <x-slot name="action">
-                                    <div class="dropdown ml-auto calendar-action">
-                                        <button id="event-btn" class="btn btn-lg f-14 p-0 text-lightest text-capitalize rounded  dropdown-toggle cal-event" type="button"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fa fa-ellipsis-h"></i>
-                                        </button>
-
-                                        <div id="cal-drop" class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-2">
-                                            @if(in_array('tasks', user_modules()))
-                                            <div class="custom-control custom-checkbox cal-filter">
-                                                <input type="checkbox" value="task"
-                                                    class="form-check-input filter-check" name="calendar[]"
-                                                    id="customCheck1" @if(in_array('task',$event_filter)) checked @endif>
-                                                <label
-                                                    class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
-                                                    for="customCheck1">@lang('app.menu.tasks')</label>
-                                            </div>
-                                            @endif
-                                            @if(in_array('events', user_modules()))
-                                            <div class="custom-control custom-checkbox cal-filter">
-                                                <input type="checkbox" value="events" class="form-check-input filter-check" name="calendar[]" id="customCheck2" @if(in_array('events',$event_filter)) checked @endif>
-                                                <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="customCheck2">@lang('app.menu.Events')</label>
-                                            </div>
-                                            @endif
-                                            @if(in_array('holidays', user_modules()))
-                                            <div class="custom-control custom-checkbox cal-filter">
-                                                <input type="checkbox" value="holiday"
-                                                    class="form-check-input filter-check" name="calendar[]"
-                                                    id="customCheck3" @if(in_array('holiday',$event_filter)) checked @endif>
-                                                <label
-                                                    class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
-                                                    for="customCheck3">@lang('app.menu.holiday')</label>
-                                            </div>
-                                            @endif
-                                            @if(in_array('tickets', user_modules()))
-                                            <div class="custom-control custom-checkbox cal-filter">
-                                                <input type="checkbox" value="tickets"
-                                                    class="form-check-input filter-check" name="calendar[]"
-                                                    id="customCheck4" @if(in_array('tickets',$event_filter)) checked @endif>
-                                                <label
-                                                    class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
-                                                    for="customCheck4">@lang('app.menu.tickets')</label>
-                                            </div>
-                                            @endif
-                                            @if(in_array('leaves', user_modules()))
-                                            <div class="custom-control custom-checkbox cal-filter">
-                                                <input type="checkbox" value="leaves"
-                                                    class="form-check-input filter-check" name="calendar[]"
-                                                    id="customCheck5" @if(in_array('leaves',$event_filter)) checked @endif>
-                                                <label
-                                                    class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
-                                                    for="customCheck5">@lang('app.menu.leaves')</label>
-                                            </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </x-slot>
-                            </x-cards.data>
-                        </div>
-                    </div>
-                @endif
-                @endif
-                <!-- EMP DASHBOARD EVENTS END -->
-            </div>
-            <div class="col-md-5">
-                @if (in_array('notices', $activeWidgets))
-                    @isset($notices)
-                        <!-- EMP DASHBOARD NOTICE START -->
-                        <div class="col-md-12">
-                            <div class="mb-3 b-shadow-4 rounded bg-white pb-2">
-                                <!-- NOTICE HEADING START -->
-                                <div class="d-flex align-items-center b-shadow-4 p-20">
-                                    <p class="mb-0 f-18 f-w-500"> @lang('app.menu.notices') </p>
-                                </div>
-                                <!-- NOTICE HEADING END -->
-                                <!-- NOTICE DETAIL START -->
-                                <div class="b-shadow-4 cal-info scroll ps" data-menu-vertical="1" data-menu-scroll="1"
-                                    data-menu-dropdown-timeout="500" id="empDashNotice" style="overflow: hidden;">
-
-
-                                    @foreach ($notices as $notice)
-                                        <div class="card border-0 b-shadow-4 p-20 rounded-0">
-                                            <div class="card-horizontal">
-                                                <div class="card-header m-0 p-0 bg-white rounded">
-                                                    <x-date-badge :month="$notice->created_at->format('M')" :date="$notice->created_at
-                                                        ->timezone(global_setting()->timezone)
-                                                        ->format('d')" />
-                                                </div>
-                                                <div class="card-body border-0 p-0 ml-3">
-                                                    <h4 class="card-title f-14 font-weight-normal text-capitalize mb-0">
-                                                        <a href="{{ route('notices.show', $notice->id) }}"
-                                                            class="openRightModal text-darkest-grey">{{ $notice->heading }}</a>
-                                                    </h4>
-                                                </div>
-                                            </div>
-                                        </div><!-- card end -->
-                                    @endforeach
-
-
-                                    <div class="ps__rail-x" style="left: 0px; top: 0px;">
-                                        <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
-                                    </div>
-                                    <div class="ps__rail-y" style="top: 0px; left: 0px;">
-                                        <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
-                                    </div>
-                                </div>
-                                <!-- NOTICE DETAIL END -->
-                            </div>
-                        </div>
-                        <!-- EMP DASHBOARD NOTICE END -->
-                    @endisset
-                @endif
-                @if (!is_null($myActiveTimer))
-                    <div class="col-sm-12" id="myActiveTimerSection">
-                        <x-cards.data :title="__('modules.timeLogs.myActiveTimer')">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    {{ $myActiveTimer->start_time->timezone(global_setting()->timezone)->format('M d, Y' . ' - ' . global_setting()->time_format) }}
-                                    <p class="text-primary my-2">
-                                        @php
-                                            $endTime = now();
-                                            $totalHours = $endTime->diff($myActiveTimer->start_time)->format('%d') * 24 + $endTime->diff($myActiveTimer->start_time)->format('%H');
-                                            $totalMinutes = $totalHours * 60 + $endTime->diff($myActiveTimer->start_time)->format('%i');
-
-                                            $totalMinutes = $totalMinutes - $myActiveTimer->breaks->sum('total_minutes');
-
-                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                            if ($totalMinutes % 60 > 0) {
-                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                            }
-                                        @endphp
-
-                                        <strong>@lang('modules.timeLogs.totalHours'):</strong> {{ $timeLog }}
-                                    </p>
-
-                                    <ul class="list-group">
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center f-12 text-dark-grey">
-                                            <span><i class="fa fa-clock"></i>
-                                                @lang('modules.timeLogs.startTime')</span>
-                                            {{ $myActiveTimer->start_time->timezone(global_setting()->timezone)->format(global_setting()->time_format) }}
-                                        </li>
-                                        <li
-                                            class="list-group-item d-flex justify-content-between align-items-center f-12 text-dark-grey">
-                                            <span><i class="fa fa-briefcase"></i> @lang('app.task')</span>
-                                            <a href="{{ route('tasks.show', $myActiveTimer->task->id) }}"
-                                                class="text-dark-grey openRightModal">{{ $myActiveTimer->task->heading }}</a>
-                                        </li>
-                                        @foreach ($myActiveTimer->breaks as $item)
-                                            <li
-                                                class="list-group-item d-flex justify-content-between align-items-center f-12 text-dark-grey">
-                                                @if (!is_null($item->end_time))
-                                                    @php
-                                                        $endTime = $item->end_time;
-                                                        $totalHours = $endTime->diff($item->start_time)->format('%d') * 24 + $endTime->diff($item->start_time)->format('%H');
-                                                        $totalMinutes = $totalHours * 60 + $endTime->diff($item->start_time)->format('%i');
-
-                                                        $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                        if ($totalMinutes % 60 > 0) {
-                                                            $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                        }
-                                                    @endphp
-                                                    <span><i class="fa fa-mug-hot"></i>
-                                                        @lang('modules.timeLogs.break')
-                                                        ({{ $timeLog }})
-                                                    </span>
-                                                    {{ $item->start_time->timezone(global_setting()->timezone)->format(global_setting()->time_format) . ' - ' . $item->end_time->timezone(global_setting()->timezone)->format(global_setting()->time_format) }}
-                                                @else
-                                                    <span><i class="fa fa-mug-hot"></i>
-                                                        @lang('modules.timeLogs.break')</span>
-                                                    {{ $item->start_time->timezone(global_setting()->timezone)->format(global_setting()->time_format) }}
-                                                @endif
-                                            </li>
-                                        @endforeach
-                                    </ul>
-
-                                </div>
-                                <div class="col-sm-12 pt-3 text-right">
-                                    @if ($editTimelogPermission == 'all' || ($editTimelogPermission == 'added' && $myActiveTimer->added_by == user()->id) || ($editTimelogPermission == 'owned' && (($myActiveTimer->project && $myActiveTimer->project->client_id == user()->id) || $myActiveTimer->user_id == user()->id)) || ($editTimelogPermission == 'both' && (($myActiveTimer->project && $myActiveTimer->project->client_id == user()->id) || $myActiveTimer->user_id == user()->id || $myActiveTimer->added_by == user()->id)))
-                                        @if (is_null($myActiveTimer->activeBreak))
-                                            <x-forms.button-secondary icon="pause-circle"
-                                                data-time-id="{{ $myActiveTimer->id }}" id="pause-timer-btn">
-                                                @lang('modules.timeLogs.pauseTimer')</x-forms.button-secondary>
-                                            <x-forms.button-primary class="ml-3 stop-active-timer"
-                                                data-time-id="{{ $myActiveTimer->id }}" icon="stop-circle">
-                                                @lang('modules.timeLogs.stopTimer')</x-forms.button-primary>
-                                        @else
-                                            <x-forms.button-primary id="resume-timer-btn" icon="play-circle"
-                                                data-time-id="{{ $myActiveTimer->activeBreak->id }}">
-                                                @lang('modules.timeLogs.resumeTimer')</x-forms.button-primary>
-                                        @endif
-                                    @endif
-                                </div>
-                            </div>
-                        </x-cards.data>
-                    </div>
-                @endif
-            </div>
-        </div>--}}
+     
     </div>
 @endsection
 @push('scripts')

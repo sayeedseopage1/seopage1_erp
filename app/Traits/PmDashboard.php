@@ -318,10 +318,14 @@ trait PmDashboard
                 'pm_id' => $this->user->id,
                 'status' => 'in progress',
             ])->whereBetween('updated_at', [$this->startMonth, $this->endMonth])->get();
+            $this->month_task_status = Task::where([
+                'added_by' => $this->user->id,
+               // 'board_column_id' => 'in progress',
+            ])->whereIn('board_column_id',[1,2,3,6,7])->whereBetween('updated_at', [$this->startMonth, $this->endMonth])->get();
 
             $this->month_partially_finished_project = Project::where([
                 'pm_id' => $this->user->id,
-                'status' => 'finished'
+                'status' => 'partially finished'
             ])->whereBetween('updated_at', [$this->startMonth, $this->endMonth])->get();
 
             $this->month_project_milestone_total = Project::join('project_milestones', 'projects.id', 'project_milestones.project_id')
@@ -512,10 +516,14 @@ trait PmDashboard
                 'pm_id' => $this->user->id,
                 'status' => 'in progress',
             ])->whereBetween('updated_at', [$startDate, $endDate])->get();
+            $this->general_task_status = Task::where([
+                'added_by' => $this->user->id,
+               // 'board_column_id' => 'in progress',
+            ])->whereIn('board_column_id',[1,2,3,6,7])->whereBetween('updated_at', [$startYears, $endYears])->get();
 
             $this->general_partially_finished_project = Project::where([
                 'pm_id' => $this->user->id,
-                'status' => 'finished'
+                'status' => 'partially finished'
             ])->whereBetween('updated_at', [$startDate, $endDate])->get();
 
             $this->general_project_milestone_total = Project::join('project_milestones', 'projects.id', 'project_milestones.project_id')
@@ -922,9 +930,14 @@ trait PmDashboard
                 'status' => 'in progress',
             ])->whereBetween('updated_at', [$startMonth, $endMonth])->get();
 
+            $this->month_task_status = Task::where([
+                'added_by' => $this->user->id,
+               // 'board_column_id' => 'in progress',
+            ])->whereIn('board_column_id',[1,2,3,6,7])->whereBetween('updated_at', [$startMonth, $endMonth])->get();
+
             $this->month_partially_finished_project = Project::where([
                 'pm_id' => $this->user->id,
-                'status' => 'finished'
+                'status' => 'partially finished'
             ])->whereBetween('updated_at', [$startMonth, $endMonth])->get();
 
             $this->month_project_milestone_total = Project::join('project_milestones', 'projects.id', 'project_milestones.project_id')
@@ -1131,10 +1144,19 @@ trait PmDashboard
                 'pm_id' => $this->user->id,
                 'status' => 'in progress',
             ])->whereBetween('updated_at', [$startYears, $endYears])->get();
+            // $this->general_task_status = Project::where([
+            //     'added_by' => $this->user->id,
+            //     'status' => 'in progress',
+            // ])->whereBetween('updated_at', [$startYears, $endYears])->get();
+            $this->general_task_status = Task::where([
+                'added_by' => $this->user->id,
+               // 'board_column_id' => 'in progress',
+            ])->whereIn('board_column_id',[1,2,3,6,7])->whereBetween('updated_at', [$startYears, $endYears])->get();
+
 
             $this->general_partially_finished_project = Project::where([
                 'pm_id' => $this->user->id,
-                'status' => 'finished'
+                'status' => 'partially finished'
             ])->whereBetween('updated_at', [$startYears, $endYears])->get();
 
             $this->general_project_milestone_total = Project::join('project_milestones', 'projects.id', 'project_milestones.project_id')
