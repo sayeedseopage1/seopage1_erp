@@ -55,7 +55,6 @@ const GoalFormModal = ({ isOpen }) => {
     const cardBodyRef = useRef(null);
 
     React.useEffect(() => {
-        console.log(cardBodyRef.current.offsetHeight);
         if (cardBodyRef && cardBodyRef.current) {
             if (cardBodyRef.current.offsetHeight > 800) {
                 cardBodyRef.current.style.height = "800px";

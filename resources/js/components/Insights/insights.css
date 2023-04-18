@@ -8,6 +8,8 @@
     box-sizing: border-box;
     width: 250px;
     position: relative;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
 }
 
 .sp1_ins_sidebar--search-wrapper {
