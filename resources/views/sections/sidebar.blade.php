@@ -479,6 +479,14 @@
                     </x-menu-item>
                 @endif
 
+
+                <li class="accordionItem closeIt">
+                    <a class="nav-item text-lightest f-15 sidebar-text-color" href="{{route("insights.index")}}" title="Insights">
+                        <i class="bi bi-graph-up"></i>
+                            <span class="pl-3">Insights</span>
+                    </a>
+                </li>
+
                 <!-- NAV ITEM - REPORTS COLLAPASE MENU -->
                 <!-- NAV ITEM - SETTINGS -->
                 <x-menu-item icon="gear" :text="__('app.menu.settings')"
