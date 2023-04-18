@@ -46,7 +46,7 @@
                             </div>
                         @endif
 
-                            <div class="col-md-12">
+                            {{-- <div class="col-md-12">
                                 <div class="mt-3">
                                     <label for="client_name" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong>
                                         <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Type Client Name" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
@@ -56,7 +56,7 @@
                                     <input name="client_name" id="client_name" type="text" class="form-control height-35 f-14" placeholder="Enter Client Name">
                                     <label id="clientNameError" class="error text-danger" for="client_name"></label>
                                 </div>
-                            </div>
+                            </div> --}}
 
                         <div class="col-md-6">
                             <div class="mt-3">

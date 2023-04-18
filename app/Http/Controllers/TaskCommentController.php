@@ -71,7 +71,7 @@ class TaskCommentController extends AccountBaseController
             Notification::send($user, new TaskCommentNotification($task,$sender));
         }
 
-        $view = view('tasks.ajax.files', $this->data)->render();
+        $view = view('tasks.comments.show', $this->data)->render();
 
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
     }
@@ -166,20 +166,51 @@ class TaskCommentController extends AccountBaseController
 
     public function update(StoreTaskComment $request, $id)
     {
-        $comment = TaskComment::findOrFail($id);
         $this->editPermission = user()->permission('edit_task_comments');
         abort_403(!($this->editPermission == 'all' || ($this->editPermission == 'added' && $comment->added_by == user()->id)));
 
-        $comment->comment = $request->comment;
-        $comment->save();
+        if ($request->editMode == 'reply') {
+            $comment = TaskReply::findOrFail($id);
+            $comment->reply = $request->comment;
+        } else {
+            $comment = TaskComment::findOrFail($id);
+            $comment->comment = $request->comment;
+        }
+        if ($comment->added_by == $this->user->id) {
+            $comment->save();
 
-        $this->comments = TaskComment::with('task')->where('task_id', $comment->task_id)->orderBy('id', 'desc')->get();
-        $view = view('tasks.comments.show', $this->data)->render();
+            $viewTaskFilePermission = user()->permission('view_task_files');
+            $viewSubTaskPermission = user()->permission('view_sub_tasks');
 
-        return Reply::dataOnly(['status' => 'success', 'view' => $view]);
+            $comment_task_id = $comment->task_id;
+            
+            $this->task = Task::with(['boardColumn', 'project', 'users', 'label', 'approvedTimeLogs', 'approvedTimeLogs.user', 'approvedTimeLogs.activeBreak', 'comments', 'comments.user', 'subtasks.files', 'userActiveTimer',
+            'files' => function ($q) use ($viewTaskFilePermission) {
+                if ($viewTaskFilePermission == 'added') {
+                    $q->where('added_by', user()->id);
+                }
+            },
+            'subtasks' => function ($q) use ($viewSubTaskPermission) {
+                if ($viewSubTaskPermission == 'added') {
+                    $q->where('added_by', user()->id);
+                }
+            }])
+            ->withCount('subtasks', 'files', 'comments', 'activeTimerAll')
+            ->findOrFail($comment_task_id)->withCustomFields();
+
+            $this->comments = TaskComment::with('task')->where('task_id', $comment->task_id)->orderBy('id', 'desc')->get();
+            $view = view('tasks.ajax.files', $this->data)->render();
+
+            return Reply::dataOnly(['status' => 'success', 'view' => $view]);
+        } else {
+            return Reply::dataOnly([
+                'status' => 'error',
+                'message' => 'You can\'t edit this comment'
+            ]);
+        } 
     }
 
-//    COMMENT REPLY SYSTEM START
+    //    COMMENT REPLY SYSTEM START
     public function replyStore(Request $request)
     {
         //dd($request->all());

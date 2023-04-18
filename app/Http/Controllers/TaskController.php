@@ -54,6 +54,7 @@ use Auth;
 use App\Models\ProjectDeliverable;
 use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
+use Toaster;
 
 use function Symfony\Component\Cache\Traits\select;
 
@@ -404,6 +405,7 @@ class TaskController extends AccountBaseController
      */
     public function create()
     {
+
         $this->addPermission = user()->permission('add_tasks');
         $this->projectShortCode = '';
         $this->project = request('task_project_id') ? Project::with('membersMany')->findOrFail(request('task_project_id')) : null;
@@ -489,7 +491,27 @@ class TaskController extends AccountBaseController
     // @codingStandardsIgnoreLine
     public function store(StoreTask $request)
     {
-        //dd($request);
+        $project_id = Project::where('id',$request->project_id)->first();
+        $task_estimation_hours= Task::where('project_id',$project_id->id)->sum('estimate_hours');
+        $task_estimation_minutes= Task::where('project_id',$project_id->id)->sum('estimate_minutes');
+        $total_task_estimation_minutes= $task_estimation_hours*60 + $task_estimation_minutes;
+        $left_minutes= ($project_id->hours_allocated-$request->estimate_hours)*60 - ($total_task_estimation_minutes+$request->estimate_minutes);
+
+        $left_in_hours = round($left_minutes/60,0);
+        $left_in_minutes= $left_minutes%60;
+        //dd($left_minutes);
+        if($left_minutes < 1)
+        {
+            // return response()->json([
+            //     "message" => "The given data was invalid.",
+            //     "errors" => [
+            //         "estimate_hours" => [
+            //             "Estimate hours cannot exceed from project allocation hours !"
+            //         ]
+            //     ]
+            // ], 422);
+        }
+       // dd($request);
         $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
 
         if (is_null($project) || ($project->project_admin != user()->id)) {
@@ -548,6 +570,11 @@ class TaskController extends AccountBaseController
             $task->repeat_cycles = $request->repeat_cycles;
         }
         $task->task_status= "pending";
+        $total_hours= $request->estimate_hours *60;
+        $total_minutes= $request->estimate_minutes;
+        $total_in_minutes= $total_hours+ $total_minutes;
+        $task->estimate_time_left_minutes= $total_in_minutes;
+
 
         $task->save();
 
@@ -681,7 +708,8 @@ class TaskController extends AccountBaseController
         $redirectUrl = urldecode($request->redirect_url);
 
         if ($redirectUrl == '') {
-            $redirectUrl = route('tasks.index');
+            //$redirectUrl = url('/account/projects/418?tab=tasks');
+            $redirectUrl = route('projects.show', $request->project_id).'?tab=tasks';
         }
 
         return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['redirectUrl' => $redirectUrl, 'taskID' => $task->id]);
@@ -990,7 +1018,7 @@ class TaskController extends AccountBaseController
         ->get();
 
         $tab = request('view');
-        
+
         switch ($tab) {
         case 'file':
             $this->tab = 'tasks.ajax.files';
@@ -1155,7 +1183,7 @@ class TaskController extends AccountBaseController
                 // $totalHours = $task->estimate_hours;
                 // $totalMinutes = $task->estimate_minutes;
                 $totalMinutes = 0;
-                
+
                 foreach($task->subtasks as $value) {
                     $countTask = Task::where('subtask_id', $value->id)->first();
                     $totalHours = $totalHours + $countTask->estimate_hours;
@@ -1174,7 +1202,7 @@ class TaskController extends AccountBaseController
                     'estimate_hours' => $totalHours,
                     'estimate_minutes' => $totalMinutes
                 ])->render();
-                
+
 
                 return Reply::dataOnly([
                     'status' => 'success',

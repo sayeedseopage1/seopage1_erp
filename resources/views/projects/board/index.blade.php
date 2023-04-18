@@ -102,6 +102,7 @@
                                         @endif
                                          {{$project->client_name->name}} </a></li>
                                       <!-- <li><span>#749</span></li> -->
+                                      @if($project->pm_id != null)
                                       <li> <a class="openRightModal RightModal2" id="RightModal2"  href="/account/employees/{{$project->pm_id}}" title="{{$project->pm_name->name}}" data-tooltip-bottom="{{$project->pm_name->name}}">
 
 
@@ -119,6 +120,7 @@
 
 
                                         {{$project->pm_name->name}} </a></li>
+                                        @endif
                                   </ul>
 
                                   <ul class="task_list" id="projects_sp1_padding">

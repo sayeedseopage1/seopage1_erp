@@ -544,10 +544,16 @@
             Swal.fire({
                 title: 'Are You Sure You Want to send approval request?',
                 showDenyButton: true,
-                confirmButtonText: 'Save',
-                denyButtonText: `Don't save`,
+                confirmButtonText: 'Send',
+                denyButtonText: `Cancel`,
             }).then((result) => {
                 if (result.isConfirmed) {
+                    
+                  //  $('#sendAuthorizationBtn').attr('disabled','disabld');
+                    $("#sendAuthorizationBtn").attr("disabled", true);
+                    $("#sendAuthorizationBtn").html("Processing...");
+
+
                     $.ajax({
                         url: '/projects/send-final-authorization-deliverables/' + id,
                         type: 'GET',

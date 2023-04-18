@@ -7,7 +7,11 @@ $changeStatusPermission = user()->permission('change_status');
 
 <div id="task-detail-section">
     <div class="row mx-0">
+        @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
+        <a href="{{route('tasks.index')}}"><button class="btn btn-primary mb-3">Go back</button></a>
+        @else 
         <a href="{{route('projects.show', $task->project_id)}}?tab=tasks"><button class="btn btn-primary mb-3">Go back</button></a>
+        @endif
         <h3 class="heading-h1 mb-3 ml-2 align-self-center">{{ ucfirst($task->heading) }}</h3>
     </div>
     <div class="row">
@@ -500,14 +504,7 @@ $changeStatusPermission = user()->permission('change_status');
             $task_review= App\Models\TaskApprove::where('task_id',$task->id)->orderBy('id','desc')->first();
 
            ?>
-
-
-
-
-
-
-        </div>
-        <div class="col-sm-3 review-card">
+           <div class="col-sm-3 review-card">
               <x-cards.data>
                   @if (($taskSettings->status == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
                       <p class="f-w-500"><i class="fa fa-circle mr-1 text-yellow"
@@ -819,6 +816,8 @@ $changeStatusPermission = user()->permission('change_status');
               </x-cards.data>
                   @endif
           </div>
+        </div>
+        
 
 
     </div>
@@ -856,7 +855,7 @@ $changeStatusPermission = user()->permission('change_status');
     <script>
         $(document).ready(function() {
 
-            /*var $worked = $("#active-task-timer570");
+            var $worked = $("#active-task-timer");
 
             function updateTimer() {
                 var myTime = $worked.html();
@@ -892,9 +891,9 @@ $changeStatusPermission = user()->permission('change_status');
                 $worked.html(ts);
                 setTimeout(updateTimer, 1000);
             }
-            if ($('#stop-task-timer570').length) {
+            if ($('#stop-task-timer').length) {
                 setTimeout(updateTimer, 1000);
-            }*/
+            }
 
             //    change task status
             $('body').on('click', '.change-task-status', function() {
@@ -1473,5 +1472,5 @@ $changeStatusPermission = user()->permission('change_status');
         });
 
     </script>
-    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+   <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
 

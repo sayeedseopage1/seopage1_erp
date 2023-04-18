@@ -122,7 +122,9 @@ class ProjectMilestoneController extends AccountBaseController
             $pm_id= PMAssign::where('pm_id',$project->pm_id)->first();
             $pm_assign= PMAssign::find($pm_id->id);
             $pm_assign->amount= $pm_assign->amount+ $milestone->cost;
+            $pm_assign->actual_amount= $pm_assign->actual_amount+ $milestone->cost;
             $pm_assign->monthly_project_amount= $pm_assign->monthly_project_amount+ $milestone->cost;
+            $pm_assign->monthly_actual_project_amount= $pm_assign->monthly_actual_project_amount+ $milestone->cost;
             $pm_assign->save();
 
             $deal_id= Deal::where('id',$project->deal_id)->first();
@@ -191,7 +193,8 @@ class ProjectMilestoneController extends AccountBaseController
         $pm_id_update= PMAssign::where('pm_id',$project_id->pm_id)->first();
         $pm_assign_update= PMAssign::find($pm_id_update->id);
         $pm_assign_update->amount= $pm_assign_update->amount- $pre_cost->cost;
-        $pm_assign_update->monthly_project_amount= $pm_assign_update->monthly_project_amount- $pre_cost->cost;
+        $pm_assign_update->actual_amount= $pm_assign_update->actual_amount- $pre_cost->cost;
+        $pm_assign_update->monthly_actual_project_amount= $pm_assign_update->monthly_actual_project_amount- $pre_cost->cost;
         $pm_assign_update->save();
 
         $deal_id_update= Deal::where('id',$project_id->deal_id)->first();
@@ -237,7 +240,9 @@ class ProjectMilestoneController extends AccountBaseController
             $pm_id= PMAssign::where('pm_id',$project->pm_id)->first();
             $pm_assign= PMAssign::find($pm_id->id);
             $pm_assign->amount= $pm_assign->amount+ $milestone->cost;
+            $pm_assign->actual_amount= $pm_assign->actual_amount+ $milestone->cost;
             $pm_assign->monthly_project_amount= $pm_assign->monthly_project_amount+ $milestone->cost;
+            $pm_assign->monthly_actual_project_amount= $pm_assign->monthly_actual_project_amount+ $milestone->cost;
             $pm_assign->save();
 
             $deal_id= Deal::where('id',$project->deal_id)->first();
@@ -380,7 +385,9 @@ class ProjectMilestoneController extends AccountBaseController
         $pm_id= PMAssign::where('pm_id',$project->pm_id)->first();
         $pm_assign= PMAssign::find($pm_id->id);
         $pm_assign->amount= $pm_assign->amount- $milestone->cost;
+        $pm_assign->actual_amount= $pm_assign->actual_amount- $milestone->cost;
         $pm_assign->monthly_project_amount= $pm_assign->monthly_project_amount- $milestone->cost;
+        $pm_assign->monthly_actual_project_amount= $pm_assign->monthly_actual_project_amount- $milestone->cost;
         $pm_assign->save();
 
         $deal_id= Deal::where('id',$project->deal_id)->first();
@@ -405,7 +412,7 @@ class ProjectMilestoneController extends AccountBaseController
         $activity->save();
         $project_update_status= Project::find($update_project->id);
         if ($update_project->due < 3) {
-          $project_update_status->status = 'finished';
+          $project_update_status->status = 'partially finished';
           $project_update_status->completion_percent= 100;
           //$var= Project::where('id',$request->project_id)->first();
           $date1 = new DateTime($project['start_date']);

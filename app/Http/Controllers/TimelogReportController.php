@@ -51,9 +51,10 @@ class TimelogReportController extends AccountBaseController
             ->groupBy('project_time_logs.project_id')
             ->get();
         }
-        // if($request->wantsJson()){
-        //     return response()->json($users);
-        // }
+
+
+        //return response()->json($users);
+
         //dd($users);
         // return view('admin.reports.time-log.index', $this->data);
         return $dataTable->render('reports.timelogs.index', $this->data);

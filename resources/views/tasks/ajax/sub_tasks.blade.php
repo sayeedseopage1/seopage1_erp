@@ -1,5 +1,3 @@
-
-
 @php
     $addSubTaskPermission = user()->permission('add_sub_tasks');
     $editSubTaskPermission = user()->permission('edit_sub_tasks');
@@ -164,6 +162,7 @@
                             <x-forms.input-group>
                                 <select class="form-control select-picker" name="user_id"
                                         id="subTaskAssignee" data-live-search="true">
+                                    <option value="" selected>--</option>
                                     <?php
                                     $users= App\Models\User::where('role_id',5)->get();
 
@@ -209,6 +208,7 @@
                             <x-forms.input-group>
                                 <select class="form-control select-picker" name="observer_id"
                                         id="subTaskAssignee2" data-live-search="true">
+                                    <option value="" selected>--</option>
                                     <?php
                                     $users= App\Models\User::where('role_id',5)->get();
 
@@ -361,25 +361,31 @@
                         </div>
                     </div> --}}
 
-                    <div class="col-md-6 col-lg-3" >
+                    <div class="col-md-6 col-lg-6" >
                         <label class="mt-5" for="">Set Estimate Time</label>
                         <sup style="color:red;">*</sup>
                         <div class="form-group ">
 
                             <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14 @error('estimate_hours') is-invalid @enderror"
-                                   name="estimate_hours" value="{{ $task ? $task->estimate_hours : '0'}}" >
+                                   name="estimate_hours" id="estimate_hours" value="{{ $task ? $task->estimate_hours : '0'}}" >
                             @error('estimate_hours')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                             @lang('app.hrs')
                             &nbsp;&nbsp;
-                            <input type="number" min="0" name="estimate_minutes"
+                            <input type="number" min="0" id="estimate_minutes" name="estimate_minutes"
                                    value="{{ $task ? $task->estimate_minutes : '0'}}" class="w-25 height-35 f-14 border rounded p-2 @error('estimate_minutes') is-invalid @enderror" >
                             @error('estimate_minutes')
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                             @lang('app.mins')
                         </div>
+                        @php
+                            $hours = round($task->estimate_time_left_minutes /60 ,0);
+                            $minutes= $task->estimate_time_left_minutes %60;
+                        @endphp
+
+                        <h6 style="color:red;">Estimation time can't exceed {{$hours}} hours {{$minutes}} minutes</h6>
                     </div>
 
                 </div>
@@ -774,9 +780,6 @@
         $('#repeat-task').change(function () {
             $('#repeat-fields').toggleClass('d-none');
         });
-        // $(document).ready(function() {
-        //   $('#description').summernote();
-        // });
         $("#selectAssignee2").selectpicker({
             actionsBox: true,
             selectAllText: "{{ __('modules.permission.selectAll') }}",
@@ -834,6 +837,35 @@
         $('#assign-self').click(function () {
             $('#selectAssignee2').val('{{ $user->id }}');
             $('#selectAssignee2').selectpicker('refresh');
+        });
+
+
+        $('#save-subtask').click(function(e){
+            var data= {
+                '_token': "{{ csrf_token() }}",
+                'estimate_hours': document.getElementById("estimate_hours").value,
+                'estimate_minutes': document.getElementById("estimate_minutes").value,
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{route('sub-tasks.store')}}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    $('#estimate_hours').trigger("reset");
+                    $('#estimate_minutes').trigger("reset");
+                },
+                error: function(error) {
+                    if (error.responseJSON.errors.estimate_hours) {
+                        toastr.error('Estimate hours cannot exceed from project allocation hours');
+                    }
+                }
+            });
         });
 
 

@@ -378,7 +378,7 @@
             <div class="card-header" id="headingTwo">
                 <h2 class="mb-0">
                     <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Developer ({{\Carbon\Carbon::now()->firstOfMonth()->addDays(20)->toFormattedDateString()}} to {{\Carbon\Carbon::now()->firstOfMonth()->addMonths(1)->addDays(19)->toFormattedDateString()}} Update)
+                        Developer Monthly Cycle Update (21st - 20th)
                     </button>
                 </h2>
             </div>
@@ -404,7 +404,7 @@
                     <div id="monthHtml">
                         <h4>Total Tasks (Status wise)</h4>
                         <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                     <div class="d-block text-capitalize">
                                         <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">To Do</h5>
@@ -422,7 +422,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                     <div class="d-block text-capitalize">
                                         <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Doing</h5>
@@ -440,7 +440,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                     <div class="d-block text-capitalize">
                                         <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Overdue</h5>
@@ -458,7 +458,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-4">
                                 <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                                     <div class="d-block text-capitalize">
                                         <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Under Review</h5>
@@ -473,6 +476,45 @@
                                     </div>
                                     <div class="d-block">
                                         <i class="fa fa-list text-lightest f-27"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                                    <div class="w-100 d-block text-capitalize">
+                                        <h5 class="f-15 f-w-500 text-darkest-grey">Reviews</h5>
+                                        <div class="d-flex justify-content-between">
+                                            <a href="">
+                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5 text-center">{{$monthlyPositiveRating}}
+                                                    <span class="f-12 font-weight-normal text-lightest">Positive Review</span>
+                                                </p>
+                                            </a>
+                                            <div class="col-md-4 mx-auto">
+                                                <div class="text-center px-2 border border-danger rounded f-15 f-w-500">Avarage Rating<br>
+                                                    @php
+                                                        $totalRating = $monthlyTasks->sum('totalRating');
+                                                        $avgRating = 0;
+                                                        if($totalRating > 0) {
+                                                            $avgRating = round($totalRating / $monthlyTasks->count(), 2);
+                                                        }
+                                                    @endphp
+                                                    @if($avgRating <= 5 && $avgRating >= 4)
+                                                        <span class="text-success mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
+                                                    @elseif($avgRating <= 4 && $avgRating >= 3)
+                                                        <span class="text-warning mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
+                                                    @elseif($avgRating <= 3)
+                                                        <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
+                                                    @else
+                                                        <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <a href="">
+                                                <p class="mb-0 f-21 font-weight-bold text-red d-grid text-center">{{$monthlyNegativeRating}}
+                                                    <span class="f-12 font-weight-normal text-lightest">Negative Review</span>
+                                                </p>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -814,47 +856,7 @@
                             </div>
                         </div>
                         <div class="row mt-3">
-                            <div class="col-md-6">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="w-100 d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Reviews</h5>
-                                        <div class="row">
-                                            <div class="col-md-4 mx-auto">
-                                                <div class="text-center px-2 border border-danger rounded f-15 f-w-500">Avarage Rating<br>
-                                                    @php
-                                                        $totalRating = $monthlyTasks->sum('totalRating');
-                                                        $avgRating = 0;
-                                                        if($totalRating > 0) {
-                                                            $avgRating = round($totalRating / $monthlyTasks->count(), 2);
-                                                        }
-                                                    @endphp
-                                                    @if($avgRating <= 5 && $avgRating >= 4)
-                                                        <span class="text-success mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @elseif($avgRating <= 4 && $avgRating >= 3)
-                                                        <span class="text-warning mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @elseif($avgRating <= 3)
-                                                        <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @else
-                                                        <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <a href="">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5 text-center">{{$monthlyPositiveRating}}
-                                                    <span class="f-12 font-weight-normal text-lightest">Positive Review</span>
-                                                </p>
-                                            </a>
-                                            <a href="">
-                                                <p class="mb-0 f-21 font-weight-bold text-red d-grid text-center">{{$monthlyNegativeRating}}
-                                                    <span class="f-12 font-weight-normal text-lightest">Negative Review</span>
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -1552,6 +1554,51 @@
                                 </x-cards.data>
                             </div>
                         @endif
+                        @if (in_array('week_timelog', $activeWidgets))
+                            <div class="col">
+                                <div
+                                    class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mt-3">
+                                    <div class="d-block text-capitalize w-100">
+                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">@lang('modules.dashboard.weekTimelog') <span class="badge badge-secondary ml-1 f-10">{{ minute_to_hour($weekWiseTimelogs - $weekWiseTimelogBreak) . ' ' . __('modules.timeLogs.thisWeek') }}</span></h5>
+
+                                        <div id="weekly-timelogs">
+                                            <nav class="mb-3">
+                                                <ul class="pagination pagination-sm week-pagination">
+                                                    @foreach ($weekPeriod->toArray() as $date)
+                                                        <li
+                                                        @class([
+                                                            'page-item',
+                                                            'week-timelog-day',
+                                                            'active' => (now(global_setting()->timezone)->toDateString() == $date->toDateString()),
+                                                        ])
+                                                        data-toggle="tooltip" data-original-title="{{ $date->format(global_setting()->date_format) }}" data-date="{{ $date->toDateString() }}">
+                                                            <a class="page-link" href="javascript:;">{{ $date->isoFormat('dd') }}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </nav>
+                                            <div class="progress" style="height: 7px;">
+                                                @php
+                                                    $totalDayMinutes = $dateWiseTimelogs->sum('total_minutes');
+                                                    $totalDayBreakMinutes = $dateWiseTimelogBreak->sum('total_minutes');
+                                                    $totalDayMinutesPercent = ($totalDayMinutes > 0) ? floatval((floatval($totalDayMinutes - $totalDayBreakMinutes)/$totalDayMinutes) * 100) : 0;
+                                                @endphp
+                                                <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $totalDayMinutesPercent }}%" aria-valuenow="{{ $totalDayMinutesPercent }}" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-original-title="{{ minute_to_hour($totalDayMinutes - $totalDayBreakMinutes) }}"></div>
+
+                                                <div class="progress-bar bg-secondary" role="progressbar" style="width: {{ (100 - $totalDayMinutesPercent) }}%" aria-valuenow="{{ $totalDayMinutesPercent }}" aria-valuemin="0" aria-valuemax="100" data-toggle="tooltip" data-original-title="{{ minute_to_hour($totalDayBreakMinutes) }}"></div>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between mt-1 text-dark-grey f-12">
+                                                <small>@lang('app.duration'): {{ minute_to_hour($dateWiseTimelogs->sum('total_minutes') - $dateWiseTimelogBreak->sum('total_minutes')) }}</small>
+                                                <small>@lang('modules.timeLogs.break'): {{ minute_to_hour($dateWiseTimelogBreak->sum('total_minutes')) }}</small>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -1740,15 +1787,26 @@
         $(document).ready(function() {
             var todayDate = moment();
             var monthDate = moment();
-
+            
             $('.todayDate').text(todayDate.format('dddd LL'));
-            $('.monthDate').text('21st ' + moment(monthDate).format('MMMM, YYYY')+' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
 
+            var todayOnlyDate = moment(todayDate).format('DD');
+            if (todayOnlyDate > 21) {
+                var text = '21st ' + moment(monthDate).format('MMMM, YYYY')+' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY');
+                $('.monthDate').text(text);
+                $('.monthDateOnHeading').text(text);
+            } else {
+                $('.monthDate').text('21st ' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY')+' to 20th '+moment(monthDate).startOf('month').add(20, 'day').format('MMMM, YYYY'));
+            }
 
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
                 if (mode == 'month') {
-                    monthDate = moment(monthDate).subtract(1, 'month');
+                    if(todayOnlyDate > 21) {
+                        monthDate = moment(monthDate).subtract(1, 'month');
+                    } else {
+                        monthDate = moment(monthDate).subtract(2, 'month');
+                    }
                     $(this).next().text('21st ' + moment(monthDate).format('MMMM, YYYY')+ ' to 20th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
@@ -1774,6 +1832,10 @@
                 
                 getData(mode, $(this), date);
             });
+
+            $('.fc-today-button').click(function() {
+                todayDate = moment();
+            })
         });
         
         function getData(mode, disableButton, date) {

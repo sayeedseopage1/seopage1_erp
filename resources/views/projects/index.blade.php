@@ -552,5 +552,6 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
         };
 
     </script>
+   <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
    
 @endpush
