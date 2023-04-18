@@ -18,6 +18,7 @@
     background: #fff;
     width: 250px;
     border-radius: 6px;
+    z-index: 1000;
     box-shadow: 0 3px 6px rgb(0 0 0 / 15%);
 }
 
