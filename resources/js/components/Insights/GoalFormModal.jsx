@@ -19,22 +19,23 @@ import { closeModal } from "./services/modals/salesDashboardModalSlice";
 import _ from "lodash";
 import PeriodInput from "./PeriodInput";
 import axios from "axios";
-import { addAssigneeUsers } from "./services/assigneeSlice";
+import AssigneeForDropdown from "./components/AssigneeForDropdown";
 
 const GoalFormModal = ({ isOpen }) => {
     const { title, entry, entryType, edit, showPrevious } = useSelector(
         (s) => s.goalFormModal
     );
 
-    const { users, teams } = useSelector((s) => s.assignee);
     const dispatch = useDispatch();
 
-    // ui
     const [periodFilter, setPeriodFilter] = useState(false);
 
     // form data
     const [assigneeType, setAssigneeType] = useState("User");
-    const [assigneeFor, setAssigneeFor] = useState("Md Mehedi Hasan");
+    const [assigneeFor, setAssigneeFor] = useState({
+        id: 0,
+        name: "Select User",
+    });
     const [pipeline, setPipeline] = useState(["Pipeline"]);
     const [frequency, setFrequency] = useState("Monthly");
     const [durationStart, setDurationStart] = useState(new Date());
@@ -47,30 +48,8 @@ const GoalFormModal = ({ isOpen }) => {
 
     const [period, setPeriod] = useState([]);
 
-    // get users
-    useEffect(() => {
-        const fetch = async () => {
-            if (users.length === 0) {
-                await axios
-                    .get("/get-users")
-                    .then((res) => {
-                        dispatch(addAssigneeUsers(res.data));
-                    })
-                    .catch((err) => console.log(err));
-            }
-        };
-
-        fetch();
-
-        return () => fetch();
-    }, []);
-
-    // end get user
-
     React.useEffect(() => {
-        if (!durationEnd) {
-            setPeriodFilter(false);
-        }
+        if (!durationEnd) setPeriodFilter(false);
     }, [durationEnd]);
 
     // time period control
@@ -334,13 +313,10 @@ const GoalFormModal = ({ isOpen }) => {
                                                 "User",
                                             ]}
                                         />
-                                        <Selection
-                                            value={assigneeFor}
-                                            onSelected={setAssigneeFor}
-                                            options={[
-                                                ...users.map((u) => u.name),
-                                            ]}
-                                            searchEnable={true}
+                                        <AssigneeForDropdown
+                                            assigneeFor={assigneeFor}
+                                            setAssigneeFor={setAssigneeFor}
+                                            assigneeType={assigneeType}
                                         />
                                     </div>
                                 </div>
