@@ -56,6 +56,12 @@ class Seopage1TeamController extends AccountBaseController
 public function getEmployeesByParentTeam(Request $request)
 {
     $parentId = $request->input('parent_id');
+    //dd($parentId);
+    $parent_users= Seopage1Team::where('id',$parentId)->first();
+    $members = $parent_users->members; // assume this is the value of the 'members' column
+    $userIds = explode(',', $members); // convert the string to an array of IDs
+    $employees = User::whereIn('id', $userIds)->get();
+    
     //$employees = EmployeeDetails::where('department_id', $departmentId)->get();
    
 
