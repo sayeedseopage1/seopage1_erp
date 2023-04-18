@@ -1190,6 +1190,7 @@ Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'Ca
 
 Route::get('get-timelogs', [TimelogReportController::class, 'getTimeLog'])->name('get-timelogs');
 Route::get('get-users', [InsightsController::class, 'getusers'])->name('get-users');
+Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams');
 
 
 //Team Routes 
@@ -1199,6 +1200,6 @@ Route::post('team/apply-quick-action', [Seopage1TeamController::class, 'applyQui
     Route::get('team/search', [Seopage1TeamController::class, 'searchTeam'])->name('teams.search');
     Route::resource('teams', Seopage1TeamController::class);
     Route::post('/get-employees-by-department', [Seopage1TeamController::class, 'getEmployeesByDepartment'])->name('getEmployeesByDepartment');
-    Route::post('/get-employees-by-parenttime', [Seopage1TeamController::class, 'getEmployeesByParentTime'])->name('getEmployeesByParentTeam');
 
+    Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'getEmployeesByParentTeam'])->name('getEmployeesByParentTeam');
 
