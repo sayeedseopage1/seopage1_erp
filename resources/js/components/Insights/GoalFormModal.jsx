@@ -1,9 +1,6 @@
 import Modal from "../UI/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    openGoalFormModal,
-    closeGoalFormModal,
-} from "./services/modals/goalFormModalSlice";
+import { closeGoalFormModal } from "./services/modals/goalFormModalSlice";
 import ReactDatePicker from "react-datepicker";
 import { BiRepeat } from "react-icons/bi";
 import Selection from "../UI/form/Selection";
@@ -21,6 +18,7 @@ import WeekOfYear from "dayjs/plugin/weekOfYear";
 import { closeModal } from "./services/modals/salesDashboardModalSlice";
 import _ from "lodash";
 import PeriodInput from "./PeriodInput";
+import axios from "axios";
 
 const GoalFormModal = ({ isOpen }) => {
     const { title, entry, entryType, edit, showPrevious } = useSelector(
@@ -251,7 +249,7 @@ const GoalFormModal = ({ isOpen }) => {
     };
 
     // handle on save
-    const handleSave = (e) => {
+    const handleSave = async (e) => {
         e.preventDefault();
         const data = {
             assigneeType,
@@ -267,7 +265,9 @@ const GoalFormModal = ({ isOpen }) => {
             recurring,
         };
 
-        console.log(data);
+        let response = await axios.post("/account/insights", data);
+
+        console.log(response);
     };
 
     // close modal

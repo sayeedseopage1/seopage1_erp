@@ -2,7 +2,9 @@ import { createContext, useContext, useState, useRef, useEffect } from "react";
 import { usePopper } from "react-popper";
 import Modal from "../../UI/Modal";
 import CustomScrollbar from "../../UI/CustomScrollbar";
+import Search from "../../UI/form/Search";
 import "./relativeDateFilter.css";
+import _ from "lodash";
 
 const relativeDates = ["Yesterday", "Today", "Tomorrow"];
 const relativePeriod = [
@@ -36,12 +38,48 @@ const rollingPeriod = [
     "Next 12 months",
 ];
 
-const RelativeDateFilter = () => {
-    const [selectedDate, useSelectedDate] = useState("This year");
+const RelativeDateFilter = ({ selected, onSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [refElement, setRefElement] = useState(null);
     const [popperElement, setPopperElement] = useState(null);
+    const [searchText, setSearchText] = useState("");
+    const [defaultHover, setDefaultHover] = useState("");
 
+    const searchRef = useRef(null);
+
+    // auto focus
+    useEffect(() => {
+        if (isOpen && searchRef) {
+            searchRef.current?.focus();
+        }
+    }, [isOpen, searchRef]);
+
+    // close outside click
+    useEffect(() => {
+        let timer;
+
+        const outsideClick = (e) => {
+            if (popperElement && !popperElement.contains(e.target)) {
+                setIsOpen(false);
+                window.removeEventListener("click", outsideClick);
+                clearTimeout(timer);
+            }
+        };
+
+        if (isOpen && popperElement) {
+            timer = setTimeout(
+                () => window.addEventListener("click", outsideClick),
+                100
+            );
+        }
+
+        return () => {
+            window.removeEventListener("click", outsideClick);
+            clearTimeout(timer);
+        };
+    }, [popperElement]);
+
+    // popper configuration
     const { styles, attributes } = usePopper(refElement, popperElement, {
         placement: "bottom-start",
         modifiers: [
@@ -54,6 +92,34 @@ const RelativeDateFilter = () => {
         ],
     });
 
+    // end popper configuration
+
+    // relative dates
+    const filteredRelativeDates = relativeDates.filter((d) =>
+        _.lowerCase(d).includes(_.lowerCase(searchText))
+    );
+
+    // relative period
+    const filteredPeriod = relativePeriod.filter((p) =>
+        _.lowerCase(p).includes(_.lowerCase(searchText))
+    );
+
+    // rolling period
+    const filteredRollingPeriod = rollingPeriod.filter((r) =>
+        _.lowerCase(r).includes(_.lowerCase(searchText))
+    );
+
+    // set default hover
+    useEffect(() => {
+        setDefaultHover(filteredRelativeDates[0]);
+    }, []);
+
+    // handle selection
+    const handleSelect = (r) => {
+        onSelect && onSelect(r);
+        setIsOpen(false);
+    };
+
     return (
         <div className="sp1_rdf--container">
             <div
@@ -61,7 +127,7 @@ const RelativeDateFilter = () => {
                 onClick={() => setIsOpen(!isOpen)}
                 className="sp1_rdf--toggle"
             >
-                {selectedDate}
+                {selected}
                 {isOpen ? (
                     <i className="fa-solid fa-caret-up" />
                 ) : (
@@ -76,36 +142,123 @@ const RelativeDateFilter = () => {
                     {...attributes}
                 >
                     <div className="sp1_rdf--menu">
+                        {/* search box */}
+                        <div className="p-2">
+                            <Search
+                                ref={searchRef}
+                                value={searchText}
+                                onChange={setSearchText}
+                            />
+                        </div>
+                        {/* search box end */}
                         <CustomScrollbar maxH={600}>
-                            {/* relative date */}
-                            <div className="sp1_rdf--menu-title">
-                                Relative date
-                            </div>
-                            <ul className="sp1_rdf--menu-list">
-                                {relativeDates.map((r) => (
-                                    <li key={`${r}-${Math.random()}`}>{r}</li>
-                                ))}
-                            </ul>
+                            <div className="mb-2">
+                                {/* relative date */}
+                                {filteredRelativeDates.length > 0 && (
+                                    <>
+                                        <div className="sp1_rdf--menu-title">
+                                            Relative date
+                                        </div>
+                                        <ul className="sp1_rdf--menu-list">
+                                            {filteredRelativeDates.map((r) => (
+                                                <li
+                                                    onClick={() =>
+                                                        setSelectedDate(r)
+                                                    }
+                                                    key={`${r}-${Math.random()}`}
+                                                    onMouseOver={() =>
+                                                        setDefaultHover(r)
+                                                    }
+                                                    className={`${
+                                                        defaultHover === r
+                                                            ? "hover"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    {r}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                )}
 
-                            {/* relative date */}
-                            <div className="sp1_rdf--menu-title">
-                                Relative date
-                            </div>
-                            <ul className="sp1_rdf--menu-list">
-                                {relativePeriod.map((r) => (
-                                    <li key={`${r}-${Math.random()}`}>{r}</li>
-                                ))}
-                            </ul>
+                                {/* relative date */}
+                                {filteredPeriod.length > 0 && (
+                                    <>
+                                        <div className="sp1_rdf--menu-title">
+                                            Relative date
+                                        </div>
+                                        <ul className="sp1_rdf--menu-list">
+                                            {filteredPeriod.map((r) => (
+                                                <li
+                                                    onClick={() =>
+                                                        handleSelect(r)
+                                                    }
+                                                    key={`${r}-${Math.random()}`}
+                                                    onMouseOver={() =>
+                                                        setDefaultHover(r)
+                                                    }
+                                                    className={`${
+                                                        defaultHover === r
+                                                            ? "hover"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    {r}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                )}
 
-                            {/* relative date */}
-                            <div className="sp1_rdf--menu-title">
-                                Relative date
+                                {/* relative date */}
+                                {filteredRollingPeriod.length > 0 && (
+                                    <>
+                                        <div className="sp1_rdf--menu-title">
+                                            Relative date
+                                        </div>
+                                        <ul className="sp1_rdf--menu-list">
+                                            {filteredRollingPeriod.map((r) => (
+                                                <li
+                                                    onClick={() =>
+                                                        handleSelect(r)
+                                                    }
+                                                    key={`${r}-${Math.random()}`}
+                                                    onMouseOver={() =>
+                                                        setDefaultHover(r)
+                                                    }
+                                                    className={`${
+                                                        defaultHover === r
+                                                            ? "hover"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    {r}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                )}
+                                <div className="sp1_rdf--custom">
+                                    <ul className="sp1_rdf--menu-list">
+                                        <li
+                                            onClick={() =>
+                                                handleSelect("Custom Period")
+                                            }
+                                            onMouseOver={() =>
+                                                setDefaultHover("Custom Period")
+                                            }
+                                            className={`${
+                                                defaultHover === "Custom Period"
+                                                    ? "hover"
+                                                    : ""
+                                            }`}
+                                        >
+                                            Custom Period
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                            <ul className="sp1_rdf--menu-list">
-                                {rollingPeriod.map((r) => (
-                                    <li key={`${r}-${Math.random()}`}>{r}</li>
-                                ))}
-                            </ul>
                         </CustomScrollbar>
                     </div>
                 </div>

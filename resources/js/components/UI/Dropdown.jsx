@@ -81,7 +81,7 @@ const Menu = ({ children, className, asModal = false, ...props }) => {
     ) : isOpen ? (
         <div ref={ref}>
             <div
-                onClick={close}
+                onClick={() => (onClickHide ? close() : null)}
                 ref={setTargetRef}
                 className={className}
                 style={styles.popper}

@@ -44,6 +44,7 @@ class InsightsController extends AccountBaseController
     public function store(Request $request)
     {
         //
+        return $request;
     }
 
     /**
