@@ -172,6 +172,7 @@ use App\Http\Controllers\ReportIssueController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\SoftwareProjectController;
 use App\Http\Controllers\InsightsController;
+use App\Http\Controllers\Seopage1TeamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1189,3 +1190,15 @@ Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'Ca
 
 Route::get('get-timelogs', [TimelogReportController::class, 'getTimeLog'])->name('get-timelogs');
 Route::get('get-users', [InsightsController::class, 'getusers'])->name('get-users');
+
+
+//Team Routes 
+Route::post('team/apply-quick-action', [Seopage1TeamController::class, 'applyQuickAction'])->name('teams.apply_quick_action');
+    Route::get('team/department-hierarchy', [Seopage1TeamController::class, 'hierarchyData'])->name('team.hierarchy');
+    Route::post('team/changeParent', [Seopage1TeamController::class, 'changeParent'])->name('team.changeParent');
+    Route::get('team/search', [Seopage1TeamController::class, 'searchTeam'])->name('teams.search');
+    Route::resource('teams', Seopage1TeamController::class);
+    Route::post('/get-employees-by-department', [Seopage1TeamController::class, 'getEmployeesByDepartment'])->name('getEmployeesByDepartment');
+    Route::post('/get-employees-by-parenttime', [Seopage1TeamController::class, 'getEmployeesByParentTime'])->name('getEmployeesByParentTeam');
+
+
