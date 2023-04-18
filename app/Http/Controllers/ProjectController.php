@@ -2081,6 +2081,61 @@ class ProjectController extends AccountBaseController
                     $data->save();
                 }
             }
+            if($request->estimation_time) {
+                $data = DelivarableColumnEdit::where([
+                    'delivarable_id' => $deliverable->id,
+                    'column_name' => 'estimation_time',
+                    'status' => '0'
+                ])->latest()->first();
+                if ($data) {
+                    $data->old_data = $deliverable->estimation_time;
+                    $data->status = '1';
+                    $data->save();
+                }
+            }
+            if($request->estimation_time) {
+                $data = DelivarableColumnEdit::where([
+                    'delivarable_id' => $deliverable->id,
+                    'column_name' => 'estimation_time',
+                    'status' => '0'
+                ])->latest()->first();
+                if ($data) {
+                    $data->old_data = $deliverable->estimation_time;
+                    $data->status = '1';
+                    $data->save();
+                }
+            }
+            if($request->quantity) {
+                $data = DelivarableColumnEdit::where([
+                    'delivarable_id' => $deliverable->id,
+                    'column_name' => 'quantity',
+                    'status' => '0'
+                ])->latest()->first();
+                if ($data) {
+                    $data->old_data = $deliverable->quantity;
+                    $data->status = '1';
+                    $data->save();
+                }
+            }
+            if($request->from || $request->to) {
+                $data = DelivarableColumnEdit::where([
+                    'delivarable_id' => $deliverable->id,
+                    'column_name' => 'estimation_completed_date',
+                    'status' => '0'
+                ])->latest()->first();
+                if ($data) {
+                    $time = '';
+                    if (!is_null($deliverable->from)) {
+                        $time .= $deliverable->from;
+                    }
+                    if (!is_null($deliverable->to)) {
+                        $time .= '-'.$deliverable->to;
+                    }
+                    $data->old_data = $time;
+                    $data->status = '1';
+                    $data->save();
+                }
+            }
         }
 
         $deliverable->title = $request->title ?? $deliverable->title;
