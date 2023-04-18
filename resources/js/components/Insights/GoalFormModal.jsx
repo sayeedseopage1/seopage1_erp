@@ -6,7 +6,7 @@ import { BiRepeat } from "react-icons/bi";
 import Selection from "../UI/form/Selection";
 import "react-datepicker/dist/react-datepicker.css";
 import "./salesDashboardForm.css";
-import React, { forwardRef, useState, useEffect } from "react";
+import React, { forwardRef, useState, useEffect, useRef } from "react";
 import Radio from "../UI/form/Radio";
 import Input from "../UI/form/Input";
 import Checkbox from "../UI/form/Cheeckbox";
@@ -20,7 +20,6 @@ import _ from "lodash";
 import PeriodInput from "./PeriodInput";
 import axios from "axios";
 import AssigneeForDropdown from "./components/AssigneeForDropdown";
-import CustomScrollbar from "../UI/CustomScrollbar";
 
 const GoalFormModal = ({ isOpen }) => {
     const { title, entry, entryType, edit, showPrevious } = useSelector(
@@ -53,6 +52,20 @@ const GoalFormModal = ({ isOpen }) => {
 
     const [period, setPeriod] = useState([]);
 
+    const cardBodyRef = useRef(null);
+
+    React.useEffect(() => {
+        console.log(cardBodyRef.current.offsetHeight);
+        if (cardBodyRef && cardBodyRef.current) {
+            if (cardBodyRef.current.offsetHeight > 800) {
+                cardBodyRef.current.style.height = "800px";
+                cardBodyRef.current.style.overflowX = "hidden";
+                cardBodyRef.current.style.overflowY = "scroll";
+            }
+        }
+    }, [cardBodyRef, periodFilter, durationEnd, frequency]);
+
+    // period filter
     React.useEffect(() => {
         if (!durationEnd) setPeriodFilter(false);
     }, [durationEnd]);
@@ -306,7 +319,10 @@ const GoalFormModal = ({ isOpen }) => {
                             </button>
                         </div>
                         {/* end header */}
-                        <div className="card-body sp1_ins_sell_dm--card_body">
+                        <div
+                            ref={cardBodyRef}
+                            className="card-body sp1_ins_sell_dm--card_body"
+                        >
                             <div className="sp1_sell_df--container">
                                 {/* item */}
                                 <div className="sp1_sell_df--item">
@@ -571,40 +587,38 @@ const GoalFormModal = ({ isOpen }) => {
                                                 label="Specify individual period goals"
                                             />
                                         </div>
-                                        <CustomScrollbar minH={0} maxH={400}>
-                                            {periodFilter ? (
-                                                <React.Fragment>
-                                                    <div className="d-flex align-items-center justify-content-between mt-3 mb-1">
-                                                        <div className="">
-                                                            Period
-                                                        </div>
-                                                        <div className="sp1_sell_df--period-input">
-                                                            {trackingType ===
-                                                            "value"
-                                                                ? `Value, ${currency}`
-                                                                : "Count"}
-                                                        </div>
+                                        {periodFilter ? (
+                                            <React.Fragment>
+                                                <div className="d-flex align-items-center justify-content-between mt-3 mb-1">
+                                                    <div className="">
+                                                        Period
                                                     </div>
+                                                    <div className="sp1_sell_df--period-input">
+                                                        {trackingType ===
+                                                        "value"
+                                                            ? `Value, ${currency}`
+                                                            : "Count"}
+                                                    </div>
+                                                </div>
 
-                                                    {period?.map((p) => (
-                                                        <div
-                                                            key={p.title}
-                                                            className="sp1_sell_df--control time_period mb-3"
-                                                        >
-                                                            <div className="sp1_sell_df--period">
-                                                                {p.title}
-                                                            </div>
-                                                            <PeriodInput
-                                                                period={p}
-                                                                handleRecurringChange={
-                                                                    handleRecurringChange
-                                                                }
-                                                            />
+                                                {period?.map((p) => (
+                                                    <div
+                                                        key={p.title}
+                                                        className="sp1_sell_df--control time_period mb-3"
+                                                    >
+                                                        <div className="sp1_sell_df--period">
+                                                            {p.title}
                                                         </div>
-                                                    ))}
-                                                </React.Fragment>
-                                            ) : null}
-                                        </CustomScrollbar>
+                                                        <PeriodInput
+                                                            period={p}
+                                                            handleRecurringChange={
+                                                                handleRecurringChange
+                                                            }
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </React.Fragment>
+                                        ) : null}
                                     </div>
                                 </div>
                                 {/* end item */}

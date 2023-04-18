@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from "./Dropdown";
 import { useEffect, useState } from "react";
-import { addAssigneeUsers } from "../services/assigneeSlice";
+import { addAssigneeTeams, addAssigneeUsers } from "../services/assigneeSlice";
 import axios from "axios";
 import Search from "../../UI/form/Search";
 import _ from "lodash";
@@ -43,9 +43,17 @@ const AssigneeForDropdown = ({ assigneeFor, setAssigneeFor, assigneeType }) => {
 
         if (assigneeType === "Team" && teams.length === 0) {
             // teams fetching here....
-            setDefaultSelected(res.data[0].name);
+            const fetch = async () => {
+                const res = await axios.get("/get-teams");
+                if (res) {
+                    dispatch(addAssigneeTeams(res.data));
+                }
+            };
+
+            fetch();
+            return;
         }
-    }, []);
+    }, [assigneeType]);
 
     // handle selection
     const handleSelection = (value) => {
@@ -103,7 +111,7 @@ const AssigneeForDropdown = ({ assigneeFor, setAssigneeFor, assigneeType }) => {
                         teams.length > 0 ? (
                             teams
                                 .filter((t) =>
-                                    _.toLower(t.name).includes(
+                                    _.toLower(t.team_name).includes(
                                         _.toLower(search)
                                     )
                                 )
@@ -111,22 +119,22 @@ const AssigneeForDropdown = ({ assigneeFor, setAssigneeFor, assigneeType }) => {
                                     <Dropdown.Item
                                         key={t.id}
                                         className={`sp1__asf--item ${
-                                            defaultSelected === t.name
+                                            defaultSelected === t.team_name
                                                 ? "hover"
                                                 : ""
                                         }`}
                                         onMouseOver={() =>
-                                            setDefaultSelected(t.name)
+                                            setDefaultSelected(t.team_name)
                                         }
                                         onClick={() =>
                                             handleSelection({
                                                 id: t.id,
-                                                name: t.name,
+                                                name: t.team_name,
                                             })
                                         }
                                     >
-                                        <span> {t.name}</span>
-                                        {t.name === assigneeFor.name && (
+                                        <span> {t.team_name}</span>
+                                        {t.team_name === assigneeFor.name && (
                                             <i className="fa-solid fa-check" />
                                         )}
                                     </Dropdown.Item>
