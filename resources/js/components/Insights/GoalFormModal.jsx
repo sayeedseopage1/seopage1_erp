@@ -19,11 +19,14 @@ import { closeModal } from "./services/modals/salesDashboardModalSlice";
 import _ from "lodash";
 import PeriodInput from "./PeriodInput";
 import axios from "axios";
+import { addAssigneeUsers } from "./services/assigneeSlice";
 
 const GoalFormModal = ({ isOpen }) => {
     const { title, entry, entryType, edit, showPrevious } = useSelector(
         (s) => s.goalFormModal
     );
+
+    const { users, teams } = useSelector((s) => s.assignee);
     const dispatch = useDispatch();
 
     // ui
@@ -43,6 +46,26 @@ const GoalFormModal = ({ isOpen }) => {
     const [recurring, setRecurring] = useState([]);
 
     const [period, setPeriod] = useState([]);
+
+    // get users
+    useEffect(() => {
+        const fetch = async () => {
+            if (users.length === 0) {
+                await axios
+                    .get("/get-users")
+                    .then((res) => {
+                        dispatch(addAssigneeUsers(res.data));
+                    })
+                    .catch((err) => console.log(err));
+            }
+        };
+
+        fetch();
+
+        return () => fetch();
+    }, []);
+
+    // end get user
 
     React.useEffect(() => {
         if (!durationEnd) {
@@ -315,9 +338,7 @@ const GoalFormModal = ({ isOpen }) => {
                                             value={assigneeFor}
                                             onSelected={setAssigneeFor}
                                             options={[
-                                                "Abut Sayeed",
-                                                "Billba Mergu",
-                                                "Md Mehedi Hasan",
+                                                ...users.map((u) => u.name),
                                             ]}
                                             searchEnable={true}
                                         />

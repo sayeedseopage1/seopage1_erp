@@ -3,7 +3,6 @@ import Dropdown from "../UI/Dropdown";
 import React, { useEffect, useRef, useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import PeriodFilter from "./components/PeriodFilter";
-import Selection from "../UI/form/Selection";
 
 const DashboardNavbar = () => {
     const [dashboardName, setDashboardName] = useState("My Dashboard");
@@ -41,7 +40,6 @@ const DashboardNavbar = () => {
                     {/* time period filter button */}
                     <PeriodFilter />
                     {/* end time period filter button */}
-                    <Selection />
                 </div>
             </div>
         </div>

@@ -1188,4 +1188,4 @@ Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMile
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
 
 Route::get('get-timelogs', [TimelogReportController::class, 'getTimeLog'])->name('get-timelogs');
-Route::get('get-users', [InsightController::class, 'getusers'])->name('get-users');
+Route::get('get-users', [InsightsController::class, 'getusers'])->name('get-users');
