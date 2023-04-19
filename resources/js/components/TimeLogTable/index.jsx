@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import EmployeeWiseTable from "./EmployeeWiseTable";
-import data from "./data.json";
+// import data from "./data.json";
 import styled from "styled-components";
 import ColumnFilter from "./ColumnFilterButton";
 import "./table.css";
@@ -14,6 +14,28 @@ import axios from "axios";
 
 // table context
 export const EmployeeWiseTableContext = React.createContext();
+export const SessionModalContext = React.createContext();
+
+const SessionModalContextProvider = ({ children }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [employeeId, setEmployeeId] = useState(null);
+    const [projectId, setProjectId] = useState(null);
+
+    return (
+        <SessionModalContext.Provider
+            value={{
+                isOpen,
+                setIsOpen,
+                employeeId,
+                setEmployeeId,
+                projectId,
+                setProjectId,
+            }}
+        >
+            {children}
+        </SessionModalContext.Provider>
+    );
+};
 
 // table State/Context provider
 const EmployeeWiseTableProvider = ({ children }) => {
@@ -58,11 +80,11 @@ const tabs = ["Employee Wise", "Project Wise", "Task Wise"];
 const projectWiseTableConfig = {
     columns: [
         { key: "project_name", label: "Project Name" },
-        { key: "client", label: "Client" },
+        { key: "client_name", label: "Client" },
         { key: "project_manager", label: "Project Manager" },
     ],
     subColumns: [
-        { key: "name", label: "Employee Name" },
+        { key: "employee_name", label: "Employee Name" },
         { key: "number_of_session", label: "Number of Session" },
         { key: "total_minutes", label: "Total Track Time" },
     ],
@@ -70,10 +92,10 @@ const projectWiseTableConfig = {
 
 // employee wise table config
 const employeeWiseTableConfig = {
-    columns: [{ key: "name", label: "Employee Name" }],
+    columns: [{ key: "employee_name", label: "Employee Name" }],
     subColumns: [
         { key: "project_name", label: "Project Name" },
-        { key: "client", label: "Client" },
+        { key: "client_name", label: "Client" },
         { key: "project_manager", label: "Project Manager" },
         { key: "number_of_session", label: "Number of Session" },
         { key: "total_minutes", label: "Total Track Time" },
@@ -83,13 +105,13 @@ const employeeWiseTableConfig = {
 // task wise table config
 const taskWiseTableConfig = {
     columns: [
-        { key: "task", label: "Task" },
+        { key: "task_name", label: "Task" },
         { key: "project_name", label: "Project Name" },
-        { key: "client", label: "Client" },
+        { key: "client_name", label: "Client" },
         { key: "project_manager", label: "Project Manager" },
     ],
     subColumns: [
-        { key: "name", label: "Employee Name" },
+        { key: "employee_name", label: "Employee Name" },
         { key: "task_start", label: "Start Time" },
         { key: "task_end", label: "End Time" },
         { key: "total_minutes", label: "Total Track Time" },
@@ -99,6 +121,7 @@ const taskWiseTableConfig = {
 // log table
 const TimeLogTable = () => {
     const [activeTab, setActiveTab] = React.useState("Employee Wise");
+    const [data, setData] = React.useState([]);
 
     const activeTableNamespace =
         activeTab === "Employee Wise"
@@ -112,7 +135,7 @@ const TimeLogTable = () => {
     useEffect(() => {
         const fetch = async () => {
             axios.get("/get-timelogs").then((res) => {
-                console.log(res.data);
+                setData(res.data);
             });
         };
 

@@ -19,7 +19,7 @@ const Item = ({ children, className = "className", ...props }) => {
 };
 
 // toggle
-const Toggle = ({ children, className, icon }) => {
+const Toggle = ({ children, className, icon = true }) => {
     const { toggle, isOpen, setToggleRef } = useContext(DropdownContext);
 
     return (
@@ -28,12 +28,14 @@ const Toggle = ({ children, className, icon }) => {
             onClick={toggle}
             className={`sp1_dd-toggle ${className}`}
         >
-            {children}{" "}
-            {isOpen ? (
-                <i className="fa-solid fa-caret-up" />
-            ) : (
-                <i className="fa-solid fa-caret-down" />
-            )}
+            {children}
+            {icon ? (
+                isOpen ? (
+                    <i className="fa-solid fa-caret-up" />
+                ) : (
+                    <i className="fa-solid fa-caret-down" />
+                )
+            ) : null}
         </div>
     );
 };
