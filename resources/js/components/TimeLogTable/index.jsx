@@ -81,7 +81,7 @@ const projectWiseTableConfig = {
     columns: [
         { key: "project_name", label: "Project Name" },
         { key: "client_name", label: "Client" },
-        { key: "project_manager", label: "Project Manager" },
+        { key: "pm_name", label: "Project Manager" },
     ],
     subColumns: [
         { key: "employee_name", label: "Employee Name" },
@@ -121,7 +121,6 @@ const taskWiseTableConfig = {
 // log table
 const TimeLogTable = () => {
     const [activeTab, setActiveTab] = React.useState("Employee Wise");
-    const [data, setData] = React.useState([]);
 
     const activeTableNamespace =
         activeTab === "Employee Wise"
@@ -131,18 +130,6 @@ const TimeLogTable = () => {
             : activeTab === "Task Wise"
             ? "task"
             : "";
-
-    useEffect(() => {
-        const fetch = async () => {
-            axios.get("/get-timelogs").then((res) => {
-                setData(res.data);
-            });
-        };
-
-        fetch();
-
-        return () => fetch();
-    }, []);
 
     return (
         <DndProvider backend={HTML5Backend}>
@@ -161,19 +148,16 @@ const TimeLogTable = () => {
             </Tabs>
             {activeTab === "Employee Wise" ? (
                 <EmployeeWiseTable
-                    data={data}
                     columns={employeeWiseTableConfig.columns}
                     subColumns={employeeWiseTableConfig.subColumns}
                 />
             ) : activeTab === "Project Wise" ? (
                 <ProjectWiseTable
-                    data={data}
                     columns={projectWiseTableConfig.columns}
                     subColumns={projectWiseTableConfig.subColumns}
                 />
             ) : activeTab === "Task Wise" ? (
                 <TaskWiseTable
-                    data={data}
                     columns={taskWiseTableConfig.columns}
                     subColumns={taskWiseTableConfig.subColumns}
                 />

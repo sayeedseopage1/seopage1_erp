@@ -9,7 +9,7 @@ import "./table.css";
 import { convertTime } from "./utils/converTime";
 
 // pivot table
-const EmployeeWiseTable = ({ data, columns, subColumns }) => {
+const EmployeeWiseTable = ({ columns, subColumns }) => {
     const {
         setColumns,
         setSubColumns,
@@ -24,6 +24,20 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
         filterColumn,
         setFilterColumn,
     } = React.useContext(EmployeeWiseTableContext);
+
+    const [data, setData] = useState([]);
+    // get employee table data
+    useEffect(() => {
+        const fetch = async () => {
+            axios.get("/get-timelogs/employees").then((res) => {
+                setData(res.data);
+            });
+        };
+
+        fetch();
+
+        return () => fetch();
+    }, []);
 
     React.useEffect(() => {
         setSortConfig({ key: "employee_id", direction: "asc" });
@@ -178,9 +192,16 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
                             <EmployeeProfile>
                                 <EmployeeProfileImage>
                                     {value[0].employee_image ? (
-                                        <img
-                                            src={`/user-uploads/avatar/${value[0].employee_image}`}
-                                        />
+                                        <div
+                                            style={{
+                                                minWidth: "35px",
+                                                minHeight: "35px",
+                                            }}
+                                        >
+                                            <img
+                                                src={`/user-uploads/avatar/${value[0].employee_image}`}
+                                            />
+                                        </div>
                                     ) : (
                                         <span>
                                             {value[0].employee_name.slice(0, 1)}
@@ -192,7 +213,7 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
                                         <a
                                             href={`employees/${value[0].employee_id}`}
                                         >
-                                            {value[0].employee_name} ({key})
+                                            {value[0].employee_name}
                                         </a>
                                     </span>
                                     <span>{value[0].employee_designation}</span>
