@@ -301,16 +301,16 @@ class TaskController extends AccountBaseController
 //            $newRevision->save();
 //        }
         $task_revision->save();
-        $parentTask = Subtask::where('task_id',$request->task_id)->get();
-//        dd($parentTask);
-        foreach ($parentTask as $subtask){
-            $subTask = Task::where('subtask_id',$subtask->id)->first();
-            $updateTask = Task::find($subTask->id);
-            $updateTask->status= "incomplete";
-            $updateTask->task_status= "revision";
-            $updateTask->board_column_id=1;
-            $updateTask->save();
-        }
+//        $parentTask = Subtask::where('task_id',$request->task_id)->get();
+////        dd($parentTask);
+//        foreach ($parentTask as $subtask){
+//            $subTask = Task::where('subtask_id',$subtask->id)->first();
+//            $updateTask = Task::find($subTask->id);
+//            $updateTask->status= "incomplete";
+//            $updateTask->task_status= "revision";
+//            $updateTask->board_column_id=1;
+//            $updateTask->save();
+//        }
 
 
       $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
@@ -557,17 +557,17 @@ class TaskController extends AccountBaseController
         $left_in_hours = round($left_minutes/60,0);
         $left_in_minutes= $left_minutes%60;
         //dd($left_minutes);
-        if($left_minutes < 1)
-        {
-            return response()->json([
-                "message" => "The given data was invalid.",
-                "errors" => [
-                    "estimate_hours" => [
-                        "Estimate hours cannot exceed from project allocation hours !"
-                    ]
-                ]
-            ], 422);
-        }
+//        if($left_minutes < 1)
+//        {
+//            return response()->json([
+//                "message" => "The given data was invalid.",
+//                "errors" => [
+//                    "estimate_hours" => [
+//                        "Estimate hours cannot exceed from project allocation hours !"
+//                    ]
+//                ]
+//            ], 422);
+//        }
        // dd($request);
         $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
 
@@ -1355,20 +1355,66 @@ class TaskController extends AccountBaseController
             $taskRevision->revision_no = $taskRevision->revision_no + 1;
             $taskRevision->save();
         }
-        $parentTask = Subtask::where('task_id',$request->task_id)->get();
-//        dd($parentTask);
-        foreach ($parentTask as $subtask){
-            $subTask = Task::where('subtask_id',$subtask->id)->first();
-            $updateTask = Task::find($subTask->id);
-            $updateTask->status= "incomplete";
-            $updateTask->task_status= "revision";
-            $updateTask->board_column_id=1;
-            $updateTask->save();
-        }
+//        $parentTask = Subtask::where('task_id',$request->task_id)->get();
+////        dd($parentTask);
+//        foreach ($parentTask as $subtask){
+//            $subTask = Task::where('subtask_id',$subtask->id)->first();
+//            $updateTask = Task::find($subTask->id);
+//            $updateTask->status= "incomplete";
+//            $updateTask->task_status= "revision";
+//            $updateTask->board_column_id=1;
+//            $updateTask->save();
+//        }
         $task_revision->save();
         return response()->json([
             'status'=>200,
         ]);
     }
+//    ACCEPT AND CONTINUE BUTTON SECTION
+        public function acceptContinue(Request $request){
+        dd($request->all());
+//            $task_status= Task::find($request->task_id);
+//            $task_status->task_status="in progress";
+//            $task_status->board_column_id=3;
+//            $task_status->save();
+//
+//            $tasks_accept = TaskRevision::where('task_id',$request->task_id)->first();
+//            $tasks_accept->accept_and_continue = $request->text3;
+//            $tasks_accept->save();
+//            return response()->json([
+//                'status'=>200,
+//            ]);
+        }
+
+//        DENY AND CONTINUE BUTTON SECTION
+        public function denyAndContinue(Request $request){
+            $task_status= Task::find($request->task_id);
+            $task_status->task_status="in progress";
+            $task_status->board_column_id=3;
+            $task_status->save();
+
+            $tasks_accept = TaskRevision::where('task_id',$request->task_id)->first();
+            $tasks_accept->deny_and_continue = $request->text2;
+            $tasks_accept->save();
+            return response()->json([
+                'status'=>200,
+            ]);
+        }
+
+//        REVISION REASON SYSTEM
+        public function revisionReason(Request $request){
+//        dd($request->all());
+            $revision_reason = TaskRevision::where('task_id',$request->task_id)->first();
+            $revision_reason->revision_reason =$request->revision_reason;
+            $revision_reason->save();
+            return response()->json([
+                'status'=>200,
+            ]);
+        }
+
+//        REVISION SUB TASKS SYSTEM
+        public function revisionSubtask(Request $request){
+        dd($request->all());
+        }
 
 }

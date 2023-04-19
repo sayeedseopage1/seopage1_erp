@@ -694,6 +694,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('tasks/client-approval', [TaskController::class, 'clientApproval'])->name('tasks.client_approval');
     Route::post('tasks/client-approved-task', [TaskController::class, 'clientApprovedTask'])->name('tasks.client_approved_task');
     Route::post('tasks/client-has-revision-task', [TaskController::class, 'clientHasRevision'])->name('tasks.client_has_revision');
+    Route::post('tasks/accept-continue', [TaskController::class, 'acceptContinue'])->name('tasks.accept_continue');
+    Route::post('tasks/deny-and-continue', [TaskController::class, 'denyAndContinue'])->name('tasks.deny_and_continue');
+    Route::post('tasks/revision-reason', [TaskController::class, 'revisionReason'])->name('tasks.revision_reason');
+    Route::post('tasks/subtask-revision', [TaskController::class, 'revisionSubtask'])->name('tasks.subtask_revision');
 
     Route::group(
         ['prefix' => 'tasks'],

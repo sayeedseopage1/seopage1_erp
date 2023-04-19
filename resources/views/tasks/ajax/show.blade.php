@@ -56,10 +56,10 @@ $changeStatusPermission = user()->permission('change_status');
 
                                         @if($task->added_by == Auth::user()->id || Auth::user()->role_id == 1)
                                           <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskapprove">Approve</button>
-                                          <button class="btn bg-danger mr-3 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskrevision">Need Revision</button>
+                                          <button class="btn bg-danger mr-3 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskBtn">Need Revision</button>
 
+                                          @include('tasks.modals.taskBtn')
                                           @include('tasks.modals.taskapprove')
-                                          @include('tasks.modals.taskrevision')
                                         @endif
                                 @endif
                             @endif
@@ -159,10 +159,16 @@ $changeStatusPermission = user()->permission('change_status');
                                             @endif
                                                 @endif
 
-                                            @if(Auth::user()->role_id== 6 && $task->status=='incomplete')
+                                            @if(Auth::user()->role_id== 6 && $task->board_column_id ==1)
                                                 <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#revision"> Revision</button>
                                                 @include('tasks.modals.revision')
                                             @endif
+
+{{--                                     @if(Auth::user()->role_id== 6 && $task->task_status=='revision')--}}
+{{--                                         <button class="btn-secondary rounded f-14 p-2" id="acceptBtn" name="accept_and_continue"> Accept & Continue</button>--}}
+{{--                                         <button class="btn-secondary rounded f-14 p-2" id="denyBtn" name="deny_and_continue"> Deny & Continue</button>--}}
+{{--                                     @endif--}}
+
 
 
 
