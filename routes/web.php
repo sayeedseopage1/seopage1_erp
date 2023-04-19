@@ -1195,11 +1195,14 @@ Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams
 
 //Team Routes 
 Route::post('team/apply-quick-action', [Seopage1TeamController::class, 'applyQuickAction'])->name('teams.apply_quick_action');
-    Route::get('team/department-hierarchy', [Seopage1TeamController::class, 'hierarchyData'])->name('team.hierarchy');
-    Route::post('team/changeParent', [Seopage1TeamController::class, 'changeParent'])->name('team.changeParent');
-    Route::get('team/search', [Seopage1TeamController::class, 'searchTeam'])->name('teams.search');
-    Route::resource('teams', Seopage1TeamController::class);
-    Route::post('/get-employees-by-department', [Seopage1TeamController::class, 'getEmployeesByDepartment'])->name('getEmployeesByDepartment');
+Route::get('team/department-hierarchy', [Seopage1TeamController::class, 'hierarchyData'])->name('team.hierarchy');
+Route::post('team/changeParent', [Seopage1TeamController::class, 'changeParent'])->name('team.changeParent');
+Route::get('team/search', [Seopage1TeamController::class, 'searchTeam'])->name('teams.search');
+Route::resource('teams', Seopage1TeamController::class);
+Route::post('/get-employees-by-department', [Seopage1TeamController::class, 'getEmployeesByDepartment'])->name('getEmployeesByDepartment');
 
-    Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'getEmployeesByParentTeam'])->name('getEmployeesByParentTeam');
+Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'getEmployeesByParentTeam'])->name('getEmployeesByParentTeam');
 
+
+//KPI Settings 
+Route::resource('kpi-settings', Controller::class);

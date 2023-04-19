@@ -173,7 +173,14 @@
                                  <br>
                                  @endforeach
                                </li>
-                              <li><i class="fa-solid fa-user"></i> <span>Client Name:</span> {{ucwords($deal->client_username)}} </li>
+                              <li><i class="fa-solid fa-user"></i> <span>Client Username:</span> {{ucwords($deal->client_username)}} </li>
+                              @if($deal->client_name != null)
+                              <li><i class="fa-solid fa-user"></i> <span>Client Name:</span> {{ucwords($deal->client_name)}} </li>
+                              @else 
+                              <li><i class="fa-solid fa-user"></i> <span>Client Name:</span>Not Available</li>
+
+
+                              @endif
 
                               @endif
 
