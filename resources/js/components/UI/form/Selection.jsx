@@ -18,6 +18,7 @@ const Selection = ({
     multiple = false,
     enableAllSelection = false,
     children,
+    optionClassName = "",
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [filteredOptions, setFilteredOptions] = useState(options);
@@ -200,8 +201,10 @@ const Selection = ({
                             </div>
                         </div>
                     ) : null}
-                    <CustomScrollbar maxH={400}>
-                        <ul className="sp1_selection--options mb-3">
+                    <CustomScrollbar minH={0} maxH={400}>
+                        <ul
+                            className={`sp1_selection--options mb-3 ${optionClassName}`}
+                        >
                             {filteredOptions.length > 0
                                 ? filteredOptions.map((option) => (
                                       <React.Fragment
@@ -214,7 +217,7 @@ const Selection = ({
                                               onMouseOver={() =>
                                                   setDefaultHoverEffect(option)
                                               }
-                                              className={`sp1_selection--option${
+                                              className={`sp1_selection--option mb-1${
                                                   defaultHoverEffect === option
                                                       ? " hover"
                                                       : ""

@@ -1,13 +1,18 @@
 import { usePopper } from "react-popper";
 import { useState, useEffect, useContext, createContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import "./dropdown.css";
 
 const DropdownContext = createContext();
 
-const Item = ({ children, className }) => {
+const Item = ({ children, className = "className", ...props }) => {
     const { close } = useContext(DropdownContext);
     return (
-        <div onClick={close} className={className}>
+        <div
+            onMouseUp={close}
+            className={`sp1_dd--item ${className}`}
+            {...props}
+        >
             {children}
         </div>
     );
@@ -18,7 +23,11 @@ const Toggle = ({ children, className, icon }) => {
     const { toggle, isOpen, setToggleRef } = useContext(DropdownContext);
 
     return (
-        <div className={`sp1_dd-toggle ${className}`}>
+        <div
+            ref={setToggleRef}
+            onClick={toggle}
+            className={`sp1_dd-toggle ${className}`}
+        >
             {children}{" "}
             {isOpen ? (
                 <i className="fa-solid fa-caret-up" />
@@ -31,11 +40,54 @@ const Toggle = ({ children, className, icon }) => {
 
 // menu
 const Menu = ({ children, className = "" }) => {
-    const { isOpen, close, onClickHide, toggleRef, targetRef, setTargetRef } =
+    const { isOpen, close, toggleRef, targetRef, setTargetRef } =
         useContext(DropdownContext);
 
+    const { styles, attributes } = usePopper(toggleRef, targetRef, {
+        placement: "bottom-start",
+        modifiers: [
+            { name: "flip", options: ["right", "left", "top", "bottom"] },
+        ],
+    });
+
+    // out side click action
+    useEffect(() => {
+        let timeout;
+
+        const outsideClick = (event) => {
+            if (targetRef && !targetRef.contains(event.target)) {
+                close();
+                window.removeEventListener("click", outsideClick);
+                clearTimeout(timeout);
+            }
+        };
+
+        timeout = setTimeout(() => {
+            window.addEventListener("click", outsideClick);
+        }, 100);
+
+        return () => {
+            window.removeEventListener("click", outsideClick);
+            clearTimeout(timeout);
+        };
+    }, [isOpen, targetRef]);
+
     return (
-        <div className={`sp1_dd--menu ${className}`} ref={setTargetRef}></div>
+        <AnimatePresence>
+            {isOpen && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className={`${className}`}
+                    ref={setTargetRef}
+                    style={styles.popper}
+                    {...attributes}
+                >
+                    {children}
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 };
 
@@ -60,7 +112,6 @@ const Dropdown = ({ children }) => {
                 setToggleRef,
                 targetRef,
                 setTargetRef,
-                onClickHide,
             }}
         >
             {children}

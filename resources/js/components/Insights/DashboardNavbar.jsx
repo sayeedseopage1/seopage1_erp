@@ -3,13 +3,16 @@ import Dropdown from "../UI/Dropdown";
 import React, { useEffect, useRef, useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import PeriodFilter from "./components/PeriodFilter";
+import UsersFilterDropdown from "./components/UsersFilterDropdown";
 
 const DashboardNavbar = () => {
     const [dashboardName, setDashboardName] = useState("My Dashboard");
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
     const [titleBoxWidth, setTitleBoxWidth] = useState(0);
     const dashboardTitleRef = useRef(null);
+    const [filteredUser, setFilteredUser] = useState({});
+    const [selectedPeriod, setSelectedPeriod] = useState("Today");
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     useEffect(() => {
         const width = dashboardTitleRef.current.offsetWidth + 70;
@@ -38,8 +41,18 @@ const DashboardNavbar = () => {
             <div className="d-flex align-items-center">
                 <div className="d-flex">
                     {/* time period filter button */}
-                    <PeriodFilter />
-                    {/* end time period filter button */}
+                    <PeriodFilter
+                        selectedPeriod={selectedPeriod}
+                        setSelectedPeriod={setSelectedPeriod}
+                        startDate={startDate}
+                        endDate={endDate}
+                        setStartDate={setStartDate}
+                        setEndDate={setEndDate}
+                    />
+                    <UsersFilterDropdown
+                        filteredUser={filteredUser}
+                        setFilteredUser={setFilteredUser}
+                    />
                 </div>
             </div>
         </div>

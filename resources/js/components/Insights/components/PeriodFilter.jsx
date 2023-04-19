@@ -5,14 +5,19 @@ import "./period-filter.css";
 import TimeRange from "../../UI/TimeRange";
 import { useEffect } from "react";
 
-const PeriodFilter = () => {
+const PeriodFilter = ({
+    selectedPeriod,
+    setSelectedPeriod,
+    startDate,
+    endDate,
+    setStartDate,
+    setEndDate,
+}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState("Period");
     const [refElement, setRefElement] = useState(null);
     const [popperElement, setPopperElement] = useState(null);
-    const [selectedPeriod, setSelectedPeriod] = useState("Today");
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+
     const [closeButton, setCloseButton] = useState(false);
 
     const { styles, attributes } = usePopper(refElement, popperElement, {
