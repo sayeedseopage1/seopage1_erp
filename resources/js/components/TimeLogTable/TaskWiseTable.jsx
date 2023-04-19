@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useDrag, useDrop } from "react-dnd";
 import { EmployeeWiseTableContext } from ".";
 import "./table.css";
+import { convertTime } from "./utils/converTime";
 
 // pivot table
 const TaskWiseTable = ({ data, columns, subColumns }) => {
@@ -327,6 +328,19 @@ const TaskWiseTable = ({ data, columns, subColumns }) => {
                                                         </span>
                                                     </EmployeeProfileName>
                                                 </EmployeeProfile>
+                                            </td>
+                                        ) : column === "total_minutes" ? (
+                                            <td
+                                                key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                        index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                {convertTime(item[column])}
                                             </td>
                                         ) : (
                                             <td

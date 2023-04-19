@@ -6,6 +6,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider, useDrag, useDrop, useDragLayer } from "react-dnd";
 import { EmployeeWiseTableContext } from ".";
 import "./table.css";
+import { convertTime } from "./utils/converTime";
 
 // pivot table
 const EmployeeWiseTable = ({ data, columns, subColumns }) => {
@@ -207,33 +208,50 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
                                     {_.without(
                                         columnOrder,
                                         ...filterColumn
-                                    ).map((column) => (
-                                        <td
-                                            key={column}
-                                            style={{
-                                                borderBottom:
-                                                    value.length - 1 === index
-                                                        ? "2px solid #AAD1FC"
-                                                        : "1px solid #E7EFFC",
-                                            }}
-                                        >
-                                            <a
-                                                href={
-                                                    column === "project_name"
-                                                        ? `projects/${item["project_id"]}`
-                                                        : column ===
-                                                          "client_name"
-                                                        ? `clients/${item["client_id"]}`
-                                                        : column ===
-                                                          "project_manager"
-                                                        ? `employees/${item["project_manager_id"]}`
-                                                        : "#"
-                                                }
+                                    ).map((column) =>
+                                        column === "total_minutes" ? (
+                                            <td
+                                                key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                        index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
                                             >
-                                                {item[column]}
-                                            </a>
-                                        </td>
-                                    ))}
+                                                {convertTime(item[column])}
+                                            </td>
+                                        ) : (
+                                            <td
+                                                key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                        index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                <a
+                                                    href={
+                                                        column ===
+                                                        "project_name"
+                                                            ? `projects/${item["project_id"]}`
+                                                            : column ===
+                                                              "client_name"
+                                                            ? `clients/${item["client_id"]}`
+                                                            : column ===
+                                                              "project_manager"
+                                                            ? `employees/${item["project_manager_id"]}`
+                                                            : "#"
+                                                    }
+                                                >
+                                                    {item[column]}
+                                                </a>
+                                            </td>
+                                        )
+                                    )}
                                 </tr>
                             </React.Fragment>
                         );
