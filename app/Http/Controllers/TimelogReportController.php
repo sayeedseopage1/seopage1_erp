@@ -77,6 +77,8 @@ class TimelogReportController extends AccountBaseController
                 'employee.name as employee_name',
                 'employee.image as employee_image',
                 'employee_designations.name as employee_designation',
+                 
+                'projects.client_id',
                 'client.name as client_name',
                 'client.image as client_image',
                 'deals.profile_link as client_from',

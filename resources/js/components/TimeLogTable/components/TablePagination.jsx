@@ -13,16 +13,18 @@ const Pagination = ({
     const [renderButtons, setRenderButtons] = React.useState([]);
     const [totalPages, setTotalPages] = React.useState(0);
 
+    const isDataChange = React.useMemo(() => data , [data]);
+    const isTotalPagesChange = React.useMemo(() => totalPages, [totalPages])
+
     // count total pages
     React.useEffect(() => {
         const tPages = Math.ceil(data.length / nPageRows);
         setTotalPages(tPages);
-    }, [data, nPageRows]);
+    }, [isDataChange, nPageRows]);
 
     // render buttons
     React.useEffect(() => {
         const buttons = [];
-        if(data.length  < 0) return;
 
         if (currentPage <= 3) {
             for (let i = 1; i <= 5; i++) {
@@ -43,7 +45,7 @@ const Pagination = ({
         }
 
         setRenderButtons(buttons);
-    }, [currentPage, totalPages]);
+    }, [currentPage, isTotalPagesChange]);
 
     React.useEffect(() => {
         const pageNumbers = [];
@@ -51,7 +53,7 @@ const Pagination = ({
             pageNumbers.push(i);
         }
         setPageNumbers(pageNumbers);
-    }, [data, nPageRows]);
+    }, [isDataChange, nPageRows]);
 
     
     const handleClick = (e) => {
@@ -75,7 +77,7 @@ const Pagination = ({
     };
 
 
-    console.log({data, renderButtons})
+
 
     
     return (
