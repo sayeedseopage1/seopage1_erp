@@ -22,6 +22,7 @@ const Pagination = ({
     // render buttons
     React.useEffect(() => {
         const buttons = [];
+        if(data.length  < 0) return;
 
         if (currentPage <= 3) {
             for (let i = 1; i <= 5; i++) {
@@ -52,6 +53,7 @@ const Pagination = ({
         setPageNumbers(pageNumbers);
     }, [data, nPageRows]);
 
+    
     const handleClick = (e) => {
         setCurrentPage(Number(e.target.id));
     };
@@ -71,6 +73,9 @@ const Pagination = ({
     const handleSelectChange = (e) => {
         setNPageRows(e.target.value);
     };
+
+
+    console.log({data, renderButtons})
 
     
     return (

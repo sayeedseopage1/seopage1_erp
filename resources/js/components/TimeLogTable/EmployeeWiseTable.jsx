@@ -30,11 +30,15 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
     const [loading, setLoading] = useState(true);
     // get employee table data
     useEffect(() => {
+        if(data.length > 0) return;
         setLoading(true);
         const fetch = async () => {
             axios.get("/get-timelogs/employees").then((res) => {
-                setData(res.data);
-                setLoading(false);
+                let data = res.data?.filter(d => d.project_status === 'in progress');
+                if(data){
+                    setData(data.sort((a,b) => a['employee_id'] < b['employee_id']));
+                }
+                setLoading(false)
             });
         };
         fetch();
@@ -210,10 +214,10 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
                                             >
                                                 
                                                 <RenderWithImageAndRole
-                                                    avatar={value[0].client_image}
-                                                    name={value[0].client_name}
-                                                    url={`clients/${value[0].client_id}`}
-                                                    clientFrom={value[0].client_from}
+                                                    avatar={item['client_image']}
+                                                    name={item['client_name']}
+                                                    url={`clients/${item[client_id]}`}
+                                                    clientFrom={[client_from]}
                                                 />
                                             </td>
 
@@ -484,10 +488,7 @@ const ColumnFilter = ({ columns, filterColumn, setFilterColumn, root }) => {
     return content;
 };
 
-// pagination
 
-
-// pagination end
 
 // ========= styled ============
 const TableContainer = styled.div`
@@ -555,8 +556,6 @@ const TableWrapper = styled.div`
         }
     }
 `;
-
-
 
 
 const EmployeeProfileTd = styled.td`

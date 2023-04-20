@@ -29,6 +29,7 @@ const TaskWiseTable = ({ columns, subColumns }) => {
     const [loading, setLoading] = useState(true);
     // get employee table data
     useEffect(() => {
+        if(data.length > 0) return;
         setLoading(true);
         const fetch = async () => {
             axios.get("/get-timelogs/tasks").then((res) => {
@@ -605,40 +606,6 @@ const TableWrapper = styled.div`
             cursor: pointer;
         }
     }
-`;
-
-// sort
-const SortIcon = styled.span`
-//   width: 10px;
-//   height: 10px;
-//   color: black;
-//   display: block;
-//   position: relative;
-//   &:before,
-//   &:after{
-//     border: 4px solid transparent;
-//     content: "";
-//     display: block;
-//     height: 0;
-//     right: 5px;
-//     top: 50%;
-//     position: absolute;
-//     width: 0;
-//   };
-//   &:before{
-//     border-bottom-color: ${(props) =>
-        props.sort === "asc" ? "#666" : "#ddd"};
-// 	  margin-top: -9px;
-//   };
-//   &:after{
-//     border-top-color: ${(props) => (props.sort === "dec" ? "#666" : "#ddd")};
-// 	  margin-top: 1px;
-//   }
-
-  &:before{
-    content: "\2191"
-  }
-
 `;
 
 const EmployeeProfileTd = styled.td`
