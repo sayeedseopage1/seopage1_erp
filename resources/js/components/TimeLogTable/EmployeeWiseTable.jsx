@@ -33,8 +33,11 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
         setLoading(true);
         const fetch = async () => {
             axios.get("/get-timelogs/employees").then((res) => {
-                // const  data = res.data.filter(d => d.project_status === 'in progress');
-                setData(res.data);
+                let data = res.data.filter(d => d.project_status === 'in progress');
+                console.log(data)
+                if(data){
+                    setData(data);
+                }
                 setLoading(false)
             });
         };

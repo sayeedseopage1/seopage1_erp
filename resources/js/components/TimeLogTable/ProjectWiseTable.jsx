@@ -30,8 +30,10 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
         setLoading(true);
         const fetch = async () => {
             axios.get("/get-timelogs/projects").then((res) => {
-                // const data = res.data.filter(d => d.project_status === 'in progress');
-                setData(res.data.sort((a, b) => a["project_id"] < b["project-id"]));
+                let data = res.data.filter(d => d.project_status === 'in progress');
+                if(data){
+                    setData(data.sort((a, b) => a["project_id"] < b["project-id"]));
+                }
                 setLoading(false);
             });
         };
