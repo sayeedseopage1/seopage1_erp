@@ -88,7 +88,7 @@ class TimelogReportController extends AccountBaseController
                 'pm_roles.display_name as pm_roles',
                 'projects.id as project_id',
                 'projects.project_name',
-                'projects.status as project_stat',
+                'projects.status as project_status',
                 'tasks.id as task_id',
                 'tasks.heading as task_name',
                 'tasks.id as task_id',
@@ -117,7 +117,7 @@ class TimelogReportController extends AccountBaseController
             ->whereIn('project_time_logs.user_id', $id_array)
             ->groupBy('project_time_logs.project_id')
         //     ->groupBy('projects.client_id')
-           // ->where('projects.status','=','in progress')
+            //->where('projects.status','=','in progress')
            
             ->orderBy('project_time_logs.task_id' , 'desc')
             ->get();
