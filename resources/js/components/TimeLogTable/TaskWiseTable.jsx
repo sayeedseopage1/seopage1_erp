@@ -352,20 +352,24 @@ const TaskWiseTable = ({ columns, subColumns }) => {
         <TableContainer>
             
             <TableWrapper>
+                {/* table */}
                 <table>
                     <thead>{prepareHeader()}</thead>
                     <tbody>
                         {(!loading && data.length > 0) ?    
                             prepareRows() 
-                        : <tr>
-                            <LoadingCell >
-                               <span> Processing...</span>
-                            </LoadingCell>
-                        </tr>
-                        }
+                        : null}
                     </tbody>
                 </table>
             </TableWrapper>
+
+            {loading && data.length === 0 &&
+                <Loading> 
+                    <div className="spinner-border" role="status"> </div>
+                    Loading...
+                </Loading>
+            }
+
 
             {/* pagination */}
             <Pagination
@@ -607,6 +611,22 @@ const TableWrapper = styled.div`
         }
     }
 `;
+
+
+const Loading = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 200px;
+    font-size: 16px;
+    & > div.spinner-border{
+        width: 16px;
+        height: 16px;
+        border-width: .16em;
+        margin-right: 10px;
+    }
+`
 
 const EmployeeProfileTd = styled.td`
     background: #f8f8f8;
