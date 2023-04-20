@@ -5,9 +5,10 @@ import { useDrag, useDrop } from "react-dnd";
 import { EmployeeWiseTableContext } from ".";
 import "./table.css";
 import { convertTime } from "./utils/converTime";
+import dayjs from "dayjs";
 
 // pivot table
-const TaskWiseTable = ({ data, columns, subColumns }) => {
+const TaskWiseTable = ({ columns, subColumns }) => {
     const {
         setSubColumns,
         sortConfig,
@@ -21,6 +22,22 @@ const TaskWiseTable = ({ data, columns, subColumns }) => {
         filterColumn,
         setFilterColumn,
     } = React.useContext(EmployeeWiseTableContext);
+
+    const [data, setData] = useState([]);
+    // get employee table data
+    useEffect(() => {
+        const fetch = async () => {
+            axios.get("/get-timelogs/tasks").then((res) => {
+                setData(
+                    res.data.sort((a, b) => a["project_id"] < b["project-id"])
+                );
+            });
+        };
+
+        fetch();
+
+        return () => fetch();
+    }, []);
 
     /* ================ Initial State ==================== */
     React.useEffect(() => {
@@ -247,30 +264,23 @@ const TaskWiseTable = ({ data, columns, subColumns }) => {
                         >
                             <EmployeeProfile>
                                 <EmployeeProfileImage>
-                                    {value[0].project_manager_image ? (
+                                    {value[0].pm_image ? (
                                         <img
-                                            src={`/user-uploads/avatar/${value[0].project_manager_image}`}
+                                            src={`/user-uploads/avatar/${value[0].pm_image}`}
                                         />
                                     ) : (
                                         <span>
-                                            {value[0].project_manager.slice(
-                                                0,
-                                                1
-                                            )}
+                                            {value[0].pm_name.slice(0, 1)}
                                         </span>
                                     )}
                                 </EmployeeProfileImage>
                                 <EmployeeProfileName>
                                     <span className="white-space">
-                                        <a
-                                            href={`employees/${value[0].project_manager_id}`}
-                                        >
-                                            {value[0].project_manager}
+                                        <a href={`employees/${value[0].pm_id}`}>
+                                            {value[0].pm_name}
                                         </a>
                                     </span>
-                                    <span>
-                                        {value[0].project_manager_designation}
-                                    </span>
+                                    <span>{value[0].pm_roles}</span>
                                 </EmployeeProfileName>
                             </EmployeeProfile>
                         </EmployeeProfileTd>
@@ -322,7 +332,7 @@ const TaskWiseTable = ({ data, columns, subColumns }) => {
                                                         <span>
                                                             {
                                                                 item[
-                                                                    "employee_designation"
+                                                                    "employee_roles"
                                                                 ]
                                                             }
                                                         </span>
@@ -341,6 +351,36 @@ const TaskWiseTable = ({ data, columns, subColumns }) => {
                                                 }}
                                             >
                                                 {convertTime(item[column])}
+                                            </td>
+                                        ) : column === "task_start" ? (
+                                            <td
+                                                key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                        index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                {dayjs(
+                                                    item["start_time"]
+                                                ).format("hh:mm A")}
+                                            </td>
+                                        ) : column === "task_end" ? (
+                                            <td
+                                                key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                        index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                {dayjs(item["end_time"]).format(
+                                                    "hh:mm A"
+                                                )}
                                             </td>
                                         ) : (
                                             <td

@@ -7,7 +7,7 @@ import "./table.css";
 import { convertTime } from "./utils/converTime";
 
 // pivot table
-const ProjectWiseTable = ({ data, columns, subColumns }) => {
+const ProjectWiseTable = ({ columns, subColumns }) => {
     const {
         setSubColumns,
         sortConfig,
@@ -21,6 +21,21 @@ const ProjectWiseTable = ({ data, columns, subColumns }) => {
         filterColumn,
         setFilterColumn,
     } = React.useContext(EmployeeWiseTableContext);
+    const [data, setData] = useState([]);
+    // get employee table data
+    useEffect(() => {
+        const fetch = async () => {
+            axios.get("/get-timelogs/projects").then((res) => {
+                setData(
+                    res.data.sort((a, b) => a["project_id"] < b["project-id"])
+                );
+            });
+        };
+
+        fetch();
+
+        return () => fetch();
+    }, []);
 
     /* ================ Initial State ==================== */
     React.useEffect(() => {
@@ -163,6 +178,7 @@ const ProjectWiseTable = ({ data, columns, subColumns }) => {
             r[a.project_id] = [...(r[a.project_id] || []), a];
             return r;
         }, {});
+        console.log(groupedData);
         /* ================ End Data Grouping ================== */
 
         for (const [key, value] of Object.entries(groupedData)) {
@@ -232,30 +248,23 @@ const ProjectWiseTable = ({ data, columns, subColumns }) => {
                         >
                             <EmployeeProfile>
                                 <EmployeeProfileImage>
-                                    {value[0].project_manager_image ? (
+                                    {value[0].pm_image ? (
                                         <img
-                                            src={`/user-uploads/avatar/${value[0].project_manager_image}`}
+                                            src={`/user-uploads/avatar/${value[0].pm_image}`}
                                         />
                                     ) : (
                                         <span>
-                                            {value[0].project_manager.slice(
-                                                0,
-                                                1
-                                            )}
+                                            {value[0].pm_name.slice(0, 1)}
                                         </span>
                                     )}
                                 </EmployeeProfileImage>
                                 <EmployeeProfileName>
                                     <span className="white-space">
-                                        <a
-                                            href={`employees/${value[0].project_manager_id}`}
-                                        >
-                                            {value[0].project_manager}
+                                        <a href={`employees/${value[0].pm_id}`}>
+                                            {value[0].pm_name}
                                         </a>
                                     </span>
-                                    <span>
-                                        {value[0].project_manager_designation}
-                                    </span>
+                                    <span>{value[0].pm_roles}</span>
                                 </EmployeeProfileName>
                             </EmployeeProfile>
                         </EmployeeProfileTd>

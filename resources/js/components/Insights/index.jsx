@@ -10,6 +10,8 @@ import AddingNewDashboardModal from "./AddingNewDashboardModal";
 import SectionModal from "./SectionModal";
 import Dashboard from "./Dashboard";
 import GoalFormModal from "./GoalFormModal";
+import "react-grid-layout/css/styles.css";
+import "react-resizable/css/styles.css";
 
 const Insights = () => {
     const { isOpen } = useSelector((s) => s.createDashboardModal);
