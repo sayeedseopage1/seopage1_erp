@@ -78,7 +78,7 @@
                                 @endif
                             </tr>
                             @if($signature == null)
-                                @include('projects.modals.clientdeliverableeditmodal')
+                                {{--@include('projects.modals.clientdeliverableeditmodal')--}}
                                 @include('projects.modals.clientdeliverabledeletemodal')
                                 @include('projects.modals.clientdeliverableapprovemodal')
                             @endif

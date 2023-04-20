@@ -20,14 +20,27 @@
         width: 400px;
         height: 150px;
     }
+    .icon-container {
+        position: relative;
+    }
 
+    .show_old_data_modal {
+        position: absolute;
+        bottom: 6px ;
+        right: 6px  ;
+    }
+    .show_i_on_top {
+        position: absolute;
+        top: 6px ;
+        right: 6px  ;
+        color: #1d82f5;
+    }
 </style>
 <!-- SweetAlert -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 
-
-
 <div class="card border-0 invoice mt-5">
+
    <div class="col-md-12" align="right">
      @php
 
@@ -67,60 +80,72 @@
                       </table>
 
                   </td>
+    
 </div>
-  <?php
-  $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
-  //dd($project->updated_at);
-  $accept_date= $project->updated_at;
-  $current_time= \Carbon\Carbon::now();
-  $diff_in_minutes = $current_time->diffInMinutes($accept_date);
-  //dd( $diff_in_minutes);
-  $pm_project= App\Models\PMProject::where('project_id',$project->id)->first();
+<?php
+    $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
+    //dd($project->updated_at);
+    $accept_date= $project->updated_at;
+    $current_time= \Carbon\Carbon::now();
+    $diff_in_minutes = $current_time->diffInMinutes($accept_date);
+    //dd( $diff_in_minutes);
+    $pm_project= App\Models\PMProject::where('project_id',$project->id)->first();
 
-   ?>
-   @if($signature == null)
-   @if($project->pm_id == Auth::id())
-   @if($diff_in_minutes >1440 && $pm_project->deliverable_status == 0)
+?>
+@if($signature == null)
+    @if($project->pm_id == Auth::id())
+        @if($diff_in_minutes >1440 && $pm_project->deliverable_status == 0)
+            <div class="col-md-2 mt-3">
+                <button type="button" class="btn btn-primary"  disabled><i class="fas fa-plus"></i> Add Deliverable</button>
+            </div>
 
-   <div class="col-md-2 mt-3">
-    <button type="button" class="btn btn-primary"  disabled><i class="fas fa-plus"></i> Add Deliverable</button>
+            <div class="col-md-12 mt-3">
+                <h6 class="text-red">You cannot add deliverables as 24 hours have been past since you accepted the project. For authorization to enable the feature <a href="#"  data-toggle="modal" data-target="#deliverableauthorization">click here</a> to send approval request to top management.</h6>
+            </div>
+            @include('projects.modals.deliverableauthorizationmodal')
+        @else
+            @php
+                $is_has_other = \App\Models\ProjectDeliverable::where([
+                    'project_id' => $project->id,
+                    'deliverable_type' => 'Others',
+                    'authorization' => 0
+                ])->exists();
+            @endphp
+            @if($project->authorization_status != 'submitted' && $is_has_other == false)
+            <div class="row mx-3">
+                <div class="mt-3 mr-2">
+                    <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
+                    @include('projects.modals.clientdeliverableaddmodal')
+                </div>
+                <div class="mt-3">
+                    <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesClientRevisionModal">
+                        <i class="fas fa-plus mr-1"></i>Client Revision
+                    </button>
+                    @include('projects.modals.clientdeliverablerevisionmodal')
+                </div>
+            </div>
+            @endif
+        @endif
+    @elseif(Auth::user()->role_id == 1)
+    <div class="row">
+        <div class="col-lg-8 col-10 mt-3 ml-3">
+            <button type="button" class="btn btn-primary rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
+            @include('projects.modals.clientdeliverableaddmodal')
+            @if($pm_project->deliverable_status == 0 && $pm_project->reason != null)
+                <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverableextensionacceptmodal">
+                    <i class="fas fa-check"></i> 
+                    Extend Time
+                </button>
+                @include('projects.modals.deliverableextensionacceptmodal')
+            @endif
+            @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
+
+                <button class="btn btn-success rounded f-14 p-2 my-3" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal" aria-haspopup="true" aria-expanded="false" id="acceptBtn">Authorization</button>
+                @include('projects.modals.deliverablefinalauthorizationacceptmodal')
+            @endif
+            
+        </div>
     </div>
-
-<div class="col-md-12 mt-3">
-<h6 class="text-red">You cannot add deliverables as 24 hours have been past since you accepted the project. For authorization to enable the feature <a href="#"  data-toggle="modal" data-target="#deliverableauthorization">click here</a> to send approval request to top management.</h6>
-</div>
-@include('projects.modals.deliverableauthorizationmodal')
-   @else
-
-
-   <div class="col-md-2 mt-3">
-    <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
-    @include('projects.modals.clientdeliverableaddmodal')
-
-</div>
-
-   @endif
-
-
-   @elseif(Auth::user()->role_id == 1)
-   <div class="row">
-   <div class="col-lg-8 col-10 mt-3 ml-3">
-    <button type="button" class="btn btn-primary rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
-    @include('projects.modals.clientdeliverableaddmodal')
-    @if($pm_project->deliverable_status == 0 && $pm_project->reason != null)
-    <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverableextensionacceptmodal"><i class="fas fa-check"></i> Extend Time</button>
-    @include('projects.modals.deliverableextensionacceptmodal')
-    @endif
-   @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
-{{--      <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-id="{{ $project->id }}" id="acceptBtn">Authorization</button>--}}
-           <button class="btn btn-success rounded f-14 p-2 my-3" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal" aria-haspopup="true" aria-expanded="false" id="acceptBtn">Authorization</button>
-           @include('projects.modals.deliverablefinalauthorizationacceptmodal')
-   @endif
-
-
-</div>
-
-</div>
 
 
 
@@ -134,14 +159,10 @@
 
 
         <div class="d-flex flex-column">
+            <h5>@lang('Project Deliverables')</h5>
 
-
-
-
-          <h5>@lang('Project Deliverables')</h5>
-
-          <td width="80%">
-              <table class="inv-num-date text-dark f-13 mt-3">
+            <td width="80%">
+                <table class="inv-num-date text-dark f-13 mt-3">
                 <thead>
                     <tr class="bg-light-grey border-right-0 f-w-500">
                       <th scope="col" class="text-center">#</th>
@@ -156,57 +177,633 @@
                       @if($signature == null)
                       <th scope="col" class="text-center">Action</th>
                       @endif
-
-
                     </tr>
                   </thead>
                   <tbody >
                     @forelse($deliverables as $deliverable)
                     <tr>
-                      <td>{{$loop->index+1}}</td>
-                    <td class="text-center">{{$deliverable->deliverable_type}}</td>
-                    <td class="text-center">{{$deliverable->title}}</td>
-                    @if($deliverable->milestone_id != null)
-                    <td class="text-center">{{$deliverable->milestone->milestone_title}}</td>
-                    @else
-                    <td class="text-center">--</td>
-                    @endif
-                       @if($deliverable->milestone_id != null)
-                    <td class="text-center">{{$deliverable->milestone->actual_cost}}{{$currency->currency_symbol}}</td>
-                    @else
-                    <td class="text-center">--</td>
-                    @endif
-                    @if($deliverable->estimation_time != null)
-                    <td class="text-center">{{$deliverable->estimation_time}} hours</td>
-                    @else
-                    <td class="text-center">--</td>
-                    @endif
-                      <td class="text-center">{{$deliverable->quantity}}</td>
-                        <td class="text-center">{!!$deliverable->description!!}</td>
-                        @if($deliverable->to != null)
-                    <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
-                    @else
-                    <td class="text-center">On {{$deliverable->from}}</td>
+                        <td>{{$loop->index+1}}</td>
+                        <td class="text-center icon-container">
+                            @php
+                                $data = \App\models\DelivarableColumnEdit::where([
+                                    'delivarable_id' => $deliverable->id,
+                                    'column_name' => 'type',
+                                ])->latest()->first();
+                            @endphp
+                            @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
+                                <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
+                            @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
+                                <i class="fa fa-check-circle show_i_on_top" aria-hidden="true" title="Request for change"></i>
+                            @endif
+                            {{$deliverable->deliverable_type}}
+                            @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
+                                @php
+                                    $data = \App\models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'type',
+                                        'status' => '1'
+                                    ])->orderBy('updated_at', 'asc')->get();
+                                    $key = 1;
+                                @endphp
+                                @if($data->count() > 0)
+                                    <button type="button" data-toggle="modal" data-target="#old_type_edited_modal{{$deliverable->id}}">
+                                        <div class="show_old_data_modal border px-1 rounded" title="{{$data->count()}} Histories">
+                                            {{$data->count()}}<i class="fa fa-history ml-1" aria-hidden="true"></i>
+                                        </div>
+                                    </button>
+                                    <div class="modal fade" id="old_type_edited_modal{{$deliverable->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Old Histories</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Field</th>
+                                                                        <th>Comment</th>
+                                                                        <th>Old Data</th>
+                                                                        <th>New Data</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @forelse($data as $value)
+                                                                        <tr>
+                                                                            <td>{{$key++}}</td>
+                                                                            <td>{{$value->column_name}}</td>
+                                                                            <td>{{$value->comment}}</td>
+                                                                            <td>
+                                                                                @php
+                                                                                    $check_latest = \App\models\DelivarableColumnEdit::where([
+                                                                                        'column_name' => $value->column_name,
+                                                                                    ])->latest()->first();
+                                                                                @endphp
 
-                    @endif
-                    @if($signature == null)
-                    <td class="text-center">
-                      <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn primary deleteDeliverable" data-id="{{ $deliverable->id }}"><i class="fas fa-trash"></i></button>
-                        @if($deliverable->authorization == 0 && Auth::user()->role_id == 1)
-                        <button class="btn btn-success" data-toggle="modal" data-target="#deliverablesapproveModal{{$deliverable->id}}">Approve</button>
+                                                                                @if($value->id == $check_latest->id)
+                                                                                    {!! $value->old_data !!}
+                                                                                @else
+                                                                                    <del class="text-danger">{!! $value->old_data !!}</del>
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>{{$value->new_data}}</td>
+                                                                            <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="5" class="shadow-none">
+                                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
+                        </td>
+                        <td class="text-center icon-container">
+                            @php
+                                $data = \App\models\DelivarableColumnEdit::where([
+                                    'delivarable_id' => $deliverable->id,
+                                    'column_name' => 'title',
+                                ])->latest()->first();
+                            @endphp
+                            @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
+                                <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
+                            @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
+                                <i class="fa fa-check-circle show_i_on_top" aria-hidden="true" title="Request for change"></i>
+                            @endif
+                            {{$deliverable->title}}
+                            @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
+                                @php
+                                    $data = \App\models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'title',
+                                        'status' => '1'
+                                    ])->orderBy('updated_at', 'asc')->get();
+                                    $key = 1;
+                                @endphp
+                                @if($data->count() > 0)
+                                    <button type="button" data-toggle="modal" data-target="#old_edited_modal{{$deliverable->id}}">
+                                        <div class="show_old_data_modal border px-1 rounded" title="{{$data->count()}} Histories">
+                                            {{$data->count()}}<i class="fa fa-history ml-1" aria-hidden="true"></i>
+                                        </div>
+                                    </button>
+                                    <div class="modal fade" id="old_edited_modal{{$deliverable->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Old Histories</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Field</th>
+                                                                        <th>Comment</th>
+                                                                        <th>Old Data</th>
+                                                                        <th>New Data</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @forelse($data as $value)
+                                                                        <tr>
+                                                                            <td>{{$key++}}</td>
+                                                                            <td>{{$value->column_name}}</td>
+                                                                            <td>{{$value->comment}}</td>
+                                                                            <td>
+                                                                                @php
+                                                                                    $check_latest = \App\models\DelivarableColumnEdit::where([
+                                                                                        'column_name' => $value->column_name,
+                                                                                    ])->latest()->first();
+                                                                                @endphp
+
+                                                                                @if($value->id == $check_latest->id)
+                                                                                    {!! $value->old_data !!}
+                                                                                @else
+                                                                                    <del class="text-danger">{!! $value->old_data !!}</del>
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>{{$value->new_data}}</td>
+                                                                            <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="5" class="shadow-none">
+                                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
+                        </td>
+                        @if($deliverable->milestone_id != null)
+                            <td class="text-center">{{$deliverable->milestone->milestone_title}}</td>
+                        @else
+                            <td class="text-center">--</td>
                         @endif
+                        @if($deliverable->milestone_id != null)
+                            <td class="text-center">{{$deliverable->milestone->actual_cost}}{{$currency->currency_symbol}}</td>
+                        @else
+                            <td class="text-center">--</td>
+                        @endif
+                        @if($deliverable->estimation_time != null)
+                            <td class="text-center icon-container">
+                                @php
+                                    $data = \App\models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'estimation_time',
+                                    ])->latest()->first();
+                                @endphp
+                                
+                                @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
+                                    <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
+                                @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
+                                    <i class="fa fa-check-circle show_i_on_top" aria-hidden="true" title="Request for change"></i>
+                                @endif
+                                {{$deliverable->estimation_time}} hours
+                                @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
+                                @php
+                                    $data = \App\models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'estimation_time',
+                                        'status' => '1'
+                                    ])->orderBy('updated_at', 'asc')->get();
+                                    $key = 1;
+                                @endphp
+                                @if($data->count() > 0)
+                                    <button type="button" data-toggle="modal" data-target="#old_estimation_time_edited_modal{{$deliverable->id}}">
+                                        <div class="show_old_data_modal border px-1 rounded" title="{{$data->count()}} Histories">
+                                            {{$data->count()}}<i class="fa fa-history ml-1" aria-hidden="true"></i>
+                                        </div>
+                                    </button>
+                                    <div class="modal fade" id="old_estimation_time_edited_modal{{$deliverable->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Old Histories</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Field</th>
+                                                                        <th>Comment</th>
+                                                                        <th>Old Data</th>
+                                                                        <th>New Data</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @forelse($data as $value)
+                                                                        <tr>
+                                                                            <td>{{$key++}}</td>
+                                                                            <td>{{$value->column_name}}</td>
+                                                                            <td>{{$value->comment}}</td>
+                                                                            <td>
+                                                                                @php
+                                                                                    $check_latest = \App\models\DelivarableColumnEdit::where([
+                                                                                        'column_name' => $value->column_name,
+                                                                                    ])->latest()->first();
+                                                                                @endphp
 
-                    </td>
-                  @endif
+                                                                                @if($value->id == $check_latest->id)
+                                                                                    {!! $value->old_data !!}
+                                                                                @else
+                                                                                    <del class="text-danger">{!! $value->old_data !!}</del>
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>{{$value->new_data}}</td>
+                                                                            <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="5" class="shadow-none">
+                                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
+                            </td>
+                        @else
+                            <td class="text-center">--</td>
+                        @endif
+                        <td class="text-center icon-container">
+                            @php
+                                $data = \App\models\DelivarableColumnEdit::where([
+                                    'delivarable_id' => $deliverable->id,
+                                    'column_name' => 'quantity',
+                                ])->latest()->first();
+                            @endphp
+                            
+                            @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
+                                <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
+                            @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
+                                <i class="fa fa-check-circle show_i_on_top" aria-hidden="true" title="Request for change"></i>
+                            @endif
+                            {{$deliverable->quantity}}
+                            @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
+                                @php
+                                    $data = \App\models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'quantity',
+                                        'status' => '1'
+                                    ])->orderBy('updated_at', 'asc')->get();
+                                    $key = 1;
+                                @endphp
+                                @if($data->count() > 0)
+                                    <button type="button" data-toggle="modal" data-target="#old_edited_modal{{$deliverable->id}}">
+                                        <div class="show_old_data_modal border px-1 rounded" title="{{$data->count()}} Histories">
+                                            {{$data->count()}}<i class="fa fa-history ml-1" aria-hidden="true"></i>
+                                        </div>
+                                    </button>
+                                    <div class="modal fade" id="old_edited_modal{{$deliverable->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Old Histories</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Field</th>
+                                                                        <th>Comment</th>
+                                                                        <th>Old Data</th>
+                                                                        <th>New Data</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @forelse($data as $value)
+                                                                        <tr>
+                                                                            <td>{{$key++}}</td>
+                                                                            <td>{{$value->column_name}}</td>
+                                                                            <td>{{$value->comment}}</td>
+                                                                            <td>
+                                                                                @php
+                                                                                    $check_latest = \App\models\DelivarableColumnEdit::where([
+                                                                                        'column_name' => $value->column_name,
+                                                                                    ])->latest()->first();
+                                                                                @endphp
 
+                                                                                @if($value->id == $check_latest->id)
+                                                                                    {!! $value->old_data !!}
+                                                                                @else
+                                                                                    <del class="text-danger">{!! $value->old_data !!}</del>
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>{{$value->new_data}}</td>
+                                                                            <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="5" class="shadow-none">
+                                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
+                        </td>
+                        <td class="text-center icon-container">
+                            @php
+                                $data = \App\models\DelivarableColumnEdit::where([
+                                    'delivarable_id' => $deliverable->id,
+                                    'column_name' => 'description',
+                                ])->latest()->first();
+                            @endphp
+                            @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
+                                <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
+                            @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
+                                <i class="fa fa-check-circle show_i_on_top" aria-hidden="true" title="Request for change"></i>
+                            @endif
+                            {!!$deliverable->description!!}
+                            @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
+                                @php
+                                    $data = \App\models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'description',
+                                        'status' => '1'
+                                    ])->orderBy('updated_at', 'asc')->get();
+                                    $key = 1;
+                                @endphp
+                                @if($data->count() > 0)
+                                    <button type="button" data-toggle="modal" data-target="#old_description_edited_modal{{$deliverable->id}}">
+                                        <div class="show_old_data_modal border px-1 rounded" title="{{$data->count()}} Histories">
+                                            {{$data->count()}}<i class="fa fa-history ml-1" aria-hidden="true"></i>
+                                        </div>
+                                    </button>
+                                    <div class="modal fade" id="old_description_edited_modal{{$deliverable->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Old Histories</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Field</th>
+                                                                        <th>Comment</th>
+                                                                        <th>Old Data</th>
+                                                                        <th>New Data</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @forelse($data as $value)
+                                                                        <tr>
+                                                                            <td>{{$key++}}</td>
+                                                                            <td>{{$value->column_name}}</td>
+                                                                            <td>{{$value->comment}}</td>
+                                                                            <td>
+                                                                                @php
+                                                                                    $check_latest = \App\models\DelivarableColumnEdit::where([
+                                                                                        'column_name' => $value->column_name,
+                                                                                    ])->latest()->first();
+                                                                                @endphp
 
+                                                                                @if($value->id == $check_latest->id)
+                                                                                    {!! $value->old_data !!}
+                                                                                @else
+                                                                                    <del class="text-danger">{!! $value->old_data !!}</del>
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>{{$value->new_data}}</td>
+                                                                            <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="5" class="shadow-none">
+                                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
+                        </td>
+                        @if($deliverable->to != null)
+                            <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
+                        @else
+                            <td class="text-center icon-container">
+                                @php
+                                    $data = \App\models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'estimation_completed_date',
+                                    ])->latest()->first();
+                                @endphp
+                                
+                                @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
+                                    <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
+                                @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
+                                    <i class="fa fa-check-circle show_i_on_top" aria-hidden="true" title="Request for change"></i>
+                                @endif
+                                On {{$deliverable->from}}
+                                @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
+                                @php
+                                    $data = \App\models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'estimation_completed_date',
+                                        'status' => '1'
+                                    ])->orderBy('updated_at', 'asc')->get();
+                                    $key = 1;
+                                @endphp
+                                @if($data->count() > 0)
+                                    <button type="button" data-toggle="modal" data-target="#old_estimation_date_edited_modal{{$deliverable->id}}">
+                                        <div class="show_old_data_modal border px-1 rounded" title="{{$data->count()}} Histories">
+                                            {{$data->count()}}<i class="fa fa-history ml-1" aria-hidden="true"></i>
+                                        </div>
+                                    </button>
+                                    <div class="modal fade" id="old_estimation_date_edited_modal{{$deliverable->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Old Histories</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Field</th>
+                                                                        <th>Comment</th>
+                                                                        <th>Old Data</th>
+                                                                        <th>New Data</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @forelse($data as $value)
+                                                                        <tr>
+                                                                            <td>{{$key++}}</td>
+                                                                            <td>{{$value->column_name}}</td>
+                                                                            <td>{{$value->comment}}</td>
+                                                                            <td>
+                                                                                @php
+                                                                                    $check_latest = \App\models\DelivarableColumnEdit::where([
+                                                                                        'column_name' => $value->column_name,
+                                                                                    ])->latest()->first();
+                                                                                @endphp
+
+                                                                                @if($value->id == $check_latest->id)
+                                                                                    {!! $value->old_data !!}
+                                                                                @else
+                                                                                    <del class="text-danger">{!! $value->old_data !!}</del>
+                                                                                @endif
+                                                                            </td>
+                                                                            <td>{{$value->new_data}}</td>
+                                                                            <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="5" class="shadow-none">
+                                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
+                            </td>
+                        @endif
+                        @if($signature == null)
+                        <td class="text-center">
+                            @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
+                            <a target="_blank" href="{{route('deliverables_modification_form', $deliverable->id)}}">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                            @endif
+                            @php
+                                $checkShowAction = $data = \App\models\DelivarableColumnEdit::where([
+                                    'delivarable_id' => $deliverable->id,
+                                    'status' => '0'
+                                ])->first();
+                            @endphp
+                            @if($project->authorization_status == 'pending' || $checkShowAction && \Auth::user()->role_id == 4)
+                            <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn primary deleteDeliverable" data-id="{{ $deliverable->id }}"><i class="fas fa-trash"></i></button>
+                            @elseif(\Auth::user()->role_id == 1)
+                            <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn primary deleteDeliverable" data-id="{{ $deliverable->id }}"><i class="fas fa-trash"></i></button>
+                            @endif
+                            @if($deliverable->authorization == 0 && Auth::user()->role_id == 1)
+                            <button class="btn btn-success approve_deliverable" data-id="{{$deliverable->id}}">Approve</button>
+                            @endif
+                        </td>
+                        @endif
                     </tr>
                     @if($signature == null)
-                    @include('projects.modals.clientdeliverableeditmodal')
-                      @include('projects.modals.clientdeliverabledeletemodal')
-                      @include('projects.modals.clientdeliverableapprovemodal')
-                      @endif
+                        @include('projects.modals.clientdeliverableeditmodal')
+                        @include('projects.modals.clientdeliverabledeletemodal')
+                    @endif
                     @empty
                     <tr>
                         No Data
@@ -257,82 +854,63 @@
     </div>
     <!-- CARD BODY END -->
     <!-- CARD FOOTER START -->
-   @php
+    @php
        $status_check= App\Models\PMProject::where('project_id',$project->id)->first();
-   @endphp
-   @if($status_check->deliverable_status == 1 && $project->deliverable_authorization == 1 && Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
-    <div class="card-footer bg-white border-0 d-flex justify-content-start">
+    @endphp
+    @if($status_check->deliverable_status == 1 && $project->deliverable_authorization == 1 && Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
+        <div class="card-footer bg-white border-0 d-flex justify-content-start">
+            <div class="d-flex">
+                <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
+                    <button class="dropdown-toggle btn-secondary" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@lang('app.action')
+                        <span><i class="fa fa-chevron-down f-15 text-dark-grey"></i></span>
+                    </button>
+                    <!-- DROPDOWN - INFORMATION -->
+                    <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton" tabindex="0">
 
-        <div class="d-flex">
-            <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
-                <button class="dropdown-toggle btn-secondary" type="button" id="dropdownMenuButton"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@lang('app.action')
-                    <span><i class="fa fa-chevron-down f-15 text-dark-grey"></i></span>
-                </button>
-                <!-- DROPDOWN - INFORMATION -->
-                <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton" tabindex="0">
 
-
-                  <?php
-                  $url= url('/');
-                   ?>
-                    <li>
-                        <a class="dropdown-item f-14 text-dark"
-                            href="{{ route('projects.download', $project->id) }}">
-                            <i class="fa fa-download f-w-500 mr-2 f-11"></i> @lang('app.download')
-                        </a>
-                        <!-- <a class="dropdown-item btn-copy" href="javascript:;" data-clipboard-text="route('front.agreement', $project->project_short_code)"><i class="fa fa-copy mr-2"></i>Copy Link</a> -->
-                          <a class="dropdown-item btn-copy" onclick="copyLink()" data-clipboard-text="{{$url}}/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
-                    </li>
-                </ul>
+                      <?php
+                      $url= url('/');
+                       ?>
+                        <li>
+                            <a class="dropdown-item f-14 text-dark"
+                                href="{{ route('projects.download', $project->id) }}">
+                                <i class="fa fa-download f-w-500 mr-2 f-11"></i> @lang('app.download')
+                            </a>
+                            <!-- <a class="dropdown-item btn-copy" href="javascript:;" data-clipboard-text="route('front.agreement', $project->project_short_code)"><i class="fa fa-copy mr-2"></i>Copy Link</a> -->
+                              <a class="dropdown-item btn-copy" onclick="copyLink()" data-clipboard-text="{{$url}}/projects/agreement/{{$project->project_short_code}}"><i class="fa fa-copy mr-2"></i>Copy Link</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-
+            <x-forms.button-cancel :link="route('projects.index')" class="border-0">@lang('app.cancel')</x-forms.button-cancel>
         </div>
-        <x-forms.button-cancel :link="route('projects.index')" class="border-0">@lang('app.cancel')
-        </x-forms.button-cancel>
-
-    </div>
     @else
-    @if($project->authorization_status == 'pending')
+        @if($project->authorization_status == 'pending')
+            @if(count($deliverables) > 0)
+                <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
+                    <div class="d-flex">
+                        <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
+                            <button class="dropdown-toggle btn-success text-white" type="button" data-id="{{$project->id}}" id="sendAuthorizationBtn">
+                                @lang('Send for Authorization')
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @else
+            <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
+                <div class="d-flex">
+                    <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
+                        <button disabled class="dropdown-toggle btn-warning" type="button" aria-haspopup="true" aria-expanded="false">
+                            @lang('Awiating for approval')
+                        </button>
 
-    <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
-
-        <div class="d-flex">
-            <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
-                <button class="dropdown-toggle btn-success text-white" type="button" data-id="{{$project->id}}" id="sendAuthorizationBtn">@lang('Send for Authorization')
-
-                </button>
-
+                        <!-- DROPDOWN - INFORMATION -->
+                    </div>
+                </div>
             </div>
-
-        </div>
-
-
-
-    </div>
-    @else
-    <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
-
-        <div class="d-flex">
-            <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
-                <button disabled class="dropdown-toggle btn-warning" type="button"
-                     aria-haspopup="true" aria-expanded="false">@lang('Awiating for approval')
-
-                </button>
-
-                <!-- DROPDOWN - INFORMATION -->
-
-            </div>
-
-        </div>
-
-
-
-    </div>
-
-
-
-    @endif
+        @endif
     @endif
 
 
@@ -459,7 +1037,7 @@
 </script>
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
-    $(document).ready(function() {
+    /*$(document).ready(function() {
 
         if ($('.custom-date-picker').length > 0) {
             datepicker('.custom-date-picker', {
@@ -486,7 +1064,7 @@
             },
             ...datepickerConfig
         });
-    });
+    });*/
 </script>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -573,6 +1151,33 @@
                     Swal.fire('Accept authorization are not saved', '', 'info')
                 }
             });
+        })
+    })
+</script>
+<script>
+    $(document).ready(function() {
+        $('.approve_deliverable').click(function(e) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                text: '@lang("Are You Sure You Want to Approve this?")',
+                showCancelButton: true,
+                showConfirmButton: true,
+                confirmButtonText: 'Approved',
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                },
+                showClass: {
+                    popup: 'swal2-noanimation',
+                    backdrop: 'swal2-noanimation'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $(this).text('Processing...');
+                    $(this).prop('disabled', true);
+                    window.location.href = '/projects/approve-deliverables/'+$(this).attr('data-id');
+                }
+            })
         })
     })
 </script>

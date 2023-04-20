@@ -1126,6 +1126,7 @@ Route::get('/projects/deliverables/{id}', [ProjectController::class, 'deliverabl
 Route::get('/projects/download/{id}', [ProjectController::class, 'download'])->name('projects.download');
 Route::post('projects/sign/{id}', [ProjectController::class, 'sign'])->name('projects.sign');
 Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
+Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');
 Route::post('/projects/public/sign/{id}', [PublicUrlController::class, 'projectSign'])->name('front.project.sign');
 Route::get('/projects/public/download/{id}', [PublicUrlController::class, 'projectDownload'])->name('front.project.download');
 
@@ -1135,6 +1136,8 @@ Route::post('/projects/add-deliverables/', [ProjectController::class, 'projectDe
 Route::post('/projects/update-deliverables/', [ProjectController::class, 'updateDeliverable'])->name('update-project-deliverable');
 Route::get('/projects/delete-deliverables/{id}', [ProjectController::class, 'deleteDeliverable']);
 Route::get('/projects/approve-deliverables/{id}', [ProjectController::class, 'approveDeliverable']);
+Route::get('project/request/modificaiton/{id}', [ProjectController::class, 'modification_form_show'])->name('deliverables_modification_form');
+Route::post('/projects/set/column/permissions', [ProjectController::class, 'set_column_edit_permission'])->name('deliverables_edit_permission');
 
 //projectboard
 Route::post('projectboards/collapseColumn', [ProjectBoardController::class, 'collapseColumn'])->name('projectboards.collapse_column');
@@ -1191,6 +1194,7 @@ Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMile
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
 
 Route::get('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
+
 Route::get('get-users', [InsightsController::class, 'getusers'])->name('get-users');
 Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams');
 
@@ -1204,7 +1208,5 @@ Route::resource('teams', Seopage1TeamController::class);
 Route::post('/get-employees-by-department', [Seopage1TeamController::class, 'getEmployeesByDepartment'])->name('getEmployeesByDepartment');
 
 Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'getEmployeesByParentTeam'])->name('getEmployeesByParentTeam');
-
-
 //KPI Settings 
 Route::resource('kpi-settings', KpiSettingController::class);

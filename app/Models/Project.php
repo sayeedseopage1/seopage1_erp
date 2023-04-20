@@ -15,6 +15,7 @@ use App\Models\Deal;
 use App\Models\User;
 use App\Models\ProjectCategory;
 use App\Models\ProjectStatus;
+use App\Models\ProjectDeliverablesClientDisagree;
 
 /**
  * App\Models\Project
@@ -408,6 +409,20 @@ class Project extends BaseModel
             // Add more cases for each attribute you want to customize
             default:
                 return parent::getActivityDescriptionForAttribute($attribute);
+        }
+    }
+
+    public function hasClientDisagree() : bool
+    {
+        $data = ProjectDeliverablesClientDisagree::where([
+            'project_id' => $this->id,
+            'status' => '0'
+        ])->exists();
+
+        if ($data) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
