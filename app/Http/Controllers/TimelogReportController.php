@@ -111,6 +111,8 @@ class TimelogReportController extends AccountBaseController
             ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
             ->whereIn('project_time_logs.user_id', $id_array)
             ->groupBy('project_time_logs.project_id')
+            ->where('projects.status','in progress')
+            ->orderBy('project_time_logs.task_id' , 'desc')
             ->get();
         } else if($type == 'tasks') {
             $data = ProjectTimeLog::select([
@@ -149,7 +151,9 @@ class TimelogReportController extends AccountBaseController
             
             ->join('users as client', 'projects.client_id', 'client.id')
             ->join('deals', 'client.id', '=', 'deals.client_id')
+            ->where('projects.status','in progress')
             ->orderBy('project_time_logs.task_id' , 'desc')
+           
             ->get();
         } else if($type == 'projects') {
             $data = ProjectTimeLog::select([
@@ -193,8 +197,10 @@ class TimelogReportController extends AccountBaseController
 
             ->groupBy('project_time_logs.project_id')
             ->groupBy('project_time_logs.user_id')
+            ->where('projects.status','in progress')
             //->groupBy('project_time_logs.total_minutes')
             ->orderBy('project_time_logs.project_id' , 'desc')
+           
 
             ->get();
             //dd($data);
