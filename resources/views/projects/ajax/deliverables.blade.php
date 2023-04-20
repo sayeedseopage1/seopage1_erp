@@ -117,6 +117,7 @@
                     <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
                     @include('projects.modals.clientdeliverableaddmodal')
                 </div>
+                
                 <div class="mt-3">
                     <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesClientRevisionModal">
                         <i class="fas fa-plus mr-1"></i>Client Revision
@@ -1037,7 +1038,7 @@
 </script>
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
-    /*$(document).ready(function() {
+    $(document).ready(function() {
 
         if ($('.custom-date-picker').length > 0) {
             datepicker('.custom-date-picker', {
@@ -1064,7 +1065,7 @@
             },
             ...datepickerConfig
         });
-    });*/
+    });
 </script>
 <script type="text/javascript">
     $(document).ready(function() {
