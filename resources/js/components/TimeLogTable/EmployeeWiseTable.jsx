@@ -230,13 +230,67 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
                                         columnOrder,
                                         ...filterColumn
                                     ).map((column) =>
-                                        column === "total_minutes" ? (
+                                        column === "client_name" ? (
                                             <td
                                                 key={column}
                                                 style={{
                                                     borderBottom:
                                                         value.length - 1 ===
-                                                        index
+                                                            index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                <EmployeeProfile>
+                                                    <EmployeeProfileImage>
+                                                        {value[0].client_image ? (
+                                                            <div
+                                                                style={{
+                                                                    minWidth: "35px",
+                                                                    minHeight: "35px",
+                                                                }}
+                                                            >
+                                                                <img
+                                                                    src={`/user-uploads/avatar/${value[0].client_image}`}
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            <span>
+                                                                {value[0].client_name.slice(
+                                                                    0,
+                                                                    1
+                                                                )}
+                                                            </span>
+                                                        )}
+                                                    </EmployeeProfileImage>
+                                                    <EmployeeProfileName>
+                                                        <span>
+                                                            <a
+                                                                href={`employees/${value[0].employee_id}`}
+                                                            >
+                                                                {
+                                                                    value[0]
+                                                                        .employee_name
+                                                                }
+                                                            </a>
+                                                        </span>
+                                                        <span>
+                                                            {
+                                                                value[0]
+                                                                    .employee_designation
+                                                            }
+                                                        </span>
+                                                    </EmployeeProfileName>
+                                                </EmployeeProfile>
+                                            </td>
+
+                                        ) : column === "total_minutes" ? (
+                                            <td
+                                                key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                            index
                                                             ? "2px solid #AAD1FC"
                                                             : "1px solid #E7EFFC",
                                                 }}
@@ -249,7 +303,7 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
                                                 style={{
                                                     borderBottom:
                                                         value.length - 1 ===
-                                                        index
+                                                            index
                                                             ? "2px solid #AAD1FC"
                                                             : "1px solid #E7EFFC",
                                                 }}
@@ -257,15 +311,15 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
                                                 <a
                                                     href={
                                                         column ===
-                                                        "project_name"
+                                                            "project_name"
                                                             ? `projects/${item["project_id"]}`
                                                             : column ===
-                                                              "client_name"
-                                                            ? `clients/${item["client_id"]}`
-                                                            : column ===
-                                                              "project_manager"
-                                                            ? `employees/${item["project_manager_id"]}`
-                                                            : "#"
+                                                                "client_name"
+                                                                ? `clients/${item["client_id"]}`
+                                                                : column ===
+                                                                    "project_manager"
+                                                                    ? `employees/${item["project_manager_id"]}`
+                                                                    : "#"
                                                     }
                                                 >
                                                     {item[column]}
@@ -308,6 +362,7 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
     );
 };
 export default EmployeeWiseTable;
+
 
 /* ========== DRAG ABLE COLUMN ============== */
 const DragAbleHeader = ({
@@ -490,6 +545,39 @@ const Pagination = ({
     setNPageRows,
 }) => {
     const [pageNumbers, setPageNumbers] = useState([]);
+    const [renderButtons, setRenderButtons] = React.useState([]);
+    const [totalPages, setTotalPages] = React.useState(0);
+
+    // count total pages
+    useEffect(() => {
+        const tPages = Math.ceil(data.length / nPageRows);
+        setTotalPages(tPages);
+    }, [data, nPageRows]);
+
+    // render buttons
+    React.useEffect(() => {
+        const buttons = [];
+
+        if (currentPage <= 3) {
+            for (let i = 1; i <= 5; i++) {
+                buttons.push(i);
+            }
+        }
+
+        if (currentPage > 3 && currentPage < totalPages - 3) {
+            for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+                buttons.push(i);
+            }
+        }
+
+        if (currentPage >= totalPages - 3) {
+            for (let i = totalPages - 4; i <= totalPages; i++) {
+                buttons.push(i);
+            }
+        }
+
+        setRenderButtons(buttons);
+    }, [currentPage, totalPages]);
 
     useEffect(() => {
         const pageNumbers = [];
@@ -550,20 +638,41 @@ const Pagination = ({
                     >
                         Previous
                     </PreviousBtn>
-                    {pageNumbers.map((number) => (
-                        <React.Fragment key={number}>
-                            <PaginateNumber
-                                key={number}
-                                id={number}
-                                onClick={handleClick}
-                                className={
-                                    currentPage === number ? "active" : ""
-                                }
-                            >
-                                {number}
-                            </PaginateNumber>
-                        </React.Fragment>
-                    ))}
+                    {totalPages > 0 && (
+                        <>
+                            {
+                                // render dots
+                                renderButtons[0] > 1 && (
+                                    <PaginateNumber>...</PaginateNumber>
+                                )
+                            }
+                            {renderButtons.map((number) => (
+                                <React.Fragment key={number}>
+                                    <PaginateNumber
+                                        key={number}
+                                        id={number}
+                                        onClick={handleClick}
+                                        className={
+                                            currentPage === number
+                                                ? "active"
+                                                : ""
+                                        }
+                                    >
+                                        {number}
+                                    </PaginateNumber>
+                                </React.Fragment>
+                            ))}
+
+                            {
+                                // render dots
+                                renderButtons[renderButtons.length - 1] <
+                                totalPages - 1 && (
+                                    <PaginateNumber>...</PaginateNumber>
+                                )
+                            }
+                        </>
+                    )}
+
                     <NextBtn
                         disabled={
                             currentPage === pageNumbers.length ? true : false
@@ -666,7 +775,7 @@ const SortIcon = styled.span`
 //   };
 //   &:before{
 //     border-bottom-color: ${(props) =>
-    props.sort === "asc" ? "#666" : "#ddd"};
+        props.sort === "asc" ? "#666" : "#ddd"};
 // 	  margin-top: -9px;
 //   };
 //   &:after{

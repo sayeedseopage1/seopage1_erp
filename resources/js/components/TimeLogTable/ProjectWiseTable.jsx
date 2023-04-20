@@ -558,6 +558,41 @@ const Pagination = ({
     setNPageRows,
 }) => {
     const [pageNumbers, setPageNumbers] = useState([]);
+    const [renderButtons, setRenderButtons] = React.useState([]);
+    const [totalPages, setTotalPages] = React.useState(0);
+
+    // count total pages
+    useEffect(() => {
+        if (data.length === 0) return;
+        const tPages = Math.ceil(data.length / nPageRows);
+        setTotalPages(tPages);
+    }, [data, nPageRows]);
+
+    // render buttons
+    React.useEffect(() => {
+        const buttons = [];
+        if (totalPages === 0) return;
+
+        if (currentPage <= 3) {
+            for (let i = 1; i <= 5; i++) {
+                buttons.push(i);
+            }
+        }
+
+        if (currentPage > 3 && currentPage < totalPages - 3) {
+            for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+                buttons.push(i);
+            }
+        }
+
+        if (currentPage >= totalPages - 3) {
+            for (let i = totalPages - 4; i <= totalPages; i++) {
+                buttons.push(i);
+            }
+        }
+
+        setRenderButtons(buttons);
+    }, [currentPage, totalPages]);
 
     useEffect(() => {
         const pageNumbers = [];
@@ -618,16 +653,41 @@ const Pagination = ({
                     >
                         Previous
                     </PreviousBtn>
-                    {pageNumbers.map((number) => (
-                        <PaginateNumber
-                            key={number}
-                            id={number}
-                            onClick={handleClick}
-                            className={currentPage === number ? "active" : ""}
-                        >
-                            {number}
-                        </PaginateNumber>
-                    ))}
+                    {totalPages > 0 && (
+                        <>
+                            {
+                                // render dots
+                                renderButtons[0] > 1 && (
+                                    <PaginateNumber>...</PaginateNumber>
+                                )
+                            }
+                            {renderButtons.length > 0 &&
+                                renderButtons.map((number) => (
+                                    <React.Fragment key={number}>
+                                        <PaginateNumber
+                                            key={number}
+                                            id={number}
+                                            onClick={handleClick}
+                                            className={
+                                                currentPage === number
+                                                    ? "active"
+                                                    : ""
+                                            }
+                                        >
+                                            {number}
+                                        </PaginateNumber>
+                                    </React.Fragment>
+                                ))}
+
+                            {
+                                // render dots
+                                renderButtons[renderButtons.length - 1] <
+                                    totalPages - 1 && (
+                                    <PaginateNumber>...</PaginateNumber>
+                                )
+                            }
+                        </>
+                    )}
                     <NextBtn
                         disabled={
                             currentPage === pageNumbers.length ? true : false
