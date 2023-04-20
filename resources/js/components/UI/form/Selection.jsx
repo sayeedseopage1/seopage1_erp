@@ -5,6 +5,7 @@ import { useState } from "react";
 import Search from "./Search";
 import { useRef } from "react";
 import { useEffect } from "react";
+import CustomScrollbar from "../CustomScrollbar";
 
 const Selection = ({
     value,
@@ -17,6 +18,7 @@ const Selection = ({
     multiple = false,
     enableAllSelection = false,
     children,
+    optionClassName = "",
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [filteredOptions, setFilteredOptions] = useState(options);
@@ -40,6 +42,10 @@ const Selection = ({
             enableAllSelection ? "all select" : filteredOptions[0]
         );
     }, []);
+
+    useEffect(() => {
+        setFilteredOptions(options);
+    }, [options]);
 
     // auto focus
     useEffect(() => {
@@ -195,37 +201,43 @@ const Selection = ({
                             </div>
                         </div>
                     ) : null}
-                    <ul className="sp1_selection--options">
-                        {filteredOptions.length > 0
-                            ? filteredOptions.map((option) => (
-                                  <React.Fragment key={Math.random()}>
-                                      <li
-                                          onClick={() =>
-                                              handleSelection(option)
-                                          }
-                                          onMouseOver={() =>
-                                              setDefaultHoverEffect(option)
-                                          }
-                                          className={`sp1_selection--option${
-                                              defaultHoverEffect === option
-                                                  ? " hover"
-                                                  : ""
-                                          }`}
+                    <CustomScrollbar minH={0} maxH={400}>
+                        <ul
+                            className={`sp1_selection--options mb-3 ${optionClassName}`}
+                        >
+                            {filteredOptions.length > 0
+                                ? filteredOptions.map((option) => (
+                                      <React.Fragment
+                                          key={`${option}.${Math.random()}`}
                                       >
-                                          <span>{option}</span>
-                                          <i
-                                              className="fa-solid fa-check"
-                                              style={{
-                                                  opacity: isActive(option)
-                                                      ? 1
-                                                      : 0,
-                                              }}
-                                          />
-                                      </li>
-                                  </React.Fragment>
-                              ))
-                            : null}
-                    </ul>
+                                          <li
+                                              onClick={() =>
+                                                  handleSelection(option)
+                                              }
+                                              onMouseOver={() =>
+                                                  setDefaultHoverEffect(option)
+                                              }
+                                              className={`sp1_selection--option mb-1${
+                                                  defaultHoverEffect === option
+                                                      ? " hover"
+                                                      : ""
+                                              }`}
+                                          >
+                                              <span>{option}</span>
+                                              <i
+                                                  className="fa-solid fa-check"
+                                                  style={{
+                                                      opacity: isActive(option)
+                                                          ? 1
+                                                          : 0,
+                                                  }}
+                                              />
+                                          </li>
+                                      </React.Fragment>
+                                  ))
+                                : null}
+                        </ul>
+                    </CustomScrollbar>
 
                     {children &&
                         children(

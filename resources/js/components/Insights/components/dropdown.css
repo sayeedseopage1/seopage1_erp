@@ -1,0 +1,15 @@
+.sp1_dd--item {
+    padding: 4px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+
+.sp1_dd--item:hover {
+    background: var(--header_color);
+    color: #fff;
+}

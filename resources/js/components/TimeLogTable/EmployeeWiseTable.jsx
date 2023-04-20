@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
-import ReactDOM from 'react-dom';
-import _, { update } from 'lodash';
-import styled from 'styled-components';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider, useDrag, useDrop, useDragLayer } from 'react-dnd';
-import { EmployeeWiseTableContext } from '.';
-import './table.css'
-
+import React, { useEffect, useRef, useState, useMemo } from "react";
+import ReactDOM from "react-dom";
+import _, { update } from "lodash";
+import styled from "styled-components";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider, useDrag, useDrop, useDragLayer } from "react-dnd";
+import { EmployeeWiseTableContext } from ".";
+import "./table.css";
+import { convertTime } from "./utils/converTime";
 
 // pivot table
-const EmployeeWiseTable = ({ data, columns, subColumns }) => {
-
+const EmployeeWiseTable = ({ columns, subColumns }) => {
     const {
         setColumns,
         setSubColumns,
@@ -23,26 +22,45 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
         columnOrder,
         setColumnOrder,
         filterColumn,
-        setFilterColumn
+        setFilterColumn,
     } = React.useContext(EmployeeWiseTableContext);
 
+    const [data, setData] = useState([]);
+    // get employee table data
+    useEffect(() => {
+        const fetch = async () => {
+            axios.get("/get-timelogs/employees").then((res) => {
+                setData(res.data);
+            });
+        };
+
+        fetch();
+
+        return () => fetch();
+    }, []);
+
     React.useEffect(() => {
-        setSubColumns(subColumns)
-        const columnOrderFromLocalStore = localStorage.getItem('employeeWiseTableColumnOrder');
-        const filterColumnFromLocalStore = localStorage.getItem('employeeWiseTableColumnFilter');
+        setSortConfig({ key: "employee_id", direction: "asc" });
+        setSubColumns(subColumns);
+        const columnOrderFromLocalStore = localStorage.getItem(
+            "employeeWiseTableColumnOrder"
+        );
+        const filterColumnFromLocalStore = localStorage.getItem(
+            "employeeWiseTableColumnFilter"
+        );
 
         if (columnOrderFromLocalStore) {
-            setColumnOrder([...JSON.parse(columnOrderFromLocalStore)])
+            setColumnOrder([...JSON.parse(columnOrderFromLocalStore)]);
         } else {
-            setColumnOrder([...subColumns.map((item) => item.key)])
+            setColumnOrder([...subColumns.map((item) => item.key)]);
         }
 
         if (filterColumnFromLocalStore) {
             setFilterColumn([...JSON.parse(filterColumnFromLocalStore)]);
         } else {
-            setFilterColumn([])
+            setFilterColumn([]);
         }
-    }, [])
+    }, []);
 
     // pagination
     const paginate = (data, currentPage, nPaginate) => {
@@ -53,7 +71,7 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
 
     // column filter
     const requestColumnFilter = (key) => {
-        if (typeof key === 'string') {
+        if (typeof key === "string") {
             const index = columnOrder.indexOf(key);
             if (index > -1) {
                 columnOrder.splice(index, 1);
@@ -73,19 +91,30 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
         }
         return [...data].sort((a, b) => {
             if (a[sortConfig.key] < b[sortConfig.key]) {
-                return sortConfig.direction === 'asc' ? -1 : 1;
+                return sortConfig.direction === "asc" ? -1 : 1;
             }
             if (a[sortConfig.key] > b[sortConfig.key]) {
-                return sortConfig.direction === 'asc' ? 1 : -1;
+                return sortConfig.direction === "asc" ? 1 : -1;
             }
             return 0;
         });
     };
     // SORT REQUEST
     const requestSort = (key) => {
-        let direction = 'asc';
-        if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
-            direction = 'dec';
+        let direction = "asc";
+        if (
+            sortConfig &&
+            sortConfig.key === key &&
+            sortConfig.direction === "asc"
+        ) {
+            direction = "dec";
+        } else if (
+            sortConfig &&
+            sortConfig.key === key &&
+            sortConfig.direction === "dec"
+        ) {
+            direction = "asc";
+            key = "employee_id";
         }
         setSortConfig({ key, direction });
     };
@@ -98,27 +127,27 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
     // prepare header
     const prepareHeader = () => {
         return (
-            <tr style={{ borderBottom: '2px solid #AAD1FC' }}>
+            <tr style={{ borderBottom: "2px solid #AAD1FC" }}>
                 {columns.map((column) => (
-                    <th key={column.key} style={{ cursor: 'default' }}>
+                    <th key={column.key} style={{ cursor: "default" }}>
                         <div>
-                            <div onClick={() => requestSort(column.key)}>
-
-                                {
-                                    sortConfig.key === column.key ? (
-                                        sortConfig.direction === 'asc' ? <>
-                                            <span className="table_asc_dec asc" ></span>
-                                        </> : <>
-                                            <span className="table_asc_dec dec" ></span>
+                            {/* <div onClick={() => requestSort("employee_id")}>
+                                {sortConfig.key === "employee_id" ? (
+                                    sortConfig.direction === "asc" ? (
+                                        <>
+                                            <span className="table_asc_dec asc"></span>
                                         </>
-
                                     ) : (
                                         <>
-                                            <span className="table_asc_dec"></span>
+                                            <span className="table_asc_dec dec"></span>
                                         </>
                                     )
-                                }
-                            </div>
+                                ) : (
+                                    <>
+                                        <span className="table_asc_dec"></span>
+                                    </>
+                                )}
+                            </div> */}
                             {column.label}
                         </div>
                     </th>
@@ -147,7 +176,7 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
         const paginatedData = paginate(sortedData, currentPage, nPageRows);
         // if rows have same name then group all rows with same name in one row and show all project details in one row
         const groupedData = paginatedData.reduce((r, a) => {
-            r[a.name] = [...(r[a.name] || []), a];
+            r[a.employee_id] = [...(r[a.employee_id] || []), a];
             return r;
         }, {});
 
@@ -158,12 +187,36 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
                     <tr key={key}>
                         <EmployeeProfileTd
                             rowSpan={value.length + 1}
-                            style={{ borderBottom: '2px solid #AAD1FC' }}>
+                            style={{ borderBottom: "2px solid #AAD1FC" }}
+                        >
                             <EmployeeProfile>
-                                <EmployeeProfileImage />
+                                <EmployeeProfileImage>
+                                    {value[0].employee_image ? (
+                                        <div
+                                            style={{
+                                                minWidth: "35px",
+                                                minHeight: "35px",
+                                            }}
+                                        >
+                                            <img
+                                                src={`/user-uploads/avatar/${value[0].employee_image}`}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <span>
+                                            {value[0].employee_name.slice(0, 1)}
+                                        </span>
+                                    )}
+                                </EmployeeProfileImage>
                                 <EmployeeProfileName>
-                                    <span>{key}</span>
-                                    <span>{value[0].role}</span>
+                                    <span>
+                                        <a
+                                            href={`employees/${value[0].employee_id}`}
+                                        >
+                                            {value[0].employee_name}
+                                        </a>
+                                    </span>
+                                    <span>{value[0].employee_designation}</span>
                                 </EmployeeProfileName>
                             </EmployeeProfile>
                         </EmployeeProfileTd>
@@ -172,17 +225,113 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
                     {value.map((item, index) => {
                         return (
                             <React.Fragment key={index}>
-                                <tr >
-                                    {_.without(columnOrder, ...filterColumn).map((column) => (
-                                        <td key={column}
-                                            style={{ borderBottom: value.length - 1 === index ? '2px solid #AAD1FC' : '1px solid #E7EFFC' }}
-                                        >{item[column]}</td>
-                                    ))}
+                                <tr>
+                                    {_.without(
+                                        columnOrder,
+                                        ...filterColumn
+                                    ).map((column) =>
+                                        column === "client_name" ? (
+                                            <td
+                                                key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                            index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                <EmployeeProfile>
+                                                    <EmployeeProfileImage>
+                                                        {value[0].client_image ? (
+                                                            <div
+                                                                style={{
+                                                                    minWidth: "35px",
+                                                                    minHeight: "35px",
+                                                                }}
+                                                            >
+                                                                <img
+                                                                    src={`/user-uploads/avatar/${value[0].client_image}`}
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            <span>
+                                                                {value[0].client_name.slice(
+                                                                    0,
+                                                                    1
+                                                                )}
+                                                            </span>
+                                                        )}
+                                                    </EmployeeProfileImage>
+                                                    <EmployeeProfileName>
+                                                        <span>
+                                                            <a
+                                                                href={`employees/${value[0].employee_id}`}
+                                                            >
+                                                                {
+                                                                    value[0]
+                                                                        .employee_name
+                                                                }
+                                                            </a>
+                                                        </span>
+                                                        <span>
+                                                            {
+                                                                value[0]
+                                                                    .employee_designation
+                                                            }
+                                                        </span>
+                                                    </EmployeeProfileName>
+                                                </EmployeeProfile>
+                                            </td>
+
+                                        ) : column === "total_minutes" ? (
+                                            <td
+                                                key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                            index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                {convertTime(item[column])}
+                                            </td>
+                                        ) : (
+                                            <td
+                                                key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                            index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                <a
+                                                    href={
+                                                        column ===
+                                                            "project_name"
+                                                            ? `projects/${item["project_id"]}`
+                                                            : column ===
+                                                                "client_name"
+                                                                ? `clients/${item["client_id"]}`
+                                                                : column ===
+                                                                    "project_manager"
+                                                                    ? `employees/${item["project_manager_id"]}`
+                                                                    : "#"
+                                                    }
+                                                >
+                                                    {item[column]}
+                                                </a>
+                                            </td>
+                                        )
+                                    )}
                                 </tr>
                             </React.Fragment>
                         );
                     })}
-                </React.Fragment>,
+                </React.Fragment>
             );
         }
 
@@ -214,18 +363,30 @@ const EmployeeWiseTable = ({ data, columns, subColumns }) => {
 };
 export default EmployeeWiseTable;
 
+
 /* ========== DRAG ABLE COLUMN ============== */
-const DragAbleHeader = ({ column, sort, columns, columnOrder, setColumnOrder, requestSort }) => {
+const DragAbleHeader = ({
+    column,
+    sort,
+    columns,
+    columnOrder,
+    setColumnOrder,
+    requestSort,
+}) => {
     const ref = useRef(null);
 
     const reOrder = (curr, target) => {
-        columnOrder.splice(columnOrder.indexOf(target), 0, columnOrder.splice(columnOrder.indexOf(curr), 1)[0]);
+        columnOrder.splice(
+            columnOrder.indexOf(target),
+            0,
+            columnOrder.splice(columnOrder.indexOf(curr), 1)[0]
+        );
 
         return [...columnOrder];
     };
 
     const [{ isDragging }, drag] = useDrag({
-        type: 'column',
+        type: "column",
         item: { column },
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
@@ -234,7 +395,7 @@ const DragAbleHeader = ({ column, sort, columns, columnOrder, setColumnOrder, re
 
     // drop
     const [{ isOver }, drop] = useDrop({
-        accept: 'column',
+        accept: "column",
         hover(item, monitor) {
             const dragIndex = columnOrder.indexOf(item.column);
             const hoverIndex = columnOrder.indexOf(column);
@@ -242,36 +403,46 @@ const DragAbleHeader = ({ column, sort, columns, columnOrder, setColumnOrder, re
 
         drop: (item, monitor) => {
             if (item.column !== column) {
-                const reOrderColumn = reOrder(item.column, column)
+                const reOrderColumn = reOrder(item.column, column);
                 setColumnOrder(reOrderColumn);
-                localStorage.setItem('employeeWiseTableColumnOrder', JSON.stringify(reOrderColumn))
+                localStorage.setItem(
+                    "employeeWiseTableColumnOrder",
+                    JSON.stringify(reOrderColumn)
+                );
             }
         },
 
-        collect: monitor => ({
-            isOver: !!monitor.isOver()
-        })
+        collect: (monitor) => ({
+            isOver: !!monitor.isOver(),
+        }),
     });
 
     drag(drop(ref));
 
     return (
-        <th key={column} ref={ref} style={{ opacity: isDragging ? 0 : 1, background: isOver ? 'rgb(0 0 0 / 5%)' : '' }}>
+        <th
+            key={column}
+            ref={ref}
+            style={{
+                opacity: isDragging ? 0 : 1,
+                background: isOver ? "rgb(0 0 0 / 5%)" : "",
+            }}
+        >
             <div>
                 <div onClick={() => requestSort(column)}>
-                    {
-                        sort.key === column ? (
-                            sort.direction === 'asc' ?
-                                <span className="table_asc_dec asc"></span>
-                                :
-                                <span className="table_asc_dec dec"></span>
+                    {sort.key === column ? (
+                        sort.direction === "asc" ? (
+                            <span className="table_asc_dec asc"></span>
                         ) : (
-                            <span className="table_asc_dec"></span>
+                            <span className="table_asc_dec dec"></span>
                         )
-                    }
-
+                    ) : (
+                        <span className="table_asc_dec"></span>
+                    )}
                 </div>
-                <div style={{ position: 'relative' }}>{columns.find((item) => item.key === column)?.label}</div>
+                <div style={{ position: "relative" }}>
+                    {columns.find((item) => item.key === column)?.label}
+                </div>
             </div>
         </th>
     );
@@ -285,14 +456,17 @@ const ColumnFilter = ({ columns, filterColumn, setFilterColumn, root }) => {
     // outside click
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (filterRef.current && !filterRef.current.contains(event.target)) {
+            if (
+                filterRef.current &&
+                !filterRef.current.contains(event.target)
+            ) {
                 setIsOpen(false);
             }
         };
 
-        window.addEventListener('mousedown', handleClickOutside);
+        window.addEventListener("mousedown", handleClickOutside);
         return () => {
-            window.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener("mousedown", handleClickOutside);
         };
     }, [filterRef]);
 
@@ -304,7 +478,9 @@ const ColumnFilter = ({ columns, filterColumn, setFilterColumn, root }) => {
     // handle filter
     const handleFilter = (e) => {
         if (e.target.checked) {
-            setFilterColumn(filterColumn.filter((item) => item !== e.target.value));
+            setFilterColumn(
+                filterColumn.filter((item) => item !== e.target.value)
+            );
         } else {
             setFilterColumn([...filterColumn, e.target.value]);
         }
@@ -319,9 +495,11 @@ const ColumnFilter = ({ columns, filterColumn, setFilterColumn, root }) => {
         }
     };
 
-    let content =
+    let content = (
         <ColumnFilterWrapper ref={filterRef}>
-            <ColumnFilterButton onClick={handleToggle}>Column Filter</ColumnFilterButton>
+            <ColumnFilterButton onClick={handleToggle}>
+                Column Filter
+            </ColumnFilterButton>
             {isOpen && (
                 <ColumnFilterDropdown>
                     {/* select all */}
@@ -345,20 +523,61 @@ const ColumnFilter = ({ columns, filterColumn, setFilterColumn, root }) => {
                                 value={column}
                                 onChange={handleFilter}
                             />
-                            <label htmlFor={column}>{_.startCase(column)}</label>
+                            <label htmlFor={column}>
+                                {_.startCase(column)}
+                            </label>
                         </ColumnFilterCheckbox>
                     ))}
                 </ColumnFilterDropdown>
             )}
         </ColumnFilterWrapper>
-
+    );
 
     return content;
 };
 
 // pagination
-const Pagination = ({ data, nPageRows, currentPage, setCurrentPage, setNPageRows }) => {
+const Pagination = ({
+    data,
+    nPageRows,
+    currentPage,
+    setCurrentPage,
+    setNPageRows,
+}) => {
     const [pageNumbers, setPageNumbers] = useState([]);
+    const [renderButtons, setRenderButtons] = React.useState([]);
+    const [totalPages, setTotalPages] = React.useState(0);
+
+    // count total pages
+    useEffect(() => {
+        const tPages = Math.ceil(data.length / nPageRows);
+        setTotalPages(tPages);
+    }, [data, nPageRows]);
+
+    // render buttons
+    React.useEffect(() => {
+        const buttons = [];
+
+        if (currentPage <= 3) {
+            for (let i = 1; i <= 5; i++) {
+                buttons.push(i);
+            }
+        }
+
+        if (currentPage > 3 && currentPage < totalPages - 3) {
+            for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+                buttons.push(i);
+            }
+        }
+
+        if (currentPage >= totalPages - 3) {
+            for (let i = totalPages - 4; i <= totalPages; i++) {
+                buttons.push(i);
+            }
+        }
+
+        setRenderButtons(buttons);
+    }, [currentPage, totalPages]);
 
     useEffect(() => {
         const pageNumbers = [];
@@ -392,7 +611,11 @@ const Pagination = ({ data, nPageRows, currentPage, setCurrentPage, setNPageRows
         <PaginationContainer>
             <div>
                 <label htmlFor="nPageRows">Show</label>
-                <SelectParPage name="nPageRows" id="nPageRows" onChange={handleSelectChange}>
+                <SelectParPage
+                    name="nPageRows"
+                    id="nPageRows"
+                    onChange={handleSelectChange}
+                >
                     <option value={10}>10</option>
                     <option value={20}>20</option>
                     <option value={30}>30</option>
@@ -402,24 +625,60 @@ const Pagination = ({ data, nPageRows, currentPage, setCurrentPage, setNPageRows
             </div>
             <PaginationGroup>
                 <EntriesPerPage>
-                    Showing {currentPage * nPageRows - nPageRows + 1} to{' '}
-                    {currentPage * nPageRows > data.length ? data.length : currentPage * nPageRows} of {data.length} entries
+                    Showing {currentPage * nPageRows - nPageRows + 1} to{" "}
+                    {currentPage * nPageRows > data.length
+                        ? data.length
+                        : currentPage * nPageRows}{" "}
+                    of {data.length} entries
                 </EntriesPerPage>
                 <PaginationButtons>
-                    <PreviousBtn disabled={currentPage === 1 ? true : false} onClick={previousPage}>
+                    <PreviousBtn
+                        disabled={currentPage === 1 ? true : false}
+                        onClick={previousPage}
+                    >
                         Previous
                     </PreviousBtn>
-                    {pageNumbers.map((number) => (
-                        <PaginateNumber
-                            key={number}
-                            id={number}
-                            onClick={handleClick}
-                            className={currentPage === number ? 'active' : ''}
-                        >
-                            {number}
-                        </PaginateNumber>
-                    ))}
-                    <NextBtn disabled={currentPage === pageNumbers.length ? true : false} onClick={nextPage}>
+                    {totalPages > 0 && (
+                        <>
+                            {
+                                // render dots
+                                renderButtons[0] > 1 && (
+                                    <PaginateNumber>...</PaginateNumber>
+                                )
+                            }
+                            {renderButtons.map((number) => (
+                                <React.Fragment key={number}>
+                                    <PaginateNumber
+                                        key={number}
+                                        id={number}
+                                        onClick={handleClick}
+                                        className={
+                                            currentPage === number
+                                                ? "active"
+                                                : ""
+                                        }
+                                    >
+                                        {number}
+                                    </PaginateNumber>
+                                </React.Fragment>
+                            ))}
+
+                            {
+                                // render dots
+                                renderButtons[renderButtons.length - 1] <
+                                totalPages - 1 && (
+                                    <PaginateNumber>...</PaginateNumber>
+                                )
+                            }
+                        </>
+                    )}
+
+                    <NextBtn
+                        disabled={
+                            currentPage === pageNumbers.length ? true : false
+                        }
+                        onClick={nextPage}
+                    >
                         Next
                     </NextBtn>
                 </PaginationButtons>
@@ -428,72 +687,75 @@ const Pagination = ({ data, nPageRows, currentPage, setCurrentPage, setNPageRows
     );
 };
 
+// pagination end
+
 // ========= styled ============
 const TableContainer = styled.div`
-  max-width: 100%;
-  overflow: hidden;
+    max-width: 100%;
+    overflow: hidden;
 `;
 
 const TableWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  box-sizing: border-box;
-  background: #fff;
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-  overflow-x: auto;
-  border-radius: 16px;
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    font-size: 14px;
-    color: #1d82f5;
-    tr {
-      &:hover {
-        background-color: #f9fbfd;
-      }
-    }
-    th {
-      background-color: #fff;
-      padding: 16px 10px;
-      text-align: left;
-      font-weight: normal;
-      white-space: nowrap;
-      min-width: 120px;
-      cursor: move;
-      border-bottom:  2px solid #AAD1FC;
-      div {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        white-space: nowrap;
-      }
-    }
-    td {
-      padding: 16px 10px;
-      text-align: left;
-      min-height: 120px;
-      border-bottom: 1px solid #E7EFFC;
-    }
-  }
-  .pagination {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    button {
-      padding: 10px;
-      margin: 0 10px;
-      border: none;
-      background-color: #f2f2f2;
-      cursor: pointer;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+    background: #fff;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    overflow-x: auto;
+    border-radius: 16px;
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        font-size: 14px;
+        color: #1d82f5;
+        tr {
+            &:hover {
+                background-color: #f9fbfd;
+            }
+        }
+        th {
+            background-color: #fff;
+            padding: 16px 10px;
+            text-align: left;
+            font-weight: normal;
+            white-space: nowrap;
+            min-width: 120px;
+            cursor: move;
+            border-bottom: 2px solid #aad1fc;
+            div {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                white-space: nowrap;
+            }
+        }
+        td {
+            padding: 16px 10px;
+            text-align: left;
+            min-height: 120px;
+            max-width: 200px;
+            border-bottom: 1px solid #e7effc;
+        }
     }
-  }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        button {
+            padding: 10px;
+            margin: 0 10px;
+            border: none;
+            background-color: #f2f2f2;
+            cursor: pointer;
+        }
+    }
 `;
 
-// sort 
+// sort
 const SortIcon = styled.span`
 //   width: 10px;
 //   height: 10px;
@@ -512,11 +774,12 @@ const SortIcon = styled.span`
 //     width: 0;
 //   };
 //   &:before{
-//     border-bottom-color: ${props => props.sort === 'asc' ? '#666' : '#ddd'};
+//     border-bottom-color: ${(props) =>
+        props.sort === "asc" ? "#666" : "#ddd"};
 // 	  margin-top: -9px;
 //   };
 //   &:after{
-//     border-top-color: ${props => props.sort === 'dec' ? '#666' : '#ddd'};
+//     border-top-color: ${(props) => (props.sort === "dec" ? "#666" : "#ddd")};
 // 	  margin-top: 1px;
 //   }
 
@@ -527,75 +790,87 @@ const SortIcon = styled.span`
 `;
 
 const EmployeeProfileTd = styled.td`
-  background: #f8f8f8;
-  &:hover: {
     background: #f8f8f8;
-  }
+    text-align: left;
+    &:hover: {
+        background: #f8f8f8;
+    }
 `;
 const EmployeeProfile = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    align-items: center;
 `;
 const EmployeeProfileImage = styled.div`
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  background-color: #ccc;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #e8e8e8;
+    overflow: hidden;
+
+    span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        font-size: 20px;
+        font-weight: bold;
+    }
 `;
 const EmployeeProfileName = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  margin-left: 10px;
-  span {
-    font-size: 12px;
-    font-weight: 500;
-    color: #000;
-    &:first-child {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1d82f5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: 10px;
+    span {
+        font-size: 12px;
+        font-weight: 400;
+        color: #000;
+        white-space: nowrap;
+        &:first-child {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1d82f5;
+        }
     }
-  }
 `;
 
 const PaginationContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  align-items: center;
-  padding: 20px;
-  box-sizing: border-box;
-  font-size: 14px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: 14px;
 `;
 
 const SelectParPage = styled.select`
-  padding: 4px;
-  font-size: 12px;
-  border-radius: 5px;
-  border: 1px solid #eaf0f7;
-  color: rgb(0 0 0 / 60%);
-  background: #fff;
-  margin: 0 6px;
-  option {
-    padding: 6px;
+    padding: 4px;
     font-size: 12px;
     border-radius: 5px;
-  }
+    border: 1px solid #eaf0f7;
+    color: rgb(0 0 0 / 60%);
+    background: #fff;
+    margin: 0 6px;
+    option {
+        padding: 6px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
 
-  &:focus {
-    outline: none;
-  }
+    &:focus {
+        outline: none;
+    }
 `;
 
 const PaginationGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
 `;
 
 const EntriesPerPage = styled.div`
@@ -606,127 +881,128 @@ const EntriesPerPage = styled.div`
 `;
 
 const PaginationButtons = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center; 
-  padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
 `;
 const PreviousBtn = styled.button`
-  padding: 6px;
-  font-size: 12px;
-  border-radius: 5px;
-  border: 1px solid #eaf0f7;
-  color: #000;
-  background: #fff;
-  &:hover {
-    background: #eaf0f7;
-    color: #1d82f5;
-  }
-  &:active {
-    background: #1d82f5;
-    color: #fff;
-  }
-  &:disabled {
-    background: #f3f3f3;
-    color: #ccc;
-  }
+    padding: 6px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: 1px solid #eaf0f7;
+    color: #000;
+    background: #fff;
+    &:hover {
+        background: #eaf0f7;
+        color: #1d82f5;
+    }
+    &:active {
+        background: #1d82f5;
+        color: #fff;
+    }
+    &:disabled {
+        background: #f3f3f3;
+        color: #ccc;
+    }
 `;
 
 const NextBtn = styled.button`
-  padding: 6px;
-  font-size: 12px;
-  border-radius: 5px;
-  border: 1px solid #eaf0f7;
-  color: #000;
-  background: #fff;
-  &:hover {
-    background: #eaf0f7;
-    color: #1d82f5;
-  }
-  &:active {
-    background: #1d82f5;
-    color: #fff;
-  }
-  &:disabled {
-    background: #f3f3f3;
-    color: #ccc;
-  }
+    padding: 6px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: 1px solid #eaf0f7;
+    color: #000;
+    background: #fff;
+    &:hover {
+        background: #eaf0f7;
+        color: #1d82f5;
+    }
+    &:active {
+        background: #1d82f5;
+        color: #fff;
+    }
+    &:disabled {
+        background: #f3f3f3;
+        color: #ccc;
+    }
 `;
 // pagination styled
 const PaginateNumber = styled.div`
-  width: 16px;
-  height: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-  margin: 0 6px;
-  border: none;
-  font-size: 14px;
-  background: ${(props) => (props.className === 'active' ? '#1d82f5' : '#fff')};
-  color: ${(props) => (props.className === 'active' ? '#fff' : '#000')};
-  cursor: pointer;
-  border-radius: 5px;
-  border: 1px solid #eaf0f7;
-  &:hover {
-    background: #eaf0f7;
-    color: #1d82f5;
-  }
+    width: 16px;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    margin: 0 6px;
+    border: none;
+    font-size: 14px;
+    background: ${(props) =>
+        props.className === "active" ? "#1d82f5" : "#fff"};
+    color: ${(props) => (props.className === "active" ? "#fff" : "#000")};
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #eaf0f7;
+    &:hover {
+        background: #eaf0f7;
+        color: #1d82f5;
+    }
 `;
 
 // column Filter
 const ColumnFilterWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin: 10px 0;
-  position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    position: relative;
 `;
 
 const ColumnFilterButton = styled.button`
-  padding: 6px;
-  font-size: 12px;
-  border-radius: 5px;
-  border: 1px solid #eaf0f7;
-  color: #000;
-  background: #fff;
-  position: relative;
-  cursor: pointer;
+    padding: 6px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: 1px solid #eaf0f7;
+    color: #000;
+    background: #fff;
+    position: relative;
+    cursor: pointer;
 `;
 
 const ColumnFilterDropdown = styled.div`
-  position: absolute;
-  top: 30px;
-  left: 0;
-  width: 100%;
-  min-width: fit-content;
-  background: #fff;
-  border: 1px solid #eaf0f7;
-  border-radius: 5px;
-  padding: 10px;
-  box-sizing: border-box;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 100%;
+    min-width: fit-content;
+    background: #fff;
+    border: 1px solid #eaf0f7;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
 `;
 
 const ColumnFilterCheckbox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 10px 0;
-  input {
-    cursor: pointer;
-  }
-  label {
-    font-size: 12px;
-    font-weight: 500;
-    white-space: nowrap;
-    cursor: pointer;
-  }
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 10px 0;
+    input {
+        cursor: pointer;
+    }
+    label {
+        font-size: 12px;
+        font-weight: 500;
+        white-space: nowrap;
+        cursor: pointer;
+    }
 `;
 
 // drag and drop
 // style when drag
 const DragAbleTH = styled.th`
     opacity: ${(props) => (props.isDragging ? 0.5 : 1)};
-    background: ${(props) => (props.isDragging ? 'red' : '#fff')};} 
+    background: ${(props) => (props.isDragging ? "red" : "#fff")};} 
 `;

@@ -6,7 +6,7 @@ import { BiRepeat } from "react-icons/bi";
 import Selection from "../UI/form/Selection";
 import "react-datepicker/dist/react-datepicker.css";
 import "./salesDashboardForm.css";
-import React, { forwardRef, useState, useEffect } from "react";
+import React, { forwardRef, useState, useEffect, useRef } from "react";
 import Radio from "../UI/form/Radio";
 import Input from "../UI/form/Input";
 import Checkbox from "../UI/form/Cheeckbox";
@@ -19,19 +19,24 @@ import { closeModal } from "./services/modals/salesDashboardModalSlice";
 import _ from "lodash";
 import PeriodInput from "./PeriodInput";
 import axios from "axios";
+import AssigneeForDropdown from "./components/AssigneeForDropdown";
 
 const GoalFormModal = ({ isOpen }) => {
     const { title, entry, entryType, edit, showPrevious } = useSelector(
         (s) => s.goalFormModal
     );
-    const dispatch = useDispatch();
 
-    // ui
+    const dispatch = useDispatch();
+    const [saving, setSaving] = useState(false);
+
     const [periodFilter, setPeriodFilter] = useState(false);
 
     // form data
     const [assigneeType, setAssigneeType] = useState("User");
-    const [assigneeFor, setAssigneeFor] = useState("Md Mehedi Hasan");
+    const [assigneeFor, setAssigneeFor] = useState({
+        id: 0,
+        name: "Select User",
+    });
     const [pipeline, setPipeline] = useState(["Pipeline"]);
     const [frequency, setFrequency] = useState("Monthly");
     const [durationStart, setDurationStart] = useState(new Date());
@@ -41,13 +46,27 @@ const GoalFormModal = ({ isOpen }) => {
     const [trackingType, setTrackingType] = useState("value");
     const [dealStage, setDealStage] = useState("Contact Mode");
     const [recurring, setRecurring] = useState([]);
+    const [dealType, setDealType] = useState("");
+    const [goalType, setGoalType] = useState("");
+    const [pointAchievement, setPointAchievement] = useState(0);
 
     const [period, setPeriod] = useState([]);
 
+    const cardBodyRef = useRef(null);
+
     React.useEffect(() => {
-        if (!durationEnd) {
-            setPeriodFilter(false);
+        if (cardBodyRef && cardBodyRef.current) {
+            if (cardBodyRef.current.offsetHeight > 800) {
+                cardBodyRef.current.style.height = "800px";
+                cardBodyRef.current.style.overflowX = "hidden";
+                cardBodyRef.current.style.overflowY = "scroll";
+            }
         }
+    }, [cardBodyRef, periodFilter, durationEnd, frequency]);
+
+    // period filter
+    React.useEffect(() => {
+        if (!durationEnd) setPeriodFilter(false);
     }, [durationEnd]);
 
     // time period control
@@ -251,6 +270,7 @@ const GoalFormModal = ({ isOpen }) => {
     // handle on save
     const handleSave = async (e) => {
         e.preventDefault();
+        setSaving(true);
         const data = {
             assigneeType,
             assigneeFor,
@@ -263,11 +283,15 @@ const GoalFormModal = ({ isOpen }) => {
             trackingType,
             dealStage,
             recurring,
+            dealType,
+            goalType,
+            pointAchievement,
         };
 
-        let response = await axios.post("/account/insights", data);
-
-        console.log(response);
+        await axios.post("/account/insights", data).then((res) => {
+            setSaving(false);
+            console.log(res);
+        });
     };
 
     // close modal
@@ -294,7 +318,10 @@ const GoalFormModal = ({ isOpen }) => {
                             </button>
                         </div>
                         {/* end header */}
-                        <div className="card-body sp1_ins_sell_dm--card_body">
+                        <div
+                            ref={cardBodyRef}
+                            className="card-body sp1_ins_sell_dm--card_body"
+                        >
                             <div className="sp1_sell_df--container">
                                 {/* item */}
                                 <div className="sp1_sell_df--item">
@@ -311,15 +338,10 @@ const GoalFormModal = ({ isOpen }) => {
                                                 "User",
                                             ]}
                                         />
-                                        <Selection
-                                            value={assigneeFor}
-                                            onSelected={setAssigneeFor}
-                                            options={[
-                                                "Abut Sayeed",
-                                                "Billba Mergu",
-                                                "Md Mehedi Hasan",
-                                            ]}
-                                            searchEnable={true}
+                                        <AssigneeForDropdown
+                                            assigneeFor={assigneeFor}
+                                            setAssigneeFor={setAssigneeFor}
+                                            assigneeType={assigneeType}
                                         />
                                     </div>
                                 </div>
@@ -383,6 +405,16 @@ const GoalFormModal = ({ isOpen }) => {
                                                 "Yearly",
                                             ]}
                                         />
+
+                                        <Selection
+                                            value={dealType}
+                                            onSelected={setDealType}
+                                            options={[
+                                                "New Client",
+                                                "Existing Client",
+                                            ]}
+                                            placeholder="Deal Type"
+                                        />
                                     </div>
                                 </div>
                                 {/* end item */}
@@ -436,6 +468,24 @@ const GoalFormModal = ({ isOpen }) => {
                                 </div>
                                 {/* end item */}
 
+                                <div className="sp1_sell_df--item">
+                                    <div className="sp1_sell_df--title">
+                                        Points Achievement
+                                    </div>
+                                    <div className="sp1_sell_df--control pt-2">
+                                        <Input
+                                            type="number"
+                                            value={pointAchievement}
+                                            onChange={(e) =>
+                                                setPointAchievement(
+                                                    e.target.value
+                                                )
+                                            }
+                                            placeholder="Point Achievement"
+                                            className="w-100"
+                                        />
+                                    </div>
+                                </div>
                                 {/* item */}
                                 <div className="sp1_sell_df--item">
                                     <div className="sp1_sell_df--title">
@@ -482,7 +532,12 @@ const GoalFormModal = ({ isOpen }) => {
                                                 className="w-auto"
                                             />
                                             {periodFilter ? (
-                                                <button className="btn btn-sm btn-light text-primary font-weight-bold">
+                                                <button
+                                                    className="btn btn-sm btn-light text-primary font-weight-bold"
+                                                    style={{
+                                                        whiteSpace: "nowrap",
+                                                    }}
+                                                >
                                                     Apply to all
                                                 </button>
                                             ) : (
@@ -500,6 +555,17 @@ const GoalFormModal = ({ isOpen }) => {
                                                     />
                                                 </div>
                                             )}
+
+                                            <Selection
+                                                value={goalType}
+                                                onSelected={setGoalType}
+                                                options={[
+                                                    "Minimum",
+                                                    "Milestone",
+                                                ]}
+                                                placeholder="Goal Type"
+                                                optionClassName="mb-0"
+                                            />
                                         </div>
                                         <div
                                             className="mt-2"
@@ -585,7 +651,7 @@ const GoalFormModal = ({ isOpen }) => {
                                 onClick={handleSave}
                                 className="btn btn-sm btn-success"
                             >
-                                Save
+                                {saving ? "Saving" : "Save"}
                             </button>
                         </div>
                     </div>

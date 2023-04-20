@@ -138,7 +138,7 @@ const RelativeDateFilter = ({ selected, onSelect }) => {
             {isOpen && (
                 <div
                     ref={setPopperElement}
-                    style={styles.popper}
+                    style={{ ...styles.popper, zIndex: "100" }}
                     {...attributes}
                 >
                     <div className="sp1_rdf--menu">
@@ -152,7 +152,7 @@ const RelativeDateFilter = ({ selected, onSelect }) => {
                         </div>
                         {/* search box end */}
                         <CustomScrollbar maxH={600}>
-                            <div className="mb-2">
+                            <div className="mb-3">
                                 {/* relative date */}
                                 {filteredRelativeDates.length > 0 && (
                                     <>
@@ -163,7 +163,7 @@ const RelativeDateFilter = ({ selected, onSelect }) => {
                                             {filteredRelativeDates.map((r) => (
                                                 <li
                                                     onClick={() =>
-                                                        setSelectedDate(r)
+                                                        handleSelect(r)
                                                     }
                                                     key={`${r}-${Math.random()}`}
                                                     onMouseOver={() =>

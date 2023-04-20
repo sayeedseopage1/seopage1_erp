@@ -94,6 +94,10 @@
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+    white-space: nowrap;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
 }
 
 
