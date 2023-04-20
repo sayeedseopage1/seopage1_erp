@@ -9,12 +9,12 @@ const Pagination = ({
     setCurrentPage,
     setNPageRows,
 }) => {
-    const [pageNumbers, setPageNumbers] = useState([]);
+    const [pageNumbers, setPageNumbers] = React.useState([]);
     const [renderButtons, setRenderButtons] = React.useState([]);
     const [totalPages, setTotalPages] = React.useState(0);
 
     // count total pages
-    useEffect(() => {
+    React.useEffect(() => {
         const tPages = Math.ceil(data.length / nPageRows);
         setTotalPages(tPages);
     }, [data, nPageRows]);
@@ -44,7 +44,7 @@ const Pagination = ({
         setRenderButtons(buttons);
     }, [currentPage, totalPages]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         const pageNumbers = [];
         for (let i = 1; i <= Math.ceil(data.length / nPageRows); i++) {
             pageNumbers.push(i);
@@ -112,9 +112,8 @@ const Pagination = ({
                                 )
                             }
                             {renderButtons.map((number) => (
-                                <React.Fragment key={number}>
+                                <React.Fragment key={Math.random()}>
                                     <PaginateNumber
-                                        key={number}
                                         id={number}
                                         onClick={handleClick}
                                         className={
@@ -132,7 +131,15 @@ const Pagination = ({
                                 // render dots
                                 renderButtons[renderButtons.length - 1] <
                                 totalPages - 1 && (
-                                    <PaginateNumber>...</PaginateNumber>
+                                    <>
+                                        <PaginateNumber>...</PaginateNumber>
+                                        <PaginateNumber
+                                            onClick={handleClick}
+                                            className={currentPage === totalPages ? "active" : ""}
+                                        >
+                                            {totalPages}
+                                        </PaginateNumber>
+                                    </>
                                 )
                             }
                         </>
@@ -151,3 +158,120 @@ const Pagination = ({
         </PaginationContainer>
     );
 };
+
+export default Pagination;
+
+// styled
+const PaginationContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    font-size: 14px;
+`;
+
+const SelectParPage = styled.select`
+    padding: 4px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: 1px solid #eaf0f7;
+    color: rgb(0 0 0 / 60%);
+    background: #fff;
+    margin: 0 6px;
+    option {
+        padding: 6px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
+
+    &:focus {
+        outline: none;
+    }
+`;
+
+const PaginationGroup = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+`;
+
+const EntriesPerPage = styled.div`
+  color: rgb(0 0 0 / 40%)
+  margin-right: 10px;
+  font-size: 14px;
+  margin-right: 10px;
+`;
+
+const PaginationButtons = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+`;
+const PreviousBtn = styled.button`
+    padding: 6px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: 1px solid #eaf0f7;
+    color: #000;
+    background: #fff;
+    &:hover {
+        background: #eaf0f7;
+        color: #1d82f5;
+    }
+    &:active {
+        background: #1d82f5;
+        color: #fff;
+    }
+    &:disabled {
+        background: #f3f3f3;
+        color: #ccc;
+    }
+`;
+
+const NextBtn = styled.button`
+    padding: 6px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: 1px solid #eaf0f7;
+    color: #000;
+    background: #fff;
+    &:hover {
+        background: #eaf0f7;
+        color: #1d82f5;
+    }
+    &:active {
+        background: #1d82f5;
+        color: #fff;
+    }
+    &:disabled {
+        background: #f3f3f3;
+        color: #ccc;
+    }
+`;
+// pagination styled
+const PaginateNumber = styled.div`
+    width: 16px;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    margin: 0 6px;
+    border: none;
+    font-size: 14px;
+    background: ${(props) =>
+        props.className === "active" ? "#1d82f5" : "#fff"};
+    color: ${(props) => (props.className === "active" ? "#fff" : "#000")};
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #eaf0f7;
+    &:hover {
+        background: #eaf0f7;
+        color: #1d82f5;
+    }
+`;

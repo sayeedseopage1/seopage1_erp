@@ -59,6 +59,8 @@ class TimelogReportController extends AccountBaseController
         // return view('admin.reports.time-log.index', $this->data);
         return $dataTable->render('reports.timelogs.index', $this->data);
     }
+    // public function getTimeLog($type)
+    
     public function getTimeLog($type)
     {
 
@@ -78,8 +80,10 @@ class TimelogReportController extends AccountBaseController
                 'client.name as client_name',
                 'client.image as client_image',
                 'deals.profile_link as client_from',
-                'pm.name as project_manager', 
-                'pm_employee_designations.name as project_manager_designation',
+                'pm.id as pm_id',
+                'pm.image as pm_image',
+                'pm.name as pm_name', 
+                'pm_employee_designations.name as pm_roles',
                 'projects.id as project_id',
                 'projects.project_name',
                 'projects.status as project_status',
@@ -115,6 +119,11 @@ class TimelogReportController extends AccountBaseController
                 'projects.client_id',
                 'client.name as client_name',
                 'client.image as client_image',
+                'deals.profile_link as client_from',
+                
+                'projects.id as project_id',
+                'projects.project_name',
+                'projects.status as project_status',
 
                 'pm.id as pm_id',
                 'pm.name as pm_name',
@@ -139,6 +148,7 @@ class TimelogReportController extends AccountBaseController
             ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
             
             ->join('users as client', 'projects.client_id', 'client.id')
+            ->join('deals', 'client.id', '=', 'deals.client_id')
             ->orderBy('project_time_logs.task_id' , 'desc')
             ->get();
         } else if($type == 'projects') {
@@ -146,8 +156,12 @@ class TimelogReportController extends AccountBaseController
                 'projects.id as project_id',
                 'projects.project_name',   
                 'projects.client_id',
+                'projects.status as project_status',
+                
                 'client.name as client_name',
                 'client.image as client_image',
+                'deals.profile_link as client_from',
+
 
                 'pm.id as pm_id',
                 'pm.name as pm_name',
@@ -173,6 +187,7 @@ class TimelogReportController extends AccountBaseController
             ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
             
             ->join('users as client', 'projects.client_id', 'client.id')
+            ->join('deals', 'client.id', '=', 'deals.client_id')
 
             ->groupBy('project_time_logs.project_id')
             ->groupBy('project_time_logs.user_id')
