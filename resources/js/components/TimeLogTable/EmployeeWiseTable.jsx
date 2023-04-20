@@ -30,11 +30,17 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
     const [loading, setLoading] = useState(true);
     // get employee table data
     useEffect(() => {
+        if(data.length > 0) return;
         setLoading(true);
         const fetch = async () => {
             axios.get("/get-timelogs/employees").then((res) => {
+                // let data = res.data?.filter(d => d.project_status === 'in progress');
+                // if(data){
+                //     setData(data.sort((a,b) => a['employee_id'] < b['employee_id']));
+                // }
+
                 setData(res.data);
-                setLoading(false);
+                setLoading(false)
             });
         };
         fetch();
@@ -210,10 +216,10 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
                                             >
                                                 
                                                 <RenderWithImageAndRole
-                                                    avatar={value[0].client_image}
-                                                    name={value[0].client_name}
-                                                    url={`clients/${value[0].client_id}`}
-                                                    clientFrom={value[0].client_from}
+                                                    avatar={item['client_image']}
+                                                    name={item['client_name']}
+                                                    url={`clients/${item["client_id"]}`}
+                                                    clientFrom={["client_from"]}
                                                 />
                                             </td>
 
@@ -223,10 +229,10 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
                                                 style={{ borderBottom: value.length - 1 === index ? "2px solid #AAD1FC" : "1px solid #E7EFFC", }}
                                             >
                                                 <RenderWithImageAndRole
-                                                    avatar={value[0].pm_image}
-                                                    name={value[0].pm_name}
-                                                    url={`employees/${value[0].pm_id}`}
-                                                    role={value[0].pm_roles}
+                                                    avatar={item["pm_image"]}
+                                                    name={item["pm_name"]}
+                                                    url={`employees/${item["pm_id"]}`}
+                                                    role={item["pm_roles"]}
                                                 />
                                             </td>
 
@@ -484,10 +490,7 @@ const ColumnFilter = ({ columns, filterColumn, setFilterColumn, root }) => {
     return content;
 };
 
-// pagination
 
-
-// pagination end
 
 // ========= styled ============
 const TableContainer = styled.div`
@@ -555,8 +558,6 @@ const TableWrapper = styled.div`
         }
     }
 `;
-
-
 
 
 const EmployeeProfileTd = styled.td`

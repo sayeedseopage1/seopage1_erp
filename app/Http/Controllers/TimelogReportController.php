@@ -77,13 +77,15 @@ class TimelogReportController extends AccountBaseController
                 'employee.name as employee_name',
                 'employee.image as employee_image',
                 'employee_designations.name as employee_designation',
+                 
+                'projects.client_id',
                 'client.name as client_name',
                 'client.image as client_image',
                 'deals.profile_link as client_from',
                 'pm.id as pm_id',
                 'pm.image as pm_image',
                 'pm.name as pm_name', 
-                'pm_employee_designations.name as pm_roles',
+                'pm_roles.display_name as pm_roles',
                 'projects.id as project_id',
                 'projects.project_name',
                 'projects.status as project_status',
@@ -99,6 +101,7 @@ class TimelogReportController extends AccountBaseController
             
             
             ->join('users as pm', 'projects.pm_id', '=', 'pm.id')
+            ->join('roles as pm_roles', 'pm.role_id', 'pm_roles.id')
             ->join('employee_details as pm_emp_details', 'pm.id', '=', 'pm_emp_details.user_id')
             ->join('designations as pm_employee_designations', 'pm_emp_details.designation_id', '=', 'pm_employee_designations.id')
             
