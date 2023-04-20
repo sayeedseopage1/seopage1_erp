@@ -107,9 +107,18 @@ const Pagination = ({
                     {totalPages > 0 && (
                         <>
                             {
-                                // render dots
+                                
                                 renderButtons[0] > 1 && (
+                                    <>
+                                    <PaginateNumber
+                                        id={1}
+                                        onClick={handleClick}
+                                        className={currentPage === 1 ? "active" : ""}
+                                    >
+                                       1
+                                    </PaginateNumber>
                                     <PaginateNumber>...</PaginateNumber>
+                                    </>
                                 )
                             }
                             {renderButtons?.map((number) => (
@@ -135,6 +144,7 @@ const Pagination = ({
                                     <>
                                         <PaginateNumber>...</PaginateNumber>
                                         <PaginateNumber
+                                            id={totalPages}
                                             onClick={handleClick}
                                             className={currentPage === totalPages ? "active" : ""}
                                         >
