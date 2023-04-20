@@ -72,6 +72,7 @@ const Pagination = ({
         setNPageRows(e.target.value);
     };
 
+    
     return (
         <PaginationContainer>
             <div>
@@ -111,8 +112,8 @@ const Pagination = ({
                                     <PaginateNumber>...</PaginateNumber>
                                 )
                             }
-                            {renderButtons.map((number) => (
-                                <React.Fragment key={Math.random()}>
+                            {renderButtons?.map((number) => (
+                                <React.Fragment key={number}>
                                     <PaginateNumber
                                         id={number}
                                         onClick={handleClick}

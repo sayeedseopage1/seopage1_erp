@@ -33,8 +33,8 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
         setLoading(true);
         const fetch = async () => {
             axios.get("/get-timelogs/employees").then((res) => {
-                const  data = res.data.filter(d => d.project_status === 'in progress');
-                setData(data);
+                // const  data = res.data.filter(d => d.project_status === 'in progress');
+                setData(res.data);
                 setLoading(false)
             });
         };
@@ -46,6 +46,7 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
     React.useEffect(() => {
         setSortConfig({ key: "employee_id", direction: "asc" });
         setSubColumns(subColumns);
+        setCurrentPage(1);
         const columnOrderFromLocalStore = localStorage.getItem(
             "employeeWiseTableColumnOrder"
         );

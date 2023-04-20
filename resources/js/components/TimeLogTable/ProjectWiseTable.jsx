@@ -30,8 +30,8 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
         setLoading(true);
         const fetch = async () => {
             axios.get("/get-timelogs/projects").then((res) => {
-                const data = res.data.filter(d => d.project_status === 'in progress');
-                setData(data.sort((a, b) => a["project_id"] < b["project-id"]));
+                // const data = res.data.filter(d => d.project_status === 'in progress');
+                setData(res.data.sort((a, b) => a["project_id"] < b["project-id"]));
                 setLoading(false);
             });
         };
@@ -44,6 +44,7 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
     /* ================ Initial State ==================== */
     React.useEffect(() => {
         setSubColumns(subColumns);
+        setCurrentPage(1);
         setSortConfig({ key: "project_id", direction: "ace" });
         const columnOrderFromLocalStore = localStorage.getItem(
             "projectWiseTableColumnOrder"
