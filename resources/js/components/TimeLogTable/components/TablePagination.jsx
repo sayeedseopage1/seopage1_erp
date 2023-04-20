@@ -26,29 +26,35 @@ const Pagination = ({
     React.useEffect(() => {
         const buttons = [];
 
-        if (currentPage <= 3) {
-            for (let i = 1; i <= 5; i++) {
+        if(totalPages <= 7){
+            for (let i = 1; i <= totalPages; i++) {
                 buttons.push(i);
+            }
+        }else{ 
+            if (currentPage <= 3) {
+                for (let i = 1; i < 5; i++) {
+                    buttons.push(i);
+                }
+                
+            }else if (currentPage >= totalPages - 3) {
+                for (let i = totalPages - 4; i <= totalPages; i++) {
+                    buttons.push(i);
+                }
+            }else if (currentPage > 3 && currentPage < totalPages - 3) {
+                for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+                    buttons.push(i);
+                }
             }
         }
 
-        if (currentPage > 3 && currentPage < totalPages - 3) {
-            for (let i = currentPage - 2; i <= currentPage + 2; i++) {
-                buttons.push(i);
-            }
-        }
+        setRenderButtons([...buttons]);
+    }, [totalPages, currentPage, isTotalPagesChange]);
 
-        if (currentPage >= totalPages - 3) {
-            for (let i = totalPages - 4; i <= totalPages; i++) {
-                buttons.push(i);
-            }
-        }
 
-        setRenderButtons(buttons);
-    }, [currentPage, isTotalPagesChange]);
-
+    // total page
     React.useEffect(() => {
         const pageNumbers = [];
+        if(data.length < 0) return;
         for (let i = 1; i <= Math.ceil(data.length / nPageRows); i++) {
             pageNumbers.push(i);
         }

@@ -34,12 +34,13 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
         setLoading(true);
         const fetch = async () => {
             axios.get("/get-timelogs/employees").then((res) => {
-                // let data = res.data?.filter(d => d.project_status === 'in progress');
-                // if(data){
-                //     setData(data.sort((a,b) => a['employee_id'] < b['employee_id']));
-                // }
+                let data = res.data?.filter(d => d.project_status === 'in progress');
+                
+                if(data){
+                    setData(data);
+                }
 
-                setData(res.data);
+                // setData(res.data);
                 setLoading(false)
             });
         };
@@ -51,7 +52,6 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
     React.useEffect(() => {
         setSortConfig({ key: "employee_id", direction: "asc" });
         setSubColumns(subColumns);
-        setCurrentPage(1);
         const columnOrderFromLocalStore = localStorage.getItem(
             "employeeWiseTableColumnOrder"
         );
@@ -262,7 +262,7 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
                                                                 ? `clients/${item["client_id"]}`
                                                                 : column ===
                                                                     "project_manager"
-                                                                    ? `employees/${item["project_manager_id"]}`
+                                                                    ? `employees/${item["pm_id"]}`
                                                                     : "#"
                                                     }
                                                 >
@@ -294,15 +294,17 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
                     <tbody>
                         {(!loading && data.length > 0) ?    
                             prepareRows() 
-                        : <tr>
-                            <LoadingCell >
-                               <span> Processing...</span>
-                            </LoadingCell>
-                        </tr>
-                        }
+                        : null}
                     </tbody>
                 </table>
             </TableWrapper>
+
+            {loading && data.length === 0 &&
+                <Loading> 
+                    <div className="spinner-border" role="status"> </div>
+                    Loading...
+                </Loading>
+            }
 
             {/* pagination */}
             <Pagination
@@ -559,6 +561,21 @@ const TableWrapper = styled.div`
     }
 `;
 
+const Loading = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 200px;
+    font-size: 16px;
+    & > div.spinner-border{
+        width: 16px;
+        height: 16px;
+        border-width: .16em;
+        margin-right: 10px;
+    }
+`
+
 
 const EmployeeProfileTd = styled.td`
     background: #f8f8f8;
@@ -618,14 +635,7 @@ const ColumnFilterCheckbox = styled.div`
     }
 `;
 
-const LoadingCell = styled.td`
-    min-height: 120px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    font-size: 24px;
-    color: #000;
-`
+
 
 // drag and drop
 // style when drag
