@@ -88,7 +88,7 @@ class TimelogReportController extends AccountBaseController
                 'pm_roles.display_name as pm_roles',
                 'projects.id as project_id',
                 'projects.project_name',
-                'projects.status as project_status',
+                'projects.status as project_stat',
                 'tasks.id as task_id',
                 'tasks.heading as task_name',
                 'tasks.id as task_id',
@@ -112,13 +112,16 @@ class TimelogReportController extends AccountBaseController
             ->join('employee_details', 'employee.id', '=', 'employee_details.user_id')
             ->join('designations as employee_designations', 'employee_details.designation_id', '=', 'employee_designations.id')
             
+            
             ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
             ->whereIn('project_time_logs.user_id', $id_array)
             ->groupBy('project_time_logs.project_id')
-        //    / ->groupBy('projects.client_id')
+        //     ->groupBy('projects.client_id')
+           // ->where('projects.status','=','in progress')
            
             ->orderBy('project_time_logs.task_id' , 'desc')
             ->get();
+           // dd($data);
         } else if($type == 'tasks') {
             $data = ProjectTimeLog::select([
                 'tasks.id as task_id',
