@@ -32,8 +32,8 @@ const TaskWiseTable = ({ columns, subColumns }) => {
         setLoading(true);
         const fetch = async () => {
             axios.get("/get-timelogs/tasks").then((res) => {
-                const data = res.data.filter(d => d.project_status === 'in progress');
-                setData(data.sort((a, b) => a["project_id"] < b["project-id"]));
+                // const data = res.data.filter(d => d.project_status === 'in progress');
+                setData(res.data.sort((a, b) => a["project_id"] < b["project-id"]));
                 setLoading(false)
             });
         };
@@ -46,6 +46,7 @@ const TaskWiseTable = ({ columns, subColumns }) => {
     /* ================ Initial State ==================== */
     React.useEffect(() => {
         setSubColumns(subColumns);
+        setCurrentPage(1);
         setSortConfig({ key: "task_id", direction: "dec" });
         const columnOrderFromLocalStore = localStorage.getItem(
             "taskWiseTableColumnOrder"
