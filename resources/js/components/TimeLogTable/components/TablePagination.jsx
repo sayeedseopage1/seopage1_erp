@@ -112,9 +112,8 @@ const Pagination = ({
                                 )
                             }
                             {renderButtons.map((number) => (
-                                <React.Fragment key={number}>
+                                <React.Fragment key={Math.random()}>
                                     <PaginateNumber
-                                        key={number}
                                         id={number}
                                         onClick={handleClick}
                                         className={
@@ -132,7 +131,15 @@ const Pagination = ({
                                 // render dots
                                 renderButtons[renderButtons.length - 1] <
                                 totalPages - 1 && (
-                                    <PaginateNumber>...</PaginateNumber>
+                                    <>
+                                        <PaginateNumber>...</PaginateNumber>
+                                        <PaginateNumber
+                                            onClick={handleClick}
+                                            className={currentPage === totalPages ? "active" : ""}
+                                        >
+                                            {totalPages}
+                                        </PaginateNumber>
+                                    </>
                                 )
                             }
                         </>

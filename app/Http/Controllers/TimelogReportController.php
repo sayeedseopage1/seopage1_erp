@@ -59,6 +59,8 @@ class TimelogReportController extends AccountBaseController
         // return view('admin.reports.time-log.index', $this->data);
         return $dataTable->render('reports.timelogs.index', $this->data);
     }
+    // public function getTimeLog($type)
+    
     public function getTimeLog($type)
     {
 
@@ -75,13 +77,12 @@ class TimelogReportController extends AccountBaseController
                 'employee.name as employee_name',
                 'employee.image as employee_image',
                 'employee_designations.name as employee_designation',
-                'client.id as client_id',
                 'client.name as client_name',
                 'client.image as client_image',
                 'deals.profile_link as client_from',
                 'pm.id as pm_id',
-                'pm.name as pm_name', 
                 'pm.image as pm_image',
+                'pm.name as pm_name', 
                 'pm_employee_designations.name as pm_roles',
                 'projects.id as project_id',
                 'projects.project_name',
@@ -118,8 +119,8 @@ class TimelogReportController extends AccountBaseController
                 'projects.client_id',
                 'client.name as client_name',
                 'client.image as client_image',
-                'deals.profile_link as client_from',                
-
+                'deals.profile_link as client_from',
+                
                 'projects.id as project_id',
                 'projects.project_name',
                 'projects.status as project_status',
@@ -133,7 +134,6 @@ class TimelogReportController extends AccountBaseController
                 'employee.name as employee_name',
                 'employee.image as employee_image',
                 'emp_roles.display_name as employee_roles',
-                
                 'project_time_logs.start_time',
                 'project_time_logs.end_time',
                 'project_time_logs.total_minutes as total_minutes'
@@ -156,6 +156,8 @@ class TimelogReportController extends AccountBaseController
                 'projects.id as project_id',
                 'projects.project_name',   
                 'projects.client_id',
+                'projects.status as project_status',
+                
                 'client.name as client_name',
                 'client.image as client_image',
                 'deals.profile_link as client_from',
@@ -186,8 +188,11 @@ class TimelogReportController extends AccountBaseController
             
             ->join('users as client', 'projects.client_id', 'client.id')
             ->join('deals', 'client.id', '=', 'deals.client_id')
-            ->groupBy('employee.id')
-            //->orderBy('project_time_logs.task_id' , 'desc')
+
+            ->groupBy('project_time_logs.project_id')
+            ->groupBy('project_time_logs.user_id')
+            ->orderBy('project_time_logs.project_id' , 'desc')
+
             ->get();
             //dd($data);
         }

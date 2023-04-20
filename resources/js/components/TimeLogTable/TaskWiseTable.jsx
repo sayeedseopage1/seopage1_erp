@@ -26,13 +26,15 @@ const TaskWiseTable = ({ columns, subColumns }) => {
     } = React.useContext(EmployeeWiseTableContext);
 
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
     // get employee table data
     useEffect(() => {
+        setLoading(true);
         const fetch = async () => {
             axios.get("/get-timelogs/tasks").then((res) => {
-                setData(
-                    res.data.sort((a, b) => a["project_id"] < b["project-id"])
-                );
+                const data = res.data.filter(d => d.project_status === 'in progress');
+                setData(data.sort((a, b) => a["project_id"] < b["project-id"]));
+                setLoading(false)
             });
         };
 
@@ -191,7 +193,7 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                         {/* task name */}
                         <EmployeeProfileTd
                             rowSpan={value.length + 1}
-                            style={{ borderBottom: "2px solid #AAD1FC" }}
+                            style={{ borderBottom: "2px solid #AAD1FC", minWidth:'300px' }}
                         >
                             <EmployeeProfile>
                                 <EmployeeProfileName>
@@ -210,6 +212,7 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                                 borderBottom: "2px solid #AAD1FC",
                                 borderLeft: "2px solid #fff",
                                 borderRight: "2px solid #fff",
+                                minWidth: '300px'
                             }}
                         >
                             <EmployeeProfile>
@@ -230,6 +233,7 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                                 borderBottom: "2px solid #AAD1FC",
                                 borderLeft: "2px solid #fff",
                                 borderRight: "2px solid #fff",
+                                minWidth: '200px'
                             }}
                         >
                             <RenderWithImageAndRole
@@ -244,10 +248,9 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                         {/* Project Manager */}
                         <EmployeeProfileTd
                             rowSpan={value.length + 1}
-                            style={{ borderBottom: "2px solid #AAD1FC" }}
+                            style={{ borderBottom: "2px solid #AAD1FC", 
+                            minWidth: '200px'}}
                         >
-                            
-
                             <RenderWithImageAndRole
                                 avatar={value[0].pm_image}
                                 name={value[0].pm_name}
@@ -347,7 +350,16 @@ const TaskWiseTable = ({ columns, subColumns }) => {
             <TableWrapper>
                 <table>
                     <thead>{prepareHeader()}</thead>
-                    <tbody>{prepareRows()}</tbody>
+                    <tbody>
+                        {(!loading && data.length > 0) ?    
+                            prepareRows() 
+                        : <tr>
+                            <LoadingCell >
+                               <span> Processing...</span>
+                            </LoadingCell>
+                        </tr>
+                        }
+                    </tbody>
                 </table>
             </TableWrapper>
 
@@ -572,7 +584,7 @@ const TableWrapper = styled.div`
             padding: 16px 10px;
             text-align: left;
             min-height: 100%;
-            min-width: 300px;
+            min-width: 100px;
             height: 100%;
             border-bottom: 1px solid #e7effc;
         }
@@ -636,23 +648,7 @@ const EmployeeProfile = styled.div`
     display: flex;
     align-items: center;
 `;
-const EmployeeProfileImage = styled.div`
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: #e8e8e8;
-    overflow: hidden;
 
-    span {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        font-size: 20px;
-        font-weight: bold;
-    }
-`;
 const EmployeeProfileName = styled.div`
     display: flex;
     flex-direction: column;
@@ -674,119 +670,6 @@ const EmployeeProfileName = styled.div`
     }
 `;
 
-const PaginationContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-    font-size: 14px;
-`;
-
-const SelectParPage = styled.select`
-    padding: 4px;
-    font-size: 12px;
-    border-radius: 5px;
-    border: 1px solid #eaf0f7;
-    color: rgb(0 0 0 / 60%);
-    background: #fff;
-    margin: 0 6px;
-    option {
-        padding: 6px;
-        font-size: 12px;
-        border-radius: 5px;
-    }
-
-    &:focus {
-        outline: none;
-    }
-`;
-
-const PaginationGroup = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-`;
-
-const EntriesPerPage = styled.div`
-  color: rgb(0 0 0 / 40%)
-  margin-right: 10px;
-  font-size: 14px;
-  margin-right: 10px;
-`;
-
-const PaginationButtons = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 0;
-`;
-const PreviousBtn = styled.button`
-    padding: 6px;
-    font-size: 12px;
-    border-radius: 5px;
-    border: 1px solid #eaf0f7;
-    color: #000;
-    background: #fff;
-    &:hover {
-        background: #eaf0f7;
-        color: #1d82f5;
-    }
-    &:active {
-        background: #1d82f5;
-        color: #fff;
-    }
-    &:disabled {
-        background: #f3f3f3;
-        color: #ccc;
-    }
-`;
-
-const NextBtn = styled.button`
-    padding: 6px;
-    font-size: 12px;
-    border-radius: 5px;
-    border: 1px solid #eaf0f7;
-    color: #000;
-    background: #fff;
-    &:hover {
-        background: #eaf0f7;
-        color: #1d82f5;
-    }
-    &:active {
-        background: #1d82f5;
-        color: #fff;
-    }
-    &:disabled {
-        background: #f3f3f3;
-        color: #ccc;
-    }
-`;
-// pagination styled
-const PaginateNumber = styled.div`
-    width: 16px;
-    height: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-    margin: 0 6px;
-    border: none;
-    font-size: 14px;
-    background: ${(props) =>
-        props.className === "active" ? "#1d82f5" : "#fff"};
-    color: ${(props) => (props.className === "active" ? "#fff" : "#000")};
-    cursor: pointer;
-    border-radius: 5px;
-    border: 1px solid #eaf0f7;
-    &:hover {
-        background: #eaf0f7;
-        color: #1d82f5;
-    }
-`;
 
 // column Filter
 const ColumnFilterWrapper = styled.div`
@@ -837,6 +720,15 @@ const ColumnFilterCheckbox = styled.div`
         cursor: pointer;
     }
 `;
+
+const LoadingCell = styled.td`
+    min-height: 120px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    color: #000;
+`
 
 // drag and drop
 // style when drag
