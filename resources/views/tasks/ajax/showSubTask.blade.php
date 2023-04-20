@@ -96,8 +96,8 @@
 						@endphp
 						<td><a class="openRightModal" href="{{route('employees.show', $assignedTo->user->id)}}">{{$assignedTo->user->name}}</a></td>
 						<td><a class="openRightModal" href="{{route('employees.show', $value->addedByUser->id)}}">{{$value->addedByUser->name}}</a></td>
-						<td>{{$value->start_date->format('Y-m-d')}}</td>
-						<td>{{$value->due_date->format('Y-m-d')}}</td>
+						<td>{{$value->start_date}}</td>
+						<td>{{$value->due_date}}</td>
 						<td>{{$value->estimate_hours}} Hours {{$value->estimate_minutes}} minutes</td>
 						<td>
 							@php
