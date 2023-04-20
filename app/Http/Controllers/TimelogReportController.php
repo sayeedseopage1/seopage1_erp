@@ -97,6 +97,7 @@ class TimelogReportController extends AccountBaseController
             ])
             ->join('projects', 'project_time_logs.project_id', '=', 'projects.id')
             
+            
             ->join('users as pm', 'projects.pm_id', '=', 'pm.id')
             ->join('employee_details as pm_emp_details', 'pm.id', '=', 'pm_emp_details.user_id')
             ->join('designations as pm_employee_designations', 'pm_emp_details.designation_id', '=', 'pm_employee_designations.id')
@@ -111,7 +112,8 @@ class TimelogReportController extends AccountBaseController
             ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
             ->whereIn('project_time_logs.user_id', $id_array)
             ->groupBy('project_time_logs.project_id')
-            ->where('projects.status','in progress')
+        //    / ->groupBy('projects.client_id')
+           
             ->orderBy('project_time_logs.task_id' , 'desc')
             ->get();
         } else if($type == 'tasks') {
