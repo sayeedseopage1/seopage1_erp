@@ -6,7 +6,7 @@
 /public/js/app.js.map
 .env
 #vendor
-
+/public/js/app.js.map
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
