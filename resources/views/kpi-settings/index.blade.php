@@ -17,85 +17,89 @@
                         @lang($pageTitle)</h2>
                 </div>
             </x-slot>
+            
             <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
-                @method('PUT')
-                <div class="row">
-                    <div class="col-lg-2">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('The Bidder')"
-                            fieldPlaceholder="Bidder percentage" fieldRequired="true" fieldName="company_name"
-                            fieldId="company_name" :fieldValue="global_setting()->company_name" />
-                    </div>
-                    <div class="col-lg-2">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Qualifying')"
-                            :fieldPlaceholder="__('Qualifying Percentage')" fieldRequired="true" fieldName="company_email"
-                            fieldId="company_email" :fieldValue="global_setting()->company_email" />
-
-                    </div>
-                    <div class="col-lg-2">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Requirements Defined')"
-                            :fieldPlaceholder="__('Requirements Defined Percentage')" fieldRequired="true" fieldName="company_email"
-                            fieldId="company_email" :fieldValue="global_setting()->company_email" />
-
-                    </div>
-
-                    <div class="col-lg-2">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Proposal Made')"
-                            :fieldPlaceholder="__('Proposal Made Percentage')" fieldRequired="true" fieldName="company_email"
-                            fieldId="company_email" :fieldValue="global_setting()->company_email" />
-
-                    </div>
-                    <div class="col-lg-2">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Negotiation started')"
-                            :fieldPlaceholder="__('Qualifying Percentage')" fieldRequired="true" fieldName="company_email"
-                            fieldId="company_email" :fieldValue="global_setting()->company_email" />
-
-                    </div>
-                    <div class="col-lg-2">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Qualifying')"
-                            :fieldPlaceholder="__('Negotiation started percentage')" fieldRequired="true" fieldName="company_email"
-                            fieldId="company_email" :fieldValue="global_setting()->company_email" />
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-2">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('Sharing milestone breakdown')"
-                            fieldPlaceholder="Sharing milestone breakdown percentage" fieldRequired="true" fieldName="company_phone"
-                            fieldId="company_phone" :fieldValue="global_setting()->company_phone" />
-                    </div>
-                    <div class="col-lg-2">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2"
-                            :fieldLabel="__('Closing the deal')"
-                            fieldPlaceholder="Closing the deal percentage" fieldRequired="false" fieldName="website"
-                            fieldId="website" :fieldValue="global_setting()->website" />
-                    </div>
-                    <div class="col-lg-2">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2"
-                            :fieldLabel="__('Sharing the contact form and filling out the form for project manage')"
-                            fieldPlaceholder="Sharing the contact form and filling out the form for project manage percentage" fieldRequired="false" fieldName="website"
-                            fieldId="website" :fieldValue="global_setting()->website" />
-                    </div>
-                    <div class="col-lg-2">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2"
-                            :fieldLabel="__('modules.accountSettings.companyWebsite')"
-                            fieldPlaceholder="e.g. https://www.spacex.com/" fieldRequired="false" fieldName="website"
-                            fieldId="website" :fieldValue="global_setting()->website" />
-                    </div>
-                    <div class="col-lg-2">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2"
-                            :fieldLabel="__('modules.accountSettings.companyWebsite')"
-                            fieldPlaceholder="e.g. https://www.spacex.com/" fieldRequired="false" fieldName="website"
-                            fieldId="website" :fieldValue="global_setting()->website" />
-                    </div>
-                    <div class="col-lg-2">
-                        <x-forms.text class="mr-0 mr-lg-2 mr-md-2"
-                            :fieldLabel="__('modules.accountSettings.companyWebsite')"
-                            fieldPlaceholder="e.g. https://www.spacex.com/" fieldRequired="false" fieldName="website"
-                            fieldId="website" :fieldValue="global_setting()->website" />
-                    </div>
+                <h6 class="text-center">Point distribution for won deal</h6>
+                <br>
+                <form id="save-kpi-settings">
                     
-                </div>
+                    <div class="form-group row">
+                      <label for="inputPassword" class="col-sm-2 col-form-label">The bidder will get:</label>
+                      <div class="col-sm-10">
+                        <input class="form-control height-35 f-14" type="number" name="the_bidder" id="the_bidder"  value="0" class="form-control"  placeholder="Percentage of points for bidder">
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Sales executive who qualifies the deal:</label>
+                        <div class="col-sm-10">
+                          <input class="form-control height-35 f-14" type="number" name="qualify" id="qualify" value="0" class="form-control"  placeholder="Percentage of points for qualified deals">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Sales executive who defined requirements of the deal will get:</label>
+                        <div class="col-sm-10">
+                          <input class="form-control height-35 f-14" type="number" class="form-control" name="requirements_defined" id="requirements_defined" value="0"  placeholder="Percentage of points for requirements defined deals">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">If anyone helps sales executive for less than:</label>
+                        <div class="col-sm-4">
+                          <input class="form-control height-35 f-14 mt-2" type="number" class="form-control" name="less_than" id="less_than" value="0"  placeholder="Percentage of points for requirements defined deals">
+                        </div>
+                        <label for="inputPassword" class="col-sm-2 col-form-label mt-1">then he/she will get:</label>
+                        <div class="col-sm-4">
+                          <input class="form-control height-35 f-14 mt-2" type="number" name="less_than_get" id="less_than_get" value="0" class="form-control"  placeholder="Percentage of points for requirements defined deals">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">If anyone helps sales executive for more than:</label>
+                        <div class="col-sm-4">
+                          <input class="form-control height-35 f-14 mt-2" type="number" class="form-control" name="more_than" id="more_than"  value="0"  placeholder="Percentage of points for requirements defined deals">
+                        </div>
+                        <label for="inputPassword" class="col-sm-2 col-form-label mt-1">then he/she will get:</label>
+                        <div class="col-sm-4">
+                          <input class="form-control height-35 f-14 mt-2" type="number" class="form-control" name="more_than_get" id="more_than_get" value="0"  placeholder="Percentage of points for requirements defined deals">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Sales executive who made the proposal of the deal will get:</label>
+                        <div class="col-sm-10">
+                          <input class="form-control height-35 f-14" type="number" name="proposal_made" id="proposal_made" value="0" class="form-control"  placeholder="Percentage of points for requirements defined deals">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Sales executive who started the negotiation of the deal will get:</label>
+                        <div class="col-sm-10">
+                          <input class="form-control height-35 f-14" type="number" class="form-control" name="negotiation_started" id="negotiation_started" value="0"  placeholder="Percentage of points for requirements defined deals">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Sales executive who shared the milestone breakdown of the deal with the client will get:</label>
+                        <div class="col-sm-10">
+                          <input class="form-control height-35 f-14" type="number" class="form-control" name="milestone_breakdown" id="milestone_breakdown" value="0"  placeholder="Percentage of points for requirements defined deals">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Sales executive who closed the deal will get:</label>
+                        <div class="col-sm-10">
+                          <input class="form-control height-35 f-14" type="number" class="form-control" name="closed_deal" id="closed_deal" value="0"  placeholder="Percentage of points for requirements defined deals">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Sales executive who shared the contact form with the client and filled out the form for
+                            project manager will get:</label>
+                        <div class="col-sm-10">
+                          <input class="form-control height-35 f-14" type="number" name="contact_form" id="contact_form" value="0" class="form-control"  placeholder="Percentage of points for requirements defined deals">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Sales executive who made the deal authorized by the team leader will get:</label>
+                        <div class="col-sm-10">
+                          <input class="form-control height-35 f-14" type="number" name="authorized_by_leader" id="authorized_by_leader" value="0" class="form-control"  placeholder="Percentage of points for requirements defined deals">
+                        </div>
+                      </div>
+                       
+                 
 
             </div>
 
@@ -115,6 +119,7 @@
                 </div>
                 <!-- Buttons End -->
             </x-slot>
+        </form>
 
         </x-setting-card>
    
@@ -122,23 +127,30 @@
 @endsection
 
 @push('scripts')
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCl9wZfCCqZ9BtkD_ItVG8dAWT9BTMVB0&callback=initMap&libraries=places&v=weekly"
-        async>
-    </script>
-    <script>
+    
+    {{-- <script>
         $('#save-form').click(function() {
-            var url = "{{ route('company-settings.update', ['1']) }}";
+            const url = "{{ route('kpi-settings.update') }}";
 
             $.easyAjax({
                 url: url,
-                container: '#editSettings',
+                container: '#save-kpi-settings',
                 type: "POST",
                 disableButton: true,
                 blockUI: true,
                 buttonSelector: "#save-form",
-                data: $('#editSettings').serialize(),
-            })
+                data: $('#save-kpi-settings').serialize(),
+                success: function(response) {
+                    if (response.status == 'success') {
+                        if ($(MODAL_XL).hasClass('show')) {
+                            $(MODAL_XL).hide();
+                            window.location.reload();
+                        } else {
+                            window.location.href = response.redirectUrl;
+                        }
+                    }
+                }
+            });
         });
-    </script>
+    </script> --}}
 @endpush

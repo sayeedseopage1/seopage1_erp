@@ -5,6 +5,8 @@ import { useDrag, useDrop } from "react-dnd";
 import { EmployeeWiseTableContext } from ".";
 import "./table.css";
 import { convertTime } from "./utils/converTime";
+import Pagination from "./components/TablePagination";
+import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
 
 // pivot table
 const ProjectWiseTable = ({ columns, subColumns }) => {
@@ -22,13 +24,17 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
         setFilterColumn,
     } = React.useContext(EmployeeWiseTableContext);
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
     // get employee table data
     useEffect(() => {
+        setLoading(true);
         const fetch = async () => {
             axios.get("/get-timelogs/projects").then((res) => {
-                setData(
-                    res.data.sort((a, b) => a["project_id"] < b["project-id"])
-                );
+                let data = res.data.filter(d => d.project_status === 'in progress');
+                if(data){
+                    setData(data.sort((a, b) => a["project_id"] < b["project-id"]));
+                }
+                setLoading(false);
             });
         };
 
@@ -40,6 +46,7 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
     /* ================ Initial State ==================== */
     React.useEffect(() => {
         setSubColumns(subColumns);
+        setCurrentPage(1);
         setSortConfig({ key: "project_id", direction: "ace" });
         const columnOrderFromLocalStore = localStorage.getItem(
             "projectWiseTableColumnOrder"
@@ -178,7 +185,6 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
             r[a.project_id] = [...(r[a.project_id] || []), a];
             return r;
         }, {});
-        console.log(groupedData);
         /* ================ End Data Grouping ================== */
 
         for (const [key, value] of Object.entries(groupedData)) {
@@ -193,11 +199,8 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
                             <EmployeeProfile>
                                 <EmployeeProfileName>
                                     <span>
-                                        <a
-                                            href={`projects/${value[0].project_id}`}
-                                        >
-                                            {value[0].project_name}
-                                        </a>
+                                        <a href={`projects/${value[0].project_id}`} >
+                                            {value[0].project_name} </a>
                                     </span>
                                 </EmployeeProfileName>
                             </EmployeeProfile>
@@ -212,33 +215,13 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
                                 borderRight: "2px solid #fff",
                             }}
                         >
-                            <EmployeeProfile>
-                                <EmployeeProfileImage>
-                                    {value[0].client_image ? (
-                                        <img
-                                            src={`/user-uploads/avatar/${value[0].client_image}`}
-                                        />
-                                    ) : (
-                                        <span>
-                                            {value[0].client_name.slice(0, 1)}
-                                        </span>
-                                    )}
-                                </EmployeeProfileImage>
-                                <EmployeeProfileName>
-                                    <span className="white-space">
-                                        <a
-                                            href={`clients/${value[0].client_id}`}
-                                        >
-                                            {value[0].client_name}
-                                        </a>
-                                    </span>
-                                    <span>
-                                        <a href={value[0].client_from}>
-                                            Freelancer.com
-                                        </a>
-                                    </span>
-                                </EmployeeProfileName>
-                            </EmployeeProfile>
+                            <RenderWithImageAndRole
+                                avatar={value[0].client_image}
+                                name={value[0].client_name}
+                                url={`clients/${value[0].client_id}`}
+                                clientFrom={value[0].client_from}
+                            />
+                           
                         </EmployeeProfileTd>
 
                         {/* Project Manager */}
@@ -284,44 +267,18 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
                                                 style={{
                                                     borderBottom:
                                                         value.length - 1 ===
-                                                        index
+                                                            index
                                                             ? "2px solid #AAD1FC"
                                                             : "1px solid #E7EFFC",
                                                 }}
                                             >
-                                                <EmployeeProfile>
-                                                    <EmployeeProfileImage>
-                                                        {item[
-                                                            "employee_image"
-                                                        ] ? (
-                                                            <img
-                                                                src={`/user-uploads/avatar/${item["employee_image"]}`}
-                                                            />
-                                                        ) : (
-                                                            <span>
-                                                                {item[
-                                                                    column
-                                                                ].slice(0, 1)}
-                                                            </span>
-                                                        )}
-                                                    </EmployeeProfileImage>
-                                                    <EmployeeProfileName>
-                                                        <span className="white-space">
-                                                            <a
-                                                                href={`employees/${item["employee_id"]}`}
-                                                            >
-                                                                {item[column]}
-                                                            </a>
-                                                        </span>
-                                                        <span>
-                                                            {
-                                                                item[
-                                                                    "employee_designation"
-                                                                ]
-                                                            }
-                                                        </span>
-                                                    </EmployeeProfileName>
-                                                </EmployeeProfile>
+                                                <RenderWithImageAndRole
+                                                    avatar={item["employee_image"]}
+                                                    name={item[column]}
+                                                    url={`employees/${item['employee_id']}`}
+                                                    role={item[ "employee_designation"]}
+                                                />
+                                                
                                             </td>
                                         ) : column === "total_minutes" ? (
                                             <td
@@ -329,7 +286,7 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
                                                 style={{
                                                     borderBottom:
                                                         value.length - 1 ===
-                                                        index
+                                                            index
                                                             ? "2px solid #AAD1FC"
                                                             : "1px solid #E7EFFC",
                                                 }}
@@ -342,7 +299,7 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
                                                 style={{
                                                     borderBottom:
                                                         value.length - 1 ===
-                                                        index
+                                                            index
                                                             ? "2px solid #AAD1FC"
                                                             : "1px solid #E7EFFC",
                                                 }}
@@ -371,9 +328,21 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
                 {/* table */}
                 <table>
                     <thead>{prepareHeader()}</thead>
-                    <tbody>{prepareRows()}</tbody>
+                    <tbody>
+                        {(!loading && data.length > 0) ?    
+                            prepareRows() 
+                        : null}
+                    </tbody>
                 </table>
             </TableWrapper>
+
+            {loading && data.length === 0 &&
+                <Loading> 
+                    <div className="spinner-border" role="status"> </div>
+                    Loading...
+                </Loading>
+            }
+
 
             {/* pagination */}
             <Pagination
@@ -549,158 +518,7 @@ const ColumnFilter = ({ columns, filterColumn, setFilterColumn, root }) => {
     return content;
 };
 
-// pagination
-const Pagination = ({
-    data,
-    nPageRows,
-    currentPage,
-    setCurrentPage,
-    setNPageRows,
-}) => {
-    const [pageNumbers, setPageNumbers] = useState([]);
-    const [renderButtons, setRenderButtons] = React.useState([]);
-    const [totalPages, setTotalPages] = React.useState(0);
 
-    // count total pages
-    useEffect(() => {
-        if (data.length === 0) return;
-        const tPages = Math.ceil(data.length / nPageRows);
-        setTotalPages(tPages);
-    }, [data, nPageRows]);
-
-    // render buttons
-    React.useEffect(() => {
-        const buttons = [];
-        if (totalPages === 0) return;
-
-        if (currentPage <= 3) {
-            for (let i = 1; i <= 5; i++) {
-                buttons.push(i);
-            }
-        }
-
-        if (currentPage > 3 && currentPage < totalPages - 3) {
-            for (let i = currentPage - 2; i <= currentPage + 2; i++) {
-                buttons.push(i);
-            }
-        }
-
-        if (currentPage >= totalPages - 3) {
-            for (let i = totalPages - 4; i <= totalPages; i++) {
-                buttons.push(i);
-            }
-        }
-
-        setRenderButtons(buttons);
-    }, [currentPage, totalPages]);
-
-    useEffect(() => {
-        const pageNumbers = [];
-        for (let i = 1; i <= Math.ceil(data.length / nPageRows); i++) {
-            pageNumbers.push(i);
-        }
-        setPageNumbers(pageNumbers);
-    }, [data, nPageRows]);
-
-    const handleClick = (e) => {
-        setCurrentPage(Number(e.target.id));
-    };
-
-    const previousPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
-    const nextPage = () => {
-        if (currentPage < pageNumbers.length) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const handleSelectChange = (e) => {
-        setNPageRows(e.target.value);
-    };
-
-    return (
-        <PaginationContainer>
-            <div>
-                <label htmlFor="nPageRows">Show</label>
-                <SelectParPage
-                    name="nPageRows"
-                    id="nPageRows"
-                    onChange={handleSelectChange}
-                >
-                    <option value={10}>10</option>
-                    <option value={20}>20</option>
-                    <option value={30}>30</option>
-                    <option value={40}>40</option>
-                </SelectParPage>
-                <label htmlFor="nPageRows">entries</label>
-            </div>
-            <PaginationGroup>
-                <EntriesPerPage>
-                    Showing {currentPage * nPageRows - nPageRows + 1} to{" "}
-                    {currentPage * nPageRows > data.length
-                        ? data.length
-                        : currentPage * nPageRows}{" "}
-                    of {data.length} entries
-                </EntriesPerPage>
-                <PaginationButtons>
-                    <PreviousBtn
-                        disabled={currentPage === 1 ? true : false}
-                        onClick={previousPage}
-                    >
-                        Previous
-                    </PreviousBtn>
-                    {totalPages > 0 && (
-                        <>
-                            {
-                                // render dots
-                                renderButtons[0] > 1 && (
-                                    <PaginateNumber>...</PaginateNumber>
-                                )
-                            }
-                            {renderButtons.length > 0 &&
-                                renderButtons.map((number) => (
-                                    <React.Fragment key={number}>
-                                        <PaginateNumber
-                                            key={number}
-                                            id={number}
-                                            onClick={handleClick}
-                                            className={
-                                                currentPage === number
-                                                    ? "active"
-                                                    : ""
-                                            }
-                                        >
-                                            {number}
-                                        </PaginateNumber>
-                                    </React.Fragment>
-                                ))}
-
-                            {
-                                // render dots
-                                renderButtons[renderButtons.length - 1] <
-                                    totalPages - 1 && (
-                                    <PaginateNumber>...</PaginateNumber>
-                                )
-                            }
-                        </>
-                    )}
-                    <NextBtn
-                        disabled={
-                            currentPage === pageNumbers.length ? true : false
-                        }
-                        onClick={nextPage}
-                    >
-                        Next
-                    </NextBtn>
-                </PaginationButtons>
-            </PaginationGroup>
-        </PaginationContainer>
-    );
-};
 
 // ========= styled ============
 const TableContainer = styled.div`
@@ -749,7 +567,7 @@ const TableWrapper = styled.div`
             padding: 16px 10px;
             text-align: left;
             min-height: 120px;
-            max-width: 200px;
+            max-width: 300px;
             border-bottom: 1px solid #e7effc;
         }
     }
@@ -768,39 +586,20 @@ const TableWrapper = styled.div`
     }
 `;
 
-// sort
-const SortIcon = styled.span`
-//   width: 10px;
-//   height: 10px;
-//   color: black;
-//   display: block;
-//   position: relative;
-//   &:before,
-//   &:after{
-//     border: 4px solid transparent;
-//     content: "";
-//     display: block;
-//     height: 0;
-//     right: 5px;
-//     top: 50%;
-//     position: absolute;
-//     width: 0;
-//   };
-//   &:before{
-//     border-bottom-color: ${(props) =>
-    props.sort === "asc" ? "#666" : "#ddd"};
-// 	  margin-top: -9px;
-//   };
-//   &:after{
-//     border-top-color: ${(props) => (props.sort === "dec" ? "#666" : "#ddd")};
-// 	  margin-top: 1px;
-//   }
-
-  &:before{
-    content: "\2191"
-  }
-
-`;
+const Loading = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 200px;
+    font-size: 16px;
+    & > div.spinner-border{
+        width: 16px;
+        height: 16px;
+        border-width: .16em;
+        margin-right: 10px;
+    }
+`
 
 const EmployeeProfileTd = styled.td`
     background: #f8f8f8;
@@ -851,119 +650,7 @@ const EmployeeProfileName = styled.div`
     }
 `;
 
-const PaginationContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    align-items: center;
-    padding: 20px;
-    box-sizing: border-box;
-    font-size: 14px;
-`;
 
-const SelectParPage = styled.select`
-    padding: 4px;
-    font-size: 12px;
-    border-radius: 5px;
-    border: 1px solid #eaf0f7;
-    color: rgb(0 0 0 / 60%);
-    background: #fff;
-    margin: 0 6px;
-    option {
-        padding: 6px;
-        font-size: 12px;
-        border-radius: 5px;
-    }
-
-    &:focus {
-        outline: none;
-    }
-`;
-
-const PaginationGroup = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-`;
-
-const EntriesPerPage = styled.div`
-  color: rgb(0 0 0 / 40%)
-  margin-right: 10px;
-  font-size: 14px;
-  margin-right: 10px;
-`;
-
-const PaginationButtons = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 0;
-`;
-const PreviousBtn = styled.button`
-    padding: 6px;
-    font-size: 12px;
-    border-radius: 5px;
-    border: 1px solid #eaf0f7;
-    color: #000;
-    background: #fff;
-    &:hover {
-        background: #eaf0f7;
-        color: #1d82f5;
-    }
-    &:active {
-        background: #1d82f5;
-        color: #fff;
-    }
-    &:disabled {
-        background: #f3f3f3;
-        color: #ccc;
-    }
-`;
-
-const NextBtn = styled.button`
-    padding: 6px;
-    font-size: 12px;
-    border-radius: 5px;
-    border: 1px solid #eaf0f7;
-    color: #000;
-    background: #fff;
-    &:hover {
-        background: #eaf0f7;
-        color: #1d82f5;
-    }
-    &:active {
-        background: #1d82f5;
-        color: #fff;
-    }
-    &:disabled {
-        background: #f3f3f3;
-        color: #ccc;
-    }
-`;
-// pagination styled
-const PaginateNumber = styled.div`
-    width: 16px;
-    height: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-    margin: 0 6px;
-    border: none;
-    font-size: 14px;
-    background: ${(props) =>
-        props.className === "active" ? "#1d82f5" : "#fff"};
-    color: ${(props) => (props.className === "active" ? "#fff" : "#000")};
-    cursor: pointer;
-    border-radius: 5px;
-    border: 1px solid #eaf0f7;
-    &:hover {
-        background: #eaf0f7;
-        color: #1d82f5;
-    }
-`;
 
 // column Filter
 const ColumnFilterWrapper = styled.div`
@@ -1014,6 +701,16 @@ const ColumnFilterCheckbox = styled.div`
         cursor: pointer;
     }
 `;
+
+const LoadingCell = styled.td`
+    min-height: 120px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    color: #000;
+`
+
 
 // drag and drop
 // style when drag

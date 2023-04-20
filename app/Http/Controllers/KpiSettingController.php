@@ -9,7 +9,8 @@ use App\Models\Setting;
 use App\Traits\CurrencyExchange;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
 class KpiSettingController extends AccountBaseController
 {
    
@@ -37,14 +38,15 @@ class KpiSettingController extends AccountBaseController
     }
 
     // phpcs:ignore
-    public function update(UpdateOrganisationSettings $request, $id)
+    public function update(Request $request)
     {
-        $setting = Setting::first();
-        $setting->company_name = $request->company_name;
-        $setting->company_email = $request->company_email;
-        $setting->company_phone = $request->company_phone;
-        $setting->website = $request->website;
-        $setting->save();
+        dd($request);
+        // $setting = Setting::first();
+        // $setting->company_name = $request->company_name;
+        // $setting->company_email = $request->company_email;
+        // $setting->company_phone = $request->company_phone;
+        // $setting->website = $request->website;
+        // $setting->save();
 
 
         return Reply::redirect(route('company-settings.index'), __('messages.updateSuccess'));
