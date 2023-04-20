@@ -11,7 +11,7 @@ import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
 
 // pivot table
-const EmployeeWiseTable = ({ columns, subColumns }) => {
+const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
     const {
         setColumns,
         setSubColumns,
@@ -226,7 +226,7 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
                                         ) : column === 'project_manager' ? (
                                             <td
                                                 key={column}
-                                                style={{ borderBottom: value.length - 1 === index ? "2px solid #AAD1FC" : "1px solid #E7EFFC", }}
+                                                style={{ borderBottom: value.length - 1 === index ? "2px solid #AAD1FC" : "1px solid #E7EFFC" }}
                                             >
                                                 <RenderWithImageAndRole
                                                     avatar={item["pm_image"]}
@@ -236,7 +236,21 @@ const EmployeeWiseTable = ({ columns, subColumns }) => {
                                                 />
                                             </td>
 
-                                        ) : column === "total_minutes" ? (
+                                        ): column==='number_of_session' ? (
+                                            <td
+                                                key={column}
+                                                
+                                                style={{ borderBottom: value.length - 1 === index ? "2px solid #AAD1FC" : "1px solid #E7EFFC" }}
+                                            >
+                                                <ModalOpeningButton 
+                                                    onClick={() => open(value[0].employee_id, item["project_id"])}
+                                                    type="button"
+                                                    aria-label="session_modal"
+                                                >
+                                                    {item[column]} 
+                                                </ModalOpeningButton>
+                                            </td>
+                                        ) :  column === "total_minutes" ? (
                                             <td
                                                 key={column}
                                                 style={{ borderBottom: value.length - 1 === index ? "2px solid #AAD1FC" : "1px solid #E7EFFC" }}
@@ -575,7 +589,14 @@ const Loading = styled.div`
         margin-right: 10px;
     }
 `
-
+const ModalOpeningButton = styled.button`
+    background: transparent;
+    padding: 10px;
+    &:hover{
+        color: #1d82f5;
+        font-weight: 600;
+    }
+`
 
 const EmployeeProfileTd = styled.td`
     background: #f8f8f8;

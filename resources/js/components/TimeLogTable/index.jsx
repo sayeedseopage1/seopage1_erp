@@ -11,6 +11,7 @@ import ProjectWiseTable from "./ProjectWiseTable";
 import TaskWiseTable from "./TaskWiseTable";
 import { useEffect } from "react";
 import axios from "axios";
+import EmployeeWiseSessionTable from "./EmployeeWiseSessionModal";
 
 // table context
 export const EmployeeWiseTableContext = React.createContext();
@@ -121,6 +122,26 @@ const taskWiseTableConfig = {
 // log table
 const TimeLogTable = () => {
     const [activeTab, setActiveTab] = React.useState("Employee Wise");
+    const [employeeSessionModal, setEmployeeSessionModal] = React.useState({
+        isOpen: false,
+        employeeID: 0,
+        projectID: 0
+    })
+
+    const openEmployeeSession = (employeeId, projectId) => {
+        setEmployeeSessionModal({
+            isOpen: true,
+            employeeID: employeeId,
+            projectID: projectId
+        })
+    }
+    const closeEmployeeSession = () => {
+        setEmployeeSessionModal({
+            isOpen: false,
+            employeeID: 0,
+            projectID: 0
+        })
+    }
 
     const activeTableNamespace =
         activeTab === "Employee Wise"
@@ -148,6 +169,8 @@ const TimeLogTable = () => {
             </Tabs>
             {activeTab === "Employee Wise" ? (
                 <EmployeeWiseTable
+                    open={openEmployeeSession}
+                    close={closeEmployeeSession}
                     columns={employeeWiseTableConfig.columns}
                     subColumns={employeeWiseTableConfig.subColumns}
                 />
@@ -162,6 +185,13 @@ const TimeLogTable = () => {
                     subColumns={taskWiseTableConfig.subColumns}
                 />
             ) : null}
+
+
+            {employeeSessionModal.isOpen && 
+                <EmployeeWiseSessionTable 
+                control={{employeeSessionModal, setEmployeeSessionModal}} 
+                />
+            }
         </DndProvider>
     );
 };
