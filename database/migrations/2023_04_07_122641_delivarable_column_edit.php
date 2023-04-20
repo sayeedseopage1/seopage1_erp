@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('column_name')->nullable();
             $table->longText('comment')->nullable();
             $table->longText('old_data')->nullable();
+            $table->longText('new_data')->nullable();
             $table->enum('status', [0, 1])->default(0);
             $table->timestamps();
         });

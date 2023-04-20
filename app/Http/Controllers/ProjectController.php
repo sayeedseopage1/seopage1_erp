@@ -79,6 +79,7 @@ use App\Notifications\ProjectReviewAcceptNotification;
 use App\Notifications\ProjectSubmissionNotification;
 use App\Notifications\ProjectSubmissionAcceptNotification;
 use App\Models\QCSubmission;
+use App\Models\ProjectDeliverablesClientDisagree;
 use App\Notifications\QCSubmissionNotification;
 use App\Notifications\QcSubmissionAcceptNotification;
 use App\Notifications\ProjectDeliverableTimeExtendNotification;
@@ -2027,7 +2028,6 @@ class ProjectController extends AccountBaseController
     }
     public function updateDeliverable(Request $request)
     {
-        //dd($request->all());
         $validate = $request->validate([
             'deliverable_type' => 'required_unless:authrization_after_edit,true',
             'milestone_id' => 'required_unless:authrization_after_edit,true',
@@ -2043,7 +2043,6 @@ class ProjectController extends AccountBaseController
         } else {
             $deliverable->authorization = 1;
         }
-
         if ($request->authrization_after_edit == 'true') {
             if($request->description) {
                 $data = DelivarableColumnEdit::where([
@@ -2053,6 +2052,7 @@ class ProjectController extends AccountBaseController
                 ])->latest()->first();
                 if ($data) {
                     $data->old_data = $deliverable->description;
+                    $data->new_data = $request->description;
                     $data->status = '1';
                     $data->save();
                 }
@@ -2065,6 +2065,7 @@ class ProjectController extends AccountBaseController
                 ])->latest()->first();
                 if ($data) {
                     $data->old_data = $deliverable->title;
+                    $data->new_data = $request->title;
                     $data->status = '1';
                     $data->save();
                 }
@@ -2072,16 +2073,17 @@ class ProjectController extends AccountBaseController
             if($request->deliverable_type) {
                 $data = DelivarableColumnEdit::where([
                     'delivarable_id' => $deliverable->id,
-                    'column_name' => 'deliverable_type',
+                    'column_name' => 'type',
                     'status' => '0'
                 ])->latest()->first();
                 if ($data) {
                     $data->old_data = $deliverable->deliverable_type;
+                    $data->new_data = $request->deliverable_type;
                     $data->status = '1';
                     $data->save();
                 }
             }
-            if($request->estimation_time) {
+            if($request->estimation_time) { 
                 $data = DelivarableColumnEdit::where([
                     'delivarable_id' => $deliverable->id,
                     'column_name' => 'estimation_time',
@@ -2089,18 +2091,7 @@ class ProjectController extends AccountBaseController
                 ])->latest()->first();
                 if ($data) {
                     $data->old_data = $deliverable->estimation_time;
-                    $data->status = '1';
-                    $data->save();
-                }
-            }
-            if($request->estimation_time) {
-                $data = DelivarableColumnEdit::where([
-                    'delivarable_id' => $deliverable->id,
-                    'column_name' => 'estimation_time',
-                    'status' => '0'
-                ])->latest()->first();
-                if ($data) {
-                    $data->old_data = $deliverable->estimation_time;
+                    $data->new_data = $request->estimation_time;
                     $data->status = '1';
                     $data->save();
                 }
@@ -2113,6 +2104,7 @@ class ProjectController extends AccountBaseController
                 ])->latest()->first();
                 if ($data) {
                     $data->old_data = $deliverable->quantity;
+                    $data->new_data = $request->quantity;
                     $data->status = '1';
                     $data->save();
                 }
@@ -2132,6 +2124,7 @@ class ProjectController extends AccountBaseController
                         $time .= '-'.$deliverable->to;
                     }
                     $data->old_data = $time;
+                    $data->new_data = $request->to ?? ''.' , '.$request->from ?? '';
                     $data->status = '1';
                     $data->save();
                 }
@@ -2751,23 +2744,41 @@ class ProjectController extends AccountBaseController
         $pm_project_update->deliverable_status = 1;
         $pm_project_update->save();
 
+        $client_revision = ProjectDeliverablesClientDisagree::where([
+            'project_id' => $project->id,
+            'status' => '0'
+        ])->get();
+        
+        if ($client_revision) {
+            foreach ($client_revision as $value) {
+                $value->status = '1';
+                $value->save();
+            }
+        }
 
+        $project_id= Project::where('id',$request->project_id)->first();
+        $log_user = Auth::user();
 
-         $project_id= Project::where('id',$request->project_id)->first();
-         $log_user = Auth::user();
+        $activity = new ProjectActivity();
+        $activity->activity= 'Top management finally authorized project deliverable';
 
-         $activity = new ProjectActivity();
-         $activity->activity= 'Top management finally authorized project deliverable';
+        $activity->project_id = $project_id->id;
 
-         $activity->project_id = $project_id->id;
+        $activity->save();
 
-         $activity->save();
+        $user= User::where('id',$project->pm_id)->first();
 
-         $user= User::where('id',$project->pm_id)->first();
+        Notification::send($user, new ProjectDeliverableFinalAuthorizationNotificationAccept($project_id));
+        return response()->json(['status'=>400]);
 
-             Notification::send($user, new ProjectDeliverableFinalAuthorizationNotificationAccept($project_id));
-             return response()->json(['status'=>400]);
+    }
 
+    public function modification_form_show($id)
+    {
+        $this->deliverable_id = $id;
+        $this->pageTitle = 'Deliverable Change Request Form';
+        $this->isShowUrl = false;
+        return view('projects.modals.deliverable_edit_permission', $this->data);
     }
 
     public function set_column_edit_permission(Request $request)
@@ -2775,13 +2786,16 @@ class ProjectController extends AccountBaseController
         if (count($request->permission_column) == count($request->data)) {
             foreach ($request->permission_column as $key => $value) {
                 $data = new DelivarableColumnEdit();
-                $data->delivarable_id = $request->deliverable_id;
+                $data->delivarable_id = $request->delivarable_id;
                 $data->column_name = $request->permission_column[$key];
                 $data->comment = $request->data[$key];
                 $data->save();
             }
 
-            return redirect()->back();
+            $data = ProjectDeliverable::find($request->delivarable_id);
+            $url = route('projects.show', $data->project_id).'?tab=deliverables';
+            Toastr::success('Delivarable change request send to project manager', 'Success', ["positionClass" => "toast-top-right"]);
+            return redirect()->to($url);
         } 
     }
 }

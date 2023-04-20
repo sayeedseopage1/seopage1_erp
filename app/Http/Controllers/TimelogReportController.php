@@ -59,8 +59,11 @@ class TimelogReportController extends AccountBaseController
         // return view('admin.reports.time-log.index', $this->data);
         return $dataTable->render('reports.timelogs.index', $this->data);
     }
+<<<<<<< HEAD
     // public function getTimeLog($type)
     
+=======
+>>>>>>> 10d079b80 (update with delivarable module)
     public function getTimeLog($type)
     {
 
@@ -77,6 +80,7 @@ class TimelogReportController extends AccountBaseController
                 'employee.name as employee_name',
                 'employee.image as employee_image',
                 'employee_designations.name as employee_designation',
+<<<<<<< HEAD
                  
                 'projects.client_id',
                 'client.name as client_name',
@@ -86,6 +90,15 @@ class TimelogReportController extends AccountBaseController
                 'pm.image as pm_image',
                 'pm.name as pm_name', 
                 'pm_roles.display_name as pm_roles',
+=======
+                'client.id as client_id',
+                'client.name as client_name',
+                'client.image as client_image',
+                'deals.profile_link as client_from',
+                'pm.id as project_manager_id',
+                'pm.name as project_manager', 
+                'pm_employee_designations.name as project_manager_designation',
+>>>>>>> 10d079b80 (update with delivarable module)
                 'projects.id as project_id',
                 'projects.project_name',
                 'projects.status as project_status',
@@ -94,14 +107,22 @@ class TimelogReportController extends AccountBaseController
                 'tasks.id as task_id',
                 'tasks.start_date as task_start',
                 'tasks.due_date as task_end',
+<<<<<<< HEAD
                 DB::raw('COUNT(project_time_logs.id) as number_of_session'),
+=======
+                DB::raw('COUNT(project_time_logs.id) as time_logs_count'),
+>>>>>>> 10d079b80 (update with delivarable module)
                 DB::raw('sum(project_time_logs.total_minutes) as total_minutes'),
             ])
             ->join('projects', 'project_time_logs.project_id', '=', 'projects.id')
             
+<<<<<<< HEAD
             
             ->join('users as pm', 'projects.pm_id', '=', 'pm.id')
             ->join('roles as pm_roles', 'pm.role_id', 'pm_roles.id')
+=======
+            ->join('users as pm', 'projects.pm_id', '=', 'pm.id')
+>>>>>>> 10d079b80 (update with delivarable module)
             ->join('employee_details as pm_emp_details', 'pm.id', '=', 'pm_emp_details.user_id')
             ->join('designations as pm_employee_designations', 'pm_emp_details.designation_id', '=', 'pm_employee_designations.id')
             
@@ -112,7 +133,10 @@ class TimelogReportController extends AccountBaseController
             ->join('employee_details', 'employee.id', '=', 'employee_details.user_id')
             ->join('designations as employee_designations', 'employee_details.designation_id', '=', 'employee_designations.id')
             
+<<<<<<< HEAD
             
+=======
+>>>>>>> 10d079b80 (update with delivarable module)
             ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
             ->whereIn('project_time_logs.user_id', $id_array)
             ->groupBy('project_time_logs.project_id')
@@ -121,7 +145,10 @@ class TimelogReportController extends AccountBaseController
            
             ->orderBy('project_time_logs.task_id' , 'desc')
             ->get();
+<<<<<<< HEAD
            // dd($data);
+=======
+>>>>>>> 10d079b80 (update with delivarable module)
         } else if($type == 'tasks') {
             $data = ProjectTimeLog::select([
                 'tasks.id as task_id',
@@ -129,11 +156,14 @@ class TimelogReportController extends AccountBaseController
                 'projects.client_id',
                 'client.name as client_name',
                 'client.image as client_image',
+<<<<<<< HEAD
                 'deals.profile_link as client_from',
                 
                 'projects.id as project_id',
                 'projects.project_name',
                 'projects.status as project_status',
+=======
+>>>>>>> 10d079b80 (update with delivarable module)
 
                 'pm.id as pm_id',
                 'pm.name as pm_name',
@@ -144,6 +174,13 @@ class TimelogReportController extends AccountBaseController
                 'employee.name as employee_name',
                 'employee.image as employee_image',
                 'emp_roles.display_name as employee_roles',
+<<<<<<< HEAD
+=======
+
+                'projects.id as project_id',
+                'projects.name as project_name',
+
+>>>>>>> 10d079b80 (update with delivarable module)
                 'project_time_logs.start_time',
                 'project_time_logs.end_time',
                 'project_time_logs.total_minutes as total_minutes'
@@ -158,22 +195,31 @@ class TimelogReportController extends AccountBaseController
             ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
             
             ->join('users as client', 'projects.client_id', 'client.id')
+<<<<<<< HEAD
             ->join('deals', 'client.id', '=', 'deals.client_id')
             ->where('projects.status','in progress')
             ->orderBy('project_time_logs.task_id' , 'desc')
            
+=======
+            ->orderBy('project_time_logs.task_id' , 'desc')
+>>>>>>> 10d079b80 (update with delivarable module)
             ->get();
         } else if($type == 'projects') {
             $data = ProjectTimeLog::select([
                 'projects.id as project_id',
                 'projects.project_name',   
                 'projects.client_id',
+<<<<<<< HEAD
                 'projects.status as project_status',
                 
                 'client.name as client_name',
                 'client.image as client_image',
                 'deals.profile_link as client_from',
 
+=======
+                'client.name as client_name',
+                'client.image as client_image',
+>>>>>>> 10d079b80 (update with delivarable module)
 
                 'pm.id as pm_id',
                 'pm.name as pm_name',
@@ -186,10 +232,15 @@ class TimelogReportController extends AccountBaseController
                 'emp_roles.display_name as employee_roles',
                 'project_time_logs.start_time',
                 'project_time_logs.end_time',
+<<<<<<< HEAD
                 DB::raw('COUNT(project_time_logs.id) as number_of_session'),
                 DB::raw('SUM(project_time_logs.total_minutes) as total_minutes'),
 
                // 'project_time_logs.total_minutes as total_minutes'
+=======
+                DB::raw('COUNT(project_time_logs.id) as time_logs_count'),
+                'project_time_logs.total_minutes as total_minutes'
+>>>>>>> 10d079b80 (update with delivarable module)
             ])  
             ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
             ->join('projects', 'project_time_logs.project_id', 'projects.id')
@@ -201,6 +252,7 @@ class TimelogReportController extends AccountBaseController
             ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
             
             ->join('users as client', 'projects.client_id', 'client.id')
+<<<<<<< HEAD
             ->join('deals', 'client.id', '=', 'deals.client_id')
 
             ->groupBy('project_time_logs.project_id')
@@ -212,6 +264,11 @@ class TimelogReportController extends AccountBaseController
 
             ->get();
             //dd($data);
+=======
+            ->groupBy('project_time_logs.project_id')
+            ->orderBy('project_time_logs.project_id' , 'desc')
+            ->get();
+>>>>>>> 10d079b80 (update with delivarable module)
         }
 
         return response()->json($data);

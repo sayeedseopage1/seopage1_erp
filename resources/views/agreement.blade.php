@@ -103,7 +103,14 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
  ?>
 
 <body id="body" class="h-100 bg-additional-grey">
-
+    @if($project->hasClientDisagree())
+    <div class="row vh-100">
+        <div class="col-12 text-center my-auto">
+            <h2>Project Manager Working with this Delivarables, Please Stay Connected </h2><br>
+            <span class="text-danger f-20 f-w-500">Thankyou</span>
+        </div>
+    </div>
+    @else
     <div class="content-wrapper container">
 
         <div class="card border-0 invoice">
@@ -184,55 +191,45 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
                       <table class="inv-num-date text-dark f-13 mt-3">
                         <thead>
                             <tr class="bg-light-grey border-right-0 f-w-500">
-                              <th scope="col" class="text-center">#</th>
-                              <th scope="col" class="text-center">Type</th>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col" class="text-center">Type</th>
                                 <th scope="col" class="text-center">Title</th>
                                 <th scope="col" class="text-center">Milestone</th>
                                 <th scope="col" class="text-center">Quantity</th>
-
-                              <th scope="col" class="text-center">Description</th>
-                              <th scope="col" class="text-center">Estimated completion date</th>
-
-
+                                <th scope="col" class="text-center">Description</th>
+                                <th scope="col" class="text-center">Estimated completion date</th>
                             </tr>
-                          </thead>
-                          <tbody >
+                        </thead>
+                        <tbody>
                             @forelse($deliverables as $deliverable)
                             <tr>
-                              <td>{{$loop->index+1}}</td>
-                            <td>{{$deliverable->deliverable_type}}</td>
-                            <td>{{$deliverable->title}}</td>
-                            @if($deliverable->milestone_id != null)
-                            <td>{{$deliverable->milestone->milestone_title}}</td>
-                            @else 
-                            <td>--</td>
-
-                            @endif
-                              <td>{{$deliverable->quantity}}</td>
+                                <td>{{$loop->index+1}}</td>
+                                <td>{{$deliverable->deliverable_type}}</td>
+                                <td>{{$deliverable->title}}</td>
+                                @if($deliverable->milestone_id != null)
+                                    <td>{{$deliverable->milestone->milestone_title}}</td>
+                                @else 
+                                    <td>--</td>
+                                @endif
+                                <td>{{$deliverable->quantity}}</td>
                                 <td>{!!$deliverable->description!!}</td>
                                 @if($deliverable->to != null)
-                            <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
-                            @else 
-                            <td class="text-center">On {{$deliverable->from}}</td>
-
-                            @endif
-
-
+                                    <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
+                                @else 
+                                    <td class="text-center">On {{$deliverable->from}}</td>
+                                @endif
                             </tr>
+                            
                             @empty
                             <tr>
                                 No Data
                             </tr>
-
                             @endforelse
-
-
-
-                          </tbody>
+                        </tbody>
 
                       </table>
-                  </td>
 
+                  </td>
                   @if ($project->project_budget != 0)
                       <div class="text-right pt-3 border-top">
                           <h4>@lang('Project Budget'):
@@ -281,6 +278,12 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
                                         @lang('Click to Sign')
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="f-14 btn btn-warning p-2 mx-3" href="javascript:;" data-toggle="modal" data-target="#disagreeModal">
+                                        <i class="fa fa-times-circle f-w-500  mr-2 f-12"></i>
+                                        @lang('Need Changes')
+                                    </a>
+                                </li>
                             @endif
                             <li>
                                 <a class="f-14 btn btn-secondary ml-2"
@@ -319,7 +322,43 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
             </div>
         </div>
     </div>
-
+    <div class="modal fade" id="disagreeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <form method="post" action="{{route('front.agreement.disagree', $project->project_short_code)}}">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Disagree Modal</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                @csrf
+                                @foreach($deliverables as $value)
+                                <div class="row m-2 py-2 border rounded">
+                                    <div class="col-12 col-sm-5 my-auto f-w-500">
+                                        {{ucfirst($value->title)}} :
+                                    </div>
+                                    <div class="col-12 col-sm-7">
+                                        <textarea class="form-control" name="comment[{{$value->id}}]">
+                                            {!! html_entity_decode(trim($value->description)) !!}
+                                        </textarea>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- Global Required Javascript -->
     <script src="{{ asset('js/main.js') }}"></script>
 
@@ -423,9 +462,25 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
                 }
             })
         });
-
     </script>
-
+    <script>
+        $(document).ready(function() {
+            var limit = {{$deliverables->count()}};
+            console.log(limit, $('.parent-row .row').length);
+            $('.add-row').unbind().click(function() {
+                if ($('.parent-row .row').length <= limit -1) {
+                    var length = $('.parent-row .row').length + 1;
+                    var html = '<div class="row"><div class="col-sm-4"><div class="form-group"><select class="form-control height-50 w-100" name="deliverable['+length+']"><option value="">Select column</option><option value="type">Type</option><option value="title">Title</option><option value="milestone_cost">Milestone Cost</option><option value="estimation_time">Estimation Hours</option><option value="quantity">Quantity</option><option value="description">Description</option><option value="estimation_completed_date">Estimated completion date</option></select></div></div><div class="col-sm-7"><div class="form-group"><textarea class="form-control" name="comment['+length+']"></textarea></div></div><div class="col-sm-1"> <button type="button" class="btn btn-danger height-50 remove-row">-</button></div></div>';
+                    $('.parent-row').append(html);
+                }
+            });
+            // remove row
+            $('.parent-row').on('click', '.remove-row', function() {
+                $(this).closest('.row').remove();
+            });
+        })
+    </script>
+    @endif
 </body>
 
 </html>
