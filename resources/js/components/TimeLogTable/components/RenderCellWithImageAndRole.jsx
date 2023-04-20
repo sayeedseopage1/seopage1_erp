@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const RenderWithImageAndRole = ({ avatar, name, role, url }) => {
+const RenderWithImageAndRole = ({ avatar, name, role, url, clientFrom }) => {
     return (
         <EmployeeProfile>
             <EmployeeProfileImage>
@@ -14,7 +14,8 @@ const RenderWithImageAndRole = ({ avatar, name, role, url }) => {
             </EmployeeProfileImage>
             <EmployeeProfileName>
                 <span><a href={url} >{name}</a></span>
-                <span>{role} </span>
+                {role ? <span>{role}</span> : null}
+                {clientFrom ? <a href={clientFrom}>Freelancer.com</a> : null}
             </EmployeeProfileName>
         </EmployeeProfile>
     )

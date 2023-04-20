@@ -6,6 +6,8 @@ import { EmployeeWiseTableContext } from ".";
 import "./table.css";
 import { convertTime } from "./utils/converTime";
 import dayjs from "dayjs";
+import Pagination from "./components/TablePagination";
+import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
 
 // pivot table
 const TaskWiseTable = ({ columns, subColumns }) => {
@@ -42,7 +44,7 @@ const TaskWiseTable = ({ columns, subColumns }) => {
     /* ================ Initial State ==================== */
     React.useEffect(() => {
         setSubColumns(subColumns);
-        setSortConfig({ key: "task_id", direction: "asc" });
+        setSortConfig({ key: "task_id", direction: "dec" });
         const columnOrderFromLocalStore = localStorage.getItem(
             "taskWiseTableColumnOrder"
         );
@@ -204,14 +206,16 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                         {/* project name */}
                         <EmployeeProfileTd
                             rowSpan={value.length + 1}
-                            style={{ borderBottom: "2px solid #AAD1FC" }}
+                            style={{
+                                borderBottom: "2px solid #AAD1FC",
+                                borderLeft: "2px solid #fff",
+                                borderRight: "2px solid #fff",
+                            }}
                         >
                             <EmployeeProfile>
                                 <EmployeeProfileName>
                                     <span>
-                                        <a
-                                            href={`projects/${value[0].project_id}`}
-                                        >
+                                        <a href={`projects/${value[0].project_id}`}>
                                             {value[0].project_name}
                                         </a>
                                     </span>
@@ -228,33 +232,13 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                                 borderRight: "2px solid #fff",
                             }}
                         >
-                            <EmployeeProfile>
-                                <EmployeeProfileImage>
-                                    {value[0].client_image ? (
-                                        <img
-                                            src={`/user-uploads/avatar/${value[0].client_image}`}
-                                        />
-                                    ) : (
-                                        <span>
-                                            {value[0].client_name.slice(0, 1)}
-                                        </span>
-                                    )}
-                                </EmployeeProfileImage>
-                                <EmployeeProfileName>
-                                    <span className="white-space">
-                                        <a
-                                            href={`clients/${value[0].client_id}`}
-                                        >
-                                            {value[0].client_name}
-                                        </a>
-                                    </span>
-                                    <span>
-                                        <a href={value[0].client_from}>
-                                            Freelancer.com
-                                        </a>
-                                    </span>
-                                </EmployeeProfileName>
-                            </EmployeeProfile>
+                            <RenderWithImageAndRole
+                                avatar={value[0].client_image}
+                                name={value[0].client_name}
+                                url={`clients/${value[0].client_id}`}
+                                clientFrom={value[0].client_from}
+                            />
+
                         </EmployeeProfileTd>
 
                         {/* Project Manager */}
@@ -262,27 +246,14 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                             rowSpan={value.length + 1}
                             style={{ borderBottom: "2px solid #AAD1FC" }}
                         >
-                            <EmployeeProfile>
-                                <EmployeeProfileImage>
-                                    {value[0].pm_image ? (
-                                        <img
-                                            src={`/user-uploads/avatar/${value[0].pm_image}`}
-                                        />
-                                    ) : (
-                                        <span>
-                                            {value[0].pm_name.slice(0, 1)}
-                                        </span>
-                                    )}
-                                </EmployeeProfileImage>
-                                <EmployeeProfileName>
-                                    <span className="white-space">
-                                        <a href={`employees/${value[0].pm_id}`}>
-                                            {value[0].pm_name}
-                                        </a>
-                                    </span>
-                                    <span>{value[0].pm_roles}</span>
-                                </EmployeeProfileName>
-                            </EmployeeProfile>
+                            
+
+                            <RenderWithImageAndRole
+                                avatar={value[0].pm_image}
+                                name={value[0].pm_name}
+                                url={`employees/${value[0].pm_id}`}
+                                role={value[0].pm_roles}
+                            />
                         </EmployeeProfileTd>
                     </tr>
 
@@ -300,54 +271,25 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                                                 style={{
                                                     borderBottom:
                                                         value.length - 1 ===
-                                                        index
+                                                            index
                                                             ? "2px solid #AAD1FC"
                                                             : "1px solid #E7EFFC",
                                                 }}
                                             >
-                                                <EmployeeProfile>
-                                                    <EmployeeProfileImage>
-                                                        {item[
-                                                            "employee_image"
-                                                        ] ? (
-                                                            <img
-                                                                src={`/user-uploads/avatar/${item["employee_image"]}`}
-                                                            />
-                                                        ) : (
-                                                            <span>
-                                                                {item[
-                                                                    column
-                                                                ].slice(0, 1)}
-                                                            </span>
-                                                        )}
-                                                    </EmployeeProfileImage>
-                                                    <EmployeeProfileName>
-                                                        <span className="white-space">
-                                                            <a
-                                                                href={`employees/${item["employee_id"]}`}
-                                                            >
-                                                                {item[column]}
-                                                            </a>
-                                                        </span>
-                                                        <span>
-                                                            {
-                                                                item[
-                                                                    "employee_roles"
-                                                                ]
-                                                            }
-                                                        </span>
-                                                    </EmployeeProfileName>
-                                                </EmployeeProfile>
+                                                <RenderWithImageAndRole
+                                                    avatar={item["employee_image"]}
+                                                    name={item[column]}
+                                                    url={`employees/${item["employee_id"]}`}
+                                                    role={item["employee_roles"]}
+                                                />
+                                                
                                             </td>
                                         ) : column === "total_minutes" ? (
                                             <td
                                                 key={column}
                                                 style={{
                                                     borderBottom:
-                                                        value.length - 1 ===
-                                                        index
-                                                            ? "2px solid #AAD1FC"
-                                                            : "1px solid #E7EFFC",
+                                                        value.length - 1 === index ? "2px solid #AAD1FC" : "1px solid #E7EFFC",
                                                 }}
                                             >
                                                 {convertTime(item[column])}
@@ -355,12 +297,8 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                                         ) : column === "task_start" ? (
                                             <td
                                                 key={column}
-                                                style={{
-                                                    borderBottom:
-                                                        value.length - 1 ===
-                                                        index
-                                                            ? "2px solid #AAD1FC"
-                                                            : "1px solid #E7EFFC",
+                                                style={{ borderBottom: 
+                                                    value.length - 1 ===  index? "2px solid #AAD1FC" : "1px solid #E7EFFC",
                                                 }}
                                             >
                                                 {dayjs(
@@ -371,11 +309,8 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                                             <td
                                                 key={column}
                                                 style={{
-                                                    borderBottom:
-                                                        value.length - 1 ===
-                                                        index
-                                                            ? "2px solid #AAD1FC"
-                                                            : "1px solid #E7EFFC",
+                                                    borderBottom: value.length - 1 ===
+                                                            index ? "2px solid #AAD1FC" : "1px solid #E7EFFC",
                                                 }}
                                             >
                                                 {dayjs(item["end_time"]).format(
@@ -386,11 +321,8 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                                             <td
                                                 key={column}
                                                 style={{
-                                                    borderBottom:
-                                                        value.length - 1 ===
-                                                        index
-                                                            ? "2px solid #AAD1FC"
-                                                            : "1px solid #E7EFFC",
+                                                    borderBottom:  value.length - 1 ===  index  
+                                                        ? "2px solid #AAD1FC" : "1px solid #E7EFFC",
                                                 }}
                                             >
                                                 {item[column]}
@@ -411,10 +343,8 @@ const TaskWiseTable = ({ columns, subColumns }) => {
 
     return (
         <TableContainer>
-            {/* <ColumnFilter columns={columnOrder} filterColumn={filterColumn} setFilterColumn={setFilterColumn} root={columnFilterButtonId} /> */}
-
+            
             <TableWrapper>
-                {/* table */}
                 <table>
                     <thead>{prepareHeader()}</thead>
                     <tbody>{prepareRows()}</tbody>
@@ -595,157 +525,6 @@ const ColumnFilter = ({ columns, filterColumn, setFilterColumn, root }) => {
     return content;
 };
 
-// pagination
-const Pagination = ({
-    data,
-    nPageRows,
-    currentPage,
-    setCurrentPage,
-    setNPageRows,
-}) => {
-    const [pageNumbers, setPageNumbers] = useState([]);
-    const [renderButtons, setRenderButtons] = React.useState([]);
-    const [totalPages, setTotalPages] = React.useState(0);
-
-    // count total pages
-    useEffect(() => {
-        const tPages = Math.ceil(data.length / nPageRows);
-        setTotalPages(tPages);
-    }, [data, nPageRows]);
-
-    // render buttons
-    React.useEffect(() => {
-        const buttons = [];
-
-        if (currentPage <= 3) {
-            for (let i = 1; i <= 5; i++) {
-                buttons.push(i);
-            }
-        }
-
-        if (currentPage > 3 && currentPage < totalPages - 3) {
-            for (let i = currentPage - 2; i <= currentPage + 2; i++) {
-                buttons.push(i);
-            }
-        }
-
-        if (currentPage >= totalPages - 3) {
-            for (let i = totalPages - 4; i <= totalPages; i++) {
-                buttons.push(i);
-            }
-        }
-
-        setRenderButtons(buttons);
-    }, [currentPage, totalPages]);
-
-    useEffect(() => {
-        const pageNumbers = [];
-        for (let i = 1; i <= Math.ceil(data.length / nPageRows); i++) {
-            pageNumbers.push(i);
-        }
-        setPageNumbers(pageNumbers);
-    }, [data, nPageRows]);
-
-    const handleClick = (e) => {
-        setCurrentPage(Number(e.target.id));
-    };
-
-    const previousPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
-    const nextPage = () => {
-        if (currentPage < pageNumbers.length) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const handleSelectChange = (e) => {
-        setNPageRows(e.target.value);
-    };
-
-    return (
-        <PaginationContainer>
-            <div>
-                <label htmlFor="nPageRows">Show</label>
-                <SelectParPage
-                    name="nPageRows"
-                    id="nPageRows"
-                    onChange={handleSelectChange}
-                >
-                    <option value={10}>10</option>
-                    <option value={20}>20</option>
-                    <option value={30}>30</option>
-                    <option value={40}>40</option>
-                </SelectParPage>
-                <label htmlFor="nPageRows">entries</label>
-            </div>
-            <PaginationGroup>
-                <EntriesPerPage>
-                    Showing {currentPage * nPageRows - nPageRows + 1} to{" "}
-                    {currentPage * nPageRows > data.length
-                        ? data.length
-                        : currentPage * nPageRows}{" "}
-                    of {data.length} entries
-                </EntriesPerPage>
-                <PaginationButtons>
-                    <PreviousBtn
-                        disabled={currentPage === 1 ? true : false}
-                        onClick={previousPage}
-                    >
-                        Previous
-                    </PreviousBtn>
-
-                    {totalPages > 0 && (
-                        <>
-                            {
-                                // render dots
-                                renderButtons[0] > 1 && (
-                                    <PaginateNumber>...</PaginateNumber>
-                                )
-                            }
-                            {renderButtons.map((number) => (
-                                <React.Fragment key={number}>
-                                    <PaginateNumber
-                                        key={number}
-                                        id={number}
-                                        onClick={handleClick}
-                                        className={
-                                            currentPage === number
-                                                ? "active"
-                                                : ""
-                                        }
-                                    >
-                                        {number}
-                                    </PaginateNumber>
-                                </React.Fragment>
-                            ))}
-
-                            {
-                                // render dots
-                                renderButtons[renderButtons.length - 1] <
-                                    totalPages - 1 && (
-                                    <PaginateNumber>...</PaginateNumber>
-                                )
-                            }
-                        </>
-                    )}
-                    <NextBtn
-                        disabled={
-                            currentPage === pageNumbers.length ? true : false
-                        }
-                        onClick={nextPage}
-                    >
-                        Next
-                    </NextBtn>
-                </PaginationButtons>
-            </PaginationGroup>
-        </PaginationContainer>
-    );
-};
-
 // ========= styled ============
 const TableContainer = styled.div`
     max-width: 100%;
@@ -792,7 +571,8 @@ const TableWrapper = styled.div`
         td {
             padding: 16px 10px;
             text-align: left;
-            min-height: 120px;
+            min-height: 100%;
+            min-width: 300px;
             height: 100%;
             border-bottom: 1px solid #e7effc;
         }
@@ -832,7 +612,7 @@ const SortIcon = styled.span`
 //   };
 //   &:before{
 //     border-bottom-color: ${(props) =>
-    props.sort === "asc" ? "#666" : "#ddd"};
+        props.sort === "asc" ? "#666" : "#ddd"};
 // 	  margin-top: -9px;
 //   };
 //   &:after{
