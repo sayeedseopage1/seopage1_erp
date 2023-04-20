@@ -21,7 +21,7 @@
             <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
                 <h6 class="text-center">Point distribution for won deal</h6>
                 <br>
-                <form id="save-kpi-settings">
+                <form id="save-kpi-settings" >
                     
                     <div class="form-group row">
                       <label for="inputPassword" class="col-sm-2 col-form-label">The bidder will get:</label>
@@ -128,9 +128,9 @@
 
 @push('scripts')
     
-    {{-- <script>
+    <script>
         $('#save-form').click(function() {
-            const url = "{{ route('kpi-settings.update') }}";
+            const url = "{{ route('kpi-settings.update', ['1']) }}";
 
             $.easyAjax({
                 url: url,
@@ -152,5 +152,5 @@
                 }
             });
         });
-    </script> --}}
+    </script>
 @endpush
