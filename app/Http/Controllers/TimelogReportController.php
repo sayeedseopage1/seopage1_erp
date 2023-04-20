@@ -173,8 +173,11 @@ class TimelogReportController extends AccountBaseController
             ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
             
             ->join('users as client', 'projects.client_id', 'client.id')
-            ->groupBy('employee.id')
-            //->orderBy('project_time_logs.task_id' , 'desc')
+
+            ->groupBy('project_time_logs.project_id')
+            ->groupBy('project_time_logs.user_id')
+            ->orderBy('project_time_logs.project_id' , 'desc')
+
             ->get();
             //dd($data);
         }
