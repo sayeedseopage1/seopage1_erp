@@ -173,6 +173,8 @@ use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\SoftwareProjectController;
 use App\Http\Controllers\InsightsController;
 use App\Http\Controllers\Seopage1TeamController;
+use App\Http\Controllers\KpiSettingController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -1205,4 +1207,4 @@ Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'get
 
 
 //KPI Settings 
-Route::resource('kpi-settings', Controller::class);
+Route::resource('kpi-settings', KpiSettingController::class);
