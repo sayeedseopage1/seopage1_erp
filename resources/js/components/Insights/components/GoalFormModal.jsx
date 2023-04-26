@@ -381,15 +381,21 @@ const TrackingInput = ({
 
     React.useEffect(() => {
         const doc = document.querySelector('.cnx_ins__goal_form_modal');
-        if(doc.offsetHeight > 720){
-            doc.style.height = '720px';
-            doc.style.overflowY = 'auto';
-        } else {
-            doc.style.height = 'auto';
-            doc.style.overflowY = 'unset';
-        }
+        if(checked){
+            if(doc.offsetHeight > 720){
+                doc.style.height = '720px';
+                doc.style.overflowY = 'auto';
+            } else {
+                doc.style.height = 'auto';
+                doc.style.overflowY = 'unset';
+            }
+        }else {
+                doc.style.height = 'auto';
+                doc.style.overflowY = 'unset';
+            }
+        
 
-    }, [period, endDate, startDate, frequency])
+    }, [period, endDate, startDate, frequency, checked])
     
     // apply all 
     const applyAll = () => {
@@ -904,7 +910,7 @@ const GoalFormModal = () => {
                         >Cancel</Button>
                         <Button 
                             onClick={handleOnSubmit}
-                            disabled={ !trackingValue && !applyRecurring || !_.isEmpty(assigneeFor)}  
+                            disabled={ !trackingValue && !applyRecurring || _.isEmpty(assigneeFor)}  
                             variant='success'
                         >
                             {isSaving ? 'Saving...' : 'Save'}
