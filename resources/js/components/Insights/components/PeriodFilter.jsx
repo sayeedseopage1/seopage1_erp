@@ -1,128 +1,178 @@
-import { useState } from "react";
-import { usePopper } from "react-popper";
-import RelativeDateFilter from "./RelativeDateFilter";
-import "./period-filter.css";
-import TimeRange from "../../UI/TimeRange";
-import { useEffect } from "react";
+import * as React from 'react'
+import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import { Icon } from '../utils/Icon';
+import Dropdown from '../ui/Dropdown';
+import Button from '../ui/Button';
+import RangeDatePicker from '../ui/RangeDatePicker';
+import RelativeTimePeriod from './RelativeTimePeriod';
+import _ from 'lodash';
 
-const PeriodFilter = ({
-    selectedPeriod,
-    setSelectedPeriod,
-    startDate,
-    endDate,
-    setStartDate,
-    setEndDate,
-}) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [title, setTitle] = useState("Period");
-    const [refElement, setRefElement] = useState(null);
-    const [popperElement, setPopperElement] = useState(null);
 
-    const [closeButton, setCloseButton] = useState(false);
 
-    const { styles, attributes } = usePopper(refElement, popperElement, {
-        placement: "bottom-start",
-        modifiers: [
-            { name: "flip", options: ["right", "top", "left", "bottom"] },
-            { name: "offset", options: { offset: [0, 3] } },
-        ],
-    });
+const PeriodFilter = ({filterValue, setFilterValue}) => {
+    const [title, setTitle] = React.useState('Period');
+    const [endDate, setEndDate] = React.useState(new Date());
+    const [startDate, setStartDate] = React.useState(new Date());
+    const [selectedPeriod, setSelectedPeriod] = React.useState('Today');
 
-    // close outside click
-    useEffect(() => {
-        let timer;
 
-        const outsideClick = (e) => {
-            if (popperElement && !popperElement.contains(e.target)) {
-                setIsOpen(false);
-                window.removeEventListener("click", outsideClick);
-                clearTimeout(timer);
-            }
-        };
-
-        if (isOpen && popperElement) {
-            timer = setTimeout(
-                () => window.addEventListener("click", outsideClick),
-                100
-            );
-        }
-
-        return () => {
-            window.removeEventListener("click", outsideClick);
-            clearTimeout(timer);
-        };
-    }, [popperElement]);
-
-    const clearState = () => {
-        setSelectedPeriod("Today");
-        setStartDate(null);
-        setEndDate(null);
-        setTitle("Period");
-        setCloseButton(false);
+    // handle relative time period
+    const handleRelativeTimePeriod = (value) => {
+        setTitle(value);
+        setSelectedPeriod(value);
+        if ( value === 'Today'){
+            setFilterValue({
+                start: dayjs().startOf('day').format(),
+                end: dayjs().endOf('day').format(),
+            });
+        }else if ( value === 'Yesterday'){
+            setFilterValue({
+                start: dayjs().subtract(1, 'day').startOf('day').format(),
+                end: dayjs().subtract(1, 'day').endOf('day').format(),
+            });
+        }else if ( value === 'This Week'){
+            setFilterValue({
+                start: dayjs().startOf('week').format(),
+                end: dayjs().endOf('week').format(),
+            });
+        }else if ( value === 'Last Week'){
+            setFilterValue({
+                start: dayjs().subtract(1, 'week').startOf('week').format(),
+                end: dayjs().subtract(1, 'week').endOf('week').format(),
+            });
+        }else if ( value === 'This Month'){
+            setFilterValue({
+                start: dayjs().startOf('month').format(),
+                end: dayjs().endOf('month').format(),
+            });
+        } else if ( value === 'Last Month'){
+            setFilterValue({
+                start: dayjs().subtract(1, 'month').startOf('month').format(),
+                end: dayjs().subtract(1, 'month').endOf('month').format(),
+            });
+        } else if ( value === 'This Quarter'){
+            setFilterValue({
+                start: dayjs().startOf('quarter').format(),
+                end: dayjs().endOf('quarter').format(),
+            });
+        } else if ( value === 'Last Quarter'){
+            setFilterValue({
+                start: dayjs().subtract(1, 'quarter').startOf('quarter').format(),
+                end: dayjs().subtract(1, 'quarter').endOf('quarter').format(),
+            });
+        } else if ( value === 'This Year'){
+            setFilterValue({
+                start: dayjs().startOf('year').format(),
+                end: dayjs().endOf('year').format(),
+            });
+        } else if ( value === 'Last Year'){
+            setFilterValue({
+                start: dayjs().subtract(1, 'year').startOf('year').format(),
+                end: dayjs().subtract(1, 'year').endOf('year').format(),
+            });
+        } else if (value == "Last 2 Week"){
+            setFilterValue({
+                start: dayjs().subtract(2, 'week').startOf('week').format(),
+                end: dayjs().subtract(1, 'week').endOf('week').format(),
+            });
+        } else if (value == "Last 3 Week"){
+            setFilterValue({
+                start: dayjs().subtract(3, 'week').startOf('week').format(),
+                end: dayjs().subtract(1, 'week').endOf('week').format(),
+            });
+        } else if (value == "Last 4 Week"){
+            setFilterValue({
+                start: dayjs().subtract(4, 'week').startOf('week').format(),
+                end: dayjs().subtract(1, 'week').endOf('week').format(),
+            });
+        } else if (value === "Last 2 month"){
+            setFilterValue({
+                start: dayjs().subtract(2, 'month').startOf('month').format(),
+                end: dayjs().subtract(1, 'month').endOf('month').format(),
+            });
+        } else if (value === "Last 3 month"){
+            setFilterValue({
+                start: dayjs().subtract(3, 'month').startOf('month').format(),
+                end: dayjs().subtract(1, 'month').endOf('month').format(),
+            });
+        } else if (value === "Last 6 month"){
+            setFilterValue({
+                start: dayjs().subtract(6, 'month').startOf('month').format(),
+                end: dayjs().subtract(1, 'month').endOf('month').format(),
+            });
+        } else if (value === "Last 12 month"){
+            setFilterValue({
+                start: dayjs().subtract(12, 'month').startOf('month').format(),
+                end: dayjs().subtract(1, 'month').endOf('month').format(),
+            });
+        } 
     };
 
-    // change title
-    useEffect(() => {
-        if (startDate || endDate) {
-            setTitle("Custom Period");
-            setSelectedPeriod("Custom Period");
-            setCloseButton(true);
-            return;
-        }
-    }, [startDate, endDate]);
-
-    // handle time selection
-    const handleTimePeriodSelect = (v) => {
-        setSelectedPeriod(v);
-        setTitle(v);
-        setEndDate(null);
-        setStartDate(null);
-        setCloseButton(true);
+    // handle custom period
+    const remove = () => {
+        setFilterValue({});
+        setTitle('Period');
+        setSelectedPeriod('Today');
     };
 
-    return (
-        <div className="sp1_period--container">
-            <div className="sp1_period--toggle-wrapper">
-                <div
-                    ref={setRefElement}
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="sp1_period--toggle"
-                >
-                    <i className="fa-solid fa-calendar-day"></i>
-                    {title}
-                    <i className="fa-solid fa-caret-down ml-2" />
-                </div>
-                {closeButton && (
-                    <button aria-label="close" onClick={clearState}>
-                        <i className="fa-solid fa-xmark"></i>
-                    </button>
-                )}
-            </div>
+    return(
+        <div className='cnx__period_filter'>
+            <div className='cnx__period_filter__title'>
+                <Dropdown>
+                    <Dropdown.Toggle 
+                        className={`cnx__btn cnx__btn_tertiary  cnx__btn_sm cnx__period_filter__title_btn ${!_.isEmpty(filterValue) ? 'active': ''}`}
+                    >
+                        <Icon type="Activity" />
+                        <span style={{marginRight: '10px'}}>{title}</span>
+                    </Dropdown.Toggle>
 
-            {isOpen && (
-                <div
-                    ref={setPopperElement}
-                    className="sp1_period--menu"
-                    style={styles.popper}
-                    {...attributes}
-                >
-                    <RelativeDateFilter
-                        selected={selectedPeriod}
-                        onSelect={handleTimePeriodSelect}
-                    />
-
-                    <div className="mt-2">
-                        <TimeRange
-                            startDate={startDate}
-                            setStartDate={setStartDate}
-                            endDate={endDate}
-                            setEndDate={setEndDate}
+                    <Dropdown.Menu offset={[0, 8]} className="cnx__period_filter_dd_menu">
+                        <RelativeTimePeriod
+                            setSelectedPeriod={handleRelativeTimePeriod}
+                            selectedPeriod={selectedPeriod}
                         />
-                    </div>
-                </div>
-            )}
+                        <div className="cnx_divider" />
+                        <RangeDatePicker 
+                            startDate={startDate}
+                            endDate={endDate}
+                            setStartDate={val => {
+                                setTitle('Custom Period');
+                                setStartDate(val);
+                                setEndDate(val);
+                                setFilterValue({
+                                    start: dayjs(val).startOf('day').format(),
+                                    end: dayjs(val).endOf('day').format(),
+                                })
+                            }}
+                            setEndDate={val => {
+                                setTitle('Custom Period');
+                                setEndDate(val);
+                                setFilterValue({
+                                    ...filterValue,
+                                    end: dayjs(val).endOf('day').format(),
+                                })
+                            }}
+                        />
+                    </Dropdown.Menu>
+                </Dropdown>
+                {!_.isEmpty(filterValue) && 
+                    <Button 
+                        onClick={remove} variant='tertiary' 
+                        className={`cnx__period_filter__title_btn __close ${!_.isEmpty(filterValue) ? 'active': ''}`}
+                    >
+                        <i className="fa-solid fa-xmark" />
+                    </Button>
+                }
+            </div>
         </div>
-    );
-};
+    )
+}
+
+
+PeriodFilter.propTypes = {
+    filterValue: PropTypes.object,
+    setFilterValue: PropTypes.func
+}
 
 export default PeriodFilter;
