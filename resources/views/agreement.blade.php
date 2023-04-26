@@ -342,8 +342,8 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
                                         {{ucfirst($value->title)}} :
                                     </div>
                                     <div class="col-12 col-sm-7">
-                                        <textarea class="form-control" name="comment[{{$value->id}}]">
-                                            {!! html_entity_decode(trim($value->description)) !!}
+                                        <textarea class="form-control" name="comment[{{$value->id}}]" style="white-space: nowrap;">
+                                            {!! trim(html_entity_decode(strip_tags($value->description))) !!}
                                         </textarea>
                                     </div>
                                 </div>

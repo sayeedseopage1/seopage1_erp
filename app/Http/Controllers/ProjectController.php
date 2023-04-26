@@ -90,6 +90,7 @@ use App\Notifications\DeliverableOthersAuthorizationAcceptNotification;
 
 use App\Notifications\ProjectDeliverableFinalAuthorizationNotification;
 use App\Notifications\ProjectDeliverableFinalAuthorizationNotificationAccept;
+use App\Notifications\ProjectDelivarableFinalAuthorizationClientNotification;
 
 
 
@@ -799,8 +800,6 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-
-      //  dd($request->all());
         $project = Project::findOrFail($id);
         $originalValues = $project->getOriginal();
         $project->project_name = $request->project_name;
@@ -896,17 +895,24 @@ class ProjectController extends AccountBaseController
         $project->comments= $request->comments;
         $project->save();
         // $this->logProjectActivity($project->id, 'Project accepted by ');
+        $users= User::where('role_id',1)->get();
 
         if ($request->project_challenge != 'No Challenge') {
-        $project_update= Project::find($project->id);
-        $project_update->status= 'under review';
-        $project_update->save();
-        $users= User::where('role_id',1)->get();
-        foreach ($users as $user) {
-
-
-           Notification::send($user, new ProjectReviewNotification($project));
+            $project_update= Project::find($project->id);
+            $project_update->status= 'under review';
+            $project_update->save();
+            foreach ($users as $user) {
+                Notification::send($user, new ProjectReviewNotification($project));
+            }
         }
+        foreach ($users as $user) {
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $user->id,
+                'role_id' => 1,
+                'title' => 'Project Accepted',
+                'body' => 'Project Manager accept this project',
+                'redirectUrl' => route('projects.show', $project->id)
+            ]);
         }
         $project_manager= new ProjectMember();
         $project_manager->user_id= Auth::id();
@@ -1953,73 +1959,66 @@ class ProjectController extends AccountBaseController
     }
     public function projectDeliverable(Request $request)
     {
-//        dd($request->all());
         $validate = $request->validate([
-                'deliverable_type' => 'required',
-                'milestone_id' => 'required',
-                'title' => 'required',
-                'estimation_time' => 'required',
-                'quantity' => 'required',
-                'delivery-type' => 'required',
-                'from' => 'required',
-            ]
-        );
+            'deliverable_type' => 'required',
+            'milestone_id' => 'required',
+            'title' => 'required',
+            'estimation_time' => 'required',
+            'quantity' => 'required',
+            'delivery-type' => 'required',
+            'from' => 'required',
+        ]);
         if ($validate) {
+            $deliverable= new ProjectDeliverable();
+            if ($request->deliverable_type == 'Others') {
+                $deliverable->authorization = 0;
+            } else {
+                $deliverable->authorization = 1;
+            }
+            $deliverable->project_id= $request->project_id;
+            $deliverable->title= $request->title;
+            $deliverable->estimation_time=$request->estimation_time;
+            $deliverable->deliverable_type= $request->deliverable_type;
+            $deliverable->quantity= $request->quantity;
+            $deliverable->from= $request->from;
+            $deliverable->to= $request->to;
+            $deliverable->milestone_id= $request->milestone_id;
+            $deliverable->description= $request->description;
+            $deliverable->save();
+            $project_id= Project::where('id',$deliverable->project_id)->first();
+            $project= Project::find($deliverable->project_id);
+            $project->hours_allocated = $project_id->hours_allocated + $deliverable->estimation_time;
 
-      $deliverable= new ProjectDeliverable();
-      if($request->deliverable_type == 'Others')
-      {
-      $deliverable->authorization = 0;
-      }
-      else{
-        $deliverable->authorization = 1;
+            if ($project->deliverable_authorization == 1 && $project->authorization_status == 'approved' && Auth::user()->role_id == 4) {
+                $project->deliverable_authorization = 0;            
+                $project->authorization_status = 'pending';            
+            }
+            $project->save();
 
-      }
-      $deliverable->project_id= $request->project_id;
-      $deliverable->title= $request->title;
-      $deliverable->estimation_time=$request->estimation_time;
-      $deliverable->deliverable_type= $request->deliverable_type;
-      $deliverable->quantity= $request->quantity;
-      $deliverable->from= $request->from;
-      $deliverable->to= $request->to;
-      $deliverable->milestone_id= $request->milestone_id;
-      $deliverable->description= $request->description;
-      $deliverable->save();
-      $project_id= Project::where('id',$deliverable->project_id)->first();
-      $project= Project::find($deliverable->project_id);
-      $project->hours_allocated = $project_id->hours_allocated + $deliverable->estimation_time;
-      $project->save();
+            $log_user = Auth::user();
 
-      $log_user = Auth::user();
+            $activity = new ProjectActivity();
+            $activity->activity= $log_user->name .' added project deliverable : '.$deliverable->title;
+            $activity->project_id = $project->id;
+            $activity->save();
 
-              $activity = new ProjectActivity();
-              $activity->activity= $log_user->name .' added project deliverable : '.$deliverable->title;
-            //   if($attribute == 'project_summary')
-            //   {
-            //       $activity->activity= $log_user->name .' updated project summary' ;
-            //   }else
-            //   {
-            //       $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
-            //   }
+            $users = User::where('role_id',1)->get();
+            foreach ($users as $user) {
+                $this->triggerPusher('notification-channel', 'notification', [
+                    'user_id' => $user->id,
+                    'role_id' => 1,
+                    'title' => 'New Delivarable',
+                    'body' => 'Project Manager add a Delivarable. Please check',
+                    'redirectUrl' => route('projects.show', $project->id).'?tab=deliverables'
+                ]);
+            }
 
-              $activity->project_id = $project->id;
-              // $activity->attribute = $attribute;
-              // $activity->old_value = $originalValue;
-              // $activity->new_value = $updatedValue;
-              // $activity->user_id = Auth::id();
-              $activity->save();
-
-
-
-      if($request->deliverable_type == 'Others')
-      {
-        $project_id= Project::where('id',$project->id)->first();
-
-        $users= User::where('role_id',1)->get();
-        foreach ($users as $user) {
-            Notification::send($user, new DeliverableOthersAuthorizationNotification($project_id));
-        }
-      }
+            if($request->deliverable_type == 'Others') {
+                $project_id= Project::where('id',$project->id)->first();
+                foreach ($users as $user) {
+                    Notification::send($user, new DeliverableOthersAuthorizationNotification($project_id));
+                }
+            }
 
             return response()->json([
                 'status'=>200,
@@ -2209,10 +2208,17 @@ class ProjectController extends AccountBaseController
 
         $user= User::where('id',$project_id->pm_id)->first();
 
-            Notification::send($user, new DeliverableOthersAuthorizationAcceptNotification($project_id));
+        $this->triggerPusher('notification-channel', 'notification', [
+            'user_id' => $user->id,
+            'role_id' => 4,
+            'title' => 'Delivarable Approved',
+            'body' => 'Admin approved Delivarable. Go..',
+            'redirectUrl' => route('projects.show', $project_id->id).'?tab=deliverables'
+        ]);
+        
+        Notification::send($user, new DeliverableOthersAuthorizationAcceptNotification($project_id));
 
-
-      Toastr::success('Approved Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        Toastr::success('Approved Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back();
     }
     public function InComplete(Request $request)
@@ -2698,8 +2704,7 @@ class ProjectController extends AccountBaseController
         $activity->save();
 
         $user= User::where('id',$project_id->pm_id)->get();
-
-            Notification::send($user, new ProjectDeliverableTimeAcceptNotification($project_id));
+        Notification::send($user, new ProjectDeliverableTimeAcceptNotification($project_id));
 
 
         Toastr::success('Authorization request accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -2709,10 +2714,10 @@ class ProjectController extends AccountBaseController
     }
     public function DeliverableFinalAuthorizationSend($id)
     {
-       // $project= Project::where('project_id',$request->project_id)->first();
-       $project=Project::find($id);
-       $project->authorization_status = 'submitted';
-       $project->save();
+        // $project= Project::where('project_id',$request->project_id)->first();
+        $project=Project::find($id);
+        $project->authorization_status = 'submitted';
+        $project->save();
 
 
         $project_id= Project::where('id',$id)->first();
@@ -2727,11 +2732,16 @@ class ProjectController extends AccountBaseController
 
         $users= User::where('role_id',1)->get();
         foreach ($users as $user) {
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $user->id,
+                'role_id' => 1,
+                'title' => 'Authorization request',
+                'body' => 'Project Manager send authorization request',
+                'redirectUrl' => route('projects.show', $project_id->id).'?tab=deliverables'
+            ]);
             Notification::send($user, new ProjectDeliverableFinalAuthorizationNotification($project_id));
         }
         return response()->json(['status'=>400]);
-
-
     }
     public function DeliverableFinalAuthorizationAccept(Request $request)
     {
@@ -2743,6 +2753,8 @@ class ProjectController extends AccountBaseController
         $pm_project_update= PMProject::find($pm_project->id);
         $pm_project_update->deliverable_status = 1;
         $pm_project_update->save();
+        
+        $project_id= Project::where('id',$request->project_id)->first();
 
         $client_revision = ProjectDeliverablesClientDisagree::where([
             'project_id' => $project->id,
@@ -2750,13 +2762,15 @@ class ProjectController extends AccountBaseController
         ])->get();
         
         if ($client_revision) {
+            $client = User::where('id',$project->client_id)->first();
+            Notification::send($client, new ProjectDelivarableFinalAuthorizationClientNotification($project_id));
+
             foreach ($client_revision as $value) {
                 $value->status = '1';
                 $value->save();
             }
         }
 
-        $project_id= Project::where('id',$request->project_id)->first();
         $log_user = Auth::user();
 
         $activity = new ProjectActivity();
@@ -2767,10 +2781,17 @@ class ProjectController extends AccountBaseController
         $activity->save();
 
         $user= User::where('id',$project->pm_id)->first();
-
+        $this->triggerPusher('notification-channel', 'notification', [
+            'user_id' => $user->id,
+            'role_id' => 4,
+            'title' => 'Authorization request accepted',
+            'body' => 'Admin accept your authorization request',
+            'redirectUrl' => route('projects.show', $project_id->id).'?tab=deliverables'
+        ]);
         Notification::send($user, new ProjectDeliverableFinalAuthorizationNotificationAccept($project_id));
-        return response()->json(['status'=>400]);
-
+        return response()->json([
+            'status' => 400
+        ]);
     }
 
     public function modification_form_show($id)
