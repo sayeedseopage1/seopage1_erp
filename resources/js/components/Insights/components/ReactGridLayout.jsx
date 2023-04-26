@@ -84,7 +84,7 @@ const ReactGridLayout = () => {
                         leftSideLabel="Deal Value"
                         barDataKey={["development_night"]}
                         data = {[ 
-                            { name: 'Apr 2023', 'development_night': '$8.0K'},
+                            { name: 'Apr 2023', 'development_night': 8},
                         ]} 
                     />
                 </ReactGridLayoutItem>
