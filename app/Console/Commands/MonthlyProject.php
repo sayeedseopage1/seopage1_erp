@@ -48,6 +48,7 @@ class MonthlyProject extends Command
           $pm_update= PmAssign::find($manager->id);
           $pm_update->monthly_project_count =0;
           $pm_update->monthly_project_amount= 0;
+          $pm_update->monthly_actual_project_amount= 0;
           $pm_update->monthly_release_amount= 0;
           $pm_update->save();
 
