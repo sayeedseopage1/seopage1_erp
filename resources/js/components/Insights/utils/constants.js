@@ -105,3 +105,7 @@ export const rollingPeriod = [
     "past 6 months",
     "Past 12 months",
 ];
+
+
+// graph colors
+export const bgColors =  ["#7DC6E5","#fecf4c"];

@@ -2,24 +2,22 @@
 import { Responsive, WidthProvider } from "react-grid-layout";
 import ReactGridLayoutItem from './ReactGridLayoutItem';
 import React from "react";
+import ConversionGraph from "./Graph/Conversion";
+import StackedBarChart from "./Graph/StackedBarChart";
 
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 
 const Layout = [
-    {i: 'a', x: 0, y: 0, w: 4, h: 8, minW: 3, minH: 8 , static: true},
-    {i: 'b', x: 4, y: 0, w: 4, h: 8, minW: 3, minH: 8},
-    {i: 'c', x: 8, y: 0, w: 4, h: 8, minW: 3, minH: 8},
+    {i: 'conversion_graph', x: 0, y: 0, w: 6, h: 8, minW: 3, minH: 8},
+    {i: 'b', x: 6, y: 0, w: 6, h: 8, minW: 3, minH: 8},
+    {i: 'c', x: 0, y: 0, w: 4, h: 8, minW: 3, minH: 8},
     {i: 'd', x: 0, y: 2, w: 4, h: 8, minW: 3, minH: 8},
     {i: 'e', x: 4, y: 2, w: 4, h: 8, minW: 3, minH: 8},
     {i: 'f', x: 8, y: 2, w: 4, h: 8, minW: 3, minH: 8},
     {i: 'g', x: 0, y: 4, w: 4, h: 8, minW: 3, minH: 8},
     {i: 'h', x: 4, y: 4, w: 4, h: 8, minW: 3, minH: 8},
-    {i: 'i', x: 8, y: 4, w: 4, h: 8, minW: 3, minH: 8},
-    {i: 'j', x: 0, y: 6, w: 4, h: 8, minW: 3, minH: 8},
-    {i: 'k', x: 4, y: 6, w: 4, h: 8, minW: 3, minH: 8},
-    {i: "deleteOnDrop" , x: 4, y: 6, w: 4, h: 8, minW: 3, minH: 8}
 ]
 
 
@@ -58,46 +56,101 @@ const ReactGridLayout = () => {
                     <span className="react-resizable-handle react-resizable-handle-se" /> 
                 }
             >
-                <ReactGridLayoutItem key="a" > 
-                    gird Item a
-                </ReactGridLayoutItem>
-                <ReactGridLayoutItem key="b" > 
-                    gird Item b
-                </ReactGridLayoutItem>
-                <ReactGridLayoutItem key="c"> 
-                    gird Item c
+                <ReactGridLayoutItem 
+                    key="conversion_graph"
+                    title="Deal Conversion"  
+                > 
+                    <ConversionGraph />
                 </ReactGridLayoutItem>
 
-                <ReactGridLayoutItem key="d">
-                    gird Item d
+                <ReactGridLayoutItem 
+                    key="b" 
+                    title="New deal performance report" 
+                > 
+                    <StackedBarChart
+                        XAxisLabel="name"
+                        leftSideLabel="Number of deals"
+                        barDataKey={["open", "won"]}
+                        data = {[ 
+                            { name: 'Apr 2023', open: 250, won: 50},
+                            { name: 'Mar 2023', open: 139, won: 21 },
+                            { name: 'Mar 2023', open: 119, won: 21 },
+                        ]} 
+                    />
                 </ReactGridLayoutItem>
-                <ReactGridLayoutItem key="e">
-                    gird Item e
-                </ReactGridLayoutItem>
-                <ReactGridLayoutItem key="f">
-                    gird Item f
-                </ReactGridLayoutItem>
-                <ReactGridLayoutItem key="g">
-                    gird Item g
-                </ReactGridLayoutItem>
-                
-                <ReactGridLayoutItem key="h">
-                    gird Item h
-                </ReactGridLayoutItem>
-                
-                
-                <ReactGridLayoutItem key="i">
-                    gird Item i
+                <ReactGridLayoutItem key="c" title="Deals won over time">
+                    <StackedBarChart
+                        XAxisLabel="name"
+                        leftSideLabel="Deal Value"
+                        barDataKey={["development_night"]}
+                        data = {[ 
+                            { name: 'Apr 2023', 'development_night': 8},
+                        ]} 
+                    />
                 </ReactGridLayoutItem>
 
-                
-                <ReactGridLayoutItem key="j">
-                    gird Item j
+                {/* <ReactGridLayoutItem key="d" title="Deals won over time">
+                    <StackedBarChart
+                        XAxisLabel="name"
+                        leftSideLabel="Deal Value"
+                        barDataKey={["development_night"]}
+                        data = {[ 
+                            { name: 'Apr 2023', 'development_night': '$8.0K'},
+                        ]} 
+                    />
+                </ReactGridLayoutItem>
+               <ReactGridLayoutItem key="e" title="New deal performance report">
+                    <StackedBarChart
+                        XAxisLabel="name"
+                        leftSideLabel="Number of deals"
+                        barDataKey={["open", "won"]}
+                        data = {[ 
+                            { name: 'Apr 2023', open: 250, won: 50},
+                            { name: 'Mar 2023', open: 139, won: 21 },
+                            { name: 'Mar 2023', open: 119, won: 21 },
+                        ]} 
+                    />
+                </ReactGridLayoutItem>
+
+                <ReactGridLayoutItem key="f" title="New deal performance report">
+                    <StackedBarChart
+                        XAxisLabel="name"
+                        leftSideLabel="Number of deals"
+                        barDataKey={["open", "won"]}
+                        data = {[ 
+                            { name: 'Apr 2023', open: 250, won: 50},
+                            { name: 'Mar 2023', open: 139, won: 21 },
+                            { name: 'Mar 2023', open: 119, won: 21 },
+                        ]} 
+                    />
+                </ReactGridLayoutItem>
+
+                <ReactGridLayoutItem key="g" title="New deal performance report">
+                    <StackedBarChart
+                        XAxisLabel="name"
+                        leftSideLabel="Number of deals"
+                        barDataKey={["open", "won"]}
+                        data = {[ 
+                            { name: 'Apr 2023', open: 250, won: 50},
+                            { name: 'Mar 2023', open: 139, won: 21 },
+                            { name: 'Mar 2023', open: 119, won: 21 },
+                        ]} 
+                    />
                 </ReactGridLayoutItem>
                 
-                <ReactGridLayoutItem key="k" >
-                    gird Item k
-                </ReactGridLayoutItem>                
+                 
+                <ReactGridLayoutItem key="h" title="New deal performance report">
+                    <StackedBarChart
+                        XAxisLabel="name"
+                        leftSideLabel="Number of deals"
+                        barDataKey={["open", "won"]}
+                        data = {[ 
+                            { name: 'Apr 2023', open: 250, won: 50},
+                            { name: 'Mar 2023', open: 139, won: 21 },
+                            { name: 'Mar 2023', open: 119, won: 21 },
+                        ]} 
+                    />
+                </ReactGridLayoutItem> */}
             </ResponsiveGridLayout>
 
 
