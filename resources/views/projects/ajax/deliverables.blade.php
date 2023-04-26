@@ -90,7 +90,6 @@
     $diff_in_minutes = $current_time->diffInMinutes($accept_date);
     //dd( $diff_in_minutes);
     $pm_project= App\Models\PMProject::where('project_id',$project->id)->first();
-
 ?>
 @if($signature == null)
     @if($project->pm_id == Auth::id())
@@ -104,26 +103,26 @@
             </div>
             @include('projects.modals.deliverableauthorizationmodal')
         @else
-            @php
-                $is_has_other = \App\Models\ProjectDeliverable::where([
-                    'project_id' => $project->id,
-                    'deliverable_type' => 'Others',
-                    'authorization' => 0
-                ])->exists();
-            @endphp
-            @if($project->authorization_status != 'submitted' && $is_has_other == false)
+            @if($project->authorization_status != 'submitted')
             <div class="row mx-3">
                 <div class="mt-3 mr-2">
                     <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
                     @include('projects.modals.clientdeliverableaddmodal')
                 </div>
-                
-                <div class="mt-3">
-                    <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesClientRevisionModal">
-                        <i class="fas fa-plus mr-1"></i>Client Revision
-                    </button>
-                    @include('projects.modals.clientdeliverablerevisionmodal')
-                </div>
+                @php
+                    $client_revision = \App\Models\ProjectDeliverablesClientDisagree::where([
+                        'project_id' => $project->id,
+                        'status' => '0'
+                    ])->exists();
+                @endphp
+                @if($client_revision)
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesClientRevisionModal">
+                            <i class="fas fa-plus mr-1"></i>Client Revision
+                        </button>
+                        @include('projects.modals.clientdeliverablerevisionmodal')
+                    </div>
+                @endif
             </div>
             @endif
         @endif
@@ -887,7 +886,14 @@
             <x-forms.button-cancel :link="route('projects.index')" class="border-0">@lang('app.cancel')</x-forms.button-cancel>
         </div>
     @else
-        @if($project->authorization_status == 'pending')
+        @php
+            $is_has_other = \App\Models\ProjectDeliverable::where([
+                'project_id' => $project->id,
+                'deliverable_type' => 'Others',
+                'authorization' => 0
+            ])->exists();
+        @endphp
+        @if($project->authorization_status == 'pending' && $is_has_other == false)
             @if(count($deliverables) > 0)
                 <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
                     <div class="d-flex">
@@ -899,6 +905,10 @@
                     </div>
                 </div>
             @endif
+        @elseif($is_has_other == true)
+            <div class="row mx-3">
+                <p class="text-danger">You have "Other type" delivarable need to approved by admin</p>
+            </div>
         @else
             <div class="card-footer bg-white border-0 d-flex justify-content-start py-0 py-lg-4 py-md-4 mb-4 mb-lg-3 mb-md-3 ">
                 <div class="d-flex">
@@ -906,8 +916,6 @@
                         <button disabled class="dropdown-toggle btn-warning" type="button" aria-haspopup="true" aria-expanded="false">
                             @lang('Awiating for approval')
                         </button>
-
-                        <!-- DROPDOWN - INFORMATION -->
                     </div>
                 </div>
             </div>

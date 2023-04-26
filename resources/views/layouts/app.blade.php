@@ -908,6 +908,27 @@
                     $("#easyNotify").easyNotify(options);
                 }
             }, channel.unbind());
+
+            var notification = pusher.subscribe('notification-channel');
+            
+            notification.bind('notification', function(data) {
+                // console.log(data.user_id, window.Laravel.user.id, data.role_id,window.Laravel.user.role_id);
+                if (data.user_id == window.Laravel.user.id && data.role_id == window.Laravel.user.role_id) {
+                    var options = {
+                        title: data.title,
+                        options: {
+                            body: data.body,
+                            icon: '{{URL::asset("user-uploads/app-logo/c86157272a41bea229e0dcbe2ff9715b.png")}}',
+                            lang: 'en-US',
+                            onClick: function() {
+                                window.location.href = data.redirectUrl;
+                            }
+                        }
+                    };
+                    
+                    $("#easyNotify").easyNotify(options);
+                }
+            }, notification.unbind());
         })
     </script>
 </body>
