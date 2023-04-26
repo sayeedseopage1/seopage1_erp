@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from "react";
 import _, { update } from "lodash";
 import { useDrag, useDrop } from "react-dnd";
 import styled from "styled-components";
-import Modal from '../UI/Modal';
+import Modal from '../Insights/ui/Modal';
 import "./table.css";
 import { convertTime } from "./utils/converTime";
 import Pagination from "./components/TablePagination";
