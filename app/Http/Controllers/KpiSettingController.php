@@ -38,7 +38,7 @@ class KpiSettingController extends AccountBaseController
     }
 
     // phpcs:ignore
-    public function update(Request $request)
+    public function update(Request $request,$id)
     {
         dd($request);
         // $setting = Setting::first();

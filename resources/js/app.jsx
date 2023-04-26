@@ -1,3 +1,3 @@
 import "./bootstrap";
 import "./components/TimeLogTable";
-import "./components/Insights";
+import "./components/Insights/main";

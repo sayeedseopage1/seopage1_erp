@@ -124,6 +124,7 @@
              <!-- Add Task Export Buttons End -->
             {{-- Time Log Table --}}
             <div id="timeLogTable"></div>
+            <div id="insights-container-modal" ></div>
             {{-- passing variable to react component from laravel --}}
            
 

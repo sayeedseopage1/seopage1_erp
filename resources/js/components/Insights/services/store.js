@@ -1,23 +1,35 @@
 import { configureStore } from "@reduxjs/toolkit";
-import salesDashboardModalReducer from "./modals/salesDashboardModalSlice";
-import newDashboardCreatingModalReducer from "./modals/newDashboardCreatingModalSlice";
-import dashboardsReducer from "./dashboardsSlice";
-import reportsReducer from "./reportsSlice";
-import goalsReducer from "./goalsSlice";
-import sectionModalReducer from "./modals/sectionModalSlice";
-import goalFormModalReducer from "./modals/goalFormModalSlice";
-import assigneeReducer from "./assigneeSlice";
-// store
+import { apiSlice } from "./api/apiSlice";
+
+// goal
+import goalReducer from "./slices/goalSlice";
+import goalModalReducer from "./slices/goalModalSlice";
+import goalFormModalReducer from "./slices/goalFormModalSlice";
+
+// dashboard
+import dashboardReducer from "./slices/dashboardSlice";
+import dashboardModalReducer from "./slices/dashboardModalSlice";
+
+// reports
+import reportReducer from "./slices/reportSlice";
+import reportModalReducer from "./slices/reportModalSlice";
+
+import sectionModalReducer from "./slices/sectionModalSlice";
+
 export const store = configureStore({
     reducer: {
-        goals: goalsReducer,
-        reports: reportsReducer,
-        dashboards: dashboardsReducer,
-        sectionModal: sectionModalReducer,
-        salesDashboardModal: salesDashboardModalReducer,
-        createDashboardModal: newDashboardCreatingModalReducer,
+        [apiSlice.reducerPath]: apiSlice.reducer,
+        goals: goalReducer,
+        goalModal : goalModalReducer,
         goalFormModal: goalFormModalReducer,
-        assignee: assigneeReducer,
+        dashboards: dashboardReducer,
+        dashboardModal: dashboardModalReducer,
+        reports: reportReducer,
+        reportModal: reportModalReducer,
+        sectionModal: sectionModalReducer,
+
     },
-    devTools: process.env.NODE_ENV !== "production",
+    middleware: (getDefaultMiddleware) => 
+        getDefaultMiddleware().concat(apiSlice.middleware),
+    devTools: true,
 });
