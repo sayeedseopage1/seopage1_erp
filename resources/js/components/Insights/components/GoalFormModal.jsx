@@ -87,7 +87,7 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
                                 className={ `cnx_select_box_option ${assigneeFor.name === option.name ? 'active': ''}`}> 
                                     {option.name}
                                     {assigneeFor.name === option.name && <i className="fa-solid fa-check" />}
-                                </Dropdown.Item>
+                            </Dropdown.Item>
                         )))
                     }
                 </Dropdown.Menu>
@@ -904,7 +904,7 @@ const GoalFormModal = () => {
                         >Cancel</Button>
                         <Button 
                             onClick={handleOnSubmit}
-                            disabled={ !trackingValue && !applyRecurring}  
+                            disabled={ !trackingValue && !applyRecurring || !_.isEmpty(assigneeFor)}  
                             variant='success'
                         >
                             {isSaving ? 'Saving...' : 'Save'}
