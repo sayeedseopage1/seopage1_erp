@@ -287,7 +287,7 @@ const GoalType = ({ goalType, setGoalType }) => {
         <React.Fragment>
             <Dropdown className="cnx_select_box_dd">
                 <Dropdown.Toggle className="cnx_select_box">
-                    {goalType || 'Deal Type'}
+                    {goalType || 'Goal Type'}
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="cnx_select_box_options">
                     {
