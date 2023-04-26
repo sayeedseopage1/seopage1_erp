@@ -800,8 +800,6 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-
-      //  dd($request->all());
         $project = Project::findOrFail($id);
         $originalValues = $project->getOriginal();
         $project->project_name = $request->project_name;
@@ -897,17 +895,24 @@ class ProjectController extends AccountBaseController
         $project->comments= $request->comments;
         $project->save();
         // $this->logProjectActivity($project->id, 'Project accepted by ');
+        $users= User::where('role_id',1)->get();
 
         if ($request->project_challenge != 'No Challenge') {
-        $project_update= Project::find($project->id);
-        $project_update->status= 'under review';
-        $project_update->save();
-        $users= User::where('role_id',1)->get();
-        foreach ($users as $user) {
-
-
-           Notification::send($user, new ProjectReviewNotification($project));
+            $project_update= Project::find($project->id);
+            $project_update->status= 'under review';
+            $project_update->save();
+            foreach ($users as $user) {
+                Notification::send($user, new ProjectReviewNotification($project));
+            }
         }
+        foreach ($users as $user) {
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $user->id,
+                'role_id' => 1,
+                'title' => 'Project Accepted',
+                'body' => 'Project Manager accept this project',
+                'redirectUrl' => route('projects.show', $project->id)
+            ]);
         }
         $project_manager= new ProjectMember();
         $project_manager->user_id= Auth::id();

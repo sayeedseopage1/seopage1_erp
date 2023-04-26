@@ -912,7 +912,6 @@
             var notification = pusher.subscribe('notification-channel');
             
             notification.bind('notification', function(data) {
-                // console.log(data.user_id, window.Laravel.user.id, data.role_id,window.Laravel.user.role_id);
                 if (data.user_id == window.Laravel.user.id && data.role_id == window.Laravel.user.role_id) {
                     var options = {
                         title: data.title,

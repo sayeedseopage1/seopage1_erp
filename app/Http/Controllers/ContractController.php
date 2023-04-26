@@ -873,7 +873,7 @@ class ContractController extends AccountBaseController
     }
     public function storedealDetails(Request $request)
     {
-//        dd($request->message_link);
+        //dd($request->all());
         $validated = $request->validate([
             'project_name' => 'required',
             'deadline' => 'required',
@@ -1121,6 +1121,13 @@ class ContractController extends AccountBaseController
                       $project_admin_update->save();
 
                     $user= User::where('id',$deal_pm_id->pm_id)->first();
+                    $this->triggerPusher('notification-channel', 'notification', [
+                        'user_id' => $user->id,
+                        'role_id' => 4,
+                        'title' => 'New project',
+                        'body' => 'You have new project. Please check',
+                        'redirectUrl' => route('contracts.show', $deal_pm_id->id)
+                    ]);
                       Mail::to($user->email)->send(new WonDealMail($project_id));
 
                       //  Mail::to($test->email)->send(new WonDealMail($project));
