@@ -14,6 +14,7 @@ import utc from "dayjs/plugin/utc";
 import quarterOfYear from "dayjs/plugin/quarterOfYear";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import WeekOfYear from "dayjs/plugin/weekOfYear";
+import axios from 'axios';
 import _ from 'lodash';
 
 
@@ -630,6 +631,7 @@ const TrackingInput = ({
 const GoalFormModal = () => {
     const { mode, entry, entryType } = useSelector(state => state.goalFormModal);
     const dispatch = useDispatch();
+    const [isSaving, setIsSaving] = React.useState(false);
 
     // form data
     const [assigneeType, setAssigneeType] = React.useState('User');
@@ -645,6 +647,7 @@ const GoalFormModal = () => {
     const [qualified, setQualified] = React.useState('Qualified');
     const [dealType, setDealType] = React.useState('');
     const [goalType, setGoalType] = React.useState('');
+    const [achievablePoints, setAchievablePoints] = React.useState('0')
 
     React.useEffect(() => {
         if(recurring.length === 0){
@@ -666,6 +669,19 @@ const GoalFormModal = () => {
     // close modal
     const close = () => {
         dispatch(closeGoalFormModal());
+    }
+
+    // handle on submit 
+    const handleOnSubmit = async (e) => {
+        e.preventDefault();
+        setIsSaving(true);
+        const data = { assigneeType, assigneeFor, pipeline, frequency, startDate, endDate, trackingType, trackingValue, recurring, applyRecurring, qualified, dealType, goalType};
+
+        await axios.post("/account/insights", data).then((res) => {
+            setIsSaving(false);
+            console.log(res);
+        });
+
     }
 
     return(
@@ -774,9 +790,9 @@ const GoalFormModal = () => {
                     <div className='cnx_select_box_wrapper'>
                         <input 
                             type='number' 
-                            value = {trackingValue}
-                            onChange={e => setTrackingValue(e.target.value)}
-                            placeholder={`Insert ${trackingType}`} 
+                            value = {achievablePoints}
+                            onChange={e => setAchievablePoints(e.target.value)}
+                            placeholder="Achievable Pointes" 
                             min={0} 
                             className='cnx_select_box'
                         />
@@ -851,9 +867,12 @@ const GoalFormModal = () => {
                             variant='tertiary'
                         >Cancel</Button>
                         <Button 
+                            onClick={handleOnSubmit}
                             disabled={ !trackingValue && !applyRecurring}  
                             variant='success'
-                        >Save</Button>
+                        >
+                            {isSaving ? 'Saving...' : 'Save'}
+                        </Button>
                     </div>
                 </Card.Footer>
             </Card>

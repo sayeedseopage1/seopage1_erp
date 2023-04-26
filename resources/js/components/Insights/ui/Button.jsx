@@ -12,7 +12,7 @@ const Button = ({
 }) => {
     const classes = `cnx__btn cnx__btn_${variant} ${disabled ? 'cnx__btn_disabled': ''} cnx__btn_${size} ${className}`
     return (
-        <button className={classes} disabled={disabled} onClick={()=> onClick && onClick()} {...props}>
+        <button className={classes} disabled={disabled} onClick={(e)=> onClick && onClick(e)} {...props}>
             {children}
         </button>
     )
