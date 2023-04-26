@@ -22,35 +22,71 @@ import _ from 'lodash';
 
 const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
     const [search, setSearch] = React.useState('');
+    const [users, setUsers] = React.useState([]);
+    const [teams,setTeams] = React.useState([]);
 
-    const options = () => {
+
+    React.useEffect(() => {
+       if (assigneeType === "User" && users.length === 0) {
+            const fetch = async () => {
+                const res = await axios.get("/get-users");
+                if (res) {
+                    setUsers([...res.data])
+                }
+            };
+
+            fetch();
+            return;
+        }
+
+        if (assigneeType === "Team" && teams.length === 0) {
+            // teams fetching here....
+            const fetch = async () => {
+                const res = await axios.get("/get-teams");
+                if (res) {
+                    let data = [];
+                    res.data.map(d => data.push({
+                        ...d,
+                        name: d.team_name
+                    }))
+                    setTeams([...data])
+                }
+            };
+
+            fetch();
+            return;
+        }
+    }, [assigneeType])
+
+    const options =  () => {
         if(assigneeType === "Team"){
-            return ['Team 1', 'Team 2', 'Team 3', 'Team 4'];
+            return teams;
         }else if(assigneeType === "User"){
-            return ['User 1', 'User 2', 'User 3', 'User 4'];
+            return users;
         }
 
         return [];
     }
 
+
     return(
         <React.Fragment>
             <Dropdown className="cnx_select_box_dd">
                 <Dropdown.Toggle className="cnx_select_box">
-                    {assigneeFor || `Select ${assigneeType}`}
+                    {assigneeFor.name || `Select ${assigneeType}`}
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="cnx_select_box_options">
                     <div className='cnx_select_box_search'>
                         <SearchBox autoFocus={true} value={search} onChange={setSearch} />
                     </div>
                     {
-                        options()?.filter(f => f.includes(search)).map((option => ( 
+                        options().length > 0 && options().filter(f => f.name.includes(search)).map((option => ( 
                             <Dropdown.Item 
-                                key={`${option}-${Math.random()}`}
-                                onClick={() => setAssigneeFor(option)}
-                                className={ `cnx_select_box_option ${assigneeFor === option ? 'active': ''}`}> 
-                                    {option}
-                                    {assigneeFor === option && <i className="fa-solid fa-check" />}
+                                key={option.id}
+                                onClick={() => setAssigneeFor({id: option.id, name: option.name})}
+                                className={ `cnx_select_box_option ${assigneeFor.name === option.name ? 'active': ''}`}> 
+                                    {option.name}
+                                    {assigneeFor.name === option.name && <i className="fa-solid fa-check" />}
                                 </Dropdown.Item>
                         )))
                     }
@@ -635,7 +671,7 @@ const GoalFormModal = () => {
 
     // form data
     const [assigneeType, setAssigneeType] = React.useState('User');
-    const [assigneeFor, setAssigneeFor] = React.useState('');
+    const [assigneeFor, setAssigneeFor] = React.useState({id: 0, name: ''});
     const [pipeline, setPipeline] = React.useState(["Pipeline"]);
     const [frequency, setFrequency] = React.useState('Monthly');
     const [startDate, setStartDate] = React.useState(new Date());
@@ -891,7 +927,7 @@ export default GoalFormModal;
 // props types 
 
 AssigneeFor.propTypes = {
-    assigneeFor: PropsTypes.string.isRequired,
+    assigneeFor: PropsTypes.object.isRequired,
     setAssigneeFor: PropsTypes.func.isRequired,
     assigneeType: PropsTypes.string.isRequired,
 }
