@@ -108,4 +108,4 @@ export const rollingPeriod = [
 
 
 // graph colors
-export const bgColors =  ["#7DC6E5","#fecf4c"];
+export const bgColors =  ["#7DC6E5","#fecf4c", "rgb(246, 183, 211)", "rgb(28, 145, 143)", 'rgb(180, 98, 177)'];
