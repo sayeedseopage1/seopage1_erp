@@ -914,7 +914,7 @@
                 <div class="d-flex">
                     <div class="inv-action mr-3 mr-lg-3 mr-md-3 dropup">
                         <button disabled class="dropdown-toggle btn-warning" type="button" aria-haspopup="true" aria-expanded="false">
-                            @lang('Awiating for approval')
+                            @lang('Awaiting for approval')
                         </button>
                     </div>
                 </div>
@@ -1172,7 +1172,7 @@
                 text: '@lang("Are You Sure You Want to Approve this?")',
                 showCancelButton: true,
                 showConfirmButton: true,
-                confirmButtonText: 'Approved',
+                confirmButtonText: 'Approve',
                 customClass: {
                     confirmButton: 'btn btn-primary',
                 },
