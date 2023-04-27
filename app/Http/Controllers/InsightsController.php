@@ -162,8 +162,14 @@ class InsightsController extends AccountBaseController
      */
     public function storeSection(Request $request)
     {
-        dd($request);
-        return $request;
+        $section= new Section();
+        $section->type= $request->type;
+        $section->section_name= $request->section;
+        $section->added_by= Auth::id();
+        $section->save();
+
+       // return $request;
+        return response()->json([$section]);
        // dd($request->assigneeFor);
         
     }
