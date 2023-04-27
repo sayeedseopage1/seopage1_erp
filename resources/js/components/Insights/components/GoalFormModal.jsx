@@ -719,7 +719,7 @@ const GoalFormModal = () => {
         setIsSaving(true);
         const data = {entry, entryType, assigneeType, assigneeFor, pipeline, frequency, startDate, endDate, trackingType, trackingValue, recurring, applyRecurring, qualified, dealType, goalType};
 
-        await axios.post("/account/insights", data).then((res) => {
+        await axios.post("/account/insights/goals/add", data).then((res) => {
             setIsSaving(false);
             console.log(res);
         });

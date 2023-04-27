@@ -6,6 +6,7 @@ import Label from '../ui/Label';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeSectionModal } from '../services/slices/sectionModalSlice';
 import { openDashboardModal, setDashboardModalData } from '../services/slices/dashboardModalSlice';
+import axios from 'axios';
 
 const AddSectionModal = () => {
     const {type, from} = useSelector((state) => state.sectionModal);
@@ -23,8 +24,13 @@ const AddSectionModal = () => {
     }
 
     // save
-    const onSave = (e) => {
+    const onSave = async (e) => {
         e.preventDefault();
+        const data = {type, section};
+        await axios.post('/account/insights/dashboards/add', data).then(res => {
+            console.log(res.data);
+            setIsSaving(false)
+        })
 
         // query to save section name to db
 
@@ -41,6 +47,9 @@ const AddSectionModal = () => {
         }
         dispatch(closeSectionModal());
     }
+
+    
+
 
     return (
         <Card className="cnx__ins__new_dashboard_modal">

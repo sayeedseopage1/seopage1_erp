@@ -16,6 +16,7 @@ const NewDashboardModal = () => {
 
     const [name , setName] = React.useState(dashboardName);
     const [section, setSection] = React.useState(defaultSection);
+    const [isSaving, setIsSaving] = React.useState(false);
 
     React.useEffect(() => {
         dispatch(setDashboardModalData({ dashboardName: name, section }))
@@ -42,6 +43,18 @@ const NewDashboardModal = () => {
             type: "DASHBOARD_SECTION",
             from: 'DASHBOARD_MODAL'
         }));
+    }
+
+
+    // on save
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        setIsSaving(true);
+        const data = {name, section, reports: [], goals: []};
+        await axios.post('/account/insights/dashboards/add', data).then(res => {
+            console.log(res.data);
+            setIsSaving(false)
+        })
     }
 
     return (
@@ -90,7 +103,13 @@ const NewDashboardModal = () => {
                             className='cnx_ins__goal_modal__card_footer_cancel'
                             variant='tertiary'
                         >Cancel</Button>
-                        <Button variant='success'>Save</Button>
+                        <Button
+                            disabled={!name || !section || isSaving}
+                            onClick={onSubmit} 
+                            variant='success'
+                        >
+                            {isSaving ? 'Saving...' : 'Save'}
+                        </Button>
                     </div>
                 
             </Card.Footer>
