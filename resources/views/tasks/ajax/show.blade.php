@@ -178,7 +178,7 @@ $changeStatusPermission = user()->permission('change_status');
                                     @endif
 
                                     @if ($editTaskPermission == 'all' || ($editTaskPermission == 'added' && $task->added_by == user()->id) || ($task->project && $task->project->project_admin == user()->id))
-                                        <a class="dropdown-item openRightModal"
+                                        <a class="dropdown-item"
                                             href="{{ route('tasks.edit', $task->id) }}">@lang('app.edit')
                                             @lang('app.task')</a>
 
@@ -1472,5 +1472,6 @@ $changeStatusPermission = user()->permission('change_status');
         });
 
     </script>
-   <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
+
 

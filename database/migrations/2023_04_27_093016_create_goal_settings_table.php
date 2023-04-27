@@ -15,6 +15,24 @@ return new class extends Migration
     {
         Schema::create('goal_settings', function (Blueprint $table) {
             $table->id();
+            $table->string('entry');
+            $table->string('entryType');
+            $table->string('assigneeType');
+            $table->bigInteger('user_id')->nullable();
+            $table->string('name')->nullable();
+            $table->bigInteger('team_id')->nullable();
+            $table->string('team_name')->nullable();
+            $table->string('pipeline')->nullable();
+            $table->string('frequency');
+            $table->date('startDate');
+            $table->date('endDate')->nullable();
+            $table->string('trackingType');
+            $table->string('trackingValue');
+            $table->string('applyRecurring')->default('false');
+            $table->string('qualified');
+            $table->string('dealType');
+            $table->string('goalType');
+            $table->integer('added_by');
             $table->timestamps();
         });
     }
