@@ -92,8 +92,10 @@ $projectArchived = $project->trashed();
                         <li>
                             <x-tab :href="route('projects.show', $project->id).'?tab=timelogs'" :text="__('app.menu.timeLogs')" class="timelogs" ajax="false" />
                         </li>
+                        <li>
+                            <x-tab :href="route('projects.show', $project->id).'?tab=activity_log'" :text="__('Activity Log')" class="activity_log"/>
+                        </li>
                     @endif
-
 
                     @if ($viewFilesPermission == 'all' || ($viewFilesPermission == 'added' && user()->id == $project->added_by) || ($viewFilesPermission == 'owned' && user()->id == $project->client_id))
                         <li>
@@ -101,12 +103,6 @@ $projectArchived = $project->trashed();
                             class="files" />
                         </li>
                     @endif
-
-
-
-
-
-
 
                     @if (in_array('expenses', user_modules()) && ($viewExpensePermission == 'all' || ($viewExpensePermission == 'added' && user()->id == $project->added_by) || ($viewExpensePermission == 'owned' && user()->id == $project->client_id)))
                         <li>
