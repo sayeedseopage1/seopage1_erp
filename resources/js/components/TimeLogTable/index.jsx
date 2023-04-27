@@ -187,11 +187,11 @@ const TimeLogTable = () => {
             ) : null}
 
 
-            {employeeSessionModal.isOpen && 
+            {/* {employeeSessionModal.isOpen && 
                 <EmployeeWiseSessionTable 
                 control={{employeeSessionModal, setEmployeeSessionModal}} 
                 />
-            }
+            } */}
         </DndProvider>
     );
 };
