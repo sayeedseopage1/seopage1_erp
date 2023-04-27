@@ -1026,6 +1026,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::post('time-log-report-chart', [TimelogReportController::class, 'timelogChartData'])->name('time-log-report.chart');
     Route::resource('time-log-report', TimelogReportController::class);
+    Route::get('time-log-report/{project_id}/{employee_id}', [TimelogReportController::class, 'show'])->where([
+        'project_id' => '[0-9]+',
+        'employee_id' => '[0-9]+',
+    ]);
 
     Route::post('finance-report-chart', [FinanceReportController::class, 'financeChartData'])->name('finance-report.chart');
     Route::resource('finance-report', FinanceReportController::class);
