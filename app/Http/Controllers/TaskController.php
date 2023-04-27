@@ -1373,13 +1373,44 @@ class TaskController extends AccountBaseController
 //    ACCEPT AND CONTINUE BUTTON SECTION
         public function acceptContinue(Request $request){
         dd($request->all());
-//            $task_status= Task::find($request->task_id);
-//            $task_status->task_status="in progress";
-//            $task_status->board_column_id=3;
-//            $task_status->save();
+            $task_status= Task::find($request->task_id);
+            $task_status->task_status="in progress";
+            $task_status->board_column_id=3;
+            $task_status->save();
+
+
+           // $subtasks = SubTask::where('task_id',$request->task_id)->get();
+            $selected_subtasks = SubTask::where('id',$request->subTask)->get();
+//            dd($selected_subtasks);
+//            foreach ($subtasks as $subtask)
+//            {
+//                $find_task= Task::where('subtask_id',$subtask->id)->first();
 //
+//            }
+            foreach ($selected_subtasks as $selected_subtask){
+
+                $find_task_id= Task::where('subtask_id',$selected_subtask->id)->first();
+                $sub_task_status= Task::find($find_task_id->id);
+                $sub_task_status->task_status = "incomplete";
+                $sub_task_status->board_column_id=1;
+                $sub_task_status->save();
+
+                $tasks_accept = new TaskRevision();
+                $tasks_accept->accept_and_continue = $request->text3;
+                $tasks_accept->subtask_id = implode(",", $request->subTask);
+                $tasks_accept->revision_acknowledgement = $request->revision_acknowledgement;
+                $tasks_accept->comment = implode(",", $request->comment);
+                $tasks_accept->save();
+            }
+            return response()->json([
+                'status'=>200,
+            ]);
+
 //            $tasks_accept = TaskRevision::where('task_id',$request->task_id)->first();
 //            $tasks_accept->accept_and_continue = $request->text3;
+//            $tasks_accept->subtask_id = $request->subTask;
+//            $tasks_accept->revision_acknowledgement = $request->revision_acknowledgement;
+//            $tasks_accept->task_comment = $request->comment;
 //            $tasks_accept->save();
 //            return response()->json([
 //                'status'=>200,
@@ -1387,7 +1418,8 @@ class TaskController extends AccountBaseController
         }
 
 //        DENY AND CONTINUE BUTTON SECTION
-        public function denyAndContinue(Request $request){
+        public function denyContinue(Request $request){
+        dd($request->all());
             $task_status= Task::find($request->task_id);
             $task_status->task_status="in progress";
             $task_status->board_column_id=3;
@@ -1405,16 +1437,12 @@ class TaskController extends AccountBaseController
         public function revisionReason(Request $request){
 //        dd($request->all());
             $revision_reason = TaskRevision::where('task_id',$request->task_id)->first();
+//            dd($revision_reason);
             $revision_reason->revision_reason =$request->revision_reason;
             $revision_reason->save();
             return response()->json([
                 'status'=>200,
             ]);
-        }
-
-//        REVISION SUB TASKS SYSTEM
-        public function revisionSubtask(Request $request){
-        dd($request->all());
         }
 
 }
