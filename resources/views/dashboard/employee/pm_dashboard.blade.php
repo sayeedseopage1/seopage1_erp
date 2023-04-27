@@ -1477,10 +1477,10 @@
                                                                     <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->heading}}" href="{{route('tasks.show', $task->id)}}" target="_blank">{{\Str::limit($task->heading, 20, ' ...')}}</a>
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->milestone_title ?? 'N/A'}}" href="{{route('projects.show', $value->id)}}?tab=milestone" target="_blank">{{\Str::limit($task->milestone->milestone_title ?? 'N/A', 20, ' ...')}}</a>
+                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->milestone_title ?? 'N/A'}}" href="{{route('projects.show', $task->project_id)}}?tab=milestone" target="_blank">{{\Str::limit($task->milestone->milestone_title ?? 'N/A', 20, ' ...')}}</a>
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->deliverables->title ?? 'N/A'}}" href="{{route('projects.show', $value->id)}}?tab=deliverables" target="_blank">{{\Str::limit($task->milestone->deliverables->title ?? 'N/A', 20, ' ...')}}</a>
+                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->deliverables->title ?? 'N/A'}}" href="{{route('projects.show', $task->project_id)}}?tab=deliverables" target="_blank">{{\Str::limit($task->milestone->deliverables->title ?? 'N/A', 20, ' ...')}}</a>
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize ">
                                                                     <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->project->project_name}}" href="{{route('projects.show', $task->project_id)}}" target="_blank">{{\Str::limit($task->project->project_name, 20, ' ...')}}</a>
