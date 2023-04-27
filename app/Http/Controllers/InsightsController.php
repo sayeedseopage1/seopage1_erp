@@ -123,6 +123,105 @@ class InsightsController extends AccountBaseController
         return response()->json([$goal]);
     }
 
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeGoal(Request $request)
+    {
+        // return $request;
+       // dd($request->assigneeFor);
+        $goal= new GoalSetting();
+        $goal->entry = $request->entry;
+        $goal->entryType = $request->entryType;
+        $goal->assigneeType = $request->assigneeType;
+        if($request->assigneeType == 'User')
+        {
+                $goal->user_id = $request->assigneeFor['id'];
+                $goal->name= $request->assigneeFor['name'];      
+        }else if($request->assigneeType == 'Team')
+        {
+           
+                $goal->team_id = $request->assigneeFor['id'];
+                $goal->team_name= $request->assigneeFor['name'];   
+           
+        }
+        foreach($request->pipeline as $pipeline)
+        {
+            $goal->pipeline= $pipeline;
+            
+        }
+        $goal->frequency = $request->frequency;
+        $goal->startDate = $request->startDate;
+        $goal->endDate = $request->endDate;
+        $goal->trackingType = $request->trackingType;
+        $goal->trackingValue= $request->trackingValue;
+        $goal->applyRecurring = $request->applyRecurring;
+        $goal->qualified = $request->qualified;
+        $goal->dealType = $request->dealType;
+        $goal->goalType = $request->goalType;
+        $goal->added_by= Auth::id();
+        $goal->save();
+        if($request->recurring != null)
+        {
+            foreach($request->recurring as $key=>$rec)
+       
+        {
+           // dd($key,$rec);
+            $recurring= new GoalRecurring();
+            $recurring->goal_id = $goal->id;
+            $recurring->value = $rec['value'];
+           // dd($recurring->value);
+            $recurring->title=  $rec['title'];
+            $recurring->start=  $rec['start'];
+            $recurring->end=  $rec['end'];
+            $recurring->save();
+
+        }
+        return response()->json([$goal,$recurring]);
+
+        }
+
+        
+
+        
+        return response()->json([$goal]);
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     * Store dashboard 
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeDashboard(Request $request)
+    {
+        return $request;
+       // dd($request->assigneeFor);
+        
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     * Store section  
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeSection(Request $request)
+    {
+        return $request;
+       // dd($request->assigneeFor);
+        
+    }
+
+
+
     /**
      * Display the specified resource.
      *
@@ -167,4 +266,7 @@ class InsightsController extends AccountBaseController
     {
         //
     }
+
+
+    
 }

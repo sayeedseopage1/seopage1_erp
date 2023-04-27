@@ -1081,9 +1081,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('search', SearchController::class);
     Route::get('/insights/{any}', [InsightsController::class,'index'])->where('any', '.*');
     Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
-
-
-
+    Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
+    Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
+    Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
+    
 });
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
