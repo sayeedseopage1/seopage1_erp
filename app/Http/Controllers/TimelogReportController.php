@@ -115,6 +115,7 @@ class TimelogReportController extends AccountBaseController
             
             ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
             ->whereIn('project_time_logs.user_id', $id_array)
+            ->groupBy('project_time_logs.user_id', 'employee.id')
             ->groupBy('project_time_logs.project_id')
         //     ->groupBy('projects.client_id')
             //->where('projects.status','=','in progress')
@@ -285,4 +286,23 @@ class TimelogReportController extends AccountBaseController
         return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
     }
 
+    public function show($project_id ,$employee_id)
+    {
+        $data = ProjectTimeLog::select([
+            'tasks.id as task_id',
+            'tasks.heading as task_name',
+            'project_time_logs.id as time_log_id',
+            'project_time_logs.start_time',
+            'project_time_logs.end_time',
+            'project_time_logs.total_minutes',
+            \DB::raw('(select sum(total_minutes) from project_time_logs where project_id = 405) as project_total_time_log')
+        ])
+        ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
+        ->where([
+            'project_time_logs.user_id' => $employee_id,
+            'project_time_logs.project_id' => $project_id
+        ])->get();
+
+        return response()->json($data);
+    }
 }

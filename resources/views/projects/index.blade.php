@@ -238,7 +238,6 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
         <!-- Task Box End -->
     </div>
     <!-- CONTENT WRAPPER END -->
-
 @endsection
 
 @push('scripts')
@@ -247,7 +246,12 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
     <script type="text/javascript">
         @php
             $startDate = \Carbon\Carbon::now()->startOfMonth()->subMonths(12)->addDays(20);
-            $endDate = \Carbon\Carbon::now()->startOfMonth()->addDays(19);
+            $today = \Carbon\Carbon::now()->format('d');
+            if ($today > 20) {
+                $endDate = \Carbon\Carbon::now()->startOfMonth()->addMonth(1)->addDays(19);
+            } else {
+                $endDate = \Carbon\Carbon::now()->startOfMonth()->addDays(19);
+            }
         @endphp
         $(function() {
             var format = '{{ global_setting()->moment_format }}';
