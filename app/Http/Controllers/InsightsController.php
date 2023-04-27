@@ -9,6 +9,7 @@ use App\Models\Seopage1Team;
 use App\Models\GoalSetting;
 use App\Models\GoalRecurring;
 use Auth;
+use App\Models\Section;
 
 class InsightsController extends AccountBaseController
 {
@@ -65,62 +66,7 @@ class InsightsController extends AccountBaseController
     public function store(Request $request)
     {
        // dd($request->assigneeFor);
-        $goal= new GoalSetting();
-        $goal->entry = $request->entry;
-        $goal->entryType = $request->entryType;
-        $goal->assigneeType = $request->assigneeType;
-        if($request->assigneeType == 'User')
-        {
        
-                $goal->user_id = $request->assigneeFor['id'];
-                $goal->name= $request->assigneeFor['name'];      
-        }else 
-        {
-           
-                $goal->team_id = $request->assigneeFor['id'];
-                $goal->team_name= $request->assigneeFor['name'];   
-           
-        }
-        foreach($request->pipeline as $pipeline)
-        {
-            $goal->pipeline= $pipeline;
-            
-        }
-        $goal->frequency = $request->frequency;
-        $goal->startDate = $request->startDate;
-        $goal->endDate = $request->endDate;
-        $goal->trackingType = $request->trackingType;
-        $goal->trackingValue= $request->trackingValue;
-        $goal->applyRecurring = $request->applyRecurring;
-        $goal->qualified = $request->qualified;
-        $goal->dealType = $request->dealType;
-        $goal->goalType = $request->goalType;
-        $goal->added_by= Auth::id();
-        $goal->save();
-        if($request->recurring != null)
-        {
-            foreach($request->recurring as $key=>$rec)
-       
-        {
-           // dd($key,$rec);
-            $recurring= new GoalRecurring();
-            $recurring->goal_id = $goal->id;
-            $recurring->value = $rec['value'];
-           // dd($recurring->value);
-            $recurring->title=  $rec['title'];
-            $recurring->start=  $rec['start'];
-            $recurring->end=  $rec['end'];
-            $recurring->save();
-
-        }
-        return response()->json([$goal,$recurring]);
-
-        }
-
-        
-
-        
-        return response()->json([$goal]);
     }
 
 
@@ -201,6 +147,7 @@ class InsightsController extends AccountBaseController
      */
     public function storeDashboard(Request $request)
     {
+        dd($request);
         return $request;
        // dd($request->assigneeFor);
         
@@ -215,7 +162,14 @@ class InsightsController extends AccountBaseController
      */
     public function storeSection(Request $request)
     {
-        return $request;
+        $section= new Section();
+        $section->type= $request->type;
+        $section->section_name= $request->section;
+        $section->added_by= Auth::id();
+        $section->save();
+
+       // return $request;
+        return response()->json([$section]);
        // dd($request->assigneeFor);
         
     }
