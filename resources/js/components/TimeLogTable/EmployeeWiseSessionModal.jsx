@@ -9,13 +9,14 @@ import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
 
 
-    const cols =  [{ key: "employee_name", label: "Employee Name" }]
+    const cols =  [{ key: "task_name", label: "Task Name" }]
     const subCols = [
-        { key: "project_name", label: "Project Name" },
-        { key: "client_name", label: "Client" },
-        { key: "project_manager", label: "Project Manager" },
-        { key: "number_of_session", label: "Number of Session" },
-        { key: "total_minutes", label: "Total Track Time" },
+        { key: "session_duration", label: "Session Duration" },
+        { key: "(TNT)_on_this_project", label: "(TTW) On This Project" },
+        { key: "total_tracked_time(TD)", label: "Total Tracked Time (TD)" },
+        { key: "start_time", label: "Start Time" },
+        { key: "end_time", label: "End Time" },
+        { key: "task_status", label: 'Task Status'}
     ]
 
 
@@ -46,7 +47,7 @@ const EmployeeWiseSessionTable = ({control}) => {
         if(data.length > 0) return;
         setLoading(true);
         const fetch = async () => {
-            axios.get("/get-timelogs/employees").then((res) => {
+            axios.get(`/account/time-log-report/${projectID}/${employeeID}`).then((res) => {
                 let data = res.data?.filter(d => d.project_status === 'in progress');
                 
                 if(data){
@@ -64,12 +65,12 @@ const EmployeeWiseSessionTable = ({control}) => {
     // initial default 
     React.useEffect(() => {
         setSortConfig({ key: "employee_id", direction: "asc" });
-        setSubColumns(subColumns);
+        setSubColumns([...subCols]);
         const columnOrderFromLocalStore = localStorage.getItem(
-            "employeeWiseTableColumnOrder"
+            "employeeWiseTableSessionColumnOrder"
         );
         const filterColumnFromLocalStore = localStorage.getItem(
-            "employeeWiseTableColumnFilter"
+            "employeeWiseTableSessionColumnFilter"
         );
 
         if (columnOrderFromLocalStore) {
@@ -123,7 +124,7 @@ const EmployeeWiseSessionTable = ({control}) => {
             sortConfig.direction === "dec"
         ) {
             direction = "asc";
-            key = "employee_id";
+            key = "task_id";
         }
         setSortConfig({ key, direction });
     };
@@ -140,27 +141,12 @@ const EmployeeWiseSessionTable = ({control}) => {
                 {columns.map((column) => (
                     <th key={column.key} style={{ cursor: "default" }}>
                         <div>
-                            {/* <div onClick={() => requestSort("employee_id")}>
-                                {sortConfig.key === "employee_id" ? (
-                                    sortConfig.direction === "asc" ? (
-                                        <>
-                                            <span className="table_asc_dec asc"></span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <span className="table_asc_dec dec"></span>
-                                        </>
-                                    )
-                                ) : (
-                                    <>
-                                        <span className="table_asc_dec"></span>
-                                    </>
-                                )}
-                            </div> */}
                             {column.label}
                         </div>
                     </th>
                 ))}
+
+                {console.log({columnOrder})}
 
                 {/* by column order */}
                 {_.without(columnOrder, ...filterColumn).map((column) => (
@@ -186,12 +172,13 @@ const EmployeeWiseSessionTable = ({control}) => {
         // if rows have same name then group all rows with same name in one row 
         // and show all project details in one row
         const groupedData = paginatedData.reduce((r, a) => {
-            r[a.employee_id] = [...(r[a.employee_id] || []), a];
+            r[a.task_id] = [...(r[a.task_id] || []), a];
             return r;
         }, {});
 
         // console.log(groupedData)
         for (const [key, value] of Object.entries(groupedData)) {
+            console.log({key, value})
             rows.push(
                 <React.Fragment key={key}>
                     <tr key={key}>
@@ -199,12 +186,7 @@ const EmployeeWiseSessionTable = ({control}) => {
                             rowSpan={value.length + 1}
                             style={{ borderBottom: "2px solid #AAD1FC" }}
                         >
-                            <RenderWithImageAndRole
-                                avatar={value[0].employee_image}
-                                name={value[0].employee_name}
-                                url={`employees/${value[0].employee_id}`}
-                                role={value[0].employee_designation}
-                            />
+                           <span> {value[0].task_id}</span>
                         </EmployeeProfileTd>
                     </tr>
 
@@ -215,74 +197,9 @@ const EmployeeWiseSessionTable = ({control}) => {
                                     {_.without(
                                         columnOrder,
                                         ...filterColumn
-                                    ).map((column) =>
-                                        column === "client_name" ? (
-                                            <td
-                                                key={column}
-                                                style={{
-                                                    borderBottom:
-                                                        value.length - 1 ===
-                                                            index
-                                                            ? "2px solid #AAD1FC"
-                                                            : "1px solid #E7EFFC",
-                                                }}
-                                            >
-                                                
-                                                <RenderWithImageAndRole
-                                                    avatar={item['client_image']}
-                                                    name={item['client_name']}
-                                                    url={`clients/${item["client_id"]}`}
-                                                    clientFrom={["client_from"]}
-                                                />
-                                            </td>
-
-                                        ) : column === 'project_manager' ? (
-                                            <td
-                                                key={column}
-                                                style={{ borderBottom: value.length - 1 === index ? "2px solid #AAD1FC" : "1px solid #E7EFFC", }}
-                                            >
-                                                <RenderWithImageAndRole
-                                                    avatar={item["pm_image"]}
-                                                    name={item["pm_name"]}
-                                                    url={`employees/${item["pm_id"]}`}
-                                                    role={item["pm_roles"]}
-                                                />
-                                            </td>
-
-                                        ) : column === "total_minutes" ? (
-                                            <td
-                                                key={column}
-                                                style={{ borderBottom: value.length - 1 === index ? "2px solid #AAD1FC" : "1px solid #E7EFFC" }}
-                                            >
-                                                {convertTime(item[column])}
-                                            </td>
-                                        ) : (
-                                            <td
-                                                key={column}
-                                                style={{
-                                                    borderBottom:
-                                                        value.length - 1 ===
-                                                            index ? "2px solid #AAD1FC" : "1px solid #E7EFFC"
-                                                }}
-                                            >
-                                                <a
-                                                    href={
-                                                        column ===
-                                                            "project_name"
-                                                            ? `projects/${item["project_id"]}`
-                                                            : column ===
-                                                                "client_name"
-                                                                ? `clients/${item["client_id"]}`
-                                                                : column ===
-                                                                    "project_manager"
-                                                                    ? `employees/${item["pm_id"]}`
-                                                                    : "#"
-                                                    }
-                                                >
-                                                    {item[column]}
-                                                </a>
-                                            </td>
-                                        )
+                                    ).map((column) => (
+                                        <span key={column} className="column">sdfsdf</span>
+                                    )
                                     )}
                                 </tr>
                             </React.Fragment>
@@ -307,6 +224,7 @@ const EmployeeWiseSessionTable = ({control}) => {
                             <table>
                                 <thead>{prepareHeader()}</thead>
                                 <tbody>
+                                    {data}
                                     {(!loading && data.length > 0) ?    
                                         prepareRows() 
                                     : null}

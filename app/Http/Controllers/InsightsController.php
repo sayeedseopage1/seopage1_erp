@@ -162,6 +162,7 @@ class InsightsController extends AccountBaseController
      */
     public function storeSection(Request $request)
     {
+        
         $section= new Section();
         $section->type= $request->type;
         $section->section_name= $request->section;

@@ -27,7 +27,7 @@ const dashboardSlice = createSlice({
     initialState,
     reducers: {
         addDashboard: (state, action) => {
-            state.dashboards.push(action.payload);
+            state.dashboards = [...state.dashboards, action.payload];
         },
         setDashboards: (state, action) => {
             state.dashboards = action.payload;

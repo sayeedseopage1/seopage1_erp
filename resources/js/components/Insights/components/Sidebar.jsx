@@ -180,6 +180,7 @@ const InsightSidebar = () => {
                                         <Accordion.Item.Body>
                                             {/* dashboard */}
                                                 {getDashboardsBySection(section)?.map((dashboard) => (
+                                                    dashboard.title ? (
                                                     <div key={dashboard.id} className='cnx_ins__sidebar_item'>
                                                          
                                                         <NavLink 
@@ -200,6 +201,7 @@ const InsightSidebar = () => {
                                                             </button>
                                                         </NavLink>
                                                     </div>
+                                                    ): null
                                                 ))}
                                             {/*end dashboard*/}
                                         </Accordion.Item.Body>

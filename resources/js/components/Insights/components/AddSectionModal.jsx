@@ -6,6 +6,7 @@ import Label from '../ui/Label';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeSectionModal } from '../services/slices/sectionModalSlice';
 import { openDashboardModal, setDashboardModalData } from '../services/slices/dashboardModalSlice';
+import { addDashboard } from '../services/slices/dashboardSlice';
 import axios from 'axios';
 
 const AddSectionModal = () => {
@@ -27,25 +28,36 @@ const AddSectionModal = () => {
     const onSave = async (e) => {
         e.preventDefault();
         const data = {type, section};
-        await axios.post('/account/insights/dashboards/add', data).then(res => {
-            console.log(res.data);
-            setIsSaving(false)
-        })
 
-        // query to save section name to db
+        await axios.post('/account/insights/sections/add', data).then(res => {
+            const d = res?.data[0];
+            if(!d) return;
+            if(d.type === 'DASHBOARD_SECTION'){
+                dispatch(addDashboard({id: d.id, section: d.section_name, title: ''}))
+            }else {
+                    console.log('e: ', res.data)
+            }
 
-        if(type === 'DASHBOARD_SECTION' && from === 'DASHBOARD_MODAL'){
-            dispatch(setDashboardModalData({ section }))
-            dispatch(openDashboardModal());
-        }else if(type === 'DASHBOARD_SECTION' && from === ''){
-            dispatch(setDashboardModalData({ section }))
+            // query to save section name to db
+
+            if(type === 'DASHBOARD_SECTION' && from === 'DASHBOARD_MODAL'){
+                dispatch(setDashboardModalData({ section }))
+                dispatch(openDashboardModal());
+            }else if(type === 'DASHBOARD_SECTION' && from === ''){
+                dispatch(setDashboardModalData({ section }))
+                dispatch(closeSectionModal());
+            }else if(type === 'REPORT_SECTION' && from === 'REPORT_MODAL'){
+                console.log('report section');
+            }else if(type === 'REPORT_SECTION' && from === ''){
+                console.log('report section');
+            }
             dispatch(closeSectionModal());
-        }else if(type === 'REPORT_SECTION' && from === 'REPORT_MODAL'){
-            console.log('report section');
-        }else if(type === 'REPORT_SECTION' && from === ''){
-            console.log('report section');
-        }
-        dispatch(closeSectionModal());
+    
+            setIsSaving(false);
+        })
+        
+           
+        
     }
 
     
