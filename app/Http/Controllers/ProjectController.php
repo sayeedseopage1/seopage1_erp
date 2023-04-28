@@ -1207,6 +1207,15 @@ class ProjectController extends AccountBaseController
                 break;
         case 'timelogs':
                 return $this->timelogs($this->project->project_admin == user()->id);
+        case 'activity_log':
+        /*if (!$projectAdmin) {
+            $viewPermission = user()->permission('view_project_timelogs');
+            abort_403(!in_array($viewPermission, ['all', 'added', 'owned']));
+        }*/
+        $this->activityLog = ProjectActivity::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
+        $this->view = 'projects.ajax.activity_log';
+        break;
+            //return $this->activity_log($this->project->project_admin == user()->id, $this->project);
         case 'expenses':
                 return $this->expenses();
         case 'payments':
@@ -1577,6 +1586,18 @@ class ProjectController extends AccountBaseController
         $this->view = 'projects.ajax.expenses';
         return $dataTable->render('projects.show', $this->data);
 
+    }
+
+    public function activity_log($projectAdmin = false, $project)
+    {
+        if (!$projectAdmin) {
+            $viewPermission = user()->permission('view_project_timelogs');
+            abort_403(!in_array($viewPermission, ['all', 'added', 'owned']));
+        }
+        
+        $activityLog = ProjectActivity::where('project_id', $project->id)->orderBy('id', 'desc')->get();
+        $this->view = 'projects.ajax.activity_log';
+        //return view($this->view, $activityLog)->render();
     }
 
     public function payments()
@@ -2735,8 +2756,8 @@ class ProjectController extends AccountBaseController
             $this->triggerPusher('notification-channel', 'notification', [
                 'user_id' => $user->id,
                 'role_id' => 1,
-                'title' => 'Authorization request',
-                'body' => 'Project Manager send authorization request',
+                'title' => 'Delivarable Authorization Request',
+                'body' => 'Project Manager send deliverable authorization request',
                 'redirectUrl' => route('projects.show', $project_id->id).'?tab=deliverables'
             ]);
             Notification::send($user, new ProjectDeliverableFinalAuthorizationNotification($project_id));
@@ -2794,9 +2815,18 @@ class ProjectController extends AccountBaseController
         ]);
     }
 
-    public function modification_form_show($id)
+    public function modification_form_show(ProjectDeliverable $id)
     {
-        $this->deliverable_id = $id;
+        $data = new \stdClass();
+        $data->id = $id->id;
+        $data->type = $id->deliverable_type;
+        $data->title = $id->title;
+        $data->estimation_time = $id->estimation_time;
+        $data->quantity = $id->quantity;
+        $data->description = $id->description;
+        $data->estimation_completed_date = $id->from ?? $id->to;
+
+        $this->deliverable = json_encode($data);
         $this->pageTitle = 'Deliverable Change Request Form';
         $this->isShowUrl = false;
         return view('projects.modals.deliverable_edit_permission', $this->data);

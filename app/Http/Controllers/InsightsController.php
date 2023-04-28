@@ -174,6 +174,14 @@ class InsightsController extends AccountBaseController
        // dd($request->assigneeFor);
         
     }
+    public function getSection()
+    {
+        $section= Section::all();
+       // dd($section);
+        return response()->json($section);
+      
+
+    }
 
 
 

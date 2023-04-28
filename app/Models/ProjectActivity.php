@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Observers\ProjectActivityObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ProjectActivity extends BaseModel
 {
+    protected $observer = ProjectActivityObserver::class;
     protected $table = 'project_activity';
 
     public function project(): BelongsTo
@@ -52,4 +53,8 @@ class ProjectActivity extends BaseModel
         return $projectActivity;
     }
 
+    public function addedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'added_by');
+    }
 }
