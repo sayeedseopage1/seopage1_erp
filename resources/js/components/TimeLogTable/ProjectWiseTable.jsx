@@ -9,7 +9,7 @@ import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
 
 // pivot table
-const ProjectWiseTable = ({ columns, subColumns }) => {
+const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
     const {
         setSubColumns,
         sortConfig,
@@ -292,6 +292,20 @@ const ProjectWiseTable = ({ columns, subColumns }) => {
                                                 }}
                                             >
                                                 {convertTime(item[column])}
+                                            </td>
+                                        ) : column==='number_of_session'? (
+                                            <td
+                                                key={column}
+                                                
+                                                style={{ borderBottom: value.length - 1 === index ? "2px solid #AAD1FC" : "1px solid #E7EFFC" }}
+                                            >
+                                                <ModalOpeningButton
+                                                    onClick={() => open(value[0].employee_id, item["project_id"], 'projectWise')}
+                                                    type="button"
+                                                    aria-label="session_modal"
+                                                >
+                                                    {item[column]} 
+                                                </ModalOpeningButton>
                                             </td>
                                         ) : (
                                             <td
@@ -718,3 +732,13 @@ const DragAbleTH = styled.th`
     opacity: ${(props) => (props.isDragging ? 0.5 : 1)};
     background: ${(props) => (props.isDragging ? "red" : "#fff")};} 
 `;
+
+
+const ModalOpeningButton = styled.button`
+    background: transparent;
+    padding: 10px;
+    &:hover{
+        color: #1d82f5;
+        font-weight: 600;
+    }
+`

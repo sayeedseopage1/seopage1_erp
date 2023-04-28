@@ -128,9 +128,10 @@ const TimeLogTable = () => {
         projectID: 0
     })
 
-    const openEmployeeSession = (employeeId, projectId) => {
+    const openEmployeeSession = (employeeId, projectId, type="") => {
         setEmployeeSessionModal({
             isOpen: true,
+            type,
             employeeID: employeeId,
             projectID: projectId
         })
@@ -138,6 +139,7 @@ const TimeLogTable = () => {
     const closeEmployeeSession = () => {
         setEmployeeSessionModal({
             isOpen: false,
+            type: "",
             employeeID: 0,
             projectID: 0
         })
@@ -176,6 +178,8 @@ const TimeLogTable = () => {
                 />
             ) : activeTab === "Project Wise" ? (
                 <ProjectWiseTable
+                    open={openEmployeeSession}
+                    close={closeEmployeeSession}
                     columns={projectWiseTableConfig.columns}
                     subColumns={projectWiseTableConfig.subColumns}
                 />
@@ -187,11 +191,11 @@ const TimeLogTable = () => {
             ) : null}
 
 
-            {/* {employeeSessionModal.isOpen && 
+            {employeeSessionModal.isOpen && 
                 <EmployeeWiseSessionTable 
-                control={{employeeSessionModal, setEmployeeSessionModal}} 
+                    control={{employeeSessionModal, setEmployeeSessionModal}} 
                 />
-            } */}
+            }
         </DndProvider>
     );
 };

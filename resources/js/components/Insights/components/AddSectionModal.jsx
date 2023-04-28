@@ -41,10 +41,10 @@ const AddSectionModal = () => {
             // query to save section name to db
 
             if(type === 'DASHBOARD_SECTION' && from === 'DASHBOARD_MODAL'){
-                dispatch(setDashboardModalData({ section }))
+                dispatch(setDashboardModalData({ section: d }))
                 dispatch(openDashboardModal());
             }else if(type === 'DASHBOARD_SECTION' && from === ''){
-                dispatch(setDashboardModalData({ section }))
+                dispatch(setDashboardModalData({ section:d }))
                 dispatch(closeSectionModal());
             }else if(type === 'REPORT_SECTION' && from === 'REPORT_MODAL'){
                 console.log('report section');

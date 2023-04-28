@@ -7,23 +7,34 @@ import "./table.css";
 import { convertTime } from "./utils/converTime";
 import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
+import dayjs from "dayjs";
+
+const cols =  [{ key: "task_name", label: "Task Name" }]
 
 
-    const cols =  [{ key: "task_name", label: "Task Name" }]
-    const subCols = [
-        { key: "session_duration", label: "Session Duration" },
-        { key: "(TNT)_on_this_project", label: "(TTW) On This Project" },
-        { key: "total_tracked_time(TD)", label: "Total Tracked Time (TD)" },
-        { key: "start_time", label: "Start Time" },
-        { key: "end_time", label: "End Time" },
-        { key: "task_status", label: 'Task Status'}
-    ]
+const employeeWise = [
+    { key: "session_duration", label: "Session Duration" },
+    { key: "(TNT)_on_this_project", label: "(TTW) On This Project" },
+    { key: "total_tracked_time(TD)", label: "Total Tracked Time (TD)" },
+    { key: "start_time", label: "Start Time" },
+    { key: "end_time", label: "End Time" },
+    { key: "task_status", label: 'Task Status'}
+]
+
+const subColsProjectWise = [
+    { key: "session_duration", label: "Session Duration" },
+    { key: "start_time", label: "Start Time" },
+    { key: "end_time", label: "End Time" },
+    { key: "task_status", label: 'Task Status'}
+]
+
+
 
 
 // pivot table
 const EmployeeWiseSessionTable = ({control}) => {
     const [columns, setColumns] = useState([...cols]);
-    const [subColumns, setSubColumns] = useState([...subCols]);
+    const [subColumns, setSubColumns] = useState([]);
     const [sortConfig, setSortConfig] = useState({});
     const [nPageRows, setNPageRows] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +44,7 @@ const EmployeeWiseSessionTable = ({control}) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const {isOpen, projectID, employeeID} = control.employeeSessionModal;
+    const {isOpen, type:ModalType, projectID, employeeID} = control.employeeSessionModal;
 
     const close = () => control.setEmployeeSessionModal({
         isOpen: false,
@@ -49,8 +60,6 @@ const EmployeeWiseSessionTable = ({control}) => {
         const fetch = async () => {
             axios.get(`/account/time-log-report/${projectID}/${employeeID}`).then((res) => {
                 let data = res.data;
-                
-                console.log(data)
                 if(data){
                     setData(data);
                 }
@@ -63,20 +72,25 @@ const EmployeeWiseSessionTable = ({control}) => {
         return () => fetch();
     }, []);
 
+    React.useEffect(() => {
+        ModalType === 'projectWise' ? setSubColumns([...subColsProjectWise]) :  setSubColumns([...employeeWise])
+    }, [])
+
     // initial default 
     React.useEffect(() => {
-        setSortConfig({ key: "employee_id", direction: "asc" });
-        setSubColumns([...subCols]);
+        setSortConfig({ key: "task_id", direction: "asc" });
         const columnOrderFromLocalStore = localStorage.getItem(
-            "employeeWiseTableSessionColumnOrder"
+            ModalType === 'projectWise' ? "projectWiseTableSessionColumnOrder" : "employeeWiseTableSessionColumnOrder"
         );
         const filterColumnFromLocalStore = localStorage.getItem(
-            "employeeWiseTableSessionColumnFilter"
+            ModalType === 'projectWise' ? "projectWiseTableSessionColumnFilter" : "employeeWiseTableSessionColumnFilter"
+            
         );
 
         if (columnOrderFromLocalStore) {
             setColumnOrder([...JSON.parse(columnOrderFromLocalStore)]);
         } else {
+            console.log({subColumns})
             setColumnOrder([...subColumns.map((item) => item.key)]);
         }
 
@@ -85,7 +99,7 @@ const EmployeeWiseSessionTable = ({control}) => {
         } else {
             setFilterColumn([]);
         }
-    }, []);
+    }, [subColumns]);
 
     // pagination
     const paginate = (data, currentPage, nPaginate) => {
@@ -167,6 +181,10 @@ const EmployeeWiseSessionTable = ({control}) => {
     // prepare rows
     const prepareRows = () => {
         const rows = [];
+        let trackTime = 0;
+        let tnt = 0;
+        let task_id = 0;
+        let rowSpan = 1;
         const sortedData = sort(data, sortConfig);
         const paginatedData = paginate(sortedData, currentPage, nPageRows);
         // if rows have same name then group all rows with same name in one row 
@@ -177,11 +195,8 @@ const EmployeeWiseSessionTable = ({control}) => {
         }, {});
 
 
-        console.log(groupedData)
-
         // console.log(groupedData)
         for (const [key, value] of Object.entries(groupedData)) {
-            console.log({key, value})
             rows.push(
                 <React.Fragment key={key}>
                     <tr key={key}>
@@ -189,7 +204,11 @@ const EmployeeWiseSessionTable = ({control}) => {
                             rowSpan={value.length + 1}
                             style={{ borderBottom: "2px solid #AAD1FC" }}
                         >
-                           <span> {value[0].task_id}</span>
+                           <span> 
+                                <a href={`tasks/${value[0].task_id}`}>
+                                    {value[0].task_name}
+                                </a>
+                            </span>
                         </EmployeeProfileTd>
                     </tr>
 
@@ -200,10 +219,95 @@ const EmployeeWiseSessionTable = ({control}) => {
                                     {_.without(
                                         columnOrder,
                                         ...filterColumn
-                                    ).map((column) => (
-                                        <span key={column} className="column">sdfsdf</span>
-                                    )
-                                    )}
+                                    ).map((column) => {
+                                        if(column === 'session_duration'){
+                                            return <td 
+                                                 key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                            index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                {convertTime(Number(item['total_minutes']))}
+                                            </td>
+                                        }else if(column === '(TNT)_on_this_project'){
+                                            if(value[0].task_id !== task_id && tnt !== Number(item['project_total_time_log'])){
+                                                task_id = value[0].task_id;
+                                                rowSpan++;
+                                                return <td 
+                                                    key={column}
+                                                    rowSpan={[...value.filter(v => v['project_total_time_log'])].length +1}
+                                                    style={{
+                                                            background: value.length === 1 ? "" : "#f9fbfd",
+                                                            textAlign: value.length === 1 ? "" : 'center',
+                                                            borderBottom:
+                                                                value.length - 1 ===
+                                                                    index
+                                                                    ? "2px solid #AAD1FC"
+                                                                    : "2px solid rgb(170, 209, 252)",
+                                                        }}
+                                                    >
+                                                        {convertTime(Number(item['project_total_time_log']))}
+                                                    </td> 
+                                            } 
+                                        }else if(column === 'total_tracked_time(TD)'){
+                                            {trackTime += Number(item['total_minutes'])}
+                                            return <td 
+                                                 key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                            index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                {trackTime === 0 ? convertTime(Number(item['total_minutes'])) :convertTime(trackTime)}
+                                            </td>
+                                        }else if(column === 'start_time'){
+                                            return <td 
+                                                 key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                            index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                {dayjs(item['start_time']).format('hh:mm a')}
+                                            </td>
+                                        }else if(column === 'end_time'){
+                                            return <td 
+                                                 key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                            index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                {dayjs(item['end_time']).format('hh:mm a')}
+                                            </td>
+                                        } else {
+                                            return <td 
+                                                 key={column}
+                                                style={{
+                                                    borderBottom:
+                                                        value.length - 1 ===
+                                                            index
+                                                            ? "2px solid #AAD1FC"
+                                                            : "1px solid #E7EFFC",
+                                                }}
+                                            >
+                                                {item['tasks_status']}
+                                            </td>
+                                        }
+                                    })}
                                 </tr>
                             </React.Fragment>
                         );
@@ -314,7 +418,7 @@ const DragAbleHeader = ({
                 const reOrderColumn = reOrder(item.column, column);
                 setColumnOrder(reOrderColumn);
                 localStorage.setItem(
-                    "employeeWiseTableSessionColumnOrder",
+                     ModalType === 'projectWise' ? "projectWiseTableSessionColumnOrder" : "employeeWiseTableSessionColumnOrder",
                     JSON.stringify(reOrderColumn)
                 );
             }
@@ -495,11 +599,13 @@ const TableWrapper = styled.div`
             background-color: #fff;
             padding: 16px 10px;
             text-align: left;
-            font-weight: normal;
+            font-weight: 500;
             white-space: nowrap;
             min-width: 120px;
             cursor: move;
             border-bottom: 2px solid #aad1fc;
+            color: #444;
+            text-align: center;
             div {
                 display: flex;
                 align-items: center;
@@ -508,10 +614,10 @@ const TableWrapper = styled.div`
             }
         }
         td {
-            padding: 16px 10px;
             text-align: left;
+            padding: 16px 10px;
             min-height: 120px;
-            min-width: 250px;
+            min-width: 200px;
             max-width: 350px;
             border-bottom: 1px solid #e7effc;
         }
@@ -548,7 +654,7 @@ const Loading = styled.div`
 
 
 const EmployeeProfileTd = styled.td`
-    background: #f8f8f8;
+    background: #f9fbfd;
     text-align: left;
     &:hover: {
         background: #f8f8f8;
