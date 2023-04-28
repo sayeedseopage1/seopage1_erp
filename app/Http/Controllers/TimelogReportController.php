@@ -291,13 +291,16 @@ class TimelogReportController extends AccountBaseController
         $data = ProjectTimeLog::select([
             'tasks.id as task_id',
             'tasks.heading as task_name',
+            'taskboard_columns.column_name as tasks_status',
             'project_time_logs.id as time_log_id',
             'project_time_logs.start_time',
             'project_time_logs.end_time',
             'project_time_logs.total_minutes',
-            \DB::raw('(select sum(total_minutes) from project_time_logs where project_id = 405) as project_total_time_log')
+            \DB::raw('(select sum(total_minutes) from project_time_logs where project_id = '.$project_id.') as project_total_time_log')
         ])
         ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
+        
+        ->join('taskboard_columns', 'tasks.board_column_id', 'taskboard_columns.id')
         ->where([
             'project_time_logs.user_id' => $employee_id,
             'project_time_logs.project_id' => $project_id

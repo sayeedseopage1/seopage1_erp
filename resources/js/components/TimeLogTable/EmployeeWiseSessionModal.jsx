@@ -48,8 +48,9 @@ const EmployeeWiseSessionTable = ({control}) => {
         setLoading(true);
         const fetch = async () => {
             axios.get(`/account/time-log-report/${projectID}/${employeeID}`).then((res) => {
-                let data = res.data?.filter(d => d.project_status === 'in progress');
+                let data = res.data;
                 
+                console.log(data)
                 if(data){
                     setData(data);
                 }
@@ -146,7 +147,6 @@ const EmployeeWiseSessionTable = ({control}) => {
                     </th>
                 ))}
 
-                {console.log({columnOrder})}
 
                 {/* by column order */}
                 {_.without(columnOrder, ...filterColumn).map((column) => (
@@ -175,6 +175,9 @@ const EmployeeWiseSessionTable = ({control}) => {
             r[a.task_id] = [...(r[a.task_id] || []), a];
             return r;
         }, {});
+
+
+        console.log(groupedData)
 
         // console.log(groupedData)
         for (const [key, value] of Object.entries(groupedData)) {
@@ -224,7 +227,6 @@ const EmployeeWiseSessionTable = ({control}) => {
                             <table>
                                 <thead>{prepareHeader()}</thead>
                                 <tbody>
-                                    {data}
                                     {(!loading && data.length > 0) ?    
                                         prepareRows() 
                                     : null}
@@ -238,6 +240,13 @@ const EmployeeWiseSessionTable = ({control}) => {
                                 Loading...
                             </Loading>
                         }
+
+                        {!loading && data.length === 0 &&
+                            <Loading> 
+                                Data Not Found
+                            </Loading>
+                        }
+
 
                         <div className="mt-auto">
                         {/* pagination */}
@@ -305,7 +314,7 @@ const DragAbleHeader = ({
                 const reOrderColumn = reOrder(item.column, column);
                 setColumnOrder(reOrderColumn);
                 localStorage.setItem(
-                    "employeeWiseTableColumnOrder",
+                    "employeeWiseTableSessionColumnOrder",
                     JSON.stringify(reOrderColumn)
                 );
             }
