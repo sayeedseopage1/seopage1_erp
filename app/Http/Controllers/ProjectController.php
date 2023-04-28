@@ -1208,14 +1208,9 @@ class ProjectController extends AccountBaseController
         case 'timelogs':
                 return $this->timelogs($this->project->project_admin == user()->id);
         case 'activity_log':
-        /*if (!$projectAdmin) {
-            $viewPermission = user()->permission('view_project_timelogs');
-            abort_403(!in_array($viewPermission, ['all', 'added', 'owned']));
-        }*/
-        $this->activityLog = ProjectActivity::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
-        $this->view = 'projects.ajax.activity_log';
-        break;
-            //return $this->activity_log($this->project->project_admin == user()->id, $this->project);
+            $this->activityLog = ProjectActivity::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
+            $this->view = 'projects.ajax.activity_log';
+            break;
         case 'expenses':
                 return $this->expenses();
         case 'payments':
@@ -2171,19 +2166,7 @@ class ProjectController extends AccountBaseController
 
         $activity = new ProjectActivity();
         $activity->activity= $log_user->name .' updated project deliverable : '.$deliverable->title;
-        //   if($attribute == 'project_summary')
-        //   {
-        //       $activity->activity= $log_user->name .' updated project summary' ;
-        //   }else
-        //   {
-        //       $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
-        //   }
-
         $activity->project_id = $project_update->id;
-        // $activity->attribute = $attribute;
-        // $activity->old_value = $originalValue;
-        // $activity->new_value = $updatedValue;
-        // $activity->user_id = Auth::id();
         $activity->save();
 
         if($request->deliverable_type == 'Others') {
@@ -2848,5 +2831,26 @@ class ProjectController extends AccountBaseController
             Toastr::success('Delivarable change request send to project manager', 'Success', ["positionClass" => "toast-top-right"]);
             return redirect()->to($url);
         } 
+    }
+
+    public function project_activity_time_log_ajax(Request $request)
+    {
+        $date = explode(' To ', $request->date_range);
+        $activityLog = ProjectActivity::where('project_id', $request->project_id);
+        
+        if ($request->employee != 'all') {
+            $activityLog->where('added_by', $request->employee);
+        }
+
+        $activityLog = $activityLog->whereBetween('created_at', [Carbon::parse($date[0])->format('Y-m-d H:i:s'), Carbon::parse($date[1])->format('Y-m-d H:i:s')])
+        ->orderBy('id', 'desc')
+        ->get();
+
+        $view = view('projects.ajax.activity_log', compact('activityLog'))->render();
+        
+        return response()->json([
+            'success' => 200,
+            'html' => $view
+        ]);
     }
 }

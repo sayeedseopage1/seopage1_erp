@@ -27,8 +27,8 @@
 								</div>
 							</div>
 							<div class="col-sm-4">
-								<div class="form-group border rounded">
-									<p class="old_data mb-4 mx-2">asdfdsf</p>
+								<div class="form-group border rounded height-50">
+									<p class="old_data mb-4 mx-2"></p>
 								</div>
 							</div>
 							<div class="col-sm-5">
