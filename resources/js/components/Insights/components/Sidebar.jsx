@@ -13,10 +13,12 @@ import { NavLink } from 'react-router-dom';
 import { Icon } from '../utils/Icon';
 import _ from 'lodash';
 import TextHighlighter from './TextHighlighter';
+import { useSections } from '../hooks/useSection';
 
 
 const InsightSidebar = () => {
     const [search, setSearch] = React.useState('');
+    const {sections}  = useSections();
     const {dashboards} = useSelector((state) => state.dashboards);
     const {reports} = useSelector((state) => state.reports);
     const { goals } = useSelector((state) => state.goals);
