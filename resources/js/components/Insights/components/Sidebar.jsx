@@ -99,7 +99,7 @@ const InsightSidebar = () => {
                             <Accordion.Item.Header icon={false} className='__accordion'>
                                 {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
                                     Dashboards
-                                    <i className={`fas fa-chevron-${active ? 'down': 'right'}`}/>
+                                    <i className={`fa-solid fa-chevron-${active ? 'down': 'right'}`}/>
                                 </div>}
                             </Accordion.Item.Header>
 
@@ -141,7 +141,7 @@ const InsightSidebar = () => {
                                             <Accordion.Item.Header icon={false} className='__accordion'>
                                             {(active) => <>
                                                     <div className='cnx_ins__sidebar_dashboards_title __inner'>
-                                                        <i className={`fas fa-chevron-${active? 'down': 'right'}`}/>
+                                                        <i className={`fa-solid fa-chevron-${active? 'down': 'right'}`}/>
                                                         {section}
                                                     </div>
                                             </>} 
@@ -226,7 +226,7 @@ const InsightSidebar = () => {
                                 <Accordion.Item.Header icon={false} className='__accordion'>
                                     {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
                                         Goals
-                                        <i className={`fas fa-chevron-${active ? 'down': 'right'}`}/>
+                                        <i className={`fa-solid fa-chevron-${active ? 'down': 'right'}`}/>
                                     </div>}
                                 </Accordion.Item.Header>
 
@@ -260,7 +260,7 @@ const InsightSidebar = () => {
                                                 <Accordion.Item.Header icon={false} className='__accordion'>
                                                 {(active) => <>
                                                         <div className='cnx_ins__sidebar_dashboards_title __inner'>
-                                                            <i className={`fas fa-chevron-${active? 'down': 'right'}`}/>
+                                                            <i className={`fa-solid fa-chevron-${active? 'down': 'right'}`}/>
                                                             {section}
                                                         </div>
                                                 </>} 
@@ -337,7 +337,7 @@ const InsightSidebar = () => {
                             <Accordion.Item.Header icon={false} className='__accordion'>
                                 {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
                                     Reports
-                                    <i className={`fas fa-chevron-${active ? 'down': 'right'}`}/>
+                                    <i className={`fa-solid fa-chevron-${active ? 'down': 'right'}`}/>
                                 </div>}
                             </Accordion.Item.Header>
 
@@ -377,7 +377,7 @@ const InsightSidebar = () => {
                                             <Accordion.Item.Header icon={false} className='__accordion'>
                                             {(active) => <>
                                                     <div className='cnx_ins__sidebar_dashboards_title __inner'>
-                                                        <i className={`fas fa-chevron-${active? 'down': 'right'}`}/>
+                                                        <i className={`fa-solid fa-chevron-${active? 'down': 'right'}`}/>
                                                         {section}
                                                     </div>
                                             </>} 
