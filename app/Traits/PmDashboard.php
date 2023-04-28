@@ -519,7 +519,7 @@ trait PmDashboard
             $this->general_task_status = Task::where([
                 'added_by' => $this->user->id,
                // 'board_column_id' => 'in progress',
-            ])->whereIn('board_column_id',[1,2,3,6,7])->whereBetween('updated_at', [$startYears, $endYears])->get();
+            ])->whereIn('board_column_id',[1,2,3,6,7])->whereBetween('updated_at', [$startDate, $endDate])->get();
 
             $this->general_partially_finished_project = Project::where([
                 'pm_id' => $this->user->id,
