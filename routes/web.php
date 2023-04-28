@@ -560,6 +560,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::post('gantt-data', [ProjectController::class, 'ganttData'])->name('projects.gantt_data');
             Route::post('invoiceList/{id}', [ProjectController::class, 'invoiceList'])->name('projects.invoice_list');
             Route::get('members/{id}', [ProjectController::class, 'members'])->name('projects.members');
+            Route::post('project/activity-log/ajax', [ProjectController::class, 'project_activity_time_log_ajax'])->name('project_activity_time_log_ajax');
             Route::get('labels/{id}', [TaskLabelController::class, 'labels'])->name('projects.labels');
 
             Route::post('project-members/save-group', [ProjectMemberController::class, 'storeGroup'])->name('project-members.store_group');
