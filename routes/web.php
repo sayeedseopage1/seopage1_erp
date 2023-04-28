@@ -1074,6 +1074,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     // Update app
     Route::get('/insights/goals/get', [InsightsController::class,'getGoal'])->name('insights-goals-get');
+    Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
     Route::get('update-settings/install', [UpdateAppController::class, 'install'])->name('update-settings.install');
     Route::get('update-settings/manual-update', [UpdateAppController::class, 'manual'])->name('update-settings.manual');
