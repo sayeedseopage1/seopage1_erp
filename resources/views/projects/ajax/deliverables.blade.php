@@ -242,17 +242,7 @@
                                                                             <td>{{$value->column_name}}</td>
                                                                             <td>{{$value->comment}}</td>
                                                                             <td>
-                                                                                @php
-                                                                                    $check_latest = \App\models\DelivarableColumnEdit::where([
-                                                                                        'column_name' => $value->column_name,
-                                                                                    ])->latest()->first();
-                                                                                @endphp
-
-                                                                                @if($value->id == $check_latest->id)
-                                                                                    {!! $value->old_data !!}
-                                                                                @else
-                                                                                    <del class="text-danger">{!! $value->old_data !!}</del>
-                                                                                @endif
+                                                                                <del class="text-danger">{!! $value->old_data !!}</del>
                                                                             </td>
                                                                             <td>{{$value->new_data}}</td>
                                                                             <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
@@ -337,17 +327,7 @@
                                                                             <td>{{$value->column_name}}</td>
                                                                             <td>{{$value->comment}}</td>
                                                                             <td>
-                                                                                @php
-                                                                                    $check_latest = \App\models\DelivarableColumnEdit::where([
-                                                                                        'column_name' => $value->column_name,
-                                                                                    ])->latest()->first();
-                                                                                @endphp
-
-                                                                                @if($value->id == $check_latest->id)
-                                                                                    {!! $value->old_data !!}
-                                                                                @else
-                                                                                    <del class="text-danger">{!! $value->old_data !!}</del>
-                                                                                @endif
+                                                                                <del class="text-danger">{!! $value->old_data !!}</del>
                                                                             </td>
                                                                             <td>{{$value->new_data}}</td>
                                                                             <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
@@ -441,20 +421,10 @@
                                                                     @forelse($data as $value)
                                                                         <tr>
                                                                             <td>{{$key++}}</td>
-                                                                            <td>{{$value->column_name}}</td>
+                                                                            <td>{{ucwords(str_replace('_', ' ', $value->column_name))}}</td>
                                                                             <td>{{$value->comment}}</td>
                                                                             <td>
-                                                                                @php
-                                                                                    $check_latest = \App\models\DelivarableColumnEdit::where([
-                                                                                        'column_name' => $value->column_name,
-                                                                                    ])->latest()->first();
-                                                                                @endphp
-
-                                                                                @if($value->id == $check_latest->id)
-                                                                                    {!! $value->old_data !!}
-                                                                                @else
-                                                                                    <del class="text-danger">{!! $value->old_data !!}</del>
-                                                                                @endif
+                                                                                <del class="text-danger">{!! $value->old_data !!}</del>
                                                                             </td>
                                                                             <td>{{$value->new_data}}</td>
                                                                             <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
@@ -543,17 +513,7 @@
                                                                             <td>{{$value->column_name}}</td>
                                                                             <td>{{$value->comment}}</td>
                                                                             <td>
-                                                                                @php
-                                                                                    $check_latest = \App\models\DelivarableColumnEdit::where([
-                                                                                        'column_name' => $value->column_name,
-                                                                                    ])->latest()->first();
-                                                                                @endphp
-
-                                                                                @if($value->id == $check_latest->id)
-                                                                                    {!! $value->old_data !!}
-                                                                                @else
-                                                                                    <del class="text-danger">{!! $value->old_data !!}</del>
-                                                                                @endif
+                                                                                <del class="text-danger">{!! $value->old_data !!}</del>
                                                                             </td>
                                                                             <td>{{$value->new_data}}</td>
                                                                             <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
@@ -638,17 +598,7 @@
                                                                             <td>{{$value->column_name}}</td>
                                                                             <td>{{$value->comment}}</td>
                                                                             <td>
-                                                                                @php
-                                                                                    $check_latest = \App\models\DelivarableColumnEdit::where([
-                                                                                        'column_name' => $value->column_name,
-                                                                                    ])->latest()->first();
-                                                                                @endphp
-
-                                                                                @if($value->id == $check_latest->id)
-                                                                                    {!! $value->old_data !!}
-                                                                                @else
-                                                                                    <del class="text-danger">{!! $value->old_data !!}</del>
-                                                                                @endif
+                                                                                <del class="text-danger">{!! $value->old_data !!}</del>
                                                                             </td>
                                                                             <td>{{$value->new_data}}</td>
                                                                             <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
@@ -737,17 +687,7 @@
                                                                             <td>{{$value->column_name}}</td>
                                                                             <td>{{$value->comment}}</td>
                                                                             <td>
-                                                                                @php
-                                                                                    $check_latest = \App\models\DelivarableColumnEdit::where([
-                                                                                        'column_name' => $value->column_name,
-                                                                                    ])->latest()->first();
-                                                                                @endphp
-
-                                                                                @if($value->id == $check_latest->id)
-                                                                                    {!! $value->old_data !!}
-                                                                                @else
-                                                                                    <del class="text-danger">{!! $value->old_data !!}</del>
-                                                                                @endif
+                                                                                <del class="text-danger">{!! $value->old_data !!}</del>
                                                                             </td>
                                                                             <td>{{$value->new_data}}</td>
                                                                             <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
