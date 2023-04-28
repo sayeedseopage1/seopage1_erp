@@ -625,7 +625,80 @@
                             @endif
                         </td>
                         @if($deliverable->to != null)
-                            <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
+                            <td class="text-center icon-container">
+                                Between {{$deliverable->from}} & {{$deliverable->to}}
+                                @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
+                                @php
+                                    $data = \App\models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'estimation_completed_date',
+                                        'status' => '1'
+                                    ])->orderBy('updated_at', 'asc')->get();
+                                    $key = 1;
+                                @endphp
+                                @if($data->count() > 0)
+                                    <button type="button" data-toggle="modal" data-target="#old_estimation_date_edited_modal{{$deliverable->id}}">
+                                        <div class="show_old_data_modal border px-1 rounded" title="{{$data->count()}} Histories">
+                                            {{$data->count()}}<i class="fa fa-history ml-1" aria-hidden="true"></i>
+                                        </div>
+                                    </button>
+                                    <div class="modal fade" id="old_estimation_date_edited_modal{{$deliverable->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Old Histories</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Field</th>
+                                                                        <th>Comment</th>
+                                                                        <th>Old Data</th>
+                                                                        <th>New Data</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @forelse($data as $value)
+                                                                        <tr>
+                                                                            <td>{{$key++}}</td>
+                                                                            <td>{{ucwords(str_replace('_', ' ', $value->column_name))}}</td>
+                                                                            <td>{{$value->comment}}</td>
+                                                                            <td>
+                                                                                <del class="text-danger">{!! $value->old_data !!}</del>
+                                                                            </td>
+                                                                            <td>{{$value->new_data}}</td>
+                                                                            <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="5" class="shadow-none">
+                                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                                @endif
+                            </td>
                         @else
                             <td class="text-center icon-container">
                                 @php
@@ -684,7 +757,7 @@
                                                                     @forelse($data as $value)
                                                                         <tr>
                                                                             <td>{{$key++}}</td>
-                                                                            <td>{{$value->column_name}}</td>
+                                                                            <td>{{ucwords(str_replace('_', ' ', $value->column_name))}}</td>
                                                                             <td>{{$value->comment}}</td>
                                                                             <td>
                                                                                 <del class="text-danger">{!! $value->old_data !!}</del>

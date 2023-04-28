@@ -862,7 +862,7 @@ class ProjectController extends AccountBaseController
             $project->calculate_task_progress = 'false';
             $project->completion_percent = $request->completion_percent;
         }
-      //  dd($project);
+        //  dd($project);
         $deal= Deal::where('id',$project->deal_id)->first();
 
         $currency= Currency::where('id',$deal->original_currency_id)->first();
@@ -1090,6 +1090,7 @@ class ProjectController extends AccountBaseController
                     if($attribute == 'project_summary')
                     {
                         $activity->activity= $log_user->name .' updated project summary' ;
+                        $activity->old_data = $originalValue;
                     }else
                     {
                         $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
