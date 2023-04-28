@@ -18,7 +18,7 @@ import _ from 'lodash';
 
 
 
-const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxisTickFormate,offset=5, labelListFormatter, xDomain, yDomain, referenceLine = false, stackOffset="auto", colors=[]}) => {
+const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxisTickFormate,offset=5, labelListFormatter, xDomain, yDomain, referenceLine = false, stackOffset="auto", colors=[], footer=true}) => {
     return(
         <div className='cnx__conversion_graph__wrapper'>
             <div className='cnx__conversion__graph'>
@@ -54,7 +54,7 @@ const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxis
                             angle={-90} 
                             position="insideLeft" 
                             offset={offset} 
-                            style={{textAnchor: 'middle'}}
+                            style={{textAnchor: 'middle', stroke: '#000', strokeWidth: '0'}}
                         />
                     </YAxis>
                     <Tooltip  cursor={{ fill: '#F1F5F9' }}/>
@@ -74,20 +74,25 @@ const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxis
                 </ResponsiveContainer>
             </div>
 
-            <div className='cnx_divider' />
+            
 
-            <div className='cnx__graph_footer'>
-               {
-                    barDataKey.length > 0 && barDataKey.map((b, index) => (
-                        <div className='__legend'  key={b}>
-                            <span style={{background: colors.length > 0 ? colors[index] : bgColors[index]}}></span>
-                            <span>
-                                {_.startCase(b.replace(/_/g, ' '))}
-                            </span>
-                        </div>
-                    ))
-                }
-            </div>
+            {footer && 
+                <>
+                    <div className='cnx_divider' />
+                    <div className='cnx__graph_footer'>
+                    {
+                            barDataKey.length > 0 && barDataKey.map((b, index) => (
+                                <div className='__legend'  key={b}>
+                                    <span style={{background: colors.length > 0 ? colors[index] : bgColors[index]}}></span>
+                                    <span>
+                                        {_.startCase(b.replace(/_/g, ' '))}
+                                    </span>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </>
+            }
         </div>
     )
 }

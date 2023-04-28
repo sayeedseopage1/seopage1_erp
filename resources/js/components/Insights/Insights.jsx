@@ -13,6 +13,7 @@ import NewDashboardModal from './components/NewDashboardModal';
 import AddSectionModal from './components/AddSectionModal';
 import Dashboard from './pages/Dashboard';
 import ReportModal from './components/ReportModal';
+import Goal from './pages/Goal';
 
 const InsightsComponent = () => {
   const {goalModalOpen} = useSelector((state) => state.goalModal);
@@ -59,6 +60,7 @@ const Insights = () => {
             <Routes>
               <Route path="/" element={<InsightsComponent />}>
                 <Route path="dashboards/:dashboardId" element={<Dashboard />} />
+                <Route path="goals/:goalId" element={<Goal />} />
                 <Route path="*" element={<h1>404</h1>} />
               </Route>
             </Routes>
