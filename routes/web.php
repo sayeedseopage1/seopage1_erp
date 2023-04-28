@@ -1077,13 +1077,15 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('update-settings/install', [UpdateAppController::class, 'install'])->name('update-settings.install');
     Route::get('update-settings/manual-update', [UpdateAppController::class, 'manual'])->name('update-settings.manual');
     Route::resource('update-settings', UpdateAppController::class);
-
+    Route::get('/insights/sections/get', [InsightsController::class,'getSection'])->name('insights-sections-get');
     Route::resource('search', SearchController::class);
     Route::get('/insights/{any}', [InsightsController::class,'index'])->where('any', '.*');
     Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
     Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
+   
+
     
 });
 //custom route for seopage1
