@@ -292,6 +292,7 @@ class TimelogReportController extends AccountBaseController
             'tasks.id as task_id',
             'tasks.heading as task_name',
             'taskboard_columns.column_name as tasks_status',
+            'taskboard_columns.label_color as tasks_color_code',
             'project_time_logs.id as time_log_id',
             'project_time_logs.start_time',
             'project_time_logs.end_time',

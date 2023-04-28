@@ -2166,19 +2166,7 @@ class ProjectController extends AccountBaseController
 
         $activity = new ProjectActivity();
         $activity->activity= $log_user->name .' updated project deliverable : '.$deliverable->title;
-        //   if($attribute == 'project_summary')
-        //   {
-        //       $activity->activity= $log_user->name .' updated project summary' ;
-        //   }else
-        //   {
-        //       $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
-        //   }
-
         $activity->project_id = $project_update->id;
-        // $activity->attribute = $attribute;
-        // $activity->old_value = $originalValue;
-        // $activity->new_value = $updatedValue;
-        // $activity->user_id = Auth::id();
         $activity->save();
 
         if($request->deliverable_type == 'Others') {
