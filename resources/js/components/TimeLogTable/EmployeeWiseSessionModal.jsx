@@ -59,7 +59,7 @@ const EmployeeWiseSessionTable = ({control}) => {
         setLoading(true);
         const fetch = async () => {
             axios.get(`/account/time-log-report/${projectID}/${employeeID}`).then((res) => {
-                let data = res.data;
+                let data = res.data.filter(d => d.tasks_status === 'Doing');
                 if(data){
                     setData(data);
                 }
@@ -304,6 +304,7 @@ const EmployeeWiseSessionTable = ({control}) => {
                                                             : "1px solid #E7EFFC",
                                                 }}
                                             >
+                                                <ProgressIndicator style={{background: item['tasks_color_code']}} />
                                                 {item['tasks_status']}
                                             </td>
                                         }
@@ -724,3 +725,12 @@ const DragAbleTH = styled.th`
     opacity: ${(props) => (props.isDragging ? 0.5 : 1)};
     background: ${(props) => (props.isDragging ? "red" : "#fff")};} 
 `;
+
+
+const ProgressIndicator = styled.span`
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+`
