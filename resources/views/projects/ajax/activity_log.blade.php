@@ -19,7 +19,44 @@
 							{{$value->addedBy->name}}
 							@endif
 						</td>
-						<td>{{$value->activity}}</td>
+						<td>
+							@if($value->old_data != null)
+							<a href="" data-toggle="modal" data-target="#old_data_modal{{$value->id}}">
+								{{str_replace('_', ' ', __($value->activity))}}
+							</a>
+
+							<!-- Modal -->
+							<div class="modal fade" id="old_data_modal{{$value->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-xl" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">Old Data</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<div class="row">
+												<div class="col-12 col-sm-6 border-right-grey">
+													<h3 class="col-12 border-bottom px-0">Old Data</h3>
+													{!! $value->old_data !!}
+												</div>
+												<div class="col-12 col-sm-6">
+													<h3 class="col-12 border-bottom px-0">New Data</h3>
+													{!! $value->project->project_summary !!}
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							@else
+								{{str_replace('_', ' ', __($value->activity))}}
+							@endif
+						</td>
 					</tr>
 					@empty
 					<tr> 
@@ -56,7 +93,7 @@
 		                        	<i class="fa fa-calendar-alt mr-2 f-14 text-dark-grey"></i>
 		                        </div>
 		                    </div>
-		                    <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" name="date_range" id="datatableRange2" placeholder="Start Date And End Date">
+		                    <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" name="date_range" id="datatableRange_al" placeholder="Start Date And End Date">
 		               </div>
 		            </div>
 		            <div class="col-12 col-sm-4">
@@ -65,7 +102,9 @@
 		                    <select class="form-control select-picker" name="employee" id="employee" data-live-search="false" data-size="8">
 		                        <option value="all">@lang('app.all')</option>
 		                        @foreach($uniqueCollection as $value)
+		                        @if(!is_null($value->addedBy))
 		                        <option value="{{$value->addedBy->id}}">{{$value->addedBy->name}}</option>
+		                        @endif
 		                        @endforeach
 		                    </select>
 		                </div>
@@ -85,6 +124,7 @@
 							<th>Activity</th>
 						</x-slot>
 						@forelse($activityLog as $value)
+						@if($value->activity != 'modules.tasks.timerStoppedBy' && $value->activity != 'modules.tasks.timerPausedBy' && $value->activity != 'modules.tasks.timerStartedBy')
 						<tr>
 							<td>{{$value->created_at->format('Y-m-d g:i A')}}<br>(GMT {{$value->created_at->format('P')}})</td>
 							<td>
@@ -95,8 +135,46 @@
 								{{$value->addedBy->name}}
 								@endif
 							</td>
-							<td>{{$value->activity}}</td>
+							<td>
+								@if($value->old_data != null)
+								<a href="" data-toggle="modal" data-target="#old_data_modal{{$value->id}}">
+									{{str_replace('_', ' ', __($value->activity))}}
+								</a>
+
+								<!-- Modal -->
+								<div class="modal fade" id="old_data_modal{{$value->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog modal-xl" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">Old Data</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<div class="row">
+													<div class="col-12 col-sm-6 border-right-grey">
+														<h3 class="col-12 border-bottom px-0">Old Data</h3>
+														{!! $value->old_data !!}
+													</div>
+													<div class="col-12 col-sm-6">
+														<h3 class="col-12 border-bottom px-0">New Data</h3>
+														{!! $value->project->project_summary !!}
+													</div>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								@else
+									{{str_replace('_', ' ', __($value->activity))}}
+								@endif
+							</td>
 						</tr>
+						@endif
 						@empty
 						<tr> 
 							<td colspan="3" class="shadow-none">
