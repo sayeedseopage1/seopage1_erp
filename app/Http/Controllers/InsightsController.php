@@ -10,6 +10,7 @@ use App\Models\GoalSetting;
 use App\Models\GoalRecurring;
 use Auth;
 use App\Models\Section;
+use App\Models\Dashboard;
 
 class InsightsController extends AccountBaseController
 {
@@ -136,6 +137,13 @@ class InsightsController extends AccountBaseController
         
         return response()->json([$goal]);
     }
+    public function getGoal()
+    {
+        $goal = GoalSetting::all();
+        $goal_recurring= GoalRecurring::all();
+        
+        return response()->json([$goal,$goal_recurring]);
+    }
 
 
     /**
@@ -147,11 +155,25 @@ class InsightsController extends AccountBaseController
      */
     public function storeDashboard(Request $request)
     {
-        dd($request);
-        return $request;
+        //dd($request);
+        $dashboard= new Dashboard();
+        $dashboard->dashboard_name= $request->name;
+        $dashboard->section_id= $request->section['id'];
+        $dashboard->added_by= Auth::id();
+        $dashboard->save(); 
+        return response()->json([$dashboard]);
+
+       // return $request;
        // dd($request->assigneeFor);
         
     }
+    public function getDashboard()
+    {
+        $dashboard= Dashboard::join('sections', 'sections.id', '=', 'dashboards.section_id')
+        ->get();
+        return response()->json([$dashboard]);
+    }
+
 
     /**
      * Store a newly created resource in storage.

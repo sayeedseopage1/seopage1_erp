@@ -15,6 +15,11 @@ return new class extends Migration
     {
         Schema::create('dashboards', function (Blueprint $table) {
             $table->id();
+            $table->string('dashboard_name');
+            $table->integer('section_id');
+            $table->string('goals')->nullable();
+            $table->string('reports')->nullable();
+            $table->integer('added_by');
             $table->timestamps();
         });
     }
