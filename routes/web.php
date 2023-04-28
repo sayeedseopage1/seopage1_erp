@@ -1073,6 +1073,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('mark_notification_read', [NotificationController::class, 'markAllRead'])->name('mark_notification_read');
 
     // Update app
+    Route::get('/insights/deals', [InsightsController::class,'DealConversion'])->name('insights-deals');
     Route::get('/insights/goals/get', [InsightsController::class,'getGoal'])->name('insights-goals-get');
     Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
