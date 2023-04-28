@@ -11,6 +11,7 @@ use App\Models\GoalRecurring;
 use Auth;
 use App\Models\Section;
 use App\Models\Dashboard;
+use App\Models\DealStage;
 
 class InsightsController extends AccountBaseController
 {
@@ -250,6 +251,13 @@ class InsightsController extends AccountBaseController
     public function destroy($id)
     {
         //
+    }
+    public function DealConversion()
+    {
+        $deals= DealStage::all();
+        return response()->json($deals);
+
+
     }
 
 
