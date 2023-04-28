@@ -136,6 +136,13 @@ class InsightsController extends AccountBaseController
         
         return response()->json([$goal]);
     }
+    public function getGoal()
+    {
+        $goal = GoalSetting::all();
+        $goal_recurring= GoalRecurring::all();
+        
+        return response()->json([$goal,$goal_recurring]);
+    }
 
 
     /**
