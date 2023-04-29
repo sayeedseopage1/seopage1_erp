@@ -76,6 +76,24 @@
                                 {{$pm->name}}
                               </td>
                           </tr>
+                          <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                              Total Estimation Hour</td>
+                            <td class="border-left-0">
+                              {{$project->hours_allocated}} hours
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                             Hourly Rate</td>
+                            <td class="border-left-0">
+                                @if($project->hours_allocated != 0 || $project->hours_allocated !=  null )
+                              {{round($project->project_budget/$project->hours_allocated ,0)}}$/hour
+                              @else 
+                              --
+                              @endif
+                            </td>
+                        </tr>
 
                       </table>
 
