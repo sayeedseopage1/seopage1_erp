@@ -485,13 +485,14 @@
                     </x-menu-item>
                 @endif
 
-
+                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
                 <li class="accordionItem closeIt">
                     <a class="nav-item text-lightest f-15 sidebar-text-color" href="{{route("insights.index")}}" title="Insights">
                         <i class="bi bi-graph-up"></i>
                             <span class="pl-3">Insights</span>
                     </a>
                 </li>
+                @endif
 
                 <!-- NAV ITEM - REPORTS COLLAPASE MENU -->
                 <!-- NAV ITEM - SETTINGS -->
