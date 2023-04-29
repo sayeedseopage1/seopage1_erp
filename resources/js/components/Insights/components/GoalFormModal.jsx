@@ -16,6 +16,7 @@ import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import WeekOfYear from "dayjs/plugin/weekOfYear";
 import axios from 'axios';
 import _ from 'lodash';
+import { useNavigate } from 'react-router-dom';
 
 
 // assignee for 
@@ -673,6 +674,7 @@ const TrackingInput = ({
 const GoalFormModal = () => {
     const { mode, entry, entryType } = useSelector(state => state.goalFormModal);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [isSaving, setIsSaving] = React.useState(false);
     const [formStatus, setFormStatus] = React.useState('idle');
 
@@ -698,6 +700,14 @@ const GoalFormModal = () => {
         }
     }, [recurring])
 
+
+    React.useEffect(() => {
+        if(formStatus === 'saved'){
+            close();
+            navigate('goals/1');
+        }
+    }, [formStatus])
+
     // close modal
     const previous = () => {
         if(mode === 'add'){
@@ -713,6 +723,7 @@ const GoalFormModal = () => {
     const close = () => {
         dispatch(closeGoalFormModal());
     }
+
 
     // validation 
     const isFormDataValid = () => {
@@ -743,8 +754,8 @@ const GoalFormModal = () => {
             setIsSaving(false);
             console.log(res);
         });
-
     }
+
 
     return(
         <div className="cnx_ins__goal_modal__container">
@@ -946,18 +957,14 @@ const GoalFormModal = () => {
                                 >
                                     Saving...
                                 </Button>
-                            ) :
-                                formStatus === 'saved' ? (
+                            ) : formStatus === 'saved' ? (
                                 <Button 
-                                    href="goals/1"
-                                    onClick={close}
+                                    disabled={ !trackingValue && !applyRecurring}  
                                     variant='success'
-                                    className='cnx__ins_goal_add_ok_btn'
                                 >
-                                    <i className='fa-solid fa-check' />
-                                    Okay
+                                    Saved
                                 </Button>
-                            ): null
+                            ) : null
                         }
                     </div>
                 </Card.Footer>
