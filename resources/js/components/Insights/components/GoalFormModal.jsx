@@ -674,10 +674,11 @@ const GoalFormModal = () => {
     const { mode, entry, entryType } = useSelector(state => state.goalFormModal);
     const dispatch = useDispatch();
     const [isSaving, setIsSaving] = React.useState(false);
+    const [formStatus, setFormStatus] = React.useState('idle');
 
     // form data
     const [assigneeType, setAssigneeType] = React.useState('User');
-    const [assigneeFor, setAssigneeFor] = React.useState({id: 0, name: ''});
+    const [assigneeFor, setAssigneeFor] = React.useState({});
     const [pipeline, setPipeline] = React.useState(["Pipeline"]);
     const [frequency, setFrequency] = React.useState('Monthly');
     const [startDate, setStartDate] = React.useState(new Date());
@@ -686,10 +687,10 @@ const GoalFormModal = () => {
     const [trackingValue, setTrackingValue] = React.useState('');
     const [recurring, setRecurring] = React.useState([]);
     const [applyRecurring, setApplyRecurring] = React.useState(false);
-    const [qualified, setQualified] = React.useState('Qualified');
+    const [qualified, setQualified] = React.useState('Contact Mode');
     const [dealType, setDealType] = React.useState('');
     const [goalType, setGoalType] = React.useState('');
-    const [achievablePoints, setAchievablePoints] = React.useState('0')
+    const [achievablePoints, setAchievablePoints] = React.useState('');
 
     React.useEffect(() => {
         if(recurring.length === 0){
@@ -713,13 +714,32 @@ const GoalFormModal = () => {
         dispatch(closeGoalFormModal());
     }
 
+    // validation 
+    const isFormDataValid = () => {
+        if(assigneeType !== 'Company'){
+            if(_.isEmpty(assigneeFor)) {
+                return false;
+            }
+        }
+
+        if(pipeline.length === 0) return false;
+        if(!Number(trackingValue)) return false;
+        if(!dealType) return false;
+        if(!goalType) return false;
+        if(!Number(achievablePoints)) return false;
+
+        return true;
+    }
+
     // handle on submit 
     const handleOnSubmit = async (e) => {
         e.preventDefault();
         setIsSaving(true);
+        setFormStatus('saving');
         const data = {entry, entryType, assigneeType, assigneeFor, pipeline, frequency, startDate, endDate, trackingType, trackingValue, recurring, applyRecurring, qualified, dealType, goalType};
 
         await axios.post("/account/insights/goals/add", data).then((res) => {
+            setFormStatus('saved');
             setIsSaving(false);
             console.log(res);
         });
@@ -908,13 +928,37 @@ const GoalFormModal = () => {
                             className='cnx_ins__goal_modal__card_footer_cancel'
                             variant='tertiary'
                         >Cancel</Button>
-                        <Button 
-                            onClick={handleOnSubmit}
-                            disabled={ !trackingValue && !applyRecurring || _.isEmpty(assigneeFor)}  
-                            variant='success'
-                        >
-                            {isSaving ? 'Saving...' : 'Save'}
-                        </Button>
+
+
+                        {
+                            formStatus === 'idle' ? (
+                                <Button 
+                                    onClick={handleOnSubmit}
+                                    disabled={ !isFormDataValid() }  
+                                    variant='success'
+                                >
+                                    Save
+                                </Button>
+                            ): formStatus === 'saving' ? (
+                                <Button 
+                                    disabled={ !trackingValue && !applyRecurring}  
+                                    variant='success'
+                                >
+                                    Saving...
+                                </Button>
+                            ) :
+                                formStatus === 'saved' ? (
+                                <Button 
+                                    href="goals/1"
+                                    onClick={close}
+                                    variant='success'
+                                    className='cnx__ins_goal_add_ok_btn'
+                                >
+                                    <i className='fa-solid fa-check' />
+                                    Okay
+                                </Button>
+                            ): null
+                        }
                     </div>
                 </Card.Footer>
             </Card>
