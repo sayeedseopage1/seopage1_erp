@@ -94,7 +94,7 @@ const InsightSidebar = () => {
             <div className='cnx_ins__sidebar_content'>
             {/* dashboards */}
                 <Accordion>
-                    <Accordion.Item defaultActive={true}>
+                    <Accordion.Item defaultActive={false}>
                         <div className='cnx_ins__sidebar_dashboards_header'>
                             <Accordion.Item.Header icon={false} className='__accordion'>
                                 {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
@@ -136,7 +136,7 @@ const InsightSidebar = () => {
                             {/* dashboard section */}
                             {getDashboardSections()?.map((section) => (
                                 <Accordion key={section}>
-                                    <Accordion.Item defaultActive={true}>
+                                    <Accordion.Item defaultActive={false}>
                                         <div className='cnx_ins__sidebar_dashboards_header __inner'>
                                             <Accordion.Item.Header icon={false} className='__accordion'>
                                             {(active) => <>
@@ -221,7 +221,7 @@ const InsightSidebar = () => {
 
             {/* Goal */}
                 <Accordion>
-                        <Accordion.Item defaultActive={true}>
+                        <Accordion.Item defaultActive={false}>
                             <div className='cnx_ins__sidebar_dashboards_header'>
                                 <Accordion.Item.Header icon={false} className='__accordion'>
                                     {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
@@ -255,7 +255,7 @@ const InsightSidebar = () => {
                                 {/* goal section */}
                                 {["Active", "Past"]?.map((section) => (
                                     <Accordion key={section}>
-                                        <Accordion.Item defaultActive={true}>
+                                        <Accordion.Item defaultActive={false}>
                                             <div className='cnx_ins__sidebar_dashboards_header __inner'>
                                                 <Accordion.Item.Header icon={false} className='__accordion'>
                                                 {(active) => <>
@@ -332,7 +332,7 @@ const InsightSidebar = () => {
 
             {/* Reports */}
                 <Accordion>
-                    <Accordion.Item defaultActive={true}>
+                    <Accordion.Item defaultActive={false}>
                         <div className='cnx_ins__sidebar_dashboards_header'>
                             <Accordion.Item.Header icon={false} className='__accordion'>
                                 {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
@@ -372,7 +372,7 @@ const InsightSidebar = () => {
                             {/* dashboard section */}
                             {getReportSections()?.map((section) => (
                                 <Accordion key={section}>
-                                    <Accordion.Item defaultActive={true}>
+                                    <Accordion.Item defaultActive={false}>
                                         <div className='cnx_ins__sidebar_dashboards_header __inner'>
                                             <Accordion.Item.Header icon={false} className='__accordion'>
                                             {(active) => <>
