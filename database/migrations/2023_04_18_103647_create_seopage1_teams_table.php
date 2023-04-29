@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('department_id')->nullable();
             $table->integer('parent_id')->nullable();
             $table->string('members');
+            $table->integer('created_by');
             $table->timestamps();
         });
     }
