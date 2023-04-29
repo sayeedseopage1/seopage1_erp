@@ -250,6 +250,7 @@ const DealType = ({ dealType, setDealType }) => {
 
     const options = () => ([
         'New Client',
+        'All Clients',
         'Existing Client'
     ])
 
@@ -765,7 +766,7 @@ const GoalFormModal = () => {
                     onClose={close}
                 >
                     <div className='cnx_ins__goal_modal__card_header_title'>
-                        Goal Modal
+                        Add Goal 2/2 - {entry} {entryType}
                     </div>
                 </Card.Header>
                 {/* card body */}

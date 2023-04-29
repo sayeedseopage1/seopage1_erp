@@ -44,15 +44,15 @@ export const TooltipElement = () => {
     const [popperElement, setPopperElement] = React.useState(null);
      // generate random id for dropdown menu
      const id = React.useMemo(() => Math.random().toString(36).substr(2, 9), []);
-     let DOM = window.getElementById(id);
+     let DOM = document.getElementById(id);
  
      // create element in html body
      React.useEffect(() => {
-         const el = window.createElement('div');
+         const el = document.createElement('div');
          el.id = id;
-         window.body.appendChild(el);
+         document.body.appendChild(el);
          return () => {
-             window.body.removeChild(el);
+             document.body.removeChild(el);
          }
      }, [])
     const {styles, attributes} = usePopper(reference, popperElement, {
