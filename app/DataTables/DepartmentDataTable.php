@@ -4,6 +4,8 @@ namespace App\DataTables;
 
 use App\Models\Department;
 use App\Models\Team;
+use App\Models\User;
+use App\Models\Seopage1Team;
 use Carbon\Carbon;
 use App\Models\Holiday;
 use App\Models\Designation;
@@ -40,46 +42,36 @@ class DepartmentDataTable extends BaseDataTable
                 return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
             ->addColumn('action', function ($row) {
-
                 $action = '<div class="task_view">
-
                     <div class="dropdown">
                         <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
                             id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="icon-options-vertical icons"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
-
-                $action .= '<a href="' . route('departments.show', $row->id) . '" class="dropdown-item openRightModal" ><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
-
-                if ($this->editDepartmentPermission == 'all')
-                {
-                    $action .= '<a class="dropdown-item openRightModal" href="' . route('departments.edit', [$row->id]) . '">
+                        if ($this->editDepartmentPermission == 'all') {
+                            /*$action .= '<a class="dropdown-item" href="' . route('teams.edit', [$row->id]) . '">
                                 <i class="fa fa-edit mr-2"></i>
                                 ' . trans('app.edit') . '
-                            </a>';
-                }
+                            </a>';*/
+                        }
 
-                if ($this->deleteDepartmentPermission == 'all')
-                {
-                    $action .= '<a class="dropdown-item delete-table-row" href="javascript:;" data-department-id="' . $row->id . '">
+                        if ($this->deleteDepartmentPermission == 'all'){
+                            $action .= '<a class="dropdown-item delete-table-row" href="javascript:;" data-department-id="' . $row->id . '">
                                 <i class="fa fa-trash mr-2"></i>
                                 ' . trans('app.delete') . '
                             </a>';
-                }
+                        }
 
-                $action .= '</div>
+                        $action .= '</div>
                     </div>
                 </div>';
 
                 return $action;
             })
-            ->editColumn(
-                'name',
-                function ($row) {
-                    return '<h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('departments.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->team_name) . '</a></h5>';
-                }
-            )
+            ->editColumn('name', function ($row) {
+                return '<h5 class="mb-0 f-13 text-darkest-grey">'.ucfirst($row->team_name).'</h5>';
+            })
             ->editColumn('parent_id', function ($row) {
                 // get name of parent department
                 $parent = Team::where('id', $row->parent_id)->first();
@@ -91,12 +83,37 @@ class DepartmentDataTable extends BaseDataTable
                     return '-';
                 }
             })
+            ->editColumn('team_member', function($row) {
+                $usersID = explode(',', $row->members);
+                $html = '';
+                foreach ($usersID as $value) {
+                    if (!empty($value)) {
+                        $user = User::find($value);
+                        $image_url = $user->image ?? 'avatar_blank.png';
+                        $html .= '<a href="'.route('employees.show', $user->id).'">
+                            <img src="'.\URL::asset('user-uploads/avatar/'.$image_url).'" class="mr-2 taskEmployeeImg rounded-circle" alt="'.$user->name.'" title="'.$user->name.'">
+                        </a>';
+                    }
+                }
+                return $html;
+            })
+            ->editColumn('department', function($row) {
+                return Team::find($row->department_id)->team_name;
+            })
+            ->editColumn('created_by', function($row) {
+                $user =  User::find($row->created_by);
+                $image_url = $user->image ?? 'avatar_blank.png';
+
+                return '<a href="'.route('employees.show', $user->id).'">
+                    <img src="'.\URL::asset('user-uploads/avatar/'.$image_url).'" class="mr-2 taskEmployeeImg rounded-circle" alt="'.$user->name.'" title="'.$user->name.'">'.$user->name.'
+                </a>';
+            })
             ->addIndexColumn()
             ->smart(false)
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['action', 'name', 'check']);
+            ->rawColumns(['action', 'name', 'check', 'team_member', 'department', 'created_by']);
     }
 
     /**
@@ -106,11 +123,10 @@ class DepartmentDataTable extends BaseDataTable
      * @return \Illuminate\Database\Eloquent\Builder
      */
 
-    public function query(Team $model)
+    public function query(Seopage1Team $model)
     {
         $request = $this->request();
         $model = $model->select('*');
-
         if (request()->searchText != '') {
             $model->where('team_name', 'like', '%' . request()->searchText . '%');
         }
@@ -172,7 +188,6 @@ class DepartmentDataTable extends BaseDataTable
             ->stateSave(true)
             ->processing(true)
             ->dom($this->domHtml)
-
             ->language(__('app.datatable'))
             ->buttons(Button::make(['extend' => 'excel', 'text' => '<i class="fa fa-file-export"></i> ' . trans('app.exportExcel')]))
             ->parameters([
@@ -204,8 +219,11 @@ class DepartmentDataTable extends BaseDataTable
                 'visible' => !in_array('client', user_roles())
             ],
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
-            __('app.name')  => ['data' => 'name', 'name' => 'team_name', 'title' => __('app.name')],
+            __('app.name')  => ['data' => 'name', 'name' => 'team_name', 'title' => __('Team Name')],
             __('modules.department.parentDepartment') => ['data' => 'parent_id', 'name' => 'parent_id', 'exportable' => true, 'title' => __('modules.department.parentDepartment')],
+            __('department') => ['data' => 'department', 'name' => 'department', 'exportable' => true, 'title' => __('Department')],
+            __('team_member') => ['data' => 'team_member', 'name' => 'team_member', 'exportable' => true, 'title' => __('Team Members')],
+            __('created_by') => ['data' => 'created_by', 'name' => 'created_by', 'exportable' => true, 'title' => __('Created By')],
             Column::computed('action', __('app.action'))
                 ->exportable(false)
                 ->printable(false)
