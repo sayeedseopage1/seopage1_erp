@@ -6,15 +6,15 @@ const Modal = ({ children, isOpen, className }) => {
     const [isBrowser, setIsBrowser] = React.useState(false);
     // generate random id for dropdown menu
     const id = React.useMemo(() => Math.random().toString(36).substr(2, 9), []);
-    let DOM = document.getElementById(id);
+    let DOM = window.getElementById(id);
 
     // create element in html body
     React.useEffect(() => {
-        const el = document.createElement('div');
+        const el = window.createElement('div');
         el.id = id;
-        document.body.appendChild(el);
+        window.body.appendChild(el);
         return () => {
-            document.body.removeChild(el);
+            window.body.removeChild(el);
         }
     }, [])
 
