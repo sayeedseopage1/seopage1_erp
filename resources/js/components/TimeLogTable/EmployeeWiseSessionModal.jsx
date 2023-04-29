@@ -59,7 +59,7 @@ const EmployeeWiseSessionTable = ({control}) => {
         setLoading(true);
         const fetch = async () => {
             axios.get(`/account/time-log-report/${projectID}/${employeeID}`).then((res) => {
-                let data = res.data.filter(d => d.tasks_status === 'Doing');
+                let data = res.data;
                 if(data){
                     setData(data);
                 }
