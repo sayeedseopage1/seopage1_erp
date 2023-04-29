@@ -203,7 +203,7 @@
                         <td>{{$loop->index+1}}</td>
                         <td class="text-center icon-container">
                             @php
-                                $data = \App\models\DelivarableColumnEdit::where([
+                                $data = \App\Models\DelivarableColumnEdit::where([
                                     'delivarable_id' => $deliverable->id,
                                     'column_name' => 'type',
                                 ])->latest()->first();
@@ -216,7 +216,7 @@
                             {{$deliverable->deliverable_type}}
                             @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'type',
                                         'status' => '1'
@@ -288,7 +288,7 @@
                         </td>
                         <td class="text-center icon-container">
                             @php
-                                $data = \App\models\DelivarableColumnEdit::where([
+                                $data = \App\Models\DelivarableColumnEdit::where([
                                     'delivarable_id' => $deliverable->id,
                                     'column_name' => 'title',
                                 ])->latest()->first();
@@ -301,7 +301,7 @@
                             {{$deliverable->title}}
                             @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'title',
                                         'status' => '1'
@@ -384,7 +384,7 @@
                         @if($deliverable->estimation_time != null)
                             <td class="text-center icon-container">
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'estimation_time',
                                     ])->latest()->first();
@@ -398,7 +398,7 @@
                                 {{$deliverable->estimation_time}} hours
                                 @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'estimation_time',
                                         'status' => '1'
@@ -473,7 +473,7 @@
                         @endif
                         <td class="text-center icon-container">
                             @php
-                                $data = \App\models\DelivarableColumnEdit::where([
+                                $data = \App\Models\DelivarableColumnEdit::where([
                                     'delivarable_id' => $deliverable->id,
                                     'column_name' => 'quantity',
                                 ])->latest()->first();
@@ -487,7 +487,7 @@
                             {{$deliverable->quantity}}
                             @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'quantity',
                                         'status' => '1'
@@ -559,7 +559,7 @@
                         </td>
                         <td class="text-center icon-container">
                             @php
-                                $data = \App\models\DelivarableColumnEdit::where([
+                                $data = \App\Models\DelivarableColumnEdit::where([
                                     'delivarable_id' => $deliverable->id,
                                     'column_name' => 'description',
                                 ])->latest()->first();
@@ -572,7 +572,7 @@
                             {!!$deliverable->description!!}
                             @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'description',
                                         'status' => '1'
@@ -647,7 +647,7 @@
                                 Between {{$deliverable->from}} & {{$deliverable->to}}
                                 @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'estimation_completed_date',
                                         'status' => '1'
@@ -720,7 +720,7 @@
                         @else
                             <td class="text-center icon-container">
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'estimation_completed_date',
                                     ])->latest()->first();
@@ -734,7 +734,7 @@
                                 On {{$deliverable->from}}
                                 @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'estimation_completed_date',
                                         'status' => '1'
@@ -813,7 +813,7 @@
                             </a>
                             @endif
                             @php
-                                $checkShowAction = $data = \App\models\DelivarableColumnEdit::where([
+                                $checkShowAction = $data = \App\Models\DelivarableColumnEdit::where([
                                     'delivarable_id' => $deliverable->id,
                                     'status' => '0'
                                 ])->first();
