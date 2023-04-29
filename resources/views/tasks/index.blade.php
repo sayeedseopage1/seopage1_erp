@@ -300,7 +300,7 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
 @push('scripts')
     @include('sections.datatable_js')
 
-
+    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
     <script>
         $('#allTasks-table').on('preXhr.dt', function(e, settings, data) {
 
