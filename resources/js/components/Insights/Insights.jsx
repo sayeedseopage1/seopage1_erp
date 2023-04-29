@@ -14,9 +14,10 @@ import AddSectionModal from './components/AddSectionModal';
 import Dashboard from './pages/Dashboard';
 import ReportModal from './components/ReportModal';
 import Goal from './pages/Goal';
+import {useDashboards} from './hooks/useDashboards'
 
 const InsightsComponent = () => {
-  const {dashboards} = useSelector((state) => state.dashboards);
+  const {dashboards} = useDashboards();
   const {goalModalOpen} = useSelector((state) => state.goalModal);
   const {goalFormModalOpen} = useSelector((state) => state.goalFormModal);
   const {dashboardModalOpen} = useSelector((state) => state.dashboardModal);

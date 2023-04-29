@@ -22,9 +22,9 @@ export const useDashboards = () => {
         }
 
         
-        if(dashboards.length === 0){
+        // if(dashboards.length === 0){
             fetch();
-        }
+        // }
 
         return () => fetch();
     }, [])

@@ -162,7 +162,7 @@ class InsightsController extends AccountBaseController
         $dashboard->section_id= $request->section['id'];
         $dashboard->added_by= Auth::id();
         $dashboard->save(); 
-        return response()->json([$dashboard]);
+        return response()->json($dashboard);
 
        // return $request;
        // dd($request->assigneeFor);
@@ -172,7 +172,7 @@ class InsightsController extends AccountBaseController
     {
         $dashboard= Dashboard::join('sections', 'sections.id', '=', 'dashboards.section_id')
         ->get();
-        return response()->json([$dashboard]);
+        return response()->json($dashboard);
     }
 
 
@@ -193,7 +193,7 @@ class InsightsController extends AccountBaseController
         $section->save();
 
        // return $request;
-        return response()->json([$section]);
+        return response()->json($section);
        // dd($request->assigneeFor);
         
     }

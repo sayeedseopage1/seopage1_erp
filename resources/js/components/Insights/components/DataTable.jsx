@@ -29,7 +29,7 @@ const DataTable = () => {
             {/* table body */}
 
             <div className="cnx__table_body">
-               {[...Array(20)].map(i => (
+               {[...Array(20)].map((_, i) => (
                     <div key={i} className="cnx__table_tr">
                         <div className="cnx__table_td">
                             Subject

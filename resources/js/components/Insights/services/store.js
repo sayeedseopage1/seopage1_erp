@@ -15,6 +15,7 @@ import reportReducer from "./slices/reportSlice";
 import reportModalReducer from "./slices/reportModalSlice";
 
 import sectionModalReducer from "./slices/sectionModalSlice";
+import sectionReducer from './slices/sectionsSlice';
 
 export const store = configureStore({
     reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
         goalModal : goalModalReducer,
         goalFormModal: goalFormModalReducer,
         dashboards: dashboardReducer,
+        sections: sectionReducer,
         dashboardModal: dashboardModalReducer,
         reports: reportReducer,
         reportModal: reportModalReducer,

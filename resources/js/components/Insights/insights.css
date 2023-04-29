@@ -1089,7 +1089,8 @@
 }
 
 .cnx__ins__new_dashboard_modal_body__dd_menu {
-    width: 320px;
+    max-width: 320px;
+    overflow-y: auto;
   }
 
 /* relative data */
@@ -1403,6 +1404,28 @@
 .cnx__table_th {
     font-weight: 600;
   }
+
+.cnx__table_footer {
+    padding: 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+.cnx__table_footer .__show_entries {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+.cnx__table_footer .__show_entries select {
+        cursor: pointer;
+        padding-left: 4px;
+      }
+
+.cnx__table_footer .__show_entries select option {
+          cursor: pointer;
+        }
 
 /* global */
 
