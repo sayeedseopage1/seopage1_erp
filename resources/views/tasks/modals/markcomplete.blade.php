@@ -23,7 +23,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group mb-0">
                                         <input type="text" id="field" class="form-control height-35 f-14 mb-1" placeholder="Add Link Here" name="link[]"/>
-                                        <span id="linkError_0" class="text-danger" for="link"></span>
+                                        <span id="linkError_0" class="text-danger" ></span>
                                     </div>
                                 </div>
                             </div>
