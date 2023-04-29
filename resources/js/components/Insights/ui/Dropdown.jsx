@@ -68,7 +68,7 @@ const DropdownToggle = ({children, icon=true, className}) => {
 }
 
 // dropdown menu
-const DropdownMenu = ({children, className, offset=[0, 3], ...props}) => {
+const DropdownMenu = ({children, className, placement="bottom-start", offset=[0, 3], ...props}) => {
     const { reference, setIsOpen, isOpen} = useDropdown();
     const [popperElement , setPopperElement] = React.useState(null);
     const [width, setWidth] = React.useState(100);
@@ -79,7 +79,7 @@ const DropdownMenu = ({children, className, offset=[0, 3], ...props}) => {
 
     let DOM = document.getElementById(id);
     const {styles, attributes} = usePopper(reference, popperElement, {
-        placement: 'bottom-start',
+        placement,
         modifiers: [
             {
                 name: 'offset',
@@ -90,7 +90,7 @@ const DropdownMenu = ({children, className, offset=[0, 3], ...props}) => {
             {
                 name: 'flip',
                 options: {
-                    fallbackPlacements: ['bottom', 'top'],
+                    fallbackPlacements: ['bottom', 'top', ],
                 },
             }
         ],
@@ -214,6 +214,7 @@ DropdownToggle.propTypes = {
 DropdownMenu.propTypes = {
     children: PropTypes.node.isRequired || PropTypes.arrayOf(PropTypes.node).isRequired,
     className: PropTypes.string,
+    placement: PropTypes.string,
     offset: PropTypes.arrayOf(PropTypes.number),
 }
 

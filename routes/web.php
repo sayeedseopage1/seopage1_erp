@@ -1074,17 +1074,24 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('mark_notification_read', [NotificationController::class, 'markAllRead'])->name('mark_notification_read');
 
     // Update app
+    Route::get('/insights/deals', [InsightsController::class,'DealConversion'])->name('insights-deals');
+    Route::get('/insights/goals/get', [InsightsController::class,'getGoal'])->name('insights-goals-get');
+    Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
     Route::get('update-settings/install', [UpdateAppController::class, 'install'])->name('update-settings.install');
     Route::get('update-settings/manual-update', [UpdateAppController::class, 'manual'])->name('update-settings.manual');
-    Route::resource('update-settings', UpdateAppController::class);
-
     Route::resource('search', SearchController::class);
+    Route::resource('update-settings', UpdateAppController::class);
+    Route::get('/insights/sections/get', [InsightsController::class,'getSection'])->name('insights-sections-get');
+    
     Route::get('/insights/{any}', [InsightsController::class,'index'])->where('any', '.*');
     Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
+    Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
+    Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
+    Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
+   
 
-
-
+    
 });
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);

@@ -287,7 +287,7 @@ const GoalType = ({ goalType, setGoalType }) => {
         <React.Fragment>
             <Dropdown className="cnx_select_box_dd">
                 <Dropdown.Toggle className="cnx_select_box">
-                    {goalType || 'Deal Type'}
+                    {goalType || 'Goal Type'}
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="cnx_select_box_options">
                     {
@@ -717,9 +717,9 @@ const GoalFormModal = () => {
     const handleOnSubmit = async (e) => {
         e.preventDefault();
         setIsSaving(true);
-        const data = { assigneeType, assigneeFor, pipeline, frequency, startDate, endDate, trackingType, trackingValue, recurring, applyRecurring, qualified, dealType, goalType};
+        const data = {entry, entryType, assigneeType, assigneeFor, pipeline, frequency, startDate, endDate, trackingType, trackingValue, recurring, applyRecurring, qualified, dealType, goalType};
 
-        await axios.post("/account/insights", data).then((res) => {
+        await axios.post("/account/insights/goals/add", data).then((res) => {
             setIsSaving(false);
             console.log(res);
         });

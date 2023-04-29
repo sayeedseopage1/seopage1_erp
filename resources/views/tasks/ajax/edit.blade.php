@@ -937,3 +937,4 @@ $viewTaskCategoryPermission = user()->permission('view_task_category');
     // }
 }
 </script>
+<script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>

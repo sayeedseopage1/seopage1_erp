@@ -13,10 +13,12 @@ import { NavLink } from 'react-router-dom';
 import { Icon } from '../utils/Icon';
 import _ from 'lodash';
 import TextHighlighter from './TextHighlighter';
+import { useSections } from '../hooks/useSection';
 
 
 const InsightSidebar = () => {
     const [search, setSearch] = React.useState('');
+    const {sections}  = useSections();
     const {dashboards} = useSelector((state) => state.dashboards);
     const {reports} = useSelector((state) => state.reports);
     const { goals } = useSelector((state) => state.goals);
@@ -62,7 +64,7 @@ const InsightSidebar = () => {
 
                <Dropdown>
                     <Dropdown.Toggle icon={false}>
-                        <Tooltip text="add Goal" >
+                        <Tooltip text="Add New" >
                             <Button aria-label="GoalAddButton" variant='success' className='cnx_ins__sidebar_btn'>
                                 <i className="fas fa-plus cnx__btn_icon"/>
                             </Button>
@@ -97,7 +99,7 @@ const InsightSidebar = () => {
                             <Accordion.Item.Header icon={false} className='__accordion'>
                                 {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
                                     Dashboards
-                                    <i className={`fas fa-chevron-${active ? 'down': 'right'}`}/>
+                                    <i className={`fa-solid fa-chevron-${active ? 'down': 'right'}`}/>
                                 </div>}
                             </Accordion.Item.Header>
 
@@ -139,7 +141,7 @@ const InsightSidebar = () => {
                                             <Accordion.Item.Header icon={false} className='__accordion'>
                                             {(active) => <>
                                                     <div className='cnx_ins__sidebar_dashboards_title __inner'>
-                                                        <i className={`fas fa-chevron-${active? 'down': 'right'}`}/>
+                                                        <i className={`fa-solid fa-chevron-${active? 'down': 'right'}`}/>
                                                         {section}
                                                     </div>
                                             </>} 
@@ -180,6 +182,7 @@ const InsightSidebar = () => {
                                         <Accordion.Item.Body>
                                             {/* dashboard */}
                                                 {getDashboardsBySection(section)?.map((dashboard) => (
+                                                    dashboard.title ? (
                                                     <div key={dashboard.id} className='cnx_ins__sidebar_item'>
                                                          
                                                         <NavLink 
@@ -200,6 +203,7 @@ const InsightSidebar = () => {
                                                             </button>
                                                         </NavLink>
                                                     </div>
+                                                    ): null
                                                 ))}
                                             {/*end dashboard*/}
                                         </Accordion.Item.Body>
@@ -222,7 +226,7 @@ const InsightSidebar = () => {
                                 <Accordion.Item.Header icon={false} className='__accordion'>
                                     {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
                                         Goals
-                                        <i className={`fas fa-chevron-${active ? 'down': 'right'}`}/>
+                                        <i className={`fa-solid fa-chevron-${active ? 'down': 'right'}`}/>
                                     </div>}
                                 </Accordion.Item.Header>
 
@@ -256,7 +260,7 @@ const InsightSidebar = () => {
                                                 <Accordion.Item.Header icon={false} className='__accordion'>
                                                 {(active) => <>
                                                         <div className='cnx_ins__sidebar_dashboards_title __inner'>
-                                                            <i className={`fas fa-chevron-${active? 'down': 'right'}`}/>
+                                                            <i className={`fa-solid fa-chevron-${active? 'down': 'right'}`}/>
                                                             {section}
                                                         </div>
                                                 </>} 
@@ -333,7 +337,7 @@ const InsightSidebar = () => {
                             <Accordion.Item.Header icon={false} className='__accordion'>
                                 {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
                                     Reports
-                                    <i className={`fas fa-chevron-${active ? 'down': 'right'}`}/>
+                                    <i className={`fa-solid fa-chevron-${active ? 'down': 'right'}`}/>
                                 </div>}
                             </Accordion.Item.Header>
 
@@ -373,7 +377,7 @@ const InsightSidebar = () => {
                                             <Accordion.Item.Header icon={false} className='__accordion'>
                                             {(active) => <>
                                                     <div className='cnx_ins__sidebar_dashboards_title __inner'>
-                                                        <i className={`fas fa-chevron-${active? 'down': 'right'}`}/>
+                                                        <i className={`fa-solid fa-chevron-${active? 'down': 'right'}`}/>
                                                         {section}
                                                     </div>
                                             </>} 
