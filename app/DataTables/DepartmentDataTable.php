@@ -50,10 +50,10 @@ class DepartmentDataTable extends BaseDataTable
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
                         if ($this->editDepartmentPermission == 'all') {
-                            /*$action .= '<a class="dropdown-item" href="' . route('teams.edit', [$row->id]) . '">
+                            $action .= '<a class="dropdown-item" href="' . route('teams.edit', [$row->id]) . '">
                                 <i class="fa fa-edit mr-2"></i>
                                 ' . trans('app.edit') . '
-                            </a>';*/
+                            </a>';
                         }
 
                         if ($this->deleteDepartmentPermission == 'all'){
@@ -74,7 +74,7 @@ class DepartmentDataTable extends BaseDataTable
             })
             ->editColumn('parent_id', function ($row) {
                 // get name of parent department
-                $parent = Team::where('id', $row->parent_id)->first();
+                $parent = Seopage1Team::where('id', $row->parent_id)->first();
 
                 if ($parent) {
                     return $parent->team_name;
@@ -98,7 +98,12 @@ class DepartmentDataTable extends BaseDataTable
                 return $html;
             })
             ->editColumn('department', function($row) {
-                return Team::find($row->department_id)->team_name;
+                $data = Team::find($row->department_id);
+                if ($data) {
+                    return $data->team_name;
+                } else {
+                    return '---';
+                }
             })
             ->editColumn('created_by', function($row) {
                 $user =  User::find($row->created_by);

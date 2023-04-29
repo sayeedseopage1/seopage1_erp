@@ -140,7 +140,7 @@
                     $.each(data, function (key, value) {
                         var option = $('<option></option>')
                             .attr('value', value.id)
-                            .html('<span class="badge badge-pill badge-light border"><div class="d-inline-block mr-1"><img class="taskEmployeeImg rounded-circle" src="' + value.image_url + '"></div>' + value.name +'</span>');
+                            .attr('data-content','<span class="badge badge-pill badge-light border"><div class="d-inline-block mr-1"><img class="taskEmployeeImg rounded-circle" src="' + value.image_url + '"></div>' + value.name +'</span>');
                         select.append(option);
                     });
                     select.selectpicker('refresh');
