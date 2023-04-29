@@ -166,6 +166,7 @@ class InsightsController extends AccountBaseController
         //dd($request);
         $dashboard= new Dashboard();
         $dashboard->dashboard_name= $request->name;
+        $dashboard->root= $request->root;
         $dashboard->section_id= $request->section['id'];
         $dashboard->added_by= Auth::id();
         $dashboard->save(); 
@@ -196,6 +197,7 @@ class InsightsController extends AccountBaseController
         $section= new Section();
         $section->type= $request->type;
         $section->section_name= $request->section;
+        $section->root= $request->root;
         $section->added_by= Auth::id();
         $section->save();
 
