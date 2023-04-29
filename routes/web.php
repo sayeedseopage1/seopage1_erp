@@ -171,6 +171,10 @@ use App\Http\Controllers\ProjectBoardController;
 use App\Http\Controllers\ReportIssueController;
 use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\SoftwareProjectController;
+use App\Http\Controllers\InsightsController;
+use App\Http\Controllers\Seopage1TeamController;
+use App\Http\Controllers\KpiSettingController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -462,6 +466,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         Route::resource('employee-shifts', EmployeeShiftController::class);
     });
 
+
+
     /* Setting menu routes ends here */
     Route::resource('company-settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
 
@@ -554,6 +560,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::post('gantt-data', [ProjectController::class, 'ganttData'])->name('projects.gantt_data');
             Route::post('invoiceList/{id}', [ProjectController::class, 'invoiceList'])->name('projects.invoice_list');
             Route::get('members/{id}', [ProjectController::class, 'members'])->name('projects.members');
+            Route::post('project/activity-log/ajax', [ProjectController::class, 'project_activity_time_log_ajax'])->name('project_activity_time_log_ajax');
             Route::get('labels/{id}', [TaskLabelController::class, 'labels'])->name('projects.labels');
 
             Route::post('project-members/save-group', [ProjectMemberController::class, 'storeGroup'])->name('project-members.store_group');
@@ -1028,6 +1035,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::post('time-log-report-chart', [TimelogReportController::class, 'timelogChartData'])->name('time-log-report.chart');
     Route::resource('time-log-report', TimelogReportController::class);
+    Route::get('time-log-report/{project_id}/{employee_id}', [TimelogReportController::class, 'show'])->where([
+        'project_id' => '[0-9]+',
+        'employee_id' => '[0-9]+',
+    ]);
 
     Route::post('finance-report-chart', [FinanceReportController::class, 'financeChartData'])->name('finance-report.chart');
     Route::resource('finance-report', FinanceReportController::class);
@@ -1071,14 +1082,24 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('mark_notification_read', [NotificationController::class, 'markAllRead'])->name('mark_notification_read');
 
     // Update app
+    Route::get('/insights/deals', [InsightsController::class,'DealConversion'])->name('insights-deals');
+    Route::get('/insights/goals/get', [InsightsController::class,'getGoal'])->name('insights-goals-get');
+    Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
     Route::get('update-settings/install', [UpdateAppController::class, 'install'])->name('update-settings.install');
     Route::get('update-settings/manual-update', [UpdateAppController::class, 'manual'])->name('update-settings.manual');
-    Route::resource('update-settings', UpdateAppController::class);
-
     Route::resource('search', SearchController::class);
+    Route::resource('update-settings', UpdateAppController::class);
+    Route::get('/insights/sections/get', [InsightsController::class,'getSection'])->name('insights-sections-get');
+    
+    Route::get('/insights/{any}', [InsightsController::class,'index'])->where('any', '.*');
+    Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
+    Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
+    Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
+    Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
+   
 
-
+    
 });
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
@@ -1125,6 +1146,7 @@ Route::get('/projects/deliverables/{id}', [ProjectController::class, 'deliverabl
 Route::get('/projects/download/{id}', [ProjectController::class, 'download'])->name('projects.download');
 Route::post('projects/sign/{id}', [ProjectController::class, 'sign'])->name('projects.sign');
 Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
+Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');
 Route::post('/projects/public/sign/{id}', [PublicUrlController::class, 'projectSign'])->name('front.project.sign');
 Route::get('/projects/public/download/{id}', [PublicUrlController::class, 'projectDownload'])->name('front.project.download');
 
@@ -1134,6 +1156,8 @@ Route::post('/projects/add-deliverables/', [ProjectController::class, 'projectDe
 Route::post('/projects/update-deliverables/', [ProjectController::class, 'updateDeliverable'])->name('update-project-deliverable');
 Route::get('/projects/delete-deliverables/{id}', [ProjectController::class, 'deleteDeliverable']);
 Route::get('/projects/approve-deliverables/{id}', [ProjectController::class, 'approveDeliverable']);
+Route::get('project/request/modificaiton/{id}', [ProjectController::class, 'modification_form_show'])->name('deliverables_modification_form');
+Route::post('/projects/set/column/permissions', [ProjectController::class, 'set_column_edit_permission'])->name('deliverables_edit_permission');
 
 //projectboard
 Route::post('projectboards/collapseColumn', [ProjectBoardController::class, 'collapseColumn'])->name('projectboards.collapse_column');
@@ -1152,7 +1176,7 @@ Route::post('/deals/comments', [DealController::class, 'comments'])->name('post-
 //project incomplete
 Route::post('/acoounts/projects/incomplete', [ProjectController::class, 'InComplete'])->name('project-incomplete');
 // project Q&C
-Route::get('/projects/q&c/{id}/{milestone_id}', [ProjectController::class, 'qc']);
+Route::get('/projects/q&c/{id}/{milestone_id}', [ProjectController::class, 'qc'])->name('qc_form');
 //project completion form
 Route::get('/projects/project-completion/{id}', [ProjectController::class, 'ProjectCompletion']);
 Route::post('/acoounts/project-completion/store', [ProjectController::class, 'ProjectCompletionSubmit'])->name('project-completion');
@@ -1189,4 +1213,20 @@ Route::controller(DealController::class)->group(function(){
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
 
+Route::get('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
 
+Route::get('get-users', [InsightsController::class, 'getusers'])->name('get-users');
+Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams');
+
+
+//Team Routes 
+Route::post('team/apply-quick-action', [Seopage1TeamController::class, 'applyQuickAction'])->name('teams.apply_quick_action');
+Route::get('team/department-hierarchy', [Seopage1TeamController::class, 'hierarchyData'])->name('team.hierarchy');
+Route::post('team/changeParent', [Seopage1TeamController::class, 'changeParent'])->name('team.changeParent');
+Route::get('team/search', [Seopage1TeamController::class, 'searchTeam'])->name('teams.search');
+Route::resource('teams', Seopage1TeamController::class);
+Route::post('/get-employees-by-department', [Seopage1TeamController::class, 'getEmployeesByDepartment'])->name('getEmployeesByDepartment');
+
+Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'getEmployeesByParentTeam'])->name('getEmployeesByParentTeam');
+//KPI Settings 
+Route::resource('kpi-settings', KpiSettingController::class);

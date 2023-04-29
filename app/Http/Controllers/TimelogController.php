@@ -406,7 +406,7 @@ class TimelogController extends AccountBaseController
             $timeLog->save();
 
             if ($request->project_id != '') {
-                $this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
+                //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
                 $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
             }
             else {
@@ -455,7 +455,7 @@ class TimelogController extends AccountBaseController
         }
 
         if (!is_null($timeLog->project_id)) {
-            $this->logProjectActivity($timeLog->project_id, 'modules.tasks.timerStoppedBy');
+            //$this->logProjectActivity($timeLog->project_id, 'modules.tasks.timerStoppedBy');
         }
 
         if (!is_null($timeLog->task_id)) {
@@ -671,7 +671,7 @@ class TimelogController extends AccountBaseController
         $timeLogBreak->save();
 
         if (!is_null($timeLog->project_id)) {
-            $this->logProjectActivity($timeLog->project_id, 'modules.tasks.timerPausedBy');
+            //$this->logProjectActivity($timeLog->project_id, 'modules.tasks.timerPausedBy');
         }
 
         if (!is_null($timeLog->task_id)) {

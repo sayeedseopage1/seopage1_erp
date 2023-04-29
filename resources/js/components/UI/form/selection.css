@@ -1,0 +1,119 @@
+.sp1_selection {
+    position: relative;
+    width: 100%;
+}
+
+.sp1_selection--toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    gap: 3px;
+    width: 100%;
+    border: 1px solid rgb(0 0 0/20%);
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    box-shadow: inset 0 0 3px rgb(0 0 0 / 10%);
+}
+
+.sp1_selection--toggle>.sp1_selection--tag {
+    font-size: 14px;
+    padding: 0 4px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid rgb(0 0 0 / 5%);
+    background: #f4f4f4;
+}
+
+
+.sp1_selection--toggle>.sp1_selection--tag>.sp1_selection--tag-close {
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0 4px;
+    background: transparent;
+    margin-top: -0.25rem;
+}
+
+.sp1_selection--remove {
+    padding: 0 6px;
+    font-size: 16px;
+    background: transparent;
+    margin-top: -0.25rem;
+}
+
+
+/* selection menu */
+.sp1_selection--menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 100;
+    border-radius: 6px;
+    border: 1px solid rgb(0 0 0 / 15%);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+}
+
+.sp1_selection--search-box {
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid rgb(0 0 0 / 10%);
+}
+
+.sp1_selection--search-box>div.all {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.sp1_selection--options {
+    padding: 10px;
+}
+
+.sp1_selection--options>.sp1_selection--option {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+
+.sp1_selection--options>.sp1_selection--option>i {
+    color: #1382f1;
+}
+
+.sp1_selection--options>.sp1_selection--option.hover,
+.sp1_selection--options>.sp1_selection--option:hover,
+.sp1_selection--search-box>div.all:hover,
+.sp1_selection--search-box>div.all.hover {
+    background: #1382f1;
+    color: #fff;
+}
+
+.sp1_selection--options>.sp1_selection--option.hover>i,
+.sp1_selection--options>.sp1_selection--option:hover>i {
+    color: #fff;
+}

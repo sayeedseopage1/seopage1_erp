@@ -557,17 +557,19 @@ class TaskController extends AccountBaseController
         $left_in_hours = round($left_minutes/60,0);
         $left_in_minutes= $left_minutes%60;
         //dd($left_minutes);
-//        if($left_minutes < 1)
-//        {
-//            return response()->json([
-//                "message" => "The given data was invalid.",
-//                "errors" => [
-//                    "estimate_hours" => [
-//                        "Estimate hours cannot exceed from project allocation hours !"
-//                    ]
-//                ]
-//            ], 422);
-//        }
+
+        if($left_minutes < 1)
+        {
+            // return response()->json([
+            //     "message" => "The given data was invalid.",
+            //     "errors" => [
+            //         "estimate_hours" => [
+            //             "Estimate hours cannot exceed from project allocation hours !"
+            //         ]
+            //     ]
+            // ], 422);
+        }
+
        // dd($request);
         $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
 

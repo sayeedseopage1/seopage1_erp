@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Pusher\Pusher;
+use App\Models\User;
 use App\Models\UserChat;
 use App\Models\TaskHistory;
 use App\Models\UserActivity;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\App;
 use App\Traits\UniversalSearchTrait;
 use Illuminate\Support\Facades\Route;
 use App\Traits\FileSystemSettingTrait;
+use Notification;
+use App\Notifications\PusherNotificaiton;
 
 class AccountBaseController extends Controller
 {
@@ -162,6 +165,10 @@ class AccountBaseController extends Controller
     public function triggerPusher($channel, $event, $data)
     {
         if ($this->pusherSettings->status) {
+            $user = User::find($data['user_id']);
+            
+            Notification::send($user, new PusherNotificaiton($data));
+            
             $pusher = new Pusher($this->pusherSettings->pusher_app_key, $this->pusherSettings->pusher_app_secret, $this->pusherSettings->pusher_app_id, array('cluster' => $this->pusherSettings->pusher_cluster, 'useTLS' => $this->pusherSettings->force_tls));
             $pusher->trigger($channel, $event, $data);
         }

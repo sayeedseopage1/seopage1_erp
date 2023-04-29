@@ -7,7 +7,11 @@ $changeStatusPermission = user()->permission('change_status');
 
 <div id="task-detail-section">
     <div class="row mx-0">
+        @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
+        <a href="{{route('tasks.index')}}"><button class="btn btn-primary mb-3">Go back</button></a>
+        @else 
         <a href="{{route('projects.show', $task->project_id)}}?tab=tasks"><button class="btn btn-primary mb-3">Go back</button></a>
+        @endif
         <h3 class="heading-h1 mb-3 ml-2 align-self-center">{{ ucfirst($task->heading) }}</h3>
     </div>
     <div class="row">
@@ -221,7 +225,7 @@ $changeStatusPermission = user()->permission('change_status');
                                     @endif
 
                                     @if ($editTaskPermission == 'all' || ($editTaskPermission == 'added' && $task->added_by == user()->id) || ($task->project && $task->project->project_admin == user()->id))
-                                        <a class="dropdown-item openRightModal"
+                                        <a class="dropdown-item"
                                             href="{{ route('tasks.edit', $task->id) }}">@lang('app.edit')
                                             @lang('app.task')</a>
 
@@ -1603,5 +1607,7 @@ $changeStatusPermission = user()->permission('change_status');
         })
     </script>
 
-    <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+<script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
+
+
 

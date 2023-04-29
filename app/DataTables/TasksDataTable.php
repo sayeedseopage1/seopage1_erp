@@ -332,9 +332,6 @@ class TasksDataTable extends BaseDataTable
                         $timeL .= ($totalMinutes) % 60 . ' ' . __('app.mins');
                     }
                     return $timeL;
-                    if ($row->id == 570) {
-                        //dd('ok');
-                    }
                 }
             });
 
@@ -385,7 +382,7 @@ class TasksDataTable extends BaseDataTable
                         <div class="row">
                             <div class="mx-auto mx-sm-0 pb-2 pb-sm-0 align-self-center">'.$subtasks_html.'</div>
                             <div class="col-9">
-                                <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="openRightModal">' . ucfirst($row->heading) . '</a></h5>
+                                <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('tasks.show', [$row->id]) . '" class="">' . ucfirst($row->heading) . '</a></h5>
                                 <p class="mb-0">' . $pin . ' ' .$span.' ' . $timer . ' ' . $labels .  '</p>
                             </div>
                         </div>
@@ -502,13 +499,13 @@ class TasksDataTable extends BaseDataTable
                 $totalHours = $task->estimate_hours;
                 $totalMinutes = $task->estimate_minutes;
                 
-                $tasks = $task->subtasks;
+                // $tasks = $task->subtasks;
                 
-                foreach($tasks as $value) {
-                    $countTask = Task::where('subtask_id', $value->id)->first();
-                    $totalHours = $totalHours + $countTask->estimate_hours;
-                    $totalMinutes = $totalMinutes + $countTask->estimate_minutes;
-                }
+                // foreach($tasks as $value) {
+                //     $countTask = Task::where('subtask_id', $value->id)->first();
+                //     $totalHours = $totalHours + $countTask->estimate_hours;
+                //     $totalMinutes = $totalMinutes + $countTask->estimate_minutes;
+                // }
 
                 if ($totalMinutes >= 60) {
                     $hours = intval(floor($totalMinutes / 60));
@@ -518,7 +515,7 @@ class TasksDataTable extends BaseDataTable
                 }
 
                 if ($totalHours == 0 && $totalMinutes == 0) {
-                    return '---';
+                    return '--';
                 } else {
                     return $totalHours.' hrs '.$totalMinutes.' mins';
                 }

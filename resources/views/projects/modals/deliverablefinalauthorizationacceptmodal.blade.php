@@ -78,7 +78,7 @@
                                 @endif
                             </tr>
                             @if($signature == null)
-                                @include('projects.modals.clientdeliverableeditmodal')
+                                {{--@include('projects.modals.clientdeliverableeditmodal')--}}
                                 @include('projects.modals.clientdeliverabledeletemodal')
                                 @include('projects.modals.clientdeliverableapprovemodal')
                             @endif
@@ -119,7 +119,10 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $.ajax({
+        $.easyAjax({
+            blockUI: true,
+            disableButton: true,
+            buttonSelector: "#authorizationBtn",
             type: "POST",
             url: "{{route('deliverable-final-authorization-accept')}}",
             data: data,

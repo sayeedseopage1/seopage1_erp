@@ -1,11 +1,12 @@
 @php
     $milestones= App\Models\ProjectMilestone::where('project_id',$project->id)->get();
+    $editData = App\Models\DelivarableColumnEdit::find($deliverable->id);
 @endphp
 <div class="modal fade" id="deliverableseditModal{{$deliverable->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Edit Deliverable</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Edit Deliverablexxxxxxxxxxxxxxxxxxx</h5>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
 

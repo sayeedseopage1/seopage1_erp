@@ -48,6 +48,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
     <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>
     <script src="https://code.jscharting.com/latest/jscharting.js"></script>
+   
 
     <title>@lang($pageTitle)</title>
     <meta name="msapplication-TileColor" content="#ffffff">
@@ -824,66 +825,8 @@
     <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {!! Toastr::message() !!}
 
-    <script type="text/javascript">
-        $(document).ready(function() {
-        	// @if(Session::get('timer_box_status') == 'off')
-            //     $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click();
-            // @else 
-            //     $('span.ui-button-icon.ui-icon.minusthick.ui-icon-arrow-4-diag').click();
-            // @endif
-
-            // $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click(function(e) {
-            //     e.preventDefault();
-
-            //     @if(Session::has('timer_box_status'))
-            //         @if(Session::get('timer_box_status') == 'off')
-
-            //             $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
-            //             @php $status = 'on'; @endphp
-            //         @else 
-            //             @php $status = 'off' @endphp
-            //         @endif
-            //     @else   
-            //         @php $status = 'on' @endphp
-            //     @endif
-
-            //     $.ajax({
-            //         type:"GET",
-            //         cache:false,
-            //         url:"{{route('home.timer_session_set', 'off')}}",
-            //         success: function(data) {
-
-            //             console.log(data);  
-            //         }
-            //     });
-            // });
-
-            // $('span.ui-button-icon.ui-icon.minusthick.ui-icon-arrow-4-diag').click(function(e) {
-            //     e.preventDefault();
-
-            //     @if(Session::has('timer_box_status'))
-            //         @if(Session::get('timer_box_status') == 'off')
-
-            //             $('span.ui-button-icon.ui-icon.ui-icon-minusthick.minusthick').click()
-            //             @php $status = 'on'; @endphp
-            //         @else 
-            //             @php $status = 'off' @endphp
-            //         @endif
-            //     @else   
-            //         @php $status = 'on' @endphp
-            //     @endif
-
-            //     $.ajax({
-            //         type:"GET",
-            //         cache:false,
-            //         url:"{{route('home.timer_session_set', 'on')}}",
-            //         success: function(data) {
-            //         }
-            //     });
-            // });
-        })
-    </script>
     <script src="{{URL::asset('easy-notification/easyNotify.js')}}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             var channel = pusher.subscribe('lead-updated-channel');
@@ -906,7 +849,63 @@
                     $("#easyNotify").easyNotify(options);
                 }
             }, channel.unbind());
+
+            var notification = pusher.subscribe('notification-channel');
+            
+            notification.bind('notification', function(data) {
+                if (data.user_id == window.Laravel.user.id && data.role_id == window.Laravel.user.role_id) {
+                    var options = {
+                        title: data.title,
+                        options: {
+                            body: data.body,
+                            icon: '{{URL::asset("user-uploads/app-logo/c86157272a41bea229e0dcbe2ff9715b.png")}}',
+                            lang: 'en-US',
+                            onClick: function() {
+                                window.location.href = data.redirectUrl;
+                            }
+                        }
+                    };
+                    
+                    $("#easyNotify").easyNotify(options);
+                }
+            }, notification.unbind());
         })
+    </script>
+    <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
+    <script type="text/javascript">
+        @php
+            $startDate = \Carbon\Carbon::now()->startOfMonth()->subMonths(12)->addDays(20);
+            $today = \Carbon\Carbon::now()->format('d');
+            if ($today > 20) {
+                $endDate = \Carbon\Carbon::now()->startOfMonth()->addMonth(1)->addDays(19);
+            } else {
+                $endDate = \Carbon\Carbon::now()->startOfMonth()->addDays(19);
+            }
+        @endphp
+        $(function() {
+            var format = '{{ global_setting()->moment_format }}';
+            var startDate = "{{ $startDate->format(global_setting()->date_format) }}";
+            var endDate = "{{ $endDate->format(global_setting()->date_format) }}";
+            var picker = $('#datatableRange_al');
+            var start = moment(startDate, format);
+            var end = moment(endDate, format);
+
+            function cb(start, end) {
+                $('#datatableRange_al').val(moment(start).subtract(1, 'year').format('{{ global_setting()->moment_date_format }}') +
+                    ' @lang("app.to") ' + end.format( '{{ global_setting()->moment_date_format }}'));
+                $('#reset-filters').removeClass('d-none');
+            }
+
+            $('#datatableRange_al').daterangepicker({
+                locale: daterangeLocale,
+                linkedCalendars: false,
+                startDate: start,
+                endDate: end,
+                ranges: daterangeConfig,
+                opens: 'left',
+                parentEl: '.dashboard-header',
+            }, cb);
+        });
     </script>
 </body>
 

@@ -34,6 +34,8 @@ use App\Models\LeadCustomForm;
 use App\Models\TaskboardColumn;
 use App\Models\UniversalSearch;
 use App\Models\TicketCustomForm;
+use App\Models\ProjectDeliverablesClientDisagree;
+use App\Models\ProjectActivity;
 use Froiden\RestAPI\ApiResponse;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProjectTimeLogBreak;
@@ -186,15 +188,43 @@ class HomeController extends Controller
 
     public function agreement($hash)
     {
-      $this->pageTitle = 'Project Agreement';
-      $this->pageIcon = 'icon-draft';
+        $this->pageTitle = 'Project Agreement';
+        $this->pageIcon = 'icon-draft';
 
-      $this->project = Project::where('project_short_code', $hash)->firstOrFail();
-      $this->global = $this->settings = global_setting();
+        $this->project = Project::where('project_short_code', $hash)->firstOrFail();
+        $this->global = $this->settings = global_setting();
 
-      $this->invoiceSetting = invoice_setting();
+        $this->invoiceSetting = invoice_setting();
 
-      return view('agreement',$this->data);
+        return view('agreement',$this->data);
+    }
+
+    public function agreement_disagree(Request $request, $id)
+    {
+        $project = Project::where('project_short_code', $id)->firstOrFail();
+        if (count($request->comment) > 0) {
+            foreach ($request->comment as $key => $value) {
+                $data = new ProjectDeliverablesClientDisagree();
+                $data->project_id = $project->id;
+                $data->delivarable_id = $key;
+                $data->comment = $value;
+                $data->save();
+            }
+        }
+
+        $project->authorization_status = 'pending';
+        $project->deliverable_authorization= 0;
+        $project->save();
+
+        $activity = new ProjectActivity();
+        $activity->activity= 'Client Disagree with delivarables';
+        $activity->project_id = $project->id;
+        $activity->save();
+
+        Toastr::success('Request send to Project Manager', 'success', [
+            'positionClass' => 'toast-top-right'
+        ]);
+        return redirect()->back();
     }
 
     public function invoice($hash)

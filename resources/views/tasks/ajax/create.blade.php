@@ -8,7 +8,12 @@
 @endphp
 
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
+<style>
+.w-25 {
+    width: 43% !important;
+}
 
+</style>
 <div class="row">
     <div class="col-sm-12">
         <x-form id="save-task-data-form">
@@ -24,10 +29,12 @@
 
                     $minutes= 2880- $diff_in_minutes;
                    //dd($project_creation_date, $current_date, $diff_in_minutes);
+                   $in_hours= round($minutes/60,0);
+                   $in_minutes= $minutes%60;
                    $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
                 @endphp
                 @if($diff_in_minutes < 2880 && $signature == null)
-                    <h6 style="color:red;" class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">You have {{$minutes}} minutes left to take the sign of deliverable file. After that you can't assign any task.</h6>
+                    <h6 style="color:red;" class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">You have {{$in_hours}} hours {{$in_minutes}} minutes left to take the sign of deliverable file. After that you can't assign any task.</h6>
 
                 @endif
                 <div class="row p-20">
@@ -208,7 +215,7 @@
                             </x-forms.input-group>
                         </div>
                     </div>
-                    <div class="col-md-12 col-lg-6">
+                    <div class="col-md-12 col-lg-4">
                         <?php
                         $users= App\Models\User::where('role_id',5)->get();
 
@@ -276,7 +283,7 @@
                     <div class="col-md-12 col-lg-6" id="set-time-estimate-fields">
                         <div class="form-group my-3">
                             <label for="">Task Estimation Time <sup class="mr-1">*</sup></label>
-                            <div class="form-group">
+                            <div class="form-group mt-1">
                                 <input type="number" min="0" class="w-25 border rounded p-2 height-35 f-14 @error('estimate_hours') is-invalid @enderror" name="estimate_hours" id="estimate_hours">
                                 @error('estimate_hours')
                                 <div class="text-danger">{{ $message }}</div>
@@ -291,8 +298,8 @@
                             </div>
                         </div>
                         @php
-                            $task_estimation_hours= App\Models\Task::where('project_id',$project->id)->sum('estimate_hours');
-                            $task_estimation_minutes= App\Models\Task::where('project_id',$project->id)->sum('estimate_minutes');
+                            $task_estimation_hours= App\Models\Task::where('project_id',$project->id)->where('subtask_id',null)->sum('estimate_hours');
+                            $task_estimation_minutes= App\Models\Task::where('project_id',$project->id)->where('subtask_id',null)->sum('estimate_minutes');
                             $toal_task_estimation_minutes= $task_estimation_hours*60 + $task_estimation_minutes;
                             $left_minutes= $project->hours_allocated*60 - $toal_task_estimation_minutes;
 
@@ -300,6 +307,10 @@
                             $left_in_minutes= $left_minutes%60;
                         @endphp
                         <h6 style="color:red;">You have {{$left_in_hours}} hours {{$left_in_minutes}} minutes remaining of estimation time</h6>
+                    </div>
+                    <div class="col-md-12 col-lg-2 mt-5">
+                        {{-- <button class="btn btn-outline-secondary add_extenstion_request" type="button">Make Extension Request</button> --}}
+                       
                     </div>
                     @if(is_null($task))
                         {{-- <div class="col-md-6">
@@ -330,7 +341,7 @@
                                 <sup class="mr-1">*</sup>
                             </label>
                             <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"></textarea>
-                            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
+                           <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                             <script>
                                 CKEDITOR.replace('description');
                             </script>
@@ -530,7 +541,7 @@
     </div>
 </div>
 
-
+@include('tasks.modals.estimateextensionmodal')
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
 
@@ -939,6 +950,12 @@
             }
         });
     });
+
+    $(document).on('click','.add_extenstion_request',function(e){
+       // alert("success");
+
+        $("#estimationextensionrequest").modal('show');
+});
 </script>
 @if(session('error'))
     <script>

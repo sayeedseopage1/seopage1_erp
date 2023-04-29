@@ -639,7 +639,7 @@ class ContractController extends AccountBaseController
                 $diff_in_days = $from->diffInDays($to);
                // dd($diff_in_days, $find_pm_id);
                 if ($diff_in_days < 90) {
-                    $deal_pm_id = Deal::find($deal->id);
+            $deal_pm_id = Deal::find($deal->id);
             $deal_pm_id->pm_id = $find_pm_id->pm_id;
             $deal_pm_id->save();
             $project_pm_id= Project::find($project->id);
@@ -873,7 +873,7 @@ class ContractController extends AccountBaseController
     }
     public function storedealDetails(Request $request)
     {
-//        dd($request->message_link);
+        //dd($request->all());
         $validated = $request->validate([
             'project_name' => 'required',
             'deadline' => 'required',
@@ -1121,6 +1121,13 @@ class ContractController extends AccountBaseController
                       $project_admin_update->save();
 
                     $user= User::where('id',$deal_pm_id->pm_id)->first();
+                    $this->triggerPusher('notification-channel', 'notification', [
+                        'user_id' => $user->id,
+                        'role_id' => 4,
+                        'title' => 'New project',
+                        'body' => 'You have new project. Please check',
+                        'redirectUrl' => route('contracts.show', $deal_pm_id->id)
+                    ]);
                       Mail::to($user->email)->send(new WonDealMail($project_id));
 
                       //  Mail::to($test->email)->send(new WonDealMail($project));
