@@ -1,6 +1,6 @@
 import { Provider, useSelector } from 'react-redux';
 import { store } from './services/store';
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes, Navigate } from 'react-router-dom';
 
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
@@ -16,6 +16,7 @@ import ReportModal from './components/ReportModal';
 import Goal from './pages/Goal';
 
 const InsightsComponent = () => {
+  const {dashboards} = useSelector((state) => state.dashboards);
   const {goalModalOpen} = useSelector((state) => state.goalModal);
   const {goalFormModalOpen} = useSelector((state) => state.goalFormModal);
   const {dashboardModalOpen} = useSelector((state) => state.dashboardModal);
@@ -27,7 +28,7 @@ const InsightsComponent = () => {
     <div className='cnx_insights'>
         <InsightSidebar />
         <main>
-          <Outlet />
+          <AppRoutes />
         </main>
 
       {/* goal modals */}
@@ -50,20 +51,27 @@ const InsightsComponent = () => {
 
 
 
+const AppRoutes = () => {
+  return(
+    <Routes>
+      <Route path="/" >
+        <Route index element={<Navigate to="/dashboards/dashboard_1" replace={true} />} />
+        <Route path="dashboards/:dashboardId" element={<Dashboard />} />
+        <Route path="goals/:goalId" element={<Goal />} />
+        <Route path="*" element={<Navigate to="/dashboards/My Dashboard" replace={true} />} />
+      </Route>
+    </Routes>
+  )
+}
+
 
 // Insights Component 
 
 const Insights = () => {
     return(
-        <BrowserRouter  basename="/account/insights">
+        <BrowserRouter basename="/account/insights">
           <Provider store={store}>
-            <Routes>
-              <Route path="/" element={<InsightsComponent />}>
-                <Route path="dashboards/:dashboardId" element={<Dashboard />} />
-                <Route path="goals/:goalId" element={<Goal />} />
-                <Route path="*" element={<h1>404</h1>} />
-              </Route>
-            </Routes>
+            <InsightsComponent />
           </Provider>
         </BrowserRouter>
     )
