@@ -108,7 +108,14 @@ class InsightsController extends AccountBaseController
         $goal->trackingType = $request->trackingType;
         $goal->trackingValue= $request->trackingValue;
         $goal->applyRecurring = $request->applyRecurring;
-        $goal->qualified = $request->qualified;
+        if( $request->entryType == 'Progressed')
+        {
+            $goal->qualified = $request->qualified;
+        }else 
+        {
+            $goal->qualified = null;
+
+        }
         $goal->dealType = $request->dealType;
         $goal->goalType = $request->goalType;
         $goal->added_by= Auth::id();

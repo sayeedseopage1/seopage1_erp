@@ -98,13 +98,8 @@
                           <input class="form-control height-35 f-14" type="number" name="authorized_by_leader" id="authorized_by_leader" value="0" class="form-control"  placeholder="Percentage of points for requirements defined deals">
                         </div>
                       </div>
-                       
-                 
-
+                      
             </div>
-
-
-           
 
             <x-slot name="action">
                 <!-- Buttons Start -->
