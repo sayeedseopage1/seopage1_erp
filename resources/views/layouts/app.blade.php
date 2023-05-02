@@ -48,7 +48,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
     <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>
     <script src="https://code.jscharting.com/latest/jscharting.js"></script>
-   
+
 
     <title>@lang($pageTitle)</title>
     <meta name="msapplication-TileColor" content="#ffffff">
@@ -80,7 +80,7 @@
             height: 10em;
         }
 
-        .loader {            
+        .loader {
             margin: 60px auto;
             font-size: 10px;
             position: relative;
@@ -135,6 +135,14 @@
             color: #99a5b5;
         }
 
+    </style>
+    <style>
+        .cke_top{
+            padding: 0 !important;
+        }
+        .cke_bottom{
+            padding: 0 !important;
+        }
     </style>
 
     {{-- Custom theme styles --}}
@@ -775,10 +783,10 @@
 
         });
     </script>
-	
+
 	<script type="text/javascript" src="{{asset('moving-countdown/script.js')}}"></script>
     <script type="text/javascript">
-        
+
         @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 && !Request::is('account/contracts/*'))
             @if(isset($deal_id) && $deal_id != null)
                 @foreach($deal_id as $value)
@@ -830,7 +838,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var channel = pusher.subscribe('lead-updated-channel');
-            
+
             channel.bind('lead-updated', function(data) {
                 // console.log(data.user_id, window.Laravel.user.id, data.role_id,window.Laravel.user.role_id);
                 if (data.user_id == window.Laravel.user.id && data.role_id == window.Laravel.user.role_id) {
@@ -845,13 +853,13 @@
                             }
                         }
                     };
-                    
+
                     $("#easyNotify").easyNotify(options);
                 }
             }, channel.unbind());
 
             var notification = pusher.subscribe('notification-channel');
-            
+
             notification.bind('notification', function(data) {
                 if (data.user_id == window.Laravel.user.id && data.role_id == window.Laravel.user.role_id) {
                     var options = {
@@ -865,7 +873,7 @@
                             }
                         }
                     };
-                    
+
                     $("#easyNotify").easyNotify(options);
                 }
             }, notification.unbind());
