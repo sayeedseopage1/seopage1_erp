@@ -235,9 +235,9 @@ class TaskController extends AccountBaseController
         ]);
 
       $task_status= Task::find($request->task_id);
-//      $task_status->status= "completed";
-      $task_status->task_status="awaiting client approval";
-      $task_status->board_column_id=8;
+      $task_status->status= "completed";
+      $task_status->task_status="approved";
+      $task_status->board_column_id=4;
       $task_status->save();
 
 
