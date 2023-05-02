@@ -108,7 +108,14 @@ class InsightsController extends AccountBaseController
         $goal->trackingType = $request->trackingType;
         $goal->trackingValue= $request->trackingValue;
         $goal->applyRecurring = $request->applyRecurring;
-        $goal->qualified = $request->qualified;
+        if( $request->entryType == 'Progressed')
+        {
+            $goal->qualified = $request->qualified;
+        }else 
+        {
+            $goal->qualified = null;
+
+        }
         $goal->dealType = $request->dealType;
         $goal->goalType = $request->goalType;
         $goal->added_by= Auth::id();
@@ -159,9 +166,20 @@ class InsightsController extends AccountBaseController
         //dd($request);
         $dashboard= new Dashboard();
         $dashboard->dashboard_name= $request->name;
+        $dashboard->root= $request->root;
         $dashboard->section_id= $request->section['id'];
         $dashboard->added_by= Auth::id();
         $dashboard->save(); 
+
+
+        $dashboard= Dashboard::select([
+            'dashboards.id as dashboard_id',
+            'dashboards.*',
+            'sections.*'
+            ])->join('sections', 'sections.id', '=', 'dashboards.section_id')
+            ->where('dashboards.id', $dashboard->id)
+        ->get();
+        
         return response()->json($dashboard);
 
        // return $request;
@@ -170,8 +188,13 @@ class InsightsController extends AccountBaseController
     }
     public function getDashboard()
     {
-        $dashboard= Dashboard::join('sections', 'sections.id', '=', 'dashboards.section_id')
+        $dashboard= Dashboard::select([
+            'dashboards.id as dashboard_id',
+            'dashboards.*',
+            'sections.*'
+            ])->join('sections', 'sections.id', '=', 'dashboards.section_id')
         ->get();
+
         return response()->json($dashboard);
     }
 
@@ -189,6 +212,7 @@ class InsightsController extends AccountBaseController
         $section= new Section();
         $section->type= $request->type;
         $section->section_name= $request->section;
+        $section->root= $request->root;
         $section->added_by= Auth::id();
         $section->save();
 

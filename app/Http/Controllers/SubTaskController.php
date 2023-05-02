@@ -47,6 +47,7 @@ class SubTaskController extends AccountBaseController
         $total_minutes= $hours+$minutes;
         if($check_estimation->estimate_time_left_minutes - $total_minutes < 0 )
         {
+
             // return response()->json([
             //     "message" => "The given data was invalid.",
             //     "errors" => [
@@ -55,6 +56,7 @@ class SubTaskController extends AccountBaseController
             //         ]
             //     ]
             // ], 422);
+
         }
         $this->addPermission = user()->permission('add_sub_tasks');
         $task = Task::findOrFail($request->task_id);
@@ -80,7 +82,7 @@ class SubTaskController extends AccountBaseController
         $subTask->assigned_to = $request->user_id ? $request->user_id : null;
 
         $subTask->save();
-        
+
         $task_id= Task::where('id',$request->task_id)->first();
         $task_s= new Task();
         $task_s->task_short_code= $task_id->task_short_code .'-'.$subTask->id;
@@ -122,10 +124,12 @@ class SubTaskController extends AccountBaseController
         // $task_user->user_id= $request->user_id ? $request->user_id : null;
         //
         // $task_user->save();
+
         $hours_s= $request->estimate_hours *60 ;
         $minutes_s= $request->estimate_minutes;
         $total_minutes_s= $hours_s+$minutes_s;
        
+
         $parent_task= Task::where('id',$subTask->task_id)->first();
         $parent_task_update= Task::find($parent_task->id);
         $parent_task_update->estimate_time_left_minutes= $parent_task->estimate_time_left_minutes - $total_minutes_s;

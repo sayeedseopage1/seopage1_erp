@@ -886,17 +886,17 @@
             var format = '{{ global_setting()->moment_format }}';
             var startDate = "{{ $startDate->format(global_setting()->date_format) }}";
             var endDate = "{{ $endDate->format(global_setting()->date_format) }}";
-            var picker = $('#datatableRange2');
+            var picker = $('#datatableRange_al');
             var start = moment(startDate, format);
             var end = moment(endDate, format);
 
             function cb(start, end) {
-                $('#datatableRange2').val(moment(start).subtract(1, 'year').format('{{ global_setting()->moment_date_format }}') +
+                $('#datatableRange_al').val(moment(start).subtract(1, 'year').format('{{ global_setting()->moment_date_format }}') +
                     ' @lang("app.to") ' + end.format( '{{ global_setting()->moment_date_format }}'));
                 $('#reset-filters').removeClass('d-none');
             }
 
-            $('#datatableRange2').daterangepicker({
+            $('#datatableRange_al').daterangepicker({
                 locale: daterangeLocale,
                 linkedCalendars: false,
                 startDate: start,

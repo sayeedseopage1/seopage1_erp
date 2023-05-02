@@ -8,7 +8,8 @@ import { closeSectionModal } from '../services/slices/sectionModalSlice';
 
 export const useSections = () => {
     const dispatch = useDispatch();
-    const {sections} = useSelector(state => state.sections)
+    const {sections} = useSelector(state => state.sections);
+    const { type, from } = useSelector(state => state.sectionModal);
     const [sectionsFetching, setSectionFetching] = React.useState(false);
     const [waitingForPostResponse, setWaitingForPostResponse] = React.useState(false);
 
@@ -40,22 +41,24 @@ export const useSections = () => {
         await axios.post("/account/insights/sections/add", data)
                 .then(res => {
                     const d = res.data;
-                    addSection(res.data);
-                    if(d.type === 'DASHBOARD_SECTION' && from === 'DASHBOARD_MODAL'){
-                        console.log(d.type)
-                        dispatch(setDashboardModalData({ section: d }))
-                        dispatch(openDashboardModal());
-                    }else if(d.type === 'DASHBOARD_SECTION' && from === ''){
-                        dispatch(setDashboardModalData({ section:d }))
-                        console.log('d2', d.type)
-                        dispatch(closeSectionModal());
-                    }else if(d.type === 'REPORT_SECTION' && from === 'REPORT_MODAL'){
-                        console.log('report section');
-                    }else if(d.type === 'REPORT_SECTION' && from === ''){
-                        console.log('report section');
+                    if(d){
+                        addSection(res.data); 
+                        setWaitingForPostResponse(false)
+                        if(type === 'DASHBOARD_SECTION' && from === 'DASHBOARD_MODAL'){
+                            dispatch(setDashboardModalData({ section: d }))
+                            dispatch(openDashboardModal());
+                            dispatch(closeSectionModal());
+                        }else if(type === 'DASHBOARD_SECTION' && !from){
+                            dispatch(setDashboardModalData({ section:d }))
+                            dispatch(closeSectionModal());
+                        }else if(type === 'REPORT_SECTION' ){
+                            dispatch(closeSectionModal());
+                        }
+
                     }
-                    dispatch(closeSectionModal());
-                    setWaitingForPostResponse(false)
+                })
+                .catch(err => {
+                    console.log(err)
                 })
     }
 

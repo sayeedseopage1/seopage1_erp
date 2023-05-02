@@ -29,7 +29,7 @@ const AddSectionModal = () => {
     // save
     const onSave = (e) => {
         e.preventDefault();
-        const data = {type, section};
+        const data = {type, section, root: 0};
         storeSection(data);
     }
 

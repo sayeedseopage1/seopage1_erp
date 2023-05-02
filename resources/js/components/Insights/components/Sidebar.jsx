@@ -180,12 +180,12 @@ const InsightSidebar = () => {
                                         </div>
                                         <Accordion.Item.Body>
                                             {/* dashboard */}
-                                                {getDashboardsBySection(section.id)?.map((dashboard) => (
+                                                {dashboards.filter(i=> i.section_id === section.id)?.map((dashboard) => (
                                                     dashboard.dashboard_name ? (
-                                                    <div key={dashboard.id} className='cnx_ins__sidebar_item'>
+                                                    <div key={dashboard.dashboard_id} className='cnx_ins__sidebar_item'>
                                                          
                                                         <NavLink 
-                                                            to={`dashboards/${dashboard.id}`}
+                                                            to={`dashboards/${dashboard.dashboard_id}`}
                                                             className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link active' : 'cnx_ins__sidebar_item_link'}
                                                         > 
                                                         

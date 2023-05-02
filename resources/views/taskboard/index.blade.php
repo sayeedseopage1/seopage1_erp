@@ -139,9 +139,7 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
                         <select class="form-control select-picker" id="label" data-live-search="true" data-container="body" data-size="8">
                             <option value="all">@lang('app.all')</option>
                             @foreach ($taskLabels as $label)
-                                <option
-                                    data-content="<span class='badge b-all' style='background:{{ $label->label_color }};'>{{ $label->label_name }}</span> "
-                                    value="{{ $label->id }}">{{ $label->label_name }}</option>
+                                <option data-content="<span class='badge b-all' style='background:{{ $label->label_color }};'>{{ $label->label_name }}</span> " value="{{ $label->id }}">{{ $label->label_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -208,7 +206,7 @@ $addTaskPermission = user()->permission('add_tasks');
                         @lang('modules.tasks.addBoardColumn')
                     </x-forms.button-secondary>
                 @endif
-                --}} 
+                --}}
 
 
                 <x-forms.button-secondary id="filter-my-task" icon="user">

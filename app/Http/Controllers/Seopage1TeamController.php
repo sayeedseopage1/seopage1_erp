@@ -6,13 +6,15 @@ use App\DataTables\DepartmentDataTable;
 use App\Helper\Reply;
 use App\Models\BaseModel;
 use App\Models\Team;
+use App\Models\Seopage1Team;
 use App\Http\Requests\Seopage1Team\StoreTeam;
 use App\Http\Requests\Seopage1Team\UpdateDepartment;
 use App\Models\EmployeeDetails;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Auth;
 use DB;
-use App\Models\Seopage1Team;
+use URL;
 
 class Seopage1TeamController extends AccountBaseController
 {
@@ -44,15 +46,26 @@ class Seopage1TeamController extends AccountBaseController
         return $dataTable->render('teams.index', $this->data);
     }
     public function getEmployeesByDepartment(Request $request)
-{
-    $departmentId = $request->input('department_id');
-    //$employees = EmployeeDetails::where('department_id', $departmentId)->get();
-   
-
-    $employees= DB::table('employee_details')->join('users', 'employee_details.user_id', '=', 'users.id')->where('department_id', $departmentId)->get();
-    //dd($employees);
-    return response()->json($employees);
-}
+    {
+        $departmentId = $request->input('department_id');
+        //$employees = EmployeeDetails::where('department_id', $departmentId)->get();
+        $employees= DB::table('employee_details')
+        ->select([
+            'users.id', 
+            'users.name', 
+            'users.image as image_url'
+        ])
+        ->join('users', 'employee_details.user_id', '=', 'users.id')
+        ->where('department_id', $departmentId)
+        ->get();
+        
+        foreach ($employees as $value) {
+            $value->image_url = URL::asset('user-uploads/avatar/'.$value->image_url ?? 'avatar_blank.png');
+        }
+        
+        //$html = view('teams.ajax.selectForm', $this->data)->render();
+        return response()->json($employees);
+    }
 public function getEmployeesByParentTeam(Request $request)
 {
     $parentId = $request->input('parent_id');
@@ -92,12 +105,12 @@ public function getEmployeesByParentTeam(Request $request)
      */
     public function store(StoreTeam $request)
     {
-       // dd($request);
-
+        // dd($request);
         $team = new Seopage1Team();
         $team->team_name = $request->team_name;
         $team->parent_id = $request->parent_id;
         $team->department_id= $request->department_id;
+        $team->created_by = Auth::id();
         $users = $request->user_id;
          
         //  Schedule::insert($insert_schedule);
@@ -107,9 +120,9 @@ public function getEmployeesByParentTeam(Request $request)
           $value= $value  . $user.',';
            
         }
-       // dd($value);
+        // dd($value);
         $team->members= $value;
-       // dd($team->members);
+        // dd($team->members);
         $team->save();
         
 
@@ -140,10 +153,11 @@ public function getEmployeesByParentTeam(Request $request)
 
     public function edit($id)
     {
-        $this->department = Team::findOrFail($id);
         $this->departments = Team::all();
-
-
+        $this->parent_teams = Seopage1Team::all();
+        $this->team = Seopage1Team::find($id);
+        $this->employees = User::allEmployees(null, true,);
+        $this->team_members = explode(',', $this->team->members);
         if (request()->ajax())
         {
             $html = view('teams.ajax.edit', $this->data)->render();
@@ -165,9 +179,17 @@ public function getEmployeesByParentTeam(Request $request)
         $editDepartment = user()->permission('edit_department');
         abort_403($editDepartment != 'all');
 
-        $group = Team::find($id);
-        $group->team_name = strip_tags($request->team_name);
-        $group->parent_id = strip_tags($request->parent_id);
+        $group = Seopage1Team::find($id);
+        $group->team_name = $request->team_name;
+        $group->department_id = $request->department_id;
+        $group->parent_id = $request->parent_id;
+        $value = '';
+        foreach ($request->user_id as $user) {
+          //dd($d['day']);
+          $value = $value  . $user.',';
+           
+        }
+        $group->members = $value;
         $group->save();
 
         $teams = Team::allDepartments();

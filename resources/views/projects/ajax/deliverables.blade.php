@@ -76,6 +76,24 @@
                                 {{$pm->name}}
                               </td>
                           </tr>
+                          <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                              Total Estimation Hour</td>
+                            <td class="border-left-0">
+                              {{$project->hours_allocated}} hours
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                             Hourly Rate</td>
+                            <td class="border-left-0">
+                                @if($project->hours_allocated != 0 || $project->hours_allocated !=  null )
+                              {{round($project->project_budget/$project->hours_allocated ,0)}}$/hour
+                              @else 
+                              --
+                              @endif
+                            </td>
+                        </tr>
 
                       </table>
 
@@ -185,7 +203,7 @@
                         <td>{{$loop->index+1}}</td>
                         <td class="text-center icon-container">
                             @php
-                                $data = \App\models\DelivarableColumnEdit::where([
+                                $data = \App\Models\DelivarableColumnEdit::where([
                                     'delivarable_id' => $deliverable->id,
                                     'column_name' => 'type',
                                 ])->latest()->first();
@@ -198,7 +216,7 @@
                             {{$deliverable->deliverable_type}}
                             @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'type',
                                         'status' => '1'
@@ -270,7 +288,7 @@
                         </td>
                         <td class="text-center icon-container">
                             @php
-                                $data = \App\models\DelivarableColumnEdit::where([
+                                $data = \App\Models\DelivarableColumnEdit::where([
                                     'delivarable_id' => $deliverable->id,
                                     'column_name' => 'title',
                                 ])->latest()->first();
@@ -283,7 +301,7 @@
                             {{$deliverable->title}}
                             @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'title',
                                         'status' => '1'
@@ -366,7 +384,7 @@
                         @if($deliverable->estimation_time != null)
                             <td class="text-center icon-container">
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'estimation_time',
                                     ])->latest()->first();
@@ -380,7 +398,7 @@
                                 {{$deliverable->estimation_time}} hours
                                 @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'estimation_time',
                                         'status' => '1'
@@ -455,7 +473,7 @@
                         @endif
                         <td class="text-center icon-container">
                             @php
-                                $data = \App\models\DelivarableColumnEdit::where([
+                                $data = \App\Models\DelivarableColumnEdit::where([
                                     'delivarable_id' => $deliverable->id,
                                     'column_name' => 'quantity',
                                 ])->latest()->first();
@@ -469,7 +487,7 @@
                             {{$deliverable->quantity}}
                             @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'quantity',
                                         'status' => '1'
@@ -541,7 +559,7 @@
                         </td>
                         <td class="text-center icon-container">
                             @php
-                                $data = \App\models\DelivarableColumnEdit::where([
+                                $data = \App\Models\DelivarableColumnEdit::where([
                                     'delivarable_id' => $deliverable->id,
                                     'column_name' => 'description',
                                 ])->latest()->first();
@@ -554,7 +572,7 @@
                             {!!$deliverable->description!!}
                             @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'description',
                                         'status' => '1'
@@ -625,25 +643,11 @@
                             @endif
                         </td>
                         @if($deliverable->to != null)
-                            <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
-                        @else
                             <td class="text-center icon-container">
-                                @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
-                                        'delivarable_id' => $deliverable->id,
-                                        'column_name' => 'estimation_completed_date',
-                                    ])->latest()->first();
-                                @endphp
-                                
-                                @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
-                                    <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
-                                @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
-                                    <i class="fa fa-check-circle show_i_on_top" aria-hidden="true" title="Request for change"></i>
-                                @endif
-                                On {{$deliverable->from}}
+                                Between {{$deliverable->from}} & {{$deliverable->to}}
                                 @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
-                                    $data = \App\models\DelivarableColumnEdit::where([
+                                    $data = \App\Models\DelivarableColumnEdit::where([
                                         'delivarable_id' => $deliverable->id,
                                         'column_name' => 'estimation_completed_date',
                                         'status' => '1'
@@ -684,7 +688,94 @@
                                                                     @forelse($data as $value)
                                                                         <tr>
                                                                             <td>{{$key++}}</td>
-                                                                            <td>{{$value->column_name}}</td>
+                                                                            <td>{{ucwords(str_replace('_', ' ', $value->column_name))}}</td>
+                                                                            <td>{{$value->comment}}</td>
+                                                                            <td>
+                                                                                <del class="text-danger">{!! $value->old_data !!}</del>
+                                                                            </td>
+                                                                            <td>{{$value->new_data}}</td>
+                                                                            <td>{{$value->updated_at->format('F j, Y h:i A')}}<br>{{$value->updated_at->diffForHumans()}}</td>
+                                                                        </tr>
+                                                                    @empty
+                                                                        <tr>
+                                                                            <td colspan="5" class="shadow-none">
+                                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforelse
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                                @endif
+                            </td>
+                        @else
+                            <td class="text-center icon-container">
+                                @php
+                                    $data = \App\Models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'estimation_completed_date',
+                                    ])->latest()->first();
+                                @endphp
+                                
+                                @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
+                                    <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
+                                @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
+                                    <i class="fa fa-check-circle show_i_on_top" aria-hidden="true" title="Request for change"></i>
+                                @endif
+                                On {{$deliverable->from}}
+                                @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
+                                @php
+                                    $data = \App\Models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'column_name' => 'estimation_completed_date',
+                                        'status' => '1'
+                                    ])->orderBy('updated_at', 'asc')->get();
+                                    $key = 1;
+                                @endphp
+                                @if($data->count() > 0)
+                                    <button type="button" data-toggle="modal" data-target="#old_estimation_date_edited_modal{{$deliverable->id}}">
+                                        <div class="show_old_data_modal border px-1 rounded" title="{{$data->count()}} Histories">
+                                            {{$data->count()}}<i class="fa fa-history ml-1" aria-hidden="true"></i>
+                                        </div>
+                                    </button>
+                                    <div class="modal fade" id="old_estimation_date_edited_modal{{$deliverable->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Old Histories</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>Field</th>
+                                                                        <th>Comment</th>
+                                                                        <th>Old Data</th>
+                                                                        <th>New Data</th>
+                                                                        <th>Date</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @forelse($data as $value)
+                                                                        <tr>
+                                                                            <td>{{$key++}}</td>
+                                                                            <td>{{ucwords(str_replace('_', ' ', $value->column_name))}}</td>
                                                                             <td>{{$value->comment}}</td>
                                                                             <td>
                                                                                 <del class="text-danger">{!! $value->old_data !!}</del>
@@ -722,7 +813,7 @@
                             </a>
                             @endif
                             @php
-                                $checkShowAction = $data = \App\models\DelivarableColumnEdit::where([
+                                $checkShowAction = $data = \App\Models\DelivarableColumnEdit::where([
                                     'delivarable_id' => $deliverable->id,
                                     'status' => '0'
                                 ])->first();

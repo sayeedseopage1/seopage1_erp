@@ -181,13 +181,13 @@
                             @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
                                 <x-sub-menu-item :link="route('departments.index')" :text="__('app.menu.department')" />
                             @endif
-                            {{-- @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
+                             @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
                             <x-sub-menu-item :link="route('teams.index')" :text="__('Team')" />
-                        @endif --}}
+                             @endif
                         {{-- @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
                                 <x-sub-menu-item :link="route('kpi-settings.index')" :text="__('Kpi Settings')" />
-                            @endif
-                        </div> --}}
+                            @endif --}}
+                        </div>
                     </x-menu-item>
                 @endif
 
@@ -485,13 +485,14 @@
                     </x-menu-item>
                 @endif
 
-
-                {{-- <li class="accordionItem closeIt">
+                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+                <li class="accordionItem closeIt">
                     <a class="nav-item text-lightest f-15 sidebar-text-color" href="{{route("insights.index")}}" title="Insights">
                         <i class="bi bi-graph-up"></i>
                             <span class="pl-3">Insights</span>
                     </a>
-                </li> --}}
+                </li>
+                @endif
 
                 <!-- NAV ITEM - REPORTS COLLAPASE MENU -->
                 <!-- NAV ITEM - SETTINGS -->

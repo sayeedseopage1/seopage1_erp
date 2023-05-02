@@ -157,19 +157,19 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
                 </div>
             </div>
-     
-            @endif
-
 
             @endif
 
 
+            @endif
+
+
 
             @endif
             @endif
             @endif
 
-            
+
             @php
 
             $project_submission= App\Models\ProjectSubmission::where('project_id',$project->id)->orderBy('id','desc')->first();
@@ -715,19 +715,21 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <!-- ACTIVITY DETAIL START -->
             <div class="p-activity-detail cal-info b-shadow-4" data-menu-vertical="1" data-menu-scroll="1" data-menu-dropdown-timeout="500" id="projectActivityDetail">
                 @forelse($activities as $key=>$activity)
+                @if($activity->activity != 'modules.tasks.timerStoppedBy' && $activity->activity != 'modules.tasks.timerPausedBy' && $activity->activity != 'modules.tasks.timerStartedBy')
                 <div class="card border-0 b-shadow-4 p-20 rounded-0">
                     <div class="card-horizontal">
                         <div class="card-header m-0 p-0 bg-white rounded">
                             <x-date-badge :month="$activity->created_at->timezone(global_setting()->timezone)->format('M')" :date="$activity->created_at->timezone(global_setting()->timezone)->format('d')" />
                         </div>
                         <div class="card-body border-0 p-0 ml-3">
-                            <h4 class="card-title f-14 font-weight-normal text-capitalize">{!! __($activity->activity) !!}</h4>
+                            <h4 class="card-title f-14 font-weight-normal text-capitalize">{!! __(str_replace('_', ' ', $activity->activity)) !!}</h4>
                             <p class="card-text f-12 text-dark-grey">
                                 {{ $activity->created_at->timezone(global_setting()->timezone)->format(global_setting()->time_format) }}
                             </p>
                         </div>
                     </div>
                 </div>
+                @endif
                 <!-- card end -->
                 @empty
                 <div class="card border-0 b-shadow-4 p-20 rounded-0">
@@ -954,33 +956,48 @@ if (list && list.length > 0) {
 });
 }
 </script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#markAsIncompleteBtn').click(function(e) {
-            e.preventDefault();
-            $.ajax({
-                url: '{{route('project-incomplete')}}',
-                type: 'POST',
-                dataType: 'JSON',
-                data: {
-                    '_token': '{{ csrf_token() }}',
-                    'id':{{$project->id}},
-                },
-                success: function(response) {
-                    if(response.status==400){
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: 'success',
-                            title: 'Mark As Incomplete Done',
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(function() {
-                            window.location.reload();
+<script>
+    $('#markAsIncompleteBtn').click(function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be mark as incomplete!",
+            icon: 'warning',
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: "Yes",
+            cancelButtonText: "Cancel",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{route('project-incomplete')}}',
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'id':{{$project->id}},
+                    },
+                    success: function(response) {
+                        if(response.status==400){
+                            swal.fire({
+                                title: 'success!',
+                                text: 'Mark As Incomplete Done',
+                                icon: 'success',
+                            }).then(function() {
+                                window.location.reload();
+                            });
+                        }
+                    },
+                    error: function(response) {
+                        swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred while mark as incomplete.',
+                            icon: 'error',
                         });
                     }
-                },
-            });
-        })
+                });
+            }
+        });
     })
 </script>
 <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
