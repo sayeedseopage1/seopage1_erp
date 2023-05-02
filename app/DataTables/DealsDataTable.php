@@ -444,7 +444,9 @@ class DealsDataTable extends BaseDataTable
                 $query->where('deal_stages.project_name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('deal_stages.short_code', 'like', '%' . request('searchText') . '%')
                     ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('users.name', 'like', '%' . request('searchText') . '%')
+                   
+                    ->orWhere('deal_stages.client_username', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('deal_stages.client_name', 'like', '%' . request('searchText') . '%')
 
 
 

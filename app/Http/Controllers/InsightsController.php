@@ -108,6 +108,8 @@ class InsightsController extends AccountBaseController
         $goal->trackingType = $request->trackingType;
         $goal->trackingValue= $request->trackingValue;
         $goal->applyRecurring = $request->applyRecurring;
+        
+        $goal->achievablePoints = $request->achievablePoints;
         if( $request->entryType == 'Progressed')
         {
             $goal->qualified = $request->qualified;
