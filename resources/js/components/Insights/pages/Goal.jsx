@@ -8,7 +8,7 @@ import StackedBarChart from '../components/Graph/StackedBarChart';
 import convertNumberToUnits from '../utils/convertNumberToUnits';
 import { relativeTime } from '../utils/relativeTime';
 import RelativeTimePeriod from '../components/RelativeTimePeriod';
-import DataTable from '../components/DataTable';
+import DataTable from '../ui/DataTable';
 
 
 // convert to unit
@@ -21,13 +21,26 @@ const numberToUnits = (value,decimal= 1) => {
 const Goal = () => {
     const [selectedPeriod, setSelectedPeriod] = React.useState('Today');
     const [filter, setFilterValue] = React.useState('');
+    const [data, setData] = React.useState([]);
 
     const handleRelativeTimePeriod =(value) => {
         setSelectedPeriod(value);
         relativeTime(value, setFilterValue);
     }
 
-    console.log(filter)
+    React.useEffect(() => {
+        const fetch = async () => {
+            await axios.get('/account/insights/deals').then(res => {
+                setData( res.data );
+            }).catch(err => console.log(err))
+        }
+
+        fetch();
+
+        return () => fetch();
+    })
+
+
     return(
         <div className="cnx__ins_dashboard">
             {/* navbar */}
@@ -314,7 +327,7 @@ const Goal = () => {
 
                     {/* graph table */}
                     <div className='cnx__ins_table'>
-                        <DataTable />
+                        <DataTable data={data} />
                     </div>
                     {/* end graph table */}
                     

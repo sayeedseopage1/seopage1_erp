@@ -693,7 +693,7 @@ const GoalFormModal = () => {
     const [qualified, setQualified] = React.useState('Contact Mode');
     const [dealType, setDealType] = React.useState('');
     const [goalType, setGoalType] = React.useState('');
-    const [achievablePoints, setAchievablePoints] = React.useState('');
+    const [achievablePoints, setAchievablePoints] = React.useState('0');
 
     React.useEffect(() => {
         if(recurring.length === 0){
@@ -738,7 +738,6 @@ const GoalFormModal = () => {
         if(!Number(trackingValue)) return false;
         if(!dealType) return false;
         if(!goalType) return false;
-        if(!Number(achievablePoints)) return false;
 
         return true;
     }
@@ -748,7 +747,7 @@ const GoalFormModal = () => {
         e.preventDefault();
         setIsSaving(true);
         setFormStatus('saving');
-        const data = {entry, entryType, assigneeType, assigneeFor, pipeline, frequency, startDate, endDate, trackingType, trackingValue, recurring, applyRecurring, qualified, dealType, goalType};
+        const data = {entry, entryType, assigneeType, assigneeFor, pipeline, frequency, startDate, endDate, trackingType, trackingValue, recurring, applyRecurring, qualified, dealType, goalType, achievablePoints};
 
         await axios.post("/account/insights/goals/add", data).then((res) => {
             setFormStatus('saved');

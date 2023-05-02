@@ -109,3 +109,16 @@ export const rollingPeriod = [
 
 // graph colors
 export const bgColors =  ["#7DC6E5","#fecf4c", "rgb(246, 183, 211)", "rgb(28, 145, 143)", 'rgb(180, 98, 177)'];
+
+
+
+
+
+
+
+
+
+
+
+// table columns
+export const dataTableColumns = ["ID", "Deal created", "Owner", "Pipeline", "Title", "Value", "Active", "Activities todo", "Contact person", "Creator", "Currency", "Deal closed on", "Done activities", "Email Messages count", "Expected closed data", "Label", "Last activity date", "Last incoming email time", "Last outgoing email time", "Last stage change", "Lost reason", "Lost time", "Next activity date", "Organization", "Probability", "Stage", "Status", "Team", "Total activities", "Update time", "Weighted value", "Won time"]
