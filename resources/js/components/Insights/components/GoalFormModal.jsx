@@ -738,7 +738,7 @@ const GoalFormModal = () => {
         if(!Number(trackingValue)) return false;
         if(!dealType) return false;
         if(!goalType) return false;
-        if(!Number(achievablePoints)) return false;
+       // if(!Number(achievablePoints)) return false;
 
         return true;
     }
@@ -748,7 +748,7 @@ const GoalFormModal = () => {
         e.preventDefault();
         setIsSaving(true);
         setFormStatus('saving');
-        const data = {entry, entryType, assigneeType, assigneeFor, pipeline, frequency, startDate, endDate, trackingType, trackingValue, recurring, applyRecurring, qualified, dealType, goalType};
+        const data = {entry, entryType, assigneeType, assigneeFor, pipeline, frequency,achievablePoints, startDate, endDate, trackingType, trackingValue, recurring, applyRecurring, qualified, dealType, goalType};
 
         await axios.post("/account/insights/goals/add", data).then((res) => {
             setFormStatus('saved');
