@@ -1,38 +1,26 @@
 import * as React from 'react';
 import axios from 'axios';
-import { addDashboard } from '../services/slices/dashboardSlice';
-import { useDispatch } from 'react-redux';
+import { addSection, setSections } from '../services/slices/sectionsSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { addReport } from '../services/slices/reportSlice';
+import { openDashboardModal, setDashboardModalData } from '../services/slices/dashboardModalSlice';
+import { closeSectionModal } from '../services/slices/sectionModalSlice';
 
 export const useSections = () => {
     const dispatch = useDispatch();
-    const [sections, setSections]  = React.useState([]);
+    const {sections} = useSelector(state => state.sections);
+    const { type, from } = useSelector(state => state.sectionModal);
     const [sectionsFetching, setSectionFetching] = React.useState(false);
     const [waitingForPostResponse, setWaitingForPostResponse] = React.useState(false);
 
     React.useEffect(() => {
         const fetch = async () => {
             await axios.get('/account/insights/sections/get').then(res => {
-                if(res.data){
-                    setSections(res.data);
-                    res.data?.map(d => {
-                        if(d.type === 'DASHBOARD_SECTION'){
-                            dispatch(addDashboard({id: d.id, section: d.section_name, title: ''}))
-                        }else if(d.type === 'REPORT_SECTION') {
-                            dispatch(addReport({
-                                id: d.id,
-                                section: d.section_name,
-                                title: "",
-                                type: ""
-                            }))
-                        }else return;
-                    })
-                }
+                dispatch(setSections(res.data));
             }).catch(err => {
                 console.log(err);
             })
         }
-
 
         if(sections.length === 0){
             fetch();
@@ -47,5 +35,33 @@ export const useSections = () => {
     } 
 
 
-    return {sections,getSectionsByType, sectionsFetching, waitingForPostResponse};
+    // store section
+    const storeSection = async(data) => {
+        setWaitingForPostResponse(true);
+        await axios.post("/account/insights/sections/add", data)
+                .then(res => {
+                    const d = res.data;
+                    if(d){
+                        addSection(res.data); 
+                        setWaitingForPostResponse(false)
+                        if(type === 'DASHBOARD_SECTION' && from === 'DASHBOARD_MODAL'){
+                            dispatch(setDashboardModalData({ section: d }))
+                            dispatch(openDashboardModal());
+                            dispatch(closeSectionModal());
+                        }else if(type === 'DASHBOARD_SECTION' && !from){
+                            dispatch(setDashboardModalData({ section:d }))
+                            dispatch(closeSectionModal());
+                        }else if(type === 'REPORT_SECTION' ){
+                            dispatch(closeSectionModal());
+                        }
+
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+    }
+
+
+    return {sections,getSectionsByType, storeSection, sectionsFetching, waitingForPostResponse};
 }

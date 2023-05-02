@@ -170,7 +170,17 @@ class InsightsController extends AccountBaseController
         $dashboard->section_id= $request->section['id'];
         $dashboard->added_by= Auth::id();
         $dashboard->save(); 
-        return response()->json([$dashboard]);
+
+
+        $dashboard= Dashboard::select([
+            'dashboards.id as dashboard_id',
+            'dashboards.*',
+            'sections.*'
+            ])->join('sections', 'sections.id', '=', 'dashboards.section_id')
+            ->where('dashboards.id', $dashboard->id)
+        ->get();
+        
+        return response()->json($dashboard);
 
        // return $request;
        // dd($request->assigneeFor);
@@ -178,9 +188,14 @@ class InsightsController extends AccountBaseController
     }
     public function getDashboard()
     {
-        $dashboard= Dashboard::join('sections', 'sections.id', '=', 'dashboards.section_id')
+        $dashboard= Dashboard::select([
+            'dashboards.id as dashboard_id',
+            'dashboards.*',
+            'sections.*'
+            ])->join('sections', 'sections.id', '=', 'dashboards.section_id')
         ->get();
-        return response()->json([$dashboard]);
+
+        return response()->json($dashboard);
     }
 
 
@@ -202,7 +217,7 @@ class InsightsController extends AccountBaseController
         $section->save();
 
        // return $request;
-        return response()->json([$section]);
+        return response()->json($section);
        // dd($request->assigneeFor);
         
     }

@@ -14,12 +14,13 @@ import { Icon } from '../utils/Icon';
 import _ from 'lodash';
 import TextHighlighter from './TextHighlighter';
 import { useSections } from '../hooks/useSection';
+import { useDashboards } from '../hooks/useDashboards';
 
 
 const InsightSidebar = () => {
     const [search, setSearch] = React.useState('');
-    const {sections}  = useSections();
-    const {dashboards} = useSelector((state) => state.dashboards);
+    const {sections, getSectionsByType}  = useSections();
+    const {dashboards} = useDashboards();
     const {reports} = useSelector((state) => state.reports);
     const { goals } = useSelector((state) => state.goals);
     const dispatch = useDispatch();
@@ -27,13 +28,12 @@ const InsightSidebar = () => {
 
     // get all unique sections
     const getDashboardSections = () => {
-        const sections = dashboards.map((item) => item.section);
-        return [...new Set(sections)];
+        return getSectionsByType('DASHBOARD_SECTION');
     }
 
     // get all dashboards by section
-    const getDashboardsBySection = (section) => {
-        return dashboards.filter((item) => item.section === section);
+    const getDashboardsBySection = (id) => {
+        return dashboards.filter((item) => item.section_id === id);
     }
 
 
@@ -48,7 +48,6 @@ const InsightSidebar = () => {
     const getReportsBySection = (section) => {
         return reports.filter((item) => item.section === section);
     }
-
 
 
     return(
@@ -135,14 +134,14 @@ const InsightSidebar = () => {
                         <Accordion.Item.Body>
                             {/* dashboard section */}
                             {getDashboardSections()?.map((section) => (
-                                <Accordion key={section}>
+                                <Accordion key={section.id}>
                                     <Accordion.Item defaultActive={false}>
                                         <div className='cnx_ins__sidebar_dashboards_header __inner'>
                                             <Accordion.Item.Header icon={false} className='__accordion'>
                                             {(active) => <>
                                                     <div className='cnx_ins__sidebar_dashboards_title __inner'>
                                                         <i className={`fa-solid fa-chevron-${active? 'down': 'right'}`}/>
-                                                        {section}
+                                                        {section.section_name}
                                                     </div>
                                             </>} 
                                             </Accordion.Item.Header>
@@ -181,12 +180,12 @@ const InsightSidebar = () => {
                                         </div>
                                         <Accordion.Item.Body>
                                             {/* dashboard */}
-                                                {getDashboardsBySection(section)?.map((dashboard) => (
-                                                    dashboard.title ? (
-                                                    <div key={dashboard.id} className='cnx_ins__sidebar_item'>
+                                                {dashboards.filter(i=> i.section_id === section.id)?.map((dashboard) => (
+                                                    dashboard.dashboard_name ? (
+                                                    <div key={dashboard.dashboard_id} className='cnx_ins__sidebar_item'>
                                                          
                                                         <NavLink 
-                                                            to={`dashboards/${dashboard.id}`}
+                                                            to={`dashboards/${dashboard.dashboard_id}`}
                                                             className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link active' : 'cnx_ins__sidebar_item_link'}
                                                         > 
                                                         
@@ -194,7 +193,7 @@ const InsightSidebar = () => {
                                                                 <i className="fa-solid fa-chart-pie" />
                                                                     <TextHighlighter
                                                                         searchWords={search}
-                                                                        textToHighlight={dashboard.title}
+                                                                        textToHighlight={dashboard.dashboard_name}
                                                                     />
                                                             </span> 
                                                         
