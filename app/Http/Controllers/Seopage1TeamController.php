@@ -156,10 +156,24 @@ public function getEmployeesByParentTeam(Request $request)
         $this->departments = Team::all();
         $this->parent_teams = Seopage1Team::all();
         $this->team = Seopage1Team::find($id);
-        $this->employees = User::allEmployees(null, true,);
+        //$this->employees = User::allEmployees(null, true,);
         $this->team_members = explode(',', $this->team->members);
-        if (request()->ajax())
-        {
+
+        $this->employees= DB::table('employee_details')
+        ->select([
+            'users.id', 
+            'users.name', 
+            'users.image as image_url'
+        ])
+        ->join('users', 'employee_details.user_id', '=', 'users.id')
+        ->where('department_id', $this->team->department_id)
+        ->get();
+        
+        foreach ($this->employees as $value) {
+            $value->image_url = URL::asset('user-uploads/avatar/'.$value->image_url ?? 'avatar_blank.png');
+        }
+
+        if (request()->ajax()) {
             $html = view('teams.ajax.edit', $this->data)->render();
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
@@ -204,21 +218,7 @@ public function getEmployeesByParentTeam(Request $request)
         $deletePermission = user()->permission('delete_department');
         abort_403($deletePermission != 'all');
 
-        EmployeeDetails::where('department_id', $id)->update(['department_id' => null]);
-        $department = Team::where('parent_id', $id)->get();
-        $parent = Team::findOrFail($id);
-
-        if(count($department) > 0)
-        {
-            foreach($department as $item)
-            {
-                $child = Team::findOrFail($item->id);
-                $child->parent_id = $parent->parent_id;
-                $child->save();
-            }
-        }
-
-        Team::destroy($id);
+        Seopage1Team::destroy($id);
 
         $redirectUrl = route('teams.index');
         return Reply::successWithData(__('messages.deleteSuccess'), ['redirectUrl' => $redirectUrl]);

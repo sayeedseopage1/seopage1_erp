@@ -1063,12 +1063,11 @@ class ProjectController extends AccountBaseController
         if($project->project_status != 'Accepted')
         {
             $pm_name= User::where('id',$project->pm_id)->first();
-            $this->logProjectActivity($project->id, 'Project accepted by '.$pm_name->name);
-
-        }else
-        {
-            // $pm_name= User::where('id',Auth::id())->first();
-            // $this->logProjectActivity($project->id, 'Project updated by '.$pm_name->name);
+            
+            $text = 'Project accepted by '.$pm_name->name;
+            $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
+            $this->logProjectActivity($project->id, $link);
+        } else {
             $log_user = Auth::user();
             foreach ($originalValues as $attribute => $originalValue) {
                 if ($attribute === 'updated_at' || $attribute === 'last_updated_by' ) {
@@ -1077,22 +1076,18 @@ class ProjectController extends AccountBaseController
 
                 $updatedValue = $project->$attribute;
 
-
-
-                if ($originalValue != $updatedValue) {
-                    if($attribute == 'project_name')
-                    {
+                if ($attribute == 'project_summary' && $originalValue != $updatedValue) {
+                    if($attribute == 'project_name') {
                         $print= 'project name';
-                    }else{
+                    } else {
                         $print= $attribute;
                     }
                     $activity = new ProjectActivity();
-                    if($attribute == 'project_summary')
-                    {
+                    if($attribute == 'project_summary') {
                         $activity->activity= $log_user->name .' updated project summary' ;
                         $activity->old_data = $originalValue;
-                    }else
-                    {
+                    } 
+                    else {
                         $activity->activity= $log_user->name .' updated '.$print.' from '.$originalValue.' to '. $updatedValue ;
                     }
 
@@ -1104,9 +1099,6 @@ class ProjectController extends AccountBaseController
                     $activity->save();
                 }
             }
-
-
-
         }
 
 
@@ -2019,6 +2011,18 @@ class ProjectController extends AccountBaseController
             $activity->project_id = $project->id;
             $activity->save();
 
+            $text = Auth::user()->name.' added project deliverable : '.$deliverable->title;
+            $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $task->user_id,
+                'role_id' => User::find($request->user_id)->role_id,
+                'title' => 'Task complete request approved',
+                'body' => Auth::user()->name.' mark task completed',
+                'redirectUrl' => route('projects.show', $project->id).'?tab=deliverable'
+            ]);
+
             $users = User::where('role_id',1)->get();
             foreach ($users as $user) {
                 $this->triggerPusher('notification-channel', 'notification', [
@@ -2165,10 +2169,9 @@ class ProjectController extends AccountBaseController
 
         $log_user = Auth::user();
 
-        $activity = new ProjectActivity();
-        $activity->activity= $log_user->name .' updated project deliverable : '.$deliverable->title;
-        $activity->project_id = $project_update->id;
-        $activity->save();
+        $text = Auth::user()->name.' updated project deliverable : '.$deliverable_id->title;
+        $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
+        $this->logProjectActivity($project->id, $link);
 
         if($request->deliverable_type == 'Others') {
             $project_id= Project::where('id',$project_update->id)->first();
@@ -2195,12 +2198,9 @@ class ProjectController extends AccountBaseController
       $deliverable = ProjectDeliverable::findOrFail($id)->delete();
       $log_user = Auth::user();
 
-      $activity = new ProjectActivity();
-      $activity->activity= $log_user->name .' deleted project deliverable : '.$deliverable_id->title;
-
-      $activity->project_id = $project->id;
-
-      $activity->save();
+      $text = Auth::user()->name.' deleted project deliverable : '.$deliverable_id->title;
+        $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
+        $this->logProjectActivity($project->id, $link);
       return response()->json(['status'=>400]);
     }
     public function approveDeliverable($id)
@@ -2220,6 +2220,7 @@ class ProjectController extends AccountBaseController
             'body' => 'Admin approved Delivarable. Go..',
             'redirectUrl' => route('projects.show', $project_id->id).'?tab=deliverables'
         ]);
+        
         
         Notification::send($user, new DeliverableOthersAuthorizationAcceptNotification($project_id));
 
@@ -2652,8 +2653,6 @@ class ProjectController extends AccountBaseController
        //dd($explanation );
         $validated = $request->validate([
             'comments' => ['required','string','min:10'],
-
-
         ]);
 
         $project= PMProject::where('project_id',$request->project_id)->first();
@@ -2665,13 +2664,9 @@ class ProjectController extends AccountBaseController
         $project_id= Project::where('id',$request->project_id)->first();
         $log_user = Auth::user();
 
-        $activity = new ProjectActivity();
-        $activity->activity= $log_user->name .' send project deliverable time extention request ';
-
-        $activity->project_id = $request->project_id;
-
-        $activity->save();
-
+        $text = Auth::user()->name.'  send project deliverable time extention request ';
+        $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
+        $this->logProjectActivity($project->id, $link);
 
         $users= User::where('role_id',1)->get();
         foreach ($users as $user) {
@@ -2701,12 +2696,9 @@ class ProjectController extends AccountBaseController
         $project_id= Project::where('id',$request->project_id)->first();
         $log_user = Auth::user();
 
-        $activity = new ProjectActivity();
-        $activity->activity= 'Top management accepted project deliverable time extention request ';
-
-        $activity->project_id = $request->project_id;
-
-        $activity->save();
+        $text = Auth::user()->name.' accepted project deliverable time extention request';
+        $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
+        $this->logProjectActivity($project->id, $link);
 
         $user= User::where('id',$project_id->pm_id)->get();
         Notification::send($user, new ProjectDeliverableTimeAcceptNotification($project_id));
@@ -2728,13 +2720,6 @@ class ProjectController extends AccountBaseController
         $project_id= Project::where('id',$id)->first();
         $log_user = Auth::user();
 
-        $activity = new ProjectActivity();
-        $activity->activity= $log_user->name .' send project deliverable for final authorization';
-
-        $activity->project_id = $project_id->id;
-
-        $activity->save();
-
         $users= User::where('role_id',1)->get();
         foreach ($users as $user) {
             $this->triggerPusher('notification-channel', 'notification', [
@@ -2746,6 +2731,11 @@ class ProjectController extends AccountBaseController
             ]);
             Notification::send($user, new ProjectDeliverableFinalAuthorizationNotification($project_id));
         }
+
+        $text = Auth::user()->name.' send project deliverable authorization request';
+        $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
+        $this->logProjectActivity($project->id, $link);
+
         return response()->json(['status'=>400]);
     }
     public function DeliverableFinalAuthorizationAccept(Request $request)
@@ -2778,12 +2768,9 @@ class ProjectController extends AccountBaseController
 
         $log_user = Auth::user();
 
-        $activity = new ProjectActivity();
-        $activity->activity= 'Top management finally authorized project deliverable';
-
-        $activity->project_id = $project_id->id;
-
-        $activity->save();
+        $text = Auth::user()->name.' finally authorized project deliverable';
+        $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
+        $this->logProjectActivity($project->id, $link);
 
         $user= User::where('id',$project->pm_id)->first();
         $this->triggerPusher('notification-channel', 'notification', [
@@ -2829,6 +2816,19 @@ class ProjectController extends AccountBaseController
 
             $data = ProjectDeliverable::find($request->delivarable_id);
             $url = route('projects.show', $data->project_id).'?tab=deliverables';
+
+            $text = Auth::user()->name.' send delivarable change request to project manager';
+            $link = '<a href="'.$url.'">'.$text.'</a>';
+            $this->logProjectActivity($data->project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $data->project->pm_id,
+                'role_id' => 4,
+                'title' => 'Delivarable Modification Request',
+                'body' => 'Admin send "'.implode(',', $request->permission_column).'" column change request',
+                'redirectUrl' => $url
+            ]);
+            
             Toastr::success('Delivarable change request send to project manager', 'Success', ["positionClass" => "toast-top-right"]);
             return redirect()->to($url);
         } 

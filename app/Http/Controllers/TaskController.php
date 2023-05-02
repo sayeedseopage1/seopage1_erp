@@ -207,12 +207,23 @@ class TaskController extends AccountBaseController
         $task->board_column_id= 6;
         $task->task_status="submitted";
         $task->save();
+
         $task_id= Task::where('id',$task->id)->first();
 
         $user= User::where('id',$task->added_by)->first();
         $sender= User::where('id',$request->user_id)->first();
 
+        $text = Auth::user()->name.' mark task complete';
+        $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+        $this->logProjectActivity($task->project->id, $link);
 
+        $this->triggerPusher('notification-channel', 'notification', [
+            'user_id' => $task->project->pm_id,
+            'role_id' => 4,
+            'title' => 'Task complete request',
+            'body' => Auth::user()->name.' mark task complete',
+            'redirectUrl' => route('tasks.show', $task->id)
+        ]);
 
         Notification::send($user, new TaskSubmitNotification($task_id,$sender));
 
@@ -249,6 +260,19 @@ class TaskController extends AccountBaseController
       $task->rating3= $request->rating3;
       $task->comments= $request->comments;
       $task->save();
+
+
+        $text = Auth::user()->name.' mark task completed';
+        $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+        $this->logProjectActivity($task->task->project->id, $link);
+
+        $this->triggerPusher('notification-channel', 'notification', [
+            'user_id' => $task->user_id,
+            'role_id' => User::find($request->user_id)->role_id,
+            'title' => 'Task complete request approved',
+            'body' => Auth::user()->name.' mark task completed',
+            'redirectUrl' => route('tasks.show', $task->id)
+        ]);
 
       $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
       $sender= User::where('id',Auth::id())->first();
@@ -315,6 +339,17 @@ class TaskController extends AccountBaseController
 
       $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
       $sender= User::where('id',$request->user_id)->first();
+      $text = Auth::user()->name.' send revision request';
+        $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+        $this->logProjectActivity($task->task->project->id, $link);
+
+        $this->triggerPusher('notification-channel', 'notification', [
+            'user_id' => $task->user_id,
+            'role_id' => User::find($request->user_id)->role_id,
+            'title' => 'Revision request',
+            'body' => Auth::user()->name.' send revision request',
+            'redirectUrl' => route('tasks.show', $task->id)
+        ]);
       $user= User::where('id',$task_submission->user_id)->first();
       Notification::send($user, new TaskRevisionNotification($task_status,$sender));
         return response()->json([
@@ -556,7 +591,6 @@ class TaskController extends AccountBaseController
 
         $left_in_hours = round($left_minutes/60,0);
         $left_in_minutes= $left_minutes%60;
-        //dd($left_minutes);
 
         if($left_minutes < 1)
         {
@@ -669,9 +703,7 @@ class TaskController extends AccountBaseController
                 }
             }
 
-
             $subTask = SubTask::with(['files'])->where('task_id', $request->taskId)->get();
-            //dd($subTask);
 
             if ($subTask) {
                 foreach ($subTask as $subTasks) {
@@ -763,6 +795,34 @@ class TaskController extends AccountBaseController
                     'links' => $gantTaskLinkArray
                 ]
             );
+        }
+
+        if (is_array($request->user_id)) {
+            $assigned_to = User::find($request->user_id[0]);
+            $text = Auth::user()->name.' assigned new task on '.$assigned_to->name;
+            $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $assigned_to->id,
+                'role_id' => $assigned_to->role_id,
+                'title' => 'You have new task',
+                'body' => 'Project managet assigned new task on you',
+                'redirectUrl' => route('tasks.show', $task->id)
+            ]);
+        } else {
+            $assigned_to = User::find($request->user_id);
+            $text = Auth::user()->name.' assigned new task on '.$assigned_to->name;
+            $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $assigned_to->id,
+                'role_id' => $assigned_to->role_id,
+                'title' => 'You have new task',
+                'body' => 'Project managet assigned new task on you',
+                'redirectUrl' => route('tasks.show', $task->id)
+            ]);
         }
 
         $redirectUrl = urldecode($request->redirect_url);
@@ -860,7 +920,6 @@ class TaskController extends AccountBaseController
 
     public function update(UpdateTask $request, $id)
     {
-      //  dd($request);
         $task = Task::with('users', 'label', 'project')->findOrFail($id)->withCustomFields();
         $editTaskPermission = user()->permission('edit_tasks');
         $taskUsers = $task->users->pluck('id')->toArray();
@@ -945,6 +1004,34 @@ class TaskController extends AccountBaseController
         // To add custom fields data
         if ($request->get('custom_fields_data')) {
             $task->updateCustomFieldData($request->get('custom_fields_data'));
+        }
+
+        if (is_array($request->user_id)) {
+            $assigned_to = User::find($request->user_id[0]);
+            $text = Auth::user()->name.' update task on '.$assigned_to->name;
+            $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $assigned_to->id,
+                'role_id' => $assigned_to->role_id,
+                'title' => 'You have new task',
+                'body' => 'Project managet update task on you',
+                'redirectUrl' => route('tasks.show', $task->id)
+            ]);
+        } else {
+            $assigned_to = User::find($request->user_id);
+            $text = Auth::user()->name.' update task on '.$assigned_to->name;
+            $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $assigned_to->id,
+                'role_id' => $assigned_to->role_id,
+                'title' => 'You have new task',
+                'body' => 'Project managet update task on you',
+                'redirectUrl' => route('tasks.show', $task->id)
+            ]);
         }
 
         // Sync task users
@@ -1373,22 +1460,14 @@ class TaskController extends AccountBaseController
         ]);
     }
 //    ACCEPT AND CONTINUE BUTTON SECTION
-        public function acceptContinue(Request $request){
-//        dd($request->all());
+    public function acceptContinue(Request $request){
             $task_status= Task::find($request->task_id);
             $task_status->task_status="in progress";
             $task_status->board_column_id=3;
-//            $task_status->save();
+            $task_status->save();
 
-
-           $subtasks = SubTask::where('task_id',$request->task_id)->get();
-            $selected_subtasks = SubTask::where('id',$request->subTask['id'])->get();
-            dd($selected_subtasks);
-//            foreach ($subtasks as $subtask)
-//            {
-//                $find_task= Task::where('subtask_id',$subtask->id)->first();
-//
-//            }
+            $subtasks = SubTask::where('task_id',$request->task_id)->get();
+            $selected_subtasks = SubTask::whereIn('id',$request->subTask)->get();
             foreach ($selected_subtasks as $selected_subtask){
 
                 $find_task_id= Task::where('subtask_id',$selected_subtask->id)->first();
@@ -1426,7 +1505,6 @@ class TaskController extends AccountBaseController
 
 //        DENY AND CONTINUE BUTTON SECTION
         public function denyContinue(Request $request){
-        dd($request->all());
             $task_status= Task::find($request->task_id);
             $task_status->task_status="in progress";
             $task_status->board_column_id=3;

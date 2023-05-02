@@ -438,15 +438,13 @@ class DealsDataTable extends BaseDataTable
         // if (request('signed') == 'yes') {
         //     $model = $model->has('signature');
         // }
-
         if ($this->request()->searchText != '') {
             $model = $model->where(function ($query) {
                 $query->where('deal_stages.project_name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('deal_stages.short_code', 'like', '%' . request('searchText') . '%')
                     ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('users.name', 'like', '%' . request('searchText') . '%')
-
-
+                    ->orWhere('deal_stages.client_username', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('deal_stages.client_name', 'like', '%' . request('searchText') . '%')
 
                   ;
             });

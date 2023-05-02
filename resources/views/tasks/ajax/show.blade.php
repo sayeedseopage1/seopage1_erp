@@ -20,6 +20,10 @@ $changeStatusPermission = user()->permission('change_status');
                 <div class="card-header bg-white  border-bottom-grey text-capitalize justify-content-between p-20">
                     <div class="row">
                         <div class="col-lg-8 col-10">
+                            @if(Auth::user()->role_id== 5 && $task->task_status == 'incomplete' && $task->board_column_id ==1)
+                                <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#revision"> Revision</button>
+                                @include('tasks.modals.revision')
+                            @endif
                             @if ($changeStatusPermission == 'all'
                             || ($changeStatusPermission == 'added' && $task->added_by == user()->id)
                             || ($changeStatusPermission == 'owned' && in_array(user()->id, $taskUsers))
@@ -30,7 +34,7 @@ $changeStatusPermission = user()->permission('change_status');
                             $extension_request= App\Models\TaskTimeExtension::where('task_id',$task->id)->where('user_id','!=',Auth::id())->first();
                              ?>
                              @if($extension_request != null)
-                            @if ($extension_request->status == 'pending' )
+                                @if ($extension_request->status == 'pending' )
                                 <!-- <x-forms.button-primary icon="check" data-status="completed"
                                     class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
                                     @lang('modules.tasks.markComplete')
@@ -40,11 +44,8 @@ $changeStatusPermission = user()->permission('change_status');
 
 
                                   @include('tasks.modals.extensionrequest')
-
-
-
-                            @endif
-                            @endif
+                                  @endif
+                                @endif
                             <?php
                               $task_user= App\Models\TaskSubmission::orderBy('id','desc')->where('task_id',$task->id)->first();
                             //  dd($task_user->user_id,Auth::user()->id);
@@ -67,7 +68,6 @@ $changeStatusPermission = user()->permission('change_status');
                                         @endif
                                 @endif
                             @endif
-
                             @if(Auth::user()->role_id==4)
                                 @if($task->board_column_id == 8)
                                     <button class="btn btn-success mr-2 mb-2 mb-lg-0 mb-md-0" id="submit_task_for_client_approval">Submit Task for Client Approval</button>
@@ -87,6 +87,7 @@ $changeStatusPermission = user()->permission('change_status');
                             @endphp
                             @if($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision')
                             @if ($task->boardColumn->slug != 'completed' && !is_null($task->is_task_user) )
+
                                   @if (is_null($task->userActiveTimer))
                                       <x-forms.button-secondary id="start-task-timer" icon="play">
                                           @lang('modules.timeLogs.startTimer')
@@ -110,7 +111,6 @@ $changeStatusPermission = user()->permission('change_status');
                                   @endif
                               @endif
                                  @if(Auth::user()->role_id == 5 || Auth::user()->role_id == 6 || Auth::user()->role_id == 4 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
-
 
 
 

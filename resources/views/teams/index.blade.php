@@ -224,7 +224,7 @@ $addDepartmentPermission = user()->permission('add_department');
                 buttonsStyling: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var url = "{{ route('departments.destroy', ':id') }}";
+                    var url = "{{ route('teams.destroy', ':id') }}";
                     url = url.replace(':id', id);
 
                     var token = "{{ csrf_token() }}";

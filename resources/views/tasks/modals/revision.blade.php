@@ -12,7 +12,7 @@
                 <h6 class="text-center">Task Revision Form Project Manager</h6>
                 <div class="card mb-3">
                     <div class="card-body">
-                        @if($taskRevisionComment->comment)
+                        @if($taskRevisionComment)
                             <p>{!! $taskRevisionComment->comment !!}</p>
                         @else
                             <p class="text-center text-danger">No Comment Found</p>
