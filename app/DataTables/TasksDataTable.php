@@ -736,12 +736,15 @@ class TasksDataTable extends BaseDataTable
         }
 
         if ($request->searchText != '') {
-            $model->where(function ($query) {
+            $model->leftJoin('users', 'projects.client_id', '=', 'users.id')->where(function ($query) {
                 $query->where('tasks.heading', 'like', '%' . request('searchText') . '%')
                     ->orWhere('member.name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('projects.project_name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('projects.project_short_code', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('tasks.task_short_code', 'like', '%' . request('searchText') . '%');
+                    ->orWhere('tasks.task_short_code', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('projects.client_id', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('tasks.task_short_code', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('users.name', 'like', '%' . request('searchText') . '%');
             });
         }
 
@@ -823,7 +826,7 @@ class TasksDataTable extends BaseDataTable
                 __('app.task') => ['data' => 'heading', 'name' => 'heading', 'exportable' => false, 'title' => __('app.task')],
                 __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
                 __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
-                __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
+                __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name','sortable' => false, 'title' => __('Client')],
                 __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
                 __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
                 __('app.estimate_time') => ['data' => 'estimate_time', 'name' => 'estimate_time', 'title' => __('Estimated Time')],
@@ -856,7 +859,7 @@ class TasksDataTable extends BaseDataTable
                 __('app.menu.tasks').' ' => ['data' => 'task', 'name' => 'heading', 'visible' => false, 'title' => __('app.menu.tasks')],
                 __('timer_action').' ' => ['data' => 'timer_action', 'name' => 'timer_action',  'title' => __('Timer Active/Inactive')],
                 __('app.project')  => ['data' => 'project_name', 'name' => 'projects.project_name', 'title' => __('app.project')],
-                __('app.client_name')  => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('Client')],
+                __('app.client_name')  => ['data' => 'client_name','sortable' => false,  'name' => 'client_name', 'title' => __('Client')],
                 __('modules.tasks.assigned') => ['data' => 'name', 'name' => 'name', 'visible' => false, 'title' => __('modules.tasks.assigned')],
                 __('app.dueDate') => ['data' => 'due_date', 'name' => 'due_date', 'title' => __('app.dueDate')],
                 __('app.estimate_time') => ['data' => 'estimate_time', 'name' => 'estimate_time', 'title' => __('Estimated Time')],

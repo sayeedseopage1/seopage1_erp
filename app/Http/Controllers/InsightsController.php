@@ -147,12 +147,32 @@ class InsightsController extends AccountBaseController
         
         return response()->json([$goal]);
     }
-    public function getGoal()
+    public function getGoal($id)
     {
-        $goal = GoalSetting::all();
-        $goal_recurring= GoalRecurring::all();
+        if(Auth::user()->role_id == 1)
+        {
+            $goal = GoalSetting::all();
+            $goal_recurring= GoalRecurring::all();
+            return response()->json([$goal,$goal_recurring]);
+        }else 
+        {
+            $user_id = Auth::id();
+                $team = Seopage1Team::whereRaw("FIND_IN_SET($user_id, members) > 0")->first();
+                if ($team) {
+                    $team_id = $team->id;
+                    $goal= GoalSetting::where('team_id',$team_id)->get();
+                    $goal_recurring= GoalRecurring::all();
+                    return response()->json([$goal,$goal_recurring]);
+
+                  
+                } else {
+                    return response()->json("You don't have permission to view this page");
+                    
+                }
+        }
+       
         
-        return response()->json([$goal,$goal_recurring]);
+      
     }
 
 
