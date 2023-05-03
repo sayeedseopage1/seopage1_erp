@@ -21,6 +21,11 @@ return new class extends Migration
             $table->integer('project_id');
             $table->integer('added_by');
             $table->integer('revision_no')->default(1);
+            $table->string('revision_status')->nullable();
+            $table->string('revision_reason')->nullable();
+            $table->longText('accept_and_continue')->nullable();
+            $table->longText('deny_and_continue')->nullable();
+            $table->string('revision_acknowledgement')->nullable();
             $table->string('approval_status')->default('pending');
             $table->timestamps();
         });
