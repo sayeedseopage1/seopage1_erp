@@ -129,7 +129,8 @@ $changeStatusPermission = user()->permission('change_status');
                                             foreach ($subtasks as $sub)
                                                 {
 
-                                                    $subtask_check= App\Models\Task::where('subtask_id',$sub->id)->where('board_column_id',8)->count();
+                                                    $subtask_check= App\Models\Task::where('subtask_id',$sub->id)->count();
+                                                    dd($subtask_check);
                                                     $subtask_incompleted_count= $subtask_incompleted_count+ $subtask_check;
 
                                                 }
