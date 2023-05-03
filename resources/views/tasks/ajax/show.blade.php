@@ -130,7 +130,7 @@ $changeStatusPermission = user()->permission('change_status');
                                                 {
 
                                                     $subtask_check= App\Models\Task::where('subtask_id',$sub->id)->count();
-                                                    dd($subtask_check);
+                                                   // dd($subtask_check);
                                                     $subtask_incompleted_count= $subtask_incompleted_count+ $subtask_check;
 
                                                 }
