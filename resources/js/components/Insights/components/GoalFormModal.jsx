@@ -18,58 +18,26 @@ import axios from 'axios';
 import _ from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import { getPeriod } from '../utils/getPeriod';
+import { useGetUsersQuery } from '../services/api/userSliceApi';
+import { useGetTeamsQuery } from '../services/api/teamSliceApi';
 
 
 // assignee for 
 
 const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
     const [search, setSearch] = React.useState('');
-    const [users, setUsers] = React.useState([]);
-    const [teams,setTeams] = React.useState([]);
+    // const [users, setUsers] = React.useState([]);
+    // const [teams,setTeams] = React.useState([]);
 
+    const {
+        data: users,
+        isFetching: usersIsFetching,
+    } = useGetUsersQuery(`/`);
 
-    React.useEffect(() => {
-       if (assigneeType === "User" && users.length === 0) {
-            const fetch = async () => {
-                const res = await axios.get("/get-users");
-                if (res) {
-                    setUsers([...res.data])
-                }
-            };
-
-            fetch();
-            return;
-        }
-
-        if (assigneeType === "Team" && teams.length === 0) {
-            // teams fetching here....
-            const fetch = async () => {
-                const res = await axios.get("/get-teams");
-                if (res) {
-                    let data = [];
-                    res.data.map(d => data.push({
-                        ...d,
-                        name: d.team_name
-                    }))
-                    setTeams([...data])
-                }
-            };
-
-            fetch();
-            return;
-        }
-    }, [assigneeType])
-
-    const options =  () => {
-        if(assigneeType === "Team"){
-            return teams;
-        }else if(assigneeType === "User"){
-            return users;
-        }
-
-        return [];
-    }
-
+      const {
+        data: teams,
+        isFetching: teamsIsFetching,
+    } = useGetTeamsQuery(`/`);
 
     return(
         <React.Fragment>
@@ -81,8 +49,13 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
                     <div className='cnx_select_box_search'>
                         <SearchBox autoFocus={true} value={search} onChange={setSearch} />
                     </div>
-                    {
+                    {/* {
                         options().length > 0 && options().filter(f => f.name.includes(search)).map((option => ( 
+                            assigneeType === "User" ? 
+                                <Dropdown.Item>
+
+                                </Dropdown.Item>
+                            : 
                             <Dropdown.Item 
                                 key={option.id}
                                 onClick={() => setAssigneeFor({id: option.id, name: option.name})}
@@ -91,6 +64,39 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
                                     {assigneeFor.name === option.name && <i className="fa-solid fa-check" />}
                             </Dropdown.Item>
                         )))
+                    } */}
+
+                    {
+                        assigneeType === "User" ?  (!users && usersIsFetching) ? 
+                                <Dropdown.Item>
+                                    Loading...
+                                </Dropdown.Item>
+                            : 
+                            users ? users.filter(f => f.name.includes(search)).map(user => (
+                                <Dropdown.Item 
+                                    key={user.id}
+                                    onClick={() => setAssigneeFor({id: user.id, name: user.name})}
+                                    className={ `cnx_select_box_option ${assigneeFor.name === user.name ? 'active': ''}`}> 
+                                        {user.name}
+                                        {assigneeFor.name === user.name && <i className="fa-solid fa-check" />}
+                                </Dropdown.Item>
+                            )): <Dropdown.Item>Users not found</Dropdown.Item>
+                        : assigneeType === "Team" ? (!teams && teamsIsFetching) ? 
+                                 <Dropdown.Item>
+                                    Loading...
+                                </Dropdown.Item>
+                            : 
+                            teams ? teams.filter(f => f.team_name.includes(search)).map(team => (
+                                <Dropdown.Item 
+                                    key={team.id}
+                                    onClick={() => setAssigneeFor({id: team.id, name: team.team_name})}
+                                    className={ `cnx_select_box_option ${assigneeFor.name === team.team_name ? 'active': ''}`}> 
+                                        {team.team_name}
+                                        {assigneeFor.name === team.team_name && <i className="fa-solid fa-check" />}
+                                </Dropdown.Item>
+                                )) 
+                            : <Dropdown.Item> Teams not found </Dropdown.Item>
+                        : null
                     }
                 </Dropdown.Menu>
             </Dropdown>

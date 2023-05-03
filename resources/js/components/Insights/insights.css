@@ -1433,9 +1433,23 @@
 
 .cnx__table_td,
     .cnx__table_th {
-    width: 100%;
-    min-width: 200px;
+    width: 250px;
     padding: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+  }
+
+  .cnx__table_td  a{
+    color: #777;
+  }
+
+  .cnx__table_td  a:hover{
+    color: #0059ff;
+    cursor: pointer;
+    text-decoration: underline;
   }
 
 .cnx__table_td:not(:last-child), .cnx__table_th:not(:last-child) {
