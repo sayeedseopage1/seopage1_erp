@@ -15,7 +15,7 @@ export const useGoals = () => {
             // dispatch(setStatus({status: "loading"}));
             await axios.get(`/account/insights/goals/get/${id}`).then(res => {
                 // dispatch(setDeals(res.data));
-                console.log(res.data);
+                // console.log(res.data);
                 // dispatch(setStatus({status: 'completed'}));
             }).catch(err => {
                 console.log(err);

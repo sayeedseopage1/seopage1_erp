@@ -139,11 +139,9 @@ class InsightsController extends AccountBaseController
 
         }
         $recurring_data= GoalRecurring::where('goal_id',$goal->id)->get();
-        return response()->json([$goal,$recurring_data]);
+        return response()->json(["goal" => $goal, "recurring"=> $recurring_data]);
 
         }
-
-        
 
         
         return response()->json([$goal]);
@@ -154,7 +152,7 @@ class InsightsController extends AccountBaseController
         {
             $goal = GoalSetting::all();
             $goal_recurring= GoalRecurring::all();
-            return response()->json([$goal,$goal_recurring]);
+            return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
         }else 
         {
             $user_id = Auth::id();
@@ -163,12 +161,11 @@ class InsightsController extends AccountBaseController
                     $team_id = $team->id;
                     $goal= GoalSetting::where('team_id',$team_id)->get();
                     $goal_recurring= GoalRecurring::all();
-                    return response()->json([$goal,$goal_recurring]);
+                    return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
 
                   
                 } else {
-                    return response()->json("You don't have permission to view this page");
-                    
+                    return response()->json("You don't have permission to view this page"); 
                 }
         }
        
