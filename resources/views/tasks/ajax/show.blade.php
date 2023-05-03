@@ -138,13 +138,13 @@ $changeStatusPermission = user()->permission('change_status');
 
                                           @endphp
 
-                                          @if(Auth::user()->role_id== 6 && $subtasks->count() !=  $subtask_incompleted_count)
+                                          {{-- @if(Auth::user()->role_id== 6 && $subtasks->count() !=  $subtask_incompleted_count)
 
                                             <button class="btn-secondary rounded f-14 p-2 my-3 disabled" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
-                                          @else
+                                          @else --}}
 
                                             <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete" ><i class="fa-solid fa-check"></i> Mark As Complete</button>
-                                          @endif
+                                          {{-- @endif --}}
                                         @endif
 
                                           @endif
