@@ -394,7 +394,8 @@ const TrackingInput = ({
         const doc = document.querySelector('.cnx_ins__goal_form_modal');
         if(checked){
             if(doc.offsetHeight > 720){
-                doc.style.height = '720px';
+                doc.style.height = window.innerHeight - 100 + 'px';
+                doc.style.maxHeight = 720 + "px";
                 doc.style.overflowY = 'auto';
             } else {
                 doc.style.height = 'auto';
@@ -663,9 +664,6 @@ const TrackingInput = ({
                 </Tooltip>
             }
 
-            {error && <div className='cnx_ins__goal_modal__tracking_input_error'>
-                Please add minimum of {trackingType}
-            </div>}
 
             {checked && <div className='cnx_time_period'>
                 <div className='cnx_time_period__header'>
