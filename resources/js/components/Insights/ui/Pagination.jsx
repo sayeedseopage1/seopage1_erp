@@ -23,7 +23,7 @@ const Pagination = ({data, setCurrentPageData, numOfPerPageRow = 10 }) => {
         let perPageData = paginate(data, currentPage, numOfPerPageRow);
         setCurrentPageData(perPageData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentPage,data, numOfPerPageRow])
+    }, [currentPage, numOfPerPageRow])
 
 
 
@@ -69,15 +69,15 @@ const Pagination = ({data, setCurrentPageData, numOfPerPageRow = 10 }) => {
 
     // next 
     const nextPage = () => {
-        if(currentPage < totalPages.length){
-            setCurrentPage(prevState => prevState + 1 );
+        if(currentPage < totalPages){
+            setCurrentPage(currentPage + 1 );
         }
     }
 
     // previous 
     const prevPage = () => {
         if(currentPage > 1){
-            setCurrentPage(prevState => prevState - 1 );
+            setCurrentPage(currentPage - 1 );
         }
     }
 
@@ -144,7 +144,9 @@ const Pagination = ({data, setCurrentPageData, numOfPerPageRow = 10 }) => {
             )}    
 
             {/* next */}
-            <Button onClick={nextPage} className='cnx__table_pagination_btn cnx__table_pagination_btn_next'> Next  </Button>
+            <Button 
+                onClick={nextPage} 
+                className='cnx__table_pagination_btn cnx__table_pagination_btn_next'> Next  </Button>
         </div>
     )
 }

@@ -9,6 +9,7 @@ import convertNumberToUnits from '../utils/convertNumberToUnits';
 import { relativeTime } from '../utils/relativeTime';
 import RelativeTimePeriod from '../components/RelativeTimePeriod';
 import DataTable from '../ui/DataTable';
+import { useDealsState } from '../hooks/useDealsState';
 
 
 // convert to unit
@@ -21,25 +22,12 @@ const numberToUnits = (value,decimal= 1) => {
 const Goal = () => {
     const [selectedPeriod, setSelectedPeriod] = React.useState('Today');
     const [filter, setFilterValue] = React.useState('');
-    const [data, setData] = React.useState([]);
+    const {deals, getDealStateStatus} = useDealsState(); 
 
     const handleRelativeTimePeriod =(value) => {
         setSelectedPeriod(value);
         relativeTime(value, setFilterValue);
     }
-
-    React.useEffect(() => {
-        const fetch = async () => {
-            await axios.get('/account/insights/deals').then(res => {
-                setData( res.data );
-            }).catch(err => console.log(err))
-        }
-
-        fetch();
-
-        return () => fetch();
-    }, [])
-
 
     return(
         <div className="cnx__ins_dashboard">
@@ -327,7 +315,7 @@ const Goal = () => {
 
                     {/* graph table */}
                     <div className='cnx__ins_table'>
-                        <DataTable data={data} />
+                        <DataTable data={deals} isLoading={getDealStateStatus === 'loading'} />
                     </div>
                     {/* end graph table */}
                     

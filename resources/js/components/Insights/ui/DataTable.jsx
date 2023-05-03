@@ -4,16 +4,17 @@ import PropTypes from 'prop-types';
 import Pagination from './Pagination';
 import TableFilterButton from './TableFilterButton';
 import { DataTableColumns } from '../components/DataTableColumns';
-import {DndProvider, useDrag, useDrop} from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useDrag, useDrop} from 'react-dnd';
+import { Icon } from '../utils/Icon';
 
 
 const DataTableContext = React.createContext();
 const ContextProvider = ({children}) => {
     const [activeColumns, setActiveColumns] = React.useState([]);
+    const [sortConfig, setSortConfig] = React.useState({key: 'id', direction: 'desc'});
 
     React.useEffect(() => {
-        let columns = DataTableColumns.map(d => d.header);
+        let columns = DataTableColumns.map(d => d.id);
         setActiveColumns([...columns]);
     }, [])
 
@@ -22,6 +23,8 @@ const ContextProvider = ({children}) => {
     return <DataTableContext.Provider value={{
         activeColumns,
         setActiveColumns,
+        sortConfig,
+        setSortConfig
     }}>
         {children}
     </DataTableContext.Provider>
@@ -36,13 +39,51 @@ const useTableState = () => {
 
 
 // data table 
-const DataTable = ({data}) => {
+const DataTable = ({data, isLoading}) => {
     const [currentPageData, setCurrentPageData] = React.useState([]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
-    const { activeColumns, setActiveColumns } = useTableState();
+    const { activeColumns, setActiveColumns, sortConfig, setSortConfig } = useTableState();
 
-    const columns = DataTableColumns.filter(d => activeColumns.includes(d.header))
-                    .sort((a, b) => activeColumns.indexOf(a.header) - activeColumns.indexOf(b.header))
+    // total page
+    const totalPage = Math.ceil(data.length / numberOfRowPerPage);
+
+
+    // config sort
+    const sortedData = (data, sortConfig) => {
+        if(sortConfig.key){
+            return [...data].sort((a, b) => {
+                if (a[sortConfig.key] < b[sortConfig.key]) {
+                    return sortConfig.direction === "asc" ? -1 : 1;
+                }
+                if (a[sortConfig.key] > b[sortConfig.key]) {
+                    return sortConfig.direction === "asc" ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+
+        return data;
+    }
+
+    // SORT REQUEST
+    const requestSort = (key) => {
+        
+        let direction = "asc";
+        if (
+            sortConfig &&
+            sortConfig.key === key &&
+            sortConfig.direction === "asc"
+        ) {
+            direction = "desc";
+        } else direction = "asc"; 
+
+        setSortConfig({ key, direction });
+    };
+
+
+
+    const columns = DataTableColumns.filter(d => activeColumns.includes(d.id))
+                    .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
                                 
 
     return(
@@ -59,6 +100,8 @@ const DataTable = ({data}) => {
                         <div className="cnx__table_tr">
                             {columns.map(column => (
                                 <DraggableColumn 
+                                    sort={sortConfig}
+                                    requestSort={requestSort}
                                     key={column.id} 
                                     column={column}
                                     activeColumns={activeColumns}
@@ -73,29 +116,48 @@ const DataTable = ({data}) => {
                     {/* table body */}
 
                     <div className="cnx__table_body">
-                    
-                        {currentPageData.length > 0 ? currentPageData.map((data) => (
-                                <div key={data.id} className="cnx__table_tr">
-                                    {columns.map(d => (
-                                        <div key={d.id} className="cnx__table_td">
-                                            {d.cell(data)}
-                                        </div>
-                                    ))}
-                                </div> 
-                        )): [...Array(Number(numberOfRowPerPage))].map((_, i) => (
-                                <div key={i} className="cnx__table_tr">
-                                {columns.map(c => (
-                                    <div key={c.header} className="cnx__table_td cnx__table_td_loading ">
+
+                    {isLoading && (
+                        [...Array(Number(numberOfRowPerPage))].map((_, i) => (
+                            <div key={i} className="cnx__table_tr">
+                                {columns.map(d => 
+                                    <div key={d.id} className="cnx__table_td cnx__table_td_loading ">
                                         <span className='animate-pulse' style={{width: `${ Math.floor(Math.random() * (100 - 30) + 30)}%`}}>loading</span>
                                     </div>
-                                ))}
+                                )}
+                            </div> 
+                        ))
+                    )}
+
+                    
+                    {!isLoading && 
+                        <React.Fragment>
+                            {
+                                currentPageData.length > 0 ? currentPageData.map((data) => (
+                                        <div key={data.id} className="cnx__table_tr">
+                                            {columns.map(d => (
+                                                <div key={d.id} className="cnx__table_td">
+                                                    {d.cell(data)}
+                                                </div>
+                                            ))}
+                                        </div> 
+                                )): 
+                                <div className='cnx__empty_table'>
+                                    <div className='cnx__empty_table_content'>
+                                        <Icon type="EmptyTable" /> 
+                                        <div>No Data to show</div>
+                                    </div>
                                 </div> 
-                        ))}
+                            }
+                        </React.Fragment>
+                    }
                     </div>
                     {/* end table body  */}
                 </div>
             </div>
         {/* table footer  */}
+        {   
+            totalPage > 1 &&
             <div className="cnx__table_footer">
                 <div className="__show_entries">
                     <span>Show</span> 
@@ -119,24 +181,23 @@ const DataTable = ({data}) => {
 
                 {/* pagination */}
                 <Pagination
-                    data={data}
+                    data={[...sortedData(data, sortConfig)]}
                     setCurrentPageData={(v) => setCurrentPageData(v)}
                     numOfPerPageRow={Number(numberOfRowPerPage)}
                 />
                 {/* end pagination */}
             </div>
+        }
             {/* end table footer  */}
         </div>
     )
 }
 
 
-const DataTableComponent = ({data}) => {
+const DataTableComponent = ({data, isLoading}) => {
     return(
         <ContextProvider>
-           <DndProvider backend={HTML5Backend}>
-                <DataTable data={data} />
-            </DndProvider> 
+           <DataTable data={data} isLoading={isLoading} />
         </ContextProvider>
     )
 }
@@ -145,11 +206,19 @@ DataTable.propTypes = {
     data: PropTypes.array.isRequired
 }
 
+
+
+
 export default DataTableComponent;
 
 
 
+
+
+// drag able column
 const DraggableColumn = ({
+    sort,
+    requestSort,
     column,
     activeColumns,
     setActiveColumns
@@ -205,11 +274,18 @@ const DraggableColumn = ({
             className={`cnx__table_th`}
         
         >
-            <div ref={ref} className={`cnx__table_th_toggle  ${isDragging ? '__dragging': ''}`}>
+            <div ref={ref}
+            onClick = {(() => requestSort(column.accessor))}
+            className={`cnx__table_th_toggle  ${isDragging ? '__dragging': ''}`}>
                 {column.header}
+                {
+                    sort.key === column.accessor &&
+                    <i className={`fa-solid fa-caret-${sort.direction === 'desc' ? 'down': 'up'}`}></i>
+                }
+                
             </div>
         </div>
     )
 
-
 }
+

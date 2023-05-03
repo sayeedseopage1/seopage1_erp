@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { MoveIcon } from "../Icons/MoveIcon";
 import ResizeCorner from "../Icons/ResizeCorner";
 import { SettingGearIcon } from "../Icons/SettingGearIcon";
+import { EmptyTableData } from "../Icons/EmptyTableIcon";
 
 export const Icon = ({type, className=""}) => {
     switch(type) {
@@ -26,6 +27,8 @@ export const Icon = ({type, className=""}) => {
             return <ResizeCorner className={className} />
         case 'Setting':
             return <SettingGearIcon className={className} />
+        case 'EmptyTable':
+            return <EmptyTableData className={className} />
         default:
             return null;
     }

@@ -1394,6 +1394,7 @@
   padding-bottom: 6px;
   overflow-x: auto;
   position: relative;
+  font-size: 14px;
 }
 
 .cnx__table_tr {
@@ -1452,6 +1453,9 @@
     }
 
 .cnx__table_th_toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 10px;
       width: 100%;
     }
@@ -1459,6 +1463,10 @@
 .cnx__table_th_toggle.__dragging {
         opacity: 0;
       }
+
+.cnx__table_th:last-child > .cnx__table_th_toggle {
+      padding-right: 50px;
+    }
 
 .cnx__table_td_loading span {
         display: block;
@@ -1471,7 +1479,7 @@
       }
 
 .cnx__table_footer {
-    padding: 16px;
+    padding: 16px 0;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -1505,13 +1513,14 @@
   z-index: 1;
   border: 1px solid #aaa;
   border: 1px solid var(--cnx-table-border);
+  border-right: 0;
 }
 
 .cnx__table_td_filter_btn_toggle {
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 12px 10px;
+  padding:12px 10px;
 }
 
 .cnx__table_td_filter_btn_toggle svg {
@@ -1537,6 +1546,11 @@
 
 .cnx__table_pagination_btn:hover {
       color: #fff;
+    }
+
+.cnx__table_pagination_btn.active {
+      color: #fff;
+      background: #1558f5;
     }
 
 .cnx__table_column_filter_menu {
@@ -1575,8 +1589,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 16px;
+  padding: 8px 16px;
   cursor: pointer;
+  margin: 0;
 }
 
 .cnx__table_filter_visible_option input {
@@ -1588,6 +1603,46 @@
 .cnx__table_filter_visible_option:hover {
     background-color: #f1f4f8;
   }
+
+.cnx__table_footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+
+.cnx__empty_table {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 450px;
+  height: 200px;
+}
+
+.cnx__empty_table_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #777;
+  }
+
+.cnx__modal_table_card {
+  width: -moz-fit-content !important;
+  width: fit-content !important;
+}
+
+.cnx__modal_table_card {
+  max-width: 80%;
+  min-width: 450px;
+}
+
+.cnx__data_table_card_body {
+  padding: 0;
+}
 
 /* global */
 
@@ -1888,7 +1943,4 @@
 }
 
 /* end goal */
-
-
-
 
