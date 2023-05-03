@@ -312,7 +312,11 @@ const GoalType = ({ goalType, setGoalType }) => {
 
 // period
 const Period = ({ period, recurringValue, defaultValue, setRecurringValue, trackingType }) => {
-    const [value, setValue] = React.useState( defaultValue );
+    const [value, setValue] = React.useState('');
+
+    React.useEffect(() => {
+        setValue(period.value);
+    }, [period]);
 
     const handleChange = e => {
         const index = recurringValue.findIndex(f => f?.title === period?.title);
@@ -376,7 +380,7 @@ const TrackingInput = ({
     setGoalType
 }) => {
     const [checked, setChecked] = React.useState(false);
-    const [period, setPeriod] = React.useState([]);
+    const [period, setPeriod] = React.useState(recurring);
     const [error, setError] = React.useState(recurring);
     const [applyAll, setApplyAll] = React.useState(false);
 
@@ -614,12 +618,15 @@ const TrackingInput = ({
     // apply to all
     const applyToAll = () => {
         let newPeriod = [...period]; 
-        newPeriod = period.map(p => p.value === trackingValue );
-        setRecurring(newPeriod)
+        newPeriod = period.map(p => ({
+            ...p,
+            value: trackingValue 
+        }));
+        setRecurring(newPeriod);
+        setPeriod(newPeriod);
     }
 
 
-    console.log(period)
 
     return(
         <div className='cnx_ins_tracking'>
@@ -634,8 +641,8 @@ const TrackingInput = ({
                     style={{width: 'auto'}}
                 />
                 {checked ? 
-                    <Button size='sm' onClick={() => setApplyAll(!applyAll)}>
-                       {applyAll? 'Remove all' : 'Apply all'}
+                    <Button size='sm' onClick={applyToAll}>
+                       Apply all
                     </Button>
                 : <Tooltip text='Recurring'>
                     <i className="fa-solid fa-repeat"></i>
