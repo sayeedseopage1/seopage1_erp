@@ -311,8 +311,8 @@ const GoalType = ({ goalType, setGoalType }) => {
 
 
 // period
-const Period = ({ period, recurringValue, setRecurringValue, trackingType }) => {
-    const [value, setValue] = React.useState('');
+const Period = ({ period, recurringValue, defaultValue, setRecurringValue, trackingType }) => {
+    const [value, setValue] = React.useState( defaultValue );
 
     const handleChange = e => {
         const index = recurringValue.findIndex(f => f?.title === period?.title);
@@ -350,7 +350,13 @@ const Period = ({ period, recurringValue, setRecurringValue, trackingType }) => 
                 {period?.title}
             </div>
             <div className='cnx_time_periods__input'>
-                <input type='number' value={value} onChange={handleChange} placeholder={`Insert ${trackingType}`} min={0} className='cnx_select_box' />
+                <input 
+                    type='number' 
+                    value={value} 
+                    onChange={handleChange} 
+                    placeholder={`Insert ${trackingType}`} 
+                    min={0} className='cnx_select_box' 
+                />
             </div>
         </div>
     )
@@ -365,8 +371,6 @@ const TrackingInput = ({
     setTrackingValue,
     recurring,
     setRecurring, 
-    applyRecurring,
-    setApplyRecurring,
     frequency,
     goalType,
     setGoalType
@@ -374,6 +378,7 @@ const TrackingInput = ({
     const [checked, setChecked] = React.useState(false);
     const [period, setPeriod] = React.useState([]);
     const [error, setError] = React.useState(recurring);
+    const [applyAll, setApplyAll] = React.useState(false);
 
     React.useEffect(()=> {
         if(!endDate){
@@ -399,14 +404,7 @@ const TrackingInput = ({
 
     }, [period, endDate, startDate, frequency, checked])
     
-    // apply all 
-    const applyAll = () => {
-        if(recurring.length > 0){
-            setError(false);
-            setApplyRecurring(true);
-        } else setError(true);  
-    }
-
+    
     // remove error
     React.useEffect(() => {
         if(recurring.length > 0 || !checked){
@@ -435,6 +433,7 @@ const TrackingInput = ({
                     title: `${current.format("YYYY")}`,
                     start: dayjs(startDate).format(),
                     end: dayjs(endDate).format(),
+                    value: ''
                 });
                 current = dayjs(current).add(1, "year");
             }
@@ -488,6 +487,7 @@ const TrackingInput = ({
                     title,
                     start: quarterStart,
                     end: quarterEnd,
+                    value: ''
                 });
 
                 curr = dayjs(curr).add(1, "quarter");
@@ -535,6 +535,7 @@ const TrackingInput = ({
                     title: dayjs(curr).format("MMM YYYY"),
                     start: monthStartDay,
                     end: monthEndDay,
+                    value: ''
                 });
 
                 curr = dayjs(curr).add(1, "month");
@@ -585,6 +586,7 @@ const TrackingInput = ({
                     title,
                     start: weekStart,
                     end: weekEnd,
+                    value: ''
                 });
 
                 curr = dayjs(curr).add(1, "week");
@@ -608,6 +610,17 @@ const TrackingInput = ({
     // end time period control
 
 
+
+    // apply to all
+    const applyToAll = () => {
+        let newPeriod = [...period]; 
+        newPeriod = period.map(p => p.value === trackingValue );
+        setRecurring(newPeriod)
+    }
+
+
+    console.log(period)
+
     return(
         <div className='cnx_ins_tracking'>
             <div className="cnx_ins__goal_modal__tracking_input">
@@ -621,8 +634,8 @@ const TrackingInput = ({
                     style={{width: 'auto'}}
                 />
                 {checked ? 
-                    <Button size='sm' onClick={applyAll}>
-                       {applyRecurring? 'Applied' : 'Apply all'}
+                    <Button size='sm' onClick={() => setApplyAll(!applyAll)}>
+                       {applyAll? 'Remove all' : 'Apply all'}
                     </Button>
                 : <Tooltip text='Recurring'>
                     <i className="fa-solid fa-repeat"></i>
@@ -659,7 +672,7 @@ const TrackingInput = ({
                 {period.map(p => (
                     <Period  
                         key={`${p.title}`} 
-                        period={p} 
+                        period={p}
                         recurringValue={recurring}
                         trackingType={trackingType}
                         setRecurringValue={setRecurring}
@@ -689,17 +702,17 @@ const GoalFormModal = () => {
     const [trackingType, setTrackingType] = React.useState('value');
     const [trackingValue, setTrackingValue] = React.useState('');
     const [recurring, setRecurring] = React.useState([]);
-    const [applyRecurring, setApplyRecurring] = React.useState(false);
+    // const [applyRecurring, setApplyRecurring] = React.useState(false);
     const [qualified, setQualified] = React.useState('Contact Mode');
     const [dealType, setDealType] = React.useState('');
     const [goalType, setGoalType] = React.useState('');
     const [achievablePoints, setAchievablePoints] = React.useState('0');
 
-    React.useEffect(() => {
-        if(recurring.length === 0){
-            setApplyRecurring(false);
-        }
-    }, [recurring])
+    // React.useEffect(() => {
+    //     if(recurring.length === 0){
+    //         setApplyRecurring(false);
+    //     }
+    // }, [recurring])
 
 
     React.useEffect(() => {
@@ -748,7 +761,23 @@ const GoalFormModal = () => {
         setFormStatus('saving');
 
 
-        const data = {entry, entryType, assigneeType, assigneeFor, pipeline, frequency, startDate, endDate, trackingType, trackingValue, recurring, applyRecurring, qualified, dealType, goalType, achievablePoints: Number(achievablePoints)};
+        const data = {
+            entry, 
+            entryType, 
+            assigneeType, 
+            assigneeFor, 
+            pipeline, 
+            frequency, 
+            startDate, 
+            endDate, 
+            trackingType, 
+            trackingValue, 
+            recurring, 
+            qualified, 
+            dealType, 
+            goalType, 
+            achievablePoints: Number(achievablePoints)
+        };
 
         
 
@@ -915,8 +944,7 @@ const GoalFormModal = () => {
                             trackingValue={trackingValue}
                             setTrackingValue={setTrackingValue}
                             frequency={frequency}
-                            applyRecurring={applyRecurring}
-                            setApplyRecurring={setApplyRecurring}
+                            // applyRecurring={applyRecurring}
                             goalType={goalType}
                             setGoalType ={setGoalType}
                         />
@@ -955,14 +983,14 @@ const GoalFormModal = () => {
                                 </Button>
                             ): formStatus === 'saving' ? (
                                 <Button 
-                                    disabled={ !trackingValue && !applyRecurring}  
+                                    disabled={ !trackingValue }  
                                     variant='success'
                                 >
                                     Saving...
                                 </Button>
                             ) : formStatus === 'saved' ? (
                                 <Button 
-                                    disabled={ !trackingValue && !applyRecurring}  
+                                    disabled={ !trackingValue }  
                                     variant='success'
                                 >
                                     Saved
@@ -1026,8 +1054,6 @@ TrackingInput.propTypes = {
     trackingValue: PropsTypes.string.isRequired,
     setTrackingValue: PropsTypes.func.isRequired,
     frequency: PropsTypes.string.isRequired,
-    applyRecurring: PropsTypes.bool.isRequired,
-    setApplyRecurring: PropsTypes.func.isRequired,
     goalType: PropsTypes.string.isRequired,
     setGoalType: PropsTypes.func.isRequired,
 }

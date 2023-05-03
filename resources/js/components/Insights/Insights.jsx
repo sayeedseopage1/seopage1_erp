@@ -18,6 +18,7 @@ import Goal from './pages/Goal';
 import {useDashboards} from './hooks/useDashboards';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useGoals } from './hooks/useGoals';
 
 const InsightsComponent = () => {
   const {dashboards} = useDashboards();
@@ -28,6 +29,7 @@ const InsightsComponent = () => {
   const {reportModalOpen} = useSelector((state) => state.reportModal);
   const {isOpenDataTable} = useSelector(state => state.dataTableModal);
 
+  const {goals} = useGoals();
   return(
     <div className='cnx_insights'>
         <InsightSidebar />
