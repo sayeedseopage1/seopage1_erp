@@ -17,9 +17,15 @@ import reportModalReducer from "./slices/reportModalSlice";
 import sectionModalReducer from "./slices/sectionModalSlice";
 import sectionReducer from './slices/sectionsSlice';
 
+import dataTableModalReducer from "./slices/dataTableModalSlice";
+// deals
+import dealReducer from './slices/dealSlice';
+
+
 export const store = configureStore({
     reducer: {
         [apiSlice.reducerPath]: apiSlice.reducer,
+        deals: dealReducer,
         goals: goalReducer,
         goalModal : goalModalReducer,
         goalFormModal: goalFormModalReducer,
@@ -29,6 +35,7 @@ export const store = configureStore({
         reports: reportReducer,
         reportModal: reportModalReducer,
         sectionModal: sectionModalReducer,
+        dataTableModal: dataTableModalReducer,
 
     },
     middleware: (getDefaultMiddleware) => 

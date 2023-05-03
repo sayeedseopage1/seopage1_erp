@@ -17,6 +17,7 @@ import WeekOfYear from "dayjs/plugin/weekOfYear";
 import axios from 'axios';
 import _ from 'lodash';
 import { useNavigate } from 'react-router-dom';
+import { getPeriod } from '../utils/getPeriod';
 
 
 // assignee for 
@@ -311,8 +312,12 @@ const GoalType = ({ goalType, setGoalType }) => {
 
 
 // period
-const Period = ({ period, recurringValue, setRecurringValue, trackingType }) => {
+const Period = ({ period, recurringValue, defaultValue, setRecurringValue, trackingType }) => {
     const [value, setValue] = React.useState('');
+
+    React.useEffect(() => {
+        setValue(period.value);
+    }, [period]);
 
     const handleChange = e => {
         const index = recurringValue.findIndex(f => f?.title === period?.title);
@@ -350,7 +355,13 @@ const Period = ({ period, recurringValue, setRecurringValue, trackingType }) => 
                 {period?.title}
             </div>
             <div className='cnx_time_periods__input'>
-                <input type='number' value={value} onChange={handleChange} placeholder={`Insert ${trackingType}`} min={0} className='cnx_select_box' />
+                <input 
+                    type='number' 
+                    value={value} 
+                    onChange={handleChange} 
+                    placeholder={`Insert ${trackingType}`} 
+                    min={0} className='cnx_select_box' 
+                />
             </div>
         </div>
     )
@@ -365,15 +376,14 @@ const TrackingInput = ({
     setTrackingValue,
     recurring,
     setRecurring, 
-    applyRecurring,
-    setApplyRecurring,
     frequency,
     goalType,
     setGoalType
 }) => {
     const [checked, setChecked] = React.useState(false);
-    const [period, setPeriod] = React.useState([]);
+    const [period, setPeriod] = React.useState(recurring);
     const [error, setError] = React.useState(recurring);
+    const [applyAll, setApplyAll] = React.useState(false);
 
     React.useEffect(()=> {
         if(!endDate){
@@ -385,7 +395,8 @@ const TrackingInput = ({
         const doc = document.querySelector('.cnx_ins__goal_form_modal');
         if(checked){
             if(doc.offsetHeight > 720){
-                doc.style.height = '720px';
+                doc.style.height = window.innerHeight - 100 + 'px';
+                doc.style.maxHeight = 720 + "px";
                 doc.style.overflowY = 'auto';
             } else {
                 doc.style.height = 'auto';
@@ -399,14 +410,7 @@ const TrackingInput = ({
 
     }, [period, endDate, startDate, frequency, checked])
     
-    // apply all 
-    const applyAll = () => {
-        if(recurring.length > 0){
-            setError(false);
-            setApplyRecurring(true);
-        } else setError(true);  
-    }
-
+    
     // remove error
     React.useEffect(() => {
         if(recurring.length > 0 || !checked){
@@ -422,190 +426,25 @@ const TrackingInput = ({
         dayjs.extend(WeekOfYear);
 
         setRecurring([]);
-
-        // yearly
-        const yearly = () => {
-            let years = [];
-            const yearStart = dayjs(startDate).startOf("year");
-            const yearEnd = dayjs(endDate).endOf("year");
-            let current = yearStart;
-
-            while (current <= yearEnd) {
-                years.push({
-                    title: `${current.format("YYYY")}`,
-                    start: dayjs(startDate).format(),
-                    end: dayjs(endDate).format(),
-                });
-                current = dayjs(current).add(1, "year");
-            }
-
-            setPeriod([...years]);
-        };
-
-        // quarterly
-        const quarterly = () => {
-            let quarters = [];
-            const qs = dayjs(startDate).startOf("quarter");
-            const qe = dayjs(endDate).endOf("quarter");
-
-            let curr = qs;
-            while (curr <= qe) {
-                const quarterNumber = dayjs(curr).quarter(); // number of quarter
-                let quarterStart = dayjs(curr).format(); // get first date of a quarter start
-                let quarterEnd = dayjs(curr)
-                    .quarter(quarterNumber)
-                    .endOf("quarter")
-                    .format(); // get last date of a quarter end
-
-                /*
-                 ** if quarter start date less then or equal
-                 ** duration start date then start date is duration start date
-                 ** else start date is quarter start date
-                 */
-                quarterStart = dayjs(quarterStart).isSameOrBefore(startDate)
-                    ? dayjs(startDate).format()
-                    : quarterStart;
-
-                /*
-                 ** if duration end date less then or equal
-                 ** duration end date then end date is duration end date
-                 ** else end date is quarter end date
-                 */
-                quarterEnd = dayjs(endDate).isSameOrBefore(quarterEnd)
-                    ? dayjs(endDate).format()
-                    : quarterEnd;
-
-                // create title for period
-                const title = `Q${quarterNumber} (${dayjs(quarterStart).format(
-                    `MMM DD`
-                )} - ${dayjs(quarterEnd).format("MMM DD")}, ${dayjs(
-                    quarterEnd
-                ).format("YYYY")})`;
-
-                // push quarters
-                quarters.push({
-                    quarterNumber,
-                    title,
-                    start: quarterStart,
-                    end: quarterEnd,
-                });
-
-                curr = dayjs(curr).add(1, "quarter");
-            }
-
-            setPeriod([...quarters]);
-        };
-
-        // divide by month
-        const monthly = () => {
-            const months = [];
-            const ms = dayjs(startDate).startOf("month");
-            const me = dayjs(endDate).endOf("month");
-
-            let curr = ms;
-
-            while (curr <= me) {
-                let monthStartDay = dayjs(curr).format();
-                let monthEndDay = dayjs(curr).endOf("month").format();
-
-                /*
-                 ** if monthStartDay less then or equal
-                 ** duration start date then return duration start
-                 ** else return monthStartDay
-                 */
-
-                monthStartDay = dayjs(monthStartDay).isSameOrBefore(
-                    startDate
-                )
-                    ? dayjs(startDate).format()
-                    : monthStartDay;
-
-                /*
-                 ** if duration end less then or equal
-                 ** monthEndDay date then return duration end
-                 ** else return monthEndDay
-                 */
-
-                monthEndDay = dayjs(endDate).isSameOrBefore(monthEndDay)
-                    ? dayjs(endDate).format()
-                    : monthEndDay;
-
-                // push month
-                months.push({
-                    title: dayjs(curr).format("MMM YYYY"),
-                    start: monthStartDay,
-                    end: monthEndDay,
-                });
-
-                curr = dayjs(curr).add(1, "month");
-            }
-
-            setPeriod([...months]);
-        };
-
-        // weekly
-        const weekly = () => {
-            const weeks = [];
-            const ws = dayjs(startDate).startOf("week");
-            const we = dayjs(endDate).endOf("week");
-
-            let curr = ws;
-            while (curr <= we) {
-                const weekNumber = dayjs(curr).week();
-                let weekStart = dayjs(curr).format();
-                let weekEnd = dayjs(curr).endOf("week").format();
-
-                /*
-                 ** if week start less then or equal
-                 ** duration start then return duration start
-                 ** else return week start
-                 */
-                weekStart = dayjs(weekStart).isSameOrBefore(startDate)
-                    ? dayjs(startDate).format()
-                    : weekStart;
-
-                /*
-                 ** if duration end less then or equal
-                 ** week end then return duration end
-                 ** else return week end
-                 */
-                weekEnd = dayjs(endDate).isSameOrBefore(weekEnd)
-                    ? dayjs(endDate).format()
-                    : weekEnd;
-
-                // title
-                const title = `Week ${weekNumber} (${dayjs(weekStart).format(
-                    "MMM DD"
-                )} - ${dayjs(weekEnd).format("MMM DD")}, ${dayjs(
-                    weekEnd
-                ).format("YYYY")})`;
-
-                // push
-                weeks.push({
-                    title,
-                    start: weekStart,
-                    end: weekEnd,
-                });
-
-                curr = dayjs(curr).add(1, "week");
-            }
-
-            setPeriod([...weeks]);
-        };
-
-        if (endDate) {
-            if (_.toLower(frequency) === "monthly") {
-                monthly();
-            } else if (_.toLower(frequency) === "quarterly") {
-                quarterly();
-            } else if (_.toLower(frequency) === "yearly") {
-                yearly();
-            } else if (_.toLower(frequency) === "weekly") {
-                weekly();
-            }
-        }
+        getPeriod(
+            {setPeriod, startDate, endDate, frequency}
+        );       
     }, [endDate, frequency, setRecurring, startDate]);
     // end time period control
+
+
+
+    // apply to all
+    const applyToAll = () => {
+        let newPeriod = [...period]; 
+        newPeriod = period.map(p => ({
+            ...p,
+            value: trackingValue 
+        }));
+        setRecurring(newPeriod);
+        setPeriod(newPeriod);
+    }
+
 
 
     return(
@@ -621,8 +460,8 @@ const TrackingInput = ({
                     style={{width: 'auto'}}
                 />
                 {checked ? 
-                    <Button size='sm' onClick={applyAll}>
-                       {applyRecurring? 'Applied' : 'Apply all'}
+                    <Button size='sm' onClick={applyToAll}>
+                       Apply all
                     </Button>
                 : <Tooltip text='Recurring'>
                     <i className="fa-solid fa-repeat"></i>
@@ -643,9 +482,6 @@ const TrackingInput = ({
                 </Tooltip>
             }
 
-            {error && <div className='cnx_ins__goal_modal__tracking_input_error'>
-                Please add minimum of {trackingType}
-            </div>}
 
             {checked && <div className='cnx_time_period'>
                 <div className='cnx_time_period__header'>
@@ -659,7 +495,7 @@ const TrackingInput = ({
                 {period.map(p => (
                     <Period  
                         key={`${p.title}`} 
-                        period={p} 
+                        period={p}
                         recurringValue={recurring}
                         trackingType={trackingType}
                         setRecurringValue={setRecurring}
@@ -689,17 +525,17 @@ const GoalFormModal = () => {
     const [trackingType, setTrackingType] = React.useState('value');
     const [trackingValue, setTrackingValue] = React.useState('');
     const [recurring, setRecurring] = React.useState([]);
-    const [applyRecurring, setApplyRecurring] = React.useState(false);
+    // const [applyRecurring, setApplyRecurring] = React.useState(false);
     const [qualified, setQualified] = React.useState('Contact Mode');
     const [dealType, setDealType] = React.useState('');
     const [goalType, setGoalType] = React.useState('');
-    const [achievablePoints, setAchievablePoints] = React.useState('');
+    const [achievablePoints, setAchievablePoints] = React.useState('0');
 
-    React.useEffect(() => {
-        if(recurring.length === 0){
-            setApplyRecurring(false);
-        }
-    }, [recurring])
+    // React.useEffect(() => {
+    //     if(recurring.length === 0){
+    //         setApplyRecurring(false);
+    //     }
+    // }, [recurring])
 
 
     React.useEffect(() => {
@@ -738,9 +574,7 @@ const GoalFormModal = () => {
         if(!Number(trackingValue)) return false;
         if(!dealType) return false;
         if(!goalType) return false;
-       // if(!Number(achievablePoints)) return false;
-
-        return true;
+         return true;
     }
 
     // handle on submit 
@@ -748,7 +582,27 @@ const GoalFormModal = () => {
         e.preventDefault();
         setIsSaving(true);
         setFormStatus('saving');
-        const data = {entry, entryType, assigneeType, assigneeFor, pipeline, frequency,achievablePoints, startDate, endDate, trackingType, trackingValue, recurring, applyRecurring, qualified, dealType, goalType};
+
+
+        const data = {
+            entry, 
+            entryType, 
+            assigneeType, 
+            assigneeFor, 
+            pipeline, 
+            frequency, 
+            startDate, 
+            endDate, 
+            trackingType, 
+            trackingValue, 
+            recurring, 
+            qualified, 
+            dealType, 
+            goalType, 
+            achievablePoints: Number(achievablePoints)
+        };
+
+        
 
         await axios.post("/account/insights/goals/add", data).then((res) => {
             setFormStatus('saved');
@@ -913,8 +767,7 @@ const GoalFormModal = () => {
                             trackingValue={trackingValue}
                             setTrackingValue={setTrackingValue}
                             frequency={frequency}
-                            applyRecurring={applyRecurring}
-                            setApplyRecurring={setApplyRecurring}
+                            // applyRecurring={applyRecurring}
                             goalType={goalType}
                             setGoalType ={setGoalType}
                         />
@@ -953,14 +806,14 @@ const GoalFormModal = () => {
                                 </Button>
                             ): formStatus === 'saving' ? (
                                 <Button 
-                                    disabled={ !trackingValue && !applyRecurring}  
+                                    disabled={ !trackingValue }  
                                     variant='success'
                                 >
                                     Saving...
                                 </Button>
                             ) : formStatus === 'saved' ? (
                                 <Button 
-                                    disabled={ !trackingValue && !applyRecurring}  
+                                    disabled={ !trackingValue }  
                                     variant='success'
                                 >
                                     Saved
@@ -1024,8 +877,6 @@ TrackingInput.propTypes = {
     trackingValue: PropsTypes.string.isRequired,
     setTrackingValue: PropsTypes.func.isRequired,
     frequency: PropsTypes.string.isRequired,
-    applyRecurring: PropsTypes.bool.isRequired,
-    setApplyRecurring: PropsTypes.func.isRequired,
     goalType: PropsTypes.string.isRequired,
     setGoalType: PropsTypes.func.isRequired,
 }

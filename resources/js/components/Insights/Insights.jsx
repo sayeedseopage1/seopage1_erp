@@ -13,8 +13,12 @@ import NewDashboardModal from './components/NewDashboardModal';
 import AddSectionModal from './components/AddSectionModal';
 import Dashboard from './pages/Dashboard';
 import ReportModal from './components/ReportModal';
+// import { ModalDataTable } from './components/ModalDataTable';
 import Goal from './pages/Goal';
-import {useDashboards} from './hooks/useDashboards'
+import {useDashboards} from './hooks/useDashboards';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useGoals } from './hooks/useGoals';
 
 const InsightsComponent = () => {
   const {dashboards} = useDashboards();
@@ -23,8 +27,9 @@ const InsightsComponent = () => {
   const {dashboardModalOpen} = useSelector((state) => state.dashboardModal);
   const {sectionModalOpen} = useSelector((state) => state.sectionModal);
   const {reportModalOpen} = useSelector((state) => state.reportModal);
+  const {isOpenDataTable} = useSelector(state => state.dataTableModal);
 
-
+  const {goals} = useGoals();
   return(
     <div className='cnx_insights'>
         <InsightSidebar />
@@ -46,6 +51,11 @@ const InsightsComponent = () => {
           { dashboardModalOpen && <NewDashboardModal /> }
           { sectionModalOpen && <AddSectionModal />}
         </Modal>
+
+
+        {/* <Modal isOpen ={isOpenDataTable}>
+          <ModalDataTable />
+        </Modal> */}
     </div>
   )
 }
@@ -70,11 +80,13 @@ const AppRoutes = () => {
 
 const Insights = () => {
     return(
+      <DndProvider backend={HTML5Backend}>
         <BrowserRouter basename="/account/insights">
           <Provider store={store}>
             <InsightsComponent />
           </Provider>
         </BrowserRouter>
+      </DndProvider>
     )
 }
 
