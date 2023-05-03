@@ -1471,7 +1471,7 @@
 .cnx__table_td_loading span {
         display: block;
         color: transparent;
-        background: #ccc;
+        background: #ddd;
         border-radius: 10px;
         -webkit-user-select: none;
            -moz-user-select: none;

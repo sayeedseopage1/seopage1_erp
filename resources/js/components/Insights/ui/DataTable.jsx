@@ -122,7 +122,7 @@ const DataTable = ({data, isLoading}) => {
                             <div key={i} className="cnx__table_tr">
                                 {columns.map(d => 
                                     <div key={d.id} className="cnx__table_td cnx__table_td_loading ">
-                                        <span className='animate-pulse' style={{width: `${ Math.floor(Math.random() * (100 - 30) + 30)}%`}}>loading</span>
+                                        <span className='animate-pulse' style={{width: `${ Math.floor(Math.random() * (70 - 20) + 20)}%`}}>loading</span>
                                     </div>
                                 )}
                             </div> 
@@ -181,7 +181,9 @@ const DataTable = ({data, isLoading}) => {
 
                 {/* pagination */}
                 <Pagination
-                    data={[...sortedData(data, sortConfig)]}
+                    sortConfig={sortConfig}
+                    sortedData={sortedData}
+                    data={data}
                     setCurrentPageData={(v) => setCurrentPageData(v)}
                     numOfPerPageRow={Number(numberOfRowPerPage)}
                 />
