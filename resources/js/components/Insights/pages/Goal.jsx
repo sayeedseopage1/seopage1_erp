@@ -38,7 +38,7 @@ const Goal = () => {
         fetch();
 
         return () => fetch();
-    })
+    }, [])
 
 
     return(
@@ -323,7 +323,7 @@ const Goal = () => {
                     </div>
                     {/* end header */}
 
-                    <div className="cnx_divider" />
+                    
 
                     {/* graph table */}
                     <div className='cnx__ins_table'>
