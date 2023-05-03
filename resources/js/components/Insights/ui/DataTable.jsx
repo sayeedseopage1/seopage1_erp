@@ -137,7 +137,7 @@ const DataTable = ({data, isLoading}) => {
                                         <div key={data.id} className="cnx__table_tr">
                                             {columns.map(d => (
                                                 <div key={d.id} className="cnx__table_td">
-                                                    {d.cell(data)}
+                                                    {d.cell(data) || <span> &nbsp; </span>}
                                                 </div>
                                             ))}
                                         </div> 
@@ -226,14 +226,14 @@ const DraggableColumn = ({
     setActiveColumns
 }) => {
     const ref = React.useRef(null);
-
     // re ordering column
     const reOrder = (curr, target) => {
         activeColumns.splice(
-            activeColumns.indexOf(target),
+            activeColumns.indexOf(target.id),
             0,
-            activeColumns.splice(activeColumns.indexOf(curr), 1)[0]
+            activeColumns.splice(activeColumns.indexOf(curr.id), 1)[0]
         )
+
 
         return [...activeColumns]
     }
