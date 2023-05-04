@@ -45,7 +45,6 @@ class KpiSettingController extends AccountBaseController
     // phpcs:ignore
     public function update(Request $request,$id)
     {
-//        dd($request->all());
         $kpi_setting = kpiSetting::find($id);
         $kpi_setting->the_bidder = $request->the_bidder;
         $kpi_setting->qualify = $request->qualify;
@@ -75,7 +74,7 @@ class KpiSettingController extends AccountBaseController
         $kpi_setting->estimated_hours3 = $request->estimated_hours3;
         $kpi_setting->logged_hours3 = $request->logged_hours3;
         $kpi_setting->sales_executive3 = $request->sales_executive3;
-//        $kpi_setting->save();
+        $kpi_setting->save();
 
 
 
@@ -84,7 +83,7 @@ class KpiSettingController extends AccountBaseController
             $kpi_setting_milestone->kpi_id = $request->id;
             $kpi_setting_milestone->sales_team_reaches = $sales_team_reach;
             $kpi_setting_milestone->closed_deals_goal_month  = $request->closed_deals_goal_month[$key] ;
-//            $kpi_setting_milestone->save();
+            $kpi_setting_milestone->save();
         }
         foreach($request->sales_from as $key => $sales_from) {
             $kpi_setting_generate_sales = new kpiSettingGenerateSales();

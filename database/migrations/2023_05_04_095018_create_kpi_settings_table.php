@@ -30,8 +30,6 @@ return new class extends Migration
             $table->bigInteger('authorized_by_leader')->default(0);
             $table->bigInteger('certain_deal')->default(0);
             $table->bigInteger('certain_deal_per_month')->default(0);
-            $table->bigInteger('closed_deal_goal')->default(0);
-            $table->bigInteger('closed_deal_goal_month')->default(0);
             $table->bigInteger('additional_milestone')->default(0);
             $table->bigInteger('additional_milestone_point')->default(0);
             $table->bigInteger('sales_above')->default(0);
