@@ -679,15 +679,15 @@ ul.fileList {
 
                            @if($deal->deal_stage == 5)
                            <div class="row mx-auto">
-                            @if($deal->autorization_status == 0)
-                            <button class="btn btn-success wons w-40 send_authorization">Request for Authorization</button>
-                            @elseif($deal->autorization_status == 2)
+                            {{-- @if($deal->authorization_status == 0)
+                            <button class="btn btn-success wons w-40 send_authorization">Request for Authorization</button> --}}
+                            {{-- @elseif($deal->authorization_status == 2)
                             <button  disabled  data-bs-whatever="@mdo" class="btn btn-warning wons w-40 disabled">Awaiting for approval</button>
 
-                            @else
+                            @else --}}
                             <a href="#" data-bs-toggle="modal" data-bs-target="#dealaddstagemodal" data-bs-whatever="@mdo" class="btn btn-success wons w-40">Won The Deal</a>
                             <a href="#" data-bs-toggle="modal" data-bs-target="#lostmodal" data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The Deal</a>
-                            @endif
+                            {{-- @endif --}}
 
                            </div>
                           
@@ -1678,58 +1678,6 @@ ul.fileList {
  })()
  </script>
  
- <script>
-        $('body').on('click', '.send_authorization', function() {
-           // alert('ok');
-             var id = "{{$deal->id}}";
-            // alert(id);
-             
-            Swal.fire({
-                title: "@lang('messages.sweetAlertTitle')",
-                text: "You want to send for the authorization?",
-                icon: 'warning',
-                showCancelButton: true,
-                focusConfirm: false,
-                confirmButtonText: "Confirm",
-                cancelButtonText: "@lang('app.cancel')",
-                customClass: {
-                    confirmButton: 'btn btn-primary mr-3',
-                    cancelButton: 'btn btn-secondary'
-                },
-                showClass: {
-                    popup: 'swal2-noanimation',
-                    backdrop: 'swal2-noanimation'
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var url = "{{ route('projects.destroy', ':id') }}";
-                    url = url.replace(':id', id);
-
-                    var token = "{{ csrf_token() }}";
-
-                    $.easyAjax({
-                        type: 'POST',
-                        url: url,
-                        container: '.content-wrapper',
-                        blockUI: true,
-                        data: {
-                            '_token': token,
-                            '_method': 'DELETE'
-                        },
-                        success: function(response) {
-                            if (response.status == "success") {
-                                showTable();
-                            }
-                        }
-                    });
-                }
-            });
-            
-        }
-    );
-     
-</script>
 
 
 

@@ -21,9 +21,9 @@
             <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
                 <h6 class="text-center">Point distribution for won deal</h6>
                 <br>
-                <form id="save-kpi-settings" action="{{route('kpi-settings.update',$kpi[0]->id)}}" method="PUT">
+                <form id="save-kpi-settings" action="{{route('kpi-settings.update',$kpi->id)}}" method="PUT">
                     @csrf
-                    <input type="hidden" name="id" value="{{$kpi[0]->id}}">
+                    <input type="hidden" name="id" value="{{$kpi->id}}">
                     <div class="form-group row">
                       <label for="inputPassword" class="col-sm-2 col-form-label">1. The bidder will get:</label>
                       <div class="col-sm-10 d-flex">
@@ -391,7 +391,7 @@
                 'sales_from': sales_from_values,
                 'sales_to': sales_to_values,
                 'sales_get': sales_get_values,
-                'id':{{$kpi[0]->id}},
+                'id':{{$kpi->id}},
             }
             // console.log(data);
             $.ajaxSetup({
@@ -401,7 +401,7 @@
             });
             $.ajax({
                 type: "PUT",
-                url: "{{ route('kpi-settings.update',$kpi[0]->id) }}",
+                url: "{{ route('kpi-settings.update',$kpi->id) }}",
                 data: data,
                 dataType: "json",
                 success: function (response) {
@@ -419,31 +419,7 @@
             });
         });
     </script>
-    <script>
-        {{--$('#save-form').click(function() {--}}
-        {{--    const url = "{{ route('kpi-settings.update', ['1']) }}";--}}
-
-        {{--    $.easyAjax({--}}
-        {{--        url: url,--}}
-        {{--        container: '#save-kpi-settings',--}}
-        {{--        type: "POST",--}}
-        {{--        disableButton: true,--}}
-        {{--        blockUI: true,--}}
-        {{--        buttonSelector: "#save-form",--}}
-        {{--        data: $('#save-kpi-settings').serialize(),--}}
-        {{--        success: function(response) {--}}
-        {{--            if (response.status == 'success') {--}}
-        {{--                if ($(MODAL_XL).hasClass('show')) {--}}
-        {{--                    $(MODAL_XL).hide();--}}
-        {{--                    window.location.reload();--}}
-        {{--                } else {--}}
-        {{--                    window.location.href = response.redirectUrl;--}}
-        {{--                }--}}
-        {{--            }--}}
-        {{--        }--}}
-        {{--    });--}}
-        {{--});--}}
-    </script>
+   
     <script>
         $(document).ready(function () {
             var buttonAdd = $("#add-button");

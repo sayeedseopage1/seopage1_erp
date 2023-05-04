@@ -340,7 +340,7 @@ class LeadController extends AccountBaseController
                 $deal_stage->updated_by= Auth::id();
                 $deal_stage->save();
 
-                $pusher_options['title'] = 'Deals updated';
+                $pusher_options['title'] = 'Milestone Breakdown';
                 $pusher_options['body'] = 'Go to the deals';
 
                

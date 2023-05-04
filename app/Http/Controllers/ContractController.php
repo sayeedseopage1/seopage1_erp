@@ -47,7 +47,8 @@ use App\Models\Country;
 use Toastr;
 use Exception;
 use App\Models\EmployeeDetails;
-
+use App\Notifications\DealAuthorizationSendNotification;
+use Notification;
 
 class ContractController extends AccountBaseController
 {
@@ -1164,6 +1165,23 @@ class ContractController extends AccountBaseController
                     // //dd($clientdetail);
                     // $clientdetail->company_name= $request->organization;
                     // $clientdetail->save();
+                        $deal= Deal::find($deal->id);
+                        $deal->authorization_status= 2;
+                        $deal->save();
+                        $sender= User::where('id',Auth::id())->first();
+                        $users= User::where('role_id',8)->orWhere('role_id',1)->get();
+                    
+                        foreach ($users as $key => $user) {
+                           // Notification::send($users, new DealAuthorizationSendNotification($deal,$sender));
+                            $this->triggerPusher('notification-channel', 'notification', [
+                                'user_id' => $user->id,
+                                'role_id' => $user->role_id,
+                                'title' => 'Price authorization request from '.$sender->name,
+                                'body' => $sender->name. ' send price authorization request for '.$deal->project_name,
+                                'redirectUrl' => route('deals.show',$deal->id)
+                            ]);
+                        }
+       
 
 
                       DB::commit();
