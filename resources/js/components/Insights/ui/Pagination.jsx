@@ -21,6 +21,7 @@ const Pagination = ({data, setCurrentPageData, numOfPerPageRow = 10, sortConfig,
 
     /// set current page data
     React.useEffect(() => {
+        console.log('data change')
         const _data = sortedData(data, sortConfig);
         let perPageData = paginate(_data, currentPage, numOfPerPageRow);
         setCurrentPageData(perPageData);

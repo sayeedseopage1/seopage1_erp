@@ -109,7 +109,7 @@ export const TooltipElement = () => {
 
 
 // tooltip component
-const TooltipComponent = ({children, text}) => {
+const TooltipComponent = ({children, text,...props}) => {
     const {setIsOpen, setElement, setReference} = useTooltip(); 
 
     React.useEffect(() => {
@@ -123,7 +123,8 @@ const TooltipComponent = ({children, text}) => {
             <div ref={setReference}
                 onMouseOver={() => setIsOpen(true)}
                 onMouseLeave={() => setIsOpen(false)}
-                style={{width: 'fit-content'}}
+                style={{width: 'fit-content', ...props.style}}
+                {...props}
             >
                 {children}
             </div>
@@ -134,11 +135,11 @@ const TooltipComponent = ({children, text}) => {
 
 
 
-const Tooltip = ({children, text}) => {
+const Tooltip = ({children, text, ...props}) => {
 
     return (
         <TooltipProvider>
-            <TooltipComponent text={text}>
+            <TooltipComponent text={text} {...props}>
                 {children}
             </TooltipComponent>
         </TooltipProvider>

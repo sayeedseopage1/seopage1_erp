@@ -17,9 +17,10 @@ export const DataTableColumns = [
         id: 'project_name',
         cell: (row) => {
             return <span>
-                <a href={`/account/projects/${row['project_id']}`}>
+                {/* <a href={`/account/projects/${row['project_id']}`}> */}
+                 {/* <a href="#" > */}
                     {row['project_name']}
-                </a>
+                {/* </a> */}
             </span>
         }
     },
@@ -28,7 +29,7 @@ export const DataTableColumns = [
         id: "amount",
         accessor: 'amount',
         cell: (row) => {
-            return <span style={{fontWeight: '600'}}> ${row['amount']} </span>
+            return <span style={{fontWeight: '600', float:"right"}}> ${row['amount'].toFixed(2)} </span>
         }
     },
     {
@@ -37,9 +38,9 @@ export const DataTableColumns = [
         accessor: 'client',
         cell: (row) => {
             return <span >
-                    <a href={`/account/clients/${row['client_id']}`} >
+                    {/* <a href={`/account/clients/${row['client_id']}`} > */}
                         {row['client_name'] || row['client_username']}
-                    </a>
+                    {/* </a> */}
             </span>
         }
     },

@@ -2,31 +2,47 @@ import axios from 'axios';
 import * as React from 'react';
 import { useDispatch,  useSelector } from 'react-redux';
 import { setDeals, setStatus } from '../services/slices/dealSlice';
+import { CompareDate } from '../utils/dateController';
+import { useGetDealsQuery } from '../services/api/dealSliceApi';
+import dayjs from 'dayjs';
 
 
 export const useDealsState = () => {
     const { deals, status, error } = useSelector(state => state.deals);
     const dispatch = useDispatch();
+    const day = new CompareDate();
+
+    const {
+        data: dealsData,
+        isLoading: dealsIsLoading,
+        error: dealsError,
+        isFetching: dealsIsFetching
+    } = useGetDealsQuery({
+        refetchOnMountOrArgChange: true,
+        skip: deals.length > 0
+    });
     
 
-    // fetch deal data
     React.useEffect(() => {
-        const fetch = async () => {
-            dispatch(setStatus({status: "loading"}));
-            await axios.get('/account/insights/deals').then(res => {
-                dispatch(setDeals(res.data));
-                dispatch(setStatus({status: 'completed'}));
-            }).catch(err => {
-                console.log(err);
-                dispatch(setStatus({status: 'idle'}));
-            })
+        if(dealsData && !dealsIsFetching){
+            dispatch(setDeals(dealsData));
         }
-
-        if(deals.length === 0){
-            fetch();
-        }
-    }, [])
+    }, [dealsData, dealsIsFetching])
 
 
-    return {deals, getDealStateStatus: status, getDealStateError:error }
+    // get deals 
+    const getDeals = (deals, startDate, endDate) => {
+
+        return deals.filter(deal => {
+            if(endDate){
+                return day.isSameOrAfter(deal.created_at, startDate) &&
+                day.isSameOrBefore(deal.created_at, endDate)
+            }else{
+                return day.isSameOrAfter(deal.created_at, startDate)
+            }
+        });
+    }
+
+
+    return {deals, getDeals, getDealStateStatus: status, getDealStateError:error }
 }
