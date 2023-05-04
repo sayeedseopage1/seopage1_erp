@@ -10,6 +10,12 @@ import { relativeTime } from '../utils/relativeTime';
 import RelativeTimePeriod from '../components/RelativeTimePeriod';
 import DataTable from '../ui/DataTable';
 import { useDealsState } from '../hooks/useDealsState';
+import { useGetGoalsQuery } from '../services/api/goalsApiSlice';
+import { useGetUsersQuery } from '../services/api/userSliceApi';
+import { useGoals } from '../hooks/useGoals';
+import { useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
+import { useUsers } from '../hooks/useUsers';
 
 
 // convert to unit
@@ -22,12 +28,51 @@ const numberToUnits = (value,decimal= 1) => {
 const Goal = () => {
     const [selectedPeriod, setSelectedPeriod] = React.useState('Today');
     const [filter, setFilterValue] = React.useState('');
-    const {deals, getDealStateStatus} = useDealsState(); 
+    const [goal, setGoal] = React.useState(null);
+    const {deals, getDeals} = useDealsState(); 
+    const [dealsData, setDealsData] = React.useState([]);
+    const [isLoading , setIsLoading] = React.useState(true);
+    const {goals, getGoalById, goalsIsLoading} = useGoals();
+    const params = useParams();
+    const {users} = useUsers();
+    const usersData = users && users.users;
 
     const handleRelativeTimePeriod =(value) => {
         setSelectedPeriod(value);
         relativeTime(value, setFilterValue);
     }
+
+
+    // get goal data
+    React.useEffect(()=> {
+        if(usersData && usersData.length > 0){
+            if(goalsIsLoading) return <div>Loading...</div>
+            let goal = getGoalById(Number(params.goalId));
+            let user = _.find(usersData, {id: goal.added_by});
+            setGoal({
+                ...goal,
+                user: user
+            });
+        }
+    }, [params.goalId, usersData, goalsIsLoading]);
+
+
+    // get deals data
+    React.useEffect(() => {
+        if(deals && deals.length > 0 && goal){
+            let _deals = getDeals(deals, goal.startDate, goal.endDate);
+            setDealsData([..._deals]);
+            setIsLoading(false);
+        }
+         
+    }, [goal, params.goalId]);
+
+
+    if(!goal) return  (
+        <div style={{display: 'flex', alignItems: 'center', "justifyContent": 'center', width: "100%", height: '100vh'}}>
+            <div>Loading...</div>
+        </div>
+    )
 
     return(
         <div className="cnx__ins_dashboard">
@@ -118,13 +163,23 @@ const Goal = () => {
                         </Button>
 
                         <div className='filter_options_line'>
-                            <span>Abu sayeed</span>
-                            <span>Deals added</span>
+                            <span>{ goal.user?.name }</span>
+                            <span>
+                                {goal.entry} {goal.entryType}
+                            </span>
                             <span>Pipeline</span>
-                            <span>Monthly</span>
-                            <span>04/01/2023</span>
-                            <span>No end date</span>
-                            <span>500 deals</span>
+                            <span>
+                                {goal.frequency}
+                            </span>
+                            <span>
+                                {dayjs(goal.startDate).format('MMM DD, YYYY')}
+                            </span>
+                            <span>
+                                {goal.endDate ? dayjs(goal.endDate).format('MMM DD, YYYY') : 'No end date'}
+                            </span>
+                            <span>
+                                {goal.trackingType === "value" ? numberToUnits(Number(goal.trackingValue)) : goal.trackingValue} deals
+                            </span>
                         </div>
 
                         <div>
@@ -147,7 +202,7 @@ const Goal = () => {
                            <Tooltip text='Goal type'>
                              <div className='cnx__ins_details_item'>
                                 <Icon type="Deal" />
-                                Deals Added
+                                {goal.entry} {goal.entryType}
                             </div>
                            </Tooltip>
 
@@ -163,21 +218,21 @@ const Goal = () => {
                             <Tooltip text="Goal Frequency">
                                 <div className='cnx__ins_details_item'>
                                     <Icon type="Activity" />
-                                    Monthly
+                                    {goal.frequency}
                                 </div>
                             </Tooltip>
 
                             <Tooltip text="Goal duration">
                                 <div className='cnx__ins_details_item'>
                                     <i className="fa-regular fa-clock"/>
-                                    04/01/2023 - No end date
+                                    {dayjs(goal.startDate).format('MMM DD, YYYY')} - {goal.endDate ? dayjs(goal.endDate).format('MMM DD, YYYY') : 'No end date'}
                                 </div>
                             </Tooltip>
 
                             <Tooltip text='Expected outcome'>
                                 <div className='cnx__ins_details_item'>
                                     <Icon type="Goal" />
-                                    500 Deals
+                                    {goal.trackingType === "value" ? numberToUnits(Number(goal.trackingValue)) : goal.trackingValue} Deals 
                                 </div>
                             </Tooltip>
                         </div>
@@ -315,7 +370,10 @@ const Goal = () => {
 
                     {/* graph table */}
                     <div className='cnx__ins_table'>
-                        <DataTable data={deals} isLoading={getDealStateStatus === 'loading'} />
+                        <DataTable 
+                            data={dealsData} 
+                            isLoading={goalsIsLoading || isLoading} 
+                        />
                     </div>
                     {/* end graph table */}
                     

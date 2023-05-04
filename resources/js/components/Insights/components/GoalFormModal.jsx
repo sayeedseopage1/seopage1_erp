@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { getPeriod } from '../utils/getPeriod';
 import { useGetUsersQuery } from '../services/api/userSliceApi';
 import { useGetTeamsQuery } from '../services/api/teamSliceApi';
+import { addGoal, setGoals } from '../services/slices/goalSlice';
 
 
 // assignee for 
@@ -547,7 +548,6 @@ const GoalFormModal = () => {
     React.useEffect(() => {
         if(formStatus === 'saved'){
             close();
-            navigate('goals/1');
         }
     }, [formStatus])
 
@@ -613,7 +613,9 @@ const GoalFormModal = () => {
         await axios.post("/account/insights/goals/add", data).then((res) => {
             setFormStatus('saved');
             setIsSaving(false);
-            console.log(res);
+            dispatch(addGoal(res.data[0]));
+            navigate(`goals/${res.data[0].id}`);
+            // window.location.href = `/account/insights/goals/${res.data[0].id}`;
         });
     }
 

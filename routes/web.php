@@ -1217,6 +1217,8 @@ Route::get('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog']
 
 Route::get('get-users', [InsightsController::class, 'getusers'])->name('get-users');
 Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams');
+Route::get('get-users/all', [InsightsController::class, 'get_users_all'])->name('get_users_all');
+Route::get('get-user/{id}', [InsightsController::class, 'get_users_by_id'])->name('get_users_by_id');
 
 
 //Team Routes 

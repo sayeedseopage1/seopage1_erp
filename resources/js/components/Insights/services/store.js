@@ -22,6 +22,10 @@ import dataTableModalReducer from "./slices/dataTableModalSlice";
 import dealReducer from './slices/dealSlice';
 
 
+// users
+import usersReducer from './slices/usersSlice';
+
+
 export const store = configureStore({
     reducer: {
         [apiSlice.reducerPath]: apiSlice.reducer,
@@ -36,7 +40,7 @@ export const store = configureStore({
         reportModal: reportModalReducer,
         sectionModal: sectionModalReducer,
         dataTableModal: dataTableModalReducer,
-
+        users: usersReducer
     },
     middleware: (getDefaultMiddleware) => 
         getDefaultMiddleware().concat(apiSlice.middleware),

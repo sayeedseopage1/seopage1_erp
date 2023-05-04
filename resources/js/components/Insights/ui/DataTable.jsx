@@ -40,16 +40,23 @@ const useTableState = () => {
 
 // data table 
 const DataTable = ({data, isLoading}) => {
-    const [currentPageData, setCurrentPageData] = React.useState([]);
+    const [currentPageData, setCurrentPageData] = React.useState([...data]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
     const { activeColumns, setActiveColumns, sortConfig, setSortConfig } = useTableState();
+    const [totalPage, setTotalPage] = React.useState(1);
 
-    // total page
-    const totalPage = Math.ceil(data.length / numberOfRowPerPage);
+
+    React.useEffect(()=> {
+      if(!data) return;
+       let t = Math.ceil(data.length / numberOfRowPerPage)
+       setCurrentPageData([...data]);
+       setTotalPage(t);
+    }, [data])
 
 
     // config sort
     const sortedData = (data, sortConfig) => {
+        if(!data) return [];
         if(sortConfig.key){
             return [...data].sort((a, b) => {
                 if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -86,7 +93,7 @@ const DataTable = ({data, isLoading}) => {
                     .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
                                 
 
-    return(
+    return (
         <div style={{maxWidth: '100%'}}>
             <div className='cnx__table_wrapper'>
                  {/* filter button */}
@@ -156,7 +163,7 @@ const DataTable = ({data, isLoading}) => {
                 </div>
             </div>
         {/* table footer  */}
-        {   
+         {/* {   
             totalPage > 1 &&
             <div className="cnx__table_footer">
                 <div className="__show_entries">
@@ -179,18 +186,15 @@ const DataTable = ({data, isLoading}) => {
                 </div>
 
 
-                {/* pagination */}
-                <Pagination
+                 <Pagination
                     sortConfig={sortConfig}
                     sortedData={sortedData}
-                    data={data}
+                    data={[...data]}
                     setCurrentPageData={(v) => setCurrentPageData(v)}
                     numOfPerPageRow={Number(numberOfRowPerPage)}
-                />
-                {/* end pagination */}
+                />  
             </div>
-        }
-            {/* end table footer  */}
+        }  */}
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import { apiSlice } from "./apiSlice";
+import { apiSlice } from "./apiSlice";            
 
 
 const userSliceApi = apiSlice.injectEndpoints({
@@ -6,12 +6,13 @@ const userSliceApi = apiSlice.injectEndpoints({
         getUsers: build.query({
             query: () => `/get-users`
         }),
-        getUser: build.query({
-            query: (id) => `/account/employees/${id}`
+        getAllUsers: build.query({
+            query: () => `/get-users/all`
         })
     })
 }) ;
 
 
 
-export const { useGetUsersQuery, useGetUserQuery } = userSliceApi;
+export const { useGetUsersQuery, useGetAllUsersQuery } = userSliceApi;
+

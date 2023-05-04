@@ -2,37 +2,27 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import * as React from 'react';
 import { setGoals, setRecurring, setStatus } from "../services/slices/goalSlice";
+import { useGetGoalsQuery } from "../services/api/goalsApiSlice";
 
 
 export const useGoals = () => {
     const {goals}  = useSelector(state => state.goals);
     const dispatch = useDispatch();
-    
 
-    // fetch all goals
+    const {data: goalsData, isLoading: goalsIsLoading, error: goalsError} = useGetGoalsQuery(window.Laravel.user.id);
+
     React.useEffect(() => {
-        const fetch = async () => {
-            const id = window.Laravel.user.id;
-            if(!id) return;
-            dispatch(setStatus({status: "loading"}));
-            await axios.get(`/account/insights/goals/get/${id}`).then(res => {
-                if(res.data){
-                    const { goals, recurring } = res.data;
-                    dispatch(setGoals(goals));
-                    dispatch(setRecurring(recurring));
-                    dispatch(setStatus({status: 'completed'}));
-                }
-            }).catch(err => {
-                console.log(err);
-                dispatch(setStatus({status: 'idle'}));
-            })
+        if(goalsData && !goalsIsLoading){
+            dispatch(setGoals(goalsData.goals));
+            dispatch(setRecurring(goalsData.recurring));
         }
+    }, [goalsData, goalsIsLoading, goalsError])
 
-        if(goals.length === 0){
-            fetch();
-        }
-    }, [])
 
- 
-    return {goals}
+    const getGoalById = (id) => {
+        return goals.length > 0 && goals.find(goal => goal.id === id);
+    }
+
+
+    return {goals, goalsIsLoading ,getGoalById}
 }

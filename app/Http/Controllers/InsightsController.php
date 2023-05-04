@@ -32,14 +32,33 @@ class InsightsController extends AccountBaseController
     {
         return view('insights.insights', $this->data);
     }
-    public function getusers(Request $request)
-    {
+    // public function getusers(Request $request)
+    // {
         
-        $users = User::where('role_id',7)->orWhere('role_id',8)->get();
+    //     $users = User::where('role_id',7)->orWhere('role_id',8)->get();
        
         
-         return response()->json($users);
-    }
+    //      return response()->json($users);
+    // }
+
+    public function getusers(Request $request)
+        {
+            
+            $users = User::where('role_id',7)->orWhere('role_id',8)->get();
+        
+            if ($request->isMethod('post')) {
+                if ($request->type == 'all') {
+                    $users = User::all();
+                } else {
+                    $users = User::find($request->id);
+                }  
+            }
+            
+            return response()->json($users);
+        }
+    
+
+
     public function getteam(Request $request)
     {
         
@@ -302,6 +321,21 @@ class InsightsController extends AccountBaseController
         return response()->json($deals);
 
 
+    }
+
+
+
+    // get all users 
+    public function get_users_by_id($id)
+    {
+        $user = User::findOrFail($id);
+        return response()->json($user);
+    }
+
+    public function get_users_all()
+    {
+        $user = User::all();
+        return response()->json($user);
     }
 
 
