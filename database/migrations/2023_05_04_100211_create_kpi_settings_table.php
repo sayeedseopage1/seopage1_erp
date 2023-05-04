@@ -34,13 +34,13 @@ return new class extends Migration
             $table->bigInteger('additional_milestone_point')->default(0);
             $table->bigInteger('sales_above')->default(0);
             $table->bigInteger('sales_above_point')->default(0);
-            $table->bigInteger('estimated_hours')->default(0);
+            $table->string('estimated_hours')->nullable();
             $table->bigInteger('logged_hours')->default(0);
             $table->bigInteger('sales_executive')->default(0);
-            $table->bigInteger('estimated_hours2')->default(0);
+            $table->string('estimated_hours2')->nullable();
             $table->bigInteger('logged_hours2')->default(0);
             $table->bigInteger('sales_executive2')->default(0);
-            $table->bigInteger('estimated_hours3')->default(0);
+            $table->string('estimated_hours3')->nullable();
             $table->bigInteger('logged_hours3')->default(0);
             $table->bigInteger('sales_executive3')->default(0);
             $table->timestamps();
