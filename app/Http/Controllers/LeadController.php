@@ -202,7 +202,7 @@ class LeadController extends AccountBaseController
             'comments' => 'required',
         ]);
         $deal_stage= DealStage::where('id',$request->id)->first();
-        if ($deal_stage->deal_stage == 4 && $request->won_lost == "No") {
+        if ($deal_stage->deal_stage == 5 && $request->won_lost == "No") {
             $deal= DealStage::find($request->id);
             $deal->comments=$request->comments;
             $deal->deal_status="Lost";
@@ -301,8 +301,8 @@ class LeadController extends AccountBaseController
 
                 $pusher_options['title'] = 'Negotiation Started';
                 $pusher_options['body'] = 'Go to the deals';
-            } else {
-                $deal->deal_stage= $deal_stage->deal_stage;
+            } elseif($deal_stage->deal_stage == 4) {
+                $deal->deal_stage= $deal_stage->deal_stage+1;
                 $deal->comments=$request->comments;
                 $deal->won_lost=$request->won_lost;
                 $deal->save();
@@ -325,6 +325,25 @@ class LeadController extends AccountBaseController
                     $lead_ag->negotiation_started= $lead_ag->negotiation_started +1;
                     $lead_ag->save();
                 }
+            }
+            else {
+                $deal->deal_stage= $deal_stage->deal_stage;
+                $deal->comments=$request->comments;
+                $deal->won_lost=$request->won_lost;
+                $deal->save();
+
+                $deal_stage= new DealStageChange();
+                $deal_stage->lead_id= $deal->lead_id;
+                $deal_stage->deal_id= $deal->short_code;
+                $deal_stage->comments= $request->comments;
+                $deal_stage->deal_stage_id=$deal->deal_stage;
+                $deal_stage->updated_by= Auth::id();
+                $deal_stage->save();
+
+                $pusher_options['title'] = 'Deals updated';
+                $pusher_options['body'] = 'Go to the deals';
+
+               
             }
             $users = User::where('role_id', '7')->get();
             foreach ($users as $user) {
