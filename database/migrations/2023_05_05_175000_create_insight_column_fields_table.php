@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('insight_table_columns', function (Blueprint $table) {
+        Schema::create('insight_column_fields', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->string('column_priority');
-            $table->string('column_status');
-            $table->integer('goal_id')->nullable();
-            $table->integer('report_id')->nullable();
+            $table->string('column_name');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('insight_table_columns');
+        Schema::dropIfExists('insight_column_fields');
     }
 };
