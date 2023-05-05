@@ -4,6 +4,7 @@ import * as React from 'react';
 import { setGoals, setRecurring, setStatus } from "../services/slices/goalSlice";
 import { useGetGoalsQuery } from "../services/api/goalsApiSlice";
 import { getPeriod } from "../utils/getPeriod";
+import dayjs from 'dayjs';
 
 
 export const useGoals = () => {
@@ -30,6 +31,29 @@ export const useGoals = () => {
             }
         }
         
+    }
+
+
+
+    // get end date
+    // get goals
+     const getEndDate = (goal) => {
+        const frequency = _.toLower(goal.frequency)
+
+        if(frequency === 'monthly'){
+            return dayjs(goal.startDate).add(1, 'month').format('YYYY-MM-DD');
+        }
+
+        if(frequency === 'weekly'){
+            return dayjs(goal.startDate).add(1, 'week').format('YYYY-MM-DD');
+        } 
+        
+        if(frequency === 'yearly'){
+            return dayjs(goal.startDate).add(1, 'year').format('YYYY-MM-DD');
+        }
+        if(frequency === 'quarterly'){
+            return dayjs(goal.startDate).add(1, 'quarter').format('YYYY-MM-DD');
+        }
     }
 
 

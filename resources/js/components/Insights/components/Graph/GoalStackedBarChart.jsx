@@ -18,7 +18,7 @@ import _ from 'lodash';
 
 
 
-const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxisTickFormate,offset=5, labelListFormatter, xDomain, yDomain, referenceLine = false, stackOffset="auto", colors=[], footer=true}) => {
+const GoalStackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxisTickFormate,offset=5, labelListFormatter, xDomain, yDomain, referenceLine = false, stackOffset="auto", colors=[], footer=true}) => {
     return(
         <div className='cnx__conversion_graph__wrapper'>
             <div className='cnx__conversion__graph'>
@@ -65,7 +65,6 @@ const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxis
                                 dataKey={b} 
                                 stackId={XAxisLabel} 
                                 fill={ colors.length > 0 ? colors[index] : bgColors[index]}
-                                style={{borderTop: '1px solid #000'}}
                             >
                                 {barDataKey.length-1 === index && 
                                 <LabelList  
@@ -103,4 +102,4 @@ const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxis
     )
 }
 
-export default StackedBarChart;
+export default GoalStackedBarChart;

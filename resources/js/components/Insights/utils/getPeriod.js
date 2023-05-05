@@ -38,7 +38,7 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency, defaultValu
             let quarters = [];
             const qs = dayjs(startDate).startOf("quarter");
             const qe = dayjs(endDate).endOf("quarter");
-
+            let index = 0;
             let curr = qs;
             while (curr <= qe) {
                 const quarterNumber = dayjs(curr).quarter(); // number of quarter
@@ -79,7 +79,8 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency, defaultValu
                     title,
                     start: quarterStart,
                     end: quarterEnd,
-                    value: defaultValue
+                    value: defaultValue,
+                    index: index++
                 });
 
                 curr = dayjs(curr).add(1, "quarter");
@@ -97,6 +98,7 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency, defaultValu
             const months = [];
             const ms = dayjs(startDate).startOf("month");
             const me = dayjs(endDate).endOf("month");
+            let index = 0;
 
             let curr = ms;
 
@@ -131,7 +133,8 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency, defaultValu
                     title: dayjs(curr).format("MMM YYYY"),
                     start: monthStartDay,
                     end: monthEndDay,
-                    value: defaultValue
+                    value: defaultValue,
+                    index: index++
                 });
 
                 curr = dayjs(curr).add(1, "month");
@@ -149,6 +152,7 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency, defaultValu
             const weeks = [];
             const ws = dayjs(startDate).startOf("week");
             const we = dayjs(endDate).endOf("week");
+            let index = 0;
 
             let curr = ws;
             while (curr <= we) {
@@ -180,13 +184,14 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency, defaultValu
                 )} - ${dayjs(weekEnd).format("MMM DD")}, ${dayjs(
                     weekEnd
                 ).format("YYYY")})`;
-
+                 
                 // push
                 weeks.push({
                     title,
                     start: weekStart,
                     end: weekEnd,
-                    value: defaultValue
+                    value: defaultValue ,
+                    index: index++
                 });
 
                 curr = dayjs(curr).add(1, "week");

@@ -19,6 +19,7 @@ import { openGoalFormModal } from '../services/slices/goalFormModalSlice';
 import { useDispatch } from 'react-redux';
 import GoalSummaryTable from '../components/GoalSummaryTable';
 import { DataTableColumns } from '../components/DataTableColumns';
+import GoalStackedBarChart from '../components/Graph/GoalStackedBarChart';
 
 // convert to unit
 const numberToUnits = (value,decimal= 1) => {
@@ -30,8 +31,9 @@ const numberToUnits = (value,decimal= 1) => {
 const Goal = () => {
     const [selectedPeriod, setSelectedPeriod] = React.useState('Today');
     const [filter, setFilterValue] = React.useState('');
+    const [summarizedData, setSummarizedData] = React.useState([]); 
     const [goal, setGoal] = React.useState(null);
-    const {deals, getDeals} = useDealsState(); 
+    const {deals, getDeals, getSummary} = useDealsState(); 
     const [dealsData, setDealsData] = React.useState([]);
     const [isLoading , setIsLoading] = React.useState(true);
     const {goals, getGoalById, goalsIsLoading} = useGoals();
@@ -39,6 +41,7 @@ const Goal = () => {
     const params = useParams();
     const {users} = useUsers();
     const usersData = users && users.users;
+    const [isSummarizing, setIsSummarizing] = React.useState(false);
 
     const dispatch = useDispatch();
 
@@ -74,6 +77,22 @@ const Goal = () => {
     }, [goal, params.goalId]);
 
 
+    React.useEffect (() => {
+        setIsSummarizing(true);
+        if(deals && deals.length > 0 && goal){
+            let sum = getSummary(deals, goal);
+            if(sum) {
+                setSummarizedData([...sum]);
+                setIsSummarizing(false);
+            } else {
+                setIsSummarizing(false);
+            }
+        }
+
+    }, [goal])
+
+
+
     const handleOpenGoalFormModal = () => {
         dispatch(openGoalFormModal({
             data: goal,
@@ -82,6 +101,7 @@ const Goal = () => {
             entryType: goal.entryType,
         }))
     }
+    
 
 
     if(!goal) return  (
@@ -312,28 +332,16 @@ const Goal = () => {
                                 />
                             </div>
                             <div className='__graph'>
-                                <StackedBarChart
+                                <GoalStackedBarChart
                                     footer={false}
-                                    XAxisLabel="name"
+                                    XAxisLabel="title"
+                                    colors={["#166901", "#F2F2F2"]}
                                     leftSideLabel="Number of deals"
-                                    barDataKey={["open", "won"]}
+                                    barDataKey={["dealAdded", "goal"]}
                                     offset={-5}
                                     labelListFormatter={value => numberToUnits(value, 0)}
                                     yAxisTickFormate={value => numberToUnits(value, 0)}
-                                    data = {[ 
-                                        { name: 'Jan', open: 0, won: 0},
-                                        { name: 'Feb', open: 0, won: 0 },
-                                        { name: 'Mar', open: 0, won: 0 },
-                                        { name: 'Apr', open: 119, won: 100 },
-                                        { name: 'May', open: 119, won: 100 },
-                                        { name: 'Jun', open: 119, won: 100 },
-                                        { name: 'Jul', open: 119, won: 100 },
-                                        { name: 'Aug', open: 119, won: 100 },
-                                        { name: 'Sep', open: 119, won: 100 },
-                                        { name: 'Oct', open: 119, won: 100 },
-                                        { name: 'Nov', open: 119, won: 100 },
-                                        { name: 'Dec', open: 119, won: 100 },
-                                    ]} 
+                                    data = {[...summarizedData]} 
                                 />
                             </div>
                         </div> 
@@ -352,13 +360,13 @@ const Goal = () => {
                         <div className='cnx__ins_graph_views'>
                             <Button
                                 onClick={() => setActiveTable('activities')}
-                                className='cnx__ins_table_view_button active'>
+                                className={`cnx__ins_table_view_button ${activeTable === 'activities' ? 'active': ""}`}>
                                 Activities
                             </Button>
 
                             <Button 
                                 onClick={() => setActiveTable('summary')}
-                                className='cnx__ins_table_view_button'>
+                                className={`cnx__ins_table_view_button ${activeTable === 'summary' ? 'active': ""}`}>
                                 Summary
                             </Button>
                         </div>
@@ -399,7 +407,8 @@ const Goal = () => {
                         )}
                         
                     { 
-                        activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
+                        // activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
+                         activeTable === 'summary' && <GoalSummaryTable data={summarizedData} isLoading={isSummarizing}/>
                     }
                     </div>
                     {/* end graph table */}
