@@ -3,7 +3,6 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Pagination from './Pagination';
 import TableFilterButton from './TableFilterButton';
-import { DataTableColumns } from '../components/DataTableColumns';
 import { useDrag, useDrop} from 'react-dnd';
 import { Icon } from '../utils/Icon';
 
@@ -13,12 +12,7 @@ const ContextProvider = ({children}) => {
     const [activeColumns, setActiveColumns] = React.useState([]);
     const [sortConfig, setSortConfig] = React.useState({key: 'id', direction: 'desc'});
 
-    React.useEffect(() => {
-        let columns = DataTableColumns.map(d => d.id);
-        setActiveColumns([...columns]);
-    }, [])
-
-
+    
 
     return <DataTableContext.Provider value={{
         activeColumns,
@@ -39,11 +33,19 @@ const useTableState = () => {
 
 
 // data table 
-const DataTable = ({data, isLoading}) => {
+const DataTable = ({data, isLoading, defaultColumns}) => {
     const [currentPageData, setCurrentPageData] = React.useState([...data]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
     const { activeColumns, setActiveColumns, sortConfig, setSortConfig } = useTableState();
     const [totalPage, setTotalPage] = React.useState(1);
+
+
+
+    // columns
+    React.useEffect(() => {
+        let _columns = defaultColumns.map(d => d.id);
+            setActiveColumns([..._columns]);
+    }, [])
 
 
     React.useEffect(()=> {
@@ -89,7 +91,7 @@ const DataTable = ({data, isLoading}) => {
 
 
 
-    const columns = DataTableColumns.filter(d => activeColumns.includes(d.id))
+    const columns = defaultColumns.filter(d => activeColumns.includes(d.id))
                     .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
                                 
 
@@ -200,10 +202,10 @@ const DataTable = ({data, isLoading}) => {
 }
 
 
-const DataTableComponent = ({data, isLoading}) => {
+const DataTableComponent = ({data, isLoading, defaultColumns}) => {
     return(
         <ContextProvider>
-           <DataTable data={data} isLoading={isLoading} />
+           <DataTable data={data} isLoading={isLoading}  defaultColumns={defaultColumns}/>
         </ContextProvider>
     )
 }

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     deals: [],
+    leads: [],
     status: "idle",
     error: null,
 }
@@ -13,7 +14,11 @@ const dealSlice = createSlice({
     initialState,
     reducers: {
         setDeals: (state, action) => {
-            state.deals = action.payload;
+            state.deals = action.payload.deals;
+        },
+
+        setLeads: (state, action) => {
+            state.leads = action.payload.leads;
         },
         
         setStatus: (state, action) => {
@@ -27,6 +32,6 @@ const dealSlice = createSlice({
 });
 
 
-export const {setDeals, setStatus, setError} = dealSlice.actions;
+export const {setDeals, setLeads, setStatus, setError} = dealSlice.actions;
 
 export default dealSlice.reducer;

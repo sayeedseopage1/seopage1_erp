@@ -4,7 +4,7 @@ import quarterOfYear from "dayjs/plugin/quarterOfYear";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import WeekOfYear from "dayjs/plugin/weekOfYear";
 
-export const getPeriod = ({setPeriod, startDate, endDate, frequency}) => {
+export const getPeriod = ({setPeriod, startDate, endDate, frequency, defaultValue=""}) => {
     dayjs.extend(utc);
     dayjs.extend(quarterOfYear);
     dayjs.extend(isSameOrBefore);
@@ -21,12 +21,16 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency}) => {
                     title: `${current.format("YYYY")}`,
                     start: dayjs(startDate).format(),
                     end: dayjs(endDate).format(),
-                    value: ''
+                    value: defaultValue
                 });
                 current = dayjs(current).add(1, "year");
             }
 
-            setPeriod([...years]);
+            if(setPeriod) {
+                setPeriod([...years]);
+            } else {
+                return years;
+            }
         };
 
         // quarterly
@@ -75,13 +79,17 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency}) => {
                     title,
                     start: quarterStart,
                     end: quarterEnd,
-                    value: ''
+                    value: defaultValue
                 });
 
                 curr = dayjs(curr).add(1, "quarter");
             }
 
-            setPeriod([...quarters]);
+            if(setPeriod) {
+                setPeriod([...quarters]);
+            }else{
+                return quarters;
+            } 
         };
 
         // divide by month
@@ -123,13 +131,17 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency}) => {
                     title: dayjs(curr).format("MMM YYYY"),
                     start: monthStartDay,
                     end: monthEndDay,
-                    value: ''
+                    value: defaultValue
                 });
 
                 curr = dayjs(curr).add(1, "month");
             }
 
-            setPeriod([...months]);
+            if(setPeriod) {
+                setPeriod([...months]);
+            } else {
+                return months;
+            }
         };
 
         // weekly
@@ -174,13 +186,17 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency}) => {
                     title,
                     start: weekStart,
                     end: weekEnd,
-                    value: ''
+                    value: defaultValue
                 });
 
                 curr = dayjs(curr).add(1, "week");
             }
 
-            setPeriod([...weeks]);
+            if(setPeriod) {
+                setPeriod([...weeks]);
+            } else {
+                return weeks;
+            }
         };
 
 

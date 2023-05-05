@@ -390,6 +390,7 @@ const TrackingInput = ({
     frequency,
     goalType,
     edit,
+    setEdit,
     setGoalType
 }) => {
     const [checked, setChecked] = React.useState(false);
@@ -407,8 +408,8 @@ const TrackingInput = ({
     // apply to all
     React.useEffect(() => {
         if(recurring.length > 0){
-            setChecked(true);
-            setPeriod([...recurring]);
+            !edit && setChecked(true);
+            !edit && setPeriod([...recurring]);
         }
     }, [recurring])
 
@@ -439,16 +440,16 @@ const TrackingInput = ({
         dayjs.extend(quarterOfYear);
         dayjs.extend(isSameOrBefore);
         dayjs.extend(WeekOfYear);
-        if(!edit && recurring.length === 0){
-            getPeriod(
-                {setPeriod, startDate, endDate, frequency}
-            ); 
-        } else {
+        // if(!edit && recurring.length === 0){
+        //     getPeriod(
+        //         {setPeriod, startDate, endDate, frequency}
+        //     ); 
+        // } else {
             edit && getPeriod(
                 {setPeriod, startDate, endDate, frequency}
             );      
-        } 
-    }, [endDate, frequency, setRecurring, startDate]);
+        // } 
+    }, [endDate, frequency, setRecurring, startDate, edit]);
     // end time period control
 
 
@@ -472,7 +473,6 @@ const TrackingInput = ({
             <div className="cnx_ins__goal_modal__tracking_input">
                 <input 
                     type='number' 
-                    defaultChecked={checked}
                     value = {trackingValue}
                     onChange={e => setTrackingValue(e.target.value)}
                     placeholder={`Insert ${trackingType}`} 
@@ -492,7 +492,15 @@ const TrackingInput = ({
 
             </div>
             {endDate ?  <div className="cnx_ins__goal_modal__tracking_input">
-                <input type='checkbox' id="recurring" onChange={e =>setChecked(e.target.checked)}  />
+                <input
+                    type='checkbox' 
+                    defaultChecked={checked}
+                    id="recurring" 
+                    onChange={e =>{
+                        setChecked(e.target.checked);
+                        setEdit(e.target.checked);
+                    }}  
+                />
                 <label htmlFor='recurring'>Specify individual period goals</label>
             </div> :
                 <Tooltip text='Select a duration end date to enable this option'>
@@ -553,11 +561,6 @@ const GoalFormModal = () => {
     const [achievablePoints, setAchievablePoints] = React.useState('0');
     const [edit, setEdit] = React.useState(false);
 
-    // React.useEffect(() => {
-    //     if(recurring.length === 0){
-    //         setApplyRecurring(false);
-    //     }
-    // }, [recurring])
 
 
     // if form mode is edit
@@ -641,6 +644,8 @@ const GoalFormModal = () => {
         setIsSaving(true);
         setFormStatus('saving');
 
+        if(!isFormDataValid()) return;            
+            
         const formData = {
             entry, 
             entryType, 
@@ -652,7 +657,7 @@ const GoalFormModal = () => {
             endDate, 
             trackingType, 
             trackingValue, 
-            recurring, 
+            recurring,
             qualified, 
             dealType, 
             goalType, 
@@ -846,6 +851,7 @@ const GoalFormModal = () => {
                             // applyRecurring={applyRecurring}
                             goalType={goalType}
                             edit = {edit}
+                            setEdit = {setEdit}
                             setGoalType ={setGoalType}
                         />
                     </div>

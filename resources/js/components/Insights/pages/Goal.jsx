@@ -17,6 +17,8 @@ import { useUsers } from '../hooks/useUsers';
 
 import { openGoalFormModal } from '../services/slices/goalFormModalSlice';
 import { useDispatch } from 'react-redux';
+import GoalSummaryTable from '../components/GoalSummaryTable';
+import { DataTableColumns } from '../components/DataTableColumns';
 
 // convert to unit
 const numberToUnits = (value,decimal= 1) => {
@@ -33,6 +35,7 @@ const Goal = () => {
     const [dealsData, setDealsData] = React.useState([]);
     const [isLoading , setIsLoading] = React.useState(true);
     const {goals, getGoalById, goalsIsLoading} = useGoals();
+    const [activeTable, setActiveTable] = React.useState('activities');
     const params = useParams();
     const {users} = useUsers();
     const usersData = users && users.users;
@@ -347,11 +350,15 @@ const Goal = () => {
                     <div className="cnx__ins_graph_container_header">
                         {/* graph view tab */}
                         <div className='cnx__ins_graph_views'>
-                            <Button className='cnx__ins_table_view_button active'>
+                            <Button
+                                onClick={() => setActiveTable('activities')}
+                                className='cnx__ins_table_view_button active'>
                                 Activities
                             </Button>
 
-                            <Button className='cnx__ins_table_view_button'>
+                            <Button 
+                                onClick={() => setActiveTable('summary')}
+                                className='cnx__ins_table_view_button'>
                                 Summary
                             </Button>
                         </div>
@@ -383,10 +390,17 @@ const Goal = () => {
 
                     {/* graph table */}
                     <div className='cnx__ins_table'>
-                        <DataTable 
-                            data={dealsData} 
-                            isLoading={goalsIsLoading || isLoading} 
-                        />
+                       {activeTable === 'activities' && (
+                            <DataTable 
+                                data={dealsData} 
+                                defaultColumns={DataTableColumns}
+                                isLoading={goalsIsLoading || isLoading} 
+                            />
+                        )}
+                        
+                    { 
+                        activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
+                    }
                     </div>
                     {/* end graph table */}
                     

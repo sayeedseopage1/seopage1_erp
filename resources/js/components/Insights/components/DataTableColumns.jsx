@@ -1,26 +1,32 @@
 import dayjs from "dayjs"
 import Tooltip from '../ui/Tooltip';
+import { useUsers } from "../hooks/useUsers";
+
+
+
+
+
 
 
 export const DataTableColumns = [
-    {
-        header: 'ID',
-        accessor: 'id',
-        id: 'id',
-        cell: (row) => {
-            return <span>{row['id']}</span>
-        }
-    },
+    // {
+    //     header: 'ID',
+    //     accessor: 'id',
+    //     id: 'id',
+    //     cell: (row) => {
+    //         return <span>{row['id']}</span>
+    //     }
+    // },
      {
         header: 'Title',
         accessor: 'project_name',
         id: 'project_name',
         cell: (row) => {
             return <span>
-                {/* <a href={`/account/projects/${row['project_id']}`}> */}
+                <a href={`/account/deals/${row['id']}`}>
                  {/* <a href="#" > */}
                     {row['project_name']}
-                {/* </a> */}
+                </a>
             </span>
         }
     },
@@ -48,6 +54,57 @@ export const DataTableColumns = [
         header: 'Deal created at',
         id: 'created_at',
         accessor: 'created_at',
-        cell: (row) => <span> {dayjs(row['created_at']).format('YYYY-MM-DD')}  </span> 
-    }
+        cell: (row) => {
+            return <span> {dayjs(row['created_at']).format('MMM DD, YYYY')} </span>
+        } 
+    },
+    {
+        header: 'Pipeline',
+        id: 'pipeline',
+        accessor: 'pipeline',
+        cell: (row) => {
+            return <span> Pipeline </span>
+        } 
+    },
+    // {
+    //     header: 'Owner',
+    //     id: "owner",
+    //     accessor: 'added_by',
+    //     cell: (row) => <OwnerCell {...row} />
+    // },
+    {
+        header: 'Stage',
+        id: "deal_stage",
+        accessor: 'deal_stage',
+        cell: (row) => <StageCell {...row} />
+    },
+    
 ]
+
+
+
+
+
+// owner cell
+const OwnerCell = (row) => {
+    const {users, getUserById} = useUsers(); 
+    const user = getUserById(users, row['added_by']);
+    if(!user) return <span> - </span>
+    return <span> {user.name} </span>
+}
+
+
+// stage cell 
+const StageCell = (row) => {
+    const stage = [
+        "Contact Mode",
+        "Qualified",
+        "Requirements Defined",
+        "Proposal Made",
+        "Negotiations Started",
+        "Milestone breakdown",
+    ]
+
+
+    return <span> {stage[row['deal_stage']]} </span>
+}
