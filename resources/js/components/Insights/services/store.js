@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, miniSerializeError } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/apiSlice";
 
 // goal
@@ -42,7 +42,10 @@ export const store = configureStore({
         dataTableModal: dataTableModalReducer,
         users: usersReducer
     },
-    middleware: (getDefaultMiddleware) => 
-        getDefaultMiddleware().concat(apiSlice.middleware),
+   // serializableCheck: false, 
+
+   middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(apiSlice.middleware),
+    serializableCheck: false,
     devTools: true,
 });

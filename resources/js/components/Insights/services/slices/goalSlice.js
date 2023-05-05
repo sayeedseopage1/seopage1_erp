@@ -14,13 +14,13 @@ const goalSlice = createSlice({
     initialState,
     reducers: {
         addGoal: (state, action) => {
-            state.goals.push(action.payload);
+            state.goals.push(action.payload.goal);
         },
         addRecurring: (state, action) => {
-            state.recurring.push(action.payload.recurring);
+            state.recurring = [...state.recurring, ...action.payload.recurring];
         },
         setGoals: (state, action) => {
-            state.goals = action.payload;
+            state.goals = action.payload.goals;
         },
 
         setRecurring: (state, action) => {

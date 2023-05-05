@@ -47,13 +47,12 @@ const InsightSidebar = () => {
 
         if(goals && users && goals.length > 0){
             let _goals = goals.map((goal) => {
-                const user = _.find(users.users, {id: goal.added_by});
-                let title = `${goal.entry} ${goal.entryType} by ${user?.name || ''}`;
+                let title = `${goal.entry} ${goal.entryType} ${goal?.name || goal?.team_name}`;
                 
                 if(goal.endDate && compareDate.isAfter(dayjs(), goal.endDate)){
-                    return {...goal, title, user, status: 'Past' };
+                    return {...goal, title, status: 'Past' };
                 } else if(!goal.endDate || !compareDate.isAfter(dayjs(), goal.endDate)){
-                    return {...goal, title, user , status: 'Active'};
+                    return {...goal, title, status: 'Active'};
                 }
             }) 
 
