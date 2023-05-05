@@ -24,6 +24,12 @@ export const useUsers = () => {
     }, [data, usersIsFetching])
 
 
-    return {users, usersIsFetching ,usersIsLoading}
+    const getUserById = (users,id) => {
+        if(!users.users.length) return;
+        return users.users.find(user =>  user.id === id);
+    }
+
+
+    return {users, usersIsFetching ,usersIsLoading, getUserById}
 
 } 

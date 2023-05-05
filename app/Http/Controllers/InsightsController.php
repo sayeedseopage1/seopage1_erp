@@ -396,8 +396,6 @@ class InsightsController extends AccountBaseController
         $deals= DealStage::all();
         $lead = Lead::all();
         return response()->json(["deals" => $deals, "leads" => $lead]);
-
-
     }
 
 
@@ -415,6 +413,8 @@ class InsightsController extends AccountBaseController
         return response()->json($user);
     }
 
+
+    
 
     
 }

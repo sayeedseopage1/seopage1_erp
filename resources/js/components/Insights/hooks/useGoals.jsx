@@ -3,6 +3,7 @@ import axios from 'axios';
 import * as React from 'react';
 import { setGoals, setRecurring, setStatus } from "../services/slices/goalSlice";
 import { useGetGoalsQuery } from "../services/api/goalsApiSlice";
+import { getPeriod } from "../utils/getPeriod";
 
 
 export const useGoals = () => {
@@ -32,5 +33,18 @@ export const useGoals = () => {
     }
 
 
-    return {goals, goalsIsLoading ,getGoalById}
+    // create goal period
+    const getTargetPeriod = (goal) => {
+        if(!goal) return;
+        let recurring = goal?.recurring?.length > 0 ? goal.recurring :  getPeriod({
+                startDate: goal.startDate,
+                endDate: goal.endDate || getEndDate(goal),
+                frequency: goal.frequency,
+                defaultValue: goal.trackingValue
+            }); 
+        return [...recurring];
+    }
+
+
+    return {goals, goalsIsLoading ,getGoalById, getTargetPeriod}
 }
