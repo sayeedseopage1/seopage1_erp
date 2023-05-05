@@ -61,7 +61,7 @@ use Session;
 
 
 
-class HomeController extends Controller
+class HomeController extends AccountBaseController
 {
     use UniversalSearchTrait;
 
@@ -216,10 +216,25 @@ class HomeController extends Controller
         $project->deliverable_authorization= 0;
         $project->save();
 
+
+        $text = 'Client ('.$project->client->name.') Disagree with delivarables';
+        $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverables">'.$text.'</a>';
+        
+
         $activity = new ProjectActivity();
-        $activity->activity= 'Client Disagree with delivarables';
+        $activity->activity= $link;
         $activity->project_id = $project->id;
         $activity->save();
+
+        
+
+         $this->triggerPusher('notification-channel', 'notification', [
+            'user_id' => $project->pm_id,
+            'role_id' => 4,
+            'title' => 'Client Disagree Delivarables',
+            'body' => $text,
+            'redirectUrl' => route('projects.show', $project->id).'?tab=deliverables'
+        ]);
 
         Toastr::success('Request send to Project Manager', 'success', [
             'positionClass' => 'toast-top-right'

@@ -50,20 +50,10 @@
                                 <option value="task_has_revision_because_i_have_added_additional_instructions_to_previous_instructions">Task has revision because I have added additional instructions to previous instructions</option>
                             </select>
                         </div>
-                        @php
-                            $subtasks = \App\Models\SubTask::where('task_id',$task->id)->get();
-                        @endphp
-                        <div class="mb-3">
-                            <label for="" class="form-label">Select Sub Tasks</label>
-                            <select class="selectpicker form-control" multiple aria-label="Default select example" data-live-search="true" id="subTask_deny">
-                                @foreach($subtasks as $item)
-                                    <option value="{{$item->id}}" >{{$item->title}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3" id="commentContainer_deny" style="display:none">
+                        
+                        <div class="mb-3" id="commentContainer_deny">
                             <label for="" class="form-label">Comment</label>
-                            <textarea name="comment" id="comment" class="form-control"></textarea>
+                            <textarea name="comment_deny" id="comment_deny" class="form-control"></textarea>
                             <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                             <script>
                                 CKEDITOR.replace('comment_deny',{
@@ -75,7 +65,7 @@
                 </div>
                 <div class="modal-footer">
                     <a href="#" class="btn btn-secondary" data-dismiss="modal">Close</a>
-                    <a href="#" class="btn btn-primary" id="denyBtn">Deny & Continue</a>
+                    <a href="#" class="btn btn-primary" mode="deny" id="denyBtn">Deny & Continue</a>
                 </div>
             </div>
         </div>
@@ -83,62 +73,20 @@
 </form>
 
 <script>
-    //    SELECT OPTION CODE
-    const dropdown_deny = document.getElementById("subTask_deny");
-    const _deny = document.getElementById("commentContainer_deny");
-    dropdown_deny.addEventListener("change", function() {
-        _deny.innerHTML = "";
-
-        const selectedOptions = Array.from(dropdown_deny.selectedOptions);
-        for (const option of selectedOptions) {
-            const textAreaContainer = document.createElement("div");
-            textAreaContainer.classList.add("mb-2");
-
-            const label = document.createElement("label");
-            label.textContent = option.text;
-            textAreaContainer.appendChild(label);
-
-            const textArea = document.createElement("textarea");
-            var id = Math.random().toString(36).substr(2,9);
-            textArea.id = id;
-            textArea.classList.add("myClass_deny");
-            CKEDITOR.replace(textArea, {
-                height: 80
-            });
-            textAreaContainer.appendChild(textArea);
-
-            _deny.appendChild(textAreaContainer);
-        }
-
-        if (selectedOptions.length > 0) {
-            _deny.style.display = "block";
-        } else {
-            _deny.style.display = "none";
-        }
-    });
-
     $('#denyBtn').click(function(e){
         e.preventDefault();
-        $(this).prop("disabled", true);
+        $('#denyBtn').attr("disabled", true);
         $('#denyBtn').html("Processing...");
         var text2 = CKEDITOR.instances.text2.getData();
-        var subTask = Array.from(document.getElementById("subTask_deny").selectedOptions).map(option => option.value);
-        const elements = document.getElementsByClassName("myClass_deny");
-        const textAreaData = [];
-        for (let i = 0; i < elements.length; i++) {
-            const id = elements[i].id;
-            var editorData = CKEDITOR.instances[id].getData();
-            textAreaData.push(editorData);
-        }
-
+        
         var data= {
             '_token': "{{ csrf_token() }}",
             'text2': text2,
-            'subTask': subTask,
+            'mode' : $(this).attr('mode'),
             'revision_acknowledgement': document.getElementById("revision_acknowledgement_deny").value,
-            'comment': textAreaData,
-            'task_id': {{$task->id}},
-            'revision_id': '{{$taskRevisionComment->id}}'
+            'comment': CKEDITOR.instances.comment_deny.getData(),
+            'task_id': '{{$task->id}}',
+            'revision_id': '{{$taskRevisionComment->id}}', 
         }
         // console.log(data);
         $.ajaxSetup({
@@ -148,14 +96,14 @@
         });
         $.ajax({
             type: "POST",
-            url: "{{route('tasks.deny_continue')}}",
+            url: "{{route("accept_or_revision_by_developer")}}",
             data: data,
             dataType: "json",
             success: function (response) {
                 // console.log(response.status);
                 if(response.status==200){
                     $('#denyAndContinue').trigger("reset");
-                    $('#denyBtn').prop("disabled", false);
+                    $('#denyBtn').attr("disabled", false);
                     $('#denyBtn').html("Deny & Continue");
                     window.location.reload();
                     toastr.success('Task Accept And Continue Successfully');

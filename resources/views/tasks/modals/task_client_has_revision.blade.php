@@ -45,7 +45,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" name="client_has_revision" id="submitBtn">Submit</button>
+                    <button type="submit" class="btn btn-primary" name="Client has Revision" id="submitBtn">Submit</button>
 
                 </div>
             </form>

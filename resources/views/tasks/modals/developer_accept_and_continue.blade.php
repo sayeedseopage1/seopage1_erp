@@ -50,18 +50,8 @@
                             <option value="task_has_revision_because_i_have_added_additional_instructions_to_previous_instructions">Task has revision because I have added additional instructions to previous instructions</option>
                         </select>
                     </div>
-                    @php
-                        $subtasks = \App\Models\SubTask::where('task_id',$task->id)->get();
-                    @endphp
-                    <div class="mb-3">
-                        <label for="" class="form-label">Select Sub Tasks</label>
-                        <select class="selectpicker form-control" multiple aria-label="Default select example" data-live-search="true" id="subTask">
-                            @foreach($subtasks as $item)
-                                <option value="{{$item->id}}" >{{$item->title}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-3" id="commentContainer" style="display:none">
+
+                    <div class="mb-3" id="commentContainer">
                         <label for="" class="form-label">Comment</label>
                         <textarea name="comment" id="comment" class="form-control"></textarea>
                         <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
@@ -75,7 +65,7 @@
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-secondary" data-dismiss="modal">Close</a>
-                <a href="#" class="btn btn-primary" id="acceptBtn">Accept & Continue</a>
+                <a href="#" class="btn btn-primary" mode="accept" id="acceptBtn">Accept & Continue</a>
             </div>
         </div>
     </div>
@@ -83,62 +73,22 @@
 </form>
 
 <script>
-//    SELECT OPTION CODE
-    const dropdown = document.getElementById("subTask");
-    const commentContainer = document.getElementById("commentContainer");
-
-    dropdown.addEventListener("change", function() {
-        commentContainer.innerHTML = "";
-
-        const selectedOptions = Array.from(dropdown.selectedOptions);
-        for (const option of selectedOptions) {
-            const textAreaContainer = document.createElement("div");
-            textAreaContainer.classList.add("mb-2");
-
-            const label = document.createElement("label");
-            label.textContent = option.text;
-            textAreaContainer.appendChild(label);
-
-            const textArea = document.createElement("textarea");
-            var id = Math.random().toString(36).substr(2,9);
-            textArea.id = id;
-            textArea.classList.add("myClass");
-            CKEDITOR.replace(textArea, {
-                height: 80
-            });
-            textAreaContainer.appendChild(textArea);
-
-            commentContainer.appendChild(textAreaContainer);
-        }
-
-        if (selectedOptions.length > 0) {
-            commentContainer.style.display = "block";
-        } else {
-            commentContainer.style.display = "none";
-        }
-    });
 
     $('#acceptBtn').click(function(e){
     e.preventDefault();
     $('#acceptBtn').attr("disabled", true);
     $('#acceptBtn').html("Processing...");
     var text3 = CKEDITOR.instances.text3.getData();
-    var subTask = Array.from(document.getElementById("subTask").selectedOptions).map(option => option.value);
-    const elements = document.getElementsByClassName("myClass");
-    const textAreaData = [];
-    for (let i = 0; i < elements.length; i++) {
-        const id = elements[i].id;
-        var editorData = CKEDITOR.instances[id].getData();
-        textAreaData.push(editorData);
-    }
+    
+
     var data= {
         '_token': "{{ csrf_token() }}",
-        'text3': text3,
-        'subTask': subTask,
+        'text2': text3,
+        'mode' : $(this).attr('mode'),
         'revision_acknowledgement': document.getElementById("revision_acknowledgement").value,
-        'comment': textAreaData,
-        'task_id': {{$task->id}},
-        'revision_id': '{{$taskRevisionComment->id}}'
+        'comment': CKEDITOR.instances.comment.getData(),
+        'task_id': '{{$task->id}}',
+        'revision_id': '{{$taskRevisionComment->id}}', 
     }
     // console.log(data);
     $.ajaxSetup({
@@ -147,14 +97,9 @@
         }
     });
 
-    if ($('#accept').length) {
-        var url = '{{route("accept_or_revision_by_developer")}}';
-    } else {
-        var url = "{{route('tasks.accept_continue')}}";
-    }
     $.ajax({
         type: "POST",
-        url: url,
+        url: '{{route("accept_or_revision_by_developer")}}',
         data: data,
         dataType: "json",
         success: function (response) {

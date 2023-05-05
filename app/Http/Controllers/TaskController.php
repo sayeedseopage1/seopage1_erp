@@ -207,12 +207,23 @@ class TaskController extends AccountBaseController
         $task->board_column_id= 6;
         $task->task_status="submitted";
         $task->save();
+
         $task_id= Task::where('id',$task->id)->first();
 
         $user= User::where('id',$task->added_by)->first();
         $sender= User::where('id',$request->user_id)->first();
 
+        $text = Auth::user()->name.' mark task complete';
+        $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+        $this->logProjectActivity($task->project->id, $link);
 
+        $this->triggerPusher('notification-channel', 'notification', [
+            'user_id' => $task->project->pm_id,
+            'role_id' => 4,
+            'title' => 'Task complete request',
+            'body' => Auth::user()->name.' mark task complete',
+            'redirectUrl' => route('tasks.show', $task->id)
+        ]);
 
         Notification::send($user, new TaskSubmitNotification($task_id,$sender));
 
@@ -250,6 +261,19 @@ class TaskController extends AccountBaseController
       $task->comments= $request->comments;
       $task->save();
 
+
+        $text = Auth::user()->name.' mark task completed';
+        $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+        $this->logProjectActivity($task->task->project->id, $link);
+
+        $this->triggerPusher('notification-channel', 'notification', [
+            'user_id' => $task->user_id,
+            'role_id' => User::find($request->user_id)->role_id,
+            'title' => 'Task complete request approved',
+            'body' => Auth::user()->name.' mark task completed',
+            'redirectUrl' => route('tasks.show', $task->id)
+        ]);
+
       $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
       $sender= User::where('id',Auth::id())->first();
       $user= User::where('id',$task_submission->user_id)->first();
@@ -262,64 +286,62 @@ class TaskController extends AccountBaseController
     }
     public function TaskRevision(Request $request)
     {
-//        dd($request->all());
         $request->validate([
             'comments2' => 'required',
         ], [
             'comments2.required' => 'This field is required!',
         ]);
-      $task_status= Task::find($request->task_id);
-      $task_status->status= "incomplete";
-      $task_status->task_status="revision";
-      $task_status->board_column_id=1;
-      $task_status->save();
-      $task= new TaskComment();
-      $task->user_id= Auth::id();
-      $task->task_id= $request->task_id;
-      $task->comment= $request->comments2;
-      $task->added_by= Auth::id();
-      $task->last_updated_by= Auth::id();
-      $task->save();
+        $task_status= Task::find($request->task_id);
+        $task_status->status= "incomplete";
+        $task_status->task_status="revision";
+        $task_status->board_column_id=1;
+        $task_status->save();
 
         $task_revision = new TaskRevision();
         $task_revision->task_id = $request->task_id;
         if ($task_status->subtask_id !=null) {
-        $task_revision->subtask_id = $task_status->subtask_id;
+            $task_revision->subtask_id = $task_status->subtask_id;
         }
         $task_revision->comment = $request->comments2;
         $task_revision->revision_status = $request->revision_status;
         $task_revision->project_id = $task_status->project_id;
         $task_revision->added_by = Auth::id();
+        if (Auth::user()->role_id == 6) {
+            $task_revision->revision_status = 'Lead Developer Revision';
+        } elseif(Auth::user()->role_id == 4) {
+            $task_revision->revision_status = 'Project Manager Revision';
+        }
         $taskRevisionFind = TaskRevision::where('task_id',$task_status->id)->orderBy('id','desc')->get();
         foreach ($taskRevisionFind as $taskRevision) {
             $taskRevision->revision_no = $taskRevision->revision_no + 1;
             $taskRevision->save();
         }
-//        if ($taskRevisionFind !=null){
-//            $newRevision = TaskRevision::find($taskRevisionFind->id);
-//            $newRevision->revision_no = $taskRevisionFind->revision_no+1;
-//            $newRevision->save();
-//        }
+        if (isset($request->revision_acknowledgement)) {
+            $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
+        }
         $task_revision->save();
-//        $parentTask = Subtask::where('task_id',$request->task_id)->get();
-////        dd($parentTask);
-//        foreach ($parentTask as $subtask){
-//            $subTask = Task::where('subtask_id',$subtask->id)->first();
-//            $updateTask = Task::find($subTask->id);
-//            $updateTask->status= "incomplete";
-//            $updateTask->task_status= "revision";
-//            $updateTask->board_column_id=1;
-//            $updateTask->save();
-//        }
 
+        $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
+        $sender= User::where('id',$request->user_id)->first();
+        $text = Auth::user()->name.' send revision request';
+        $link = '<a href="'.route('tasks.show', $task_status->id).'">'.$text.'</a>';
+        $this->logProjectActivity($task_status->project->id, $link);
 
-      $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
-      $sender= User::where('id',$request->user_id)->first();
-      $user= User::where('id',$task_submission->user_id)->first();
-      Notification::send($user, new TaskRevisionNotification($task_status,$sender));
-        return response()->json([
-            'status'=>200,
+        $task_user = TaskUser::where('task_id', $request->task_id)->first();
+        $task_user_data = User::find($task_user->user_id);
+
+        $this->triggerPusher('notification-channel', 'notification', [
+            'user_id' => $task_user_data->id,
+            'role_id' => $task_user_data->role_id,
+            'title' => 'Revision request',
+            'body' => Auth::user()->name.' send revision request',
+            'redirectUrl' => route('tasks.show', $task_status->id)
         ]);
+        $user= User::where('id',$task_submission->user_id)->first();
+
+        Notification::send($user, new TaskRevisionNotification($task_status, $sender));
+        Toastr::success('Task Revision Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return redirect()->back();
     }
     public function TaskExtension(Request $request)
     {
@@ -556,7 +578,6 @@ class TaskController extends AccountBaseController
 
         $left_in_hours = round($left_minutes/60,0);
         $left_in_minutes= $left_minutes%60;
-        //dd($left_minutes);
 
         if($left_minutes < 1)
         {
@@ -669,9 +690,7 @@ class TaskController extends AccountBaseController
                 }
             }
 
-
             $subTask = SubTask::with(['files'])->where('task_id', $request->taskId)->get();
-            //dd($subTask);
 
             if ($subTask) {
                 foreach ($subTask as $subTasks) {
@@ -763,6 +782,34 @@ class TaskController extends AccountBaseController
                     'links' => $gantTaskLinkArray
                 ]
             );
+        }
+
+        if (is_array($request->user_id)) {
+            $assigned_to = User::find($request->user_id[0]);
+            $text = Auth::user()->name.' assigned new task on '.$assigned_to->name;
+            $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $assigned_to->id,
+                'role_id' => $assigned_to->role_id,
+                'title' => 'You have new task',
+                'body' => 'Project managet assigned new task on you',
+                'redirectUrl' => route('tasks.show', $task->id)
+            ]);
+        } else {
+            $assigned_to = User::find($request->user_id);
+            $text = Auth::user()->name.' assigned new task on '.$assigned_to->name;
+            $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $assigned_to->id,
+                'role_id' => $assigned_to->role_id,
+                'title' => 'You have new task',
+                'body' => 'Project managet assigned new task on you',
+                'redirectUrl' => route('tasks.show', $task->id)
+            ]);
         }
 
         $redirectUrl = urldecode($request->redirect_url);
@@ -860,7 +907,6 @@ class TaskController extends AccountBaseController
 
     public function update(UpdateTask $request, $id)
     {
-      //  dd($request);
         $task = Task::with('users', 'label', 'project')->findOrFail($id)->withCustomFields();
         $editTaskPermission = user()->permission('edit_tasks');
         $taskUsers = $task->users->pluck('id')->toArray();
@@ -945,6 +991,34 @@ class TaskController extends AccountBaseController
         // To add custom fields data
         if ($request->get('custom_fields_data')) {
             $task->updateCustomFieldData($request->get('custom_fields_data'));
+        }
+
+        if (is_array($request->user_id)) {
+            $assigned_to = User::find($request->user_id[0]);
+            $text = Auth::user()->name.' update task on '.$assigned_to->name;
+            $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $assigned_to->id,
+                'role_id' => $assigned_to->role_id,
+                'title' => 'You have new task',
+                'body' => 'Project managet update task on you',
+                'redirectUrl' => route('tasks.show', $task->id)
+            ]);
+        } else {
+            $assigned_to = User::find($request->user_id);
+            $text = Auth::user()->name.' update task on '.$assigned_to->name;
+            $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $assigned_to->id,
+                'role_id' => $assigned_to->role_id,
+                'title' => 'You have new task',
+                'body' => 'Project managet update task on you',
+                'redirectUrl' => route('tasks.show', $task->id)
+            ]);
         }
 
         // Sync task users
@@ -1357,39 +1431,31 @@ class TaskController extends AccountBaseController
             $taskRevision->revision_no = $taskRevision->revision_no + 1;
             $taskRevision->save();
         }
-//        $parentTask = Subtask::where('task_id',$request->task_id)->get();
-////        dd($parentTask);
-//        foreach ($parentTask as $subtask){
-//            $subTask = Task::where('subtask_id',$subtask->id)->first();
-//            $updateTask = Task::find($subTask->id);
-//            $updateTask->status= "incomplete";
-//            $updateTask->task_status= "revision";
-//            $updateTask->board_column_id=1;
-//            $updateTask->save();
-//        }
+       // $parentTask = Subtask::where('task_id',$request->task_id)->get();
+       // dd($parentTask);
+       // foreach ($parentTask as $subtask){
+       //     $subTask = Task::where('subtask_id',$subtask->id)->first();
+       //     $updateTask = Task::find($subTask->id);
+       //     $updateTask->status= "incomplete";
+       //     $updateTask->task_status= "revision";
+       //     $updateTask->board_column_id=1;
+       //     $updateTask->save();
+       // }
         $task_revision->save();
         return response()->json([
             'status'=>200,
         ]);
     }
 //    ACCEPT AND CONTINUE BUTTON SECTION
-        public function acceptContinue(Request $request){
-        dd($request->all());
+    public function acceptContinue(Request $request){
             $task_status= Task::find($request->task_id);
             $task_status->task_status="in progress";
             $task_status->board_column_id=3;
             $task_status->save();
 
-
-           // $subtasks = SubTask::where('task_id',$request->task_id)->get();
-            $selected_subtasks = SubTask::where('id',$request->subTask)->get();
-//            dd($selected_subtasks);
-//            foreach ($subtasks as $subtask)
-//            {
-//                $find_task= Task::where('subtask_id',$subtask->id)->first();
-//
-//            }
-            foreach ($selected_subtasks as $selected_subtask){
+            $subtasks = SubTask::where('task_id',$request->task_id)->get();
+            $selected_subtasks = SubTask::whereIn('id',$request->subTask)->get();
+            foreach ($selected_subtasks as $key => $selected_subtask){
 
                 $find_task_id= Task::where('subtask_id',$selected_subtask->id)->first();
                 $sub_task_status= Task::find($find_task_id->id);
@@ -1399,37 +1465,82 @@ class TaskController extends AccountBaseController
 
                 $tasks_accept = new TaskRevision();
                 $tasks_accept->accept_and_continue = $request->text3;
-                $tasks_accept->subtask_id = implode(",", $request->subTask);
-                $tasks_accept->revision_acknowledgement = $request->revision_acknowledgement;
-                $tasks_accept->comment = implode(",", $request->comment);
+                $tasks_accept->subtask_id = $request->subTask[$key];
+                $tasks_accept->revision_reason = $request->revision_acknowledgement;
+                $tasks_accept->comment = $request->comment[$key];
                 $tasks_accept->save();
             }
+
+            $tasks_accept = TaskRevision::find($request->revision_id);
+            $tasks_accept->deny_and_continue = $request->text2;
+            $tasks_accept->subtask_id = implode(",", $request->subTask);
+            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+            $tasks_accept->comment = implode(",", $request->comment);
+            $tasks_accept->save();
+
+            foreach ($subtasks as $subtask){
+
+                $find_task_id= Task::where('subtask_id',$subtask->id)->first();
+                if($find_task_id->board_column_id == 8)
+                {
+                    $sub_task_status= Task::find($find_task_id->id);
+
+                    $sub_task_status->task_status = "completed";
+                    $sub_task_status->board_column_id=4;
+                    $sub_task_status->save();
+
+                }
+            }
+
             return response()->json([
                 'status'=>200,
             ]);
-
-//            $tasks_accept = TaskRevision::where('task_id',$request->task_id)->first();
-//            $tasks_accept->accept_and_continue = $request->text3;
-//            $tasks_accept->subtask_id = $request->subTask;
-//            $tasks_accept->revision_acknowledgement = $request->revision_acknowledgement;
-//            $tasks_accept->task_comment = $request->comment;
-//            $tasks_accept->save();
-//            return response()->json([
-//                'status'=>200,
-//            ]);
         }
 
 //        DENY AND CONTINUE BUTTON SECTION
-        public function denyContinue(Request $request){
-        dd($request->all());
+        public function denyContinue(Request $request) {
             $task_status= Task::find($request->task_id);
             $task_status->task_status="in progress";
             $task_status->board_column_id=3;
             $task_status->save();
 
-            $tasks_accept = TaskRevision::where('task_id',$request->task_id)->first();
+            $subtasks = SubTask::where('task_id',$request->task_id)->get();
+            $selected_subtasks = SubTask::whereIn('id',$request->subTask)->get();
+            foreach ($selected_subtasks as $key => $selected_subtask){
+
+                $find_task_id= Task::where('subtask_id',$selected_subtask->id)->first();
+                $sub_task_status= Task::find($find_task_id->id);
+                $sub_task_status->task_status = "incomplete";
+                $sub_task_status->board_column_id=1;
+                $sub_task_status->save(); 
+                //dd($request->subTask[$key]);
+                $tasks_accept = new TaskRevision();
+                $tasks_accept->deny_and_continue = $request->text3;
+                $tasks_accept->subtask_id = $request->subTask[$key];
+                $tasks_accept->revision_reason = $request->revision_acknowledgement;
+                $tasks_accept->comment = $request->comment[$key];
+                $tasks_accept->save();
+            }
+
+            $tasks_accept = TaskRevision::find($request->revision_id);
             $tasks_accept->deny_and_continue = $request->text2;
+            $tasks_accept->subtask_id = implode(",", $request->subTask);
+            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+            $tasks_accept->comment = implode(",", $request->comment);
             $tasks_accept->save();
+
+            foreach ($subtasks as $subtask){
+
+                $find_task_id= Task::where('subtask_id',$subtask->id)->first();
+                if($find_task_id->board_column_id == 8) {
+                    $sub_task_status= Task::find($find_task_id->id);
+
+                    $sub_task_status->task_status = "completed";
+                    $sub_task_status->board_column_id=4;
+                    $sub_task_status->save();
+
+                }
+            }
             return response()->json([
                 'status'=>200,
             ]);
@@ -1437,11 +1548,34 @@ class TaskController extends AccountBaseController
 
 //        REVISION REASON SYSTEM
         public function revisionReason(Request $request){
-//        dd($request->all());
-            $revision_reason = TaskRevision::where('task_id',$request->task_id)->first();
-//            dd($revision_reason);
+            $revision_reason = new TaskRevision();
+            $revision_reason->task_id = $request->task_id;
             $revision_reason->revision_reason =$request->revision_reason;
             $revision_reason->save();
+            return response()->json([
+                'status'=>200,
+            ]);
+        }
+
+        public function accept_or_revision_by_developer(Request $request)
+        {
+            $task_status= Task::find($request->task_id);
+            $task_status->task_status="in progress";
+            $task_status->board_column_id=3;
+            $task_status->save();
+
+            $tasks_accept = TaskRevision::find($request->revision_id);
+            if ($request->mode == 'deny') {
+                $tasks_accept->deny_and_continue = $request->text2;
+            } else {
+                $tasks_accept->accept_and_continue = $request->text2;
+            }
+            $tasks_accept->task_id = $task_status->id;
+            $tasks_accept->subtask_id = $task_status->subTask;
+            $tasks_accept->revision_acknowledgement = $request->revision_acknowledgement;
+            $tasks_accept->dev_comment = $request->comment;
+            $tasks_accept->save();
+
             return response()->json([
                 'status'=>200,
             ]);

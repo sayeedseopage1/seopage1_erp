@@ -54,7 +54,7 @@
 								</div>
 							</div>
 							@else
-								{{str_replace('_', ' ', __($value->activity))}}
+								{!! html_entity_decode($value->activity, ENT_QUOTES, 'UTF-8') !!}
 							@endif
 						</td>
 					</tr>
@@ -170,7 +170,7 @@
 									</div>
 								</div>
 								@else
-									{{str_replace('_', ' ', __($value->activity))}}
+									{!! html_entity_decode($value->activity, ENT_QUOTES, 'UTF-8') !!}
 								@endif
 							</td>
 						</tr>

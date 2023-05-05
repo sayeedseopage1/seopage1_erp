@@ -20,4 +20,9 @@ class ProjectDeliverable extends BaseModel
     {
         //return $this->belongsTo(ProjectDeliverablesClientDisagree::class, 'id');
     }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
 }

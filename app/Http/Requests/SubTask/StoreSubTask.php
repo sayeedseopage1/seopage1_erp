@@ -37,7 +37,7 @@ class StoreSubTask extends FormRequest
             'title' => 'required',
             'estimate_hours'=> 'required',
             'estimate_minutes'=> 'required',
-
+            'description' => 'required',
             'user_id'=>'required'
 
         ];

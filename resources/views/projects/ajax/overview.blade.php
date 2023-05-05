@@ -18,7 +18,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
 </style>
 <div class="d-lg-flex">
-    <div class="project-left w-100 py-0 py-lg-5 py-md-0" id="project-left">
+    <div class="project-leftxx w-100 py-0 py-lg-5 py-md-0" id="project-left">
         <div class="d-flex align-content-center flex-lg-row-reverse mb-4">
             @if (!$project->trashed())
             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
@@ -705,7 +705,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
     </div>
 
     <!-- PROJECT RIGHT START -->
-    <div class="project-right pt-0 pb-4 p-lg-0 .activity" id="activity">
+    {{--<div class="project-right pt-0 pb-4 p-lg-0 .activity" id="activity">
         <div class="bg-white">
             <!-- ACTIVITY HEADING START -->
             <div class="p-activity-heading d-flex align-items-center justify-content-between b-shadow-4 p-20">
@@ -747,7 +747,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             <!-- ACTIVITY DETAIL END -->
         </div>
-    </div>
+    </div>--}}
 
     <!-- PROJECT RIGHT END -->
 
