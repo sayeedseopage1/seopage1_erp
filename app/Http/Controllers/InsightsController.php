@@ -167,10 +167,79 @@ class InsightsController extends AccountBaseController
         
         return response()->json(["goal" => $goal]);
     }
-    public function editGoal($id)
+    public function editGoal(Request $request, $id)
     {
-        dd($id);
+        $goal= GoalSetting::find($id);
+        $goal->entry = $request->entry;
+        $goal->entryType = $request->entryType;
+        $goal->assigneeType = $request->assigneeType;
+        if($request->assigneeType == 'User')
+        {
+                $goal->user_id = $request->assigneeFor['id'];
+                $goal->name= $request->assigneeFor['name'];      
+        }else if($request->assigneeType == 'Team')
+        {
+           
+                $goal->team_id = $request->assigneeFor['id'];
+                $goal->team_name= $request->assigneeFor['name'];   
+           
+        }
+        foreach($request->pipeline as $pipeline)
+        {
+            $goal->pipeline= $pipeline;
+            
+        }
+        $goal->frequency = $request->frequency;
+        $goal->startDate = $request->startDate;
+        $goal->endDate = $request->endDate;
+        $goal->trackingType = $request->trackingType;
+        $goal->trackingValue= $request->trackingValue;
+        $goal->applyRecurring = $request->applyRecurring;
+        
+        $goal->achievablePoints = $request->achievablePoints;
+        if( $request->entryType == 'Progressed')
+        {
+            $goal->qualified = $request->qualified;
+        }else 
+        {
+            $goal->qualified = null;
+
+        }
+        $goal->dealType = $request->dealType;
+        $goal->goalType = $request->goalType;
+        $goal->added_by= Auth::id();
+        $goal->save();
+        $find_goal_recurrings= GoalRecurring::where('goal_id',$id)->get();
+        if($find_goal_recurrings != null)
+        {
+            foreach ($find_goal_recurrings as $value) {
+                $recurring= GoalRecurring::find($value->id);
+                $recurring->delete();
+
+            }
+    
+        }
+       
+        if($request->recurring != null)
+        {
+            foreach($request->recurring as $key=>$rec)
+       
+        {
+           // dd($key,$rec);
+            $recurring= new GoalRecurring();
+            $recurring->goal_id = $goal->id;
+            $recurring->value = $rec['value'];
+           // dd($recurring->value);
+            $recurring->title=  $rec['title'];
+            $recurring->start=  $rec['start'];
+            $recurring->end=  $rec['end'];
+            $recurring->save();
+
+        }
+        $recurring_data= GoalRecurring::where('goal_id',$goal->id)->get();
+        return response()->json(["goal" => $goal, "recurring"=> $recurring_data]);
     }
+}
 
     public function getGoal($id)
     {
