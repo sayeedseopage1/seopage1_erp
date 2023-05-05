@@ -12,6 +12,7 @@ use Auth;
 use App\Models\Section;
 use App\Models\Dashboard;
 use App\Models\DealStage;
+use App\Models\Lead;
 
 class InsightsController extends AccountBaseController
 {
@@ -160,11 +161,17 @@ class InsightsController extends AccountBaseController
         $recurring_data= GoalRecurring::where('goal_id',$goal->id)->get();
         return response()->json(["goal" => $goal, "recurring"=> $recurring_data]);
 
+
         }
 
         
         return response()->json(["goal" => $goal]);
     }
+    public function editGoal($id)
+    {
+        dd($id);
+    }
+
     public function getGoal($id)
     {
         if(Auth::user()->role_id == 1)
@@ -318,7 +325,8 @@ class InsightsController extends AccountBaseController
     public function DealConversion()
     {
         $deals= DealStage::all();
-        return response()->json($deals);
+        $lead = Lead::all();
+        return response()->json(["deals" => $deals, "leads" => $lead]);
 
 
     }
