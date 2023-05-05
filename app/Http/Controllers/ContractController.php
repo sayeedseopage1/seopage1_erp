@@ -1476,6 +1476,22 @@ class ContractController extends AccountBaseController
                     //     Mail::to($usr->email)->send(new WonDealMail($project_id));
                     //   }
                 }
+                $deal= Deal::find($deal->id);
+                        $deal->authorization_status= 2;
+                        $deal->save();
+                        $sender= User::where('id',Auth::id())->first();
+                        $users= User::where('role_id',8)->orWhere('role_id',1)->get();
+                    
+                        foreach ($users as $key => $user) {
+                           // Notification::send($users, new DealAuthorizationSendNotification($deal,$sender));
+                            $this->triggerPusher('notification-channel', 'notification', [
+                                'user_id' => $user->id,
+                                'role_id' => $user->role_id,
+                                'title' => 'Price authorization request from '.$sender->name,
+                                'body' => $sender->name. ' send price authorization request for '.$deal->project_name,
+                                'redirectUrl' => route('deals.show',$deal->id)
+                            ]);
+                        }
 
 
                 DB::commit();
