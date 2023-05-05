@@ -8,20 +8,15 @@ const Modal = ({ children, isOpen, className }) => {
     const id = React.useMemo(() => Math.random().toString(36).substr(2, 9), []);
     let DOM = document.getElementById(id);
 
-    // create element in html body
+    
     React.useEffect(() => {
+        setIsBrowser(true);
         const el = document.createElement('div');
         el.id = id;
         document.body.appendChild(el);
         return () => {
             document.body.removeChild(el);
         }
-    }, [])
-
-
-
-    React.useEffect(() => {
-        setIsBrowser(true);
     }, []);
 
     if(!DOM) return;

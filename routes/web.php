@@ -954,6 +954,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('contracts', ContractController::class);
     Route::resource('contract-renew', ContractRenewController::class);
     Route::resource('deals', DealController::class);
+    
     Route::post('deals/apply-quick-action', [DealController::class, 'applyQuickAction'])->name('deals.apply_quick_action');
     Route::post('accounts/deals/store', [DealController::class, 'store'])->name('store.deal');
     Route::post('accounts/deals/update', [DealController::class, 'update'])->name('update.deal');
@@ -1083,7 +1084,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     // Update app
     Route::get('/insights/deals', [InsightsController::class,'DealConversion'])->name('insights-deals');
-    Route::get('/insights/goals/get', [InsightsController::class,'getGoal'])->name('insights-goals-get');
+    Route::get('/insights/goals/get/{id}', [InsightsController::class,'getGoal'])->name('insights-goals-get');
+    
+    Route::post('/insights/goals/edit/{id}', [InsightsController::class,'editGoal']);
     Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
     Route::get('update-settings/install', [UpdateAppController::class, 'install'])->name('update-settings.install');
@@ -1219,6 +1222,7 @@ Route::any('get-users', [InsightsController::class, 'getusers'])->name('get-user
 Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams');
 Route::get('get-users/all', [InsightsController::class, 'get_users_all'])->name('get_users_all');
 Route::get('get-user/{id}', [InsightsController::class, 'get_users_by_id'])->name('get_users_by_id');
+
 
 //Team Routes 
 Route::post('team/apply-quick-action', [Seopage1TeamController::class, 'applyQuickAction'])->name('teams.apply_quick_action');

@@ -14,6 +14,10 @@ import {
 
 const data = [
   {
+    name: 'Contact Made',
+    value:  8,
+  },
+  {
     name: 'Qualified',
     value:  8,
   },

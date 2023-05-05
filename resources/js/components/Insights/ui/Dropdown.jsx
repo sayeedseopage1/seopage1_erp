@@ -90,7 +90,7 @@ const DropdownMenu = ({children, className, placement="bottom-start", offset=[0,
             {
                 name: 'flip',
                 options: {
-                    fallbackPlacements: ['bottom', 'top', ],
+                    fallbackPlacements: ['bottom', 'top','left', 'right' ],
                 },
             }
         ],

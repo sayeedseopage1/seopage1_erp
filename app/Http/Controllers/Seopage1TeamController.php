@@ -156,6 +156,7 @@ public function getEmployeesByParentTeam(Request $request)
         $this->departments = Team::all();
         $this->parent_teams = Seopage1Team::all();
         $this->team = Seopage1Team::find($id);
+
         //$this->employees = User::allEmployees(null, true,);
         $this->team_members = explode(',', $this->team->members);
 
@@ -174,6 +175,7 @@ public function getEmployeesByParentTeam(Request $request)
         }
 
         if (request()->ajax()) {
+
             $html = view('teams.ajax.edit', $this->data)->render();
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }

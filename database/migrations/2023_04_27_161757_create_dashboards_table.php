@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('section_id');
             $table->string('goals')->nullable();
             $table->string('reports')->nullable();
+            $table->integer('root')->default(0);
             $table->integer('added_by');
             $table->timestamps();
         });

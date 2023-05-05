@@ -8,10 +8,12 @@ import { closeSectionModal } from '../services/slices/sectionModalSlice';
 import { openDashboardModal, setDashboardModalData } from '../services/slices/dashboardModalSlice';
 import { addDashboard } from '../services/slices/dashboardSlice';
 import axios from 'axios';
+import { useSections } from '../hooks/useSection';
 
 const AddSectionModal = () => {
     const {type, from} = useSelector((state) => state.sectionModal);
     const [section, setSection] = React.useState('');
+    const {storeSection, waitingForPostResponse} = useSections();
     const dispatch = useDispatch();
 
     // back
@@ -25,39 +27,10 @@ const AddSectionModal = () => {
     }
 
     // save
-    const onSave = async (e) => {
+    const onSave = (e) => {
         e.preventDefault();
-        const data = {type, section};
-
-        await axios.post('/account/insights/sections/add', data).then(res => {
-            const d = res?.data[0];
-            if(!d) return;
-            if(d.type === 'DASHBOARD_SECTION'){
-                dispatch(addDashboard({id: d.id, section: d.section_name, title: ''}))
-            }else {
-                    console.log('e: ', res.data)
-            }
-
-            // query to save section name to db
-
-            if(type === 'DASHBOARD_SECTION' && from === 'DASHBOARD_MODAL'){
-                dispatch(setDashboardModalData({ section: d }))
-                dispatch(openDashboardModal());
-            }else if(type === 'DASHBOARD_SECTION' && from === ''){
-                dispatch(setDashboardModalData({ section:d }))
-                dispatch(closeSectionModal());
-            }else if(type === 'REPORT_SECTION' && from === 'REPORT_MODAL'){
-                console.log('report section');
-            }else if(type === 'REPORT_SECTION' && from === ''){
-                console.log('report section');
-            }
-            dispatch(closeSectionModal());
-    
-            setIsSaving(false);
-        })
-        
-           
-        
+        const data = {type, section, root: 0};
+        storeSection(data);
     }
 
     
@@ -69,7 +42,6 @@ const AddSectionModal = () => {
                 <h4>Add New section</h4>
             </Card.Header>
             <Card.Body className="cnx__ins__new_dashboard_modal_body">
-                <form action="">
                     <Label label="Section Name">
                     <Input 
                         type='text' 
@@ -78,7 +50,6 @@ const AddSectionModal = () => {
                         onChange={(e) => setSection(e.target.value)}    
                     />
                     </Label>
-                </form>
             </Card.Body>
             <Card.Footer className="cnx__ins__new_dashboard_modal_footer"> 
                     <div className='cnx_ins__new_dashboard__card_footer'>
@@ -98,7 +69,9 @@ const AddSectionModal = () => {
                         >
                             Close
                         </Button>}
-                        <Button type="button" onClick={onSave} variant='success' disabled={!section}>Save</Button>
+                        <Button type="button" onClick={onSave} variant='success' disabled={!section || waitingForPostResponse}>
+                            {waitingForPostResponse ? 'Saving...' : 'Save'}
+                        </Button>
                     </div>
             </Card.Footer>
         </Card>

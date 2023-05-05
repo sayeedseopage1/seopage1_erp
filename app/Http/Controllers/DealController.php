@@ -8,10 +8,7 @@ use App\Models\Lead;
 use App\Helper\Files;
 use App\Helper\Reply;
 use App\Models\Country;
-use App\Models\LeadAgent;
-use App\Models\LeadSource;
-use App\Models\LeadStatus;
-use App\Imports\LeadImport;
+
 use App\Jobs\ImportLeadJob;
 use App\Models\GdprSetting;
 use App\Models\LeadCategory;
@@ -52,6 +49,8 @@ use App\Models\Currency;
 use Illuminate\Support\Facades\Redirect;
 //use SweetAlert;
 use Toastr;
+use App\Notifications\DealAuthorizationSendNotification;
+use Notification;
 
 
 
@@ -278,6 +277,30 @@ class DealController extends AccountBaseController
             'redirectUrl' => route('deals.index')
         ]);
     }
+    // public function DealAuthorization(Request $request, $id)
+    // {
+    //     $deal= DealStage::find($id);
+    //     $deal->authorization_status= 2;
+    //     $deal->save();
+    //     $sender= User::where('id',Auth::id())->first();
+    //   $users= User::where('role_id',8)->orWhere('role_id',1)->get();
+     
+    //   foreach ($users as $key => $user) {
+    //     Notification::send($users, new DealAuthorizationSendNotification($deal,$sender));
+    //     $this->triggerPusher('notification-channel', 'notification', [
+    //         'user_id' => $user->id,
+    //         'role_id' => $user->role_id,
+    //         'title' => 'Price authorization request from '.$sender->name,
+    //         'body' => $sender->name. ' send price authorization request for '.$deal->project_name,
+    //         'redirectUrl' => route('deals.show',$deal->id)
+    //     ]);
+       
+    //   }
+    //   return Reply::success('Authorizations send successfully');
+      
+       
+
+    // }
 
     private function storeUpdate($request, $contract)
     {

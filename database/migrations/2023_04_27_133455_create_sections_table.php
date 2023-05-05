@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('type');
             $table->string('section_name');
+            $table->integer('root')->default(0);
             $table->integer('added_by');
             $table->integer('updated_by')->nullable();
             $table->timestamps();

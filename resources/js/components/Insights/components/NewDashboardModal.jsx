@@ -8,11 +8,13 @@ import Dropdown from '../ui/Dropdown';
 import { closeDashboardModal, setDashboardModalData } from '../services/slices/dashboardModalSlice';
 import { openSectionModal } from '../services/slices/sectionModalSlice';
 import { useSections } from '../hooks/useSection';
+import { useDashboards } from '../hooks/useDashboards';
 
 
 const NewDashboardModal = () => {
     const dispatch = useDispatch();
-    const {dashboards} = useSelector((state) => state.dashboards);
+    // const {dashboards} = useSelector((state) => state.dashboards);
+    const {dashboards, addNewDashboard} = useDashboards();
     const { dashboardName, section: defaultSection } = useSelector(state => state.dashboardModal);
     const { getSectionsByType} = useSections(); 
     const [name , setName] = React.useState(dashboardName);
@@ -33,22 +35,20 @@ const NewDashboardModal = () => {
 
     // open section modal
     const addSection = () => {
-        dispatch(closeDashboardModal());
         dispatch(openSectionModal({
             type: "DASHBOARD_SECTION",
             from: 'DASHBOARD_MODAL'
         }));
+        dispatch(closeDashboardModal());
     }
 
 
     // on save
-    const onSubmit = async (e) => {
+    const onSubmit = (e) => {
         e.preventDefault();
         setIsSaving(true);
-        const data = {name, section, reports: [], goals: []};
-        await axios.post('/account/insights/dashboards/add', data).then(res => {
-            setIsSaving(false)
-        })
+        const data = {name, root: 0, section, reports: [], goals: []};
+        addNewDashboard(data, setIsSaving);
         
     }
 

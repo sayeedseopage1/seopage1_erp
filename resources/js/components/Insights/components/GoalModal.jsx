@@ -48,7 +48,7 @@ const GoalModal = () => {
                         onClose={close}
                     >
                         <div className='cnx_ins__goal_modal__card_header_title'>
-                            Goal Modal
+                            Add Modal 1/2
                         </div>
                     </Card.Header>
                     {/* card body */}

@@ -65,8 +65,14 @@ const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxis
                                 dataKey={b} 
                                 stackId={XAxisLabel} 
                                 fill={ colors.length > 0 ? colors[index] : bgColors[index]}
+                                style={{borderTop: '1px solid #000'}}
                             >
-                                {barDataKey.length-1 === index && <LabelList  style={{stroke: '#000', strokeWidth: '0'}} position="top"  formatter={labelListFormatter} />} 
+                                {barDataKey.length-1 === index && 
+                                <LabelList  
+                                    style={{stroke: '#000', strokeWidth: '0'}} 
+                                    position="top"  
+                                    formatter={labelListFormatter} 
+                                />} 
                             </Bar>
                         ))}
                         {/* <Bar dataKey="open" stackId={XAxisLabel} fill="#fecf4c" label={{position: 'top'}} /> */}

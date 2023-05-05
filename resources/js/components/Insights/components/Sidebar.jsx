@@ -9,33 +9,64 @@ import Button from '../ui/Button';
 import Tooltip from '../ui/Tooltip';
 import Dropdown from '../ui/Dropdown';
 import Accordion from '../ui/Accordion';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Icon } from '../utils/Icon';
 import _ from 'lodash';
 import TextHighlighter from './TextHighlighter';
 import { useSections } from '../hooks/useSection';
+import { useDashboards } from '../hooks/useDashboards';
+import { useGoals } from '../hooks/useGoals';
+import dayjs from 'dayjs';
+import { CompareDate } from '../utils/dateController';
+import { useUsers } from '../hooks/useUsers';
+import { selectAllUsers, selectUserById, useGetUserMutation, useGetUsersQuery } from '../services/api/userSliceApi';
+import { useGetGoalsQuery } from '../services/api/goalsApiSlice';
+import { useGetTeamsQuery } from '../services/api/teamSliceApi';
+
 
 
 const InsightSidebar = () => {
     const [search, setSearch] = React.useState('');
-    const {sections}  = useSections();
-    const {dashboards} = useSelector((state) => state.dashboards);
+    const {sections, getSectionsByType}  = useSections();
+    const {dashboards} = useDashboards();
+    const [filteredGoals, setFilteredGoals] = React.useState({active: [], past: []});
     const {reports} = useSelector((state) => state.reports);
-    const { goals } = useSelector((state) => state.goals);
+    // const { goals } = useSelector((state) => state.goals);
     const dispatch = useDispatch();
+    const compareDate = new CompareDate();
+    const {goals, getGoalById, goalsIsLoading} = useGoals();
+    const {users, usersIsLoading} = useUsers();
+    const location =  useLocation();
 
+
+    React.useEffect(() => {
+        const _filteredGoals = {
+            active: [],
+            past: []
+        };
+
+        if(goals && users && goals.length > 0){
+            let _goals = goals.map((goal) => {
+                let title = `${goal.entry} ${goal.entryType} ${goal?.name || goal?.team_name}`;
+                
+                if(goal.endDate && compareDate.isAfter(dayjs(), goal.endDate)){
+                    return {...goal, title, status: 'Past' };
+                } else if(!goal.endDate || !compareDate.isAfter(dayjs(), goal.endDate)){
+                    return {...goal, title, status: 'Active'};
+                }
+            }) 
+
+            _filteredGoals.active = _goals.filter((goal) => goal.status === 'Active');
+            _filteredGoals.past = _goals.filter((goal) => goal.status === 'Past');
+        }
+
+        setFilteredGoals(_filteredGoals);
+    }, [goals, users, location])
 
     // get all unique sections
     const getDashboardSections = () => {
-        const sections = dashboards.map((item) => item.section);
-        return [...new Set(sections)];
+        return getSectionsByType('DASHBOARD_SECTION');
     }
-
-    // get all dashboards by section
-    const getDashboardsBySection = (section) => {
-        return dashboards.filter((item) => item.section === section);
-    }
-
 
     // get all unique report sections
 
@@ -50,6 +81,27 @@ const InsightSidebar = () => {
     }
 
 
+    // get goals 
+    // const getGoals = (goals, type, search) => {
+
+    //     return goals.map(goal => {
+    //         const user = _.find(users.users, {id: goal.added_by});
+    //         let title = `${goal.entry} ${goal.entryType} by ${user?.name || ''}`;
+    //         if(type === "Past"){
+    //             if(goal.endDate && compareDate.isAfter(dayjs(), goal.endDate)){
+    //                 return {...goal, title, user } 
+    //             } else return;
+    //         } else if(type === "Active"){
+    //             if(!goal.endDate || !compareDate.isAfter(dayjs(), goal.endDate)){
+    //                 if(_.toLower(title).includes(search) ){
+    //                     return { ...goal, title, user } 
+    //                 }
+    //             }else return;
+                
+    //         }else return;
+    //     })
+    // }
+    
 
     return(
         <aside className='cnx_ins__sidebar'> 
@@ -94,7 +146,7 @@ const InsightSidebar = () => {
             <div className='cnx_ins__sidebar_content'>
             {/* dashboards */}
                 <Accordion>
-                    <Accordion.Item defaultActive={true}>
+                    <Accordion.Item defaultActive={false}>
                         <div className='cnx_ins__sidebar_dashboards_header'>
                             <Accordion.Item.Header icon={false} className='__accordion'>
                                 {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
@@ -135,14 +187,14 @@ const InsightSidebar = () => {
                         <Accordion.Item.Body>
                             {/* dashboard section */}
                             {getDashboardSections()?.map((section) => (
-                                <Accordion key={section}>
-                                    <Accordion.Item defaultActive={true}>
+                                <Accordion key={section.id}>
+                                    <Accordion.Item defaultActive={false}>
                                         <div className='cnx_ins__sidebar_dashboards_header __inner'>
                                             <Accordion.Item.Header icon={false} className='__accordion'>
                                             {(active) => <>
                                                     <div className='cnx_ins__sidebar_dashboards_title __inner'>
                                                         <i className={`fa-solid fa-chevron-${active? 'down': 'right'}`}/>
-                                                        {section}
+                                                        {section.section_name}
                                                     </div>
                                             </>} 
                                             </Accordion.Item.Header>
@@ -181,12 +233,12 @@ const InsightSidebar = () => {
                                         </div>
                                         <Accordion.Item.Body>
                                             {/* dashboard */}
-                                                {getDashboardsBySection(section)?.map((dashboard) => (
-                                                    dashboard.title ? (
-                                                    <div key={dashboard.id} className='cnx_ins__sidebar_item'>
+                                                {dashboards.filter(i=> i.section_id === section.id)?.map((dashboard) => (
+                                                    dashboard.dashboard_name ? (
+                                                    <div key={dashboard.dashboard_id} className='cnx_ins__sidebar_item'>
                                                          
                                                         <NavLink 
-                                                            to={`dashboards/${dashboard.id}`}
+                                                            to={`dashboards/${dashboard.dashboard_id}`}
                                                             className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link active' : 'cnx_ins__sidebar_item_link'}
                                                         > 
                                                         
@@ -194,7 +246,7 @@ const InsightSidebar = () => {
                                                                 <i className="fa-solid fa-chart-pie" />
                                                                     <TextHighlighter
                                                                         searchWords={search}
-                                                                        textToHighlight={dashboard.title}
+                                                                        textToHighlight={dashboard.dashboard_name}
                                                                     />
                                                             </span> 
                                                         
@@ -221,7 +273,7 @@ const InsightSidebar = () => {
 
             {/* Goal */}
                 <Accordion>
-                        <Accordion.Item defaultActive={true}>
+                        <Accordion.Item defaultActive={false}>
                             <div className='cnx_ins__sidebar_dashboards_header'>
                                 <Accordion.Item.Header icon={false} className='__accordion'>
                                     {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
@@ -252,10 +304,13 @@ const InsightSidebar = () => {
                                 </Dropdown>
                             </div>
                             <Accordion.Item.Body>
+
+                                
+
                                 {/* goal section */}
                                 {["Active", "Past"]?.map((section) => (
                                     <Accordion key={section}>
-                                        <Accordion.Item defaultActive={true}>
+                                        <Accordion.Item defaultActive={false}>
                                             <div className='cnx_ins__sidebar_dashboards_header __inner'>
                                                 <Accordion.Item.Header icon={false} className='__accordion'>
                                                 {(active) => <>
@@ -294,28 +349,22 @@ const InsightSidebar = () => {
                                                 </Dropdown>
                                             </div>
                                             <Accordion.Item.Body>
+                                                {goalsIsLoading && usersIsLoading && 
+                                                    <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
+                                                        <span>
+                                                            loading...
+                                                        </span> 
+                                                    </div>
+                                                }
                                                 {/* goals */}
-                                                    {goals.filter(g => g.status === _.lowerCase(section))?.filter(g => _.lowerCase(g.title).includes(_.lowerCase(search))).map((goal) => (
-                                                        <div key={goal.id} className='cnx_ins__sidebar_item'>
-                                                            <NavLink 
-                                                                to={`goals/${goal.id}`}
-                                                                className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link active' : 'cnx_ins__sidebar_item_link'}
-                                                            > 
-                                                            
-                                                                <span>
-                                                                    <Icon type={goal.type} />
-                                                                    <TextHighlighter
-                                                                        searchWords={search}
-                                                                        textToHighlight={goal.title}
-                                                                    />
-                                                                </span> 
-                                                            
-                                                                <button aria-label='moveItem' className="cnx_ins__sidebar_item_move">
-                                                                    <Icon type="Move" />
-                                                                </button>
-                                                            </NavLink>
+                                                    {!usersIsLoading && !goalsIsLoading && goals.length > 0 ? 
+                                                        <GoalItem goals={filteredGoals[_.toLower(section)]}/> :
+                                                        <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
+                                                            <span>
+                                                                No active goals
+                                                            </span> 
                                                         </div>
-                                                    ))}
+                                                    }
                                                 {/*end goals*/}
                                             </Accordion.Item.Body>
                                         </Accordion.Item>
@@ -332,7 +381,7 @@ const InsightSidebar = () => {
 
             {/* Reports */}
                 <Accordion>
-                    <Accordion.Item defaultActive={true}>
+                    <Accordion.Item defaultActive={false}>
                         <div className='cnx_ins__sidebar_dashboards_header'>
                             <Accordion.Item.Header icon={false} className='__accordion'>
                                 {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
@@ -372,7 +421,7 @@ const InsightSidebar = () => {
                             {/* dashboard section */}
                             {getReportSections()?.map((section) => (
                                 <Accordion key={section}>
-                                    <Accordion.Item defaultActive={true}>
+                                    <Accordion.Item defaultActive={false}>
                                         <div className='cnx_ins__sidebar_dashboards_header __inner'>
                                             <Accordion.Item.Header icon={false} className='__accordion'>
                                             {(active) => <>
@@ -457,3 +506,32 @@ const InsightSidebar = () => {
 
 export default InsightSidebar;
 
+
+
+
+
+
+const GoalItem = ({goals}) => {
+
+
+    return goals.length > 0  && goals !== undefined ?  
+        goals.map((goal) => (
+           goal &&  
+           <div key={goal.id} className='cnx_ins__sidebar_item'>
+                <Tooltip text={goal.title} style={{width: '100%'}}>
+                    <NavLink
+                        to={`goals/${goal.id}`}
+                        className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link __goal_item active' : 'cnx_ins__sidebar_item_link __goal_item'}
+                    >
+                        <span> {goal.title.length > 23 ? goal.title.slice(0, 23) + '...' : goal.title} </span>
+                        <button aria-label='moveItem' className="cnx_ins__sidebar_item_move">
+                            <Icon type="Move" />
+                        </button>
+                    </NavLink>
+                </Tooltip>
+            </div>
+        )) : 
+        <div className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
+            <span> No active goals</span>
+        </div>
+}

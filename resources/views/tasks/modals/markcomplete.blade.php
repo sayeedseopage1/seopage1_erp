@@ -117,9 +117,6 @@
         });
 
     });
-
-</script>
-<script type="text/javascript">
     $(document).ready(function () {
         var buttonAdd = $("#add-button");
         var buttonRemove = $("#remove-button");
@@ -189,4 +186,7 @@
             enableButtonAdd();
         });
     });
+</script>
+<script type="text/javascript">
+
 </script>
