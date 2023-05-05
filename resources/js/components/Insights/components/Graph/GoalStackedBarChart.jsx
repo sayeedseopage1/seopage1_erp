@@ -14,11 +14,25 @@ import {
 import { bgColors } from '../../utils/constants';
 import _ from 'lodash';
 
+import { openDataTableModal } from '../../services/slices/dataTableModalSlice';
+import { useDispatch } from 'react-redux';
 
 
 
+const GoalStackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxisTickFormate,offset=5, labelListFormatter, xDomain, yDomain, referenceLine = false, stackOffset="auto", colors=[], footer=true}) => {
 
-const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxisTickFormate,offset=5, labelListFormatter, xDomain, yDomain, referenceLine = false, stackOffset="auto", colors=[], footer=true}) => {
+
+    const dispatch = useDispatch();
+
+
+    const handleBarClick = (data) => {
+        if(!data) return;
+        dispatch(openDataTableModal({
+            data: data.activePayload[0].payload, 
+            title: 'Deals'
+        }));
+    }
+
     return(
         <div className='cnx__conversion_graph__wrapper'>
             <div className='cnx__conversion__graph'>
@@ -26,6 +40,7 @@ const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxis
                     <BarChart
                         width={100}
                         height={100}
+                         onClick={handleBarClick}
                         data={data}
                         stackOffset={stackOffset}
                         style={{ stroke: '#fff', strokeWidth: 2 }}
@@ -57,7 +72,7 @@ const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxis
                             style={{textAnchor: 'middle', stroke: '#000', strokeWidth: '0'}}
                         />
                     </YAxis>
-                    <Tooltip  cursor={{ fill: '#F1F5F9' }}/>
+                    <Tooltip  cursor={{ fill: '#F1F5F9' }} onClick={() => alert("alert")}/>
                     {referenceLine && <ReferenceLine y={0} stroke="#000" />}
                     {barDataKey.length > 0 && barDataKey.map((b, index) => (
                             <Bar 
@@ -65,14 +80,14 @@ const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxis
                                 dataKey={b} 
                                 stackId={XAxisLabel} 
                                 fill={ colors.length > 0 ? colors[index] : bgColors[index]}
-                                style={{borderTop: '1px solid #000'}}
                             >
-                                {barDataKey.length-1 === index && 
+                                {/* {barDataKey.length-1 === index &&  */}
                                 <LabelList  
                                     style={{stroke: '#000', strokeWidth: '0'}} 
                                     position="top"  
                                     formatter={labelListFormatter} 
-                                />} 
+                                />
+                                {/* }  */}
                             </Bar>
                         ))}
                         {/* <Bar dataKey="open" stackId={XAxisLabel} fill="#fecf4c" label={{position: 'top'}} /> */}
@@ -103,4 +118,4 @@ const StackedBarChart = ({data, leftSideLabel,  XAxisLabel, barDataKey=[], yAxis
     )
 }
 
-export default StackedBarChart;
+export default GoalStackedBarChart;

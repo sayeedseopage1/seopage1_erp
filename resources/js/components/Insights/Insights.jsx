@@ -13,7 +13,7 @@ import NewDashboardModal from './components/NewDashboardModal';
 import AddSectionModal from './components/AddSectionModal';
 import Dashboard from './pages/Dashboard';
 import ReportModal from './components/ReportModal';
-// import { ModalDataTable } from './components/ModalDataTable';
+import { ModalDataTable } from './components/ModalDataTable';
 import Goal from './pages/Goal';
 import {useDashboards} from './hooks/useDashboards';
 import { DndProvider } from 'react-dnd';
@@ -80,9 +80,9 @@ const InsightsComponent = () => {
         </Modal>
 
 
-        {/* <Modal isOpen ={isOpenDataTable}>
+        <Modal isOpen ={isOpenDataTable}>
           <ModalDataTable />
-        </Modal> */}
+        </Modal>
     </div>
   )
 }

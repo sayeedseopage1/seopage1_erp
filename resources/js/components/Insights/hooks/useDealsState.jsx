@@ -6,6 +6,7 @@ import { CompareDate } from '../utils/dateController';
 import { useGetDealsQuery } from '../services/api/dealSliceApi';
 import { useGoals } from './useGoals';
 import dayjs from 'dayjs';
+import { goal } from '../utils/constants';
 
 
 export const useDealsState = () => {
@@ -56,7 +57,7 @@ export const useDealsState = () => {
 
 
     // analyze deals with in period
-    const analyzeDeals = (deals, period) => {
+    const analyzeDeals = (deals, period, index) => {
         let totalDeal = 0;
         let dealAdded = 0;
         let dealWon = 0;
@@ -64,6 +65,7 @@ export const useDealsState = () => {
         let dealAddedPercentage = 0;
         let dealWonPercentage = 0;
         let dealLostPercentage = 0;
+        let goalProgress = 0;
         let difference = 0;
         
         
@@ -93,10 +95,23 @@ export const useDealsState = () => {
 
 
 
+       let goal = Number(period.value);
+            
+        goalProgress = goal === 0 ? 0 : ( dealAdded /goal ) * 100;
+        // goalProgress  = goalProgress > 100 ? 100 : goalProgress;
+        goalProgress = goalProgress < 0 ? 0 : goalProgress;
+
+        // if goal progress not integer then fix it to 1 decimal place
+        if(goalProgress % 1 !== 0){
+            goalProgress = goalProgress.toFixed(1);
+        }
+
+       let target = goal - dealAdded;
 
         return {
+            deals: _deals,
             ...period,
-            id: period.id || period.title,
+            id: `${period.index || index} `,
             totalDeal,
             dealAdded,
             dealWon,
@@ -104,8 +119,10 @@ export const useDealsState = () => {
             dealAddedPercentage,
             dealWonPercentage,
             dealLostPercentage,
-            difference: dealAdded - Number(period.value),
-            goal: Number(period.value)
+            goalProgress,
+            target,
+            difference:dealAdded - Number(period.value),
+            goal
         }
         
     }
@@ -119,9 +136,8 @@ export const useDealsState = () => {
         let period = getTargetPeriod(goal);
         let summary = [];
 
-
-        period.map(p => {
-            let analyzedValue = analyzeDeals(deals, p);
+        period.map((p, i) => {
+            let analyzedValue = analyzeDeals(deals, p, i);
             summary.push(analyzedValue);
         })
 

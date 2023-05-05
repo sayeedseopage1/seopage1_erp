@@ -35,7 +35,7 @@ export const DataTableColumns = [
         id: "amount",
         accessor: 'amount',
         cell: (row) => {
-            return <span style={{fontWeight: '600', float:"right"}}> ${row['amount'].toFixed(2)} </span>
+            return <span style={{fontWeight: '600'}}> ${row['amount'].toFixed(2)} </span>
         }
     },
     {

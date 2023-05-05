@@ -194,6 +194,7 @@ const Qualified = ({ qualified, setQualified }) => {
         "Requirements Defined",
         "Proposal Made",
         "Negotiations Started",
+        "Milestone breakdown",
     ])
 
     return(
