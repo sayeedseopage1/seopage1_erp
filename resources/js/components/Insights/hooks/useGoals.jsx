@@ -6,21 +6,29 @@ import { useGetGoalsQuery } from "../services/api/goalsApiSlice";
 
 
 export const useGoals = () => {
-    const {goals}  = useSelector(state => state.goals);
+    const {goals, recurring}  = useSelector(state => state.goals);
     const dispatch = useDispatch();
 
     const {data: goalsData, isLoading: goalsIsLoading, error: goalsError} = useGetGoalsQuery(window.Laravel.user.id);
 
     React.useEffect(() => {
         if(goalsData && !goalsIsLoading){
-            dispatch(setGoals(goalsData.goals));
-            dispatch(setRecurring(goalsData.recurring));
+            dispatch(setGoals(goalsData));
+            dispatch(setRecurring(goalsData));
         }
     }, [goalsData, goalsIsLoading, goalsError])
 
 
     const getGoalById = (id) => {
-        return goals.length > 0 && goals.find(goal => goal.id === id);
+        if(goals.length > 0){
+            const _goals = goals.find(goal => goal.id === id);
+            const _recurring = recurring.length > 0 ? recurring.filter(r => r.goal_id === id) : [];
+            return  {
+                ..._goals,
+                recurring: _recurring
+            }
+        }
+        
     }
 
 

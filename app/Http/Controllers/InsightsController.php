@@ -163,7 +163,7 @@ class InsightsController extends AccountBaseController
         }
 
         
-        return response()->json([$goal]);
+        return response()->json(["goal" => $goal]);
     }
     public function getGoal($id)
     {

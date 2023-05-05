@@ -15,12 +15,12 @@ import quarterOfYear from "dayjs/plugin/quarterOfYear";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import WeekOfYear from "dayjs/plugin/weekOfYear";
 import axios from 'axios';
-import _ from 'lodash';
+import _, { set } from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import { getPeriod } from '../utils/getPeriod';
 import { useGetUsersQuery } from '../services/api/userSliceApi';
 import { useGetTeamsQuery } from '../services/api/teamSliceApi';
-import { addGoal, setGoals } from '../services/slices/goalSlice';
+import { addGoal, addRecurring, setGoals } from '../services/slices/goalSlice';
 
 
 // assignee for 
@@ -220,7 +220,7 @@ const Qualified = ({ qualified, setQualified }) => {
 }
 
 // Frequency
-const Frequency = ({ frequency, setFrequency }) => {
+const Frequency = ({ frequency, setFrequency, setEdit }) => {
 
     const options = () => ([
         'Weekly',
@@ -239,7 +239,10 @@ const Frequency = ({ frequency, setFrequency }) => {
                     {
                         options()?.map(option => (
                             <Dropdown.Item key={`${option}-${Math.random()}`} 
-                            onClick={() => setFrequency(option)}
+                            onClick={() => {
+                                setFrequency(option);
+                                setEdit(true);
+                            }}
                             className={`cnx_select_box_option ${frequency === option ? 'active' : ''}`}> {option} 
                             {frequency === option && <i className="fa-solid fa-check" />}
                             </Dropdown.Item>
@@ -320,7 +323,8 @@ const GoalType = ({ goalType, setGoalType }) => {
 
 // period
 const Period = ({ period, recurringValue, defaultValue, setRecurringValue, trackingType }) => {
-    const [value, setValue] = React.useState('');
+    const [value, setValue] = React.useState(period.value);
+    
 
     React.useEffect(() => {
         setValue(period.value);
@@ -385,6 +389,7 @@ const TrackingInput = ({
     setRecurring, 
     frequency,
     goalType,
+    edit,
     setGoalType
 }) => {
     const [checked, setChecked] = React.useState(false);
@@ -397,6 +402,15 @@ const TrackingInput = ({
             setChecked(false);
         }
     }, [endDate])
+
+
+    // apply to all
+    React.useEffect(() => {
+        if(recurring.length > 0){
+            setChecked(true);
+            setPeriod([...recurring]);
+        }
+    }, [recurring])
 
     React.useEffect(() => {
         const doc = document.querySelector('.cnx_ins__goal_form_modal');
@@ -417,13 +431,7 @@ const TrackingInput = ({
 
     }, [period, endDate, startDate, frequency, checked])
     
-    
-    // remove error
-    React.useEffect(() => {
-        if(recurring.length > 0 || !checked){
-            setError(false);
-        }
-    }, [recurring, checked])
+
 
     // period control
     React.useEffect(() => {
@@ -431,11 +439,15 @@ const TrackingInput = ({
         dayjs.extend(quarterOfYear);
         dayjs.extend(isSameOrBefore);
         dayjs.extend(WeekOfYear);
-
-        setRecurring([]);
-        getPeriod(
-            {setPeriod, startDate, endDate, frequency}
-        );       
+        if(!edit && recurring.length === 0){
+            getPeriod(
+                {setPeriod, startDate, endDate, frequency}
+            ); 
+        } else {
+            edit && getPeriod(
+                {setPeriod, startDate, endDate, frequency}
+            );      
+        } 
     }, [endDate, frequency, setRecurring, startDate]);
     // end time period control
 
@@ -454,11 +466,13 @@ const TrackingInput = ({
 
 
 
+
     return(
         <div className='cnx_ins_tracking'>
             <div className="cnx_ins__goal_modal__tracking_input">
                 <input 
                     type='number' 
+                    defaultChecked={checked}
                     value = {trackingValue}
                     onChange={e => setTrackingValue(e.target.value)}
                     placeholder={`Insert ${trackingType}`} 
@@ -516,7 +530,7 @@ const TrackingInput = ({
 
 // goal modal
 const GoalFormModal = () => {
-    const { mode, entry, entryType } = useSelector(state => state.goalFormModal);
+    const {data, mode, entry, entryType } = useSelector(state => state.goalFormModal);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isSaving, setIsSaving] = React.useState(false);
@@ -537,12 +551,50 @@ const GoalFormModal = () => {
     const [dealType, setDealType] = React.useState('');
     const [goalType, setGoalType] = React.useState('');
     const [achievablePoints, setAchievablePoints] = React.useState('0');
+    const [edit, setEdit] = React.useState(false);
 
     // React.useEffect(() => {
     //     if(recurring.length === 0){
     //         setApplyRecurring(false);
     //     }
     // }, [recurring])
+
+
+    // if form mode is edit
+    React.useEffect(() => {
+        if(_.lowerCase(mode) === 'edit' && data){
+            setAssigneeType(data.assigneeType);
+            // assignee for
+            if(data.assigneeType === 'Company'){
+                setAssigneeFor({});
+            } else if(data.assigneeType === 'User'){
+                setAssigneeFor({id: data.user_id, name: data.name});
+            } else setAssigneeFor({id: data.team_id, name: data.team_name});
+
+            // frequency
+            setFrequency(data.frequency);
+            // start date
+            setStartDate(new Date(data.startDate));
+            // end date
+            data.endDate ? setEndDate(new Date(data.endDate)) : setEndDate(null);
+            // tracking type
+            setTrackingType(data.trackingType);
+            // tracking value
+            setTrackingValue(data.trackingValue);
+            
+            // recurring
+            setRecurring(data.recurring || []);
+            // qualified
+            setQualified(data.qualified || 'Contact Mode');
+            // deal type
+            setDealType(data.dealType || '');
+            // goal type
+            setGoalType(data.goalType || '');
+            // achievable points
+            setAchievablePoints(data.achievablePoints || '0');
+
+        }
+    }, [])
 
 
     React.useEffect(() => {
@@ -589,8 +641,7 @@ const GoalFormModal = () => {
         setIsSaving(true);
         setFormStatus('saving');
 
-
-        const data = {
+        const formData = {
             entry, 
             entryType, 
             assigneeType, 
@@ -610,13 +661,23 @@ const GoalFormModal = () => {
 
         
 
-        await axios.post("/account/insights/goals/add", data).then((res) => {
-            setFormStatus('saved');
-            setIsSaving(false);
-            dispatch(addGoal(res.data[0]));
-            navigate(`goals/${res.data[0].id}`);
-            // window.location.href = `/account/insights/goals/${res.data[0].id}`;
-        });
+        if(_.lowerCase(mode) === 'edit'){
+            await axios.post(`/account/insights/goals/edit/${data.id}`, formData).then((res) => {
+                setFormStatus('saved');
+                setIsSaving(false);
+                navigate(`goals/${res.data?.goal.id}`);
+                dispatch(addGoal(res.data));
+                dispatch(addRecurring(res.data));
+            });
+        } else {
+            await axios.post("/account/insights/goals/add", formData).then((res) => {
+                setFormStatus('saved');
+                setIsSaving(false);
+                navigate(`goals/${res.data?.goal.id}`);
+                dispatch(addGoal(res.data));
+                dispatch(addRecurring(res.data));
+            });
+        }
     }
 
 
@@ -693,7 +754,7 @@ const GoalFormModal = () => {
                     </div>
 
                     <div className='cnx_select_box_wrapper'>
-                        <Frequency frequency={frequency} setFrequency={setFrequency} />
+                        <Frequency frequency={frequency} setFrequency={setFrequency} setEdit={setEdit} />
                         <DealType dealType={dealType} setDealType={setDealType} />
                     </div>
                 </div>
@@ -707,10 +768,17 @@ const GoalFormModal = () => {
 
                     <div className='cnx_select_box_wrapper'>
                         <RangeDatePicker 
+                            
                             startDate={startDate}
                             endDate={endDate}
-                            setStartDate={setStartDate}
-                            setEndDate={setEndDate}
+                            setStartDate={(v) => {
+                                setStartDate(v);
+                                setEdit(true);
+                            } }
+                            setEndDate={(v) => {
+                                setEndDate(v);
+                                setEdit(true);
+                            }}
                         />
                     </div>
                 </div>
@@ -777,6 +845,7 @@ const GoalFormModal = () => {
                             frequency={frequency}
                             // applyRecurring={applyRecurring}
                             goalType={goalType}
+                            edit = {edit}
                             setGoalType ={setGoalType}
                         />
                     </div>

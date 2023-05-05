@@ -10,13 +10,13 @@ import { relativeTime } from '../utils/relativeTime';
 import RelativeTimePeriod from '../components/RelativeTimePeriod';
 import DataTable from '../ui/DataTable';
 import { useDealsState } from '../hooks/useDealsState';
-import { useGetGoalsQuery } from '../services/api/goalsApiSlice';
-import { useGetUsersQuery } from '../services/api/userSliceApi';
 import { useGoals } from '../hooks/useGoals';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { useUsers } from '../hooks/useUsers';
 
+import { openGoalFormModal } from '../services/slices/goalFormModalSlice';
+import { useDispatch } from 'react-redux';
 
 // convert to unit
 const numberToUnits = (value,decimal= 1) => {
@@ -37,6 +37,8 @@ const Goal = () => {
     const {users} = useUsers();
     const usersData = users && users.users;
 
+    const dispatch = useDispatch();
+
     const handleRelativeTimePeriod =(value) => {
         setSelectedPeriod(value);
         relativeTime(value, setFilterValue);
@@ -48,7 +50,8 @@ const Goal = () => {
         if(usersData && usersData.length > 0){
             if(goalsIsLoading) return <div>Loading...</div>
             let goal = getGoalById(Number(params.goalId));
-            let user = _.find(usersData, {id: goal.added_by});
+            if(!goal) return;
+            let user = _.find(usersData, {id: goal?.added_by});
             setGoal({
                 ...goal,
                 user: user
@@ -68,6 +71,16 @@ const Goal = () => {
     }, [goal, params.goalId]);
 
 
+    const handleOpenGoalFormModal = () => {
+        dispatch(openGoalFormModal({
+            data: goal,
+            mode: 'edit',
+            entry: goal.entry,
+            entryType: goal.entryType,
+        }))
+    }
+
+
     if(!goal) return  (
         <div style={{display: 'flex', alignItems: 'center', "justifyContent": 'center', width: "100%", height: '100vh'}}>
             <div>Loading...</div>
@@ -78,7 +91,7 @@ const Goal = () => {
         <div className="cnx__ins_dashboard">
             {/* navbar */}
             <div className="cnx__ins_dashboard_navbar">
-                <EditAbleBox text="Deals added" onSave={() => {}} />
+                <EditAbleBox text={`${_.toUpper(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`} onSave={() => {}} />
                 <div className='cnx__ins_dashboard_navbar_btn_group' style={{border: 0, padding:0}}>
                     {/* user */}
                     <div className='cnx__period_filter'>
@@ -158,12 +171,12 @@ const Goal = () => {
                             Goal Details
                         </h4>
 
-                        <Button variant='tertiary'>
+                        <Button variant='tertiary' onClick={handleOpenGoalFormModal}>
                             <i className='fa-solid fa-pencil'/>
                         </Button>
 
                         <div className='filter_options_line'>
-                            <span>{ goal.user?.name }</span>
+                            <span>{ goal?.name || goal?.team_name }</span>
                             <span>
                                 {goal.entry} {goal.entryType}
                             </span>
@@ -195,7 +208,7 @@ const Goal = () => {
                             <Tooltip text="Assignee">
                                 <div className='cnx__ins_details_item'>
                                     <i className='fa-regular fa-user'/>
-                                    Abu Sayeed
+                                    <span>{ goal?.name || goal?.team_name }</span>
                                 </div>
                             </Tooltip>
                             
