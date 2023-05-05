@@ -396,11 +396,6 @@ class InsightsController extends AccountBaseController
         $deals= DealStage::all();
         $lead = Lead::all();
         return response()->json(["deals" => $deals, "leads" => $lead]);
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 12d19012c (goal page summary table)
     }
 
 
