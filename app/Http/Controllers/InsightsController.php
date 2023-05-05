@@ -34,12 +34,31 @@ class InsightsController extends AccountBaseController
     }
     public function getusers(Request $request)
     {
-        
         $users = User::where('role_id',7)->orWhere('role_id',8)->get();
        
+        if ($request->isMethod('post')) {
+            if ($request->type == 'all') {
+                $users = User::all();
+            } else {
+                $users = User::find($request->id);
+            }  
+        }
         
-         return response()->json($users);
+        return response()->json($users);
     }
+
+    public function get_users_by_id($id)
+    {
+        $user = User::findOrFail($id);
+        return response()->json($user);
+    }
+
+    public function get_users_all()
+    {
+        $user = User::all();
+        return response()->json($user);
+    }
+
     public function getteam(Request $request)
     {
         

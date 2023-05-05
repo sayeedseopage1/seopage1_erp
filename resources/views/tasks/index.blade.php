@@ -725,6 +725,7 @@ $viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
                 }
             })
         });
+        
     </script>
 
 @endpush

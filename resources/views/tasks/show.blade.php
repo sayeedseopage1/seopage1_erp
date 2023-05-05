@@ -45,7 +45,7 @@
     <script>
         const activeTab = "{{ $activeTab }}";
         $('.project-menu .' + activeTab).addClass('active');
-
+        
     </script>
 
 @endpush

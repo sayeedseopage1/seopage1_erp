@@ -704,7 +704,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('tasks/accept-continue', [TaskController::class, 'acceptContinue'])->name('tasks.accept_continue');
     Route::post('tasks/deny-continue', [TaskController::class, 'denyContinue'])->name('tasks.deny_continue');
     Route::post('tasks/revision-reason', [TaskController::class, 'revisionReason'])->name('tasks.revision_reason');
-
+    Route::post('tesks/revision/accept-or-revision-by-developer', [TaskController::class, 'accept_or_revision_by_developer'])->name('accept_or_revision_by_developer');
     Route::group(
         ['prefix' => 'tasks'],
         function () {
@@ -1215,9 +1215,10 @@ Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'Ca
 
 Route::get('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
 
-Route::get('get-users', [InsightsController::class, 'getusers'])->name('get-users');
+Route::any('get-users', [InsightsController::class, 'getusers'])->name('get-users');
 Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams');
-
+Route::get('get-users/all', [InsightsController::class, 'get_users_all'])->name('get_users_all');
+Route::get('get-user/{id}', [InsightsController::class, 'get_users_by_id'])->name('get_users_by_id');
 
 //Team Routes 
 Route::post('team/apply-quick-action', [Seopage1TeamController::class, 'applyQuickAction'])->name('teams.apply_quick_action');

@@ -736,12 +736,15 @@ class TasksDataTable extends BaseDataTable
         }
 
         if ($request->searchText != '') {
-            $model->where(function ($query) {
+            $model->leftJoin('users', 'projects.client_id', '=', 'users.id')->where(function ($query) {
                 $query->where('tasks.heading', 'like', '%' . request('searchText') . '%')
                     ->orWhere('member.name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('projects.project_name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('projects.project_short_code', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('tasks.task_short_code', 'like', '%' . request('searchText') . '%');
+                    ->orWhere('tasks.task_short_code', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('projects.client_id', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('tasks.task_short_code', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('users.name', 'like', '%' . request('searchText') . '%');
             });
         }
 

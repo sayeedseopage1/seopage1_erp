@@ -905,15 +905,28 @@ class ProjectController extends AccountBaseController
                 Notification::send($user, new ProjectReviewNotification($project));
             }
         }
-        foreach ($users as $user) {
-            $this->triggerPusher('notification-channel', 'notification', [
-                'user_id' => $user->id,
-                'role_id' => 1,
-                'title' => 'Project Accepted',
-                'body' => 'Project Manager accept this project',
-                'redirectUrl' => route('projects.show', $project->id)
-            ]);
+        if ($project->project_status != 'Accepted') {
+            foreach ($users as $user) {
+                $this->triggerPusher('notification-channel', 'notification', [
+                    'user_id' => $user->id,
+                    'role_id' => 1,
+                    'title' => 'Project Accepted',
+                    'body' => 'Project Manager accept this project',
+                    'redirectUrl' => route('projects.show', $project->id)
+                ]);
+            }
+        } else {
+            foreach ($users as $user) {
+                $this->triggerPusher('notification-channel', 'notification', [
+                    'user_id' => $user->id,
+                    'role_id' => 1,
+                    'title' => 'Project Accepted',
+                    'body' => 'Project Manager update this project',
+                    'redirectUrl' => route('projects.show', $project->id)
+                ]);
+            }
         }
+        
         $project_manager= new ProjectMember();
         $project_manager->user_id= Auth::id();
         $project_manager->project_id= $project->id;
