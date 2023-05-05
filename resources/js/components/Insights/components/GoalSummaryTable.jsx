@@ -74,7 +74,7 @@ const GoalSummaryTableColumns =   [
         accessor: 'goal',
         id: 'goal',
         cell: (row) => {
-           return <span>${row['goal'].toFixed(2)}</span>
+           return <span>{row['goal'].toFixed(2)}</span>
         }
     },
 
@@ -83,7 +83,7 @@ const GoalSummaryTableColumns =   [
         accessor: 'dealAdded',
         id: 'dealAdded',
         cell: (row) => {
-           return <span>${row['dealAdded'].toFixed(2)}</span>
+           return <span>{row['dealAdded'].toFixed(2)}</span>
         }
     },
 

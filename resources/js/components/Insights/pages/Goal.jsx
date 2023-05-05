@@ -114,7 +114,7 @@ const Goal = () => {
         <div className="cnx__ins_dashboard">
             {/* navbar */}
             <div className="cnx__ins_dashboard_navbar">
-                <EditAbleBox text={`${_.toUpper(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`} onSave={() => {}} />
+                <EditAbleBox text={`${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`} onSave={() => {}} />
                 <div className='cnx__ins_dashboard_navbar_btn_group' style={{border: 0, padding:0}}>
                     {/* user */}
                     <div className='cnx__period_filter'>
@@ -335,10 +335,11 @@ const Goal = () => {
                                 <GoalStackedBarChart
                                     footer={false}
                                     XAxisLabel="title"
-                                    colors={["#166901", "#F2F2F2"]}
+                                    colors={["#166901", "#ddd"]}
                                     leftSideLabel="Number of deals"
-                                    barDataKey={["dealAdded", "goal"]}
+                                    barDataKey={["dealAdded", "target"]}
                                     offset={-5}
+                                    yDomain={ [0, dataMax => (dataMax + Math.ceil(dataMax * 0.1))]}
                                     labelListFormatter={value => numberToUnits(value, 0)}
                                     yAxisTickFormate={value => numberToUnits(value, 0)}
                                     data = {[...summarizedData]} 

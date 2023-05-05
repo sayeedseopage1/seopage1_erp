@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState = {
-    isOpenDataTable: true,
+    isOpenDataTable: false,
     data: [],
     title: 'Modal title',
     status: 'idle',

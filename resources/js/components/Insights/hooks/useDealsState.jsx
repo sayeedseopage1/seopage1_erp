@@ -95,8 +95,9 @@ export const useDealsState = () => {
 
 
 
+       let goal = Number(period.value);
             
-        goalProgress = (dealAdded / Number(period.value)) * 100;
+        goalProgress = goal === 0 ? 0 : ( dealAdded /goal ) * 100;
         // goalProgress  = goalProgress > 100 ? 100 : goalProgress;
         goalProgress = goalProgress < 0 ? 0 : goalProgress;
 
@@ -105,8 +106,10 @@ export const useDealsState = () => {
             goalProgress = goalProgress.toFixed(1);
         }
 
+       let target = goal - dealAdded;
 
         return {
+            deals: _deals,
             ...period,
             id: `${period.index || index} `,
             totalDeal,
@@ -117,8 +120,9 @@ export const useDealsState = () => {
             dealWonPercentage,
             dealLostPercentage,
             goalProgress,
-            difference: dealAdded - Number(period.value),
-            goal: Number(period.value)
+            target,
+            difference:dealAdded - Number(period.value),
+            goal
         }
         
     }

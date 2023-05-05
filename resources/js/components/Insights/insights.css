@@ -1672,6 +1672,13 @@
   padding: 0;
 }
 
+.cnx__data_table_card_body___title{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+}
+
 /* global */
 
 .cnx_insights {
