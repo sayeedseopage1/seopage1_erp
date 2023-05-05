@@ -954,6 +954,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('contracts', ContractController::class);
     Route::resource('contract-renew', ContractRenewController::class);
     Route::resource('deals', DealController::class);
+    
     Route::post('deals/apply-quick-action', [DealController::class, 'applyQuickAction'])->name('deals.apply_quick_action');
     Route::post('accounts/deals/store', [DealController::class, 'store'])->name('store.deal');
     Route::post('accounts/deals/update', [DealController::class, 'update'])->name('update.deal');
@@ -1084,6 +1085,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     // Update app
     Route::get('/insights/deals', [InsightsController::class,'DealConversion'])->name('insights-deals');
     Route::get('/insights/goals/get/{id}', [InsightsController::class,'getGoal'])->name('insights-goals-get');
+    
+    Route::post('/insights/goals/edit/{id}', [InsightsController::class,'editGoal']);
     Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
     Route::get('update-settings/install', [UpdateAppController::class, 'install'])->name('update-settings.install');
