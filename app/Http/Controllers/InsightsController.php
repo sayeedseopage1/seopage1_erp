@@ -159,6 +159,7 @@ class InsightsController extends AccountBaseController
 
         }
         $recurring_data= GoalRecurring::where('goal_id',$goal->id)->get();
+        //dd($goal, $$recurring);
         return response()->json(["goal" => $goal, "recurring"=> $recurring_data]);
 
 
