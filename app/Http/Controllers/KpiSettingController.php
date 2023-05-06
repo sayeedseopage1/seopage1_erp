@@ -64,13 +64,12 @@ class KpiSettingController extends AccountBaseController
         $kpi_setting->addition_sales = $request->addition_sales;
         $kpi_setting->after = $request->after;
         $kpi_setting->shift_will_get = $request->shift_will_get;
-        $kpi_setting->gnerate_project = $request->gnerate_project;
+        $kpi_setting->generate_project = $request->generate_project;
         $kpi_setting->single_deal = $request->single_deal;
         $kpi_setting->bonus_point = $request->bonus_point;
         $kpi_setting->sales_above = $request->sales_above;
         $kpi_setting->sales_above_point = $request->sales_above_point;
         $kpi_setting->logged_hours_above = $request->logged_hours_above;
-        $kpi_setting->logged_hours_above_to = $request->logged_hours_above_to;
         $kpi_setting->logged_hours_above_sales_amount = $request->logged_hours_above_sales_amount;
         $kpi_setting->achieve_more_than = $request->achieve_more_than;
         $kpi_setting->achieve_less_than = $request->achieve_less_than;

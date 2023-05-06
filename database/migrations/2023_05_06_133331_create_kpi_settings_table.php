@@ -32,13 +32,12 @@ return new class extends Migration
             $table->string('addition_sales')->nullable();
             $table->bigInteger('after')->default(0);
             $table->bigInteger('shift_will_get')->default(0);
-            $table->string('gnerate_project')->nullable();
+            $table->string('generate_project')->nullable();
             $table->bigInteger('single_deal')->default(0);
             $table->bigInteger('bonus_point')->default(0);
             $table->bigInteger('sales_above')->default(0);
             $table->bigInteger('sales_above_point')->default(0);
             $table->bigInteger('logged_hours_above')->default(0);
-            $table->bigInteger('logged_hours_above_to')->default(0);
             $table->bigInteger('logged_hours_above_sales_amount')->default(0);
             $table->bigInteger('achieve_more_than')->default(0);
             $table->bigInteger('achieve_less_than')->default(0);
