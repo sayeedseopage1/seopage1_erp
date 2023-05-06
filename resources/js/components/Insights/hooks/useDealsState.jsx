@@ -37,23 +37,21 @@ export const useDealsState = () => {
     // get deals 
     const getDeals = (deals, goal, startDate, endDate) => {
 
-        // return deals.filter(deal => {
-        //     if(endDate){
-        //         return day.isSameOrAfter(deal.created_at, startDate) &&
-        //         day.isSameOrBefore(deal.created_at, endDate)
-        //     }else{
-        //         return day.isSameOrAfter(deal.created_at, startDate)
-        //     }
-        // });
-        const _endDate = endDate ?? getEndDate(goal);
+        
+        if(!deals || !goal) return;
+        const _endDate = endDate ? endDate : getEndDate(goal);
        
-        return deals.filter(
+        let filteredDeals = deals.filter(
                 deal => day.isSameOrAfter(deal.created_at, startDate) && 
-                day.isSameOrBefore(deal.created_at, _endDate)  &&
+                day.isSameOrBefore(deal.created_at, _endDate)  
+                &&
                 (goal.assigneeType === 'User' ? deal.added_by === goal.assignedUser?.id :
                  goal.assigneeType === 'Team' ? deal.added_by === goal.team?.members?.split(',').map(member => Number(member)) : false) &&
                 (_.lowerCase(goal.entryType) === 'progressed' ? _.lowerCase(goal.qualified) === _.lowerCase(stage[Number(deal.deal_stage)]) : true)
-            )
+            );
+        
+            
+        return filteredDeals;
     }
 
 

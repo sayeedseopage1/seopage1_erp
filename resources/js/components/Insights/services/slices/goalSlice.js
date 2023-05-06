@@ -19,7 +19,7 @@ const goalSlice = createSlice({
         updateGoal: (state, action) => {
             state.goals = state.goals.map(goal => {
                 if (goal.id === action.payload.goal.id) {
-                    return [...goal, action.payload.goal];
+                    return action.payload.goal;
                 }
                 return goal;
             });
@@ -39,9 +39,13 @@ const goalSlice = createSlice({
         },
 
         updateRecurring: (state, action) => {
-            let recurring = state.recurring.find(recurring => recurring.goal_id !== action.payload.goal.id);
-
-            state.recurring =  [...recurring, action.payload.recurring];
+            if(state.recurring.length > 0){
+                let recurring = state.recurring.filter(recurring => 
+                    recurring.goal_id !== action.payload.goal.id);
+                state.recurring =  [...recurring, ...action.payload.recurring];
+            }
+            
+            state.recurring =  [...action.payload.recurring];
         },
 
         setStatus: (state, action) => {

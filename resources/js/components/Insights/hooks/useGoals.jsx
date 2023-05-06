@@ -41,18 +41,18 @@ export const useGoals = () => {
         const frequency = _.toLower(goal.frequency)
 
         if(frequency === 'monthly'){
-            return dayjs(goal.startDate).endOf('month').format('YYYY-MM-DD');
+            return dayjs(goal.startDate).add(1, 'month').format('YYYY-MM-DD');
         }
 
         if(frequency === 'weekly'){
-            return dayjs(goal.startDate).endOf('week').format('YYYY-MM-DD');
+            return dayjs(goal.startDate).add(1, 'week').format('YYYY-MM-DD');
         } 
         
         if(frequency === 'yearly'){
-            return dayjs(goal.startDate).endOf().format('YYYY-MM-DD');
+            return dayjs(goal.startDate).endOf('year').format('YYYY-MM-DD');
         }
         if(frequency === 'quarterly'){
-            return dayjs(goal.startDate).endOf('quarter').format('YYYY-MM-DD');
+            return dayjs(goal.startDate).add(1, 'quarter').format('YYYY-MM-DD');
         }
     }
 

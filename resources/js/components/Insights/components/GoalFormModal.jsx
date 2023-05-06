@@ -653,8 +653,8 @@ const GoalFormModal = () => {
             trackingType, 
             trackingValue, 
             recurring,
+            dealType,
             qualified, 
-            dealType, 
             goalType, 
             achievablePoints: Number(achievablePoints)
         };
@@ -665,7 +665,6 @@ const GoalFormModal = () => {
             await axios.post(`/account/insights/goals/edit/${data.id}`, formData).then((res) => {
                 setFormStatus('saved');
                 setIsSaving(false);
-                
                 if(res.data?.goal){
                     dispatch(setStatus('updating'));
                     dispatch(updateGoal({goal: res.data.goal}));
