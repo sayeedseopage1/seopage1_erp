@@ -6,7 +6,7 @@ import { CompareDate } from '../utils/dateController';
 import { useGetDealsQuery } from '../services/api/dealSliceApi';
 import { useGoals } from './useGoals';
 import dayjs from 'dayjs';
-import { goal, stage } from '../utils/constants';
+import { stage } from '../utils/constants';
 
 
 export const useDealsState = () => {

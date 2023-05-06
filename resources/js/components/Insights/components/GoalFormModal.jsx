@@ -676,11 +676,13 @@ const GoalFormModal = () => {
             });
         } else {
             await axios.post("/account/insights/goals/add", formData).then((res) => {
-                setFormStatus('saved');
-                setIsSaving(false);   
-                dispatch(addGoal(res.data));
-                dispatch(addRecurring(res.data));             
-                navigate(`goals/${res.data?.goal.id}`); 
+                if(res.data.goal){
+                    setFormStatus('saved');
+                    setIsSaving(false);   
+                    navigate(`goals/${res.data?.goal.id}`); 
+                    dispatch(addGoal(res.data));
+                    dispatch(addRecurring(res.data));             
+                }
             });
         }
     }
