@@ -261,7 +261,7 @@
                         <x-forms.label class="my-3" fieldId="description2" :fieldLabel="__('Description')"></x-forms.label>
                         <div id="description2"></div>
                         <textarea name="description" id="description2-text" class="d-none">Description</textarea>
-                        
+                        <div class="invalid-feedback" id="description_error"></div>
                     </div>
                 </div>
 
@@ -701,8 +701,12 @@
                         }
                     },
                     error: function(error) {
-                        console.log(error)
-                    }
+                        
+                        if (error.responseJSON.errors.description) {
+                            $('#description_error').addClass('d-block');
+                            $('#description_error').text('This field are required');
+                        }
+                    } 
                 });
             });
 
