@@ -6,12 +6,12 @@ import { CompareDate } from '../utils/dateController';
 import { useGetDealsQuery } from '../services/api/dealSliceApi';
 import { useGoals } from './useGoals';
 import dayjs from 'dayjs';
-import { goal } from '../utils/constants';
+import { goal, stage } from '../utils/constants';
 
 
 export const useDealsState = () => {
     const { deals, leads , status, error } = useSelector(state => state.deals);
-    const {getTargetPeriod} = useGoals();
+    const {getTargetPeriod, getEndDate} = useGoals();
     const dispatch = useDispatch();
     const day = new CompareDate();
 
@@ -35,16 +35,24 @@ export const useDealsState = () => {
 
 
     // get deals 
-    const getDeals = (deals, startDate, endDate) => {
+    const getDeals = (deals, goal, startDate, endDate) => {
 
-        return deals.filter(deal => {
-            if(endDate){
-                return day.isSameOrAfter(deal.created_at, startDate) &&
-                day.isSameOrBefore(deal.created_at, endDate)
-            }else{
-                return day.isSameOrAfter(deal.created_at, startDate)
-            }
-        });
+        
+        if(!deals || !goal) return;
+        const _endDate = endDate ? endDate : getEndDate(goal);
+        // console.log(goal)
+       
+        let filteredDeals = deals.filter(
+                deal => day.isSameOrAfter(deal.created_at, startDate) && 
+                day.isSameOrBefore(deal.created_at, _endDate)  
+                &&
+                (goal.assigneeType === 'User' ? deal.added_by === goal.assignedUser?.id :
+                 goal.assigneeType === 'Team' ?  goal.team?.members?.split(',').findIndex(d => Number(d) === Number(deal.added_by)) : false) &&
+                (_.lowerCase(goal.entryType) === 'progressed' ? _.lowerCase(goal.qualified) === _.lowerCase(stage[Number(deal.deal_stage)]) : true) 
+            );
+        
+            
+        return filteredDeals;
     }
 
 
@@ -57,7 +65,7 @@ export const useDealsState = () => {
 
 
     // analyze deals with in period
-    const analyzeDeals = (deals, period, index) => {
+    const analyzeDeals = (deals, period, goalData , index) => {
         let totalDeal = 0;
         let dealAdded = 0;
         let dealWon = 0;
@@ -71,8 +79,8 @@ export const useDealsState = () => {
         
         if(!deals) return;
 
-        const _deals = deals.filter(deal => day.isSameOrAfter(deal.created_at, period.start) && 
-                day.isSameOrBefore(deal.created_at, period.end))
+        const _deals = getDeals(deals, goalData, period.start, period.end);
+
         // get period start and end date
 
         totalDeal = _deals.length;
@@ -136,8 +144,9 @@ export const useDealsState = () => {
         let period = getTargetPeriod(goal);
         let summary = [];
 
+
         period.map((p, i) => {
-            let analyzedValue = analyzeDeals(deals, p, i);
+            let analyzedValue = analyzeDeals(deals, p, goal, i);
             summary.push(analyzedValue);
         })
 

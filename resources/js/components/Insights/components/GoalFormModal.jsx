@@ -20,7 +20,8 @@ import { useNavigate } from 'react-router-dom';
 import { getPeriod } from '../utils/getPeriod';
 import { useGetUsersQuery } from '../services/api/userSliceApi';
 import { useGetTeamsQuery } from '../services/api/teamSliceApi';
-import { addGoal, addRecurring, setGoals } from '../services/slices/goalSlice';
+import { addGoal, addRecurring, setGoals, setStatus, updateGoal, updateRecurring } from '../services/slices/goalSlice';
+import { stage } from '../utils/constants';
 
 
 // assignee for 
@@ -188,14 +189,7 @@ const PipelineSelect = ({ pipeline, setPipeline, multiple }) => {
 
 // Qualified
 const Qualified = ({ qualified, setQualified }) => {
-    const options = () => ([
-        "Contact Mode",
-        "Qualified",
-        "Requirements Defined",
-        "Proposal Made",
-        "Negotiations Started",
-        "Milestone breakdown",
-    ])
+    const options = () => stage;
 
     return(
         <React.Fragment>
@@ -659,8 +653,8 @@ const GoalFormModal = () => {
             trackingType, 
             trackingValue, 
             recurring,
+            dealType,
             qualified, 
-            dealType, 
             goalType, 
             achievablePoints: Number(achievablePoints)
         };
@@ -671,17 +665,22 @@ const GoalFormModal = () => {
             await axios.post(`/account/insights/goals/edit/${data.id}`, formData).then((res) => {
                 setFormStatus('saved');
                 setIsSaving(false);
-                navigate(`goals/${res.data?.goal.id}`);
-                dispatch(addGoal(res.data));
-                dispatch(addRecurring(res.data));
+                if(res.data?.goal){
+                    dispatch(setStatus('updating'));
+                    dispatch(updateGoal({goal: res.data.goal}));
+                    dispatch(updateRecurring(res.data));
+                    dispatch(setStatus('idle'))
+                    navigate(`goals/${res.data?.goal.id}`);
+                }
+                
             });
         } else {
             await axios.post("/account/insights/goals/add", formData).then((res) => {
                 setFormStatus('saved');
-                setIsSaving(false);
-                navigate(`goals/${res.data?.goal.id}`);
+                setIsSaving(false);   
                 dispatch(addGoal(res.data));
-                dispatch(addRecurring(res.data));
+                dispatch(addRecurring(res.data));             
+                navigate(`goals/${res.data?.goal.id}`); 
             });
         }
     }
@@ -862,14 +861,14 @@ const GoalFormModal = () => {
                 </Card.Body>
                 {/* end card body */}
                 <Card.Footer>
-                        <Button
+                       {_.lowerCase(mode) !== 'edit' && <Button
                             onClick={previous}
                             className='cnx_ins__goal_modal__card_footer_cancel'
                             variant='tertiary'
                         >
                             <i className="fa-solid fa-chevron-left" />
                             Previous
-                        </Button>
+                        </Button>} 
 
                     <div className='cnx_ins__goal_modal__card_footer'>
                         <Button
@@ -886,7 +885,7 @@ const GoalFormModal = () => {
                                     disabled={ !isFormDataValid() }  
                                     variant='success'
                                 >
-                                    Save
+                                    {_.lowerCase(mode) === 'edit' ? 'Update' : 'Save'}
                                 </Button>
                             ): formStatus === 'saving' ? (
                                 <Button 

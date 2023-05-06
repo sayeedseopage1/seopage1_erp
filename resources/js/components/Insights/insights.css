@@ -1712,7 +1712,7 @@
     visibility: hidden;
     width: -moz-fit-content;
     width: fit-content;
-    position: absolute;
+    
     pointer-events: none;
     padding: 7px 30px;
     font-size: 16px;
@@ -1724,6 +1724,8 @@
     height: 100%;
     border: 1px solid transparent;
     outline: none;
+    position: absolute;
+    top: 0;
     padding: 4px 10px;
     border-radius: 4px;
     font-size: 16px;

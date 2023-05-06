@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 
 
 export const useGoals = () => {
-    const {goals, recurring}  = useSelector(state => state.goals);
+    const {goals, recurring, status}  = useSelector(state => state.goals);
     const dispatch = useDispatch();
 
     const {data: goalsData, isLoading: goalsIsLoading, error: goalsError} = useGetGoalsQuery(window.Laravel.user.id);
@@ -49,7 +49,7 @@ export const useGoals = () => {
         } 
         
         if(frequency === 'yearly'){
-            return dayjs(goal.startDate).add(1, 'year').format('YYYY-MM-DD');
+            return dayjs(goal.startDate).endOf('year').format('YYYY-MM-DD');
         }
         if(frequency === 'quarterly'){
             return dayjs(goal.startDate).add(1, 'quarter').format('YYYY-MM-DD');
@@ -70,5 +70,5 @@ export const useGoals = () => {
     }
 
 
-    return {goals, goalsIsLoading ,getGoalById, getTargetPeriod}
+    return {goals, goalsIsLoading ,getGoalById, getTargetPeriod, getEndDate, goalStateStatus: status}
 }
