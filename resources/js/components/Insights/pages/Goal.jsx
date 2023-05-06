@@ -21,6 +21,7 @@ import { useDispatch } from 'react-redux';
 import GoalSummaryTable from '../components/GoalSummaryTable';
 import { DataTableColumns } from '../components/DataTableColumns';
 import GoalStackedBarChart from '../components/Graph/GoalStackedBarChart';
+import { stage } from '../utils/constants';
 
 // convert to unit
 const numberToUnits = (value,decimal= 1) => {
@@ -276,7 +277,7 @@ const Goal = () => {
                             <Tooltip text="Pipeline">
                                 <div className='cnx__ins_details_item'>
                                     <i className="fa-solid fa-chart-simple" />
-                                    Pipeline
+                                    Pipeline{goal?.entryType === 'Progressed' ? ', ' + goal?.qualified :''}
                                 </div>
                             </Tooltip>
                         </div>

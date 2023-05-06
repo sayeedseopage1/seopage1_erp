@@ -861,14 +861,14 @@ const GoalFormModal = () => {
                 </Card.Body>
                 {/* end card body */}
                 <Card.Footer>
-                        <Button
+                       {_.lowerCase(mode) !== 'edit' && <Button
                             onClick={previous}
                             className='cnx_ins__goal_modal__card_footer_cancel'
                             variant='tertiary'
                         >
                             <i className="fa-solid fa-chevron-left" />
                             Previous
-                        </Button>
+                        </Button>} 
 
                     <div className='cnx_ins__goal_modal__card_footer'>
                         <Button

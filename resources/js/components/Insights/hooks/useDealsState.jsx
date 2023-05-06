@@ -40,14 +40,15 @@ export const useDealsState = () => {
         
         if(!deals || !goal) return;
         const _endDate = endDate ? endDate : getEndDate(goal);
+        // console.log(goal)
        
         let filteredDeals = deals.filter(
                 deal => day.isSameOrAfter(deal.created_at, startDate) && 
                 day.isSameOrBefore(deal.created_at, _endDate)  
                 &&
                 (goal.assigneeType === 'User' ? deal.added_by === goal.assignedUser?.id :
-                 goal.assigneeType === 'Team' ? deal.added_by === goal.team?.members?.split(',').map(member => Number(member)) : false) &&
-                (_.lowerCase(goal.entryType) === 'progressed' ? _.lowerCase(goal.qualified) === _.lowerCase(stage[Number(deal.deal_stage)]) : true)
+                 goal.assigneeType === 'Team' ?  goal.team?.members?.split(',').findIndex(d => Number(d) === Number(deal.added_by)) : false) &&
+                (_.lowerCase(goal.entryType) === 'progressed' ? _.lowerCase(goal.qualified) === _.lowerCase(stage[Number(deal.deal_stage)]) : true) 
             );
         
             

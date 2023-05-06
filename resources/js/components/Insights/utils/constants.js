@@ -90,7 +90,7 @@ export const stage = [
         "Requirements Defined",
         "Proposal Made",
         "Negotiations Started",
-        "Milestone breakdown",
+        "Milestone Breakdown",
     ]
 
 
