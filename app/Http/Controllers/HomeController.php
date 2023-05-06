@@ -61,7 +61,7 @@ use Session;
 
 
 
-class HomeController extends AccountBaseController
+class HomeController extends Controller
 {
     use UniversalSearchTrait;
 

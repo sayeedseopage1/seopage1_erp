@@ -1145,8 +1145,7 @@ Route::get('/project-overview/filter', [ProjectController::class, 'ProjectOvervi
 Route::get('/projects/deliverables/{id}', [ProjectController::class, 'deliverables']);
 Route::get('/projects/download/{id}', [ProjectController::class, 'download'])->name('projects.download');
 Route::post('projects/sign/{id}', [ProjectController::class, 'sign'])->name('projects.sign');
-Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
-Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');
+
 Route::post('/projects/public/sign/{id}', [PublicUrlController::class, 'projectSign'])->name('front.project.sign');
 Route::get('/projects/public/download/{id}', [PublicUrlController::class, 'projectDownload'])->name('front.project.download');
 
@@ -1231,3 +1230,5 @@ Route::post('/get-employees-by-department', [Seopage1TeamController::class, 'get
 Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'getEmployeesByParentTeam'])->name('getEmployeesByParentTeam');
 //KPI Settings 
 Route::resource('kpi-settings', KpiSettingController::class);
+Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
+Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');
