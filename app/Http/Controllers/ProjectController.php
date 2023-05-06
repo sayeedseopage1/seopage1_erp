@@ -1590,7 +1590,7 @@ class ProjectController extends AccountBaseController
             $viewPermission = user()->permission('view_project_timelogs');
             abort_403(!in_array($viewPermission, ['all', 'added', 'owned']));
         }
-        
+
         $activityLog = ProjectActivity::where('project_id', $project->id)->orderBy('id', 'desc')->get();
         $this->view = 'projects.ajax.activity_log';
         //return view($this->view, $activityLog)->render();
@@ -2007,8 +2007,8 @@ class ProjectController extends AccountBaseController
             $project->hours_allocated = $project_id->hours_allocated + $deliverable->estimation_time;
 
             if ($project->deliverable_authorization == 1 && $project->authorization_status == 'approved' && Auth::user()->role_id == 4) {
-                $project->deliverable_authorization = 0;            
-                $project->authorization_status = 'pending';            
+                $project->deliverable_authorization = 0;
+                $project->authorization_status = 'pending';
             }
             $project->save();
 
@@ -2099,7 +2099,7 @@ class ProjectController extends AccountBaseController
                     $data->save();
                 }
             }
-            if($request->estimation_time) { 
+            if($request->estimation_time) {
                 $data = DelivarableColumnEdit::where([
                     'delivarable_id' => $deliverable->id,
                     'column_name' => 'estimation_time',
@@ -2220,7 +2220,7 @@ class ProjectController extends AccountBaseController
             'body' => 'Admin approved Delivarable. Go..',
             'redirectUrl' => route('projects.show', $project_id->id).'?tab=deliverables'
         ]);
-        
+
         Notification::send($user, new DeliverableOthersAuthorizationAcceptNotification($project_id));
 
         Toastr::success('Approved Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -2624,11 +2624,11 @@ class ProjectController extends AccountBaseController
       $project_id= Project::where('id',$project->project_id)->first();
 
       $user= User::where('id',$project_id->pm_id)->first();
-  
-  
-  
+
+
+
         Notification::send($user, new QcSubmissionAcceptNotification($project_id));
-  
+
       $qc_submission= QcSubmission::find($request->id);
       $qc_submission->delete();
     }else {
@@ -2637,7 +2637,7 @@ class ProjectController extends AccountBaseController
       $mile->qc_status= 1;
       $mile->save();
     }
-   
+
     Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
     return back();
 
@@ -2758,14 +2758,14 @@ class ProjectController extends AccountBaseController
         $pm_project_update= PMProject::find($pm_project->id);
         $pm_project_update->deliverable_status = 1;
         $pm_project_update->save();
-        
+
         $project_id= Project::where('id',$request->project_id)->first();
 
         $client_revision = ProjectDeliverablesClientDisagree::where([
             'project_id' => $project->id,
             'status' => '0'
         ])->get();
-        
+
         if ($client_revision) {
             $client = User::where('id',$project->client_id)->first();
             Notification::send($client, new ProjectDelivarableFinalAuthorizationClientNotification($project_id));
@@ -2831,14 +2831,14 @@ class ProjectController extends AccountBaseController
             $url = route('projects.show', $data->project_id).'?tab=deliverables';
             Toastr::success('Delivarable change request send to project manager', 'Success', ["positionClass" => "toast-top-right"]);
             return redirect()->to($url);
-        } 
+        }
     }
 
     public function project_activity_time_log_ajax(Request $request)
     {
         $date = explode(' To ', $request->date_range);
         $activityLog = ProjectActivity::where('project_id', $request->project_id);
-        
+
         if ($request->employee != 'all') {
             $activityLog->where('added_by', $request->employee);
         }
@@ -2848,10 +2848,34 @@ class ProjectController extends AccountBaseController
         ->get();
 
         $view = view('projects.ajax.activity_log', compact('activityLog'))->render();
-        
+
         return response()->json([
             'success' => 200,
             'html' => $view
+        ]);
+    }
+    public function deliverableEstimationTime($deliverableId){
+        $deliverable = \App\Models\ProjectDeliverable::find($deliverableId);
+        return $deliverable->estimation_time;
+    }
+    public function deliverableDueDate($deliverableId){
+        $deliverable = \App\Models\ProjectDeliverable::find($deliverableId);
+        $html = '';
+
+        if ($deliverable->to != null) {
+            $html .= 'Between ' . $deliverable->from . ' & ' . $deliverable->to . '';
+        } else {
+            $html .= 'On ' . $deliverable->from . '';
+        }
+
+        return $html;
+    }
+    public function timeExtension(Request $request){
+        dd($request->all());
+        $request->validate([
+            'new_date' => 'required',
+        ], [
+            'new_date.required' => 'This field is required!',
         ]);
     }
 }

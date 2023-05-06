@@ -8,6 +8,74 @@
 	margin-left: 0px;
 }
     </style>
+    <style>
+        .point__row_wrapper_container{
+            display: flex;
+            align-items: flex-end;
+            -webkit-align-items: flex-end;
+            -webkit-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .point__row_wrapper {
+            display: flex;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+            width: -moz-fit-content;
+            width: fit-content;
+        }
+
+        .point__distribution{
+            display: flex;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            -webkit-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .point__row{
+            width: fit-content;
+            display: flex;
+            align-items: center;
+            -webkit-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 16px;
+            border: 1px solid #f3f3f3;
+            border-radius: 6px;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, .03);
+        }
+
+        .point__col{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .point__col > input,
+        .point__col > select{
+            padding: 1px 10px;
+            width: 80px;
+            border: 1px solid rgba(0, 0, 0, .1);
+            border-radius: 4px;
+        }
+        .point__col > select {
+            width:-moz-fit-content;
+            width: fit-content;
+            padding: 3px 10px;
+            background: transparent;
+        }
+
+        .__point_field_add_btn_group{
+            margin-bottom: 15px;
+        }
+    </style>
 
 
         <x-setting-card>
@@ -17,307 +85,248 @@
                         @lang($pageTitle)</h2>
                 </div>
             </x-slot>
-
             <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
-                <h6 class="text-center">Point distribution for won deal</h6>
+                <h3 class="text-center  border-1 shadow-sm mx-auto p-3 rounded text-uppercase" style="width: fit-content;">Base Point Distribution</h3>
                 <br>
-                <form id="save-kpi-settings" action="{{route('kpi-settings.update',$kpi[0]->id)}}" method="PUT">
+                <form id="save-kpi-settings" action="{{route('kpi-settings.update',$kpi->id)}}" method="PUT">
                     @csrf
-                    <input type="hidden" name="id" value="{{$kpi[0]->id}}">
+                    <input type="hidden" name="id" value="{{$kpi->id}}">
                     <div class="form-group row">
-                      <label for="inputPassword" class="col-sm-2 col-form-label">1. The bidder will get:</label>
-                      <div class="col-sm-10 d-flex">
-                        <input class="form-control height-35 f-14" type="number" name="the_bidder" id="the_bidder"  value="0" class="form-control"  placeholder="Percentage of points for bidder">
+                      <label for="inputPassword" class="col-sm-4 col-form-label">1. The bidder will get:</label>
+                      <div class="col-sm-8 d-flex">
+                        <input class="form-control height-35 f-14" type="number" name="the_bidder" id="the_bidder"  value="{{$kpi->the_bidder}}" class="form-control"  placeholder="Percentage of points for bidder">
                           <label class="mt-2 mx-1">%</label>
                       </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">2. Sales executive who qualifies the deal:</label>
-                        <div class="col-sm-10 d-flex">
-                          <input class="form-control height-35 f-14" type="number" name="qualify" id="qualify" value="0" class="form-control"  placeholder="Percentage of points for qualified deals">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">2. Sales executive who qualifies the deal:</label>
+                        <div class="col-sm-8 d-flex">
+                          <input class="form-control height-35 f-14" type="number" name="qualify" id="qualify" value="{{$kpi->qualify}}" class="form-control"  placeholder="Percentage of points for qualified deals">
                             <label class="mt-2 mx-1">%</label>
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">3. Sales executive who defined requirements of the deal will get:</label>
-                        <div class="col-sm-10 d-flex">
-                          <input class="form-control height-35 f-14" type="number" class="form-control" name="requirements_defined" id="requirements_defined" value="0"  placeholder="Percentage of points for requirements defined deals">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">3. Sales executive who defined requirements of the deal will get:</label>
+                        <div class="col-sm-8 d-flex">
+                          <input class="form-control height-35 f-14" type="number" class="form-control" name="requirements_defined" id="requirements_defined" value="{{$kpi->requirements_defined}}"  placeholder="Percentage of points for requirements defined deals">
                             <label class="mt-2 mx-1">%</label>
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">4. If anyone helps sales executive for less than:</label>
-                        <div class="col-sm-3">
-                          <input class="form-control height-35 f-14 mt-2" type="number" class="form-control" name="less_than" id="less_than" value="0"  placeholder="Percentage of points for requirements defined deals">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">4. If anyone helps sales executive for less than:</label>
+                        <div class="col-sm-2">
+                          <input class="form-control height-35 f-14 mt-2" type="number" class="form-control" name="less_than" id="less_than" value="{{$kpi->less_than}}"  placeholder="Percentage of points for requirements defined deals">
                         </div>
                           <span class="mt-3">Minutes</span>
-                        <label for="inputPassword" class="col-sm-2 col-form-label mt-1">then he/she will get:</label>
-                        <div class="col-sm-3 d-flex">
-                          <input class="form-control height-35 f-14 mt-2" type="number" name="less_than_get" id="less_than_get" value="0" class="form-control"  placeholder="Percentage of points for requirements defined deals">
+                        <label for="inputPassword" class="col-sm-2 col-form-label mt-2">then he/she will get:</label>
+                        <div class="col-sm-2 d-flex">
+                          <input class="form-control height-35 f-14 mt-2" type="number" name="less_than_get" id="less_than_get" value="{{$kpi->less_than_get}}" class="form-control"  placeholder="Percentage of points for requirements defined deals">
                             <label class="mt-2 mx-1">%</label>
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">5. If anyone helps sales executive for more than:</label>
-                        <div class="col-sm-3">
-                          <input class="form-control height-35 f-14 mt-2" type="number" class="form-control" name="more_than" id="more_than"  value="0"  placeholder="Percentage of points for requirements defined deals">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">5. If anyone helps sales executive for more than:</label>
+                        <div class="col-sm-2">
+                          <input class="form-control height-35 f-14 mt-2" type="number" class="form-control" name="more_than" id="more_than"  value="{{$kpi->more_than}}"  placeholder="Percentage of points for requirements defined deals">
                         </div>
                           <span class="mt-3">Minutes</span>
-                        <label for="inputPassword" class="col-sm-2 col-form-label mt-1">then he/she will get:</label>
-                        <div class="col-sm-3 d-flex">
-                          <input class="form-control height-35 f-14 mt-2" type="number" class="form-control" name="more_than_get" id="more_than_get" value="0"  placeholder="Percentage of points for requirements defined deals">
+                        <label for="inputPassword" class="col-sm-2 col-form-label mt-2">then he/she will get:</label>
+                        <div class="col-sm-2 d-flex">
+                          <input class="form-control height-35 f-14 mt-2" type="number" class="form-control" name="more_than_get" id="more_than_get" value="{{$kpi->more_than_get}}"  placeholder="Percentage of points for requirements defined deals">
                             <label class="mt-2 mx-1">%</label>
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">6. Sales executive who made the proposal of the deal will get:</label>
-                        <div class="col-sm-10 d-flex">
-                          <input class="form-control height-35 f-14" type="number" name="proposal_made" id="proposal_made" value="0" class="form-control"  placeholder="Percentage of points for requirements defined deals">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">6. Sales executive who made the proposal of the deal will get:</label>
+                        <div class="col-sm-8 d-flex">
+                          <input class="form-control height-35 f-14" type="number" name="proposal_made" id="proposal_made" value="{{$kpi->proposal_made}}" class="form-control"  placeholder="Percentage of points for requirements defined deals">
                             <label class="mt-2 mx-1">%</label>
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">7. Sales executive who started the negotiation of the deal will get:</label>
-                        <div class="col-sm-10 d-flex">
-                          <input class="form-control height-35 f-14" type="number" class="form-control" name="negotiation_started" id="negotiation_started" value="0"  placeholder="Percentage of points for requirements defined deals">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">7. Sales executive who started the negotiation of the deal will get:</label>
+                        <div class="col-sm-8 d-flex">
+                          <input class="form-control height-35 f-14" type="number" class="form-control" name="negotiation_started" id="negotiation_started" value="{{$kpi->negotiation_started}}"  placeholder="Percentage of points for requirements defined deals">
                             <label class="mt-2 mx-1">%</label>
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">8. Sales executive who shared the milestone breakdown of the deal with the client will get:</label>
-                        <div class="col-sm-10 d-flex">
-                          <input class="form-control height-35 f-14" type="number" class="form-control" name="milestone_breakdown" id="milestone_breakdown" value="0"  placeholder="Percentage of points for requirements defined deals">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">8. Sales executive who shared the milestone breakdown of the deal with the client will get:</label>
+                        <div class="col-sm-8 d-flex">
+                          <input class="form-control height-35 f-14" type="number" class="form-control" name="milestone_breakdown" id="milestone_breakdown" value="{{$kpi->milestone_breakdown}}"  placeholder="Percentage of points for requirements defined deals">
                             <label class="mt-2 mx-1">%</label>
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">9. Sales executive who closed (won) the deal will get:</label>
-                        <div class="col-sm-10 d-flex">
-                          <input class="form-control height-35 f-14" type="number" class="form-control" name="closed_deal" id="closed_deal" value="0"  placeholder="Percentage of points for requirements defined deals">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">9. Sales executive who closed (won) the deal will get:</label>
+                        <div class="col-sm-8 d-flex">
+                          <input class="form-control height-35 f-14" type="number" class="form-control" name="closed_deal" id="closed_deal" value="{{$kpi->closed_deal}}"  placeholder="Percentage of points for requirements defined deals">
                             <label class="mt-2 mx-1">%</label>
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">10. Sales executive who shared the contact form with the client and filled out the form for
+                        <label for="inputPassword" class="col-sm-4 col-form-label">10. Sales executive who shared the contact form with the client and filled out the form for
                             project manager will get:</label>
-                        <div class="col-sm-10 d-flex">
-                          <input class="form-control height-35 f-14" type="number" name="contact_form" id="contact_form" value="0" class="form-control"  placeholder="Percentage of points for requirements defined deals">
+                        <div class="col-sm-8 d-flex">
+                          <input class="form-control height-35 f-14" type="number" name="contact_form" id="contact_form" value="{{$kpi->contact_form}}" class="form-control"  placeholder="Percentage of points for requirements defined deals">
                             <label class="mt-2 mx-1">%</label>
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="inputPassword" class="col-sm-2 col-form-label">11. Sales executive who made the deal authorized by the team leader will get:</label>
-                        <div class="col-sm-10 d-flex">
-                          <input class="form-control height-35 f-14" type="number" name="authorized_by_leader" id="authorized_by_leader" value="0" class="form-control"  placeholder="Percentage of points for requirements defined deals">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">11. Team Lead will get if he authorize the deal:</label>
+                        <div class="col-sm-8 d-flex">
+                          <input class="form-control height-35 f-14" type="number" name="authorized_by_leader" id="authorized_by_leader" value="{{$kpi->authorized_by_leader}}" class="form-control"  placeholder="Percentage of points for requirements defined deals">
                             <label class="mt-2 mx-1">%</label>
                         </div>
                       </div>
                     <hr>
-
-
-                    <div class="mb-3">
-                        <div class="form-group row">
-                            <label for="certainDeals" class="col-sm-3 col-form-label">12. If Sales Executive Converts </label>
-                            <div class="col-sm-3">
-                                <input class="form-control height-35 f-14" type="number" name="certain_deal" id="certain_deal" value="0" class="form-control"  placeholder="Points when they will add a certain deals like  deals per month">
+                    <hr>
+                    <h3 class="text-center mt-1 mb-5 border-1 shadow-sm mx-auto p-3 rounded text-uppercase" style="width: fit-content;">Point distribution for won deal</h3>
+                    <section class="point__distribution">
+                        <div class="point__row">
+                            <div class="point__col">For every</div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="for_every" id="for_every" value="{{$kpi->for_every}}">  </div>
+                            <div class="point__col">addition sales</div>
+                            <div class="point__col">
+                                <select class="point__select" name="addition_sales" id="addition_sales">
+                                    <option value="new_client" class="point__option" {{$kpi->addition_sales=='new_client'? 'selected':''}}>New client</option>
+                                    <option value="existing_client" class="point__option" {{$kpi->addition_sales=='existing_client'? 'selected':''}}>Existing Client</option>
+                                    <option value="both" class="point__option" {{$kpi->addition_sales=='both'? 'selected':''}}>Both</option>
+                                </select>
                             </div>
-                            <span class="mt-2">Deals Per Month</span>
-                            <label for="certainDeals" class="col-sm-2 col-form-label">then he/she will get: </label>
-                            <div class="col-sm-2">
-                                <input class="form-control height-35 f-14" type="number" name="certain_deal_per_month" id="certain_deal_per_month" value="0" class="form-control"  placeholder="They will get 20 points when they will add a certain deals like 120 deals per month">
-                            </div>
-                            <span class="mt-2">Points</span>
+                            <div class="point__col">after</div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="after" id="after" value="{{$kpi->after}}">  </div>
+                            <div class="point__col"> milestone per month </div>
+                            <div class="point__col"> shift will get </div>
+                            <div class="point__col"> <input type="number" class="point__input" name="shift_will_get" id="shift_will_get" value="{{$kpi->shift_will_get}}">  </div>
+                            <div class="point__col"> points. </div>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-group row">
-                            <label for="certainDeals" class="col-sm-3 col-form-label">13. If Sales Executive Closes </label>
-                            <div class="col-sm-3">
-                                <input class="form-control height-35 f-14" type="number" name="closed_deal_goal" id="closed_deal_goal" value="0" class="form-control"  placeholder="They will get 30 points if they reach the closed deals goal like 20 deals per month or something">
-                            </div>
-                            <span class="mt-2">Deals Per Month</span>
-                            <label for="certainDeals" class="col-sm-2 col-form-label">then he/she will get: </label>
-                            <div class="col-sm-2">
-                                <input class="form-control height-35 f-14" type="number" name="closed_deal_goal_month" id="closed_deal_goal_month" value="0" class="form-control"  placeholder="They will get 30 points if they reach the closed deals goal like 20 deals per month or something">
-                            </div>
-                            <span class="mt-2">Points</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-10 dynamic-field" id="dynamic-field-1">
-                            <div class="row">
-                                <label for="certainDeals" class="col-sm-2 col-form-label">14. If Sales Team Reaches </label>
-                                <div class="form-group col-sm-3 d-flex">
-                                    <label class="mt-2 mx-1">$</label>
-                                    <input class="form-control height-35 f-14" type="number" name="sales_team_reaches[]" id="sales_team_reaches" value="0" class="form-control"  placeholder="0">
-                                </div>
-                                <span class="mt-2">Milestone Per Month</span>
-                                <label for="certainDeals" class="col-sm-2 col-form-label">then they will get: </label>
-                                <div class="col-sm-3">
-                                    <input class="form-control height-35 f-14" type="number" name="closed_deals_goal_month[]" id="closed_deals_goal_month" value="0" class="form-control"  placeholder="0">
-                                </div>
-                                <span class="mt-2">Points</span>
-                            </div>
-                        </div>
+                         <div class="point__row">
+                             <div class="point__col"> If a sales shift gnerate any project </div>
+                             <div class="point__col">
+                                 <select class="point__select" name="gnerate_project" id="gnerate_project">
+                                     <option value="equal" class="point__option" {{$kpi->gnerate_project=='equal'? 'selected':''}}>Equal</option>
+                                     <option value="more_than" class="point__option" {{$kpi->gnerate_project=='more_than'? 'selected':''}}>More than </option>
+                                 </select>
+                             </div>
+                             <div class="point__col"> $<input type="number" class="point__input" name="single_deal" id="single_deal" value="{{$kpi->single_deal}}">  </div>
+                             <div class="point__col"> on single deal that shift will get a flat</div>
+                             <div class="point__col"> <input type="number" class="point__input" name="bonus_point" id="bonus_point" value="{{$kpi->bonus_point}}">  </div>
+                             <div class="point__col"> bonus points</div>
+                         </div>
+                         <div class="point__row_wrapper_container">
+                             @php
+                                 $kpi_setting_generate_sales = \App\Models\kpiSettingGenerateSale::all();
+                             @endphp
+                             @if(count($kpi_setting_generate_sales)>0)
+                             <div class="point__row_wrapper">
+                                 @foreach($kpi_setting_generate_sales as $kpi_setting_generate_sale)
+                                 <div class="point__row dynamic-field" id="dynamic-field-1">
+                                     <div class="point__col"> If Sales Team Generates sales from </div>
+                                     <div class="point__col"> <input type="number" class="point__input" name="sales_from[]" id="sales_from" value="{{$kpi_setting_generate_sale->sales_from}}">  </div>
+                                     <div class="point__col"> To</div>
+                                     <div class="point__col"> <input type="number" class="point__input" name="sales_to[]" id="sales_to" value="{{$kpi_setting_generate_sale->sales_to}}">  </div>
+                                     <div class="point__col"> per month</div>
+                                     <div class="point__col"> team lead will get </div>
+                                     <div class="point__col"> <input type="number" class="point__input" name="sales_amount[]" id="sales_amount"  value="{{$kpi_setting_generate_sale->sales_amount}}"> % </div>
+                                     <div class="point__col"> points of the sales amount</div>
+                                 </div>
+                                 @endforeach
+                             </div>
+                             @else
+                                 <div class="point__row_wrapper">
+                                     <div class="point__row dynamic-field" id="dynamic-field-1">
+                                         <div class="point__col"> If Sales Team Generates sales from </div>
+                                         <div class="point__col"> <input type="number" class="point__input" name="sales_from[]" id="sales_from" placeholder="0">  </div>
+                                         <div class="point__col"> To</div>
+                                         <div class="point__col"> <input type="number" class="point__input" name="sales_to[]" id="sales_to" placeholder="0">  </div>
+                                         <div class="point__col"> per month</div>
+                                         <div class="point__col"> team lead will get </div>
+                                         <div class="point__col"> <input type="number" class="point__input" name="sales_amount[]" id="sales_amount"  placeholder="0"> % </div>
+                                         <div class="point__col"> points of the sales amount</div>
+                                     </div>
+                                 </div>
+                             @endif
+                             <div class="point__col __point_field_add_btn_group">
+                                 <button type="button" id="add-button" class="btn btn-primary" style="padding: 0px 8px;"><i class="fa fa-plus" style="font-size: 12px;"></i></button>
+                                 <button type="button" id="remove-button" class="btn btn-secondary ml-1" disabled="disabled" style="padding: 0px  8px;"><i class="fa fa-trash" style="font-size: 12px;"></i></button>
+                             </div>
+                         </div>
+                         <div class="point__row">
+                             <div class="point__col"> If sales team generates sales above </div>
+                             <div class="point__col"> $<input type="number" class="point__input" name="sales_above" id="sales_above" value="{{$kpi->sales_above}}">  </div>
+                             <div class="point__col"> per moth </div>
+                             <div class="point__col"> team lead will get </div>
+                             <div class="point__col"> <input type="number" class="point__input" name="sales_above_point" id="sales_above_point" value="{{$kpi->sales_above_point}}"> % </div>
+                             <div class="point__col">  points</div>
+                         </div>
+                         <div class="point__row_wrapper_container">
+                             @php
+                                 $kpi_setting_logged_hour = \App\Models\kpiSettingLoggedHour::all();
+                             @endphp
+                             @if(count($kpi_setting_logged_hour)>0)
+                             <div class="point__row_wrapper">
+                                 @foreach($kpi_setting_logged_hour as $kpi_setting_logged_hour)
+                                 <div class="point__row dynamicMore-field" id="dynamicMore-field-1">
+                                     <div class="point__col"> If the hourly rate of the project based on logged hours between </div>
+                                     <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between[]" id="logged_hours_between" value="{{$kpi_setting_logged_hour->logged_hours_between}}">  </div>
+                                     <div class="point__col"> To</div>
+                                     <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between_to[]" id="logged_hours_between_to" value="{{$kpi_setting_logged_hour->logged_hours_between_to}}">  </div>
+                                     <div class="point__col"> shift will get</div>
+                                     <div class="point__col"> of the sales amount </div>
+                                     <div class="point__col"> <input type="number" class="point__input" name="logged_hours_sales_amount[]" id="logged_hours_sales_amount" value="{{$kpi_setting_logged_hour->logged_hours_sales_amount}}"> % </div>
+                                 </div>
+                                 @endforeach
+                             </div>
+                             @else
+                                 <div class="point__row_wrapper">
+                                     <div class="point__row dynamicMore-field" id="dynamicMore-field-1">
+                                         <div class="point__col"> If the hourly rate of the project based on logged hours between </div>
+                                         <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between[]" id="logged_hours_between" placeholder="0">  </div>
+                                         <div class="point__col"> To</div>
+                                         <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between_to[]" id="logged_hours_between_to" placeholder="0">  </div>
+                                         <div class="point__col"> shift will get</div>
+                                         <div class="point__col"> of the sales amount </div>
+                                         <div class="point__col"> <input type="number" class="point__input" name="logged_hours_sales_amount[]" id="logged_hours_sales_amount" placeholder="0"> % </div>
+                                     </div>
+                                 </div>
+                             @endif
+                             <div class="point__col __point_field_add_btn_group">
+                                 <button type="button" id="addMore-button" class="btn btn-primary" style="padding: 0px 8px;"><i class="fa fa-plus" style="font-size: 12px;"></i></button>
+                                 <button type="button" id="removeMore-button" class="btn btn-secondary ml-1" disabled="disabled" style="padding: 0px  8px;"><i class="fa fa-trash" style="font-size: 12px;"></i></button>
+                             </div>
+                         </div>
+                         <div class="point__row">
+                             <div class="point__col"> If the hourly rate of the project based on logged hours above </div>
+                             <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_above" id="logged_hours_above" value="{{$kpi->logged_hours_above}}">  </div>
+                             <div class="point__col"> To </div>
+                             <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_above_to" id="logged_hours_above_to" value="{{$kpi->logged_hours_above_to}}">  </div>
+                             <div class="point__col"> shift will get </div>
+                             <div class="point__col"> of the sales amount </div>
+                             <div class="point__col"> <input type="number" class="point__input" name="logged_hours_above_sales_amount" id="logged_hours_above_sales_amount" value="{{$kpi->logged_hours_above_sales_amount}}"> % </div>
+                         </div>
+                         <div class="point__row">
+                             <div class="point__col"> To achieve more than </div>
+                             <div class="point__col"> <input type="number" class="point__input" name="achieve_more_than" id="achieve_more_than" value="{{$kpi->achieve_more_than}}"> %  </div>
+                             <div class="point__col"> points </div>
+                             <div class="point__col"> minimum project value cannot be less than </div>
+                             <div class="point__col"> $<input type="number" class="point__input" name="achieve_less_than" id="achieve_less_than" value="{{$kpi->achieve_less_than}}"> </div>
+                         </div>
+                    </section>
+                    <x-slot name="action">
+                        <!-- Buttons Start -->
+                        <div class="w-100 border-top-grey">
+                            <x-setting-form-actions>
+                                <x-forms.button-primary id="save-form" class="mr-3" icon="check">@lang('app.save')
+                                </x-forms.button-primary>
 
-                        <div class="col-md-2 append-buttons">
-                            <div class="clearfix">
-                                <button type="button" id="add-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus"></i></button>
-                                <button type="button" id="remove-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-trash"></i></button>
-                            </div>
+                                <x-forms.button-cancel :link="url()->previous()" class="border-0">@lang('app.cancel')
+                                </x-forms.button-cancel>
+                                </x-settingsform-actions>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-group row">
-                            <label for="certainDeals" class="col-sm-1 col-form-label">15. For every </label>
-                            <div class="col-sm-2 d-flex">
-                                <label class="mt-2 mx-1">$</label>
-                                <input class="form-control height-35 f-14" type="number" name="additional_milestone" id="additional_milestone" value="0" class="form-control"  placeholder="They will get 30 points if they reach the closed deals goal like 20 deals per month or something">
-                            </div>
-                            <span class="mt-2">Additional to the Milestone Per Month</span>
-                            <label for="certainDeals" class="col-sm-2 col-form-label">then they will get: </label>
-                            <div class="col-sm-3">
-                                <input class="form-control height-35 f-14" type="number" name="additional_milestone_point" id="additional_milestone_point" value="0" class="form-control"  placeholder="They will get 30 points if they reach the closed deals goal like 20 deals per month or something">
-                            </div>
-                            <span class="mt-2">Additional Points</span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-10 dynamicMore-field" id="dynamicMore-field-1">
-                            <div class="row">
-                                <label for="certainDeals" class="col-sm-3 col-form-label">16. If Sales Team Generates sales from</label>
-                                <div class="form-group col-sm-1 d-flex">
-                                    <label class="mt-2 mx-1">$</label>
-                                    <input class="form-control height-35 f-14" type="number" name="sales_from[]" id="sales_from" value="0" class="form-control"  placeholder="0">
-                                </div>
-                                <label for="certainDeals" class="col-sm-1 col-form-label">To </label>
-                                <div class="col-sm-1 d-flex">
-                                    <label class="mt-2 mx-1">$</label>
-                                    <input class="form-control height-35 f-14" type="number" name="sales_to[]" id="sales_to" value="0" class="form-control"  placeholder="0">
-                                </div>
-                                <span class="mt-2">Per Month </span>
-                                <label for="certainDeals" class="col-sm-2 col-form-label">Team lead will get</label>
-                                <div class="col-sm-3 d-flex">
-                                    <input class="form-control height-35 f-14" type="number" name="sales_get[]" id="sales_get" value="0" class="form-control"  placeholder="0">
-                                    <label class="mt-2 mx-1">%</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-2 append-buttons">
-                            <div class="clearfix">
-                                <button type="button" id="addMore-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus"></i></button>
-                                <button type="button" id="removeMore-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                <div class="mb-3">
-                    <div class="form-group row">
-                        <label for="certainDeals" class="col-sm-1 col-form-label">17. If sales team generates sales above </label>
-                        <div class="col-sm-2 d-flex">
-                            <label class="mt-2 mx-1">$</label>
-                            <input class="form-control height-35 f-14" type="number" name="sales_above" id="sales_above" value="0" class="form-control"  placeholder="They will get 30 points if they reach the closed deals goal like 20 deals per month or something">
-                        </div>
-                        <span class="mt-2">Per Month</span>
-                        <label for="certainDeals" class="col-sm-2 col-form-label">Team lead will get: </label>
-                        <div class="col-sm-3 d-flex">
-                            <input class="form-control height-35 f-14" type="number" name="sales_above_point" id="sales_above_point" value="0" class="form-control"  placeholder="They will get 30 points if they reach the closed deals goal like 20 deals per month or something">
-                            <label class="mt-2 mx-1">%</label>
-                        </div>
-                        <span class="mt-2">Points</span>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="form-group row">
-                        <label for="certainDeals" class="col-sm-3 col-form-label">18. If the hourly rate of the project based on estimated hours </label>
-                        <div class="col-sm-1">
-                            <select name="estimated_hours" id="estimated_hours" class="form-control height-35 f-14">
-                                <option value="">--</option>
-                                <option value="and">And</option>
-                                <option value="or">Or</option>
-                            </select>
-                        </div>
-                        <label for="certainDeals" class="col-sm-2 col-form-label">Logged hours is more than </label>
-                        <div class="col-sm-1 d-flex">
-                            <label class="mt-2 mx-1">$</label>
-                            <input class="form-control height-35 f-14" type="number" name="logged_hours" id="logged_hours" value="0" class="form-control"  placeholder="They will get 30 points if they reach the closed deals goal like 20 deals per month or something">
-                        </div>
-                        <label for="certainDeals" class="col-sm-2 col-form-label">Sales Executive will get </label>
-                        <div class="col-sm-1 d-flex">
-                            <input class="form-control height-35 f-14" type="number" name="sales_executive" id="sales_executive" value="0" class="form-control"  placeholder="They will get 30 points if they reach the closed deals goal like 20 deals per month or something">
-                            <label class="mt-2 mx-1">%</label>
-                        </div>
-                        <span class="mt-2">Points of the sales amount</span>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="form-group row">
-                        <label for="certainDeals" class="col-sm-3 col-form-label">19. If the hourly rate of the project based on estimated hours </label>
-                        <div class="col-sm-1">
-                            <select name="estimated_hours2" id="estimated_hours2" class="form-control height-35 f-14">
-                                <option value="">--</option>
-                                <option value="and">And</option>
-                                <option value="or">Or</option>
-                            </select>
-                        </div>
-                        <label for="certainDeals" class="col-sm-2 col-form-label">Logged hours is more than </label>
-                        <div class="col-sm-1 d-flex">
-                            <label class="mt-2 mx-1">$</label>
-                            <input class="form-control height-35 f-14" type="number" name="logged_hours2" id="logged_hours2" value="0" class="form-control"  placeholder="They will get 30 points if they reach the closed deals goal like 20 deals per month or something">
-                        </div>
-                        <label for="certainDeals" class="col-sm-2 col-form-label">Sales Executive will get </label>
-                        <div class="col-sm-1 d-flex">
-                            <input class="form-control height-35 f-14" type="number" name="sales_executive2" id="sales_executive2" value="0" class="form-control"  placeholder="They will get 30 points if they reach the closed deals goal like 20 deals per month or something">
-                            <label class="mt-2 mx-1">%</label>
-                        </div>
-                        <span class="mt-2">Points of the sales amount</span>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <div class="form-group row">
-                        <label for="certainDeals" class="col-sm-3 col-form-label">20. If the hourly rate of the project based on estimated hours </label>
-                        <div class="col-sm-1">
-                            <select name="estimated_hours3" id="estimated_hours3" class="form-control height-35 f-14">
-                                <option value="">--</option>
-                                <option value="and">And</option>
-                                <option value="or">Or</option>
-                            </select>
-                        </div>
-                        <label for="certainDeals" class="col-sm-2 col-form-label">Logged hours is more than </label>
-                        <div class="col-sm-1 d-flex">
-                            <label class="mt-2 mx-1">$</label>
-                            <input class="form-control height-35 f-14" type="number" name="logged_hours3" id="logged_hours3" value="0" class="form-control"  placeholder="They will get 30 points if they reach the closed deals goal like 20 deals per month or something">
-                        </div>
-                        <label for="certainDeals" class="col-sm-2 col-form-label">Sales Executive will get </label>
-                        <div class="col-sm-1 d-flex">
-                            <input class="form-control height-35 f-14" type="number" name="sales_executive3" id="sales_executive3" value="0" class="form-control"  placeholder="They will get 30 points if they reach the closed deals goal like 20 deals per month or something">
-                            <label class="mt-2 mx-1">%</label>
-                        </div>
-                        <span class="mt-2">Points of the sales amount</span>
-                    </div>
-                </div>
-            </div>
-
-            <x-slot name="action">
-                <!-- Buttons Start -->
-                <div class="w-100 border-top-grey">
-                    <x-setting-form-actions>
-                        <x-forms.button-primary id="save-form" class="mr-3" icon="check">@lang('app.save')
-                        </x-forms.button-primary>
-
-                        <x-forms.button-cancel :link="url()->previous()" class="border-0">@lang('app.cancel')
-                        </x-forms.button-cancel>
-                        </x-settingsform-actions>
-                </div>
-                <!-- Buttons End -->
-            </x-slot>
-        </form>
-
+                        <!-- Buttons End -->
+                    </x-slot>
+                </form>
         </x-setting-card>
 
     <!-- SETTINGS END -->
@@ -331,16 +340,6 @@
             // console.log(formData);
             $('#save-form').attr("disabled", true);
             $('#save-form').html("Processing...");
-            var sales_team_reaches = document.getElementsByName("sales_team_reaches[]");
-            var sales_team_reaches_values = [];
-            for (var i = 0; i < sales_team_reaches.length; i++) {
-                sales_team_reaches_values.push(sales_team_reaches[i].value);
-            }
-            var closed_deals_goal_month = document.getElementsByName("closed_deals_goal_month[]");
-            var closed_deals_goal_month_values = [];
-            for (var i = 0; i < closed_deals_goal_month.length; i++) {
-                closed_deals_goal_month_values.push(closed_deals_goal_month[i].value);
-            }
             var sales_from = document.getElementsByName("sales_from[]");
             var sales_from_values = [];
             for (var i = 0; i < sales_from.length; i++) {
@@ -351,10 +350,25 @@
             for (var i = 0; i < sales_to.length; i++) {
                 sales_to_values.push(sales_to[i].value);
             }
-            var sales_get = document.getElementsByName("sales_get[]");
-            var sales_get_values = [];
-            for (var i = 0; i < sales_get.length; i++) {
-                sales_get_values.push(sales_get[i].value);
+            var sales_amount = document.getElementsByName("sales_amount[]");
+            var sales_amount_values = [];
+            for (var i = 0; i < sales_amount.length; i++) {
+                sales_amount_values.push(sales_amount[i].value);
+            }
+            var logged_hours_between = document.getElementsByName("logged_hours_between[]");
+            var logged_hours_between_values = [];
+            for (var i = 0; i < logged_hours_between.length; i++) {
+                logged_hours_between_values.push(logged_hours_between[i].value);
+            }
+            var logged_hours_between_to = document.getElementsByName("logged_hours_between_to[]");
+            var logged_hours_between_to_values = [];
+            for (var i = 0; i < logged_hours_between_to.length; i++) {
+                logged_hours_between_to_values.push(logged_hours_between_to[i].value);
+            }
+            var logged_hours_sales_amount = document.getElementsByName("logged_hours_sales_amount[]");
+            var logged_hours_sales_amount_values = [];
+            for (var i = 0; i < logged_hours_sales_amount.length; i++) {
+                logged_hours_sales_amount_values.push(logged_hours_sales_amount[i].value);
             }
             var data= {
                 '_token': "{{ csrf_token() }}",
@@ -371,29 +385,29 @@
                 'closed_deal': document.getElementById("closed_deal").value,
                 'contact_form': document.getElementById("contact_form").value,
                 'authorized_by_leader': document.getElementById("authorized_by_leader").value,
-                'certain_deal': document.getElementById("certain_deal").value,
-                'certain_deal_per_month': document.getElementById("certain_deal_per_month").value,
-                'additional_milestone': document.getElementById("additional_milestone").value,
-                'additional_milestone_point': document.getElementById("additional_milestone_point").value,
+                'for_every': document.getElementById("for_every").value,
+                'addition_sales': document.getElementById("addition_sales").value,
+                'after': document.getElementById("after").value,
+                'shift_will_get': document.getElementById("shift_will_get").value,
+                'gnerate_project': document.getElementById("gnerate_project").value,
+                'single_deal': document.getElementById("single_deal").value,
+                'bonus_point': document.getElementById("bonus_point").value,
                 'sales_above': document.getElementById("sales_above").value,
                 'sales_above_point': document.getElementById("sales_above_point").value,
-                'estimated_hours': document.getElementById("estimated_hours").value,
-                'logged_hours': document.getElementById("logged_hours").value,
-                'sales_executive': document.getElementById("sales_executive").value,
-                'estimated_hours2': document.getElementById("estimated_hours2").value,
-                'logged_hours2': document.getElementById("logged_hours2").value,
-                'sales_executive2': document.getElementById("sales_executive2").value,
-                'estimated_hours3': document.getElementById("estimated_hours3").value,
-                'logged_hours3': document.getElementById("logged_hours3").value,
-                'sales_executive3': document.getElementById("sales_executive3").value,
-                'sales_team_reaches': sales_team_reaches_values,
-                'closed_deals_goal_month': closed_deals_goal_month_values,
+                'logged_hours_above': document.getElementById("logged_hours_above").value,
+                'logged_hours_above_to': document.getElementById("logged_hours_above_to").value,
+                'logged_hours_above_sales_amount': document.getElementById("logged_hours_above_sales_amount").value,
+                'achieve_more_than': document.getElementById("achieve_more_than").value,
+                'achieve_less_than': document.getElementById("achieve_less_than").value,
                 'sales_from': sales_from_values,
                 'sales_to': sales_to_values,
-                'sales_get': sales_get_values,
-                'id':{{$kpi[0]->id}},
+                'sales_amount': sales_amount_values,
+                'logged_hours_between': logged_hours_between_values,
+                'logged_hours_between_to': logged_hours_between_to_values,
+                'logged_hours_sales_amount': logged_hours_sales_amount_values,
+                'id':{{$kpi->id}},
             }
-            // console.log(data);
+            console.log(data);
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -401,7 +415,7 @@
             });
             $.ajax({
                 type: "PUT",
-                url: "{{ route('kpi-settings.update',$kpi[0]->id) }}",
+                url: "{{ route('kpi-settings.update',$kpi->id) }}",
                 data: data,
                 dataType: "json",
                 success: function (response) {
@@ -418,31 +432,6 @@
                 }
             });
         });
-    </script>
-    <script>
-        {{--$('#save-form').click(function() {--}}
-        {{--    const url = "{{ route('kpi-settings.update', ['1']) }}";--}}
-
-        {{--    $.easyAjax({--}}
-        {{--        url: url,--}}
-        {{--        container: '#save-kpi-settings',--}}
-        {{--        type: "POST",--}}
-        {{--        disableButton: true,--}}
-        {{--        blockUI: true,--}}
-        {{--        buttonSelector: "#save-form",--}}
-        {{--        data: $('#save-kpi-settings').serialize(),--}}
-        {{--        success: function(response) {--}}
-        {{--            if (response.status == 'success') {--}}
-        {{--                if ($(MODAL_XL).hasClass('show')) {--}}
-        {{--                    $(MODAL_XL).hide();--}}
-        {{--                    window.location.reload();--}}
-        {{--                } else {--}}
-        {{--                    window.location.href = response.redirectUrl;--}}
-        {{--                }--}}
-        {{--            }--}}
-        {{--        }--}}
-        {{--    });--}}
-        {{--});--}}
     </script>
     <script>
         $(document).ready(function () {
@@ -514,20 +503,6 @@
                 enableButtonAdd();
             });
         });
-        // const dynamicField = document.getElementById('dynamic-field-1');
-        // const addButton = dynamicField.querySelector('button');
-        //
-        // addButton.addEventListener('click', () => {
-        //     const clone = dynamicField.cloneNode(true);
-        //     document.body.appendChild(clone);
-        // });
-        // const dynamicField = document.getElementById('addMore-field-1');
-        // const addButton = dynamicField.querySelector('button');
-        //
-        // addButton.addEventListener('click', () => {
-        //     const clone = dynamicField.cloneNode(true);
-        //     document.body.appendChild(clone);
-        // });
         $(document).ready(function () {
             var buttonAdd = $("#addMore-button");
             var buttonRemove = $("#removeMore-button");
@@ -545,9 +520,6 @@
                 count = totalFields() + 1;
                 field = $("#dynamicMore-field-1").clone();
                 field.attr("id", "dynamicMore-field-" + count);
-                field.children("label").attr("for", "linkError_" + 'total').text("Field " + count);
-                field.find("input").attr("id", "linkError_" + 'total').val("");
-                field.append('<span id="linkError_'+total+'" class="text-danger" for="link"></span>');
                 $(className + ":last").after($(field));
             }
 
