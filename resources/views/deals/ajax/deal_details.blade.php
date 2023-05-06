@@ -653,7 +653,13 @@ ul.fileList {
                <div class="row">
                    <div class="col-md-4">
                        <div class="deal_item">
-                           <h3><i class="fa-solid fa-user-large"></i> Client Name: <span>{{$deal->client_username}}</span> </h3>
+                        @if($deal->client_name == null)
+                           <h3><i class="fa-solid fa-user-large"></i> Client Username: <span>{{$deal->client_username}}</span> </h3>
+                          @else 
+                          <h3><i class="fa-solid fa-user-large"></i> Client Name: <span>{{$deal->client_name}}</span> </h3>
+
+
+                          @endif
                            <h3><i class="fa-solid fa-money-bill-transfer"></i> Converted On: <span>{{$deal->created_at->format('d M, Y')}}</span> <span>({{$deal->created_at->format('h : i A')}})</span> </h3>
                            @if($deal->won_lost == null)
                             <h3><i class="fa-solid fa-hands-bubbles"></i> Deal Won/Lost: <span>N\A</span> </h3>

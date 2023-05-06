@@ -19,6 +19,19 @@ class StoreSubTask extends FormRequest
         return true;
     }
 
+    public function prepareForValidation()
+    {
+        $input = $this->all();
+
+        // Modify the post data here
+
+        if ($input['description'] == '<p><br></p>') {
+            $input['description'] = '';
+        }
+
+        $this->replace($input);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -37,7 +50,7 @@ class StoreSubTask extends FormRequest
             'title' => 'required',
             'estimate_hours'=> 'required',
             'estimate_minutes'=> 'required',
-
+            'description' => 'required',
             'user_id'=>'required'
 
         ];

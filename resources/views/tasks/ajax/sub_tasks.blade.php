@@ -258,12 +258,10 @@
 
                 <div class="col-md-12 col-lg-12">
                     <div class="form-group">
-                        <x-forms.label class="my-3" fieldId="description2"
-                                       :fieldLabel="__('Description')">
-                        </x-forms.label>
+                        <x-forms.label class="my-3" fieldId="description2" :fieldLabel="__('Description')"></x-forms.label>
                         <div id="description2"></div>
-                        <textarea name="description" id="description2-text"
-                                  class="d-none">Description</textarea>
+                        <textarea name="description" id="description2-text" class="d-none">Description</textarea>
+                        <div class="invalid-feedback" id="description_error"></div>
                     </div>
                 </div>
 
@@ -683,7 +681,6 @@
             $('#save-subtask').click(function() {
 
                 const url = "{{ route('sub-tasks.store') }}";
-
                 $.easyAjax({
                     url: url,
                     container: '#save-subtask-data-form',
@@ -702,7 +699,14 @@
                                 window.location.reload();
                             }
                         }
-                    }
+                    },
+                    error: function(error) {
+                        
+                        if (error.responseJSON.errors.description) {
+                            $('#description_error').addClass('d-block');
+                            $('#description_error').text('This field are required');
+                        }
+                    } 
                 });
             });
 

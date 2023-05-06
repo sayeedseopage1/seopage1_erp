@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kpi_setting_milestones', function (Blueprint $table) {
+        Schema::create('kpi_setting_logged_hours', function (Blueprint $table) {
             $table->id();
             $table->integer('kpi_id');
-            $table->bigInteger('sales_team_reaches')->default(0);
-            $table->bigInteger('closed_deals_goal_month')->default(0);
+            $table->bigInteger('logged_hours_between')->default(0);
+            $table->bigInteger('logged_hours_between_to')->default(0);
+            $table->bigInteger('logged_hours_sales_amount')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kpi_setting_milestones');
+        Schema::dropIfExists('kpi_setting_logged_hours');
     }
 };

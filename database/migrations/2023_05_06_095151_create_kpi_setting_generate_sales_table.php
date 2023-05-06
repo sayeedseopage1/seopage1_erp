@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('insight_table_columns', function (Blueprint $table) {
+        Schema::create('kpi_setting_generate_sales', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->string('column_priority');
-            $table->string('column_status');
-            $table->integer('goal_id')->nullable();
-            $table->integer('report_id')->nullable();
+            $table->integer('kpi_id');
+            $table->bigInteger('sales_from')->default(0);
+            $table->bigInteger('sales_to')->default(0);
+            $table->bigInteger('sales_amount')->default(0);
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('insight_table_columns');
+        Schema::dropIfExists('kpi_setting_generate_sales');
     }
 };

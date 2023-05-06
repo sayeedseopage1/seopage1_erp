@@ -7,12 +7,12 @@
             </div>
             <div class="modal-body">
                 @php
-                    $taskRevisionComment = \App\Models\TaskRevision::where('task_id',$task->id)->orderBy('id', 'desc')->first();
+                    $taskRevisionComment = \App\Models\TaskRevision::where('subtask_id',$task->subtask_id)->latest()->first();
                 @endphp
                 <h6 class="text-center">Task Revision Form Project Manager</h6>
                 <div class="card mb-3">
                     <div class="card-body">
-                        @if($taskRevisionComment->comment)
+                        @if($taskRevisionComment)
                             <p>{!! $taskRevisionComment->comment !!}</p>
                         @else
                             <p class="text-center text-danger">No Comment Found</p>
@@ -22,13 +22,12 @@
                 <div class="mb-1 text-center">
                     <button class="btn-secondary rounded f-14 p-2 mr-2" name="aceept" data-toggle="modal" data-target="#acceptAndContinue"> Accept & Continue</button>
                     <button class="btn-secondary  rounded f-14 p-2 mr-2" name="denay" data-toggle="modal" data-target="#denyAndContinue"> Deny & Continue</button>
-                    @include('tasks.modals.acceptAndContinue')
-                    @include('tasks.modals.denyAndContinue')
+                    @include('tasks.modals.developer_accept_and_continue')
+                    @include('tasks.modals.developer_deny_and_continue')
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 
