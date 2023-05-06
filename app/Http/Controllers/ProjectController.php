@@ -2028,14 +2028,6 @@ class ProjectController extends AccountBaseController
             $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
             $this->logProjectActivity($project->id, $link);
 
-            $this->triggerPusher('notification-channel', 'notification', [
-                'user_id' => $task->user_id,
-                'role_id' => User::find($request->user_id)->role_id,
-                'title' => 'Task complete request approved',
-                'body' => Auth::user()->name.' mark task completed',
-                'redirectUrl' => route('projects.show', $project->id).'?tab=deliverable'
-            ]);
-
             $users = User::where('role_id',1)->get();
             foreach ($users as $user) {
                 $this->triggerPusher('notification-channel', 'notification', [
