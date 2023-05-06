@@ -13,7 +13,7 @@
 					<input type="hidden" name="delivarable_id" value="{{$deliverable->id}}">
 					<div class="parent-row">
 						<div class="row clone-row">
-							<div class="col-sm-2">
+							<div class="align-self-end col-sm-2">
 								<div class="form-group">
 									<select class="form-control height-50 w-100 permission_column" name="permission_column[]">
 										<option value="">Select column</option>
@@ -27,8 +27,8 @@
 								</div>
 							</div>
 							<div class="col-sm-4">
-								<div class="form-group border rounded height-50">
-									<p class="old_data mb-4 mx-2"></p>
+								<div class="form-group border rounded">
+									<div class="old_data mb-4 mx-2"></div>
 								</div>
 							</div>
 							<div class="col-sm-5">
@@ -36,7 +36,7 @@
 									<textarea class="form-control" name="data[]"></textarea>
 								</div>
 							</div>
-							<div class="col-sm-1">
+							<div class="align-self-end col-sm-1">
 								<button type="button" class="btn btn-danger height-50 remove-row">-</button>
 							</div>
 						</div>
@@ -58,7 +58,7 @@
 	$(document).ready(function() {
 		$('.add-row').unbind().click(function() {
 			var length = $('.parent-row .row').length + 1;
-			var html = '<div class="row"><div class="col-sm-2"><div class="form-group"><select class="form-control height-50 w-100 permission_column" name="permission_column['+length+']"><option value="">Select column</option><option value="type">Type</option><option value="title">Title</option><option value="estimation_time">Estimation Hours</option><option value="quantity">Quantity</option><option value="description">Description</option><option value="estimation_completed_date">Estimated completion date</option></select></div></div><div class="col-sm-4"><div class="form-group border rounded h-75"><p class="old_data mb-4 mx-2"></p></div></div><div class="col-sm-5"><div class="form-group"><textarea class="form-control" name="data['+length+']"></textarea></div></div><div class="col-sm-1"> <button type="button" class="btn btn-danger height-50 remove-row">-</button></div></div>';
+			var html = '<div class="row"><div class="align-self-end col-sm-2"><div class="form-group"><select class="form-control w-100 permission_column" name="permission_column['+length+']"><option value="">Select column</option><option value="type">Type</option><option value="title">Title</option><option value="estimation_time">Estimation Hours</option><option value="quantity">Quantity</option><option value="description">Description</option><option value="estimation_completed_date">Estimated completion date</option></select></div></div><div class="col-sm-4"><div class="form-group border rounded"><p class="old_data mb-4 mx-2"></p></div></div><div class="col-sm-5"><div class="form-group"><textarea class="form-control" name="data['+length+']"></textarea></div></div><div class="align-self-end col-sm-1"> <button type="button" class="btn btn-danger remove-row">-</button></div></div>';
 			$('.parent-row').append(html);
 		});
 		// remove row
@@ -85,7 +85,7 @@
 
 			$.each(deliverable, function(key, value) {
 				if (key == selected_option) {
-					textarea.text(value);
+					textarea.html(value);
 				}
 			});
 		})

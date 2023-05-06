@@ -2174,7 +2174,7 @@ class ProjectController extends AccountBaseController
 
         $log_user = Auth::user();
 
-        $text = Auth::user()->name.' updated project deliverable : '.$deliverable_id->title;
+        $text = Auth::user()->name.' updated project deliverable : '.$deliverable->title;
         $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
         $this->logProjectActivity($project->id, $link);
 
