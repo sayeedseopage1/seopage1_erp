@@ -87,40 +87,25 @@
 
 
     //    SELECT OPTION CODE
-
     const dropdown = document.getElementById("subTask");
     const commentContainer = document.getElementById("commentContainer");
 
     dropdown.addEventListener("change", function() {
-        commentContainer.innerHTML = "";
-
         const selectedOptions = Array.from(dropdown.selectedOptions);
-        for (const option of selectedOptions) {
-            const textAreaContainer = document.createElement("div");
-            textAreaContainer.classList.add("mb-2");
-
-            const label = document.createElement("label");
-            label.textContent = option.text;
-            textAreaContainer.appendChild(label);
-
-            const textArea2 = commentContainer.createElement("textarea");
-            var id = Math.random().toString(36).substr(2,9);
-            textArea2.id = id;
-            textArea2.classList.add("myClass");
-            CKEDITOR.replace(textArea2, {
-                height: 80
-            });
-            textAreaContainer.appendChild(textArea2);
-
-            commentContainer.appendChild(textAreaContainer);
-        }
-
         if (selectedOptions.length > 0) {
+            commentContainer.innerHTML = "";
+            selectedOptions.forEach(option => {
+                const textarea = document.createElement("textarea");
+                textarea.setAttribute("name", `comment_${option.value}`);
+                textarea.setAttribute("placeholder", `Comment for ${option.text}`);
+                commentContainer.appendChild(textarea);
+            });
             commentContainer.style.display = "block";
         } else {
             commentContainer.style.display = "none";
         }
     });
+
 
     $('#denyBtn').click(function(e){
         e.preventDefault();
@@ -143,7 +128,7 @@
             'comment': textAreaData,
             'task_id': {{$task->id}},
         }
-        console.log(data);
+        // console.log(data);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -161,7 +146,7 @@
                     $('#denyBtn').attr("disabled", false);
                     $('#denyBtn').html("Deny & Continue");
                     window.location.reload();
-                    toastr.success('Task Deny And Continue Successfully');
+                    toastr.success('Task Accept And Continue Successfully');
                 }
 
             },
