@@ -6,8 +6,8 @@ use App\Models\Currency;
 use App\Helper\Reply;
 use App\Http\Requests\Settings\UpdateOrganisationSettings;
 use App\Models\kpiSetting;
-use App\Models\kpiSettingGenerateSales;
-use App\Models\kpiSettingMilestone;
+use App\Models\kpiSettingGenerateSale;
+use App\Models\kpiSettingLoggedHour;
 use App\Models\Setting;
 use App\Traits\CurrencyExchange;
 use Carbon\Carbon;
@@ -45,6 +45,7 @@ class KpiSettingController extends AccountBaseController
     // phpcs:ignore
     public function update(Request $request,$id)
     {
+//        dd($request->all());
         $kpi_setting = kpiSetting::find($id);
         $kpi_setting->the_bidder = $request->the_bidder;
         $kpi_setting->qualify = $request->qualify;
@@ -59,39 +60,38 @@ class KpiSettingController extends AccountBaseController
         $kpi_setting->closed_deal = $request->closed_deal;
         $kpi_setting->contact_form = $request->contact_form;
         $kpi_setting->authorized_by_leader = $request->authorized_by_leader;
-        $kpi_setting->certain_deal = $request->certain_deal;
-        $kpi_setting->certain_deal_per_month = $request->certain_deal_per_month;
-        $kpi_setting->additional_milestone = $request->additional_milestone;
-        $kpi_setting->additional_milestone_point = $request->additional_milestone_point;
+        $kpi_setting->for_every = $request->for_every;
+        $kpi_setting->addition_sales = $request->addition_sales;
+        $kpi_setting->after = $request->after;
+        $kpi_setting->shift_will_get = $request->shift_will_get;
+        $kpi_setting->generate_project = $request->generate_project;
+        $kpi_setting->single_deal = $request->single_deal;
+        $kpi_setting->bonus_point = $request->bonus_point;
         $kpi_setting->sales_above = $request->sales_above;
         $kpi_setting->sales_above_point = $request->sales_above_point;
-        $kpi_setting->estimated_hours = $request->estimated_hours;
-        $kpi_setting->logged_hours = $request->logged_hours;
-        $kpi_setting->sales_executive = $request->sales_executive;
-        $kpi_setting->estimated_hours2 = $request->estimated_hours2;
-        $kpi_setting->logged_hours2 = $request->logged_hours2;
-        $kpi_setting->sales_executive2 = $request->sales_executive2;
-        $kpi_setting->estimated_hours3 = $request->estimated_hours3;
-        $kpi_setting->logged_hours3 = $request->logged_hours3;
-        $kpi_setting->sales_executive3 = $request->sales_executive3;
+        $kpi_setting->logged_hours_above = $request->logged_hours_above;
+        $kpi_setting->logged_hours_above_sales_amount = $request->logged_hours_above_sales_amount;
+        $kpi_setting->achieve_more_than = $request->achieve_more_than;
+        $kpi_setting->achieve_less_than = $request->achieve_less_than;
         $kpi_setting->save();
 
 
 
-        foreach($request->sales_team_reaches as $key => $sales_team_reach) {
-            $kpi_setting_milestone = new kpiSettingMilestone();
-            $kpi_setting_milestone->kpi_id = $request->id;
-            $kpi_setting_milestone->sales_team_reaches = $sales_team_reach;
-            $kpi_setting_milestone->closed_deals_goal_month  = $request->closed_deals_goal_month[$key] ;
-            $kpi_setting_milestone->save();
-        }
         foreach($request->sales_from as $key => $sales_from) {
-            $kpi_setting_generate_sales = new kpiSettingGenerateSales();
+            $kpi_setting_generate_sales = new kpiSettingGenerateSale();
             $kpi_setting_generate_sales->kpi_id = $request->id;
-            $kpi_setting_generate_sales->sales_from= $sales_from;
+            $kpi_setting_generate_sales->sales_from = $sales_from;
             $kpi_setting_generate_sales->sales_to  = $request->sales_to[$key] ;
-            $kpi_setting_generate_sales->sales_get  = $request->sales_get[$key] ;
+            $kpi_setting_generate_sales->sales_amount  = $request->sales_amount[$key] ;
             $kpi_setting_generate_sales->save();
+        }
+        foreach($request->logged_hours_between as $key => $logged_hours_between) {
+            $kpi_setting_logged_hour = new kpiSettingLoggedHour();
+            $kpi_setting_logged_hour->kpi_id = $request->id;
+            $kpi_setting_logged_hour->logged_hours_between= $logged_hours_between;
+            $kpi_setting_logged_hour->logged_hours_between_to  = $request->logged_hours_between_to[$key] ;
+            $kpi_setting_logged_hour->logged_hours_sales_amount  = $request->logged_hours_sales_amount[$key] ;
+            $kpi_setting_logged_hour->save();
         }
         return response()->json(['status'=>200]);
     }

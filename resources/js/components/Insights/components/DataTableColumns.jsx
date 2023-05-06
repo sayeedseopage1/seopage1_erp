@@ -1,6 +1,7 @@
 import dayjs from "dayjs"
 import Tooltip from '../ui/Tooltip';
 import { useUsers } from "../hooks/useUsers";
+import { stage } from "../utils/constants";
 
 
 
@@ -66,12 +67,12 @@ export const DataTableColumns = [
             return <span> Pipeline </span>
         } 
     },
-    // {
-    //     header: 'Owner',
-    //     id: "owner",
-    //     accessor: 'added_by',
-    //     cell: (row) => <OwnerCell {...row} />
-    // },
+    {
+        header: 'Owner',
+        id: "owner",
+        accessor: 'added_by',
+        cell: (row) => <OwnerCell {...row} />
+    },
     {
         header: 'Stage',
         id: "deal_stage",
@@ -96,15 +97,5 @@ const OwnerCell = (row) => {
 
 // stage cell 
 const StageCell = (row) => {
-    const stage = [
-        "Contact Mode",
-        "Qualified",
-        "Requirements Defined",
-        "Proposal Made",
-        "Negotiations Started",
-        "Milestone breakdown",
-    ]
-
-
     return <span> {stage[row['deal_stage']]} </span>
 }

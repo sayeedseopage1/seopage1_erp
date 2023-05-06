@@ -136,14 +136,7 @@
         }
 
     </style>
-    <style>
-        .cke_top{
-            padding: 0 !important;
-        }
-        .cke_bottom{
-            padding: 0 !important;
-        }
-    </style>
+    
 
     {{-- Custom theme styles --}}
     @if (!user()->dark_theme)
