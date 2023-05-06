@@ -2175,8 +2175,8 @@ class ProjectController extends AccountBaseController
         $log_user = Auth::user();
 
         $text = Auth::user()->name.' updated project deliverable : '.$deliverable->title;
-        $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
-        $this->logProjectActivity($project->id, $link);
+        $link = '<a href="'.route('projects.show', $project_id_update->id).'?tab=deliverable">'.$text.'</a>';
+        $this->logProjectActivity($project_id_update->id, $link);
 
         if($request->deliverable_type == 'Others') {
             $project_id= Project::where('id',$project_update->id)->first();
