@@ -88,11 +88,11 @@
             <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
                 <h3 class="text-center  border-1 shadow-sm mx-auto p-3 rounded text-uppercase" style="width: fit-content;">Base Point Distribution</h3>
                 <br>
-                <form id="save-kpi-settings" action="{{route('kpi-settings.update',$kpi->id)}}" method="PUT">
+                <form id="save-kpi-settings" action="{{route('kpi-settings.update',$kpi->id )}}" method="PUT">
                     @csrf
                     <input type="hidden" name="id" value="{{$kpi->id}}">
                     <div class="form-group row">
-                      <label for="inputPassword" class="col-sm-4 col-form-label">1. The bidder will get:</label>
+                      <label for="inputPassword" class="col-sm-4 col-form-label">1. The Bidder will get:</label>
                       <div class="col-sm-8 d-flex">
                         <input class="form-control height-35 f-14" type="number" name="the_bidder" id="the_bidder"  value="{{$kpi->the_bidder}}" class="form-control"  placeholder="Percentage of points for bidder">
                           <label class="mt-2 mx-1">%</label>
@@ -183,6 +183,115 @@
                     <hr>
                     <h3 class="text-center mt-1 mb-5 border-1 shadow-sm mx-auto p-3 rounded text-uppercase" style="width: fit-content;">Point distribution for won deal</h3>
                     <section class="point__distribution">
+                        <div class="point__row_wrapper_container">
+                            @php
+                                $kpi_setting_logged_hour = \App\Models\kpiSettingLoggedHour::all();
+                            @endphp
+                            @if(count($kpi_setting_logged_hour)>0)
+                                <div class="point__row_wrapper">
+                                    @foreach($kpi_setting_logged_hour as $kpi_setting_logged_hour)
+                                        <div class="point__row dynamicMore-field" id="dynamicMore-field-1">
+                                            <div class="point__col"> If the hourly rate of the project based on logged hours between </div>
+                                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between[]" id="logged_hours_between" value="{{$kpi_setting_logged_hour->logged_hours_between}}">  </div>
+                                            <div class="point__col"> To</div>
+                                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between_to[]" id="logged_hours_between" value="{{$kpi_setting_logged_hour->logged_hours_between_to}}"> </div>
+                                            <div class="point__col"> shift will get</div>
+                                            <div class="point__col"> <input type="number" class="point__input" name="logged_hours_sales_amount[]" id="logged_hours_sales_amount"  value="{{$kpi_setting_logged_hour->logged_hours_sales_amount}}"> % </div>
+                                            <div class="point__col"> of the sales amount.</div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="point__row_wrapper">
+                                    <div class="point__row dynamicMore-field" id="dynamicMore-field-1">
+                                        <div class="point__col"> If the hourly rate of the project based on logged hours between </div>
+                                        <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between[]" id="logged_hours_between" placeholder="0">  </div>
+                                        <div class="point__col"> To</div>
+                                        <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between_to[]" id="logged_hours_between_to" placeholder="0"> , </div>
+                                        <div class="point__col"> shift will get</div>
+                                        <div class="point__col"> <input type="number" class="point__input" name="logged_hours_sales_amount[]" id="logged_hours_sales_amount"  placeholder="0"> % </div>
+                                        <div class="point__col"> of the sales amount. </div>
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="point__col __point_field_add_btn_group">
+                                <button type="button" id="addMore-button" class="btn btn-primary" style="padding: 0px 8px;"><i class="fa fa-plus" style="font-size: 12px;"></i></button>
+                                <button type="button" id="removeMore-button" class="btn btn-secondary ml-1" disabled="disabled" style="padding: 0px  8px;"><i class="fa fa-trash" style="font-size: 12px;"></i></button>
+                            </div>
+                        </div>
+                        <div class="point__row">
+                            <div class="point__col"> If the hourly rate of the project based on logged hours above </div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_above" id="logged_hours_above" value="{{$kpi->logged_hours_above}}"> , </div>
+                            <div class="point__col"> shift will get </div>
+                            <div class="point__col"> <input type="number" class="point__input" name="logged_hours_above_sales_amount" id="logged_hours_above_sales_amount" value="{{$kpi->logged_hours_above_sales_amount}}"> % </div>
+                            <div class="point__col"> of the sales amount. </div>
+                        </div>
+                        <div class="point__row">
+                            <div class="point__col"> To achieve more than </div>
+                            <div class="point__col"> <input type="number" class="point__input" name="achieve_more_than" id="achieve_more_than" value="{{$kpi->achieve_more_than}}"> %  </div>
+                            <div class="point__col"> points, </div>
+                            <div class="point__col"> Minimum project value cannot be less than </div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="achieve_less_than" id="achieve_less_than" value="{{$kpi->achieve_less_than}}"> </div>
+                        </div>
+                        <div class="point__row_wrapper_container">
+                            @php
+                                $kpi_setting_generate_sales = \App\Models\kpiSettingGenerateSale::all();
+                            @endphp
+                            @if(count($kpi_setting_generate_sales)>0)
+                                <div class="point__row_wrapper">
+                                    @foreach($kpi_setting_generate_sales as $kpi_setting_generate_sale)
+                                        <div class="point__row dynamic-field" id="dynamic-field-1">
+                                            <div class="point__col"> If sales team generates sales from </div>
+                                            <div class="point__col"> <input type="number" class="point__input" name="sales_from[]" id="sales_from" value="{{$kpi_setting_generate_sale->sales_from}}">  </div>
+                                            <div class="point__col"> To</div>
+                                            <div class="point__col"> <input type="number" class="point__input" name="sales_to[]" id="sales_to" value="{{$kpi_setting_generate_sale->sales_to}}">  </div>
+                                            <div class="point__col"> per month,</div>
+                                            <div class="point__col"> team lead will get </div>
+                                            <div class="point__col"> <input type="number" class="point__input" name="sales_amount[]" id="sales_amount"  value="{{$kpi_setting_generate_sale->sales_amount}}"> % </div>
+                                            <div class="point__col"> points of the sales amount.</div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="point__row_wrapper">
+                                    <div class="point__row dynamic-field" id="dynamic-field-1">
+                                        <div class="point__col"> If sales team generates sales from </div>
+                                        <div class="point__col"> <input type="number" class="point__input" name="sales_from[]" id="sales_from" placeholder="0">  </div>
+                                        <div class="point__col"> To</div>
+                                        <div class="point__col"> <input type="number" class="point__input" name="sales_to[]" id="sales_to" placeholder="0">  </div>
+                                        <div class="point__col"> per month,</div>
+                                        <div class="point__col"> team lead will get </div>
+                                        <div class="point__col"> <input type="number" class="point__input" name="sales_amount[]" id="sales_amount"  placeholder="0"> % </div>
+                                        <div class="point__col"> points of the sales amount.</div>
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="point__col __point_field_add_btn_group">
+                                <button type="button" id="add-button" class="btn btn-primary" style="padding: 0px 8px;"><i class="fa fa-plus" style="font-size: 12px;"></i></button>
+                                <button type="button" id="remove-button" class="btn btn-secondary ml-1" disabled="disabled" style="padding: 0px  8px;"><i class="fa fa-trash" style="font-size: 12px;"></i></button>
+                            </div>
+                        </div>
+                        <div class="point__row">
+                            <div class="point__col"> If sales team generates sales above </div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="sales_above" id="sales_above" value="{{$kpi->sales_above}}">  </div>
+                            <div class="point__col"> per month, </div>
+                            <div class="point__col"> team lead will get </div>
+                            <div class="point__col"> <input type="number" class="point__input" name="sales_above_point" id="sales_above_point" value="{{$kpi->sales_above_point}}"> % </div>
+                            <div class="point__col">  points.</div>
+                        </div>
+                         <div class="point__row">
+                             <div class="point__col"> If a sales shift generate any project </div>
+                             <div class="point__col">
+                                 <select class="point__select" name="generate_project" id="generate_project">
+                                     <option value="equal" class="point__option" {{$kpi->generate_project=='equal'? 'selected':''}}>Equal</option>
+                                     <option value="more_than" class="point__option" {{$kpi->generate_project=='more_than'? 'selected':''}}>More than </option>
+                                 </select>
+                             </div>
+                             <div class="point__col"> $<input type="number" class="point__input" name="single_deal" id="single_deal" value="{{$kpi->single_deal}}">  </div>
+                             <div class="point__col"> on single deal, that shift will get a flat</div>
+                             <div class="point__col"> <input type="number" class="point__input" name="bonus_point" id="bonus_point" value="{{$kpi->bonus_point}}">  </div>
+                             <div class="point__col"> bonus points.</div>
+                         </div>
                         <div class="point__row">
                             <div class="point__col">For every</div>
                             <div class="point__col"> $<input type="number" class="point__input" name="for_every" id="for_every" value="{{$kpi->for_every}}">  </div>
@@ -196,128 +305,17 @@
                             </div>
                             <div class="point__col">after</div>
                             <div class="point__col"> $<input type="number" class="point__input" name="after" id="after" value="{{$kpi->after}}">  </div>
-                            <div class="point__col"> milestone per month </div>
+                            <div class="point__col"> milestone per month, </div>
                             <div class="point__col"> shift will get </div>
                             <div class="point__col"> <input type="number" class="point__input" name="shift_will_get" id="shift_will_get" value="{{$kpi->shift_will_get}}">  </div>
                             <div class="point__col"> points. </div>
                         </div>
-                         <div class="point__row">
-                             <div class="point__col"> If a sales shift gnerate any project </div>
-                             <div class="point__col">
-                                 <select class="point__select" name="gnerate_project" id="gnerate_project">
-                                     <option value="equal" class="point__option" {{$kpi->gnerate_project=='equal'? 'selected':''}}>Equal</option>
-                                     <option value="more_than" class="point__option" {{$kpi->gnerate_project=='more_than'? 'selected':''}}>More than </option>
-                                 </select>
-                             </div>
-                             <div class="point__col"> $<input type="number" class="point__input" name="single_deal" id="single_deal" value="{{$kpi->single_deal}}">  </div>
-                             <div class="point__col"> on single deal that shift will get a flat</div>
-                             <div class="point__col"> <input type="number" class="point__input" name="bonus_point" id="bonus_point" value="{{$kpi->bonus_point}}">  </div>
-                             <div class="point__col"> bonus points</div>
-                         </div>
-                         <div class="point__row_wrapper_container">
-                             @php
-                                 $kpi_setting_generate_sales = \App\Models\kpiSettingGenerateSale::all();
-                             @endphp
-                             @if(count($kpi_setting_generate_sales)>0)
-                             <div class="point__row_wrapper">
-                                 @foreach($kpi_setting_generate_sales as $kpi_setting_generate_sale)
-                                 <div class="point__row dynamic-field" id="dynamic-field-1">
-                                     <div class="point__col"> If Sales Team Generates sales from </div>
-                                     <div class="point__col"> <input type="number" class="point__input" name="sales_from[]" id="sales_from" value="{{$kpi_setting_generate_sale->sales_from}}">  </div>
-                                     <div class="point__col"> To</div>
-                                     <div class="point__col"> <input type="number" class="point__input" name="sales_to[]" id="sales_to" value="{{$kpi_setting_generate_sale->sales_to}}">  </div>
-                                     <div class="point__col"> per month</div>
-                                     <div class="point__col"> team lead will get </div>
-                                     <div class="point__col"> <input type="number" class="point__input" name="sales_amount[]" id="sales_amount"  value="{{$kpi_setting_generate_sale->sales_amount}}"> % </div>
-                                     <div class="point__col"> points of the sales amount</div>
-                                 </div>
-                                 @endforeach
-                             </div>
-                             @else
-                                 <div class="point__row_wrapper">
-                                     <div class="point__row dynamic-field" id="dynamic-field-1">
-                                         <div class="point__col"> If Sales Team Generates sales from </div>
-                                         <div class="point__col"> <input type="number" class="point__input" name="sales_from[]" id="sales_from" placeholder="0">  </div>
-                                         <div class="point__col"> To</div>
-                                         <div class="point__col"> <input type="number" class="point__input" name="sales_to[]" id="sales_to" placeholder="0">  </div>
-                                         <div class="point__col"> per month</div>
-                                         <div class="point__col"> team lead will get </div>
-                                         <div class="point__col"> <input type="number" class="point__input" name="sales_amount[]" id="sales_amount"  placeholder="0"> % </div>
-                                         <div class="point__col"> points of the sales amount</div>
-                                     </div>
-                                 </div>
-                             @endif
-                             <div class="point__col __point_field_add_btn_group">
-                                 <button type="button" id="add-button" class="btn btn-primary" style="padding: 0px 8px;"><i class="fa fa-plus" style="font-size: 12px;"></i></button>
-                                 <button type="button" id="remove-button" class="btn btn-secondary ml-1" disabled="disabled" style="padding: 0px  8px;"><i class="fa fa-trash" style="font-size: 12px;"></i></button>
-                             </div>
-                         </div>
-                         <div class="point__row">
-                             <div class="point__col"> If sales team generates sales above </div>
-                             <div class="point__col"> $<input type="number" class="point__input" name="sales_above" id="sales_above" value="{{$kpi->sales_above}}">  </div>
-                             <div class="point__col"> per moth </div>
-                             <div class="point__col"> team lead will get </div>
-                             <div class="point__col"> <input type="number" class="point__input" name="sales_above_point" id="sales_above_point" value="{{$kpi->sales_above_point}}"> % </div>
-                             <div class="point__col">  points</div>
-                         </div>
-                         <div class="point__row_wrapper_container">
-                             @php
-                                 $kpi_setting_logged_hour = \App\Models\kpiSettingLoggedHour::all();
-                             @endphp
-                             @if(count($kpi_setting_logged_hour)>0)
-                             <div class="point__row_wrapper">
-                                 @foreach($kpi_setting_logged_hour as $kpi_setting_logged_hour)
-                                 <div class="point__row dynamicMore-field" id="dynamicMore-field-1">
-                                     <div class="point__col"> If the hourly rate of the project based on logged hours between </div>
-                                     <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between[]" id="logged_hours_between" value="{{$kpi_setting_logged_hour->logged_hours_between}}">  </div>
-                                     <div class="point__col"> To</div>
-                                     <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between_to[]" id="logged_hours_between_to" value="{{$kpi_setting_logged_hour->logged_hours_between_to}}">  </div>
-                                     <div class="point__col"> shift will get</div>
-                                     <div class="point__col"> of the sales amount </div>
-                                     <div class="point__col"> <input type="number" class="point__input" name="logged_hours_sales_amount[]" id="logged_hours_sales_amount" value="{{$kpi_setting_logged_hour->logged_hours_sales_amount}}"> % </div>
-                                 </div>
-                                 @endforeach
-                             </div>
-                             @else
-                                 <div class="point__row_wrapper">
-                                     <div class="point__row dynamicMore-field" id="dynamicMore-field-1">
-                                         <div class="point__col"> If the hourly rate of the project based on logged hours between </div>
-                                         <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between[]" id="logged_hours_between" placeholder="0">  </div>
-                                         <div class="point__col"> To</div>
-                                         <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between_to[]" id="logged_hours_between_to" placeholder="0">  </div>
-                                         <div class="point__col"> shift will get</div>
-                                         <div class="point__col"> of the sales amount </div>
-                                         <div class="point__col"> <input type="number" class="point__input" name="logged_hours_sales_amount[]" id="logged_hours_sales_amount" placeholder="0"> % </div>
-                                     </div>
-                                 </div>
-                             @endif
-                             <div class="point__col __point_field_add_btn_group">
-                                 <button type="button" id="addMore-button" class="btn btn-primary" style="padding: 0px 8px;"><i class="fa fa-plus" style="font-size: 12px;"></i></button>
-                                 <button type="button" id="removeMore-button" class="btn btn-secondary ml-1" disabled="disabled" style="padding: 0px  8px;"><i class="fa fa-trash" style="font-size: 12px;"></i></button>
-                             </div>
-                         </div>
-                         <div class="point__row">
-                             <div class="point__col"> If the hourly rate of the project based on logged hours above </div>
-                             <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_above" id="logged_hours_above" value="{{$kpi->logged_hours_above}}">  </div>
-                             <div class="point__col"> To </div>
-                             <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_above_to" id="logged_hours_above_to" value="{{$kpi->logged_hours_above_to}}">  </div>
-                             <div class="point__col"> shift will get </div>
-                             <div class="point__col"> of the sales amount </div>
-                             <div class="point__col"> <input type="number" class="point__input" name="logged_hours_above_sales_amount" id="logged_hours_above_sales_amount" value="{{$kpi->logged_hours_above_sales_amount}}"> % </div>
-                         </div>
-                         <div class="point__row">
-                             <div class="point__col"> To achieve more than </div>
-                             <div class="point__col"> <input type="number" class="point__input" name="achieve_more_than" id="achieve_more_than" value="{{$kpi->achieve_more_than}}"> %  </div>
-                             <div class="point__col"> points </div>
-                             <div class="point__col"> minimum project value cannot be less than </div>
-                             <div class="point__col"> $<input type="number" class="point__input" name="achieve_less_than" id="achieve_less_than" value="{{$kpi->achieve_less_than}}"> </div>
-                         </div>
                     </section>
                     <x-slot name="action">
                         <!-- Buttons Start -->
                         <div class="w-100 border-top-grey">
                             <x-setting-form-actions>
-                                <x-forms.button-primary id="save-form" class="mr-3" icon="check">@lang('app.save')
+                                <x-forms.button-primary id="save-form" class="mr-3" icon="check">@lang('app.update')
                                 </x-forms.button-primary>
 
                                 <x-forms.button-cancel :link="url()->previous()" class="border-0">@lang('app.cancel')
@@ -389,13 +387,12 @@
                 'addition_sales': document.getElementById("addition_sales").value,
                 'after': document.getElementById("after").value,
                 'shift_will_get': document.getElementById("shift_will_get").value,
-                'gnerate_project': document.getElementById("gnerate_project").value,
+                'generate_project': document.getElementById("generate_project").value,
                 'single_deal': document.getElementById("single_deal").value,
                 'bonus_point': document.getElementById("bonus_point").value,
                 'sales_above': document.getElementById("sales_above").value,
                 'sales_above_point': document.getElementById("sales_above_point").value,
                 'logged_hours_above': document.getElementById("logged_hours_above").value,
-                'logged_hours_above_to': document.getElementById("logged_hours_above_to").value,
                 'logged_hours_above_sales_amount': document.getElementById("logged_hours_above_sales_amount").value,
                 'achieve_more_than': document.getElementById("achieve_more_than").value,
                 'achieve_less_than': document.getElementById("achieve_less_than").value,
@@ -407,7 +404,7 @@
                 'logged_hours_sales_amount': logged_hours_sales_amount_values,
                 'id':{{$kpi->id}},
             }
-            console.log(data);
+            // console.log(data);
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -520,8 +517,12 @@
                 count = totalFields() + 1;
                 field = $("#dynamicMore-field-1").clone();
                 field.attr("id", "dynamicMore-field-" + count);
+                field.children("label").attr("for", "linkError_" + 'total').text("Field " + count);
+                field.find("input").attr("id", "linkError_" + 'total').val("");
+                field.append('<span id="linkError_'+total+'" class="text-danger" for="link"></span>');
                 $(className + ":last").after($(field));
             }
+
 
             function removeLastField() {
                 if (totalFields() > 1) {
