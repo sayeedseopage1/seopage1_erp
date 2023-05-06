@@ -22,8 +22,6 @@
                 <div class="mb-1 text-center">
                     <button class="btn-secondary rounded f-14 p-2 mr-2" name="aceept" data-toggle="modal" data-target="#acceptAndContinue"> Accept & Continue</button>
                     <button class="btn-secondary  rounded f-14 p-2 mr-2" name="denay" data-toggle="modal" data-target="#denyAndContinue"> Deny & Continue</button>
-{{--                    <button class="btn-secondary  rounded f-14 p-2" data-toggle="modal" data-target="#subTaskRevision">Sub Task Revision</button>--}}
-{{--                    @include('tasks.modals.subTaskRevision')--}}
                     @include('tasks.modals.acceptAndContinue')
                     @include('tasks.modals.denyAndContinue')
                 </div>

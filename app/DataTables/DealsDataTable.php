@@ -260,8 +260,11 @@ class DealsDataTable extends BaseDataTable
                     return '<badge style="background-color:#0000FF !important;" class="badge badge-info">Requirements Defined</badge>';
                 }elseif ($row->deal_stage == 3) {
                     return '<badge style="background-color:#FFA500 !important;" class="badge badge-primary text-dark">Proposal Made</badge>';
-                }else {
+                }elseif($row->deal_stage == 4) {
                     return '<badge style="background-color:#A020F0 !important;" class="badge badge-success">Negotiation Started</badge>';
+                }else{
+                  return '<badge style="background-color:#C525F2 !important;" class="badge badge-success">Milestone Breakdown</badge>';
+
                 }
 
                 }
@@ -438,16 +441,15 @@ class DealsDataTable extends BaseDataTable
         // if (request('signed') == 'yes') {
         //     $model = $model->has('signature');
         // }
-
         if ($this->request()->searchText != '') {
             $model = $model->where(function ($query) {
                 $query->where('deal_stages.project_name', 'like', '%' . request('searchText') . '%')
                     ->orWhere('deal_stages.short_code', 'like', '%' . request('searchText') . '%')
                     ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
+
                    
                     ->orWhere('deal_stages.client_username', 'like', '%' . request('searchText') . '%')
                     ->orWhere('deal_stages.client_name', 'like', '%' . request('searchText') . '%')
-
 
 
                   ;

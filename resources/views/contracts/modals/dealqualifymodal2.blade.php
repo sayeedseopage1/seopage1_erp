@@ -11,6 +11,8 @@
                     <h5 class="modal-title" id="exampleModalLabel">Requirements Defined<span>&#8594;</span> Proposal Made</h5>
                 @elseif($deal->deal_stage == 3)
                     <h5 class="modal-title" id="exampleModalLabel">Proposal Made <span>&#8594;</span> Negotiation Started</h5>
+                    @elseif($deal->deal_stage == 4)
+                    <h5 class="modal-title" id="exampleModalLabel">Negotiation Started <span>&#8594;</span> Milestone Breakdown</h5>
 
                 @endif
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

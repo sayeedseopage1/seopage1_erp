@@ -43,7 +43,7 @@
                     <div class="container">
                         <div class="mb-3">
                             <label for="" class="form-label">Revision Acknowledgement</label>
-                            <select class="form-control height-35 f-14" id="revision_acknowledgement">
+                            <select class="form-control height-35 f-14" id="revision_acknowledgement_deny">
                                 <option value="">--</option>
                                 <option value="task_has_revision_because_requirements_are_not_fulfilled_according_to_my_instructions">Task has revision because requirements are not fulfilled according to my instructions</option>
                                 <option value="task_has_revision_because_i_have_customized_previous_instructions">Task has revision because I have customized previous instructions</option>
@@ -55,18 +55,18 @@
                         @endphp
                         <div class="mb-3">
                             <label for="" class="form-label">Select Sub Tasks</label>
-                            <select class="selectpicker form-control" multiple aria-label="Default select example" data-live-search="true" id="subTask">
+                            <select class="selectpicker form-control" multiple aria-label="Default select example" data-live-search="true" id="subTask_deny">
                                 @foreach($subtasks as $item)
                                     <option value="{{$item->id}}" >{{$item->title}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="mb-3" id="commentContainer" style="display:none">
+                        <div class="mb-3" id="commentContainer_deny" style="display:none">
                             <label for="" class="form-label">Comment</label>
                             <textarea name="comment" id="comment" class="form-control"></textarea>
                             <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                             <script>
-                                CKEDITOR.replace('comment',{
+                                CKEDITOR.replace('comment_deny',{
                                     height:100,
                                 });
                             </script>
@@ -83,50 +83,62 @@
 </form>
 
 <script>
-
-
-
     //    SELECT OPTION CODE
-    const dropdown = document.getElementById("subTask");
-    const commentContainer = document.getElementById("commentContainer");
+    const dropdown_deny = document.getElementById("subTask_deny");
+    const _deny = document.getElementById("commentContainer_deny");
+    dropdown_deny.addEventListener("change", function() {
+        _deny.innerHTML = "";
 
-    dropdown.addEventListener("change", function() {
-        const selectedOptions = Array.from(dropdown.selectedOptions);
-        if (selectedOptions.length > 0) {
-            commentContainer.innerHTML = "";
-            selectedOptions.forEach(option => {
-                const textarea = document.createElement("textarea");
-                textarea.setAttribute("name", `comment_${option.value}`);
-                textarea.setAttribute("placeholder", `Comment for ${option.text}`);
-                commentContainer.appendChild(textarea);
+        const selectedOptions = Array.from(dropdown_deny.selectedOptions);
+        for (const option of selectedOptions) {
+            const textAreaContainer = document.createElement("div");
+            textAreaContainer.classList.add("mb-2");
+
+            const label = document.createElement("label");
+            label.textContent = option.text;
+            textAreaContainer.appendChild(label);
+
+            const textArea = document.createElement("textarea");
+            var id = Math.random().toString(36).substr(2,9);
+            textArea.id = id;
+            textArea.classList.add("myClass_deny");
+            CKEDITOR.replace(textArea, {
+                height: 80
             });
-            commentContainer.style.display = "block";
+            textAreaContainer.appendChild(textArea);
+
+            _deny.appendChild(textAreaContainer);
+        }
+
+        if (selectedOptions.length > 0) {
+            _deny.style.display = "block";
         } else {
-            commentContainer.style.display = "none";
+            _deny.style.display = "none";
         }
     });
 
-
     $('#denyBtn').click(function(e){
         e.preventDefault();
-        $('#denyBtn').attr("disabled", true);
+        $(this).prop("disabled", true);
         $('#denyBtn').html("Processing...");
-        var text3 = CKEDITOR.instances.text3.getData();
-        var subTask = Array.from(document.getElementById("subTask").selectedOptions).map(option => option.value);
-        const elements = document.getElementsByClassName("myClass");
+        var text2 = CKEDITOR.instances.text2.getData();
+        var subTask = Array.from(document.getElementById("subTask_deny").selectedOptions).map(option => option.value);
+        const elements = document.getElementsByClassName("myClass_deny");
         const textAreaData = [];
         for (let i = 0; i < elements.length; i++) {
             const id = elements[i].id;
             var editorData = CKEDITOR.instances[id].getData();
             textAreaData.push(editorData);
         }
+
         var data= {
             '_token': "{{ csrf_token() }}",
-            'text3': text3,
+            'text2': text2,
             'subTask': subTask,
-            'revision_acknowledgement': document.getElementById("revision_acknowledgement").value,
+            'revision_acknowledgement': document.getElementById("revision_acknowledgement_deny").value,
             'comment': textAreaData,
             'task_id': {{$task->id}},
+            'revision_id': '{{$taskRevisionComment->id}}'
         }
         // console.log(data);
         $.ajaxSetup({
@@ -143,7 +155,7 @@
                 // console.log(response.status);
                 if(response.status==200){
                     $('#denyAndContinue').trigger("reset");
-                    $('#denyBtn').attr("disabled", false);
+                    $('#denyBtn').prop("disabled", false);
                     $('#denyBtn').html("Deny & Continue");
                     window.location.reload();
                     toastr.success('Task Accept And Continue Successfully');

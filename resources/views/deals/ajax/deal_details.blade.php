@@ -209,7 +209,7 @@ transform: rotate(45deg);
         background: #119143;
         color: #fff;
     }
-    .nopadding h3 {
+    .col-12 .col-sm-2 nopadding {
         padding: 10px 0;
         text-align: center;
         font-family: Poppins;
@@ -219,11 +219,22 @@ transform: rotate(45deg);
         letter-spacing: normal;
         color: #1d82f5;
     }
+    h3 {
+        padding: 10px 0;
+        text-align: center;
+        font-family: Poppins;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1.56;
+        letter-spacing: normal;
+        color: #1d82f5;
 
-    .nopadding {
+    }
+
+    .col-12 .col-sm-2 nopadding {
         padding: 3px !important;
         margin: 0 !important;
-        width: 20%;
+        /* width: 16%; */
     }
     /* deal_item  */
 
@@ -271,10 +282,10 @@ transform: rotate(45deg);
     .deal_item2 {
         width: 100%;
         min-height: 150px;
-        padding: 26px 0;
+        padding: 0px 0;
         border-radius: 10px;
         background-color: #F3F9FF;
-        height: auto;
+        height: 100%;
     }
 
 
@@ -474,13 +485,13 @@ transform: rotate(45deg);
     /* custom container */
 
     .custom_container{
-      max-width: 1440px;
+      max-width: 1600px;
       /* max-width: 615px; */
       margin: 0 auto;
       display: block;
     }
     @media (min-width: 768px) and (max-width: 1024px) {
-        .nopadding {
+        .col-12 col-sm-2 nopadding {
             padding: 0 !important;
             margin: 0 !important;
             width: 33%;
@@ -525,7 +536,7 @@ transform: rotate(45deg);
         .deal_item2 {
             margin: 5px 0;
         }
-        .nopadding {
+        .col-12 col-sm-2 nopadding {
             padding: 3px !important;
             margin: 0 !important;
             width: 20%;
@@ -642,7 +653,13 @@ ul.fileList {
                <div class="row">
                    <div class="col-md-4">
                        <div class="deal_item">
-                           <h3><i class="fa-solid fa-user-large"></i> Client Name: <span>{{$deal->client_username}}</span> </h3>
+                        @if($deal->client_name == null)
+                           <h3><i class="fa-solid fa-user-large"></i> Client Username: <span>{{$deal->client_username}}</span> </h3>
+                          @else 
+                          <h3><i class="fa-solid fa-user-large"></i> Client Name: <span>{{$deal->client_name}}</span> </h3>
+
+
+                          @endif
                            <h3><i class="fa-solid fa-money-bill-transfer"></i> Converted On: <span>{{$deal->created_at->format('d M, Y')}}</span> <span>({{$deal->created_at->format('h : i A')}})</span> </h3>
                            @if($deal->won_lost == null)
                             <h3><i class="fa-solid fa-hands-bubbles"></i> Deal Won/Lost: <span>N\A</span> </h3>
@@ -662,13 +679,24 @@ ul.fileList {
                    </div>
 
                    <div class="col-md-4 text-center">
-                       <div class="deal_item2">
+                       <div class="deal_item ">
                            <h3>Deal Status</h3><br>
                            @if($deal->won_lost == null)
 
-                           @if($deal->deal_stage == 4)
-                           <a href="#" data-bs-toggle="modal" data-bs-target="#dealaddstagemodal" data-bs-whatever="@mdo" class="btn btn-success wons">Won The Deal</a>
-                           <a href="#" data-bs-toggle="modal" data-bs-target="#lostmodal" data-bs-whatever="@mdo" class="btn btn-danger loss">Lost The Deal</a>
+                           @if($deal->deal_stage == 5)
+                           <div class="row mx-auto">
+                            {{-- @if($deal->authorization_status == 0)
+                            <button class="btn btn-success wons w-40 send_authorization">Request for Authorization</button> --}}
+                            {{-- @elseif($deal->authorization_status == 2)
+                            <button  disabled  data-bs-whatever="@mdo" class="btn btn-warning wons w-40 disabled">Awaiting for approval</button>
+
+                            @else --}}
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#dealaddstagemodal" data-bs-whatever="@mdo" class="btn btn-success wons w-40">Won The Deal</a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#lostmodal" data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The Deal</a>
+                            {{-- @endif --}}
+
+                           </div>
+                          
                            @include('contracts.modals.dealaddstagemodal')
                          @include('contracts.modals.deallostmodal')
                          @else
@@ -700,7 +728,7 @@ ul.fileList {
                        <!-- info  -->
 
                        <div class="row seodeals_item pb-4">
-                           <div class="nopadding">
+                           <div class="col-12 col-sm-2 nopadding">
                                <div class="deal custom-active" data-bs-whatever="@mdo">
                                    <i class="fa-solid fa-clock"></i>  <span>   {{$lead_converted_date}}</span>
                                </div>
@@ -811,10 +839,10 @@ ul.fileList {
 
                            </div>
 
-                           <!-- nopadding  -->
+                           <!-- col-12 col-sm-2 nopadding  -->
 
 
-                           <div class="nopadding">
+                           <div class="col-12 col-sm-2 nopadding">
                                 @if($deal->deal_stage == 0)
                                <a class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
                              <span> Click me to Change Stage</span>
@@ -824,7 +852,7 @@ ul.fileList {
                                @include('contracts.modals.dealqualifymodal2')
 
                                @endif
-                               @elseif($deal->deal_stage == 1 || $deal->deal_stage == 2 || $deal->deal_stage == 3 || $deal->deal_stage == 4)
+                               @elseif($deal->deal_stage == 1 || $deal->deal_stage == 2 || $deal->deal_stage == 3 || $deal->deal_stage == 4 || $deal->deal_stage == 5)
                                <?php
 
 
@@ -951,15 +979,15 @@ ul.fileList {
                                @endif
                            </div>
 
-                           <!-- nopadding  -->
+                           <!-- col-12 col-sm-2 nopadding  -->
 
-                           <div class="nopadding">
+                           <div class="col-12 col-sm-2 nopadding">
                                @if($deal->deal_stage == 1)
                                <a class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
                                    Click me to Change Stage
                                </a>
                                   @include('contracts.modals.dealqualifymodal2')
-                                  @elseif($deal->deal_stage == 2  || $deal->deal_stage == 3 || $deal->deal_stage == 4)
+                                  @elseif($deal->deal_stage == 2  || $deal->deal_stage == 3 || $deal->deal_stage == 4 || $deal->deal_stage == 5)
                                   <?php
 
 
@@ -1083,16 +1111,16 @@ ul.fileList {
                                @endif
                            </div>
 
-                           <!-- nopadding  -->
+                           <!-- col-12 col-sm-2 nopadding  -->
 
-                           <div class="nopadding">
+                           <div class="col-12 col-sm-2 nopadding">
                              @if($deal->deal_stage == 2)
                              <a class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
                                  Click me to Change Stage
                              </a>
                                 @include('contracts.modals.dealqualifymodal2')
 
-                                @elseif($deal->deal_stage == 3  || $deal->deal_stage == 4)
+                                @elseif($deal->deal_stage == 3  || $deal->deal_stage == 4 || $deal->deal_stage == 5)
                                 <?php
 
 
@@ -1223,17 +1251,17 @@ ul.fileList {
                            </div>
 
 
-                           <!-- nopadding  -->
+                           <!-- col-12 col-sm-2 nopadding  -->
 
 
-                           <div class="nopadding">
-                             @if($deal->deal_stage == 3)
+                           <div class="col-12 col-sm-2 nopadding">
+                             @if($deal->deal_stage == 3 )
                              <a class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
                                  Click me to Change Stage
                              </a>
                                 @include('contracts.modals.dealqualifymodal2')
 
-                                @elseif($deal->deal_stage == 4)
+                                @elseif($deal->deal_stage == 4 || $deal->deal_stage == 5 )
                                 <?php
 
 
@@ -1360,6 +1388,140 @@ ul.fileList {
                                @endif
 
                            </div>
+                           <div class="col-12 col-sm-2 nopadding">
+                            @if($deal->deal_stage == 4)
+                            <a class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2" data-bs-whatever="@mdo">
+                                Click me to Change Stage
+                            </a>
+                               @include('contracts.modals.dealqualifymodal2')
+
+                               @elseif($deal->deal_stage == 5)
+                               <?php
+
+
+
+                               $lead_converted_to_mile_def= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',5)->first();
+                               $lead_converted_to_mile= $lead_converted_to_mile_def->created_at->diffForHumans();
+
+
+
+
+                                ?>
+
+
+                               <div class="deal custom-active" data-bs-whatever="@mdo">
+                                   <i class="fa-solid fa-clock"></i>  <span> {{$lead_converted_to_mile}}</span>
+                               </div>
+                               @else
+                               <div class="deal" data-bs-whatever="@mdo">
+                                    <span>Click me to Change Stage</span>
+                               </div>
+                            @endif
+                              <h3>Milestone Breakdown</h3>
+                              <div class="custom_scroling_seo">
+                                <?php
+                                 $milestone_breakdown= App\Models\DealStageChange::where('deal_id',$deal->short_code)->where('deal_stage_id',5)->orderBy('id','desc')->get();
+                                 ?>
+                                @foreach($milestone_breakdown as $mile)
+                                  <div class="details-seopage1 mb-2">
+                                      <p>{!!$mile->comments!!}</p>
+                                      <?php
+                                      $milestr = $mile->attach;
+
+
+                                         // Create Array Out of the String, The comma ',' is the delimiter
+                                         // This would output
+                                         //       [ 1 => 1, 2 => 2, 3 => '', 4 => 4, 5 => 5, 6 => 6 ]
+                                         $mileexplodedStr = explode(',', $milestr);
+
+                                         // Filter Array And Remove The empty element which in this case
+                                         //    3 => ''
+                                         $milefilteredArray = $mileexplodedStr;
+                                         //dd($filteredArray);
+
+                                       ?>
+
+                                      <div class="seopage1_attach">
+                                        @foreach($milefilteredArray as $data)
+                                        @if($data != null)
+                                          <a href="/storage/deal-files/{{$data}}" title="{{$data}}" target="_blank"><i class="fa fa-paperclip"></i> {{Str::limit($data,20)}}  </a>
+
+
+
+                                          @endif
+
+                                          @endforeach
+                                      </div>
+
+                                      <div class="sbinfo">
+                                          <ul>
+                                            <li>{{$mile->user->name}}</li>
+                                            <li>{{$mile->created_at->toFormattedDateString()}}</li>
+                                            <li>{{$mile->created_at->format('h : i A')}}</li>
+                                          </ul>
+                                      </div>
+                                  </div>
+                                  @endforeach
+
+                              </div>
+                              @if($deal->deal_stage == 5)
+                              <div class="dealstage_comments_box mt-2">
+
+                                  <div class="comments-section">
+                                      <div class="row">
+
+                                          <div class="comment-add">
+                                              <div class="col-md-12">
+                                                <form action="{{route('post-comment')}}" method="POST" enctype="multipart/form-data">
+                                                  @csrf
+                                                  <input type="hidden" name="deal_stage_id" value="5">
+                                                  <input type="hidden" name="deal_id" value="{{$deal->short_code}}">
+                                                      <div class="form-floating mb-3">
+                                                          <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here" id="floatingTextarea2" style="height: auto"></textarea>
+
+                                                      </div>
+
+                                                      <div class="wrapper">
+
+                                                        <div class="files">
+
+                                                            <span class="btn btn-default btn-file">
+                                                                <i class="fa fa-paperclip"></i>
+                                                                <input type="file" name="attach[]"  multiple />
+                                                            </span>
+
+                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+
+                                                            <br />
+                                                            <ul class="fileList"></ul>
+
+                                                        </div>
+
+                                                      </div>
+
+                                                      <!-- <div class="wrapper">
+                                                          <input type="file" id="file-input" name="attach[]" multiple>
+                                                          <label for="file-input">
+
+                                                            <i class="fa fa-paperclip fa-2x"></i>
+                                                            <span></span>
+                                                          </label>
+
+                                                          <i class="fa fa-times-circle remove"></i>
+                                                          <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                        </div> -->
+
+
+
+                                                  </form>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              @endif
+
+                          </div>
                        </div>
 
                        <!-- details  -->
@@ -1384,15 +1546,7 @@ ul.fileList {
 @endsection
 
 
-<script type="text/javascript">
-Swal.fire({
-  title: 'Error!',
-  text: 'Do you want to continue',
-  icon: 'error',
-  confirmButtonText: 'Cool'
-})
 
-</script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.js" charset="utf-8"></script>
 
@@ -1529,6 +1683,7 @@ Swal.fire({
  // });
  })()
  </script>
+ 
 
 
 
@@ -1536,3 +1691,5 @@ Swal.fire({
 
 
 @endpush
+
+

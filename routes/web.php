@@ -704,7 +704,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('tasks/accept-continue', [TaskController::class, 'acceptContinue'])->name('tasks.accept_continue');
     Route::post('tasks/deny-continue', [TaskController::class, 'denyContinue'])->name('tasks.deny_continue');
     Route::post('tasks/revision-reason', [TaskController::class, 'revisionReason'])->name('tasks.revision_reason');
-
+    Route::post('tesks/revision/accept-or-revision-by-developer', [TaskController::class, 'accept_or_revision_by_developer'])->name('accept_or_revision_by_developer');
     Route::group(
         ['prefix' => 'tasks'],
         function () {
@@ -1148,8 +1148,7 @@ Route::get('/get-due-date/{deliverableId}', [ProjectController::class, 'delivera
 Route::post('/projects/time-extension', [ProjectController::class, 'timeExtension'])->name('project-time-extension');
 Route::get('/projects/download/{id}', [ProjectController::class, 'download'])->name('projects.download');
 Route::post('projects/sign/{id}', [ProjectController::class, 'sign'])->name('projects.sign');
-Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
-Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');
+
 Route::post('/projects/public/sign/{id}', [PublicUrlController::class, 'projectSign'])->name('front.project.sign');
 Route::get('/projects/public/download/{id}', [PublicUrlController::class, 'projectDownload'])->name('front.project.download');
 
@@ -1218,9 +1217,10 @@ Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'Ca
 
 Route::get('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
 
-Route::get('get-users', [InsightsController::class, 'getusers'])->name('get-users');
+Route::any('get-users', [InsightsController::class, 'getusers'])->name('get-users');
 Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams');
-
+Route::get('get-users/all', [InsightsController::class, 'get_users_all'])->name('get_users_all');
+Route::get('get-user/{id}', [InsightsController::class, 'get_users_by_id'])->name('get_users_by_id');
 
 //Team Routes
 Route::post('team/apply-quick-action', [Seopage1TeamController::class, 'applyQuickAction'])->name('teams.apply_quick_action');
@@ -1233,3 +1233,5 @@ Route::post('/get-employees-by-department', [Seopage1TeamController::class, 'get
 Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'getEmployeesByParentTeam'])->name('getEmployeesByParentTeam');
 //KPI Settings
 Route::resource('kpi-settings', KpiSettingController::class);
+Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
+Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');

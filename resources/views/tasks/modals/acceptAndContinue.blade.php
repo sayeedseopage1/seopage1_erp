@@ -83,9 +83,6 @@
 </form>
 
 <script>
-
-
-
 //    SELECT OPTION CODE
     const dropdown = document.getElementById("subTask");
     const commentContainer = document.getElementById("commentContainer");
@@ -141,6 +138,7 @@
         'revision_acknowledgement': document.getElementById("revision_acknowledgement").value,
         'comment': textAreaData,
         'task_id': {{$task->id}},
+        'revision_id': '{{$taskRevisionComment->id}}'
     }
     // console.log(data);
     $.ajaxSetup({
@@ -148,9 +146,15 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    if ($('#accept').length) {
+        var url = '{{route("accept_or_revision_by_developer")}}';
+    } else {
+        var url = "{{route('tasks.accept_continue')}}";
+    }
     $.ajax({
         type: "POST",
-        url: "{{route('tasks.accept_continue')}}",
+        url: url,
         data: data,
         dataType: "json",
         success: function (response) {

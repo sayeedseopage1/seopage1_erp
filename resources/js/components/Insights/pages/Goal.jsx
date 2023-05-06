@@ -8,8 +8,18 @@ import StackedBarChart from '../components/Graph/StackedBarChart';
 import convertNumberToUnits from '../utils/convertNumberToUnits';
 import { relativeTime } from '../utils/relativeTime';
 import RelativeTimePeriod from '../components/RelativeTimePeriod';
-import DataTable from '../components/DataTable';
+import DataTable from '../ui/DataTable';
+import { useDealsState } from '../hooks/useDealsState';
+import { useGoals } from '../hooks/useGoals';
+import { useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
+import { useUsers } from '../hooks/useUsers';
 
+import { openGoalFormModal } from '../services/slices/goalFormModalSlice';
+import { useDispatch } from 'react-redux';
+import GoalSummaryTable from '../components/GoalSummaryTable';
+import { DataTableColumns } from '../components/DataTableColumns';
+import GoalStackedBarChart from '../components/Graph/GoalStackedBarChart';
 
 // convert to unit
 const numberToUnits = (value,decimal= 1) => {
@@ -21,18 +31,90 @@ const numberToUnits = (value,decimal= 1) => {
 const Goal = () => {
     const [selectedPeriod, setSelectedPeriod] = React.useState('Today');
     const [filter, setFilterValue] = React.useState('');
+    const [summarizedData, setSummarizedData] = React.useState([]); 
+    const [goal, setGoal] = React.useState(null);
+    const {deals, getDeals, getSummary} = useDealsState(); 
+    const [dealsData, setDealsData] = React.useState([]);
+    const [isLoading , setIsLoading] = React.useState(true);
+    const {goals, getGoalById, goalsIsLoading} = useGoals();
+    const [activeTable, setActiveTable] = React.useState('activities');
+    const params = useParams();
+    const {users} = useUsers();
+    const usersData = users && users.users;
+    const [isSummarizing, setIsSummarizing] = React.useState(false);
+
+    const dispatch = useDispatch();
 
     const handleRelativeTimePeriod =(value) => {
         setSelectedPeriod(value);
         relativeTime(value, setFilterValue);
     }
 
-    console.log(filter)
+
+    // get goal data
+    React.useEffect(()=> {
+        if(usersData && usersData.length > 0){
+            if(goalsIsLoading) return <div>Loading...</div>
+            let goal = getGoalById(Number(params.goalId));
+            if(!goal) return;
+            let user = _.find(usersData, {id: goal?.added_by});
+            setGoal({
+                ...goal,
+                user: user
+            });
+        }
+    }, [params.goalId, usersData, goalsIsLoading]);
+
+
+    // get deals data
+    React.useEffect(() => {
+        if(deals && deals.length > 0 && goal){
+            let _deals = getDeals(deals, goal.startDate, goal.endDate);
+            setDealsData([..._deals]);
+            setIsLoading(false);
+        }
+         
+    }, [goal, params.goalId]);
+
+
+    React.useEffect (() => {
+        setIsSummarizing(true);
+        if(deals && deals.length > 0 && goal){
+            let sum = getSummary(deals, goal);
+            if(sum) {
+                setSummarizedData([...sum]);
+                setIsSummarizing(false);
+            } else {
+                setIsSummarizing(false);
+            }
+        }
+
+    }, [goal])
+
+
+
+    const handleOpenGoalFormModal = () => {
+        dispatch(openGoalFormModal({
+            data: goal,
+            mode: 'edit',
+            entry: goal.entry,
+            entryType: goal.entryType,
+        }))
+    }
+    
+
+
+    if(!goal) return  (
+        <div style={{display: 'flex', alignItems: 'center', "justifyContent": 'center', width: "100%", height: '100vh'}}>
+            <div>Loading...</div>
+        </div>
+    )
+
     return(
         <div className="cnx__ins_dashboard">
             {/* navbar */}
             <div className="cnx__ins_dashboard_navbar">
-                <EditAbleBox text="Deals added" onSave={() => {}} />
+                <EditAbleBox text={`${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`} onSave={() => {}} />
                 <div className='cnx__ins_dashboard_navbar_btn_group' style={{border: 0, padding:0}}>
                     {/* user */}
                     <div className='cnx__period_filter'>
@@ -112,18 +194,28 @@ const Goal = () => {
                             Goal Details
                         </h4>
 
-                        <Button variant='tertiary'>
+                        <Button variant='tertiary' onClick={handleOpenGoalFormModal}>
                             <i className='fa-solid fa-pencil'/>
                         </Button>
 
                         <div className='filter_options_line'>
-                            <span>Abu sayeed</span>
-                            <span>Deals added</span>
+                            <span>{ goal?.name || goal?.team_name }</span>
+                            <span>
+                                {goal.entry} {goal.entryType}
+                            </span>
                             <span>Pipeline</span>
-                            <span>Monthly</span>
-                            <span>04/01/2023</span>
-                            <span>No end date</span>
-                            <span>500 deals</span>
+                            <span>
+                                {goal.frequency}
+                            </span>
+                            <span>
+                                {dayjs(goal.startDate).format('MMM DD, YYYY')}
+                            </span>
+                            <span>
+                                {goal.endDate ? dayjs(goal.endDate).format('MMM DD, YYYY') : 'No end date'}
+                            </span>
+                            <span>
+                                {goal.trackingType === "value" ? numberToUnits(Number(goal.trackingValue)) : goal.trackingValue} deals
+                            </span>
                         </div>
 
                         <div>
@@ -139,14 +231,14 @@ const Goal = () => {
                             <Tooltip text="Assignee">
                                 <div className='cnx__ins_details_item'>
                                     <i className='fa-regular fa-user'/>
-                                    Abu Sayeed
+                                    <span>{ goal?.name || goal?.team_name }</span>
                                 </div>
                             </Tooltip>
                             
                            <Tooltip text='Goal type'>
                              <div className='cnx__ins_details_item'>
                                 <Icon type="Deal" />
-                                Deals Added
+                                {goal.entry} {goal.entryType}
                             </div>
                            </Tooltip>
 
@@ -162,21 +254,21 @@ const Goal = () => {
                             <Tooltip text="Goal Frequency">
                                 <div className='cnx__ins_details_item'>
                                     <Icon type="Activity" />
-                                    Monthly
+                                    {goal.frequency}
                                 </div>
                             </Tooltip>
 
                             <Tooltip text="Goal duration">
                                 <div className='cnx__ins_details_item'>
                                     <i className="fa-regular fa-clock"/>
-                                    04/01/2023 - No end date
+                                    {dayjs(goal.startDate).format('MMM DD, YYYY')} - {goal.endDate ? dayjs(goal.endDate).format('MMM DD, YYYY') : 'No end date'}
                                 </div>
                             </Tooltip>
 
                             <Tooltip text='Expected outcome'>
                                 <div className='cnx__ins_details_item'>
                                     <Icon type="Goal" />
-                                    500 Deals
+                                    {goal.trackingType === "value" ? numberToUnits(Number(goal.trackingValue)) : goal.trackingValue} Deals 
                                 </div>
                             </Tooltip>
                         </div>
@@ -240,28 +332,17 @@ const Goal = () => {
                                 />
                             </div>
                             <div className='__graph'>
-                                <StackedBarChart
+                                <GoalStackedBarChart
                                     footer={false}
-                                    XAxisLabel="name"
+                                    XAxisLabel="title"
+                                    colors={["#166901", "#ddd"]}
                                     leftSideLabel="Number of deals"
-                                    barDataKey={["open", "won"]}
+                                    barDataKey={["dealAdded", "target"]}
                                     offset={-5}
+                                    yDomain={ [0, dataMax => (dataMax + Math.ceil(dataMax * 0.1))]}
                                     labelListFormatter={value => numberToUnits(value, 0)}
                                     yAxisTickFormate={value => numberToUnits(value, 0)}
-                                    data = {[ 
-                                        { name: 'Jan', open: 0, won: 0},
-                                        { name: 'Feb', open: 0, won: 0 },
-                                        { name: 'Mar', open: 0, won: 0 },
-                                        { name: 'Apr', open: 119, won: 100 },
-                                        { name: 'May', open: 119, won: 100 },
-                                        { name: 'Jun', open: 119, won: 100 },
-                                        { name: 'Jul', open: 119, won: 100 },
-                                        { name: 'Aug', open: 119, won: 100 },
-                                        { name: 'Sep', open: 119, won: 100 },
-                                        { name: 'Oct', open: 119, won: 100 },
-                                        { name: 'Nov', open: 119, won: 100 },
-                                        { name: 'Dec', open: 119, won: 100 },
-                                    ]} 
+                                    data = {[...summarizedData]} 
                                 />
                             </div>
                         </div> 
@@ -278,11 +359,15 @@ const Goal = () => {
                     <div className="cnx__ins_graph_container_header">
                         {/* graph view tab */}
                         <div className='cnx__ins_graph_views'>
-                            <Button className='cnx__ins_table_view_button active'>
+                            <Button
+                                onClick={() => setActiveTable('activities')}
+                                className={`cnx__ins_table_view_button ${activeTable === 'activities' ? 'active': ""}`}>
                                 Activities
                             </Button>
 
-                            <Button className='cnx__ins_table_view_button'>
+                            <Button 
+                                onClick={() => setActiveTable('summary')}
+                                className={`cnx__ins_table_view_button ${activeTable === 'summary' ? 'active': ""}`}>
                                 Summary
                             </Button>
                         </div>
@@ -310,11 +395,22 @@ const Goal = () => {
                     </div>
                     {/* end header */}
 
-                    <div className="cnx_divider" />
+                    
 
                     {/* graph table */}
                     <div className='cnx__ins_table'>
-                        <DataTable />
+                       {activeTable === 'activities' && (
+                            <DataTable 
+                                data={dealsData} 
+                                defaultColumns={DataTableColumns}
+                                isLoading={goalsIsLoading || isLoading} 
+                            />
+                        )}
+                        
+                    { 
+                        // activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
+                         activeTable === 'summary' && <GoalSummaryTable data={summarizedData} isLoading={isSummarizing}/>
+                    }
                     </div>
                     {/* end graph table */}
                     

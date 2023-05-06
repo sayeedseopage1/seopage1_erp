@@ -93,7 +93,7 @@ $projectArchived = $project->trashed();
                             <x-tab :href="route('projects.show', $project->id).'?tab=timelogs'" :text="__('app.menu.timeLogs')" class="timelogs" ajax="false" />
                         </li>
                         <li>
-                            <x-tab :href="route('projects.show', $project->id).'?tab=activity_log'" :text="__('Activity Log')" class="activity_log"/>
+                            <x-tab :href="route('projects.show', $project->id).'?tab=activity_log'" :text="__('Activity Log')" class="activity_log" ajax="false"/>
                         </li>
                     @endif
 
