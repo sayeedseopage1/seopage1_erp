@@ -10,6 +10,7 @@ export const useTeams = () => {
         isError: isTeamsError,
         isLoading: isTeamsLoading,
     } = useGetTeamsQuery({
+        refetchOnMountOrArgChange: true,
         skip: teams.length > 0,
     });
 
@@ -19,7 +20,7 @@ export const useTeams = () => {
         if (data) {
             setTeams(data);
         }
-    }, [data]);
+    }, [data, isTeamsFetching]);
 
 
     return {

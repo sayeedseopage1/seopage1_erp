@@ -11,6 +11,7 @@ import RelativeTimePeriod from '../components/RelativeTimePeriod';
 import DataTable from '../ui/DataTable';
 import { useDealsState } from '../hooks/useDealsState';
 import { useGoals } from '../hooks/useGoals';
+import { useTeams } from '../hooks/useTeams';
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { useUsers } from '../hooks/useUsers';
@@ -36,10 +37,11 @@ const Goal = () => {
     const {deals, getDeals, getSummary} = useDealsState(); 
     const [dealsData, setDealsData] = React.useState([]);
     const [isLoading , setIsLoading] = React.useState(true);
-    const {goals, getGoalById, goalsIsLoading} = useGoals();
+    const {goals, getGoalById, goalsIsLoading, goalStateStatus} = useGoals();
     const [activeTable, setActiveTable] = React.useState('activities');
     const params = useParams();
     const {users} = useUsers();
+    const {teams} = useTeams();
     const usersData = users && users.users;
     const [isSummarizing, setIsSummarizing] = React.useState(false);
 
@@ -51,25 +53,51 @@ const Goal = () => {
     }
 
 
-    // get goal data
-    React.useEffect(()=> {
-        if(usersData && usersData.length > 0){
-            if(goalsIsLoading) return <div>Loading...</div>
+    const getGoal = React.useCallback(() => {
+        if(goals && goals.length > 0){
             let goal = getGoalById(Number(params.goalId));
             if(!goal) return;
             let user = _.find(usersData, {id: goal?.added_by});
+            let assignedUser = _.find(usersData, {id: goal?.user_id});
+            let team = _.find(teams, {id: goal?.team_id});
             setGoal({
                 ...goal,
-                user: user
+                user: user,
+                assignedUser: assignedUser,
+                team: team
             });
         }
-    }, [params.goalId, usersData, goalsIsLoading]);
+    }, [goals, params.goalId , usersData, teams, goalStateStatus, dispatch]);
+
+
+    React.useEffect(() => {
+        getGoal();
+    }, [getGoal])
+
+
+    // // get goal data
+    // React.useEffect(()=> {
+    //     if(usersData && usersData.length > 0){
+    //         if(goalsIsLoading) return <div>Loading...</div>
+    //         let goal = getGoalById(Number(params.goalId));
+    //         if(!goal) return;
+    //         let user = _.find(usersData, {id: goal?.added_by});
+    //         let assignedUser = _.find(usersData, {id: goal?.user_id});
+    //         let team = _.find(teams, {id: goal?.team_id});
+    //         setGoal({
+    //             ...goal,
+    //             user: user,
+    //             assignedUser: assignedUser,
+    //             team: team
+    //         });
+    //     }
+    // }, [params.goalId, usersData, goalsIsLoading, teams]);
 
 
     // get deals data
     React.useEffect(() => {
         if(deals && deals.length > 0 && goal){
-            let _deals = getDeals(deals, goal.startDate, goal.endDate);
+            let _deals = getDeals(deals, goal, goal.startDate, goal.endDate);
             setDealsData([..._deals]);
             setIsLoading(false);
         }
@@ -90,7 +118,6 @@ const Goal = () => {
         }
 
     }, [goal])
-
 
 
     const handleOpenGoalFormModal = () => {
@@ -114,7 +141,6 @@ const Goal = () => {
         <div className="cnx__ins_dashboard">
             {/* navbar */}
             <div className="cnx__ins_dashboard_navbar">
-                {console.log(`${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`)}
                 <EditAbleBox 
                     text={`${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`} 
                     onSave={() => {}} 

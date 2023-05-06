@@ -50,10 +50,11 @@ const DataTable = ({data, isLoading, defaultColumns}) => {
 
     React.useEffect(()=> {
       if(!data) return;
-       let t = Math.ceil(data.length / numberOfRowPerPage)
-       setCurrentPageData([...data]);
+       const sorted = sortedData(data, sortConfig);
+       let t = Math.ceil(sorted.length / numberOfRowPerPage)
+       setCurrentPageData([...sorted]);
        setTotalPage(t);
-    }, [data])
+    }, [data, sortConfig])
 
 
     // config sort

@@ -84,6 +84,14 @@ export const reports = [
 ]
 
 
+export const stage = [
+        "Contact Mode",
+        "Qualified",
+        "Requirements Defined",
+        "Proposal Made",
+        "Negotiations Started",
+        "Milestone breakdown",
+    ]
 
 
 // relative time period
