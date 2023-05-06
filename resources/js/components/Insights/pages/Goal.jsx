@@ -114,7 +114,11 @@ const Goal = () => {
         <div className="cnx__ins_dashboard">
             {/* navbar */}
             <div className="cnx__ins_dashboard_navbar">
-                <EditAbleBox text={`${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`} onSave={() => {}} />
+                {console.log(`${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`)}
+                <EditAbleBox 
+                    text={`${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`} 
+                    onSave={() => {}} 
+                />
                 <div className='cnx__ins_dashboard_navbar_btn_group' style={{border: 0, padding:0}}>
                     {/* user */}
                     <div className='cnx__period_filter'>

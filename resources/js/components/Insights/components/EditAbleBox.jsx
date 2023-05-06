@@ -14,6 +14,10 @@ const EditAbleBox = ({text, onSave}) => {
 
     }, [wrapperRef, value]);
 
+    React.useEffect(() => {
+        setValue(text);
+    }, [text])
+
 
     const onBlur = (e) => {
         if (e.target.value !== text) {
