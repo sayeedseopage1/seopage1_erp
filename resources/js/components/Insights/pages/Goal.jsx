@@ -11,7 +11,8 @@ import RelativeTimePeriod from '../components/RelativeTimePeriod';
 import DataTable from '../ui/DataTable';
 import { useDealsState } from '../hooks/useDealsState';
 import { useGoals } from '../hooks/useGoals';
-import { useParams } from 'react-router-dom';
+import { useTeams } from '../hooks/useTeams';
+import { useLocation, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { useUsers } from '../hooks/useUsers';
 
@@ -20,6 +21,7 @@ import { useDispatch } from 'react-redux';
 import GoalSummaryTable from '../components/GoalSummaryTable';
 import { DataTableColumns } from '../components/DataTableColumns';
 import GoalStackedBarChart from '../components/Graph/GoalStackedBarChart';
+import { stage } from '../utils/constants';
 
 // convert to unit
 const numberToUnits = (value,decimal= 1) => {
@@ -36,10 +38,12 @@ const Goal = () => {
     const {deals, getDeals, getSummary} = useDealsState(); 
     const [dealsData, setDealsData] = React.useState([]);
     const [isLoading , setIsLoading] = React.useState(true);
-    const {goals, getGoalById, goalsIsLoading} = useGoals();
+    const {goals, getGoalById, goalsIsLoading, goalStateStatus} = useGoals();
     const [activeTable, setActiveTable] = React.useState('activities');
     const params = useParams();
+    const location = useLocation();
     const {users} = useUsers();
+    const {teams} = useTeams();
     const usersData = users && users.users;
     const [isSummarizing, setIsSummarizing] = React.useState(false);
 
@@ -51,30 +55,56 @@ const Goal = () => {
     }
 
 
-    // get goal data
+    // const getGoal = React.useCallback(() => {
+    //     if(goals && goals.length > 0){
+    //         let goal = getGoalById(Number(params.goalId));
+    //         if(!goal) return;
+    //         let user = _.find(usersData, {id: goal?.added_by});
+    //         let assignedUser = _.find(usersData, {id: goal?.user_id});
+    //         let team = _.find(teams, {id: goal?.team_id});
+    //         setGoal({
+    //             ...goal,
+    //             user: user,
+    //             assignedUser: assignedUser,
+    //             team: team
+    //         });
+    //     }
+    // }, [goals, params.goalId , usersData, teams, goalStateStatus, dispatch]);
+
+
+    // React.useEffect(() => {
+    //     getGoal();
+    // }, [getGoal])
+
+
+    // // get goal data
     React.useEffect(()=> {
         if(usersData && usersData.length > 0){
             if(goalsIsLoading) return <div>Loading...</div>
             let goal = getGoalById(Number(params.goalId));
             if(!goal) return;
             let user = _.find(usersData, {id: goal?.added_by});
+            let assignedUser = _.find(usersData, {id: Number(goal?.user_id)});
+            let team = _.find(teams, {id: goal?.team_id});
             setGoal({
                 ...goal,
-                user: user
+                user: user,
+                assignedUser: assignedUser,
+                team: team
             });
         }
-    }, [params.goalId, usersData, goalsIsLoading]);
+    }, [params.goalId, goals, usersData, goalsIsLoading, teams, goalStateStatus, location]);
 
 
     // get deals data
     React.useEffect(() => {
         if(deals && deals.length > 0 && goal){
-            let _deals = getDeals(deals, goal.startDate, goal.endDate);
+            let _deals = getDeals(deals, goal, goal.startDate, goal.endDate);
             setDealsData([..._deals]);
             setIsLoading(false);
         }
          
-    }, [goal, params.goalId]);
+    }, [goal, location, params.goalId]);
 
 
     React.useEffect (() => {
@@ -90,7 +120,6 @@ const Goal = () => {
         }
 
     }, [goal])
-
 
 
     const handleOpenGoalFormModal = () => {
@@ -114,7 +143,10 @@ const Goal = () => {
         <div className="cnx__ins_dashboard">
             {/* navbar */}
             <div className="cnx__ins_dashboard_navbar">
-                <EditAbleBox text={`${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`} onSave={() => {}} />
+                <EditAbleBox 
+                    text={`${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`} 
+                    onSave={() => {}} 
+                />
                 <div className='cnx__ins_dashboard_navbar_btn_group' style={{border: 0, padding:0}}>
                     {/* user */}
                     <div className='cnx__period_filter'>
@@ -245,7 +277,7 @@ const Goal = () => {
                             <Tooltip text="Pipeline">
                                 <div className='cnx__ins_details_item'>
                                     <i className="fa-solid fa-chart-simple" />
-                                    Pipeline
+                                    Pipeline{goal?.entryType === 'Progressed' ? ', ' + goal?.qualified :''}
                                 </div>
                             </Tooltip>
                         </div>

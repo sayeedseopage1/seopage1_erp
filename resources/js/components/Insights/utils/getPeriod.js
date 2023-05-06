@@ -15,13 +15,14 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency, defaultValu
             const yearStart = dayjs(startDate).startOf("year");
             const yearEnd = dayjs(endDate).endOf("year");
             let current = yearStart;
-
+            let index = 0;
             while (current <= yearEnd) {
                 years.push({
                     title: `${current.format("YYYY")}`,
                     start: dayjs(startDate).format(),
                     end: dayjs(endDate).format(),
-                    value: defaultValue
+                    value: defaultValue,
+                    index: index++
                 });
                 current = dayjs(current).add(1, "year");
             }

@@ -159,6 +159,7 @@ class InsightsController extends AccountBaseController
 
         }
         $recurring_data= GoalRecurring::where('goal_id',$goal->id)->get();
+        //dd($goal, $$recurring);
         return response()->json(["goal" => $goal, "recurring"=> $recurring_data]);
 
 
@@ -237,31 +238,38 @@ class InsightsController extends AccountBaseController
 
         }
         $recurring_data= GoalRecurring::where('goal_id',$goal->id)->get();
-        return response()->json(["goal" => $goal, "recurring"=> $recurring]);
+
+        return response()->json(["goal" => $goal, "recurring"=> $recurring_data]);
+    } else {
+        return response()->json(["goal" => $goal]);
+
     }
 }
 
     public function getGoal($id)
     {
-        if(Auth::user()->role_id == 1)
+        $user= User::where('id',$id)->first();
+        if($user->role_id == 1)
         {
             $goal = GoalSetting::all();
             $goal_recurring= GoalRecurring::all();
+           
             return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-        }else 
+        }elseif($user->role_id != 1)
         {
-            $user_id = Auth::id();
-                $team = Seopage1Team::whereRaw("FIND_IN_SET($user_id, members) > 0")->first();
+           
+                $team = Seopage1Team::whereRaw("FIND_IN_SET($user, members) > 0")->first();
                 if ($team) {
                     $team_id = $team->id;
-                    $goal= GoalSetting::where('team_id',$team_id)->get();
+                    $goal= GoalSetting::where('team_id',$team_id)->orWhere('user_id',$user->id)->get();
                     $goal_recurring= GoalRecurring::all();
                     return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
 
                   
-                } else {
-                    return response()->json("You don't have permission to view this page"); 
-                }
+                } 
+        }
+        else {
+            return response()->json("You don't have permission to view this page"); 
         }
        
         

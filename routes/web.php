@@ -854,6 +854,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         });
     Route::resource('invoices', InvoiceController::class);
 
+    //kpi settings 
+    //KPI Settings
+    Route::resource('kpi-settings', KpiSettingController::class);
+
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
     Route::get('estimates/download/{id}', [EstimateController::class, 'download'])->name('estimates.download');
@@ -1083,7 +1087,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     // Update app
     Route::get('/insights/deals', [InsightsController::class,'DealConversion'])->name('insights-deals');
-    Route::get('/insights/goals/get', [InsightsController::class,'getGoal'])->name('insights-goals-get');
+    Route::get('/insights/goals/get/{id}', [InsightsController::class,'getGoal'])->name('insights-goals-get');
     Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
     Route::get('update-settings/install', [UpdateAppController::class, 'install'])->name('update-settings.install');
@@ -1095,7 +1099,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/insights/{any}', [InsightsController::class,'index'])->where('any', '.*');
     Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
+    Route::post('/insights/goals/edit/{id}', [InsightsController::class,'editGoal'])->name('insights/goals/edit');
     Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
+   
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
 
 
@@ -1231,7 +1237,6 @@ Route::resource('teams', Seopage1TeamController::class);
 Route::post('/get-employees-by-department', [Seopage1TeamController::class, 'getEmployeesByDepartment'])->name('getEmployeesByDepartment');
 
 Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'getEmployeesByParentTeam'])->name('getEmployeesByParentTeam');
-//KPI Settings
-Route::resource('kpi-settings', KpiSettingController::class);
+
 Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
 Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');

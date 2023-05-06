@@ -10,7 +10,7 @@ import { Icon } from '../utils/Icon';
 const DataTableContext = React.createContext();
 const ContextProvider = ({children}) => {
     const [activeColumns, setActiveColumns] = React.useState([]);
-    const [sortConfig, setSortConfig] = React.useState({key: 'id', direction: 'desc'});
+    const [sortConfig, setSortConfig] = React.useState({key: 'id', direction: 'asc'});
 
     
 
@@ -50,10 +50,11 @@ const DataTable = ({data, isLoading, defaultColumns}) => {
 
     React.useEffect(()=> {
       if(!data) return;
-       let t = Math.ceil(data.length / numberOfRowPerPage)
-       setCurrentPageData([...data]);
+       const sorted = sortedData(data, sortConfig);
+       let t = Math.ceil(sorted.length / numberOfRowPerPage)
+       setCurrentPageData([...sorted]);
        setTotalPage(t);
-    }, [data])
+    }, [data, sortConfig])
 
 
     // config sort
