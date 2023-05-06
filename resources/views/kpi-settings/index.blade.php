@@ -88,11 +88,11 @@
             <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
                 <h3 class="text-center  border-1 shadow-sm mx-auto p-3 rounded text-uppercase" style="width: fit-content;">Base Point Distribution</h3>
                 <br>
-                <form id="save-kpi-settings" action="{{route('kpi-settings.update',$kpi->id)}}" method="PUT">
+                <form id="save-kpi-settings" action="{{route('kpi-settings.update',$kpi->id )}}" method="PUT">
                     @csrf
                     <input type="hidden" name="id" value="{{$kpi->id}}">
                     <div class="form-group row">
-                      <label for="inputPassword" class="col-sm-4 col-form-label">1. The bidder will get:</label>
+                      <label for="inputPassword" class="col-sm-4 col-form-label">1. The Bidder will get:</label>
                       <div class="col-sm-8 d-flex">
                         <input class="form-control height-35 f-14" type="number" name="the_bidder" id="the_bidder"  value="{{$kpi->the_bidder}}" class="form-control"  placeholder="Percentage of points for bidder">
                           <label class="mt-2 mx-1">%</label>

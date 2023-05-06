@@ -854,6 +854,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         });
     Route::resource('invoices', InvoiceController::class);
 
+    //kpi settings 
+    //KPI Settings
+    Route::resource('kpi-settings', KpiSettingController::class);
+
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
     Route::get('estimates/download/{id}', [EstimateController::class, 'download'])->name('estimates.download');
@@ -1231,7 +1235,6 @@ Route::resource('teams', Seopage1TeamController::class);
 Route::post('/get-employees-by-department', [Seopage1TeamController::class, 'getEmployeesByDepartment'])->name('getEmployeesByDepartment');
 
 Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'getEmployeesByParentTeam'])->name('getEmployeesByParentTeam');
-//KPI Settings
-Route::resource('kpi-settings', KpiSettingController::class);
+
 Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
 Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');
