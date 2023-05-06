@@ -12,8 +12,6 @@ const ContextProvider = ({children}) => {
     const [activeColumns, setActiveColumns] = React.useState([]);
     const [sortConfig, setSortConfig] = React.useState({key: 'id', direction: 'asc'});
 
-    
-
     return <DataTableContext.Provider value={{
         activeColumns,
         setActiveColumns,
