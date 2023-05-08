@@ -46,6 +46,7 @@ const Goal = () => {
     const {teams} = useTeams();
     const usersData = users && users.users;
     const [isSummarizing, setIsSummarizing] = React.useState(false);
+    
 
     const dispatch = useDispatch();
 
@@ -99,18 +100,28 @@ const Goal = () => {
     // get deals data
     React.useEffect(() => {
         if(deals && deals.length > 0 && goal){
-            let _deals = getDeals(deals, goal, goal.startDate, goal.endDate);
+            let endDate;
+            let startDate;
+            if(filter.end && filter.start){
+            startDate = filter.start;
+            endDate = filter.end;
+            }else{
+                endDate = goal.endDate;
+                startDate = goal.startDate;
+            }
+
+            let _deals = getDeals(deals, goal, startDate, endDate);
             setDealsData([..._deals]);
             setIsLoading(false);
         }
          
-    }, [goal, location, params.goalId]);
+    }, [goal, location, params.goalId, filter]);
 
 
     React.useEffect (() => {
         setIsSummarizing(true);
         if(deals && deals.length > 0 && goal){
-            let sum = getSummary(deals, goal);
+            let sum = getSummary(deals, goal, filter);
             if(sum) {
                 setSummarizedData([...sum]);
                 setIsSummarizing(false);
@@ -119,7 +130,7 @@ const Goal = () => {
             }
         }
 
-    }, [goal])
+    }, [goal, dealsData, filter])
 
 
     const handleOpenGoalFormModal = () => {
