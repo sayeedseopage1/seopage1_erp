@@ -1443,7 +1443,7 @@
 
 .cnx__table_td,
     .cnx__table_th {
-    width: 250px;
+    width: 100%;
     padding: 10px;
     overflow: hidden;
     white-space: nowrap;
@@ -1451,6 +1451,8 @@
     -ms-text-overflow: ellipsis;
     text-overflow: ellipsis;
   }
+
+  
 
   .cnx__table_td  a{
     color: #777;

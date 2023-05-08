@@ -104,7 +104,7 @@ const DataTable = ({data, isLoading, defaultColumns}) => {
                     {/* header */}
                 <div className='cnx__table'>
                    
-                    <div className="cnx__table_head">
+                    <div className="cnx__table_head" style={{paddingRight: currentPageData.length > 34 ? '5px' : ''}}>
                         <div className="cnx__table_tr">
                             {columns.map(column => (
                                 <DraggableColumn 
