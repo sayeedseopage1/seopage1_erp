@@ -45,7 +45,7 @@ class KpiSettingController extends AccountBaseController
     // phpcs:ignore
     public function update(Request $request,$id)
     {
-//        dd($request->all());
+//dd($request->all());
         $kpi_setting = kpiSetting::find($id);
         $kpi_setting->the_bidder = $request->the_bidder;
         $kpi_setting->qualify = $request->qualify;
@@ -60,29 +60,46 @@ class KpiSettingController extends AccountBaseController
         $kpi_setting->closed_deal = $request->closed_deal;
         $kpi_setting->contact_form = $request->contact_form;
         $kpi_setting->authorized_by_leader = $request->authorized_by_leader;
-        $kpi_setting->for_every = $request->for_every;
-        $kpi_setting->addition_sales = $request->addition_sales;
+        $kpi_setting->additional_sales_amount = $request->additional_sales_amount;
+        $kpi_setting->client_type = $request->client_type;
         $kpi_setting->after = $request->after;
-        $kpi_setting->shift_will_get = $request->shift_will_get;
-        $kpi_setting->generate_project = $request->generate_project;
-        $kpi_setting->single_deal = $request->single_deal;
+        $kpi_setting->after_reach_amount = $request->after_reach_amount;
+       
+        $kpi_setting->generate_single_deal = $request->generate_single_deal;
         $kpi_setting->bonus_point = $request->bonus_point;
-        $kpi_setting->sales_above = $request->sales_above;
-        $kpi_setting->sales_above_point = $request->sales_above_point;
+        $kpi_setting->generate_sales_above = $request->generate_sales_above;
+        $kpi_setting->generate_sales_above_point = $request->generate_sales_above_point;
         $kpi_setting->logged_hours_above = $request->logged_hours_above;
         $kpi_setting->logged_hours_above_sales_amount = $request->logged_hours_above_sales_amount;
         $kpi_setting->achieve_more_than = $request->achieve_more_than;
         $kpi_setting->achieve_less_than = $request->achieve_less_than;
+        $kpi_setting->accepted_by_pm = $request->accepted_by_pm;
         $kpi_setting->save();
 
-
-
-        foreach($request->sales_from as $key => $sales_from) {
+        $generate_sales = kpiSettingGenerateSale::where('kpi_id',$kpi_setting->id)->get();
+        if($generate_sales != null)
+        {
+            foreach($generate_sales as $sales)
+            {
+                $update_sales= kpiSettingGenerateSale::find($sales->id);
+                $update_sales->delete();
+            }
+        }
+        $hours_logged = kpiSettingLoggedHour::where('kpi_id',$kpi_setting->id)->get();
+        if($hours_logged != null)
+        {
+            foreach($hours_logged as $logged)
+            {
+                $update_logged= kpiSettingLoggedHour::find($logged->id);
+                $update_logged->delete();
+            }
+        }
+        foreach($request->generate_sales_from as $key => $sales_from) {
             $kpi_setting_generate_sales = new kpiSettingGenerateSale();
             $kpi_setting_generate_sales->kpi_id = $request->id;
-            $kpi_setting_generate_sales->sales_from = $sales_from;
-            $kpi_setting_generate_sales->sales_to  = $request->sales_to[$key] ;
-            $kpi_setting_generate_sales->sales_amount  = $request->sales_amount[$key] ;
+            $kpi_setting_generate_sales->generate_sales_from = $sales_from;
+            $kpi_setting_generate_sales->generate_sales_to  = $request->generate_sales_to[$key] ;
+            $kpi_setting_generate_sales->generate_sales_amount  = $request->generate_sales_amount[$key] ;
             $kpi_setting_generate_sales->save();
         }
         foreach($request->logged_hours_between as $key => $logged_hours_between) {

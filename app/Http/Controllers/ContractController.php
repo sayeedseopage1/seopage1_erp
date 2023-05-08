@@ -49,6 +49,8 @@ use Exception;
 use App\Models\EmployeeDetails;
 use App\Notifications\DealAuthorizationSendNotification;
 use Notification;
+use App\Models\kpiSetting;
+use App\Models\CashPoint;
 
 class ContractController extends AccountBaseController
 {

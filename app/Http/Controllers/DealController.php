@@ -136,11 +136,6 @@ class DealController extends AccountBaseController
 
         $this->currencies = Currency::all();
 
-
-
-
-
-
         if (request()->ajax()) {
             $this->pageTitle = __('') . ' ' . __('Create Deal');
             $html = view('deals.ajax.create', $this->data)->render();
@@ -219,10 +214,6 @@ class DealController extends AccountBaseController
             find($id);
 
         //dd($this->deal);
-
-
-
-
 
         $this->currencies = Currency::all();
 

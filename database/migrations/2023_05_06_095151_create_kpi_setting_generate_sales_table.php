@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('kpi_setting_generate_sales', function (Blueprint $table) {
             $table->id();
             $table->integer('kpi_id');
-            $table->bigInteger('sales_from')->default(0);
-            $table->bigInteger('sales_to')->default(0);
-            $table->bigInteger('sales_amount')->default(0);
+            $table->bigInteger('generate_sales_from')->default(0);
+            $table->bigInteger('generate_sales_to')->default(0);
+            $table->bigInteger('generate_sales_amount')->default(0);
             $table->timestamps();
         });
     }
