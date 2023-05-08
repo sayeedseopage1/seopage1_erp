@@ -82,7 +82,6 @@ const GoalStackedBarChart = ({data,
                         axisLine={false}  
                         tickLine={false}
                         domain={xDomain}
-                        allowDataOverflow={true}
                         interval={0}
                         tickFormatter={v => v.split('(')[0]}
                     />
@@ -105,7 +104,6 @@ const GoalStackedBarChart = ({data,
                         content={<CustomTooltip />} 
                         cursor={{ fill: '#f8f8f8' }} 
                     />
-                    {referenceLine && <ReferenceLine y={0} stroke="#000" />}
                         <Bar
                             dataKey="value"
                             stackId={XAxisLabel}
