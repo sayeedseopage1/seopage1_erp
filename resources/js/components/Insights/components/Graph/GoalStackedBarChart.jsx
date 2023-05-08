@@ -46,7 +46,6 @@ const GoalStackedBarChart = ({data,
 
     const handleBarClick = (data) => {
         if(!data) return;
-        console.log(data)
         dispatch(openDataTableModal({
             data: data?.activePayload[0]?.payload, 
             title: 'Deals'
@@ -239,7 +238,7 @@ const CustomBar = (props) => {
 
                     <foreignObject
                         x={x + width / 2 - 30}
-                        y={y + height - (target / target * height) - 30}
+                        y={y + height - (target / target * height) - 20}
                         width={60}
                         height={20}
                     >
