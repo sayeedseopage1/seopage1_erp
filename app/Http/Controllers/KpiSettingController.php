@@ -64,7 +64,6 @@ class KpiSettingController extends AccountBaseController
         $kpi_setting->client_type = $request->client_type;
         $kpi_setting->after = $request->after;
         $kpi_setting->after_reach_amount = $request->after_reach_amount;
-       
         $kpi_setting->generate_single_deal = $request->generate_single_deal;
         $kpi_setting->bonus_point = $request->bonus_point;
         $kpi_setting->generate_sales_above = $request->generate_sales_above;
