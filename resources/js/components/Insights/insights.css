@@ -1,10 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter: wght@400;500;600;700&display=swap');
-
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
+  scrollbar-width: thin;
 }
 
 .cnx_divider {
@@ -1321,6 +1316,7 @@
   font-size: 15px;
   font-weight: 600;
   color: #444;
+  
 }
 
 .cnx__conversion__graph {
@@ -1433,7 +1429,7 @@
     width: -moz-fit-content;
     width: fit-content;
     max-height: 720px;
-    overflow-y: overlay;
+    overflow-y: auto;
   }
 
 .cnx__table_body > .cnx__table_tr {
@@ -1456,6 +1452,8 @@
     text-overflow: ellipsis;
   }
 
+  
+
   .cnx__table_td  a{
     color: #777;
   }
@@ -1467,8 +1465,8 @@
   }
 
 .cnx__table_td:not(:last-child), .cnx__table_th:not(:last-child) {
-      border-right: 1px solid #aaa;
-      border-right: 1px solid var(--cnx-table-border);
+      border-right: 1px solid #d6d6d6;
+      border-right: 1px solid var(--cnx-table-row-border);
     }
 
 .cnx__table_th {
@@ -1981,3 +1979,74 @@
 
 /* end goal */
 
+
+
+
+
+/* tooltip */
+
+.cnx__tooltip{
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  border-radius: 6px;
+}
+
+.cnx__tooltip__header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+
+
+.cnx__tooltip__header .__tooltip_goal_progress{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(0,0,0,0.05);
+}
+
+
+.cnx__tooltip__body{
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cnx__tooltip__body .__tooltip_item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #777;
+}
+
+
+.cnx__tooltip__body .__tooltip_item span:last-child{
+  margin-left: auto;
+}
+
+.cnx__tooltip__body .__tooltip_item svg{
+  width: 14px;
+  height: 14px;
+}
+
+
+
+.cnx__goal_graph_labelList_icon{
+  width: 14px;
+  height: 14px; 
+}

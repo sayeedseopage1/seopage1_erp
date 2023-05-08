@@ -821,12 +821,18 @@ const GoalFormModal = () => {
 
                     <div className='cnx_select_box_wrapper'>
                         <label className='' htmlFor='metric_value'>
-                            <input id="metric_value" type="radio" name="metric" value="value" onChange={e => setTrackingType(e.target.value)} defaultChecked={true} />
+                            <input 
+                               id="metric_value" 
+                               type="radio" 
+                               name="metric" 
+                               value="value" 
+                               onChange={e => setTrackingType(e.target.value)} 
+                               defaultChecked={trackingType === 'value'} />
                             Value
                         </label>
 
                         <label className='' htmlFor='metric_count'>
-                            <input type="radio" id="metric_count" name="metric" value="count" onChange={e => setTrackingType(e.target.value)} />
+                            <input type="radio" id="metric_count" name="metric" value="count" onChange={e => setTrackingType(e.target.value)} defaultChecked={trackingType === 'count'} />
                             Count
                         </label>
                     </div>
