@@ -1190,6 +1190,11 @@ Route::get('/projects/project-completion/{id}', [ProjectController::class, 'Proj
 Route::post('/acoounts/project-completion/store', [ProjectController::class, 'ProjectCompletionSubmit'])->name('project-completion');
 
 //add project niche
+Route:: get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
+Route:: get('/projects/get-parent-category/{subCategoryId}', [ProjectController::class, 'subCategoryId']);
+
+
+//add project niche
 Route::post('/projects/niche-store', [ProjectController::class, 'storeNiche'])->name('add-niche');
 Route::get('/projects/niches', [ProjectController::class, 'Niche'])->name('get-niche');
 Route::delete('/projects/delete-niche/{id}', [ProjectController::class, 'deleteNiche']);
