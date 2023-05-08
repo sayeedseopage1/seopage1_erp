@@ -99,7 +99,7 @@ const DataTable = ({data, isLoading, defaultColumns}) => {
             <div className='cnx__table_wrapper'>
                  {/* filter button */}
                         <div className='cnx__table_td_filter_btn'>
-                            <TableFilterButton  />
+                            {/* <TableFilterButton  /> */}
                         </div> 
                     {/* header */}
                 <div className='cnx__table'>

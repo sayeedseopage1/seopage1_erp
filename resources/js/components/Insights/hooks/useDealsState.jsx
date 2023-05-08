@@ -7,6 +7,7 @@ import { useGetDealsQuery } from '../services/api/dealSliceApi';
 import { useGoals } from './useGoals';
 import dayjs from 'dayjs';
 import { stage } from '../utils/constants';
+import _ from 'lodash';
 
 
 export const useDealsState = () => {
@@ -35,11 +36,22 @@ export const useDealsState = () => {
 
 
     // get deals 
-    const getDeals = (deals, goal, startDate, endDate) => {
+    const getDeals = (deals, goal, startDate, endDate, filter) => {
 
         
         if(!deals || !goal) return;
-        const _endDate = endDate ? endDate : getEndDate(goal);
+
+        let _endDate = endDate;
+
+
+        if(filter?.start && filter?.end){
+            startDate = filter.start;
+            endDate = filter.end;
+        } else {
+            startDate = startDate ? startDate : goal.startDate;
+            _endDate = endDate ? endDate : getEndDate(goal);
+        }
+        
         // console.log(goal)
        
         let filteredDeals = deals.filter(
@@ -78,12 +90,13 @@ export const useDealsState = () => {
         let difference = 0;
         let endDate ;
         let startDate;
+        let result;
         
         
         
         if(!deals) return;
 
-        if(filter.end && filter.start){
+        if(filter?.end && filter?.start){
             startDate = filter.start;
             endDate = filter.end;
         }else{
@@ -91,7 +104,7 @@ export const useDealsState = () => {
             endDate = period.end;
         }
 
-        const _deals = getDeals(deals, goalData, startDate, endDate);
+        const _deals = getDeals(deals, goalData, startDate, endDate, filter);
 
         // get period start and end date
 
@@ -127,13 +140,48 @@ export const useDealsState = () => {
         }
 
        let target = goal - dealAdded;
+       target = parseInt(target) === target ? target : target.toFixed(1);
+
+       if(_.lowerCase(goalData.trackingType) === 'value'){
+            difference = dealAdded - Number(period.value);
+       } else {
+            difference = totalDeal - Number(period.value);
+       }
+
+
+         difference =  parseInt(difference) === difference ? difference : difference.toFixed(1);
+         goal =  parseInt(goal) === goal ? goal : goal.toFixed(1);
+
+
+        result = _.lowerCase(goalData.trackingType) === 'value' ? dealAdded : totalDeal;
+        result = parseInt(result) === result ? result : result.toFixed(1);
+        let yAxis = 0;
+
+        if(_.lowerCase(goalData.trackingType) === 'value'){
+            if(goal < dealAdded){
+                yAxis = dealAdded;
+            }else{
+                yAxis = goal;
+            }
+        }else{
+            if(goal < totalDeal){
+                yAxis = totalDeal;
+            }else{
+                yAxis = goal
+            }
+        }
+
+
+
+        // formate
+        dealAdded = dealAdded.toFixed(2);
 
         return {
             deals: _deals,
             ...period,
             id: `${period.index || index} `,
-            totalDeal,
-            dealAdded,
+            totalDeal: Number(totalDeal),
+            dealAdded: Number(dealAdded),
             dealWon,
             dealLost,
             dealAddedPercentage,
@@ -141,8 +189,12 @@ export const useDealsState = () => {
             dealLostPercentage,
             goalProgress,
             target,
-            difference:dealAdded - Number(period.value),
-            goal
+            difference,
+            goal,
+            result,
+            targetType: _.lowerCase(goalData.trackingType),
+            goalData,
+            yAxis 
         }
         
     }
@@ -151,14 +203,14 @@ export const useDealsState = () => {
 
 
     // get summary 
-    const getSummary = ( deals, goal, filter ) => {
+    const getSummary = ( deals, goal, filter, applyFilter ) => {
         if(!deals || !goal) return;
-        let period = getTargetPeriod(goal);
+        let period = applyFilter ? getTargetPeriod(goal, filter) : getTargetPeriod(goal);
         let summary = [];
 
 
         period.map((p, i) => {
-            let analyzedValue = analyzeDeals(deals, p, goal, i, filter);
+            let analyzedValue = applyFilter ? analyzeDeals(deals, p, goal, i, filter) : analyzeDeals(deals, p, goal, i);
             summary.push(analyzedValue);
         })
 

@@ -26,13 +26,14 @@ import { stage } from '../utils/constants';
 // convert to unit
 const numberToUnits = (value,decimal= 1) => {
     let c = convertNumberToUnits(value, decimal)
-    return `$${c}`
+    return `${c}`
 }
 
 
 const Goal = () => {
     const [selectedPeriod, setSelectedPeriod] = React.useState('Today');
-    const [filter, setFilterValue] = React.useState('');
+    const [filter, setFilterValue] = React.useState(null);
+    const [applyFilter, setApplyFilter] = React.useState(false);
     const [summarizedData, setSummarizedData] = React.useState([]); 
     const [goal, setGoal] = React.useState(null);
     const {deals, getDeals, getSummary} = useDealsState(); 
@@ -102,9 +103,9 @@ const Goal = () => {
         if(deals && deals.length > 0 && goal){
             let endDate;
             let startDate;
-            if(filter.end && filter.start){
-            startDate = filter.start;
-            endDate = filter.end;
+            if(filter?.end && filter?.start && applyFilter){
+                startDate = filter.start;
+                endDate = filter.end;
             }else{
                 endDate = goal.endDate;
                 startDate = goal.startDate;
@@ -115,13 +116,13 @@ const Goal = () => {
             setIsLoading(false);
         }
          
-    }, [goal, location, params.goalId, filter]);
+    }, [goal, location, params.goalId, filter, applyFilter]);
 
 
     React.useEffect (() => {
         setIsSummarizing(true);
         if(deals && deals.length > 0 && goal){
-            let sum = getSummary(deals, goal, filter);
+            let sum = getSummary(deals, goal, filter, applyFilter);
             if(sum) {
                 setSummarizedData([...sum]);
                 setIsSummarizing(false);
@@ -372,19 +373,22 @@ const Goal = () => {
                                 <RelativeTimePeriod
                                     setSelectedPeriod={handleRelativeTimePeriod}
                                     selectedPeriod={selectedPeriod}
+                                    defaultPeriod={"Goal Period"}
+                                    setApplyFilter={setApplyFilter}
                                 />
                             </div>
                             <div className='__graph'>
                                 <GoalStackedBarChart
                                     footer={false}
                                     XAxisLabel="title"
-                                    colors={["#166901", "#ddd"]}
+                                    actualFillColor={"#1d8603"}
+                                    targetFillColor={"#E5E5E5"}
                                     leftSideLabel="Number of deals"
-                                    barDataKey={["dealAdded", "target"]}
+                                    barDataKey={[ "value" ]}
                                     offset={-5}
-                                    yDomain={ [0, dataMax => (dataMax + Math.ceil(dataMax * 0.1))]}
-                                    labelListFormatter={value => numberToUnits(value, 0)}
-                                    yAxisTickFormate={value => numberToUnits(value, 0)}
+                                    // yDomain={ [0, dataMax => (dataMax + Math.ceil(dataMax * 0.1))]}
+                                    labelListFormatter={value => goal.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 2)  }
+                                    yAxisTickFormate={value => goal.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 2)  }
                                     data = {[...summarizedData]} 
                                 />
                             </div>
