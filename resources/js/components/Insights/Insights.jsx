@@ -59,7 +59,7 @@ const InsightsComponent = () => {
       width: "100%", 
       height: '100vh'
     }}>
-      <div class="spinner-border" role="status">  </div>
+      <div className="spinner-border" role="status">  </div>
       Loading...
   </div>
 

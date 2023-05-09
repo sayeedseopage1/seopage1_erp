@@ -1417,6 +1417,11 @@
     width: -moz-fit-content;
     width: fit-content;
     min-width: 100%;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1;
   }
 
 .cnx__table_head > .cnx__table_tr {
