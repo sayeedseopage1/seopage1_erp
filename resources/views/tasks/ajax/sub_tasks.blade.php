@@ -64,10 +64,9 @@
                 <input type="hidden" name="task_id" value="{{ $task->id }}">
                 <div class="row">
                     <div class="col-md-6">
-                        <x-forms.text :fieldLabel="__('app.title')" fieldName="title" fieldRequired="true"
-                                      fieldId="title" :fieldPlaceholder="__('placeholders.task')" />
-                        <x-forms.text :fieldLabel="__('Parent Task')" fieldName="" fieldId=""
-                                      :fieldValue="$task->heading" fieldReadOnly="true" />
+                        <x-forms.text :fieldLabel="__('app.title')" fieldName="title" fieldRequired="true" fieldId="title" :fieldPlaceholder="__('placeholders.task')" />
+                        <div class="invalid-feedback" id="title_error"></div>
+                        <x-forms.text :fieldLabel="__('Parent Task')" fieldName="" fieldId="" :fieldValue="$task->heading" fieldReadOnly="true" />
                     </div>
                     <?php
                     $milestone= App\Models\ProjectMilestone::where('id',$task->milestone_id)->first();
@@ -77,24 +76,21 @@
                     <div class="col-md-6 col-lg-4">
 
 
-                        <x-forms.text :fieldLabel="__('Milestone')" fieldName="" fieldId=""
-                                      :fieldValue="$milestone->milestone_title" fieldReadOnly="true" />
+                        <x-forms.text :fieldLabel="__('Milestone')" fieldName="" fieldId="" :fieldValue="$milestone->milestone_title" fieldReadOnly="true" />
                     </div>
 
 
 
                     <div class="col-md-6">
-                        <x-forms.datepicker fieldId="sub_task_start_date" fieldRequired="true" :fieldLabel="__('app.startDate')" fieldName="start_date"
-                                            :fieldPlaceholder="__('placeholders.date')" />
+                        <x-forms.datepicker fieldId="sub_task_start_date" fieldRequired="true" :fieldLabel="__('app.startDate')" fieldName="start_date" :fieldPlaceholder="__('placeholders.date')" />
+                        <div class="invalid-feedback" id="sub_task_start_date_error"></div>
                     </div>
                     <div class="col-md-6 dueDateBox" @if($task && is_null($task->due_date)) style="display: none" @endif>
-
-                        <x-forms.datepicker fieldId="sub_task_due_date" fieldRequired="true" :fieldLabel="__('app.dueDate')" fieldName="due_date"
-                                            :fieldPlaceholder="__('placeholders.date')" />
+                        <x-forms.datepicker fieldId="sub_task_due_date" fieldRequired="true" :fieldLabel="__('app.dueDate')" fieldName="due_date" :fieldPlaceholder="__('placeholders.date')" />
+                        <div class="invalid-feedback" id="sub_task_due_date_error"></div>
                     </div>
                     {{-- <div class="col-md-2 col-lg-2 pt-5">
-                        <x-forms.checkbox class="mr-0 mr-lg-2 mr-md-2" :checked="$task ? is_null($task->due_date) : ''" :fieldLabel="__('app.withoutDueDate')"
-                                          fieldName="without_duedate" fieldId="without_duedate" fieldValue="yes" />
+                        <x-forms.checkbox class="mr-0 mr-lg-2 mr-md-2" :checked="$task ? is_null($task->due_date) : ''" :fieldLabel="__('app.withoutDueDate')" fieldName="without_duedate" fieldId="without_duedate" fieldValue="yes" />
                     </div> --}}
 
                 </div>
@@ -108,16 +104,13 @@
                         @if ($task->project_id != null)
                             <input type="hidden" name="project_id"  value="{{ $task->project_id }}">
 
-                            <x-forms.text :fieldLabel="__('app.project')" fieldName="project_id" fieldId=""
-                                          :fieldValue="$project_name->project_name" fieldReadOnly="true" />
+                            <x-forms.text :fieldLabel="__('app.project')" fieldName="project_id" fieldId="" :fieldValue="$project_name->project_name" fieldReadOnly="true" />
                         @else
-                            <x-forms.select fieldId="" fieldName="project_id" :fieldLabel="__('app.project')"
-                                            search="true">
+                            <x-forms.select fieldId="" fieldName="project_id" :fieldLabel="__('app.project')" search="true">
                                 <option value="">--</option>
                                 @foreach($projects as $project)
                                     <option value="{{$project->id}}">{{$project->project_name}}</option>
-                                @endforeach
-
+                                @endforeach 
                             </x-forms.select>
                         @endif
                     </div>
@@ -127,12 +120,9 @@
                     ?>
 
                     <div class="col-md-6">
-                        <x-forms.label class="my-3" fieldId="category_id"
-                                       :fieldLabel="__('modules.tasks.taskCategory')">
-                        </x-forms.label>
+                        <x-forms.label class="my-3" fieldId="category_id" :fieldLabel="__('modules.tasks.taskCategory')"></x-forms.label>
                         <x-forms.input-group>
-                            <select class="form-control select-picker" name="task_category_id"
-                                    data-live-search="true" data-size="8">
+                            <select class="form-control select-picker" name="task_category_id" data-live-search="true" data-size="8">
                                 <option value="">--</option>
                                 @foreach($task_categories as $category)
 
@@ -140,24 +130,17 @@
                                     </option>
 
                                 @endforeach
-
-
                             </select>
-
-
                         </x-forms.input-group>
                     </div>
-
                 </div>
-
                 <div class="row">
 
 
 
                     <div class="col-md-6">
                         <div class="form-group my-3">
-                            <x-forms.label fieldId="subTaskAssignee"
-                                           :fieldLabel="__('modules.tasks.assignTo')">
+                            <x-forms.label fieldId="subTaskAssignee" :fieldLabel="__('modules.tasks.assignTo')">
                             </x-forms.label>
                             <x-forms.input-group>
                                 <select class="form-control select-picker" name="user_id"
@@ -189,8 +172,7 @@
                                         // dd($task_id->task_id);
 
                                         ?>
-                                        <option
-                                            data-content="<span class='badge badge-pill badge-light border'><div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $item->image_url }}' ></div> {{ ucfirst($item->name) }} {{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}"
+                                        <option data-content="<span class='badge badge-pill badge-light border'><div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $item->image_url }}' ></div> {{ ucfirst($item->name) }} {{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}"
                                             value="{{ $item->id }}">{{ mb_ucwords($item->name) }} </option>
                                     @endforeach
                                 </select>
@@ -256,7 +238,7 @@
                   </div>
                 </div> --}}
 
-                <div class="col-md-12 col-lg-12">
+                <div class="col-md-12 col-lg-12 px-0">
                     <div class="form-group">
                         <x-forms.label class="my-3" fieldId="description2" :fieldLabel="__('Description')"></x-forms.label>
                         <div id="description2"></div>
@@ -705,6 +687,21 @@
                         if (error.responseJSON.errors.description) {
                             $('#description_error').addClass('d-block');
                             $('#description_error').text('This field are required');
+                        }
+                        if (error.responseJSON.errors.title) {
+                            $('#title').addClass('is-invalid');
+                            $('#title_error').addClass('d-block');
+                            $('#title_error').text(error.responseJSON.errors.title);
+                        }
+                        if (error.responseJSON.errors.start_date) {
+                            $('#sub_task_start_date').addClass('is-invalid');
+                            $('#sub_task_start_date_error').addClass('d-block');
+                            $('#sub_task_start_date_error').text(error.responseJSON.errors.start_date);
+                        }
+                        if (error.responseJSON.errors.due_date) {
+                            $('#sub_task_due_date').addClass('is-invalid');
+                            $('#sub_task_due_date_error').addClass('d-block');
+                            $('#sub_task_due_date_error').text(error.responseJSON.errors.due_date);
                         }
                     } 
                 });

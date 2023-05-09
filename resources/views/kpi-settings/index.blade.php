@@ -183,10 +183,18 @@
                     <hr>
                     <h3 class="text-center mt-1 mb-5 border-1 shadow-sm mx-auto p-3 rounded text-uppercase" style="width: fit-content;">Point distribution for won deal</h3>
                     <section class="point__distribution">
+                         <div class="point__row">
+                                <div class="point__col"> For every sales that gets accepted by project manager, respective sales shift will get </div>
+                                <div class="point__col"> <input type="number" class="point__input" name="accepted_by_pm" id="accepted_by_pm" value="{{$kpi->accepted_by_pm}}"> </div>
+                                <div class="point__col"> %  </div>
+                                {{-- <div class="point__col"> <input type="number" class="point__input" name="logged_hours_above_sales_amount" id="logged_hours_above_sales_amount" value="{{$kpi->logged_hours_above_sales_amount}}"> % </div>
+                                <div class="point__col"> of the sales amount. </div> --}}
+                            </div>
                         <div class="point__row_wrapper_container">
                             @php
                                 $kpi_setting_logged_hour = \App\Models\kpiSettingLoggedHour::all();
                             @endphp
+                           
                             @if(count($kpi_setting_logged_hour)>0)
                                 <div class="point__row_wrapper">
                                     @foreach($kpi_setting_logged_hour as $kpi_setting_logged_hour)
@@ -242,12 +250,12 @@
                                     @foreach($kpi_setting_generate_sales as $kpi_setting_generate_sale)
                                         <div class="point__row dynamic-field" id="dynamic-field-1">
                                             <div class="point__col"> If sales team generates sales from </div>
-                                            <div class="point__col"> <input type="number" class="point__input" name="sales_from[]" id="sales_from" value="{{$kpi_setting_generate_sale->sales_from}}">  </div>
+                                            <div class="point__col"> <input type="number" class="point__input" name="generate_sales_from[]" id="generate_sales_from" value="{{$kpi_setting_generate_sale->generate_sales_from}}">  </div>
                                             <div class="point__col"> To</div>
-                                            <div class="point__col"> <input type="number" class="point__input" name="sales_to[]" id="sales_to" value="{{$kpi_setting_generate_sale->sales_to}}">  </div>
+                                            <div class="point__col"> <input type="number" class="point__input" name="generate_sales_to[]" id="generate_sales_to" value="{{$kpi_setting_generate_sale->generate_sales_to}}">  </div>
                                             <div class="point__col"> per month,</div>
                                             <div class="point__col"> team lead will get </div>
-                                            <div class="point__col"> <input type="number" class="point__input" name="sales_amount[]" id="sales_amount"  value="{{$kpi_setting_generate_sale->sales_amount}}"> % </div>
+                                            <div class="point__col"> <input type="number" class="point__input" name="generate_sales_amount[]" id="generate_sales_amount"  value="{{$kpi_setting_generate_sale->generate_sales_amount}}"> % </div>
                                             <div class="point__col"> points of the sales amount.</div>
                                         </div>
                                     @endforeach
@@ -256,12 +264,12 @@
                                 <div class="point__row_wrapper">
                                     <div class="point__row dynamic-field" id="dynamic-field-1">
                                         <div class="point__col"> If sales team generates sales from </div>
-                                        <div class="point__col"> <input type="number" class="point__input" name="sales_from[]" id="sales_from" placeholder="0">  </div>
+                                        <div class="point__col"> <input type="number" class="point__input" name="generate_sales_from[]" id="generate_sales_from" placeholder="0">  </div>
                                         <div class="point__col"> To</div>
-                                        <div class="point__col"> <input type="number" class="point__input" name="sales_to[]" id="sales_to" placeholder="0">  </div>
+                                        <div class="point__col"> <input type="number" class="point__input" name="generate_sales_to[]" id="generate_sales_to" placeholder="0">  </div>
                                         <div class="point__col"> per month,</div>
                                         <div class="point__col"> team lead will get </div>
-                                        <div class="point__col"> <input type="number" class="point__input" name="sales_amount[]" id="sales_amount"  placeholder="0"> % </div>
+                                        <div class="point__col"> <input type="number" class="point__input" name="generate_sales_amount[]" id="generate_sales_amount"  placeholder="0"> % </div>
                                         <div class="point__col"> points of the sales amount.</div>
                                     </div>
                                 </div>
@@ -273,41 +281,36 @@
                         </div>
                         <div class="point__row">
                             <div class="point__col"> If sales team generates sales above </div>
-                            <div class="point__col"> $<input type="number" class="point__input" name="sales_above" id="sales_above" value="{{$kpi->sales_above}}">  </div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="generate_sales_above" id="generate_sales_above" value="{{$kpi->generate_sales_above}}">  </div>
                             <div class="point__col"> per month, </div>
                             <div class="point__col"> team lead will get </div>
-                            <div class="point__col"> <input type="number" class="point__input" name="sales_above_point" id="sales_above_point" value="{{$kpi->sales_above_point}}"> % </div>
+                            <div class="point__col"> <input type="number" class="point__input" name="generate_sales_above_point" id="generate_sales_above_point" value="{{$kpi->generate_sales_above_point}}"> % </div>
                             <div class="point__col">  points.</div>
                         </div>
                          <div class="point__row">
-                             <div class="point__col"> If a sales shift generate any project </div>
-                             <div class="point__col">
-                                 <select class="point__select" name="generate_project" id="generate_project">
-                                     <option value="equal" class="point__option" {{$kpi->generate_project=='equal'? 'selected':''}}>Equal</option>
-                                     <option value="more_than" class="point__option" {{$kpi->generate_project=='more_than'? 'selected':''}}>More than </option>
-                                 </select>
-                             </div>
-                             <div class="point__col"> $<input type="number" class="point__input" name="single_deal" id="single_deal" value="{{$kpi->single_deal}}">  </div>
+                             <div class="point__col"> If a sales shift generate any project equal/more than</div>
+                            
+                             <div class="point__col"> $<input type="number" class="point__input" name="generate_single_deal" id="generate_single_deal" value="{{$kpi->generate_single_deal}}">  </div>
                              <div class="point__col"> on single deal, that shift will get a flat</div>
                              <div class="point__col"> <input type="number" class="point__input" name="bonus_point" id="bonus_point" value="{{$kpi->bonus_point}}">  </div>
                              <div class="point__col"> bonus points.</div>
                          </div>
                         <div class="point__row">
                             <div class="point__col">For every</div>
-                            <div class="point__col"> $<input type="number" class="point__input" name="for_every" id="for_every" value="{{$kpi->for_every}}">  </div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="additional_sales_amount" id="additional_sales_amount" value="{{$kpi->additional_sales_amount}}">  </div>
                             <div class="point__col">addition sales</div>
                             <div class="point__col">
-                                <select class="point__select" name="addition_sales" id="addition_sales">
-                                    <option value="new_client" class="point__option" {{$kpi->addition_sales=='new_client'? 'selected':''}}>New client</option>
-                                    <option value="existing_client" class="point__option" {{$kpi->addition_sales=='existing_client'? 'selected':''}}>Existing Client</option>
-                                    <option value="both" class="point__option" {{$kpi->addition_sales=='both'? 'selected':''}}>Both</option>
+                                <select class="point__select" name="client_type" id="client_type">
+                                    <option value="new_client" class="point__option" {{$kpi->client_type=='new_client'? 'selected':''}}>New client</option>
+                                    <option value="existing_client" class="point__option" {{$kpi->client_type=='existing_client'? 'selected':''}}>Existing Client</option>
+                                    <option value="both" class="point__option" {{$kpi->client_type=='both'? 'selected':''}}>Both</option>
                                 </select>
                             </div>
                             <div class="point__col">after</div>
                             <div class="point__col"> $<input type="number" class="point__input" name="after" id="after" value="{{$kpi->after}}">  </div>
                             <div class="point__col"> milestone per month, </div>
                             <div class="point__col"> shift will get </div>
-                            <div class="point__col"> <input type="number" class="point__input" name="shift_will_get" id="shift_will_get" value="{{$kpi->shift_will_get}}">  </div>
+                            <div class="point__col"> <input type="number" class="point__input" name="after_reach_amount" id="after_reach_amount" value="{{$kpi->after_reach_amount}}">  </div>
                             <div class="point__col"> points. </div>
                         </div>
                     </section>
@@ -338,17 +341,17 @@
             // console.log(formData);
             $('#save-form').attr("disabled", true);
             $('#save-form').html("Processing...");
-            var sales_from = document.getElementsByName("sales_from[]");
+            var sales_from = document.getElementsByName("generate_sales_from[]");
             var sales_from_values = [];
             for (var i = 0; i < sales_from.length; i++) {
                 sales_from_values.push(sales_from[i].value);
             }
-            var sales_to = document.getElementsByName("sales_to[]");
+            var sales_to = document.getElementsByName("generate_sales_to[]");
             var sales_to_values = [];
             for (var i = 0; i < sales_to.length; i++) {
                 sales_to_values.push(sales_to[i].value);
             }
-            var sales_amount = document.getElementsByName("sales_amount[]");
+            var sales_amount = document.getElementsByName("generate_sales_amount[]");
             var sales_amount_values = [];
             for (var i = 0; i < sales_amount.length; i++) {
                 sales_amount_values.push(sales_amount[i].value);
@@ -383,25 +386,26 @@
                 'closed_deal': document.getElementById("closed_deal").value,
                 'contact_form': document.getElementById("contact_form").value,
                 'authorized_by_leader': document.getElementById("authorized_by_leader").value,
-                'for_every': document.getElementById("for_every").value,
-                'addition_sales': document.getElementById("addition_sales").value,
+                'additional_sales_amount': document.getElementById("additional_sales_amount").value,
+                'client_type': document.getElementById("client_type").value,
                 'after': document.getElementById("after").value,
-                'shift_will_get': document.getElementById("shift_will_get").value,
-                'generate_project': document.getElementById("generate_project").value,
-                'single_deal': document.getElementById("single_deal").value,
+                'after_reach_amount': document.getElementById("after_reach_amount").value,
+               
+                'generate_single_deal': document.getElementById("generate_single_deal").value,
                 'bonus_point': document.getElementById("bonus_point").value,
-                'sales_above': document.getElementById("sales_above").value,
-                'sales_above_point': document.getElementById("sales_above_point").value,
+                'generate_sales_above': document.getElementById("generate_sales_above").value,
+                'generate_sales_above_point': document.getElementById("generate_sales_above_point").value,
                 'logged_hours_above': document.getElementById("logged_hours_above").value,
                 'logged_hours_above_sales_amount': document.getElementById("logged_hours_above_sales_amount").value,
                 'achieve_more_than': document.getElementById("achieve_more_than").value,
                 'achieve_less_than': document.getElementById("achieve_less_than").value,
-                'sales_from': sales_from_values,
-                'sales_to': sales_to_values,
-                'sales_amount': sales_amount_values,
+                'generate_sales_from': sales_from_values,
+                'generate_sales_to': sales_to_values,
+                'generate_sales_amount': sales_amount_values,
                 'logged_hours_between': logged_hours_between_values,
                 'logged_hours_between_to': logged_hours_between_to_values,
                 'logged_hours_sales_amount': logged_hours_sales_amount_values,
+                'accepted_by_pm': document.getElementById("accepted_by_pm").value,
                 'id':{{$kpi->id}},
             }
             // console.log(data);

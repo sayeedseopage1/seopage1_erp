@@ -93,36 +93,126 @@ $task_submission= App\Models\TaskSubmission::where('task_id',$task->id)->orderBy
 
 
 
-      <div class="modal-body">
-        @if($task_submission != null)
+        <div class="modal-body">
+            <p>
+                <a class="btn btn-primary" data-toggle="collapse" href="#oldSubmission" role="button" aria-expanded="false" aria-controls="oldSubmission">
+                    @php
+                        if($task_submission != null) {
+                            $latestObject = $task_submission->first();
 
-        <h5>Submitted Work</h5>
-        @foreach($task_submission as $submission)
-        @if($submission->link != null)
-        <div class="mb-3">
-          <a class="text-lowercase" href="{{$submission->link}}" target="_blank">  {{$submission->link}}</a>
+                            // Remove the latest object from the collection
+                            $objects = $task_submission->reject(function ($object) use ($latestObject) {
+                                return $object->id === $latestObject->id;
+                            });
 
+                            $taskSubmissions = json_decode($task_submission, true);
+
+                            // Assuming you have the "task_submissions" array in $taskSubmissions
+
+                            $groupedSubmissions = collect($taskSubmissions)->groupBy(function ($submission) {
+                                return $submission['submission_no'] . '_' . $submission['task_id'];
+                            })->map(function ($group) {
+                                return $group;
+                            })->toArray();
+
+                            $newArray = [];
+
+                            function mergeArrays($arr1, $arr2) {
+                                $merged = [];
+
+                                foreach ($arr1 as $key => $value) {
+                                    if ($value !== null) {
+                                        $merged[$key] = $value;
+                                    } elseif (isset($arr2[$key])) {
+                                        $merged[$key] = $arr2[$key];
+                                    }
+                                }
+
+                                foreach ($arr2 as $key => $value) {
+                                    if ($value !== null && !isset($merged[$key])) {
+                                        $merged[$key] = $value;
+                                    }
+                                }
+
+                                return $merged;
+                            }
+
+                            foreach($groupedSubmissions as $key => $value) {
+                                if(count($value) > 1) {
+                                    if(!is_null($value[0]) && !is_null($value[1])) {
+                                        $newArr = mergeArrays($value[0], $value[1]);
+                                        array_push($newArray, $newArr);
+                                    }
+                                } else {
+                                    array_push($newArray, $value[0]);
+                                }
+                            }
+
+                            $newArray = json_encode($newArray);
+                            $newArray = json_decode($newArray);
+                        }  
+                    @endphp
+                    Old Submission ({{count($newArray)}})
+                </a>
+            </p>
+            <div class="collapse" id="oldSubmission">
+                <div class="card card-body">
+                    @if($newArray != null)
+                        <h5>Submitted Work</h5>
+                        @php $counter = 1; @endphp
+                        @foreach($newArray as $submission)
+                            <h5>Submission {{$counter++}} <span class="float-right">({{\Carbon\Carbon::parse($submission->created_at)->format('Y-m-d H:i:s')}})</span></h5>
+                            @if($submission->link != null)
+                                <div class="mb-3">
+                                    <a class="text-lowercase" href="{{$submission->link}}" target="_blank">{{$submission->link}}</a>
+                                </div>
+                            @endif
+                            @if($submission->text != null)
+                                <div class="mb-3 text-lowercase">
+                                    {!! $submission->text !!}
+                                </div>
+                            @endif
+                            @if(isset($submission->attach))
+                                <div class="mb-3">
+                                    <p class="card-text">
+                                        <a class="text-dark-grey" style="font-weight:bold;" target="_blank" href="{{asset('storage/TaskSubmission/'.$submission->attach)}}"><i class="fa-solid fa-link"></i> {{$submission->attach}}</a>
+                                    </p>
+                                </div>
+                            @endif
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+        <hr>
+        @php
+            $latestObject = \App\Models\TaskSubmission::where([
+                'task_id' => $latestObject->task_id,
+                'submission_no' => $latestObject->submission_no
+            ])->get()->toArray();
+
+            $latestObject = json_encode(mergeArrays($latestObject[0], $latestObject[1]));
+            $latestObject = json_decode($latestObject);
+        @endphp
+        <div class="bg-amt-grey">
+            <h5 class="bg-amt-grey p-2">Latest Submission <span class="float-right">{{\Carbon\Carbon::parse($latestObject->created_at)->format('Y-m-d')}}</span></h5>
+            @if($latestObject->link != null)
+                <div class="mb-3 m-2">
+                    <a class="text-lowercase" href="{{$latestObject->link}}" target="_blank">  {{$latestObject->link}}</a>
+
+                </div>
+            @endif
+            @if($latestObject->text != null)
+                <div class="mb-3 m-2 text-lowercase">
+                    {!! $latestObject->text !!}
+                </div>
+            @endif
+            @if(isset($latestObject->attach))
+                <div class="mb-3 m-2">
+                    <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;" target="_blank" href="{{asset('storage/TaskSubmission/'.$latestObject->attach)}}"><i class="fa-solid fa-link"></i> {{$latestObject->attach}}</a></p>
+                </div>
+            @endif
         </div>
-        @endif
-        @if($submission->text != null)
-        <div class="mb-3 text-lowercase">
-
-
-           {!! $submission->text !!}
-
-        </div>
-        @endif
-        @if($submission->attach != null)
-        <div class="mb-3">
-            <p class="card-text">  <a class="text-dark-grey" style="font-weight:bold;" target="_blank" href="{{asset('storage/TaskSubmission/'.$submission->attach)}}"><i class="fa-solid fa-link"></i> {{$submission->attach}}</a></p>
-
-        </div>
-        @endif
-
-        @endforeach
-          @endif
-            <hr>
-
+        
         <div class="container">
       	<div class="row flex-column">
           <div class="mb-3">
