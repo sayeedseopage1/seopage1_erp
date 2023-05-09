@@ -108,10 +108,10 @@ export const relativePeriod = [
 ];
 
 export const rollingPeriod = [
-    "Past 2 weeks",
-    "Past 3 months",
-    "past 6 months",
-    "Past 12 months",
+    "Last 2 weeks",
+    "Last 3 months",
+    "Last 6 months",
+    "Last 12 months",
 ];
 
 
