@@ -842,4 +842,8 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         return $this->belongsToMany(EmployeeShift::class, 'employee_shift_schedules');
     }
 
+    public function getRole()
+    {
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
 }

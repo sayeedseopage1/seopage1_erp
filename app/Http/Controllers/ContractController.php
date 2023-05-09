@@ -413,11 +413,9 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
-
         $current_time= Carbon::now()->format('d-m-Y H:i:s' );
         $award_date= strtotime($request->award_time);
         $aw_dt= date('Y-m-d H:i:s', $award_date );
-        //dd($aw_dt);
 
 
 
@@ -445,12 +443,12 @@ class ContractController extends AccountBaseController
                 ]
             ], 422);
         }
-        //  dd($diff_in_minutes);
+
         $deal_stage = DealStage::where('id', $request->id)->first();
 
 
         $deal = DealStage::find($request->id);
-        //dd($deal);
+
         if ($deal_stage->deal_stage == 0) {
             $deal->deal_stage = $deal_stage->deal_stage + 1;
             $deal->comments = $deal_stage->comments;
@@ -642,30 +640,30 @@ class ContractController extends AccountBaseController
                 $diff_in_days = $from->diffInDays($to);
                // dd($diff_in_days, $find_pm_id);
                 if ($diff_in_days < 90) {
-            $deal_pm_id = Deal::find($deal->id);
-            $deal_pm_id->pm_id = $find_pm_id->pm_id;
-            $deal_pm_id->save();
-            $project_pm_id= Project::find($project->id);
-            $project_pm_id->pm_id = $find_pm_id->pm_id;
-            $project_pm_id->save();
-           // dd($project_pm_id);
+                    $deal_pm_id = Deal::find($deal->id);
+                    $deal_pm_id->pm_id = $find_pm_id->pm_id;
+                    $deal_pm_id->save();
+                    $project_pm_id= Project::find($project->id);
+                    $project_pm_id->pm_id = $find_pm_id->pm_id;
+                    $project_pm_id->save();
+                   // dd($project_pm_id);
 
-            $pmassign = new PMProject();
-            $pmassign->project_id = $project->id;
-            $pmassign->status = 'pending';
-            $pmassign->pm_id = $find_pm_id->pm_id;
-            $pmassign->deal_id = $deal->id;
-            $pmassign->client_id = $existing_client->id;
-            $pmassign->save();
-            $pm_project_find = PMAssign::where('pm_id', $find_pm_id->pm_id)->first();
-            $pm_project_update = PMAssign::find($pm_project_find->id);
-            $pm_project_update->project_count = $pm_project_update->project_count + 1;
-            $pm_project_update->amount = $pm_project_update->amount + ($deal->amount /2);
-            $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
-            $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
-            $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->amount/2);
-            $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
-            $pm_project_update->save();
+                    $pmassign = new PMProject();
+                    $pmassign->project_id = $project->id;
+                    $pmassign->status = 'pending';
+                    $pmassign->pm_id = $find_pm_id->pm_id;
+                    $pmassign->deal_id = $deal->id;
+                    $pmassign->client_id = $existing_client->id;
+                    $pmassign->save();
+                    $pm_project_find = PMAssign::where('pm_id', $find_pm_id->pm_id)->first();
+                    $pm_project_update = PMAssign::find($pm_project_find->id);
+                    $pm_project_update->project_count = $pm_project_update->project_count + 1;
+                    $pm_project_update->amount = $pm_project_update->amount + ($deal->amount /2);
+                    $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                    $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                    $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->amount/2);
+                    $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
+                    $pm_project_update->save();
 
          
                 }

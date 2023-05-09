@@ -45,17 +45,16 @@ class StoreSubTask extends FormRequest
         $task = Task::find(request()->task_id);
         $startDate = $task->start_date->format($setting->date_format);
         $dueDate = !is_null($task->due_date) ? $task->due_date->format($setting->date_format) : '';
-
         $rules = [
             'title' => 'required',
             'estimate_hours'=> 'required',
             'estimate_minutes'=> 'required',
             'description' => 'required',
-            'user_id'=>'required'
-
+            'user_id'=>'required',
+            
         ];
 
-        $dueDateRule = 'nullable|date_format:"' . $setting->date_format . '"|after_or_equal:' . $startDate;
+        $dueDateRule = 'required|date_format:"' . $setting->date_format . '"|after_or_equal:' . $startDate;
 
         !is_null($task->due_date) ? $dueDateRule . '|before_or_equal:' . $task->due_date : $dueDateRule;
 
