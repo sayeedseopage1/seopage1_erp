@@ -445,7 +445,7 @@ const Goal = () => {
                     
 
                     {/* graph table */}
-                    <div className='cnx__ins_table'>
+                    <div className='cnx__ins_table pb-3'>
                        {activeTable === 'activities' && (
                             <DataTable 
                                 data={dealsData} 
