@@ -13,6 +13,7 @@ use App\Models\Section;
 use App\Models\Dashboard;
 use App\Models\DealStage;
 use App\Models\Lead;
+use Illuminate\Support\Facades\DB;
 
 class InsightsController extends AccountBaseController
 {
