@@ -454,7 +454,7 @@ class LeadController extends AccountBaseController
                 }
                 //end activity log
 
-                $pusher_options['title'] = 'Deals updated';
+                $pusher_options['title'] = 'Milestone Breakdown';
                 $pusher_options['body'] = 'Go to the deals';
 
                 if (Auth::user()->role_id == 7) {
@@ -466,21 +466,21 @@ class LeadController extends AccountBaseController
                 }
             }
             else {
-                $deal->deal_stage= $deal_stage->deal_stage;
-                $deal->comments=$request->comments;
-                $deal->won_lost=$request->won_lost;
-                $deal->save();
+                // $deal->deal_stage= $deal_stage->deal_stage;
+                // $deal->comments=$request->comments;
+                // $deal->won_lost=$request->won_lost;
+                // $deal->save();
 
-                $deal_stage= new DealStageChange();
-                $deal_stage->lead_id= $deal->lead_id;
-                $deal_stage->deal_id= $deal->short_code;
-                $deal_stage->comments= $request->comments;
-                $deal_stage->deal_stage_id=$deal->deal_stage;
-                $deal_stage->updated_by= Auth::id();
-                $deal_stage->save();
+                // $deal_stage= new DealStageChange();
+                // $deal_stage->lead_id= $deal->lead_id;
+                // $deal_stage->deal_id= $deal->short_code;
+                // $deal_stage->comments= $request->comments;
+                // $deal_stage->deal_stage_id=$deal->deal_stage;
+                // $deal_stage->updated_by= Auth::id();
+                // $deal_stage->save();
 
-                $pusher_options['title'] = 'Milestone Breakdown';
-                $pusher_options['body'] = 'Go to the deals';
+                // $pusher_options['title'] = 'Milestone Breakdown';
+                // $pusher_options['body'] = 'Go to the deals';
             }
 
             $users = User::where('role_id', '7')->get();
