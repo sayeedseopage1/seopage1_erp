@@ -8,10 +8,14 @@ use App\Models\Notification as ModelsNotification;
 use App\Notifications\LeadAgentAssigned;
 use App\Models\UniversalSearch;
 use App\Models\User;
+use App\Models\LeadsDealsActivityLog;
 use Illuminate\Support\Facades\Notification;
+use App\Traits\LeadDealActivityLog;
+use Auth;
 
 class LeadObserver
 {
+    use LeadDealActivityLog;
 
     public function saving(Lead $lead)
     {
@@ -42,6 +46,13 @@ class LeadObserver
 
     public function created(Lead $lead)
     {
+        $user = Auth::user();
+        $text = $user->getRole->name.' '.$user->name.' - Created the lead ('.$lead->client_name.')';
+        $link = '<a href="'.route('leads.show', $lead->id).'">'.$text.'</a>';
+        $this->saveActivityLog([
+            'lead' => $lead->id
+        ], $link);
+
         if (!isRunningInConsoleOrSeeding()) {
             if (request('agent_id') != '') {
                 event(new LeadEvent($lead, $lead->leadAgent, 'LeadAgentAssigned'));

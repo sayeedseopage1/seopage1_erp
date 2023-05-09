@@ -49,6 +49,8 @@ use Exception;
 use App\Models\EmployeeDetails;
 use App\Notifications\DealAuthorizationSendNotification;
 use Notification;
+use App\Models\kpiSetting;
+use App\Models\CashPoint;
 
 class ContractController extends AccountBaseController
 {
@@ -411,11 +413,9 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
-
         $current_time= Carbon::now()->format('d-m-Y H:i:s' );
         $award_date= strtotime($request->award_time);
         $aw_dt= date('Y-m-d H:i:s', $award_date );
-        //dd($aw_dt);
 
 
 
@@ -443,12 +443,12 @@ class ContractController extends AccountBaseController
                 ]
             ], 422);
         }
-        //  dd($diff_in_minutes);
+
         $deal_stage = DealStage::where('id', $request->id)->first();
 
 
         $deal = DealStage::find($request->id);
-        //dd($deal);
+
         if ($deal_stage->deal_stage == 0) {
             $deal->deal_stage = $deal_stage->deal_stage + 1;
             $deal->comments = $deal_stage->comments;
@@ -640,30 +640,30 @@ class ContractController extends AccountBaseController
                 $diff_in_days = $from->diffInDays($to);
                // dd($diff_in_days, $find_pm_id);
                 if ($diff_in_days < 90) {
-            $deal_pm_id = Deal::find($deal->id);
-            $deal_pm_id->pm_id = $find_pm_id->pm_id;
-            $deal_pm_id->save();
-            $project_pm_id= Project::find($project->id);
-            $project_pm_id->pm_id = $find_pm_id->pm_id;
-            $project_pm_id->save();
-           // dd($project_pm_id);
+                    $deal_pm_id = Deal::find($deal->id);
+                    $deal_pm_id->pm_id = $find_pm_id->pm_id;
+                    $deal_pm_id->save();
+                    $project_pm_id= Project::find($project->id);
+                    $project_pm_id->pm_id = $find_pm_id->pm_id;
+                    $project_pm_id->save();
+                   // dd($project_pm_id);
 
-            $pmassign = new PMProject();
-            $pmassign->project_id = $project->id;
-            $pmassign->status = 'pending';
-            $pmassign->pm_id = $find_pm_id->pm_id;
-            $pmassign->deal_id = $deal->id;
-            $pmassign->client_id = $existing_client->id;
-            $pmassign->save();
-            $pm_project_find = PMAssign::where('pm_id', $find_pm_id->pm_id)->first();
-            $pm_project_update = PMAssign::find($pm_project_find->id);
-            $pm_project_update->project_count = $pm_project_update->project_count + 1;
-            $pm_project_update->amount = $pm_project_update->amount + ($deal->amount /2);
-            $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
-            $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
-            $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->amount/2);
-            $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
-            $pm_project_update->save();
+                    $pmassign = new PMProject();
+                    $pmassign->project_id = $project->id;
+                    $pmassign->status = 'pending';
+                    $pmassign->pm_id = $find_pm_id->pm_id;
+                    $pmassign->deal_id = $deal->id;
+                    $pmassign->client_id = $existing_client->id;
+                    $pmassign->save();
+                    $pm_project_find = PMAssign::where('pm_id', $find_pm_id->pm_id)->first();
+                    $pm_project_update = PMAssign::find($pm_project_find->id);
+                    $pm_project_update->project_count = $pm_project_update->project_count + 1;
+                    $pm_project_update->amount = $pm_project_update->amount + ($deal->amount /2);
+                    $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                    $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                    $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->amount/2);
+                    $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
+                    $pm_project_update->save();
 
          
                 }
@@ -706,6 +706,8 @@ class ContractController extends AccountBaseController
                 $pm_project_update->save();
             }
         }
+
+      
 
         if ($project) {
             $users = user::whereIn('role_id', [1, 4])->get();
@@ -1168,21 +1170,60 @@ class ContractController extends AccountBaseController
                         $deal= Deal::find($deal->id);
                         $deal->authorization_status= 2;
                         $deal->save();
-                        $sender= User::where('id',Auth::id())->first();
-                        $users= User::where('role_id',8)->orWhere('role_id',1)->get();
+                        // $sender= User::where('id',Auth::id())->first();
+                        // $users= User::where('role_id',8)->orWhere('role_id',1)->get();
                     
-                        foreach ($users as $key => $user) {
-                           // Notification::send($users, new DealAuthorizationSendNotification($deal,$sender));
-                            $this->triggerPusher('notification-channel', 'notification', [
-                                'user_id' => $user->id,
-                                'role_id' => $user->role_id,
-                                'title' => 'Price authorization request from '.$sender->name,
-                                'body' => $sender->name. ' send price authorization request for '.$deal->project_name,
-                                'redirectUrl' => route('deals.show',$deal->id)
-                            ]);
-                        }
-       
+                        // foreach ($users as $key => $user) {
+                        //    // Notification::send($users, new DealAuthorizationSendNotification($deal,$sender));
+                        //     $this->triggerPusher('notification-channel', 'notification', [
+                        //         'user_id' => $user->id,
+                        //         'role_id' => $user->role_id,
+                        //         'title' => 'Price authorization request from '.$sender->name,
+                        //         'body' => $sender->name. ' send price authorization request for '.$deal->project_name,
+                        //         'redirectUrl' => route('deals.show',$deal->id)
+                        //     ]);
+                        // }
+                        // the bidder kpi points start fropm here.
+                        $kpi= kpiSetting::first();
+                       
+                        $project_budget= $deal->amount;
+                     
+                        
+                            if($deal->lead_id != null)
+                            {
+                                $lead = Lead::where('id',$deal->lead_id)->first();
+                                $user_name= User::where('id',$lead->added_by)->first(); 
+                                $cash_points= CashPoint::where('user_id',$lead->added_by)->latest()->first();
 
+                          // dd($cash_points);
+                                // dd($cash_points);
+                                $point= new CashPoint();
+                                $point->user_id= $lead->added_by;
+                                $point->project_id= $project_id->id;
+                            //    / dd($point);
+
+                                $point->activity= $user_name->name . ' created the bid';
+                                $point->gained_as = "Individual";
+                                $point->points= ($project_budget*$kpi->the_bidder)/100;
+                                //dd($point);
+                                
+                                if ($cash_points != null) {
+                                 // dd($cash_points);
+                                   
+                                    $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->the_bidder)/100;
+                                  //  dd($point);
+
+                                }else 
+                                {
+                                    ($project_budget*$kpi->the_bidder)/100;
+
+                                }
+                                $point->save();
+                               // dd($point);
+                                
+                            
+                                
+                            }
 
                       DB::commit();
                       // all good
@@ -1201,7 +1242,7 @@ class ContractController extends AccountBaseController
     public function updatedealDetails(Request $request)
     {
 
-//        dd($request->all());
+    // dd($request->all());
         $validated = $request->validate([
             'project_name' => 'required',
             'deadline' => 'required',
@@ -1245,6 +1286,7 @@ class ContractController extends AccountBaseController
     DB::beginTransaction();
 
               try {
+                // /dd($request);
                 $deal = Deal::find($request->id);
                 $deal->project_name = $request->project_name;
                 $deal->currency_id= 1;
@@ -1442,6 +1484,39 @@ class ContractController extends AccountBaseController
                     $project_admin_update->added_by= $project_id->pm_id;
                     $project_admin_update->project_admin= $project_id->pm_id;
                     $project_admin_update->save();
+
+                  
+                    // the bidder kpi points start fropm here.
+                    $kpi= kpiSetting::first();
+                       
+                    $project_budget= $deal->amount;
+                   
+                        if($deal->lead_id != null)
+                        {
+                            $lead = Lead::where('id',$deal->lead_id)->first();
+                            $user_name= User::where('id',$lead->added_by)->first(); 
+                            $cash_points= CashPoint::where('user_id',$lead->added_by)->latest()->first();
+                            $point= new CashPoint();
+                            $point->user_id= $lead->added_by;
+                            $point->project_id= $project_id->id;
+                            $point->activity= $user_name->name . ' created the bid';
+                            $point->gained_as = "Individual";
+                            $point->points= ($project_budget*$kpi->the_bidder)/100;
+                            if ($cash_points != 0) {
+                               
+                                $point->total_points_earn= $cash_points->sum('total_points')+ ($project_budget*$kpi->the_bidder)/100;
+
+                            }else 
+                            {
+                                $point->total_points_earn = ($project_budget*$kpi->the_bidder)/100;;
+
+                            }
+                            $point->save();
+                           // dd($point);
+                            
+                        
+                            
+                        }
                   $user= User::where('id',$deal_pm_id->pm_id)->first();
                     Mail::to($user->email)->send(new WonDealMail($project_id));
                     // $check_new_pm= User::where('id',$deal->pm_id)->first();
@@ -1475,23 +1550,25 @@ class ContractController extends AccountBaseController
                     //   foreach ($users as $usr) {
                     //     Mail::to($usr->email)->send(new WonDealMail($project_id));
                     //   }
-                }
-                $deal= Deal::find($deal->id);
-                        $deal->authorization_status= 2;
-                        $deal->save();
-                        $sender= User::where('id',Auth::id())->first();
-                        $users= User::where('role_id',8)->orWhere('role_id',1)->get();
                     
-                        foreach ($users as $key => $user) {
-                           // Notification::send($users, new DealAuthorizationSendNotification($deal,$sender));
-                            $this->triggerPusher('notification-channel', 'notification', [
-                                'user_id' => $user->id,
-                                'role_id' => $user->role_id,
-                                'title' => 'Price authorization request from '.$sender->name,
-                                'body' => $sender->name. ' send price authorization request for '.$deal->project_name,
-                                'redirectUrl' => route('deals.show',$deal->id)
-                            ]);
-                        }
+                    
+                }
+                // $deal= Deal::find($deal->id);
+                //         $deal->authorization_status= 2;
+                //         $deal->save();
+                //         $sender= User::where('id',Auth::id())->first();
+                //         $users= User::where('role_id',8)->orWhere('role_id',1)->get();
+                    
+                //         foreach ($users as $key => $user) {
+                //            // Notification::send($users, new DealAuthorizationSendNotification($deal,$sender));
+                //             $this->triggerPusher('notification-channel', 'notification', [
+                //                 'user_id' => $user->id,
+                //                 'role_id' => $user->role_id,
+                //                 'title' => 'Price authorization request from '.$sender->name,
+                //                 'body' => $sender->name. ' send price authorization request for '.$deal->project_name,
+                //                 'redirectUrl' => route('deals.show',$deal->id)
+                //             ]);
+                //         }
 
 
                 DB::commit();

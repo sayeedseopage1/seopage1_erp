@@ -28,19 +28,20 @@ return new class extends Migration
             $table->bigInteger('closed_deal')->default(0);
             $table->bigInteger('contact_form')->default(0);
             $table->bigInteger('authorized_by_leader')->default(0);
-            $table->bigInteger('for_every')->default(0);
-            $table->string('addition_sales')->nullable();
+            $table->bigInteger('additional_sales_amount')->default(0);
+            $table->string('client_type')->nullable();
             $table->bigInteger('after')->default(0);
-            $table->bigInteger('shift_will_get')->default(0);
+            $table->bigInteger('after_reach_amount')->default(0);
             $table->string('generate_project')->nullable();
-            $table->bigInteger('single_deal')->default(0);
+            $table->bigInteger('generate_single_deal')->default(0);
             $table->bigInteger('bonus_point')->default(0);
-            $table->bigInteger('sales_above')->default(0);
-            $table->bigInteger('sales_above_point')->default(0);
+            $table->bigInteger('generate_sales_above')->default(0);
+            $table->bigInteger('generate_sales_above_point')->default(0);
             $table->bigInteger('logged_hours_above')->default(0);
             $table->bigInteger('logged_hours_above_sales_amount')->default(0);
             $table->bigInteger('achieve_more_than')->default(0);
             $table->bigInteger('achieve_less_than')->default(0);
+            $table->bigInteger('accepted_by_pm')->default(0);
             $table->timestamps();
         });
     }

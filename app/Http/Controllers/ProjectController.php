@@ -2203,7 +2203,7 @@ class ProjectController extends AccountBaseController
       $deliverable = ProjectDeliverable::findOrFail($id)->delete();
       $log_user = Auth::user();
 
-      $text = Auth::user()->name.' deleted project deliverable : '.$deliverable_id->title;
+        $text = Auth::user()->name.' deleted project deliverable : '.$deliverable_id->title;
         $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
         $this->logProjectActivity($project->id, $link);
       return response()->json(['status'=>400]);

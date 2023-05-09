@@ -8,68 +8,68 @@
 </style>
 <form action="{{route('tasks.accept_continue')}}" method="post">
     @csrf
-<div class="modal" id="acceptAndContinue">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Please Explain Why & How Did This Happen?</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="">
-                    <textarea name="text3" id="text3" class="form-control"></textarea>
-                    <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
-                    <script>
-                        CKEDITOR.replace('text3',{
-                            height:100,
-                        });
-                    </script>
+    <div class="modal" id="acceptAndContinue">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Please Explain Why & How Did This Happen?</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
-                <div class="modal-footer">
-                    <a data-toggle="modal" href="#acceptAndContinue2" class="btn btn-primary">Next</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal" id="acceptAndContinue2">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Task Revision</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <div class="mb-3">
-                        <label for="" class="form-label">Revision Acknowledgement</label>
-                        <select class="form-control height-35 f-14" id="revision_acknowledgement">
-                            <option value="">--</option>
-                            <option value="task_has_revision_because_requirements_are_not_fulfilled_according_to_my_instructions">Task has revision because requirements are not fulfilled according to my instructions</option>
-                            <option value="task_has_revision_because_i_have_customized_previous_instructions">Task has revision because I have customized previous instructions</option>
-                            <option value="task_has_revision_because_i_have_added_additional_instructions_to_previous_instructions">Task has revision because I have added additional instructions to previous instructions</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3" id="commentContainer">
-                        <label for="" class="form-label">Comment</label>
-                        <textarea name="comment" id="comment" class="form-control"></textarea>
+                <div class="modal-body">
+                    <div class="">
+                        <textarea name="text3" id="text3" class="form-control"></textarea>
                         <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                         <script>
-                            CKEDITOR.replace('comment',{
+                            CKEDITOR.replace('text3',{
                                 height:100,
                             });
                         </script>
                     </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="acceptBtn" class="btn btn-primary">Next</button>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <a href="#" class="btn btn-secondary" data-dismiss="modal">Close</a>
-                <a href="#" class="btn btn-primary" mode="accept" id="acceptBtn">Accept & Continue</a>
             </div>
         </div>
     </div>
-</div>
+    <!-- <div class="modal" id="acceptAndContinue2">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Task Revision</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="mb-3">
+                            <label for="" class="form-label">Revision Acknowledgement</label>
+                            <select class="form-control height-35 f-14" id="revision_acknowledgement">
+                                <option value="">--</option>
+                                <option value="task_has_revision_because_requirements_are_not_fulfilled_according_to_my_instructions">Task has revision because requirements are not fulfilled according to my instructions</option>
+                                <option value="task_has_revision_because_i_have_customized_previous_instructions">Task has revision because I have customized previous instructions</option>
+                                <option value="task_has_revision_because_i_have_added_additional_instructions_to_previous_instructions">Task has revision because I have added additional instructions to previous instructions</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="commentContainer">
+                            <label for="" class="form-label">Comment</label>
+                            <textarea name="comment" id="comment" class="form-control"></textarea>
+                            <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
+                            <script>
+                                CKEDITOR.replace('comment',{
+                                    height:100,
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-secondary" data-dismiss="modal">Close</a>
+                    <a href="#" class="btn btn-primary" mode="accept" id="acceptBtn">Accept & Continue</a>
+                </div>
+            </div>
+        </div>
+    </div> -->
 </form>
 
 <script>
@@ -85,8 +85,8 @@
         '_token': "{{ csrf_token() }}",
         'text2': text3,
         'mode' : $(this).attr('mode'),
-        'revision_acknowledgement': document.getElementById("revision_acknowledgement").value,
-        'comment': CKEDITOR.instances.comment.getData(),
+        //'revision_acknowledgement': document.getElementById("revision_acknowledgement").value,
+        //'comment': CKEDITOR.instances.comment.getData(),
         'task_id': '{{$task->id}}',
         'revision_id': '{{$taskRevisionComment->id}}', 
     }

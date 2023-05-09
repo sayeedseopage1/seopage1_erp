@@ -31,7 +31,6 @@ use Illuminate\Support\Facades\Artisan;
 use Maatwebsite\Excel\HeadingRowImport;
 use App\Http\Requests\Lead\StoreDealStageRequest;
 use App\Http\Requests\Lead\StoreRequest;
-
 use App\Http\Requests\Lead\UpdateRequest;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use App\Http\Requests\Admin\Employee\ImportRequest;
@@ -53,10 +52,10 @@ use Toastr;
 use Mail;
 use App\Mail\LeadConversionMail;
 use Illuminate\Support\Facades\Validator;
-
 use App\Notifications\DealUpdate;
-
 use App\Models\LeadActivity;
+use App\Models\LeadsDealsActivityLog;
+use App\Models\Deal;
 
 
 
@@ -107,8 +106,7 @@ class LeadController extends AccountBaseController
 
           }
         }
-        // dd($request);
-        // dd($value);
+
         $deal= new DealStage();
         $deal->short_code= 'DSEOP1'. $suffle;
         $deal->lead_id= $lead->id;
@@ -126,6 +124,31 @@ class LeadController extends AccountBaseController
         $deal->added_by= Auth::id();
         $deal->converted_by= Auth::id();
         $deal->save();
+
+        // activity log
+        $user = Auth::user();
+        $text = $user->getRole->name.' '.$user->name.' - Lead ('.$lead->client_name.') was converted';
+
+        $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
+
+        $activityLog = new LeadsDealsActivityLog();
+        $activityLog->lead_id = $deal->lead_id;
+        $activityLog->deal_id = $deal->id;
+        $activityLog->message = $link;
+        $activityLog->created_by = Auth::id();
+        $activityLog->save();
+
+        //update previous lead
+
+        $previous_lead = LeadsDealsActivityLog::where([
+            'lead_id' => $deal->lead_id,
+            'deal_id' => null
+        ])->first();
+        if ($previous_lead) {
+            $previous_lead->deal_id = $deal->id;
+            $previous_lead->save();
+        }
+        //END ACTIVITY LOG
         $deal_stage= new DealStageChange();
         $deal_stage->lead_id= $lead->id;
         $deal_stage->deal_id= $deal->short_code;
@@ -230,7 +253,7 @@ class LeadController extends AccountBaseController
             }
         } else {
             $deal= DealStage::find($request->id);
-            
+
             if($deal_stage->deal_stage == 0 )
             {
                 $deal->deal_stage= $deal_stage->deal_stage+1;
@@ -245,6 +268,31 @@ class LeadController extends AccountBaseController
                 $deal_stage->deal_stage_id=$deal->deal_stage;
                 $deal_stage->updated_by= Auth::id();
                 $deal_stage->save();
+
+                // activity log
+                //$deal = Deal::where('deal_id', $deal->short_code)->first();
+
+                $user = Auth::user();
+                $text = $user->getRole->name.' '.$user->name.' - Moved Deal ('.$deal->project_name.') from Contact Made to Qualified, Explanation: '.\Str::limit($deal_stage->comments, 30, '...');
+                $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
+
+                $activityLog = new LeadsDealsActivityLog();
+                $activityLog->lead_id = $deal->lead_id;
+                $activityLog->deal_id = $deal->id;
+                $activityLog->message = $link;
+                $activityLog->created_by = Auth::id();
+                $activityLog->save();
+
+                //update previous lead
+                $previous_lead = LeadsDealsActivityLog::where([
+                    'lead_id' => $deal->lead_id,
+                    'deal_id' => null
+                ])->first();
+                if ($previous_lead) {
+                    $previous_lead->deal_id = $deal->id;
+                    $previous_lead->save();
+                }
+                //END ACTIVITY LOG
 
                 // $lead_id= Lead::where('id',$deal->lead_id)->first();
                 // $lead= Lead::find($lead_id->id);
@@ -267,6 +315,29 @@ class LeadController extends AccountBaseController
                 $deal_stage->updated_by= Auth::id();
                 $deal_stage->save();
 
+                // activity log
+                $user = Auth::user();
+                $text = $user->getRole->name.' '.$user->name.' - Moved Deal ('.$deal->project_name.') from Qualified to Requirements Defined, Explanation: '.\Str::limit($request->comments, 30, '...');
+                $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
+
+                $activityLog = new LeadsDealsActivityLog();
+                $activityLog->lead_id = $deal->lead_id;
+                $activityLog->deal_id = $deal->id;
+                $activityLog->message = $link;
+                $activityLog->created_by = Auth::id();
+                $activityLog->save();
+
+                //update previous lead
+                $previous_lead = LeadsDealsActivityLog::where([
+                    'lead_id' => $deal->lead_id,
+                    'deal_id' => null
+                ])->first();
+                if ($previous_lead) {
+                    $previous_lead->deal_id = $deal->id;
+                    $previous_lead->save();
+                }
+                //end activity log
+
                 $pusher_options['title'] = 'Requirements Defined';
                 $pusher_options['body'] = 'Go to the deals';
             } elseif ($deal_stage->deal_stage == 2) {
@@ -282,6 +353,29 @@ class LeadController extends AccountBaseController
                 $deal_stage->deal_stage_id=$deal->deal_stage;
                 $deal_stage->updated_by= Auth::id();
                 $deal_stage->save();
+
+                // activity log
+                $user = Auth::user();
+                $text = $user->getRole->name.' '.$user->name.' - Moved Deal ('.$deal->project_name.') from Requirements Defined to Proposal Made, Explanation: '.\Str::limit($request->comments, 30, '...');
+                $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
+
+                $activityLog = new LeadsDealsActivityLog();
+                $activityLog->lead_id = $deal->lead_id;
+                $activityLog->deal_id = $deal->id;
+                $activityLog->message = $link;
+                $activityLog->created_by = Auth::id();
+                $activityLog->save();
+
+                //update previous lead
+                $previous_lead = LeadsDealsActivityLog::where([
+                    'lead_id' => $deal->lead_id,
+                    'deal_id' => null
+                ])->first();
+                if ($previous_lead) {
+                    $previous_lead->deal_id = $deal->id;
+                    $previous_lead->save();
+                }
+                //end activity log
 
                 $pusher_options['title'] = 'Proposal Made';
                 $pusher_options['body'] = 'Go to the deals';
@@ -299,6 +393,28 @@ class LeadController extends AccountBaseController
                 $deal_stage->updated_by= Auth::id();
                 $deal_stage->save();
 
+                // activity log
+                $user = Auth::user();
+                $text = $user->getRole->name.' '.$user->name.' - Moved Deal ('.$deal->project_name.') from Proposal Made to Negotiation Started, Explanation: '.\Str::limit($request->comments, 30, '...');
+                $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
+
+                $activityLog = new LeadsDealsActivityLog();
+                $activityLog->lead_id = $deal->lead_id;
+                $activityLog->deal_id = $deal->id;
+                $activityLog->message = $link;
+                $activityLog->created_by = Auth::id();
+                $activityLog->save();
+
+                //update previous lead
+                $previous_lead = LeadsDealsActivityLog::where([
+                    'lead_id' => $deal->lead_id,
+                    'deal_id' => null
+                ])->first();
+                if ($previous_lead) {
+                    $previous_lead->deal_id = $deal->id;
+                    $previous_lead->save();
+                }
+                //end activity log
                 $pusher_options['title'] = 'Negotiation Started';
                 $pusher_options['body'] = 'Go to the deals';
             } elseif($deal_stage->deal_stage == 4) {
@@ -315,7 +431,30 @@ class LeadController extends AccountBaseController
                 $deal_stage->updated_by= Auth::id();
                 $deal_stage->save();
 
-                $pusher_options['title'] = 'Deals updated';
+                // activity log
+                $user = Auth::user();
+                $text = $user->getRole->name.' '.$user->name.' - Moved Deal ('.$deal->project_name.') from Negotiation Started to Milestone Breakdown, Explanation: '.\Str::limit($request->comments, 30, '...');
+                $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
+
+                $activityLog = new LeadsDealsActivityLog();
+                $activityLog->lead_id = $deal->lead_id;
+                $activityLog->deal_id = $deal->id;
+                $activityLog->message = $link;
+                $activityLog->created_by = Auth::id();
+                $activityLog->save();
+
+                //update previous lead
+                $previous_lead = LeadsDealsActivityLog::where([
+                    'lead_id' => $deal->lead_id,
+                    'deal_id' => null
+                ])->first();
+                if ($previous_lead) {
+                    $previous_lead->deal_id = $deal->id;
+                    $previous_lead->save();
+                }
+                //end activity log
+
+                $pusher_options['title'] = 'Milestone Breakdown';
                 $pusher_options['body'] = 'Go to the deals';
 
                 if (Auth::user()->role_id == 7) {
@@ -327,24 +466,23 @@ class LeadController extends AccountBaseController
                 }
             }
             else {
-                $deal->deal_stage= $deal_stage->deal_stage;
-                $deal->comments=$request->comments;
-                $deal->won_lost=$request->won_lost;
-                $deal->save();
+                // $deal->deal_stage= $deal_stage->deal_stage;
+                // $deal->comments=$request->comments;
+                // $deal->won_lost=$request->won_lost;
+                // $deal->save();
 
-                $deal_stage= new DealStageChange();
-                $deal_stage->lead_id= $deal->lead_id;
-                $deal_stage->deal_id= $deal->short_code;
-                $deal_stage->comments= $request->comments;
-                $deal_stage->deal_stage_id=$deal->deal_stage;
-                $deal_stage->updated_by= Auth::id();
-                $deal_stage->save();
+                // $deal_stage= new DealStageChange();
+                // $deal_stage->lead_id= $deal->lead_id;
+                // $deal_stage->deal_id= $deal->short_code;
+                // $deal_stage->comments= $request->comments;
+                // $deal_stage->deal_stage_id=$deal->deal_stage;
+                // $deal_stage->updated_by= Auth::id();
+                // $deal_stage->save();
 
-                $pusher_options['title'] = 'Milestone Breakdown';
-                $pusher_options['body'] = 'Go to the deals';
-
-               
+                // $pusher_options['title'] = 'Milestone Breakdown';
+                // $pusher_options['body'] = 'Go to the deals';
             }
+
             $users = User::where('role_id', '7')->get();
             foreach ($users as $user) {
                 $pusher_options['user_id'] = $user->id;
@@ -356,14 +494,12 @@ class LeadController extends AccountBaseController
             }
         }
 
-
         return response()->json([
             'status'=>400
         ]);
     }
     public function DealStageUpdateLost(Request $request)
     {
-//        dd($request->all());
         $validator = Validator::make($request->all(), [
             'comments' => 'required',
         ]);
@@ -648,6 +784,11 @@ class LeadController extends AccountBaseController
         $lead_agent->added_by= Auth::id();
         $lead_agent->last_updated_by= Auth::id();
         $lead_agent->save();
+
+        //$user = Auth::user();
+        //$text = $user->getRole->name.' '.$user->name.' created the lead ('.$lead->client_name.')';
+        //$link = '<a href="'.route('leads.show', $lead->id).'">'.$text.'</a>';
+        //$this->logProjectActivity($project->id, $link);
 
         if ($request->get('custom_fields_data')) {
             $lead->updateCustomFieldData($request->get('custom_fields_data'));
