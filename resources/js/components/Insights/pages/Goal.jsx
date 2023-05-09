@@ -390,8 +390,8 @@ const Goal = () => {
                                     barDataKey={[ "value" ]}
                                     offset={-5}
                                     // yDomain={ [0, dataMax => (dataMax + Math.ceil(dataMax * 0.1))]}
-                                    labelListFormatter={value => goal.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 2)  }
-                                    yAxisTickFormate={value => goal.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 2)  }
+                                    labelListFormatter={value => goal.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
+                                    yAxisTickFormate={value => goal.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
                                     data = {[...summarizedData]} 
                                 />
                             </div>
