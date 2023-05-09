@@ -5,6 +5,7 @@ import { setGoals, setRecurring, setStatus } from "../services/slices/goalSlice"
 import { useGetGoalsQuery } from "../services/api/goalsApiSlice";
 import { getPeriod } from "../utils/getPeriod";
 import dayjs from 'dayjs';
+import _ from "lodash";
 
 
 export const useGoals = () => {
@@ -58,14 +59,24 @@ export const useGoals = () => {
 
 
     // create goal period
-    const getTargetPeriod = (goal) => {
+    const getTargetPeriod = (goal, filter) => {
         if(!goal) return;
-        let recurring = goal?.recurring?.length > 0 ? goal.recurring :  getPeriod({
+        let recurring;
+        if(!filter && _.isEmpty(filter)){
+            recurring = goal?.recurring?.length > 0 ? goal.recurring :  getPeriod({
                 startDate: goal.startDate,
                 endDate: goal.endDate || getEndDate(goal),
                 frequency: goal.frequency,
                 defaultValue: goal.trackingValue
-            }); 
+            });
+        }else{
+            recurring = getPeriod({
+                startDate: filter.start,
+                endDate: filter.end,
+                frequency: goal.frequency,
+                defaultValue: goal.trackingValue
+            });
+        }
         return [...recurring];
     }
 

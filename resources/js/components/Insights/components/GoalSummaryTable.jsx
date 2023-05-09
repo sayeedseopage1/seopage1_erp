@@ -74,16 +74,16 @@ const GoalSummaryTableColumns =   [
         accessor: 'goal',
         id: 'goal',
         cell: (row) => {
-           return <span>{row['goal'].toFixed(2)}</span>
+           return <span>{row['goal']}</span>
         }
     },
 
     {
         header: 'Result',
-        accessor: 'dealAdded',
-        id: 'dealAdded',
+        accessor: 'result',
+        id: 'result',
         cell: (row) => {
-           return <span>{row['dealAdded'].toFixed(2)}</span>
+           return <span>{row['result']}</span>
         }
     },
 
@@ -94,7 +94,7 @@ const GoalSummaryTableColumns =   [
         cell: (row) => {
             const diff = row['difference'];
             const color = diff < 0 ? 'red' : 'green';
-            const text = diff < 0 ? `- $${Math.abs(diff).toFixed(2)}` : `+ $${Math.abs(diff).toFixed(2)}`
+            const text = diff < 0 ? `${diff}` : `${diff}`
            return <span style={{fontWeight: '600', color: color}}>{text}</span>
         }
     },

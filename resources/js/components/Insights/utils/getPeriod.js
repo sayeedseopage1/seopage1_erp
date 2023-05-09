@@ -4,12 +4,14 @@ import quarterOfYear from "dayjs/plugin/quarterOfYear";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import WeekOfYear from "dayjs/plugin/weekOfYear";
 
+
 export const getPeriod = ({setPeriod, startDate, endDate, frequency, defaultValue=""}) => {
     dayjs.extend(utc);
     dayjs.extend(quarterOfYear);
     dayjs.extend(isSameOrBefore);
     dayjs.extend(WeekOfYear);
 
+    // });
      const yearly = () => {
             let years = [];
             const yearStart = dayjs(startDate).startOf("year");
