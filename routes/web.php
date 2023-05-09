@@ -1240,3 +1240,5 @@ Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'get
 
 Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
 Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');
+
+Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');

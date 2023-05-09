@@ -6,9 +6,12 @@ use App\Models\DealStage;
 use App\Models\DealStatus;
 use App\Models\User;
 use App\Models\UserDealboardSetting;
+use App\Traits\LeadDealActivityLog;
+use Auth;
 
 class DealStatusObserver
 {
+    use LeadDealActivityLog;
 
     public function created(DealStatus $dealStatus)
     {
