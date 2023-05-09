@@ -413,6 +413,7 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
+        //dd('ok');
         $current_time= Carbon::now()->format('d-m-Y H:i:s' );
         $award_date= strtotime($request->award_time);
         $aw_dt= date('Y-m-d H:i:s', $award_date );
@@ -708,6 +709,19 @@ class ContractController extends AccountBaseController
         }
 
       
+        // activity log
+        /*$user = Auth::user();
+        $text = $user->getRole->name.' '.$user->name.' - Closed Deal ('.$deal->project_name.') from Qualified to Requirements Defined, Explanation: '.\Str::limit($request->comments, 30, '...');
+        $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
+
+        $activityLog = new LeadsDealsActivityLog();
+        $activityLog->lead_id = $deal->lead_id;
+        $activityLog->deal_id = $deal->id;
+        $activityLog->message = $link;
+        $activityLog->created_by = Auth::id();
+        $activityLog->save();*/
+
+        //update previous lead
 
         if ($project) {
             $users = user::whereIn('role_id', [1, 4])->get();

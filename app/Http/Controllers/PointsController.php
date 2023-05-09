@@ -16,8 +16,6 @@ class PointsController extends AccountBaseController
 
     public function index()
     {
-        //$this->pageTitle = 'app.menu.points';
-
         return view('points.index', $this->data);
     }
 }
