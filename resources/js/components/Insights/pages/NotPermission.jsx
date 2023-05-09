@@ -5,24 +5,21 @@ import { useUsers } from "../hooks/useUsers";
 
 
 const NotPermission = () => {
-    const { users, getUserById } = useUsers();
     const [isPageLoading, setIsPageLoading] = useState(true);
     const navigate = useNavigate();
     
     useEffect(() => {
         setIsPageLoading(true);
-        if(users.users.length){
-            // console.log(users)
-            const user = getUserById(users, window.Laravel.user.id);
-            if(user && user.role_id === 1 || user.role_id === 8 || user.role_id === 7){
-                setIsPageLoading(false);
-                navigate('/account/insights/dashboard/my-dashboard');
-            } else {
-                setIsPageLoading(false);
-            }
-            
+        
+        // console.log(users)
+        const role_id = window.Laravel.user.role_id;
+        if( role_id === 1 || role_id === 8 || role_id === 7){
+            setIsPageLoading(false);
+            navigate('/account/insights/dashboard/my-dashboard');
+        } else {
+            setIsPageLoading(false);
         }
-    }, [users])
+    }, [])
 
 
      if(isPageLoading) return <div 

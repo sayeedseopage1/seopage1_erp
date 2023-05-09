@@ -30,6 +30,7 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
     const [search, setSearch] = React.useState('');
     // const [users, setUsers] = React.useState([]);
     // const [teams,setTeams] = React.useState([]);
+    const activeUser = window.Laravel.user;
 
     const {
         data: users,
@@ -48,9 +49,11 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
                     {assigneeFor.name || `Select ${assigneeType}`}
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="cnx_select_box_options">
-                    <div className='cnx_select_box_search'>
-                        <SearchBox autoFocus={true} value={search} onChange={setSearch} />
-                    </div>
+                    {activeUser?.role_id !== 7 &&
+                        <div className='cnx_select_box_search'>
+                            <SearchBox autoFocus={true} value={search} onChange={setSearch} />
+                        </div>
+                    }
                     {/* {
                         options().length > 0 && options().filter(f => f.name.includes(search)).map((option => ( 
                             assigneeType === "User" ? 
@@ -69,11 +72,20 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
                     } */}
 
                     {
-                        assigneeType === "User" ?  (!users && usersIsFetching) ? 
+                        assigneeType === "User" ?  activeUser?.role_id === 7 ?
+                                <Dropdown.Item 
+                                    key={activeUser?.id}
+                                    onClick={() => setAssigneeFor({id: activeUser?.id, name: activeUser?.name})}
+                                    className={ `cnx_select_box_option ${assigneeFor.name === activeUser?.name ? 'active': ''}`}> 
+                                        {activeUser?.name}
+                                        {assigneeFor.name === activeUser?.name && <i className="fa-solid fa-check" />}
+                                </Dropdown.Item>
+                                
+                            : (!users && usersIsFetching) ? 
                                 <Dropdown.Item>
                                     Loading...
                                 </Dropdown.Item>
-                            : 
+                            :
                             users ? users.filter(f => f.name.includes(search)).map(user => (
                                 <Dropdown.Item 
                                     key={user.id}
@@ -133,14 +145,11 @@ const PipelineSelect = ({ pipeline, setPipeline, multiple }) => {
         }else setPipeline(['Select Pipeline']);
     }
 
-    const options = () => ([
-        'Pipeline',
-        'Pipeline 1',
-    ])
+    const options = () => (['Pipeline'])
 
     return(
         <React.Fragment>
-            <Dropdown className="cnx_select_box_dd">
+            <Dropdown disabled={true} className="cnx_select_box_dd">
                 <Dropdown.Toggle className="cnx_select_box">
                     <div>
                         {multiple ? pipeline.length > 0 && pipeline.map(p => (
@@ -162,7 +171,7 @@ const PipelineSelect = ({ pipeline, setPipeline, multiple }) => {
                         <SearchBox autoFocus={true} value={search} onChange={setSearch}  className="cnx_select_box_search_input" />
                     </div>
 
-                    {
+                    {/* {
                         multiple && (
                             <>
                                 <Dropdown.Item
@@ -171,7 +180,7 @@ const PipelineSelect = ({ pipeline, setPipeline, multiple }) => {
                                 <div className="hr" />
                             </>
                         )
-                    }
+                    } */}
                     {options()?.filter(f => f.includes(search)).map(option => (
                         <Dropdown.Item key={`${option}-${Math.random()}`} 
                         onClick={() => onSelected(option)}
@@ -710,12 +719,43 @@ const GoalFormModal = () => {
                                 {assigneeType}
                             </Dropdown.Toggle>
                             <Dropdown.Menu className="cnx_select_box_options">
-                                <Dropdown.Item onClick={() => setAssigneeType("Company")} className={`cnx_select_box_option ${assigneeType === 'Company'? 'active' : ''}`}> Company (everyone) 
-                                    {assigneeType === 'Company' && <i className="fa-solid fa-check" />}
+                                {
+                                    window.Laravel?.user?.role_id === 1 && (
+                                        <Dropdown.Item 
+                                            onClick={() => setAssigneeType("Company")} 
+                                            className={`
+                                                cnx_select_box_option 
+                                                ${assigneeType === 'Company'? 'active' : ''}
+                                            `}
+                                        > 
+                                            Company (everyone) 
+                                            {assigneeType === 'Company' && <i className="fa-solid fa-check" />}
+                                        </Dropdown.Item>
+                                    )
+                                }
+                                {
+                                    (window?.Laravel?.user?.role_id === 1 || 
+                                    window?.Laravel?.user?.role_id === 8) && (
+                                        <Dropdown.Item 
+                                            onClick={() => setAssigneeType("Team")} 
+                                            className={`
+                                                cnx_select_box_option 
+                                                ${assigneeType === 'Team'? 'active' : ''}`}
+                                            > 
+                                                Team
+                                            {assigneeType === 'Team' && <i className="fa-solid fa-check" />}
+                                        </Dropdown.Item>
+                                    ) 
+                                }
+                                
+
+                                <Dropdown.Item 
+                                    onClick={() => setAssigneeType("User")} 
+                                    className={`cnx_select_box_option ${assigneeType === 'User'? 'active' : ''}`}
+                                > 
+                                    User 
+                                    {assigneeType === 'User' && <i className="fa-solid fa-check" />}
                                 </Dropdown.Item>
-                                <Dropdown.Item onClick={() => setAssigneeType("Team")} className={`cnx_select_box_option ${assigneeType === 'Team'? 'active' : ''}`}> Team
-                                {assigneeType === 'Team' && <i className="fa-solid fa-check" />}</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setAssigneeType("User")} className={`cnx_select_box_option ${assigneeType === 'User'? 'active' : ''}`}> User {assigneeType === 'User' && <i className="fa-solid fa-check" />}</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     {/* end assignee type */} 

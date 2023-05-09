@@ -165,7 +165,7 @@ const Goal = () => {
                     {/* user */}
                     <div className='cnx__period_filter'>
                         <div className='cnx__period_filter__title'>
-                            <Dropdown>
+                            {/* <Dropdown>
                                 <Dropdown.Toggle
                                     className={`cnx__btn cnx__btn_tertiary  cnx__btn_sm cnx__period_filter__title_btn`}
                                 >
@@ -198,14 +198,14 @@ const Goal = () => {
  
 
                                 </Dropdown.Menu>
-                            </Dropdown>
+                            </Dropdown> */}
                         </div>
                     </div>
 
                     {/* user */}
                     <div className='cnx__period_filter'>
                         {/* actions */}
-                            <Dropdown>
+                            {/* <Dropdown>
                                 <Dropdown.Toggle
                                     icon={false}
                                     className={`cnx__btn cnx__btn_tertiary  cnx__btn_sm cnx__period_filter__title_btn`}
@@ -224,7 +224,7 @@ const Goal = () => {
                                         Delete
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
-                            </Dropdown>
+                            </Dropdown> */}
                     </div>
 
                      
@@ -239,10 +239,11 @@ const Goal = () => {
                         <h4 className=''>
                             Goal Details
                         </h4>
-
-                        <Button variant='tertiary' onClick={handleOpenGoalFormModal}>
+                        {/* edit goal */}
+                        {/* <Button variant='tertiary' onClick={handleOpenGoalFormModal}>
                             <i className='fa-solid fa-pencil'/>
-                        </Button>
+                        </Button> */}
+                        {/* end edit goal */}
 
                         <div className='filter_options_line'>
                             <span>{ goal?.name || goal?.team_name }</span>
