@@ -68,8 +68,8 @@ export const DataTableColumns = [
         } 
     },
     {
-        header: 'Owner',
-        id: "owner",
+        header: 'Added by',
+        id: "added_by",
         accessor: 'added_by',
         cell: (row) => <OwnerCell {...row} />
     },
@@ -97,5 +97,5 @@ const OwnerCell = (row) => {
 
 // stage cell 
 const StageCell = (row) => {
-    return <span> {stage[row['deal_stage']]} </span>
+    return <span> {row.entryType === 'Progressed' ? stage[row['deal_stage']] : '-'} </span>
 }
