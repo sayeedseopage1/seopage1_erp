@@ -121,8 +121,10 @@ const Goal = () => {
 
     React.useEffect (() => {
         setIsSummarizing(true);
+
         if(deals && deals.length > 0 && goal){
             let sum = getSummary(deals, goal, filter, applyFilter);
+            
             if(sum) {
                 setSummarizedData([...sum]);
                 setIsSummarizing(false);
@@ -131,7 +133,7 @@ const Goal = () => {
             }
         }
 
-    }, [goal, dealsData, filter])
+    }, [goal, dealsData, filter, location, goalStateStatus, applyFilter])
 
 
     const handleOpenGoalFormModal = () => {

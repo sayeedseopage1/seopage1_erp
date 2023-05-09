@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import _ from "lodash";
 
 
 export const relativeTime = (value, setFilterValue) => {
@@ -52,37 +53,37 @@ export const relativeTime = (value, setFilterValue) => {
                 start: dayjs().subtract(1, 'year').startOf('year').format(),
                 end: dayjs().subtract(1, 'year').endOf('year').format(),
             });
-        } else if (value == "Last 2 Week"){
+        } else if (_.lowerCase(value) === "last 2 weeks"){
             setFilterValue({
                 start: dayjs().subtract(2, 'week').startOf('week').format(),
                 end: dayjs().subtract(1, 'week').endOf('week').format(),
             });
-        } else if (value == "Last 3 Week"){
+        } else if (value === "Last 3 Week"){
             setFilterValue({
                 start: dayjs().subtract(3, 'week').startOf('week').format(),
                 end: dayjs().subtract(1, 'week').endOf('week').format(),
             });
-        } else if (value == "Last 4 Week"){
+        } else if (value === "Last 4 Week"){
             setFilterValue({
                 start: dayjs().subtract(4, 'week').startOf('week').format(),
                 end: dayjs().subtract(1, 'week').endOf('week').format(),
             });
-        } else if (value === "Last 2 month"){
+        } else if (_.lowerCase(value) === "last 2 months"){
             setFilterValue({
                 start: dayjs().subtract(2, 'month').startOf('month').format(),
                 end: dayjs().subtract(1, 'month').endOf('month').format(),
             });
-        } else if (value === "Last 3 month"){
+        } else if (_.lowerCase(value) === "last 3 months"){
             setFilterValue({
                 start: dayjs().subtract(3, 'month').startOf('month').format(),
                 end: dayjs().subtract(1, 'month').endOf('month').format(),
             });
-        } else if (value === "Last 6 month"){
+        } else if (_.lowerCase(value) === "last 6 months"){
             setFilterValue({
                 start: dayjs().subtract(6, 'month').startOf('month').format(),
                 end: dayjs().subtract(1, 'month').endOf('month').format(),
             });
-        } else if (value === "Last 12 month"){
+        } else if (_.lowerCase(value) === "last 12 months"){
             setFilterValue({
                 start: dayjs().subtract(12, 'month').startOf('month').format(),
                 end: dayjs().subtract(1, 'month').endOf('month').format(),

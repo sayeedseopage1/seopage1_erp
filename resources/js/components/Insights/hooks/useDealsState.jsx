@@ -96,13 +96,9 @@ export const useDealsState = () => {
         
         if(!deals) return;
 
-        if(filter?.end && filter?.start){
-            startDate = filter.start;
-            endDate = filter.end;
-        }else{
+        
             startDate = period.start;
             endDate = period.end;
-        }
 
         const _deals = getDeals(deals, goalData, startDate, endDate, filter);
 

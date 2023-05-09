@@ -391,7 +391,7 @@ const TrackingInput = ({
     const [checked, setChecked] = React.useState(false);
     const [period, setPeriod] = React.useState(recurring);
     const [error, setError] = React.useState(recurring);
-    const [applyAll, setApplyAll] = React.useState(false);
+
 
     React.useEffect(()=> {
         if(!endDate){
@@ -410,22 +410,17 @@ const TrackingInput = ({
 
     React.useEffect(() => {
         const doc = document.querySelector('.cnx_ins__goal_form_modal');
-        if(checked){
-            if(doc.offsetHeight > 720){
+        
+            if(doc.scrollHeight > 720){
                 doc.style.height = window.innerHeight - 100 + 'px';
                 doc.style.maxHeight = 720 + "px";
                 doc.style.overflowY = 'auto';
             } else {
                 doc.style.height = 'auto';
-                doc.style.overflowY = 'unset';
-            }
-        }else {
-                doc.style.height = 'auto';
-                doc.style.overflowY = 'unset';
+                doc.style.overflowY = 'hidden';
             }
         
-
-    }, [period, endDate, startDate, frequency, checked])
+    }, [period, endDate, startDate, frequency, checked, edit, recurring])
     
 
 
@@ -489,10 +484,12 @@ const TrackingInput = ({
             {endDate ?  <div className="cnx_ins__goal_modal__tracking_input">
                 <input
                     type='checkbox' 
-                    defaultChecked={checked}
+                    checked={checked}
                     id="recurring" 
                     onChange={e =>{
                         setChecked(e.target.checked);
+                        !e.target.checked && setRecurring([]);
+                        !e.target.checked && setPeriod([]);
                         setEdit(e.target.checked);
                     }}  
                 />
@@ -832,7 +829,14 @@ const GoalFormModal = () => {
                         </label>
 
                         <label className='' htmlFor='metric_count'>
-                            <input type="radio" id="metric_count" name="metric" value="count" onChange={e => setTrackingType(e.target.value)} defaultChecked={trackingType === 'count'} />
+                            <input 
+                                type="radio" 
+                                id="metric_count" 
+                                name="metric" 
+                                value="count" 
+                                onChange={e => setTrackingType(e.target.value)} 
+                                defaultChecked={trackingType === 'count'} 
+                            />
                             Count
                         </label>
                     </div>
