@@ -49,7 +49,6 @@ const InsightsComponent = () => {
   }, [goals, users, deals])
 
 
-
   
   if(isPageLoading) return <div 
     style={{
@@ -66,7 +65,11 @@ const InsightsComponent = () => {
 
   return(
     <div className='cnx_insights'>
-        <InsightSidebar />
+       {
+          Number(window.Laravel.user.role_id) === 1 || Number(window.Laravel.user.role_id) === 8 || Number(window.Laravel.user.role_id) === 7 ? 
+          <InsightSidebar /> 
+          : null
+       } 
         <main>
           <AppRoutes />
         </main>

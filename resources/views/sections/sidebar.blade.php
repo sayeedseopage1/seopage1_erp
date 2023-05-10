@@ -609,7 +609,9 @@
                         <x-sub-menu-item  :link="$sidebarUserPermissions['manage_company_setting'] == 4 ? route('company-settings.index') : route('profile-settings.index')" :text="'General Settings'" />
                         @if(Auth::user()->role_id == 1)
                         <x-sub-menu-item  :link="route('kpi-settings.index')" :text="'KPI Settings'" />
-                        <x-sub-menu-item  :link="route('incentive-settings.index')" :text="'Incentives Settings'" />
+
+                        {{-- <x-sub-menu-item  :link="''" :text="'Incentives Settings'" /> --}}
+
                         @endif
                     </div>
                 </x-menu-item>

@@ -97,5 +97,5 @@ const OwnerCell = (row) => {
 
 // stage cell 
 const StageCell = (row) => {
-    return <span> {row.entryType === 'Progressed' ? stage[row['deal_stage']] : '-'} </span>
+    return <span> { stage[row['deal_stage']]} </span>
 }
