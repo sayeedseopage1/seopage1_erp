@@ -174,6 +174,7 @@ use App\Http\Controllers\SoftwareProjectController;
 use App\Http\Controllers\InsightsController;
 use App\Http\Controllers\Seopage1TeamController;
 use App\Http\Controllers\KpiSettingController;
+use App\Http\Controllers\IncentiveSettingController;
 use App\Http\Controllers\PointsController;
 
 
@@ -855,9 +856,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         });
     Route::resource('invoices', InvoiceController::class);
 
-    //kpi settings 
     //KPI Settings
     Route::resource('kpi-settings', KpiSettingController::class);
+    //Incentives Settings
+    Route::resource('incentive-settings',IncentiveSettingController::class);
 
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
@@ -1102,7 +1104,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
     Route::post('/insights/goals/edit/{id}', [InsightsController::class,'editGoal'])->name('insights/goals/edit');
     Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
-   
+
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
 
 
