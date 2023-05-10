@@ -12,7 +12,7 @@ const NotPermission = () => {
         setIsPageLoading(true);
         
         // console.log(users)
-        const role_id = window.Laravel.user.role_id;
+        const role_id = Number(window.Laravel.user.role_id);
         if( role_id === 1 || role_id === 8 || role_id === 7){
             setIsPageLoading(false);
             navigate('/account/insights/dashboard/my-dashboard');

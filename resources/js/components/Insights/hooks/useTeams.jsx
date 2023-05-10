@@ -4,8 +4,18 @@ import { useGetTeamsQuery } from '../services/api/teamSliceApi';
 export const useTeams = () => {
     const [teams, setTeams] = React.useState([]);
 
-    const {
-        data,
+    // const {
+    //     data = [],
+    //     isFetching: isTeamsFetching,
+    //     isError: isTeamsError,
+    //     isLoading: isTeamsLoading,
+    // } = useGetTeamsQuery({
+    //     refetchOnMountOrArgChange: true,
+    //     skip: teams.length > 0,
+    // });
+
+    const { 
+        data = [],
         isFetching: isTeamsFetching,
         isError: isTeamsError,
         isLoading: isTeamsLoading,
@@ -17,6 +27,7 @@ export const useTeams = () => {
 
 
     React.useEffect(() => {
+        console.log({data})
         if (data) {
             setTeams(data);
         }

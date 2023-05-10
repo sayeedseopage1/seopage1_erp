@@ -49,7 +49,7 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
                     {assigneeFor.name || `Select ${assigneeType}`}
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="cnx_select_box_options">
-                    {activeUser?.role_id !== 7 &&
+                    {Number(activeUser?.role_id)!== 7 &&
                         <div className='cnx_select_box_search'>
                             <SearchBox autoFocus={true} value={search} onChange={setSearch} />
                         </div>
@@ -72,7 +72,7 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
                     } */}
 
                     {
-                        assigneeType === "User" ?  activeUser?.role_id === 7 ?
+                        assigneeType === "User" ?  Number(activeUser?.role_id) === 7 ?
                                 <Dropdown.Item 
                                     key={activeUser?.id}
                                     onClick={() => setAssigneeFor({id: activeUser?.id, name: activeUser?.name})}
@@ -720,7 +720,7 @@ const GoalFormModal = () => {
                             </Dropdown.Toggle>
                             <Dropdown.Menu className="cnx_select_box_options">
                                 {
-                                    window.Laravel?.user?.role_id === 1 && (
+                                    Number(window.Laravel?.user?.role_id) === 1 && (
                                         <Dropdown.Item 
                                             onClick={() => setAssigneeType("Company")} 
                                             className={`
@@ -734,8 +734,8 @@ const GoalFormModal = () => {
                                     )
                                 }
                                 {
-                                    (window?.Laravel?.user?.role_id === 1 || 
-                                    window?.Laravel?.user?.role_id === 8) && (
+                                    (Number(window?.Laravel?.user?.role_id) === 1 || 
+                                    Number(window?.Laravel?.user?.role_id) === 8) && (
                                         <Dropdown.Item 
                                             onClick={() => setAssigneeType("Team")} 
                                             className={`
