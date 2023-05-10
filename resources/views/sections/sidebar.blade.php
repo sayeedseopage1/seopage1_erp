@@ -396,21 +396,21 @@
                     </x-slot>
                     <div class="accordionItemContent pb-2">
                       <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
-                    
-                     
-                      
-                      
+
+
+
+
                             <x-sub-menu-item :link="route('software_projects.index')" :text="__('app.menu.projects')" />
-                       
-                        
-                         
-                       
+
+
+
+
                             <x-sub-menu-item :link="route('tasks.index')" :text="__('app.menu.tasks')" />
-                       
-                      
+
+
                             <x-sub-menu-item :link="route('timelogs.index')" :text="__('app.menu.timeLogs')" />
-                       
-                       
+
+
                     </div>
                 </x-menu-item> --}}
 
@@ -609,7 +609,9 @@
                         <x-sub-menu-item  :link="$sidebarUserPermissions['manage_company_setting'] == 4 ? route('company-settings.index') : route('profile-settings.index')" :text="'General Settings'" />
                         @if(Auth::user()->role_id == 1)
                         <x-sub-menu-item  :link="route('kpi-settings.index')" :text="'KPI Settings'" />
+
                         {{-- <x-sub-menu-item  :link="''" :text="'Incentives Settings'" /> --}}
+
                         @endif
                     </div>
                 </x-menu-item>
@@ -631,7 +633,7 @@
                     </div>
                 </x-menu-item>
 
-         
+
             </ul>
         </div>
         <!-- SIDEBAR MENU END -->

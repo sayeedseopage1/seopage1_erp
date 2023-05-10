@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('project_niches', function (Blueprint $table) {
+        Schema::create('incentive_settings', function (Blueprint $table) {
             $table->id();
-            $table->string('category_name');
-            $table->integer('parent_category_id')->nullable();
-            $table->integer('sub_category_id')->nullable();
+            $table->float('every_shift_every_point_above')->default(0);
+            $table->float('individual_goal_percentage')->default(0);
+            $table->float('point_of_value')->default(0);
+            $table->float('point_of_contribute')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('project_niches');
+        Schema::dropIfExists('incentive_settings');
     }
 };

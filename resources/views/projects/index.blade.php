@@ -30,7 +30,7 @@
             <div class="select-status">
                 <select class="form-control select-picker" name="status" id="status" data-live-search="true" data-size="8">
                     <option selected value="in progress">@lang('In Progress')</option>
-                     <option {{ request('status') == 'all' ? 'selected' : '' }} value="all">@lang('app.all')</option> 
+                     <option {{ request('status') == 'all' ? 'selected' : '' }} value="all">@lang('app.all')</option>
                     <option {{ request('status') == 'overdue' ? 'selected' : '' }} value="overdue">@lang('app.overdue')
                     </option>
                     <?php $p_status= App\Models\ProjectStatusSetting::where('status_name','!=','not started')->get() ?>
@@ -165,6 +165,11 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
         <!-- Add Task Export Buttons Start -->
         <div class="d-block d-lg-flex d-md-flex justify-content-between action-bar">
             <div id="table-actions" class="flex-grow-1 align-items-center mb-2 mb-lg-0 mb-md-0">
+                @if(Auth::user()->role_id == 1)
+                <a href="{{route('project-view-category')}}" class="btn-success rounded f-14 p-2 mr-3 float-left mb-2 mb-lg-0 mb-md-0">
+                    <i class="fa fa-eye mr-1" aria-hidden="true"></i>View Categories
+                </a>
+                @endif
             {{--   @if ($addProjectPermission == 'all' || $addProjectPermission == 'added' || $addProjectPermission == 'both')
                     <x-forms.link-primary :link="route('projects.create')"
                         class="mr-3 openRightModal float-left mb-2 mb-lg-0 mb-md-0" icon="plus">
@@ -277,7 +282,7 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
                 parentEl: '.dashboard-header',
             }, cb);
 
-            
+
 
             $('#datatableRange2').on('apply.daterangepicker', function(ev, picker) {
                 showTable();
@@ -311,7 +316,7 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
             data['deadLineStartDate'] = deadLineStartDate;
             data['deadLineEndDate'] = deadLineEndDate;
             data['searchText'] = searchText;
-            
+
             var dateRangePicker = $('#datatableRange2').data('daterangepicker');
             var startDate = $('#datatableRange').val();
 
@@ -557,5 +562,5 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
 
     </script>
    <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
-   
+
 @endpush
