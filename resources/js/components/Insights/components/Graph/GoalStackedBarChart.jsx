@@ -238,9 +238,9 @@ const CustomBar = (props) => {
 
                     <foreignObject
                         x={x + width / 2 - 30}
-                        y={y + height - (target / target * height) - 20}
-                        width={60}
-                        height={20}
+                        y={y + height - (target / target * height) - 30}
+                        width={80}
+                        height={30}
                     >
                         <div style={{
                                 width: '100%',

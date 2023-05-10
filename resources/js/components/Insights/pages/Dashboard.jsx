@@ -10,7 +10,12 @@ const Dashboard = () => {
     const [filterValue, setFilterValue] = React.useState({});
     const [filteredUser, setFilteredUser] = React.useState("");
     return(
-        <div className="cnx__ins_dashboard">
+        <div className="cnx__ins_dashboard"
+            style={{
+                height: '100vh',
+                overflow: 'hidden',
+            }}
+        >
             <div 
                 style={{
                     position: 'absolute',
@@ -23,7 +28,7 @@ const Dashboard = () => {
                     height: '100vh',
                     fontSize: '20px',
                     fontWeight: 'bold',     
-                    zIndex: 1000,
+                    zIndex: 100,
                     background: 'rgba(255, 255, 255, 0.8)'               
                 }} 
             >
