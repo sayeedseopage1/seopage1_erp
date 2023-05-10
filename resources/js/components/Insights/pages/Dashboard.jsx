@@ -23,7 +23,7 @@ const Dashboard = () => {
                     height: '100vh',
                     fontSize: '20px',
                     fontWeight: 'bold',     
-                    zIndex: 1000,
+                    zIndex: 100,
                     background: 'rgba(255, 255, 255, 0.8)'               
                 }} 
             >
