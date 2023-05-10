@@ -159,7 +159,7 @@
 </div>
 <script type="text/javascript">
 
-  
+
     let milestone_id =document.getElementById('milestone_id').value;
     //console.log(milestone_id);
     document.querySelector('create-invoice').addEventListener('click', () => {
