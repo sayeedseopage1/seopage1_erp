@@ -13,7 +13,7 @@ const Dashboard = () => {
         <div className="cnx__ins_dashboard"
             style={{
                 height: '100vh',
-                overflow: 'hidden',
+                overflow: 'hidden',     
             }}
         >
             <div 
