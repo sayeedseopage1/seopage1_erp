@@ -248,39 +248,6 @@
                         </x-slot>
                         <div class="accordionItemContent pb-2">
                             <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
-                            @if (
-                                !in_array('client', user_roles()) &&
-                                    in_array('leads', user_modules()) &&
-                                    $sidebarUserPermissions['view_lead'] != 5 &&
-                                    $sidebarUserPermissions['view_lead'] != 'none')
-                                <x-sub-menu-item icon="person" :text="__('app.menu.lead')" :link="route('leads.index')">
-                                    <x-slot name="iconPath">
-                                        <path
-                                            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-                                    </x-slot>
-                                </x-sub-menu-item>
-                            @endif
-                            <?php
-                            $won_deals_project = App\Models\Project::where('pm_id', Auth::id())
-                                ->where('project_status', 'pending')
-                                ->count();
-                            $won_deals = App\Models\Project::where('project_status', 'pending')->count();
-                            
-                            ?>
-                            @if (in_array('contracts', user_modules()) &&
-                                    $sidebarUserPermissions['view_contract'] != 5 &&
-                                    $sidebarUserPermissions['view_contract'] != 'none')
-                                @if (Auth::user()->role_id != 4)
-                                    <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
-                                @endif
-                                @if (Auth::user()->role_id == 4)
-                                    <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals (' . $won_deals_project . ')'" />
-                                @elseif(Auth::user()->role_id == 1)
-                                    <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals (' . $won_deals . ')'" />
-                                @else
-                                    <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
-                                @endif
-                            @endif
                             @if (in_array('projects', user_modules()) &&
                                     $sidebarUserPermissions['view_projects'] != 5 &&
                                     $sidebarUserPermissions['view_projects'] != 'none')
@@ -303,6 +270,41 @@
                             {{-- @endif --}}
                         </div>
                     </x-menu-item>
+                @endif
+                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
+                    <x-menu-item icon="cart-dash-fill" :text="'Sales'">
+                        <x-slot name="iconPath">
+                            <path
+                                d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z" />
+                        </x-slot>
+                        <div class="accordionItemContent pb-2">
+                            <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
+                            <x-sub-menu-item icon="person" :text="__('app.menu.lead')" :link="route('leads.index')">
+                                <x-slot name="iconPath">
+                                    <path
+                                        d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                                </x-slot>
+                            </x-sub-menu-item>
+                            <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
+                            <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
+                            {{-- <x-sub-menu-item link="" :text="'Qualified Sales'" /> --}}
+                            <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
+                            {{-- <x-sub-menu-item :link="route('points.index')" :text="'Points'" /> --}}
+                            {{-- <x-sub-menu-item link="" :text="'Incentives'" /> --}}
+                        </div>
+                    </x-menu-item>
+                    {{-- <x-menu-item icon="briefcase" :text="'Resource'">
+                        <x-slot name="iconPath">
+                            <path
+                                d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z" />
+                        </x-slot>
+                        <div class="accordionItemContent pb-2">
+                            <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
+
+                            <x-sub-menu-item link="" :text="'Resource'" />
+                            <x-sub-menu-item link="" :text="'Portfolio'" />
+                        </div>
+                    </x-menu-item> --}}
                 @endif
 
                 <!-- NAV ITEM - FINANCE COLLAPASE MENU -->
@@ -394,21 +396,21 @@
                     </x-slot>
                     <div class="accordionItemContent pb-2">
                       <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
-                    
-                     
-                      
-                      
+
+
+
+
                             <x-sub-menu-item :link="route('software_projects.index')" :text="__('app.menu.projects')" />
-                       
-                        
-                         
-                       
+
+
+
+
                             <x-sub-menu-item :link="route('tasks.index')" :text="__('app.menu.tasks')" />
-                       
-                      
+
+
                             <x-sub-menu-item :link="route('timelogs.index')" :text="__('app.menu.timeLogs')" />
-                       
-                       
+
+
                     </div>
                 </x-menu-item> --}}
 
@@ -582,7 +584,7 @@
                 @endif
 
 
-                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+                {{--@if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
                 <li class="accordionItem closeIt">
                     <a class="nav-item text-lightest f-15 sidebar-text-color" href="{{route("insights.index")}}" title="Insights">
 
@@ -591,20 +593,25 @@
                     </a>
                 </li>
 
-                @endif
+                @endif--}}
 
 
                 <!-- NAV ITEM - REPORTS COLLAPASE MENU -->
                 <!-- NAV ITEM - SETTINGS -->
-                <x-menu-item icon="gear" :text="__('app.menu.settings')" :link="$sidebarUserPermissions['manage_company_setting'] == 4
-                    ? route('company-settings.index')
-                    : route('profile-settings.index')">
+                <x-menu-item icon="gear" :text="__('app.menu.settings')">
                     <x-slot name="iconPath">
                         <path
                             d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
                         <path
                             d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
                     </x-slot>
+                    <div class="accordionItemContent pb-2">
+                        <x-sub-menu-item  :link="$sidebarUserPermissions['manage_company_setting'] == 4 ? route('company-settings.index') : route('profile-settings.index')" :text="'General Settings'" />
+                        @if(Auth::user()->role_id == 1)
+                        <x-sub-menu-item  :link="route('kpi-settings.index')" :text="'KPI Settings'" />
+                        <x-sub-menu-item  :link="route('incentive-settings.index')" :text="'Incentives Settings'" />
+                        @endif
+                    </div>
                 </x-menu-item>
 
 
@@ -624,7 +631,7 @@
                     </div>
                 </x-menu-item>
 
-         
+
             </ul>
         </div>
         <!-- SIDEBAR MENU END -->

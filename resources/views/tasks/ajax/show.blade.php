@@ -19,11 +19,14 @@
             <div class="card bg-white border-0 b-shadow-4">
                 <div class="card-header bg-white  border-bottom-grey text-capitalize justify-content-between p-20">
                     <div class="row">
-                        <div class="col-lg-8 col-10">   
-                            @if(Auth::user()->role_id == 5 && $task->status == 'incomplete' && $task->task_status == 'incomplete')
-                                <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#revision"> Revision</button>
+                        <div class="col-lg-8 col-10">
+                            @php
+                                $task_member = App\Models\TaskUser::where('task_id', $task->id)->first();
+                            @endphp
+                            {{--@if(Auth::user()->role_id == 5 && $task->board_column_id == 1 && $task_member->user_id == Auth::user()->id)
+                                <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#revision">Revision</button>
                                 @include('tasks.modals.develoepr_revision')
-                            @endif
+                            @endif--}}
                             @if (
                                 $changeStatusPermission == 'all' ||
                                     ($changeStatusPermission == 'added' && $task->added_by == user()->id) ||
@@ -42,9 +45,7 @@
                                     @lang('modules.tasks.markComplete')
                                 </x-forms.button-primary> -->
 
-                                        <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white"
-                                            data-toggle="modal" data-target="#extensionrequest">Extension
-                                            Request</button>
+                                        <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#extensionrequest">Extension Request</button>
 
 
                                         @include('tasks.modals.extensionrequest')
@@ -95,7 +96,7 @@
                                 $val = App\Models\ProjectTimeLog::where('task_id', $task->id)->latest()->first();
                                 $task_active_id = App\Models\Task::where('id', $task->id)->first();
                             @endphp
-                            @if ($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision')
+                            @if ($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision' || $task->task_status == 'incomplete')
                                 @if ($task->boardColumn->slug != 'completed' && !is_null($task->is_task_user))
                                     @if ($task->boardColumn->id != 1)
                                         @if (is_null($task->userActiveTimer))
@@ -130,18 +131,13 @@
                                         Auth::user()->role_id == 9 ||
                                         Auth::user()->role_id == 10)
 
-
-
-
-                                    @if ($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision')
-
+                                    @if ($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision' || $task->board_column_id == 3)
                                         @php
                                             $task_time = App\Models\ProjectTimelog::orderBy('id', 'desc')
                                                 ->where('task_id', $task->id)
                                                 ->first();
                                         @endphp
-
-                                        @if ($task->status != 'completed' && is_null($task->userActiveTimer) && $task->taskUsers->first()->user_id == Auth::id())
+                                        @if ($task->board_column_id != 4 && is_null($task->userActiveTimer) && $task->taskUsers->first()->user_id == Auth::id())
 
                                             @php
                                                 $has_incompleted_task = false;
@@ -187,8 +183,8 @@
                                                 Time Extension</button>
                                         @endif
                                     @endif
-                                    {{-- ($task_member->user_id == Auth::user()->id) || --}}
-                                    @if (($task->board_column_id == 1 && $task->board_column_id == 1 && $task_member->user_id == Auth::user()->id) )
+
+                                    @if (($task->board_column_id == 1 && $task_member->user_id == Auth::user()->id) )
                                         <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#revision"> Revision</button>
 
                                         @if (Auth::user()->role_id == 5)
@@ -392,12 +388,26 @@
                             <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                                 <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                                     @lang('modules.tasks.assignBy')</p>
-                                {{-- <p class="mb-0 text-dark-grey f-14 w-70"> --}}
+                             
                                 <x-employee :user="$task->createBy" />
-                                {{-- </p> --}}
+                               
                             </div>
                         @endif
                     @endif
+                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
+                            @lang('Project Manager')</p>
+                     
+                        <x-employee :user="$task->project->pm" />
+                       
+                    </div>
+                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
+                            @lang('Client')</p>
+                     
+                        <x-employee :user="$task->project->client" />
+                       
+                    </div>
                     <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                         <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                             @lang('modules.tasks.priority')</p>
@@ -711,6 +721,22 @@
                             </p>
                         </div>
                     @endif
+                @endif
+                @if($task->status == 'completed')
+              
+                    <div class="col-12 px-0 pb-3 d-lg-flex d-block">
+                        <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Actual Completion Date') }}
+                        </p>
+                        <p class="mb-0 text-dark-grey w-50 f-14">
+                            @if (!is_null($task->updated_at))
+                                {{ \Carbon\Carbon::parse($task->updated_at)->format('d-m-Y') }}
+                            @else
+                                --
+                            @endif
+
+                        </p>
+                    </div>
+              
                 @endif
 
                 @if (

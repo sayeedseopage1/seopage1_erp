@@ -54,12 +54,14 @@ use App\Models\ClientForm;
 use Crypt;
 use Toastr;
 use App\Models\Deal;
+use App\Models\DealStage;
 use Illuminate\Support\Facades\Redirect;
 use Mail;
 use App\Mail\ClientSubmitMail;
 use Session;
-
-
+use Pusher\Pusher;
+use App\Notifications\PusherNotificaiton;
+use Notification;
 
 class HomeController extends Controller
 {
@@ -226,19 +228,37 @@ class HomeController extends Controller
         $activity->project_id = $project->id;
         $activity->save();
 
-        
-
-         $this->triggerPusher('notification-channel', 'notification', [
+        $data = [
             'user_id' => $project->pm_id,
             'role_id' => 4,
             'title' => 'Client Disagree Delivarables',
-            'body' => $text,
+            'body' => $link,
             'redirectUrl' => route('projects.show', $project->id).'?tab=deliverables'
-        ]);
+        ];
+
+        $this->pusherSettings = pusher_settings();
+
+        if ($this->pusherSettings->status) {
+            $user = User::find($data['user_id']);
+            
+            Notification::send($user, new PusherNotificaiton($data));
+            
+            $pusher = new Pusher(
+                $this->pusherSettings->pusher_app_key, 
+                $this->pusherSettings->pusher_app_secret, 
+                $this->pusherSettings->pusher_app_id, 
+                array(
+                    'cluster' => $this->pusherSettings->pusher_cluster, 
+                    'useTLS' => $this->pusherSettings->force_tls
+                )
+            );
+            $pusher->trigger('notification-channel', 'notification', $data);
+        }
 
         Toastr::success('Request send to Project Manager', 'success', [
             'positionClass' => 'toast-top-right'
         ]);
+
         return redirect()->back();
     }
 
@@ -1270,5 +1290,16 @@ class HomeController extends Controller
             // Session::put('timer_box_status', '');
         }
         // dd(Session::get('timer_box_status'));
+    }
+
+    public function deals_data()
+    {
+        // $data = DealStage::join('deal_stage_changes', 'deal_stages.short_code', 'deal_stage_changes.deal_id')->groupBy('deal_stages.short_code')->get()->take(10);
+        
+        // $new_array = [];
+        // foreach ($data as $key => $value) {
+                
+        // }
+        // dd($groupedData);
     }
 }

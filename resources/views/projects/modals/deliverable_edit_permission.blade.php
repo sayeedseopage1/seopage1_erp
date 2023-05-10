@@ -1,4 +1,11 @@
 @extends('layouts.app')
+@push('styles')
+<style type="text/css">
+	.old_data {
+		height: 25px;
+	}
+</style>
+@endpush
 @section('content')
 @php
 	$deliverable = json_decode($deliverable);
@@ -15,6 +22,7 @@
 						<div class="row clone-row">
 							<div class="align-self-end col-sm-2">
 								<div class="form-group">
+									<label>Select Column</label>
 									<select class="form-control height-50 w-100 permission_column" name="permission_column[]">
 										<option value="">Select column</option>
 										<option value="type">Type</option>
@@ -27,17 +35,21 @@
 								</div>
 							</div>
 							<div class="col-sm-4">
+								<label>Old data</label>
 								<div class="form-group border rounded">
 									<div class="old_data mb-4 mx-2"></div>
 								</div>
 							</div>
 							<div class="col-sm-5">
 								<div class="form-group">
+									<label>New Data</label>
 									<textarea class="form-control" name="data[]"></textarea>
 								</div>
 							</div>
 							<div class="align-self-end col-sm-1">
-								<button type="button" class="btn btn-danger height-50 remove-row">-</button>
+								<div class="form-group">
+									<button type="button" class="btn btn-danger height-50 remove-row">-</button>
+								</div>
 							</div>
 						</div>
 					</div>				

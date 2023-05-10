@@ -30,6 +30,7 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
     const [search, setSearch] = React.useState('');
     // const [users, setUsers] = React.useState([]);
     // const [teams,setTeams] = React.useState([]);
+    const activeUser = window.Laravel.user;
 
     const {
         data: users,
@@ -48,9 +49,11 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
                     {assigneeFor.name || `Select ${assigneeType}`}
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="cnx_select_box_options">
-                    <div className='cnx_select_box_search'>
-                        <SearchBox autoFocus={true} value={search} onChange={setSearch} />
-                    </div>
+                    {activeUser?.role_id !== 7 &&
+                        <div className='cnx_select_box_search'>
+                            <SearchBox autoFocus={true} value={search} onChange={setSearch} />
+                        </div>
+                    }
                     {/* {
                         options().length > 0 && options().filter(f => f.name.includes(search)).map((option => ( 
                             assigneeType === "User" ? 
@@ -69,11 +72,20 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
                     } */}
 
                     {
-                        assigneeType === "User" ?  (!users && usersIsFetching) ? 
+                        assigneeType === "User" ?  activeUser?.role_id === 7 ?
+                                <Dropdown.Item 
+                                    key={activeUser?.id}
+                                    onClick={() => setAssigneeFor({id: activeUser?.id, name: activeUser?.name})}
+                                    className={ `cnx_select_box_option ${assigneeFor.name === activeUser?.name ? 'active': ''}`}> 
+                                        {activeUser?.name}
+                                        {assigneeFor.name === activeUser?.name && <i className="fa-solid fa-check" />}
+                                </Dropdown.Item>
+                                
+                            : (!users && usersIsFetching) ? 
                                 <Dropdown.Item>
                                     Loading...
                                 </Dropdown.Item>
-                            : 
+                            :
                             users ? users.filter(f => f.name.includes(search)).map(user => (
                                 <Dropdown.Item 
                                     key={user.id}
@@ -133,14 +145,11 @@ const PipelineSelect = ({ pipeline, setPipeline, multiple }) => {
         }else setPipeline(['Select Pipeline']);
     }
 
-    const options = () => ([
-        'Pipeline',
-        'Pipeline 1',
-    ])
+    const options = () => (['Pipeline'])
 
     return(
         <React.Fragment>
-            <Dropdown className="cnx_select_box_dd">
+            <Dropdown disabled={true} className="cnx_select_box_dd">
                 <Dropdown.Toggle className="cnx_select_box">
                     <div>
                         {multiple ? pipeline.length > 0 && pipeline.map(p => (
@@ -162,7 +171,7 @@ const PipelineSelect = ({ pipeline, setPipeline, multiple }) => {
                         <SearchBox autoFocus={true} value={search} onChange={setSearch}  className="cnx_select_box_search_input" />
                     </div>
 
-                    {
+                    {/* {
                         multiple && (
                             <>
                                 <Dropdown.Item
@@ -171,7 +180,7 @@ const PipelineSelect = ({ pipeline, setPipeline, multiple }) => {
                                 <div className="hr" />
                             </>
                         )
-                    }
+                    } */}
                     {options()?.filter(f => f.includes(search)).map(option => (
                         <Dropdown.Item key={`${option}-${Math.random()}`} 
                         onClick={() => onSelected(option)}
@@ -391,7 +400,7 @@ const TrackingInput = ({
     const [checked, setChecked] = React.useState(false);
     const [period, setPeriod] = React.useState(recurring);
     const [error, setError] = React.useState(recurring);
-    const [applyAll, setApplyAll] = React.useState(false);
+
 
     React.useEffect(()=> {
         if(!endDate){
@@ -410,22 +419,17 @@ const TrackingInput = ({
 
     React.useEffect(() => {
         const doc = document.querySelector('.cnx_ins__goal_form_modal');
-        if(checked){
-            if(doc.offsetHeight > 720){
+        
+            if(doc.scrollHeight > 720){
                 doc.style.height = window.innerHeight - 100 + 'px';
                 doc.style.maxHeight = 720 + "px";
                 doc.style.overflowY = 'auto';
             } else {
                 doc.style.height = 'auto';
-                doc.style.overflowY = 'unset';
-            }
-        }else {
-                doc.style.height = 'auto';
-                doc.style.overflowY = 'unset';
+                doc.style.overflowY = 'hidden';
             }
         
-
-    }, [period, endDate, startDate, frequency, checked])
+    }, [period, endDate, startDate, frequency, checked, edit, recurring])
     
 
 
@@ -489,10 +493,12 @@ const TrackingInput = ({
             {endDate ?  <div className="cnx_ins__goal_modal__tracking_input">
                 <input
                     type='checkbox' 
-                    defaultChecked={checked}
+                    checked={checked}
                     id="recurring" 
                     onChange={e =>{
                         setChecked(e.target.checked);
+                        !e.target.checked && setRecurring([]);
+                        !e.target.checked && setPeriod([]);
                         setEdit(e.target.checked);
                     }}  
                 />
@@ -713,12 +719,43 @@ const GoalFormModal = () => {
                                 {assigneeType}
                             </Dropdown.Toggle>
                             <Dropdown.Menu className="cnx_select_box_options">
-                                <Dropdown.Item onClick={() => setAssigneeType("Company")} className={`cnx_select_box_option ${assigneeType === 'Company'? 'active' : ''}`}> Company (everyone) 
-                                    {assigneeType === 'Company' && <i className="fa-solid fa-check" />}
+                                {
+                                    window.Laravel?.user?.role_id === 1 && (
+                                        <Dropdown.Item 
+                                            onClick={() => setAssigneeType("Company")} 
+                                            className={`
+                                                cnx_select_box_option 
+                                                ${assigneeType === 'Company'? 'active' : ''}
+                                            `}
+                                        > 
+                                            Company (everyone) 
+                                            {assigneeType === 'Company' && <i className="fa-solid fa-check" />}
+                                        </Dropdown.Item>
+                                    )
+                                }
+                                {
+                                    (window?.Laravel?.user?.role_id === 1 || 
+                                    window?.Laravel?.user?.role_id === 8) && (
+                                        <Dropdown.Item 
+                                            onClick={() => setAssigneeType("Team")} 
+                                            className={`
+                                                cnx_select_box_option 
+                                                ${assigneeType === 'Team'? 'active' : ''}`}
+                                            > 
+                                                Team
+                                            {assigneeType === 'Team' && <i className="fa-solid fa-check" />}
+                                        </Dropdown.Item>
+                                    ) 
+                                }
+                                
+
+                                <Dropdown.Item 
+                                    onClick={() => setAssigneeType("User")} 
+                                    className={`cnx_select_box_option ${assigneeType === 'User'? 'active' : ''}`}
+                                > 
+                                    User 
+                                    {assigneeType === 'User' && <i className="fa-solid fa-check" />}
                                 </Dropdown.Item>
-                                <Dropdown.Item onClick={() => setAssigneeType("Team")} className={`cnx_select_box_option ${assigneeType === 'Team'? 'active' : ''}`}> Team
-                                {assigneeType === 'Team' && <i className="fa-solid fa-check" />}</Dropdown.Item>
-                                <Dropdown.Item onClick={() => setAssigneeType("User")} className={`cnx_select_box_option ${assigneeType === 'User'? 'active' : ''}`}> User {assigneeType === 'User' && <i className="fa-solid fa-check" />}</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     {/* end assignee type */} 
@@ -821,12 +858,25 @@ const GoalFormModal = () => {
 
                     <div className='cnx_select_box_wrapper'>
                         <label className='' htmlFor='metric_value'>
-                            <input id="metric_value" type="radio" name="metric" value="value" onChange={e => setTrackingType(e.target.value)} defaultChecked={true} />
+                            <input 
+                               id="metric_value" 
+                               type="radio" 
+                               name="metric" 
+                               value="value" 
+                               onChange={e => setTrackingType(e.target.value)} 
+                               defaultChecked={trackingType === 'value'} />
                             Value
                         </label>
 
                         <label className='' htmlFor='metric_count'>
-                            <input type="radio" id="metric_count" name="metric" value="count" onChange={e => setTrackingType(e.target.value)} />
+                            <input 
+                                type="radio" 
+                                id="metric_count" 
+                                name="metric" 
+                                value="count" 
+                                onChange={e => setTrackingType(e.target.value)} 
+                                defaultChecked={trackingType === 'count'} 
+                            />
                             Count
                         </label>
                     </div>

@@ -12,8 +12,6 @@ const ContextProvider = ({children}) => {
     const [activeColumns, setActiveColumns] = React.useState([]);
     const [sortConfig, setSortConfig] = React.useState({key: 'id', direction: 'asc'});
 
-    
-
     return <DataTableContext.Provider value={{
         activeColumns,
         setActiveColumns,
@@ -101,12 +99,12 @@ const DataTable = ({data, isLoading, defaultColumns}) => {
             <div className='cnx__table_wrapper'>
                  {/* filter button */}
                         <div className='cnx__table_td_filter_btn'>
-                            <TableFilterButton  />
+                            {/* <TableFilterButton  /> */}
                         </div> 
                     {/* header */}
                 <div className='cnx__table'>
                    
-                    <div className="cnx__table_head">
+                    <div className="cnx__table_head" style={{paddingRight: currentPageData.length > 34 ? '5px' : ''}}>
                         <div className="cnx__table_tr">
                             {columns.map(column => (
                                 <DraggableColumn 

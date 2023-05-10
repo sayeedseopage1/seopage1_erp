@@ -174,6 +174,8 @@ use App\Http\Controllers\SoftwareProjectController;
 use App\Http\Controllers\InsightsController;
 use App\Http\Controllers\Seopage1TeamController;
 use App\Http\Controllers\KpiSettingController;
+use App\Http\Controllers\IncentiveSettingController;
+use App\Http\Controllers\PointsController;
 
 
 /*
@@ -311,7 +313,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('attendances/store-clock-in', [DashboardController::class, 'storeClockIn'])->name('attendances.store_clock_in');
     Route::get('attendances/update-clock-in', [DashboardController::class, 'updateClockIn'])->name('attendances.update_clock_in');
     Route::get('dashboard/private_calendar', [DashboardController::class, 'privateCalendar'])->name('dashboard.private_calendar');
-
+    Route::resource('points', PointsController::class);
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     /* Setting menu routes starts from here */
@@ -854,9 +856,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         });
     Route::resource('invoices', InvoiceController::class);
 
-    //kpi settings
+
     //KPI Settings
     Route::resource('kpi-settings', KpiSettingController::class);
+    //Incentives Settings
+    Route::resource('incentive-settings',IncentiveSettingController::class);
 
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
@@ -1246,3 +1250,7 @@ Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'get
 
 Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
 Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');
+
+
+Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
+

@@ -13,6 +13,7 @@ use App\Models\Section;
 use App\Models\Dashboard;
 use App\Models\DealStage;
 use App\Models\Lead;
+use Illuminate\Support\Facades\DB;
 
 class InsightsController extends AccountBaseController
 {
@@ -249,7 +250,7 @@ class InsightsController extends AccountBaseController
     public function getGoal($id)
     {
         $user= User::where('id',$id)->first();
-        if($user->role_id == 1)
+        if($user->role_id == 1 || $user->role_id == 8)
         {
             $goal = GoalSetting::all();
             $goal_recurring= GoalRecurring::all();

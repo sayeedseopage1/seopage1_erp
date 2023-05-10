@@ -45,9 +45,9 @@
                             <label for="" class="form-label">Revision Acknowledgement</label>
                             <select class="form-control height-35 f-14" id="revision_acknowledgement_deny">
                                 <option value="">--</option>
-                                <option value="task_has_revision_because_requirements_are_not_fulfilled_according_to_my_instructions">Task has revision because requirements are not fulfilled according to my instructions</option>
-                                <option value="task_has_revision_because_i_have_customized_previous_instructions">Task has revision because I have customized previous instructions</option>
-                                <option value="task_has_revision_because_i_have_added_additional_instructions_to_previous_instructions">Task has revision because I have added additional instructions to previous instructions</option>
+                                <option value="task_has_revision_because_requirements_are_not_fulfilled_according_to_my_instructions">Task has revision because requirements are not fulfilled according to lead developer's instructions</option>
+                                <option value="task_has_revision_because_i_have_customized_previous_instructions">Task has revision because i made some changes outside instructions</option>
+                                <option value="task_has_revision_because_i_have_added_additional_instructions_to_previous_instructions">Task has revision because lead developer has added additional instructions to previous instructions</option>
                             </select>
                         </div>
                         

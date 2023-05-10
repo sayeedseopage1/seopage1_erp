@@ -26,13 +26,14 @@ import { stage } from '../utils/constants';
 // convert to unit
 const numberToUnits = (value,decimal= 1) => {
     let c = convertNumberToUnits(value, decimal)
-    return `$${c}`
+    return `${c}`
 }
 
 
 const Goal = () => {
     const [selectedPeriod, setSelectedPeriod] = React.useState('Today');
-    const [filter, setFilterValue] = React.useState('');
+    const [filter, setFilterValue] = React.useState(null);
+    const [applyFilter, setApplyFilter] = React.useState(false);
     const [summarizedData, setSummarizedData] = React.useState([]); 
     const [goal, setGoal] = React.useState(null);
     const {deals, getDeals, getSummary} = useDealsState(); 
@@ -46,6 +47,7 @@ const Goal = () => {
     const {teams} = useTeams();
     const usersData = users && users.users;
     const [isSummarizing, setIsSummarizing] = React.useState(false);
+    
 
     const dispatch = useDispatch();
 
@@ -99,18 +101,30 @@ const Goal = () => {
     // get deals data
     React.useEffect(() => {
         if(deals && deals.length > 0 && goal){
-            let _deals = getDeals(deals, goal, goal.startDate, goal.endDate);
+            let endDate;
+            let startDate;
+            if(filter?.end && filter?.start && applyFilter){
+                startDate = filter.start;
+                endDate = filter.end;
+            }else{
+                endDate = goal.endDate;
+                startDate = goal.startDate;
+            }
+
+            let _deals = getDeals(deals, goal, startDate, endDate);
             setDealsData([..._deals]);
             setIsLoading(false);
         }
          
-    }, [goal, location, params.goalId]);
+    }, [goal, location, params.goalId, filter, applyFilter]);
 
 
     React.useEffect (() => {
         setIsSummarizing(true);
+
         if(deals && deals.length > 0 && goal){
-            let sum = getSummary(deals, goal);
+            let sum = getSummary(deals, goal, filter, applyFilter);
+            
             if(sum) {
                 setSummarizedData([...sum]);
                 setIsSummarizing(false);
@@ -119,7 +133,7 @@ const Goal = () => {
             }
         }
 
-    }, [goal])
+    }, [goal, dealsData, filter, location, goalStateStatus, applyFilter])
 
 
     const handleOpenGoalFormModal = () => {
@@ -151,7 +165,7 @@ const Goal = () => {
                     {/* user */}
                     <div className='cnx__period_filter'>
                         <div className='cnx__period_filter__title'>
-                            <Dropdown>
+                            {/* <Dropdown>
                                 <Dropdown.Toggle
                                     className={`cnx__btn cnx__btn_tertiary  cnx__btn_sm cnx__period_filter__title_btn`}
                                 >
@@ -184,14 +198,14 @@ const Goal = () => {
  
 
                                 </Dropdown.Menu>
-                            </Dropdown>
+                            </Dropdown> */}
                         </div>
                     </div>
 
                     {/* user */}
                     <div className='cnx__period_filter'>
                         {/* actions */}
-                            <Dropdown>
+                            {/* <Dropdown>
                                 <Dropdown.Toggle
                                     icon={false}
                                     className={`cnx__btn cnx__btn_tertiary  cnx__btn_sm cnx__period_filter__title_btn`}
@@ -210,7 +224,7 @@ const Goal = () => {
                                         Delete
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
-                            </Dropdown>
+                            </Dropdown> */}
                     </div>
 
                      
@@ -225,10 +239,11 @@ const Goal = () => {
                         <h4 className=''>
                             Goal Details
                         </h4>
-
-                        <Button variant='tertiary' onClick={handleOpenGoalFormModal}>
+                        {/* edit goal */}
+                        {/* <Button variant='tertiary' onClick={handleOpenGoalFormModal}>
                             <i className='fa-solid fa-pencil'/>
-                        </Button>
+                        </Button> */}
+                        {/* end edit goal */}
 
                         <div className='filter_options_line'>
                             <span>{ goal?.name || goal?.team_name }</span>
@@ -361,19 +376,22 @@ const Goal = () => {
                                 <RelativeTimePeriod
                                     setSelectedPeriod={handleRelativeTimePeriod}
                                     selectedPeriod={selectedPeriod}
+                                    defaultPeriod={"Goal Period"}
+                                    setApplyFilter={setApplyFilter}
                                 />
                             </div>
                             <div className='__graph'>
                                 <GoalStackedBarChart
                                     footer={false}
                                     XAxisLabel="title"
-                                    colors={["#166901", "#ddd"]}
+                                    actualFillColor={"#1d8603"}
+                                    targetFillColor={"#E5E5E5"}
                                     leftSideLabel="Number of deals"
-                                    barDataKey={["dealAdded", "target"]}
+                                    barDataKey={[ "value" ]}
                                     offset={-5}
-                                    yDomain={ [0, dataMax => (dataMax + Math.ceil(dataMax * 0.1))]}
-                                    labelListFormatter={value => numberToUnits(value, 0)}
-                                    yAxisTickFormate={value => numberToUnits(value, 0)}
+                                    // yDomain={ [0, dataMax => (dataMax + Math.ceil(dataMax * 0.1))]}
+                                    labelListFormatter={value => goal.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
+                                    yAxisTickFormate={value => goal.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
                                     data = {[...summarizedData]} 
                                 />
                             </div>
@@ -430,7 +448,7 @@ const Goal = () => {
                     
 
                     {/* graph table */}
-                    <div className='cnx__ins_table'>
+                    <div className='cnx__ins_table pb-3'>
                        {activeTable === 'activities' && (
                             <DataTable 
                                 data={dealsData} 

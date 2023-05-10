@@ -10,6 +10,8 @@ import _ from "lodash";
 const RelativeTimePeriod = ({
     selectedPeriod,
     setSelectedPeriod,
+    setApplyFilter,
+    defaultPeriod
 }) => {
     const [searchText, setSearchText] = React.useState('');
 
@@ -45,7 +47,10 @@ const RelativeTimePeriod = ({
                        <div className="cnx__relative_time__menu__title">Relative Dates</div>
 
                       {filteredRelativeDates.map((d) => (
-                        <Dropdown.Item key={d} onClick={() => setSelectedPeriod(d)} className={`cnx_select_box_option cnx__relative_time__menu__item ${selectedPeriod === d? 'active' : ''}`}> 
+                        <Dropdown.Item key={d} onClick={() => {
+                            setSelectedPeriod(d),
+                            setApplyFilter(true)
+                        }} className={`cnx_select_box_option cnx__relative_time__menu__item ${selectedPeriod === d? 'active' : ''}`}> 
                             <TextHighlighter
                                 searchWords={searchText}
                                 textToHighlight={d}
@@ -61,7 +66,10 @@ const RelativeTimePeriod = ({
                        <div className="cnx__relative_time__menu__title">Relative Dates</div>
 
                       {filteredPeriod.map((d) => (
-                        <Dropdown.Item key={d} onClick={() => setSelectedPeriod(d)} className={`cnx_select_box_option cnx__relative_time__menu__item ${selectedPeriod === d? 'active' : ''}`}> 
+                        <Dropdown.Item key={d} onClick={() => {
+                            setSelectedPeriod(d),
+                            setApplyFilter(true)
+                        }} className={`cnx_select_box_option cnx__relative_time__menu__item ${selectedPeriod === d? 'active' : ''}`}> 
                             <TextHighlighter
                                 searchWords={searchText}
                                 textToHighlight={d}
@@ -77,7 +85,10 @@ const RelativeTimePeriod = ({
                        <div className="cnx__relative_time__menu__title">Relative Dates</div>
 
                       {filteredRollingPeriod.map((d) => (
-                        <Dropdown.Item key={d} onClick={() => setSelectedPeriod(d)} className={`cnx_select_box_option cnx__relative_time__menu__item ${selectedPeriod === d? 'active' : ''}`}> 
+                        <Dropdown.Item key={d} onClick={() => {
+                            setSelectedPeriod(d),
+                            setApplyFilter(true)
+                        }} className={`cnx_select_box_option cnx__relative_time__menu__item ${selectedPeriod === d? 'active' : ''}`}> 
                             <TextHighlighter
                                 searchWords={searchText}
                                 textToHighlight={d}
@@ -86,6 +97,14 @@ const RelativeTimePeriod = ({
                       ))}
                     </div>
                 )}
+
+                <div className="">
+                        <Dropdown.Item  
+                        onClick={() => setApplyFilter(false)} 
+                        className={`cnx_select_box_option cnx__relative_time__menu__item}`}> 
+                            {defaultPeriod}
+                        </Dropdown.Item>
+                    </div>
                 </div>
             </Dropdown.Menu>
         </Dropdown>

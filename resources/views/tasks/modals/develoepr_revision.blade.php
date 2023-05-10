@@ -2,14 +2,24 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tasks Revision</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Task Revision Form Lead Developer</h5>
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 @php
                     $taskRevisionComment = \App\Models\TaskRevision::where('subtask_id',$task->subtask_id)->latest()->first();
+                    $revision_acknowledgement = $taskRevisionComment->revision_acknowledgement ?? $taskRevisionComment->revision_reason;
                 @endphp
-                <h6 class="text-center">Task Revision Form Project Manager</h6>
+                <div class="card-title">
+                    <b class="text-danger">Reason: </b>
+                    @if($revision_acknowledgement == "task_has_revision_because_requirements_are_not_fulfilled_according_to_my_instructions")
+                        Task has revision because requirements are not fulfilled according to lead developer's instructions
+                    @elseif($revision_acknowledgement == "task_has_revision_because_i_have_customized_previous_instructions")
+                        Task has revision because lead developer made some changes outside instructions.
+                    @elseif($revision_acknowledgement == "task_has_revision_because_i_have_customized_previous_instructions")
+                        Task has revision because lead developer has added additional instructions to previous instructions
+                    @endif
+                </div>
                 <div class="card mb-3">
                     <div class="card-body">
                         @if($taskRevisionComment)
