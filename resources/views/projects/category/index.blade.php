@@ -2,7 +2,7 @@
 @section('content')
     <div class="container">
         @php
-            $categories = \App\Models\ProjectNiche::all();
+            $categories = \App\Models\ProjectNiche::with('parent','child')->get();
         @endphp
         <div class="row">
             <div class="col-md-12">
@@ -18,35 +18,38 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Category</th>
-                            <th>Sub Category</th>
+                            <th>Niche Category</th>
                             <th>Parent Category</th>
-                            <th class="text-center">Action</th>
+{{--                            <th>Sub Category</th>--}}
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($categories as $key=>$category)
                         <tr>
                             <td>{{ $key + 1 }}</td>
-                            <td>{{$category->category_name}}</td>
                             <td>
-                                @if($category->sub_category_id)
-                                    {{$category->subcat->category_name}}
+                                @if($category->parent_category_id)
+                                    {{$category->category_name}} <span style="font-size: 10px;"><i class="fa fa-long-arrow-alt-left" style="color: #28313c; font-size: 10px;"></i>{{$category->parent->category_name}}</span>
                                 @else
-                                    !! No Sub Category !!
+                                    {{$category->category_name}}
                                 @endif
                             </td>
                             <td>
-                                {{$category->parent->category_name ?? '!! No Parent Category !!'}}
+                                @if($category->parent_category_id)
+                                    {{$category->parent->category_name}}
+                                @else
+                                <span>No parent category</span>
+                                @endif
                             </td>
-                            <td class="text-center">
-                                <a href="" class="update_category_form btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" data-id="0" data-name="0"  data-price="0">
+{{--                            <td>{{$category->child ? $category->child->category_name: 'No sub category' }}</td>--}}
+                            <td>
+                                <a href="" class="btn btn-primary update_category_form" data-toggle="modal" data-target="#editnichemodal" data-id="{{ $category->id }}" data-name="{{ $category->category_name }}">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                                <a href="" class="delete_category text-secondary" data-id="0">
-                                    <i class="fa fa-trash"></i>
-                                </a>
+                                @include('projects.modals.editnichemodal')
                             </td>
+
                         </tr>
                         @endforeach
                         </tbody>

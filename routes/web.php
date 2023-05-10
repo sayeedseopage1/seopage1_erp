@@ -854,7 +854,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         });
     Route::resource('invoices', InvoiceController::class);
 
-    //kpi settings 
+    //kpi settings
     //KPI Settings
     Route::resource('kpi-settings', KpiSettingController::class);
 
@@ -1101,7 +1101,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
     Route::post('/insights/goals/edit/{id}', [InsightsController::class,'editGoal'])->name('insights/goals/edit');
     Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
-   
+
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
 
 
@@ -1191,7 +1191,8 @@ Route::post('/acoounts/project-completion/store', [ProjectController::class, 'Pr
 
 //add project niche
 Route:: get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
-Route:: get('/projects/get-parent-category/{subCategoryId}', [ProjectController::class, 'subCategoryId']);
+Route::get('/projects/get-sub-category/{id}',[ProjectController::class,'parentCategoryId']);
+Route:: get('/projects/update-category/{id}', [ProjectController::class, 'updateCategory'])->name('update.category');
 
 
 //add project niche

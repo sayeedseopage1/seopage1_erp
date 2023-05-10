@@ -2449,10 +2449,11 @@ class ProjectController extends AccountBaseController
         return view('projects.category.index',$this->data);
     }
 
-    public function subCategoryId($subCategoryId){
-        $sub_category = \App\Models\ProjectNiche::find($subCategoryId);
-        return $sub_category->sub_category_id;
+    public function parentCategoryId($id){
+        $sub_categories = \App\Models\ProjectNiche::where('parent_category_id',$id)->get();
+        return $sub_categories;
     }
+
 
 
     public function Niche()
@@ -2474,14 +2475,24 @@ class ProjectController extends AccountBaseController
         ]);
         $category = new ProjectNiche();
         $category->category_name = $request->category_name;
-        $category->sub_category_id = $request->sub_category_id;
         $category->parent_category_id = $request->parent_category_id;
+//        $category->sub_category_id = $request->sub_category_id;
 
         $category->save();
         return response()->json([
             'status' => 200,
             'message' => 'Category Added Successfully',
         ]);
+    }
+    public function updateCategory(Request $request, $id){
+        $update_category = ProjectNiche::find($id);
+        $update_category->category_name = $request->category_name;
+        $update_category->parent_category_id = $request->parent_category_id;
+        $update_category->save();
+        return response()->json([
+            'status'=>200,
+        ]);
+
     }
     public function deleteNiche($id)
     {
