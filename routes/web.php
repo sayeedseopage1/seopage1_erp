@@ -174,6 +174,7 @@ use App\Http\Controllers\SoftwareProjectController;
 use App\Http\Controllers\InsightsController;
 use App\Http\Controllers\Seopage1TeamController;
 use App\Http\Controllers\KpiSettingController;
+use App\Http\Controllers\IncentiveSettingController;
 use App\Http\Controllers\PointsController;
 
 
@@ -855,9 +856,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         });
     Route::resource('invoices', InvoiceController::class);
 
-    //kpi settings 
+
     //KPI Settings
     Route::resource('kpi-settings', KpiSettingController::class);
+    //Incentives Settings
+    Route::resource('incentive-settings',IncentiveSettingController::class);
 
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
@@ -1102,7 +1105,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
     Route::post('/insights/goals/edit/{id}', [InsightsController::class,'editGoal'])->name('insights/goals/edit');
     Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
-   
+
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
 
 
@@ -1191,6 +1194,12 @@ Route::get('/projects/project-completion/{id}', [ProjectController::class, 'Proj
 Route::post('/acoounts/project-completion/store', [ProjectController::class, 'ProjectCompletionSubmit'])->name('project-completion');
 
 //add project niche
+Route:: get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
+Route::get('/projects/get-sub-category/{id}',[ProjectController::class,'parentCategoryId']);
+Route:: get('/projects/update-category/{id}', [ProjectController::class, 'updateCategory'])->name('update.category');
+
+
+//add project niche
 Route::post('/projects/niche-store', [ProjectController::class, 'storeNiche'])->name('add-niche');
 Route::get('/projects/niches', [ProjectController::class, 'Niche'])->name('get-niche');
 Route::delete('/projects/delete-niche/{id}', [ProjectController::class, 'deleteNiche']);
@@ -1242,4 +1251,6 @@ Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'get
 Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
 Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');
 
+
 Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
+

@@ -2443,6 +2443,19 @@ class ProjectController extends AccountBaseController
 
 
     }
+    // VIEW PROJECT CATEGORY SECTION
+    public function viewCategory(){
+        $this->pageTitle = 'Categories';
+        return view('projects.category.index',$this->data);
+    }
+
+    public function parentCategoryId($id){
+        $sub_categories = \App\Models\ProjectNiche::where('parent_category_id',$id)->get();
+        return $sub_categories;
+    }
+
+
+
     public function Niche()
     {
         //dd($id);
@@ -2454,27 +2467,32 @@ class ProjectController extends AccountBaseController
     }
     public function storeNiche(Request $request)
     {
-        //  dd($request);
-        $validator = Validator::make($request->all(), [
+//        dd($request->all());
+        $request->validate([
             'category_name' => 'required',
-
-
+        ], [
+            'category_name.required' => 'Please enter the category name!',
         ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'errors' => $validator->messages(),
-            ]);
-        } else {
-            $category = new ProjectNiche();
-            $category->category_name = $request->category_name;
+        $category = new ProjectNiche();
+        $category->category_name = $request->category_name;
+        $category->parent_category_id = $request->parent_category_id;
+//        $category->sub_category_id = $request->sub_category_id;
 
-            $category->save();
-            return response()->json([
-                'status' => 200,
-                'message' => 'Category Added Successfully',
-            ]);
-        }
+        $category->save();
+        return response()->json([
+            'status' => 200,
+            'message' => 'Category Added Successfully',
+        ]);
+    }
+    public function updateCategory(Request $request, $id){
+        $update_category = ProjectNiche::find($id);
+        $update_category->category_name = $request->category_name;
+        $update_category->parent_category_id = $request->parent_category_id;
+        $update_category->save();
+        return response()->json([
+            'status'=>200,
+        ]);
+
     }
     public function deleteNiche($id)
     {
