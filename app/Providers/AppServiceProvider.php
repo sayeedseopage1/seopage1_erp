@@ -5,6 +5,10 @@ namespace App\Providers;
 use App\Models\Setting;
 use App\Observers\SettingsObserver;
 use App\Models\ProjectActivity;
+
+use App\Observers\LeadsDealsActivityLogObserver;
+use App\Models\LeadsDealsActivityLog;
+
 use App\Observers\ProjectActivityObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
@@ -35,6 +39,8 @@ class AppServiceProvider extends ServiceProvider
 
         Setting::observe(SettingsObserver::class);
         ProjectActivity::observe(ProjectActivityObserver::class);
+        
+        LeadsDealsActivityLog::observe(LeadsDealsActivityLogObserver::class);
 
         Model::preventLazyLoading(app()->environment('development'));
 

@@ -1104,10 +1104,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
    
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
-
-
-
 });
+
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
 Route::get('/deals/details/{id}', [ContractController::class, 'dealDetails'])->name('dealDetails');
@@ -1243,3 +1241,7 @@ Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->
 Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');
 
 Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
+
+Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
+Route::get('menu/filter/get-employee/{department?}/{shifts?}', [PointsController::class, 'get_employe_by_filter_options']);
+Route::post('point-table-data', [PointsController::class, 'get_point_table_data']);

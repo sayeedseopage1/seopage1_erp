@@ -91,6 +91,7 @@ use App\Notifications\DeliverableOthersAuthorizationAcceptNotification;
 use App\Notifications\ProjectDeliverableFinalAuthorizationNotification;
 use App\Notifications\ProjectDeliverableFinalAuthorizationNotificationAccept;
 use App\Notifications\ProjectDelivarableFinalAuthorizationClientNotification;
+use App\Models\LeadsDealsActivityLog;
 
 
 
@@ -1215,6 +1216,8 @@ class ProjectController extends AccountBaseController
                 return $this->timelogs($this->project->project_admin == user()->id);
         case 'activity_log':
             $this->activityLog = ProjectActivity::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
+            $this->lead_deal_activity_log = LeadsDealsActivityLog::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
+
             $this->view = 'projects.ajax.activity_log';
             break;
         case 'expenses':

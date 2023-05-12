@@ -271,7 +271,10 @@
                         </div>
                     </x-menu-item>
                 @endif
-                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
+                @php
+                    $user = Auth::user();
+                @endphp
+                @if($user->role_id == 1 || $user->role_id == 7 || $user->role_id == 8 || $user->role_id == 4)
                     <x-menu-item icon="cart-dash-fill" :text="'Sales'">
                         <x-slot name="iconPath">
                             <path
@@ -279,6 +282,9 @@
                         </x-slot>
                         <div class="accordionItemContent pb-2">
                             <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
+                            @if($user->role_id == 4)
+                            <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
+                            @else
                             <x-sub-menu-item icon="person" :text="__('app.menu.lead')" :link="route('leads.index')">
                                 <x-slot name="iconPath">
                                     <path
@@ -291,6 +297,7 @@
                             <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
                             {{--<x-sub-menu-item :link="route('points.index')" :text="'Points'" />--}}
                             {{--<x-sub-menu-item link="" :text="'Incentives'" />--}}
+                            @endif
                         </div>
                     </x-menu-item>
                     {{--<x-menu-item icon="briefcase" :text="'Resource'">

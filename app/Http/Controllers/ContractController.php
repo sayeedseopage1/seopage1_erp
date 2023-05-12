@@ -51,6 +51,7 @@ use App\Notifications\DealAuthorizationSendNotification;
 use Notification;
 use App\Models\kpiSetting;
 use App\Models\CashPoint;
+use App\Models\LeadsDealsActivityLog;
 
 class ContractController extends AccountBaseController
 {
@@ -413,12 +414,10 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
-        //dd('ok');
+        \DB::beginTransaction();
         $current_time= Carbon::now()->format('d-m-Y H:i:s' );
         $award_date= strtotime($request->award_time);
         $aw_dt= date('Y-m-d H:i:s', $award_date );
-
-
 
         $validated = $request->validate([
 //            'user_name' => 'required',
@@ -446,7 +445,6 @@ class ContractController extends AccountBaseController
         }
 
         $deal_stage = DealStage::where('id', $request->id)->first();
-
 
         $deal = DealStage::find($request->id);
 
@@ -630,10 +628,8 @@ class ContractController extends AccountBaseController
         if($existing_client != null)
         {
             // /dd("true");
-          
            
             $find_pm_id = Project::where('client_id',$existing_client->id)->orderBy('id','desc')->where('id','!=',$project->id)->where('pm_id','!=',null)->first();
-           
             $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
 
                 $from = Carbon::createFromFormat('Y-m-d H:s:i', $find_pm_id->created_at);
@@ -710,19 +706,29 @@ class ContractController extends AccountBaseController
 
       
         // activity log
-        /*$user = Auth::user();
-        $text = $user->getRole->name.' '.$user->name.' - Closed Deal ('.$deal->project_name.') from Qualified to Requirements Defined, Explanation: '.\Str::limit($request->comments, 30, '...');
-        $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
-
+        $user = Auth::user();
+        $text = $user->getRole->name.' '.$user->name.' - Closed Deal ('.$deal->project_name.') for '.$deal->actual_amount.'$ (Client: '.$deal->client_name.')';
+        $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';   
         $activityLog = new LeadsDealsActivityLog();
-        $activityLog->lead_id = $deal->lead_id;
-        $activityLog->deal_id = $deal->id;
+        $activityLog->lead_id = $lead->id;
+        $activityLog->deal_id = $deal_stage->id;
+        $activityLog->won_deal_id = $contract->id;
+        $activityLog->project_id = $project->id;
         $activityLog->message = $link;
         $activityLog->created_by = Auth::id();
-        $activityLog->save();*/
+        $activityLog->save();
 
         //update previous lead
-
+        /*$previous_lead = LeadsDealsActivityLog::where([
+            'lead_id' => $deal->lead_id,
+            'deal_id' => null
+        ])->first();
+        if ($previous_lead) {
+            $previous_lead->deal_id = $deal->id;
+            $previous_lead->save();
+        }*/
+        //end activity log
+        \DB::commit();
         if ($project) {
             $users = user::whereIn('role_id', [1, 4])->get();
             foreach ($users as $user) {
@@ -1199,7 +1205,6 @@ class ContractController extends AccountBaseController
                         // }
                         // the bidder kpi points start fropm here.
                         $kpi= kpiSetting::first();
-                       
                         $project_budget= $deal->amount;
                      
                         
