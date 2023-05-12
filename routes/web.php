@@ -176,6 +176,8 @@ use App\Http\Controllers\Seopage1TeamController;
 use App\Http\Controllers\KpiSettingController;
 use App\Http\Controllers\IncentiveSettingController;
 use App\Http\Controllers\PointsController;
+use App\Http\Controllers\IncentiveController;
+
 
 
 /*
@@ -313,7 +315,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('attendances/store-clock-in', [DashboardController::class, 'storeClockIn'])->name('attendances.store_clock_in');
     Route::get('attendances/update-clock-in', [DashboardController::class, 'updateClockIn'])->name('attendances.update_clock_in');
     Route::get('dashboard/private_calendar', [DashboardController::class, 'privateCalendar'])->name('dashboard.private_calendar');
-    Route::resource('points', PointsController::class);
+    // Route::resource('points/', PointsController::class)->only
+    
+    Route::get('/menu/filter-options/{mode}', [PointsController::class, 'get_filter_options']);
+    Route::get('/points/{any?}', [PointsController::class,'index'])->where('any', '.*')->name('points.index');
+    Route::get('/incentives/{any?}', [IncentiveController::class, 'index'])-> name('incentives.index');
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     /* Setting menu routes starts from here */
