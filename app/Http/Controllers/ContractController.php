@@ -1187,41 +1187,63 @@ class ContractController extends AccountBaseController
 
                         $kpi= kpiSetting::first();
                        
-                        $project_budget= $deal->amount;
+                        $project_budget= ($deal->amount * $kpi->accepted_by_pm)/100;
                      
                         
                             if($deal->lead_id != null)
                             {
                                 $lead = Lead::where('id',$deal->lead_id)->first();
                                 $user_name= User::where('id',$lead->added_by)->first(); 
-                                $cash_points= CashPoint::where('user_id',$lead->added_by)->latest()->first();
+                                $cash_points= CashPoint::where('user_id',$lead->added_by)->orderBy('id','desc')->first();
                                 $point= new CashPoint();
                                 $point->user_id= $lead->added_by;
                                 $point->project_id= $project_id->id;
                                 $point->activity= $user_name->name . ' created the bid';
                                 $point->gained_as = "Individual";
                                 $point->points= ($project_budget*$kpi->the_bidder)/100;
-
+    
                                 if ($cash_points != null) {
                                
                                     $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->the_bidder)/100;
-
+    
                                 }else 
                                 {
-                                    ($project_budget*$kpi->the_bidder)/100;
-
+                                    $point->total_points_earn=  ($project_budget*$kpi->the_bidder)/100;
+    
                                 }
                                 $point->save();
                                // dd($point);
-
+    
                             }
-                            $deal_short_code= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',2)->first();
-                           
+                                    $deal_qualified= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',1)->first();
 
-                                if($deal_short_code->deal_stage_id == 2)
-                                {
+    
+                                    $user_name= User::where('id',$deal_qualified->updated_by)->first(); 
+                                    $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                    $point= new CashPoint();
+                                    $point->user_id= $deal_qualified->updated_by;
+                                    $point->project_id= $project_id->id;
+                                    $point->activity= $user_name->name . ' made the deal qulaify deal';
+                                    $point->gained_as = "Individual";
+                                    $point->points= ($project_budget*$kpi->qualify)/100;
+    
+                                    if ($cash_points_qualified != null) {
+                                   
+                                        $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($project_budget*$kpi->qualify)/100;
+    
+                                    }else 
+                                    {
+                                        $point->total_points_earn=  ($project_budget*$kpi->qualify)/100;
+    
+                                    }
+                                    $point->save();
+                                  
+    
+                               
+                                    $deal_short_code= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',2)->first();
+    
                                     $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
-                                    $cash_points= CashPoint::where('user_id',$user_name->id)->latest()->first();
+                                    $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                                     $point= new CashPoint();
                                     $point->user_id= $deal_short_code->updated_by;
                                     $point->project_id= $project_id->id;
@@ -1229,97 +1251,236 @@ class ContractController extends AccountBaseController
                                     $point->gained_as = "Individual";
                                     $point->points= ($project_budget*$kpi->requirements_defined)/100;
     
-                                    if ($cash_points != null) {
+                                    if ($cash_points_requirements_defined != null) {
                                    
-                                        $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->requirements_defined)/100;
+                                        $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($project_budget*$kpi->requirements_defined)/100;
     
                                     }else 
                                     {
-                                        ($project_budget*$kpi->requirements_defined)/100;
+                                        $point->total_points_earn=  ($project_budget*$kpi->requirements_defined)/100;
     
                                     }
                                     $point->save();
-
-                                }
+                                   
+    
+                              
                                 
-                                if($deal_short_code->deal_stage_id == 3)
-                                {
-                                    
-                                    $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
-                                    $cash_points= CashPoint::where('user_id',$user_name->id)->latest()->first();
+                                    $deal_proposal= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',3)->first();
+                                    $user_name= User::where('id',$deal_proposal->updated_by)->first(); 
+                                    $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                                     $point= new CashPoint();
-                                    $point->user_id= $deal_short_code->updated_by;
+                                    $point->user_id= $deal_proposal->updated_by;
                                     $point->project_id= $project_id->id;
                                     $point->activity= $user_name->name . ' created the proposal';
                                     $point->gained_as = "Individual";
                                     $point->points= ($project_budget*$kpi->proposal_made)/100;
     
-                                    if ($cash_points != null) {
+                                    if ($cash_points_proposal_made != null) {
                                    
-                                        $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->proposal_made)/100;
+                                        $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($project_budget*$kpi->proposal_made)/100;
     
                                     }else 
                                     {
-                                        ($project_budget*$kpi->proposal_made)/100;
+                                        $point->total_points_earn=  ($project_budget*$kpi->proposal_made)/100;
     
                                     }
                                     $point->save();
-
-                                }
-                                if($deal_short_code->deal_stage_id == 4)
-                                {
-                                    
-                                    $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
-                                    $cash_points= CashPoint::where('user_id',$user_name->id)->latest()->first();
+                                   
+    
+                                
+                                    $deal_negotiation_started= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',4)->first();                               
+                                    $user_name= User::where('id',$deal_negotiation_started->updated_by)->first(); 
+                                    $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                                     $point= new CashPoint();
-                                    $point->user_id= $deal_short_code->updated_by;
+                                    $point->user_id= $deal_negotiation_started->updated_by;
                                     $point->project_id= $project_id->id;
                                     $point->activity= $user_name->name . ' started negotiation started';
                                     $point->gained_as = "Individual";
                                     $point->points= ($project_budget*$kpi->negotiation_started)/100;
     
-                                    if ($cash_points != null) {
+                                    if ($cash_points_negotiation_started != null) {
                                    
-                                        $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->negotiation_started)/100;
+                                        $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($project_budget*$kpi->negotiation_started)/100;
     
                                     }else 
                                     {
-                                        ($project_budget*$kpi->negotiation_started)/100;
+                                        $point->total_points_earn=  ($project_budget*$kpi->negotiation_started)/100;
     
                                     }
                                     $point->save();
-
-                                }
-                                if($deal_short_code->deal_stage_id == 5)
-                                {
-                                    
-                                    $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
-                                    $cash_points= CashPoint::where('user_id',$user_name->id)->latest()->first();
+                                   
+                               
+                                    $deal_milestone_breakdown= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',5)->first();
+                                    $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
+                                    $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                                     $point= new CashPoint();
-                                    $point->user_id= $deal_short_code->updated_by;
+                                    $point->user_id= $deal_milestone_breakdown->updated_by;
                                     $point->project_id= $project_id->id;
                                     $point->activity= $user_name->name . ' created the milestone breakdown';
                                     $point->gained_as = "Individual";
                                     $point->points= ($project_budget*$kpi->milestone_breakdown)/100;
     
-                                    if ($cash_points != null) {
+                                    if ($cash_points_milestone_breakdown != null) {
                                    
-                                        $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->milestone_breakdown)/100;
+                                        $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($project_budget*$kpi->milestone_breakdown)/100;
     
                                     }else 
                                     {
+                                        $point->total_points_earn=
                                         ($project_budget*$kpi->milestone_breakdown)/100;
     
                                     }
                                     $point->save();
 
-                                }
+                                    if ($deal->amount > $kpi->generate_single_deal) {
 
-
+                                        $bonus_point= $kpi->bonus_point;
+                                        if($deal->lead_id != null)
+                             {
+                                 $lead = Lead::where('id',$deal->lead_id)->first();
+                                 $user_name= User::where('id',$lead->added_by)->first(); 
+                                 $cash_points= CashPoint::where('user_id',$lead->added_by)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $lead->added_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' created the bid';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($bonus_point*$kpi->the_bidder)/100;
+     
+                                 if ($cash_points != null) {
+                                
+                                     $point->total_points_earn= $cash_points->total_points_earn+ ($bonus_point*$kpi->the_bidder)/100;
+     
+                                 }else 
+                                 {
+                                     $point->total_points_earn=  ($bonus_point*$kpi->the_bidder)/100;
+     
+                                 }
+                                 $point->save();
+                                // dd($point);
+     
+                             }
+                                     $deal_qualified= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',1)->first();
+    
+     
+                                     $user_name= User::where('id',$deal_qualified->updated_by)->first(); 
+                                     $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                     $point= new CashPoint();
+                                     $point->user_id= $deal_qualified->updated_by;
+                                     $point->project_id= $project_id->id;
+                                     $point->activity= $user_name->name . ' made the deal qulaify deal';
+                                     $point->gained_as = "Individual";
+                                     $point->points= ($bonus_point*$kpi->qualify)/100;
+     
+                                     if ($cash_points_qualified != null) {
+                                    
+                                         $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($bonus_point*$kpi->qualify)/100;
+     
+                                     }else 
+                                     {
+                                         $point->total_points_earn=  ($bonus_point*$kpi->qualify)/100;
+     
+                                     }
+                                     $point->save();
+                                   
+     
+                                
+                                     $deal_short_code= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',2)->first();
+     
+                                     $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
+                                     $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                     $point= new CashPoint();
+                                     $point->user_id= $deal_short_code->updated_by;
+                                     $point->project_id= $project_id->id;
+                                     $point->activity= $user_name->name . ' made the deal requirements defined';
+                                     $point->gained_as = "Individual";
+                                     $point->points= ($bonus_point*$kpi->requirements_defined)/100;
+     
+                                     if ($cash_points_requirements_defined != null) {
+                                    
+                                         $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($bonus_point*$kpi->requirements_defined)/100;
+     
+                                     }else 
+                                     {
+                                         $point->total_points_earn=  ($bonus_point*$kpi->requirements_defined)/100;
+     
+                                     }
+                                     $point->save();
+                                    
+     
                                
-                              
-                          
-                            
+                                 
+                                     $deal_proposal= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',3)->first();
+                                     $user_name= User::where('id',$deal_proposal->updated_by)->first(); 
+                                     $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                     $point= new CashPoint();
+                                     $point->user_id= $deal_proposal->updated_by;
+                                     $point->project_id= $project_id->id;
+                                     $point->activity= $user_name->name . ' created the proposal';
+                                     $point->gained_as = "Individual";
+                                     $point->points= ($bonus_point*$kpi->proposal_made)/100;
+     
+                                     if ($cash_points_proposal_made != null) {
+                                    
+                                         $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($bonus_point*$kpi->proposal_made)/100;
+     
+                                     }else 
+                                     {
+                                         $point->total_points_earn=  ($bonus_point*$kpi->proposal_made)/100;
+     
+                                     }
+                                     $point->save();
+                                    
+     
+                                 
+                                     $deal_negotiation_started= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',4)->first();                               
+                                     $user_name= User::where('id',$deal_negotiation_started->updated_by)->first(); 
+                                     $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                     $point= new CashPoint();
+                                     $point->user_id= $deal_negotiation_started->updated_by;
+                                     $point->project_id= $project_id->id;
+                                     $point->activity= $user_name->name . ' started negotiation started';
+                                     $point->gained_as = "Individual";
+                                     $point->points= ($bonus_point*$kpi->negotiation_started)/100;
+     
+                                     if ($cash_points_negotiation_started != null) {
+                                    
+                                         $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($bonus_point*$kpi->negotiation_started)/100;
+     
+                                     }else 
+                                     {
+                                         $point->total_points_earn=  ($bonus_point*$kpi->negotiation_started)/100;
+     
+                                     }
+                                     $point->save();
+                                    
+                                
+                                     $deal_milestone_breakdown= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',5)->first();
+                                     $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
+                                     $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                     $point= new CashPoint();
+                                     $point->user_id= $deal_milestone_breakdown->updated_by;
+                                     $point->project_id= $project_id->id;
+                                     $point->activity= $user_name->name . ' created the milestone breakdown';
+                                     $point->gained_as = "Individual";
+                                     $point->points= ($bonus_point*$kpi->milestone_breakdown)/100;
+     
+                                     if ($cash_points_milestone_breakdown != null) {
+                                    
+                                         $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($bonus_point*$kpi->milestone_breakdown)/100;
+     
+                                     }else 
+                                     {
+                                         $point->total_points_earn=
+                                         ($bonus_point*$kpi->milestone_breakdown)/100;
+     
+                                     }
+                                     $point->save();
+    
+                                     }
+                                  //  dd($point);
+    
+                    
 
                       DB::commit();
                       // all good
@@ -1582,144 +1743,7 @@ class ContractController extends AccountBaseController
                     $project_admin_update->save();
 
                   
-                    // the bidder kpi points start fropm here.
-                    $kpi= kpiSetting::first();
-                       
-                    $project_budget= $deal->amount;
-                 
-                    
-                        if($deal->lead_id != null)
-                        {
-                            $lead = Lead::where('id',$deal->lead_id)->first();
-                            $user_name= User::where('id',$lead->added_by)->first(); 
-                            $cash_points= CashPoint::where('user_id',$lead->added_by)->latest()->first();
-                            $point= new CashPoint();
-                            $point->user_id= $lead->added_by;
-                            $point->project_id= $project_id->id;
-                            $point->activity= $user_name->name . ' created the bid';
-                            $point->gained_as = "Individual";
-                            $point->points= ($project_budget*$kpi->the_bidder)/100;
-
-                            if ($cash_points != null) {
-                           
-                                $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->the_bidder)/100;
-
-                            }else 
-                            {
-                                ($project_budget*$kpi->the_bidder)/100;
-
-                            }
-                            $point->save();
-                           // dd($point);
-
-                        }
-                        $deal_short_code= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',2)->first();
-                       
-
-                            if($deal_short_code->deal_stage_id == 2)
-                            {
-                                $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
-                                $cash_points= CashPoint::where('user_id',$user_name->id)->latest()->first();
-                                $point= new CashPoint();
-                                $point->user_id= $deal_short_code->updated_by;
-                                $point->project_id= $project_id->id;
-                                $point->activity= $user_name->name . ' made the deal requirements defined';
-                                $point->gained_as = "Individual";
-                                $point->points= ($project_budget*$kpi->requirements_defined)/100;
-
-                                if ($cash_points != null) {
-                               
-                                    $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->requirements_defined)/100;
-
-                                }else 
-                                {
-                                    $point->total_points_earn=  ($project_budget*$kpi->requirements_defined)/100;
-
-                                }
-                                $point->save();
-
-                            }
-                            
-                            if($deal_short_code->deal_stage_id == 3)
-                            {
-                                
-                                $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
-                                $cash_points= CashPoint::where('user_id',$user_name->id)->latest()->first();
-                                $point= new CashPoint();
-                                $point->user_id= $deal_short_code->updated_by;
-                                $point->project_id= $project_id->id;
-                                $point->activity= $user_name->name . ' created the proposal';
-                                $point->gained_as = "Individual";
-                                $point->points= ($project_budget*$kpi->proposal_made)/100;
-
-                                if ($cash_points != null) {
-                               
-                                    $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->proposal_made)/100;
-
-                                }else 
-                                {
-                                    $point->total_points_earn=  ($project_budget*$kpi->proposal_made)/100;
-
-                                }
-                                $point->save();
-
-                            }
-                            if($deal_short_code->deal_stage_id == 4)
-                            {
-                                
-                                $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
-                                $cash_points= CashPoint::where('user_id',$user_name->id)->latest()->first();
-                                $point= new CashPoint();
-                                $point->user_id= $deal_short_code->updated_by;
-                                $point->project_id= $project_id->id;
-                                $point->activity= $user_name->name . ' started negotiation started';
-                                $point->gained_as = "Individual";
-                                $point->points= ($project_budget*$kpi->negotiation_started)/100;
-
-                                if ($cash_points != null) {
-                               
-                                    $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->negotiation_started)/100;
-
-                                }else 
-                                {
-                                    $point->total_points_earn=  ($project_budget*$kpi->negotiation_started)/100;
-
-                                }
-                                $point->save();
-
-                            }
-                            if($deal_short_code->deal_stage_id == 5)
-                            {
-                                
-                                $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
-                                $cash_points= CashPoint::where('user_id',$user_name->id)->latest()->first();
-                                $point= new CashPoint();
-                                $point->user_id= $deal_short_code->updated_by;
-                                $point->project_id= $project_id->id;
-                                $point->activity= $user_name->name . ' created the milestone breakdown';
-                                $point->gained_as = "Individual";
-                                $point->points= ($project_budget*$kpi->milestone_breakdown)/100;
-
-                                if ($cash_points != null) {
-                               
-                                    $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->milestone_breakdown)/100;
-
-                                }else 
-                                {
-                                    $point->total_points_earn=
-                                    ($project_budget*$kpi->milestone_breakdown)/100;
-
-                                }
-                                $point->save();
-
-                            }
-
-
-                        
-                           // dd($point);
-                            
-                        
-                            
+                   
                         
                   $user= User::where('id',$deal_pm_id->pm_id)->first();
                     Mail::to($user->email)->send(new WonDealMail($project_id));
@@ -1773,7 +1797,303 @@ class ContractController extends AccountBaseController
                 //                 'redirectUrl' => route('deals.show',$deal->id)
                 //             ]);
                 //         }
+                     // the bidder kpi points start fropm here.
 
+
+                     $kpi= kpiSetting::first();
+                       
+                     $project_budget= ($deal->amount * $kpi->accepted_by_pm)/100;
+                  
+                     
+                         if($deal->lead_id != null)
+                         {
+                             $lead = Lead::where('id',$deal->lead_id)->first();
+                             $user_name= User::where('id',$lead->added_by)->first(); 
+                             $cash_points= CashPoint::where('user_id',$lead->added_by)->orderBy('id','desc')->first();
+                             $point= new CashPoint();
+                             $point->user_id= $lead->added_by;
+                             $point->project_id= $project_id->id;
+                             $point->activity= $user_name->name . ' created the bid';
+                             $point->gained_as = "Individual";
+                             $point->points= ($project_budget*$kpi->the_bidder)/100;
+ 
+                             if ($cash_points != null) {
+                            
+                                 $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->the_bidder)/100;
+ 
+                             }else 
+                             {
+                                 $point->total_points_earn=  ($project_budget*$kpi->the_bidder)/100;
+ 
+                             }
+                             $point->save();
+                            // dd($point);
+ 
+                         }
+                                 $deal_qualified= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',1)->first();
+
+ 
+                                 $user_name= User::where('id',$deal_qualified->updated_by)->first(); 
+                                 $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_qualified->updated_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' made the deal qulaify deal';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($project_budget*$kpi->qualify)/100;
+ 
+                                 if ($cash_points_qualified != null) {
+                                
+                                     $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($project_budget*$kpi->qualify)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=  ($project_budget*$kpi->qualify)/100;
+ 
+                                 }
+                                 $point->save();
+                               
+ 
+                            
+                                 $deal_short_code= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',2)->first();
+ 
+                                 $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
+                                 $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_short_code->updated_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' made the deal requirements defined';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($project_budget*$kpi->requirements_defined)/100;
+ 
+                                 if ($cash_points_requirements_defined != null) {
+                                
+                                     $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($project_budget*$kpi->requirements_defined)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=  ($project_budget*$kpi->requirements_defined)/100;
+ 
+                                 }
+                                 $point->save();
+                                
+ 
+                           
+                             
+                                 $deal_proposal= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',3)->first();
+                                 $user_name= User::where('id',$deal_proposal->updated_by)->first(); 
+                                 $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_proposal->updated_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' created the proposal';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($project_budget*$kpi->proposal_made)/100;
+ 
+                                 if ($cash_points_proposal_made != null) {
+                                
+                                     $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($project_budget*$kpi->proposal_made)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=  ($project_budget*$kpi->proposal_made)/100;
+ 
+                                 }
+                                 $point->save();
+                                
+ 
+                             
+                                 $deal_negotiation_started= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',4)->first();                               
+                                 $user_name= User::where('id',$deal_negotiation_started->updated_by)->first(); 
+                                 $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_negotiation_started->updated_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' started negotiation started';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($project_budget*$kpi->negotiation_started)/100;
+ 
+                                 if ($cash_points_negotiation_started != null) {
+                                
+                                     $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($project_budget*$kpi->negotiation_started)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=  ($project_budget*$kpi->negotiation_started)/100;
+ 
+                                 }
+                                 $point->save();
+                                
+                            
+                                 $deal_milestone_breakdown= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',5)->first();
+                                 $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
+                                 $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_milestone_breakdown->updated_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' created the milestone breakdown';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($project_budget*$kpi->milestone_breakdown)/100;
+ 
+                                 if ($cash_points_milestone_breakdown != null) {
+                                
+                                     $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($project_budget*$kpi->milestone_breakdown)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=
+                                     ($project_budget*$kpi->milestone_breakdown)/100;
+ 
+                                 }
+                                 $point->save();
+
+
+                                 if ($deal->amount > $kpi->generate_single_deal) {
+
+                                    $bonus_point= $kpi->bonus_point;
+                                    if($deal->lead_id != null)
+                         {
+                             $lead = Lead::where('id',$deal->lead_id)->first();
+                             $user_name= User::where('id',$lead->added_by)->first(); 
+                             $cash_points= CashPoint::where('user_id',$lead->added_by)->orderBy('id','desc')->first();
+                             $point= new CashPoint();
+                             $point->user_id= $lead->added_by;
+                             $point->project_id= $project_id->id;
+                             $point->activity= $user_name->name . ' created the bid';
+                             $point->gained_as = "Individual";
+                             $point->points= ($bonus_point*$kpi->the_bidder)/100;
+ 
+                             if ($cash_points != null) {
+                            
+                                 $point->total_points_earn= $cash_points->total_points_earn+ ($bonus_point*$kpi->the_bidder)/100;
+ 
+                             }else 
+                             {
+                                 $point->total_points_earn=  ($bonus_point*$kpi->the_bidder)/100;
+ 
+                             }
+                             $point->save();
+                            // dd($point);
+ 
+                         }
+                                 $deal_qualified= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',1)->first();
+
+ 
+                                 $user_name= User::where('id',$deal_qualified->updated_by)->first(); 
+                                 $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_qualified->updated_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' made the deal qulaify deal';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($bonus_point*$kpi->qualify)/100;
+ 
+                                 if ($cash_points_qualified != null) {
+                                
+                                     $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($bonus_point*$kpi->qualify)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=  ($bonus_point*$kpi->qualify)/100;
+ 
+                                 }
+                                 $point->save();
+                               
+ 
+                            
+                                 $deal_short_code= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',2)->first();
+ 
+                                 $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
+                                 $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_short_code->updated_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' made the deal requirements defined';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($bonus_point*$kpi->requirements_defined)/100;
+ 
+                                 if ($cash_points_requirements_defined != null) {
+                                
+                                     $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($bonus_point*$kpi->requirements_defined)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=  ($bonus_point*$kpi->requirements_defined)/100;
+ 
+                                 }
+                                 $point->save();
+                                
+ 
+                           
+                             
+                                 $deal_proposal= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',3)->first();
+                                 $user_name= User::where('id',$deal_proposal->updated_by)->first(); 
+                                 $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_proposal->updated_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' created the proposal';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($bonus_point*$kpi->proposal_made)/100;
+ 
+                                 if ($cash_points_proposal_made != null) {
+                                
+                                     $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($bonus_point*$kpi->proposal_made)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=  ($bonus_point*$kpi->proposal_made)/100;
+ 
+                                 }
+                                 $point->save();
+                                
+ 
+                             
+                                 $deal_negotiation_started= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',4)->first();                               
+                                 $user_name= User::where('id',$deal_negotiation_started->updated_by)->first(); 
+                                 $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_negotiation_started->updated_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' started negotiation started';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($bonus_point*$kpi->negotiation_started)/100;
+ 
+                                 if ($cash_points_negotiation_started != null) {
+                                
+                                     $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($bonus_point*$kpi->negotiation_started)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=  ($bonus_point*$kpi->negotiation_started)/100;
+ 
+                                 }
+                                 $point->save();
+                                
+                            
+                                 $deal_milestone_breakdown= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',5)->first();
+                                 $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
+                                 $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_milestone_breakdown->updated_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' created the milestone breakdown';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($bonus_point*$kpi->milestone_breakdown)/100;
+ 
+                                 if ($cash_points_milestone_breakdown != null) {
+                                
+                                     $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($bonus_point*$kpi->milestone_breakdown)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=
+                                     ($bonus_point*$kpi->milestone_breakdown)/100;
+ 
+                                 }
+                                 $point->save();
+
+                                 }
 
                 DB::commit();
                 // all good
