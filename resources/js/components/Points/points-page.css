@@ -134,22 +134,50 @@
 .sp1__pp_filter_dd {
   padding: 0 10px;
   padding-bottom: 10px;
+  max-width: 450px;
   overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
 }
 
 .sp1__pp_filter_dd_toggle {
   font-weight: bold;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+}
+
+.sp1__pp_menu_items{
+  max-height: 700px;
+  padding-top: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sp1__pp_filter_dd_item {
   font-size: 14px;
   cursor: pointer;
   border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+
+
 
 .sp1__pp_filter_dd_item:hover {
     background: #f3f6f7;
   }
+
+.sp1__pp_filter_dd_item.active,
+.sp1__pp_filter_dd_item.active:hover{
+  color: #fff;
+  background: #739df1;
+}
 
 .sp1__pp_filter_dd_search {
   padding: 6px 0;
@@ -276,7 +304,7 @@
 
 .cnx__table_tr {
   display: flex;
-    /* align-items: stretch; */
+    align-items: stretch;
 }
 
 .cnx__table_td {
@@ -293,6 +321,11 @@
     border: 0;
     padding-top: 16px;
     padding-bottom: 16px;
+  }
+
+  .sp1__pp_table_td{
+    width: 100%;
+    white-space: pre-wrap !important;
   }
 
 .sp1__pp_table_tr> .cnx__table_th {

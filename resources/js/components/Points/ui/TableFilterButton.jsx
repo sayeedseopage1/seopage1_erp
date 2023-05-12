@@ -1,7 +1,7 @@
 import * as React from 'react';
-import Dropdown from './Dropdown';
-import SearchBox from './Searchbox';
-import { Icon } from '../utils/Icon';
+import Dropdown from '../../Insights/ui/Dropdown';
+import SearchBox from '../../Insights/ui/Searchbox';
+import { Icon } from '../../Insights/utils/Icon';
 import {dataTableColumns} from '../utils/constants';
 
 

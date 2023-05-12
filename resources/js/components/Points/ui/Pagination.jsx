@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Button from './Button';
+import Button from '../../Insights/ui/Button';
 
 
 const Pagination = ({data, setCurrentPageData, numOfPerPageRow = 10, sortConfig, sortedData }) => {

@@ -2,9 +2,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Pagination from './Pagination';
-import TableFilterButton from './TableFilterButton';
+// import TableFilterButton from './TableFilterButton';
 import { useDrag, useDrop} from 'react-dnd';
-import { Icon } from '../utils/Icon';
+import { Icon } from '../../Insights/utils/Icon';
 
 
 const DataTableContext = React.createContext();
@@ -136,7 +136,7 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
                                 currentPageData.length > 0 ? currentPageData.map((data) => (
                                         <div key={data.id} className="cnx__table_tr sp1__pp_table_tr">
                                             {columns.map(d => (
-                                                <div key={d.id} className="cnx__table_td">
+                                                <div key={d.id} className="cnx__table_td sp1__pp_table_td">
                                                     {d.cell(data)}
                                                 </div>
                                             ))}
@@ -273,7 +273,7 @@ const DraggableColumn = ({
     return(
         <div 
             id={`cnx__table_th_${column.id}`}
-            className={`cnx__table_th`}
+            className={`cnx__table_th sp1__pp_table_td`}
         
         >
             <div ref={ref}

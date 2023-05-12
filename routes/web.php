@@ -317,7 +317,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('dashboard/private_calendar', [DashboardController::class, 'privateCalendar'])->name('dashboard.private_calendar');
     // Route::resource('points/', PointsController::class)->only
     
-    Route::get('/menu/filter-options/{mode}', [PointsController::class, 'get_filter_options']);
+    Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
+    Route::get('/menu/filter/get-employee/{department?}/{shifts?}', [PointsController::class, 'get_employe_by_filter_options']);
+    Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
     Route::get('/points/{any?}', [PointsController::class,'index'])->where('any', '.*')->name('points.index');
     Route::get('/incentives/{any?}', [IncentiveController::class, 'index'])-> name('incentives.index');
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
@@ -1260,3 +1262,4 @@ Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agre
 
 Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
 
+ 

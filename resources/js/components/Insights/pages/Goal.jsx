@@ -164,8 +164,14 @@ const Goal = () => {
         }
         
         let _deals = getDeals(deals, goal, startDate, endDate);
-        setDealsData([..._deals]);
-        setIsLoading(false);
+        if(_deals){
+            setDealsData([..._deals]);
+            setIsLoading(false);
+        }else {
+            setDealsData([]);
+            setIsLoading(false);
+        }
+        
     }, [deals, usersData, goal, teams, filter, applyFilter, location]);
 
 
@@ -340,28 +346,32 @@ const Goal = () => {
                             Goal Details
                         </h4>
                         {/* edit goal */}
-                        <Button variant='tertiary' onClick={handleOpenGoalFormModal}>
-                            <i className='fa-solid fa-pencil'/>
-                        </Button>
+                        {
+                            new Date(goal?.endDate) !== new Date() && 
+                            <Button variant='tertiary' onClick={handleOpenGoalFormModal}>
+                                <i className='fa-solid fa-pencil'/>
+                            </Button>
+                        }
+                        
                         {/* end edit goal */}
 
                         <div className='filter_options_line'>
                             <span>{ goal?.name || goal?.team_name }</span>
                             <span>
-                                {goal.entry} {goal.entryType}
+                                {goal?.entry} {goal?.entryType}
                             </span>
                             <span>Pipeline</span>
                             <span>
-                                {goal.frequency}
+                                {goal?.frequency}
                             </span>
                             <span>
-                                {dayjs(goal.startDate).format('MMM DD, YYYY')}
+                                {dayjs(goal?.startDate).format('MMM DD, YYYY')}
                             </span>
                             <span>
-                                {goal.endDate ? dayjs(goal.endDate).format('MMM DD, YYYY') : 'No end date'}
+                                {goal?.endDate ? dayjs(goal?.endDate).format('MMM DD, YYYY') : 'No end date'}
                             </span>
                             <span>
-                                {goal.trackingType === "value" ? numberToUnits(Number(goal.trackingValue)) : goal.trackingValue} deals
+                                {goal?.trackingType === "value" ? numberToUnits(Number(goal?.trackingValue)) : goal?.trackingValue} deals
                             </span>
                         </div>
 
@@ -385,7 +395,7 @@ const Goal = () => {
                            <Tooltip text='Goal type'>
                              <div className='cnx__ins_details_item'>
                                 <Icon type="Deal" />
-                                {goal.entry} {goal.entryType}
+                                {goal?.entry} {goal?.entryType}
                             </div>
                            </Tooltip>
 
@@ -401,21 +411,21 @@ const Goal = () => {
                             <Tooltip text="Goal Frequency">
                                 <div className='cnx__ins_details_item'>
                                     <Icon type="Activity" />
-                                    {goal.frequency}
+                                    {goal?.frequency}
                                 </div>
                             </Tooltip>
 
                             <Tooltip text="Goal duration">
                                 <div className='cnx__ins_details_item'>
                                     <i className="fa-regular fa-clock"/>
-                                    {dayjs(goal.startDate).format('MMM DD, YYYY')} - {goal.endDate ? dayjs(goal.endDate).format('MMM DD, YYYY') : 'No end date'}
+                                    {dayjs(goal?.startDate).format('MMM DD, YYYY')} - {goal.endDate ? dayjs(goal?.endDate).format('MMM DD, YYYY') : 'No end date'}
                                 </div>
                             </Tooltip>
 
                             <Tooltip text='Expected outcome'>
                                 <div className='cnx__ins_details_item'>
                                     <Icon type="Goal" />
-                                    {goal.trackingType === "value" ? numberToUnits(Number(goal.trackingValue)) : goal.trackingValue} Deals 
+                                    {goal?.trackingType === "value" ? numberToUnits(Number(goal?.trackingValue)) : goal?.trackingValue} Deals 
                                 </div>
                             </Tooltip>
                         </div>
@@ -495,8 +505,8 @@ const Goal = () => {
                                     barDataKey={[ "value" ]}
                                     offset={-5}
                                     // yDomain={ [0, dataMax => (dataMax + Math.ceil(dataMax * 0.1))]}
-                                    labelListFormatter={value => goal.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
-                                    yAxisTickFormate={value => goal.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
+                                    labelListFormatter={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
+                                    yAxisTickFormate={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
                                     data = {[...summarizedData]} 
                                 />
                             </div>

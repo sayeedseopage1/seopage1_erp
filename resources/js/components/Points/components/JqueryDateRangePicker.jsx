@@ -26,7 +26,8 @@ const JqueryDateRangePicker = ({
                 }
 
                 
-                
+               setStartDate(start.format('YYYY-MM-DD'));
+               setEndDate(end.format('YYYY-MM-DD')); 
                 function cb(start, end) {
                     setStartDate(start.format('YYYY-MM-DD'));
                     setEndDate(end.format('YYYY-MM-DD'));

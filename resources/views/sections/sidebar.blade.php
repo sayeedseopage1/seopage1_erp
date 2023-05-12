@@ -290,11 +290,8 @@
                             {{-- <x-sub-menu-item link="" :text="'Qualified Sales'" /> --}}
                             <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
                             <x-sub-menu-item :link="route('points.index')" :text="'Points'" />
-<<<<<<< HEAD
                             <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
-=======
-                            {{-- <x-sub-menu-item link="" :text="'Incentives'" /> --}}
->>>>>>> b16d3bf44 (migration fixed)
+
                         </div>
                     </x-menu-item>
                     {{-- <x-menu-item icon="briefcase" :text="'Resource'">
