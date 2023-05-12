@@ -112,6 +112,15 @@ class PointsController extends AccountBaseController
         } else {
             $data = CashPoint::where('user_id', $request->user_id);
         }
+
+        if ($request->team_id != '') {
+            $user = Seopage1Team::where('department_id', $request->department_id)->get();
+            $user_list = explode(',', $user);
+
+            $data = CashPoint::whereIn('user_id', $user_list);
+        } else {
+            $data = CashPoint::where('user_id', $request->user_id);
+        }
             
         if ($request->start_date != '') {
             $data = $data->whereDateBetween('created_at', '>=', Carbon::parse($request->start_date));
@@ -120,6 +129,26 @@ class PointsController extends AccountBaseController
         if ($request->end_date != '') {
             $data = $data->whereDateBetween('created_at', '=<', Carbon::parse($request->start_date));
         }
+
+        if ($request->team_id != '') {
+            $data = Team::where('id', $request->team_id)->first();
+
+            $team = Seopage1Team::where('department_id', $data->id)->get();
+
+            $user_list = [];
+            foreach ($team as $key => $value) {
+                $users = explode(',', $value->members);
+                
+                foreach ($users as $user) {
+                    if ($user != '') {
+                        array_push($user_list, $user);
+                    }
+                }
+            }
+            $data = CashPoint::whereIn('user_id', $user_list);
+        }
+
+        $data = $data->get();
 
         return response()->json($data);
     }   
