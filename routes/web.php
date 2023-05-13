@@ -176,7 +176,7 @@ use App\Http\Controllers\Seopage1TeamController;
 use App\Http\Controllers\KpiSettingController;
 use App\Http\Controllers\IncentiveSettingController;
 use App\Http\Controllers\PointsController;
-
+use App\Http\Controllers\PortfolioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -942,10 +942,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
 
     // Contracts
-      Route::post('contracts/deal-create', [ContractController::class, 'createDeal'])->name('create-deal');
-      Route::post('contracts/deal-store', [ContractController::class, 'storeDeal'])->name('store-deals');
-      Route::get('contracts/deal-delete/{id}', [ContractController::class, 'deleteDeal']);
-      Route::get('deal-url/{id}', [ContractController::class, 'DealUrl']);
+    Route::post('contracts/deal-create', [ContractController::class, 'createDeal'])->name('create-deal');
+    Route::post('contracts/deal-store', [ContractController::class, 'storeDeal'])->name('store-deals');
+    Route::get('contracts/deal-delete/{id}', [ContractController::class, 'deleteDeal']);
+    Route::get('deal-url/{id}', [ContractController::class, 'DealUrl']);
     Route::post('contracts/apply-quick-action', [ContractController::class, 'applyQuickAction'])->name('contracts.apply_quick_action');
     Route::get('contracts/download/{id}', [ContractController::class, 'download'])->name('contracts.download');
     Route::post('contracts/sign/{id}', [ContractController::class, 'sign'])->name('contracts.sign');
@@ -1121,7 +1121,7 @@ Route::post('/deals/deny', [ContractController::class, 'DealDeny'])->name('deny-
 Route::post('/deals/client-form', [HomeController::class, 'ClientForm'])->name('client-submission');
 Route::post('/deals/client-form-submit', [ContractController::class, 'ClientFormSubmit'])->name('form-submit-to-client');
 Route::get('/thankyou', [HomeController::class, 'Thankyou']);
-    /* Account prefix routes end here */
+/* Account prefix routes end here */
 //store custom lead route for seaopage1
 Route::post('/lead/store', [LeadController::class, 'storeLead'])->name('store-lead');
 Route::post('/lead/update', [LeadController::class, 'updateLead'])->name('update-lead');
@@ -1192,11 +1192,26 @@ Route::get('/projects/q&c/{id}/{milestone_id}', [ProjectController::class, 'qc']
 //project completion form
 Route::get('/projects/project-completion/{id}', [ProjectController::class, 'ProjectCompletion']);
 Route::post('/acoounts/project-completion/store', [ProjectController::class, 'ProjectCompletionSubmit'])->name('project-completion');
+Route::get('/projects/project-completion/get-sub-niche/{niche_id}', [ProjectController::class, 'getSubNiches']);
+
+
+//Portfolio Section
+Route::resource('portfolio',PortfolioController::class);
 
 //add project niche
 Route:: get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
 Route::get('/projects/get-sub-category/{id}',[ProjectController::class,'parentCategoryId']);
-Route:: get('/projects/update-category/{id}', [ProjectController::class, 'updateCategory'])->name('update.category');
+Route::put('/projects/update-niche-category/{id}', [ProjectController::class, 'updateCategory']);
+
+//add project cms
+Route:: get('/projects/view-cms', [ProjectController::class, 'viewCms'])->name('project-view-cms');
+Route:: post('/projects/add-cms', [ProjectController::class, 'storeCms'])->name('add-cms');
+Route::put('/projects/update-cms/{id}', [ProjectController::class, 'updateCms']);
+
+//add project website type
+Route:: get('/projects/view-website-type', [ProjectController::class, 'viewWebsiteType'])->name('project-view-website-type');
+Route:: post('/projects/add-website-type', [ProjectController::class, 'storeWebsiteType'])->name('add-website-type');
+Route::put('/projects/update-website-type/{id}', [ProjectController::class, 'updateWebsiteType']);
 
 
 //add project niche
@@ -1253,4 +1268,3 @@ Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agre
 
 
 Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
-

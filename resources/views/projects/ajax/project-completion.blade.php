@@ -336,25 +336,244 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-12 col-md-12">
+                        <div class="row mt-5">
+                            <div class="col-md-6">
+                                @php
+                                    $all_cms = \App\Models\ProjectCms::all();
+                                @endphp
+                                <label class="" for="">Select CMC Category
+                                    <sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Select CMC Category" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <div class="input-group">
+                                    <select class="form-control height-35 f-14" name="cms_category" id="cms_category" data-live-search="true" data-size="8">
+                                        <option value="">--</option>
+                                        @foreach($all_cms as $cms)
+                                            <option value="{{$cms->id}}">{{$cms->cms_name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <span id="cms_categoryError" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                @php
+                                    $website_types = \App\Models\ProjectWebsiteType::all();
+                                @endphp
+                                <label class="" for="">Select Website Type
+                                    <sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Select Website Type" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <div class="input-group">
+                                    <select class="form-control height-35 f-14" name="website_type" id="website_type" data-live-search="true" data-size="8">
+                                        <option value="">--</option>
+                                        @foreach($website_types as $website_type)
+                                            <option value="{{$website_type->id}}">{{$website_type->website_type}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <span id="website_typeError" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-12 col-lg-12 mt-5">
                         <div class="row">
                             <div class="col-md-6 col-lg-6 mt-1">
-                                <label class="" for="">Submit The Niche/Category of The Project
+                                 <label class="" for="">Submit The Niche/Category of The Project
+                                     <sup class="f-14 mr-1">*</sup>
                                     <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Submit The Niche/Category of The Project" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
                                         <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                                     </svg>
                                 </label>
                                 <div class="input-group w-100">
                                     <x-forms.input-group>
-                                        <select class="form-control select-picker" name="niche" id="option_value" data-live-search="true" data-size="8">
-                                            @foreach($categories as $category)
-                                                <option value="{{$category->id}}">{{$category->category_name}}</option>
+                                        @php
+                                            $parent_categories = \App\Models\ProjectNiche::whereNull('parent_category_id')->get();
+                                        @endphp
+                                        <select class="form-control select-picker" name="niche" id="niche" data-live-search="true" data-size="8">
+                                            <option value="">--</option>
+                                            @foreach($parent_categories as $parent_category)
+                                                <option value="{{$parent_category->id}}">{{$parent_category->category_name}}</option>
                                             @endforeach
                                         </select>
-                                        <x-slot name="append">
-                                            <button  type="button" class="btn btn-outline-secondary border-grey" data-toggle="modal" data-target="#nicheaddmodal" type="button">@lang('app.add')</button>
-                                        </x-slot>
                                     </x-forms.input-group>
+                                    <span id="nicheError" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-6 mt-1">
+                                <label class="" for="">Submit The Niche/Sub Category of The Project
+                                    <sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Submit The Niche/Parent Category of The Project" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <div class="input-group w-100">
+                                    <div class="input-group">
+                                        <select class="form-control height-35 f-14" name="sub_niche" id="sub_niche" data-live-search="true" data-size="8">
+                                            <option value="">--</option>
+                                        </select>
+                                    </div>
+                                    <span id="sub_nicheError" class="text-danger"></span>
+                                </div>
+                            </div>
+{{--                            <div class="col-lg-12 col-md-12 mt-5">--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <div class="d-flex">--}}
+{{--                                        <div class="form-check">--}}
+{{--                                            <input class="form-check-input" type="checkbox" id="use_theme" name="use_theme" value="1">--}}
+{{--                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="">Did you use any theme for this theme on the project?--}}
+{{--                                                <sup class="f-14 mr-1">*</sup>--}}
+{{--                                                <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Did you use any theme for this theme on the project?" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">--}}
+{{--                                                    <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>--}}
+{{--                                                </svg>--}}
+{{--                                            </label>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+                            <div class="col-lg-12 col-md-12 mt-5" id="use_theme_box">
+                                <label for="">
+                                    Did you use any theme for this theme on the project?
+                                    <sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Did You share the use theme site link info with client?" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="theme_information"  id="theme_information1" value="1">
+                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault11">
+                                                Yes
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="theme_information" id="theme_information2" value="0" >
+                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault12">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span id="theme_informationError" class="text-danger"></span>
+                            </div>
+                            <div class="col-lg-6 col-md-6 mt-3" id="theme_box">
+                                <label for="">Submit The Use Theme Site Link <sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Submit The Use Theme Site Link" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <input type="text" class="form-control height-35 f-14" name="theme_link" id="theme_link" value="">
+                                <span id="theme_linkError" class="text-danger"></span>
+                            </div>
+
+
+
+
+{{--                            <div class="col-lg-12 col-md-12 mt-5">--}}
+{{--                                <div class="form-group">--}}
+{{--                                    <div class="d-flex">--}}
+{{--                                        <div class="form-check">--}}
+{{--                                            <input class="form-check-input" type="checkbox" id="website_plugin" name="website_plugin" value="1">--}}
+{{--                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="">Did you use any significant plugin for this project?--}}
+{{--                                                <sup class="f-14 mr-1">*</sup>--}}
+{{--                                                <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Did you use any significant plugin for this project?" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">--}}
+{{--                                                    <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>--}}
+{{--                                                </svg>--}}
+{{--                                            </label>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+
+
+                            <div class="col-lg-12 col-md-12 mt-5" id="use_theme_box">
+                                <label for="">
+                                    Did you use any significant plugin for this project?
+                                    <sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Did you use any significant plugin for this project?" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="website_plugin_box_information"  id="website_plugin_box_information2" value="1">
+                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault11">
+                                                Yes
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="website_plugin_box_information" id="website_plugin_box_information2" value="0" >
+                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault12">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span id="plugin_informationError" class="text-danger"></span>
+                            </div>
+
+{{--                            <div class="col-lg-12 col-md-12 mt-3" id="website_plugin_box">--}}
+{{--                                <div class="row">--}}
+{{--                                    <div class="col-md-1">--}}
+{{--                                        <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="">Did you use any significant plugin for this project?--}}
+{{--                                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Did you use any significant plugin for this project?" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">--}}
+{{--                                                <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>--}}
+{{--                                            </svg>--}}
+{{--                                        </label>--}}
+{{--                                        <div class="form-check">--}}
+{{--                                            <input class="form-check-input" type="radio" name="website_plugin_box_information"  id="website_plugin_box_information1" value="1">--}}
+{{--                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault11">--}}
+{{--                                                Yes--}}
+{{--                                            </label>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <div class="col-md-1">--}}
+{{--                                        <div class="form-check">--}}
+{{--                                            <input class="form-check-input" type="radio" name="website_plugin_box_information" id="website_plugin_box_information2" value="0" >--}}
+{{--                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault12">--}}
+{{--                                                No--}}
+{{--                                            </label>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+                            <div class="col-lg-12 col-md-12 mt-5" id="plugin_box">
+                                <div class="row">
+                                    <div class="col-md-10 dynamic-field" id="dynamic-field-1">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="plugin_name">Plugin Name</label>
+                                                    <input type="text" id="plugin_name" class="form-control height-35 f-14" placeholder="Type official plugin name" name="plugin_name[]"/>
+                                                    <span id="plugin_nameError" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label for="plugin_url">Plugin Url</label>
+                                                    <input type="url" id="plugin_url" class="form-control height-35 f-14" placeholder="Add plugin url" name="plugin_url[]"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2 append-buttons" style="margin-top: 25px;">
+                                        <div class="clearfix">
+                                            <button type="button" id="add-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                            <button type="button" id="remove-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12 mt-5">
@@ -518,12 +737,24 @@
             var qc_protocol = $('input[name="qc_protocol"]:checked').val();
             var login_information = $('input[name="login_information"]:checked').val();
             var drive_information = $('input[name="drive_information"]:checked').val();
+            var theme_information = $('input[name="theme_information"]:checked').val();
+            var website_plugin_box_information = $('input[name="website_plugin_box_information"]:checked').val();
             var dummy_information = $('input[name="dummy_information"]:checked').val();
             var notify = $('input[name="notify"]:checked').val();
             var actual_information = $('input[name="actual_information"]:checked').val();
             var rating = $('input[name="rating"]:checked').val();
             var requirements = $('input[name="requirements"]:checked').val();
             var price = $('input[name="price"]:checked').val();
+            var plugin_name = document.getElementsByName("plugin_name[]");
+            var plugin_name_values = [];
+            for (var i = 0; i < plugin_name.length; i++) {
+                plugin_name_values.push(plugin_name[i].value);
+            }
+            var plugin_url = document.getElementsByName("plugin_url[]");
+            var plugin_url_values = [];
+            for (var i = 0; i < plugin_url.length; i++) {
+                plugin_url_values.push(plugin_url[i].value);
+            }
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'qc_protocol': qc_protocol,
@@ -542,7 +773,17 @@
                 'comments': document.getElementById("comments").value,
                 'comments2': document.getElementById("comments2").value,
                 'comments3': document.getElementById("comments3").value,
-                'niche': document.getElementById("option_value").value,
+                'cms_category': document.getElementById("cms_category").value,
+                'website_type': document.getElementById("website_type").value,
+                'niche': document.getElementById("niche").value,
+                'sub_niche': document.getElementById("sub_niche").value,
+                // 'use_theme': document.getElementById("use_theme").value,
+                'theme_information': theme_information,
+                'website_plugin_box_information': website_plugin_box_information,
+                'plugin_name': plugin_name_values,
+                'plugin_url': plugin_url_values,
+                'theme_link': document.getElementById("theme_link").value,
+                // 'website_plugin': document.getElementById("website_plugin").value,
                 'dummy_yes': document.getElementById("dummy_yes").value,
                 'dummy_information': dummy_information,
                 'dummy_link': document.getElementById("dummy_link").value,
@@ -551,6 +792,7 @@
                 'actual_information': actual_information,
                 'actual_link': document.getElementById("actual_link").value,
                 'milestone_id': {{$milestone->id}},
+                'added_by': {{Auth::user()->id}},
             }
             // console.log(data);
             $.ajaxSetup({
@@ -654,6 +896,46 @@
                     }else{
                         $('#comments3Error').text('');
                     }
+                    if(error.responseJSON.errors.cms_category){
+                        $('#cms_categoryError').text(error.responseJSON.errors.cms_category);
+                    }else{
+                        $('#cms_categoryError').text('');
+                    }
+                    if(error.responseJSON.errors.website_type){
+                        $('#website_typeError').text(error.responseJSON.errors.website_type);
+                    }else{
+                        $('#website_typeError').text('');
+                    }
+                    if(error.responseJSON.errors.niche){
+                        $('#nicheError').text(error.responseJSON.errors.niche);
+                    }else{
+                        $('#nicheError').text('');
+                    }
+                    if(error.responseJSON.errors.sub_niche){
+                        $('#sub_nicheError').text(error.responseJSON.errors.sub_niche);
+                    }else{
+                        $('#sub_nicheError').text('');
+                    }
+                    if(error.responseJSON.errors.use_theme){
+                        $('#use_themeError').text(error.responseJSON.errors.use_theme);
+                    }else{
+                        $('#use_themeError').text('');
+                    }
+                    if(error.responseJSON.errors.theme_information){
+                        $('#theme_informationError').text(error.responseJSON.errors.theme_information);
+                    }else{
+                        $('#theme_informationError').text('');
+                    }
+                    if(error.responseJSON.errors.theme_link){
+                        $('#theme_linkError').text(error.responseJSON.errors.theme_link);
+                    }else{
+                        $('#theme_linkError').text('');
+                    }
+                    if(error.responseJSON.errors.website_plugin_box_information){
+                        $('#plugin_informationError').text(error.responseJSON.errors.website_plugin_box_information);
+                    }else{
+                        $('#plugin_informationError').text('');
+                    }
                     if(error.responseJSON.errors.dummy_yes){
                         $('#dummy_yesError').text(error.responseJSON.errors.dummy_yes);
                     }else{
@@ -691,6 +973,100 @@
                     }
                     $('#submitButton').attr("disabled", false);
                     $('#submitButton').html("Submit");
+                }
+            });
+        });
+
+
+
+        $(document).ready(function () {
+            var buttonAdd = $("#add-button");
+            var buttonRemove = $("#remove-button");
+            var className = ".dynamic-field";
+            var count = 0;
+            var field = "";
+            var maxFields = 50;
+
+            function totalFields() {
+                return $(className).length;
+            }
+
+            function addNewField() {
+                var total = $('input[name="link[]"]').length;
+                count = totalFields() + 1;
+                field = $("#dynamic-field-1").clone();
+                field.attr("id", "dynamic-field-" + count);
+                field.children("label").attr("for", "linkError_" + 'total').text("Field " + count);
+                field.find("input").attr("id", "linkError_" + 'total').val("");
+                field.append('<span id="linkError_'+total+'" class="text-danger" for="link"></span>');
+                $(className + ":last").after($(field));
+            }
+
+            function removeLastField() {
+                if (totalFields() > 1) {
+                    $(className + ":last").remove();
+                }
+            }
+
+            function enableButtonRemove() {
+                if (totalFields() === 2) {
+                    buttonRemove.removeAttr("disabled");
+                    buttonRemove.addClass("shadow-sm");
+                }
+            }
+
+            function disableButtonRemove() {
+                if (totalFields() === 1) {
+                    buttonRemove.attr("disabled", "disabled");
+                    buttonRemove.removeClass("shadow-sm");
+                }
+            }
+
+            function disableButtonAdd() {
+                if (totalFields() === maxFields) {
+                    buttonAdd.attr("disabled", "disabled");
+                    buttonAdd.removeClass("shadow-sm");
+                }
+            }
+
+            function enableButtonAdd() {
+                if (totalFields() === maxFields - 1) {
+                    buttonAdd.removeAttr("disabled");
+                    buttonAdd.addClass("shadow-sm");
+                }
+            }
+
+            buttonAdd.click(function () {
+                addNewField();
+                enableButtonRemove();
+                disableButtonAdd();
+            });
+
+            buttonRemove.click(function () {
+                removeLastField();
+                disableButtonRemove();
+                enableButtonAdd();
+            });
+        });
+
+
+
+        $(document).ready(function () {
+            $('#niche').change(function () {
+                var niche_id = $(this).val();
+                if (niche_id) {
+                    $.ajax({
+                        url: '/projects/project-completion/get-sub-niche/' + niche_id,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $.each(data, function (index, sub_niche) {
+                                $('#sub_niche').append('<option value="' + sub_niche.id + '">' + sub_niche.category_name + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#sub_niche').empty();
                 }
             });
         });
@@ -834,7 +1210,11 @@
             $("#drive_yes_box").hide();
             $("#drive_box").hide();
             $("#dummy_yes_box").hide();
+            // $("#use_theme_box").hide();
+            // $("#website_plugin_box").hide();
             $("#dummy_box").hide();
+            $("#theme_box").hide();
+            $("#plugin_box").hide();
             $("#actual_yes_box").hide();
             $("#actual_box").hide();
         });
@@ -895,6 +1275,30 @@
         });
 
         $(document).ready(function() {
+            $('#use_theme').click(function() {
+
+
+                var check3 = $('#use_theme').is(":checked") ? true : false;
+                //console.log(check);
+                if (check3 == true) {
+                    $('#use_theme_box').show();
+                } else {
+                    $('#use_theme_box').hide();
+                }
+                // /coonsole.log(value);
+
+            });
+            $('#website_plugin').click(function() {
+                var check3 = $('#website_plugin').is(":checked") ? true : false;
+                //console.log(check);
+                if (check3 == true) {
+                    $('#website_plugin_box').show();
+                } else {
+                    $('#website_plugin_box').hide();
+                }
+                // /coonsole.log(value);
+
+            });
             $('#dummy_yes').click(function() {
 
 
@@ -908,6 +1312,26 @@
                 // /coonsole.log(value);
 
             });
+            $("input[name$='theme_information']").click(function() {
+                var value5 = $(this).val();
+                // console.log(value5);
+                if (value5 == 1) {
+                    $("#theme_box").show();
+                }else {
+                    $("#theme_box").hide();
+                }
+            });
+
+            $("input[name$='website_plugin_box_information']").click(function() {
+                var value6 = $(this).val();
+                // console.log(value5);
+                if (value6 == 1) {
+                    $("#plugin_box").show();
+                }else {
+                    $("#plugin_box").hide();
+                }
+            });
+
             $("input[name$='dummy_information']").click(function() {
                 var value3 = $(this).val();
                 //console.log(value2);

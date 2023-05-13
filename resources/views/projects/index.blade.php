@@ -169,6 +169,12 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
                 <a href="{{route('project-view-category')}}" class="btn-success rounded f-14 p-2 mr-3 float-left mb-2 mb-lg-0 mb-md-0">
                     <i class="fa fa-eye mr-1" aria-hidden="true"></i>View Categories
                 </a>
+                    <a href="{{route('project-view-cms')}}" class="btn-success rounded f-14 p-2 mr-3 float-left mb-2 mb-lg-0 mb-md-0">
+                        <i class="fa fa-eye mr-1" aria-hidden="true"></i>View CMS
+                    </a>
+                    <a href="{{route('project-view-website-type')}}" class="btn-success rounded f-14 p-2 mr-3 float-left mb-2 mb-lg-0 mb-md-0">
+                        <i class="fa fa-eye mr-1" aria-hidden="true"></i>View Website Types
+                    </a>
                 @endif
             {{--   @if ($addProjectPermission == 'all' || $addProjectPermission == 'added' || $addProjectPermission == 'both')
                     <x-forms.link-primary :link="route('projects.create')"
