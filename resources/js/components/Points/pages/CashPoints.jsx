@@ -64,10 +64,10 @@ const CashPoints = () => {
                             },
                             {
                                 header: "Balance Point",
-                                accessor: "points_aaa",
-                                id: "points_aaa",
+                                accessor: "balance",
+                                id: "balance",
                                 cell: (row) => {
-                                    return <span>0</span>
+                                    return <span>{row['balance']}</span>
                                 }
                             }
                         ]}

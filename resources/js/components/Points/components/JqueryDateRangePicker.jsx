@@ -6,7 +6,7 @@ const JqueryDateRangePicker = ({
     startDate,
     endDate,
     setStartDate,
-    setEndDate
+    setEndDate,
 }) => {
    
     React.useEffect(() => {
@@ -26,8 +26,10 @@ const JqueryDateRangePicker = ({
                 }
 
                 
-               setStartDate(start.format('YYYY-MM-DD'));
-               setEndDate(end.format('YYYY-MM-DD')); 
+               setStartDate(start.format());
+               setEndDate(end.format()); 
+
+               
                 function cb(start, end) {
                     setStartDate(start.format('YYYY-MM-DD'));
                     setEndDate(end.format('YYYY-MM-DD'));
@@ -81,9 +83,7 @@ const JqueryDateRangePicker = ({
             <div className='sp1__jquery_date_btn'>
                 <i className="fa-solid fa-calendar-days"></i>
             </div>
-            {startDate && endDate && (
-                <div className='sp1__jquery_date_text'></div>
-            )} 
+            <div className='sp1__jquery_date_text'></div>
         </div>
     )
 }

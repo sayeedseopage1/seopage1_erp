@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\Team;
 use App\Models\Seopage1Team;
 use App\Models\CashPoint;
+use Carbon\Carbon;
 
 class PointsController extends AccountBaseController
 {
@@ -16,7 +17,6 @@ class PointsController extends AccountBaseController
     {
         parent::__construct();
         $this->pageTitle = 'app.menu.point';
-        
     }
 
     public function index()
@@ -57,21 +57,24 @@ class PointsController extends AccountBaseController
         }
     }
 
-    public function get_employe_by_filter_options($department = null, $shift = null)
+    public function get_employe_by_filter_options(Request $request)
     {
+        $department = $request->query('department_id');
+        $shift = $request->query('shift_id');
+
         if (is_null($department) && is_null($shift)) {
             $data = User::allEmployees(null, true, 'all')->map(function($item) {
                 return [
                     'id' => $item->id, 
                     'name' => $item->name,
-                    'image' => $item->image
+                    'image_url' => $item->image
                 ];
             });
 
             return response()->json($data);
- 
         } else {
             $data = Seopage1Team::select('*');
+            
             if (!is_null($department)) {
                 $data = $data->where('department_id', $department);
             }
@@ -102,88 +105,22 @@ class PointsController extends AccountBaseController
         
     }
 
-    // public function get_point_table_data(Request $request)
-    // {
-    //     $data = CashPoint::where('user_id', $request->user_id);
-        
-    //     if ($request->start_date) {
-    //         $data = $data->whereDateBetween('created_at', '>=', Carbon::parse($request->start_date));
-    //     }
-
-    //     if ($request->end_date) {
-    //         $data = $data->whereDateBetween('created_at', '=<', Carbon::parse($request->start_date));
-    //     }
-    //     dd($data->get());
-    // }   
-
-
-
-    // public function get_point_table_data(Request $request)
-    // {
-    //     if ($request->department_id != '') {
-    //         $user = Seopage1Team::where('department_id', $request->department_id)->get();
-    //         $user_list = explode(',', $user);
-
-    //         $data = CashPoint::whereIn('user_id', $user_list);
-    //     } else {
-    //         $data = CashPoint::where('user_id', $request->user_id);
-    //     }
-            
-    //     if ($request->start_date != '') {
-    //         $data = $data->whereDateBetween('created_at', '>=', Carbon::parse($request->start_date));
-    //     }
-
-    //     if ($request->end_date != '') {
-    //         $data = $data->whereDateBetween('created_at', '=<', Carbon::parse($request->start_date));
-    //     }
-
-    //     return response()->json($data);
-    // }
-
-
     public function get_point_table_data(Request $request)
     {
+        $data = CashPoint::select('*');
 
-        $department_id = $request->department_id ?? null;
-        $team_id = $request->team_id ?? null;
-        $user_id = $request->user_id ?? null;
+        if ($request->department_id != '') {
+            $user = Seopage1Team::where('department_id', $request->department_id)->get();
+            $user_list = explode(',', $user);
 
+            $data = $data->whereIn('user_id', $user_list);
+        }
 
-        if(is_null($department_id) && is_null($team_id) && is_null($user_id)){
-            $data = CashPoint::all();
-            return response()->json($data);
-        }else{
-            if ($request->department_id != '') {
-                $user = Seopage1Team::where('department_id', $request->department_id)->get();
-                $user_list = explode(',', $user);
-    
-                $data = CashPoint::whereIn('user_id', $user_list);
-            } else {
-                $data = CashPoint::where('user_id', $request->user_id);
-            }
-    
-            if ($request->team_id != '') {
-                $user = Seopage1Team::where('department_id', $request->department_id)->get();
-                $user_list = explode(',', $user);
-    
-                $data = CashPoint::whereIn('user_id', $user_list);
-            } else {
-                $data = CashPoint::where('user_id', $request->user_id);
-            }
-                
-            if ($request->start_date != '') {
-                $data = $data->whereDateBetween('created_at', '>=', Carbon::parse($request->start_date));
-            }
-    
-            if ($request->end_date != '') {
-                $data = $data->whereDateBetween('created_at', '=<', Carbon::parse($request->end_date));
-            }
-    
-            if ($request->team_id != '') {
-                $data = Team::where('id', $request->team_id)->first();
-    
-                $team = Seopage1Team::where('department_id', $data->id)->get();
-    
+        if ($request->team_id != '') {
+            $team = Team::where('id', $request->team_id)->first();
+            if ($team) {
+                $team = Seopage1Team::where('department_id', $team->id)->get();
+
                 $user_list = [];
                 foreach ($team as $key => $value) {
                     $users = explode(',', $value->members);
@@ -194,17 +131,38 @@ class PointsController extends AccountBaseController
                         }
                     }
                 }
-                $data = CashPoint::whereIn('user_id', $user_list);
             }
+
+            $data = $data->whereIn('user_id', $user_list);
+        }
+
+        if ($request->user_id != '') {
+            $data = $data->where('user_id', $request->user_id);
+        }
+        if ($request->start_date != '') {
+            $data = $data->where(\DB::raw('DATE(created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
+        }
+
+        if ($request->end_date != '') {
+            $data = $data->where(\DB::raw('DATE(created_at)'), '<=', Carbon::parse($request->end_date)->format('Y-m-d'));
         }
 
         $data = $data->get();
 
-       
+        $total_points = $data->sum('points');
+        $minus_point = 0;
+        foreach ($data as $key => $value) {
+            if ($key == 0) {
+                $value->balance = $total_points;
+                $minus_point = $value->points;
+            } else {
+                $total_points = $total_points - $minus_point;
+                $minus_point = $value->points;
+
+                $value->balance = $total_points;
+            }
+        }
 
         return response()->json($data);
     }   
-
-
-   
 }

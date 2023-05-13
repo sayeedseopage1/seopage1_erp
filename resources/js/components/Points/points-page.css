@@ -112,8 +112,10 @@
 .sp1__pp_filter_bar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
-  height: 48px;
+  padding: 10px 0;
+  height: fit-content;
   background-color: #fff;
 }
 
@@ -127,8 +129,8 @@
   white-space: nowrap;
 }
 
-.sp1__pp_filter_bar_item:not(:last-child) {
-    border-right: 1px solid #e1e1e1;
+.sp1__pp_filter_bar_item {
+    border-right: 1px solid #e1e1e1 !important;
   }
 
 .sp1__pp_filter_dd {
