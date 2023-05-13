@@ -10,8 +10,6 @@ const CashPoints = () => {
     const [data, setData] = React.useState([]);
     const [pointTableDataIsLoading, setPointTableDataIsLoading] = React.useState([]);
     
-
-    console.log(data)
     return(
         <div className='sp1_point_page'>
             <PointPageFilterBar setData={setData} setPointTableDataIsLoading={setPointTableDataIsLoading} />
@@ -21,7 +19,7 @@ const CashPoints = () => {
                 <main className='sp1_point_page_main'>
                     <div className="" style={{padding: '16px'}}> 
                     <DataTable
-                        data={data}
+                        data={[...data]}
                         isLoading={pointTableDataIsLoading}
                         defaultColumns={[
                             {

@@ -24,7 +24,7 @@ const Pagination = ({data, setCurrentPageData, numOfPerPageRow = 10, sortConfig,
         let perPageData = paginate(_data, currentPage, numOfPerPageRow);
         setCurrentPageData(perPageData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentPage, numOfPerPageRow, sortConfig])
+    }, [currentPage, numOfPerPageRow, data, sortConfig])
 
 
 

@@ -121,7 +121,7 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
                         [...Array(Number(numberOfRowPerPage))].map((_, i) => (
                             <div key={i} className="cnx__table_tr sp1__pp_table_tr">
                                 {columns.map(d => 
-                                    <div key={d.id} className="cnx__table_td cnx__table_td_loading ">
+                                    <div key={d.id} className="cnx__table_td sp1__pp_table_td cnx__table_td_loading ">
                                         <span className='animate-pulse' style={{width: `${ Math.floor(Math.random() * (100 - 30) + 30)}%`}}>loading</span>
                                     </div>
                                 )}
@@ -156,8 +156,7 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
                 </div>
             </div>
         {/* table footer  */}
-        {   
-            totalPage > 1 &&
+        
             <div className="cnx__table_footer">
                 <div className="__show_entries">
                     <span>Show</span> 
@@ -189,7 +188,7 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
                 />
                 {/* end pagination */}
             </div>
-        }
+        
             {/* end table footer  */}
         </div>
     )

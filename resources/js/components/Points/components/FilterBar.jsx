@@ -87,15 +87,25 @@ const FilterDropdownItem = ({
                                 <div className='cnx_divider'/>
                             </>
                         }
+
                         
 
                         <div className="sp1__pp_menu_items" style={{maxHeight}}>
+
+                            {!isLoading && items.length === 0 && <>
+                                <Dropdown.Item 
+                                    className={`sp1__pp_filter_dd_item`} 
+                                >
+                                        Data not found
+                                </Dropdown.Item>
+                            </>}
+                            
                             {
                                 isLoading ? (
                                     <div className=''>
                                         Loading...
                                     </div> 
-                                ): <>
+                                ):  items.length > 0 && <>
 
                                     {search.length === 0 && items.length > 1 &&  
                                     <Dropdown.Item 
@@ -318,12 +328,6 @@ const PointPageFilterBar = ({setData, setPointTableDataIsLoading}) => {
 
 
 
-
-    React.useEffect(()=> {
-        pointTableData({})
-    }, [])
-
-
     // React.useEffect(()=> {
     //     console.log({startDate, endDate})
     //     pointTableData({
@@ -335,13 +339,18 @@ const PointPageFilterBar = ({setData, setPointTableDataIsLoading}) => {
 
 
     // 
+    React.useEffect(()=> {
+        pointTableData({});
+    }, [])
+
 
     React.useEffect(()=> {
-        if(tableData){
+        
+        setPointTableDataIsLoading(dataFetchingStateIsLoading)
+        if(tableData!== undefined && tableData !== null){
             setData([...tableData]);
-            setPointTableDataIsLoading(dataFetchingStateIsLoading)
         }
-    },[tableData])
+    },[tableData, dataFetchingStateIsLoading])
 
 
     // const {data: shifts, isLoading: shiftDataIsLoading} = useGetShiftOptionsQuery();
@@ -367,13 +376,30 @@ const PointPageFilterBar = ({setData, setPointTableDataIsLoading}) => {
                     // end_date: endDate
                 })
             }else {
-                getEmployeeOptions(`/${value.id}`);
-                pointTableData({ team_id: value.id,
+                getEmployeeOptions(`/null/${value.id}`);
+                pointTableData({ 
+                    team_id: value.id,
+                    // start_data: startDate,
+                    // end_date: endDate 
+                })
+            }
+        }else{
+            if(selectedDepartment.id !== 'all'){
+                getEmployeeOptions(`/${selectedDepartment.id}/`);
+                pointTableData({
+                    department_id: selectedDepartment.id,
+                    // start_data: startDate,
+                    // end_date: endDate
+                })
+            }else {
+                getEmployeeOptions(`/`);
+                pointTableData({ 
                     // start_data: startDate,
                     // end_date: endDate 
                 })
             }
         }
+        
     }
 
     // department select
@@ -387,6 +413,10 @@ const PointPageFilterBar = ({setData, setPointTableDataIsLoading}) => {
                 // start_data: startDate,
                 // end_date: endDate
             })
+        } else {
+            getShiftOptions(`/`);
+            getEmployeeOptions(`/`);
+            pointTableData({})
         }
     }
 
@@ -417,8 +447,27 @@ const PointPageFilterBar = ({setData, setPointTableDataIsLoading}) => {
                 })
             }else {
                 pointTableData({ user_id: value.id})
+            }   
+        }else{
+            if(
+                selectedDepartment.id !== 'all' && 
+                shift.id !== 'all'
+            ){
+                pointTableData({
+                    department_id: selectedDepartment.id ,
+                    team_id: shift.id,
+                    // start_data: startDate,
+                    // end_date: endDate
+                })
+            }else if(
+                shift.id !== 'all'
+            ){
+                pointTableData({
+                    team_id: shift.id,
+                    // start_data: startDate,
+                    // end_date: endDate
+                })
             }
-           
         }
 
     }
@@ -478,10 +527,8 @@ const PointPageFilterBar = ({setData, setPointTableDataIsLoading}) => {
                 title="Points gained as" 
                 selected={pointGainedAs}
                 items={[
-                    { id: 'all', name: 'All' },
-                    { id: 'morning', name: 'Morning' },
-                    { id: 'evening', name: 'Evening' },
-                    { id: 'night', name: 'Night'}
+                    { id: 'individual',
+                    name: 'Individual'}
                 ]}
                 onClick={setPointGainedAs}
             />
