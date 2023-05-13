@@ -23,6 +23,7 @@ import { DataTableColumns } from '../components/DataTableColumns';
 import GoalStackedBarChart from '../components/Graph/GoalStackedBarChart';
 import { stage } from '../utils/constants';
 import { useGetTeamsQuery } from '../services/api/teamSliceApi';
+import { useEditGoalTitle, useEditGoalTitleMutation } from '../services/api/goalsApiSlice';
 
 // convert to unit
 const numberToUnits = (value,decimal= 1) => {
@@ -63,45 +64,8 @@ const Goal = () => {
         relativeTime(value, setFilterValue);
     }
 
+    const [editGoalTitle] = useEditGoalTitleMutation();
 
-    // const getGoal = React.useCallback(() => {
-    //     if(goals && goals.length > 0){
-    //         let goal = getGoalById(Number(params.goalId));
-    //         if(!goal) return;
-    //         let user = _.find(usersData, {id: goal?.added_by});
-    //         let assignedUser = _.find(usersData, {id: goal?.user_id});
-    //         let team = _.find(teams, {id: goal?.team_id});
-    //         setGoal({
-    //             ...goal,
-    //             user: user,
-    //             assignedUser: assignedUser,
-    //             team: team
-    //         });
-    //     }
-    // }, [goals, params.goalId , usersData, teams, goalStateStatus, dispatch]);
-
-
-    // React.useEffect(() => {
-    //     getGoal();
-    // }, [getGoal])
-
-   
-    // React.useEffect(()=> {
-    //     if(usersData && usersData.length > 0){
-    //         if(goalsIsLoading) return <div>Loading...</div>
-    //         let goal = getGoalById(Number(params.goalId));
-    //         if(!goal) return;
-    //         let user = _.find(usersData, {id: goal?.added_by});
-    //         let assignedUser = _.find(usersData, {id: Number(goal?.user_id)});
-    //         let team = _.find(teams, {id: goal?.team_id});
-    //         setGoal({
-    //             ...goal,
-    //             user: user,
-    //             assignedUser: assignedUser,
-    //             team: team
-    //         });
-    //     }
-    // }, []);
 
 
     // set goal data with memorized callback
@@ -227,21 +191,6 @@ const Goal = () => {
 
 
 
-    // React.useEffect (() => {
-
-    //     if(goal){
-    //         let sum = getSummary(dealsData, goal, filter, applyFilter);
-    //         if(sum) {
-    //             setSummarizedData([...sum]);
-    //             setIsSummarizing(false);
-    //         } else {
-    //             setIsSummarizing(false);
-    //         }
-    //     }
-
-    // }, [goal, dealsData, filter, location, goalStateStatus, applyFilter])
-
-
     const handleOpenGoalFormModal = () => {
         dispatch(openGoalFormModal({
             data: goal,
@@ -249,6 +198,12 @@ const Goal = () => {
             entry: goal.entry,
             entryType: goal.entryType,
         }))
+    }
+
+    // save title change
+    const handleTitleChange = ({id, title}) => {
+        console.log({id, title})
+        editGoalTitle({id, title});
     }
     
 
@@ -259,13 +214,16 @@ const Goal = () => {
         </div>
     )
 
+
+    const _title = `${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`;
+
     return(
         <div className="cnx__ins_dashboard">
             {/* navbar */}
             <div className="cnx__ins_dashboard_navbar">
                 <EditAbleBox 
-                    text={`${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`} 
-                    onSave={() => {}} 
+                    text={`${goal?.title || _title}`} 
+                    onSave={(title) => handleTitleChange({id: goal?.id, title})} 
                 />
                 <div className='cnx__ins_dashboard_navbar_btn_group' style={{border: 0, padding:0}}>
                     {/* user */}

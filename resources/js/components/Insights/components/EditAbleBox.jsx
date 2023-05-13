@@ -21,7 +21,7 @@ const EditAbleBox = ({text, onSave}) => {
 
     const onBlur = (e) => {
         if (e.target.value !== text) {
-            onSave(e.target.value);
+            onSave &&  onSave(e.target.value);
         } 
     }
 
