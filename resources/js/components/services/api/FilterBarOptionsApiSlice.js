@@ -12,7 +12,7 @@ const filterBarOptionsApiSlice = apiSlice.injectEndpoints({
         }),
 
         getProjectsOptions: build.mutation({
-            query: (shift) => `/account/menu/filter-options/projects${shift}`
+            query: () => `/account/menu/filter-options/projects`
         }),
 
         getShiftOptions: build.mutation({

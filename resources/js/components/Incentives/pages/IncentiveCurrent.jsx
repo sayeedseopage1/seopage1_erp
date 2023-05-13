@@ -11,26 +11,28 @@ const IncentiveCurrent = () => {
 
 
     return (
-        <div className="sp1_point_page_container">
+        <div className="">
             <IncentivesFilterBar
                 setData={setData}
                 setPointTableDataIsLoading={setPointTableDataIsLoading}
             />
-            <IncentiveNavbar />
+            <div className='sp1_point_page_container'>
+                <IncentiveNavbar />
 
-            <main className="sp1_point_page_main">
-                <InnerNavbar
-                    items={[
-                        {id: 'incentive_current_item_1', name: 'Monthly', url: "/current/monthly"},
-                        // {id: 'incentive_current_item_2', name: 'Quarterly', url: "/incentive/current/quarterly"},
-                        // {id: 'incentive_current_item_3', name: 'Yearly', url: "/incentive/current/yearly"},
-                    ]}
-                />
-                
-                <section className="sp1__incentive_item_container">
-                    IncentiveCurrent
-                </section>
-            </main>
+                <main className="sp1_point_page_main">
+                    <InnerNavbar
+                        items={[
+                            {id: 'incentive_current_item_1', name: 'Monthly', url: "/current/monthly"},
+                            {id: 'incentive_current_item_2', name: 'Quarterly', url: "/current/quarterly"},
+                            {id: 'incentive_current_item_3', name: 'Yearly', url: "/current/yearly"},
+                        ]}
+                    />
+                    
+                    <section className="sp1__incentive_item_container">
+                        IncentiveCurrent
+                    </section>
+                </main>
+            </div>
         </div>
 
         

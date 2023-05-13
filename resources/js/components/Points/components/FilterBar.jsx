@@ -57,7 +57,7 @@ const FilterDropdownItem = ({
     const handleClick = (e, value) => {
         e.preventDefault();
         if(onClick){
-            console.log(value)
+            
             onClick(value)
         }
     }
@@ -419,7 +419,7 @@ const PointPageFilterBar = ({setData, setPointTableDataIsLoading}) => {
     // fetch data
     React.useEffect(()=> {
         getEmployeeOptions(`?department_id=${selectedDepartment.id}&shift_id=${shift.id}`);
-        getProjectsOptions('');
+        getProjectsOptions();
         getDepartmentOptions(``);
         getShiftOptions(`/${selectedDepartment.id}`);
     }, []);
@@ -688,7 +688,7 @@ const PointPageFilterBar = ({setData, setPointTableDataIsLoading}) => {
                 isLoading={projectsDataIsLoading}
                 inVisible={inVisible}
                 setInVisible={setInVisible}
-                items={projects?.map(project => ({id: project.id, name: project.project_name}))}
+                items={projects? projects.map(project => ({id: project.id, name: project.project_name}) ) : []}
                 onClick={setSelectedProject}
             />
 

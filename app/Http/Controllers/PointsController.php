@@ -36,10 +36,17 @@ class PointsController extends AccountBaseController
             });
             
             return response()->json($data);
-        } elseif ($mode == 'projects') {
-            $data = Project::select(['id', 'project_name'])->where('status', 'finished')->get();
-            return response()->json($data);
-        } elseif ($mode == 'department') {
+        }elseif ($mode == 'projects') {
+            $projects = CashPoint::distinct()->pluck('project_id');
+            $project_list = [];
+            foreach ($projects as $key => $value) {
+                $data = Project::select(['id', 'project_name'])->where('id', $value)->first();
+                if(!is_null($data)){
+                    array_push($project_list, $data);
+                }
+            }
+            return response()->json($project_list);
+        }elseif ($mode == 'department') {
             $data = Team::select([
                 'id', 
                 'team_name as name'
@@ -135,7 +142,9 @@ class PointsController extends AccountBaseController
 
             $data = $data->whereIn('user_id', $user_list);
         }
-
+        if ($request->project_id != '') {
+            $data = $data->where('project_id', $request->project_id);
+        }
         if ($request->user_id != '') {
             $data = $data->where('user_id', $request->user_id);
         }
