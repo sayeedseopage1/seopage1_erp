@@ -247,12 +247,28 @@
   border: 1px solid #e1e1e1;
   border-radius: 6px;
   font-size: 14px;
+  width: 270px;
+  max-width: 270px;
+}
+
+.sp1__pp_sidebar_filter_item{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  height: fit-content;
+  border: 0 !important;
+  width: 100%;
 }
 
 .sp1__pp_sidebar_filter_item > span {
   font-size: 14px;
   display: block;
   margin-bottom: 5px;
+}
+
+.sp1__pp_sidebar_filter_item > .cnx__dropdown{
+  width: 100%;
 }
 
 @media screen and (max-width: 1136px) {
@@ -328,11 +344,13 @@
 
   .sp1__pp_table_td{
     width: 100%;
+    min-width: 200px;
     white-space: pre-wrap !important;
   }
 
 .sp1__pp_table_tr> .cnx__table_th {
     border: 0;
+    min-width: 200px;
   }
 
 .sp1__table_th_filter_btn {
@@ -361,4 +379,8 @@
 
 .table_asc_dec.asc::after {
   color: #424242;
+}
+
+.sp1__pp_sidebar_filter_label{
+  display: block;
 }

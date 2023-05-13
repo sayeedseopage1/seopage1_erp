@@ -175,47 +175,142 @@ const SidebarFilterDropdownItem = ({
     title,
     selected,
     items = [],
+    isLoading,
     onClick,
-    className,
+    avatar = false,
+    miniScreen='hide',
+    className= "",
+    id,
+    inVisible,
+    setInVisible
 }) => {
     const [search, setSearch] = React.useState("");
+    const [maxHeight, setMaxHeight] = React.useState(720);
    
     
+    const menuHeight = React.useMemo(() => maxHeight, [maxHeight])
+
+    // set max height
+    React.useEffect(() => {
+        if(window){
+            if(window.innerHeight < 720){
+                 setMaxHeight(window.innerHeight - 150);
+            } 
+         }
+    }, [menuHeight])
+
+
+    const handleClick = (e, value) => {
+        e.preventDefault();
+        if(onClick){
+            onClick(value)
+        }
+    }
+
     return (
-        <div className='sp1__pp_sidebar_filter_item'>
-            <span>{title}</span>
-            <Dropdown>
-                <Dropdown.Toggle className="sp1__pp_filter_dd_toggle sp1__pp_sidebar_filter_dd_toggle">
-                    {_.startCase(selected.name)}
-                </Dropdown.Toggle>
-                <Dropdown.Menu className="sp1__pp_filter_dd">
-                    <div className="sp1__pp_filter_dd_search">
-                        <SearchBox
-                            value={search}
-                            onChange={setSearch}
-                        />
-                    </div>
+            <PointPageFilterBarItem id={id} className="sp1__pp_sidebar_filter_item">
+                <span className='sp1__pp_sidebar_filter_label'>{title}</span>
+                <Dropdown>
+                    <Dropdown.Toggle className="sp1__pp_filter_dd_toggle sp1__pp_sidebar_filter_dd_toggle">
+                        <Tooltip
+                            text={_.startCase(selected.name)}
+                        >
+                            <>
+                            {
+                                selected?.name ?
+                                selected.name?.length > 30 ? 
+                                _.startCase(selected?.name?.slice(0, 29)) + '...'
+                                : selected.name
+                                : ''
+                            }
+                            </>
+                        </Tooltip>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className="sp1__pp_filter_dd">
+                            {
+                                items?.length > 20 && 
+                                <>
+                                    <div className="sp1__pp_filter_dd_search">
+                                        <SearchBox
+                                            value={search}
+                                            onChange={setSearch}
+                                        />
+                                    </div>
+                                    <div className='cnx_divider'/>
+                                </>
+                            }
 
-                    <div className='cnx_divider'/>
+                            
 
-                    {
-                        items.length > 0 && items
-                        .filter(i => i.name.toLowerCase().includes(search.toLowerCase()))
-                        .map((item) => (
-                            <Dropdown.Item 
-                                key={item.id}
-                                className={`sp1__pp_filter_dd_item ${selected?.id ===  item.id ? 'active': ""} ${className}`} 
-                                onClick={() => onClick &&  onClick(item)}
-                            >
-                            {item.name} 
-                            </Dropdown.Item>
-                        ))
-                    }
-                    
-                </Dropdown.Menu>
-            </Dropdown>
-        </div>
-    )
+                            <div className="sp1__pp_menu_items" style={{maxHeight}}>
+
+                                {!isLoading && items.length === 0 && <>
+                                    <Dropdown.Item 
+                                        className={`sp1__pp_filter_dd_item`} 
+                                    >
+                                            Data not found
+                                    </Dropdown.Item>
+                                </>}
+                                
+                                {
+                                    isLoading ? (
+                                        <div className=''>
+                                            Loading...
+                                        </div> 
+                                    ):  items.length > 0 && <>
+
+                                        {search.length === 0 && items.length > 1 &&  
+                                        <Dropdown.Item 
+                                                className={`sp1__pp_filter_dd_item ${selected?.id === 'all' ? 'active': ""} ${className}`} 
+                                                onClick={(e) => handleClick(e, {id: 'all', name: 'All'})}
+                                        >
+                                            All
+                                        </Dropdown.Item>}
+                                        {
+                                            items?.length > 0 && items
+                                            .filter(i => i.name.toLowerCase().includes(search.toLowerCase()))
+                                            .map((item) => (
+                                                <Dropdown.Item 
+                                                    key={item.id}
+                                                    className={`sp1__pp_filter_dd_item ${selected?.id ===  item.id ? 'active': ""} ${className}`} 
+                                                    onClick={(e) => handleClick(e, item)}
+                                                >
+                                                    {avatar ? 
+                                                        item[avatar] ?(
+                                                        <img 
+                                                            src={`/user-uploads/avatar/${item[avatar]}`}
+                                                            alt={item.name}
+                                                            style={{
+                                                                width: 26,
+                                                                height: 26,
+                                                                borderRadius: '50%'
+                                                                
+                                                            }}
+                                                        />
+
+                                                    ) : <img 
+                                                        src={`https://gravatar.com/avatar/${Math.random()}.png?s=200&d=mp`}
+                                                        alt={item.name}
+                                                        style={{
+                                                            width: 26,
+                                                            height: 26,
+                                                            borderRadius: '50%'
+                                                            
+                                                        }}
+                                                    /> : null}
+                                                    {item.name}
+                                                </Dropdown.Item>
+                                            ))
+                                        }
+                                    
+                                    
+                                    </>
+                                }
+                            </div>                
+                    </Dropdown.Menu>
+                </Dropdown>
+            </PointPageFilterBarItem>
+        )
 }
 
 
@@ -612,7 +707,7 @@ const PointPageFilterBar = ({setData, setPointTableDataIsLoading}) => {
 
             
 
-            {/* <div className='sp1__pp_filter_sidebar_container'>
+            <div className='sp1__pp_filter_sidebar_container'>
                 <div className='sp1__pp_filter_sidebar_toggle' onClick={() => setIsOpen(true)}>
                     <i className="fa-solid fa-filter"></i>
                     <span>Filters</span>
@@ -636,158 +731,93 @@ const PointPageFilterBar = ({setData, setPointTableDataIsLoading}) => {
                     <div className='sp1__pp_filter_sidebar_items'>
                         <SidebarFilterDropdownItem
                             title="Select Department" 
-                            selected={shift}
+                            miniScreen='visible'
+                            selected={selectedDepartment} 
+                            isLoading={departmentDataIsLoading}
                             id="department"
-                            items={[
-                                { id: 'all', name: 'All' },
-                                { id: 'morning', name: 'Morning' },
-                                { id: 'evening', name: 'Evening' },
-                                { id: 'night', name: 'Night'}
-                            ]}
-                            onClick={setShift}
+                            items={departments}
+                            inVisible={inVisible}
+                            setInVisible={setInVisible}
+                            onClick={handleDepartmentFilter}
                         />
+                        
 
+                        {/* credit/debit */}
                         <SidebarFilterDropdownItem
-                            title="Select Department" 
+                            title="Select Shift" 
+                            miniScreen='visible'
                             selected={shift}
-                            id="department"
-                            items={[
-                                { id: 'all', name: 'All' },
-                                { id: 'morning', name: 'Morning' },
-                                { id: 'evening', name: 'Evening' },
-                                { id: 'night', name: 'Night'}
-                            ]}
-                            onClick={setShift}
-                        />
-
-
-
-                        <SidebarFilterDropdownItem
-                            title="Select Department" 
-                            selected={shift}
-                            id="department"
-                            items={[
-                                { id: 'all', name: 'All' },
-                                { id: 'morning', name: 'Morning' },
-                                { id: 'evening', name: 'Evening' },
-                                { id: 'night', name: 'Night'}
-                            ]}
-                            onClick={setShift}
+                            isLoading = {shiftDataIsLoading}
+                            items={shifts}
+                            id="shift"
+                            inVisible={inVisible}
+                            setInVisible={setInVisible}
+                            onClick={handleShiftFilter}
                         />
 
 
+                        {/* credit/debit */}
                         <SidebarFilterDropdownItem
-                            title="Select Department" 
-                            selected={shift}
-                            id="department"
+                            title="Select Credit/Debit" 
+                            miniScreen='visible'
+                            selected={creditOrDebit}
                             items={[
-                                { id: 'all', name: 'All' },
-                                { id: 'morning', name: 'Morning' },
-                                { id: 'evening', name: 'Evening' },
-                                { id: 'night', name: 'Night'}
+                                { id: 'earn', name: 'Point Earned' },
+                                // { id: 'lost', name: 'Point Lost' }
                             ]}
-                            onClick={setShift}
+                            id="creditOrDebit"
+                            inVisible={inVisible}
+                            setInVisible={setInVisible}
+                            onClick={setCreditOrDebit}
                         />
 
 
-
+                        {/* credit/debit */}
                         <SidebarFilterDropdownItem
-                            title="Select Department" 
-                            selected={shift}
-                            id="department"
+                            title="Points gained as" 
+                            miniScreen='visible'
+                            selected={pointGainedAs}
+                            id="pointGainedAs"
+                            inVisible={inVisible}
+                            setInVisible={setInVisible}
                             items={[
-                                { id: 'all', name: 'All' },
-                                { id: 'morning', name: 'Morning' },
-                                { id: 'evening', name: 'Evening' },
-                                { id: 'night', name: 'Night'}
+                                { id: 'individual',
+                                name: 'Individual'}
                             ]}
-                            onClick={setShift}
-                        />
-
-                        <SidebarFilterDropdownItem
-                            title="Select Department" 
-                            selected={shift}
-                            id="department"
-                            items={[
-                                { id: 'all', name: 'All' },
-                                { id: 'morning', name: 'Morning' },
-                                { id: 'evening', name: 'Evening' },
-                                { id: 'night', name: 'Night'}
-                            ]}
-                            onClick={setShift}
+                            onClick={setPointGainedAs}
                         />
 
 
-
+                        {/* projects */}
                         <SidebarFilterDropdownItem
-                            title="Select Department" 
-                            selected={shift}
-                            id="department"
-                            items={[
-                                { id: 'all', name: 'All' },
-                                { id: 'morning', name: 'Morning' },
-                                { id: 'evening', name: 'Evening' },
-                                { id: 'night', name: 'Night'}
-                            ]}
-                            onClick={setShift}
-                        />
-
-                        <SidebarFilterDropdownItem
-                            title="Select Department" 
-                            selected={shift}
-                            id="department"
-                            items={[
-                                { id: 'all', name: 'All' },
-                                { id: 'morning', name: 'Morning' },
-                                { id: 'evening', name: 'Evening' },
-                                { id: 'night', name: 'Night'}
-                            ]}
-                            onClick={setShift}
+                            title="Select Project" 
+                            miniScreen='visible'
+                            id="project"
+                            selected={selectedProject}
+                            isLoading={projectsDataIsLoading}
+                            inVisible={inVisible}
+                            setInVisible={setInVisible}
+                            items={projects?.map(project => ({id: project.id, name: project.project_name}))}
+                            onClick={setSelectedProject}
                         />
 
 
                         <SidebarFilterDropdownItem
-                            title="Select Department" 
-                            selected={shift}
-                            id="department"
-                            items={[
-                                { id: 'all', name: 'All' },
-                                { id: 'morning', name: 'Morning' },
-                                { id: 'evening', name: 'Evening' },
-                                { id: 'night', name: 'Night'}
-                            ]}
-                            onClick={setShift}
-                        />
-
-                        <SidebarFilterDropdownItem
-                            title="Select Department" 
-                            selected={shift}
-                            id="department"
-                            items={[
-                                { id: 'all', name: 'All' },
-                                { id: 'morning', name: 'Morning' },
-                                { id: 'evening', name: 'Evening' },
-                                { id: 'night', name: 'Night'}
-                            ]}
-                            onClick={setShift}
-                        />
-
-                        <SidebarFilterDropdownItem
-                            title="Select Department" 
-                            selected={shift}
-                            id="department"
-                            items={[
-                                { id: 'all', name: 'All' },
-                                { id: 'morning', name: 'Morning' },
-                                { id: 'evening', name: 'Evening' },
-                                { id: 'night', name: 'Night'}
-                            ]}
-                            onClick={setShift}
+                            title="Select Employee" 
+                            miniScreen='visible'
+                            id="employee"
+                            selected={selectedEmployee}
+                            isLoading={employeeDataIsLoading}
+                            items={employee}
+                            inVisible={inVisible}
+                            setInVisible={setInVisible}
+                            avatar='image'
+                            onClick={handleEmployeeFilter}
                         />
                     </div>
                 </div>
                 )}
-            </div> */}
+            </div>
 
         </div>
     )
