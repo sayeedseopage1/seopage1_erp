@@ -23,6 +23,7 @@ import { DataTableColumns } from '../components/DataTableColumns';
 import GoalStackedBarChart from '../components/Graph/GoalStackedBarChart';
 import { stage } from '../utils/constants';
 import { useGetTeamsQuery } from '../services/api/teamSliceApi';
+import { useEditGoalTitle, useEditGoalTitleMutation } from '../services/api/goalsApiSlice';
 
 // convert to unit
 const numberToUnits = (value,decimal= 1) => {
@@ -63,45 +64,8 @@ const Goal = () => {
         relativeTime(value, setFilterValue);
     }
 
+    const [editGoalTitle] = useEditGoalTitleMutation();
 
-    // const getGoal = React.useCallback(() => {
-    //     if(goals && goals.length > 0){
-    //         let goal = getGoalById(Number(params.goalId));
-    //         if(!goal) return;
-    //         let user = _.find(usersData, {id: goal?.added_by});
-    //         let assignedUser = _.find(usersData, {id: goal?.user_id});
-    //         let team = _.find(teams, {id: goal?.team_id});
-    //         setGoal({
-    //             ...goal,
-    //             user: user,
-    //             assignedUser: assignedUser,
-    //             team: team
-    //         });
-    //     }
-    // }, [goals, params.goalId , usersData, teams, goalStateStatus, dispatch]);
-
-
-    // React.useEffect(() => {
-    //     getGoal();
-    // }, [getGoal])
-
-   
-    // React.useEffect(()=> {
-    //     if(usersData && usersData.length > 0){
-    //         if(goalsIsLoading) return <div>Loading...</div>
-    //         let goal = getGoalById(Number(params.goalId));
-    //         if(!goal) return;
-    //         let user = _.find(usersData, {id: goal?.added_by});
-    //         let assignedUser = _.find(usersData, {id: Number(goal?.user_id)});
-    //         let team = _.find(teams, {id: goal?.team_id});
-    //         setGoal({
-    //             ...goal,
-    //             user: user,
-    //             assignedUser: assignedUser,
-    //             team: team
-    //         });
-    //     }
-    // }, []);
 
 
     // set goal data with memorized callback
@@ -164,8 +128,14 @@ const Goal = () => {
         }
         
         let _deals = getDeals(deals, goal, startDate, endDate);
-        setDealsData([..._deals]);
-        setIsLoading(false);
+        if(_deals){
+            setDealsData([..._deals]);
+            setIsLoading(false);
+        }else {
+            setDealsData([]);
+            setIsLoading(false);
+        }
+        
     }, [deals, usersData, goal, teams, filter, applyFilter, location]);
 
 
@@ -221,21 +191,6 @@ const Goal = () => {
 
 
 
-    // React.useEffect (() => {
-
-    //     if(goal){
-    //         let sum = getSummary(dealsData, goal, filter, applyFilter);
-    //         if(sum) {
-    //             setSummarizedData([...sum]);
-    //             setIsSummarizing(false);
-    //         } else {
-    //             setIsSummarizing(false);
-    //         }
-    //     }
-
-    // }, [goal, dealsData, filter, location, goalStateStatus, applyFilter])
-
-
     const handleOpenGoalFormModal = () => {
         dispatch(openGoalFormModal({
             data: goal,
@@ -243,6 +198,12 @@ const Goal = () => {
             entry: goal.entry,
             entryType: goal.entryType,
         }))
+    }
+
+    // save title change
+    const handleTitleChange = ({id, title}) => {
+        console.log({id, title})
+        editGoalTitle({id, title});
     }
     
 
@@ -253,13 +214,16 @@ const Goal = () => {
         </div>
     )
 
+
+    const _title = `${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`;
+
     return(
         <div className="cnx__ins_dashboard">
             {/* navbar */}
             <div className="cnx__ins_dashboard_navbar">
                 <EditAbleBox 
-                    text={`${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`} 
-                    onSave={() => {}} 
+                    text={`${goal?.title || _title}`} 
+                    onSave={(title) => handleTitleChange({id: goal?.id, title})} 
                 />
                 <div className='cnx__ins_dashboard_navbar_btn_group' style={{border: 0, padding:0}}>
                     {/* user */}
@@ -340,28 +304,32 @@ const Goal = () => {
                             Goal Details
                         </h4>
                         {/* edit goal */}
-                        <Button variant='tertiary' onClick={handleOpenGoalFormModal}>
-                            <i className='fa-solid fa-pencil'/>
-                        </Button>
+                        {
+                            new Date(goal?.endDate) !== new Date() && 
+                            <Button variant='tertiary' onClick={handleOpenGoalFormModal}>
+                                <i className='fa-solid fa-pencil'/>
+                            </Button>
+                        }
+                        
                         {/* end edit goal */}
 
                         <div className='filter_options_line'>
                             <span>{ goal?.name || goal?.team_name }</span>
                             <span>
-                                {goal.entry} {goal.entryType}
+                                {goal?.entry} {goal?.entryType}
                             </span>
                             <span>Pipeline</span>
                             <span>
-                                {goal.frequency}
+                                {goal?.frequency}
                             </span>
                             <span>
-                                {dayjs(goal.startDate).format('MMM DD, YYYY')}
+                                {dayjs(goal?.startDate).format('MMM DD, YYYY')}
                             </span>
                             <span>
-                                {goal.endDate ? dayjs(goal.endDate).format('MMM DD, YYYY') : 'No end date'}
+                                {goal?.endDate ? dayjs(goal?.endDate).format('MMM DD, YYYY') : 'No end date'}
                             </span>
                             <span>
-                                {goal.trackingType === "value" ? numberToUnits(Number(goal.trackingValue)) : goal.trackingValue} deals
+                                {goal?.trackingType === "value" ? numberToUnits(Number(goal?.trackingValue)) : goal?.trackingValue} deals
                             </span>
                         </div>
 
@@ -385,7 +353,7 @@ const Goal = () => {
                            <Tooltip text='Goal type'>
                              <div className='cnx__ins_details_item'>
                                 <Icon type="Deal" />
-                                {goal.entry} {goal.entryType}
+                                {goal?.entry} {goal?.entryType}
                             </div>
                            </Tooltip>
 
@@ -401,21 +369,21 @@ const Goal = () => {
                             <Tooltip text="Goal Frequency">
                                 <div className='cnx__ins_details_item'>
                                     <Icon type="Activity" />
-                                    {goal.frequency}
+                                    {goal?.frequency}
                                 </div>
                             </Tooltip>
 
                             <Tooltip text="Goal duration">
                                 <div className='cnx__ins_details_item'>
                                     <i className="fa-regular fa-clock"/>
-                                    {dayjs(goal.startDate).format('MMM DD, YYYY')} - {goal.endDate ? dayjs(goal.endDate).format('MMM DD, YYYY') : 'No end date'}
+                                    {dayjs(goal?.startDate).format('MMM DD, YYYY')} - {goal.endDate ? dayjs(goal?.endDate).format('MMM DD, YYYY') : 'No end date'}
                                 </div>
                             </Tooltip>
 
                             <Tooltip text='Expected outcome'>
                                 <div className='cnx__ins_details_item'>
                                     <Icon type="Goal" />
-                                    {goal.trackingType === "value" ? numberToUnits(Number(goal.trackingValue)) : goal.trackingValue} Deals 
+                                    {goal?.trackingType === "value" ? numberToUnits(Number(goal?.trackingValue)) : goal?.trackingValue} Deals 
                                 </div>
                             </Tooltip>
                         </div>
@@ -495,8 +463,8 @@ const Goal = () => {
                                     barDataKey={[ "value" ]}
                                     offset={-5}
                                     // yDomain={ [0, dataMax => (dataMax + Math.ceil(dataMax * 0.1))]}
-                                    labelListFormatter={value => goal.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
-                                    yAxisTickFormate={value => goal.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
+                                    labelListFormatter={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
+                                    yAxisTickFormate={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
                                     data = {[...summarizedData]} 
                                 />
                             </div>

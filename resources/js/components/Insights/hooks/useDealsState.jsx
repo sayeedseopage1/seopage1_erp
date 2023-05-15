@@ -94,7 +94,7 @@ export const useDealsState = () => {
             // create array of all clients username
             let clients = filteredDeals.map(deal => deal.client_username);    
             // create unique array of clients username
-            clients = [...new Set(clients)];
+            clients = clients ?  [...new Set(clients)] : [];
             
             // if any client has no existing on other deals and 
             // has not duplicate on filtered deals then remove it from clients array
@@ -141,13 +141,7 @@ export const useDealsState = () => {
 
         if(_.lowerCase(goal.entryType) === 'won'){
             filteredDeals = filteredDeals.filter(deal => _.lowerCase(deal.won_lost) === 'yes');
-        }
-
-        
-    
-    
-        
-                    
+        }     
         return filteredDeals;
     }
 
@@ -254,8 +248,6 @@ export const useDealsState = () => {
                         yAxis = goal
                     }
                 }
-
-
 
                 // formate
                 dealAdded = dealAdded.toFixed(2);

@@ -648,6 +648,7 @@ const GoalFormModal = () => {
         if(!isFormDataValid()) return;            
             
         const formData = {
+            title: `${entry} ${entryType} ${assigneeFor.name}`,
             entry, 
             entryType, 
             assigneeType, 
