@@ -105,7 +105,6 @@
 .cnx__ins__ui_search_icon_svg {
   width: 14px;
   height: 14px;
-  margin-top: 0.25rem;
 }
 
 .cnx__ins__ui_search_input:focus + .cnx__ins__ui_search_icon > .cnx__ins__ui_search_icon_svg {
