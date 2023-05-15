@@ -49,8 +49,7 @@
                 @endif
             </div>
             <!-- DROPDOWN - INFORMATION -->
-            <div class="dropdown-menu dropdown-menu-right sidebar-brand-dropdown ml-3"
-                aria-labelledby="dropdownMenuLink" tabindex="0">
+            <div class="dropdown-menu dropdown-menu-right sidebar-brand-dropdown ml-3" aria-labelledby="dropdownMenuLink" tabindex="0">
                 <div class="d-flex justify-content-between align-items-center profile-box">
                     <div class="profileInfo d-flex align-items-center mr-1 flex-wrap">
                         <div class="profileImg mr-2">
@@ -271,7 +270,10 @@
                         </div>
                     </x-menu-item>
                 @endif
-                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
+                @php
+                    $user = Auth::user();
+                @endphp
+                @if($user->role_id == 1 || $user->role_id == 7 || $user->role_id == 8 || $user->role_id == 4)
                     <x-menu-item icon="cart-dash-fill" :text="'Sales'">
                         <x-slot name="iconPath">
                             <path
@@ -279,6 +281,9 @@
                         </x-slot>
                         <div class="accordionItemContent pb-2">
                             <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
+                            @if($user->role_id == 4)
+                            <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
+                            @else
                             <x-sub-menu-item icon="person" :text="__('app.menu.lead')" :link="route('leads.index')">
                                 <x-slot name="iconPath">
                                     <path
@@ -287,14 +292,17 @@
                             </x-sub-menu-item>
                             <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
                             <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
+
                             {{-- <x-sub-menu-item link="" :text="'Qualified Sales'" /> --}}
                             <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
                             <x-sub-menu-item :link="route('points.index')" :text="'Points'" />
-                            <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
+
+                            {{-- <x-sub-menu-item link="" :text="'Incentives'" /> --}}
 
                         </div>
                     </x-menu-item>
                     {{-- <x-menu-item icon="briefcase" :text="'Resource'">
+
                         <x-slot name="iconPath">
                             <path
                                 d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z" />
@@ -305,7 +313,9 @@
                             <x-sub-menu-item link="" :text="'Resource'" />
                             <x-sub-menu-item link="" :text="'Portfolio'" />
                         </div>
+
                     </x-menu-item> --}}
+
                 @endif
 
                 <!-- NAV ITEM - FINANCE COLLAPASE MENU -->
@@ -611,7 +621,9 @@
                         @if(Auth::user()->role_id == 1)
                         <x-sub-menu-item  :link="route('kpi-settings.index')" :text="'KPI Settings'" />
 
+
                         {{-- <x-sub-menu-item  :link="''" :text="'Incentives Settings'" /> --}}
+
 
                         @endif
                     </div>

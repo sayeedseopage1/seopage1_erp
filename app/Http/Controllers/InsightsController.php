@@ -222,19 +222,22 @@ class InsightsController extends AccountBaseController
     public function getGoal($id)
     {
         $user= User::where('id',$id)->first();
-        if($user->role_id == 1) {
+
+
+        if($user->role_id == 1 || $user->role_id == 8)
+        {
+
+
             $goal = GoalSetting::all();
             $goal_recurring= GoalRecurring::all();
            
             return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
         } elseif($user->role_id != 1) {
             $team = Seopage1Team::whereRaw("FIND_IN_SET($user->id, members) > 0")->first();
-            //dd($team);
+
             if ($team != null)  {
-                // $team_id = $team->id;
-                //  dd($team_id);
                 $goal= GoalSetting::where('team_id',$team->id)->orWhere('user_id',$user->id)->get();
-                //  dd($goal);
+
                 $goal_recurring= GoalRecurring::all();
                 return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
             } 
@@ -397,4 +400,11 @@ class InsightsController extends AccountBaseController
             'title' => $data->title
         ]);
     }
+
+
+    public function getGoalDetails($id)
+    {
+        dd($id);
+    }
 }
+
