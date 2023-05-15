@@ -1634,7 +1634,7 @@ class ContractController extends AccountBaseController
                                      $point->user_id= $deal_id_contact->added_by;
                                      $point->project_id= $project_id->id;
                                      $point->activity= $user_name->name . ' for achieving monthly target';
-                                     $point->gained_as = "Team";
+                                     $point->gained_as = "Individual";
                                      $point->points= ($project_budget*$value->generate_sales_amount)/100;
      
                                      if ($cash_points_team_lead != null) {
@@ -1658,7 +1658,7 @@ class ContractController extends AccountBaseController
                                      $point->user_id= $deal_id_contact->added_by;
                                      $point->project_id= $project_id->id;
                                      $point->activity= $user_name->name . ' for achieving monthly target';
-                                     $point->gained_as = "Team";
+                                     $point->gained_as = "Individual";
                                      $point->points= ($project_budget*$kpi->generate_sales_above_point)/100;
      
                                      if ($cash_points_team_lead != null) {
