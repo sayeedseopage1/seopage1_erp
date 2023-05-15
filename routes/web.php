@@ -1089,6 +1089,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     // Update app
     Route::get('/insights/deals', [InsightsController::class,'DealConversion'])->name('insights-deals');
     Route::get('/insights/goals/get/{id}', [InsightsController::class,'getGoal'])->name('insights-goals-get');
+
+    Route::get('/insights/get-goal-details/{id}', [InsightsController::class,'getGoalDetails'])->name('insights-get-goals-details');
+    
     Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
     Route::get('update-settings/install', [UpdateAppController::class, 'install'])->name('update-settings.install');
@@ -1101,6 +1104,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
     Route::post('/insights/goals/edit/{id}', [InsightsController::class,'editGoal'])->name('insights/goals/edit');
+    Route::post('/insights/goal-title/edit/{data}', [InsightsController::class,'editGoalTitle'])->name('insights.goals-title.edit');
     Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
    
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
@@ -1243,5 +1247,5 @@ Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agre
 Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
 
 Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
-Route::get('menu/filter/get-employee/{department?}/{shifts?}', [PointsController::class, 'get_employe_by_filter_options']);
+Route::get('menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
 Route::post('point-table-data', [PointsController::class, 'get_point_table_data']);
