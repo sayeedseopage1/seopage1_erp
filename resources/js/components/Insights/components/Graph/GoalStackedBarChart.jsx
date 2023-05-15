@@ -238,9 +238,9 @@ const CustomBar = (props) => {
 
                     <foreignObject
                         x={x + width / 2 - 30}
-                        y={y + height - (target / target * height) - 20}
-                        width={60}
-                        height={20}
+                        y={y + height - (target / target * height) - 30}
+                        width={80}
+                        height={30}
                     >
                         <div style={{
                                 width: '100%',
@@ -260,7 +260,7 @@ const CustomBar = (props) => {
 
                             {_.lowerCase(targetType) === 'value'  ?
                                 `$${convertNumberToUnits(target, 2)}` :
-                                convertNumberToUnits(target, 2)}
+                                convertNumberToUnits(target, 0)}
                             
                             <Icon type='Goal' className='cnx__goal_graph_labelList_icon' />
                         </div>
@@ -293,7 +293,7 @@ const CustomBar = (props) => {
                         >
                             {_.lowerCase(targetType) === 'value'  ?
                                 `$${convertNumberToUnits(actual, 2)}` :
-                                convertNumberToUnits(actual, 2)}
+                                convertNumberToUnits(actual, 0)}
 
                         </div>
 

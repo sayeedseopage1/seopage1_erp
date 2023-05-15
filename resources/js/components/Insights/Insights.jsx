@@ -25,6 +25,7 @@ import { useEffect } from 'react';
 import { useGetGoalsQuery } from './services/api/goalsApiSlice';
 import { useGetAllUsersQuery, useGetUsersQuery } from './services/api/userSliceApi';
 import { useDealsState } from './hooks/useDealsState';
+import NotPermission from './pages/NotPermission';
 
 const InsightsComponent = () => {
   const {dashboards} = useDashboards();
@@ -48,18 +49,27 @@ const InsightsComponent = () => {
   }, [goals, users, deals])
 
 
-
   
-  if(isPageLoading) return <div style={{display: 'flex', alignItems: 'center', "justifyContent": 'center', width: "100%", height: '100vh'}}>
-    <h1>
-    Loading...
-  </h1>
+  if(isPageLoading) return <div 
+    style={{
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      width: "100%", 
+      height: '100vh'
+    }}>
+      <div className="spinner-border" role="status">  </div>
+      Loading...
   </div>
 
 
   return(
     <div className='cnx_insights'>
-        <InsightSidebar />
+       {
+          Number(window.Laravel.user.role_id) === 1 || Number(window.Laravel.user.role_id) === 8 || Number(window.Laravel.user.role_id) === 7 ? 
+          <InsightSidebar /> 
+          : null
+       } 
         <main>
           <AppRoutes />
         </main>
@@ -92,8 +102,8 @@ const InsightsComponent = () => {
 const AppRoutes = () => {
   return(
     <Routes>
-      <Route path="/" >
-        <Route index element={<Navigate to="/dashboards/dashboard_1" replace={true} />} />
+      <Route path="/">
+        <Route index element= {<NotPermission />} />
         <Route path="dashboards/:dashboardId" element={<Dashboard />} />
         <Route path="goals/:goalId" element={<Goal />} />
         <Route path="*" element={<Navigate to="/dashboards/My Dashboard" replace={true} />} />

@@ -504,7 +504,7 @@
 </div>
 </div>
 
-@include('projects.modals.addnichemodal')
+@include('projects.modals.backup_addnichemodal')
 @include('projects.modals.deletenichemodal')
 
 @push('scripts')

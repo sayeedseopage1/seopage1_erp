@@ -38,7 +38,6 @@ export const useDealsState = () => {
     // get deals 
     const getDeals = (deals, goal, startDate, endDate, filter) => {
 
-        
         if(!deals || !goal) return;
 
         let _endDate = endDate;
@@ -51,21 +50,114 @@ export const useDealsState = () => {
             startDate = startDate ? startDate : goal.startDate;
             _endDate = endDate ? endDate : getEndDate(goal);
         }
-        
-        // console.log(goal)
-       
-        let filteredDeals = deals.filter(
-                deal => day.isSameOrAfter(deal.created_at, startDate) && 
-                day.isSameOrBefore(deal.created_at, _endDate)  
-                &&
-                (goal.assigneeType === 'User' ? deal.added_by === goal.assignedUser?.id :
-                 goal.assigneeType === 'Team' ?  goal.team?.members?.split(',').findIndex(d => Number(d) === Number(deal.added_by)) : false) &&
-                (_.lowerCase(goal.entryType) === 'progressed' ? _.lowerCase(goal.qualified) === _.lowerCase(stage[Number(deal.deal_stage)]) : true) &&
-                (_.lowerCase(goal.entryType) === 'won' ? _.lowerCase(deal.won_lost) === 'yes' : true)
-            );
-        
+
+        let filteredDeals = [];    
+        let othersDeals = [];
+
+
+        // filter by date range
+        deals.map(deal => {
+            if(day.isSameOrAfter(deal.created_at, startDate) && 
+                day.isSameOrBefore(deal.created_at, _endDate)){
+                 filteredDeals.push(deal);
+                }else {
+                    othersDeals.push(deal);
+                }
+        })
+
+
+
+        if(_.lowerCase(goal.dealType) === 'new client'){
+            // create array of all clients username
+             let clients = filteredDeals.map(deal => deal.client_username);    
+           // create unique array of clients username
+            clients = [...new Set(clients)];
+
+            // if any client has existing on other deals then remove it from clients array
+            clients = clients.filter(client => {
+                return !othersDeals.find(deal => deal.client_username === client)
+            })
+
+            // filter deals by clients
+            filteredDeals = filteredDeals.filter(deal => {
+                return clients.findIndex(client => client === deal.client_username) !== -1
+            })
+
+
+            // first deal of each client
+            filteredDeals = filteredDeals.filter((deal, index) => {
+                return filteredDeals.findIndex(d => d.client_username === deal.client_username) === index
+            })
+
+
+        } else if(_.lowerCase(goal.dealType) === 'existing client'){
+            // create array of all clients username
+            let clients = filteredDeals.map(deal => deal.client_username);    
+            // create unique array of clients username
+            clients = [...new Set(clients)];
             
+            // if any client has no existing on other deals and 
+            // has not duplicate on filtered deals then remove it from clients array
+
+            clients = clients.filter(client => {
+                return !othersDeals.find(deal => deal.client_username === client) &&
+                        filteredDeals.findIndex(deal => deal.client_username === client) <= 0
+            })
+
+
+            // filter deals by clients
+            filteredDeals = filteredDeals.filter(deal => {
+                return clients.findIndex(client => client === deal.client_username) !== -1
+            });
+
+
+            // remove first deal of each client
+            filteredDeals.filter((deal, index) => {
+                return filteredDeals.findIndex(d => d.client_username === deal.client_username) !== index
+            })
+        }
+
+        
+
+        // filter by user if assignee type is user
+        if(_.lowerCase(goal.assigneeType) === 'user'){
+            filteredDeals = filteredDeals.filter(deal => deal.added_by === goal.assignedUser?.id);
+        }
+
+        // console.log(goal)
+        // // filter by team if assignee type is team
+        if(_.lowerCase(goal.assigneeType) === 'team' && goal.team){
+            const members = goal.team?.members?.split(',');
+
+            filteredDeals = filteredDeals.filter(deal => {
+                return members.findIndex(member => Number(member) === Number(deal.added_by)) !== -1
+            })
+        }
+
+        // filter by entry type
+        if(_.lowerCase(goal.entryType) === 'progressed'){
+            filteredDeals = filteredDeals.filter(deal => _.lowerCase(goal.qualified) === _.lowerCase(stage[Number(deal.deal_stage)]));
+        }
+
+        if(_.lowerCase(goal.entryType) === 'won'){
+            filteredDeals = filteredDeals.filter(deal => _.lowerCase(deal.won_lost) === 'yes');
+        }
+
+        
+    
+    
+        
+                    
         return filteredDeals;
+    }
+
+
+    // distribute deals by period
+    const distributeDealsByPeriod = (deals, startDate, endDate) => {
+        return deals.filter(deal => {
+            return day.isSameOrAfter(deal.created_at, startDate) && 
+            day.isSameOrBefore(deal.created_at, endDate)
+        })
     }
 
 
@@ -78,7 +170,7 @@ export const useDealsState = () => {
 
 
     // analyze deals with in period
-    const analyzeDeals = (deals, period, goalData , index, filter) => {
+    const analyzeDeals = (deals, period, goalData , index) => {
         let totalDeal = 0;
         let dealAdded = 0;
         let dealWon = 0;
@@ -90,92 +182,97 @@ export const useDealsState = () => {
         let difference = 0;
         let endDate ;
         let startDate;
-        let result;
+        let result = 0;
+        let yAxis = goalData.trackingValue;
+        let target = 0;
+        let goal = 0;
+        let _deals = deals;
         
+    
         
+
         
-        if(!deals) return;
+        startDate = period.start;
+        endDate = period.end;
 
-        if(filter?.end && filter?.start){
-            startDate = filter.start;
-            endDate = filter.end;
-        }else{
-            startDate = period.start;
-            endDate = period.end;
-        }
-
-        const _deals = getDeals(deals, goalData, startDate, endDate, filter);
-
+         _deals = distributeDealsByPeriod(_deals, startDate, endDate);
         // get period start and end date
 
-        totalDeal = _deals.length;
+        goal = Number(period.value);
 
-        // count total deal added value 
-        _deals.map(deal => {
-            // console.log({deal, startDate, endDate})
-            
-                dealAdded += deal.amount;
+        if(_deals.length > 0){
+            totalDeal = _deals.length;
+
+                // count total deal added value 
+                _deals.map(deal => {
+                    // console.log({deal, startDate, endDate})
+                    
+                        dealAdded += deal.amount;
 
 
-                if(_.lowerCase(deal.won_lost) === 'yes') {
-                    dealWon++;
+                        if(_.lowerCase(deal.won_lost) === 'yes') {
+                            dealWon++;
+                        }
+                        if(_.lowerCase(deal.won_lost) === 'no') {
+                            dealLost++;
+                        }
+
+                    })
+
+
+
+                    
+                goalProgress = goal === 0 ? 0 : ( dealAdded /goal ) * 100;
+                // goalProgress  = goalProgress > 100 ? 100 : goalProgress;
+                goalProgress = goalProgress < 0 ? 0 : goalProgress;
+
+                // if goal progress not integer then fix it to 1 decimal place
+                if(goalProgress % 1 !== 0){
+                    goalProgress = goalProgress.toFixed(1);
                 }
-                if(_.lowerCase(deal.won_lost) === 'no') {
-                    dealLost++;
+
+                target = goal - dealAdded;
+                target = parseInt(target) === target ? target : target.toFixed(1);
+
+                    
+                goal =  parseInt(goal) === goal ? goal : goal.toFixed(1);
+
+
+                result = _.lowerCase(goalData.trackingType) === 'value' ? dealAdded : totalDeal;
+                result = parseInt(result) === result ? result : result.toFixed(1);
+
+                if(_.lowerCase(goalData.trackingType) === 'value'){
+                    if(goal < dealAdded){
+                        yAxis = dealAdded;
+                    }else{
+                        yAxis = goal;
+                    }
+                }else{
+                    if(goal < totalDeal){
+                        yAxis = totalDeal;
+                    }else{
+                        yAxis = goal
+                    }
                 }
 
-            })
 
 
-
-       let goal = Number(period.value);
-            
-        goalProgress = goal === 0 ? 0 : ( dealAdded /goal ) * 100;
-        // goalProgress  = goalProgress > 100 ? 100 : goalProgress;
-        goalProgress = goalProgress < 0 ? 0 : goalProgress;
-
-        // if goal progress not integer then fix it to 1 decimal place
-        if(goalProgress % 1 !== 0){
-            goalProgress = goalProgress.toFixed(1);
+                // formate
+                dealAdded = dealAdded.toFixed(2);
         }
 
-       let target = goal - dealAdded;
-       target = parseInt(target) === target ? target : target.toFixed(1);
 
-       if(_.lowerCase(goalData.trackingType) === 'value'){
-            difference = dealAdded - Number(period.value);
-       } else {
-            difference = totalDeal - Number(period.value);
-       }
-
-
-         difference =  parseInt(difference) === difference ? difference : difference.toFixed(1);
-         goal =  parseInt(goal) === goal ? goal : goal.toFixed(1);
-
-
-        result = _.lowerCase(goalData.trackingType) === 'value' ? dealAdded : totalDeal;
-        result = parseInt(result) === result ? result : result.toFixed(1);
-        let yAxis = 0;
 
         if(_.lowerCase(goalData.trackingType) === 'value'){
-            if(goal < dealAdded){
-                yAxis = dealAdded;
-            }else{
-                yAxis = goal;
-            }
-        }else{
-            if(goal < totalDeal){
-                yAxis = totalDeal;
-            }else{
-                yAxis = goal
-            }
+            difference = dealAdded - Number(period.value);
+        } else {
+            difference = totalDeal - Number(period.value);
         }
 
 
+        difference =  parseInt(difference) === difference ? difference : difference.toFixed(1);
 
-        // formate
-        dealAdded = dealAdded.toFixed(2);
-
+        
         return {
             deals: _deals,
             ...period,

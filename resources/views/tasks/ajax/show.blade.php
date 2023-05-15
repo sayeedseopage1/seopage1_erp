@@ -388,12 +388,26 @@
                             <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                                 <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                                     @lang('modules.tasks.assignBy')</p>
-                                {{-- <p class="mb-0 text-dark-grey f-14 w-70"> --}}
+                             
                                 <x-employee :user="$task->createBy" />
-                                {{-- </p> --}}
+                               
                             </div>
                         @endif
                     @endif
+                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
+                            @lang('Project Manager')</p>
+                     
+                        <x-employee :user="$task->project->pm" />
+                       
+                    </div>
+                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
+                            @lang('Client')</p>
+                     
+                        <x-employee :user="$task->project->client" />
+                       
+                    </div>
                     <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                         <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                             @lang('modules.tasks.priority')</p>
@@ -707,6 +721,22 @@
                             </p>
                         </div>
                     @endif
+                @endif
+                @if($task->status == 'completed')
+              
+                    <div class="col-12 px-0 pb-3 d-lg-flex d-block">
+                        <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Actual Completion Date') }}
+                        </p>
+                        <p class="mb-0 text-dark-grey w-50 f-14">
+                            @if (!is_null($task->updated_at))
+                                {{ \Carbon\Carbon::parse($task->updated_at)->format('d-m-Y') }}
+                            @else
+                                --
+                            @endif
+
+                        </p>
+                    </div>
+              
                 @endif
 
                 @if (

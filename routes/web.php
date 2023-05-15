@@ -1263,4 +1263,4 @@ Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agre
 
 Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
 
- 
+
