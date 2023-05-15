@@ -510,6 +510,30 @@
                               </div>
                             </div>
                           </div>
+                          @if(Auth::user()->role_id == 8 && Route::currentRouteName() == 'authorization_request')
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>Confirm that is price is ok?</label>
+                                <textarea class="form-control" name="price_authorization" rows="10"></textarea>
+                                <script>
+                                      CKEDITOR.replace('price_authorization');
+                                  </script>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>Confirm that is requirment is defined or not?</label>
+                                <textarea class="form-control" name="requirment_define" rows="10"></textarea>
+                                <script>
+                                      CKEDITOR.replace('requirment_define');
+                                  </script>
+                              </div>
+                            </div>
+                          </div>
+                          @endif
 
                           <br>
                           <div class="d-flex justify-content-center">
@@ -761,6 +785,8 @@
         var description7 = CKEDITOR.instances.description7Text.getData();
         var description8 = CKEDITOR.instances.description8Text.getData();
         var description9 = CKEDITOR.instances.description9Text.getData();
+        var price_authorization = CKEDITOR.instances.price_authorization.getData();
+        var requirment_define = CKEDITOR.instances.requirment_define.getData();
         // console.log(name);
         var message_links = document.getElementsByName("message_link[]");
         var message_links_values = [];
@@ -784,8 +810,8 @@
             'description5': description5,
             'description6': description6,
             'description7': description7,
-            'description8': description8,
-            'description9': description9,
+            'price_authorization': price_authorization,
+            'requirment_define': requirment_define,
             'id': '{{$deal->id}}',
         }
         // console.log(data);
@@ -796,13 +822,13 @@
         });
         $.ajax({
             type: "POST",
-            url: "{{route('store-deal-details')}}",
+            url: "{{route('authorization_submit')}}",
             data: data,
             dataType: "json",
             success: function (response) {
                 $('.error').html("");
                 $(location).prop('href', '{{url('/account/contracts/')}}');
-                toastr.success('Deal Create Successfully');
+                toastr.success('Authorization Complete');
                 $('#createDeal').attr("disabled", false);
                 $('#createDeal').html("Complete Deal Creation");
             },

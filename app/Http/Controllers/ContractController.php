@@ -672,7 +672,6 @@ class ContractController extends AccountBaseController
         if($existing_client != null)
         {
             $find_pm_id = Project::where('client_id',$existing_client->id)->orderBy('id','desc')->where('id','!=',$project->id)->where('pm_id','!=',null)->first();
-
             $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
             $from = Carbon::createFromFormat('Y-m-d H:s:i', $find_pm_id->created_at);
             $diff_in_days = $from->diffInDays($to);
@@ -712,13 +711,17 @@ class ContractController extends AccountBaseController
         $text = $user->getRole->name.' '.$user->name.' - Closed Deal ('.$deal->project_name.') for '.$deal->actual_amount.'$ (Client: '.$deal->client_name.')';
         $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';   
         $activityLog = new LeadsDealsActivityLog();
-        $activityLog->lead_id = $lead->id;
-        $activityLog->deal_id = $deal_stage->id;
-        $activityLog->won_deal_id = $contract->id;
-        $activityLog->project_id = $project->id;
-        $activityLog->message = $link;
-        $activityLog->created_by = Auth::id();
-        $activityLog->save();
+        if ($lead != null) {
+            $activityLog->lead_id = $lead->id;
+        }
+            $activityLog->deal_id = $deal_stage->id;
+            $activityLog->won_deal_id = $contract->id;
+            $activityLog->project_id = $project->id;
+            $activityLog->message = $link;
+            $activityLog->created_by = Auth::id();
+            $activityLog->save();
+        
+       
 
         //update previous lead
         /*$previous_lead = LeadsDealsActivityLog::where([
@@ -898,7 +901,6 @@ class ContractController extends AccountBaseController
     }
     public function storedealDetails(Request $request)
     {
-        //dd($request->all());
         $validated = $request->validate([
             'project_name' => 'required',
             'deadline' => 'required',
@@ -1189,20 +1191,22 @@ class ContractController extends AccountBaseController
                         $deal= Deal::find($deal->id);
                         $deal->authorization_status= 2;
                         $deal->save();
-                        // $sender= User::where('id',Auth::id())->first();
-                        // $users= User::where('role_id',8)->orWhere('role_id',1)->get();
-                    
-                        // foreach ($users as $key => $user) {
-                        //    // Notification::send($users, new DealAuthorizationSendNotification($deal,$sender));
-                        //     $this->triggerPusher('notification-channel', 'notification', [
-                        //         'user_id' => $user->id,
-                        //         'role_id' => $user->role_id,
-                        //         'title' => 'Price authorization request from '.$sender->name,
-                        //         'body' => $sender->name. ' send price authorization request for '.$deal->project_name,
-                        //         'redirectUrl' => route('deals.show',$deal->id)
-                        //     ]);
-                        // }
+                        $sender= User::where('id',Auth::id())->first();
 
+                        //sales lead 
+                        $users= User::where('role_id',8)->get();
+                    
+                        foreach ($users as $key => $user) {
+                            Notification::send($user, new DealAuthorizationSendNotification($deal,$sender));
+                            $this->triggerPusher('notification-channel', 'notification', [
+                                'user_id' => $user->id,
+                                'role_id' => $user->role_id,
+                                'title' => 'Price authorization request from '.$sender->name,
+                                'body' => $sender->name. ' send price authorization request for '.$deal->project_name,
+                                'redirectUrl' => route('deals.show',$deal->id)
+                            ]);
+                        }
+                        //end lead 
                         // the bidder kpi points start fropm here.
 
 
@@ -1362,6 +1366,53 @@ class ContractController extends AccountBaseController
 
 
                                     }
+
+                                    $deal_id= Deal::where('id',$deal->id)->first();
+                                    //dd($deal_id);
+                                    $user_name= User::where('id',$deal_id->added_by)->first(); 
+
+                                    $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                    $point= new CashPoint();
+                                    $point->user_id= $deal_id->added_by;
+                                    $point->project_id= $project_id->id;
+                                    $point->activity= $user_name->name . ' closed the deal';
+                                    $point->gained_as = "Individual";
+                                    $point->points= ($project_budget*$kpi->closed_deal)/100;
+    
+                                    if ($cash_points_close_deal != null) {
+                                   
+                                        $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget*$kpi->closed_deal)/100;
+    
+                                    }else 
+                                    {
+                                        $point->total_points_earn=
+                                        ($project_budget*$kpi->closed_deal)/100;
+    
+                                    }
+                                    $point->save();
+                                    $deal_id_contact= Deal::where('id',$request->id)->first();
+                                    $user_name= User::where('id',$deal_id_contact->added_by)->first(); 
+
+                                    $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                    $point= new CashPoint();
+                                    $point->user_id= $deal_id_contact->added_by;
+                                    $point->project_id= $project_id->id;
+                                    $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                                    $point->gained_as = "Individual";
+                                    $point->points= ($project_budget*$kpi->contact_form)/100;
+    
+                                    if ($cash_points_contact != null) {
+                                   
+                                        $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
+    
+                                    }else 
+                                    {
+                                        $point->total_points_earn=
+                                        ($project_budget*$kpi->contact_form)/100;
+    
+                                    }
+                                    $point->save();
+                                   
                                     
 
 
@@ -1515,6 +1566,54 @@ class ContractController extends AccountBaseController
        
 
                                      }
+                                     $deal_id= Deal::where('id',$deal->id)->first();
+                                     //dd($deal_id);
+                                     $user_name= User::where('id',$deal_id->added_by)->first(); 
+ 
+                                     $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                     $point= new CashPoint();
+                                     $point->user_id= $deal_id->added_by;
+                                     $point->project_id= $project_id->id;
+                                     $point->activity= $user_name->name . ' closed the deal';
+                                     $point->gained_as = "Individual";
+                                     $point->points= ($project_budget*$kpi->closed_deal)/100;
+     
+                                     if ($cash_points_close_deal != null) {
+                                    
+                                         $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget*$kpi->closed_deal)/100;
+     
+                                     }else 
+                                     {
+                                         $point->total_points_earn=
+                                         ($project_budget*$kpi->closed_deal)/100;
+     
+                                     }
+                                     $point->save();
+                                     $deal_id_contact= Deal::where('id',$request->id)->first();
+                                     $user_name= User::where('id',$deal_id_contact->added_by)->first(); 
+ 
+                                     $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                     $point= new CashPoint();
+                                     $point->user_id= $deal_id_contact->added_by;
+                                     $point->project_id= $project_id->id;
+                                     $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                                     $point->gained_as = "Individual";
+                                     $point->points= ($project_budget*$kpi->contact_form)/100;
+     
+                                     if ($cash_points_contact != null) {
+                                    
+                                         $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
+     
+                                     }else 
+                                     {
+                                         $point->total_points_earn=
+                                         ($project_budget*$kpi->contact_form)/100;
+     
+                                     }
+                                     $point->save();
+                                    
+
+                                     
                                     
                                      }
 
@@ -1998,6 +2097,95 @@ class ContractController extends AccountBaseController
  
                                  }
                                  $point->save();
+                                 $deal_id= Deal::where('id',$deal->id)->first();
+                                 $user_name= User::where('id',$deal_id->added_by)->first(); 
+
+                                 $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_id->added_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' closed the deal';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($project_budget*$kpi->closed_deal)/100;
+ 
+                                 if ($cash_points_close_deal != null) {
+                                
+                                     $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget*$kpi->closed_deal)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=
+                                     ($project_budget*$kpi->closed_deal)/100;
+ 
+                                 }
+                                 $point->save();
+                                 $deal_id_contact= Deal::where('id',$request->id)->first();
+                                 $user_name= User::where('id',$deal_id_contact->added_by)->first(); 
+
+                                 $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_id_contact->added_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($project_budget*$kpi->contact_form)/100;
+ 
+                                 if ($cash_points_contact != null) {
+                                
+                                     $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=
+                                     ($project_budget*$kpi->contact_form)/100;
+ 
+                                 }
+                                 $point->save();
+                                 $deal_id= Deal::where('id',$deal->id)->first();
+                                 
+                                 $user_name= User::where('id',$deal_id->added_by)->first(); 
+
+                                 $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_id->added_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' closed the deal';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($project_budget*$kpi->closed_deal)/100;
+ 
+                                 if ($cash_points_close_deal != null) {
+                                
+                                     $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget*$kpi->closed_deal)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=
+                                     ($project_budget*$kpi->closed_deal)/100;
+ 
+                                 }
+                                 $point->save();
+                                 $deal_id_contact= Deal::where('id',$request->id)->first();
+                                 $user_name= User::where('id',$deal_id_contact->added_by)->first(); 
+
+                                 $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_id_contact->added_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($project_budget*$kpi->contact_form)/100;
+ 
+                                 if ($cash_points_contact != null) {
+                                
+                                     $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=
+                                     ($project_budget*$kpi->contact_form)/100;
+ 
+                                 }
+                                 $point->save();
 
 
                                  if ($deal->amount > $kpi->generate_single_deal) {
@@ -2124,7 +2312,8 @@ class ContractController extends AccountBaseController
                                 
                             
                                  $deal_milestone_breakdown= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',5)->first();
-                                 $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
+                                 if ($deal_milestone_breakdown != null) {
+                                    $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
                                  $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                                  $point= new CashPoint();
                                  $point->user_id= $deal_milestone_breakdown->updated_by;
@@ -2146,7 +2335,54 @@ class ContractController extends AccountBaseController
                                  $point->save();
 
                                  
+                                 
                                  }
+                                 $deal_id= Deal::where('id',$deal->id)->first();
+                                 //dd($deal_id);
+                                 $user_name= User::where('id',$deal_id->added_by)->first(); 
+
+                                 $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_id->added_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' closed the deal';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($project_budget*$kpi->closed_deal)/100;
+ 
+                                 if ($cash_points_close_deal != null) {
+                                
+                                     $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget*$kpi->closed_deal)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=
+                                     ($project_budget*$kpi->closed_deal)/100;
+ 
+                                 }
+                                 $point->save();
+                                 $deal_id_contact= Deal::where('id',$request->id)->first();
+                                 $user_name= User::where('id',$deal_id_contact->added_by)->first(); 
+
+                                 $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                 $point= new CashPoint();
+                                 $point->user_id= $deal_id_contact->added_by;
+                                 $point->project_id= $project_id->id;
+                                 $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                                 $point->gained_as = "Individual";
+                                 $point->points= ($project_budget*$kpi->contact_form)/100;
+ 
+                                 if ($cash_points_contact != null) {
+                                
+                                     $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
+ 
+                                 }else 
+                                 {
+                                     $point->total_points_earn=
+                                     ($project_budget*$kpi->contact_form)/100;
+ 
+                                 }
+                                 $point->save();
+                                
                                 
 
                                 
@@ -2427,7 +2663,9 @@ class ContractController extends AccountBaseController
                                 
                             
                                  $deal_milestone_breakdown= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',5)->first();
-                                 $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
+                                 if($deal_milestone_breakdown != null)
+                                 {
+                                    $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
                                  $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                                  $point= new CashPoint();
                                  $point->user_id= $deal_milestone_breakdown->updated_by;
@@ -2449,6 +2687,10 @@ class ContractController extends AccountBaseController
                                  $point->save();
 
                                  }
+                                 
+
+                                 }
+                                }
 
                 DB::commit();
                 // all good
@@ -2795,5 +3037,57 @@ class ContractController extends AccountBaseController
                 'message' => 'Data inserted successfully'
             ]
         );
+    }
+
+    public function authorization_request(Deal $data)
+    {
+        $this->pageTitle = 'Add Deal Details';
+        $this->middleware(function ($request, $next) {
+            abort_403(!in_array('contracts', $this->user->modules));
+            return $next($request);
+        });
+        $deal = $data;
+
+        return view('contracts.dealdetails_authorization', $this->data, compact('deal'));
+    }
+
+    public function authorization_submit(Request $request)
+    {
+        $request->validate([
+            'price_authorization' => 'required',
+            'requirment_define' => 'required',
+        ]);
+        $deal = Deal::find($request->id);
+        $deal->authorization_status = 1;
+        $deal->price_authorization = $request->price_authorization;
+        $deal->requirment_define = $request->requirment_define; 
+
+        $kpiSetting = kpiSetting::first();
+        $earned_point = ($kpiSetting->authorized_by_leader * $deal->actual_amount) / 100;
+
+        $user_name= User::where('role_id',8)->first(); 
+        $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+
+        $point= new CashPoint();
+        $point->user_id= $user_name->id;
+        $point->project_id= $project_id->id;
+        $point->activity= $user_name->name . ' for authorizing deal';
+        $point->gained_as = "Individual";
+        $point->points= $earned_point;
+
+        if ($cash_points_team_lead != null) {            
+            $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($deal->amount*$earned_point)/100;
+        } else {
+            $point->total_points_earn= ($deal->amount*$earned_point)/100;
+        }
+
+        $point->save();
+
+        if ($deal->save()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Data inserted successfully'
+            ]);
+        }
     }
 }

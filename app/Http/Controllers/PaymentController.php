@@ -431,6 +431,50 @@ class PaymentController extends AccountBaseController
 
                                 $point->save();
                             }
+
+                            $user_name= User::where('id',$deal->added_by)->first(); 
+
+                            $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                            $point= new CashPoint();
+                            $point->user_id= $deal_id->added_by;
+                            $point->project_id= $project_id->id;
+                            $point->activity= $user_name->name . ' closed the deal';
+                            $point->gained_as = "Individual";
+                            $point->points= ($project_budget*$kpi->closed_deal)/100;
+
+                            if ($cash_points_close_deal != null) {
+                           
+                                $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget*$kpi->closed_deal)/100;
+
+                            }else 
+                            {
+                                $point->total_points_earn=
+                                ($project_budget*$kpi->closed_deal)/100;
+
+                            }
+                            $point->save();
+
+                            $user_name= User::where('id',$deal->updated_by)->first(); 
+
+                            $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                            $point= new CashPoint();
+                            $point->user_id= $deal_id_contact->added_by;
+                            $point->project_id= $project_id->id;
+                            $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                            $point->gained_as = "Individual";
+                            $point->points= ($project_budget*$kpi->contact_form)/100;
+
+                            if ($cash_points_contact != null) {
+                           
+                                $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
+
+                            }else 
+                            {
+                                $point->total_points_earn=
+                                ($project_budget*$kpi->contact_form)/100;
+
+                            }
+                            $point->save();
                             
                         }
                     }
