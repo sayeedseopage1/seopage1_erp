@@ -80,7 +80,8 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
         setSortConfig({ key, direction });
     };
 
-
+    // sort by user id
+    
 
     const columns = defaultColumns.filter(d => activeColumns.includes(d.id))
                     .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))

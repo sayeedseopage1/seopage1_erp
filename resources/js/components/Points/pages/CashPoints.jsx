@@ -10,21 +10,7 @@ const CashPoints = () => {
     const [data, setData] = React.useState([]);
     const [pointTableDataIsLoading, setPointTableDataIsLoading] = React.useState([]);
 
-    // data have multiple user id
-    // sort data by user id also data id
-    const sortData = (data) => {
-        return data.sort((a,b ) => {
-            if(a.user_id > b.user_id) {
-                return 1;
-            }
-            if(a.user_id < b.user_id) {
-                return -1;
-            }
-            return 0;
-        });
 
-       
-    }
 
     
     return(

@@ -18,9 +18,22 @@ const Pagination = ({data, setCurrentPageData, numOfPerPageRow = 10, sortConfig,
         return data.slice(startIndex, startIndex + nPaginate);
     };
 
+    const sortData = (data) => {
+        return data.sort((a,b ) => {
+            if(a.user_id > b.user_id) {
+                return 1;
+            }
+            if(a.user_id < b.user_id) {
+                return -1;
+            }
+            return 0;
+        });
+    }
+
     /// set current page data
     React.useEffect(() => {
-        const _data = sortedData(data, sortConfig);
+        let _data = sortedData(data, sortConfig);
+        _data = sortData(_data);
         let perPageData = paginate(_data, currentPage, numOfPerPageRow);
         setCurrentPageData(perPageData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
