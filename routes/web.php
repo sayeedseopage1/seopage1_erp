@@ -174,7 +174,10 @@ use App\Http\Controllers\SoftwareProjectController;
 use App\Http\Controllers\InsightsController;
 use App\Http\Controllers\Seopage1TeamController;
 use App\Http\Controllers\KpiSettingController;
+use App\Http\Controllers\IncentiveSettingController;
 use App\Http\Controllers\PointsController;
+use App\Http\Controllers\IncentiveController;
+
 
 
 /*
@@ -312,7 +315,13 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('attendances/store-clock-in', [DashboardController::class, 'storeClockIn'])->name('attendances.store_clock_in');
     Route::get('attendances/update-clock-in', [DashboardController::class, 'updateClockIn'])->name('attendances.update_clock_in');
     Route::get('dashboard/private_calendar', [DashboardController::class, 'privateCalendar'])->name('dashboard.private_calendar');
-    Route::resource('points', PointsController::class);
+    // Route::resource('points/', PointsController::class)->only
+    
+    Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
+    Route::get('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
+    Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
+    Route::get('/points/{any?}', [PointsController::class,'index'])->where('any', '.*')->name('points.index');
+    Route::get('/incentives/{any?}', [IncentiveController::class, 'index'])->where('any', '.*')->name('incentives.index');
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     /* Setting menu routes starts from here */
@@ -855,9 +864,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         });
     Route::resource('invoices', InvoiceController::class);
 
-    //kpi settings 
+
     //KPI Settings
     Route::resource('kpi-settings', KpiSettingController::class);
+    //Incentives Settings
+    Route::resource('incentive-settings',IncentiveSettingController::class);
 
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
@@ -1089,9 +1100,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     // Update app
     Route::get('/insights/deals', [InsightsController::class,'DealConversion'])->name('insights-deals');
     Route::get('/insights/goals/get/{id}', [InsightsController::class,'getGoal'])->name('insights-goals-get');
-
-    Route::get('/insights/get-goal-details/{id}', [InsightsController::class,'getGoalDetails'])->name('insights-get-goals-details');
-    
     Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
     Route::get('update-settings/install', [UpdateAppController::class, 'install'])->name('update-settings.install');
@@ -1104,12 +1112,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
     Route::post('/insights/goals/edit/{id}', [InsightsController::class,'editGoal'])->name('insights/goals/edit');
-    Route::post('/insights/goal-title/edit/{data}', [InsightsController::class,'editGoalTitle'])->name('insights.goals-title.edit');
+    Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class,'editGoalTitle'])->name('insights.goals-title.edit');
     Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
-   
-    Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
-});
 
+    Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
+
+
+
+});
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
 Route::get('/deals/details/{id}', [ContractController::class, 'dealDetails'])->name('dealDetails');
@@ -1193,6 +1203,12 @@ Route::get('/projects/project-completion/{id}', [ProjectController::class, 'Proj
 Route::post('/acoounts/project-completion/store', [ProjectController::class, 'ProjectCompletionSubmit'])->name('project-completion');
 
 //add project niche
+Route:: get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
+Route::get('/projects/get-sub-category/{id}',[ProjectController::class,'parentCategoryId']);
+Route:: get('/projects/update-category/{id}', [ProjectController::class, 'updateCategory'])->name('update.category');
+
+
+//add project niche
 Route::post('/projects/niche-store', [ProjectController::class, 'storeNiche'])->name('add-niche');
 Route::get('/projects/niches', [ProjectController::class, 'Niche'])->name('get-niche');
 Route::delete('/projects/delete-niche/{id}', [ProjectController::class, 'deleteNiche']);
@@ -1244,8 +1260,7 @@ Route::post('/get-employees-by-parentteam', [Seopage1TeamController::class, 'get
 Route::get('/projects/agreement/{hash}', [HomeController::class, 'agreement'])->name('front.agreement');
 Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agreement_disagree'])->name('front.agreement.disagree');
 
+
 Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
 
-Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
-Route::get('menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
-Route::post('point-table-data', [PointsController::class, 'get_point_table_data']);
+ 

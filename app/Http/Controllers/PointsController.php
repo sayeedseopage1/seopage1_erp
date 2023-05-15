@@ -36,15 +36,17 @@ class PointsController extends AccountBaseController
             });
             
             return response()->json($data);
-        } elseif ($mode == 'projects') {
+        }elseif ($mode == 'projects') {
             $projects = CashPoint::distinct()->pluck('project_id');
             $project_list = [];
             foreach ($projects as $key => $value) {
                 $data = Project::select(['id', 'project_name'])->where('id', $value)->first();
-                array_push($project_list, $data);
+                if(!is_null($data)){
+                    array_push($project_list, $data);
+                }
             }
             return response()->json($project_list);
-        } elseif ($mode == 'department') {
+        }elseif ($mode == 'department') {
             $data = Team::select([
                 'id', 
                 'team_name as name'
@@ -64,15 +66,15 @@ class PointsController extends AccountBaseController
 
     public function get_employe_by_filter_options(Request $request)
     {
-        $department = $request->query('department');
-        $shift = $request->query('shifts');
+        $department = $request->query('department_id');
+        $shift = $request->query('shift_id');
 
         if (is_null($department) && is_null($shift)) {
             $data = User::allEmployees(null, true, 'all')->map(function($item) {
                 return [
                     'id' => $item->id, 
                     'name' => $item->name,
-                    'image_url' => $item->image
+                    'image' => $item->image
                 ];
             });
 
@@ -140,15 +142,12 @@ class PointsController extends AccountBaseController
 
             $data = $data->whereIn('user_id', $user_list);
         }
-
         if ($request->project_id != '') {
             $data = $data->where('project_id', $request->project_id);
         }
-
         if ($request->user_id != '') {
             $data = $data->where('user_id', $request->user_id);
         }
-
         if ($request->start_date != '') {
             $data = $data->where(\DB::raw('DATE(created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
         }
