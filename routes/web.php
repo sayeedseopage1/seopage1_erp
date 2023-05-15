@@ -1264,5 +1264,4 @@ Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agre
 
 
 Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
-Route::get('/insights/goal-details/{data}', [InsightsController::class,'getGoalDetails'])->name('insights-goal-details');
-
+Route::get('/insights/deal-details/{data}', [InsightsController::class,'getGoalDetails'])->name('insights-goal-details');
