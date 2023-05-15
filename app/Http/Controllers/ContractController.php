@@ -1308,10 +1308,13 @@ class ContractController extends AccountBaseController
     
                                     }
                                     $point->save();
+                                  
                                    
                                
                                     $deal_milestone_breakdown= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',5)->first();
-                                    $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
+                                    if($deal_milestone_breakdown != null)
+                                    {
+                                        $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
                                     $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                                     $point= new CashPoint();
                                     $point->user_id= $deal_milestone_breakdown->updated_by;
@@ -1331,6 +1334,11 @@ class ContractController extends AccountBaseController
     
                                     }
                                     $point->save();
+
+                                    }
+                                    
+
+
 
                                     if ($deal->amount > $kpi->generate_single_deal) {
 
@@ -1456,28 +1464,44 @@ class ContractController extends AccountBaseController
                                     
                                 
                                      $deal_milestone_breakdown= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',5)->first();
-                                     $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
-                                     $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                                     $point= new CashPoint();
-                                     $point->user_id= $deal_milestone_breakdown->updated_by;
-                                     $point->project_id= $project_id->id;
-                                     $point->activity= $user_name->name . ' created the milestone breakdown';
-                                     $point->gained_as = "Individual";
-                                     $point->points= ($bonus_point*$kpi->milestone_breakdown)/100;
-     
-                                     if ($cash_points_milestone_breakdown != null) {
-                                    
-                                         $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($bonus_point*$kpi->milestone_breakdown)/100;
-     
-                                     }else 
+                                     if($deal_milestone_breakdown != null)
                                      {
-                                         $point->total_points_earn=
-                                         ($bonus_point*$kpi->milestone_breakdown)/100;
-     
+                                        $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
+                                        $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                        $point= new CashPoint();
+                                        $point->user_id= $deal_milestone_breakdown->updated_by;
+                                        $point->project_id= $project_id->id;
+                                        $point->activity= $user_name->name . ' created the milestone breakdown';
+                                        $point->gained_as = "Individual";
+                                        $point->points= ($bonus_point*$kpi->milestone_breakdown)/100;
+        
+                                        if ($cash_points_milestone_breakdown != null) {
+                                       
+                                            $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($bonus_point*$kpi->milestone_breakdown)/100;
+        
+                                        }else 
+                                        {
+                                            $point->total_points_earn=
+                                            ($bonus_point*$kpi->milestone_breakdown)/100;
+        
+                                        }
+                                        $point->save();
+       
+
                                      }
-                                     $point->save();
-    
+                                    
                                      }
+
+                                     // start team lead point calculation here
+
+                                     // If sales team generates sales from To per month,  team lead will get  % points of the sales amount.
+                                      
+                                        
+                                        
+                                       
+                                        
+
+
                                   //  dd($point);
     
                     
@@ -2093,7 +2117,15 @@ class ContractController extends AccountBaseController
                                  }
                                  $point->save();
 
+                                 
                                  }
+                                
+
+                                
+                                     // start team lead point calculation here
+
+                                     // If sales team generates sales from To per month,  team lead will get  % points of the sales amount.
+
 
                 DB::commit();
                 // all good
