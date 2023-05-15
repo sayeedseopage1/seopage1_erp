@@ -28,10 +28,12 @@ return new class extends Migration
             $table->date('endDate')->nullable();
             $table->string('trackingType');
             $table->string('trackingValue');
-            $table->string('applyRecurring')->default('false');
-            $table->string('qualified');
+            $table->string('applyRecurring')->nullable();
+            $table->string('qualified')->nullable();
             $table->string('dealType');
             $table->string('goalType');
+            $table->integer('achievablePoints');
+            $table->string('title')->nullable();
             $table->integer('added_by');
             $table->timestamps();
         });

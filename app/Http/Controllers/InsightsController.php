@@ -8,12 +8,12 @@ use App\Models\User;
 use App\Models\Seopage1Team;
 use App\Models\GoalSetting;
 use App\Models\GoalRecurring;
-use Auth;
 use App\Models\Section;
 use App\Models\Dashboard;
 use App\Models\DealStage;
 use App\Models\Lead;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class InsightsController extends AccountBaseController
 {
@@ -99,29 +99,23 @@ class InsightsController extends AccountBaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function storeGoal(Request $request)
     {
-        // return $request;
-       // dd($request->assigneeFor);
         $goal= new GoalSetting();
         $goal->entry = $request->entry;
         $goal->entryType = $request->entryType;
         $goal->assigneeType = $request->assigneeType;
-        if($request->assigneeType == 'User')
-        {
-                $goal->user_id = $request->assigneeFor['id'];
-                $goal->name= $request->assigneeFor['name'];      
-        }else if($request->assigneeType == 'Team')
-        {
-           
-                $goal->team_id = $request->assigneeFor['id'];
-                $goal->team_name= $request->assigneeFor['name'];   
-           
+        if($request->assigneeType == 'User') {
+            $goal->user_id = $request->assigneeFor['id'];
+            $goal->name= $request->assigneeFor['name'];      
+        } else if ($request->assigneeType == 'Team') {
+            $goal->team_id = $request->assigneeFor['id'];
+            $goal->team_name= $request->assigneeFor['name'];   
         }
-        foreach($request->pipeline as $pipeline)
-        {
+
+        foreach($request->pipeline as $pipeline) {
             $goal->pipeline= $pipeline;
-            
         }
         $goal->frequency = $request->frequency;
         $goal->startDate = $request->startDate;
@@ -129,67 +123,53 @@ class InsightsController extends AccountBaseController
         $goal->trackingType = $request->trackingType;
         $goal->trackingValue= $request->trackingValue;
         $goal->applyRecurring = $request->applyRecurring;
-        
-        $goal->achievablePoints = $request->achievablePoints;
-        if( $request->entryType == 'Progressed')
-        {
+        $goal->achievablePoints = (int) $request->achievablePoints;
+        if( $request->entryType == 'Progressed') {
             $goal->qualified = $request->qualified;
-        }else 
-        {
+        } else {
             $goal->qualified = null;
-
         }
+
         $goal->dealType = $request->dealType;
         $goal->goalType = $request->goalType;
+        $goal->title = $request->title;
         $goal->added_by= Auth::id();
         $goal->save();
-        if($request->recurring != null)
-        {
-            foreach($request->recurring as $key=>$rec)
-       
-        {
-           // dd($key,$rec);
-            $recurring= new GoalRecurring();
-            $recurring->goal_id = $goal->id;
-            $recurring->value = $rec['value'];
-           // dd($recurring->value);
-            $recurring->title=  $rec['title'];
-            $recurring->start=  $rec['start'];
-            $recurring->end=  $rec['end'];
-            $recurring->save();
-
-        }
-        $recurring_data= GoalRecurring::where('goal_id',$goal->id)->get();
-        //dd($goal, $$recurring);
-        return response()->json(["goal" => $goal, "recurring"=> $recurring_data]);
-
-
+        if($request->recurring != null) {
+            foreach($request->recurring as $key=>$rec) {
+                // dd($key,$rec);
+                $recurring= new GoalRecurring();
+                $recurring->goal_id = $goal->id;
+                $recurring->value = $rec['value'];
+                // dd($recurring->value);
+                $recurring->title=  $rec['title'];
+                $recurring->start=  $rec['start'];
+                $recurring->end=  $rec['end'];
+                $recurring->save();
+            }
+            $recurring_data= GoalRecurring::where('goal_id',$goal->id)->get();
+            //dd($goal, $$recurring);
+            return response()->json(["goal" => $goal, "recurring"=> $recurring_data]);
         }
 
         
         return response()->json(["goal" => $goal]);
     }
-    public function editGoal(Request $request, $id)
-    {
+    public function editGoal(Request $request, $id) {
         $goal= GoalSetting::find($id);
         $goal->entry = $request->entry;
         $goal->entryType = $request->entryType;
         $goal->assigneeType = $request->assigneeType;
-        if($request->assigneeType == 'User')
-        {
-                $goal->user_id = $request->assigneeFor['id'];
-                $goal->name= $request->assigneeFor['name'];      
-        }else if($request->assigneeType == 'Team')
-        {
-           
-                $goal->team_id = $request->assigneeFor['id'];
-                $goal->team_name= $request->assigneeFor['name'];   
-           
+        if($request->assigneeType == 'User') {
+            $goal->user_id = $request->assigneeFor['id'];
+            $goal->name= $request->assigneeFor['name'];      
+        } else if($request->assigneeType == 'Team') {
+            $goal->team_id = $request->assigneeFor['id'];
+            $goal->team_name= $request->assigneeFor['name'];   
         }
-        foreach($request->pipeline as $pipeline)
-        {
-            $goal->pipeline= $pipeline;
-            
+
+        foreach($request->pipeline as $pipeline) {
+            $goal->pipeline= $pipeline;  
         }
         $goal->frequency = $request->frequency;
         $goal->startDate = $request->startDate;
@@ -199,45 +179,37 @@ class InsightsController extends AccountBaseController
         $goal->applyRecurring = $request->applyRecurring;
         
         $goal->achievablePoints = $request->achievablePoints;
-        if( $request->entryType == 'Progressed')
-        {
+        if ($request->entryType == 'Progressed') {
             $goal->qualified = $request->qualified;
-        }else 
-        {
+        } else {
             $goal->qualified = null;
-
         }
+
         $goal->dealType = $request->dealType;
         $goal->goalType = $request->goalType;
         $goal->added_by= Auth::id();
         $goal->save();
-        $find_goal_recurrings= GoalRecurring::where('goal_id',$id)->get();
-        if($find_goal_recurrings != null)
-        {
+
+        $find_goal_recurrings = GoalRecurring::where('goal_id',$id)->get();
+        if($find_goal_recurrings != null) {
             foreach ($find_goal_recurrings as $value) {
                 $recurring= GoalRecurring::find($value->id);
                 $recurring->delete();
-
             }
-    
         }
        
-        if($request->recurring != null)
-        {
-            foreach($request->recurring as $key=>$rec)
-       
-        {
-           // dd($key,$rec);
-            $recurring= new GoalRecurring();
-            $recurring->goal_id = $goal->id;
-            $recurring->value = $rec['value'];
-           // dd($recurring->value);
-            $recurring->title=  $rec['title'];
-            $recurring->start=  $rec['start'];
-            $recurring->end=  $rec['end'];
-            $recurring->save();
-
-        }
+        if($request->recurring != null) {
+            foreach($request->recurring as $key=>$rec) {
+                // dd($key,$rec);
+                $recurring= new GoalRecurring();
+                $recurring->goal_id = $goal->id;
+                $recurring->value = $rec['value'];
+                // dd($recurring->value);
+                $recurring->title=  $rec['title'];
+                $recurring->start=  $rec['start'];
+                $recurring->end=  $rec['end'];
+                $recurring->save();
+            }
         $recurring_data= GoalRecurring::where('goal_id',$goal->id)->get();
 
         return response()->json(["goal" => $goal, "recurring"=> $recurring_data]);
@@ -250,34 +222,25 @@ class InsightsController extends AccountBaseController
     public function getGoal($id)
     {
         $user= User::where('id',$id)->first();
+
         if($user->role_id == 1 || $user->role_id == 8)
         {
+
             $goal = GoalSetting::all();
             $goal_recurring= GoalRecurring::all();
            
             return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-        }elseif($user->role_id != 1)
-        {
-           
-                $team = Seopage1Team::whereRaw("FIND_IN_SET($user->id, members) > 0")->first();
-                //dd($team);
-                if ($team != null)  {
-                    // $team_id = $team->id;
-                  //  dd($team_id);
-                    $goal= GoalSetting::where('team_id',$team->id)->orWhere('user_id',$user->id)->get();
-                  //  dd($goal);
-                    $goal_recurring= GoalRecurring::all();
-                    return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-
-                  
-                } 
+        } elseif($user->role_id != 1) {
+            $team = Seopage1Team::whereRaw("FIND_IN_SET($user->id, members) > 0")->first();
+            if ($team != null)  {
+                $goal= GoalSetting::where('team_id',$team->id)->orWhere('user_id',$user->id)->get();
+                $goal_recurring= GoalRecurring::all();
+                return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+            } 
         }
         else {
             return response()->json("You don't have permission to view this page"); 
         }
-       
-        
-      
     }
 
 
@@ -290,7 +253,6 @@ class InsightsController extends AccountBaseController
      */
     public function storeDashboard(Request $request)
     {
-        //dd($request);
         $dashboard= new Dashboard();
         $dashboard->dashboard_name= $request->name;
         $dashboard->root= $request->root;
@@ -298,13 +260,12 @@ class InsightsController extends AccountBaseController
         $dashboard->added_by= Auth::id();
         $dashboard->save(); 
 
-
         $dashboard= Dashboard::select([
             'dashboards.id as dashboard_id',
             'dashboards.*',
             'sections.*'
-            ])->join('sections', 'sections.id', '=', 'dashboards.section_id')
-            ->where('dashboards.id', $dashboard->id)
+        ])->join('sections', 'sections.id', '=', 'dashboards.section_id')
+        ->where('dashboards.id', $dashboard->id)
         ->get();
         
         return response()->json($dashboard);
@@ -319,7 +280,7 @@ class InsightsController extends AccountBaseController
             'dashboards.id as dashboard_id',
             'dashboards.*',
             'sections.*'
-            ])->join('sections', 'sections.id', '=', 'dashboards.section_id')
+        ])->join('sections', 'sections.id', '=', 'dashboards.section_id')
         ->get();
 
         return response()->json($dashboard);
@@ -343,18 +304,13 @@ class InsightsController extends AccountBaseController
         $section->added_by= Auth::id();
         $section->save();
 
-       // return $request;
+        // return $request;
         return response()->json($section);
-       // dd($request->assigneeFor);
-        
     }
     public function getSection()
     {
         $section= Section::all();
-       // dd($section);
         return response()->json($section);
-      
-
     }
 
 
@@ -405,7 +361,8 @@ class InsightsController extends AccountBaseController
     }
     public function DealConversion()
     {
-        $deals= DealStage::all();
+        $deals= DealStage::with('client')->get();
+
         $lead = Lead::all();
         return response()->json(["deals" => $deals, "leads" => $lead]);
     }
@@ -425,8 +382,23 @@ class InsightsController extends AccountBaseController
         return response()->json($user);
     }
 
+    public function editGoalTitle(Request $request, GoalSetting $data)
+    {
+        $request->validate([
+            'title' => 'required|max:255'
+        ]);
 
-    
+        $data->title = $request->title;
+        $data->save();
 
-    
+        return response()->json([
+            'status' => 'success',
+            'title' => $data->title
+        ]);
+    }
+
+    public function getGoalDetails($id)
+    {
+        dd($id);
+    }
 }

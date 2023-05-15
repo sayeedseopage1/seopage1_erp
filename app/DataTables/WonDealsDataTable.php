@@ -160,7 +160,7 @@ class WonDealsDataTable extends BaseDataTable
             $model->where(function ($q) use ($startDate, $endDate) {
                 $q->whereBetween(DB::raw('DATE(deals.`created_at`)'), [$startDate, $endDate]);
 
-                $q->orWhereBetween(DB::raw('DATE(deals.`updated_at`)'), [$startDate, $endDate]);
+                $q->WhereBetween(DB::raw('DATE(deals.`updated_at`)'), [$startDate, $endDate]);
             });
         }
 
