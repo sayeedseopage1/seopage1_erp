@@ -444,7 +444,7 @@ class InsightsController extends AccountBaseController
         }
         
 
-        return response()->json($dealStagel);
+        return response()->json($dealStage);
     }
 }
 
