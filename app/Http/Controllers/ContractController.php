@@ -1619,7 +1619,7 @@ class ContractController extends AccountBaseController
                                      }
                                      $currentMonth = Carbon::now()->month;
                                     // / dd($currentMonth);
-                                  \$monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
+                                  $monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
                                     //$monthly_deal = 20000;
 
                                      $kpi_settings= kpiSettingGenerateSale::all();
@@ -1634,7 +1634,7 @@ class ContractController extends AccountBaseController
                                      $point->user_id= $deal_id_contact->added_by;
                                      $point->project_id= $project_id->id;
                                      $point->activity= $user_name->name . ' for achieving monthly target';
-                                     $point->gained_as = "Individual";
+                                     $point->gained_as = "Team";
                                      $point->points= ($project_budget*$value->generate_sales_amount)/100;
      
                                      if ($cash_points_team_lead != null) {
