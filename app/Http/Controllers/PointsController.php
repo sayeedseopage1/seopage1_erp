@@ -74,7 +74,7 @@ class PointsController extends AccountBaseController
                 return [
                     'id' => $item->id, 
                     'name' => $item->name,
-                    'image_url' => $item->image
+                    'image' => $item->image
                 ];
             });
 
