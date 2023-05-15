@@ -1099,7 +1099,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     // Update app
     Route::get('/insights/deals', [InsightsController::class,'DealConversion'])->name('insights-deals');
+
     Route::get('/insights/goals/get/{id}', [InsightsController::class,'getGoal'])->name('insights-goals-get');
+
     Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
     Route::get('update-settings/install', [UpdateAppController::class, 'install'])->name('update-settings.install');
@@ -1262,5 +1264,5 @@ Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agre
 
 
 Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
-
+Route::get('/insights/goal-details/{data}', [InsightsController::class,'getGoalDetails'])->name('insights-goal-details');
 

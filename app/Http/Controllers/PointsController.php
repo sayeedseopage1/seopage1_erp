@@ -156,21 +156,7 @@ class PointsController extends AccountBaseController
             $data = $data->where(\DB::raw('DATE(created_at)'), '<=', Carbon::parse($request->end_date)->format('Y-m-d'));
         }
 
-        $data = $data->get();
-
-        $total_points = $data->sum('points');
-        $minus_point = 0;
-        foreach ($data as $key => $value) {
-            if ($key == 0) {
-                $value->balance = $total_points;
-                $minus_point = $value->points;
-            } else {
-                $total_points = $total_points - $minus_point;
-                $minus_point = $value->points;
-
-                $value->balance = $total_points;
-            }
-        }
+        $data = $data->orderBy('id', 'desc')->get();
 
         return response()->json($data);
     }   
