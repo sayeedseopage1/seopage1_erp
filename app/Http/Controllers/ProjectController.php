@@ -2362,7 +2362,11 @@ class ProjectController extends AccountBaseController
             'website_type'=> 'required',
             'niche'=> 'required',
             'sub_niche'=> 'required',
-            'use_theme'=> 'required',
+            'main_page_number'=> 'required',
+            'main_page_name'=> 'required',
+            'secondary_page_number'=> 'required',
+            'secondary_page_name'=> 'required',
+//            'use_theme'=> 'required',
             'theme_information'=> 'required',
             'theme_link' => 'required_if:theme_information,1',
             'website_plugin_box_information'=> 'required',
@@ -2397,7 +2401,11 @@ class ProjectController extends AccountBaseController
             'website_type.required' => 'This field is required!!',
             'niche.required' => 'This field is required!!',
             'sub_niche.required' => 'This field is required!!',
-            'use_theme.required' => 'This field is required. Please select Yes or No',
+            'main_page_number.required' => 'This field is required!!',
+            'main_page_name.required' => 'This field is required!!',
+            'secondary_page_name.required' => 'This field is required!!',
+            'secondary_page_number.required' => 'This field is required!!',
+//            'use_theme.required' => 'This field is required. Please select Yes or No',
             'theme_information.required' => 'This field is required!!',
             'theme_link' => 'This field is required!!',
             'website_plugin_box_information.required' => 'This field is required!!',
@@ -2451,11 +2459,16 @@ class ProjectController extends AccountBaseController
         $project_portfolio->website_type= $request->website_type;
         $project_portfolio->niche= $request->niche;
         $project_portfolio->sub_niche= $request->sub_niche;
-        $project_portfolio->use_theme = $request->use_theme;
+//        $project_portfolio->use_theme = $request->use_theme;
         $project_portfolio->theme_information = $request->theme_information;
         $project_portfolio->theme_link = $request->theme_link;
-        $project_portfolio->website_plugin = $request->website_plugin;
+//        $project_portfolio->website_plugin = $request->website_plugin;
         $project_portfolio->plugin_information = $request->website_plugin_box_information;
+        $project_portfolio->main_page_number = $request->main_page_number;
+        $project_portfolio->main_page_name = $request->main_page_name;
+        $project_portfolio->secondary_page_number = $request->secondary_page_number;
+        $project_portfolio->secondary_page_name = $request->secondary_page_name;
+        $project_portfolio->description = $request->description;
         $project_portfolio->portfolio_link= $request->actual_link;
         $project_portfolio->added_by= $request->added_by;
 

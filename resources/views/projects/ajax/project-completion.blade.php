@@ -421,6 +421,65 @@
                                     <span id="sub_nicheError" class="text-danger"></span>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-3">
+                                <label for="main_page" style="margin-top: 35px;">Total Primary or Main Pages:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="plugin_name">Insert Number of Pages<sup class="f-14 mr-1">*</sup></label>
+                                    <input type="number" id="main_page_number" class="form-control height-35 f-14" placeholder="0" name="main_page_number"/>
+                                    <span id="main_page_numberError" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="plugin_name">Insert Name of Pages <sup class="f-14 mr-1">*</sup> <span style="font-size: 10px;">(For example: Home, Services)</span></label>
+                                    <input type="text" id="main_page_name" class="form-control height-35 f-14" placeholder="Insert page name" name="main_page_name"/>
+                                    <span id="main_page_nameError" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-3">
+                                <label for="main_page" style="margin-top: 35px;">Total Secondary Pages:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="secondary_page">Insert Number of Pages <sup class="f-14 mr-1">*</sup></label>
+                                    <input type="number" id="secondary_page_number" class="form-control height-35 f-14" placeholder="0" name="secondary_page_number"/>
+                                    <span id="secondary_page_numberError" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="secondary_page_name">Insert Name of Pages <sup class="f-14 mr-1">*</sup> <span style="font-size: 10px;">(For example: Contact Us, About)</span></label>
+                                    <input type="text" id="secondary_page_name" class="form-control height-35 f-14" placeholder="Insert page name" name="secondary_page_name"/>
+                                    <span id="secondary_page_nameError" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label class="text-dark-grey" data-label="true" for="descriptionText">Description
+                                        <sup class="mr-1">*</sup>
+                                        <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Description" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                            <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                        </svg>
+                                    </label>
+                                    <textarea name="description" id="descriptionText" class="form-control"></textarea>
+                                    <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
+                                    <script>
+                                        CKEDITOR.replace('description',{
+                                            height:100,
+                                        });
+                                    </script>
+                                    <label id="descriptionError" class="error" for="descriptionText"></label>
+                                </div>
+                            </div>
+                        </div>
 {{--                            <div class="col-lg-12 col-md-12 mt-5">--}}
 {{--                                <div class="form-group">--}}
 {{--                                    <div class="d-flex">--}}
@@ -473,9 +532,6 @@
                                 <input type="text" class="form-control height-35 f-14" name="theme_link" id="theme_link" value="">
                                 <span id="theme_linkError" class="text-danger"></span>
                             </div>
-
-
-
 
 {{--                            <div class="col-lg-12 col-md-12 mt-5">--}}
 {{--                                <div class="form-group">--}}
@@ -628,7 +684,6 @@
                                 <input type="text" class="form-control height-35 f-14" name="dummy_link" id="dummy_link" value="">
                                 <span id="dummy_linkError" class="text-danger"></span>
                             </div>
-                        </div>
                     </div>
                     <div class="col-lg-12 col-md-12 mt-5">
                         <label for="">Did You Notify the Client About Dummy Site Removal After 2-Weeks?
@@ -755,6 +810,7 @@
             for (var i = 0; i < plugin_url.length; i++) {
                 plugin_url_values.push(plugin_url[i].value);
             }
+            var description = CKEDITOR.instances.descriptionText.getData();
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'qc_protocol': qc_protocol,
@@ -777,13 +833,15 @@
                 'website_type': document.getElementById("website_type").value,
                 'niche': document.getElementById("niche").value,
                 'sub_niche': document.getElementById("sub_niche").value,
-                // 'use_theme': document.getElementById("use_theme").value,
+                'main_page_number': document.getElementById("main_page_number").value,
+                'main_page_name': document.getElementById("main_page_name").value,
+                'secondary_page_number': document.getElementById("secondary_page_number").value,
+                'secondary_page_name': document.getElementById("secondary_page_name").value,
                 'theme_information': theme_information,
                 'website_plugin_box_information': website_plugin_box_information,
                 'plugin_name': plugin_name_values,
                 'plugin_url': plugin_url_values,
                 'theme_link': document.getElementById("theme_link").value,
-                // 'website_plugin': document.getElementById("website_plugin").value,
                 'dummy_yes': document.getElementById("dummy_yes").value,
                 'dummy_information': dummy_information,
                 'dummy_link': document.getElementById("dummy_link").value,
@@ -791,6 +849,7 @@
                 'actual_yes': document.getElementById("actual_yes").value,
                 'actual_information': actual_information,
                 'actual_link': document.getElementById("actual_link").value,
+                'description': description,
                 'milestone_id': {{$milestone->id}},
                 'added_by': {{Auth::user()->id}},
             }
@@ -916,10 +975,25 @@
                     }else{
                         $('#sub_nicheError').text('');
                     }
-                    if(error.responseJSON.errors.use_theme){
-                        $('#use_themeError').text(error.responseJSON.errors.use_theme);
+                    if(error.responseJSON.errors.main_page_number){
+                        $('#main_page_numberError').text(error.responseJSON.errors.main_page_number);
                     }else{
-                        $('#use_themeError').text('');
+                        $('#main_page_numberError').text('');
+                    }
+                    if(error.responseJSON.errors.main_page_name){
+                        $('#main_page_nameError').text(error.responseJSON.errors.main_page_name);
+                    }else{
+                        $('#main_page_nameError').text('');
+                    }
+                    if(error.responseJSON.errors.secondary_page_number){
+                        $('#secondary_page_numberError').text(error.responseJSON.errors.secondary_page_number);
+                    }else{
+                        $('#secondary_page_numberError').text('');
+                    }
+                    if(error.responseJSON.errors.secondary_page_name){
+                        $('#secondary_page_nameError').text(error.responseJSON.errors.secondary_page_name);
+                    }else{
+                        $('#secondary_page_nameError').text('');
                     }
                     if(error.responseJSON.errors.theme_information){
                         $('#theme_informationError').text(error.responseJSON.errors.theme_information);
