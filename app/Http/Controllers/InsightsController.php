@@ -435,9 +435,9 @@ class InsightsController extends AccountBaseController
     public function getGoalDetails(GoalSetting $data)
     {
         if ($data->entryType == 'Added') {
-            $dealStage = DealStage::where([
+            $dealStage = Lead::where([
                 'added_by' => $data->user_id,
-            ])
+            ])->where('deal_status',0)
             ->whereDate('created_at', '>=', $data->startDate);
             if (!is_null($data->endDate)) {
                 $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
