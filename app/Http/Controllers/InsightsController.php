@@ -561,7 +561,7 @@ class InsightsController extends AccountBaseController
             }
 
             $dealStage = DealStage::where([
-                'added_by' => $data->user_id,
+               
                 'deal_stage' => $deal_status
             ])
             ->whereDate('created_at', '>=', $data->startDate);
