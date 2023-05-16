@@ -232,7 +232,7 @@ class InsightsController extends AccountBaseController
             $goal_recurring= GoalRecurring::all();
            
             return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-        } elseif($user->role_id != 1) {
+        } elseif($user->role_id != 1 || $user->role_id != 8) {
             $count = Seopage1Team::
             whereRaw("FIND_IN_SET(?, members)", [$user->id])
             ->get();
