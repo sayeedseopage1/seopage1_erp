@@ -1,0 +1,33 @@
+
+
+.sp1__incentive_item_container{
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 0;
+}
+
+
+.sp1__incentive_row{
+    display: -moz-grid;
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.sp1__incentive_row_1{
+    display: -moz-grid;
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.sp1__incentive_row_item{
+    padding: 16px;
+    background-color: #F3F9FF; 
+    border-radius: 6px;
+    font-weight: bold;
+}

@@ -5,7 +5,7 @@ import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom
 import { Provider } from 'react-redux';
 import {store} from '../services/store';
 import IncentiveCurrent from './pages/IncentiveCurrent';
-
+import './incentives.css'
 
 const IncentiveContainer  = () => {
 
@@ -21,6 +21,7 @@ const Incentives = () => {
               <Routes>
                   <Route path='/' element={<IncentiveContainer/>}>
                     <Route index element={<Navigate to="/current/monthly"  />} />
+                    <Route path="/current" element={<Navigate to="/current/monthly"  />} /> 
                     <Route path='/current/:period' element={<IncentiveCurrent />} />
                   </Route> 
               </Routes>
