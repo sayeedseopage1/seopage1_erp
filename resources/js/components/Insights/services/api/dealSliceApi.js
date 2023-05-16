@@ -11,8 +11,9 @@ const dealSliceApi = apiSlice.injectEndpoints({
             query: (id) => `/account/insights/deals`
         }),
 
-        getDealByGoalId: build.query({
-            query: (id) => `/account/insights/deal-details//${id}`
+        getDealsByGoalId: build.query({
+            query: (goalId) => `/account/insights/deal-details/${goalId}`,
+            providesTags: (result, error, goalId) => [{ type: 'Deal', goalId: goalId }]
         })
         
     })
@@ -20,5 +21,5 @@ const dealSliceApi = apiSlice.injectEndpoints({
 
 
 
-export const { useGetDealsQuery, useGetDealByGoalIdQuery } = dealSliceApi;
+export const { useGetDealsQuery, useGetDealsByGoalIdQuery } = dealSliceApi;
 

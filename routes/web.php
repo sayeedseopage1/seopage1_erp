@@ -1101,6 +1101,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/insights/deals', [InsightsController::class,'DealConversion'])->name('insights-deals');
 
     Route::get('/insights/goals/get/{id}', [InsightsController::class,'getGoal'])->name('insights-goals-get');
+    Route::get('/insights/goal/get-goal-details/{data}', [InsightsController::class, 'get_goal_details'])->name('get_goal_details');
 
     Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
@@ -1115,7 +1116,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
     Route::post('/insights/goals/edit/{id}', [InsightsController::class,'editGoal'])->name('insights/goals/edit');
-    Route::get('/insights/deal-details/{data}', [InsightsController::class,'getGoalDetails'])->name('insights-goal-details');
     Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class,'editGoalTitle'])->name('insights.goals-title.edit');
     Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
 
@@ -1266,6 +1266,8 @@ Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agre
 
 
 Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
-Route::get('/goal/get-goal-details/{data}', [InsightsController::class, 'get_goal_details'])->name('get_goal_details');
+
+// Route::get('/goal/get-goal-details/{data}', [InsightsController::class, 'get_goal_details'])->name('get_goal_details');
 Route::get('deals/request/authorization/{data}', [ContractController::class, 'authorization_request'])->name('authorization_request');
 Route::post('/authorization/deal-details/', [ContractController::class, 'authorization_submit'])->name('authorization_submit');
+

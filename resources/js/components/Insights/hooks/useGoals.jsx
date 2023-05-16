@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import * as React from 'react';
 import { setGoals, setRecurring, setStatus } from "../services/slices/goalSlice";
-import { useGetGoalsQuery } from "../services/api/goalsApiSlice";
+import { useGetGoalsQuery, useUpdateGoalMutation } from "../services/api/goalsApiSlice";
 import { getPeriod } from "../utils/getPeriod";
 import dayjs from 'dayjs';
 import _ from "lodash";
@@ -11,6 +11,16 @@ import _ from "lodash";
 export const useGoals = () => {
     const {goals, recurring, status}  = useSelector(state => state.goals);
     const dispatch = useDispatch();
+
+    const [
+        updateGoal,
+        {
+            isUninitialized: updateGoalIsUninitialized,
+            isSuccess: updateGoalIsSuccess,
+            isLoading: updateGoalIsLoading,
+        }
+    ] = useUpdateGoalMutation();
+
 
     const {data: goalsData, isLoading: goalsIsLoading, error: goalsError} = useGetGoalsQuery(window.Laravel.user.id);
 
@@ -22,7 +32,7 @@ export const useGoals = () => {
     }, [goalsData, goalsIsLoading, goalsError])
 
 
-    const getGoalById = (id) => {
+    const getGoalById = ({goals, id}) => {
         if(goals.length > 0){
             const _goals = goals.find(goal => goal.id === id);
             const _recurring = recurring.length > 0 ? recurring.filter(r => r.goal_id === id) : [];
@@ -34,6 +44,8 @@ export const useGoals = () => {
         
     }
 
+
+    
 
 
     // get end date
@@ -81,5 +93,16 @@ export const useGoals = () => {
     }
 
 
-    return {goals, goalsIsLoading ,getGoalById, getTargetPeriod, getEndDate, goalStateStatus: status}
+    return {
+        goals, 
+        goalsIsLoading,
+        getGoalById, 
+        getTargetPeriod, 
+        getEndDate, 
+        goalStateStatus: status,
+        updateGoal,
+        updateGoalIsUninitialized,
+        updateGoalIsSuccess,
+        updateGoalIsLoading,
+    }
 }

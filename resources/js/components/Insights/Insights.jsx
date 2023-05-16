@@ -36,17 +36,16 @@ const InsightsComponent = () => {
   const {reportModalOpen} = useSelector((state) => state.reportModal);
   const {isOpenDataTable} = useSelector(state => state.dataTableModal);
   const [isPageLoading, setIsPageLoading] = React.useState(true);
-  const {deals} = useDealsState();
   const {goals, getGoalById, goalsIsLoading} = useGoals();
   const { data: users,} = useGetAllUsersQuery();
 
 
   useEffect(() => {
-    if(goals && users && deals){
+    if(goals && users){
       setIsPageLoading(false);
     }
 
-  }, [goals, users, deals])
+  }, [goals, users,])
 
 
   

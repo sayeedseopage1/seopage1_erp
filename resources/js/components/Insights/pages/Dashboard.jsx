@@ -28,7 +28,7 @@ const Dashboard = () => {
                     height: '100vh',
                     fontSize: '20px',
                     fontWeight: 'bold',     
-                    zIndex: 100,
+                    zIndex: 1,
                     background: 'rgba(255, 255, 255, 0.8)'               
                 }} 
             >
