@@ -24,7 +24,7 @@ export const DataTableColumns = [
         id: 'project_name',
         cell: (row) => {
             let id = row['id'];
-            let name = row['project_name'];
+            let name = row['client_name'];
 
             return <span>
                 {
@@ -47,7 +47,7 @@ export const DataTableColumns = [
 
             return (amount) ?
                 <span style={{fontWeight: 'bold'}}>
-                    {amount.toFixed(2)}
+                    {Number(amount).toFixed(2)}
                 </span>
                 : <span> - </span>
         }
@@ -101,6 +101,20 @@ export const DataTableColumns = [
                 : <span> - </span>
         } 
     },
+     {
+        header: 'Deal Won By',
+        id: 'deal_won_by',
+        accessor: 'deal_won_by',
+        cell: (row) => {
+            const deal_won_by = row['added_by'];
+
+            console.log(deal_won_by)
+
+            return deal_won_by ? <OwnerCell id={deal_won_by} /> : <span> - </span> 
+
+        } 
+    },
+    
     {
         header: 'Pipeline',
         id: 'pipeline',
@@ -109,25 +123,7 @@ export const DataTableColumns = [
             return <span> Pipeline </span>
         } 
     },
-     {
-        header: 'Deal Won By',
-        id: 'deal_won_by',
-        accessor: 'deal_won_by',
-        cell: (row) => {
-            const deal_won_by = row['won_by'];
-
-            return (deal_won_by) ?
-                <span> {deal_won_by} </span>
-                : <span> - </span>
-        } 
-    },
     
-    {
-        header: 'Deal Converted By',
-        id: "deal_converted_by",
-        accessor: 'deal_converted_by',
-        cell: (row) => <OwnerCell {...row} />
-    },
     {
         header: 'Current Stage',
         id: "current_stage",
@@ -146,6 +142,58 @@ export const DataTableColumns = [
                 : <span> Lost </span>
                 : <span> Open </span>
         }
+    },
+
+    
+
+    {
+        header: 'Client Contact Form',
+        id: "submission_status",
+        accessor: 'submission_status',
+        cell: (row) => {
+            const submission_status = row['submission_status'];
+            return (submission_status) ?
+                <span> {submission_status} </span>
+                : <span> - </span>
+        }
+    },
+
+    {
+        header: 'Project Award Time',
+        id: "project_award_time",
+        accessor: 'project_award_time',
+        cell: (row) => {
+            const award_time = row['award_time'];
+
+            return (award_time) ?
+                <span> {dayjs(award_time).format('MMM DD, YYYY')} </span>
+                : <span> - </span>
+        }
+    },
+ 
+    
+    {
+        header: 'Project Manager',
+        id: 'project_manager',
+        accessor: 'project_manager',
+        cell: (row) => {
+            const pm_id = row['pm_id'];
+
+            return pm_id ? <OwnerCell id={pm_id} /> : <span> - </span> 
+
+        } 
+    },
+    
+
+    {
+        header: 'Deal Converted By',
+        id: "deal_converted_by",
+        accessor: 'deal_converted_by',
+        cell: (row) => {
+            const deal_converted_by = row['converted_by'];
+
+            return deal_converted_by ? <OwnerCell id={deal_converted_by} /> : <span> - </span>
+        } 
     }
     
 ]
@@ -155,9 +203,9 @@ export const DataTableColumns = [
 
 
 // owner cell
-const OwnerCell = (row) => {
+const OwnerCell = ({id}) => {
     const {users, getUserById} = useUsers(); 
-    const user = getUserById(users, Number(row['converted_by']));
+    const user = getUserById(users, Number(id));
     if(!user) return <span> - </span>
     return <span> {user.name} </span>
 }

@@ -144,7 +144,7 @@ const Goal = () => {
 
             goal = Number(period.value);
             dealAdded = _deals.reduce((total, deal) => {
-                return total + deal.amount;
+                return total + Number(deal.amount);
             }, 0);
 
             
@@ -256,6 +256,7 @@ const Goal = () => {
 
             if (_targetPeriod) {
                 _targetPeriod.map((period, index) => {
+                    // let deals = goalDealsData || [];
                     let startDate = period.start;
                     let endDate = period.end;
                     let _deals = distributeDealsByPeriod(goalDealsData, startDate, endDate);
