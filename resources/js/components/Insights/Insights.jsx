@@ -24,7 +24,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { useGetGoalsQuery } from './services/api/goalsApiSlice';
 import { useGetAllUsersQuery, useGetUsersQuery } from './services/api/userSliceApi';
-import { useDealsState } from './hooks/useDealsState';
+
 import NotPermission from './pages/NotPermission';
 
 const InsightsComponent = () => {
@@ -35,21 +35,12 @@ const InsightsComponent = () => {
   const {sectionModalOpen} = useSelector((state) => state.sectionModal);
   const {reportModalOpen} = useSelector((state) => state.reportModal);
   const {isOpenDataTable} = useSelector(state => state.dataTableModal);
-  const [isPageLoading, setIsPageLoading] = React.useState(true);
-  const {goals, getGoalById, goalsIsLoading} = useGoals();
+  const {goalsIsFetching} = useGoals();
   const { data: users,} = useGetAllUsersQuery();
 
 
-  useEffect(() => {
-    if(goals && users){
-      setIsPageLoading(false);
-    }
-
-  }, [goals, users,])
-
-
   
-  if(isPageLoading) return <div 
+  if(goalsIsFetching) return <div 
     style={{
       display: 'flex', 
       alignItems: 'center', 

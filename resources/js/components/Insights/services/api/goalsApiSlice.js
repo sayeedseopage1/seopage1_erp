@@ -1,3 +1,4 @@
+import { result } from "lodash";
 import { apiSlice } from "./apiSlice";            
 
 
@@ -7,10 +8,14 @@ const goalApiSlice = apiSlice.injectEndpoints({
         getGoals: build.query({
             // query: (id) => `/account/insights/goals/get/${id}`
             query: (user_id) => `/account/insights/goals/get/${user_id}`,
-            providesTags: (result, error, user_id) => {
-                if (!result) return [{ type: 'Goal', id: 'LIST' }]
-                return [...result.map(({ id }) => ({ type: 'Goal', id })), { type: 'Goal', id: 'LIST' }]
+            providesTags: (result) => {
+                if(!result) return [{ type: 'Goal', id: 'LIST' }]
+
+                const {goals} = result;
+
+                return [...goals.map(({id}) => ({ type: 'Goal', id }))]
             }
+           
         }),
 
 
@@ -58,5 +63,16 @@ const goalApiSlice = apiSlice.injectEndpoints({
 
 
 
-export const { useGetGoalsQuery, useEditGoalTitleMutation, useGetGoalByIdQuery, useUpdateGoalMutation} = goalApiSlice;
+
+// Export hooks for usage in functional components, which are
+// auto-generated based on the defined endpoints
+
+
+
+export const { 
+    useGetGoalsQuery, 
+    useEditGoalTitleMutation, 
+    useGetGoalByIdQuery, 
+    useUpdateGoalMutation,
+} = goalApiSlice;
 
