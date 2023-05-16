@@ -570,10 +570,6 @@ class InsightsController extends AccountBaseController
                 $response['deal_stage'] = $dealStage;
             }
        
-        
-        
-    
-
 
          elseif ($data->entryType == 'Progressed') {
             if ($data->qualified == 'Qualified') {
