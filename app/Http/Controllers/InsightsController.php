@@ -541,6 +541,7 @@ class InsightsController extends AccountBaseController
             }
             $dealStage = $dealStage->join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
                 'leads.added_by' => $data->user_id,
+                ['deal_stages.created_at' , '>=', $data->startDate]
             ])->get();
 
 
@@ -578,6 +579,7 @@ class InsightsController extends AccountBaseController
             }
             $dealStage = $dealStage->join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
                 'leads.added_by' => $data->user_id,
+                ['deals.created_at' , '>=', $data->startDate]
             ])->get();
 
 

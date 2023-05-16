@@ -158,7 +158,7 @@ class DealController extends AccountBaseController
             'description' => 'required',
             'comments' => 'required',
         ]);
-
+        \DB::beginTransaction();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new DealStage();
