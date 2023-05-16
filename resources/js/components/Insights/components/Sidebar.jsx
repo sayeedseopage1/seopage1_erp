@@ -86,6 +86,9 @@ const InsightSidebar = () => {
 
     // get goals 
     const getGoals = (goals, type, search) => {
+        let goalsList = [];
+
+        
 
         return goals.map(goal => {
             const user = _.find(users.users, {id: goal.added_by});
