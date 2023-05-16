@@ -175,7 +175,7 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
 
 
                 <div className='__total_entries'>
-                    Showing 1 to 10 of 77 entries
+                    Showing {currentPageData.length > 0 ? 1 : 0} to {currentPageData.length} of {data.length} entries
                 </div>
 
 
