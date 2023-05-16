@@ -1450,11 +1450,11 @@
     .cnx__table_th {
     width: 250px;
     padding: 6px 10px;
-    overflow: hidden;
+    /* overflow: hidden;
     white-space: nowrap;
     -o-text-overflow: ellipsis;
     -ms-text-overflow: ellipsis;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis; */
   }
 
   

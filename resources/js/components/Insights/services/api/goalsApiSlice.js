@@ -6,16 +6,20 @@ const goalApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         
         getGoals: build.query({
-            // query: (id) => `/account/insights/goals/get/${id}`
             query: (user_id) => `/account/insights/goals/get/${user_id}`,
-            providesTags: (result) => {
-                if(!result) return [{ type: 'Goal', id: 'LIST' }]
+            providesTags: (result) => [{ type: 'Goal', id: 'LIST' }],
+        }),
 
-                const {goals} = result;
+        addNewGoal: build.mutation({
+            query: (data) => ({
+                url: `/account/insights/goals/add`,
+                method: 'POST',
+                body: {
+                    ...data
+                }
+            }),
 
-                return [...goals.map(({id}) => ({ type: 'Goal', id }))]
-            }
-           
+            invalidatesTags: (result, error, arg) => [{ type: 'Goal', id: 'LIST' }]
         }),
 
 

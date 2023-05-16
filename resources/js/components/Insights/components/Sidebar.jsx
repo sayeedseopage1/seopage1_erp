@@ -34,7 +34,7 @@ const InsightSidebar = () => {
     // const { goals } = useSelector((state) => state.goals);
     const dispatch = useDispatch();
     const compareDate = new CompareDate();
-    const {goals, goalsIsFetching, goalsIsLoading} = useGoals();
+    const {goals, goalsIsFetching} = useGoals();
     const {users, usersIsLoading} = useUsers();
     const location =  useLocation();
 
@@ -60,9 +60,6 @@ const InsightSidebar = () => {
             _filteredGoals.active = _goals.filter((goal) => goal.status === 'Active');
             _filteredGoals.past = _goals.filter((goal) => goal.status === 'Past');
         }
-
-        console.log(_filteredGoals)
-
         setFilteredGoals(_filteredGoals);
     }, [goalsIsFetching])
 
@@ -355,7 +352,7 @@ const InsightSidebar = () => {
                                                 </Dropdown>
                                             </div>
                                             <Accordion.Item.Body>
-                                                {goalsIsLoading && usersIsLoading && 
+                                                {goalsIsFetching && 
                                                     <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
                                                         <span>
                                                             loading...
@@ -363,7 +360,7 @@ const InsightSidebar = () => {
                                                     </div>
                                                 }
                                                 {/* goals */}
-                                                    {!usersIsLoading && !goalsIsLoading && goals.length > 0 ? 
+                                                    { !goalsIsFetching && goals.goals.length > 0 ? 
                                                         <GoalItem goals={filteredGoals[_.toLower(section)]}/> :
                                                         <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
                                                             <span>

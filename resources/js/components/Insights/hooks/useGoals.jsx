@@ -26,8 +26,10 @@ export const useGoals = () => {
         isSuccess: goalsIsSuccess,
         isFetching: goalsIsFetching,
     } = useGetGoalsQuery(
-        window?.Laravel?.user?.id,
+        window?.Laravel?.user?.id
     );
+
+    
 
 
 

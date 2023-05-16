@@ -675,7 +675,6 @@ const GoalFormModal = () => {
         
 
         if(_.lowerCase(mode) === 'edit'){
-            console.log({id: data.id, data: {...formData}})
             try{
                 const res = await updateGoal({id: data.id, data: {...formData}});
 
