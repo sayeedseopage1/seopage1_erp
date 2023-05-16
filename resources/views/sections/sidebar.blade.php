@@ -298,6 +298,12 @@
                             <x-sub-menu-item :link="route('points.index')" :text="'Points'" />
 
                             <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
+
+
+
+                            {{--<x-sub-menu-item :link="route('points.index')" :text="'Points'" />--}}
+                            {{--<x-sub-menu-item link="" :text="'Incentives'" />--}}
+
                             @endif
 
                         </div>

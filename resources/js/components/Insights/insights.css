@@ -1854,6 +1854,9 @@
 
 .cnx__ins_details_bar_header h4 {
       font-size: 14px;
+      white-space: nowrap;
+      margin: 0;
+      padding: 0;
     }
 
 .cnx__ins_details_bar_header .filter_options_line {
@@ -1862,7 +1865,15 @@
       gap: 10px;
       text-transform: uppercase;
       margin-left: auto;
-    }
+      white-space: nowrap;
+      max-width: 550px;
+      overflow-x: auto;
+      scrollbar-width: none;
+}
+
+.cnx__ins_details_bar_header .filter_options_line::-webkit-scrollbar {
+        display: none;
+      }
 
 .cnx__ins_details_bar_header .filter_options_line span {
         display: inline-block;

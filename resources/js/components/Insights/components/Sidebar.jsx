@@ -34,7 +34,7 @@ const InsightSidebar = () => {
     // const { goals } = useSelector((state) => state.goals);
     const dispatch = useDispatch();
     const compareDate = new CompareDate();
-    const {goals, getGoalById, goalsIsLoading} = useGoals();
+    const {goals, goalsIsFetching, goalsIsLoading} = useGoals();
     const {users, usersIsLoading} = useUsers();
     const location =  useLocation();
 
@@ -45,9 +45,10 @@ const InsightSidebar = () => {
             past: []
         };
 
-        if(goals && users && goals.length > 0){
-            let _goals = goals.map((goal) => {
-                let title = `${goal.entry} ${goal.entryType} ${goal?.name || goal?.team_name}`;
+
+        if(goals?.goals && goals?.goals?.length > 0){
+            let _goals = goals?.goals?.map((goal) => {
+                let title = goal?.title;
                 
                 if(goal.endDate && compareDate.isAfter(dayjs(), goal.endDate)){
                     return {...goal, title, status: 'Past' };
@@ -60,8 +61,10 @@ const InsightSidebar = () => {
             _filteredGoals.past = _goals.filter((goal) => goal.status === 'Past');
         }
 
+        console.log(_filteredGoals)
+
         setFilteredGoals(_filteredGoals);
-    }, [goals, users, location])
+    }, [goalsIsFetching])
 
     // get all unique sections
     const getDashboardSections = () => {
@@ -82,25 +85,28 @@ const InsightSidebar = () => {
 
 
     // get goals 
-    // const getGoals = (goals, type, search) => {
+    const getGoals = (goals, type, search) => {
+        let goalsList = [];
 
-    //     return goals.map(goal => {
-    //         const user = _.find(users.users, {id: goal.added_by});
-    //         let title = `${goal.entry} ${goal.entryType} by ${user?.name || ''}`;
-    //         if(type === "Past"){
-    //             if(goal.endDate && compareDate.isAfter(dayjs(), goal.endDate)){
-    //                 return {...goal, title, user } 
-    //             } else return;
-    //         } else if(type === "Active"){
-    //             if(!goal.endDate || !compareDate.isAfter(dayjs(), goal.endDate)){
-    //                 if(_.toLower(title).includes(search) ){
-    //                     return { ...goal, title, user } 
-    //                 }
-    //             }else return;
+        
+
+        return goals.map(goal => {
+            const user = _.find(users.users, {id: goal.added_by});
+            let title = `${goal.entry} ${goal.entryType} by ${user?.name || ''}`;
+            if(type === "Past"){
+                if(goal.endDate && compareDate.isAfter(dayjs(), goal.endDate)){
+                    return {...goal, title, user } 
+                } else return;
+            } else if(type === "Active"){
+                if(!goal.endDate || !compareDate.isAfter(dayjs(), goal.endDate)){
+                    if(_.toLower(title).includes(search) ){
+                        return { ...goal, title, user } 
+                    }
+                }else return;
                 
-    //         }else return;
-    //     })
-    // }
+            }else return;
+        })
+    }
     
 
     return(
@@ -296,10 +302,10 @@ const InsightSidebar = () => {
                                             </Dropdown.Item>
                                         
                                             <div className='cnx_divider'/>
-                                            <Dropdown.Item className="cnx_ins__sidebar_header_dd_item disabled">
+                                            {/* <Dropdown.Item className="cnx_ins__sidebar_header_dd_item disabled">
                                                 <i className="fa-solid fa-trash-can cnx_font_sm" />
                                                 <span>Bulk delete goal</span>
-                                            </Dropdown.Item>
+                                            </Dropdown.Item> */}
                                         </Dropdown.Menu>
                                 </Dropdown>
                             </div>
