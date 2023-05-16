@@ -8,22 +8,22 @@ const IncentiveNavbar = () => {
         {
             id: 'incentive_navbar_item_1',
             name: 'Current',
-            url: '/current/monthly'
+            url: '/current'
         },
         {
             id: 'incentive_navbar_item_2',
             name: 'Disbursed amounts',
-            url: '/incentive/disbursed-amounts'
+            url: '/#'
         },
         {
             id: 'incentive_navbar_item_3',
             name: 'Held amounts',
-            url: '/incentive/held-amounts'
+            url: '/#'
         },
         {
             id: 'incentive_navbar_item_4',
             name: 'Rewards left to be redeemed ',
-            url: '/incentive/reward-left-to-be-redeemed'
+            url: '/#'
         },
     ]
 
