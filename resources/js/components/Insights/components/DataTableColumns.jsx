@@ -108,7 +108,7 @@ export const DataTableColumns = [
         cell: (row) => {
             const deal_won_by = row['added_by'];
 
-            console.log(deal_won_by)
+          //  console.log(deal_won_by)
 
             return deal_won_by ? <OwnerCell id={deal_won_by} /> : <span> - </span> 
 
