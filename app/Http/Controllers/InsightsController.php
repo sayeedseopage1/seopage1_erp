@@ -532,18 +532,31 @@ class InsightsController extends AccountBaseController
 
     public function getGoalDetails(GoalSetting $data)
     {
-        if ($data->entryType == 'Added') {
+        $team = Seopage1Team::find($data->team_id);
 
+        $users = explode(',', $team->members);
+        $user_data = [];
+        foreach ($users as $key => $value) {
+            if ($value != '') {
+                array_push($user_data, $value);
+            }
+        }
+        
+        // Always use an array of user IDs, even if $data->user_id is set
+        $data2 = $data->user_id ? [$data->user_id] : $user_data;
+        
+        if ($data->entryType == 'Added') {
             $dealStage = DealStage::join('leads', 'leads.id', '=', 'deal_stages.lead_id')
-            ->where(function ($query) use ($data) {
-                $query->where('leads.added_by', $data->user_id)
-                      ->whereDate('deal_stages.created_at', '>=', $data->startDate);
-                if (!is_null($data->endDate)) {
-                    $query->whereDate('deal_stages.created_at', '<=', $data->endDate);
-                }
-            })
-            ->get();
-        // dd($dealStage);
+                ->whereIn('leads.added_by', $data2)
+                ->whereDate('deal_stages.created_at', '>=', $data->startDate)
+                ->when($data->endDate, function ($query) use ($data) {
+                    return $query->whereDate('deal_stages.created_at', '<=', $data->endDate);
+                })
+                ->get(); 
+        
+            $response['deal_stage'] = $dealStage;
+        
+     //dd($dealStage);
 
 
 
@@ -575,14 +588,14 @@ class InsightsController extends AccountBaseController
 
            
             $dealStage = Deal::join('leads', 'leads.id', '=', 'deals.lead_id')
-            ->where(function ($query) use ($data) {
-                $query->where('leads.added_by', $data->user_id)
-                      ->whereDate('deals.created_at', '>=', $data->startDate);
-                if (!is_null($data->endDate)) {
-                    $query->whereDate('deals.created_at', '<=', $data->endDate);
-                }
+            ->whereIn('leads.added_by', $data2)
+            ->whereDate('deals.created_at', '>=', $data->startDate)
+            ->when($data->endDate, function ($query) use ($data) {
+                return $query->whereDate('deals.created_at', '<=', $data->endDate);
             })
-            ->get();
+            ->get(); 
+    
+        $response['deal_stage'] = $dealStage;
 
 
         }
