@@ -223,6 +223,17 @@ class InsightsController extends AccountBaseController
     {
         $user= User::where('id',$id)->first();
 
+        if(Auth::user()->id == $user->id)
+        {
+            $goal= GoalSetting::where('user_id',$user->id)->get();
+            //dd($goal);
+                    
+
+            $goal_recurring= GoalRecurring::all();
+        //   return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+
+        }
+
 
         if($user->role_id == 1 || $user->role_id == 8)
         {
@@ -231,8 +242,9 @@ class InsightsController extends AccountBaseController
             $goal = GoalSetting::all();
             $goal_recurring= GoalRecurring::all();
            
-            return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-        } elseif($user->role_id != 1 || $user->role_id != 8) {
+            // return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+        } 
+        elseif($user->role_id != 1 || $user->role_id != 8) {
             $count = Seopage1Team::
             whereRaw("FIND_IN_SET(?, members)", [$user->id])
             ->get();
@@ -253,25 +265,17 @@ class InsightsController extends AccountBaseController
               
 
                 }
+               
                 
             } 
     //    /dd($goal);
-            return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+           
         }
-        elseif(Auth::user()->id == $user->id){
-            
-                $goal= GoalSetting::where('user_id',$user->id)->get();
-                        
-
-                $goal_recurring= GoalRecurring::all();
-               // return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-            
-
+        return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+        
+        
         }
-        else {
-            return response()->json("You don't have permission to view this page"); 
-        }
-    }
+    
 
 
     /**
