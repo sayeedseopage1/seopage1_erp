@@ -19,7 +19,7 @@ import { useUsers } from '../hooks/useUsers';
 import { openGoalFormModal } from '../services/slices/goalFormModalSlice';
 import { useDispatch } from 'react-redux';
 import GoalSummaryTable from '../components/GoalSummaryTable';
-import { DataTableColumns } from '../components/DataTableColumns';
+import { AddedTableColumns, DataTableColumns, WonTableData } from '../components/DataTableColumns';
 import GoalStackedBarChart from '../components/Graph/GoalStackedBarChart';
 import { stage } from '../utils/constants';
 import { useGetTeamsQuery } from '../services/api/teamSliceApi';
@@ -61,11 +61,7 @@ const Goal = () => {
         ) {
           // if goal have end date and end date is greater than today
           // disable edit
-            if(goalData?.goal?.end_date && day.isAfter(goalData?.goal?.end_date)) {
-                return false;
-            } else{
-                return true;
-            }
+            return true;
         }
 
         return false;
@@ -627,7 +623,13 @@ const Goal = () => {
                         {activeTable === 'deals' && (
                             <DataTable
                                 data={goalDealsData ? [...goalDealsData] : []}
-                                defaultColumns={DataTableColumns}
+                                defaultColumns={
+                                    goal?.entryType === 'Won' ?
+                                    WonTableData :
+                                    goal?.entryType === 'Added'?
+                                    AddedTableColumns : 
+                                    DataTableColumns
+                                }
                                 isLoading={dealsIsFetching}
                             />
                         )}
