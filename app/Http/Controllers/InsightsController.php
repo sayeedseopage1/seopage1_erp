@@ -254,15 +254,19 @@ class InsightsController extends AccountBaseController
 
                 }
                 
-            } else {
+            } 
+    //    /dd($goal);
+            return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+        }
+        elseif(Auth::user()->id == $user->id){
+            
                 $goal= GoalSetting::where('user_id',$user->id)->get();
                         
 
                 $goal_recurring= GoalRecurring::all();
                // return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-            }
-    //    /dd($goal);
-            return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+            
+
         }
         else {
             return response()->json("You don't have permission to view this page"); 
