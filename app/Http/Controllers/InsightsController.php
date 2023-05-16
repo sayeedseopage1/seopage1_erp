@@ -14,6 +14,7 @@ use App\Models\DealStage;
 use App\Models\Lead;
 use Illuminate\Support\Facades\DB;
 use Auth;
+use App\Models\Deal;
 
 class InsightsController extends AccountBaseController
 {
@@ -34,6 +35,7 @@ class InsightsController extends AccountBaseController
     {
         return view('insights.insights', $this->data);
     }
+     
     // public function getusers(Request $request)
     // {
         
@@ -435,14 +437,16 @@ class InsightsController extends AccountBaseController
     public function getGoalDetails(GoalSetting $data)
     {
         if ($data->entryType == 'Added') {
-            $dealStage = Lead::where([
-                'added_by' => $data->user_id,
-            ])->where('deal_status',0)
-            ->whereDate('created_at', '>=', $data->startDate);
+            $dealStage = DealStage::
+            whereDate('created_at', '>=', $data->startDate);
             if (!is_null($data->endDate)) {
                 $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
             }
-            $dealStage = $dealStage->get();
+            $dealStage = $dealStage->join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
+                'leads.added_by' => $data->user_id,
+            ])->get();
+
+
         } elseif ($data->entryType == 'Progressed') {
             if ($data->qualified == 'Qualified') {
                 $deal_status = 1;
@@ -468,15 +472,14 @@ class InsightsController extends AccountBaseController
             }
             $dealStage = $dealStage->get();
         } elseif ($data->entryType == 'Won') {
-            $dealStage = DealStage::where([
-                'added_by' => $data->user_id,
-                'won_lost' => 'Yes'
-            ])
-            ->whereDate('created_at', '>=', $data->startDate);
+            $dealStage = Deal::
+            whereDate('created_at', '>=', $data->startDate);
             if (!is_null($data->endDate)) {
                 $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
             }
-            $dealStage = $dealStage->get();
+            $dealStage = $dealStage->join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
+                'leads.added_by' => $data->user_id,
+            ])->get();
         }
         
 
