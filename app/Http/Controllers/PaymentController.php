@@ -312,7 +312,6 @@ class PaymentController extends AccountBaseController
                     $project_hourly_rate = $project->project_budget / $total_hours;
                     //--------------
                     foreach ($kpi_settings as $value) {
-                        dd('ok');
                         if ($value->logged_hours_between <= $project_hourly_rate && $value->logged_hours_between_to >= $project_hourly_rate) {
                             $deal = Deal::find($project->deal_id);
                             $project_budget= ($deal->amount * $value->logged_hours_sales_amount) / 100;
@@ -525,7 +524,6 @@ class PaymentController extends AccountBaseController
             $redirectUrl = route('projects.show', $request->project_id).'?tab=milestones';
         }
         \DB::commit();
-        \DB::roleback();
         return Reply::successWithData(__('messages.paymentSuccess'), ['redirectUrl' => $redirectUrl]);
     }
 
