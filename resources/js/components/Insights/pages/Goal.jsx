@@ -144,7 +144,7 @@ const Goal = () => {
 
             goal = Number(period.value);
             dealAdded = _deals.reduce((total, deal) => {
-                return total + deal.amount;
+                return total + Number(deal.amount);
             }, 0);
 
             
@@ -256,6 +256,7 @@ const Goal = () => {
 
             if (_targetPeriod) {
                 _targetPeriod.map((period, index) => {
+                    // let deals = goalDealsData || [];
                     let startDate = period.start;
                     let endDate = period.end;
                     let _deals = distributeDealsByPeriod(goalDealsData, startDate, endDate);
@@ -498,19 +499,22 @@ const Goal = () => {
                                 <i className="fa-solid fa-chart-simple" />
                             </Button>
 
-                            <Button className='cnx__ins_graph_view_button'>
+                            {/* <Button className='cnx__ins_graph_view_button'>
                                 <i className="fa-solid fa-chart-pie" />
                             </Button>
 
                             <Button className='cnx__ins_graph_view_button'>
                                 <i className="fa-solid fa-chart-bar"></i>
-                            </Button>
+                            </Button> */}
 
                             {isSummarizing && <div>
-                                <div className="spinner-border" role="status">  </div>
+                                <div className="spinner-border" role="status" style={{
+                                    width: '1.3rem',
+                                    height: '1.3rem',
+                                }}>  </div>
                             </div>}
                         </div>
-                        <div>
+                        {/* <div>
                             <Dropdown>
                                 <Dropdown.Toggle
                                     className={`cnx__btn cnx__btn_tertiary  cnx__btn_sm cnx__period_filter__title_btn`}
@@ -529,7 +533,7 @@ const Goal = () => {
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                        </div>
+                        </div> */}
                         {/* graph view tab end */}
                     </div>
                     {/* end header */}

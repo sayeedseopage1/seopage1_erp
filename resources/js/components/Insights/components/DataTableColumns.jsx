@@ -19,46 +19,102 @@ export const DataTableColumns = [
     //     }
     // },
      {
-        header: 'Title',
+        header: 'Deal Name',
         accessor: 'project_name',
         id: 'project_name',
         cell: (row) => {
+            let id = row['id'];
+            let name = row['client_name'];
+
             return <span>
-                <a href={`/account/deals/${row['id']}`}>
-                 {/* <a href="#" > */}
-                    {row['project_name']}
+                {
+                    id && name ?
+                    <a href={`/account/deals/${id}`}>
+                        {name}
+                    </a>
+                    : <span> - </span>
+                }
+                
+            </span>
+        }
+    },
+    {
+        header: "Project Budget (USD)",
+        id: "project_budget",
+        accessor: 'project_budget',
+        cell: (row) => {
+            const amount = row['amount'];
+
+            return (amount) ?
+                <span style={{fontWeight: 'bold'}}>
+                    {Number(amount).toFixed(2)}
+                </span>
+                : <span> - </span>
+        }
+    },
+    {
+        header: "Currency",
+        id: "currency",
+        accessor: 'currency',
+        cell: (row) => {
+            return <span> USD </span> 
+        }
+    },
+    
+    {
+        header: "Project Link",
+        id: "project_link",
+        accessor: 'project_link',
+        cell: (row) => {
+            const project_link = row['project_link'];
+
+            return (project_link) ?
+                <span>
+                    <a href={project_link}>
+                    {project_link}
                 </a>
-            </span>
+                </span>
+                : <span> - </span>
         }
     },
     {
-        header: "Value",
-        id: "amount",
-        accessor: 'amount',
+        header: "Client Username",
+        id: "client_username",
+        accessor: 'client_username',
         cell: (row) => {
-            return <span style={{fontWeight: '600'}}> ${row['amount'].toFixed(2)} </span>
+            const client_username = row['client_username'];
+
+            return (client_username) ? 
+                <span> {client_username} </span>
+                : <span> - </span>
         }
     },
     {
-        header: "Client",
-        id: "client",
-        accessor: 'client',
+        header: 'Deal Created Date',
+        id: 'deal_created_date',
+        accessor: 'deal_created_date',
         cell: (row) => {
-            return <span >
-                    {/* <a href={`/account/clients/${row['client_id']}`} > */}
-                        {row['client_name'] || row['client_username']}
-                    {/* </a> */}
-            </span>
-        }
-    },
-    {
-        header: 'Deal created at',
-        id: 'created_at',
-        accessor: 'created_at',
-        cell: (row) => {
-            return <span> {dayjs(row['created_at']).format('MMM DD, YYYY')} </span>
+            const deal_created_date = row['created_at'];
+
+            return (deal_created_date) ?
+                <span> {dayjs(deal_created_date).format('MMM DD, YYYY')} </span>
+                : <span> - </span>
         } 
     },
+     {
+        header: 'Deal Won By',
+        id: 'deal_won_by',
+        accessor: 'deal_won_by',
+        cell: (row) => {
+            const deal_won_by = row['added_by'];
+
+            console.log(deal_won_by)
+
+            return deal_won_by ? <OwnerCell id={deal_won_by} /> : <span> - </span> 
+
+        } 
+    },
+    
     {
         header: 'Pipeline',
         id: 'pipeline',
@@ -67,18 +123,78 @@ export const DataTableColumns = [
             return <span> Pipeline </span>
         } 
     },
+    
     {
-        header: 'Added by',
-        id: "added_by",
-        accessor: 'added_by',
-        cell: (row) => <OwnerCell {...row} />
-    },
-    {
-        header: 'Stage',
-        id: "deal_stage",
-        accessor: 'deal_stage',
+        header: 'Current Stage',
+        id: "current_stage",
+        accessor: 'current_stage',
         cell: (row) => <StageCell {...row} />
     },
+    {
+        header: 'Deal Status',
+        id: "deal_status",
+        accessor: 'deal_status',
+        cell: (row) => {
+            const deal_status = row['won_lost'];
+            return (deal_status) ?
+                deal_status === 'Yes' ?
+                <span> Won </span>
+                : <span> Lost </span>
+                : <span> Open </span>
+        }
+    },
+
+    
+
+    {
+        header: 'Client Contact Form',
+        id: "submission_status",
+        accessor: 'submission_status',
+        cell: (row) => {
+            const submission_status = row['submission_status'];
+            return (submission_status) ?
+                <span> {submission_status} </span>
+                : <span> - </span>
+        }
+    },
+
+    {
+        header: 'Project Award Time',
+        id: "project_award_time",
+        accessor: 'project_award_time',
+        cell: (row) => {
+            const award_time = row['award_time'];
+
+            return (award_time) ?
+                <span> {dayjs(award_time).format('MMM DD, YYYY')} </span>
+                : <span> - </span>
+        }
+    },
+ 
+    
+    {
+        header: 'Project Manager',
+        id: 'project_manager',
+        accessor: 'project_manager',
+        cell: (row) => {
+            const pm_id = row['pm_id'];
+
+            return pm_id ? <OwnerCell id={pm_id} /> : <span> - </span> 
+
+        } 
+    },
+    
+
+    {
+        header: 'Deal Converted By',
+        id: "deal_converted_by",
+        accessor: 'deal_converted_by',
+        cell: (row) => {
+            const deal_converted_by = row['converted_by'];
+
+            return deal_converted_by ? <OwnerCell id={deal_converted_by} /> : <span> - </span>
+        } 
+    }
     
 ]
 
@@ -87,9 +203,9 @@ export const DataTableColumns = [
 
 
 // owner cell
-const OwnerCell = (row) => {
+const OwnerCell = ({id}) => {
     const {users, getUserById} = useUsers(); 
-    const user = getUserById(users, row['added_by']);
+    const user = getUserById(users, Number(id));
     if(!user) return <span> - </span>
     return <span> {user.name} </span>
 }
