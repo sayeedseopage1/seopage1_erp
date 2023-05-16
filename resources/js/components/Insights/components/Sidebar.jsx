@@ -61,7 +61,7 @@ const InsightSidebar = () => {
             _filteredGoals.past = _goals.filter((goal) => goal.status === 'Past');
         }
         setFilteredGoals(_filteredGoals);
-    }, [goalsIsFetching])
+    }, [goalsIsFetching, goals])
 
     // get all unique sections
     const getDashboardSections = () => {
