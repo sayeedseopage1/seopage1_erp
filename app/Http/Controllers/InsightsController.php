@@ -534,15 +534,16 @@ class InsightsController extends AccountBaseController
     {
         if ($data->entryType == 'Added') {
 
-            $dealStage = DealStage::
-            whereDate('created_at', '>=', $data->startDate);
-            if (!is_null($data->endDate)) {
-                $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
-            }
-            $dealStage = $dealStage->join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
-                'leads.added_by' => $data->user_id,
-                ['deal_stages.created_at' , '>=', $data->startDate]
-            ])->get();
+            $dealStage = DealStage::join('leads', 'leads.id', '=', 'deal_stages.lead_id')
+            ->where(function ($query) use ($data) {
+                $query->where('leads.added_by', $data->user_id)
+                      ->whereDate('deal_stages.created_at', '>=', $data->startDate);
+                if (!is_null($data->endDate)) {
+                    $query->whereDate('deal_stages.created_at', '<=', $data->endDate);
+                }
+            })
+            ->get();
+        // dd($dealStage);
 
 
 
@@ -572,15 +573,16 @@ class InsightsController extends AccountBaseController
             $dealStage = $dealStage->get();
         } elseif ($data->entryType == 'Won') {
 
-            $dealStage = Deal::
-            whereDate('created_at', '>=', $data->startDate);
-            if (!is_null($data->endDate)) {
-                $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
-            }
-            $dealStage = $dealStage->join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
-                'leads.added_by' => $data->user_id,
-                ['deals.created_at' , '>=', $data->startDate]
-            ])->get();
+           
+            $dealStage = Deal::join('leads', 'leads.id', '=', 'deals.lead_id')
+            ->where(function ($query) use ($data) {
+                $query->where('leads.added_by', $data->user_id)
+                      ->whereDate('deals.created_at', '>=', $data->startDate);
+                if (!is_null($data->endDate)) {
+                    $query->whereDate('deals.created_at', '<=', $data->endDate);
+                }
+            })
+            ->get();
 
 
         }
