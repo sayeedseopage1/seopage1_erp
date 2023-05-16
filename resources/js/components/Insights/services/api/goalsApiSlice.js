@@ -7,8 +7,10 @@ import { apiSlice } from "./apiSlice";
 
 const goalApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
+        
         getGoals: build.query({
-            query: (id) => `/account/insights/goals/get/${id}`
+            // query: (id) => `/account/insights/goals/get/${id}`
+            query: (user_id) => `/account/insights/goals/get/${user_id}`
         }),
 
         editGoalTitle: build.mutation({

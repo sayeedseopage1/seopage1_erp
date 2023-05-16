@@ -1115,6 +1115,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
     Route::post('/insights/goals/edit/{id}', [InsightsController::class,'editGoal'])->name('insights/goals/edit');
+    Route::get('/insights/deal-details/{data}', [InsightsController::class,'getGoalDetails'])->name('insights-goal-details');
     Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class,'editGoalTitle'])->name('insights.goals-title.edit');
     Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
 
