@@ -14,6 +14,7 @@ use App\Models\DealStage;
 use App\Models\Lead;
 use Illuminate\Support\Facades\DB;
 use Auth;
+use App\Models\Deal;
 
 class InsightsController extends AccountBaseController
 {
@@ -34,6 +35,7 @@ class InsightsController extends AccountBaseController
     {
         return view('insights.insights', $this->data);
     }
+     
     // public function getusers(Request $request)
     // {
         
@@ -223,6 +225,17 @@ class InsightsController extends AccountBaseController
     {
         $user= User::where('id',$id)->first();
 
+        if(Auth::user()->id == $user->id)
+        {
+            $goal= GoalSetting::where('user_id',$user->id)->get();
+            //dd($goal);
+                    
+
+            $goal_recurring= GoalRecurring::all();
+        //   return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+
+        }
+
 
         if($user->role_id == 1 || $user->role_id == 8)
         {
@@ -231,8 +244,9 @@ class InsightsController extends AccountBaseController
             $goal = GoalSetting::all();
             $goal_recurring= GoalRecurring::all();
            
-            return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-        } elseif($user->role_id != 1) {
+            // return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+        } 
+        elseif($user->role_id != 1 || $user->role_id != 8) {
             $count = Seopage1Team::
             whereRaw("FIND_IN_SET(?, members)", [$user->id])
             ->get();
@@ -253,21 +267,17 @@ class InsightsController extends AccountBaseController
               
 
                 }
+               
                 
-            } else {
-                $goal= GoalSetting::where('user_id',$user->id)->get();
-                        
-
-                $goal_recurring= GoalRecurring::all();
-               // return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-            }
+            } 
     //    /dd($goal);
-            return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+           
         }
-        else {
-            return response()->json("You don't have permission to view this page"); 
+        return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+        
+        
         }
-    }
+    
 
 
     /**
@@ -427,14 +437,16 @@ class InsightsController extends AccountBaseController
     public function getGoalDetails(GoalSetting $data)
     {
         if ($data->entryType == 'Added') {
-            $dealStage = DealStage::where([
-                'added_by' => $data->user_id,
-            ])
-            ->whereDate('created_at', '>=', $data->startDate);
+            $dealStage = DealStage::
+            whereDate('created_at', '>=', $data->startDate);
             if (!is_null($data->endDate)) {
                 $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
             }
-            $dealStage = $dealStage->get();
+            $dealStage = $dealStage->join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
+                'leads.added_by' => $data->user_id,
+            ])->get();
+
+
         } elseif ($data->entryType == 'Progressed') {
             if ($data->qualified == 'Qualified') {
                 $deal_status = 1;
@@ -460,15 +472,14 @@ class InsightsController extends AccountBaseController
             }
             $dealStage = $dealStage->get();
         } elseif ($data->entryType == 'Won') {
-            $dealStage = DealStage::where([
-                'added_by' => $data->user_id,
-                'won_lost' => 'Yes'
-            ])
-            ->whereDate('created_at', '>=', $data->startDate);
+            $dealStage = Deal::
+            whereDate('created_at', '>=', $data->startDate);
             if (!is_null($data->endDate)) {
                 $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
             }
-            $dealStage = $dealStage->get();
+            $dealStage = $dealStage->join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
+                'leads.added_by' => $data->user_id,
+            ])->get();
         }
         
 
