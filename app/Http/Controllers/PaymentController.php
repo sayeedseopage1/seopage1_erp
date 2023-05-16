@@ -312,6 +312,7 @@ class PaymentController extends AccountBaseController
                     $project_hourly_rate = $project->project_budget / $total_hours;
                     //--------------
                     foreach ($kpi_settings as $value) {
+                        dd('ok');
                         if ($value->logged_hours_between <= $project_hourly_rate && $value->logged_hours_between_to >= $project_hourly_rate) {
                             $deal = Deal::find($project->deal_id);
                             $project_budget= ($deal->amount * $value->logged_hours_sales_amount) / 100;
@@ -337,7 +338,6 @@ class PaymentController extends AccountBaseController
                             }
 
                             $deal_qualified= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',1)->first();
-
 
                             $user_name= User::where('id',$deal_qualified->updated_by)->first(); 
                             $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
@@ -465,21 +465,36 @@ class PaymentController extends AccountBaseController
                             $point->points= ($project_budget*$kpi->contact_form)/100;
 
                             if ($cash_points_contact != null) {
-                           
                                 $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
-
-                            }else 
-                            {
-                                $point->total_points_earn=
-                                ($project_budget*$kpi->contact_form)/100;
+                            } else {
+                                $point->total_points_earn= ($project_budget*$kpi->contact_form)/100;
 
                             }
                             $point->save();
-                            
+                            if ($deal->authorization_status == 1) {
+                                $team_lead = User::where('role_id', 8)->first();
+
+                                $user_name= User::where('id',$team_lead->id)->first(); 
+
+                                $cash_points_contact= CashPoint::where('user_id',$team_lead->id)->orderBy('id','desc')->first();
+                                $point= new CashPoint();
+                                $point->user_id= $team_lead->id;
+                                $point->project_id= $project_id->id;
+                                $point->activity= $user_name->name . ' authorize the deal';
+                                $point->gained_as = "Individual";
+                                $point->points= ($project_budget*$kpi->authorized_by_leader)/100;
+
+                                if ($cash_points_contact != null) {
+                                    $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->authorized_by_leader)/100;
+                                } else {
+                                    $point->total_points_earn= ($project_budget*$kpi->authorized_by_leader)/100;
+
+                                }
+                                $point->save();
+                                
+                            }
                         }
                     }
-
-                    //dd($project_hourly_rate, 'check db');
                 }
 
 
@@ -510,6 +525,7 @@ class PaymentController extends AccountBaseController
             $redirectUrl = route('projects.show', $request->project_id).'?tab=milestones';
         }
         \DB::commit();
+        \DB::roleback();
         return Reply::successWithData(__('messages.paymentSuccess'), ['redirectUrl' => $redirectUrl]);
     }
 
