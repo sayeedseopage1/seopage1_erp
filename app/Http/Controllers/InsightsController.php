@@ -589,16 +589,18 @@ class InsightsController extends AccountBaseController
             } else {
                 $deal_status = 0;
             }
-
+            
             $dealStage = DealStage::join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
-               
                 'deal_stage' => $deal_status
             ])
-            ->whereDate('created_at', '>=', $data->startDate);
+            ->whereDate('deal_stages.created_at', '>=', $data->startDate);
+            
             if (!is_null($data->endDate)) {
-                $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
+                $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
             }
+            
             $dealStage = $dealStage->get();
+            
         } elseif ($data->entryType == 'Won') {
             if($data->team_id != null)
             {
