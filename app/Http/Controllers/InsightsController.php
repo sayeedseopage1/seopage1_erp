@@ -430,9 +430,11 @@ class InsightsController extends AccountBaseController
             $dealStage = DealStage::where([
                 'added_by' => $data->user_id,
             ])
-            ->whereDate('created_at', '>=', $data->startDate)
-            ->whereDate('created_at', '<=', $data->endDate)
-            ->get();
+            ->whereDate('created_at', '>=', $data->startDate);
+            if (!is_null($data->endDate)) {
+                $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
+            }
+            $dealStage = $dealStage->get();
         } elseif ($data->entryType == 'Progressed') {
             if ($data->qualified == 'Qualified') {
                 $deal_status = 1;
@@ -452,21 +454,56 @@ class InsightsController extends AccountBaseController
                 'added_by' => $data->user_id,
                 'deal_stage' => $deal_status
             ])
-            ->whereDate('created_at', '>=', $data->startDate)
-            ->whereDate('created_at', '<=', $data->endDate)
-            ->get();
+            ->whereDate('created_at', '>=', $data->startDate);
+            if (!is_null($data->endDate)) {
+                $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
+            }
+            $dealStage = $dealStage->get();
         } elseif ($data->entryType == 'Won') {
             $dealStage = DealStage::where([
                 'added_by' => $data->user_id,
                 'won_lost' => 'Yes'
             ])
-            ->whereDate('created_at', '>=', $data->startDate)
-            ->whereDate('created_at', '<=', $data->endDate)
-            ->get();
+            ->whereDate('created_at', '>=', $data->startDate);
+            if (!is_null($data->endDate)) {
+                $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
+            }
+            $dealStage = $dealStage->get();
         }
         
 
         return response()->json($dealStage);
+    }
+
+    public function get_goal_details(GoalSetting $data)
+    {
+        $auth = Auth::user();
+        if ($auth->role_id == 1 || $auth->role_id == 7 || $auth->role_id == 8) {
+            $response = [];
+            $recurring = GoalRecurring::where('goal_id', $data->id)->get();
+
+            $response['goal'] = $data;
+            $response['recurring'] = count($recurring) > 0 ? $recurring : null;
+
+            if ($data->assigneeType == 'User') {
+                $response['assigned_to'] = User::find($data->user_id);
+            } elseif ($data->assigneeType == 'Team') {
+                $team = Seopage1Team::find($data->team_id);
+
+                $users = explode(',', $team->members);
+                $user_data = [];
+                foreach ($users as $key => $value) {
+                    if ($value != '') {
+                        $user = User::find($value);
+                        array_push($user_data, $user);
+                    }
+                }
+                $response['team'] = $user_data;
+            }
+
+            $response['added_by'] = User::find($data->added_by);
+            return response()->json($response);
+        }
     }
 }
 
