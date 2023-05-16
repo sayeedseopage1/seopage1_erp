@@ -61,22 +61,22 @@ export const DataTableColumns = [
         }
     },
     
-    {
-        header: "Project Link",
-        id: "project_link",
-        accessor: 'project_link',
-        cell: (row) => {
-            const project_link = row['project_link'];
+    // {
+    //     header: "Project Link",
+    //     id: "project_link",
+    //     accessor: 'project_link',
+    //     cell: (row) => {
+    //         const project_link = row['project_link'];
 
-            return (project_link) ?
-                <span>
-                    {/* <a href={project_link}> */}
-                    {project_link}
-                {/* </a> */}
-                </span>
-                : <span> - </span>
-        }
-    },
+    //         return (project_link) ?
+    //             <span>
+    //                 {/* <a href={project_link}> */}
+    //                 {project_link}
+    //             {/* </a> */}
+    //             </span>
+    //             : <span> - </span>
+    //     }
+    // },
     {
         header: "Client Username",
         id: "client_username",
@@ -211,22 +211,22 @@ export const WonTableData = [
         }
     },
     
-    {
-        header: "Project Link",
-        id: "project_link",
-        accessor: 'project_link',
-        cell: (row) => {
-            const project_link = row['project_link'];
+    // {
+    //     header: "Project Link",
+    //     id: "project_link",
+    //     accessor: 'project_link',
+    //     cell: (row) => {
+    //         const project_link = row['project_link'];
 
-            return (project_link) ?
-                <span>
-                    {/* <a href={project_link}> */}
-                    {project_link}
-                {/* </a> */}
-                </span>
-                : <span> - </span>
-        }
-    },
+    //         return (project_link) ?
+    //             <span>
+    //                 {/* <a href={project_link}> */}
+    //                 {project_link}
+    //             {/* </a> */}
+    //             </span>
+    //             : <span> - </span>
+    //     }
+    // },
     {
         header: "Client Username",
         id: "client_username",
@@ -393,22 +393,22 @@ export const AddedTableColumns = [
         }
     },
     
-    {
-        header: "Project Link",
-        id: "project_link",
-        accessor: 'project_link',
-        cell: (row) => {
-            const project_link = row['project_link'];
+    // {
+    //     header: "Project Link",
+    //     id: "project_link",
+    //     accessor: 'project_link',
+    //     cell: (row) => {
+    //         const project_link = row['project_link'];
 
-            return (project_link) ?
-                <span>
-                    <a href={project_link}>
-                    {project_link}
-                </a>
-                </span>
-                : <span> - </span>
-        }
-    },
+    //         return (project_link) ?
+    //             <span>
+    //                 <a href={project_link}>
+    //                 {project_link}
+    //             </a>
+    //             </span>
+    //             : <span> - </span>
+    //     }
+    // },
     {
         header: "Client Username",
         id: "client_username",
