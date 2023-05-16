@@ -8,6 +8,10 @@ import _ from "lodash";
 
 
 export const useGoals = () => {
+    const [goals, setGoals] = React.useState({
+        goals: [],
+        recurring: []
+    });
     const dispatch = useDispatch();
 
     const [
@@ -29,8 +33,39 @@ export const useGoals = () => {
         window?.Laravel?.user?.id
     );
 
-    
 
+    React.useEffect(() => {
+        if(goalsData && goalsIsSuccess){
+            const newGoals = [];
+            const newRecurring = [];
+
+            
+             goalsData?.goals?.map(goal => {
+                if(_.isArray(goal)){
+                    newGoals.push(...goal);
+                }else{
+                    newGoals.push(goal)
+                }
+               
+            })
+
+             goalsData?.recurring?.map(r => {
+                if(_.isArray(r)){
+                    newRecurring.push(...r);
+                }else{
+                    newRecurring.push(r)
+                }
+            })
+
+            setGoals({
+                goals: newGoals,
+                recurring: newRecurring
+            })
+        }
+
+       
+
+    }, [goalsData, goalsIsSuccess])
 
 
 
@@ -80,7 +115,7 @@ export const useGoals = () => {
 
 
     return {
-        goals: goalsData,
+        goals,
         goalsIsLoading,
         goalsIsSuccess,
         goalsIsFetching,

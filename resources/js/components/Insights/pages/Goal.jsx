@@ -248,18 +248,20 @@ const Goal = () => {
     // calculate goal summary 
     const calculateGoalSummary = React.useCallback(() => {
         
+        
         // create time period for graph view
-        if (goalData && goalDealsData) {
+        if (goalData) {
             const { goal, recurring } = goalData;
+            const deals = goalDealsData || [];
             const _targetPeriod = getTargetPeriod({...goal,recurring: recurring || [] }, filter);
             const summarizedData = [];
 
             if (_targetPeriod) {
                 _targetPeriod.map((period, index) => {
-                    // let deals = goalDealsData || [];
                     let startDate = period.start;
                     let endDate = period.end;
-                    let _deals = distributeDealsByPeriod(goalDealsData, startDate, endDate);
+                    let _deals = distributeDealsByPeriod(deals, startDate, endDate);
+                    
 
                     if (_deals.length > 0) {
                         summarizedData.push(summarized(_deals, goalData, period, index));
