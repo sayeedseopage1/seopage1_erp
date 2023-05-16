@@ -50,27 +50,27 @@ const CashPoints = () => {
                                 } 
                             },
                             {
-                                header: "Point Earned",
+                                header: "Points Earned",
                                 accessor: "points",
                                 id: "points",
                                 cell: (row) => {
-                                    return <span>{row['points']}</span>
+                                    return <span>{Number(row['points']).toFixed(2)}</span>
                                 }
                             },
                             {
-                                header: "Point Lost",
+                                header: "Points Lost",
                                 accessor: "total_points_lost",
                                 id: "total_points_lost",
                                 cell: (row) => {
-                                    return <span>{row['total_points_lost']}</span>
+                                    return <span>{Number(row['total_points_lost']).toFixed(2)}</span>
                                 }
                             },
                             {
-                                header: "Balance Point",
-                                accessor: "balance",
-                                id: "balance",
+                                header: "Balance Points",
+                                accessor: "total_points_earn",
+                                id: "total_points_earn",
                                 cell: (row) => {
-                                    return <span>{row['balance']}</span>
+                                    return <span>{Number(row['total_points_earn']).toFixed(2)}</span>
                                 }
                             }
                         ]}

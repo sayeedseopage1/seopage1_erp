@@ -159,5 +159,5 @@ class PointsController extends AccountBaseController
         $data = $data->orderBy('id', 'desc')->get();
 
         return response()->json($data);
-    }   
+    }
 }

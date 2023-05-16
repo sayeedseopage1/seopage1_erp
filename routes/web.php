@@ -1109,6 +1109,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('search', SearchController::class);
     Route::resource('update-settings', UpdateAppController::class);
     Route::get('/insights/sections/get', [InsightsController::class,'getSection'])->name('insights-sections-get');
+    Route::get('/insights/deal-details/{data}', [InsightsController::class,'getGoalDetails'])->name('insights-goal-details');
 
     Route::get('/insights/{any}', [InsightsController::class,'index'])->where('any', '.*');
     Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
@@ -1264,4 +1265,6 @@ Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agre
 
 
 Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
-Route::get('/insights/deal-details/{data}', [InsightsController::class,'getGoalDetails'])->name('insights-goal-details');
+Route::get('/goal/get-goal-details/{data}', [InsightsController::class, 'get_goal_details'])->name('get_goal_details');
+Route::get('deals/request/authorization/{data}', [ContractController::class, 'authorization_request'])->name('authorization_request');
+Route::post('/authorization/deal-details/', [ContractController::class, 'authorization_submit'])->name('authorization_submit');
