@@ -1411,7 +1411,7 @@
 .cnx__table_tr {
     width: 100%;
     display: flex ;
-    align-items: center;
+    align-items: stretch;
   }
 
 .cnx__table_head {
@@ -1448,8 +1448,12 @@
 
 .cnx__table_td,
     .cnx__table_th {
-    width: 250px;
+      width: 100%;
     padding: 6px 10px;
+    white-space: pre-wrap !important;
+    display: flex;
+    align-items: center;
+    min-width: 250px;
     /* overflow: hidden;
     white-space: nowrap;
     -o-text-overflow: ellipsis;
@@ -1461,6 +1465,9 @@
 
   .cnx__table_td  a{
     color: #777;
+    white-space: pre-wrap !important;
+    -ms-word-break: break-all;
+    word-break: break-all;
   }
 
   .cnx__table_td  a:hover{
@@ -1477,6 +1484,7 @@
 .cnx__table_th {
     padding: 0;
     height: 40px;
+    width: 100%;
     font-weight: 600;
   }
 

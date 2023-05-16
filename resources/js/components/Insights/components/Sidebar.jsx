@@ -276,7 +276,7 @@ const InsightSidebar = () => {
 
             {/* Goal */}
                 <Accordion>
-                        <Accordion.Item defaultActive={false}>
+                        <Accordion.Item defaultActive={true}>
                             <div className='cnx_ins__sidebar_dashboards_header'>
                                 <Accordion.Item.Header icon={false} className='__accordion'>
                                     {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
@@ -313,7 +313,7 @@ const InsightSidebar = () => {
                                 {/* goal section */}
                                 {["Active", "Past"]?.map((section) => (
                                     <Accordion key={section}>
-                                        <Accordion.Item defaultActive={false}>
+                                        <Accordion.Item defaultActive={section === 'Active'}>
                                             <div className='cnx_ins__sidebar_dashboards_header __inner'>
                                                 <Accordion.Item.Header icon={false} className='__accordion'>
                                                 {(active) => <>
@@ -361,7 +361,7 @@ const InsightSidebar = () => {
                                                 }
                                                 {/* goals */}
                                                     { !goalsIsFetching && goals.goals.length > 0 ? 
-                                                        <GoalItem goals={filteredGoals[_.toLower(section)]}/> :
+                                                        <GoalItem goals={filteredGoals[_.toLower(section)]} search={search}/> :
                                                         <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
                                                             <span>
                                                                 No active goals
@@ -514,7 +514,7 @@ export default InsightSidebar;
 
 
 
-const GoalItem = ({goals}) => {
+const GoalItem = ({goals, search}) => {
 
 
     return goals.length > 0  && goals !== undefined ?  
@@ -526,7 +526,13 @@ const GoalItem = ({goals}) => {
                         to={`goals/${goal.id}`}
                         className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link __goal_item active' : 'cnx_ins__sidebar_item_link __goal_item'}
                     >
-                        <span> {goal.title.length > 23 ? goal.title.slice(0, 23) + '...' : goal.title} </span>
+                        
+
+                         <TextHighlighter
+                            searchWords={search}
+                            textToHighlight={goal.title}
+                            totalChars={23}
+                        />
                         <button aria-label='moveItem' className="cnx_ins__sidebar_item_move">
                             <Icon type="Move" />
                         </button>

@@ -3,9 +3,12 @@ import _ from 'lodash';
 
 const TextHighlighter = ({
         searchWords="",
-        textToHighlight=""
+        textToHighlight="",
+        totalChars= 32,
     }) => {
         const splitText = (text) => {
+            // remove spacial characters (-, _, /, \, ., etc.)
+            text =  text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '');
             // split text into array of letters
             const searchText = searchWords.split("");
             const letters = text.split("");
@@ -27,12 +30,17 @@ const TextHighlighter = ({
             return sentence;
         };
 
-        return textToHighlight ? <div className='cnx__text'>{splitText(textToHighlight)}</div> : "";
+        let textLength = textToHighlight.length;
+        return textToHighlight ? <div className='cnx__text'>
+            {splitText(textToHighlight).splice(0, totalChars)}
+            {textLength > totalChars ? <span className='cnx__text__more'> ... </span> : ""}
+        </div> : "";
     }
 
     TextHighlighter.propTypes = {
         searchWords: PropsTypes.string,
-        textToHighlight: PropsTypes.string
+        textToHighlight: PropsTypes.string,
+        totalChars: PropsTypes.number,
     }
 
 

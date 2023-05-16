@@ -39,15 +39,42 @@ export const DataTableColumns = [
         }
     },
     {
-        header: "Value",
-        id: "amount",
-        accessor: 'amount',
+        header: "Project Budget (USD)",
+        id: "project_budget",
+        accessor: 'project_budget',
         cell: (row) => {
             const amount = row['amount'];
 
-            return  (amount === undefined && amount === null) ?
-                    <span style={{fontWeight: '600'}}> ${amount.toFixed(2)} </span>
-                    : <span> - </span>
+            return (amount) ?
+                <span style={{fontWeight: 'bold'}}>
+                    {amount.toFixed(2)}
+                </span>
+                : <span> - </span>
+        }
+    },
+    {
+        header: "Currency",
+        id: "currency",
+        accessor: 'currency',
+        cell: (row) => {
+            return <span> USD </span> 
+        }
+    },
+    
+    {
+        header: "Project Link",
+        id: "project_link",
+        accessor: 'project_link',
+        cell: (row) => {
+            const project_link = row['project_link'];
+
+            return (project_link) ?
+                <span>
+                    <a href={project_link}>
+                    {project_link}
+                </a>
+                </span>
+                : <span> - </span>
         }
     },
     {
@@ -67,7 +94,7 @@ export const DataTableColumns = [
         id: 'deal_created_date',
         accessor: 'deal_created_date',
         cell: (row) => {
-            const deal_created_date = row['deal_created_date'];
+            const deal_created_date = row['created_at'];
 
             return (deal_created_date) ?
                 <span> {dayjs(deal_created_date).format('MMM DD, YYYY')} </span>
@@ -82,6 +109,19 @@ export const DataTableColumns = [
             return <span> Pipeline </span>
         } 
     },
+     {
+        header: 'Deal Won By',
+        id: 'deal_won_by',
+        accessor: 'deal_won_by',
+        cell: (row) => {
+            const deal_won_by = row['won_by'];
+
+            return (deal_won_by) ?
+                <span> {deal_won_by} </span>
+                : <span> - </span>
+        } 
+    },
+    
     {
         header: 'Deal Converted By',
         id: "deal_converted_by",
@@ -94,6 +134,19 @@ export const DataTableColumns = [
         accessor: 'current_stage',
         cell: (row) => <StageCell {...row} />
     },
+    {
+        header: 'Deal Status',
+        id: "deal_status",
+        accessor: 'deal_status',
+        cell: (row) => {
+            const deal_status = row['won_lost'];
+            return (deal_status) ?
+                deal_status === 'Yes' ?
+                <span> Won </span>
+                : <span> Lost </span>
+                : <span> Open </span>
+        }
+    }
     
 ]
 
@@ -104,7 +157,7 @@ export const DataTableColumns = [
 // owner cell
 const OwnerCell = (row) => {
     const {users, getUserById} = useUsers(); 
-    const user = getUserById(users, row['']);
+    const user = getUserById(users, Number(row['converted_by']));
     if(!user) return <span> - </span>
     return <span> {user.name} </span>
 }
