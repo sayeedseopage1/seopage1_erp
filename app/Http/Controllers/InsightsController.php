@@ -590,7 +590,7 @@ class InsightsController extends AccountBaseController
                 $deal_status = 0;
             }
 
-            $dealStage = DealStage::where([
+            $dealStage = DealStage::join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
                
                 'deal_stage' => $deal_status
             ])
