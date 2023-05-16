@@ -708,7 +708,6 @@ class PaymentController extends AccountBaseController
             $redirectUrl = route('projects.show', $request->project_id).'?tab=milestones';
         }
         \DB::commit();
-        \DB::rollback();
         return Reply::successWithData(__('messages.paymentSuccess'), ['redirectUrl' => $redirectUrl]);
     }
 
