@@ -37,7 +37,9 @@ const goalApiSlice = apiSlice.injectEndpoints({
                     title, 
                     _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
                 }
-            })
+            }),
+            
+            invalidatesTags: (result, error, arg) => [{ type: 'Goal', id: 'LIST' }]
         }),
 
         updateGoal: build.mutation({
@@ -61,7 +63,20 @@ const goalApiSlice = apiSlice.injectEndpoints({
             ])
           }
         }),
-        
+
+        // add goal
+        addGoal : build.mutation({
+            query: (data) => ({
+                url: `/account/insights/goals/add`,
+                method: 'POST',
+                body: {
+                    ...data,
+                    _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            }),
+
+            invalidatesTags: (result, error, arg) => [{ type: 'Goal', id: 'LIST' }]
+        })
     })
 }) ;
 
@@ -78,5 +93,6 @@ export const {
     useEditGoalTitleMutation, 
     useGetGoalByIdQuery, 
     useUpdateGoalMutation,
+    useAddGoalMutation,
 } = goalApiSlice;
 

@@ -36,11 +36,21 @@ const InsightsComponent = () => {
   const {reportModalOpen} = useSelector((state) => state.reportModal);
   const {isOpenDataTable} = useSelector(state => state.dataTableModal);
   const {goalsIsFetching} = useGoals();
+  const [isLoadingPage, setIsLoadingPage] = React.useState(true);
   const { data: users,} = useGetAllUsersQuery();
 
 
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      setIsLoadingPage(false);
+    }, 1000)
+
+    return () => {
+      clearTimeout(timer);
+    }
+  }, [])
   
-  if(goalsIsFetching) return <div 
+  if(isLoadingPage) return <div 
     style={{
       display: 'flex', 
       alignItems: 'center', 
@@ -48,7 +58,15 @@ const InsightsComponent = () => {
       width: "100%", 
       height: '100vh'
     }}>
-      <div className="spinner-border" role="status">  </div>
+      <div 
+        className="spinner-border" 
+        role="status"
+        style={{
+          width: '1.3rem',
+          height: '1.3rem',
+          marginRight: '0.5rem'
+        }}      
+      >  </div>
       Loading...
   </div>
 

@@ -566,6 +566,10 @@ const GoalFormModal = () => {
         updateGoal,
         updateGoalIsLoading,
         updateGoalIsSuccess,
+        
+        addGoal,
+        addGoalIsLoading,
+        addGoalIsSuccess,
     } = useGoals();
 
 
@@ -694,15 +698,20 @@ const GoalFormModal = () => {
                 setIsSaving(false);
             }
         } else {
-            await axios.post("/account/insights/goals/add", formData).then((res) => {
-                if(res.data.goal){
-                    setFormStatus('saved');
-                    setIsSaving(false);   
-                    navigate(`goals/${res.data?.goal.id}`); 
-                    dispatch(addGoal(res.data));
-                    dispatch(addRecurring(res.data));             
+            try{
+                let res = await addGoal(formData).unwrap();
+
+                if(res){
+                    navigate(`goals/${res?.goal.id}`); 
+                    dispatch(closeGoalFormModal());
                 }
-            });
+
+            }catch(err){
+                console.log(err)
+            } finally {
+                setFormStatus('saved');
+                setIsSaving(false);
+            }
         }
     }
     

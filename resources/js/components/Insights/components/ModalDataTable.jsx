@@ -4,10 +4,10 @@ import DataTable from '../ui/DataTable';
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../ui/Button";
 import { closeDataTableModal } from "../services/slices/dataTableModalSlice";
-import { DataTableColumns } from "./DataTableColumns";
+import { AddedTableColumns, DataTableColumns, WonTableData } from "./DataTableColumns";
 
 export const ModalDataTable = () =>{
-    const {data, title} = useSelector(state => state.dataTableModal);
+    const {data, entryType, title} = useSelector(state => state.dataTableModal);
     
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = React.useState(true);
@@ -37,8 +37,8 @@ export const ModalDataTable = () =>{
                     <Card.Body className='cnx__data_table_card_body'>
                         <div className='d-flex align-items-center justify-content-center position-relative py-3'>
                             <div className='cnx__data_table_card_body___title filter_options_line position-relative'>
-                                <span>${data.dealAdded.toFixed(2)}</span> • 
-                                <span>{data.totalDeal} Deals</span>
+                                <span>${Number(data.dealAdded).toFixed(2)}</span> • 
+                                <span>{Number(data.totalDeal).toFixed(2)} Deals</span>
                             </div>
                             
                         </div>
@@ -47,9 +47,9 @@ export const ModalDataTable = () =>{
                             <DataTable 
                                 data={data.deals} 
                                     defaultColumns={
-                                        data?.entryType === 'Won' ?
+                                        entryType === 'Won' ?
                                         WonTableData :
-                                        data?.entryType === 'Added'?
+                                        entryType === 'Added'?
                                         AddedTableColumns : 
                                         DataTableColumns
                                     }
