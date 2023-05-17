@@ -51,7 +51,7 @@ use Illuminate\Support\Facades\Redirect;
 use Toastr;
 use App\Notifications\DealAuthorizationSendNotification;
 use Notification;
-
+use App\Models\GoalSetting;;
 
 
 class DealController extends AccountBaseController
@@ -198,6 +198,34 @@ class DealController extends AccountBaseController
         $deal_stage->updated_by= Auth::id();
         $deal_stage->save();
 
+        //kpi settings
+        $goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
+        
+        $deal_sum = 0;
+        $deal_count = 0;
+
+        foreach ($goal_settings as $key => $value) {
+            if ($value->trackingType == 'value') {
+                if (is_null($value->end_date)) {
+                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->sum('amount');
+                } else {
+                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->sum('amount');
+                }
+            } else {
+                if (is_null($value->end_date)) {
+                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->count();
+                } else {
+                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->count();
+                }
+            }
+
+            if ($deal >= (int) $value->trackingValue) {
+                $value->goal_status = 1;
+                $value->save();
+            }
+        }
+        \DB::commit();
+        //dd($deal_sum, $deal_count);
         return response()->json([
             'status' => 'success',
             'redirectUrl' => route('deals.index')
