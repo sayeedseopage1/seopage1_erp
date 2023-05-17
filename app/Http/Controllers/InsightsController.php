@@ -553,11 +553,17 @@ class InsightsController extends AccountBaseController
     
         if ($data->entryType == 'Added') {
             $dealStage = DealStage::select([
-                'leads.id as lead_id',
-                'leads.added_by as lead_converted_by',
-                'deal_stages.project_name as deal_project_name',
                 'deal_stages.id as deal_id',
+                'deal_stages.client_username as client_username',
+                'deal_stages.project_name as deal_project_name',
+                'deal_stages.project_link as deal_project_link',
+                'deal_stages.amount as deal_amount',
+                'deal_stages.deal_stage as deal_stage',
+                'deal_stages.deal_status as deal_status',
+                'deal_stages.actual_amount as deal_original_amount',
                 'deal_stages.created_at as deal_created_at',
+                'leads.added_by as lead_converted_by',
+                'leads.id as lead_id',
             ])
             ->join('leads', 'leads.id', '=', 'deal_stages.lead_id')
             ->whereIn('leads.added_by', $data2)
@@ -620,12 +626,32 @@ class InsightsController extends AccountBaseController
             $data2 = $data->user_id ? [$data->user_id] : $user_data;
            
             $dealStage = Deal::select([
-                'leads.id as lead_id',
                 'deals.id as won_deal_id',
+                'deals.project_name as deal_project_name',
+                'deals.client_username as client_username',
+                'leads.project_link as deal_project_link',
+                'deals.amount as deal_amount',
+                'deals.actual_amount as deal_original_amount',
+                'deals.deal_creation_date as deal_created_at',
                 'deals.added_by as won_by',
-                'deals.project_name as deal_project_name'
+                'deals.created_at as won_deal_creation_date',
+                'deals.award_time as deal_award_time',
+
+                'pm.id as pm_id',
+                'pm.name as pm_name',
+
+                'deals.submission_status as client_contact_form',
+                'deals.status as deal_project_status',
+
+                'leads.added_by as lead_converted_by',
+                'leads.added_by as lead_converted_by',
+                'leads.id as lead_id',
+
+                'leads.id as lead_id',
+                'deals.project_name as deal_project_name',
             ])
             ->join('leads', 'leads.id', '=', 'deals.lead_id')
+            ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
             ->whereIn('leads.added_by', $data2)
             ->whereDate('deals.created_at', '>=', $data->startDate);
 
