@@ -212,7 +212,10 @@ export const WonTableData = [
 
             return (amount !== undefined) ?
                 <span style={{fontWeight: 'bold'}}>
-                   $ {Number(amount).toFixed(2)}
+                    {row['tracking_type'] === 'count' ? 
+                            amount > 1 ? '1.00' : Number(amount).toFixed(2)
+                    : `$ ${Number(amount).toFixed(2)}`     
+                }
                 </span>
                 : <span> - </span>
         }
@@ -227,7 +230,9 @@ export const WonTableData = [
 
             return (amount !== undefined) ?
                 <span style={{fontWeight: 'bold'}}>
-                    $ {Number(amount).toFixed(2)}
+                    {row['tracking_type'] === 'count' ? 
+                         amount > 1 ? '1.00' : Number(amount).toFixed(2)
+                    : `$ ${Number(amount).toFixed(2)}`} 
                 </span>
                 : <span>  </span>
         }
