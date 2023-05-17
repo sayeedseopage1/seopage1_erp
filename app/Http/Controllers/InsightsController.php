@@ -675,8 +675,12 @@ class InsightsController extends AccountBaseController
             ->get();
 
             foreach ($deals_data as $key => $value) {
-                $member = rtrim($data->goal->members, ',');
-                $member = explode(',', $member);
+                if (!is_null($data->goal)) {
+                    $member = rtrim($data->goal->members, ',');
+                    $member = explode(',', $member);
+                } else {
+                    $member[] = $data->user_id;
+                }
                 
                 $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->get();
                 $value->bidder_amount = round((24 * $value->amount) / 100, 2);
