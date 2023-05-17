@@ -555,7 +555,9 @@ class InsightsController extends AccountBaseController
             $dealStage = DealStage::select([
                 'leads.id as lead_id',
                 'leads.added_by as lead_converted_by',
-                'deal_stages.id as deal_id'
+                'deal_stages.project_name as deal_project_name',
+                'deal_stages.id as deal_id',
+                'deal_stages.created_at as deal_created_at',
             ])
             ->join('leads', 'leads.id', '=', 'deal_stages.lead_id')
             ->whereIn('leads.added_by', $data2)
@@ -610,9 +612,7 @@ class InsightsController extends AccountBaseController
                         array_push($user_data,$value);
                     }
                 }
-
-            }else 
-            {
+            } else {
                 $user_data[]= $data->user_id;
             }
             
@@ -622,7 +622,8 @@ class InsightsController extends AccountBaseController
             $dealStage = Deal::select([
                 'leads.id as lead_id',
                 'deals.id as won_deal_id',
-                'deals.added_by as won_by'
+                'deals.added_by as won_by',
+                'deals.project_name as deal_project_name'
             ])
             ->join('leads', 'leads.id', '=', 'deals.lead_id')
             ->whereIn('leads.added_by', $data2)
