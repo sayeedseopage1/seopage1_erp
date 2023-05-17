@@ -554,6 +554,8 @@ class InsightsController extends AccountBaseController
     
         if ($data->entryType == 'Added') {
             $dealStage = DealStage::select([
+
+                'deal_stages.id as id',
                 'deal_stages.id as deal_id',
                 'deal_stages.client_username as client_username',
                 'deal_stages.project_name as deal_project_name',
@@ -627,6 +629,7 @@ class InsightsController extends AccountBaseController
             $data2 = $data->user_id ? [$data->user_id] : $user_data;
            
             $dealStage = Deal::select([
+
                 'deals.id as id',
                 'deals.id as won_deal_id',
                 'deals.project_name as deal_project_name',

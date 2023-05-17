@@ -455,7 +455,7 @@ class PaymentController extends AccountBaseController
 
                             }
                             $point->save();
-                            $user_name= User::where('id',$deal->updated_by)->first(); 
+                            $user_name= User::where('id',$deal->added_by)->first(); 
 
                             $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                             $point= new CashPoint();
@@ -638,7 +638,7 @@ class PaymentController extends AccountBaseController
 
                         }
                         $point->save();
-                        $user_name= User::where('id',$deal->updated_by)->first(); 
+                        $user_name= User::where('id',$deal->added_by)->first(); 
 
                         $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                         $point= new CashPoint();
