@@ -253,30 +253,32 @@ const Goal = () => {
             const _targetPeriod = getTargetPeriod({...goal,recurring: recurring || [] }, filter);
             const summarizedData = [];
 
+            
+
             if (_targetPeriod) {
                 _targetPeriod.map((period, index) => {
                     let startDate = period.start;
                     let endDate = period.end;
                     let accessor = goal.entryType === 'Added' ? 'deal_created_at' : 'created_at';
                     let _deals = distributeDealsByPeriod(deals, startDate, endDate, accessor);
+                    console.log('_deals', _deals)
                     let _summarizedData = {};                   
 
-                    if (_deals.length > 0) {
-                        if(goal.entryType === 'Added'){
-                            _summarizedData = addedGoalSummary(_deals, goalData, period, index);
-                        }else if(goal.entryType === 'Won'){
-                            _summarizedData = wonGoalSummary(_deals, goalData, period, index);
-                        }else{
-                            _summarizedData = summarized(_deals, goalData, period, index)
-                        }
-                        summarizedData.push(_summarizedData);
-                    } else {
-                        _deals = [];
+                    
+                    if(goal.entryType === 'Added'){
+                        _summarizedData = addedGoalSummary(_deals, goalData, period, index);
+                    }else if(goal.entryType === 'Won'){
+                        _summarizedData = wonGoalSummary(_deals, goalData, period, index);
+                    }else{
+                        _summarizedData = summarized(_deals, goalData, period, index)
                     }
+                    summarizedData.push(_summarizedData);
+                    
                 })
             }
 
            
+            console.log('summarizedData', summarizedData)
 
             setIsSummarizing(false);
             setGoalSummary(summarizedData);

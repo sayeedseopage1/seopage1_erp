@@ -157,9 +157,7 @@ export const useGoals = () => {
             dealWonPercentage = 0;
             dealLostPercentage = 0;
             goalProgress = 0;
-            difference = 0;
-            endDate = '';
-            startDate = '';
+            difference = 0; 
             result = 0;
             yAxis = goalData?.goal?.trackingValue;
             target = 0;
@@ -349,8 +347,6 @@ export const useGoals = () => {
             dealLostPercentage = 0;
             goalProgress = 0;
             difference = 0;
-            endDate = '';
-            startDate = '';
             result = 0;
             yAxis = goalData?.goal?.trackingValue;
             target = 0;
@@ -479,8 +475,6 @@ export const useGoals = () => {
             dealLostPercentage = 0;
             goalProgress = 0;
             difference = 0;
-            endDate = '';
-            startDate = '';
             result = 0;
             yAxis = goalData?.goal?.trackingValue;
             target = 0;
