@@ -562,7 +562,7 @@ const GoalItem = ({goals, search}) => {
                          <TextHighlighter
                             searchWords={search}
                             textToHighlight={goal.title}
-                            totalChars={32}
+                            totalChars={36}
                         />
                         <button aria-label='moveItem' className="cnx_ins__sidebar_item_move">
                             <Icon type="Move" />
