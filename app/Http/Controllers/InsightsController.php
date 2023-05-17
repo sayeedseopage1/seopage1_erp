@@ -596,9 +596,13 @@ class InsightsController extends AccountBaseController
             } else {
                 $deal_status = 0;
             }
-            
-            $dealStage = DealStage::join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
-                'deal_stage' => $deal_status
+
+            $dealStage = DealStage::join('leads', 'leads.id', '=', 'deal_stages.lead_id')
+            ->join('deal_stage_changes', 'deal_stage_changes.deal_id', 'deal_stages.short_code')
+            ->whereIn('leads.added_by', $data2)
+            ->where([
+                'deal_stages.deal_stage' => $deal_status,
+                'deal_stage_changes.deal_stage_id' => 'deal_stages.deal_stage',
             ])
             ->whereDate('deal_stages.created_at', '>=', $data->startDate);
             
@@ -697,7 +701,12 @@ class InsightsController extends AccountBaseController
             ])
             ->join('leads', 'leads.id', 'deals.lead_id')
             ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
-            ->whereIn('deals.added_by', $data2)
+            ->whereDate('deals.created_at', '>=', $data->startDate);
+
+            if (!is_null($data->endDate)) {
+                $deals_data = $deals_data->whereDate('deals.created_at', '<=', $data->endDate);
+            }
+            $deals_data = $deals_data->whereIn('deals.added_by', $data2)
             ->orderBy('deals.id', 'desc')
             ->get();
 
