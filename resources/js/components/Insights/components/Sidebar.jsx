@@ -22,6 +22,7 @@ import { useUsers } from '../hooks/useUsers';
 import { selectAllUsers, selectUserById, useGetUserMutation, useGetUsersQuery } from '../services/api/userSliceApi';
 import { useGetGoalsQuery } from '../services/api/goalsApiSlice';
 import { useGetTeamsQuery } from '../services/api/teamSliceApi';
+import { goal } from '../utils/constants';
 
 
 
@@ -44,9 +45,10 @@ const InsightSidebar = () => {
 
 
     React.useEffect(() => {
-        if(__goals.goals.length !== goals.goals.length){
-            setGoals({...__goals});
-        }
+        // check if goals and __goals are not equal
+        
+
+        setGoals({...__goals})
     }, [__goals,  goalsIsFetching])
 
 
@@ -387,11 +389,12 @@ const InsightSidebar = () => {
                                                             <GoalItem goals={filteredGoals[_.toLower(section)]} search={search}/> :
 
                                                         goalsIsFetching ? 
+                                                        <></> :
                                                             <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
                                                                 <span>
                                                                     No active goals
                                                                 </span> 
-                                                            </div> : <></>
+                                                            </div> 
                                                         
                                                     }
                                                 {/*end goals*/}

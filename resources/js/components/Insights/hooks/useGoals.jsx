@@ -403,13 +403,15 @@ export const useGoals = () => {
         }
 
         if (_deals.length > 0) {
-            totalDeal = _deals.length;
+            
 
             goal = Number(period.value);
             dealAdded = _deals.reduce((total, deal) => {
                 return total + Number(deal.team_total_amount);
             }, 0);
 
+            
+            totalDeal = dealAdded;
             
 
             // count total deal added value

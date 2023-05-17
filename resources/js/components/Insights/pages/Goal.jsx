@@ -263,7 +263,6 @@ const Goal = () => {
                     let _deals = distributeDealsByPeriod(deals, startDate, endDate, accessor);
                     let _summarizedData = {};                   
 
-                    
                     if(goal.entryType === 'Added'){
                         _summarizedData = addedGoalSummary(_deals, goalData, period, index);
                     }else if(goal.entryType === 'Won'){
@@ -326,7 +325,10 @@ const Goal = () => {
                 <EditAbleBox
                     text={`${goal?.title || _title}`}
                     onSave={(title) => 
-                        isAuthorizedToEdit() && handleTitleChange(title)
+                        isAuthorizedToEdit() && handleTitleChange({
+                            id: goal?.id,
+                            title,
+                        })
                     }
                     readonly={!isAuthorizedToEdit() ? true : false}
                 />
@@ -571,8 +573,8 @@ const Goal = () => {
                                     barDataKey={["value"]}
                                     offset={-5}
                                     // yDomain={ [0, dataMax => (dataMax + Math.ceil(dataMax * 0.1))]}
-                                    labelListFormatter={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)}
-                                    yAxisTickFormate={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)}
+                                    labelListFormatter={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : goal?.entryType === 'Won' ? numberToUnits(value, 2) : numberToUnits(value, 0)}
+                                    yAxisTickFormate={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : goal?.entryType === 'Won' ? numberToUnits(value, 2) : numberToUnits(value, 0)}
                                     data={[...goalSummary]}
                                 />
                             </div>

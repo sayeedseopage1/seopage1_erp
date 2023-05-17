@@ -37,7 +37,9 @@ const goalApiSlice = apiSlice.injectEndpoints({
                     title, 
                     _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
                 }
-            })
+            }),
+            
+            invalidatesTags: (result, error, arg) => [{ type: 'Goal', id: 'LIST' }]
         }),
 
         updateGoal: build.mutation({
