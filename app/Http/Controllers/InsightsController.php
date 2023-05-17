@@ -724,7 +724,7 @@ class InsightsController extends AccountBaseController
                 }
                 
                 $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)
-                ->distinct('deal_stage')
+                ->distinct('deal_stage_id')
                 ->get();
                 $value->bidder_amount = round((24 * $value->amount) / 100, 2);
                 $value->team_total_amount = 0;
