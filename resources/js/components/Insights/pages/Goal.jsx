@@ -261,7 +261,6 @@ const Goal = () => {
                     let endDate = period.end;
                     let accessor = goal.entryType === 'Added' ? 'deal_created_at' : 'created_at';
                     let _deals = distributeDealsByPeriod(deals, startDate, endDate, accessor);
-                    console.log('_deals', _deals)
                     let _summarizedData = {};                   
 
                     
@@ -278,7 +277,6 @@ const Goal = () => {
             }
 
            
-            console.log('summarizedData', summarizedData)
 
             setIsSummarizing(false);
             setGoalSummary(summarizedData);

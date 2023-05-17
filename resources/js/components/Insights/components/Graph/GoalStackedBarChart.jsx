@@ -213,7 +213,7 @@ const CustomBar = (props) => {
 
         // show target value and actual value on one bar deference color
         const { x, y, width, height, fill, payload, targetFillColor, actualFillColor } = props;
-        const { goal, dealAdded,targetType, totalDeal, goalData } = payload;      
+        const { goal, dealAdded,targetType, totalDeal, goalData, } = payload;      
         const actual = _.lowerCase(targetType) === 'value'  ? dealAdded : totalDeal;
         const target = _.lowerCase(targetType) === 'value'  ? goal : goal;
 

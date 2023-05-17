@@ -161,9 +161,10 @@ export const useGoals = () => {
             result = 0;
             yAxis = goalData?.goal?.trackingValue;
             target = 0;
-            goal = 0;
+            goal = Number(period.value)
         } else {
             totalDeal = deals.length;
+            
             goal = Number(period.value);
             dealAdded = _deals.reduce((total, deal) => {
                 return total + Number(deal.deal_amount);
@@ -250,7 +251,7 @@ export const useGoals = () => {
 
 
     // progressed goal summary 
-    const progressedGoalSummary = (deals, goals, period, index) => {
+    const progressedGoalSummary = (deals, goalData, period, index) => {
         let totalDeal = 0;
         let dealAdded = 0;
         let dealWon = 0;
@@ -350,7 +351,7 @@ export const useGoals = () => {
             result = 0;
             yAxis = goalData?.goal?.trackingValue;
             target = 0;
-            goal = 0;
+            goal = Number(period.value)
         }
 
         return {
@@ -478,7 +479,7 @@ export const useGoals = () => {
             result = 0;
             yAxis = goalData?.goal?.trackingValue;
             target = 0;
-            goal = 0;
+            goal = Number(period.value)
         }
 
         return {
