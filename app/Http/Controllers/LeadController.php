@@ -208,7 +208,7 @@ class LeadController extends AccountBaseController
         }
 
         //goal setting
-        $goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
+        /*$goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
         
         foreach ($goal_settings as $key => $value) {
             if ($value->trackingType == 'value') {
@@ -229,7 +229,7 @@ class LeadController extends AccountBaseController
                 $value->goal_status = 1;
                 $value->save();
             }
-        }
+        }*/
 
         Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
         return response()->json([
