@@ -56,6 +56,7 @@ use App\Notifications\DealUpdate;
 use App\Models\LeadActivity;
 use App\Models\LeadsDealsActivityLog;
 use App\Models\Deal;
+use App\Models\GoalSetting;
 
 
 
@@ -186,14 +187,12 @@ class LeadController extends AccountBaseController
         foreach ($users as $user) {
           Mail::to($user->email)->send(new LeadConversionMail($lead));
         }
-
-
+        
 
         $deal= DealStage::where('lead_id',$lead->id)->first();
         // add pusher with admin role id 1
         $users = User::where('role_id', '1')->get();
 
-        
 
         foreach ($users as $user) {
             $pusher_options = [
@@ -208,6 +207,29 @@ class LeadController extends AccountBaseController
             $user->notify(new DealUpdate($deal, $pusher_options));
         }
 
+        //goal setting
+        $goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
+        
+        foreach ($goal_settings as $key => $value) {
+            if ($value->trackingType == 'value') {
+                if (is_null($value->end_date)) {
+                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->sum('amount');
+                } else {
+                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->sum('amount');
+                }
+            } else {
+                if (is_null($value->end_date)) {
+                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->count();
+                } else {
+                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->count();
+                }
+            }
+
+            if ($deal >= (int) $value->trackingValue) {
+                $value->goal_status = 1;
+                $value->save();
+            }
+        }
 
         Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
         return response()->json([

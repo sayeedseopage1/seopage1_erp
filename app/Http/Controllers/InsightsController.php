@@ -532,43 +532,45 @@ class InsightsController extends AccountBaseController
 
     public function getGoalDetails(GoalSetting $data)
     {
-            if($data->team_id != null)
-            {
-                $team = Seopage1Team::find($data->team_id);
+        if($data->team_id != null)
+        {
+            $team = Seopage1Team::find($data->team_id);
 
-                $users = explode(',', $team->members);
-                $user_data = [];
-                foreach ($users as $key => $value) {
-                    if ($value != '') {
-                         //$user = User::find($value);
-                        array_push($user_data,$value);
-                    }
+            $users = explode(',', $team->members);
+            $user_data = [];
+            foreach ($users as $key => $value) {
+                if ($value != '') {
+                     //$user = User::find($value);
+                    array_push($user_data,$value);
                 }
-
-            }else 
-            {
-                $user_data[]= $data->user_id;
             }
-            
-
-            // Always use an array of user IDs, even if $data->user_id is set
-            $data2 = $data->user_id ? [$data->user_id] : $user_data;
-        //    / dd($data2);
+        } else {
+            $user_data[]= $data->user_id;
+        }
         
-            if ($data->entryType == 'Added') {
-                $dealStage = DealStage::join('leads', 'leads.id', '=', 'deal_stages.lead_id')
-                    ->whereIn('leads.added_by', $data2)
-                    ->whereDate('deal_stages.created_at', '>=', $data->startDate);
-        
-                if (!is_null($data->endDate)) {
-                    $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
-                }
-        
-                $dealStage = $dealStage->get();
-               // dd($dealStage);
-        
-                $response['deal_stage'] = $dealStage;
+        // Always use an array of user IDs, even if $data->user_id is set
+        $data2 = $data->user_id ? [$data->user_id] : $user_data;
+    
+        if ($data->entryType == 'Added') {
+            $dealStage = DealStage::select([
+                'leads.id as lead_id',
+                'leads.added_by as lead_converted_by',
+                'deal_stages.project_name as deal_project_name',
+                'deal_stages.id as deal_id',
+                'deal_stages.created_at as deal_created_at',
+            ])
+            ->join('leads', 'leads.id', '=', 'deal_stages.lead_id')
+            ->whereIn('leads.added_by', $data2)
+            ->whereDate('deal_stages.created_at', '>=', $data->startDate);
+    
+            if (!is_null($data->endDate)) {
+                $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
             }
+    
+            $dealStage = $dealStage->get();
+    
+            $response['deal_stage'] = $dealStage;
+        }
        
 
          elseif ($data->entryType == 'Progressed') {
@@ -610,32 +612,29 @@ class InsightsController extends AccountBaseController
                         array_push($user_data,$value);
                     }
                 }
-
-            }else 
-            {
+            } else {
                 $user_data[]= $data->user_id;
             }
             
 
-            // Always use an array of user IDs, even if $data->user_id is set
             $data2 = $data->user_id ? [$data->user_id] : $user_data;
-        //    / dd($data2);
-
            
-        $dealStage = Deal::join('leads', 'leads.id', '=', 'deals.lead_id')
-        ->whereIn('leads.added_by', $data2)
-        ->whereDate('deals.created_at', '>=', $data->startDate);
+            $dealStage = Deal::select([
+                'leads.id as lead_id',
+                'deals.id as won_deal_id',
+                'deals.added_by as won_by',
+                'deals.project_name as deal_project_name'
+            ])
+            ->join('leads', 'leads.id', '=', 'deals.lead_id')
+            ->whereIn('leads.added_by', $data2)
+            ->whereDate('deals.created_at', '>=', $data->startDate);
 
             if (!is_null($data->endDate)) {
                 $dealStage = $dealStage->whereDate('deals.created_at', '<=', $data->endDate);
             }
 
             $dealStage = $dealStage->get();
-            //dd($dealStage);
-
-
         }
-        
 
         return response()->json($dealStage);
     }
