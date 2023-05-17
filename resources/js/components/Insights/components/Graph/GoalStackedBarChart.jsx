@@ -48,7 +48,8 @@ const GoalStackedBarChart = ({data,
         if(!data) return;
         dispatch(openDataTableModal({
             data: data?.activePayload[0]?.payload, 
-            title: 'Deals'
+            title: 'Deals',
+            entryType: data?.activePayload[0]?.payload?.goalData?.goal?.entryType
         }));
     }
 
