@@ -24,7 +24,7 @@ export const DataTableColumns = [
         id: 'project_name',
         cell: (row) => {
             let id = row['id'];
-            let name = row['client_name'];
+            let name = row['project_name'];
 
             return <span>
                 {
@@ -36,6 +36,18 @@ export const DataTableColumns = [
                 }
                 
             </span>
+        }
+    },
+    {
+        header: "Client Username",
+        id: "client_username",
+        accessor: 'client_username',
+        cell: (row) => {
+            const client_username = row['client_username'];
+
+            return (client_username) ? 
+                <span> {client_username} </span>
+                : <span> - </span>
         }
     },
     {
@@ -77,18 +89,7 @@ export const DataTableColumns = [
     //             : <span> - </span>
     //     }
     // },
-    {
-        header: "Client Username",
-        id: "client_username",
-        accessor: 'client_username',
-        cell: (row) => {
-            const client_username = row['client_username'];
-
-            return (client_username) ? 
-                <span> {client_username} </span>
-                : <span> - </span>
-        }
-    },
+    
     {
         header: 'Deal Created Date',
         id: 'deal_created_date',
@@ -168,13 +169,14 @@ export const WonTableData = [
     //         return <span>{row['id']}</span>
     //     }
     // },
+    
      {
         header: 'Deal Name',
         accessor: 'project_name',
         id: 'project_name',
         cell: (row) => {
             let id = row['id'];
-            let name = row['client_name'];
+            let name = row['project_name'];
 
             return <span>
                 {
@@ -189,6 +191,19 @@ export const WonTableData = [
         }
     },
     {
+        header: "Client Name",
+        id: "client_name",
+        accessor: 'client_name',
+        cell: (row) => {
+            const client_name = row['client_name'];
+
+            return (client_name) ? 
+                <span> {client_name} </span>
+                : <span> - </span>
+        }
+    },
+    
+    {
         header: "Actual Amount",
         id: "amount",
         accessor: 'amount',
@@ -197,7 +212,7 @@ export const WonTableData = [
 
             return (amount !== undefined) ?
                 <span style={{fontWeight: 'bold'}}>
-                    {Number(amount).toFixed(2)}
+                   $ {Number(amount).toFixed(2)}
                 </span>
                 : <span> - </span>
         }
@@ -212,10 +227,35 @@ export const WonTableData = [
 
             return (amount !== undefined) ?
                 <span style={{fontWeight: 'bold'}}>
-                    {Number(amount).toFixed(2)}
+                    $ {Number(amount).toFixed(2)}
                 </span>
                 : <span>  </span>
         }
+    },
+    {
+        header: 'Deal Won By',
+        id: 'deal_won_by',
+        accessor: 'deal_won_by',
+        cell: (row) => {
+            const deal_won_by = row['added_by'];
+
+            // console.log(deal_won_by)
+
+            return deal_won_by ? <OwnerCell id={deal_won_by} /> : <span> - </span> 
+
+        } 
+    },
+    {
+        header: 'Deal Created Date',
+        id: 'created_at',
+        accessor: 'created_at',
+        cell: (row) => {
+            const deal_created_date = row['created_at'];
+
+            return (deal_created_date) ?
+                <span> {dayjs(deal_created_date).format('MMM DD, YYYY')} </span>
+                : <span> - </span>
+        } 
     },
     {
         header: "Currency",
@@ -242,43 +282,8 @@ export const WonTableData = [
     //             : <span> - </span>
     //     }
     // },
-    {
-        header: "Client Username",
-        id: "client_username",
-        accessor: 'client_username',
-        cell: (row) => {
-            const client_username = row['client_username'];
-
-            return (client_username) ? 
-                <span> {client_username} </span>
-                : <span> - </span>
-        }
-    },
-    {
-        header: 'Deal Created Date',
-        id: 'created_at',
-        accessor: 'created_at',
-        cell: (row) => {
-            const deal_created_date = row['created_at'];
-
-            return (deal_created_date) ?
-                <span> {dayjs(deal_created_date).format('MMM DD, YYYY')} </span>
-                : <span> - </span>
-        } 
-    },
-     {
-        header: 'Deal Won By',
-        id: 'deal_won_by',
-        accessor: 'deal_won_by',
-        cell: (row) => {
-            const deal_won_by = row['added_by'];
-
-            // console.log(deal_won_by)
-
-            return deal_won_by ? <OwnerCell id={deal_won_by} /> : <span> - </span> 
-
-        } 
-    },
+    
+    
     
     {
         header: 'Pipeline',
@@ -386,6 +391,18 @@ export const AddedTableColumns = [
         }
     },
     {
+        header: "Client Username",
+        id: "client_username",
+        accessor: 'client_username',
+        cell: (row) => {
+            const client_username = row['client_username'];
+
+            return (client_username) ? 
+                <span> {client_username} </span>
+                : <span> - </span>
+        }
+    },
+    {
         header: "Project Budget (USD)",
         id: "deal_amount",
         accessor: 'deal_amount',
@@ -439,18 +456,7 @@ export const AddedTableColumns = [
     //             : <span> - </span>
     //     }
     // },
-    {
-        header: "Client Username",
-        id: "client_username",
-        accessor: 'client_username',
-        cell: (row) => {
-            const client_username = row['client_username'];
-
-            return (client_username) ? 
-                <span> {client_username} </span>
-                : <span> - </span>
-        }
-    },
+  
     {
         header: 'Deal Created Date',
         id: 'deal_created_at',
