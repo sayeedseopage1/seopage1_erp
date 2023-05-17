@@ -199,7 +199,7 @@ class DealController extends AccountBaseController
         $deal_stage->save();
 
         //kpi settings
-        $goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
+        /*$goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
         
         $deal_sum = 0;
         $deal_count = 0;
@@ -223,7 +223,7 @@ class DealController extends AccountBaseController
                 $value->goal_status = 1;
                 $value->save();
             }
-        }
+        }*/
         \DB::commit();
         //dd($deal_sum, $deal_count);
         return response()->json([
