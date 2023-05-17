@@ -51,11 +51,12 @@ const Goal = () => {
 
 
     // goal hooks
-    const { getTargetPeriod } = useGoals();
+    const { getTargetPeriod, addedGoalSummary } = useGoals();
 
 
     // authorized for edit 
     const isAuthorizedToEdit = () => {
+              
         if(
             goalData?.goal?.added_by === window?.Laravel?.user?.id
         ) {
@@ -103,10 +104,10 @@ const Goal = () => {
     
 
     // distribute deals by period
-    const distributeDealsByPeriod = (deals, startDate, endDate) => {
+    const distributeDealsByPeriod = (deals, startDate, endDate, accessor) => {
         return deals.filter(deal => {
-            return day.isSameOrAfter(deal.created_at, startDate) &&
-                day.isSameOrBefore(deal.created_at, endDate)
+            return day.isSameOrAfter(deal[accessor], startDate) &&
+                day.isSameOrBefore(deal[accessor], endDate)
         })
     }
 
@@ -256,11 +257,17 @@ const Goal = () => {
                 _targetPeriod.map((period, index) => {
                     let startDate = period.start;
                     let endDate = period.end;
-                    let _deals = distributeDealsByPeriod(deals, startDate, endDate);
-                    
+                    let accessor = goal.entryType === 'Added' ? 'deal_created_at' : 'created_at';
+                    let _deals = distributeDealsByPeriod(deals, startDate, endDate, accessor);
+                    let _summarizedData = {};                   
 
                     if (_deals.length > 0) {
-                        summarizedData.push(summarized(_deals, goalData, period, index));
+                        if(goal.entryType === 'Added'){
+                            _summarizedData = addedGoalSummary(_deals, goalData, period, index);
+                        }else{
+                            _summarizedData = summarized(_deals, goalData, period, index)
+                        }
+                        summarizedData.push(_summarizedData);
                     } else {
                         _deals = [];
                     }
@@ -316,7 +323,10 @@ const Goal = () => {
             <div className="cnx__ins_dashboard_navbar">
                 <EditAbleBox
                     text={`${goal?.title || _title}`}
-                    onSave={(title) => handleTitleChange({ id: goal?.id, title })}
+                    onSave={(title) => 
+                        isAuthorizedToEdit() && handleTitleChange(title)
+                    }
+                    readonly={!isAuthorizedToEdit() ? true : false}
                 />
                 <div className='cnx__ins_dashboard_navbar_btn_group' style={{ border: 0, padding: 0 }}>
                     {/* user */}

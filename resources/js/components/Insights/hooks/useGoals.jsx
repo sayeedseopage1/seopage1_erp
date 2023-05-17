@@ -123,6 +123,394 @@ export const useGoals = () => {
         return [...recurring];
     }
 
+
+
+    /// fixed decimal 
+    const fixedDecimalPlace = (_value) => {
+        let value = Number(_value);
+        return parseInt(value) === value ? value : value.toFixed(1);
+    }
+
+    // added goal summary
+    const addedGoalSummary = (deals, goalData, period, index) => {
+        let totalDeal = 0;
+        let dealAdded = 0;
+        let dealWon = 0;
+        let dealLost = 0;
+        let dealAddedPercentage = 0;
+        let dealWonPercentage = 0;
+        let dealLostPercentage = 0;
+        let goalProgress = 0;
+        let difference = 0;
+        let result = 0;
+        let yAxis = goalData.trackingValue;
+        let target = 0;
+        let goal = 0;
+        let _deals = deals || [];
+
+        if(_.isEmpty(deals) || deals === undefined){
+            totalDeal = 0;
+            dealAdded = 0;
+            dealWon = 0;
+            dealLost = 0;
+            dealAddedPercentage = 0;
+            dealWonPercentage = 0;
+            dealLostPercentage = 0;
+            goalProgress = 0;
+            difference = 0;
+            endDate = '';
+            startDate = '';
+            result = 0;
+            yAxis = goalData?.goal?.trackingValue;
+            target = 0;
+            goal = 0;
+        } else {
+            totalDeal = deals.length;
+            goal = Number(period.value);
+            dealAdded = _deals.reduce((total, deal) => {
+                return total + Number(deal.deal_amount);
+            }, 0);
+
+           
+            goalProgress = goal !== 0 ? (dealAdded / goal) * 100 : 0;
+            difference = fixedDecimalPlace(dealAdded - goal);
+            target = goal - dealAdded;
+            result = fixedDecimalPlace(dealAdded - goal);
+
+
+            const {goal: _goal} = goalData;
+
+            result = _.lowerCase(_goal.trackingType) === 'value' ? dealAdded : totalDeal;
+
+            // create yAxis
+            if (_.lowerCase(_goal.trackingType) === 'value') {
+                if (goal < dealAdded) {
+                    yAxis = dealAdded;
+                } else {
+                    yAxis = goal;
+                }
+            } else {
+                if (goal < totalDeal) {
+                    yAxis = totalDeal;
+                } else {
+                    yAxis = goal
+                }
+            }
+
+            // difference
+            if (_.lowerCase(_goal.trackingType) === 'value') {
+                difference = dealAdded - Number(period.value);
+            }else{
+                difference = totalDeal - Number(period.value);
+            }
+
+            // formate
+            result = fixedDecimalPlace(result);
+            totalDeal = fixedDecimalPlace(totalDeal);
+            target = fixedDecimalPlace(target);
+            dealAdded = fixedDecimalPlace(dealAdded);
+            difference = fixedDecimalPlace(difference);
+            goalProgress = goalProgress < 0 ? 0 : goalProgress;
+            if (goalProgress % 1 !== 0) {
+                goalProgress = goalProgress.toFixed(1);
+            };
+
+            
+        }
+
+
+
+
+
+
+
+
+
+        return {
+            deals: _deals,
+            ...period,
+            id: `${period.index || index} `,
+            totalDeal: Number(totalDeal),
+            dealAdded: Number(dealAdded),
+            dealWon,
+            dealLost,
+            dealAddedPercentage,
+            dealWonPercentage,
+            dealLostPercentage,
+            goalProgress,
+            target,
+            difference,
+            goal,
+            result,
+            targetType: _.lowerCase(goalData?.goal.trackingType),
+            goalData,
+            yAxis,
+        }
+
+
+    }
+
+
+    // progressed goal summary 
+    const progressedGoalSummary = (deals, goals, period, index) => {
+        let totalDeal = 0;
+        let dealAdded = 0;
+        let dealWon = 0;
+        let dealLost = 0;
+        let dealAddedPercentage = 0;
+        let dealWonPercentage = 0;
+        let dealLostPercentage = 0;
+        let goalProgress = 0;
+        let difference = 0;
+        let result = 0;
+        let yAxis = goalData.trackingValue;
+        let target = 0;
+        let goal = 0;
+        let _deals = deals;
+
+
+        // fixed decimal place to 2 if not integer
+        const fixedDecimalPlace = (_value) => {
+            let value = Number(_value);
+            return parseInt(value) === value ? value : value.toFixed(1);
+        }
+
+        if (_deals.length > 0) {
+            totalDeal = _deals.length;
+
+            goal = Number(period.value);
+            dealAdded = _deals.reduce((total, deal) => {
+                return total + Number(deal.amount);
+            }, 0);
+
+            
+
+            // count total deal added value
+            _deals.map(deal => {
+                if (_.lowerCase(deal.won_lost) === 'yes') {
+                    dealWon++;
+                }
+                if (_.lowerCase(deal.won_lost) === 'no') {
+                    dealLost++;
+                }
+            })
+
+
+            goalProgress = goal === 0 ? 0 : (dealAdded / goal) * 100;
+            goalProgress = goalProgress < 0 ? 0 : goalProgress;
+            if (goalProgress % 1 !== 0) {
+                goalProgress = goalProgress.toFixed(1);
+            };
+
+            target = goal - dealAdded;
+            target = fixedDecimalPlace(target);
+            goal = fixedDecimalPlace(goal);
+            const {goal: _goalData} = goalData;
+
+          
+
+            result = _.lowerCase(_goalData.trackingType) === 'value' ? dealAdded : totalDeal;
+            result = fixedDecimalPlace(result);
+
+            if (_.lowerCase(_goalData.trackingType) === 'value') {
+                if (goal < dealAdded) {
+                    yAxis = dealAdded;
+                } else {
+                    yAxis = goal;
+                }
+            } else {
+                if (goal < totalDeal) {
+                    yAxis = totalDeal;
+                } else {
+                    yAxis = goal
+                }
+            }
+
+
+
+
+            /// difference
+            if (_.lowerCase(_goalData.trackingType) === 'value') {
+                difference = dealAdded - Number(period.value);
+            }else{
+                difference = totalDeal - Number(period.value);
+            }
+
+            
+            dealAdded = fixedDecimalPlace(dealAdded);
+            difference = fixedDecimalPlace(difference);
+        } else {
+            totalDeal = 0;
+            dealAdded = 0;
+            dealWon = 0;
+            dealLost = 0;
+            dealAddedPercentage = 0;
+            dealWonPercentage = 0;
+            dealLostPercentage = 0;
+            goalProgress = 0;
+            difference = 0;
+            endDate = '';
+            startDate = '';
+            result = 0;
+            yAxis = goalData?.goal?.trackingValue;
+            target = 0;
+            goal = 0;
+        }
+
+        return {
+            deals: _deals,
+            ...period,
+            id: `${period.index || index} `,
+            totalDeal: Number(totalDeal),
+            dealAdded: Number(dealAdded),
+            dealWon,
+            dealLost,
+            dealAddedPercentage,
+            dealWonPercentage,
+            dealLostPercentage,
+            goalProgress,
+            target,
+            difference,
+            goal,
+            result,
+            targetType: _.lowerCase(goalData?.goal.trackingType),
+            goalData,
+            yAxis,
+        }
+
+    }
+
+
+    // get goal won deals 
+    const wonGoalSummary = (deals, goals, period, index) => {
+        let totalDeal = 0;
+        let dealAdded = 0;
+        let dealWon = 0;
+        let dealLost = 0;
+        let dealAddedPercentage = 0;
+        let dealWonPercentage = 0;
+        let dealLostPercentage = 0;
+        let goalProgress = 0;
+        let difference = 0;
+        let result = 0;
+        let yAxis = goalData.trackingValue;
+        let target = 0;
+        let goal = 0;
+        let _deals = deals;
+
+
+        // fixed decimal place to 2 if not integer
+        const fixedDecimalPlace = (_value) => {
+            let value = Number(_value);
+            return parseInt(value) === value ? value : value.toFixed(1);
+        }
+
+        if (_deals.length > 0) {
+            totalDeal = _deals.length;
+
+            goal = Number(period.value);
+            dealAdded = _deals.reduce((total, deal) => {
+                return total + Number(deal.amount);
+            }, 0);
+
+            
+
+            // count total deal added value
+            _deals.map(deal => {
+                if (_.lowerCase(deal.won_lost) === 'yes') {
+                    dealWon++;
+                }
+                if (_.lowerCase(deal.won_lost) === 'no') {
+                    dealLost++;
+                }
+            })
+
+
+            goalProgress = goal === 0 ? 0 : (dealAdded / goal) * 100;
+            goalProgress = goalProgress < 0 ? 0 : goalProgress;
+            if (goalProgress % 1 !== 0) {
+                goalProgress = goalProgress.toFixed(1);
+            };
+
+            target = goal - dealAdded;
+            target = fixedDecimalPlace(target);
+            goal = fixedDecimalPlace(goal);
+            const {goal: _goalData} = goalData;
+
+          
+
+            result = _.lowerCase(_goalData.trackingType) === 'value' ? dealAdded : totalDeal;
+            result = fixedDecimalPlace(result);
+
+            if (_.lowerCase(_goalData.trackingType) === 'value') {
+                if (goal < dealAdded) {
+                    yAxis = dealAdded;
+                } else {
+                    yAxis = goal;
+                }
+            } else {
+                if (goal < totalDeal) {
+                    yAxis = totalDeal;
+                } else {
+                    yAxis = goal
+                }
+            }
+
+
+
+
+            /// difference
+            if (_.lowerCase(_goalData.trackingType) === 'value') {
+                difference = dealAdded - Number(period.value);
+            }else{
+                difference = totalDeal - Number(period.value);
+            }
+
+            
+            dealAdded = fixedDecimalPlace(dealAdded);
+            difference = fixedDecimalPlace(difference);
+        } else {
+            totalDeal = 0;
+            dealAdded = 0;
+            dealWon = 0;
+            dealLost = 0;
+            dealAddedPercentage = 0;
+            dealWonPercentage = 0;
+            dealLostPercentage = 0;
+            goalProgress = 0;
+            difference = 0;
+            endDate = '';
+            startDate = '';
+            result = 0;
+            yAxis = goalData?.goal?.trackingValue;
+            target = 0;
+            goal = 0;
+        }
+
+        return {
+            deals: _deals,
+            ...period,
+            id: `${period.index || index} `,
+            totalDeal: Number(totalDeal),
+            dealAdded: Number(dealAdded),
+            dealWon,
+            dealLost,
+            dealAddedPercentage,
+            dealWonPercentage,
+            dealLostPercentage,
+            goalProgress,
+            target,
+            difference,
+            goal,
+            result,
+            targetType: _.lowerCase(goalData?.goal.trackingType),
+            goalData,
+            yAxis,
+        }
+
+    }
+
+
     
 
 
@@ -146,5 +534,9 @@ export const useGoals = () => {
         addGoalIsSuccess,
         addGoalIsLoading,
         addGoalIsFetching,
+
+
+        // 
+        addedGoalSummary,
     }
 }

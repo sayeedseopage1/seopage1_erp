@@ -355,8 +355,8 @@ export const AddedTableColumns = [
         accessor: 'project_name',
         id: 'project_name',
         cell: (row) => {
-            let id = row['id'];
-            let name = row['client_name'];
+            let id = row['deal_id'];
+            let name = row['deal_project_name'];
 
             return <span>
                 {
@@ -372,18 +372,33 @@ export const AddedTableColumns = [
     },
     {
         header: "Project Budget (USD)",
-        id: "project_budget",
-        accessor: 'project_budget',
+        id: "deal_amount",
+        accessor: 'deal_amount',
         cell: (row) => {
-            const amount = row['amount'];
+            const deal_amount = row['deal_amount'];
 
-            return (amount) ?
+            return (deal_amount) ?
                 <span style={{fontWeight: 'bold'}}>
-                    {Number(amount).toFixed(2)}
+                    {Number(deal_amount).toFixed(2)}
                 </span>
                 : <span> - </span>
         }
     },
+
+    // {
+    //     header: "Project Budget (Original)",
+    //     id: "deal_original_amount",
+    //     accessor: 'deal_original_amount',
+    //     cell: (row) => {
+    //         const deal_original_amount = row['deal_original_amount'];
+
+    //         return (deal_original_amount) ?
+    //             <span style={{fontWeight: 'bold'}}>
+    //                 {Number(deal_original_amount).toFixed(2)}
+    //             </span>
+    //             : <span> - </span>
+    //     }
+    // },
     {
         header: "Currency",
         id: "currency",
@@ -423,44 +438,35 @@ export const AddedTableColumns = [
     },
     {
         header: 'Deal Created Date',
-        id: 'deal_created_date',
-        accessor: 'deal_created_date',
+        id: 'deal_created_at',
+        accessor: 'deal_created_at',
         cell: (row) => {
-            const deal_created_date = row['created_at'];
+            const deal_created_at = row['deal_created_at'];
 
-            return (deal_created_date) ?
-                <span> {dayjs(deal_created_date).format('MMM DD, YYYY')} </span>
+            return (deal_created_at) ?
+                <span> {dayjs(deal_created_at).format('MMM DD, YYYY')} </span>
                 : <span> - </span>
         } 
     },
      {
         header: 'Deal Converted By',
-        id: 'deal_converted_by',
-        accessor: 'deal_converted_by',
+        id: 'lead_converted_by',
+        accessor: 'lead_converted_by',
         cell: (row) => {
-            const deal_converted_by = row['added_by'];
+            const lead_converted_by = row['lead_converted_by'];
 
             // console.log(deal_won_by)
 
-            return deal_converted_by ? <OwnerCell id={deal_converted_by} /> : <span> - </span> 
+            return lead_converted_by ? <OwnerCell id={lead_converted_by} /> : <span> - </span> 
 
         } 
     },
     {
         header: 'Current Stage',
-        id: "current_stage",
-        accessor: 'current_stage',
+        id: "deal_stage",
+        accessor: 'deal_stage',
         cell: (row) => <StageCell {...row} />
     },
-    
-    // {
-    //     header: 'Pipeline',
-    //     id: 'pipeline',
-    //     accessor: 'pipeline',
-    //     cell: (row) => {
-    //         return <span> Pipeline </span>
-    //     } 
-    // },
     
    
     {
@@ -476,59 +482,6 @@ export const AddedTableColumns = [
                 : <span> Open </span>
         }
     },
-
-    
-
-    // {
-    //     header: 'Client Contact Form',
-    //     id: "submission_status",
-    //     accessor: 'submission_status',
-    //     cell: (row) => {
-    //         const submission_status = row['submission_status'];
-    //         return (submission_status) ?
-    //             <span> {submission_status} </span>
-    //             : <span> - </span>
-    //     }
-    // },
-
-    // {
-    //     header: 'Project Award Time',
-    //     id: "project_award_time",
-    //     accessor: 'project_award_time',
-    //     cell: (row) => {
-    //         const award_time = row['award_time'];
-
-    //         return (award_time) ?
-    //             <span> {dayjs(award_time).format('MMM DD, YYYY')} </span>
-    //             : <span> - </span>
-    //     }
-    // },
- 
-    
-    // {
-    //     header: 'Project Manager',
-    //     id: 'project_manager',
-    //     accessor: 'project_manager',
-    //     cell: (row) => {
-    //         const pm_id = row['pm_id'];
-
-    //         return pm_id ? <OwnerCell id={pm_id} /> : <span> - </span> 
-
-    //     } 
-    // },
-    
-
-    // {
-    //     header: 'Deal Converted By',
-    //     id: "deal_converted_by",
-    //     accessor: 'deal_converted_by',
-    //     cell: (row) => {
-    //         const deal_converted_by = row['added_by'];
-
-    //         return deal_converted_by ? <OwnerCell id={deal_converted_by} /> : <span> - </span>
-    //     } 
-    // }
-    
 ]
 
 

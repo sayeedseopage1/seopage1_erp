@@ -48,7 +48,7 @@ const InsightsComponent = () => {
     return () => {
       clearTimeout(timer);
     }
-  })
+  }, [])
   
   if(isLoadingPage) return <div 
     style={{
@@ -58,7 +58,15 @@ const InsightsComponent = () => {
       width: "100%", 
       height: '100vh'
     }}>
-      <div className="spinner-border" role="status">  </div>
+      <div 
+        className="spinner-border" 
+        role="status"
+        style={{
+          width: '1.3rem',
+          height: '1.3rem',
+          marginRight: '0.5rem'
+        }}      
+      >  </div>
       Loading...
   </div>
 
