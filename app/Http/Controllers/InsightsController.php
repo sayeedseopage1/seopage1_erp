@@ -709,7 +709,7 @@ class InsightsController extends AccountBaseController
             $deals_data = $deals_data->whereIn('deals.added_by', $data2)
             ->orderBy('deals.id', 'desc')
             ->get();
-
+            $array = [];
             foreach ($deals_data as $key => $value) {
                 if ($data->trackingType == 'count') {
                     $value->amount = 1;
