@@ -446,15 +446,21 @@ export const AddedTableColumns = [
 
         } 
     },
-    
     {
-        header: 'Pipeline',
-        id: 'pipeline',
-        accessor: 'pipeline',
-        cell: (row) => {
-            return <span> Pipeline </span>
-        } 
+        header: 'Current Stage',
+        id: "current_stage",
+        accessor: 'current_stage',
+        cell: (row) => <StageCell {...row} />
     },
+    
+    // {
+    //     header: 'Pipeline',
+    //     id: 'pipeline',
+    //     accessor: 'pipeline',
+    //     cell: (row) => {
+    //         return <span> Pipeline </span>
+    //     } 
+    // },
     
    
     {
