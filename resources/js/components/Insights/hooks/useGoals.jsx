@@ -170,25 +170,34 @@ export const useGoals = () => {
                 return total + Number(deal.deal_amount);
             }, 0);
 
-           
-            goalProgress = goal !== 0 ? (dealAdded / goal) * 100 : 0;
-            difference = fixedDecimalPlace(dealAdded - goal);
-            target = goal - dealAdded;
+
+            
+            
             result = fixedDecimalPlace(dealAdded - goal);
 
 
             const {goal: _goal} = goalData;
 
-            result = _.lowerCase(_goal.trackingType) === 'value' ? dealAdded : totalDeal;
+            if(_goal?.trackingType === "Value"){
+                goalProgress = goal !== 0 ? (dealAdded / goal) * 100 : 0;
+                difference = fixedDecimalPlace(dealAdded - goal);
+                target = goal - dealAdded;
+                result = dealAdded
+                // create yAxis;
 
-            // create yAxis
-            if (_.lowerCase(_goal.trackingType) === 'value') {
                 if (goal < dealAdded) {
                     yAxis = dealAdded;
                 } else {
                     yAxis = goal;
                 }
-            } else {
+
+            }else{
+                goalProgress = goal !== 0 ? (totalDeal / goal) * 100 : 0;
+                difference = fixedDecimalPlace(totalDeal - goal);
+                target = goal - totalDeal;
+                result = totalDeal;
+
+            // create yAxis
                 if (goal < totalDeal) {
                     yAxis = totalDeal;
                 } else {
@@ -196,13 +205,7 @@ export const useGoals = () => {
                 }
             }
 
-            // difference
-            if (_.lowerCase(_goal.trackingType) === 'value') {
-                difference = dealAdded - Number(period.value);
-            }else{
-                difference = totalDeal - Number(period.value);
-            }
-
+            
             // formate
             result = fixedDecimalPlace(result);
             totalDeal = fixedDecimalPlace(totalDeal);
@@ -214,16 +217,7 @@ export const useGoals = () => {
                 goalProgress = goalProgress.toFixed(1);
             };
 
-            
         }
-
-
-
-
-
-
-
-
 
         return {
             deals: _deals,
@@ -294,14 +288,22 @@ export const useGoals = () => {
                 }
             })
 
+            if(goalData?.goal?.trackingType  === 'Value') {
+                goalProgress = goal === 0 ? 0 : (dealAdded / goal) * 100;
+                target = goal - dealAdded;
+            }else{
+                goalProgress = goal === 0 ? 0 : (totalDeal / goal) * 100;
+                target = goal - totalDeal;
+            }
 
-            goalProgress = goal === 0 ? 0 : (dealAdded / goal) * 100;
+
+            
             goalProgress = goalProgress < 0 ? 0 : goalProgress;
             if (goalProgress % 1 !== 0) {
                 goalProgress = goalProgress.toFixed(1);
             };
 
-            target = goal - dealAdded;
+            
             target = fixedDecimalPlace(target);
             goal = fixedDecimalPlace(goal);
             const {goal: _goalData} = goalData;
@@ -424,14 +426,20 @@ export const useGoals = () => {
                 }
             })
 
-
-            goalProgress = goal === 0 ? 0 : (dealAdded / goal) * 100;
+            if(goalData?.goal?.trackingType === "Value"){
+                goalProgress = goal === 0 ? 0 : (dealAdded / goal) * 100;
+                target = goal - dealAdded;
+            }else{
+                goalProgress = goal === 0 ? 0 : (totalDeal / goal) * 100;
+                target = goal - totalDeal;
+            }
+            
             goalProgress = goalProgress < 0 ? 0 : goalProgress;
             if (goalProgress % 1 !== 0) {
                 goalProgress = goalProgress.toFixed(1);
             };
 
-            target = goal - dealAdded;
+            
             target = fixedDecimalPlace(target);
             goal = fixedDecimalPlace(goal);
             const {goal: _goalData} = goalData;
