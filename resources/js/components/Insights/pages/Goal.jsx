@@ -2,230 +2,323 @@ import * as React from 'react';
 import EditAbleBox from "../components/EditAbleBox";
 import Dropdown from '../ui/Dropdown';
 import Button from '../ui/Button';
-import {Icon} from '../utils/Icon';
+import { Icon } from '../utils/Icon';
 import Tooltip from '../ui/Tooltip';
 import StackedBarChart from '../components/Graph/StackedBarChart';
 import convertNumberToUnits from '../utils/convertNumberToUnits';
 import { relativeTime } from '../utils/relativeTime';
 import RelativeTimePeriod from '../components/RelativeTimePeriod';
 import DataTable from '../ui/DataTable';
-import { useDealsState } from '../hooks/useDealsState';
+// import { useDealsState } from '../hooks/useDealsState';
 import { useGoals } from '../hooks/useGoals';
 import { useTeams } from '../hooks/useTeams';
-import { useLocation, useParams } from 'react-router-dom';
+import { useFetcher, useLocation, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { useUsers } from '../hooks/useUsers';
 
 import { openGoalFormModal } from '../services/slices/goalFormModalSlice';
 import { useDispatch } from 'react-redux';
 import GoalSummaryTable from '../components/GoalSummaryTable';
-import { DataTableColumns } from '../components/DataTableColumns';
+import { AddedTableColumns, DataTableColumns, WonTableData } from '../components/DataTableColumns';
 import GoalStackedBarChart from '../components/Graph/GoalStackedBarChart';
 import { stage } from '../utils/constants';
 import { useGetTeamsQuery } from '../services/api/teamSliceApi';
-import { useEditGoalTitle, useEditGoalTitleMutation } from '../services/api/goalsApiSlice';
+import { useEditGoalTitle, useEditGoalTitleMutation, useGetGoalByIdQuery } from '../services/api/goalsApiSlice';
+import { useGetDealsByGoalIdQuery } from '../services/api/dealSliceApi';
+import { CompareDate } from '../utils/dateController';
 
 // convert to unit
-const numberToUnits = (value,decimal= 1) => {
+const numberToUnits = (value, decimal = 1) => {
     let c = convertNumberToUnits(value, decimal)
     return `${c}`
 }
 
 
 const Goal = () => {
+    const params = useParams(); // get goal id from url
+    const location = useLocation(); // get location
+    const day = new CompareDate();
+    const [goalSummary, setGoalSummary] = React.useState(null); // store goal summary data here
+
+    // custom filter by data
     const [selectedPeriod, setSelectedPeriod] = React.useState('Today');
     const [filter, setFilterValue] = React.useState(null);
     const [applyFilter, setApplyFilter] = React.useState(false);
-    const [summarizedData, setSummarizedData] = React.useState([]); 
-    const [goal, setGoal] = React.useState(null);
-    const {deals, getDeals, getSummary} = useDealsState(); 
-    const [dealsData, setDealsData] = React.useState([]);
-    const [isLoading , setIsLoading] = React.useState(true);
-    const {goals, getGoalById, goalsIsLoading, goalStateStatus} = useGoals();
-    const [activeTable, setActiveTable] = React.useState('activities');
-    const params = useParams();
-    const location = useLocation();
-    const {users} = useUsers();
-    // const {teams} = useTeams();
 
+    // ui helper state
+    const [isSummarizing, setIsSummarizing] = React.useState(true);
+    const [activeTable, setActiveTable] = React.useState('deals');
+
+
+    // goal hooks
+    const { getTargetPeriod } = useGoals();
+
+
+    // authorized for edit 
+    const isAuthorizedToEdit = () => {
+        if(
+            goalData?.goal?.added_by === window?.Laravel?.user?.id
+        ) {
+          // if goal have end date and end date is greater than today
+          // disable edit
+            return true;
+        }
+
+        return false;
+    }
+
+
+    // get goal deals by goal id
     const {
-        data: teams,
-        isFetching: teamsIsFetching,
-    } = useGetTeamsQuery(`/`, {
+        data: goalDealsData,
+        isFetching: dealsIsFetching,
+    } = useGetDealsByGoalIdQuery(params?.goalId, {
         refetchOnMountOrArgChange: true,
     });
-    const usersData = users && users.users;
-    const [isSummarizing, setIsSummarizing] = React.useState(deals.length > 0 ? true : false);
-    
+
+    // get goal by id
+    const {
+        data: goalData,
+        isFetching: goalIsFetching,
+    } = useGetGoalByIdQuery(params?.goalId, {
+        refetchOnMountOrArgChange: true,
+    });
+
+    // edit goal title
+    const [editGoalTitle] = useEditGoalTitleMutation();
     const dispatch = useDispatch();
 
-    const handleRelativeTimePeriod =(value) => {
+
+    // get filter period
+    const handleRelativeTimePeriod = (value) => {
         setSelectedPeriod(value);
         relativeTime(value, setFilterValue);
     }
 
-    const [editGoalTitle] = useEditGoalTitleMutation();
-
-
-
-    // set goal data with memorized callback
-
-
-    // console.log({teams})
-
-    const getGoal = React.useCallback(() => {
-
-        if(goals && goals.length > 0){
-            let goal = getGoalById(Number(params.goalId));
-            if(!goal) return;
-            let user = _.find(usersData, {id: goal?.added_by});
-            let assignedUser = _.find(usersData, {id: Number(goal?.user_id)});
-            let team = _.lowerCase(goal.assigneeType) === 'team' ? _.find(teams, {id: goal?.team_id}) : null;
-            setGoal({
-                ...goal,
-                user: user,
-                assignedUser,
-                team: team
-            });
-        }
-    }, [goals, params.goalId , usersData, teams, goalStateStatus, dispatch, location]);
-
-    React.useEffect(() => {
-        getGoal();
-    }, [getGoal, teams])
-
-
-    // // get goal data
-    // React.useEffect(()=> {
-    //     if(usersData && usersData.length > 0){
-    //         if(goalsIsLoading) return <div>Loading...</div>
-    //         let goal = getGoalById(Number(params.goalId));
-    //         if(!goal) return;
-    //         let user = _.find(usersData, {id: goal?.added_by});
-    //         let assignedUser = _.find(usersData, {id: Number(goal?.user_id)});
-    //         let team = _.find(teams, {id: goal?.team_id});
-    //         setGoal({
-    //             ...goal,
-    //             user: user,
-    //             assignedUser: assignedUser,
-    //             team: team
-    //         });
-    //     }
-    // }, [params.goalId, goals, usersData, goalsIsLoading, teams, goalStateStatus, location]);
-
-
-
-    // get filtered deals
-    const getFilteredDeals = React.useCallback((deals, goal, filter) => {
-        let endDate;
-        let startDate;
-        if(filter?.end && filter?.start && applyFilter){
-            startDate = filter.start;
-            endDate = filter.end;
-        }else{
-            endDate = goal.endDate;
-            startDate = goal.startDate;
-        }
-        
-        let _deals = getDeals(deals, goal, startDate, endDate);
-        if(_deals){
-            setDealsData([..._deals]);
-            setIsLoading(false);
-        }else {
-            setDealsData([]);
-            setIsLoading(false);
-        }
-        
-    }, [deals, usersData, goal, teams, filter, applyFilter, location]);
-
-
-
-    React.useEffect(() => {
-        if(deals && deals.length > 0 && goal){
-            getFilteredDeals(deals, goal, filter);
-        }
-    }, [getFilteredDeals])
-
-
-
-
-
-    // // get deals data
-    // React.useEffect(() => {
-    //     if(deals && deals.length > 0 && goal){
-    //         let endDate;
-    //         let startDate;
-    //         if(filter?.end && filter?.start && applyFilter){
-    //             startDate = filter.start;
-    //             endDate = filter.end;
-    //         }else{
-    //             endDate = goal.endDate;
-    //             startDate = goal.startDate;
-    //         }
-
-    //         let _deals = getDeals(deals, goal, startDate, endDate);
-    //         setDealsData([..._deals]);
-    //         setIsLoading(false);
-    //     }
-         
-    // }, [goal, location, params.goalId, filter, applyFilter]);
-
-    const getSummarizedData = React.useCallback((deals, goal, filter, applyFilter) => {
-       
-        let sum = getSummary(deals, goal, filter, applyFilter);
-        
-        if(sum.length) {
-            setSummarizedData([...sum]);
-            setIsSummarizing(false);
-        } else if(deals.length ){
-            setIsSummarizing(false);
-        }
-    }, [deals, goal, usersData, teams, filter, applyFilter, location]);
-
-
-    React.useEffect(() => {
-        if(goal){
-            getSummarizedData(dealsData, goal, filter, applyFilter);
-        }
-    }, [ getSummarizedData]);
-
-
-
-    const handleOpenGoalFormModal = () => {
-        dispatch(openGoalFormModal({
-            data: goal,
-            mode: 'edit',
-            entry: goal.entry,
-            entryType: goal.entryType,
-        }))
-    }
-
-    // save title change
-    const handleTitleChange = ({id, title}) => {
-        console.log({id, title})
+    // change goal title
+     // save title change
+     const handleTitleChange = ({id, title}) => {
         editGoalTitle({id, title});
     }
     
 
+    // distribute deals by period
+    const distributeDealsByPeriod = (deals, startDate, endDate) => {
+        return deals.filter(deal => {
+            return day.isSameOrAfter(deal.created_at, startDate) &&
+                day.isSameOrBefore(deal.created_at, endDate)
+        })
+    }
 
-    if(!goal) return  (
-        <div style={{display: 'flex', alignItems: 'center', "justifyContent": 'center', width: "100%", height: '100vh'}}>
-            <div>Loading...</div>
-        </div>
-    )
 
+    // get goal summary
+    const summarized = (deals, goals, period, index) => {
+        let totalDeal = 0;
+        let dealAdded = 0;
+        let dealWon = 0;
+        let dealLost = 0;
+        let dealAddedPercentage = 0;
+        let dealWonPercentage = 0;
+        let dealLostPercentage = 0;
+        let goalProgress = 0;
+        let difference = 0;
+        let result = 0;
+        let yAxis = goalData.trackingValue;
+        let target = 0;
+        let goal = 0;
+        let _deals = deals;
+
+
+        // fixed decimal place to 2 if not integer
+        const fixedDecimalPlace = (_value) => {
+            let value = Number(_value);
+            return parseInt(value) === value ? value : value.toFixed(1);
+        }
+
+        if (_deals.length > 0) {
+            totalDeal = _deals.length;
+
+            goal = Number(period.value);
+            dealAdded = _deals.reduce((total, deal) => {
+                return total + Number(deal.amount);
+            }, 0);
+
+            
+
+            // count total deal added value
+            _deals.map(deal => {
+                if (_.lowerCase(deal.won_lost) === 'yes') {
+                    dealWon++;
+                }
+                if (_.lowerCase(deal.won_lost) === 'no') {
+                    dealLost++;
+                }
+            })
+
+
+            goalProgress = goal === 0 ? 0 : (dealAdded / goal) * 100;
+            goalProgress = goalProgress < 0 ? 0 : goalProgress;
+            if (goalProgress % 1 !== 0) {
+                goalProgress = goalProgress.toFixed(1);
+            };
+
+            target = goal - dealAdded;
+            target = fixedDecimalPlace(target);
+            goal = fixedDecimalPlace(goal);
+            const {goal: _goalData} = goalData;
+
+          
+
+            result = _.lowerCase(_goalData.trackingType) === 'value' ? dealAdded : totalDeal;
+            result = fixedDecimalPlace(result);
+
+            if (_.lowerCase(_goalData.trackingType) === 'value') {
+                if (goal < dealAdded) {
+                    yAxis = dealAdded;
+                } else {
+                    yAxis = goal;
+                }
+            } else {
+                if (goal < totalDeal) {
+                    yAxis = totalDeal;
+                } else {
+                    yAxis = goal
+                }
+            }
+
+
+
+
+            /// difference
+            if (_.lowerCase(_goalData.trackingType) === 'value') {
+                difference = dealAdded - Number(period.value);
+            }else{
+                difference = totalDeal - Number(period.value);
+            }
+
+            
+            dealAdded = fixedDecimalPlace(dealAdded);
+            difference = fixedDecimalPlace(difference);
+        } else {
+            totalDeal = 0;
+            dealAdded = 0;
+            dealWon = 0;
+            dealLost = 0;
+            dealAddedPercentage = 0;
+            dealWonPercentage = 0;
+            dealLostPercentage = 0;
+            goalProgress = 0;
+            difference = 0;
+            endDate = '';
+            startDate = '';
+            result = 0;
+            yAxis = goalData?.goal?.trackingValue;
+            target = 0;
+            goal = 0;
+        }
+
+        return {
+            deals: _deals,
+            ...period,
+            id: `${period.index || index} `,
+            totalDeal: Number(totalDeal),
+            dealAdded: Number(dealAdded),
+            dealWon,
+            dealLost,
+            dealAddedPercentage,
+            dealWonPercentage,
+            dealLostPercentage,
+            goalProgress,
+            target,
+            difference,
+            goal,
+            result,
+            targetType: _.lowerCase(goalData?.goal.trackingType),
+            goalData,
+            yAxis,
+        }
+
+    }
+
+
+    // calculate goal summary 
+    const calculateGoalSummary = React.useCallback(() => {
+        
+        
+        // create time period for graph view
+        if (goalData) {
+            const { goal, recurring } = goalData;
+            const deals = goalDealsData || [];
+            const _targetPeriod = getTargetPeriod({...goal,recurring: recurring || [] }, filter);
+            const summarizedData = [];
+
+            if (_targetPeriod) {
+                _targetPeriod.map((period, index) => {
+                    let startDate = period.start;
+                    let endDate = period.end;
+                    let _deals = distributeDealsByPeriod(deals, startDate, endDate);
+                    
+
+                    if (_deals.length > 0) {
+                        summarizedData.push(summarized(_deals, goalData, period, index));
+                    } else {
+                        _deals = [];
+                    }
+                })
+            }
+
+           
+
+            setIsSummarizing(false);
+            setGoalSummary(summarizedData);
+
+        }
+
+    }, [goalDealsData, goalData, filter, applyFilter, location, params]);
+
+
+    React.useEffect(() => {
+        setIsSummarizing(true);
+        calculateGoalSummary();
+    }, [calculateGoalSummary, location, params])
+
+
+    // open edit modal
+    const handleOpenGoalFormModal = () => {
+        if(!goalData?.goal) return null;
+        dispatch(openGoalFormModal({
+            data: goalData?.goal,
+            mode: 'edit',
+            entry: goalData?.goal?.entry,
+            entryType: goalData?.goal?.entryType,
+        }))
+    }
+
+
+    if (goalIsFetching || !goalData) {
+        return (
+            <div style={{ display: 'flex', alignItems: 'center', "justifyContent": 'center', width: "100%", height: '100vh' }}>
+                <div>Loading...</div>
+            </div>
+        )    
+    }
+
+
+    const { goal } = goalData;
+
+    if(!goal) return <div>Goal not found</div>
 
     const _title = `${_.upperFirst(goal?.entry)} ${goal?.entryType} ${goal?.name || goal?.team_name}`;
 
-    return(
+    return (
         <div className="cnx__ins_dashboard">
             {/* navbar */}
             <div className="cnx__ins_dashboard_navbar">
-                <EditAbleBox 
-                    text={`${goal?.title || _title}`} 
-                    onSave={(title) => handleTitleChange({id: goal?.id, title})} 
+                <EditAbleBox
+                    text={`${goal?.title || _title}`}
+                    onSave={(title) => handleTitleChange({ id: goal?.id, title })}
                 />
-                <div className='cnx__ins_dashboard_navbar_btn_group' style={{border: 0, padding:0}}>
+                <div className='cnx__ins_dashboard_navbar_btn_group' style={{ border: 0, padding: 0 }}>
                     {/* user */}
                     <div className='cnx__period_filter'>
                         <div className='cnx__period_filter__title'>
@@ -269,7 +362,7 @@ const Goal = () => {
                     {/* user */}
                     <div className='cnx__period_filter'>
                         {/* actions */}
-                            {/* <Dropdown>
+                        {/* <Dropdown>
                                 <Dropdown.Toggle
                                     icon={false}
                                     className={`cnx__btn cnx__btn_tertiary  cnx__btn_sm cnx__period_filter__title_btn`}
@@ -291,7 +384,7 @@ const Goal = () => {
                             </Dropdown> */}
                     </div>
 
-                     
+
                 </div>
             </div>
             {/* end navbar */}
@@ -305,16 +398,16 @@ const Goal = () => {
                         </h4>
                         {/* edit goal */}
                         {
-                            new Date(goal?.endDate) !== new Date() && 
+                            isAuthorizedToEdit() &&
                             <Button variant='tertiary' onClick={handleOpenGoalFormModal}>
-                                <i className='fa-solid fa-pencil'/>
+                                <i className='fa-solid fa-pencil' />
                             </Button>
                         }
-                        
+
                         {/* end edit goal */}
 
                         <div className='filter_options_line'>
-                            <span>{ goal?.name || goal?.team_name }</span>
+                            <span>{goal?.name || goal?.team_name}</span>
                             <span>
                                 {goal?.entry} {goal?.entryType}
                             </span>
@@ -339,33 +432,33 @@ const Goal = () => {
                             </Button>
                         </div>
                     </div>
-                    <div className="cnx_divider" style={{margin: '0'}} />
+                    <div className="cnx_divider" style={{ margin: '0' }} />
                     {/* details */}
-                     <div className='cnx__ins_details'>
-                        <div className='cnx__ins_details_col'> 
+                    <div className='cnx__ins_details'>
+                        <div className='cnx__ins_details_col'>
                             <Tooltip text="Assignee">
                                 <div className='cnx__ins_details_item'>
-                                    <i className='fa-regular fa-user'/>
-                                    <span>{ goal?.name || goal?.team_name }</span>
+                                    <i className='fa-regular fa-user' />
+                                    <span>{goal?.name || goal?.team_name}</span>
                                 </div>
                             </Tooltip>
-                            
-                           <Tooltip text='Goal type'>
-                             <div className='cnx__ins_details_item'>
-                                <Icon type="Deal" />
-                                {goal?.entry} {goal?.entryType}
-                            </div>
-                           </Tooltip>
+
+                            <Tooltip text='Goal type'>
+                                <div className='cnx__ins_details_item'>
+                                    <Icon type="Deal" />
+                                    {goal?.entry} {goal?.entryType}
+                                </div>
+                            </Tooltip>
 
                             <Tooltip text="Pipeline">
                                 <div className='cnx__ins_details_item'>
                                     <i className="fa-solid fa-chart-simple" />
-                                    Pipeline{goal?.entryType === 'Progressed' ? ', ' + goal?.qualified :''}
+                                    Pipeline{goal?.entryType === 'Progressed' ? ', ' + goal?.qualified : ''}
                                 </div>
                             </Tooltip>
                         </div>
 
-                        <div className='cnx__ins_details_col'> 
+                        <div className='cnx__ins_details_col'>
                             <Tooltip text="Goal Frequency">
                                 <div className='cnx__ins_details_item'>
                                     <Icon type="Activity" />
@@ -375,7 +468,7 @@ const Goal = () => {
 
                             <Tooltip text="Goal duration">
                                 <div className='cnx__ins_details_item'>
-                                    <i className="fa-regular fa-clock"/>
+                                    <i className="fa-regular fa-clock" />
                                     {dayjs(goal?.startDate).format('MMM DD, YYYY')} - {goal.endDate ? dayjs(goal?.endDate).format('MMM DD, YYYY') : 'No end date'}
                                 </div>
                             </Tooltip>
@@ -383,17 +476,17 @@ const Goal = () => {
                             <Tooltip text='Expected outcome'>
                                 <div className='cnx__ins_details_item'>
                                     <Icon type="Goal" />
-                                    {goal?.trackingType === "value" ? numberToUnits(Number(goal?.trackingValue)) : goal?.trackingValue} Deals 
+                                    {goal?.trackingType === "value" ? numberToUnits(Number(goal?.trackingValue)) : goal?.trackingValue} Deals
                                 </div>
                             </Tooltip>
                         </div>
-                     </div>
-                   {/* end details */}
+                    </div>
+                    {/* end details */}
 
                 </div>
                 {/* end details bar */}
 
-            
+
                 {/* graph container */}
                 <div className="cnx__ins_graph_container">
                     {/* header */}
@@ -404,38 +497,41 @@ const Goal = () => {
                                 <i className="fa-solid fa-chart-simple" />
                             </Button>
 
-                            <Button className='cnx__ins_graph_view_button'>
+                            {/* <Button className='cnx__ins_graph_view_button'>
                                 <i className="fa-solid fa-chart-pie" />
                             </Button>
 
                             <Button className='cnx__ins_graph_view_button'>
-                               <i className="fa-solid fa-chart-bar"></i>
-                            </Button>
+                                <i className="fa-solid fa-chart-bar"></i>
+                            </Button> */}
 
-                           {isSummarizing &&  <div>
-                                <div className="spinner-border" role="status">  </div>
+                            {isSummarizing && <div>
+                                <div className="spinner-border" role="status" style={{
+                                    width: '1.3rem',
+                                    height: '1.3rem',
+                                }}>  </div>
                             </div>}
                         </div>
-                        <div>
-                           <Dropdown>
+                        {/* <div>
+                            <Dropdown>
                                 <Dropdown.Toggle
                                     className={`cnx__btn cnx__btn_tertiary  cnx__btn_sm cnx__period_filter__title_btn`}
                                 >
                                     <span>
-                                       Export
+                                        Export
                                     </span>
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu offset={[0, 8]} placement='bottom-end' className="cnx__period_filter_dd_menu">
-                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}> 
+                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
                                         Pdf
                                     </Dropdown.Item>
-                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}> 
+                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
                                         PNG
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                        </div>
+                        </div> */}
                         {/* graph view tab end */}
                     </div>
                     {/* end header */}
@@ -443,8 +539,8 @@ const Goal = () => {
                     <div className="cnx_divider" />
 
                     {/* graph */}
-                        {!isSummarizing && 
-                            <div className='cnx__ins_graph'>
+                    {!isSummarizing && goalSummary.length > 0 ?
+                        <div className='cnx__ins_graph'>
                             <div className='__time_filter'>
                                 <RelativeTimePeriod
                                     setSelectedPeriod={handleRelativeTimePeriod}
@@ -460,56 +556,57 @@ const Goal = () => {
                                     actualFillColor={"#1d8603"}
                                     targetFillColor={"#E5E5E5"}
                                     leftSideLabel="Number of deals"
-                                    barDataKey={[ "value" ]}
+                                    barDataKey={["value"]}
                                     offset={-5}
                                     // yDomain={ [0, dataMax => (dataMax + Math.ceil(dataMax * 0.1))]}
-                                    labelListFormatter={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
-                                    yAxisTickFormate={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)  }
-                                    data = {[...summarizedData]} 
+                                    labelListFormatter={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)}
+                                    yAxisTickFormate={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)}
+                                    data={[...goalSummary]}
                                 />
                             </div>
-                        </div> 
-                        }
+                        </div>
+                        : null
+                    }
                     {/* end graph */}
-                    
+
                 </div>
                 {/* end graph container */}
 
 
 
-                 {/* table container */}
+                {/* table container */}
                 <div className="cnx__ins_graph_container">
                     {/* header */}
                     <div className="cnx__ins_graph_container_header">
                         {/* graph view tab */}
                         <div className='cnx__ins_graph_views'>
                             <Button
-                                onClick={() => setActiveTable('activities')}
-                                className={`cnx__ins_table_view_button ${activeTable === 'activities' ? 'active': ""}`}>
-                                Activities
+                                onClick={() => setActiveTable('deals')}
+                                className={`cnx__ins_table_view_button ${activeTable === 'deals' ? 'active' : ""}`}>
+                                Deals
                             </Button>
 
-                            <Button 
+                            <Button
                                 onClick={() => setActiveTable('summary')}
-                                className={`cnx__ins_table_view_button ${activeTable === 'summary' ? 'active': ""}`}>
+                                className={`cnx__ins_table_view_button ${activeTable === 'summary' ? 'active' : ""}`}>
                                 Summary
                             </Button>
                         </div>
                         <div>
-                           <Dropdown>
+                            <Dropdown>
                                 <Dropdown.Toggle
                                     className={`cnx__btn cnx__btn_tertiary  cnx__btn_sm cnx__period_filter__title_btn`}
                                 >
                                     <span>
-                                       Export
+                                        Export
                                     </span>
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu offset={[0, 8]} placement='bottom-end' className="cnx__period_filter_dd_menu">
-                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}> 
+                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
                                         Pdf
                                     </Dropdown.Item>
-                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}> 
+                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
                                         PNG
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
@@ -519,29 +616,35 @@ const Goal = () => {
                     </div>
                     {/* end header */}
 
-                    
+
 
                     {/* graph table */}
                     <div className='cnx__ins_table pb-3'>
-                       {activeTable === 'activities' && (
-                            <DataTable 
-                                data={dealsData} 
-                                defaultColumns={DataTableColumns}
-                                isLoading={goalsIsLoading || isLoading} 
+                        {activeTable === 'deals' && (
+                            <DataTable
+                                data={goalDealsData ? [...goalDealsData] : []}
+                                defaultColumns={
+                                    goal?.entryType === 'Won' ?
+                                    WonTableData :
+                                    goal?.entryType === 'Added'?
+                                    AddedTableColumns : 
+                                    DataTableColumns
+                                }
+                                isLoading={dealsIsFetching}
                             />
                         )}
-                        
-                    { 
-                        // activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
-                         activeTable === 'summary' && <GoalSummaryTable data={summarizedData} isLoading={isSummarizing}/>
-                    }
+
+                        {
+                            // activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
+                            activeTable === 'summary' && <GoalSummaryTable data={goalSummary} isLoading={isSummarizing} />
+                        }
                     </div>
                     {/* end graph table */}
-                    
+
                 </div>
                 {/* end table container */}
             </div>
-            
+
         </div>
     )
 }

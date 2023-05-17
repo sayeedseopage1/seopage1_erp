@@ -1,38 +1,71 @@
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import * as React from 'react';
-import { setGoals, setRecurring, setStatus } from "../services/slices/goalSlice";
-import { useGetGoalsQuery } from "../services/api/goalsApiSlice";
+import { useGetGoalsQuery, useUpdateGoalMutation, usePrefetch } from "../services/api/goalsApiSlice";
 import { getPeriod } from "../utils/getPeriod";
 import dayjs from 'dayjs';
 import _ from "lodash";
 
 
 export const useGoals = () => {
-    const {goals, recurring, status}  = useSelector(state => state.goals);
+    const [goals, setGoals] = React.useState({
+        goals: [],
+        recurring: []
+    });
     const dispatch = useDispatch();
 
-    const {data: goalsData, isLoading: goalsIsLoading, error: goalsError} = useGetGoalsQuery(window.Laravel.user.id);
+    const [
+        updateGoal,
+        {
+            isUninitialized: updateGoalIsUninitialized,
+            isSuccess: updateGoalIsSuccess,
+            isLoading: updateGoalIsLoading,
+        }
+    ] = useUpdateGoalMutation();
+
+
+   const {
+        data: goalsData,
+        isLoading: goalsIsLoading,
+        isSuccess: goalsIsSuccess,
+        isFetching: goalsIsFetching,
+    } = useGetGoalsQuery(
+        window?.Laravel?.user?.id
+    );
+
 
     React.useEffect(() => {
-        if(goalsData && !goalsIsLoading){
-            dispatch(setGoals(goalsData));
-            dispatch(setRecurring(goalsData));
-        }
-    }, [goalsData, goalsIsLoading, goalsError])
+        if(goalsData && goalsIsSuccess){
+            const newGoals = [];
+            const newRecurring = [];
 
+            
+             goalsData?.goals?.map(goal => {
+                if(_.isArray(goal)){
+                    newGoals.push(...goal);
+                }else{
+                    newGoals.push(goal)
+                }
+               
+            })
 
-    const getGoalById = (id) => {
-        if(goals.length > 0){
-            const _goals = goals.find(goal => goal.id === id);
-            const _recurring = recurring.length > 0 ? recurring.filter(r => r.goal_id === id) : [];
-            return  {
-                ..._goals,
-                recurring: _recurring
-            }
+             goalsData?.recurring?.map(r => {
+                if(_.isArray(r)){
+                    newRecurring.push(...r);
+                }else{
+                    newRecurring.push(r)
+                }
+            })
+
+            setGoals({
+                goals: newGoals,
+                recurring: newRecurring
+            })
         }
-        
-    }
+
+       
+
+    }, [goalsData, goalsIsSuccess])
 
 
 
@@ -81,5 +114,18 @@ export const useGoals = () => {
     }
 
 
-    return {goals, goalsIsLoading ,getGoalById, getTargetPeriod, getEndDate, goalStateStatus: status}
+    return {
+        goals,
+        goalsIsLoading,
+        goalsIsSuccess,
+        goalsIsFetching,
+        getTargetPeriod, 
+        getEndDate, 
+
+        // update
+        updateGoal,
+        updateGoalIsUninitialized,
+        updateGoalIsSuccess,
+        updateGoalIsLoading,
+    }
 }

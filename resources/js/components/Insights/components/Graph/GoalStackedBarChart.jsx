@@ -156,7 +156,7 @@ const CustomTooltip = ({
 }) => {
     if(active && payload ) {
         let { goal, dealAdded, difference,targetType, totalDeal, title, goalProgress, goalData } = payload[0].payload;
-        let { entry, entryType, label } = goalData;
+        let { entry, entryType, label } = goalData?.goal
         return (
             <div className="cnx__tooltip">
                 <div className='cnx__tooltip__header'>

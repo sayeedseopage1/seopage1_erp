@@ -22,6 +22,7 @@ import { useGetUsersQuery } from '../services/api/userSliceApi';
 import { useGetTeamsQuery } from '../services/api/teamSliceApi';
 import { addGoal, addRecurring, setGoals, setStatus, updateGoal, updateRecurring } from '../services/slices/goalSlice';
 import { stage } from '../utils/constants';
+import { useGoals } from '../hooks/useGoals';
 
 
 // assignee for 
@@ -561,6 +562,11 @@ const GoalFormModal = () => {
     const [goalType, setGoalType] = React.useState('');
     const [achievablePoints, setAchievablePoints] = React.useState('0');
     const [edit, setEdit] = React.useState(false);
+    const {
+        updateGoal,
+        updateGoalIsLoading,
+        updateGoalIsSuccess,
+    } = useGoals();
 
 
 
@@ -669,18 +675,24 @@ const GoalFormModal = () => {
         
 
         if(_.lowerCase(mode) === 'edit'){
-            await axios.post(`/account/insights/goals/edit/${data.id}`, formData).then((res) => {
-                setFormStatus('saved');
-                setIsSaving(false);
-                if(res.data?.goal){
+            try{
+                const res = await updateGoal({id: data.id, data: {...formData}});
+
+                if(res?.goal){
                     dispatch(setStatus('updating'));
-                    dispatch(updateGoal({goal: res.data.goal}));
-                    dispatch(updateRecurring(res.data));
+                    dispatch(updateGoal({goal: res.goal}));
+                    dispatch(updateRecurring(res));
                     dispatch(setStatus('idle'))
-                    navigate(`goals/${res.data?.goal.id}`);
+                    navigate(`goals/${res?.goal.id}`);
                 }
                 
-            });
+
+            }catch(err){
+                console.log(err)
+            } finally {
+                setFormStatus('saved');
+                setIsSaving(false);
+            }
         } else {
             await axios.post("/account/insights/goals/add", formData).then((res) => {
                 if(res.data.goal){
@@ -693,7 +705,10 @@ const GoalFormModal = () => {
             });
         }
     }
+    
 
+
+    
 
     return(
         <div className="cnx_ins__goal_modal__container">

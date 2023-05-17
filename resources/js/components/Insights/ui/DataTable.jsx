@@ -38,7 +38,6 @@ const DataTable = ({data, isLoading, defaultColumns}) => {
     const [totalPage, setTotalPage] = React.useState(1);
 
 
-    console.log({tData: data})
 
     // columns
     React.useEffect(() => {

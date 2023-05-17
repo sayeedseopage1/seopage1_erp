@@ -295,9 +295,15 @@
                             {{--<x-sub-menu-item link="" :text="'Qualified Sales'" />--}}
                             <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
 
-                            <x-sub-menu-item :link="route('points.index')" :text="'Points'" />
+                            {{-- <x-sub-menu-item :link="route('points.index')" :text="'Points'" />
 
-                            <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
+                            <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" /> --}}
+
+
+
+                            {{--<x-sub-menu-item :link="route('points.index')" :text="'Points'" />--}}
+                            {{--<x-sub-menu-item link="" :text="'Incentives'" />--}}
+
                             @endif
 
                         </div>
@@ -618,7 +624,8 @@
                         <x-sub-menu-item  :link="$sidebarUserPermissions['manage_company_setting'] == 4 ? route('company-settings.index') : route('profile-settings.index')" :text="'General Settings'" />
                         @if(Auth::user()->role_id == 1)
                         <x-sub-menu-item  :link="route('kpi-settings.index')" :text="'KPI Settings'" />
-                        {{--<x-sub-menu-item  :link="''" :text="'Incentives Settings'" />--}}
+                        <x-sub-menu-item  :link="route('incentive-settings.index')" :text="'Incentives Settings'" />
+                      
                         @endif
                     </div>
                 </x-menu-item>

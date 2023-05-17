@@ -46,7 +46,13 @@ export const ModalDataTable = () =>{
                          <div>
                             <DataTable 
                                 data={data.deals} 
-                                defaultColumns={DataTableColumns} 
+                                    defaultColumns={
+                                        data?.entryType === 'Won' ?
+                                        WonTableData :
+                                        data?.entryType === 'Added'?
+                                        AddedTableColumns : 
+                                        DataTableColumns
+                                    }
                                 isLoading={isLoading } 
                             />
                          </div> 

@@ -434,20 +434,144 @@ class InsightsController extends AccountBaseController
     }
 
 
+    // public function getGoalDetails(GoalSetting $data)
+    // {
+    //     if ($data->entryType == 'Added') {
+    //         $dealStage = DealStage::where([
+    //             'added_by' => $data->user_id,
+    //         ])
+    //         ->whereDate('created_at', '>=', $data->startDate)
+    //         ->whereDate('created_at', '<=', $data->endDate)
+    //         ->get();
+    //     } elseif ($data->entryType == 'Progressed') {
+    //         if ($data->qualified == 'Qualified') {
+    //             $deal_status = 1;
+    //         } elseif ($data->qualified == 'Requirements Defined') {
+    //             $deal_status = 2;
+    //         } elseif ($data->qualified == 'Proposal Made') {
+    //             $deal_status = 3;
+    //         } elseif ($data->qualified == 'Negotiations Started') {
+    //             $deal_status = 4;
+    //         } elseif ($data->qualified == 'Milestone Breakdown') {
+    //             $deal_status = 5;
+    //         } else {
+    //             $deal_status = 0;
+    //         }
+
+    //         $dealStage = DealStage::where([
+    //             'added_by' => $data->user_id,
+    //             'deal_stage' => $deal_status
+    //         ])
+    //         ->whereDate('created_at', '>=', $data->startDate)
+    //         ->whereDate('created_at', '<=', $data->endDate)
+    //         ->get();
+    //     } elseif ($data->entryType == 'Won') {
+    //         $dealStage = DealStage::where([
+    //             'added_by' => $data->user_id,
+    //             'won_lost' => 'Yes'
+    //         ])
+    //         ->whereDate('created_at', '>=', $data->startDate)
+    //         ->whereDate('created_at', '<=', $data->endDate)
+    //         ->get();
+    //     }
+        
+
+    //     return response()->json($dealStage);
+    // }
+
+
+    // public function getGoalDetails(GoalSetting $data)
+    // {
+    //     if ($data->entryType == 'Added') {
+    //         $dealStage = DealStage::where([
+    //             'added_by' => $data->user_id,
+    //         ])
+    //         ->whereDate('created_at', '>=', $data->startDate)
+    //         ->whereDate('created_at', '<=', $data->endDate)
+    //         ->get();
+    //     } elseif ($data->entryType == 'Progressed') {
+    //         if ($data->qualified == 'Qualified') {
+    //             $deal_status = 1;
+    //         } elseif ($data->qualified == 'Requirements Defined') {
+    //             $deal_status = 2;
+    //         } elseif ($data->qualified == 'Proposal Made') {
+    //             $deal_status = 3;
+    //         } elseif ($data->qualified == 'Negotiations Started') {
+    //             $deal_status = 4;
+    //         } elseif ($data->qualified == 'Milestone Breakdown') {
+    //             $deal_status = 5;
+    //         } else {
+    //             $deal_status = 0;
+    //         }
+
+    //         $dealStage = DealStage::where([
+    //             'added_by' => $data->user_id,
+    //             'deal_stage' => $deal_status
+    //         ])
+    //         ->whereDate('created_at', '>=', $data->startDate);
+    //         if (!is_null($data->endDate)) {
+    //             $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
+    //         }
+    //         $dealStage = $dealStage->get();
+            
+    //     } elseif ($data->entryType == 'Won') {
+    //         $dealStage = DealStage::where([
+    //             'added_by' => $data->user_id,
+    //             'won_lost' => 'Yes'
+    //         ])
+    //         ->whereDate('created_at', '>=', $data->startDate);
+    //         if (!is_null($data->endDate)) {
+    //             $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
+    //         }
+    //         $dealStage = $dealStage->get();
+    //     }
+        
+
+    //     return response()->json($dealStage);
+    // }
+
     public function getGoalDetails(GoalSetting $data)
     {
-        if ($data->entryType == 'Added') {
-            $dealStage = DealStage::
-            whereDate('created_at', '>=', $data->startDate);
-            if (!is_null($data->endDate)) {
-                $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
+            if($data->team_id != null)
+            {
+                $team = Seopage1Team::find($data->team_id);
+
+                $users = explode(',', $team->members);
+                $user_data = [];
+                foreach ($users as $key => $value) {
+                    if ($value != '') {
+                         //$user = User::find($value);
+                        array_push($user_data,$value);
+                    }
+                }
+
+            }else 
+            {
+                $user_data[]= $data->user_id;
             }
-            $dealStage = $dealStage->join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
-                'leads.added_by' => $data->user_id,
-            ])->get();
+            
 
+            // Always use an array of user IDs, even if $data->user_id is set
+            $data2 = $data->user_id ? [$data->user_id] : $user_data;
+        //    / dd($data2);
+        
+            if ($data->entryType == 'Added') {
+                $dealStage = DealStage::join('leads', 'leads.id', '=', 'deal_stages.lead_id')
+                    ->whereIn('leads.added_by', $data2)
+                    ->whereDate('deal_stages.created_at', '>=', $data->startDate);
+        
+                if (!is_null($data->endDate)) {
+                    $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
+                }
+        
+                $dealStage = $dealStage->get();
+               // dd($dealStage);
+        
+                $response['deal_stage'] = $dealStage;
+            }
+       
 
-        } elseif ($data->entryType == 'Progressed') {
+         elseif ($data->entryType == 'Progressed') {
             if ($data->qualified == 'Qualified') {
                 $deal_status = 1;
             } elseif ($data->qualified == 'Requirements Defined') {
@@ -461,30 +585,62 @@ class InsightsController extends AccountBaseController
             } else {
                 $deal_status = 0;
             }
-
-            $dealStage = DealStage::where([
-                'added_by' => $data->user_id,
+            
+            $dealStage = DealStage::join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
                 'deal_stage' => $deal_status
             ])
-            ->whereDate('created_at', '>=', $data->startDate);
+            ->whereDate('deal_stages.created_at', '>=', $data->startDate);
+            
             if (!is_null($data->endDate)) {
-                $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
+                $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
             }
+            
             $dealStage = $dealStage->get();
+            
         } elseif ($data->entryType == 'Won') {
-            $dealStage = Deal::
-            whereDate('created_at', '>=', $data->startDate);
-            if (!is_null($data->endDate)) {
-                $dealStage = $dealStage->whereDate('created_at', '<=', $data->endDate);
+            if($data->team_id != null)
+            {
+                $team = Seopage1Team::find($data->team_id);
+
+                $users = explode(',', $team->members);
+                $user_data = [];
+                foreach ($users as $key => $value) {
+                    if ($value != '') {
+                         //$user = User::find($value);
+                        array_push($user_data,$value);
+                    }
+                }
+
+            }else 
+            {
+                $user_data[]= $data->user_id;
             }
-            $dealStage = $dealStage->join('leads', 'leads.id', '=', 'deal_stages.lead_id')->where([
-                'leads.added_by' => $data->user_id,
-            ])->get();
+            
+
+            // Always use an array of user IDs, even if $data->user_id is set
+            $data2 = $data->user_id ? [$data->user_id] : $user_data;
+        //    / dd($data2);
+
+           
+        $dealStage = Deal::join('leads', 'leads.id', '=', 'deals.lead_id')
+        ->whereIn('leads.added_by', $data2)
+        ->whereDate('deals.created_at', '>=', $data->startDate);
+
+            if (!is_null($data->endDate)) {
+                $dealStage = $dealStage->whereDate('deals.created_at', '<=', $data->endDate);
+            }
+
+            $dealStage = $dealStage->get();
+            //dd($dealStage);
+
+
         }
         
 
         return response()->json($dealStage);
     }
+
+
 
     public function get_goal_details(GoalSetting $data)
     {
@@ -512,7 +668,9 @@ class InsightsController extends AccountBaseController
                 $response['team'] = $user_data;
             }
 
+
             $response['added_by'] = User::find($data->added_by);
+
             return response()->json($response);
         }
     }
