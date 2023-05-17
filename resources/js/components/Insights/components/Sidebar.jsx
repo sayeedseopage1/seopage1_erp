@@ -391,7 +391,7 @@ const InsightSidebar = () => {
                                                                 <span>
                                                                     No active goals
                                                                 </span> 
-                                                            </div> : null
+                                                            </div> : <></>
                                                         
                                                     }
                                                 {/*end goals*/}

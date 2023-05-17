@@ -382,7 +382,7 @@ export const useGoals = () => {
 
 
     // get goal won deals 
-    const wonGoalSummary = (deals, goals, period, index) => {
+    const wonGoalSummary = (deals, goalData, period, index) => {
         let totalDeal = 0;
         let dealAdded = 0;
         let dealWon = 0;
@@ -410,7 +410,7 @@ export const useGoals = () => {
 
             goal = Number(period.value);
             dealAdded = _deals.reduce((total, deal) => {
-                return total + Number(deal.amount);
+                return total + Number(deal.team_total_amount);
             }, 0);
 
             
@@ -538,5 +538,7 @@ export const useGoals = () => {
 
         // 
         addedGoalSummary,
+        wonGoalSummary,
+        progressedGoalSummary
     }
 }

@@ -51,7 +51,7 @@ const Goal = () => {
 
 
     // goal hooks
-    const { getTargetPeriod, addedGoalSummary } = useGoals();
+    const { getTargetPeriod, addedGoalSummary, wonGoalSummary} = useGoals();
 
 
     // authorized for edit 
@@ -264,6 +264,8 @@ const Goal = () => {
                     if (_deals.length > 0) {
                         if(goal.entryType === 'Added'){
                             _summarizedData = addedGoalSummary(_deals, goalData, period, index);
+                        }else if(goal.entryType === 'Won'){
+                            _summarizedData = wonGoalSummary(_deals, goalData, period, index);
                         }else{
                             _summarizedData = summarized(_deals, goalData, period, index)
                         }
