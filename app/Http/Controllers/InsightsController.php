@@ -668,32 +668,32 @@ class InsightsController extends AccountBaseController
             $dealStage = $dealStage->get();*/
 
             $deals_data = Deal::select([
-                'deals.id as id',
-                'deals.id as won_deal_id',
-                'deals.project_name as deal_project_name',
-                'deals.client_username as client_username',
-                'leads.project_link as deal_project_link',
-                'deals.amount as deal_amount',
-                'deals.actual_amount as deal_original_amount',
-                'deals.deal_creation_date as deal_created_at',
-                'deals.added_by as won_by',
-                'deals.created_at as won_deal_creation_date',
-                'deals.award_time as deal_award_time',
+                'deals.*',
+                // 'deals.id as won_deal_id',
+                // 'deals.project_name as deal_project_name',
+                // 'deals.client_username as client_username',
+                // 'leads.project_link as deal_project_link',
+                // 'deals.amount as deal_amount',
+                // 'deals.actual_amount as deal_original_amount',
+                // 'deals.deal_creation_date as deal_created_at',
+                // 'deals.added_by as won_by',
+                // 'deals.created_at as won_deal_creation_date',
+                // 'deals.award_time as deal_award_time',
 
                 'pm.id as pm_id',
                 'pm.name as pm_name',
 
-                'deals.submission_status as client_contact_form',
-                'deals.status as deal_project_status',
+                // 'deals.submission_status as client_contact_form',
+                // 'deals.status as deal_project_status',
 
-                'leads.added_by as lead_converted_by',
-                'leads.added_by as lead_converted_by',
-                'leads.id as lead_id',
+                // 'leads.added_by as lead_converted_by',
+                // 'leads.added_by as lead_converted_by',
+                // 'leads.id as lead_id',
 
-                'leads.id as lead_id',
+                // 'leads.id as lead_id',
                 'leads.added_by as bidder',
-                'deals.project_name as deal_project_name',
-                'leads.added_by as bidder',
+                // 'deals.project_name as deal_project_name',
+                // 'leads.added_by as bidder',
             ])
             ->join('leads', 'leads.id', 'deals.lead_id')
             ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
@@ -702,6 +702,9 @@ class InsightsController extends AccountBaseController
             ->get();
 
             foreach ($deals_data as $key => $value) {
+                if ($data->trackingType == 'count') {
+                    $value->amount = 1;
+                }
                 if (!is_null($data->goal)) {
                     $member = rtrim($data->goal->members, ',');
                     $member = explode(',', $member);
