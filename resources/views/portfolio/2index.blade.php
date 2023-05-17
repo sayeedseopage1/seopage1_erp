@@ -1,6 +1,15 @@
 @extends('layouts.app')
 @section('content')
 <style>
+    .selectBox{
+        width: 7rem;
+        background-color: #ffffff;
+        border: none;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        border-radius: 5px;
+        text-align: center;
+
+    }
     .categoryLink{
         background-color: #ffffff;
         box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -25,9 +34,42 @@
         }
     }
     @media (max-width: 750px) {
+        .mediaBox {
+            flex-wrap: wrap;
+        }
         .col-sm-2 {
             width: 50%;
             margin-bottom: 10px;
+        }
+    }
+    @media (max-width: 750px) {
+        .dropdown-toggleMedia {
+            display: block;
+            width: 100%;
+            text-align: left;
+        }
+
+        .dropdown-menuMedia {
+            position: static;
+            float: none;
+            width: auto;
+            margin-top: 0;
+            box-shadow: none;
+        }
+
+        .dropdown-itemMedia {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            clear: both;
+            font-weight: 400;
+            color: #212529;
+            text-align: left;
+        }
+
+        .dropdown-item:hover {
+            color: #16181b;
+            background-color: #f8f9fa;
         }
     }
 </style>
@@ -36,68 +78,81 @@
             <div class="col-md-12">
                 <div class="card mt-3">
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row mediaBox">
                             <div class="col-sm-2">
                                 <label for="">Select CMS Category</label><br>
-                                <div class="dropdown bootstrap-select form-control select-picker" style="width: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-                                    <select name="cms_id" id="cms_id" data-live-search="true" class="form-control select-picker error" data-size="8">
-                                        <option value="">--</option>
-                                        @foreach ($cms_categories as $cms_category)
-                                            <option value="{{$cms_category->id}}">{{$cms_category->cms_name}}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle selectBox dropdown-toggleMedia" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        All<i class="fa fa-sort-down mb-1 ml-2"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menuMedia" aria-labelledby="dropdownMenuButton">
+                                    @foreach($cms_categories as $cms_category)
+                                        <a class="dropdown-item dropdown-itemMedia selected" href="#">{{$cms_category->cms_name}}</a>
+                                    @endforeach
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-2">
                                 <label for="">Website Types</label><br>
-                                <div class="dropdown bootstrap-select form-control select-picker" style="width: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-                                    <select name="website_type" id="website_type" data-live-search="true" class="form-control select-picker error" data-size="8">
-                                        <option value="">--</option>
-                                        @foreach ($website_types as $website_type)
-                                            <option value="{{$website_type->id}}">{{$website_type->website_type}}</option>
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle selectBox dropdown-toggleMedia" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        All<i class="fa fa-sort-down mb-1 ml-2"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menuMedia" aria-labelledby="dropdownMenuButton">
+                                        @foreach($website_types as $website_type)
+                                        <a class="dropdown-item dropdown-itemMedia" href="#">{{$website_type->website_type}}</a>
                                         @endforeach
-                                    </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-2">
                                 <label for="">Select Website Category</label><br>
-                                <div class="dropdown bootstrap-select form-control select-picker" style="width: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-                                    <select name="website_category" id="website_category" data-live-search="true" class="form-control select-picker error" data-size="8">
-                                        <option value="">--</option>
-                                        @foreach ($parent_categories as $parent_category)
-                                            <option value="{{$parent_category->id}}">{{$parent_category->category_name}}</option>
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle selectBox dropdown-toggleMedia" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        All<i class="fa fa-sort-down mb-1 ml-2"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menuMedia" aria-labelledby="dropdownMenuButton">
+                                        @foreach($parent_categories as $parent_category)
+                                        <a class="dropdown-item dropdown-itemMedia" href="#">{{$parent_category->category_name}}</a>
                                         @endforeach
-                                    </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-2">
                                 <label for="">Select Website Subcategory</label><br>
-                                <div style="width: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-                                    <select class="form-control height-35 f-14" name="website_sub_cat" id="website_sub_cat" data-live-search="true" data-size="8">
-                                        <option value="">--</option>
-                                    </select>
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle selectBox dropdown-toggleMedia" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        All<i class="fa fa-sort-down mb-1 ml-2"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menuMedia" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item dropdown-itemMedia" href="#">Action</a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-2">
                                 <label for="">Select Website Theme</label><br>
-                                <div class="dropdown bootstrap-select form-control select-picker" style="width: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-                                    <select name="theme_name" id="theme_name" data-live-search="true" class="form-control select-picker error" data-size="8">
-                                        <option value="">--</option>
-                                        @foreach ($project_portfolios as $project_portfolio)
-                                            <option value="{{$project_portfolio->id}}">{{$project_portfolio->theme_name}}</option>
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle selectBox dropdown-toggleMedia" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        All<i class="fa fa-sort-down mb-1 ml-2"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menuMedia" aria-labelledby="dropdownMenuButton">
+                                        @foreach($project_portfolios as $project_portfolio)
+                                            <a class="dropdown-item dropdown-itemMedia" href="#">{{$project_portfolio->theme_name}}</a>
                                         @endforeach
-                                    </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-2">
                                 <label for="">Select Website Plugin</label><br>
-                                <div class="dropdown bootstrap-select form-control select-picker" style="width: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-                                    <select name="portfolio_link" id="portfolio_link" data-live-search="true" class="form-control select-picker error" data-size="8">
-                                        <option value="">--</option>
-                                        @foreach ($project_portfolios as $project_portfolio)
-                                            <option value="{{$project_portfolio->id}}">{{$project_portfolio->plugin_name}}</option>
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle selectBox dropdown-toggleMedia" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        All<i class="fa fa-sort-down mb-1 ml-2"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menuMedia" aria-labelledby="dropdownMenuButton">
+                                        @foreach($project_portfolios as $project_portfolio)
+                                            <a class="dropdown-item dropdown-itemMedia" href="#">{{$project_portfolio->plugin_name}}</a>
                                         @endforeach
-                                    </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -177,29 +232,7 @@
         </div>
     </div>
 @endsection
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('#website_category').change(function () {
-            var website_cat_id = $(this).val();
-            // console.log(website_cat_id);
-            if (website_cat_id) {
-                $.ajax({
-                    url: '/portfolio/get-sub-category/' + website_cat_id,
-                    type: "GET",
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        $.each(data, function (index, website_sub_cat) {
-                            $('#website_sub_cat').append('<option value="' + website_sub_cat.id + '">' + website_sub_cat.category_name + '</option>');
-                        });
-                    }
-                });
-            } else {
-                $('#website_sub_cat').empty();
-            }
-        });
-    });
     document.addEventListener("DOMContentLoaded", function() {
         var linkBtns = document.querySelectorAll(".linkBtn");
 
@@ -220,5 +253,4 @@
         });
     });
 </script>
-
 

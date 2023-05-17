@@ -3,20 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\ProjectCms;
-use App\Models\ProjectNiche;
 use App\Models\ProjectPortfolio;
-use App\Models\ProjectWebsiteType;
+use App\Models\ProjectSubmission;
+use App\Models\QCSubmission;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use function Doctrine\Common\Collections\Expr\visit;
 
-class PortfolioController extends AccountBaseController
+class ProjectCredential extends AccountBaseController
 {
     public function __construct()
     {
         parent::__construct();
-        $this->pageTitle = 'Portfolio';
-        $this->activeSettingMenu = 'portfolio';
+        $this->pageTitle = 'Project Credential';
+        $this->activeSettingMenu = 'Project Credential';
         $this->middleware(function ($request, $next) {
             abort_403(user()->permission('manage_company_setting') !== 'all');
             return $next($request);
@@ -29,25 +28,10 @@ class PortfolioController extends AccountBaseController
      */
     public function index()
     {
-        $this->cms_categories = ProjectCms::all();
-        $this->website_types = ProjectWebsiteType::all();
-        $this->parent_categories = ProjectNiche::whereNull('parent_category_id')->get();
-        $this->project_portfolios = ProjectPortfolio::all();
-        $this->portfolios = DB::table('project_portfolios')
-            ->leftJoin('users', 'project_portfolios.project_id', '=', 'users.id')
-            ->leftJoin('project_niches', 'project_portfolios.project_id', '=', 'project_niches.id')
-            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
-            ->select('project_portfolios.*','users.user_name','projects.project_name','project_niches.category_name')
-            ->get();
-
-//                dd($this->portfolios);
-        return view('portfolio.index',$this->data);
-    }
-
-    public function getSubCategory($website_cat_id)
-    {
-        $website_sub_cats = ProjectNiche::find($website_cat_id)->child;
-        return response()->json($website_sub_cats);
+        $this->q_c_submission = QCSubmission::latest()->first();
+        $this->project_submission = ProjectSubmission::latest()->first();
+        $this->project_portfolio = ProjectPortfolio::latest()->first();
+        return view('project-credentials.index',$this->data);
     }
 
     /**

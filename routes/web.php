@@ -177,6 +177,7 @@ use App\Http\Controllers\KpiSettingController;
 use App\Http\Controllers\IncentiveSettingController;
 use App\Http\Controllers\PointsController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\ProjectCredential;
 
 /*
 |--------------------------------------------------------------------------
@@ -1197,6 +1198,8 @@ Route::get('/projects/project-completion/get-sub-niche/{niche_id}', [ProjectCont
 
 //Portfolio Section
 Route::resource('portfolio',PortfolioController::class);
+Route::get('/portfolio/get-sub-category/{website_cat_id}', [PortfolioController::class, 'getSubCategory']);
+
 
 //add project niche
 Route:: get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
@@ -1218,6 +1221,9 @@ Route::put('/projects/update-website-type/{id}', [ProjectController::class, 'upd
 Route::post('/projects/niche-store', [ProjectController::class, 'storeNiche'])->name('add-niche');
 Route::get('/projects/niches', [ProjectController::class, 'Niche'])->name('get-niche');
 Route::delete('/projects/delete-niche/{id}', [ProjectController::class, 'deleteNiche']);
+
+//project credentials
+Route::resource('project-credentials',ProjectCredential::class);
 
 //top-management project accept/deny
 Route::post('/projects/accept/', [ProjectController::class, 'ProjectAccept'])->name('project-accept');

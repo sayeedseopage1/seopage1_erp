@@ -20,10 +20,8 @@ return new class extends Migration
             $table->integer('website_type')->nullable();
             $table->integer('niche')->nullable();
             $table->integer('sub_niche')->nullable();
-            $table->tinyInteger('use_theme')->default(0);
-            $table->tinyInteger('theme_information')->default(0);
-            $table->text('theme_link')->nullable();
-            $table->tinyInteger('website_plugin')->default(0);
+            $table->string('theme_name')->nullable();
+            $table->text('theme_url')->nullable();
             $table->tinyInteger('plugin_information')->default(0);
             $table->text('plugin_name')->nullable();
             $table->string('plugin_url')->nullable();
@@ -31,6 +29,8 @@ return new class extends Migration
             $table->string('main_page_name')->nullable();
             $table->string('secondary_page_number')->nullable();
             $table->string('secondary_page_name')->nullable();
+            $table->string('backup_email_address')->nullable();
+            $table->string('day_interval')->nullable();
             $table->longText('description')->nullable();
             $table->text('portfolio_link')->nullable();
             $table->integer('added_by')->nullable();
