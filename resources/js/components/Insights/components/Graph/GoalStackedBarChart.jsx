@@ -213,7 +213,7 @@ const CustomBar = (props) => {
 
         // show target value and actual value on one bar deference color
         const { x, y, width, height, fill, payload, targetFillColor, actualFillColor } = props;
-        const { goal, dealAdded,targetType, totalDeal, goalData } = payload;      
+        const { goal, dealAdded,targetType, totalDeal, goalData, } = payload;      
         const actual = _.lowerCase(targetType) === 'value'  ? dealAdded : totalDeal;
         const target = _.lowerCase(targetType) === 'value'  ? goal : goal;
 
@@ -260,7 +260,9 @@ const CustomBar = (props) => {
 
                             {_.lowerCase(targetType) === 'value'  ?
                                 `$${convertNumberToUnits(target, 2)}` :
-                                convertNumberToUnits(target, 0)}
+                                goalData?.goal?.entryType === 'Won' ? convertNumberToUnits(target, 2) : 
+                                convertNumberToUnits(target, 0)
+                            }
                             
                             <Icon type='Goal' className='cnx__goal_graph_labelList_icon' />
                         </div>
@@ -293,6 +295,7 @@ const CustomBar = (props) => {
                         >
                             {_.lowerCase(targetType) === 'value'  ?
                                 `$${convertNumberToUnits(actual, 2)}` :
+                                goalData?.goal?.entryType === 'Won' ? convertNumberToUnits(actual, 2) :
                                 convertNumberToUnits(actual, 0)}
 
                         </div>

@@ -51,11 +51,12 @@ const Goal = () => {
 
 
     // goal hooks
-    const { getTargetPeriod } = useGoals();
+    const { getTargetPeriod, addedGoalSummary, wonGoalSummary} = useGoals();
 
 
     // authorized for edit 
     const isAuthorizedToEdit = () => {
+              
         if(
             goalData?.goal?.added_by === window?.Laravel?.user?.id
         ) {
@@ -103,10 +104,10 @@ const Goal = () => {
     
 
     // distribute deals by period
-    const distributeDealsByPeriod = (deals, startDate, endDate) => {
+    const distributeDealsByPeriod = (deals, startDate, endDate, accessor) => {
         return deals.filter(deal => {
-            return day.isSameOrAfter(deal.created_at, startDate) &&
-                day.isSameOrBefore(deal.created_at, endDate)
+            return day.isSameOrAfter(deal[accessor], startDate) &&
+                day.isSameOrBefore(deal[accessor], endDate)
         })
     }
 
@@ -252,18 +253,25 @@ const Goal = () => {
             const _targetPeriod = getTargetPeriod({...goal,recurring: recurring || [] }, filter);
             const summarizedData = [];
 
+            
+
             if (_targetPeriod) {
                 _targetPeriod.map((period, index) => {
                     let startDate = period.start;
                     let endDate = period.end;
-                    let _deals = distributeDealsByPeriod(deals, startDate, endDate);
-                    
+                    let accessor = goal.entryType === 'Added' ? 'deal_created_at' : 'created_at';
+                    let _deals = distributeDealsByPeriod(deals, startDate, endDate, accessor);
+                    let _summarizedData = {};                   
 
-                    if (_deals.length > 0) {
-                        summarizedData.push(summarized(_deals, goalData, period, index));
-                    } else {
-                        _deals = [];
+                    if(goal.entryType === 'Added'){
+                        _summarizedData = addedGoalSummary(_deals, goalData, period, index);
+                    }else if(goal.entryType === 'Won'){
+                        _summarizedData = wonGoalSummary(_deals, goalData, period, index);
+                    }else{
+                        _summarizedData = summarized(_deals, goalData, period, index)
                     }
+                    summarizedData.push(_summarizedData);
+                    
                 })
             }
 
@@ -316,7 +324,13 @@ const Goal = () => {
             <div className="cnx__ins_dashboard_navbar">
                 <EditAbleBox
                     text={`${goal?.title || _title}`}
-                    onSave={(title) => handleTitleChange({ id: goal?.id, title })}
+                    onSave={(title) => 
+                        isAuthorizedToEdit() && handleTitleChange({
+                            id: goal?.id,
+                            title,
+                        })
+                    }
+                    readonly={!isAuthorizedToEdit() ? true : false}
                 />
                 <div className='cnx__ins_dashboard_navbar_btn_group' style={{ border: 0, padding: 0 }}>
                     {/* user */}
@@ -559,8 +573,8 @@ const Goal = () => {
                                     barDataKey={["value"]}
                                     offset={-5}
                                     // yDomain={ [0, dataMax => (dataMax + Math.ceil(dataMax * 0.1))]}
-                                    labelListFormatter={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)}
-                                    yAxisTickFormate={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : numberToUnits(value, 0)}
+                                    labelListFormatter={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : goal?.entryType === 'Won' ? numberToUnits(value, 2) : numberToUnits(value, 0)}
+                                    yAxisTickFormate={value => goal?.trackingType === 'value' ? `$${numberToUnits(value, 2)}` : goal?.entryType === 'Won' ? numberToUnits(value, 2) : numberToUnits(value, 0)}
                                     data={[...goalSummary]}
                                 />
                             </div>

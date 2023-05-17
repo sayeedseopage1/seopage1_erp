@@ -1750,6 +1750,11 @@
       background-color: #e6e6e6;
       border-color: rgba(5,92,255,0.33725);
     }
+    .cnx__editable_box__input:disabled {
+      border-color: transparent !important;
+      background-color: transparent !important;
+    }
+
 
 .cnx__editable_box__icon {
     opacity: 0;
