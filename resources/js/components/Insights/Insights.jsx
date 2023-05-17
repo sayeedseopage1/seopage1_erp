@@ -36,11 +36,21 @@ const InsightsComponent = () => {
   const {reportModalOpen} = useSelector((state) => state.reportModal);
   const {isOpenDataTable} = useSelector(state => state.dataTableModal);
   const {goalsIsFetching} = useGoals();
+  const [isLoadingPage, setIsLoadingPage] = React.useState(true);
   const { data: users,} = useGetAllUsersQuery();
 
 
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      setIsLoadingPage(false);
+    }, 1000)
+
+    return () => {
+      clearTimeout(timer);
+    }
+  })
   
-  if(goalsIsFetching) return <div 
+  if(isLoadingPage) return <div 
     style={{
       display: 'flex', 
       alignItems: 'center', 

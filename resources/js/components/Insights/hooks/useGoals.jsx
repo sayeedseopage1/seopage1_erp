@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import axios from 'axios';
 import * as React from 'react';
-import { useGetGoalsQuery, useUpdateGoalMutation, usePrefetch } from "../services/api/goalsApiSlice";
+import { useGetGoalsQuery, useUpdateGoalMutation, usePrefetch, useAddGoalMutation } from "../services/api/goalsApiSlice";
 import { getPeriod } from "../utils/getPeriod";
 import dayjs from 'dayjs';
 import _ from "lodash";
@@ -13,6 +13,17 @@ export const useGoals = () => {
         recurring: []
     });
     const dispatch = useDispatch();
+
+
+    const [
+        addGoal,
+        {
+            isUninitialized: addGoalIsUninitialized,
+            isSuccess: addGoalIsSuccess,
+            isLoading: addGoalIsLoading,
+            isFetching: addGoalIsFetching,
+        }
+    ] = useAddGoalMutation();
 
     const [
         updateGoal,
@@ -68,7 +79,6 @@ export const useGoals = () => {
     }, [goalsData, goalsIsSuccess])
 
 
-
     // get end date
     // get goals
      const getEndDate = (goal) => {
@@ -113,6 +123,8 @@ export const useGoals = () => {
         return [...recurring];
     }
 
+    
+
 
     return {
         goals,
@@ -127,5 +139,12 @@ export const useGoals = () => {
         updateGoalIsUninitialized,
         updateGoalIsSuccess,
         updateGoalIsLoading,
+
+        // add
+        addGoal,
+        addGoalIsUninitialized,
+        addGoalIsSuccess,
+        addGoalIsLoading,
+        addGoalIsFetching,
     }
 }
