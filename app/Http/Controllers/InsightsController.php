@@ -657,7 +657,7 @@ class InsightsController extends AccountBaseController
             ])
             ->join('leads', 'leads.id', '=', 'deals.lead_id')
             ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
-            ->whereIn('leads.added_by', $data2)
+            ->whereIn('deals.added_by', $data2)
             ->whereDate('deals.created_at', '>=', $data->startDate);
 
             if (!is_null($data->endDate)) {
@@ -666,15 +666,15 @@ class InsightsController extends AccountBaseController
 
             $dealStage = $dealStage->get();
 
-            $deals_data = Deal::select([
-                'deals.*', 
-                'leads.added_by as bidder',
-            ])
-            ->join('leads', 'leads.id', 'deals.lead_id')
-            ->orderBy('deals.id', 'desc')
-            ->get();
+            // $deals_data = Deal::select([
+            //     'deals.*', 
+            //     'leads.added_by as bidder',
+            // ])
+            // ->join('leads', 'leads.id', 'deals.lead_id')
+            // ->orderBy('deals.id', 'desc')
+            // ->get();
 
-            foreach ($deals_data as $key => $value) {
+            foreach ($dealStage as $key => $value) {
                 if (!is_null($data->goal)) {
                     $member = rtrim($data->goal->members, ',');
                     $member = explode(',', $member);
