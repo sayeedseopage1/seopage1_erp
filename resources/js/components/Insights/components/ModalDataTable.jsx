@@ -41,7 +41,7 @@ export const ModalDataTable = () =>{
     const getWonTableColumns = React.useCallback((goal) => {
         
         if(goal?.entryType === 'Won'){
-            if(goal?.general_checkbox === "1"){
+            if(Number(team_id) === 1){
                 let t = wonTableVisibleColumns.filter(
                     column => column.accessor !== 'team_total_amount'
                 )
