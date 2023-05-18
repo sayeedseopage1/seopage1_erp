@@ -561,7 +561,7 @@ const GoalFormModal = () => {
     const [dealType, setDealType] = React.useState('');
     const [goalType, setGoalType] = React.useState('');
     const [achievablePoints, setAchievablePoints] = React.useState('0');
-    const [general, setGeneral] = React.useState(false);
+    // const [general, setGeneral] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
     const {
         updateGoal,
@@ -586,7 +586,7 @@ const GoalFormModal = () => {
                 setAssigneeFor({id: data.user_id, name: data.name});
             } else setAssigneeFor({id: data.team_id, name: data.team_name});
             // general
-            setGeneral(Number(data.general_checkbox) === 1 ? true : false);
+            // setGeneral(Number(data.general_checkbox) === 1 ? true : false);
             // frequency
             setFrequency(data.frequency);
             // start date
@@ -675,7 +675,6 @@ const GoalFormModal = () => {
             dealType,
             qualified, 
             goalType, 
-            general_checkbox: general ? 1 : 0,
             achievablePoints: Number(achievablePoints)
         };
 
@@ -738,7 +737,7 @@ const GoalFormModal = () => {
                 <Card.Body className={`cnx_ins__goal_modal cnx_ins__goal_form_modal`}>
 
                     {/* General */}
-                    {
+                    {/* {
                         entryType === "Won" && 
                         <div className='cnx_ins__goal_modal__card_body'>
                             <div className='cnx_ins__goal_modal__card_body_label'> </div>
@@ -761,7 +760,7 @@ const GoalFormModal = () => {
                                 </label>
                             </div>
                         </div>
-                    }
+                    } */}
                 {/* assignee  */}
                 <div className='cnx_ins__goal_modal__card_body'>
                     <div className='cnx_ins__goal_modal__card_body_label'>

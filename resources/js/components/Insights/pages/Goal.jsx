@@ -100,7 +100,7 @@ const Goal = () => {
                 entry: goalData?.goal?.entry,
                 entryType: goalData?.goal?.entryType,
                 trackingType: goalData?.goal?.trackingType,
-                general_checkbox: goalData?.goal?.general_checkbox || '0'
+                team_id: Number(goal?.team_id) 
             }
             localStorage.setItem(`goal_${userId}`, JSON.stringify(_g));
         }
@@ -664,7 +664,7 @@ const Goal = () => {
 
                                 visibleColumns={
                                     goal?.entryType === 'Won' ?
-                                      goal?.general_checkbox === "1" ? 
+                                      Number(goal?.team_id) === 1 ? 
                                       wonTableVisibleColumns.filter(item => item.accessor !== 'team_total_amount') : 
                                       wonTableVisibleColumns
                                      :
