@@ -550,7 +550,8 @@ const GoalItem = ({goals, search}) => {
         goals
         .sort((a, b) => b.id - a.id )
         .map((goal) => (
-           goal &&  
+           goal && 
+           _.lowerCase(goal.title).includes(_.lowerCase(search)) && 
            <div key={goal.id} className='cnx_ins__sidebar_item'>
                 <Tooltip text={goal.title} style={{width: '100%'}}>
                     <NavLink

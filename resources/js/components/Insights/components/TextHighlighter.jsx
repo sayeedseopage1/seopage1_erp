@@ -17,7 +17,7 @@ const TextHighlighter = ({
             let letters = text.split(new RegExp(`(${searchText})`, 'gi'));
 
             
-            // console.log({letters})
+            
             let sentence = [];
             
             
@@ -32,7 +32,7 @@ const TextHighlighter = ({
                     sentence.push(<span key={`letter(${letter}-${index})`} className="__whitespace"> &nbsp; </span>);
                 }else {
                     sentence.push(<span key={`letter(${letter}-${index})`}>  
-                        {letter}
+                        {letter.replace(/ /g, "\u00a0")}
                      </span>);
                 }
             } );
