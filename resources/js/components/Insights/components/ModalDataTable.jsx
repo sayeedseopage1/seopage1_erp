@@ -38,7 +38,7 @@ export const ModalDataTable = () =>{
                         <div className='d-flex align-items-center justify-content-center position-relative py-3'>
                             <div className='cnx__data_table_card_body___title filter_options_line position-relative'>
                                 <span>${Number(data.dealAdded).toFixed(2)}</span> • 
-                                <span>{Number(data.totalDeal).toFixed(2)} Deals</span>
+                                <span>{Number(data.rowCount)} Deals</span>
                             </div>
                             
                         </div>
