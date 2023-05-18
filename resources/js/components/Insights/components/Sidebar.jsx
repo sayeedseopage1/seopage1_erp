@@ -359,7 +359,7 @@ const InsightSidebar = () => {
                                                 } */}
                                                 {/* goals */}
                                                     
-                                                    { goals.goals.length > 0 ?
+                                                    {/* { goals.goals.length > 0 ?
                                                             <GoalItem goals={filteredGoals[_.toLower(section)]} search={search}/> :
 
                                                         goalsIsFetching ? 
@@ -370,23 +370,23 @@ const InsightSidebar = () => {
                                                                 </span> 
                                                             </div> 
                                                         
-                                                    }
+                                                    } */}
 
-                                                        {/* { goals.goals.length > 0 ?
+                                                        { goals.goals.length > 0 ?
                                                             <SidebarItems 
                                                                 goals={filteredGoals[_.toLower(section)]} 
                                                                 search={search}
                                                             /> :
 
-                                                        goalsIsFetching ? 
-                                                        <></> :
-                                                            <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
-                                                                <span>
-                                                                    No active goals
-                                                                </span> 
-                                                            </div> 
-                                                        
-                                                    } */}
+                                                            goalsIsFetching ? 
+                                                            <></> :
+                                                                <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
+                                                                    <span>
+                                                                        No active goals
+                                                                    </span> 
+                                                                </div> 
+                                                            
+                                                        }
                                                 {/*end goals*/}
                                             </Accordion.Item.Body>
                                         </Accordion.Item>
