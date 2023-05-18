@@ -21,7 +21,7 @@ import { useDispatch } from 'react-redux';
 import GoalSummaryTable from '../components/GoalSummaryTable';
 import { AddedTableColumns, DataTableColumns, WonTableData } from '../components/DataTableColumns';
 import GoalStackedBarChart from '../components/Graph/GoalStackedBarChart';
-import { stage } from '../utils/constants';
+import { addedTableVisibleColumns, processedTableVisibleColumns, stage, wonTableVisibleColumns } from '../utils/constants';
 import { useGetTeamsQuery } from '../services/api/teamSliceApi';
 import { useEditGoalTitle, useEditGoalTitleMutation, useGetGoalByIdQuery } from '../services/api/goalsApiSlice';
 import { useGetDealsByGoalIdQuery } from '../services/api/dealSliceApi';
@@ -88,6 +88,23 @@ const Goal = () => {
     // edit goal title
     const [editGoalTitle] = useEditGoalTitleMutation();
     const dispatch = useDispatch();
+
+
+    // set goal to local storage
+    React.useEffect(() => {
+        if (goalData?.goal && window) {
+            let userId = window?.Laravel?.user?.id;
+
+            const _g = {
+                id: goalData?.goal?.id,
+                entry: goalData?.goal?.entry,
+                entryType: goalData?.goal?.entryType,
+                trackingType: goalData?.goal?.trackingType,
+                general_checkbox: goalData?.goal?.general_checkbox || 0
+            }
+            localStorage.setItem(`goal_${userId}`, JSON.stringify(_g));
+        }
+    }, [goalIsFetching]);
 
 
     // get filter period
@@ -643,6 +660,17 @@ const Goal = () => {
                                     goal?.entryType === 'Added'?
                                     AddedTableColumns : 
                                     DataTableColumns
+                                }
+
+                                visibleColumns={
+                                    goal?.entryType === 'Won' ?
+                                      goal?.general_checkbox ? 
+                                      wonTableVisibleColumns.filter(item => item.accessor !== 'team_total_amount') : 
+                                      wonTableVisibleColumns
+                                     :
+                                    goal?.entryType === 'Added'?
+                                    addedTableVisibleColumns:
+                                    processedTableVisibleColumns
                                 }
                                 isLoading={dealsIsFetching}
                             />

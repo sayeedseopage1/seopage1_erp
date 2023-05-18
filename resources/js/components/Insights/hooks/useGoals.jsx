@@ -417,9 +417,16 @@ export const useGoals = () => {
             
             rowCount = _deals.length;
             goal = Number(period.value);
-            dealAdded = _deals.reduce((total, deal) => {
-                return total + Number(deal.team_total_amount);
-            }, 0);
+            if(goalData?.goal?.general_checkbox) {
+                dealAdded = _deals.reduce((total, deal) => {
+                    return total + Number(deal.amount);
+                }, 0);
+            }else{
+                dealAdded = _deals.reduce((total, deal) => {
+                    return total + Number(deal.team_total_amount);
+                }, 0);
+            }
+            
 
             
             totalDeal = dealAdded;
