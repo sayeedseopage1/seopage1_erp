@@ -586,7 +586,7 @@ const GoalFormModal = () => {
                 setAssigneeFor({id: data.user_id, name: data.name});
             } else setAssigneeFor({id: data.team_id, name: data.team_name});
             // general
-            setGeneral(data.general_checkbox || false);
+            setGeneral(Number(data.general_checkbox) === 1 ? true : false);
             // frequency
             setFrequency(data.frequency);
             // start date
