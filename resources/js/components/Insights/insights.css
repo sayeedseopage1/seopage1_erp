@@ -578,6 +578,14 @@
     font-weight: 500;
   }
 
+  .cnx_ins__sidebar_dashboards_title_badge{
+    font-size: 12px;
+    padding: 0 3px;
+    border-radius: 6px;
+    background-color: #f3f3f3;
+    font-weight: bold;
+  }
+
 .cnx_ins__sidebar_dashboards_dd {
   z-index: 1;
 }
@@ -627,6 +635,32 @@
   align-items: center;
   gap: 10px;
   overflow: hidden;
+  position: relative;
+}
+
+.cnx_ins__sidebar_item_own{
+  position: absolute;
+  font-size: 10px;
+  top: 0;
+  left: 0;
+  color: #fff;
+  padding: 0;
+  width: 8px !important;
+  height: 100% !important;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.cnx_ins__sidebar_item_own > span{
+  text-transform: lowercase;
+  font-weight: bold;
+  font-size: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  padding-bottom: 3px;
+  transform: translate(-50%, -50%) rotate(-90deg);
 }
 
 .cnx_ins__sidebar_item > div {
@@ -703,13 +737,30 @@
         }
 
 .cnx_ins__sidebar_item_link:hover > button {
-      opacity: 1;
-    }
+    opacity: 1;
+  }
+
+.cnx_ins__sidebar_item_see_more{
+  text-align: center;
+  justify-content: center;
+  font-weight: 600;
+  padding: 5px 0;
+  margin-top: 10px;
+}
+
+
+.cnx_ins__sidebar_item_see_more:hover{
+  background-color: #f5f5f5;
+  text-decoration: underline;
+  cursor: pointer;
+}
 
 .cnx_ins__sidebar_item_move {
   background-color: transparent;
   border: none;
 }
+
+
 
 /* goal modal */
 

@@ -136,7 +136,7 @@ class InsightsController extends AccountBaseController
         $goal->dealType = $request->dealType;
         $goal->goalType = $request->goalType;
         $goal->title = $request->title;
-        $goal->general_checkbox = $request->general_checkbox;
+        // $goal->general_checkbox = $request->general_checkbox;
         $goal->added_by= Auth::id();
         $goal->save();
         if($request->recurring != null) {
@@ -191,7 +191,7 @@ class InsightsController extends AccountBaseController
 
         $goal->dealType = $request->dealType;
         $goal->goalType = $request->goalType;
-        $goal->general_checkbox = $request->general_checkbox;
+        // $goal->general_checkbox = $request->general_checkbox;
         $goal->added_by= Auth::id();
         $goal->save();
 
