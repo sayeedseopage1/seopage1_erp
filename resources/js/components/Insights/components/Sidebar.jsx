@@ -18,6 +18,7 @@ import { useDashboards } from '../hooks/useDashboards';
 import { useGoals } from '../hooks/useGoals';
 import dayjs from 'dayjs';
 import { CompareDate } from '../utils/dateController';
+import SidebarItems from './SidebarItems';
 
 
 
@@ -370,6 +371,22 @@ const InsightSidebar = () => {
                                                             </div> 
                                                         
                                                     }
+
+                                                        {/* { goals.goals.length > 0 ?
+                                                            <SidebarItems 
+                                                                goals={filteredGoals[_.toLower(section)]} 
+                                                                search={search}
+                                                            /> :
+
+                                                        goalsIsFetching ? 
+                                                        <></> :
+                                                            <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
+                                                                <span>
+                                                                    No active goals
+                                                                </span> 
+                                                            </div> 
+                                                        
+                                                    } */}
                                                 {/*end goals*/}
                                             </Accordion.Item.Body>
                                         </Accordion.Item>
