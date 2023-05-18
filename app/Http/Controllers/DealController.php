@@ -199,10 +199,7 @@ class DealController extends AccountBaseController
         $deal_stage->save();
 
         //kpi settings
-        /*$goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
-        
-        $deal_sum = 0;
-        $deal_count = 0;
+        $goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
 
         foreach ($goal_settings as $key => $value) {
             if ($value->trackingType == 'value') {
@@ -218,12 +215,13 @@ class DealController extends AccountBaseController
                     $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->count();
                 }
             }
-
+            
             if ($deal >= (int) $value->trackingValue) {
                 $value->goal_status = 1;
                 $value->save();
             }
-        }*/
+        }
+
         \DB::commit();
         //dd($deal_sum, $deal_count);
         return response()->json([

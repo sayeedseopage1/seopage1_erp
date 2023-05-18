@@ -493,6 +493,7 @@
                                                 <div class="text-center px-2 border border-danger rounded f-15 f-w-500">Avarage Rating<br>
                                                     @php
                                                         $totalRating = $monthlyTasks->sum('totalRating');
+                                                        //dd($totalRating, $monthlyTasks->count());
                                                         $avgRating = 0;
                                                         if($totalRating > 0) {
                                                             $avgRating = round($totalRating / $monthlyTasks->count(), 2);

@@ -124,10 +124,10 @@ class PointsController extends AccountBaseController
         }
 
         if ($request->team_id != '') {
-            $team = Team::where('id', $request->team_id)->first();
-            if ($team) {
-                $team = Seopage1Team::where('department_id', $team->id)->get();
-
+            //$team = Team::where('id', $request->team_id)->first();
+            //if ($team) {
+                $team = Seopage1Team::where('id', $request->team_id)->get();
+                //dd($team);
                 $user_list = [];
                 foreach ($team as $key => $value) {
                     $users = explode(',', $value->members);
@@ -138,7 +138,7 @@ class PointsController extends AccountBaseController
                         }
                     }
                 }
-            }
+            //}
 
             $data = $data->whereIn('user_id', $user_list);
         }

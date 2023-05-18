@@ -1120,9 +1120,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
 
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
-
-
-
 });
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
