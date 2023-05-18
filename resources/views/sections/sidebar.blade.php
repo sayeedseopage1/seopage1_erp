@@ -295,8 +295,10 @@
                             <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
                             {{--<x-sub-menu-item link="" :text="'Qualified Sales'" />--}}
                             <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
+                            @if(Auth::user()->role_id == 1)
 
                              <x-sub-menu-item :link="route('points.index')" :text="'Points'" />
+                             @endif
 
                          {{--   <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" /> --}}
 
