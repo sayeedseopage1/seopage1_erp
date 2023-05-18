@@ -709,7 +709,8 @@ class InsightsController extends AccountBaseController
             if (!is_null($data->endDate)) {
                 $deals_data = $deals_data->whereDate('deals.created_at', '<=', $data->endDate);
             }
-            $deals_data = $deals_data->whereIn('deals.added_by', $data2)
+            $deals_data = $deals_data->where('deals.status', '!=','Denied')
+            ->whereIn('deals.added_by', $data2)
             ->orderBy('deals.id', 'desc')
             ->get();
             $array = [];
