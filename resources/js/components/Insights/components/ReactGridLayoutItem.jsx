@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Icon } from '../utils/Icon';
 
 // eslint-disable-next-line react/display-name, react/prop-types
-const ReactGridLayoutItem = React.forwardRef(({style, className, onMouseDown, onMouseUp, onTouchEnd, children,title, ...props}, ref) => {
+const ReactGridLayoutItem = React.forwardRef(({style, className="", onMouseDown, onMouseUp, onTouchEnd, children,title, ...props}, ref) => {
     return(
         <div 
             ref={ref}
