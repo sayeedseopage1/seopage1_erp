@@ -302,8 +302,9 @@ const InsightSidebar = () => {
                                                         <div className='cnx_ins__sidebar_dashboards_title __inner'>
                                                             <i className={`fa-solid fa-chevron-${active? 'down': 'right'}`}/>
                                                             {section}
+                                                            
 
-                                                            {goalsIsFetching && 
+                                                            {goalsIsFetching ? 
                                                                 <div>
                                                                     <div className="spinner-border" role="status" style={{
                                                                         width: '.85rem',
@@ -311,7 +312,10 @@ const InsightSidebar = () => {
                                                                         border : '0.1em solid currentcolor',
                                                                         borderRightColor: 'transparent',
                                                                     }}/>  
-                                                                </div>
+                                                                </div>:
+                                                                <span className='cnx_ins__sidebar_dashboards_title_badge'>
+                                                                    {filteredGoals[_.toLower(section)].length || 0}
+                                                                </span>
                                                             }
                                                         </div>
                                                 </>} 
@@ -529,6 +533,7 @@ const GoalItem = ({goals, search}) => {
                 .map((goal) => (
                    goal && 
                    <div key={goal.id} className='cnx_ins__sidebar_item'>
+                       
                         <Tooltip text={goal.title} style={{width: '100%'}}>
                             <NavLink
                                 to={`goals/${goal.id}`}
@@ -539,9 +544,9 @@ const GoalItem = ({goals, search}) => {
                                     textToHighlight={goal.title}
                                     totalChars={41}
                                 />
-                                <button aria-label='moveItem' className="cnx_ins__sidebar_item_move">
+                                {/* <button aria-label='moveItem' className="cnx_ins__sidebar_item_move">
                                     <Icon type="Move" />
-                                </button>
+                                </button> */}
                             </NavLink>
                         </Tooltip>
                     </div>

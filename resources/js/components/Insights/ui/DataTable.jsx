@@ -31,7 +31,7 @@ const useTableState = () => {
 
 
 // data table 
-const DataTable = ({data, isLoading, defaultColumns}) => {
+const DataTable = ({data, isLoading, defaultColumns, visibleColumns}) => {
     const [currentPageData, setCurrentPageData] = React.useState([...data]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
     const { activeColumns, setActiveColumns, sortConfig, setSortConfig } = useTableState();
@@ -41,9 +41,20 @@ const DataTable = ({data, isLoading, defaultColumns}) => {
 
     // columns
     React.useEffect(() => {
+        let _columnsToDisplay = []
         let _columns = defaultColumns.map(d => d.id);
-            setActiveColumns([..._columns]);
-    }, [])
+        if(visibleColumns){
+            let _visibleColumns = visibleColumns.map(d => {
+                if(d.status){
+                    return d.accessor;
+                }
+            });
+            _columnsToDisplay = _columns.filter(d => _visibleColumns.includes(d));
+        } else{
+            _columnsToDisplay = [..._columns];
+        }
+        setActiveColumns([..._columnsToDisplay]);
+    }, [defaultColumns, visibleColumns])
 
 
     React.useEffect(()=> {
@@ -201,19 +212,18 @@ const DataTable = ({data, isLoading, defaultColumns}) => {
 }
 
 
-const DataTableComponent = ({data, isLoading, defaultColumns}) => {
+const DataTableComponent = ({data, isLoading, defaultColumns, visibleColumns}) => {
     return(
         <ContextProvider>
-           <DataTable data={data} isLoading={isLoading}  defaultColumns={defaultColumns}/>
+           <DataTable 
+                data={data} 
+                isLoading={isLoading}  
+                defaultColumns={defaultColumns}
+                visibleColumns={visibleColumns}
+           />
         </ContextProvider>
     )
 }
-
-DataTable.propTypes = {
-    data: PropTypes.array.isRequired
-}
-
-
 
 
 export default DataTableComponent;
