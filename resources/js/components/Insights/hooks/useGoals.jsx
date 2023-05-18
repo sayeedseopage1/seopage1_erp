@@ -429,7 +429,9 @@ export const useGoals = () => {
             
 
             
+           if(Number(goalData?.goal?.team_id) ===  1){
             totalDeal = dealAdded;
+           } 
             
 
             // count total deal added value
