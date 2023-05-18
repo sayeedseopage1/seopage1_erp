@@ -1199,6 +1199,7 @@ Route::get('/projects/project-completion/get-sub-niche/{niche_id}', [ProjectCont
 //Portfolio Section
 Route::resource('portfolio',PortfolioController::class);
 Route::get('/portfolio/get-sub-category/{website_cat_id}', [PortfolioController::class, 'getSubCategory']);
+Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
 
 
 //add project niche

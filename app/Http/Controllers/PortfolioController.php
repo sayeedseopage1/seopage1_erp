@@ -29,15 +29,13 @@ class PortfolioController extends AccountBaseController
      */
     public function index()
     {
-        $this->cms_categories = ProjectCms::all();
-        $this->website_types = ProjectWebsiteType::all();
-        $this->parent_categories = ProjectNiche::whereNull('parent_category_id')->get();
-        $this->project_portfolios = ProjectPortfolio::all();
         $this->portfolios = DB::table('project_portfolios')
             ->leftJoin('users', 'project_portfolios.project_id', '=', 'users.id')
             ->leftJoin('project_niches', 'project_portfolios.project_id', '=', 'project_niches.id')
+            ->leftJoin('project_cms', 'project_portfolios.id', '=', 'project_cms.id')
+            ->leftJoin('project_website_types', 'project_portfolios.id', '=', 'project_website_types.id')
             ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
-            ->select('project_portfolios.*','users.user_name','projects.project_name','project_niches.category_name')
+            ->select('project_portfolios.*','users.user_name','projects.project_name','project_niches.category_name','project_cms.cms_name','project_website_types.website_type')
             ->get();
 
 //                dd($this->portfolios);
@@ -49,6 +47,49 @@ class PortfolioController extends AccountBaseController
         $website_sub_cats = ProjectNiche::find($website_cat_id)->child;
         return response()->json($website_sub_cats);
     }
+
+
+    public function filterCmsCategories(Request $request)
+    {
+//                dd($request->all());
+        if (!is_null($request->input('category_id'))) {
+            $selectedCategoryId = $request->input('category_id');
+            $filteredCategories = ProjectPortfolio::where('cms_category', $selectedCategoryId);
+        }
+
+        if (!is_null($request->input('website_type'))) {
+            $selectedCategoryId = $request->input('website_type');
+            $filteredCategories = ProjectPortfolio::where('website_type', $selectedCategoryId);
+        }
+
+        if (!is_null($request->input('website_category'))) {
+            $selectedCategoryId = $request->input('website_category');
+            $filteredCategories = ProjectPortfolio::where('website_category', $selectedCategoryId);
+        }
+
+        if (!is_null($request->input('website_sub_cat'))) {
+            $selectedCategoryId = $request->input('website_sub_cat');
+            $filteredCategories = ProjectPortfolio::where('website_sub_cat', $selectedCategoryId);
+        }
+
+        if (!is_null($request->input('theme_name'))) {
+            $selectedCategoryId = $request->input('theme_name');
+            $filteredCategories = ProjectPortfolio::where('theme_name', $selectedCategoryId);
+        }
+
+        if (!is_null($request->input('portfolio_link'))) {
+            $selectedCategoryId = $request->input('portfolio_link');
+            $filteredCategories = ProjectPortfolio::where('portfolio_link', $selectedCategoryId);
+        }
+
+
+
+        $filteredCategories = $filteredCategories->get();
+
+//        dd($filteredCategories);
+        return response()->json($filteredCategories);
+    }
+
 
     /**
      * Show the form for creating a new resource.
