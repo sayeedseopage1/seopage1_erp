@@ -1,10 +1,6 @@
 
 import { Responsive, WidthProvider } from "react-grid-layout";
-import ReactGridLayoutItem from './ReactGridLayoutItem';
 import React from "react";
-import ConversionGraph from "./Graph/Conversion";
-import convertNumberToUnits from "../utils/convertNumberToUnits";
-
 import GridLayout from "react-grid-layout";
 import Tooltip from "../ui/Tooltip";
 import TextHighlighter from "./TextHighlighter";
@@ -15,29 +11,40 @@ const Item = React.forwardRef(({goal,search, style, isDragging ,className="", on
     return (
         <div 
             className={`cnx_ins__sidebar_item ${className}`}
-            ref={ref}    
+            ref={ref} 
             style={style}
-            onMouseUp={onMouseUp}
-            onTouchEnd={onTouchEnd}
             {...props}
         >
-            <Tooltip text={goal.title} style={{width: '100%'}}>
-                <NavLink
-                    to={`goals/${goal.id}`}
-                    className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link __goal_item active' : 'cnx_ins__sidebar_item_link __goal_item'}
-                >
-                    <TextHighlighter
-                        searchWords={search}
-                        textToHighlight={goal.title}
-                        totalChars={41}
-                    />
-                    <button 
-                        onMouseDown={onMouseDown} 
-                        aria-label='moveItem' className="cnx_ins__sidebar_item_move"
+            <Tooltip text={goal.title} disabled={isDragging} style={{width: '100%'}}>
+                <div className="cnx__ins__sidebar_item">
+                    <NavLink
+                        to={`goals/${goal.id}`}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onMouseUp={(e) => e.preventDefault()}
+                        className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link __goal_item active' : 'cnx_ins__sidebar_item_link __goal_item'}
                     >
-                        <Icon type="Move" />
+                        <TextHighlighter
+                            searchWords={search}
+                            textToHighlight={goal.title}
+                            totalChars={41}
+                        />
+                    
+                    </NavLink>
+
+                    <button 
+                            onMouseDown={onMouseDown} 
+                            onMouseUp={onMouseUp}
+                            onTouchEnd={onTouchEnd}
+                            aria-label='moveItem' 
+                            className="cnx_ins__sidebar_item_move"
+                            style={{
+                                zIndex: 1
+                            }}
+                        >
+                            <Icon type="Move" />
                     </button>
-                </NavLink>
+                </div>
+                
             </Tooltip>
         </div>
     )
@@ -52,36 +59,76 @@ const SidebarItems = ({goals, search}) => {
     const [expended, setExpended] = React.useState(false);
     const [isDragging, setIsDragging] = React.useState(false);
     const [visibleGoals, setVisibleGoals] = React.useState([...goals]);
+    const [layout, setLayout] = React.useState([]);
     const length = expended ? goals.length : 12;
     
     React.useEffect(() => {
         let _goals = goals
+            .sort((a, b) => b.id - a.id)
             .filter(goal => goal.title.toLowerCase().includes(search.toLowerCase()))
             .slice(0, length);
 
+        
         setVisibleGoals([..._goals]);
 
     }, [goals, search, expended]);
 
-    console.log(isDragging)
 
+
+    React.useEffect(() => {
+        let _layout = localStorage.getItem(`sp1_gs_${window?.Laravel?.user?.id}`);
+       
+        if(_layout) {
+            _layout = JSON.parse(_layout);
+            setLayout([..._layout]);
+        }else{
+            let _layout = [];
+            for(let i = 0; i < visibleGoals.length; i++){
+                _layout.push({
+                    i: visibleGoals[i].id.toString(),
+                    x: 0,
+                    y: i,
+                    w: 1,
+                    h: 1,
+                    static: false
+                })
+            }
+            setLayout([..._layout]);
+        }
+
+
+    }, [visibleGoals]);
+
+    const onLayoutChange = (layout) => {
+        setLayout([...layout]);
+        localStorage.setItem(`sp1_gs_${window?.Laravel?.user?.id}`, JSON.stringify(layout));
+    }
+
+       
+
+    if(visibleGoals.length === 0) return null;
     return(
-        <GridLayout
+        <>
+            <GridLayout
             className="layout"
             cols={1}
             rowHeight={30}
-            width={250}
+            width={248}
             isResizable={false}
+            layout={[...layout]}
             autoSize={true}
             isBounded={true}
             compactType="vertical"
             onDragStart={() => setIsDragging(true)}
             onDragStop={() => setIsDragging(false)}
+            // store into local storage
+            onLayoutChange={onLayoutChange}
+
+
         >
-            {visibleGoals.map((goal, index) => {
+            {visibleGoals.map((goal) => {
                 return <div
                     key={goal.id}
-                    data-grid={{x: 0, y: index, w: 1, h: 1}}
                 >
 
                     <Item 
@@ -94,6 +141,18 @@ const SidebarItems = ({goals, search}) => {
 
             })}
         </GridLayout>
+
+            {
+                goals.length > 12 && 
+                <div 
+                    onClick={() => setExpended(!expended)}
+                    className='cnx_ins__sidebar_item  cnx_ins__sidebar_item_see_more'
+                >
+                    {expended ? 'Hide' : 'See more'}
+                </div>
+                
+            }        
+        </>
     )
 
 
