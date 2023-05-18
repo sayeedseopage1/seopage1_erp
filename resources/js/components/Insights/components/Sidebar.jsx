@@ -18,11 +18,7 @@ import { useDashboards } from '../hooks/useDashboards';
 import { useGoals } from '../hooks/useGoals';
 import dayjs from 'dayjs';
 import { CompareDate } from '../utils/dateController';
-import { useUsers } from '../hooks/useUsers';
-import { selectAllUsers, selectUserById, useGetUserMutation, useGetUsersQuery } from '../services/api/userSliceApi';
-import { useGetGoalsQuery } from '../services/api/goalsApiSlice';
-import { useGetTeamsQuery } from '../services/api/teamSliceApi';
-import { goal } from '../utils/constants';
+
 
 
 
@@ -32,7 +28,6 @@ const InsightSidebar = () => {
     const {dashboards} = useDashboards();
     const [filteredGoals, setFilteredGoals] = React.useState({active: [], past: []});
     const {reports} = useSelector((state) => state.reports);
-    // const { goals } = useSelector((state) => state.goals);
     const [goals, setGoals] = React.useState({
         goals: [],
         recurring: []
@@ -40,8 +35,7 @@ const InsightSidebar = () => {
     const dispatch = useDispatch();
     const compareDate = new CompareDate();
     const {goals:__goals, goalsIsFetching} = useGoals();
-    const {users, usersIsLoading} = useUsers();
-    const location =  useLocation();
+    
 
 
     React.useEffect(() => {
@@ -93,31 +87,6 @@ const InsightSidebar = () => {
         return reports.filter((item) => item.section === section);
     }
 
-
-    // get goals 
-    const getGoals = (goals, type, search) => {
-        let goalsList = [];
-
-        
-
-        return goals.map(goal => {
-            const user = _.find(users.users, {id: goal.added_by});
-            let title = `${goal.entry} ${goal.entryType} by ${user?.name || ''}`;
-            if(type === "Past"){
-                if(goal.endDate && compareDate.isAfter(dayjs(), goal.endDate)){
-                    return {...goal, title, user } 
-                } else return;
-            } else if(type === "Active"){
-                if(!goal.endDate || !compareDate.isAfter(dayjs(), goal.endDate)){
-                    if(_.toLower(title).includes(search) ){
-                        return { ...goal, title, user } 
-                    }
-                }else return;
-                
-            }else return;
-        })
-    }
-    
 
     return(
         <aside className='cnx_ins__sidebar'> 
@@ -385,7 +354,7 @@ const InsightSidebar = () => {
                                                 } */}
                                                 {/* goals */}
                                                     
-                                                    { goals.goals.length > 0 ? 
+                                                    { goals.goals.length > 0 ?
                                                             <GoalItem goals={filteredGoals[_.toLower(section)]} search={search}/> :
 
                                                         goalsIsFetching ? 
@@ -544,32 +513,54 @@ export default InsightSidebar;
 
 
 const GoalItem = ({goals, search}) => {
+    const [expended, setExpended] = React.useState(false);
+
+
+    const length = expended ? goals.length : 12;
 
 
     return goals.length > 0  && goals !== undefined ?  
-        goals
-        .sort((a, b) => b.id - a.id )
-        .map((goal) => (
-           goal && 
-           _.lowerCase(goal.title).includes(_.lowerCase(search)) && 
-           <div key={goal.id} className='cnx_ins__sidebar_item'>
-                <Tooltip text={goal.title} style={{width: '100%'}}>
-                    <NavLink
-                        to={`goals/${goal.id}`}
-                        className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link __goal_item active' : 'cnx_ins__sidebar_item_link __goal_item'}
-                    >
-                         <TextHighlighter
-                            searchWords={search}
-                            textToHighlight={goal.title}
-                            totalChars={41}
-                        />
-                        <button aria-label='moveItem' className="cnx_ins__sidebar_item_move">
-                            <Icon type="Move" />
-                        </button>
-                    </NavLink>
-                </Tooltip>
-            </div>
-        )) : 
+        <>
+            {
+                goals
+                .sort((a, b) => b.id - a.id )
+                .filter(goal => _.lowerCase(goal.title).includes(_.lowerCase(search)) )
+                .slice(0, length) 
+                .map((goal) => (
+                   goal && 
+                   <div key={goal.id} className='cnx_ins__sidebar_item'>
+                        <Tooltip text={goal.title} style={{width: '100%'}}>
+                            <NavLink
+                                to={`goals/${goal.id}`}
+                                className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link __goal_item active' : 'cnx_ins__sidebar_item_link __goal_item'}
+                            >
+                                 <TextHighlighter
+                                    searchWords={search}
+                                    textToHighlight={goal.title}
+                                    totalChars={41}
+                                />
+                                <button aria-label='moveItem' className="cnx_ins__sidebar_item_move">
+                                    <Icon type="Move" />
+                                </button>
+                            </NavLink>
+                        </Tooltip>
+                    </div>
+                ))
+            }
+
+
+            {
+                goals.length > 12 && 
+                <div 
+                    onClick={() => setExpended(!expended)}
+                    className='cnx_ins__sidebar_item  cnx_ins__sidebar_item_see_more'
+                >
+                    {expended ? 'Hide' : 'See more'}
+                </div>
+                
+            }
+        </>
+         : 
         <div className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
             <span> No active goals</span>
         </div>
