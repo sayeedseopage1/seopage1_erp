@@ -1,17 +1,21 @@
 import PropsTypes from 'prop-types';
 import _ from 'lodash';
+import React from 'react';
 
 const TextHighlighter = ({
         searchWords="",
         textToHighlight="",
         totalChars= 32,
     }) => {
+
+        // avoid re-rendering
+
         const splitText = (text) => {
             // remove spacial characters (-, _, /, \, ., etc.)
             text =  text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '');
             // split text into array of letters
             const searchText = searchWords;
-            // replace space to || for spliting
+            // replace space to || for  
             // group by search words  
             // split by search words
             let letters = text.split(new RegExp(`(${searchText})`, 'gi'));
@@ -39,6 +43,8 @@ const TextHighlighter = ({
      
             return sentence;
         };
+
+
 
         let textLength = textToHighlight.length;
         return textToHighlight ? <div className='cnx__text'>

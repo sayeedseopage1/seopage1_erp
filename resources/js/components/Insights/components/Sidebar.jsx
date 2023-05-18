@@ -558,12 +558,10 @@ const GoalItem = ({goals, search}) => {
                         to={`goals/${goal.id}`}
                         className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link __goal_item active' : 'cnx_ins__sidebar_item_link __goal_item'}
                     >
-                        
-
                          <TextHighlighter
                             searchWords={search}
                             textToHighlight={goal.title}
-                            totalChars={36}
+                            totalChars={41}
                         />
                         <button aria-label='moveItem' className="cnx_ins__sidebar_item_move">
                             <Icon type="Move" />
