@@ -296,9 +296,9 @@
                             {{--<x-sub-menu-item link="" :text="'Qualified Sales'" />--}}
                             <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
 
-                            {{-- <x-sub-menu-item :link="route('points.index')" :text="'Points'" />
+                             <x-sub-menu-item :link="route('points.index')" :text="'Points'" />
 
-                            <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" /> --}}
+                         {{--   <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" /> --}}
 
 
 
