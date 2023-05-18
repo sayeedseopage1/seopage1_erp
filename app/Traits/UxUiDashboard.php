@@ -32,8 +32,7 @@ trait UxUiDashboard
             $startMonth = $date->startOfMonth()->addDays(20)->toDateString(); 
             $endMonth = $date->startOfMonth()->addMonth(1)->addDays(19)->toDateString(); 
 
-            $this->monthlyTasks = Task::withoutGlobalScopes()->select('tasks.*')
-            ->selectRaw('SUM(task_approves.rating + task_approves.rating2 + task_approves.rating3) / 3 as totalRating')
+            $this->monthlyTasks = Task::withoutGlobalScopes()->select('tasks.*', 'task_approves.*')
             ->join('task_users', 'task_users.task_id', '=', 'tasks.id')
             ->join('task_approves', 'task_approves.task_id', '=', 'tasks.id')
             ->where('task_users.user_id', $this->user->id)
@@ -46,6 +45,8 @@ trait UxUiDashboard
             $this->monthlyNegativeRating = 0;
 
             foreach ($this->monthlyTasks as $key => $value) {
+                $rating = (int) $value->rating + (int) $value->rating2 + (int) $value->rating3;
+                $value->totalRating = $rating / 3;
                 if ($value->totalRating > 3) {
                     $this->monthlyPositiveRating++;
                 } else {
@@ -68,8 +69,7 @@ trait UxUiDashboard
             $startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('startDate')) : now($this->global->timezone)->startOfMonth();
             $endDate = (request('endDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('endDate')) : now($this->global->timezone);
 
-            $this->yearlyTasks = Task::withoutGlobalScopes()->select('tasks.*')
-            ->selectRaw('SUM(task_approves.rating + task_approves.rating2 + task_approves.rating3) / 3 as totalRating')
+            $this->yearlyTasks = Task::withoutGlobalScopes()->select('tasks.*', 'task_approves.*')
             ->join('task_users', 'task_users.task_id', '=', 'tasks.id')
             ->join('task_approves', 'task_approves.task_id', '=', 'tasks.id')
             ->where('task_users.user_id', $this->user->id)
@@ -82,6 +82,8 @@ trait UxUiDashboard
             $this->yearlyNegativeRating = 0;
 
             foreach ($this->yearlyTasks as $key => $value) {
+                $rating = (int) $value->rating + (int) $value->rating2 + (int) $value->rating3;
+                $value->totalRating = $rating / 3;
                 if ($value->totalRating > 3) {
                     $this->yearlyPositiveRating++;
                 } else {
@@ -210,8 +212,7 @@ trait UxUiDashboard
                 $endMonth = Carbon::now()->startOfMonth()->addDays(19)->toDateString(); 
             }
             
-            $this->monthlyTasks = Task::withoutGlobalScopes()->select('tasks.*')
-            ->selectRaw('SUM(task_approves.rating + task_approves.rating2 + task_approves.rating3) / 3 as totalRating')
+            $this->monthlyTasks = Task::withoutGlobalScopes()->select('tasks.*', 'task_approves.*')
             ->join('task_users', 'task_users.task_id', '=', 'tasks.id')
             ->join('task_approves', 'task_approves.task_id', '=', 'tasks.id')
             ->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [$startMonth, $endMonth])
@@ -222,6 +223,8 @@ trait UxUiDashboard
             $this->monthlyNegativeRating = 0;
 
             foreach ($this->monthlyTasks as $key => $value) {
+                $rating = (int) $value->rating + (int) $value->rating2 + (int) $value->rating3;
+                $value->totalRating = $rating / 3;
                 if ($value->totalRating > 3) {
                     $this->monthlyPositiveRating++;
                 } else {
@@ -234,8 +237,7 @@ trait UxUiDashboard
             $this->monthlyOverdue = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [$startMonth, $endMonth])->where('board_column_id', 7)->get();
             $this->monthlyUnderReview = Task::withoutGlobalScopes()->select('tasks.*')->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [$startMonth, $endMonth])->where('board_column_id', 6)->get();
 
-            $this->yearlyTasks = Task::withoutGlobalScopes()->select('tasks.*')
-            ->selectRaw('SUM(task_approves.rating + task_approves.rating2 + task_approves.rating3) / 3 as totalRating')
+            $this->yearlyTasks = Task::withoutGlobalScopes()->select(['tasks.*', 'task_approves.*'])
             ->join('task_users', 'task_users.task_id', '=', 'tasks.id')
             ->join('task_approves', 'task_approves.task_id', '=', 'tasks.id')
             ->where('task_users.user_id', $this->user->id)->whereBetween('start_date', [Carbon::now()->subMonths(12), Carbon::now()])
@@ -246,6 +248,8 @@ trait UxUiDashboard
             $this->yearlyNegativeRating = 0;
 
             foreach ($this->yearlyTasks as $key => $value) {
+                $rating = (int) $value->rating + (int) $value->rating2 + (int) $value->rating3;
+                $value->totalRating = $rating / 3;
                 if ($value->totalRating > 3) {
                     $this->yearlyPositiveRating++;
                 } else {

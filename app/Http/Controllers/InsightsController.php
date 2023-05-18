@@ -136,6 +136,7 @@ class InsightsController extends AccountBaseController
         $goal->dealType = $request->dealType;
         $goal->goalType = $request->goalType;
         $goal->title = $request->title;
+        $goal->general_checkbox = $request->general_checkbox;
         $goal->added_by= Auth::id();
         $goal->save();
         if($request->recurring != null) {
@@ -190,6 +191,7 @@ class InsightsController extends AccountBaseController
 
         $goal->dealType = $request->dealType;
         $goal->goalType = $request->goalType;
+        $goal->general_checkbox = $request->general_checkbox;
         $goal->added_by= Auth::id();
         $goal->save();
 
@@ -723,9 +725,7 @@ class InsightsController extends AccountBaseController
                     $member[] = $data->user_id;
                 }
                 
-                $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)
-                ->groupBy('deal_stage_id')
-                ->get();
+                $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
                 $value->bidder_amount = round((24 * $value->amount) / 100, 2);
                 $value->team_total_amount = 0;
                 $team_total_amount = 0;

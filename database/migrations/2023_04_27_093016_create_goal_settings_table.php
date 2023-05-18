@@ -37,6 +37,7 @@ return new class extends Migration
             $table->boolean('goal_status')->default(false);
             $table->float('goal_progress')->default(0);
             $table->string('title')->nullable();
+            $table->enum('general_checkbox', [0, 1])->default(0);
             $table->integer('added_by');
             $table->timestamps();
         });
