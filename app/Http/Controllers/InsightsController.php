@@ -639,7 +639,7 @@ class InsightsController extends AccountBaseController
 
                     'leads.added_by as bidder',
                 ])
-                ->join('leads', 'leads.id', 'deals.lead_id')
+                ->leftJoin('leads', 'leads.id', 'deals.lead_id')
                 ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
                 ->whereDate('deals.created_at', '>=', $data->startDate);
 
@@ -650,6 +650,7 @@ class InsightsController extends AccountBaseController
                 ->whereIn('deals.added_by', $data2)
                 ->orderBy('deals.id', 'desc')
                 ->get();
+                // /dd($deals_data);
                 foreach ($deals_data as $key => $value) {
                     $check_client = Deal::whereDate('created_at', '>=', $data->startDate);
                     if (!is_null($data->endDate)) {
