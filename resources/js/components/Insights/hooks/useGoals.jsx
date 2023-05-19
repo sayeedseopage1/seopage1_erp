@@ -431,11 +431,10 @@ export const useGoals = () => {
                 }, 0);
             }
             
+            
 
             
-           if(Number(goalData?.goal?.team_id) ===  1){
-            totalDeal = dealAdded;
-           } 
+            totalDeal = dealAdded 
             
 
             // count total deal added value
@@ -509,7 +508,6 @@ export const useGoals = () => {
             dealWonPercentage = 0;
             dealLostPercentage = 0;
             goalProgress = 0;
-            difference: fixedDecimalPlace(result - Number(period.value));
             result = 0;
             yAxis = goalData?.goal?.trackingValue;
             target = 0;
