@@ -261,7 +261,7 @@ class DealController extends AccountBaseController
             $dealStage_amount2 = $dealStage->get();
             $dealStage_amount = $dealStage->sum('deal_stages.amount');
             $dealStage_count = $dealStage->count();
-         dd($dealStage_amount2,$dealStage_amount,$dealStage_count);
+         dd($dealStage_amount2,$dealStage_amount,$dealStage_count, $dealStage_amount2->sum('amount'));
             if ($goal->trackingType == 'value') {
                 // /dd("true");
                 
