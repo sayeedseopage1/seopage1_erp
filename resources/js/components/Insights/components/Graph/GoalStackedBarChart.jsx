@@ -18,12 +18,14 @@ import { openDataTableModal } from '../../services/slices/dataTableModalSlice';
 import { useDispatch } from 'react-redux';
 import { Icon } from '../../utils/Icon';
 import convertNumberToUnits from '../../utils/convertNumberToUnits';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useCallback } from 'react';
+import Button from '../../ui/Button';
 
 
 
-const GoalStackedBarChart = ({data, 
+const GoalStackedBarChart = ({
+    data, 
     actualFillColor, 
     targetFillColor, 
     leftSideLabel,  
@@ -39,9 +41,63 @@ const GoalStackedBarChart = ({data,
     colors=[], 
     footer=true
 }) => {
-
-
+    const [graphData, setGraphData] = React.useState([])
+    const [activePage, setActivePage] = React.useState(0);
+    const [isLoading, setIsLoading] = React.useState(true);
     const dispatch = useDispatch();
+
+    const ref = React.useRef(null);
+
+    const memoData = React.useMemo(() => {
+        return data;
+    }, [data])
+
+    const handleGraphResponsivePagination = React.useCallback(() => {
+        if(ref && ref.current){ 
+            let width = ref.current.offsetWidth;
+            let breakpoint = Math.floor( width / 100); 
+            let _data = [];
+            ref.current.style.overflowX = 'hidden';
+            if(width > 450 && breakpoint > 1){
+                _data = data?.reduce((acc, curr, index) => {
+                    if(index%(breakpoint-1) === 0){
+                     acc.push([curr]);
+                    }else{
+                     acc[acc.length - 1].push(curr) 
+                    }
+                    return acc;
+                 }, [])
+            }else{
+                ref.current.style.overflowX = 'auto';
+                _data = data?.reduce((acc, curr, index) => {
+                    if(index % 3 === 0){
+                     acc.push([curr]);
+                    }else{
+                     acc[acc.length - 1].push(curr) 
+                    }
+                    return acc;
+                 }, [])
+            }
+            setGraphData([..._data])
+            setIsLoading(false);
+        }
+    }, [ref, memoData])
+
+
+    // handle responsive
+    React.useEffect(() => {
+        handleGraphResponsivePagination(data);
+    }, [handleGraphResponsivePagination])
+
+    // handle on resize page
+    React.useEffect(() => { 
+        if(window){
+            window.addEventListener('resize', () => handleGraphResponsivePagination());
+        }
+        return () => window.removeEventListener('resize', () => handleGraphResponsivePagination())
+    }, [ref, memoData])
+
+     
 
 
     const handleBarClick = (data) => {
@@ -54,88 +110,115 @@ const GoalStackedBarChart = ({data,
     }
 
 
-    
+    const nextPage = () => {
+        if(activePage < graphData.length -1) {
+           setActivePage(prev => prev + 1) 
+        }
+    }
+
+    const prevPage = () => {
+        if(activePage > 0) {
+           setActivePage(prev => prev - 1) 
+        }
+    }
+   
 
     return(
         <div className='cnx__conversion_graph__wrapper'>
-            <div className='cnx__conversion__graph'>
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                        width={100}
-                        height={100}
-                        onClick={handleBarClick}
-                        data={data}
-                        stackOffset={stackOffset}
-                        margin={{
-                            top: 20,
-                            right: 30,
-                            left: 30,
-                            bottom: 10,
-                        }}
-                        padding = {{
-                            top: 40,
-                        }}
-                    >
-                    <CartesianGrid vertical={false} strokeDasharray="0 0 0" strokeWidth={0.5} stroke='#ddd' fillOpacity={0.2}/>
-                    <XAxis 
-                        dataKey= {XAxisLabel} 
-                        axisLine={false}  
-                        tickLine={false}
-                        domain={xDomain}
-                        interval={0}
-                        tickFormatter={v => v.split('(')[0]}
-                    />
-                    <YAxis 
-                        axisLine={false}
-                        tickLine={false}
-                        tickFormatter={yAxisTickFormate}
-                        dataKey="yAxis"
-                        domain={[0, 'dataMax']}
-                    >
-                        <Label 
-                            value={leftSideLabel} 
-                            angle={-90} 
-                            position="insideLeft" 
-                            offset={offset} 
-                            style={{textAnchor: 'middle', stroke: '#000', strokeWidth: '0'}}
-                        />
-                    </YAxis>
-                    <Tooltip
-                        content={<CustomTooltip />} 
-                        cursor={{ fill: '#f8f8f8' }} 
-                    />
-                        <Bar
-                            dataKey="value"
-                            stackId={XAxisLabel}
-                            shape={
-                                <CustomBar 
-                                    targetFillColor={targetFillColor}
-                                    actualFillColor={actualFillColor}
-                                 />
-                            }
-                        />
+            <div 
+                className='cnx__conversion__graph' 
+                ref={ref} 
+            >
+               <div style={{
+                width: '100%',
+                height: '100%',
+                minWidth: '450px'
+               }}>
+                
+                    {
+                        !isLoading && 
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                                width={100}
+                                height={100}
+                                onClick={handleBarClick}
+                                data={graphData[activePage]}
+                                stackOffset={stackOffset}
+                                margin={{
+                                    top: 20,
+                                    right: 30,
+                                    left: 30,
+                                    bottom: 10,
+                                }}
+                                padding = {{
+                                    top: 40,
+                                }}
+                            >
+                            <CartesianGrid vertical={false} strokeDasharray="0 0 0" strokeWidth={0.5} stroke='#ddd' fillOpacity={0.2}/>
+                            <XAxis 
+                                dataKey= {XAxisLabel} 
+                                axisLine={false}  
+                                tickLine={false}
+                                domain={xDomain}
+                                interval={0}
+                                tickFormatter={v => v.split('(')[0]}
+                            />
+                            <YAxis 
+                                axisLine={false}
+                                tickLine={false}
+                                tickFormatter={yAxisTickFormate}
+                                dataKey="yAxis"
+                                domain={[0, 'dataMax']}
+                            >
+                                <Label 
+                                    value={leftSideLabel} 
+                                    angle={-90} 
+                                    position="insideLeft" 
+                                    offset={offset} 
+                                    style={{textAnchor: 'middle', stroke: '#000', strokeWidth: '0'}}
+                                />
+                            </YAxis>
+                            <Tooltip
+                                content={<CustomTooltip />} 
+                                cursor={{ fill: '#f8f8f8' }} 
+                            />
+                                <Bar
+                                    dataKey="value"
+                                    stackId={XAxisLabel}
+                                    shape={
+                                        <CustomBar 
+                                            targetFillColor={targetFillColor}
+                                            actualFillColor={actualFillColor}
+                                        />
+                                    }
+                                />
 
-                        
-                    </BarChart>
-                </ResponsiveContainer>
+                                
+                            </BarChart>
+                        </ResponsiveContainer>
+                    }
+                </div> 
+                
             </div>
 
             
 
-            {footer && 
+            {!isLoading && graphData.length > 1 && 
                 <>
                     <div className='cnx_divider' />
                     <div className='cnx__graph_footer'>
-                    {
-                            barDataKey.length > 0 && barDataKey.map((b, index) => (
-                                <div className='__legend'  key={b}>
-                                    <span style={{background: colors.length > 0 ? colors[index] : bgColors[index]}}></span>
-                                    <span>
-                                        {_.startCase(b.replace(/_/g, ' '))}
-                                    </span>
-                                </div>
-                            ))
-                        }
+                        <div className='__legend ml-auto' >
+                            <Button
+                                onClick={prevPage}
+                                variant='tertiary'
+                            >Prev</Button>
+                        </div>
+                        <div className='__legend' >
+                            <Button
+                                onClick={nextPage}
+                                variant='tertiary' 
+                            >Next</Button>
+                        </div>
                     </div>
                 </>
             }

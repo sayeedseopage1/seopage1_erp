@@ -90,7 +90,11 @@ export const useGoals = () => {
 
         if(frequency === 'weekly'){
             return dayjs(goal.startDate).add(1, 'week').format('YYYY-MM-DD');
-        } 
+        }
+        
+        if(frequency === '10 days'){
+            return dayjs(goal.startDate).add(9, 'day').format('YYYY-MM-DD');
+        }
         
         if(frequency === 'yearly'){
             return dayjs(goal.startDate).endOf('year').format('YYYY-MM-DD');

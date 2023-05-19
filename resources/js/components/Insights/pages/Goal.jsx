@@ -582,7 +582,6 @@ const Goal = () => {
                             </div>
                             <div className='__graph'>
                                 <GoalStackedBarChart
-                                    footer={false}
                                     XAxisLabel="title"
                                     actualFillColor={"#1d8603"}
                                     targetFillColor={"#E5E5E5"}
