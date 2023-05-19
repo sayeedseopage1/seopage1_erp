@@ -120,16 +120,19 @@ const Goal = () => {
 
 
     // set deals
-    React.useEffect(() => {
-        if(!dealsIsFetching && goalDealsData && goalData){
-            if(goalData?.goal?.entryType === "Won" && goalData?.goal?.team_id !== 1 ){
-                let d = goalDealsData.filter(deal => Number(deal['team_total_amount']) !== 0);
-                setTableDeals([...d]);
-            }else{  
-                setTableDeals([...goalDealsData])
-            }
-        }
-    }, [goalDealsData])
+    // React.useEffect(() => {
+    //     if(!dealsIsFetching && goalDealsData && goalData){
+    //         if(goalData?.goal?.entryType === "Won" && Number(goalData?.goal?.team_id) !== 1 ){
+    //             let d = goalDealsData.filter(deal => {
+    //                 console.log(deal["team_total_amount"])
+    //                 return Number(deal['team_total_amount']) !== 0
+    //             });
+    //             setTableDeals([...d]);
+    //         }else{  
+    //             setTableDeals([...goalDealsData])
+    //         }
+    //     }
+    // }, [dealsIsFetching, goalDealsData, goalData, goalIsFetching])
     
     // get filter period
     const handleRelativeTimePeriod = (value) => {
@@ -282,6 +285,13 @@ const Goal = () => {
 
     }
 
+    const getGoalDealsDate = (deals, goal) => {
+        if(goal.entryType === "Won" && goal.team_id !== 1){
+            return deals.filter(deal => Number(deal["team_total_amount"]) !== 0) || []
+        }else{
+            return deals || []
+        }
+    }
 
     // calculate goal summary 
     const calculateGoalSummary = React.useCallback(() => {
@@ -710,7 +720,7 @@ const Goal = () => {
                             <div >
                                 <DataTable
                                     ref={dealTableRef}
-                                    data={tableDeals ? [...tableDeals] : []}
+                                    data={[...getGoalDealsDate(goalDealsData, goal)]}
                                     defaultColumns={
                                         goal?.entryType === 'Won' ?
                                         WonTableData :
