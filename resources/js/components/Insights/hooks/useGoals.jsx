@@ -180,7 +180,7 @@ export const useGoals = () => {
 
             const {goal: _goal} = goalData;
 
-            if(_goal?.trackingType === "Value"){
+            if(_.lowerCase(_goal?.trackingType )=== "value"){
                 goalProgress = goal !== 0 ? (dealAdded / goal) * 100 : 0;
                 difference = fixedDecimalPlace(dealAdded - goal);
                 target = goal - dealAdded;
@@ -294,7 +294,7 @@ export const useGoals = () => {
                 }
             })
 
-            if(goalData?.goal?.trackingType  === 'Value') {
+            if(_.lowerCase(goalData?.goal?.trackingType)  === 'value') {
                 goalProgress = goal === 0 ? 0 : (dealAdded / goal) * 100;
                 target = goal - dealAdded;
             }else{
@@ -444,7 +444,7 @@ export const useGoals = () => {
                 }
             })
 
-            if(goalData?.goal?.trackingType === "Value"){
+            if(_.lowerCase(goalData?.goal?.trackingType) === "value"){
                 goalProgress = goal === 0 ? 0 : (dealAdded / goal) * 100;
                 target = goal - dealAdded;
             }else{

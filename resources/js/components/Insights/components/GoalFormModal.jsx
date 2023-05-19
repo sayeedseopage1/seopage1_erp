@@ -229,6 +229,7 @@ const Frequency = ({ frequency, setFrequency, setEdit }) => {
 
     const options = () => ([
         'Weekly',
+        '10 Days',
         'Monthly',
         'Quarterly',
         'Yearly',
