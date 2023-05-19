@@ -461,6 +461,7 @@ class InsightsController extends AccountBaseController
         $data2 = $data->user_id ? [$data->user_id] : $user_data;
     
         if ($data->entryType == 'Added') {
+
             if ($data->dealType == 'All Clients') {
                 $dealStage = DealStage::select([
                     'deal_stages.id as id',
@@ -512,6 +513,7 @@ class InsightsController extends AccountBaseController
 
             }
             
+
         } elseif ($data->entryType == 'Progressed') {
             if ($data->qualified == 'Qualified') {
                 $deal_status = 1;
@@ -588,7 +590,9 @@ class InsightsController extends AccountBaseController
 
                     'leads.added_by as bidder',
                 ])
+
                 ->leftJoin('leads', 'leads.id', 'deals.lead_id')
+
                 ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
                 ->whereDate('deals.created_at', '>=', $data->startDate);
 
@@ -596,6 +600,7 @@ class InsightsController extends AccountBaseController
                     $deals_data = $deals_data->whereDate('deals.created_at', '<=', $data->endDate);
                 }
                 $deals_data = $deals_data->where('deals.status', '!=','Denied')
+
                 //->whereIn('deals.added_by', $data2)
                 ->orderBy('deals.id', 'desc')
                 ->get();
@@ -611,6 +616,7 @@ class InsightsController extends AccountBaseController
                         $value->amount = 1;
                         $value->tracking_type = 'count';
                     }
+
                     if (!is_null($data->goal)) {
                         $member = rtrim($data->goal->members, ',');
                         $member = explode(',', $member);
@@ -657,11 +663,14 @@ class InsightsController extends AccountBaseController
                     $team_summation = DealStageChange::where('deal_id', $value->deal_id)->whereIn('updated_by', $member)->get();
 
                     if (in_array($value->added_by, $member)) {
+
                     //$team_total_amount = $team_total_amount + $amount;
+
                         $value->team_total_amount = round($value->team_total_amount + $value->won_deal_amount, 2);
                     }
 
                     if (in_array($value->bidder, $member)) {
+
                     //$team_total_amount = $team_total_amount + $amount;
                         $value->team_total_amount = round($value->team_total_amount + $value->bidder_amount, 2);
                     }
@@ -753,6 +762,7 @@ class InsightsController extends AccountBaseController
                     $array[] = $value;
                 }
             }
+
 
             return response()->json($array);
         }
