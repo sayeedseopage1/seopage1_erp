@@ -1233,27 +1233,27 @@ class ProjectController extends AccountBaseController
                          }
                          $point->save();
 
-                         if ($find_deal_id->authorization_status == 1) {
-                            $earned_point = ($kpi->authorized_by_leader * $find_deal_id->amount) / 100;
+                        //  if ($find_deal_id->authorization_status == 1) {
+                        //     $earned_point = ($kpi->authorized_by_leader * $find_deal_id->amount) / 100;
 
-                         $user_name= User::where('role_id',8)->first(); 
-                         $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                         //kpi point
-                         $point= new CashPoint();
-                         $point->user_id= $user_name->id;
-                         $point->project_id= $find_project_id->id;
-                         $point->activity= $user_name->name . ' for authorizing deal';
-                         $point->gained_as = "Individual";
-                         $point->points= $earned_point;
+                        //  $user_name= User::where('role_id',8)->first(); 
+                        //  $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                        //  //kpi point
+                        //  $point= new CashPoint();
+                        //  $point->user_id= $user_name->id;
+                        //  $point->project_id= $find_project_id->id;
+                        //  $point->activity= $user_name->name . ' for authorizing deal';
+                        //  $point->gained_as = "Individual";
+                        //  $point->points= $earned_point;
                  
-                         if ($cash_points_team_lead != null) {            
-                             $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point;
-                         } else {
-                             $point->total_points_earn= $earned_point;
-                         }
+                        //  if ($cash_points_team_lead != null) {            
+                        //      $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point;
+                        //  } else {
+                        //      $point->total_points_earn= $earned_point;
+                        //  }
                  
-                         $point->save();
-                         }
+                        //  $point->save();
+                        //  }
 
                         
                         
@@ -1541,7 +1541,17 @@ class ProjectController extends AccountBaseController
 
                          }
 
+                //5% kpi setting start
 
+                /*$goal = GoalSetting::whereDate('startDate', '>=', $find_deal_id->created_at);
+
+                if (!is_null($goal->endDate)) {
+                    $goal = $goal->whereDate('endDate', '<=', $find_deal_id->created_at);
+                }
+
+                dd($goal);*/
+
+                //5% kpi setting end
         }
 
          
@@ -1655,6 +1665,7 @@ class ProjectController extends AccountBaseController
             }
         }
         if ($project->project_status != 'Accepted') {
+
             foreach ($users as $user) {
                 $this->triggerPusher('notification-channel', 'notification', [
                     'user_id' => $user->id,
