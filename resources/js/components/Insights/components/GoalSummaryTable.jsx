@@ -95,8 +95,7 @@ const GoalSummaryTableColumns =   [
         cell: (row) => {
             const diff = row['difference'];
             const color = diff < 0 ? 'red' : 'green';
-            const text = diff < 0 ? `${diff}` : `${diff}`
-           return <span style={{fontWeight: '600', color: color}}>{text}</span>
+           return <span style={{fontWeight: '600', color: color}}>{diff}</span>
         }
     },
 

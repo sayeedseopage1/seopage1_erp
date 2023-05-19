@@ -421,7 +421,7 @@ export const useGoals = () => {
             
             rowCount = _deals.length;
             goal = Number(period.value);
-            if(goalData?.goal?.general_checkbox) {
+            if(Number(goalData?.goal?.team_id) ===  1) {
                 dealAdded = _deals.reduce((total, deal) => {
                     return total + Number(deal.amount);
                 }, 0);
@@ -469,6 +469,7 @@ export const useGoals = () => {
           
 
             result = _.lowerCase(_goalData.trackingType) === 'value' ? dealAdded : totalDeal;
+            
             result = fixedDecimalPlace(result);
 
             if (_.lowerCase(_goalData.trackingType) === 'value') {
@@ -489,15 +490,16 @@ export const useGoals = () => {
 
 
             /// difference
-            if (_.lowerCase(_goalData.trackingType) === 'value') {
-                difference = dealAdded - Number(period.value);
-            }else{
-                difference = totalDeal - Number(period.value);
-            }
-
+            // if (_.lowerCase(_goalData.trackingType) === 'value') {
+            //     difference = dealAdded - Number(period.value);
+            // }else{
+            //     difference = totalDeal - Number(period.value);
+            // }
+            
             
             dealAdded = fixedDecimalPlace(dealAdded);
-            difference = fixedDecimalPlace(difference);
+            // difference = fixedDecimalPlace(difference);
+            
         } else {
             totalDeal = 0;
             dealAdded = 0;
@@ -507,7 +509,7 @@ export const useGoals = () => {
             dealWonPercentage = 0;
             dealLostPercentage = 0;
             goalProgress = 0;
-            difference = 0;
+            difference: fixedDecimalPlace(result - Number(period.value));
             result = 0;
             yAxis = goalData?.goal?.trackingValue;
             target = 0;
@@ -528,7 +530,7 @@ export const useGoals = () => {
             dealLostPercentage,
             goalProgress,
             target,
-            difference,
+            difference: fixedDecimalPlace(result - Number(period.value)),
             goal,
             result,
             targetType: _.lowerCase(goalData?.goal.trackingType),

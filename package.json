@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "@popperjs/core": "^2.11.7",
+        "@react-pdf/renderer": "^3.1.9",
         "@reduxjs/toolkit": "^1.9.3",
         "@tanstack/react-table": "^8.8.5",
         "bootstrap": "^4.3.1",
