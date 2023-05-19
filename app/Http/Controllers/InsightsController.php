@@ -555,31 +555,57 @@ class InsightsController extends AccountBaseController
         $data2 = $data->user_id ? [$data->user_id] : $user_data;
     
         if ($data->entryType == 'Added') {
-            $dealStage = DealStage::select([
-                'deal_stages.id as id',
-                'deal_stages.id as deal_id',
-                'deal_stages.client_username as client_username',
-                'deal_stages.project_name as deal_project_name',
-                'deal_stages.project_link as deal_project_link',
-                'deal_stages.amount as deal_amount',
-                'deal_stages.deal_stage as deal_stage',
-                'deal_stages.deal_status as deal_status',
-                'deal_stages.actual_amount as deal_original_amount',
-                'deal_stages.created_at as deal_created_at',
-                'leads.added_by as lead_converted_by',
-                'leads.id as lead_id',
-            ])
-            ->join('leads', 'leads.id', '=', 'deal_stages.lead_id')
-            ->whereIn('leads.added_by', $data2)
-            ->whereDate('deal_stages.created_at', '>=', $data->startDate);
-    
-            if (!is_null($data->endDate)) {
-                $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
+            if ($data->dealType == 'All Clients') {
+                $dealStage = DealStage::select([
+                    'deal_stages.id as id',
+                    'deal_stages.id as deal_id',
+                    'deal_stages.client_username as client_username',
+                    'deal_stages.project_name as deal_project_name',
+                    'deal_stages.project_link as deal_project_link',
+                    'deal_stages.amount as deal_amount',
+                    'deal_stages.deal_stage as deal_stage',
+                    'deal_stages.deal_status as deal_status',
+                    'deal_stages.actual_amount as deal_original_amount',
+                    'deal_stages.created_at as deal_created_at',
+                    'leads.added_by as lead_converted_by',
+                    'leads.id as lead_id',
+                ])
+                ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+                ->whereIn('leads.added_by', $data2)
+                ->whereDate('deal_stages.created_at', '>=', $data->startDate);
+        
+                if (!is_null($data->endDate)) {
+                    $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
+                }
+        
+                $dealStage = $dealStage->get();
+            } elseif ($data->dealType == 'New Client') {
+                $dealStage = DealStage::select([
+                    'deal_stages.id as id',
+                    'deal_stages.id as deal_id',
+                    'deal_stages.client_username as client_username',
+                    'deal_stages.project_name as deal_project_name',
+                    'deal_stages.project_link as deal_project_link',
+                    'deal_stages.amount as deal_amount',
+                    'deal_stages.deal_stage as deal_stage',
+                    'deal_stages.deal_status as deal_status',
+                    'deal_stages.actual_amount as deal_original_amount',
+                    'deal_stages.created_at as deal_created_at',
+                    'leads.added_by as lead_converted_by',
+                    'leads.id as lead_id',
+                ])
+                ->join('leads', 'leads.id', '=', 'deal_stages.lead_id')
+                ->whereIn('leads.added_by', $data2)
+                ->whereDate('deal_stages.created_at', '>=', $data->startDate);
+        
+                if (!is_null($data->endDate)) {
+                    $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
+                }
+        
+                $dealStage = $dealStage->get();
+
             }
-    
-            $dealStage = $dealStage->get();
-    
-            $response['deal_stage'] = $dealStage;
+            
         } elseif ($data->entryType == 'Progressed') {
             if ($data->qualified == 'Qualified') {
                 $deal_status = 1;
@@ -595,20 +621,37 @@ class InsightsController extends AccountBaseController
                 $deal_status = 0;
             }
 
-            $dealStage = DealStage::join('leads', 'leads.id', '=', 'deal_stages.lead_id')
-            ->join('deal_stage_changes', 'deal_stage_changes.deal_id', 'deal_stages.short_code')
-            ->whereIn('leads.added_by', $data2)
-            ->where([
-                'deal_stages.deal_stage' => $deal_status,
-                'deal_stage_changes.deal_stage_id' => 'deal_stages.deal_stage',
-            ])
-            ->whereDate('deal_stages.created_at', '>=', $data->startDate);
-            
-            if (!is_null($data->endDate)) {
-                $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
+            if ($data->dealType == 'All Clients') {
+                $dealStage = DealStage::leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+                ->join('deal_stage_changes', 'deal_stage_changes.deal_id', 'deal_stages.short_code')
+                ->whereIn('leads.added_by', $data2)
+                ->where([
+                    'deal_stages.deal_stage' => $deal_status,
+                    'deal_stage_changes.deal_stage_id' => 'deal_stages.deal_stage',
+                ])
+                ->whereDate('deal_stages.created_at', '>=', $data->startDate);
+                
+                if (!is_null($data->endDate)) {
+                    $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
+                }
+                
+                $dealStage = $dealStage->get();
+            } elseif ($data->dealType == 'New Client') {
+                $dealStage = DealStage::join('leads', 'leads.id', '=', 'deal_stages.lead_id')
+                ->join('deal_stage_changes', 'deal_stage_changes.deal_id', 'deal_stages.short_code')
+                ->whereIn('leads.added_by', $data2)
+                ->where([
+                    'deal_stages.deal_stage' => $deal_status,
+                    'deal_stage_changes.deal_stage_id' => 'deal_stages.deal_stage',
+                ])
+                ->whereDate('deal_stages.created_at', '>=', $data->startDate);
+                
+                if (!is_null($data->endDate)) {
+                    $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
+                }
+                
+                $dealStage = $dealStage->get();
             }
-            
-            $dealStage = $dealStage->get();
             
         } elseif ($data->entryType == 'Won') {
             if($data->team_id != null)
@@ -804,9 +847,7 @@ class InsightsController extends AccountBaseController
                     $array[] = $value;
                 }
             }
-            
-            
-            
+
             return response()->json($array);
         }
 
