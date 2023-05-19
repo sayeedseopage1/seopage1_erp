@@ -31,12 +31,11 @@ const useTableState = () => {
 
 
 // data table 
-const DataTable = ({data, isLoading, defaultColumns, visibleColumns}) => {
+const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleColumns}, ref) => {
     const [currentPageData, setCurrentPageData] = React.useState([...data]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
     const { activeColumns, setActiveColumns, sortConfig, setSortConfig } = useTableState();
     const [totalPage, setTotalPage] = React.useState(1);
-
 
 
     // columns
@@ -113,9 +112,29 @@ const DataTable = ({data, isLoading, defaultColumns, visibleColumns}) => {
                             {/* <TableFilterButton  /> */}
                         </div> 
                     {/* header */}
-                <div className='cnx__table'>
+                <div className='cnx__table' >
                    
-                    <div className="cnx__table_head" style={{paddingRight: currentPageData.length > 34 ? '5px' : ''}}>
+                    {/* <div className="cnx__table_head" style={{paddingRight: currentPageData.length > 34 ? '5px' : ''}}>
+                        <div className="cnx__table_tr">
+                            {columns.map(column => (
+                                <DraggableColumn 
+                                    sort={sortConfig}
+                                    requestSort={requestSort}
+                                    key={column.id} 
+                                    column={column}
+                                    activeColumns={activeColumns}
+                                    setActiveColumns={setActiveColumns}
+                                />
+                            ))}
+                        </div>                         
+                    </div> */}
+                    
+                    {/* end header */}
+
+                    {/* table body */}
+
+                    <div className="cnx__table_body" ref={ref} style={{padding: 0}}>
+                    <div className="cnx__table_head">
                         <div className="cnx__table_tr">
                             {columns.map(column => (
                                 <DraggableColumn 
@@ -129,12 +148,6 @@ const DataTable = ({data, isLoading, defaultColumns, visibleColumns}) => {
                             ))}
                         </div>                         
                     </div>
-                    
-                    {/* end header */}
-
-                    {/* table body */}
-
-                    <div className="cnx__table_body">
 
                     {isLoading && (
                         [...Array(Number(numberOfRowPerPage))].map((_, i) => (
@@ -209,13 +222,14 @@ const DataTable = ({data, isLoading, defaultColumns, visibleColumns}) => {
         }  */}
         </div>
     )
-}
+})
 
 
-const DataTableComponent = ({data, isLoading, defaultColumns, visibleColumns}) => {
+const DataTableComponent = React.forwardRef(({data, isLoading, defaultColumns, visibleColumns}, ref) => {
     return(
         <ContextProvider>
            <DataTable 
+                ref={ref}
                 data={data} 
                 isLoading={isLoading}  
                 defaultColumns={defaultColumns}
@@ -223,7 +237,7 @@ const DataTableComponent = ({data, isLoading, defaultColumns, visibleColumns}) =
            />
         </ContextProvider>
     )
-}
+}) 
 
 
 export default DataTableComponent;

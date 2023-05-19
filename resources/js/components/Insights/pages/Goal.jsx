@@ -26,6 +26,8 @@ import { useGetTeamsQuery } from '../services/api/teamSliceApi';
 import { useEditGoalTitle, useEditGoalTitleMutation, useGetGoalByIdQuery } from '../services/api/goalsApiSlice';
 import { useGetDealsByGoalIdQuery } from '../services/api/dealSliceApi';
 import { CompareDate } from '../utils/dateController';
+import { useReactToPrint } from 'react-to-print';
+
 
 // convert to unit
 const numberToUnits = (value, decimal = 1) => {
@@ -52,6 +54,15 @@ const Goal = () => {
 
     // goal hooks
     const { getTargetPeriod, addedGoalSummary, wonGoalSummary} = useGoals();
+    const [printPreparing, setPrintPreparing] = React.useState(false);
+    const dealTableRef = React.useRef(null);
+
+    const handlePrintDealTable = useReactToPrint({
+        content: () => dealTableRef.current,
+        onBeforeGetContent: () => setPrintPreparing(true),
+        onAfterPrint: () => setPrintPreparing(false),
+        documentTitle: `${activeTable === 'deals' ? 'deals-table': 'deal-summary-table'}-${params?.goalId}`
+    })
 
 
     // authorized for edit 
@@ -318,6 +329,7 @@ const Goal = () => {
             entryType: goalData?.goal?.entryType,
         }))
     }
+
 
 
     if (goalIsFetching || !goalData) {
@@ -637,7 +649,19 @@ const Goal = () => {
                                 className={`cnx__ins_table_view_button ${activeTable === 'summary' ? 'active' : ""}`}>
                                 Summary
                             </Button>
+                            
+
+                            {
+                                printPreparing && <div>
+                                    <div className="spinner-border" role="status" style={{
+                                        width: '1.3rem',
+                                        height: '1.3rem',
+                                        
+                                    }}>  </div>
+                                </div>
+                            }
                         </div>
+                        
                         <div>
                             <Dropdown>
                                 <Dropdown.Toggle
@@ -650,11 +674,13 @@ const Goal = () => {
 
                                 <Dropdown.Menu offset={[0, 8]} placement='bottom-end' className="cnx__period_filter_dd_menu">
                                     <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
-                                        Pdf
+                                        <div onClick={handlePrintDealTable}>
+                                            Pdf
+                                        </div>
                                     </Dropdown.Item>
-                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
+                                    {/* <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
                                         PNG
-                                    </Dropdown.Item>
+                                    </Dropdown.Item> */}
                                 </Dropdown.Menu>
                             </Dropdown>
                         </div>
@@ -667,33 +693,37 @@ const Goal = () => {
                     {/* graph table */}
                     <div className='cnx__ins_table pb-3'>
                         {activeTable === 'deals' && (
-                            <DataTable
-                                data={goalDealsData ? [...goalDealsData] : []}
-                                defaultColumns={
-                                    goal?.entryType === 'Won' ?
-                                    WonTableData :
-                                    goal?.entryType === 'Added'?
-                                    AddedTableColumns : 
-                                    DataTableColumns
-                                }
+                           
+                            <div >
+                                <DataTable
+                                    ref={dealTableRef}
+                                    data={goalDealsData ? [...goalDealsData] : []}
+                                    defaultColumns={
+                                        goal?.entryType === 'Won' ?
+                                        WonTableData :
+                                        goal?.entryType === 'Added'?
+                                        AddedTableColumns : 
+                                        DataTableColumns
+                                    }
 
-                                visibleColumns={
-                                    goal?.entryType === 'Won' ?
-                                      Number(goal?.team_id) === 1 ? 
-                                      wonTableVisibleColumns.filter(item => item.accessor !== 'team_total_amount') : 
-                                      wonTableVisibleColumns
-                                     :
-                                    goal?.entryType === 'Added'?
-                                    addedTableVisibleColumns:
-                                    processedTableVisibleColumns
-                                }
-                                isLoading={dealsIsFetching}
-                            />
+                                    visibleColumns={
+                                        goal?.entryType === 'Won' ?
+                                        Number(goal?.team_id) === 1 ? 
+                                        wonTableVisibleColumns.filter(item => item.accessor !== 'team_total_amount') : 
+                                        wonTableVisibleColumns
+                                        :
+                                        goal?.entryType === 'Added'?
+                                        addedTableVisibleColumns:
+                                        processedTableVisibleColumns
+                                    }
+                                    isLoading={dealsIsFetching}
+                                />
+                            </div>
                         )}
 
                         {
                             // activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
-                            activeTable === 'summary' && <GoalSummaryTable data={goalSummary} isLoading={isSummarizing} />
+                            activeTable === 'summary' && <GoalSummaryTable ref={dealTableRef} data={goalSummary} isLoading={isSummarizing} />
                         }
                     </div>
                     {/* end graph table */}

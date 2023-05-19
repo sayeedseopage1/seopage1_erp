@@ -1,11 +1,11 @@
 import * as React from 'react';
 import DataTable from '../ui/DataTable';
 import _ from 'lodash';
-import { useDealsState } from '../hooks/useDealsState';
 
 
 
-const GoalSummaryTable = ({data, isLoading}) => {
+
+const GoalSummaryTable = React.forwardRef(({data, isLoading}, ref) => {
     // const { getSummary } = useDealsState();
     // const [data, setData] = React.useState([]);
     // const [isLoading, setIsLoading] = React.useState(false);
@@ -44,14 +44,15 @@ const GoalSummaryTable = ({data, isLoading}) => {
 
     return(
         <div>
-            <DataTable 
+            <DataTable  
+                ref={ref} 
                 data={data}
                 isLoading={isLoading}
                 defaultColumns={GoalSummaryTableColumns}
             />
         </div>
     )
-};
+})
 
 export default GoalSummaryTable;
 
