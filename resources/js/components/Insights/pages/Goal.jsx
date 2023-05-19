@@ -329,7 +329,7 @@ const Goal = () => {
     }
 
 
-    const { goal } = goalData;
+    const { goal, added_by } = goalData;
 
     if(!goal) return <div>Goal not found</div>
 
@@ -467,7 +467,7 @@ const Goal = () => {
                     {/* details */}
                     <div className='cnx__ins_details'>
                         <div className='cnx__ins_details_col'>
-                            <Tooltip text="Assignee">
+                            <Tooltip text="Assignee for">
                                 <div className='cnx__ins_details_item'>
                                     <i className='fa-regular fa-user' />
                                     <span>{goal?.name || goal?.team_name}</span>
@@ -487,6 +487,15 @@ const Goal = () => {
                                     Pipeline{goal?.entryType === 'Progressed' ? ', ' + goal?.qualified : ''}
                                 </div>
                             </Tooltip>
+
+
+                            <Tooltip text="Assignee by">
+                                <div className='cnx__ins_details_item'>
+                                    <i className='fa-solid fa-user' />
+                                    <span>{added_by?.name}</span>
+                                </div>
+                            </Tooltip>
+                            
                         </div>
 
                         <div className='cnx__ins_details_col'>
@@ -508,6 +517,13 @@ const Goal = () => {
                                 <div className='cnx__ins_details_item'>
                                     <Icon type="Goal" />
                                     {goal?.trackingType === "value" ? numberToUnits(Number(goal?.trackingValue)) : goal?.trackingValue} Deals
+                                </div>
+                            </Tooltip>
+
+                            <Tooltip text='Client type'>
+                                <div className='cnx__ins_details_item'>
+                                <i className='fa-solid fa-users' />
+                                    {goal?.dealType}
                                 </div>
                             </Tooltip>
                         </div>
