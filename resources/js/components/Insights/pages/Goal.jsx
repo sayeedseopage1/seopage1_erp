@@ -41,6 +41,7 @@ const Goal = () => {
     const location = useLocation(); // get location
     const day = new CompareDate();
     const [goalSummary, setGoalSummary] = React.useState(null); // store goal summary data here
+    const [tableDeals, setTableDeals] = React.useState([]);
 
     // custom filter by data
     const [selectedPeriod, setSelectedPeriod] = React.useState('Today');
@@ -118,6 +119,18 @@ const Goal = () => {
     }, [goalIsFetching]);
 
 
+    // set deals
+    React.useEffect(() => {
+        if(!dealsIsFetching && goalDealsData && goalData){
+            if(goalData?.goal?.entryType === "Won" && goalData?.goal?.team_id !== 1 ){
+                let d = goalDealsData.filter(deal => Number(deal['team_total_amount']) !== 0);
+                setTableDeals([...d]);
+            }else{  
+                setTableDeals([...goalDealsData])
+            }
+        }
+    }, [goalDealsData])
+    
     // get filter period
     const handleRelativeTimePeriod = (value) => {
         setSelectedPeriod(value);
@@ -697,7 +710,7 @@ const Goal = () => {
                             <div >
                                 <DataTable
                                     ref={dealTableRef}
-                                    data={goalDealsData ? [...goalDealsData] : []}
+                                    data={tableDeals ? [...tableDeals] : []}
                                     defaultColumns={
                                         goal?.entryType === 'Won' ?
                                         WonTableData :
