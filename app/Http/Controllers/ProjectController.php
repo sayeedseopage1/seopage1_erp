@@ -1541,7 +1541,17 @@ class ProjectController extends AccountBaseController
 
                          }
 
+                //5% kpi setting start
 
+                /*$goal = GoalSetting::whereDate('startDate', '>=', $find_deal_id->created_at);
+
+                if (!is_null($goal->endDate)) {
+                    $goal = $goal->whereDate('endDate', '<=', $find_deal_id->created_at);
+                }
+
+                dd($goal);*/
+
+                //5% kpi setting end
         }
 
          
@@ -1655,6 +1665,7 @@ class ProjectController extends AccountBaseController
             }
         }
         if ($project->project_status != 'Accepted') {
+
             foreach ($users as $user) {
                 $this->triggerPusher('notification-channel', 'notification', [
                     'user_id' => $user->id,
