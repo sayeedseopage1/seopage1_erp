@@ -52,6 +52,7 @@ use Toastr;
 use App\Notifications\DealAuthorizationSendNotification;
 use Notification;
 use App\Models\GoalSetting;;
+use App\Models\RoleUser;
 
 
 class DealController extends AccountBaseController
