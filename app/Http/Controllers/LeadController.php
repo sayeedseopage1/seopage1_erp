@@ -170,11 +170,10 @@ class LeadController extends AccountBaseController
 
             if($goal->dealType == 'New Client')
             {
-
-            
+    
        //dd("nksdnlas");
             $dealStage = DealStage::select([
-                'deal.*',
+                'deal_stages.*',
                 'deal_stages.id as id',
                 'deal_stages.id as deal_id',
                 'deal_stages.client_username as client_username',
@@ -192,6 +191,7 @@ class LeadController extends AccountBaseController
             ->whereIn('leads.added_by', $goal2)
             ->whereDate('deal_stages.created_at', '>=', $goal->startDate)
             ->groupBy('deal_stages.client_username');
+            
         //  /dd($dealStage);
     
             if (!is_null($goal->endDate)) {
@@ -201,6 +201,7 @@ class LeadController extends AccountBaseController
     
             $dealStage_amount = $dealStage->sum('deal_stages.amount');
             $dealStage_count = $dealStage->count();
+           // dd($dealStage_amount,$dealStage_count);
             if ($goal->trackingType == 'value') {
                 
                     $deal_amount = $dealStage_amount;
@@ -211,7 +212,7 @@ class LeadController extends AccountBaseController
                     $deal_amount = $dealStage_count;
                
             }
-            // dd($deal_amount);
+           //dd($deal_amount);
             if ($deal_amount >= (int) $goal->trackingValue) {
                 $goal_update= GoalSetting::find($goal->id);
                 $goal_update->goal_status = 1;
@@ -221,7 +222,7 @@ class LeadController extends AccountBaseController
         }else 
         {
             $dealStage = DealStage::select([
-                'deal.*',
+                'deal_stages.*',
                 'deal_stages.id as id',
                 'deal_stages.id as deal_id',
                 'deal_stages.client_username as client_username',
