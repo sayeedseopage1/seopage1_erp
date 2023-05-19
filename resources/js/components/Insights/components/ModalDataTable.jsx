@@ -13,7 +13,13 @@ export const ModalDataTable = () =>{
     const [goal, setGoal] = React.useState(null);
     const [visibleColumns, setVisibleColumns] = React.useState([]);
     
-    
+    const getGoalDealsDate = (deals, goal) => {
+        if(goal?.entryType === "Won" && goal?.team_id !== 1){
+            return deals.filter(deal => Number(deal["team_total_amount"]) !== 0) || []
+        }else{
+            return deals || []
+        }
+    } 
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = React.useState(true);
 
@@ -79,8 +85,15 @@ export const ModalDataTable = () =>{
                     <Card.Body className='cnx__data_table_card_body'>
                         <div className='d-flex align-items-center justify-content-center position-relative py-3'>
                             <div className='cnx__data_table_card_body___title filter_options_line position-relative'>
-                                <span>${Number(data.dealAdded).toFixed(2)}</span> • 
-                                <span>{Number(data.rowCount)} Deals</span>
+                                {/* <span>${Number(data.dealAdded).toFixed(2)}</span> • 
+                                <span>{Number(data.rowCount)} Deals</span> */}
+                            <span>Goal: {goal?.trackingType === "value"  ? "$" : ''} {Number(data.goal).toFixed(2)}</span>
+                            |
+                            <span>{goal?.trackingType === 'value' ? 'Achieved': "Total"} ${Number(data.dealAdded).toFixed(2)} </span>
+                            | 
+                            {goal?.trackingType === 'value' && <span>Total: ${Number(data.totalAmount).toFixed(2)}</span>}
+                            |
+                            <span>Contributed In: {Number(data.rowCount)} Deals</span>
                             </div>
                             
                         </div>
@@ -88,7 +101,7 @@ export const ModalDataTable = () =>{
                         
                          <div>
                             <DataTable 
-                                data={data.deals} 
+                                data={[...getGoalDealsDate(data.deals, goal)]} 
                                 defaultColumns={
                                     goal?.entryType === 'Won' ?
                                     WonTableData :
