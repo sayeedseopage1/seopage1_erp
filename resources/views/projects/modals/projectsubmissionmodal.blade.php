@@ -320,7 +320,12 @@
           </div>
         </td>
         <td>
-          <p class="fw-normal mb-1">  {{$project_submission->category->category_name}}
+          <p class="fw-normal mb-1">
+              @if($project_submission->niche)
+                  {{$project_submission->niche}}
+              @else
+                  <p class="fw-normal mb-1">Category name not found</p>
+              @endif
             </p>
 
         </td>

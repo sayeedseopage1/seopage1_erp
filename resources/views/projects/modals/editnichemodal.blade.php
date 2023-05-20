@@ -25,7 +25,7 @@
                             @endphp
                             <div class="form-group my-3">
                                 <label class="f-14 text-dark-grey mb-12" data-label="true" for="category_name">Select Parent Category</label>
-                                <select name="parent_category_id" id="parent_category_id" class="form-control height-35 f-14">
+                                <select name="parent_category_id2" id="parent_category_id2" class="form-control height-35 f-14">
                                     <option value="" selected>--</option>
                                     @foreach($categories as $category)
                                         <option value="{{$category->id}}">{{$category->category_name}}</option>
@@ -47,12 +47,11 @@
     $(document).on('click', '.update_category_form', function() {
         let id = $(this).data('id');
         let category_name = $(this).data('name');
-        let parent_category_id = $('#parent_category_id').val();
+        let parent_category_id = $(this).data('parent');
 
         $('#id').val(id);
         $('#category_name2').val(category_name);
-
-        $('#editnichemodal').modal('show');
+        $('#parent_category_id2').val(parent_category_id);
     });
 
     $(document).on('click', '#update_niche', function(e) {
@@ -61,7 +60,7 @@
         $('#update_niche').html("Processing...");
         let id = $('#id').val();
         let category_name = $('#category_name2').val();
-        let parent_category_id = $('#parent_category_id').val();
+        let parent_category_id = $('#parent_category_id2').val();
 
         $.ajaxSetup({
             headers: {
@@ -70,16 +69,15 @@
         });
 
         $.ajax({
-            url: '/projects/update-category/' + id,
-            method: 'get',
+            url: '/projects/update-niche-category/'+id,
+            method: 'put',
             data: {
                 id: id,
                 category_name: category_name,
-                parent_category_id: parent_category_id // Add parent_category_id to the data object
+                parent_category_id: parent_category_id,
             },
             success: function(res) {
                 if (res.status == 200) {
-                    $('#editnichemodal').modal('hide');
                     $('#update_niche').attr("disabled", false);
                     $('#update_niche').html("Submit");
                     window.location.reload();

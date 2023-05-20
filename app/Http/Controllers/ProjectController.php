@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Models\ProjectCms;
+use App\Models\ProjectPortfolio;
+use App\Models\ProjectWebsiteType;
+
 use App\Models\DealStageChange;
 use App\Models\kpiSettingGenerateSale;
+
 use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Team;
@@ -3074,7 +3080,7 @@ class ProjectController extends AccountBaseController
 
 
         $this->clients = User::allClients();
-        $this->categories = ProjectNiche::all();
+        $this->categories = ProjectNiche::where('parent_category_id')->get();
         $this->currencies = Currency::all();
         $this->teams = Team::all();
         $this->projectStatus = ProjectStatusSetting::where('status', 'active')->get();
@@ -3100,9 +3106,14 @@ class ProjectController extends AccountBaseController
         return view('projects.create', $this->data);
 
     }
+    public function getSubNiches($niche_id)
+    {
+        $sub_niches = \App\Models\ProjectNiche::find($niche_id)->child;
+        return response()->json($sub_niches);
+    }
     public function ProjectCompletionSubmit(Request $request)
      {
-     // dd($request);
+//      dd($request->all());
         $validated = $request->validate([
             'qc_protocol' => 'required',
             'login_information' => 'required',
@@ -3112,6 +3123,20 @@ class ProjectController extends AccountBaseController
             'comments'=> 'required',
             'comments2'=> 'required',
             'comments3'=> 'required',
+            'cms_category'=> 'required',
+            'website_type'=> 'required',
+            'niche'=> 'required',
+            'sub_niche'=> 'required',
+            'main_page_number'=> 'required',
+            'main_page_name'=> 'required',
+            'secondary_page_number'=> 'required',
+            'secondary_page_name'=> 'required',
+            'backup_email_address'=> 'required',
+            'day_interval'=> 'required',
+//            'use_theme'=> 'required',
+            'theme_name'=> 'required',
+            'theme_url' => 'required',
+            'website_plugin_box_information'=> 'required',
             'dummy_yes'=> 'required',
             'dummy_information'=> 'required',
             'notify' => 'required',
@@ -3139,6 +3164,20 @@ class ProjectController extends AccountBaseController
             'comments.required' => 'Comment is required. Please write you opinion about technical team!!',
             'comments2.required' => 'Comment is required. Please write you opinion about defined requirements from sales team!!',
             'comments3.required' => 'Comment is required. Please write you opinion about defined price from sales team!!',
+            'cms_category.required' => 'This field is required!!',
+            'website_type.required' => 'This field is required!!',
+            'niche.required' => 'This field is required!!',
+            'sub_niche.required' => 'This field is required!!',
+            'main_page_number.required' => 'This field is required!!',
+            'main_page_name.required' => 'This field is required!!',
+            'secondary_page_name.required' => 'This field is required!!',
+            'secondary_page_number.required' => 'This field is required!!',
+            'backup_email_address.required' => 'This field is required!!',
+            'day_interval.required' => 'This field is required!!',
+//            'use_theme.required' => 'This field is required. Please select Yes or No',
+            'theme_name.required' => 'This field is required!!',
+            'theme_url' => 'This field is required!!',
+            'website_plugin_box_information.required' => 'This field is required!!',
             'dummy_yes.required' => 'This field is required. Please select Yes or No',
             'dummy_information.required' => 'This field is required.',
             'notify.required' => 'This field is required. Please select Yes or No!!',
@@ -3170,7 +3209,6 @@ class ProjectController extends AccountBaseController
       $milestone->comments2= $request->comments2;
       $milestone->requirements= $request->requirements;
       $milestone->price= $request->price;
-      $milestone->niche= $request->niche;
       $milestone->dummy_yes = $request->dummy_yes;
       $milestone->dummy_information = $request->dummy_information;
       $milestone->dummy_link= $request->dummy_link;
@@ -3179,11 +3217,39 @@ class ProjectController extends AccountBaseController
       $milestone->actual_information = $request->actual_information;
       $milestone->actual_link= $request->actual_link;
       $milestone->status = 'pending';
-
       $milestone->save();
       $milestone_update= ProjectMilestone::where('id',$milestone->milestone_id)->first();
       $milestone_update->project_completion_status= 2;
       $milestone_update->save();
+
+        $project_portfolio = new ProjectPortfolio();
+        $project_portfolio->project_id= $project->project_id;
+        $project_portfolio->cms_category= $request->cms_category;
+        $project_portfolio->website_type= $request->website_type;
+        $project_portfolio->niche= $request->niche;
+        $project_portfolio->sub_niche= $request->sub_niche;
+        $project_portfolio->theme_name = $request->theme_name;
+        $project_portfolio->theme_url = $request->theme_url;
+        $project_portfolio->plugin_information = $request->website_plugin_box_information;
+        $project_portfolio->main_page_number = $request->main_page_number;
+        $project_portfolio->main_page_name = $request->main_page_name;
+        $project_portfolio->secondary_page_number = $request->secondary_page_number;
+        $project_portfolio->secondary_page_name = $request->secondary_page_name;
+        $project_portfolio->backup_email_address = $request->backup_email_address;
+        $project_portfolio->day_interval = $request->day_interval;
+        $project_portfolio->description = $request->description;
+        $project_portfolio->portfolio_link= $request->actual_link;
+        $project_portfolio->added_by= $request->added_by;
+
+        foreach($request->plugin_name as $key => $new_plugin_name) {
+            $project_portfolio->project_id= $project->project_id;
+            $project_portfolio->plugin_name = $new_plugin_name;
+            $project_portfolio->plugin_url  = $request->plugin_url[$key] ;
+            $project_portfolio->save();
+        }
+
+
+
       //$user= User::where('id',$project->pm_id)->first();
 
 
@@ -3192,10 +3258,6 @@ class ProjectController extends AccountBaseController
 
       Notification::send($user, new ProjectSubmissionNotification($milestone));
     }
-
-//      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-
-//      return redirect('/account/projects/'.$milestone->project_id.'?tab=milestones');
         return response()->json([
             'status' => 'success',
             'redirectUrl' => url('/account/projects/'.$milestone->project_id.'?tab=milestones')
@@ -3205,10 +3267,59 @@ class ProjectController extends AccountBaseController
 
 
     }
-    // VIEW PROJECT CATEGORY SECTION
+    // VIEW PROJECT CATEGORY TYPE SECTION
     public function viewCategory(){
         $this->pageTitle = 'Categories';
         return view('projects.category.index',$this->data);
+    }
+
+    // VIEW PROJECT CMS SECTION
+    public function viewCms(){
+        $this->pageTitle = 'CMS';
+        return view('projects.cms.index',$this->data);
+    }
+    public function storeCms(Request $request){
+        $validated = $request->validate([
+            'cms_name' => 'required',
+        ], [
+            'cms_name.required' => 'This field is required!!',
+        ]);
+        $cms = new ProjectCms();
+        $cms->cms_name = $request->cms_name;
+        $cms->save();
+        return response()->json(['status'=>200]);
+    }
+    public function updateCms(Request $request,$id)
+    {
+        $cms = ProjectCms::find($id);
+        $cms->cms_name = $request->cms_name;
+        $cms->save();
+
+        return response()->json(['status'=>200]);
+    }
+    // VIEW PROJECT WEBSITE SECTION
+    public function viewWebsiteType(){
+        $this->pageTitle = 'Website Type';
+        return view('projects.website-type.index',$this->data);
+    }
+    public function storeWebsiteType(Request $request){
+        $validated = $request->validate([
+            'website_type' => 'required',
+        ], [
+            'website_type.required' => 'This field is required!!',
+        ]);
+        $project_website_type = new ProjectWebsiteType();
+        $project_website_type->website_type = $request->website_type;
+        $project_website_type->save();
+        return response()->json(['status'=>200]);
+    }
+    public function updateWebsiteType(Request $request,$id)
+    {
+        $project_website_type = ProjectWebsiteType::find($id);
+        $project_website_type->website_type = $request->website_type;
+        $project_website_type->save();
+
+        return response()->json(['status'=>200]);
     }
 
     public function parentCategoryId($id){
