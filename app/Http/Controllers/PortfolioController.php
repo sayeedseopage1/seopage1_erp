@@ -9,6 +9,7 @@ use App\Models\ProjectPortfolio;
 use App\Models\ProjectWebsiteType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function Symfony\Component\HttpClient\Response\select;
 
 class PortfolioController extends AccountBaseController
 {
@@ -30,11 +31,11 @@ class PortfolioController extends AccountBaseController
     public function index()
     {
         $this->portfolios = DB::table('project_portfolios')
-            ->leftJoin('users', 'project_portfolios.project_id', '=', 'users.id')
             ->leftJoin('project_niches', 'project_portfolios.project_id', '=', 'project_niches.id')
             ->leftJoin('project_cms', 'project_portfolios.id', '=', 'project_cms.id')
             ->leftJoin('project_website_types', 'project_portfolios.id', '=', 'project_website_types.id')
             ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
+            ->join('users', 'projects.client_id', '=', 'users.id')
             ->select('project_portfolios.*','users.user_name','projects.project_name','project_niches.category_name','project_cms.cms_name','project_website_types.website_type')
             ->get();
 
@@ -64,27 +65,26 @@ class PortfolioController extends AccountBaseController
 
         if (!is_null($request->input('website_category'))) {
             $selectedCategoryId = $request->input('website_category');
-            $filteredCategories = ProjectPortfolio::where('website_category', $selectedCategoryId);
+            $filteredCategories = ProjectPortfolio::where('niche', $selectedCategoryId);
         }
 
         if (!is_null($request->input('website_sub_cat'))) {
             $selectedCategoryId = $request->input('website_sub_cat');
-            $filteredCategories = ProjectPortfolio::where('website_sub_cat', $selectedCategoryId);
+            $filteredCategories = ProjectPortfolio::where('sub_niche', $selectedCategoryId);
         }
 
         if (!is_null($request->input('theme_name'))) {
             $selectedCategoryId = $request->input('theme_name');
-            $filteredCategories = ProjectPortfolio::where('theme_name', $selectedCategoryId);
+            $filteredCategories = ProjectPortfolio::where('id', $selectedCategoryId);
         }
 
-        if (!is_null($request->input('portfolio_link'))) {
-            $selectedCategoryId = $request->input('portfolio_link');
-            $filteredCategories = ProjectPortfolio::where('portfolio_link', $selectedCategoryId);
+        if (!is_null($request->input('website_plugin'))) {
+            $selectedCategoryId = $request->input('website_plugin');
+            $filteredCategories = ProjectPortfolio::where('id', $selectedCategoryId);
         }
-
-
 
         $filteredCategories = $filteredCategories->get();
+
 
 //        dd($filteredCategories);
         return response()->json($filteredCategories);

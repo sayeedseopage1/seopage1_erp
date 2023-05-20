@@ -92,7 +92,7 @@
                             <div class="col-sm-2">
                                 <label for="">Select Website Plugin</label><br>
                                 <div class="dropdown bootstrap-select form-control select-picker" style="width: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-                                    <select name="portfolio_link" id="portfolio_link" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                    <select name="website_plugin" id="website_plugin" data-live-search="true" class="form-control select-picker error" data-size="8">
                                         <option value="">--</option>
                                         @foreach ($portfolios as $portfolio)
                                             <option value="{{$portfolio->id}}">{{$portfolio->plugin_name}}</option>
@@ -181,13 +181,14 @@
 <script>
     // CMS FILTER SECTION
     $(document).ready(function() {
-        $('#cms_id, #website_type, #website_category, #website_sub_cat, #theme_name, #portfolio_link').change(function() {
+        $('#cms_id, #website_type, #website_category, #website_sub_cat, #theme_name, #website_plugin').change(function() {
             var selectedCategoryId = $('#cms_id').val();
             var websiteType = $('#website_type').val();
             var website_category = $('#website_category').val();
             var website_sub_cat = $('#website_sub_cat').val();
             var theme_name = $('#theme_name').val();
-            var portfolio_link = $('#portfolio_link').val();
+            var website_plugin = $('#website_plugin').val();
+            // console.log(theme_name);
             var selectedCmsName = $(this).find(':selected').text();
             $.ajax({
                 url: "{{ route('filter-cms-categories') }}",
@@ -198,9 +199,10 @@
                     website_category: website_category,
                     website_sub_cat: website_sub_cat,
                     theme_name: theme_name,
-                    portfolio_link: portfolio_link
+                    website_plugin: website_plugin
                 },
                 success: function(response) {
+                    console.log(response);
                     $('.displayFilterData').empty();
 
                     var categoryHtml = '<p class="mt-2 f-20">Website Category: ' + selectedCmsName + '</p>';
