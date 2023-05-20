@@ -22,6 +22,7 @@ import { useGetUsersQuery } from '../services/api/userSliceApi';
 import { useGetTeamsQuery } from '../services/api/teamSliceApi';
 import { addGoal, addRecurring, setGoals, setStatus, updateGoal, updateRecurring } from '../services/slices/goalSlice';
 import { stage } from '../utils/constants';
+import { useGoals } from '../hooks/useGoals';
 
 
 // assignee for 
@@ -228,6 +229,7 @@ const Frequency = ({ frequency, setFrequency, setEdit }) => {
 
     const options = () => ([
         'Weekly',
+        '10 Days',
         'Monthly',
         'Quarterly',
         'Yearly',
@@ -560,7 +562,17 @@ const GoalFormModal = () => {
     const [dealType, setDealType] = React.useState('');
     const [goalType, setGoalType] = React.useState('');
     const [achievablePoints, setAchievablePoints] = React.useState('0');
+    // const [general, setGeneral] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
+    const {
+        updateGoal,
+        updateGoalIsLoading,
+        updateGoalIsSuccess,
+        
+        addGoal,
+        addGoalIsLoading,
+        addGoalIsSuccess,
+    } = useGoals();
 
 
 
@@ -574,7 +586,8 @@ const GoalFormModal = () => {
             } else if(data.assigneeType === 'User'){
                 setAssigneeFor({id: data.user_id, name: data.name});
             } else setAssigneeFor({id: data.team_id, name: data.team_name});
-
+            // general
+            // setGeneral(Number(data.general_checkbox) === 1 ? true : false);
             // frequency
             setFrequency(data.frequency);
             // start date
@@ -648,6 +661,7 @@ const GoalFormModal = () => {
         if(!isFormDataValid()) return;            
             
         const formData = {
+            title: `${entry} ${entryType} ${assigneeFor.name}`,
             entry, 
             entryType, 
             assigneeType, 
@@ -665,34 +679,49 @@ const GoalFormModal = () => {
             achievablePoints: Number(achievablePoints)
         };
 
-        
+
+       
 
         if(_.lowerCase(mode) === 'edit'){
-            await axios.post(`/account/insights/goals/edit/${data.id}`, formData).then((res) => {
-                setFormStatus('saved');
-                setIsSaving(false);
-                if(res.data?.goal){
+            try{
+                const res = await updateGoal({id: data.id, data: {...formData}});
+
+                if(res?.goal){
                     dispatch(setStatus('updating'));
-                    dispatch(updateGoal({goal: res.data.goal}));
-                    dispatch(updateRecurring(res.data));
+                    dispatch(updateGoal({goal: res.goal}));
+                    dispatch(updateRecurring(res));
                     dispatch(setStatus('idle'))
-                    navigate(`goals/${res.data?.goal.id}`);
+                    navigate(`goals/${res?.goal.id}`);
                 }
                 
-            });
+
+            }catch(err){
+                console.log(err)
+            } finally {
+                setFormStatus('saved');
+                setIsSaving(false);
+            }
         } else {
-            await axios.post("/account/insights/goals/add", formData).then((res) => {
-                if(res.data.goal){
-                    setFormStatus('saved');
-                    setIsSaving(false);   
-                    navigate(`goals/${res.data?.goal.id}`); 
-                    dispatch(addGoal(res.data));
-                    dispatch(addRecurring(res.data));             
+            try{
+                let res = await addGoal(formData).unwrap();
+
+                if(res){
+                    navigate(`goals/${res?.goal.id}`); 
+                    dispatch(closeGoalFormModal());
                 }
-            });
+
+            }catch(err){
+                console.log(err)
+            } finally {
+                setFormStatus('saved');
+                setIsSaving(false);
+            }
         }
     }
+    
 
+
+    
 
     return(
         <div className="cnx_ins__goal_modal__container">
@@ -707,6 +736,32 @@ const GoalFormModal = () => {
                 </Card.Header>
                 {/* card body */}
                 <Card.Body className={`cnx_ins__goal_modal cnx_ins__goal_form_modal`}>
+
+                    {/* General */}
+                    {/* {
+                        entryType === "Won" && 
+                        <div className='cnx_ins__goal_modal__card_body'>
+                            <div className='cnx_ins__goal_modal__card_body_label'> </div>
+
+                            <div className='cnx_select_box_wrapper'>
+                                <label htmlFor="">
+                                    
+                                    <input 
+                                        type="checkbox" 
+                                        value={general}
+                                        name="general_checkbox"  
+                                        onChange={e => setGeneral(e.target.checked)} 
+                                        checked={general}
+                                        style={{
+                                            cursor: 'pointer',
+                                        }}
+                                    /> 
+
+                                    Mark this checkbox if this is a general goal
+                                </label>
+                            </div>
+                        </div>
+                    } */}
                 {/* assignee  */}
                 <div className='cnx_ins__goal_modal__card_body'>
                     <div className='cnx_ins__goal_modal__card_body_label'>
@@ -844,11 +899,12 @@ const GoalFormModal = () => {
                             min={0} 
                             className='cnx_select_box'
                         />
+
+                        
                     </div>
                 </div>
 
                 
-
 
                 {/* Tracking metric */}
                 <div className='cnx_ins__goal_modal__card_body'>
@@ -864,7 +920,11 @@ const GoalFormModal = () => {
                                name="metric" 
                                value="value" 
                                onChange={e => setTrackingType(e.target.value)} 
-                               defaultChecked={trackingType === 'value'} />
+                               checked={trackingType === 'value'} 
+                               style={{
+                                    cursor: 'pointer',
+                                }}
+                            /> 
                             Value
                         </label>
 
@@ -875,7 +935,10 @@ const GoalFormModal = () => {
                                 name="metric" 
                                 value="count" 
                                 onChange={e => setTrackingType(e.target.value)} 
-                                defaultChecked={trackingType === 'count'} 
+                                checked={trackingType === 'count'} 
+                                style={{
+                                    cursor: 'pointer',
+                                }}
                             />
                             Count
                         </label>

@@ -109,7 +109,7 @@ export const TooltipElement = () => {
 
 
 // tooltip component
-const TooltipComponent = ({children, text,...props}) => {
+const TooltipComponent = ({children, disabled, text,...props}) => {
     const {setIsOpen, setElement, setReference} = useTooltip(); 
 
     React.useEffect(() => {
@@ -128,18 +128,18 @@ const TooltipComponent = ({children, text,...props}) => {
             >
                 {children}
             </div>
-            <TooltipElement/>
+            {!disabled && <TooltipElement/>}
         </>
     )
 }
 
 
 
-const Tooltip = ({children, text, ...props}) => {
+const Tooltip = ({children, text, disabled=false, ...props}) => {
 
     return (
         <TooltipProvider>
-            <TooltipComponent text={text} {...props}>
+            <TooltipComponent text={text} disabled={disabled} {...props}>
                 {children}
             </TooltipComponent>
         </TooltipProvider>
@@ -156,11 +156,13 @@ TooltipProvider.propTypes = {
 TooltipComponent.propTypes = {
     text: PropTypes.string.isRequired,
     children: PropTypes.element.isRequired,
+    disabled: PropTypes.bool,
 }
 
 Tooltip.propTypes = {
     text: PropTypes.string.isRequired,
     children: PropTypes.element.isRequired,
+    disabled: PropTypes.bool,
 }
 
 export default Tooltip;

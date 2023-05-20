@@ -57,7 +57,7 @@ class EmployeeShiftScheduleController extends AccountBaseController
             $this->employees = User::where('id', user()->id)->get();
 
         } else {
-            $this->employees = User::allEmployees(null, true, ($this->viewShiftPermission == 'all' ? 'all' : null));
+            $this->employees = User::allEmployees(null, true);
         }
 
         $now = now();

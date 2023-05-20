@@ -8,7 +8,7 @@
 						<th>By</th>
 						<th>Activity</th>
 					</x-slot>
-					@forelse($activityLog as $value)
+					@foreach($activityLog as $value)
 					<tr>
 						<td>{{$value->created_at->format('Y-m-d g:i A')}}<br>(GMT {{$value->created_at->format('P')}})</td>
 						<td>
@@ -58,13 +58,23 @@
 							@endif
 						</td>
 					</tr>
-					@empty
-					<tr> 
-						<td colspan="3" class="shadow-none">
-			                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-			            </td>
+					@endforeach
+					@foreach($lead_deal_activity_log as $value)
+					<tr>
+						<td>{{$value->created_at->format('Y-m-d g:i A')}}<br>(GMT {{$value->created_at->format('P')}})</td>
+						<td>
+							@if(is_null($value->addedBy))
+								---
+							@else
+							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image)}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">
+							{{$value->addedBy->name}}
+							@endif
+						</td>
+						<td>
+							{!! html_entity_decode($value->message, ENT_QUOTES, 'UTF-8') !!}
+						</td>
 					</tr>
-					@endforelse
+					@endforeach
 				</x-table>
 			</x-cards.data>
 		</div>

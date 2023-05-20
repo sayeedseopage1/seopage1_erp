@@ -156,24 +156,30 @@ $task_submission= App\Models\TaskSubmission::where('task_id',$task->id)->orderBy
                 </a>
             </p>
             <div class="collapse" id="oldSubmission">
-                <div class="card card-body">
+                <div class="card card-body p-2">
                     @if($newArray != null)
-                        <h5>Submitted Work</h5>
                         @php $counter = 1; @endphp
                         @foreach($newArray as $submission)
-                            <h5>Submission {{$counter++}} <span class="float-right">({{\Carbon\Carbon::parse($submission->created_at)->format('Y-m-d H:i:s')}})</span></h5>
+                            <div class="row mx-0 bg-amt-grey p-2 rounded">
+                                <h5 class="align-self-center mb-0">Submission {{$counter++}}</h5>
+                                <span class="ml-auto f-14">
+                                    {{\Carbon\Carbon::parse($submission->created_at)->format('Y-m-d')}}<br>
+                                    {{\Carbon\Carbon::parse($submission->created_at)->format('H:i A')}}
+                                </span>
+                            </div>
+                            
                             @if($submission->link != null)
-                                <div class="mb-3">
+                                <div class="mb-3 p-2">
                                     <a class="text-lowercase" href="{{$submission->link}}" target="_blank">{{$submission->link}}</a>
                                 </div>
                             @endif
                             @if($submission->text != null)
-                                <div class="mb-3 text-lowercase">
+                                <div class="mb-3 text-lowercase p-2">
                                     {!! $submission->text !!}
                                 </div>
                             @endif
                             @if(isset($submission->attach))
-                                <div class="mb-3">
+                                <div class="mb-3 p-2">
                                     <p class="card-text">
                                         <a class="text-dark-grey" style="font-weight:bold;" target="_blank" href="{{asset('storage/TaskSubmission/'.$submission->attach)}}"><i class="fa-solid fa-link"></i> {{$submission->attach}}</a>
                                     </p>
@@ -193,8 +199,8 @@ $task_submission= App\Models\TaskSubmission::where('task_id',$task->id)->orderBy
             $latestObject = json_encode(mergeArrays($latestObject[0], $latestObject[1]));
             $latestObject = json_decode($latestObject);
         @endphp
-        <div class="bg-amt-grey">
-            <h5 class="bg-amt-grey p-2">Latest Submission <span class="float-right">{{\Carbon\Carbon::parse($latestObject->created_at)->format('Y-m-d')}}</span></h5>
+        <div class="card card-body p-2 mb-3">
+            <h5 class="bg-amt-grey p-2 rounded">Latest Submission <span class="float-right">{{\Carbon\Carbon::parse($latestObject->created_at)->format('Y-m-d')}}</span></h5>
             @if($latestObject->link != null)
                 <div class="mb-3 m-2">
                     <a class="text-lowercase" href="{{$latestObject->link}}" target="_blank">  {{$latestObject->link}}</a>

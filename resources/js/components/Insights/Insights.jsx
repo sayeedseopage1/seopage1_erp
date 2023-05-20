@@ -24,7 +24,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { useGetGoalsQuery } from './services/api/goalsApiSlice';
 import { useGetAllUsersQuery, useGetUsersQuery } from './services/api/userSliceApi';
-import { useDealsState } from './hooks/useDealsState';
+
 import NotPermission from './pages/NotPermission';
 
 const InsightsComponent = () => {
@@ -35,22 +35,22 @@ const InsightsComponent = () => {
   const {sectionModalOpen} = useSelector((state) => state.sectionModal);
   const {reportModalOpen} = useSelector((state) => state.reportModal);
   const {isOpenDataTable} = useSelector(state => state.dataTableModal);
-  const [isPageLoading, setIsPageLoading] = React.useState(true);
-  const {deals} = useDealsState();
-  const {goals, getGoalById, goalsIsLoading} = useGoals();
+  const {goalsIsFetching} = useGoals();
+  const [isLoadingPage, setIsLoadingPage] = React.useState(true);
   const { data: users,} = useGetAllUsersQuery();
 
 
   useEffect(() => {
-    if(goals && users && deals){
-      setIsPageLoading(false);
+    let timer = setTimeout(() => {
+      setIsLoadingPage(false);
+    }, 1000)
+
+    return () => {
+      clearTimeout(timer);
     }
-
-  }, [goals, users, deals])
-
-
+  }, [])
   
-  if(isPageLoading) return <div 
+  if(isLoadingPage) return <div 
     style={{
       display: 'flex', 
       alignItems: 'center', 
@@ -58,7 +58,15 @@ const InsightsComponent = () => {
       width: "100%", 
       height: '100vh'
     }}>
-      <div className="spinner-border" role="status">  </div>
+      <div 
+        className="spinner-border" 
+        role="status"
+        style={{
+          width: '1.3rem',
+          height: '1.3rem',
+          marginRight: '0.5rem'
+        }}      
+      >  </div>
       Loading...
   </div>
 

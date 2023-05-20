@@ -105,7 +105,6 @@
 .cnx__ins__ui_search_icon_svg {
   width: 14px;
   height: 14px;
-  margin-top: 0.25rem;
 }
 
 .cnx__ins__ui_search_input:focus + .cnx__ins__ui_search_icon > .cnx__ins__ui_search_icon_svg {
@@ -579,6 +578,14 @@
     font-weight: 500;
   }
 
+  .cnx_ins__sidebar_dashboards_title_badge{
+    font-size: 12px;
+    padding: 0 3px;
+    border-radius: 6px;
+    background-color: #f3f3f3;
+    font-weight: bold;
+  }
+
 .cnx_ins__sidebar_dashboards_dd {
   z-index: 1;
 }
@@ -628,6 +635,32 @@
   align-items: center;
   gap: 10px;
   overflow: hidden;
+  position: relative;
+}
+
+.cnx_ins__sidebar_item_own{
+  position: absolute;
+  font-size: 10px;
+  top: 0;
+  left: 0;
+  color: #fff;
+  padding: 0;
+  width: 8px !important;
+  height: 100% !important;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.cnx_ins__sidebar_item_own > span{
+  text-transform: lowercase;
+  font-weight: bold;
+  font-size: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  padding-bottom: 3px;
+  transform: translate(-50%, -50%) rotate(-90deg);
 }
 
 .cnx_ins__sidebar_item > div {
@@ -649,6 +682,7 @@
     -webkit-text-decoration: none;
     text-decoration: none;
     color: #000;
+    position: relative;
   }
 
   .cnx_ins__sidebar_item_link.__goal_item{
@@ -688,29 +722,61 @@
       background-color: #eaf0f7;
     }
 
-.cnx_ins__sidebar_item_link > button {
-      opacity: 0;
-      cursor: pointer;
-    }
 
-.cnx_ins__sidebar_item_link > button svg {
-        fill: #575757;
-        width: 14px;
-        height: 14px;
-      }
+.cnx_ins__sidebar_item_see_more{
+  text-align: center;
+  justify-content: center;
+  font-weight: 600;
+  padding: 5px 0;
+  margin-top: 10px;
+}
 
-.cnx_ins__sidebar_item_link > button:hover svg {
-          fill: #000;
-        }
 
-.cnx_ins__sidebar_item_link:hover > button {
-      opacity: 1;
-    }
+.cnx_ins__sidebar_item_see_more:hover{
+  background-color: #f5f5f5;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cnx__ins__sidebar_item{
+  display: flex;
+  align-items: center;
+}
 
 .cnx_ins__sidebar_item_move {
   background-color: transparent;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 16px;
+  padding-left: 6px;
+  height: 100%;
   border: none;
 }
+
+.cnx__ins__sidebar_item > button {
+  opacity: 0;
+  cursor: pointer;
+}
+
+.cnx__ins__sidebar_item > button svg {
+    fill: #575757;
+    width: 14px;
+    height: 14px;
+  }
+
+.cnx__ins__sidebar_item > button:hover svg {
+      fill: #000;
+    }
+
+.cnx__ins__sidebar_item:hover > button {
+opacity: 1;
+}
+
+
+
+
 
 /* goal modal */
 
@@ -1412,7 +1478,7 @@
 .cnx__table_tr {
     width: 100%;
     display: flex ;
-    align-items: center;
+    align-items: stretch;
   }
 
 .cnx__table_head {
@@ -1449,19 +1515,26 @@
 
 .cnx__table_td,
     .cnx__table_th {
-    width: 250px;
+      width: 100%;
     padding: 6px 10px;
-    overflow: hidden;
+    white-space: pre-wrap !important;
+    display: flex;
+    align-items: center;
+    min-width: 250px;
+    /* overflow: hidden;
     white-space: nowrap;
     -o-text-overflow: ellipsis;
     -ms-text-overflow: ellipsis;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis; */
   }
 
   
 
   .cnx__table_td  a{
     color: #777;
+    white-space: pre-wrap !important;
+    -ms-word-break: break-all;
+    word-break: break-all;
   }
 
   .cnx__table_td  a:hover{
@@ -1478,6 +1551,7 @@
 .cnx__table_th {
     padding: 0;
     height: 40px;
+    width: 100%;
     font-weight: 600;
   }
 
@@ -1743,6 +1817,11 @@
       background-color: #e6e6e6;
       border-color: rgba(5,92,255,0.33725);
     }
+    .cnx__editable_box__input:disabled {
+      border-color: transparent !important;
+      background-color: transparent !important;
+    }
+
 
 .cnx__editable_box__icon {
     opacity: 0;
@@ -1855,6 +1934,9 @@
 
 .cnx__ins_details_bar_header h4 {
       font-size: 14px;
+      white-space: nowrap;
+      margin: 0;
+      padding: 0;
     }
 
 .cnx__ins_details_bar_header .filter_options_line {
@@ -1863,7 +1945,15 @@
       gap: 10px;
       text-transform: uppercase;
       margin-left: auto;
-    }
+      white-space: nowrap;
+      max-width: 550px;
+      overflow-x: auto;
+      scrollbar-width: none;
+}
+
+.cnx__ins_details_bar_header .filter_options_line::-webkit-scrollbar {
+        display: none;
+      }
 
 .cnx__ins_details_bar_header .filter_options_line span {
         display: inline-block;

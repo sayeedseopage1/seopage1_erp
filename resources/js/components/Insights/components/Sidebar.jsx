@@ -18,10 +18,8 @@ import { useDashboards } from '../hooks/useDashboards';
 import { useGoals } from '../hooks/useGoals';
 import dayjs from 'dayjs';
 import { CompareDate } from '../utils/dateController';
-import { useUsers } from '../hooks/useUsers';
-import { selectAllUsers, selectUserById, useGetUserMutation, useGetUsersQuery } from '../services/api/userSliceApi';
-import { useGetGoalsQuery } from '../services/api/goalsApiSlice';
-import { useGetTeamsQuery } from '../services/api/teamSliceApi';
+import SidebarItems from './SidebarItems';
+
 
 
 
@@ -31,12 +29,22 @@ const InsightSidebar = () => {
     const {dashboards} = useDashboards();
     const [filteredGoals, setFilteredGoals] = React.useState({active: [], past: []});
     const {reports} = useSelector((state) => state.reports);
-    // const { goals } = useSelector((state) => state.goals);
+    const [goals, setGoals] = React.useState({
+        goals: [],
+        recurring: []
+    });
     const dispatch = useDispatch();
     const compareDate = new CompareDate();
-    const {goals, getGoalById, goalsIsLoading} = useGoals();
-    const {users, usersIsLoading} = useUsers();
-    const location =  useLocation();
+    const {goals:__goals, goalsIsFetching} = useGoals();
+    
+
+
+    React.useEffect(() => {
+        // check if goals and __goals are not equal
+        
+
+        setGoals({...__goals})
+    }, [__goals,  goalsIsFetching])
 
 
     React.useEffect(() => {
@@ -45,23 +53,24 @@ const InsightSidebar = () => {
             past: []
         };
 
-        if(goals && users && goals.length > 0){
-            let _goals = goals.map((goal) => {
-                let title = `${goal.entry} ${goal.entryType} ${goal?.name || goal?.team_name}`;
-                
-                if(goal.endDate && compareDate.isAfter(dayjs(), goal.endDate)){
-                    return {...goal, title, status: 'Past' };
-                } else if(!goal.endDate || !compareDate.isAfter(dayjs(), goal.endDate)){
+
+        if(goals?.goals && goals?.goals?.length > 0){
+            let _goals = goals?.goals?.map((goal) => {
+                let title = goal?.title;
+                let today =  dayjs().format('YYYY-MM-DD');
+
+                if(!goal.endDate || compareDate.isSameOrBefore(today, goal.endDate)){
                     return {...goal, title, status: 'Active'};
+                }else{
+                    return {...goal, title, status: 'Past' };
                 }
             }) 
 
             _filteredGoals.active = _goals.filter((goal) => goal.status === 'Active');
             _filteredGoals.past = _goals.filter((goal) => goal.status === 'Past');
         }
-
         setFilteredGoals(_filteredGoals);
-    }, [goals, users, location])
+    }, [goalsIsFetching, goals])
 
     // get all unique sections
     const getDashboardSections = () => {
@@ -80,28 +89,6 @@ const InsightSidebar = () => {
         return reports.filter((item) => item.section === section);
     }
 
-
-    // get goals 
-    // const getGoals = (goals, type, search) => {
-
-    //     return goals.map(goal => {
-    //         const user = _.find(users.users, {id: goal.added_by});
-    //         let title = `${goal.entry} ${goal.entryType} by ${user?.name || ''}`;
-    //         if(type === "Past"){
-    //             if(goal.endDate && compareDate.isAfter(dayjs(), goal.endDate)){
-    //                 return {...goal, title, user } 
-    //             } else return;
-    //         } else if(type === "Active"){
-    //             if(!goal.endDate || !compareDate.isAfter(dayjs(), goal.endDate)){
-    //                 if(_.toLower(title).includes(search) ){
-    //                     return { ...goal, title, user } 
-    //                 }
-    //             }else return;
-                
-    //         }else return;
-    //     })
-    // }
-    
 
     return(
         <aside className='cnx_ins__sidebar'> 
@@ -273,7 +260,7 @@ const InsightSidebar = () => {
 
             {/* Goal */}
                 <Accordion>
-                        <Accordion.Item defaultActive={false}>
+                        <Accordion.Item defaultActive={true}>
                             <div className='cnx_ins__sidebar_dashboards_header'>
                                 <Accordion.Item.Header icon={false} className='__accordion'>
                                     {(active) => <div className='cnx_ins__sidebar_dashboards_title'>
@@ -296,10 +283,10 @@ const InsightSidebar = () => {
                                             </Dropdown.Item>
                                         
                                             <div className='cnx_divider'/>
-                                            <Dropdown.Item className="cnx_ins__sidebar_header_dd_item disabled">
+                                            {/* <Dropdown.Item className="cnx_ins__sidebar_header_dd_item disabled">
                                                 <i className="fa-solid fa-trash-can cnx_font_sm" />
                                                 <span>Bulk delete goal</span>
-                                            </Dropdown.Item>
+                                            </Dropdown.Item> */}
                                         </Dropdown.Menu>
                                 </Dropdown>
                             </div>
@@ -310,13 +297,28 @@ const InsightSidebar = () => {
                                 {/* goal section */}
                                 {["Active", "Past"]?.map((section) => (
                                     <Accordion key={section}>
-                                        <Accordion.Item defaultActive={false}>
+                                        <Accordion.Item defaultActive={section === 'Active'}>
                                             <div className='cnx_ins__sidebar_dashboards_header __inner'>
                                                 <Accordion.Item.Header icon={false} className='__accordion'>
                                                 {(active) => <>
                                                         <div className='cnx_ins__sidebar_dashboards_title __inner'>
                                                             <i className={`fa-solid fa-chevron-${active? 'down': 'right'}`}/>
                                                             {section}
+                                                            
+
+                                                            {goalsIsFetching ? 
+                                                                <div>
+                                                                    <div className="spinner-border" role="status" style={{
+                                                                        width: '.85rem',
+                                                                        height: '.85rem',
+                                                                        border : '0.1em solid currentcolor',
+                                                                        borderRightColor: 'transparent',
+                                                                    }}/>  
+                                                                </div>:
+                                                                <span className='cnx_ins__sidebar_dashboards_title_badge'>
+                                                                    {filteredGoals[_.toLower(section)].length || 0}
+                                                                </span>
+                                                            }
                                                         </div>
                                                 </>} 
                                                 </Accordion.Item.Header>
@@ -349,22 +351,43 @@ const InsightSidebar = () => {
                                                 </Dropdown>
                                             </div>
                                             <Accordion.Item.Body>
-                                                {goalsIsLoading && usersIsLoading && 
+                                                {/* {goalsIsFetching && 
                                                     <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
                                                         <span>
                                                             loading...
                                                         </span> 
                                                     </div>
-                                                }
+                                                } */}
                                                 {/* goals */}
-                                                    {!usersIsLoading && !goalsIsLoading && goals.length > 0 ? 
-                                                        <GoalItem goals={filteredGoals[_.toLower(section)]}/> :
-                                                        <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
-                                                            <span>
-                                                                No active goals
-                                                            </span> 
-                                                        </div>
-                                                    }
+                                                    
+                                                    {/* { goals.goals.length > 0 ?
+                                                            <GoalItem goals={filteredGoals[_.toLower(section)]} search={search}/> :
+
+                                                        goalsIsFetching ? 
+                                                        <></> :
+                                                            <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
+                                                                <span>
+                                                                    No active goals
+                                                                </span> 
+                                                            </div> 
+                                                        
+                                                    } */}
+
+                                                        { goals.goals.length > 0 ?
+                                                            <SidebarItems 
+                                                                goals={filteredGoals[_.toLower(section)]} 
+                                                                search={search}
+                                                            /> :
+
+                                                            goalsIsFetching ? 
+                                                            <></> :
+                                                                <div  className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
+                                                                    <span>
+                                                                        No active goals
+                                                                    </span> 
+                                                                </div> 
+                                                            
+                                                        }
                                                 {/*end goals*/}
                                             </Accordion.Item.Body>
                                         </Accordion.Item>
@@ -511,26 +534,56 @@ export default InsightSidebar;
 
 
 
-const GoalItem = ({goals}) => {
+const GoalItem = ({goals, search}) => {
+    const [expended, setExpended] = React.useState(false);
+
+
+    const length = expended ? goals.length : 12;
 
 
     return goals.length > 0  && goals !== undefined ?  
-        goals.map((goal) => (
-           goal &&  
-           <div key={goal.id} className='cnx_ins__sidebar_item'>
-                <Tooltip text={goal.title} style={{width: '100%'}}>
-                    <NavLink
-                        to={`goals/${goal.id}`}
-                        className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link __goal_item active' : 'cnx_ins__sidebar_item_link __goal_item'}
-                    >
-                        <span> {goal.title.length > 23 ? goal.title.slice(0, 23) + '...' : goal.title} </span>
-                        <button aria-label='moveItem' className="cnx_ins__sidebar_item_move">
-                            <Icon type="Move" />
-                        </button>
-                    </NavLink>
-                </Tooltip>
-            </div>
-        )) : 
+        <>
+            {
+                goals
+                .sort((a, b) => b.id - a.id )
+                .filter(goal => _.lowerCase(goal.title).includes(_.lowerCase(search)) )
+                .slice(0, length) 
+                .map((goal) => (
+                   goal && 
+                   <div key={goal.id} className='cnx_ins__sidebar_item'>
+                       
+                        <Tooltip text={goal.title} style={{width: '100%'}}>
+                            <NavLink
+                                to={`goals/${goal.id}`}
+                                className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link __goal_item active' : 'cnx_ins__sidebar_item_link __goal_item'}
+                            >
+                                 <TextHighlighter
+                                    searchWords={search}
+                                    textToHighlight={goal.title}
+                                    totalChars={41}
+                                />
+                                {/* <button aria-label='moveItem' className="cnx_ins__sidebar_item_move">
+                                    <Icon type="Move" />
+                                </button> */}
+                            </NavLink>
+                        </Tooltip>
+                    </div>
+                ))
+            }
+
+
+            {
+                goals.length > 12 && 
+                <div 
+                    onClick={() => setExpended(!expended)}
+                    className='cnx_ins__sidebar_item  cnx_ins__sidebar_item_see_more'
+                >
+                    {expended ? 'Hide' : 'See more'}
+                </div>
+                
+            }
+        </>
+         : 
         <div className='cnx_ins__sidebar_item_link cnx_ins__sidebar_item'>
             <span> No active goals</span>
         </div>

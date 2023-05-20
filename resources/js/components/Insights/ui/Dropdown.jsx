@@ -42,7 +42,7 @@ const DropdownItem = ({children, className, onClick, disabled=false, ...props}) 
     return(
         <div 
             onMouseUp={() => disabled ? null : setIsOpen(false)}
-            onClick={() => disabled ? null : onClick ? onClick(): null}
+            onClick={(e) => disabled ? null : onClick ? onClick(e): null}
             className={`cnx_dropdown__item ${disabled ? 'cnx_dropdown__item_disabled}': ''} ${className}`}
             {...props}
         >
@@ -90,7 +90,7 @@ const DropdownMenu = ({children, className, placement="bottom-start", offset=[0,
             {
                 name: 'flip',
                 options: {
-                    fallbackPlacements: ['bottom', 'top','left', 'right' ],
+                    fallbackPlacements: ['bottom', 'left', 'right', 'top' ],
                 },
             }
         ],

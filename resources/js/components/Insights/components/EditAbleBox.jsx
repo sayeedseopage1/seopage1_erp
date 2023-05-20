@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-const EditAbleBox = ({text, onSave}) => {
+const EditAbleBox = ({text, onSave, readonly=false}) => {
     const [value, setValue] = React.useState(text);
     const wrapperRef = React.useRef(null);
     const inputRef = React.useRef(null); 
@@ -21,7 +21,7 @@ const EditAbleBox = ({text, onSave}) => {
 
     const onBlur = (e) => {
         if (e.target.value !== text) {
-            onSave(e.target.value);
+            onSave &&  onSave(e.target.value);
         } 
     }
 
@@ -32,18 +32,24 @@ const EditAbleBox = ({text, onSave}) => {
                 type="text" 
                 ref={inputRef}
                 value={value} 
-                onChange={e => setValue(e.target.value)} 
-                onBlur={onBlur}
+                onChange={e => !readonly && setValue(e.target.value)} 
+                onBlur={!readonly ? onBlur : null}
+                readOnly={readonly}
                 className='cnx__editable_box__input'
+                disabled={readonly}
             />
-            <i className="fas fa-pencil-alt cnx__editable_box__icon"></i>
+            {
+                !readonly &&
+                <i className="fas fa-pencil-alt cnx__editable_box__icon"></i>
+            }
         </div>
     )
 }
 
 EditAbleBox.propTypes = {
     text: PropTypes.string.isRequired,
-    onSave: PropTypes.func.isRequired
+    onSave: PropTypes.func.isRequired,
+    readonly: PropTypes.bool
 }
 
 export default EditAbleBox;

@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "@popperjs/core": "^2.11.7",
+        "@react-pdf/renderer": "^3.1.9",
         "@reduxjs/toolkit": "^1.9.3",
         "@tanstack/react-table": "^8.8.5",
         "bootstrap": "^4.3.1",
@@ -30,6 +31,7 @@
         "cropperjs": "^1.5.12",
         "dayjs": "^1.11.7",
         "dropify": "^0.2.2",
+        "file-saver": "^2.0.5",
         "flag-icon-css": "^4.1.7",
         "framer-motion": "^10.10.0",
         "frappe-charts": "^1.5.5",
@@ -52,6 +54,7 @@
         "react-redux": "^8.0.5",
         "react-router-dom": "^6.10.0",
         "react-scripts": "^5.0.1",
+        "react-to-print": "^2.14.12",
         "recharts": "^2.5.0",
         "signature_pad": "^3.0.0-beta.4",
         "styled-components": "^5.3.9",

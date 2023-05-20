@@ -45,8 +45,8 @@ class DealAuthorizationSendNotification extends Notification
     public function toMail($notifiable)
     {
         $deal= Deal::where('id',$this->deal->id)->first();
-        $url = url('/account/deals/'. $deal->id);
-
+        //$url = url('/account/deals/'. $deal->id);
+        $authorization_url = route('authorization_request', $deal->id);
         //329?tab=deliverables
   
   
@@ -84,7 +84,7 @@ class DealAuthorizationSendNotification extends Notification
           ->subject(__('Client '.$deal->client_username.', Price authorization request') )
   
           ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
-          ->markdown('mail.deals.price_authorization', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
+          ->markdown('mail.deals.price_authorization', ['url' => $authorization_url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
     }
 
     /**

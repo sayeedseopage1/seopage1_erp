@@ -150,6 +150,68 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency, defaultValu
             }
         };
 
+        // make period by every 10 days
+        const tenDays = () => {
+            const tenDays = [];
+            const tds = dayjs(startDate).startOf("day");   
+            const tde = dayjs(endDate).endOf("day");
+            let index = 0; 
+
+            let current = tds;
+            while(current <= tde){
+                let tenDayStart = dayjs(current).format();
+                let tenDayEnd = dayjs(current).add(9, "day").format();
+
+                // if month is 31days then add 1 day to end of period
+                if(
+                    dayjs(tenDayStart).daysInMonth() === 31
+                    && dayjs(tenDayEnd).format("DD") === "30"
+                ){
+                    tenDayEnd = dayjs(tenDayEnd).add(1, "day").format();
+                }
+                
+
+                /*
+                ** if tenDayStart less then or equal
+                ** duration start date then return duration start
+                ** else return tenDayStart
+                */
+
+                tenDayStart = dayjs(tenDayStart).isSameOrBefore(startDate)
+                    ? dayjs(startDate).format()
+                    : tenDayStart;
+
+                /*
+                ** if duration end less then or equal
+                ** tenDayEnd date then return duration end
+                ** else return tenDayEnd
+                */
+
+                tenDayEnd = dayjs(endDate).isSameOrBefore(tenDayEnd)
+                    ? dayjs(endDate).format()
+                    : tenDayEnd;
+
+                // push ten days
+                tenDays.push({
+                    title: `${dayjs(tenDayStart).format("MMM DD")} - ${dayjs(
+                        tenDayEnd
+                    ).format("MMM DD")}, ${dayjs(tenDayEnd).format("YYYY")}`,
+                    start: tenDayStart,
+                    end: tenDayEnd,
+                    value: defaultValue,
+                    index: index++
+                });
+
+                current = dayjs(tenDayEnd).format('DD') === '31' ? dayjs(current).add(11, "day") : dayjs(current).add(10, "day")
+            }
+
+            if(setPeriod) {
+                setPeriod([...tenDays]);
+            }else {
+                return tenDays;
+            }
+        }
+
         // weekly
         const weekly = () => {
             const weeks = [];
@@ -218,7 +280,11 @@ export const getPeriod = ({setPeriod, startDate, endDate, frequency, defaultValu
             return yearly();
         } else if (_.toLower(frequency) === "weekly") {
             return weekly();
-        } 
+        } else if (_.toLower(frequency) === "10 days") {
+            return tenDays();
+        } else {
+            return [];
+        }
         
     return;
 

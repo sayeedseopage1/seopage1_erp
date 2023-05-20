@@ -6,6 +6,7 @@ const initialState = {
     isOpenDataTable: false,
     data: [],
     title: 'Modal title',
+    entryType: null,
     status: 'idle',
     error: null,
     tableCaption: null,
@@ -22,6 +23,7 @@ const dataTableModalSlice = createSlice({
             state.isOpenDataTable = true;
             state.data = action.payload.data;
             state.title = action.payload.title;
+            state.entryType = action.payload.entryType || null;
             state.status = 'idle';
             state.tableCaption = action.payload.tableCaption || null;
             state.error = null;
@@ -34,6 +36,7 @@ const dataTableModalSlice = createSlice({
             state.status = 'idle';
             state.error = null;
             state.tableCaption = null;
+            state.entryType = null;
         },
 
         setStatus: (state, action) => {

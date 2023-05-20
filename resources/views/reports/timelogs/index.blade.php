@@ -5,7 +5,7 @@
     @include('sections.datatable_css')
 @endpush
 
-@section('filter-section')
+{{-- @section('filter-section')
 
 
     <x-filters.filter-box>
@@ -94,7 +94,7 @@
         <!-- MORE FILTERS END -->
     </x-filters.filter-box>
 
-@endsection
+@endsection --}}
 
 
 
@@ -102,7 +102,7 @@
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper">
         <!-- Add Task Export Buttons Start -->
-        <div class="d-flex flex-column">
+        {{-- <div class="d-flex flex-column">
             
             <!-- TASK STATUS START -->
             <x-cards.data id="task-chart-card" :title="__($pageTitle)" padding="false">
@@ -112,7 +112,7 @@
             <div id="table-actions" class="flex-grow-1 align-items-center mt-4">
             </div>
 
-        </div>
+        </div> --}}
 
         <!-- Add Task Export Buttons End -->
         <!-- Task Box Start -->
