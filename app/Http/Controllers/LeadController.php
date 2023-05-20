@@ -109,7 +109,7 @@ class LeadController extends AccountBaseController
 
           }
         }
-        // DB::beginTransaction();
+         DB::beginTransaction();
         $deal= new DealStage();
         $deal->short_code= 'DSEOP1'. $suffle;
         $deal->lead_id= $lead->id;
@@ -199,6 +199,7 @@ class LeadController extends AccountBaseController
                // dd($dealStage);
             }
     
+            $dealStage_amount2 = $dealStage->get();
             $dealStage_amount = $dealStage->sum('deal_stages.amount');
             $dealStage_count = $dealStage->count();
            // dd($dealStage_amount,$dealStage_count);
@@ -217,6 +218,7 @@ class LeadController extends AccountBaseController
                 $goal_update= GoalSetting::find($goal->id);
                 $goal_update->goal_status = 1;
                 $goal_update->save();
+
             }
 
         }else 
@@ -279,32 +281,7 @@ class LeadController extends AccountBaseController
             
         }
     }
-     //dd($dealStage);
-   // dd("dnkasndlkasd");
-        //goal setting
-        /*$goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
-        
-        foreach ($goal_settings as $key => $value) {
-            if ($value->trackingType == 'value') {
-                if (is_null($value->end_date)) {
-                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->sum('amount');
-                } else {
-                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->sum('amount');
-                }
-            } else {
-                if (is_null($value->end_date)) {
-                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->count();
-                } else {
-                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->count();
-                }
-            }
-
-            if ($deal >= (int) $value->trackingValue) {
-                $value->goal_status = 1;
-                $value->save();
-            }
-        }*/
-
+     
 
 
 
