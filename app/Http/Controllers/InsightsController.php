@@ -555,7 +555,7 @@ class InsightsController extends AccountBaseController
         $data2 = $data->user_id ? [$data->user_id] : $user_data;
     
         if ($data->entryType == 'Added') {
-            if ($data->dealType == 'All Clients') {
+            if ($data->dealType == 'All Clients' || $data->dealType == 'Existing Clients') {
                 $dealStage = DealStage::select([
                     'deal_stages.id as id',
                     'deal_stages.id as deal_id',
@@ -621,7 +621,7 @@ class InsightsController extends AccountBaseController
                 $deal_status = 0;
             }
 
-            if ($data->dealType == 'All Clients') {
+            if ($data->dealType == 'All Clients' || $data->dealType == 'Existing Clients') {
                 $dealStage = DealStage::leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
                 ->join('deal_stage_changes', 'deal_stage_changes.deal_id', 'deal_stages.short_code')
                 ->whereIn('leads.added_by', $data2)
@@ -674,7 +674,7 @@ class InsightsController extends AccountBaseController
             $data2 = $data->user_id ? [$data->user_id] : $user_data;
 
             $array = [];
-            if ($data->dealType == 'All Clients') {
+            if ($data->dealType == 'All Clients' || $data->dealType == 'Existing Clients') {
                 $deals_data = Deal::select([
                     'deals.*',
                     'pm.id as pm_id',
