@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CashPoint;
 use App\Models\Deal;
 use App\Models\Seopage1Team;
 use Carbon\Carbon;
@@ -280,6 +281,31 @@ class DealController extends AccountBaseController
                 $goal_update= GoalSetting::find($goal->id);
                 $goal_update->goal_status = 1;
                 $goal_update->save();
+                if ($goal->achievablePoints > 0) {
+
+                    $distribute_amount = $goal->achievablePoints / count($user_data);
+                    
+                    foreach ($user_data as $value) {
+
+                        $user_name = User::find($value);
+                        $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+
+                        $point= new CashPoint();
+                        $point->user_id= $value;
+                        //$point->project_id= $find_project_id->id;
+                        $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                        $point->gained_as = "Individual";
+                        $point->points= $distribute_amount;
+
+                        if ($user_last_point != null) {
+                            $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                        } else {
+                            $point->total_points_earn=  $distribute_amount;
+                        }
+
+                        $point->save();
+                    }
+                }
             }
 
         }else 
@@ -330,6 +356,31 @@ class DealController extends AccountBaseController
                 $goal_update= GoalSetting::find($goal->id);
                 $goal_update->goal_status = 1;
                 $goal_update->save();
+                if ($goal->achievablePoints > 0) {
+
+                    $distribute_amount = $goal->achievablePoints / count($user_data);
+                    
+                    foreach ($user_data as $value) {
+
+                        $user_name = User::find($value);
+                        $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+
+                        $point= new CashPoint();
+                        $point->user_id= $value;
+                        //$point->project_id= $find_project_id->id;
+                        $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                        $point->gained_as = "Individual";
+                        $point->points= $distribute_amount;
+
+                        if ($user_last_point != null) {
+                            $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                        } else {
+                            $point->total_points_earn=  $distribute_amount;
+                        }
+
+                        $point->save();
+                    }
+                }
             }
 
         }
