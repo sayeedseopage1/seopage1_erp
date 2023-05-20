@@ -95,17 +95,10 @@ export const ModalDataTable = () =>{
                     </>
                      
                 }else{
-
-                    if(goalData?.goal?.team_id && Number(goalData?.goal?.team_id )=== 1){
-                        return <>
-                            <span>Goal: {goal} Deals  </span> •
-                            <span>Achieved: ${dealAdded} </span> •
-                            <span>No. of Deals: {data?.totalRow} </span> 
-                        </>
-                    }else return <>
+                    return <>
                         <span>Goal: {goal} Deals  </span> •
                         <span>Achieved: ${dealAdded} </span> •
-                        <span>Contributed In: {data?.totalRow} Deals </span> 
+                        <span>Contributed In: {data?.rowCount} Deals </span> 
                     </>
                 }
             }
