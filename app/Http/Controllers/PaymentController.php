@@ -318,7 +318,7 @@ class PaymentController extends AccountBaseController
                         //$value->logged_hours_between_to = 200;
                         if ($value->logged_hours_between <= $project_hourly_rate && $value->logged_hours_between_to >= $project_hourly_rate) {
                             $deal = Deal::find($project->deal_id);
-                            $project_budget= ($deal->amount * $value->logged_hours_sales_amount) / 100;
+                            $project_budget= ($deal->amount * ($value->logged_hours_sales_amount) - $kpi->accepted_by_pm) / 100;
 
                             if($deal->lead_id != null) {
                                 $lead = Lead::where('id',$deal->lead_id)->first();
@@ -501,7 +501,7 @@ class PaymentController extends AccountBaseController
 
                     if ($kpi->logged_hours_above >= $project_hourly_rate) {
                         $deal = Deal::find($project->deal_id);
-                        $project_budget= ($deal->amount * $kpi->logged_hours_above_sales_amount) / 100;
+                        $project_budget= ($deal->amount * ($kpi->logged_hours_above_sales_amount) - $kpi->accepted_by_pm) / 100;
 
                         if($deal->lead_id != null) {
                             $lead = Lead::where('id',$deal->lead_id)->first();
