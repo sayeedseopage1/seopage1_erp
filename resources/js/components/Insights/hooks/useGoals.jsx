@@ -152,6 +152,7 @@ export const useGoals = () => {
         let goal = 0;
         let _deals = deals || [];
         let rowCount = 0;
+        let totalRow = 0;
 
         if(_.isEmpty(deals) || deals === undefined){
             totalDeal = 0;
@@ -244,7 +245,8 @@ export const useGoals = () => {
             targetType: _.lowerCase(goalData?.goal.trackingType),
             goalData,
             yAxis,
-            rowCount
+            rowCount,
+            totalRow: rowCount,
         }
 
 
@@ -410,6 +412,7 @@ export const useGoals = () => {
         let _deals = deals;
         let rowCount = 0;
         let totalAmount = 0;
+        let totalRow = 0;
 
 
         // fixed decimal place to 2 if not integer
@@ -420,7 +423,7 @@ export const useGoals = () => {
 
         if (_deals.length > 0) {
             
-            
+            totalRow = _deals.length;
             goal = Number(period.value);
             if(Number(goalData?.goal?.team_id) ===  1) {
                 dealAdded = _deals.reduce((total, deal) => {
@@ -476,6 +479,7 @@ export const useGoals = () => {
             result = _.lowerCase(_goalData.trackingType) === 'value' ? dealAdded : totalDeal;
             
             result = fixedDecimalPlace(result);
+            totalDeal = fixedDecimalPlace(totalDeal);
 
             if (_.lowerCase(_goalData.trackingType) === 'value') {
                 if (goal < dealAdded) {
@@ -490,6 +494,9 @@ export const useGoals = () => {
                     yAxis = goal
                 }
             }
+
+
+
 
 
 
@@ -541,7 +548,8 @@ export const useGoals = () => {
             goalData,
             yAxis,
             rowCount,
-            totalAmount
+            totalAmount,
+            totalRow
         }
 
     }

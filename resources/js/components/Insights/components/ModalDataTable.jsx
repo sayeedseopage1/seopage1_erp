@@ -6,7 +6,7 @@ import Button from "../ui/Button";
 import { closeDataTableModal } from "../services/slices/dataTableModalSlice";
 import { AddedTableColumns, DataTableColumns, WonTableData } from "./DataTableColumns";
 import { addedTableVisibleColumns, processedTableVisibleColumns, wonTableVisibleColumns } from '../utils/constants';
-import { set } from 'lodash';
+import _, { set } from 'lodash';
 
 export const ModalDataTable = () =>{
     const {data, entryType, title} = useSelector(state => state.dataTableModal);
@@ -69,6 +69,41 @@ export const ModalDataTable = () =>{
     }, [goal, getWonTableColumns])
 
 
+    const getHeaderText = (data) => {
+        // console.log(data)
+        if(data){
+            const { goalData, goal, rowCount, dealAdded, totalDeal } = data;   
+            if(_.lowerCase(goalData?.goal?.entryType) === 'added'){
+               if(_.lowerCase(goalData?.goal?.trackingType) === 'value'){
+                    return <>
+                        <span>Goal: ${goal} </span> •
+                        <span>Achieved: ${dealAdded} </span> •
+                        <span>Contributed In: {rowCount} Deals </span> 
+                    </>
+               }else{
+                    return <>
+                        <span>Goal: {goal} Deals </span> •
+                        <span>Achieved: {rowCount} Deals </span> 
+                    </>
+               } 
+            }else if(_.lowerCase(goalData?.goal?.entryType) === 'won'){
+                if(_.lowerCase(goalData?.goal?.trackingType) === 'value'){
+                    return <>
+                        <span>Goal: ${goal}  </span> •
+                        <span>Achieved: ${dealAdded} </span> •
+                        <span>Contributed In: {rowCount} Deals </span> 
+                    </>
+                }else{
+                    return <>
+                        <span>Goal: {goal} Deals  </span> •
+                        <span>Achieved: {totalDeal} </span> •
+                        <span>Contributed In: {data?.totalRow} Deals </span> 
+                    </>
+                }
+            }
+        }
+    }
+
 
     return(
         <div className="cnx_ins__goal_modal__container">
@@ -85,15 +120,16 @@ export const ModalDataTable = () =>{
                     <Card.Body className='cnx__data_table_card_body'>
                         <div className='d-flex align-items-center justify-content-center position-relative py-3'>
                             <div className='cnx__data_table_card_body___title filter_options_line position-relative'>
+                            {getHeaderText(data)}       
                                 {/* <span>${Number(data.dealAdded).toFixed(2)}</span> • 
                                 <span>{Number(data.rowCount)} Deals</span> */}
-                            <span>Goal: {goal?.trackingType === "value"  ? "$" : ''} {Number(data.goal).toFixed(2)}</span>
+                            {/* <span>Goal: {goal?.trackingType === "value"  ? "$" : ''} {Number(data.goal).toFixed(2)}</span>
                             |
                             <span>{goal?.trackingType === 'value' ? 'Achieved': "Total"} ${Number(data.dealAdded).toFixed(2)} </span>
                             | 
                             {goal?.trackingType === 'value' && <span>Total: ${Number(data.totalAmount).toFixed(2)}</span>}
                             |
-                            <span>Contributed In: {Number(data.rowCount)} Deals</span>
+                            <span>Contributed In: {Number(data.rowCount)} Deals</span> */}
                             </div>
                             
                         </div>
