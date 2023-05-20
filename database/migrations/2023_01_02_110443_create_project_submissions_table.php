@@ -26,7 +26,6 @@ return new class extends Migration
             $table->longText('comments')->nullable();
             $table->longText('comments2')->nullable();
             $table->longText('comments3')->nullable();
-
             $table->integer('requirements')->default(0);
             $table->integer('price')->default(0);
             $table->longText('niche')->nullable();

@@ -136,6 +136,11 @@ $projectArchived = $project->trashed();
                                 :text="__('modules.projects.burndownChart')" class="burndown-chart" ajax="false" />
                         </li>
                     @endif
+                    @if(Auth::user()->role_id == 1)
+                        <li>
+                            <a href="{{route('project-credentials.index')}}" class="text-dark-grey text-capitalize border-right-grey p-sub-menu project_credentials"><span>project credentials</span></a>
+                        </li>
+                    @endif
                 </ul>
             </nav>
         </div>
@@ -279,6 +284,6 @@ $projectArchived = $project->trashed();
     </script>
 
 
-    
-    
+
+
 @endpush
