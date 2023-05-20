@@ -14,6 +14,7 @@ class IncentiveSettingController extends AccountBaseController
         $this->pageTitle = 'Incentive Settings';
         $this->activeSettingMenu = 'incentive_settings';
         $this->middleware(function ($request, $next) {
+            abort_403(user()->permission('manage_company_setting') !== 'all');
             return $next($request);
         });
     }

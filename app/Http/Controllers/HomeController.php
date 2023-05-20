@@ -62,6 +62,7 @@ use Session;
 use Pusher\Pusher;
 use App\Notifications\PusherNotificaiton;
 use Notification;
+use App\Models\TaskUser;
 
 class HomeController extends Controller
 {

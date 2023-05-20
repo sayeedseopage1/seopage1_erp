@@ -35,7 +35,12 @@
         .logo {
             height: 33px;
         }
-
+        .collapsing {
+            position: relative;
+            height: 0;
+            overflow: hidden;
+            transition: height 0.50s cubic-bezier(.95,-0.1,.47,1.18);
+        }
         .signature_wrap {
             position: relative;
             height: 150px;
@@ -326,6 +331,7 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <form method="post" action="{{route('front.agreement.disagree', $project->project_short_code)}}">
+                    @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Disagree Modal</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -335,19 +341,56 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-12">
-                                @csrf
-                                @foreach($deliverables as $value)
-                                <div class="row m-2 py-2 border rounded">
-                                    <div class="col-12 col-sm-5 my-auto f-w-500">
-                                        {{ucfirst($value->title)}} :
-                                    </div>
-                                    <div class="col-12 col-sm-7">
-                                        <textarea class="form-control" name="comment[{{$value->id}}]" style="white-space: nowrap;">
-                                            {!! trim(html_entity_decode(strip_tags($value->description))) !!}
-                                        </textarea>
-                                    </div>
-                                </div>
-                                @endforeach
+                                <table class="inv-num-date text-dark f-13 mt-3 table">
+                                    <thead>
+                                        <tr class="bg-light-grey border-right-0 f-w-500">
+                                            <th scope="col" class="text-center">#</th>
+                                            <th scope="col" class="text-center">Type</th>
+                                            <th scope="col" class="text-center">Title</th>
+                                            <th scope="col" class="text-center">Milestone</th>
+                                            <th scope="col" class="text-center">Quantity</th>
+                                            <th scope="col" class="text-center">Description</th>
+                                            <th scope="col" class="text-center">Estimated completion date</th>
+                                            <th scope="col" class="text-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($deliverables as $deliverable)
+                                        <tr>
+                                            <td>{{$loop->index+1}}</td>
+                                            <td>{{$deliverable->deliverable_type}}</td>
+                                            <td>{{$deliverable->title}}</td>
+                                            @if($deliverable->milestone_id != null)
+                                                <td>{{$deliverable->milestone->milestone_title}}</td>
+                                            @else 
+                                                <td>--</td>
+                                            @endif
+                                            <td>{{$deliverable->quantity}}</td>
+                                            <td>{!!$deliverable->description!!}</td>
+                                            @if($deliverable->to != null)
+                                                <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
+                                            @else 
+                                                <td class="text-center">On {{$deliverable->from}}</td>
+                                            @endif
+                                            <td>
+                                                <a class="btn btn-warning float-right" data-toggle="collapse" data-target="#row{{$deliverable->id}}">Add comment</a>
+                                            </td>
+                                        </tr>
+                                        <tr id="row{{$deliverable->id}}" class="collapse">
+                                            <td colspan="8" class="px-0">
+                                                <div class="from-group">
+                                                    <label class="f-16 font-weight-bold pt-2 px-1">Write your comment below</label>
+                                                    <textarea class="form-control" id="comment{{$deliverable->id}}" rows="4" name="comment[{{$deliverable->id}}]"></textarea>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            No Data
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Deal;
+use App\Models\Seopage1Team;
 use Carbon\Carbon;
 use App\Models\Lead;
 use App\Helper\Files;
@@ -51,6 +52,8 @@ use Illuminate\Support\Facades\Redirect;
 use Toastr;
 use App\Notifications\DealAuthorizationSendNotification;
 use Notification;
+use App\Models\GoalSetting;;
+use App\Models\RoleUser;
 
 
 
@@ -158,7 +161,7 @@ class DealController extends AccountBaseController
             'description' => 'required',
             'comments' => 'required',
         ]);
-
+        \DB::beginTransaction();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new DealStage();
@@ -179,6 +182,200 @@ class DealController extends AccountBaseController
         $deal->added_by= Auth::id();
         $deal->converted_by= Auth::id();
         $deal->save();
+        $goals = GoalSetting::where([
+            'goal_status' =>  0, 
+        ])->get();
+        // /dd($goals);
+        
+        if($goals != null)
+        {
+
+       
+        foreach ($goals as $goal) {
+            $start = Carbon::parse($goal->startDate);
+            $end = Carbon::parse($goal->endDate);
+            $dateToCheck = Carbon::parse($deal->created_at);
+
+            if ($dateToCheck->between($start, $end)) {
+
+            if($goal->team_id != null)
+        {
+            $team = Seopage1Team::find($goal->team_id);
+
+            $users = explode(',', $team->members);
+            $user_data = [];
+            foreach ($users as $key => $value) {
+                if ($value != '') {
+                     //$user = User::find($value);
+                    array_push($user_data,$value);
+                }
+            }
+        } else {
+            $user_data[]= $goal->user_id;
+        }
+    }
+        
+        
+        // Always use an array of user IDs, even if $goal->user_id is set
+        $goal2 = $goal->user_id ? [$goal->user_id] : $user_data;
+       
+        
+        if ($goal->entryType == 'Added') {
+
+            if($goal->dealType == 'New Client')
+            {
+               // dd("true");
+
+            
+       //dd("nksdnlas");
+            $dealStage = DealStage::select([
+                'deal_stages.*',
+                'deal_stages.id as id',
+                'deal_stages.id as deal_id',
+                'deal_stages.client_username as client_username',
+                'deal_stages.project_name as deal_project_name',
+                'deal_stages.project_link as deal_project_link',
+                'deal_stages.amount as deal_amount',
+                'deal_stages.deal_stage as deal_stage',
+                'deal_stages.deal_status as deal_status',
+                'deal_stages.actual_amount as deal_original_amount',
+                'deal_stages.created_at as deal_created_at',
+                'leads.added_by as lead_converted_by',
+                'leads.id as lead_id',
+            ])
+            ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+            ->whereIn('deal_stages.added_by', $goal2)
+           
+            ->whereDate('deal_stages.created_at', '>=', $goal->startDate)
+            //->pluck('client_username')->unique()
+           // ->get();
+            // /$clientUsernames = $dealStage->pluck('client_username')->unique()->toArray();
+        //    / dd($dealStage);
+           ->groupBy('deal_stages.client_username');
+        //  /dd($dealStage);
+    
+            if (!is_null($goal->endDate)) {
+                $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $goal->endDate);
+               // dd($dealStage);
+            }
+            $dealStage_amount2 = $dealStage->get();
+            $dealStage_amount = $dealStage->sum('deal_stages.amount');
+            $dealStage_count = $dealStage->count();
+         //dd($dealStage_amount2,$dealStage_amount,$dealStage_count, $dealStage_amount2->sum('amount'));
+            if ($goal->trackingType == 'value') {
+                // /dd("true");
+                
+                    $deal_amount = $dealStage_amount;
+               // dd($deal_amount);
+                
+            } else {
+               
+                    $deal_amount = $dealStage_count;
+               
+            }
+           // dd($deal_amount);
+            // /dd("true");
+            if ($deal_amount >= (int) $goal->trackingValue) {
+               // dd("true");
+                $goal_update= GoalSetting::find($goal->id);
+                $goal_update->goal_status = 1;
+                $goal_update->save();
+            }
+
+        }else 
+        {
+            $dealStage = DealStage::select([
+                'deal_stages.*',
+                'deal_stages.id as id',
+                'deal_stages.id as deal_id',
+                'deal_stages.client_username as client_username',
+                'deal_stages.project_name as deal_project_name',
+                'deal_stages.project_link as deal_project_link',
+                'deal_stages.amount as deal_amount',
+                'deal_stages.deal_stage as deal_stage',
+                'deal_stages.deal_status as deal_status',
+                'deal_stages.actual_amount as deal_original_amount',
+                'deal_stages.created_at as deal_created_at',
+                'leads.added_by as lead_converted_by',
+                'leads.id as lead_id',
+            ])
+            ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+            ->whereIn('deal_stages.added_by', $goal2)
+            ->whereDate('deal_stages.created_at', '>=', $goal->startDate);
+            // ->groupBy('deal_stages.client_username');
+        //  /dd($dealStage);
+    
+            if (!is_null($goal->endDate)) {
+                $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $goal->endDate);
+               // dd($dealStage);
+            }
+    
+            $dealStage_amount = $dealStage->sum('deal_stages.amount');
+            $dealStage_count = $dealStage->count();
+           // dd($dealStage_amount,$dealStage_count);
+            if ($goal->trackingType == 'value') {
+                //dd("true");
+                
+                    $deal_amount = $dealStage_amount;
+                //    / dd($deal_amount);
+                
+            } else {
+               
+                    $deal_amount = $dealStage_count;
+               
+            }
+            // dd($deal_amount);
+            if ($deal_amount >= (int) $goal->trackingValue) {
+              //  dd("true");
+                $goal_update= GoalSetting::find($goal->id);
+                $goal_update->goal_status = 1;
+                $goal_update->save();
+            }
+
+        }
+        // kpi points distribution start from here
+
+
+         // kpi points distribution end here
+    
+    
+        }
+       
+
+            
+        }
+    }
+     //dd($dealStage);
+   // dd("dnkasndlkasd");
+        //goal setting
+        /*$goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
+        
+        foreach ($goal_settings as $key => $value) {
+            if ($value->trackingType == 'value') {
+                if (is_null($value->end_date)) {
+                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->sum('amount');
+                } else {
+                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->sum('amount');
+                }
+            } else {
+                if (is_null($value->end_date)) {
+                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->count();
+                } else {
+                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->count();
+                }
+            }
+
+            if ($deal >= (int) $value->trackingValue) {
+                $value->goal_status = 1;
+                $value->save();
+            }
+        }*/
+
+
+
+
+        //goal achieve check end here
+
         $find_user= User::where('user_name', $request->client_username)->first();
         if($find_user == null )
         {
@@ -198,6 +395,32 @@ class DealController extends AccountBaseController
         $deal_stage->updated_by= Auth::id();
         $deal_stage->save();
 
+        //kpi settings
+        // $goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
+
+        // foreach ($goal_settings as $key => $value) {
+        //     if ($value->trackingType == 'value') {
+        //         if (is_null($value->end_date)) {
+        //             $deal = Deal::whereDate('created_at', '>=', $value->startDate)->sum('amount');
+        //         } else {
+        //             $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->sum('amount');
+        //         }
+        //     } else {
+        //         if (is_null($value->end_date)) {
+        //             $deal = Deal::whereDate('created_at', '>=', $value->startDate)->count();
+        //         } else {
+        //             $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->count();
+        //         }
+        //     }
+            
+        //     if ($deal >= (int) $value->trackingValue) {
+        //         $value->goal_status = 1;
+        //         $value->save();
+        //     }
+        // }
+
+        \DB::commit();
+        //dd($deal_sum, $deal_count);
         return response()->json([
             'status' => 'success',
             'redirectUrl' => route('deals.index')

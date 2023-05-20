@@ -178,6 +178,7 @@ use App\Http\Controllers\IncentiveSettingController;
 use App\Http\Controllers\PointsController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProjectCredential;
+use App\Http\Controllers\IncentiveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -314,7 +315,13 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('attendances/store-clock-in', [DashboardController::class, 'storeClockIn'])->name('attendances.store_clock_in');
     Route::get('attendances/update-clock-in', [DashboardController::class, 'updateClockIn'])->name('attendances.update_clock_in');
     Route::get('dashboard/private_calendar', [DashboardController::class, 'privateCalendar'])->name('dashboard.private_calendar');
-    Route::resource('points', PointsController::class);
+    // Route::resource('points/', PointsController::class)->only
+    
+    Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
+    Route::get('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
+    Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
+    Route::get('/points/{any?}', [PointsController::class,'index'])->where('any', '.*')->name('points.index');
+    Route::get('/incentives/{any?}', [IncentiveController::class, 'index'])->where('any', '.*')->name('incentives.index');
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     /* Setting menu routes starts from here */
@@ -1092,7 +1099,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     // Update app
     Route::get('/insights/deals', [InsightsController::class,'DealConversion'])->name('insights-deals');
+
     Route::get('/insights/goals/get/{id}', [InsightsController::class,'getGoal'])->name('insights-goals-get');
+    Route::get('/insights/goal/get-goal-details/{data}', [InsightsController::class, 'get_goal_details'])->name('get_goal_details');
+
     Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
     Route::get('update-settings/install', [UpdateAppController::class, 'install'])->name('update-settings.install');
@@ -1100,17 +1110,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('search', SearchController::class);
     Route::resource('update-settings', UpdateAppController::class);
     Route::get('/insights/sections/get', [InsightsController::class,'getSection'])->name('insights-sections-get');
+    Route::get('/insights/deal-details/{data}', [InsightsController::class,'getGoalDetails'])->name('insights-goal-details');
 
     Route::get('/insights/{any}', [InsightsController::class,'index'])->where('any', '.*');
     Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
     Route::post('/insights/goals/edit/{id}', [InsightsController::class,'editGoal'])->name('insights/goals/edit');
+    Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class,'editGoalTitle'])->name('insights.goals-title.edit');
     Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
 
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
-
-
-
 });
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
@@ -1275,3 +1284,10 @@ Route::post('/projects/agreement/disagree/{hash}', [HomeController::class, 'agre
 
 
 Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deals_data');
+
+
+// Route::get('/goal/get-goal-details/{data}', [InsightsController::class, 'get_goal_details'])->name('get_goal_details');
+Route::get('deals/request/authorization/{data}', [ContractController::class, 'authorization_request'])->name('authorization_request');
+Route::post('/authorization/deal-details/', [ContractController::class, 'authorization_submit'])->name('authorization_submit');
+
+

@@ -511,8 +511,6 @@
                             </div>
                           </div>
 
-
-
                           <br>
                           <div class="d-flex justify-content-center">
                               <button class="btn btn-primary" type="submit" id="createDeal" ><span class="btn-txt">Complete Deal Creation</span></button>

@@ -361,7 +361,6 @@
 													$project= App\Models\Project::where('id',$item->project_id)->first();
 													$task_user= App\Models\TaskUser::where('task_id',$item->id)->first();
 													$user = App\Models\User::where('id',$task_user->user_id)->first();
-
 													@endphp
 													<a href="{{route('employees.show', $user->id)}}" title="{{$user->name}}" class="openRightModal">{{Str::limit($user->name,10)}}</a>
 													
@@ -801,7 +800,11 @@
 															$project= App\Models\Project::where('id',$row->project_id)->first();
 															$client= App\Models\User::where('id',$project->client_id)->first();
 														 	$task_user= App\Models\TaskUser::where('task_id',$row->id)->first();
-														 	$user = App\Models\User::where('id',$task_user->user_id)->first();
+														 	if($task_user != null) {
+														 		$user = App\Models\User::where('id',$task_user->user_id)->first();
+														 	} else {
+														 		'no data';
+														 	}
 													 	@endphp
 														<a href="{{route('projects.show', $project->id)}}" title="{{$project->project_name}}" class="openRightModal">{{Str::limit($project->project_name,15)}}</a>
 													</td>
@@ -809,7 +812,11 @@
 						                        		<a href="{{route('clients.show', $project->client_id)}}" title="{{$client->name}}" class="openRightModal">{{$client->name}}</a>
 						                        	</td>
 													<td>
+														@if($task_user != null)
 														<a href="{{route('employees.show', $user->id)}}" title="{{$user->name}}" class="openRightModal">{{$user->name}}</a>
+														@else 
+															--
+														@endif
 													</td>
 						                        	<td>
 														@if($row->due_date != null)
@@ -1275,11 +1282,15 @@
 			                                		<td>{{$loop->index+1}}</td>
 													<td><a href="{{route('tasks.show', $row->id)}}" title="{{$row->heading}}" class="openRightModal">{{Str::limit($row->heading,15)}}</a></td>
 				                                	<td>
-														@php
+													@php
 													$project= App\Models\Project::where('id',$row->project_id)->first();
 													$client= App\Models\User::where('id',$project->client_id)->first();
-													 $task_user= App\Models\TaskUser::where('task_id',$row->id)->first();
-													 $user = App\Models\User::where('id',$task_user->user_id)->first();
+												 	$task_user= App\Models\TaskUser::where('task_id',$row->id)->first();
+												 	if($task_user != null) {
+												 		$user = App\Models\User::where('id',$task_user->user_id)->first();
+												 	} else {
+												 		'no data';
+												 	}
 
 													@endphp
 													<a href="{{route('projects.show', $project->id)}}" title="{{$project->project_name}}" class="openRightModal">{{Str::limit($project->project_name,15)}}</a>

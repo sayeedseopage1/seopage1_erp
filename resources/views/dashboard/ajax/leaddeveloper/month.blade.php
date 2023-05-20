@@ -376,7 +376,11 @@
 									$project= App\Models\Project::where('id',$row->project_id)->first();
 									$client= App\Models\User::where('id',$project->client_id)->first();
 								 	$task_user= App\Models\TaskUser::where('task_id',$row->id)->first();
-								 	$user = App\Models\User::where('id',$task_user->user_id)->first();
+                                    if(!is_null($task_user)) {
+                                        $user = App\Models\User::where('id',$task_user->user_id)->first();
+                                    } else {
+                                        'no data';
+                                    }
 							 	@endphp
 								<a href="{{route('projects.show', $project->id)}}" title="{{$project->project_name}}" class="openRightModal">{{Str::limit($project->project_name,15)}}</a>
 							</td>
