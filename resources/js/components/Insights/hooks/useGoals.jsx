@@ -90,7 +90,11 @@ export const useGoals = () => {
 
         if(frequency === 'weekly'){
             return dayjs(goal.startDate).add(1, 'week').format('YYYY-MM-DD');
-        } 
+        }
+        
+        if(frequency === '10 days'){
+            return dayjs(goal.startDate).add(9, 'day').format('YYYY-MM-DD');
+        }
         
         if(frequency === 'yearly'){
             return dayjs(goal.startDate).endOf('year').format('YYYY-MM-DD');
@@ -405,6 +409,7 @@ export const useGoals = () => {
         let goal = 0;
         let _deals = deals;
         let rowCount = 0;
+        let totalAmount = 0;
 
 
         // fixed decimal place to 2 if not integer
@@ -415,23 +420,27 @@ export const useGoals = () => {
 
         if (_deals.length > 0) {
             
-            rowCount = _deals.length;
+            
             goal = Number(period.value);
-            if(goalData?.goal?.general_checkbox) {
+            if(Number(goalData?.goal?.team_id) ===  1) {
                 dealAdded = _deals.reduce((total, deal) => {
                     return total + Number(deal.amount);
                 }, 0);
+                rowCount = _deals.length; 
             }else{
                 dealAdded = _deals.reduce((total, deal) => {
                     return total + Number(deal.team_total_amount);
                 }, 0);
-            }
-            
 
+                rowCount = _deals.filter(deal =>  Number(deal.team_total_amount) !== 0).length;
+            }
+
+            totalAmount = _deals.reduce((total, deal) => {
+                return total + Number(deal.amount);
+            }, 0);
             
-           if(Number(goalData?.goal?.team_id) ===  1){
-            totalDeal = dealAdded;
-           } 
+            
+            totalDeal = dealAdded 
             
 
             // count total deal added value
@@ -465,6 +474,7 @@ export const useGoals = () => {
           
 
             result = _.lowerCase(_goalData.trackingType) === 'value' ? dealAdded : totalDeal;
+            
             result = fixedDecimalPlace(result);
 
             if (_.lowerCase(_goalData.trackingType) === 'value') {
@@ -485,15 +495,16 @@ export const useGoals = () => {
 
 
             /// difference
-            if (_.lowerCase(_goalData.trackingType) === 'value') {
-                difference = dealAdded - Number(period.value);
-            }else{
-                difference = totalDeal - Number(period.value);
-            }
-
+            // if (_.lowerCase(_goalData.trackingType) === 'value') {
+            //     difference = dealAdded - Number(period.value);
+            // }else{
+            //     difference = totalDeal - Number(period.value);
+            // }
+            
             
             dealAdded = fixedDecimalPlace(dealAdded);
-            difference = fixedDecimalPlace(difference);
+            // difference = fixedDecimalPlace(difference);
+            
         } else {
             totalDeal = 0;
             dealAdded = 0;
@@ -503,7 +514,6 @@ export const useGoals = () => {
             dealWonPercentage = 0;
             dealLostPercentage = 0;
             goalProgress = 0;
-            difference = 0;
             result = 0;
             yAxis = goalData?.goal?.trackingValue;
             target = 0;
@@ -524,13 +534,14 @@ export const useGoals = () => {
             dealLostPercentage,
             goalProgress,
             target,
-            difference,
+            difference: fixedDecimalPlace(result - Number(period.value)),
             goal,
             result,
             targetType: _.lowerCase(goalData?.goal.trackingType),
             goalData,
             yAxis,
-            rowCount
+            rowCount,
+            totalAmount
         }
 
     }

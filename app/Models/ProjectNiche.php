@@ -10,12 +10,6 @@ class ProjectNiche extends Model
     use HasFactory;
         protected $table = 'project_niches';
 
-//        public function parent(){
-//            return $this->belongsTo(ProjectNiche::class,'parent_category_id');
-//        }
-//        public function subcat() {
-//            return $this->hasOne(ProjectNiche::class, 'id', 'sub_category_id')->select('id', 'category_name');
-//        }
         public function parent()
         {
             return $this->belongsTo(ProjectNiche::class,'parent_category_id','id');
@@ -23,7 +17,7 @@ class ProjectNiche extends Model
 
         public function child()
         {
-            return $this->belongsTo(ProjectNiche::class,'sub_category_id','id');
+            return $this->hasMany(ProjectNiche::class,'parent_category_id','id');
         }
 
 }

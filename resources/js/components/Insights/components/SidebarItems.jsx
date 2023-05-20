@@ -7,7 +7,7 @@ import TextHighlighter from "./TextHighlighter";
 import { NavLink } from "react-router-dom";
 import { Icon } from "../utils/Icon";
 
-const Item = React.forwardRef(({goal,search, style, isDragging ,className="", onMouseDown, onMouseUp, onTouchEnd,...props}, ref) => {
+const Item = React.forwardRef(({goal,search, style, setIsDragging, isDragging ,className="", onMouseDown, onMouseUp, onTouchEnd,...props}, ref) => {
     return (
         <div 
             className={`cnx_ins__sidebar_item ${className}`}
@@ -20,7 +20,10 @@ const Item = React.forwardRef(({goal,search, style, isDragging ,className="", on
                     <NavLink
                         to={`goals/${goal.id}`}
                         onMouseDown={(e) => e.preventDefault()}
-                        onMouseUp={(e) => e.preventDefault()}
+                        onMouseUp={(e) => {
+                            e.preventDefault();
+                            setIsDragging(false);
+                        }} 
                         className={({isActive}) => isActive ? 'cnx_ins__sidebar_item_link __goal_item active' : 'cnx_ins__sidebar_item_link __goal_item'}
                     >
                         <TextHighlighter
@@ -135,6 +138,7 @@ const SidebarItems = ({goals, search}) => {
                         goal={goal} 
                         search={search} 
                         isDragging={isDragging}
+                        setIsDragging= {setIsDragging}
                     />
                    
                 </div>

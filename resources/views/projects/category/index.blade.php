@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container">
+    <div class="container-fluid">
         @php
             $categories = \App\Models\ProjectNiche::with('parent','child')->get();
         @endphp
@@ -30,7 +30,7 @@
                             <td>{{ $key + 1 }}</td>
                             <td>
                                 @if($category->parent_category_id)
-                                    {{$category->category_name}} <span style="font-size: 10px;"><i class="fa fa-long-arrow-alt-left" style="color: #28313c; font-size: 10px;"></i>{{$category->parent->category_name}}</span>
+                                    {{$category->category_name}} <span style="font-size: 10px;"><i class="fa fa-long-arrow-alt-left mr-1" style="color: #28313c; font-size: 10px;"></i>{{$category->parent->category_name}}</span>
                                 @else
                                     {{$category->category_name}}
                                 @endif
@@ -44,15 +44,15 @@
                             </td>
 {{--                            <td>{{$category->child ? $category->child->category_name: 'No sub category' }}</td>--}}
                             <td>
-                                <a href="" class="btn btn-primary update_category_form" data-toggle="modal" data-target="#editnichemodal" data-id="{{ $category->id }}" data-name="{{ $category->category_name }}">
+                                <a href="" class="btn btn-primary update_category_form" data-toggle="modal" data-target="#editnichemodal" data-id="{{ $category->id }}" data-name="{{ $category->category_name }}" data-parent="{{$category->parent_category_id}}">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                                @include('projects.modals.editnichemodal')
                             </td>
 
                         </tr>
                         @endforeach
                         </tbody>
+                        @include('projects.modals.editnichemodal')
                     </table>
                 </div>
             </div>

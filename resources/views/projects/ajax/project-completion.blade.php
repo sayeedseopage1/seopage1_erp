@@ -336,25 +336,232 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-12 col-md-12">
+                        <div class="row mt-5">
+                            <div class="col-md-6">
+                                @php
+                                    $all_cms = \App\Models\ProjectCms::all();
+                                @endphp
+                                <label class="" for="">Select CMC Category
+                                    <sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Select CMC Category" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <div class="input-group">
+                                    <select class="form-control height-35 f-14" name="cms_category" id="cms_category" data-live-search="true" data-size="8">
+                                        <option value="">--</option>
+                                        @foreach($all_cms as $cms)
+                                            <option value="{{$cms->id}}">{{$cms->cms_name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <span id="cms_categoryError" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                @php
+                                    $website_types = \App\Models\ProjectWebsiteType::all();
+                                @endphp
+                                <label class="" for="">Select Website Type
+                                    <sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Select Website Type" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <div class="input-group">
+                                    <select class="form-control height-35 f-14" name="website_type" id="website_type" data-live-search="true" data-size="8">
+                                        <option value="">--</option>
+                                        @foreach($website_types as $website_type)
+                                            <option value="{{$website_type->id}}">{{$website_type->website_type}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <span id="website_typeError" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-12 col-lg-12 mt-5">
                         <div class="row">
                             <div class="col-md-6 col-lg-6 mt-1">
-                                <label class="" for="">Submit The Niche/Category of The Project
+                                 <label class="" for="">Submit The Niche/Category of The Project
+                                     <sup class="f-14 mr-1">*</sup>
                                     <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Submit The Niche/Category of The Project" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
                                         <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                                     </svg>
                                 </label>
                                 <div class="input-group w-100">
                                     <x-forms.input-group>
-                                        <select class="form-control select-picker" name="niche" id="option_value" data-live-search="true" data-size="8">
-                                            @foreach($categories as $category)
-                                                <option value="{{$category->id}}">{{$category->category_name}}</option>
+                                        @php
+                                            $parent_categories = \App\Models\ProjectNiche::whereNull('parent_category_id')->get();
+                                        @endphp
+                                        <select class="form-control select-picker" name="niche" id="niche" data-live-search="true" data-size="8">
+                                            <option value="">--</option>
+                                            @foreach($parent_categories as $parent_category)
+                                                <option value="{{$parent_category->id}}">{{$parent_category->category_name}}</option>
                                             @endforeach
                                         </select>
-                                        <x-slot name="append">
-                                            <button  type="button" class="btn btn-outline-secondary border-grey" data-toggle="modal" data-target="#nicheaddmodal" type="button">@lang('app.add')</button>
-                                        </x-slot>
                                     </x-forms.input-group>
+                                    <span id="nicheError" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-6 mt-1">
+                                <label class="" for="">Submit The Niche/Sub Category of The Project
+                                    <sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Submit The Niche/Parent Category of The Project" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <div class="input-group w-100">
+                                    <div class="input-group">
+                                        <select class="form-control height-35 f-14" name="sub_niche" id="sub_niche" data-live-search="true" data-size="8">
+                                            <option value="">--</option>
+                                        </select>
+                                    </div>
+                                    <span id="sub_nicheError" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-3">
+                                <label for="main_page" style="margin-top: 35px;">Total Primary or Main Pages:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="plugin_name">Insert Number of Pages<sup class="f-14 mr-1">*</sup></label>
+                                    <input type="number" id="main_page_number" class="form-control height-35 f-14" placeholder="0" name="main_page_number"/>
+                                    <span id="main_page_numberError" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="plugin_name">Insert Name of Pages <sup class="f-14 mr-1">*</sup> <span style="font-size: 10px;">(For example: Home, Services)</span></label>
+                                    <input type="text" id="main_page_name" class="form-control height-35 f-14" placeholder="Insert page name" name="main_page_name"/>
+                                    <span id="main_page_nameError" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-3">
+                                <label for="main_page" style="margin-top: 35px;">Total Secondary Pages:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="secondary_page">Insert Number of Pages <sup class="f-14 mr-1">*</sup></label>
+                                    <input type="number" id="secondary_page_number" class="form-control height-35 f-14" placeholder="0" name="secondary_page_number"/>
+                                    <span id="secondary_page_numberError" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="secondary_page_name">Insert Name of Pages <sup class="f-14 mr-1">*</sup> <span style="font-size: 10px;">(For example: Contact Us, About)</span></label>
+                                    <input type="text" id="secondary_page_name" class="form-control height-35 f-14" placeholder="Insert page name" name="secondary_page_name"/>
+                                    <span id="secondary_page_nameError" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="backup_email_address">Backup email address<sup class="f-14 mr-1">*</sup></label>
+                                <input type="email" class="form-control height-35 f-14 " name="backup_email_address" id="backup_email_address" value="" placeholder="Enter Backup email address">
+                                <span id="backup_email_addressError" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="day_interval">Day Interval<sup class="f-14 mr-1">*</sup></label>
+                                <input type="text" class="form-control height-35 f-14" name="day_interval" id="day_interval" placeholder="07 Days 20-05-2023">
+                                <span id="day_intervalError" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label class="text-dark-grey" data-label="true" for="descriptionText">Description
+                                        <sup class="mr-1">*</sup>
+                                        <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Description" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                            <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                        </svg>
+                                    </label>
+                                    <textarea name="description" id="descriptionText" class="form-control"></textarea>
+                                    <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
+                                    <script>
+                                        CKEDITOR.replace('description',{
+                                            height:100,
+                                        });
+                                    </script>
+                                    <label id="descriptionError" class="error" for="descriptionText"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="theme_name">Theme Name<sup class="f-14 mr-1">*</sup></label>
+                                    <input type="text" id="theme_name" class="form-control height-35 f-14" placeholder="Type theme name" name="theme_name"/>
+                                    <span id="theme_nameError" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="theme_link">Theme Url <sup class="f-14 mr-1">*</sup></label>
+                                    <input type="url" id="theme_url" class="form-control height-35 f-14" placeholder="Type theme url" name="theme_url"/>
+                                    <span id="theme_urlError" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-lg-12 col-md-12 mt-5" id="use_theme_box">
+                                <label for="">
+                                    Did you use any significant plugin for this project?
+                                    <sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Did you use any significant plugin for this project?" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="website_plugin_box_information"  id="website_plugin_box_information2" value="1">
+                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault11">
+                                                Yes
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="website_plugin_box_information" id="website_plugin_box_information2" value="0" >
+                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault12">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span id="plugin_informationError" class="text-danger"></span>
+                            </div>
+                            <div class="col-lg-12 col-md-12 mt-5" id="plugin_box">
+                                <div class="row">
+                                    <div class="col-md-10 dynamic-field" id="dynamic-field-1">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="plugin_name">Plugin Name</label>
+                                                    <input type="text" id="plugin_name" class="form-control height-35 f-14" placeholder="Type official plugin name" name="plugin_name[]"/>
+                                                    <span id="plugin_nameError" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label for="plugin_url">Plugin Url</label>
+                                                    <input type="url" id="plugin_url" class="form-control height-35 f-14" placeholder="Add plugin url" name="plugin_url[]"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2 append-buttons" style="margin-top: 25px;">
+                                        <div class="clearfix">
+                                            <button type="button" id="add-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                            <button type="button" id="remove-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12 mt-5">
@@ -409,7 +616,6 @@
                                 <input type="text" class="form-control height-35 f-14" name="dummy_link" id="dummy_link" value="">
                                 <span id="dummy_linkError" class="text-danger"></span>
                             </div>
-                        </div>
                     </div>
                     <div class="col-lg-12 col-md-12 mt-5">
                         <label for="">Did You Notify the Client About Dummy Site Removal After 2-Weeks?
@@ -508,7 +714,6 @@
 @include('projects.modals.deletenichemodal')
 
 @push('scripts')
-
     <script>
         $('#submitButton').click(function(e){
             // alert('ok');
@@ -518,12 +723,24 @@
             var qc_protocol = $('input[name="qc_protocol"]:checked').val();
             var login_information = $('input[name="login_information"]:checked').val();
             var drive_information = $('input[name="drive_information"]:checked').val();
+            var website_plugin_box_information = $('input[name="website_plugin_box_information"]:checked').val();
             var dummy_information = $('input[name="dummy_information"]:checked').val();
             var notify = $('input[name="notify"]:checked').val();
             var actual_information = $('input[name="actual_information"]:checked').val();
             var rating = $('input[name="rating"]:checked').val();
             var requirements = $('input[name="requirements"]:checked').val();
             var price = $('input[name="price"]:checked').val();
+            var plugin_name = document.getElementsByName("plugin_name[]");
+            var plugin_name_values = [];
+            for (var i = 0; i < plugin_name.length; i++) {
+                plugin_name_values.push(plugin_name[i].value);
+            }
+            var plugin_url = document.getElementsByName("plugin_url[]");
+            var plugin_url_values = [];
+            for (var i = 0; i < plugin_url.length; i++) {
+                plugin_url_values.push(plugin_url[i].value);
+            }
+            var description = CKEDITOR.instances.descriptionText.getData();
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'qc_protocol': qc_protocol,
@@ -542,7 +759,21 @@
                 'comments': document.getElementById("comments").value,
                 'comments2': document.getElementById("comments2").value,
                 'comments3': document.getElementById("comments3").value,
-                'niche': document.getElementById("option_value").value,
+                'cms_category': document.getElementById("cms_category").value,
+                'website_type': document.getElementById("website_type").value,
+                'niche': document.getElementById("niche").value,
+                'sub_niche': document.getElementById("sub_niche").value,
+                'main_page_number': document.getElementById("main_page_number").value,
+                'main_page_name': document.getElementById("main_page_name").value,
+                'secondary_page_number': document.getElementById("secondary_page_number").value,
+                'secondary_page_name': document.getElementById("secondary_page_name").value,
+                'backup_email_address': document.getElementById("backup_email_address").value,
+                'day_interval': document.getElementById("day_interval").value,
+                'website_plugin_box_information': website_plugin_box_information,
+                'plugin_name': plugin_name_values,
+                'plugin_url': plugin_url_values,
+                'theme_name': document.getElementById("theme_name").value,
+                'theme_url': document.getElementById("theme_url").value,
                 'dummy_yes': document.getElementById("dummy_yes").value,
                 'dummy_information': dummy_information,
                 'dummy_link': document.getElementById("dummy_link").value,
@@ -550,7 +781,9 @@
                 'actual_yes': document.getElementById("actual_yes").value,
                 'actual_information': actual_information,
                 'actual_link': document.getElementById("actual_link").value,
+                'description': description,
                 'milestone_id': {{$milestone->id}},
+                'added_by': {{Auth::user()->id}},
             }
             // console.log(data);
             $.ajaxSetup({
@@ -654,6 +887,71 @@
                     }else{
                         $('#comments3Error').text('');
                     }
+                    if(error.responseJSON.errors.cms_category){
+                        $('#cms_categoryError').text(error.responseJSON.errors.cms_category);
+                    }else{
+                        $('#cms_categoryError').text('');
+                    }
+                    if(error.responseJSON.errors.website_type){
+                        $('#website_typeError').text(error.responseJSON.errors.website_type);
+                    }else{
+                        $('#website_typeError').text('');
+                    }
+                    if(error.responseJSON.errors.niche){
+                        $('#nicheError').text(error.responseJSON.errors.niche);
+                    }else{
+                        $('#nicheError').text('');
+                    }
+                    if(error.responseJSON.errors.sub_niche){
+                        $('#sub_nicheError').text(error.responseJSON.errors.sub_niche);
+                    }else{
+                        $('#sub_nicheError').text('');
+                    }
+                    if(error.responseJSON.errors.main_page_number){
+                        $('#main_page_numberError').text(error.responseJSON.errors.main_page_number);
+                    }else{
+                        $('#main_page_numberError').text('');
+                    }
+                    if(error.responseJSON.errors.main_page_name){
+                        $('#main_page_nameError').text(error.responseJSON.errors.main_page_name);
+                    }else{
+                        $('#main_page_nameError').text('');
+                    }
+                    if(error.responseJSON.errors.secondary_page_number){
+                        $('#secondary_page_numberError').text(error.responseJSON.errors.secondary_page_number);
+                    }else{
+                        $('#secondary_page_numberError').text('');
+                    }
+                    if(error.responseJSON.errors.secondary_page_name){
+                        $('#secondary_page_nameError').text(error.responseJSON.errors.secondary_page_name);
+                    }else{
+                        $('#secondary_page_nameError').text('');
+                    }
+                    if(error.responseJSON.errors.backup_email_address){
+                        $('#backup_email_addressError').text(error.responseJSON.errors.backup_email_address);
+                    }else{
+                        $('#backup_email_addressError').text('');
+                    }
+                    if(error.responseJSON.errors.day_interval){
+                        $('#day_intervalError').text(error.responseJSON.errors.day_interval);
+                    }else{
+                        $('#day_intervalError').text('');
+                    }
+                    if(error.responseJSON.errors.theme_name){
+                        $('#theme_nameError').text(error.responseJSON.errors.theme_name);
+                    }else{
+                        $('#theme_nameError').text('');
+                    }
+                    if(error.responseJSON.errors.theme_url){
+                        $('#theme_urlError').text(error.responseJSON.errors.theme_url);
+                    }else{
+                        $('#theme_urlError').text('');
+                    }
+                    if(error.responseJSON.errors.website_plugin_box_information){
+                        $('#plugin_informationError').text(error.responseJSON.errors.website_plugin_box_information);
+                    }else{
+                        $('#plugin_informationError').text('');
+                    }
                     if(error.responseJSON.errors.dummy_yes){
                         $('#dummy_yesError').text(error.responseJSON.errors.dummy_yes);
                     }else{
@@ -691,6 +989,100 @@
                     }
                     $('#submitButton').attr("disabled", false);
                     $('#submitButton').html("Submit");
+                }
+            });
+        });
+
+
+
+        $(document).ready(function () {
+            var buttonAdd = $("#add-button");
+            var buttonRemove = $("#remove-button");
+            var className = ".dynamic-field";
+            var count = 0;
+            var field = "";
+            var maxFields = 50;
+
+            function totalFields() {
+                return $(className).length;
+            }
+
+            function addNewField() {
+                var total = $('input[name="link[]"]').length;
+                count = totalFields() + 1;
+                field = $("#dynamic-field-1").clone();
+                field.attr("id", "dynamic-field-" + count);
+                field.children("label").attr("for", "linkError_" + 'total').text("Field " + count);
+                field.find("input").attr("id", "linkError_" + 'total').val("");
+                field.append('<span id="linkError_'+total+'" class="text-danger" for="link"></span>');
+                $(className + ":last").after($(field));
+            }
+
+            function removeLastField() {
+                if (totalFields() > 1) {
+                    $(className + ":last").remove();
+                }
+            }
+
+            function enableButtonRemove() {
+                if (totalFields() === 2) {
+                    buttonRemove.removeAttr("disabled");
+                    buttonRemove.addClass("shadow-sm");
+                }
+            }
+
+            function disableButtonRemove() {
+                if (totalFields() === 1) {
+                    buttonRemove.attr("disabled", "disabled");
+                    buttonRemove.removeClass("shadow-sm");
+                }
+            }
+
+            function disableButtonAdd() {
+                if (totalFields() === maxFields) {
+                    buttonAdd.attr("disabled", "disabled");
+                    buttonAdd.removeClass("shadow-sm");
+                }
+            }
+
+            function enableButtonAdd() {
+                if (totalFields() === maxFields - 1) {
+                    buttonAdd.removeAttr("disabled");
+                    buttonAdd.addClass("shadow-sm");
+                }
+            }
+
+            buttonAdd.click(function () {
+                addNewField();
+                enableButtonRemove();
+                disableButtonAdd();
+            });
+
+            buttonRemove.click(function () {
+                removeLastField();
+                disableButtonRemove();
+                enableButtonAdd();
+            });
+        });
+
+
+
+        $(document).ready(function () {
+            $('#niche').change(function () {
+                var niche_id = $(this).val();
+                if (niche_id) {
+                    $.ajax({
+                        url: '/projects/project-completion/get-sub-niche/' + niche_id,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $.each(data, function (index, sub_niche) {
+                                $('#sub_niche').append('<option value="' + sub_niche.id + '">' + sub_niche.category_name + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#sub_niche').empty();
                 }
             });
         });
@@ -834,7 +1226,11 @@
             $("#drive_yes_box").hide();
             $("#drive_box").hide();
             $("#dummy_yes_box").hide();
+            // $("#use_theme_box").hide();
+            // $("#website_plugin_box").hide();
             $("#dummy_box").hide();
+            $("#theme_box").hide();
+            $("#plugin_box").hide();
             $("#actual_yes_box").hide();
             $("#actual_box").hide();
         });
@@ -895,6 +1291,30 @@
         });
 
         $(document).ready(function() {
+            $('#use_theme').click(function() {
+
+
+                var check3 = $('#use_theme').is(":checked") ? true : false;
+                //console.log(check);
+                if (check3 == true) {
+                    $('#use_theme_box').show();
+                } else {
+                    $('#use_theme_box').hide();
+                }
+                // /coonsole.log(value);
+
+            });
+            $('#website_plugin').click(function() {
+                var check3 = $('#website_plugin').is(":checked") ? true : false;
+                //console.log(check);
+                if (check3 == true) {
+                    $('#website_plugin_box').show();
+                } else {
+                    $('#website_plugin_box').hide();
+                }
+                // /coonsole.log(value);
+
+            });
             $('#dummy_yes').click(function() {
 
 
@@ -908,6 +1328,26 @@
                 // /coonsole.log(value);
 
             });
+            $("input[name$='theme_information']").click(function() {
+                var value5 = $(this).val();
+                // console.log(value5);
+                if (value5 == 1) {
+                    $("#theme_box").show();
+                }else {
+                    $("#theme_box").hide();
+                }
+            });
+
+            $("input[name$='website_plugin_box_information']").click(function() {
+                var value6 = $(this).val();
+                // console.log(value5);
+                if (value6 == 1) {
+                    $("#plugin_box").show();
+                }else {
+                    $("#plugin_box").hide();
+                }
+            });
+
             $("input[name$='dummy_information']").click(function() {
                 var value3 = $(this).val();
                 //console.log(value2);

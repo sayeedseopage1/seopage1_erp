@@ -26,6 +26,8 @@ import { useGetTeamsQuery } from '../services/api/teamSliceApi';
 import { useEditGoalTitle, useEditGoalTitleMutation, useGetGoalByIdQuery } from '../services/api/goalsApiSlice';
 import { useGetDealsByGoalIdQuery } from '../services/api/dealSliceApi';
 import { CompareDate } from '../utils/dateController';
+import { useReactToPrint } from 'react-to-print';
+
 
 // convert to unit
 const numberToUnits = (value, decimal = 1) => {
@@ -39,6 +41,7 @@ const Goal = () => {
     const location = useLocation(); // get location
     const day = new CompareDate();
     const [goalSummary, setGoalSummary] = React.useState(null); // store goal summary data here
+    const [tableDeals, setTableDeals] = React.useState([]);
 
     // custom filter by data
     const [selectedPeriod, setSelectedPeriod] = React.useState('Today');
@@ -52,6 +55,15 @@ const Goal = () => {
 
     // goal hooks
     const { getTargetPeriod, addedGoalSummary, wonGoalSummary} = useGoals();
+    const [printPreparing, setPrintPreparing] = React.useState(false);
+    const dealTableRef = React.useRef(null);
+
+    const handlePrintDealTable = useReactToPrint({
+        content: () => dealTableRef.current,
+        onBeforeGetContent: () => setPrintPreparing(true),
+        onAfterPrint: () => setPrintPreparing(false),
+        documentTitle: `${activeTable === 'deals' ? 'deals-table': 'deal-summary-table'}-${params?.goalId}`
+    })
 
 
     // authorized for edit 
@@ -107,6 +119,21 @@ const Goal = () => {
     }, [goalIsFetching]);
 
 
+    // set deals
+    // React.useEffect(() => {
+    //     if(!dealsIsFetching && goalDealsData && goalData){
+    //         if(goalData?.goal?.entryType === "Won" && Number(goalData?.goal?.team_id) !== 1 ){
+    //             let d = goalDealsData.filter(deal => {
+    //                 console.log(deal["team_total_amount"])
+    //                 return Number(deal['team_total_amount']) !== 0
+    //             });
+    //             setTableDeals([...d]);
+    //         }else{  
+    //             setTableDeals([...goalDealsData])
+    //         }
+    //     }
+    // }, [dealsIsFetching, goalDealsData, goalData, goalIsFetching])
+    
     // get filter period
     const handleRelativeTimePeriod = (value) => {
         setSelectedPeriod(value);
@@ -258,6 +285,13 @@ const Goal = () => {
 
     }
 
+    const getGoalDealsDate = (deals, goal) => {
+        if(goal.entryType === "Won" && goal.team_id !== 1){
+            return deals.filter(deal => Number(deal["team_total_amount"]) !== 0) || []
+        }else{
+            return deals || []
+        }
+    }
 
     // calculate goal summary 
     const calculateGoalSummary = React.useCallback(() => {
@@ -320,6 +354,7 @@ const Goal = () => {
     }
 
 
+
     if (goalIsFetching || !goalData) {
         return (
             <div style={{ display: 'flex', alignItems: 'center', "justifyContent": 'center', width: "100%", height: '100vh' }}>
@@ -329,7 +364,7 @@ const Goal = () => {
     }
 
 
-    const { goal } = goalData;
+    const { goal, added_by } = goalData;
 
     if(!goal) return <div>Goal not found</div>
 
@@ -467,7 +502,7 @@ const Goal = () => {
                     {/* details */}
                     <div className='cnx__ins_details'>
                         <div className='cnx__ins_details_col'>
-                            <Tooltip text="Assignee">
+                            <Tooltip text="Assignee for">
                                 <div className='cnx__ins_details_item'>
                                     <i className='fa-regular fa-user' />
                                     <span>{goal?.name || goal?.team_name}</span>
@@ -487,6 +522,15 @@ const Goal = () => {
                                     Pipeline{goal?.entryType === 'Progressed' ? ', ' + goal?.qualified : ''}
                                 </div>
                             </Tooltip>
+
+
+                            <Tooltip text="Assignee by">
+                                <div className='cnx__ins_details_item'>
+                                    <i className='fa-solid fa-user' />
+                                    <span>{added_by?.name}</span>
+                                </div>
+                            </Tooltip>
+                            
                         </div>
 
                         <div className='cnx__ins_details_col'>
@@ -508,6 +552,13 @@ const Goal = () => {
                                 <div className='cnx__ins_details_item'>
                                     <Icon type="Goal" />
                                     {goal?.trackingType === "value" ? numberToUnits(Number(goal?.trackingValue)) : goal?.trackingValue} Deals
+                                </div>
+                            </Tooltip>
+
+                            <Tooltip text='Client type'>
+                                <div className='cnx__ins_details_item'>
+                                <i className='fa-solid fa-users' />
+                                    {goal?.dealType}
                                 </div>
                             </Tooltip>
                         </div>
@@ -582,7 +633,6 @@ const Goal = () => {
                             </div>
                             <div className='__graph'>
                                 <GoalStackedBarChart
-                                    footer={false}
                                     XAxisLabel="title"
                                     actualFillColor={"#1d8603"}
                                     targetFillColor={"#E5E5E5"}
@@ -622,7 +672,19 @@ const Goal = () => {
                                 className={`cnx__ins_table_view_button ${activeTable === 'summary' ? 'active' : ""}`}>
                                 Summary
                             </Button>
+                            
+
+                            {
+                                printPreparing && <div>
+                                    <div className="spinner-border" role="status" style={{
+                                        width: '1.3rem',
+                                        height: '1.3rem',
+                                        
+                                    }}>  </div>
+                                </div>
+                            }
                         </div>
+                        
                         <div>
                             <Dropdown>
                                 <Dropdown.Toggle
@@ -635,11 +697,13 @@ const Goal = () => {
 
                                 <Dropdown.Menu offset={[0, 8]} placement='bottom-end' className="cnx__period_filter_dd_menu">
                                     <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
-                                        Pdf
+                                        <div onClick={handlePrintDealTable}>
+                                            Pdf
+                                        </div>
                                     </Dropdown.Item>
-                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
+                                    {/* <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
                                         PNG
-                                    </Dropdown.Item>
+                                    </Dropdown.Item> */}
                                 </Dropdown.Menu>
                             </Dropdown>
                         </div>
@@ -652,33 +716,37 @@ const Goal = () => {
                     {/* graph table */}
                     <div className='cnx__ins_table pb-3'>
                         {activeTable === 'deals' && (
-                            <DataTable
-                                data={goalDealsData ? [...goalDealsData] : []}
-                                defaultColumns={
-                                    goal?.entryType === 'Won' ?
-                                    WonTableData :
-                                    goal?.entryType === 'Added'?
-                                    AddedTableColumns : 
-                                    DataTableColumns
-                                }
+                           
+                            <div >
+                                <DataTable
+                                    ref={dealTableRef}
+                                    data={[...getGoalDealsDate(goalDealsData, goal)]}
+                                    defaultColumns={
+                                        goal?.entryType === 'Won' ?
+                                        WonTableData :
+                                        goal?.entryType === 'Added'?
+                                        AddedTableColumns : 
+                                        DataTableColumns
+                                    }
 
-                                visibleColumns={
-                                    goal?.entryType === 'Won' ?
-                                      Number(goal?.team_id) === 1 ? 
-                                      wonTableVisibleColumns.filter(item => item.accessor !== 'team_total_amount') : 
-                                      wonTableVisibleColumns
-                                     :
-                                    goal?.entryType === 'Added'?
-                                    addedTableVisibleColumns:
-                                    processedTableVisibleColumns
-                                }
-                                isLoading={dealsIsFetching}
-                            />
+                                    visibleColumns={
+                                        goal?.entryType === 'Won' ?
+                                        Number(goal?.team_id) === 1 ? 
+                                        wonTableVisibleColumns.filter(item => item.accessor !== 'team_total_amount') : 
+                                        wonTableVisibleColumns
+                                        :
+                                        goal?.entryType === 'Added'?
+                                        addedTableVisibleColumns:
+                                        processedTableVisibleColumns
+                                    }
+                                    isLoading={dealsIsFetching}
+                                />
+                            </div>
                         )}
 
                         {
                             // activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
-                            activeTable === 'summary' && <GoalSummaryTable data={goalSummary} isLoading={isSummarizing} />
+                            activeTable === 'summary' && <GoalSummaryTable ref={dealTableRef} data={goalSummary} isLoading={isSummarizing} />
                         }
                     </div>
                     {/* end graph table */}

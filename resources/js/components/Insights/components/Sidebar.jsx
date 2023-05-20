@@ -57,11 +57,12 @@ const InsightSidebar = () => {
         if(goals?.goals && goals?.goals?.length > 0){
             let _goals = goals?.goals?.map((goal) => {
                 let title = goal?.title;
-                
-                if(goal.endDate && compareDate.isAfter(dayjs(), goal.endDate)){
-                    return {...goal, title, status: 'Past' };
-                } else if(!goal.endDate || !compareDate.isAfter(dayjs(), goal.endDate)){
+                let today =  dayjs().format('YYYY-MM-DD');
+
+                if(!goal.endDate || compareDate.isSameOrBefore(today, goal.endDate)){
                     return {...goal, title, status: 'Active'};
+                }else{
+                    return {...goal, title, status: 'Past' };
                 }
             }) 
 
