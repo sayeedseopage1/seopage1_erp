@@ -8,7 +8,6 @@ const JqueryDateRangePicker = ({
     endDate,
     setStartDate,
     setEndDate,
-    defaultSelectedType = "monthly" 
 }) => {
 
     const handleTimePicker = () => {
@@ -18,21 +17,10 @@ const JqueryDateRangePicker = ({
             // let today = moment().format('D'); 
             
             $(function() {
-                let start = moment();
+                let start = moment().startOf('month');
                 let end = moment();
  
-                if(defaultSelectedType){
-                    if(_.lowerCase(defaultSelectedType) === 'monthly'){
-                        start = moment().startOf('month');
-                        end =moment().endOf('month');
-                    }else if(_.lowerCase(defaultSelectedType) === 'quarterly'){
-                        start = moment().startOf('quarter');
-                        end =moment().endOf('quarter');
-                     }else if(_.lowerCase(defaultSelectedType) === 'yearly'){
-                        start = moment().startOf('year');
-                        end = moment().endOf('year');
-                    }
-                }
+               
 
                 // if(today > 20){
                 //     end = moment().add(1, 'months').date(20);
@@ -97,12 +85,7 @@ const JqueryDateRangePicker = ({
         handleTimePicker();
     }, []);
 
-    
-    React.useEffect(() => {
-        handleTimePicker();
-    }, [defaultSelectedType]);
-
-
+  
     return (
         <div id="jqueryDatePicker" className='sp1__jquery_date_picker' style={{position: 'relative'}}>
             <div className='sp1__jquery_date_btn'>

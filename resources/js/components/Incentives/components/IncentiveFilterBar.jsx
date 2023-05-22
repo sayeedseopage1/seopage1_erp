@@ -1,14 +1,12 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
-import JqueryDateRangePicker from '../../Points/components/JqueryDateRangePicker';
+import JqueryDateRangePicker from './JqueryDateRangePicker';
 import Dropdown from '../../Insights/ui/Dropdown';
 import _ from 'lodash';
 import SearchBox from '../../Insights/ui/Searchbox';
 import Button from '../../Insights/ui/Button';
 import { 
-    useGetDepartmentOptionsMutation,  
     useGetEmployeeOptionsMutation,  
-    useGetProjectsOptionsMutation,  
     useGetShiftOptionsMutation, 
 } from '../../services/api/FilterBarOptionsApiSlice';
 import { useIncentiveCurrentDataMutation } from '../../services/api/IncentiveApiSlice';
