@@ -634,6 +634,20 @@ const IncentiveFilterBar = ({setData, setPointTableDataIsLoading}) => {
                 onClick={handleShiftFilter}
             />
 
+            <FilterDropdownItem
+                title="Select Employee"
+                id="employee"
+                selected={selectedEmployee}
+                isLoading={employeeDataIsLoading}
+                items={employee}
+                inVisible={inVisible}
+                setInVisible={setInVisible}
+                avatar='image'
+                onClick={handleEmployeeFilter}
+            />
+
+
+
 
             <div className='sp1__pp_filter_sidebar_container'>
                 <div className='sp1__pp_filter_sidebar_toggle' onClick={() => setIsOpen(true)}>

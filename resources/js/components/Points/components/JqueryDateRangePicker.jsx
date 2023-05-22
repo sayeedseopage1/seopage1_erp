@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import _ from 'lodash';
 import * as React from 'react';
 
 
@@ -7,6 +8,7 @@ const JqueryDateRangePicker = ({
     endDate,
     setStartDate,
     setEndDate,
+    defaultSelectedType = "monthly" 
 }) => {
    
     React.useEffect(() => {
@@ -16,14 +18,27 @@ const JqueryDateRangePicker = ({
             let today = moment().format('D'); 
             
             $(function() {
-                let start = moment().subtract(1, 'months').date(21);
-                let end = moment().date(19);
+                let start = moment();
+                let end = moment();
 
-                if(today > 20){
-                    end = moment().add(1, 'months').date(20);
-                }else {
-                    end = moment().date(20);
+                if(defaultSelectedType){
+                    if(_.lowerCase(defaultSelectedType) === 'monthly'){
+                        start = moment().startOf('month');
+                        end =moment().endOf('month');
+                    }else if(_.lowerCase(defaultSelectedType === 'quarterly')){
+                        start = moment().startOf('quarter');
+                        end =moment().endOf('quarter');
+                     }else if(_.lowerCase(defaultSelectedType === 'yearly')){
+                        start = moment().startOf('year');
+                        end =moment().endOf('year');
+                    }
                 }
+
+                // if(today > 20){
+                //     end = moment().add(1, 'months').date(20);
+                // }else {
+                //     end = moment().date(20);
+                // }
 
                 
                setStartDate(start.format());
