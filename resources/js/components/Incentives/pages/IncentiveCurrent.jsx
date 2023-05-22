@@ -25,6 +25,8 @@ const IncentiveCurrent = () => {
 
     let isLoading = firstLoading || tableDataIsFetching;
 
+    let diff = Number(data?.point_achieve_by_your_shift - data?.non_incentive_point_above);
+
     return (
         <div className="">
             <IncentivesFilterBar
@@ -106,7 +108,7 @@ const IncentiveCurrent = () => {
                                 <div className='sp1__incentive_item'>
                                     {!isLoading && (
                                         <span>
-                                            *Approximate incentive amount for your shift (Provided all your shift and team minimum goals are met):({data?.point_achieve_by_your_shift}-{data?.non_incentive_point_above})*100 =  $ {data?.every_shift_team_total_acheive}
+                                            *Approximate incentive amount for your shift (Provided all your shift and team minimum goals are met):({diff > 0 ? diff : 0})*100 =  $ {diff > 0 ? data?.every_shift_team_total_acheive : 0}
                                         </span>
                                     )}    
                                 </div> 

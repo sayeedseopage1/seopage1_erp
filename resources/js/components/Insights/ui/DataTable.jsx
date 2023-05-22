@@ -220,9 +220,9 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
                                             key={data.id} 
                                             className="cnx__table_tr"
                                             data-row-id = {data.id}
-                                            onMouseDown={handleMouseDown}
-                                            onMouseUp={handleMouseUp}
-                                            onMouseMove={handleMouseMove}
+                                            // onMouseDown={handleMouseDown}
+                                            // onMouseUp={handleMouseUp}
+                                            // onMouseMove={handleMouseMove}
                                         >
                                             {columns.map(d => (
                                                 <div key={d.id} className="cnx__table_td">
