@@ -36,6 +36,9 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
     const { activeColumns, setActiveColumns, sortConfig, setSortConfig } = useTableState();
     const [totalPage, setTotalPage] = React.useState(1);
+    const [selectionStart, setSelectionStart] = React.useState(false);
+    const [startRowId, setStartRowId] = React.useState();
+
 
 
     // columns
@@ -99,6 +102,50 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
     };
 
 
+    // mouse down in row
+    const handleMouseDown = (e) => {
+        e.preventDefault();
+        setSelectionStart(true);
+        let {rowId} = e.target.parentNode.dataset;
+        setStartRowId(Number(rowId));
+        console.log(e.target.parentNode)
+    }
+
+    // mouse up in row
+    const handleMouseUp = (e) => {
+        e.preventDefault();
+        setSelectionStart(false);
+        console.log(e.target.parentNode)
+    }
+
+    // mouse move in row
+    const handleMouseMove = (e) => {
+        e.preventDefault();
+        if(!selectionStart) return;
+        let rows = document.querySelectorAll('.cnx__table_tr');
+        let parent = e.target.parentNode;
+        let {rowId} = parent.dataset;
+        rowId = Number(rowId);
+
+        for(let i = 0; i < rows.length; i++){
+            const row  = rows[i];
+            const currentRowId = Number(row.dataset.rowId);
+
+            const isBetweenRange = 
+                (currentRowId >= startRowId && currentRowId <= rowId) ||
+                (currentRowId <= startRowId && currentRowId >= rowId);
+            
+            if(isBetweenRange){
+                row.classList.add('__selected'); 
+            }else{
+                row.classList.remove('__selected'); 
+            }
+             
+
+        }
+
+    }
+
 
     const columns = defaultColumns.filter(d => activeColumns.includes(d.id))
                     .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
@@ -154,7 +201,10 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
                             <div key={i} className="cnx__table_tr">
                                 {columns.map(d => 
                                     <div key={d.id} className="cnx__table_td cnx__table_td_loading ">
-                                        <span className='animate-pulse' style={{width: `${ Math.floor(Math.random() * (70 - 20) + 20)}%`}}>loading</span>
+                                        <span 
+                                            className='animate-pulse' 
+                                            style={{width: `${ Math.floor(Math.random() * (70 - 20) + 20)}%`}}
+                                        >loading</span>
                                     </div>
                                 )}
                             </div> 
@@ -166,7 +216,14 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
                         <React.Fragment>
                             {
                                 currentPageData.length > 0 ? currentPageData.map((data) => (
-                                        <div key={data.id} className="cnx__table_tr">
+                                        <div 
+                                            key={data.id} 
+                                            className="cnx__table_tr"
+                                            data-row-id = {data.id}
+                                            // onMouseDown={handleMouseDown}
+                                            // onMouseUp={handleMouseUp}
+                                            // onMouseMove={handleMouseMove}
+                                        >
                                             {columns.map(d => (
                                                 <div key={d.id} className="cnx__table_td">
                                                     {d.cell(data) || <span> &nbsp; </span>}
