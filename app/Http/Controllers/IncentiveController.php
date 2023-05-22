@@ -26,12 +26,12 @@ class IncentiveController extends AccountBaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($take_json = null)
+    public function index()
     {
         return view('incentives.index', $this->data);
     }
 
-    public function index_json()
+    public function index_json(Request $request)
     {
         $userID = $this->user->id;
 
@@ -132,11 +132,16 @@ class IncentiveController extends AccountBaseController
 
         $cash_point_total = CashPoint::whereIn('user_id', $user_array)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
         $cash_point_total_of_this_user = CashPoint::where('user_id', $this->user->id)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
+        $data['point_achieve_by_your_shift'] = $cash_point_total;
+        if ($cash_point > 0) {
+            $total_percentage_share_incentive = (100 * ($cash_point_total - $cash_point_total_of_this_user)) / $cash_point_total ;
+            $total_percentage_share_incentive_of_this_user = 100 - $total_percentage_share_incentive;
 
-        $total_percentage_share_incentive = (100 * ($cash_point_total - $cash_point_total_of_this_user)) / $cash_point_total ;
-        $total_percentage_share_incentive_of_this_user = 100 - $total_percentage_share_incentive;
-
-        $data['toal_share_incentive'] = ($data['every_shift_team_total_acheive'] / 100) * $total_percentage_share_incentive;
+            $data['toal_share_incentive'] = ($data['every_shift_team_total_acheive'] / 100) * $total_percentage_share_incentive;
+        } else {
+            $data['toal_share_incentive'] = 0;
+        }
+        
 
         
         return response()->json($data);
