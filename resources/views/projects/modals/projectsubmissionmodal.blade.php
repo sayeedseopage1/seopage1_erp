@@ -327,7 +327,11 @@
               </div>
           </td>
           <td>
+            @if($project_portfolio != null)
                   <p class="fw-normal mb-1">{{$project_portfolio->cms_name}}</p>
+                  @else 
+                  <p class="fw-normal mb-1">--</p>
+                  @endif
 
           </td>
 
@@ -347,7 +351,11 @@
               </div>
           </td>
           <td>
+            @if($project_portfolio != null)
                   <p class="fw-normal mb-1">{{$project_portfolio->website_type}}</p>
+                  @else 
+                  <p class="fw-normal mb-1">--</p>
+                  @endif
 
           </td>
 
@@ -367,7 +375,12 @@
           </div>
         </td>
         <td>
+          @if($project_portfolio != null)
+
                 <p class="fw-normal mb-1">{{$project_portfolio->category_name}}</p>
+                @else 
+                  <p class="fw-normal mb-1">--</p>
+                  @endif
         </td>
 
 
