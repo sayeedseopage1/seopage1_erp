@@ -302,7 +302,18 @@ class PaymentController extends AccountBaseController
             $currency= Currency::where('id',$milestone_id->original_currency_id)->first();
             $pm= User::where('id',$project->pm_id)->first();
             if($milestone_id->summary != null) {
-                $kpi_settings = kpiSettingLoggedHour::all();
+                
+
+                
+                $description= $milestone_id->summary;
+
+            }else {
+                $description = 'No Description Found';
+            }
+
+            $client= User::where('id',$project->client_id)->first();
+            $pm= User::where('id',$project->pm_id)->first();
+            $kpi_settings = kpiSettingLoggedHour::all();
                 $total_minutes = ProjectTimeLog::where('project_id', $project->id)->sum('total_minutes');
                 $kpi= kpiSetting::first();
                 
@@ -680,16 +691,6 @@ class PaymentController extends AccountBaseController
                     }
                 }
 
-
-                
-                $description= $milestone_id->summary;
-
-            }else {
-                $description = 'No Description Found';
-            }
-
-            $client= User::where('id',$project->client_id)->first();
-            $pm= User::where('id',$project->pm_id)->first();
 
 
             Notification::send($pm, new MilestoneReleaseNotification($milestone_id,$invoice));
