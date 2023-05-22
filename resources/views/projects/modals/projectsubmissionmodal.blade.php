@@ -399,8 +399,12 @@
               </div>
           </td>
           <td>
+            @if($project_portfolio != null)
                   <p class="fw-normal mb-1">Number of pages: {{$project_portfolio->main_page_number}}</p>
                   <p class="fw-normal mb-1">Name of pages: {{$project_portfolio->main_page_name}}</p>
+                  @else
+                  <p class="fw-normal mb-1">--</p>
+              @endif
 
           </td>
 
@@ -420,8 +424,12 @@
               </div>
           </td>
           <td>
+            @if($project_portfolio != null)
                   <p class="fw-normal mb-1">Number of pages: {{$project_portfolio->secondary_page_number}}</p>
                   <p class="fw-normal mb-1">Name of pages: {{$project_portfolio->secondary_page_name}}</p>
+                  @else
+                  <p class="fw-normal mb-1">--</p>
+              @endif
 
           </td>
 
@@ -441,7 +449,11 @@
               </div>
           </td>
           <td>
+            @if($project_portfolio != null)
                   <p class="fw-normal mb-1">{{$project_portfolio->backup_email_address}}</p>
+                  @else
+                  <p class="fw-normal mb-1">--</p>
+              @endif
 
           </td>
 
@@ -461,7 +473,13 @@
               </div>
           </td>
           <td>
+            @if($project_portfolio != null)
+            
+            
               <p class="fw-normal mb-1">{{$project_portfolio->day_interval}}</p>
+              @else
+              <p class="fw-normal mb-1">--</p>
+          @endif
 
           </td>
 
@@ -481,7 +499,13 @@
               </div>
           </td>
           <td>
+            @if($project_portfolio != null)
               <p class="fw-normal mb-1">{!! $project_portfolio->description !!}</p>
+              @else 
+              <p class="fw-normal mb-1">--</p>
+              @endif
+
+
 
           </td>
 
@@ -501,8 +525,12 @@
               </div>
           </td>
           <td>
+            @if($project_portfolio != null)
               <p class="fw-normal mb-1">{{$project_portfolio->theme_name}}</p>
               <p class="fw-normal mb-1">{{$project_portfolio->theme_url}}</p>
+              @else 
+              <p class="fw-normal mb-1">--</p>
+              @endif
 
           </td>
 
@@ -522,6 +550,7 @@
           </div>
         </td>
         <td>
+          @if($project_portfolio != null)
           <p class="fw-normal mb-1">@if($project_portfolio->plugin_information == 1)
             Yes
 
@@ -529,6 +558,9 @@
             No
             @endif
             </p>
+            @else 
+            <p class="fw-normal mb-1">--</p>
+            @endif
 
         </td>
 
@@ -578,8 +610,12 @@
               </div>
           </td>
           <td>
+            @if($project_portfolio != null)
               <p class="fw-normal mb-1">{{$project_portfolio->plugin_name}}</p>
               <p class="fw-normal mb-1">{{$project_portfolio->plugin_url}}</p>
+              @else 
+              <p class="fw-normal mb-1">--</p>
+              @endif
 
           </td>
 
