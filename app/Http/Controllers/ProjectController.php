@@ -3955,4 +3955,9 @@ class ProjectController extends AccountBaseController
             'new_date.required' => 'This field is required!',
         ]);
     }
+    public function getSubNiches($niche_id)
+    {
+        $sub_niches = ProjectNiche::find($niche_id)->child;
+        return response()->json($sub_niches);
+    }
 }
