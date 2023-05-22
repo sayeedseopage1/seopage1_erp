@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CashPoint;
 use App\Models\Deal;
 use App\Models\Seopage1Team;
 use Carbon\Carbon;
@@ -161,7 +162,7 @@ class DealController extends AccountBaseController
             'description' => 'required',
             'comments' => 'required',
         ]);
-        \DB::beginTransaction();
+       
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new DealStage();
@@ -280,6 +281,31 @@ class DealController extends AccountBaseController
                 $goal_update= GoalSetting::find($goal->id);
                 $goal_update->goal_status = 1;
                 $goal_update->save();
+                if ($goal->achievablePoints > 0) {
+
+                    $distribute_amount = $goal->achievablePoints / count($user_data);
+                    
+                    foreach ($user_data as $value) {
+
+                        $user_name = User::find($value);
+                        $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+
+                        $point= new CashPoint();
+                        $point->user_id= $value;
+                        //$point->project_id= $find_project_id->id;
+                        $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                        $point->gained_as = "Individual";
+                        $point->points= $distribute_amount;
+
+                        if ($user_last_point != null) {
+                            $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                        } else {
+                            $point->total_points_earn=  $distribute_amount;
+                        }
+
+                        $point->save();
+                    }
+                }
             }
 
         }else 
@@ -330,6 +356,31 @@ class DealController extends AccountBaseController
                 $goal_update= GoalSetting::find($goal->id);
                 $goal_update->goal_status = 1;
                 $goal_update->save();
+                if ($goal->achievablePoints > 0) {
+
+                    $distribute_amount = $goal->achievablePoints / count($user_data);
+                    
+                    foreach ($user_data as $value) {
+
+                        $user_name = User::find($value);
+                        $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+
+                        $point= new CashPoint();
+                        $point->user_id= $value;
+                        //$point->project_id= $find_project_id->id;
+                        $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                        $point->gained_as = "Individual";
+                        $point->points= $distribute_amount;
+
+                        if ($user_last_point != null) {
+                            $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                        } else {
+                            $point->total_points_earn=  $distribute_amount;
+                        }
+
+                        $point->save();
+                    }
+                }
             }
 
         }
@@ -345,32 +396,7 @@ class DealController extends AccountBaseController
             
         }
     }
-     //dd($dealStage);
-   // dd("dnkasndlkasd");
-        //goal setting
-        /*$goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
-        
-        foreach ($goal_settings as $key => $value) {
-            if ($value->trackingType == 'value') {
-                if (is_null($value->end_date)) {
-                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->sum('amount');
-                } else {
-                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->sum('amount');
-                }
-            } else {
-                if (is_null($value->end_date)) {
-                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->count();
-                } else {
-                    $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->count();
-                }
-            }
-
-            if ($deal >= (int) $value->trackingValue) {
-                $value->goal_status = 1;
-                $value->save();
-            }
-        }*/
-
+    
 
 
 
@@ -395,31 +421,7 @@ class DealController extends AccountBaseController
         $deal_stage->updated_by= Auth::id();
         $deal_stage->save();
 
-        //kpi settings
-        // $goal_settings = GoalSetting::whereDate('startDate', '>=',Carbon::today()->format('Y-m-d'))->whereDate('endDate', '>=', Carbon::today()->format('Y-m-d'))->get();
-
-        // foreach ($goal_settings as $key => $value) {
-        //     if ($value->trackingType == 'value') {
-        //         if (is_null($value->end_date)) {
-        //             $deal = Deal::whereDate('created_at', '>=', $value->startDate)->sum('amount');
-        //         } else {
-        //             $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->sum('amount');
-        //         }
-        //     } else {
-        //         if (is_null($value->end_date)) {
-        //             $deal = Deal::whereDate('created_at', '>=', $value->startDate)->count();
-        //         } else {
-        //             $deal = Deal::whereDate('created_at', '>=', $value->startDate)->whereDate('created_at', '<=', $value->end_date)->count();
-        //         }
-        //     }
-            
-        //     if ($deal >= (int) $value->trackingValue) {
-        //         $value->goal_status = 1;
-        //         $value->save();
-        //     }
-        // }
-
-        \DB::commit();
+        
         //dd($deal_sum, $deal_count);
         return response()->json([
             'status' => 'success',

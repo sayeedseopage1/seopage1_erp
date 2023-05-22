@@ -462,6 +462,8 @@ class InsightsController extends AccountBaseController
     
         if ($data->entryType == 'Added') {
 
+
+
             if ($data->dealType == 'All Clients' || $data->dealType == 'Existing Clients') {
                 $dealStage = DealStage::select([
                     'deal_stages.id as id',

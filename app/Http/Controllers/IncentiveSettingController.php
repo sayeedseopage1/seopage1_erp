@@ -86,6 +86,8 @@ class IncentiveSettingController extends AccountBaseController
         $incentive_setting->individual_goal_percentage = $request->individual_goal_percentage;
         $incentive_setting->point_of_value = $request->point_of_value;
         $incentive_setting->point_of_contribute = $request->point_of_contribute;
+        $incentive_setting->incentive_deduction = $request->incentive_deduction;
+        
         $incentive_setting->save();
 
         return response()->json(['status'=>200]);

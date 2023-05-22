@@ -630,6 +630,7 @@ class ContractController extends AccountBaseController
        // dd($existing_client);
         if($existing_client != null)
         {
+
           //  dd("true");
            
             $find_pm_id = Project::where('client_id',$existing_client->id)->orderBy('id','desc')->where('id','!=',$project->id)->where('pm_id','!=',null)->first();
@@ -638,10 +639,11 @@ class ContractController extends AccountBaseController
                 
             $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
 
-                $from = Carbon::createFromFormat('Y-m-d H:s:i', $find_pm_id->created_at);
 
+                $from = Carbon::createFromFormat('Y-m-d H:s:i', $find_pm_id->created_at);
                 $diff_in_days = $from->diffInDays($to);
-               // dd($diff_in_days, $find_pm_id);
+
+                // dd($diff_in_days, $find_pm_id);
                 if ($diff_in_days < 90) {
                     $deal_pm_id = Deal::find($deal->id);
                     $deal_pm_id->pm_id = $find_pm_id->pm_id;
@@ -649,7 +651,7 @@ class ContractController extends AccountBaseController
                     $project_pm_id= Project::find($project->id);
                     $project_pm_id->pm_id = $find_pm_id->pm_id;
                     $project_pm_id->save();
-                   // dd($project_pm_id);
+                    // dd($project_pm_id);
 
                     $pmassign = new PMProject();
                     $pmassign->project_id = $project->id;
@@ -667,10 +669,9 @@ class ContractController extends AccountBaseController
                     $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->amount/2);
                     $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
                     $pm_project_update->save();
-
-         
                 }
             }
+
            
         }
 
@@ -709,6 +710,7 @@ class ContractController extends AccountBaseController
         //         $pm_project_update->save();
         //     }
         // }
+
 
       
         // activity log
