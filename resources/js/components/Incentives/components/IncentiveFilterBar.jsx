@@ -11,7 +11,7 @@ import {
     useGetProjectsOptionsMutation,  
     useGetShiftOptionsMutation, 
 } from '../../services/api/FilterBarOptionsApiSlice';
-import { usePointTableDataMutation } from '../../services/api/PointTableDataApiSlice';
+import { useIncentiveCurrentDataMutation } from '../../services/api/IncentiveApiSlice';
 import Tooltip from '../../Insights/ui/Tooltip';
 
 
@@ -57,7 +57,7 @@ const FilterDropdownItem = ({
     const handleClick = (e, value) => {
         e.preventDefault();
         if(onClick){
-            console.log(value)
+            
             onClick(value)
         }
     }
@@ -316,11 +316,9 @@ const SidebarFilterDropdownItem = ({
 }
 
 
-const IncentiveFilterBar = ({setData, setPointTableDataIsLoading, defaultSelectedDate="monthly"}) => {
-    const [departments, setDepartments] = React.useState([]);
+const IncentiveFilterBar = ({setData, setTableDataIsFetching, defaultSelectedDate="monthly"}) => {
     const [shifts, setShifts] = React.useState([]);
     const [employee, setEmployee] = React.useState([]);
-    const [projects, setProjects] = React.useState([]);
 
 
     const [startDate, setStartDate] = React.useState(null); 
@@ -329,27 +327,13 @@ const IncentiveFilterBar = ({setData, setPointTableDataIsLoading, defaultSelecte
     const [inVisible, setInVisible] = React.useState([]);
 
 
-    const [shift, setShift] = React.useState({
-        department_id: 1,
+    const [shift, setShift] = React.useState({ 
         id:2,
         name:"Development morning shift sales"
         
     });
 
-    const [creditOrDebit, setCreditOrDebit] = React.useState(
-        { id: 'earn', name: 'Point Earned' }
-    );
-
-    const [pointGainedAs, setPointGainedAs] = React.useState({
-        id: 'individual',
-        name: 'Individual'
-    });
-
-    const [selectedProject, setSelectedProject] = React.useState({
-        id: 'all',
-        name: 'All'
-    });
-
+    
     const [selectedEmployee, setSelectedEmployee] = React.useState(
         {
             "id": 208,
@@ -358,10 +342,7 @@ const IncentiveFilterBar = ({setData, setPointTableDataIsLoading, defaultSelecte
         }
     );
 
-    const [selectedDepartment, setSelectedDepartment] = React.useState({
-        id: 1,
-        name: 'Web Development'
-    });
+   
 
     // shifts
     const [
@@ -371,16 +352,7 @@ const IncentiveFilterBar = ({setData, setPointTableDataIsLoading, defaultSelecte
             isLoading: shiftDataIsLoading
         }
     ] = useGetShiftOptionsMutation();
-
-
-    // projects
-    const [
-        getProjectsOptions,
-        {
-            data: projectsFilterOptionsData,
-            isLoading: projectsDataIsLoading
-        }
-    ] = useGetProjectsOptionsMutation();
+ 
 
     // employee 
     const [
@@ -391,36 +363,46 @@ const IncentiveFilterBar = ({setData, setPointTableDataIsLoading, defaultSelecte
         }
     ] = useGetEmployeeOptionsMutation();
 
-     // department 
-     const [
-        getDepartmentOptions,
-        {
-            data: departmentData,
-            isLoading: departmentDataIsLoading 
-        }
-    ] = useGetDepartmentOptionsMutation();
-
+ 
+ 
 
     const [
-        pointTableData,
+        incentiveCurrentData,
         {
-            data: tableData,
-            isLoading: dataFetchingStateIsLoading
+            isLoading: dataFetchingStateIsLoading,
         }
-    ] = usePointTableDataMutation();
+    ] =  useIncentiveCurrentDataMutation();
 
-    const departmentDataMemo = React.useMemo(() => departmentData, [departmentData])
+
+    React.useEffect(() => {
+        setTableDataIsFetching(dataFetchingStateIsLoading); 
+    }, [dataFetchingStateIsLoading])
+
+
+    const getCurrentData = async (query) => {
+
+        try{
+            let res = await incentiveCurrentData({
+                ...query,
+                period: defaultSelectedDate
+            }).unwrap(); 
+            setData(res);
+        }catch(err){
+            console.log(err)
+        }finally{
+            setTableDataIsFetching(dataFetchingStateIsLoading)
+        }
+    }
+
+   
     const shiftsDataMemo = React.useMemo(() => shiftsData, [shiftsData])
-    const projectsFilterOptionsDataMemo = React.useMemo(() => projectsFilterOptionsData, [projectsFilterOptionsData])
     const employeeDataMemo = React.useMemo(() => employeeData, [employeeData])
 
 
     // fetch data
     React.useEffect(()=> {
-        getEmployeeOptions(`?department_id=${selectedDepartment.id}&shift_id=${shift.id}`);
-        getProjectsOptions('');
-        getDepartmentOptions(``);
-        getShiftOptions(`/${selectedDepartment.id}`);
+        getShiftOptions('/');
+        getEmployeeOptions(`?shift_id=${shift.id}`); 
     }, []);
 
     // initials state
@@ -429,19 +411,11 @@ const IncentiveFilterBar = ({setData, setPointTableDataIsLoading, defaultSelecte
             setEmployee([...employeeData])
         }
 
-        if(projectsFilterOptionsData){
-            setProjects([...projectsFilterOptionsData])
-        }
-
         if(shiftsData){
             setShifts([...shiftsData])
         }
 
-        if(departmentData){
-            setDepartments([...departmentData])
-        }
-
-    }, [employeeDataMemo, projectsFilterOptionsDataMemo, shiftsDataMemo, departmentDataMemo])
+    }, [employeeDataMemo, shiftsDataMemo ])
 
 
 
@@ -453,44 +427,43 @@ const IncentiveFilterBar = ({setData, setPointTableDataIsLoading, defaultSelecte
     //     })
     // }, [startDate, endDate])
 
+    const startDateMemo = React.useMemo(() => startDate, [startDate]) 
+    const endDateMemo = React.useMemo(() => endDate, [endDate]) 
 
 
     // 
     React.useEffect(()=> {
-        pointTableData({
-            department_id: selectedDepartment.id,
-            team_id: shift.id,
-            user_id: selectedEmployee.id,
-            start_date: startDate,
-            end_date: endDate
-        });
-    }, [])
+       if(startDate && endDate){
+            getCurrentData({ 
+                team_id: shift.id,
+                user_id: selectedEmployee.id,
+                start_date: startDate,
+                end_date: endDate,
+            });
+       } 
+    }, [startDateMemo,endDateMemo])
 
-     // 
-     React.useEffect(()=> {
-        pointTableData({
-            department_id: selectedDepartment.id !== 'all' ? selectedDepartment.id : '',
-            team_id: shift.id !== 'all' ? shift.id : '',
-            user_id: selectedEmployee.id !== 'all' ? selectedEmployee.id : '',
-            start_date: startDate,
-            end_date: endDate
-        });
-    }, [startDate, endDate])
+    //  // 
+    //  React.useEffect(()=> {
+    //     getCurrentData({ 
+    //         team_id: shift.id !== 'all' ? shift.id : '',
+    //         user_id: selectedEmployee.id !== 'all' ? selectedEmployee.id : '',
+    //         start_date: startDate,
+    //         end_date: endDate
+    //     });
+    // }, [startDate, endDate])
+    
 
 
-    React.useEffect(()=> {
+    // React.useEffect(()=> {
         
-        setPointTableDataIsLoading(dataFetchingStateIsLoading)
-        if(tableData!== undefined && tableData !== null){
-            setData([...tableData]);
-        }
-    },[tableData, dataFetchingStateIsLoading])
+    //     setTableDataIsFetching(dataFetchingStateIsLoading)
+    //     if(tableData!== undefined && tableData !== null){
+    //         setData(tableData);
+    //     }
+    // },[tableData, dataFetchingStateIsLoading])
 
 
-    // const {data: shifts, isLoading: shiftDataIsLoading} = useGetShiftOptionsQuery();
-    // const {data: projects, isLoading: projectDataIsLoading}  = useGetProjectsOptionsQuery();
-    // const {data: employee, isLoading: employeeDataIsLoading} = useGetEmployeeOptionsQuery();
-    // const {data: department, isLoading: departmentDataIsLoading} = useGetDepartmentOptionsQuery();
 
     // filter sidebar id
     const [isOpen, setIsOpen] = React.useState(false);
@@ -501,102 +474,47 @@ const IncentiveFilterBar = ({setData, setPointTableDataIsLoading, defaultSelecte
     const handleShiftFilter = (value) => {
         setShift(value);
         if(value.id !== 'all'){
-            if(selectedDepartment.id !== 'all'){
-                getEmployeeOptions(`?department_id=${selectedDepartment.id}&shift_id=${value.id}`);
-                pointTableData({
-                    department_id: selectedDepartment.id,
-                    team_id: value.id ,
-                    start_data: startDate,
-                    end_date: endDate
-                })
-            }else {
-                getEmployeeOptions(`?shift_id=${value.id}`);
-                pointTableData({ 
-                    team_id: value.id,
-                    start_data: startDate,
-                    end_date: endDate 
-                })
-            }
+             
+            getEmployeeOptions(`?shift_id=${value.id}`);
+            getCurrentData({ 
+                team_id: value.id,
+                start_data: startDate,
+                end_date: endDate 
+            })
+        
         }else{
-            if(selectedDepartment.id !== 'all'){
-                getEmployeeOptions(`?department_id=${selectedDepartment.id}`);
-                pointTableData({
-                    department_id: selectedDepartment.id,
-                    start_data: startDate,
-                    end_date: endDate
-                })
-            }else {
-                getEmployeeOptions(`/`);
-                pointTableData({ 
-                    // start_data: startDate,
-                    // end_date: endDate 
-                })
-            }
+            getEmployeeOptions(`/`);
+            getCurrentData({ 
+                start_data: startDate,
+                end_date: endDate 
+            })
         }
         
     }
-
-    // department select
-    const handleDepartmentFilter = (value) =>{
-        setSelectedDepartment(value);
-        if(value.id !== 'all'){
-            getShiftOptions(`/${value.id}`);
-            getEmployeeOptions(`?department_id${value.id}`);
-            pointTableData({
-                department_id: value.id,
-                // start_data: startDate,
-                // end_date: endDate
-            })
-        } else {
-            getShiftOptions(`/`);
-            getEmployeeOptions(`/`);
-            pointTableData({})
-        }
-    }
+ 
 
 
     // department select
     const handleEmployeeFilter = (value) =>{
         setSelectedEmployee(value);
         if(value.id !== 'all'){
-            if(
-                selectedDepartment.id !== 'all' && 
+             if(
                 shift.id !== 'all'
             ){
-                pointTableData({
-                    department_id: selectedDepartment.id ,
-                    team_id: shift.id,
-                    user_id: value.id,
-                    // start_data: startDate,
-                    // end_date: endDate
-                })
-            }else if(
-                shift.id !== 'all'
-            ){
-                pointTableData({
+                getCurrentData({
                     team_id: shift.id,
                     user_id: value.id,
                     start_data: startDate,
                     end_date: endDate
                 })
             }else {
-                pointTableData({ user_id: value.id})
+                getCurrentData({ user_id: value.id})
             }   
         }else{
-            if(
-                selectedDepartment.id !== 'all' && 
+             if(
                 shift.id !== 'all'
             ){
-                pointTableData({
-                    department_id: selectedDepartment.id ,
-                    team_id: shift.id,
-                    start_data: startDate,
-                    end_date: endDate
-                })
-            }else if(
-                shift.id !== 'all'
-            ){
-                pointTableData({
+                getCurrentData({
                     team_id: shift.id,
                     start_data: startDate,
                     end_date: endDate
