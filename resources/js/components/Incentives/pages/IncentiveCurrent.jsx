@@ -2,19 +2,23 @@ import * as React from 'react';
 import InnerNavbar from "../../Points/components/InnerNavbar";
 import IncentivesFilterBar from '../components/IncentiveFilterBar';
 import IncentiveNavbar from '../components/IncentiveNavbar';
+import { useParams } from 'react-router-dom';
 
 
 
 const IncentiveCurrent = () => {
     const [data, setData] = React.useState([]);
     const [pointTableDataIsLoading, setPointTableDataIsLoading] = React.useState(true);
+    const params = useParams(); 
 
+     
 
     return (
         <div className="">
             <IncentivesFilterBar
                 setData={setData}
                 setPointTableDataIsLoading={setPointTableDataIsLoading}
+                defaultSelectedDate={params.period || 'monthly'}
             />
             <div className='sp1_point_page_container'>
                 <IncentiveNavbar />

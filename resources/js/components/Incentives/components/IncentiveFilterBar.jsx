@@ -31,7 +31,7 @@ const FilterDropdownItem = ({
     items = [],
     isLoading,
     onClick,
-    avatar = false,
+    avatar = '',
     miniScreen='hide',
     className= "",
     id,
@@ -131,8 +131,9 @@ const FilterDropdownItem = ({
                                                     className={`sp1__pp_filter_dd_item ${selected?.id ===  item.id ? 'active': ""} ${className}`} 
                                                     onClick={(e) => handleClick(e, item)}
                                                 >
+                                                    
                                                     {avatar ? 
-                                                        item[avatar] ?(
+                                                         item[avatar] ?(
                                                         <img 
                                                             src={`/user-uploads/avatar/${item[avatar]}`}
                                                             alt={item.name}
@@ -145,7 +146,7 @@ const FilterDropdownItem = ({
                                                         />
 
                                                     ) : <img 
-                                                        src={`https://gravatar.com/avatar/${Math.random()}.png?s=200&d=mp`}
+                                                        src={`https://gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.png?s=200&d=mp`}
                                                         alt={item.name}
                                                         style={{
                                                             width: 26,
@@ -177,7 +178,7 @@ const SidebarFilterDropdownItem = ({
     items = [],
     isLoading,
     onClick,
-    avatar = false,
+    avatar = '',
     miniScreen='hide',
     className= "",
     id,
@@ -275,10 +276,11 @@ const SidebarFilterDropdownItem = ({
                                                     className={`sp1__pp_filter_dd_item ${selected?.id ===  item.id ? 'active': ""} ${className}`} 
                                                     onClick={(e) => handleClick(e, item)}
                                                 >
+                                                    
                                                     {avatar ? 
-                                                        item[avatar] ?(
+                                                        (item['image_url'] || item[avatar])  ?(
                                                         <img 
-                                                            src={`/user-uploads/avatar/${item[avatar]}`}
+                                                            src={`${item['image_url'] || '/user-uploads/avatar/${item[avatar]}' }`}
                                                             alt={item.name}
                                                             style={{
                                                                 width: 26,
@@ -314,7 +316,7 @@ const SidebarFilterDropdownItem = ({
 }
 
 
-const IncentiveFilterBar = ({setData, setPointTableDataIsLoading}) => {
+const IncentiveFilterBar = ({setData, setPointTableDataIsLoading, defaultSelectedDate="monthly"}) => {
     const [departments, setDepartments] = React.useState([]);
     const [shifts, setShifts] = React.useState([]);
     const [employee, setEmployee] = React.useState([]);
@@ -617,6 +619,7 @@ const IncentiveFilterBar = ({setData, setPointTableDataIsLoading}) => {
                     endDate={endDate}
                     setStartDate={setStartDate}
                     setEndDate={setEndDate} 
+                    defaultSelectedType={defaultSelectedDate}
                 /> 
             </IncentiveFilterBarItem>
 
@@ -671,17 +674,7 @@ const IncentiveFilterBar = ({setData, setPointTableDataIsLoading}) => {
                     </div>
 
                     <div className='sp1__pp_filter_sidebar_items'>
-                        <SidebarFilterDropdownItem
-                            title="Select Department" 
-                            miniScreen='visible'
-                            selected={selectedDepartment} 
-                            isLoading={departmentDataIsLoading}
-                            id="department"
-                            items={departments}
-                            inVisible={inVisible}
-                            setInVisible={setInVisible}
-                            onClick={handleDepartmentFilter}
-                        />
+                        
                         
 
                         {/* credit/debit */}
@@ -695,52 +688,6 @@ const IncentiveFilterBar = ({setData, setPointTableDataIsLoading}) => {
                             inVisible={inVisible}
                             setInVisible={setInVisible}
                             onClick={handleShiftFilter}
-                        />
-
-
-                        {/* credit/debit */}
-                        <SidebarFilterDropdownItem
-                            title="Select Credit/Debit" 
-                            miniScreen='visible'
-                            selected={creditOrDebit}
-                            items={[
-                                { id: 'earn', name: 'Point Earned' },
-                                // { id: 'lost', name: 'Point Lost' }
-                            ]}
-                            id="creditOrDebit"
-                            inVisible={inVisible}
-                            setInVisible={setInVisible}
-                            onClick={setCreditOrDebit}
-                        />
-
-
-                        {/* credit/debit */}
-                        <SidebarFilterDropdownItem
-                            title="Points gained as" 
-                            miniScreen='visible'
-                            selected={pointGainedAs}
-                            id="pointGainedAs"
-                            inVisible={inVisible}
-                            setInVisible={setInVisible}
-                            items={[
-                                { id: 'individual',
-                                name: 'Individual'}
-                            ]}
-                            onClick={setPointGainedAs}
-                        />
-
-
-                        {/* projects */}
-                        <SidebarFilterDropdownItem
-                            title="Select Project" 
-                            miniScreen='visible'
-                            id="project"
-                            selected={selectedProject}
-                            isLoading={projectsDataIsLoading}
-                            inVisible={inVisible}
-                            setInVisible={setInVisible}
-                            items={projects?.map(project => ({id: project.id, name: project.project_name}))}
-                            onClick={setSelectedProject}
                         />
 
 
