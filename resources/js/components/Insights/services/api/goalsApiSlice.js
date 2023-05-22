@@ -90,6 +90,7 @@ const goalApiSlice = apiSlice.injectEndpoints({
 
 export const { 
     useGetGoalsQuery, 
+    useLazyGetGoalsQuery,
     useEditGoalTitleMutation, 
     useGetGoalByIdQuery, 
     useUpdateGoalMutation,

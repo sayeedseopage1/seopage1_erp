@@ -318,7 +318,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     // Route::resource('points/', PointsController::class)->only
     
     Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
-    Route::post('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
+    Route::get('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
     Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
     Route::get('/points/{any?}', [PointsController::class,'index'])->where('any', '.*')->name('points.index');
     Route::post('/incentives-json/get', [IncentiveController::class, 'index_json'])->name('incentives.json');
