@@ -47,41 +47,46 @@ class GoalAchieveCheck extends Command
     }
     public function handle()
     {
-        $date = '2022-05-01';
-        $deal_projects=  Project::whereDate('start_date','>=',$date)->where('project_status','Accepted')->get();
-    //    /dd($deal_projects);
+        $currentMonth = Carbon::now()->startOfMonth();
+       
+        // /dd($currentMonth);
+        
+        $deal_projects = Project::where('start_date', '>=', $currentMonth)
+        ->where('project_status','=','Accepted')->get();
+        // $deal_projects=  Project::whereDate('start_date','>=',$date)->where('project_status','Accepted')->get();
+//dd($deal_projects);
         foreach ($deal_projects as $deal_project) {
-            $goals = GoalSetting::where([
-                'goal_status' =>  0, 
-            ])->get();
+           // dd($deal_project);
+            $goals = GoalSetting::all();
             //dd($goals);
-                $deal_id= Deal::where('id',$deal_project->deal_id)->first();
-            //   /  dd($deal_id);
+                $deal_id= Deal::where('id',$deal_project['deal_id'])->first();
+           // dd($deal_id);
+           
+           
+
+            
             foreach($goals as $goal) {
                 $start = Carbon::parse($goal->startDate);
                 $end = Carbon::parse($goal->endDate);
-                $dateToCheck = Carbon::parse($deal_project->created_at);
+                $dateToCheck = Carbon::parse($deal_id->created_at);
                 //dd($dateToCheck );
         
                 if ($dateToCheck->between($start, $end)) {
-                    if ($goal->entryType == 'Added') {
-                        $user_id[] = $goal->user_id;
-                    } elseif ($goal->entryType == 'Won') {
+                    if ($goal->entryType == 'Won') {
                         $team = Seopage1Team::find($goal->team_id);
                         $user_id = explode(',', rtrim($team->members, ','));
                     }
+                //    / dd($user_id);
         
                     $array = [];
                     if ($goal->dealType == 'All Clients' || $goal->dealType == 'Existing Client') {
                         $deals_data = Deal::select([
                             'deals.*',
-                            'pm.id as pm_id',
-                            'pm.name as pm_name',
-        
+                           
                             'leads.added_by as bidder',
                         ])
                         ->leftJoin('leads', 'leads.id', 'deals.lead_id')
-                        ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
+                       
                         ->whereDate('deals.created_at', '>=', $goal->startDate);
         
                         if (!is_null($goal->endDate)) {
@@ -143,7 +148,7 @@ class GoalAchieveCheck extends Command
         
                             $value->won_deal_amount = round((17 * $value->amount) / 100, 2);
                             $team_summation = DealStageChange::where('deal_id', $value->deal_id)->whereIn('updated_by', $user_id)->get();
-                          // dd($team_summation);
+                         //  dd($team_summation);
         
                             if (in_array($value->added_by, $user_id)) {
                             //$team_total_amount = $team_total_amount + $amount;
@@ -156,51 +161,53 @@ class GoalAchieveCheck extends Command
                             }
         
                             $array[] = $value;
-                            if ($team_total_amount >= (int) $goal->trackingValue) {
-                                // $goal_id= GoalSetting::find($goal->id);
-                                //dd($goal_id);
-                                $goal_id= GoalSetting::find($goal->id);
-                                $goal_id->goal_status = 1;
-                                $goal_id->save();
-                                if ($goal->achievablePoints > 0) {
-            
-                                    $distribute_amount = $goal->achievablePoints / count($user_id);
-                                    
-                                    foreach ($user_id as $value2) {
-            
-                                        $user_name = User::find($value2);
-                                        $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-            
-                                        $point= new CashPoint();
-                                        $point->user_id= $value2;
-                                        $point->project_id= $deal_project->id;
-                                        $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
-                                        $point->gained_as = "Individual";
-                                        $point->points= $distribute_amount;
-            
-                                        if ($user_last_point != null) {
-                                            $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
-                                        } else {
-                                            $point->total_points_earn=  $distribute_amount;
-                                        }
-            
-                                        $point->save();
+                         
+                          if ($team_total_amount >= (int) $goal->trackingValue) {
+                            // $goal_id= GoalSetting::find($goal->id);
+                            //dd($goal_id);
+                            $goal_id= GoalSetting::find($goal->id);
+                            $goal_id->goal_status = 1;
+                            $goal_id->save();
+                            if ($goal->achievablePoints > 0) {
+        
+                                $distribute_amount = $goal->achievablePoints / count($user_id);
+                                
+                                foreach ($user_id as $value2) {
+        
+                                    $user_name = User::find($value2);
+                                    $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+        
+                                    $point= new CashPoint();
+                                    $point->user_id= $value2;
+                                    $point->project_id= $deal_project->id;
+                                    $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                                    $point->gained_as = "Individual";
+                                    $point->points= $distribute_amount;
+        
+                                    if ($user_last_point != null) {
+                                        $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                                    } else {
+                                        $point->total_points_earn=  $distribute_amount;
                                     }
+        
+                                    $point->save();
                                 }
                             }
                         }
+                           
+                        }
                       // dd($array);
+                      //var_dump(($team_total_amount >= (int) $goal->trackingValue));
+                     
                        
                     } elseif ($goal->dealType == 'New Client') {
                         $deals_data = Deal::select([
                             'deals.*',
-                            'pm.id as pm_id',
-                            'pm.name as pm_name',
-        
+                           
                             'leads.added_by as bidder',
                         ])
                         ->leftjoin('leads', 'leads.id', 'deals.lead_id')
-                        ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
+                       
                         ->whereDate('deals.created_at', '>=', $goal->startDate);
         
                         if (!is_null($goal->endDate)) {
@@ -265,45 +272,48 @@ class GoalAchieveCheck extends Command
                             }
         
                             $array[] = $value;
-                            
-        
                             if ($team_total_amount >= (int) $goal->trackingValue) {
-                            $goal_id= GoalSetting::find($goal->id);
-                            $goal_id->goal_status = 1;
-                            $goal_id->save();
-        
-                                if ($goal->achievablePoints > 0) {
-        
-                                    $distribute_amount = $goal->achievablePoints / count($user_id);
-                                    
-                                    foreach ($user_id as $value2) {
-        
-                                        $user_name = User::find($value2);
-                                        $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-        
-                                        $point= new CashPoint();
-                                        $point->user_id= $value2;
-                                        $point->project_id= $deal_project->id;
-                                        $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
-                                        $point->gained_as = "Individual";
-                                        $point->points= $distribute_amount;
-        
-                                        if ($user_last_point != null) {
-                                            $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
-                                        } else {
-                                            $point->total_points_earn=  $distribute_amount;
+                                $goal_id= GoalSetting::find($goal->id);
+                                $goal_id->goal_status = 1;
+                                $goal_id->save();
+            
+                                    if ($goal->achievablePoints > 0) {
+            
+                                        $distribute_amount = $goal->achievablePoints / count($user_id);
+                                        
+                                        foreach ($user_id as $value2) {
+            
+                                            $user_name = User::find($value2);
+                                            $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+            
+                                            $point= new CashPoint();
+                                            $point->user_id= $value2;
+                                            $point->project_id= $deal_project->id;
+                                            $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                                            $point->gained_as = "Individual";
+                                            $point->points= $distribute_amount;
+            
+                                            if ($user_last_point != null) {
+                                                $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                                            } else {
+                                                $point->total_points_earn=  $distribute_amount;
+                                            }
+            
+                                            $point->save();
                                         }
-        
-                                        $point->save();
                                     }
                                 }
-                            }
+                            
+        
+                           
                         }
+                        
                     }
                 }
             }
+        
         }
-        $this->info('Points distributed successfully.');
+      
     }
 
 }
