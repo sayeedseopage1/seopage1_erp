@@ -47,18 +47,15 @@ class HourlyKpiDistribution extends Command
     }
     public function handle()
     {
-        $date = '2023-05-01';
+        $date= '2022-04-30';
         $completed_projects = Project::whereDate('start_date','>=',$date)->where('project_status','Accepted')->where('status','finished')->get();
-        $kpi= kpiSetting::first();
-        $kpi_settings = kpiSettingLoggedHour::all();
-    //    / dd($completed_projects);
     foreach ($completed_projects as $project) {
-
-        $project_timelogs= ProjectTimeLog::where('project_id',$project->id)->count();
-        if($project_timelogs > 0)
-        
+        $kpi_settings = kpiSettingLoggedHour::all();
         $total_minutes = ProjectTimeLog::where('project_id', $project->id)->sum('total_minutes');
-       
+        $kpi= kpiSetting::first();
+        
+        //$total_minutes = 1500;
+        //$project->project_budget = 4000;
 
         if ($total_minutes > 0 && $project->project_budget >= $kpi->achieve_less_than ) {
             $total_hours = $total_minutes / 60;
@@ -69,7 +66,6 @@ class HourlyKpiDistribution extends Command
                 //$value->logged_hours_between_to = 200;
                 if ($value->logged_hours_between <= $project_hourly_rate && $value->logged_hours_between_to >= $project_hourly_rate) {
                     $deal = Deal::find($project->deal_id);
-                    //dd($deal);
                     $project_budget= ($deal->amount * ($value->logged_hours_sales_amount) - $kpi->accepted_by_pm) / 100;
 
                     if($deal->lead_id != null) {
@@ -250,7 +246,7 @@ class HourlyKpiDistribution extends Command
             }
 
             //$project_hourly_rate = 35;
-            $project_hourly_rate = $project->project_budget / $total_hours;
+
             if ($kpi->logged_hours_above >= $project_hourly_rate) {
                 $deal = Deal::find($project->deal_id);
                 $project_budget= ($deal->amount * ($kpi->logged_hours_above_sales_amount) - $kpi->accepted_by_pm) / 100;
@@ -407,7 +403,6 @@ class HourlyKpiDistribution extends Command
 
                 }
                 $point->save();
-                // /dd($point);
 
                 if ($deal->authorization_status == 1) {
                     $team_lead = User::where('role_id', 8)->first();
@@ -432,12 +427,7 @@ class HourlyKpiDistribution extends Command
                 }
             }
         }
-       
 
     }
-  
-
-
-    
     }
 }

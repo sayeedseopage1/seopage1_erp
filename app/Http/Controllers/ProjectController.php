@@ -1629,7 +1629,7 @@ class ProjectController extends AccountBaseController
 
                             'leads.added_by as bidder',
                         ])
-                        ->join('leads', 'leads.id', 'deals.lead_id')
+                        ->leftjoin('leads', 'leads.id', 'deals.lead_id')
                         ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
                         ->whereDate('deals.created_at', '>=', $goal->startDate);
 
