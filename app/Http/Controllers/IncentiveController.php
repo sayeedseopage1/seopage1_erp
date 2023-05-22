@@ -33,7 +33,14 @@ class IncentiveController extends AccountBaseController
 
     public function index_json(Request $request)
     {
-        $userID = $this->user->id;
+        //dd($request);
+        if (isset($request->start_date)) {
+            $start_date = Carbon::parse($request->start_date)->format('Y-m-d');
+        }
+        if (isset($request->end->date)) {
+            $end_date = Carbon::parse($request->end_date)->format('Y-m-d');
+        }
+        $userID = $request->user_id;
 
         $user_goals = GoalSetting::where([
             'assigneeType' => 'User',
@@ -57,8 +64,6 @@ class IncentiveController extends AccountBaseController
         }
 
         $data['minimum_user_goals_shift'] = $user_goals;
-
-
 
         $user_achieve_goals = GoalSetting::where([
             'assigneeType' => 'User',
@@ -111,38 +116,74 @@ class IncentiveController extends AccountBaseController
 
         $incentive_setting = IncentiveSetting::first();
         $data['non_incentive_point_above'] = $incentive_setting->every_shift_every_point_above;
+       // dd($data['non_incentive_point_above']);
 
         $user_list_for_point_achieve = Seopage1Team::where('id', '!=', 1)->get();
+        //dd($user_list_for_point_achieve);
 
         $user_array = [];
         foreach ($user_list_for_point_achieve as $value) {
             $user_lists = explode(',', rtrim($value->members, ','));
-            if (in_array($this->user->id, $user_lists)) {
+            if (in_array($request->user_id, $user_lists)) {
                 foreach ($user_lists as $user_id) {
                     array_push($user_array, $user_id);
                 }
             }  
         }
 
+        
+
         $user_array = array_unique($user_array);
+    //    / dd($user_array);
 
         $cash_point = CashPoint::whereIn('user_id', $user_array)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->sum('points');
+    //    / dd($cash_point);
+
+        //if user can't complete 10 days goal
+        $ten_days_incomplete_goal = GoalSetting::where([
+            'assigneeType' => 'User',
+            'goalType' => 'minimum',
+            'frequency' => '10 Days',
+            'goal_status' => 0
+        ])
+        ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+        ->get();
+
+        // $data['deduct_point_for_incomplete_goal'] = 0;
+        // foreach ($ten_days_incomplete_goal as $value) {
+        //     if(Carbon::today()->get(Carbon::parse($value->startDate)->addDays(10))) {
+        //         $deduct_point = ($incentive_setting->incentive_deduction * $cash_point) / 100;
+        //         $data['deduct_point_for_incomplete_goal'] = $data['deduct_point_for_incomplete_goal'] + $deduct_point;
+        //         $cash_point = $cash_point - $deduct_point;
+        //     }
+        // }
+        //if user can't complete 10 days goal end 
 
         $data['every_shift_team_total_acheive'] = $cash_point;
+   // dd($data['every_shift_team_total_acheive']);
 
         $cash_point_total = CashPoint::whereIn('user_id', $user_array)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
-        $cash_point_total_of_this_user = CashPoint::where('user_id', $this->user->id)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
-        $data['point_achieve_by_your_shift'] = $cash_point_total;
+        // $cash_point_total_of_this_user = CashPoint::where('user_id', $request->user_id)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
+        $cash_point_total_of_this_user = CashPoint::where('user_id', $request->user_id)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->sum('points');
+        // /$data['point_achieve_by_your_shift'] = $cash_point_total;
+        $data['point_achieve_by_your_shift'] = round($cash_point,2);
+    // dd($data['point_achieve_by_your_shift'], $cash_point_total_of_this_user);
         if ($cash_point > 0) {
-            $total_percentage_share_incentive = (100 * ($cash_point_total - $cash_point_total_of_this_user)) / $cash_point_total ;
+            // $total_percentage_share_incentive = (100 * ($cash_point_total - $cash_point_total_of_this_user)) / $cash_point_total ;
+            $total_percentage_share_incentive = (100 * ($cash_point - $cash_point_total_of_this_user)) / $cash_point ;
+           
             $total_percentage_share_incentive_of_this_user = 100 - $total_percentage_share_incentive;
+           // dd($total_percentage_share_incentive,$total_percentage_share_incentive_of_this_user);
 
             $data['toal_share_incentive'] = ($data['every_shift_team_total_acheive'] / 100) * $total_percentage_share_incentive;
         } else {
             $data['toal_share_incentive'] = 0;
         }
+       // dd($data['toal_share_incentive']);
+       $data['point_value']= $incentive_setting->point_of_value;
+       $data['percentage_of_share']= $total_percentage_share_incentive_of_this_user;
         
-
+        dd($data);
         
         return response()->json($data);
     }
