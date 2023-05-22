@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Auth;
 use Illuminate\Http\Request;
 use App\Models\GoalSetting;
 use App\Models\IncentiveSetting;
@@ -40,7 +41,13 @@ class IncentiveController extends AccountBaseController
         if (isset($request->end->date)) {
             $end_date = Carbon::parse($request->end_date)->format('Y-m-d');
         }
-        $userID = $request->user_id;
+        if (Auth::user()->role_id == 8 || Auth::user()->role_id == 7 ) {
+            $userID = Auth::id();
+        }else 
+        {
+            $userID = $request->user_id;
+        }
+      
 
         $user_goals = GoalSetting::where([
             'assigneeType' => 'User',
