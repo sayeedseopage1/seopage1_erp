@@ -23,8 +23,7 @@ const IncentiveCurrent = () => {
     }, [])
 
 
-    let isLoading = firstLoading || tableDataIsFetching;
-    console.log(data)
+    let isLoading = firstLoading || tableDataIsFetching; 
 
     let diff = Number(data?.point_achieve_by_your_shift - data?.non_incentive_point_above);
     let approximateIncentive = diff > 0 ? diff * Number(data?.point_value) : 0;
@@ -110,7 +109,7 @@ const IncentiveCurrent = () => {
                                 <div className='sp1__incentive_item'>
                                     {!isLoading && (
                                         <span>
-                                            *Approximate incentive amount for your shift (Provided all your shift and team minimum goals are met):({diff > 0 ? diff : 0})*${point_value} =  $ {approximateIncentive}
+                                            *Approximate incentive amount for your shift (Provided all your shift and team minimum goals are met):({diff > 0 ? diff.toFixed(2) : 0}) * {data?.point_value} =  $ {approximateIncentive.toFixed(2)}
                                         </span>
                                     )}    
                                 </div> 
@@ -119,7 +118,7 @@ const IncentiveCurrent = () => {
                                 <div className="sp1__incentive_item">
                                     {!isLoading && (
                                         <span>
-                                            *Your share of approximate incentive: {data?.percentage_of_share}% of $ {approximateIncentive} = $ { (approximateIncentive * Number(data?.percentage_of_share)/100).toFixed(2)} 
+                                            *Your share of approximate incentive: {Number(data?.percentage_of_share).toFixed(2)}% of $ {approximateIncentive.toFixed(2)} = $ { (approximateIncentive * Number(data?.percentage_of_share)/100).toFixed(2)} 
                                         </span>
                                     )} 
                                     
