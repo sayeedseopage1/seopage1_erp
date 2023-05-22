@@ -1214,7 +1214,7 @@ Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCate
 //add project niche
 Route:: get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
 Route::get('/projects/get-sub-category/{id}',[ProjectController::class,'parentCategoryId']);
-Route::put('/projects/update-niche-category/{id}', [ProjectController::class, 'updateCategory']);
+Route::put('/projects/update-niche-category/{id}', [ProjectController::class, 'updateCategory']); 
 
 //add project cms
 Route:: get('/projects/view-cms', [ProjectController::class, 'viewCms'])->name('project-view-cms');
