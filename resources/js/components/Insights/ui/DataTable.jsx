@@ -31,14 +31,20 @@ const useTableState = () => {
 
 
 // data table 
-const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleColumns}, ref) => {
+const DataTable = React.forwardRef(({
+    data, 
+    isLoading, 
+    defaultColumns, 
+    visibleColumns
+}, ref) => {
     const [currentPageData, setCurrentPageData] = React.useState([...data]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
     const { activeColumns, setActiveColumns, sortConfig, setSortConfig } = useTableState();
     const [totalPage, setTotalPage] = React.useState(1);
     const [selectionStart, setSelectionStart] = React.useState(false);
     const [startRowId, setStartRowId] = React.useState();
-
+    const [actualAmount, setActualAmount] = React.useState(0);
+    const [contributedAmount, setContributedAmount] = React.useState(0);
 
 
     // columns
@@ -115,7 +121,25 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
     const handleMouseUp = (e) => {
         e.preventDefault();
         setSelectionStart(false);
-        console.log(e.target.parentNode)
+        let parent = e.target.parentNode;
+        let {rowId} = parent.dataset;
+
+        let _filterData = data.filter(d => d.id >= startRowId && d.id <= rowId);
+
+
+        _filterData.map(d => {
+                let amount = d['amount'] || d['deal_amount'];
+                if(amount){
+                    setActualAmount(p => p + Number(amount));
+                }
+        }); 
+
+        _filterData.map(d => {
+                let amount = d['team_total_amount'];
+                if(amount){
+                    setContributedAmount(p => p + Number(amount));
+                }
+        });   
     }
 
     // mouse move in row
@@ -139,17 +163,23 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
                 row.classList.add('__selected'); 
             }else{
                 row.classList.remove('__selected'); 
-            }
-             
+            } 
 
         }
 
     }
 
+  
 
     const columns = defaultColumns.filter(d => activeColumns.includes(d.id))
                     .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
-                                
+             
+                    
+
+    console.log({
+        actualAmount,
+        contributedAmount
+    })
 
     return (
         <div style={{maxWidth: '100%'}}>
@@ -220,9 +250,9 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
                                             key={data.id} 
                                             className="cnx__table_tr"
                                             data-row-id = {data.id}
-                                            // onMouseDown={handleMouseDown}
-                                            // onMouseUp={handleMouseUp}
-                                            // onMouseMove={handleMouseMove}
+                                            onMouseDown={handleMouseDown}
+                                            onMouseUp={handleMouseUp}
+                                            onMouseMove={handleMouseMove}
                                         >
                                             {columns.map(d => (
                                                 <div key={d.id} className="cnx__table_td">
