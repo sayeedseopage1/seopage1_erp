@@ -3,7 +3,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Pagination from './Pagination';
 // import TableFilterButton from './TableFilterButton';
-import { useDrag, useDrop} from 'react-dnd';
+import { useDrag, useDragLayer, useDrop} from 'react-dnd';
 import { Icon } from '../../Insights/utils/Icon';
 
 
@@ -44,7 +44,13 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
 
     React.useEffect(() => {
         let columns = defaultColumns.map(d => d.id);
-        setActiveColumns([...columns]);
+        let lsColumn = localStorage.getItem(`pointTableColumn_${window?.Laravel?.user?.id}`);
+        if(lsColumn){
+            // order by lsColumn
+            setActiveColumns([...JSON.parse(lsColumn)])
+        }else{
+            setActiveColumns([...columns]);
+        }
     }, [])
 
 
@@ -130,7 +136,6 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
                         ))
                     )}
 
-                    
                     {!isLoading && 
                         <React.Fragment>
                             {
@@ -260,6 +265,7 @@ const DraggableColumn = ({
             if(item.column !== column) {
                 const reOrderColumn = reOrder(item.column, column);
                 setActiveColumns(reOrderColumn);
+                localStorage.setItem(`pointTableColumn_${window?.Laravel?.user?.id}`, JSON.stringify(reOrderColumn));
             }
         },
         collect: (monitor) => ({
@@ -271,19 +277,21 @@ const DraggableColumn = ({
 
 
     return(
-        <div 
+        <>
+            <div 
             id={`cnx__table_th_${column.id}`}
             className={`cnx__table_th sp1__pp_table_td`}
         
         >
             <div ref={ref}
                 // onClick = {(() => requestSort(column.accessor))}
-                className={`cnx__table_th_toggle  ${isDragging ? '__dragging': ''} ${isOver ? '__dragging_over': ''}}`}
+                className={`cnx__table_th_toggle  ${isDragging ? '__dragging': ''} ${isOver ? '__dragging_over': ''}`}
                 style={{
-                    opacity: isDragging ? 0.5 : 1,
-                    backgroundColor: isOver ? '#f3f3f3' : 'transparent',
+                    opacity: isDragging? 0.5 : 1,
+                    backgroundColor: isDragging? '#f8f8f8' :isOver ? '#f3f3f3' : '#fff',
                     justifyContent: 'flex-start',
                     gap: '6px',
+                    borderInline: isOver? '1px solid #ccc' : 'none'
                 }}
             >
                 
@@ -295,10 +303,61 @@ const DraggableColumn = ({
                             <span className="table_asc_dec dec"></span>
                     ) : <span className="table_asc_dec"></span>
                 } */}
-                {column.header}
+                {column.header}             
             </div>
-        </div>
+
+            
+            </div>
+                {/* drag item */}
+                <CustomDragLayer 
+                width={ref?.current?.offsetWidth}
+                height={ref?.current?.offsetHeight}
+            />
+        
+        </>
     )
 
 }
 
+
+
+const CustomDragLayer = ({width,height}) => {
+    const {
+        item,
+        itemType,
+        currentOffset,
+    } = useDragLayer((monitor) =>({
+        item: monitor.getItem(),
+        itemType: monitor.getItemType(),
+        currentOffset: monitor.getSourceClientOffset()
+    }))
+ 
+    if(!item){
+        return null;
+    }
+   return(
+        <div style={{
+            position: 'fixed',
+            pointerEvents: 'none',
+            zIndex: 100,
+            left: 0,
+            top: 0,
+            width: '100%',
+            height: '100%',
+        }}>
+             <div style={{
+                position: 'absolute',
+                top: currentOffset?.y,
+                left: currentOffset?.x,
+                backgroundColor: '#ddd',
+                color: '#000',
+                padding: '4px',
+                width: `${width}px`,
+                height: `${height}px`
+                
+            }}>
+                {item?.column?.header}
+          </div>
+        </div>
+   )
+}
