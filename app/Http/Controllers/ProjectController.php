@@ -1539,7 +1539,7 @@ class ProjectController extends AccountBaseController
                     }
 
                     $array = [];
-                    if ($goal->dealType == 'All Clients') {
+                    if ($goal->dealType == 'All Clients' || $goal->dealType == 'Existing Client') {
                         $deals_data = Deal::select([
                             'deals.*',
                             'pm.id as pm_id',

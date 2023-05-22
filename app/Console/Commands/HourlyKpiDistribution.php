@@ -47,17 +47,22 @@ class HourlyKpiDistribution extends Command
     }
     public function handle()
     {
-        $date= '2022-04-30';
-        $completed_projects = Project::whereDate('start_date','>=',$date)->where('project_status','Accepted')->where('status','finished')->get();
+       // $date= '2022-04-30';
+        $currentMonth = Carbon::now()->startOfMonth();
+        // /dd($currentMonth);
+        
+        $completed_projects = Project::where('start_date', '>=', $currentMonth)
+        ->where('project_status','Accepted')->where('status','finished')->get();
+       // dd($completed_projects);
     foreach ($completed_projects as $project) {
+    //    / dd($project);
         $kpi_settings = kpiSettingLoggedHour::all();
         $total_minutes = ProjectTimeLog::where('project_id', $project->id)->sum('total_minutes');
+ 
         $kpi= kpiSetting::first();
-        
-        //$total_minutes = 1500;
-        //$project->project_budget = 4000;
+    
 
-        if ($total_minutes > 0 && $project->project_budget >= $kpi->achieve_less_than ) {
+        if ($total_minutes > 0 && $project->project_budget >= $kpi->achieve_less_than) {
             $total_hours = $total_minutes / 60;
             //un-comment this when finished
             $project_hourly_rate = $project->project_budget / $total_hours;
