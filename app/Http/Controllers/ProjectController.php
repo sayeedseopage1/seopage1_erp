@@ -803,7 +803,7 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-        \DB::beginTransaction();
+        
         //kpi distribution start from here 
         $find_project_id= Project::where('id',$id)->first();
         $find_deal_id= Deal::where('id',$find_project_id->deal_id)->first();
@@ -1513,26 +1513,7 @@ class ProjectController extends AccountBaseController
                     }
                     $point->save();
 
-                    $earned_point = ($kpi->authorized_by_leader * $project_budget_additional) / 100;
-
-                    $user_name= User::where('role_id',8)->first(); 
-                    $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                    //kpi point
-                    $point= new CashPoint();
-                    $point->user_id= $user_name->id;
-                    $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' for authorizing deal';
-                    $point->gained_as = "Individual";
-                    $point->points= $earned_point;
-            
-                    if ($cash_points_team_lead != null) {            
-                        $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point;
-                    } else {
-                        $point->total_points_earn= $earned_point;
-                    }
-            
-                    $point->save();
-
+                       
 
                      }
 
@@ -2084,7 +2065,7 @@ class ProjectController extends AccountBaseController
         if ($redirectUrl == '') {
             $redirectUrl = route('projects.index');
         }
-        \DB::commit();
+        
         return Reply::successWithData(__('messages.projectUpdated'), ['projectID' => $project->id, 'redirectUrl' => $redirectUrl]);
     }
 
