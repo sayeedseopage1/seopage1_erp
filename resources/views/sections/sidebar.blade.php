@@ -312,6 +312,7 @@
                         </div>
                     </x-menu-item>
 
+
                      <x-menu-item icon="briefcase" :text="'Resource'">
 
                         <x-slot name="iconPath">
@@ -321,11 +322,20 @@
                         <div class="accordionItemContent pb-2">
                             <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
 
+
+
 {{--                            <x-sub-menu-item link="" :text="'Resource'" />--}}
+                            {{-- <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" /> --}}
+
+                            {{-- <x-sub-menu-item link="" :text="'Resource'" /> --}}
                             <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" />
+
                         </div>
 
                     </x-menu-item>
+
+
+                            {{-- <x-sub-menu-item link="" :text="'Resource'" /> --}}
 
                 @endif
 
