@@ -116,6 +116,11 @@
                         <div class="point__col"> <input type="number" class="point__input" name="point_of_contribute" id="point_of_contribute" value="{{$incentive_setting->point_of_contribute}}"> </div>
                         <div class="point__col">  points that contribute to the incentive, those points will be distributed proportionally among the shift members.</div>
                     </div>
+                    <div class="point__row">
+                        <div class="point__col">2. For missing any 10 days goals, the sales shift will get</div>
+                        <div class="point__col"> <input type="number" class="point__input" name="incentive_deduction" id="incentive_deduction" value="{{$incentive_setting->incentive_deduction}}"> </div>
+                        <div class="point__col">% less from the total incentive amount.</div>
+                    </div>
                 </section>
                 <x-slot name="action">
                     <!-- Buttons Start -->
@@ -150,7 +155,9 @@
                 'individual_goal_percentage': document.getElementById("individual_goal_percentage").value,
                 'point_of_value': document.getElementById("point_of_value").value,
                 'point_of_contribute': document.getElementById("point_of_contribute").value,
+                'incentive_deduction': document.getElementById("incentive_deduction").value,
                 'id':{{$incentive_setting->id}},
+                
             }
             // console.log(data);
             $.ajaxSetup({
