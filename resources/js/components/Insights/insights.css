@@ -1479,7 +1479,10 @@ opacity: 1;
     width: 100%;
     display: flex ;
     align-items: stretch;
-  }
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
 
 .cnx__table_head {
     width: -moz-fit-content;
