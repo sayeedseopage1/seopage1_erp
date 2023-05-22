@@ -322,6 +322,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
     Route::get('/points/{any?}', [PointsController::class,'index'])->where('any', '.*')->name('points.index');
     Route::get('/incentives/{any?}', [IncentiveController::class, 'index'])->where('any', '.*')->name('incentives.index');
+    Route::get('/incentives/json/{any?}', [IncentiveController::class, 'index_json'])->where('any', '.*')->name('incentives.json');
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     /* Setting menu routes starts from here */
