@@ -8,6 +8,7 @@ use App\Models\GoalSetting;
 use App\Models\IncentiveSetting;
 use App\Models\Seopage1Team;
 use App\Models\CashPoint;
+use Carbon\Carbon;
 
 class IncentiveController extends AccountBaseController
 {
@@ -27,12 +28,18 @@ class IncentiveController extends AccountBaseController
      */
     public function index($take_json = null)
     {
+        return view('incentives.index', $this->data);
+    }
+
+    public function index_json()
+    {
         $userID = $this->user->id;
 
         $user_goals = GoalSetting::where([
             'assigneeType' => 'User',
             'goalType' => 'minimum',
-            'user_id' => $userID
+            'user_id' => $userID,
+            ['created_at', '>=', Carbon::now()->startOfMonth()]
         ])->count();
 
         $team_goal = GoalSetting::where([
@@ -103,40 +110,36 @@ class IncentiveController extends AccountBaseController
 
 
         $incentive_setting = IncentiveSetting::first();
-        $data['every_shift_every_point_above'] = $incentive_setting->every_shift_every_point_above;
+        $data['non_incentive_point_above'] = $incentive_setting->every_shift_every_point_above;
 
         $user_list_for_point_achieve = Seopage1Team::where('id', '!=', 1)->get();
 
         $user_array = [];
         foreach ($user_list_for_point_achieve as $value) {
             $user_lists = explode(',', rtrim($value->members, ','));
-
-            foreach ($user_lists as $user_id) {
-                array_push($user_array, $user_id);
-            }
+            if (in_array($this->user->id, $user_lists)) {
+                foreach ($user_lists as $user_id) {
+                    array_push($user_array, $user_id);
+                }
+            }  
         }
+
         $user_array = array_unique($user_array);
 
-        $cash_point = CashPoint::whereIn('user_id', $user_array)->sum('points');
-        $cash_point_total = CashPoint::whereIn('user_id', $user_array)->count();
-        $total_contributor = 0;
+        $cash_point = CashPoint::whereIn('user_id', $user_array)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->sum('points');
 
-        foreach ($user_array as $key => $value) {
-            $total_data = CashPoint::where('user_id', $value)->count();
-            $total_contributor = $total_contributor + $total_data;
-        }
-        
-        //$user_get = 
         $data['every_shift_team_total_acheive'] = $cash_point;
-        $data['total_contributor'] = $total_contributor;
 
-        //$data['incentive_amount_for_shift'] = ($data['every_shift_team_total_acheive'] - $data['every_shift_every_point_above']) * $incentive_setting->point_of_value;
+        $cash_point_total = CashPoint::whereIn('user_id', $user_array)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
+        $cash_point_total_of_this_user = CashPoint::where('user_id', $this->user->id)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
 
-        if (is_null($take_json)) {
-            return view('incentives.index', $this->data);
-        } else {
-            return response()->json($data);
-        }
+        $total_percentage_share_incentive = (100 * ($cash_point_total - $cash_point_total_of_this_user)) / $cash_point_total ;
+        $total_percentage_share_incentive_of_this_user = 100 - $total_percentage_share_incentive;
+
+        $data['toal_share_incentive'] = ($data['every_shift_team_total_acheive'] / 100) * $total_percentage_share_incentive;
+
+        
+        return response()->json($data);
     }
 
     /**
