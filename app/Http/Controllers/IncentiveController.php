@@ -33,6 +33,12 @@ class IncentiveController extends AccountBaseController
 
     public function index_json(Request $request)
     {
+        if (isset($request->start_date)) {
+            $start_date = Carbon::parse($request->start_date)->format('Y-m-d');
+        }
+        if (isset($request->end->date)) {
+            $end_date = Carbon::parse($request->end_date)->format('Y-m-d');
+        }
         $userID = $this->user->id;
 
         $user_goals = GoalSetting::where([
@@ -57,8 +63,6 @@ class IncentiveController extends AccountBaseController
         }
 
         $data['minimum_user_goals_shift'] = $user_goals;
-
-
 
         $user_achieve_goals = GoalSetting::where([
             'assigneeType' => 'User',
@@ -124,9 +128,31 @@ class IncentiveController extends AccountBaseController
             }  
         }
 
+        
+
         $user_array = array_unique($user_array);
 
         $cash_point = CashPoint::whereIn('user_id', $user_array)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->sum('points');
+
+        //if user can't complete 10 days goal
+        $ten_days_incomplete_goal = GoalSetting::where([
+            'assigneeType' => 'User',
+            'goalType' => 'minimum',
+            'frequency' => '10 Days',
+            'goal_status' => 0
+        ])
+        ->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+        ->get();
+
+        $data['deduct_point_for_incomplete_goal'] = 0;
+        foreach ($ten_days_incomplete_goal as $value) {
+            if(Carbon::today()->gte(Carbon::parse($value->startDate)->addDays(10))) {
+                $deduct_point = ($incentive_setting->incentive_deduction * $cash_point) / 100;
+                $data['deduct_point_for_incomplete_goal'] = $data['deduct_point_for_incomplete_goal'] + $deduct_point;
+                $cash_point = $cash_point - $deduct_point;
+            }
+        }
+        //if user can't complete 10 days goal end 
 
         $data['every_shift_team_total_acheive'] = $cash_point;
 
