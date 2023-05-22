@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\DealStageChange;
 use App\Models\kpiSettingGenerateSale;
+use App\Models\ProjectCms;
+use App\Models\ProjectWebsiteType;
 use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Team;
@@ -803,7 +805,7 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-        \DB::beginTransaction();
+        
         //kpi distribution start from here 
         $find_project_id= Project::where('id',$id)->first();
         $find_deal_id= Deal::where('id',$find_project_id->deal_id)->first();
@@ -1513,26 +1515,7 @@ class ProjectController extends AccountBaseController
                     }
                     $point->save();
 
-                    $earned_point = ($kpi->authorized_by_leader * $project_budget_additional) / 100;
-
-                    $user_name= User::where('role_id',8)->first(); 
-                    $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                    //kpi point
-                    $point= new CashPoint();
-                    $point->user_id= $user_name->id;
-                    $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' for authorizing deal';
-                    $point->gained_as = "Individual";
-                    $point->points= $earned_point;
-            
-                    if ($cash_points_team_lead != null) {            
-                        $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point;
-                    } else {
-                        $point->total_points_earn= $earned_point;
-                    }
-            
-                    $point->save();
-
+                       
 
                      }
 
@@ -2084,7 +2067,7 @@ class ProjectController extends AccountBaseController
         if ($redirectUrl == '') {
             $redirectUrl = route('projects.index');
         }
-        \DB::commit();
+        
         return Reply::successWithData(__('messages.projectUpdated'), ['projectID' => $project->id, 'redirectUrl' => $redirectUrl]);
     }
 
@@ -3408,6 +3391,54 @@ class ProjectController extends AccountBaseController
 
 
     }
+    public function viewCms(){
+        $this->pageTitle = 'CMS';
+        return view('projects.cms.index',$this->data);
+    }
+    public function storeCms(Request $request){
+        $validated = $request->validate([
+            'cms_name' => 'required',
+        ], [
+            'cms_name.required' => 'This field is required!!',
+        ]);
+        $cms = new ProjectCms();
+        $cms->cms_name = $request->cms_name;
+        $cms->save();
+        return response()->json(['status'=>200]);
+    }
+    public function updateCms(Request $request,$id)
+    {
+        $cms = ProjectCms::find($id);
+        $cms->cms_name = $request->cms_name;
+        $cms->save();
+
+        return response()->json(['status'=>200]);
+    }
+    // VIEW PROJECT WEBSITE SECTION
+    public function viewWebsiteType(){
+        $this->pageTitle = 'Website Type';
+        return view('projects.website-type.index',$this->data);
+    }
+    public function storeWebsiteType(Request $request){
+        $validated = $request->validate([
+            'website_type' => 'required',
+        ], [
+            'website_type.required' => 'This field is required!!',
+        ]);
+        $project_website_type = new ProjectWebsiteType();
+        $project_website_type->website_type = $request->website_type;
+        $project_website_type->save();
+        return response()->json(['status'=>200]);
+    }
+    public function updateWebsiteType(Request $request,$id)
+    {
+        $project_website_type = ProjectWebsiteType::find($id);
+        $project_website_type->website_type = $request->website_type;
+        $project_website_type->save();
+
+        return response()->json(['status'=>200]);
+    }
+
     // VIEW PROJECT CATEGORY SECTION
     public function viewCategory(){
         $this->pageTitle = 'Categories';
@@ -3415,7 +3446,7 @@ class ProjectController extends AccountBaseController
     }
 
     public function parentCategoryId($id){
-        $sub_categories = \App\Models\ProjectNiche::where('parent_category_id',$id)->get();
+        $sub_categories = ProjectNiche::where('parent_category_id',$id)->get();
         return $sub_categories;
     }
 
@@ -3841,11 +3872,11 @@ class ProjectController extends AccountBaseController
         ]);
     }
     public function deliverableEstimationTime($deliverableId){
-        $deliverable = \App\Models\ProjectDeliverable::find($deliverableId);
+        $deliverable = ProjectDeliverable::find($deliverableId);
         return $deliverable->estimation_time;
     }
     public function deliverableDueDate($deliverableId){
-        $deliverable = \App\Models\ProjectDeliverable::find($deliverableId);
+        $deliverable = ProjectDeliverable::find($deliverableId);
         $html = '';
 
         if ($deliverable->to != null) {
