@@ -3,40 +3,29 @@
 <style>
     .categoryLink{
         background-color: #ffffff;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        border-radius: 50px;
-        margin-right: 25px;
+        border-radius: 6px;
+        margin-right: 10px;
+        border: 1px solid rgba(0,0,0,0.1);
+        padding: 1px 10px 1px 3px; 
+        color: #484a50;
+        margin-bottom: 10px;
+        cursor: pointer;
     }
-    @media (max-width: 580px) {
-        .categoryLink {
-            margin-bottom: 10px;
-        }
-        .col-sm-6 {
-            width: 100%;
-            display: block;
-        }
+
+
+    .categoryLink:hover {
+        box-shadow: 0 0 3px rgba(82, 118, 226, 0.3);
+        color: #4a6fdf !important;
+        border-color: #4a6fdf;
     }
-    @media (max-width: 750px) {
-        .col-md-3 {
-            width: 50%;
-        }
-        .categoryLink {
-            margin-bottom: 10px;
-        }
-    }
-    @media (max-width: 750px) {
-        .col-sm-2 {
-            width: 50%;
-            margin-bottom: 10px;
-        }
-    }
+
 </style>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="card mt-3">
                     <div class="card-body">
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-sm-2">
                                 <label for="">Select CMS Category</label><br>
                                 <div class="dropdown bootstrap-select form-control select-picker" style="width: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
@@ -100,16 +89,101 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <br>
-                        <div class="displayFilterData">
-                            <p class="mt-2 f-20">Website Category: Seopage1</p>
-                            <div class="d-flex">
-                                <div class="categoryLink">
-                                    <img src="img/avatar.png" alt="" class="rounded-circle m-1" width="30" height="30">
-                                    <a href="#" class="ml-2 linkBtn mr-4" onclick="event.preventDefault();">www.seopage1.com</a>
+                        </div> --}}
+
+
+
+                        {{-- top filter bar --}}
+
+                            <div class="row">
+                                <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
+                                    <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select CMS Category</label>
+                                    <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
+                                        <select name="cms_id" id="cms_id" data-live-search="true" class="w-100 form-control select-picker error" data-size="8">
+                                            <option value="">--</option>
+                                            @foreach ($portfolios as $portfolio)
+                                                <option value="{{ $portfolio->id }}">{{ $portfolio->cms_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
+                                    <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Website Types</label> 
+                                    <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
+                                        <select name="website_type" id="website_type" data-live-search="true" class="w-100 form-control select-picker error" data-size="8">
+                                            <option value="">--</option>
+                                            @foreach ($portfolios as $portfolio)
+                                                <option value="{{$portfolio->id}}">{{$portfolio->website_type}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
+                                    <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Category</label>
+                                    <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
+                                        <select name="website_category" id="website_category" data-live-search="true" class="w-100 form-control select-picker error" data-size="8">
+                                            <option value="">--</option>
+                                            @foreach ($portfolios as $portfolio)
+                                                <option value="{{$portfolio->id}}">{{$portfolio->category_name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
+                                    <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Subcategory</label>
+                                    <div style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
+                                        <select class="form-control height-35 f-14" name="website_sub_cat" id="website_sub_cat" data-live-search="true" data-size="8">
+                                            <option value="">--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
+                                    <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Theme</label>
+                                    <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
+                                        <select name="theme_name" id="theme_name" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                            <option value="">--</option>
+                                            @foreach ($portfolios as $portfolio)
+                                                <option value="{{$portfolio->id}}">{{$portfolio->theme_name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
+                                    <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Plugin</label> 
+                                    <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
+                                        <select name="website_plugin" id="website_plugin" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                            <option value="">--</option>
+                                            @foreach ($portfolios as $portfolio)
+                                                <option value="{{$portfolio->id}}">{{$portfolio->plugin_name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+
+                        {{-- end top filter bar --}}
+
+
+                        
+                        <br>
+                        <div class="displayFilterData">
+                            <p class="mt-2 f-18" style="color:#5e6168; font-weight: 500">Website Category: <span id="displaySelectedCategory">Seopage1</span></p>
+
+
+                            <div id="categoryLinkWrapper" class="d-flex flex-wrap m-0 p-0">
+
+                                
+                                <div class="categoryLink linkBtn" >
+                                    <img src="/user-uploads/favicon/14d159b3d5548dfbc48b977da1ede616.png" alt="" class="rounded-circle m-1" width="26" height="26" style="border: 2px solid #dddddd;">
+                                    <span class="linkBtn">www.seopage1.com</span>
+                                </div>
+                                
                         </div>
 
                         @foreach($portfolios as $index => $portfolio)
@@ -180,68 +254,138 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     // CMS FILTER SECTION
-    $(document).ready(function() {
-        $('#cms_id, #website_type, #website_category, #website_sub_cat, #theme_name, #website_plugin').change(function() {
-            var selectedCategoryId = $('#cms_id').val();
-            var websiteType = $('#website_type').val();
-            var website_category = $('#website_category').val();
-            var website_sub_cat = $('#website_sub_cat').val();
-            var theme_name = $('#theme_name').val();
-            var website_plugin = $('#website_plugin').val();
-            // console.log(theme_name);
-            var selectedCmsName = $(this).find(':selected').text();
+    // $(document).ready(function() {
+    //     $('#cms_id, #website_type, #website_category, #website_sub_cat, #theme_name, #website_plugin').change(function(event) {
+    //         console.log(event)
+    //         var selectedCategoryId = $('#cms_id').val();
+    //         var websiteType = $('#website_type').val();
+    //         var website_category = $('#website_category').val();
+    //         var website_sub_cat = $('#website_sub_cat').val();
+    //         var theme_name = $('#theme_name').val();
+    //         var website_plugin = $('#website_plugin').val();
+    //         // console.log(theme_name);
+    //         // var selectedCmsName = $(this).find(':selected').text();
+
+    //         // var selectedCmsName = ('#cms_id').text();
+
+    //         console.log(selectedCmsName);
+
+    //         let l =  $('#cms_id').val();
+    //         console.log(l)
+
+    //         $.ajax({
+    //             url: "{{ route('filter-cms-categories') }}",
+    //             method: 'GET',
+    //             data: {
+    //                 category_id: selectedCategoryId,
+    //                 website_type: websiteType,
+    //                 website_category: website_category,
+    //                 website_sub_cat: website_sub_cat,
+    //                 theme_name: theme_name,
+    //                 website_plugin: website_plugin
+    //             },
+    //             success: function(response) {
+                    
+    //                 // $('.displayFilterData').empty();
+
+    //                 // var categoryHtml = '<p class="mt-2 f-20">Website Category: ' + selectedCmsName + '</p>';
+
+    //                 // $('.displayFilterData').append(categoryHtml);
+
+                   
+                                    
+                                    
+    //                             </a>
+    //                 $.each(response, function(index, category) {
+    //                     var linkHtml =  
+    //                         '<a href="#" class="categoryLink" >' +
+    //                         '<img src="/user-uploads/favicon/14d159b3d5548dfbc48b977da1ede616.png" alt="" class="rounded-circle m-1" width="26" height="26" style="border: 2px solid #dddddd;">' +
+    //                         '<span class="linkBtn">' + category.portfolio_link + '</span></a>'
+                            
+    //                     $('#categoryLinkWrapper').append(linkHtml);
+    //                 });
+
+    //                 var linkBtns = document.querySelectorAll(".linkBtn");
+
+    //                 linkBtns.forEach(function(linkBtn, index) {
+    //                     linkBtn.addEventListener("click", function(event) {
+    //                         event.preventDefault();
+
+    //                         var linkShows = document.querySelectorAll(".linkShow");
+    //                         linkShows.forEach(function(linkShow) {
+    //                             linkShow.style.display = "none";
+    //                         });
+
+    //                         var linkShow = document.getElementById("linkShow" + index);
+    //                         if (linkShow) {
+    //                             linkShow.style.display = "block";
+    //                         }
+    //                     });
+    //                 });
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.log(xhr.responseText);
+    //             }
+    //         });
+    //     });
+    // });
+     $(document).ready(function(event){
+         var selectedCategory = '';
+
+
+         // render website
+          function renderToViewTree({
+            title: '',
+            website_name: '',
+            website_favicon: ''
+          }){
+              if(title){
+                $('#displaySelectedCategory').text(title);
+              } 
+          }
+
+         // fetch data by id
+         function fetchData({
+            category_id="",
+            website_type="",
+            website_category="",
+            website_sub_cat="",
+            theme_name="",
+            website_plugin="",
+            selected_category = '',
+         }) {
             $.ajax({
                 url: "{{ route('filter-cms-categories') }}",
                 method: 'GET',
-                data: {
-                    category_id: selectedCategoryId,
-                    website_type: websiteType,
-                    website_category: website_category,
-                    website_sub_cat: website_sub_cat,
-                    theme_name: theme_name,
-                    website_plugin: website_plugin
+                data:{
+                    category_id,
+                    website_type,
+                    website_category,
+                    website_sub_cat,
+                    theme_name,
+                    website_plugin
                 },
-                success: function(response) {
-                    console.log(response);
-                    $('.displayFilterData').empty();
 
-                    var categoryHtml = '<p class="mt-2 f-20">Website Category: ' + selectedCmsName + '</p>';
-                    $('.displayFilterData').append(categoryHtml);
-
-                    $.each(response, function(index, category) {
-                        var linkHtml = '<div class="d-flex mb-3">' +
-                            '<div class="categoryLink">' +
-                            '<img src="img/avatar.png" alt="" class="rounded-circle m-1" width="30" height="30">' +
-                            '<a href="#" class="ml-2 linkBtn mr-4">' + category.portfolio_link + '</a>' +
-                            '</div>' +
-                            '</div>';
-                        $('.displayFilterData').append(linkHtml);
-                    });
-
-                    var linkBtns = document.querySelectorAll(".linkBtn");
-
-                    linkBtns.forEach(function(linkBtn, index) {
-                        linkBtn.addEventListener("click", function(event) {
-                            event.preventDefault();
-
-                            var linkShows = document.querySelectorAll(".linkShow");
-                            linkShows.forEach(function(linkShow) {
-                                linkShow.style.display = "none";
-                            });
-
-                            var linkShow = document.getElementById("linkShow" + index);
-                            if (linkShow) {
-                                linkShow.style.display = "block";
-                            }
-                        });
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
+                success: function(res) {
+                    renderToViewTree({
+                        title: selectedCategory,
+                        website_name: 
+                    })
                 }
-            });
-        });
-    });
+            })
+         }
+
+
+         $('#cms_id').change(function(event){
+            let id = $(this).val();
+            let innerText = $(this).find(":selected").text();
+            fetchData({
+                category_id: id
+            })
+         });
+
+     });
+
 
     // AUTO SELECT SUBCATEGORY SECTION
     $(document).ready(function () {
