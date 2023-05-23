@@ -993,6 +993,26 @@
                 }
             });
         });
+        $(document).ready(function () {
+            $('#niche').change(function () {
+                var niche_id = $(this).val();
+                if (niche_id) {
+                    $.ajax({
+                        url: '/projects/project-completion/get-sub-niche/' + niche_id,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('#sub_niche').empty();
+                            $.each(data, function (index, sub_niche) {
+                                $('#sub_niche').append('<option value="' + sub_niche.id + '">' + sub_niche.category_name + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#sub_niche').empty();
+                }
+            });
+        });
 
 
 
