@@ -27,6 +27,7 @@ import { useEditGoalTitle, useEditGoalTitleMutation, useGetGoalByIdQuery } from 
 import { useGetDealsByGoalIdQuery } from '../services/api/dealSliceApi';
 import { CompareDate } from '../utils/dateController';
 import { useReactToPrint } from 'react-to-print';
+import { replace } from 'lodash';
 
 
 // convert to unit
@@ -117,7 +118,7 @@ const Goal = () => {
             }
             localStorage.setItem(`goal_${userId}`, JSON.stringify(_g));
         }else{
-            navigate('/account/insights/goal-404');
+           !goalIsFetching && navigate("/account/insights/goal-404"); 
         }
     }, [goalIsFetching]);
 
