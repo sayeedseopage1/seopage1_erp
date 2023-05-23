@@ -93,7 +93,6 @@ const EmployeeWiseSessionTable = ({control}) => {
         if (columnOrderFromLocalStore) {
             setColumnOrder([...JSON.parse(columnOrderFromLocalStore)]);
         } else {
-            console.log({subColumns})
             setColumnOrder([...subColumns.map((item) => item.key)]);
         }
 
