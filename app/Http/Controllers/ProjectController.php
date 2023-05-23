@@ -3450,8 +3450,6 @@ class ProjectController extends AccountBaseController
         ]);
 //        route('dealDetails', $deal->id)
 
-
-
     }
     public function viewCms(){
         $this->pageTitle = 'CMS';
