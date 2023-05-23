@@ -611,8 +611,8 @@
           </td>
           <td>
             @if($project_portfolio != null)
-              <p class="fw-normal mb-1">{{$project_portfolio->plugin_name}}</p>
-              <p class="fw-normal mb-1">{{$project_portfolio->plugin_url}}</p>
+            <p class="fw-normal mb-1">{{implode(',',Json_decode($project_portfolio->plugin_name))}}</p>
+            <p class="fw-normal mb-1">{{implode(',',Json_decode($project_portfolio->plugin_url))}}</p>
               @else 
               <p class="fw-normal mb-1">--</p>
               @endif
