@@ -1475,11 +1475,35 @@ opacity: 1;
   overflow-y: auto;
 }
 
+.cnx__table_calculated_value{
+  position: absolute;
+  top: 60px;
+  right: 0px;
+  border: 1px solid #517aff;
+  background-color: #517aff;
+  color: #fff;
+  box-shadow: 0 0 6px rgba(88, 138, 245, 0.05);
+  padding: 10px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  gap: 6px;
+  width: fit-content;
+  z-index: 2;
+}
+
 .cnx__table_tr {
     width: 100%;
     display: flex ;
     align-items: stretch;
-  }
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+
 
 .cnx__table_head {
     width: -moz-fit-content;
@@ -1495,7 +1519,6 @@ opacity: 1;
 
 .cnx__table_head > .cnx__table_tr {
     border-bottom: 1px solid #aaa;
-    border-bottom: 1px solid var(--cnx-table-border);
   }
 
 .cnx__table_body {
@@ -1505,33 +1528,36 @@ opacity: 1;
   }
 
 .cnx__table_body > .cnx__table_tr {
-    border-bottom: 1px solid #ddd;
-    border-bottom: 1px solid var(--cnx-table-row-border);
+    border-bottom: 1px solid #c9c9c9;
   }
 
 .cnx__table_body > .cnx__table_tr:hover {
     background-color: #fafafa;
   }
 
-.cnx__table_td,
-    .cnx__table_th {
-      width: 100%;
-    padding: 6px 10px;
-    white-space: pre-wrap !important;
-    display: flex;
-    align-items: center;
-    min-width: 250px;
-    /* overflow: hidden;
-    white-space: nowrap;
-    -o-text-overflow: ellipsis;
-    -ms-text-overflow: ellipsis;
-    text-overflow: ellipsis; */
+  .cnx__table_tr.__selected{
+    background-color: #eaf0f7 !important;
+    color:#000 !important;
   }
 
-  
+.cnx__table_td,
+   .cnx__table_th {
+      width: 100%;
+      padding: 6px 10px;
+      white-space: pre-wrap !important;
+      display: flex;
+      align-items: center;
+      min-width: 250px;
+      /* overflow: hidden;
+      white-space: nowrap;
+      -o-text-overflow: ellipsis;
+      -ms-text-overflow: ellipsis;
+      text-overflow: ellipsis; */
+  }
 
+    
   .cnx__table_td  a{
-    color: #777;
+    color: #444;
     white-space: pre-wrap !important;
     -ms-word-break: break-all;
     word-break: break-all;

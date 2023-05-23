@@ -12,7 +12,7 @@ import DataTable from '../ui/DataTable';
 // import { useDealsState } from '../hooks/useDealsState';
 import { useGoals } from '../hooks/useGoals';
 import { useTeams } from '../hooks/useTeams';
-import { useFetcher, useLocation, useParams } from 'react-router-dom';
+import { useFetcher, useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { useUsers } from '../hooks/useUsers';
 
@@ -27,6 +27,7 @@ import { useEditGoalTitle, useEditGoalTitleMutation, useGetGoalByIdQuery } from 
 import { useGetDealsByGoalIdQuery } from '../services/api/dealSliceApi';
 import { CompareDate } from '../utils/dateController';
 import { useReactToPrint } from 'react-to-print';
+import { replace } from 'lodash';
 
 
 // convert to unit
@@ -39,6 +40,7 @@ const numberToUnits = (value, decimal = 1) => {
 const Goal = () => {
     const params = useParams(); // get goal id from url
     const location = useLocation(); // get location
+    const navigate = useNavigate();
     const day = new CompareDate();
     const [goalSummary, setGoalSummary] = React.useState(null); // store goal summary data here
     const [tableDeals, setTableDeals] = React.useState([]);
@@ -115,6 +117,8 @@ const Goal = () => {
                 team_id: Number(goal?.team_id) 
             }
             localStorage.setItem(`goal_${userId}`, JSON.stringify(_g));
+        }else{
+           !goalIsFetching && navigate("/account/insights/goal-404"); 
         }
     }, [goalIsFetching]);
 
@@ -149,9 +153,9 @@ const Goal = () => {
 
     // distribute deals by period
     const distributeDealsByPeriod = (deals, startDate, endDate, accessor) => {
-        return deals.filter(deal => {
-            return day.isSameOrAfter(deal[accessor], startDate) &&
-                day.isSameOrBefore(deal[accessor], endDate)
+        return deals?.filter(deal => {
+            return day.isSameOrAfter(day.dayjs(deal[accessor]).format('YYYY-MM-DD'), day.dayjs(startDate).format('YYYY-MM-DD')) &&
+                day.isSameOrBefore(day.dayjs(deal[accessor]).format('YYYY-MM-DD'), day.dayjs(endDate).format('YYYY-MM-DD'))
         })
     }
 
@@ -285,9 +289,9 @@ const Goal = () => {
 
     }
 
-    const getGoalDealsDate = (deals, goal) => {
-        if(goal.entryType === "Won" && goal.team_id !== 1){
-            return deals.filter(deal => Number(deal["team_total_amount"]) !== 0) || []
+    const getGoalDealsData = (deals, goal) => {
+        if(goal?.entryType === "Won" && goal?.team_id !== 1){
+            return deals?.filter(deal => Number(deal["team_total_amount"]) !== 0) || []
         }else{
             return deals || []
         }
@@ -720,7 +724,7 @@ const Goal = () => {
                             <div >
                                 <DataTable
                                     ref={dealTableRef}
-                                    data={[...getGoalDealsDate(goalDealsData, goal)]}
+                                    data={[...getGoalDealsData(goalDealsData, goal)]}
                                     defaultColumns={
                                         goal?.entryType === 'Won' ?
                                         WonTableData :
@@ -739,6 +743,7 @@ const Goal = () => {
                                         addedTableVisibleColumns:
                                         processedTableVisibleColumns
                                     }
+                                    goal={goal}
                                     isLoading={dealsIsFetching}
                                 />
                             </div>
@@ -746,7 +751,12 @@ const Goal = () => {
 
                         {
                             // activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
-                            activeTable === 'summary' && <GoalSummaryTable ref={dealTableRef} data={goalSummary} isLoading={isSummarizing} />
+                            activeTable === 'summary' && 
+                            <GoalSummaryTable 
+                                ref={dealTableRef} 
+                                data={goalSummary} 
+                                isLoading={isSummarizing}
+                            />
                         }
                     </div>
                     {/* end graph table */}

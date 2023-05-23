@@ -10,14 +10,7 @@ import { stage } from "../utils/constants";
 
 
 export const DataTableColumns = [
-    // {
-    //     header: 'ID',
-    //     accessor: 'id',
-    //     id: 'id',
-    //     cell: (row) => {
-    //         return <span>{row['id']}</span>
-    //     }
-    // },
+   
      {
         header: 'Deal Name',
         accessor: 'project_name',
@@ -29,9 +22,9 @@ export const DataTableColumns = [
             return <span>
                 {
                     id && name ?
-                    // <a href={`/account/deals/${id}`}>
-                    <span>{name}</span> 
-                    // </a>
+                    <a href={`/account/deals/${id}`}>
+                        <span>{name}</span> 
+                    </a>
                     : <span> - </span>
                 }
                 
@@ -161,15 +154,7 @@ export const DataTableColumns = [
 
 
 export const WonTableData = [
-    // {
-    //     header: 'ID',
-    //     accessor: 'id',
-    //     id: 'id',
-    //     cell: (row) => {
-    //         return <span>{row['id']}</span>
-    //     }
-    // },
-    
+   
      {
         header: 'Deal Name',
         accessor: 'project_name',
@@ -181,9 +166,9 @@ export const WonTableData = [
             return <span>
                 {
                     id && name ?
-                    // <a href={`/account/deals/${id}`}>
-                    <span>{name}</span> 
-                    // </a>
+                    <a href={`/account/contracts/${id}`}>
+                        <span>{name}</span> 
+                    </a>
                     : <span> - </span>
                 }
                 
@@ -386,9 +371,9 @@ export const AddedTableColumns = [
             return <span>
                 {
                     id && name ?
-                    // <a href={`/account/deals/${id}`}>
-                    <span>{name}</span> 
-                    // </a>
+                    <a href={`/account/deals/${id}`}>
+                        <span>{name}</span> 
+                    </a>
                     : <span> - </span>
                 }
                 

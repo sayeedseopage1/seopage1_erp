@@ -51,13 +51,16 @@ class GoalAchieveCheck extends Command
        
         // /dd($currentMonth);
         
-        $deal_projects = Project::where('start_date', '>=', $currentMonth)
-        ->where('project_status','=','Accepted')->get();
+        $deal_projects = Project::where('created_at', '>=', $currentMonth)
+        ->where('project_status','!=','Not Accepted')->get();
+    //    / dd($deal_projects);
         // $deal_projects=  Project::whereDate('start_date','>=',$date)->where('project_status','Accepted')->get();
 //dd($deal_projects);
         foreach ($deal_projects as $deal_project) {
            // dd($deal_project);
-            $goals = GoalSetting::all();
+           $goals = GoalSetting::where([
+            'goal_status' =>  0, 
+        ])->get();
             //dd($goals);
                 $deal_id= Deal::where('id',$deal_project['deal_id'])->first();
            // dd($deal_id);
@@ -93,11 +96,11 @@ class GoalAchieveCheck extends Command
                             $deals_data = $deals_data->whereDate('deals.created_at', '<=', $goal->endDate);
                         }
                         $deals_data = $deals_data->where('deals.status', '!=','Denied')
-                        ->whereIn('deals.added_by', $user_id)
+                       // ->whereIn('deals.added_by', $user_id)
                         ->orderBy('deals.id', 'desc')
                         ->get();
-                     // dd($deals_data);
-        
+                    //  / dd($deals_data);
+                     $team_total_amount = 0;
                         foreach ($deals_data as $key => $value) {
                             $check_client = Deal::whereDate('created_at', '>=', $goal->startDate);
                             if (!is_null($goal->endDate)) {
@@ -113,7 +116,7 @@ class GoalAchieveCheck extends Command
                             $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
                             $value->bidder_amount = round((24 * $value->amount) / 100, 2);
                             $value->team_total_amount = 0;
-                            $team_total_amount = 0;
+                           
                            // dd($value->deal_stage);
         
                             foreach ($value->deal_stage as $key => $deal_stage) {
@@ -161,8 +164,26 @@ class GoalAchieveCheck extends Command
                             }
         
                             $array[] = $value;
+                        // / dd($value);
                          
-                          if ($team_total_amount >= (int) $goal->trackingValue) {
+                           
+                        }
+                       // dd($team_total_amount);
+                        if($goal->team_id == 1)
+                        {
+                            if($goal->trackingType == 'value')
+                            {
+                                $team_total_amount = Deal::where('status','!=','Denied')->sum('amount');
+
+                            }else 
+                            {
+                                $team_total_amount = Deal::where('status','!=','Denied')->count(); 
+                            }
+                           
+
+                        }
+                  
+                        if ($team_total_amount >= (int) $goal->trackingValue) {
                             // $goal_id= GoalSetting::find($goal->id);
                             //dd($goal_id);
                             $goal_id= GoalSetting::find($goal->id);
@@ -194,8 +215,6 @@ class GoalAchieveCheck extends Command
                                 }
                             }
                         }
-                           
-                        }
                       // dd($array);
                       //var_dump(($team_total_amount >= (int) $goal->trackingValue));
                      
@@ -208,16 +227,19 @@ class GoalAchieveCheck extends Command
                         ])
                         ->leftjoin('leads', 'leads.id', 'deals.lead_id')
                        
-                        ->whereDate('deals.created_at', '>=', $goal->startDate);
+                        ->whereDate('deals.created_at', '>=', $goal->startDate)
+                        ->where('deals.client_badge','=','new client');
         
                         if (!is_null($goal->endDate)) {
                             $deals_data = $deals_data->whereDate('deals.created_at', '<=', $goal->endDate);
                         }
                         $deals_data = $deals_data->where('deals.status', '!=','Denied')
-                        ->whereIn('deals.added_by', $user_id)
+                       // ->whereIn('deals.added_by', $user_id)
                         ->groupBy('deals.client_id')
                         ->orderBy('deals.id', 'desc')
                         ->get();
+                       // dd($deals_data);
+                        $team_total_amount = 0;
         
                         foreach ($deals_data as $key => $value) {
                             if ($goal->trackingType == 'count') {
@@ -228,7 +250,7 @@ class GoalAchieveCheck extends Command
                             $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
                             $value->bidder_amount = round((24 * $value->amount) / 100, 2);
                             $value->team_total_amount = 0;
-                            $team_total_amount = 0;
+                           
         
                             foreach ($value->deal_stage as $key => $deal_stage) {
                                 $amount = 0;
@@ -271,46 +293,261 @@ class GoalAchieveCheck extends Command
                                 $value->team_total_amount = round($value->team_total_amount + $value->bidder_amount, 2);
                             }
         
-                            $array[] = $value;
-                            if ($team_total_amount >= (int) $goal->trackingValue) {
-                                $goal_id= GoalSetting::find($goal->id);
-                                $goal_id->goal_status = 1;
-                                $goal_id->save();
-            
-                                    if ($goal->achievablePoints > 0) {
-            
-                                        $distribute_amount = $goal->achievablePoints / count($user_id);
-                                        
-                                        foreach ($user_id as $value2) {
-            
-                                            $user_name = User::find($value2);
-                                            $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-            
-                                            $point= new CashPoint();
-                                            $point->user_id= $value2;
-                                            $point->project_id= $deal_project->id;
-                                            $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
-                                            $point->gained_as = "Individual";
-                                            $point->points= $distribute_amount;
-            
-                                            if ($user_last_point != null) {
-                                                $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
-                                            } else {
-                                                $point->total_points_earn=  $distribute_amount;
-                                            }
-            
-                                            $point->save();
-                                        }
-                                    }
-                                }
+                           $array[] = $value;
+                           
                             
         
                            
                         }
+                      //  dd($team_total_amount);
+                        if($goal->team_id == 1)
+                        {
+                            if($goal->trackingType == 'value')
+                            {
+                                $team_total_amount = Deal::where('status','!=','Denied')->sum('amount');
+
+                            }else 
+                            {
+                                $team_total_amount = Deal::where('status','!=','Denied')->count(); 
+                            }
+                           
+
+                        }
+                     //   dd($team_total_amount);
+                        if ($team_total_amount >= (int) $goal->trackingValue) {
+                            $goal_id= GoalSetting::find($goal->id);
+                            $goal_id->goal_status = 1;
+                            $goal_id->save();
+        
+                                if ($goal->achievablePoints > 0) {
+        
+                                    $distribute_amount = $goal->achievablePoints / count($user_id);
+                                    
+                                    foreach ($user_id as $value2) {
+        
+                                        $user_name = User::find($value2);
+                                        $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+        
+                                        $point= new CashPoint();
+                                        $point->user_id= $value2;
+                                        $point->project_id= $deal_project->id;
+                                        $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                                        $point->gained_as = "Individual";
+                                        $point->points= $distribute_amount;
+        
+                                        if ($user_last_point != null) {
+                                            $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                                        } else {
+                                            $point->total_points_earn=  $distribute_amount;
+                                        }
+        
+                                        $point->save();
+                                    }
+                                }
+                            }
                         
                     }
                 }
             }
+
+           
+           
+    
+           
+            foreach ($goals as $goal) {
+                $start = Carbon::parse($goal->startDate);
+                $end = Carbon::parse($goal->endDate);
+                $dateToCheck = Carbon::parse($deal_id->created_at);
+    
+                if ($dateToCheck->between($start, $end)) {
+    
+                if($goal->team_id != null)
+            {
+                $team = Seopage1Team::find($goal->team_id);
+    
+                $users = explode(',', $team->members);
+                $user_data = [];
+                foreach ($users as $key => $value) {
+                    if ($value != '') {
+                         //$user = User::find($value);
+                        array_push($user_data,$value);
+                    }
+                }
+            } else {
+                $user_data[]= $goal->user_id;
+            }
+        }
+            
+            
+            // Always use an array of user IDs, even if $goal->user_id is set
+            $goal2 = $goal->user_id ? [$goal->user_id] : $user_data;
+           
+            
+            if ($goal->entryType == 'Added') {
+    
+                if($goal->dealType == 'New Client')
+                {
+        
+           //dd("nksdnlas");
+                $dealStage = DealStage::select([
+                    'deal_stages.*',
+                    'deal_stages.id as id',
+                    'deal_stages.id as deal_id',
+                    'deal_stages.client_username as client_username',
+                    'deal_stages.project_name as deal_project_name',
+                    'deal_stages.project_link as deal_project_link',
+                    'deal_stages.amount as deal_amount',
+                    'deal_stages.deal_stage as deal_stage',
+                    'deal_stages.deal_status as deal_status',
+                    'deal_stages.actual_amount as deal_original_amount',
+                    'deal_stages.created_at as deal_created_at',
+                    'leads.added_by as lead_converted_by',
+                    'leads.id as lead_id',
+                ])
+                ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+                ->whereIn('leads.added_by', $goal2)
+                ->whereDate('deal_stages.created_at', '>=', $goal->startDate)
+                ->where('deal_stages.client_badge','=','new client');
+                
+            //  /dd($dealStage);
+        
+                if (!is_null($goal->endDate)) {
+                    $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $goal->endDate);
+                   // dd($dealStage);
+                }
+        
+                $dealStage_amount2 = $dealStage->get();
+                $dealStage_amount = $dealStage->sum('deal_stages.amount');
+                $dealStage_count = $dealStage->count();
+               // dd($dealStage_amount,$dealStage_count);
+                if ($goal->trackingType == 'value') {
+                    
+                        $deal_amount = $dealStage_amount;
+                    //    / dd($deal_amount);
+                    
+                } else {
+                   
+                        $deal_amount = $dealStage_count;
+                   
+                }
+               //dd($deal_amount);
+                if ($deal_amount >= (int) $goal->trackingValue) {
+                    $goal_update= GoalSetting::find($goal->id);
+                    $goal_update->goal_status = 1;
+                    $goal_update->save();
+                    if ($goal->achievablePoints > 0) {
+    
+                        $distribute_amount = $goal->achievablePoints / count($user_data); 
+                        
+                        foreach ($user_data as $value) {
+    
+                            $user_name = User::find($value);
+                            $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+    
+                            $point= new CashPoint();
+                            $point->user_id= $value;
+                           // $point->project_id= $find_project_id->id;
+                            $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                            $point->gained_as = "Individual";
+                            $point->points= $distribute_amount;
+    
+                            if ($user_last_point != null) {
+                                $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                            } else {
+                                $point->total_points_earn=  $distribute_amount;
+                            }
+    
+                            $point->save();
+                        }
+                    }
+    
+                }
+    
+            }else 
+            {
+                $dealStage = DealStage::select([
+                    'deal_stages.*',
+                    'deal_stages.id as id',
+                    'deal_stages.id as deal_id',
+                    'deal_stages.client_username as client_username',
+                    'deal_stages.project_name as deal_project_name',
+                    'deal_stages.project_link as deal_project_link',
+                    'deal_stages.amount as deal_amount',
+                    'deal_stages.deal_stage as deal_stage',
+                    'deal_stages.deal_status as deal_status',
+                    'deal_stages.actual_amount as deal_original_amount',
+                    'deal_stages.created_at as deal_created_at',
+                    'leads.added_by as lead_converted_by',
+                    'leads.id as lead_id',
+                ])
+                ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+                ->whereIn('leads.added_by', $goal2)
+                ->whereDate('deal_stages.created_at', '>=', $goal->startDate);
+                // ->groupBy('deal_stages.client_username');
+            //  /dd($dealStage);
+        
+                if (!is_null($goal->endDate)) {
+                    $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $goal->endDate);
+                   // dd($dealStage);
+                }
+        
+                $dealStage_amount = $dealStage->sum('deal_stages.amount');
+                $dealStage_count = $dealStage->count();
+                if ($goal->trackingType == 'value') {
+                    
+                        $deal_amount = $dealStage_amount;
+                    //    / dd($deal_amount);
+                    
+                } else {
+                   
+                        $deal_amount = $dealStage_count;
+                   
+                }
+                // dd($deal_amount);
+                if ($deal_amount >= (int) $goal->trackingValue) {
+                    $goal_update= GoalSetting::find($goal->id);
+                    $goal_update->goal_status = 1;
+                    $goal_update->save();
+                    if ($goal->achievablePoints > 0) {
+    
+                        $distribute_amount = $goal->achievablePoints / count($user_data);
+                        
+                        foreach ($user_data as $value) {
+    
+                            $user_name = User::find($value);
+                            $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+    
+                            $point= new CashPoint();
+                            $point->user_id= $value;
+                           // $point->project_id= $find_project_id->id;
+                            $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                            $point->gained_as = "Individual";
+                            $point->points= $distribute_amount;
+    
+                            if ($user_last_point != null) {
+                                $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                            } else {
+                                $point->total_points_earn=  $distribute_amount;
+                            }
+    
+                            $point->save();
+                        }
+                    }
+                }
+    
+            }
+            // kpi points distribution start from here
+    
+    
+             // kpi points distribution end here
+        
+        
+            }
+           
+    
+                
+            }
+        
         
         }
       

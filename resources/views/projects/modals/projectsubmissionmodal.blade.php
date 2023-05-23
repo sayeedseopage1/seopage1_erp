@@ -8,6 +8,13 @@
       </div>
       <?php
       $project_submission= App\Models\ProjectSubmission::where('project_id',$project->id)->orderBy('id','desc')->first();
+        $project_portfolio =DB::table('project_portfolios')
+                            ->join('project_cms','project_portfolios.cms_category','=','project_cms.id')
+                            ->join('project_website_types','project_portfolios.website_type','=','project_website_types.id')
+                            ->join('project_niches','project_portfolios.niche','=','project_niches.id')
+                            ->select('project_portfolios.*','project_cms.cms_name','project_website_types.website_type','project_niches.category_name')
+                            ->orderBy('project_portfolios.id', 'desc')
+                            ->first();
        ?>
       <form class="" action="{{route('project-submit-accept')}}" method="post">
         @csrf
@@ -307,54 +314,50 @@
 
       </tr>
       <tr>
-        <td>
-          <div class="d-flex align-items-center">
-            12
+          <td>
+              <div class="d-flex align-items-center">
+                  12
 
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center">
-            Niche/Category of the Project
+              </div>
+          </td>
+          <td>
+              <div class="d-flex align-items-center">
+                  CMS of the project
 
-          </div>
-        </td>
-        <td>
-          <p class="fw-normal mb-1">
-              @if($project_submission->niche)
-                  {{$project_submission->niche}}
-              @else
-                  <p class="fw-normal mb-1">Category name not found</p>
-              @endif
-            </p>
+              </div>
+          </td>
+          <td>
+            @if($project_portfolio != null)
+                  <p class="fw-normal mb-1">{{$project_portfolio->cms_name}}</p>
+                  @else 
+                  <p class="fw-normal mb-1">--</p>
+                  @endif
 
-        </td>
+          </td>
 
 
       </tr>
       <tr>
-        <td>
-          <div class="d-flex align-items-center">
-            13
+          <td>
+              <div class="d-flex align-items-center">
+                  13
 
-          </div>
-        </td>
-        <td>
-          <div class="d-flex align-items-center">
-            Collected the Dummy/test site Information
+              </div>
+          </td>
+          <td>
+              <div class="d-flex align-items-center">
+                  Website type of the project
 
-          </div>
-        </td>
-        <td>
-          <p class="fw-normal mb-1">@if($project_submission->dummy_yes == 1)
-            Yes
+              </div>
+          </td>
+          <td>
+            @if($project_portfolio != null)
+                  <p class="fw-normal mb-1">{{$project_portfolio->website_type}}</p>
+                  @else 
+                  <p class="fw-normal mb-1">--</p>
+                  @endif
 
-            @else
-            No
-            @endif
-            </p>
-
-        </td>
+          </td>
 
 
       </tr>
@@ -367,31 +370,262 @@
         </td>
         <td>
           <div class="d-flex align-items-center">
-            Shared the Dummy/test site with client
+            Niche/Category of the Project
 
           </div>
         </td>
         <td>
-          <p class="fw-normal mb-1">@if($project_submission->dummy_information == 1)
-            Yes
-            <br>
-            <br>
-          <strong>Dummy/Test Site link: </strong><a href="{{$project_submission->dummy_link}}" target="_blank">{{$project_submission->dummy_link}}</a>
-          <br>
+          @if($project_portfolio != null)
 
-            @else
-            No
-            @endif
-            </p>
-
+                <p class="fw-normal mb-1">{{$project_portfolio->category_name}}</p>
+                @else 
+                  <p class="fw-normal mb-1">--</p>
+                  @endif
         </td>
+
+
+      </tr>
+      <tr>
+          <td>
+              <div class="d-flex align-items-center">
+                  15
+
+              </div>
+          </td>
+          <td>
+              <div class="d-flex align-items-center">
+                  Total Primary or Main Pages
+
+              </div>
+          </td>
+          <td>
+            @if($project_portfolio != null)
+                  <p class="fw-normal mb-1">Number of pages: {{$project_portfolio->main_page_number}}</p>
+                  <p class="fw-normal mb-1">Name of pages: {{$project_portfolio->main_page_name}}</p>
+                  @else
+                  <p class="fw-normal mb-1">--</p>
+              @endif
+
+          </td>
+
+
+      </tr>
+      <tr>
+          <td>
+              <div class="d-flex align-items-center">
+                  16
+
+              </div>
+          </td>
+          <td>
+              <div class="d-flex align-items-center">
+                  Total Secondary Pages
+
+              </div>
+          </td>
+          <td>
+            @if($project_portfolio != null)
+                  <p class="fw-normal mb-1">Number of pages: {{$project_portfolio->secondary_page_number}}</p>
+                  <p class="fw-normal mb-1">Name of pages: {{$project_portfolio->secondary_page_name}}</p>
+                  @else
+                  <p class="fw-normal mb-1">--</p>
+              @endif
+
+          </td>
+
+
+      </tr>
+      <tr>
+          <td>
+              <div class="d-flex align-items-center">
+                  17
+
+              </div>
+          </td>
+          <td>
+              <div class="d-flex align-items-center">
+                  Backup email address
+
+              </div>
+          </td>
+          <td>
+            @if($project_portfolio != null)
+                  <p class="fw-normal mb-1">{{$project_portfolio->backup_email_address}}</p>
+                  @else
+                  <p class="fw-normal mb-1">--</p>
+              @endif
+
+          </td>
+
+
+      </tr>
+      <tr>
+          <td>
+              <div class="d-flex align-items-center">
+                  18
+
+              </div>
+          </td>
+          <td>
+              <div class="d-flex align-items-center">
+                  Day Interval
+
+              </div>
+          </td>
+          <td>
+            @if($project_portfolio != null)
+            
+            
+              <p class="fw-normal mb-1">{{$project_portfolio->day_interval}}</p>
+              @else
+              <p class="fw-normal mb-1">--</p>
+          @endif
+
+          </td>
+
+
+      </tr>
+      <tr>
+          <td>
+              <div class="d-flex align-items-center">
+                  19
+
+              </div>
+          </td>
+          <td>
+              <div class="d-flex align-items-center">
+                  Description
+
+              </div>
+          </td>
+          <td>
+            @if($project_portfolio != null)
+              <p class="fw-normal mb-1">{!! $project_portfolio->description !!}</p>
+              @else 
+              <p class="fw-normal mb-1">--</p>
+              @endif
+
+
+
+          </td>
+
+
+      </tr>
+      <tr>
+          <td>
+              <div class="d-flex align-items-center">
+                  20
+
+              </div>
+          </td>
+          <td>
+              <div class="d-flex align-items-center">
+                  Theme Name And Url
+
+              </div>
+          </td>
+          <td>
+            @if($project_portfolio != null)
+              <p class="fw-normal mb-1">{{$project_portfolio->theme_name}}</p>
+              <p class="fw-normal mb-1">{{$project_portfolio->theme_url}}</p>
+              @else 
+              <p class="fw-normal mb-1">--</p>
+              @endif
+
+          </td>
 
 
       </tr>
       <tr>
         <td>
           <div class="d-flex align-items-center">
-            15
+            21
+
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center">
+              Use significant plugin for this project
+
+          </div>
+        </td>
+        <td>
+          @if($project_portfolio != null)
+          <p class="fw-normal mb-1">@if($project_portfolio->plugin_information == 1)
+            Yes
+
+            @else
+            No
+            @endif
+            </p>
+            @else 
+            <p class="fw-normal mb-1">--</p>
+            @endif
+
+        </td>
+
+
+      </tr>
+      <tr>
+          <td>
+              <div class="d-flex align-items-center">
+                  23
+
+              </div>
+          </td>
+          <td>
+              <div class="d-flex align-items-center">
+                  Shared the Dummy/test site with client
+
+              </div>
+          </td>
+          <td>
+              <p class="fw-normal mb-1">@if($project_submission->dummy_information == 1)
+                      Yes
+                      <br>
+                      <br>
+                      <strong>Dummy/Test Site link: </strong><a href="{{$project_submission->dummy_link}}" target="_blank">{{$project_submission->dummy_link}}</a>
+                      <br>
+
+                  @else
+                      No
+                  @endif
+              </p>
+
+          </td>
+
+
+      </tr>
+      <tr>
+          <td>
+              <div class="d-flex align-items-center">
+                  22
+
+              </div>
+          </td>
+          <td>
+              <div class="d-flex align-items-center">
+                  Plugin Name And Url
+
+              </div>
+          </td>
+          <td>
+            @if($project_portfolio != null)
+            <p class="fw-normal mb-1">{{implode(',',Json_decode($project_portfolio->plugin_name))}}</p>
+            <p class="fw-normal mb-1">{{implode(',',Json_decode($project_portfolio->plugin_url))}}</p>
+              @else 
+              <p class="fw-normal mb-1">--</p>
+              @endif
+
+          </td>
+
+
+      </tr>
+
+      <tr>
+        <td>
+          <div class="d-flex align-items-center">
+            24
 
           </div>
         </td>
@@ -417,7 +651,7 @@
       <tr>
         <td>
           <div class="d-flex align-items-center">
-            16
+            25
 
           </div>
         </td>
@@ -443,7 +677,7 @@
       <tr>
         <td>
           <div class="d-flex align-items-center">
-            17
+            26
 
           </div>
         </td>

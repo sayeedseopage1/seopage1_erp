@@ -50,9 +50,7 @@ class KpiDistribution extends Command
         $date = '2023-05-01';
         //dd($currentMonth);
         $projects = Project::whereDate('start_date','>=',$date)->where('project_status','Accepted')->get();
-        // /dd($projects);
-      //  \DB::beginTransaction();
-
+        
         foreach ($projects as $value) {
            
                  //kpi distribution start from here 

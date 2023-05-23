@@ -29,46 +29,46 @@ export function CompareDate(){
 
 
 CompareDate.prototype.isBetween = function(compareDate, startDate, endDate){
-    this.current = compareDate;
-    this.start = startDate;
-    this.end = endDate;
+    this.current = this.dayjs(compareDate).format('YYYY-MM-DD');
+    this.start = this.dayjs(startDate).format('YYYY-MM-DD');
+    this.end = this.dayjs(endDate).format('YYYY-MM-DD');
     return this.dayjs(this.current).isBetween(this.start, this.end); 
 }
 
 //  is same or before
 CompareDate.prototype.isSameOrBefore = function(current, compare){
-    this.current = current,
-    this.compare = compare
+    this.current = this.dayjs(current).format('YYYY-MM-DD');
+    this.compare = this.dayjs(compare).format('YYYY-MM-DD');
     return this.dayjs(this.current).isSameOrBefore(this.compare); 
 }
 
 
 //  is same or after
 CompareDate.prototype.isSameOrAfter = function(current, compare){
-    this.current = current,
-    this.compare = compare
+    this.current = this.dayjs(current).format('YYYY-MM-DD');
+    this.compare = this.dayjs(compare).format('YYYY-MM-DD');
     return this.dayjs(this.current).isSameOrAfter(this.compare); 
 }
 
 
 // is isSame
 CompareDate.prototype.isSame = function(current, compare) {
-    this.current = current,
-    this.compare = compare
+    this.current = this.dayjs(current).format('YYYY-MM-DD');
+    this.compare = this.dayjs(compare).format('YYYY-MM-DD');
     return this.dayjs(this.current).isSame(this.compare); 
 }
 
 // is before
 CompareDate.prototype.isBefore = function(current, compare) {
-    this.current = current,
-    this.compare = compare
+    this.current = this.dayjs(current).format('YYYY-MM-DD');
+    this.compare = this.dayjs(compare).format('YYYY-MM-DD');
     return this.dayjs(this.current).isBefore(this.compare); 
 }
 
 // is after
 CompareDate.prototype.isAfter = function(current, compare) {
-    this.current = current,
-    this.compare = compare
+    this.current = this.dayjs(current).format('YYYY-MM-DD');
+    this.compare = this.dayjs(compare).format('YYYY-MM-DD');
     return this.dayjs(this.current).isAfter(this.compare); 
 }
 

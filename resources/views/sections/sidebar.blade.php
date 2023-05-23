@@ -295,12 +295,13 @@
                             <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
                             {{--<x-sub-menu-item link="" :text="'Qualified Sales'" />--}}
                             <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
-                            @if(Auth::user()->role_id == 1)
+                            @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
 
                              <x-sub-menu-item :link="route('points.index')" :text="'Points'" />
-                             @endif
+                            
 
-                         {{--   <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" /> --}}
+                           <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
+                           @endif
 
 
 
@@ -328,7 +329,7 @@
                             {{-- <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" /> --}}
 
                             {{-- <x-sub-menu-item link="" :text="'Resource'" /> --}}
-                            <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" />
+                            {{-- <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" /> --}}
 
                         </div>
 

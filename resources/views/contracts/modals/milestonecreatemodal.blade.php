@@ -41,14 +41,14 @@
                     <?php
                     $original_currency_id = App\Models\Currency::where('id',$deal->original_currency_id)->first();
                     ?>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="exampleFormControlInput1">Currency <span style="color:red;">*</span></label>
                             <input type="text" id="original_currency_id"  readonly value="{{$original_currency_id->currency_code}}({{$original_currency_id->currency_symbol}})"  class="form-control original_currency_id height-35 f-14" id="exampleFormControlInput1"  placeholder="{{$original_currency_id->currency_code}}({{$original_currency_id->currency_symbol}})">
                         </div>
 
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
 
                             <label for="exampleFormControlTextarea1">Milestone Type <span style="color:red;">*</span></label>
@@ -64,6 +64,19 @@
                         </div>
                     </div>
 
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Service Type <span style="color:red;">*</span></label>
+                            <select class="form-control milestone_type height-35 f-14" name="service_type">
+                                <option value="Development">Development</option>
+                                <option value="Webcontent">Webcontent</option>
+                                <option value="Blogs/articles">Blogs/articles</option>
+                                <option value="Product descriptions">Product descriptions</option>
+                                <option value="Product category/collection pages">Product category/collection pages</option>
+                                <option value="Basic SEO">Basic SEO</option>
+                            </select>
+                        </div>
+                    </div>
 
 
                     <div class="col-md-12">

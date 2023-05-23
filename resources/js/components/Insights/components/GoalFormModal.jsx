@@ -573,9 +573,8 @@ const GoalFormModal = () => {
         addGoalIsLoading,
         addGoalIsSuccess,
     } = useGoals();
-
-
-
+ 
+ 
     // if form mode is edit
     React.useEffect(() => {
         if(_.lowerCase(mode) === 'edit' && data){
@@ -658,7 +657,10 @@ const GoalFormModal = () => {
         setIsSaving(true);
         setFormStatus('saving');
 
-        if(!isFormDataValid()) return;            
+        if(!isFormDataValid()) return;  
+        
+        let sDate = dayjs(new Date(startDate).valueOf()).format();
+        let eDate = endDate ? dayjs(new Date(endDate).valueOf()).format() : null;
             
         const formData = {
             title: `${entry} ${entryType} ${assigneeFor.name}`,
@@ -668,8 +670,8 @@ const GoalFormModal = () => {
             assigneeFor, 
             pipeline, 
             frequency, 
-            startDate, 
-            endDate, 
+            startDate: sDate,
+            endDate: eDate,
             trackingType, 
             trackingValue, 
             recurring,
@@ -679,8 +681,7 @@ const GoalFormModal = () => {
             achievablePoints: Number(achievablePoints)
         };
 
-
-       
+ 
 
         if(_.lowerCase(mode) === 'edit'){
             try{

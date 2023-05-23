@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DealStageChange;
 use App\Models\kpiSettingGenerateSale;
 use App\Models\ProjectCms;
+use App\Models\ProjectPortfolio;
 use App\Models\ProjectWebsiteType;
 use Carbon\Carbon;
 use App\Models\Task;
@@ -1555,9 +1556,10 @@ class ProjectController extends AccountBaseController
                             $deals_data = $deals_data->whereDate('deals.created_at', '<=', $goal->endDate);
                         }
                         $deals_data = $deals_data->where('deals.status', '!=','Denied')
-                        ->whereIn('deals.added_by', $user_id)
+                       // ->whereIn('deals.added_by', $user_id)
                         ->orderBy('deals.id', 'desc')
                         ->get();
+                        $team_total_amount = 0;
 
                         foreach ($deals_data as $key => $value) {
                             $check_client = Deal::whereDate('created_at', '>=', $goal->startDate);
@@ -1574,7 +1576,7 @@ class ProjectController extends AccountBaseController
                             $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
                             $value->bidder_amount = round((24 * $value->amount) / 100, 2);
                             $value->team_total_amount = 0;
-                            $team_total_amount = 0;
+                            
 
                             foreach ($value->deal_stage as $key => $deal_stage) {
                                 $amount = 0;
@@ -1621,6 +1623,50 @@ class ProjectController extends AccountBaseController
 
                             $array[] = $value;
                         }
+                        if($goal->team_id == 1)
+                        {
+                            if($goal->trackingType == 'value')
+                            {
+                                $team_total_amount = Deal::where('status','!=','Denied')->sum('amount');
+
+                            }else 
+                            {
+                                $team_total_amount = Deal::where('status','!=','Denied')->count(); 
+                            }
+                           
+
+                        }
+                        if ($team_total_amount >= (int) $goal->trackingValue) {
+                            $goal->goal_status = 1;
+                            $goal->save();
+
+                            if ($goal->achievablePoints > 0) {
+
+                                $distribute_amount = $goal->achievablePoints / count($user_id);
+                                
+                                foreach ($user_id as $value) {
+
+                                    $user_name = User::find($value);
+                                    $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+
+                                    $point= new CashPoint();
+                                    $point->user_id= $value;
+                                    $point->project_id= $find_project_id->id;
+                                    $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                                    $point->gained_as = "Individual";
+                                    $point->points= $distribute_amount;
+
+                                    if ($user_last_point != null) {
+                                        $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                                    } else {
+                                        $point->total_points_earn=  $distribute_amount;
+                                    }
+
+                                    $point->save();
+                                }
+                            }
+                        }
+                        
                     } elseif ($goal->dealType == 'New Client') {
                         $deals_data = Deal::select([
                             'deals.*',
@@ -1631,16 +1677,19 @@ class ProjectController extends AccountBaseController
                         ])
                         ->leftjoin('leads', 'leads.id', 'deals.lead_id')
                         ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
-                        ->whereDate('deals.created_at', '>=', $goal->startDate);
+                        ->whereDate('deals.created_at', '>=', $goal->startDate)
+                        ->where('deals.client_badge','=','new client');
+                        ;
 
                         if (!is_null($goal->endDate)) {
                             $deals_data = $deals_data->whereDate('deals.created_at', '<=', $goal->endDate);
                         }
                         $deals_data = $deals_data->where('deals.status', '!=','Denied')
-                        ->whereIn('deals.added_by', $user_id)
+                       // ->whereIn('deals.added_by', $user_id)
                         ->groupBy('deals.client_id')
                         ->orderBy('deals.id', 'desc')
                         ->get();
+                        $team_total_amount = 0;
 
                         foreach ($deals_data as $key => $value) {
                             if ($goal->trackingType == 'count') {
@@ -1651,7 +1700,7 @@ class ProjectController extends AccountBaseController
                             $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
                             $value->bidder_amount = round((24 * $value->amount) / 100, 2);
                             $value->team_total_amount = 0;
-                            $team_total_amount = 0;
+                           
 
                             foreach ($value->deal_stage as $key => $deal_stage) {
                                 $amount = 0;
@@ -1697,34 +1746,48 @@ class ProjectController extends AccountBaseController
                             $array[] = $value;
                             
 
-                            if ($team_total_amount >= (int) $goal->trackingValue) {
-                                $goal->goal_status = 1;
-                                $goal->save();
+                            
+                        }
+                        if($goal->team_id == 1)
+                        {
+                            if($goal->trackingType == 'value')
+                            {
+                                $team_total_amount = Deal::where('status','!=','Denied')->sum('amount');
 
-                                if ($goal->achievablePoints > 0) {
+                            }else 
+                            {
+                                $team_total_amount = Deal::where('status','!=','Denied')->count(); 
+                            }
+                           
 
-                                    $distribute_amount = $goal->achievablePoints / count($user_id);
-                                    
-                                    foreach ($user_id as $value) {
+                        }
+                        if ($team_total_amount >= (int) $goal->trackingValue) {
+                            $goal->goal_status = 1;
+                            $goal->save();
 
-                                        $user_name = User::find($value);
-                                        $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                            if ($goal->achievablePoints > 0) {
 
-                                        $point= new CashPoint();
-                                        $point->user_id= $value;
-                                        $point->project_id= $find_project_id->id;
-                                        $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
-                                        $point->gained_as = "Individual";
-                                        $point->points= $distribute_amount;
+                                $distribute_amount = $goal->achievablePoints / count($user_id);
+                                
+                                foreach ($user_id as $value) {
 
-                                        if ($user_last_point != null) {
-                                            $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
-                                        } else {
-                                            $point->total_points_earn=  $distribute_amount;
-                                        }
+                                    $user_name = User::find($value);
+                                    $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
 
-                                        $point->save();
+                                    $point= new CashPoint();
+                                    $point->user_id= $value;
+                                    $point->project_id= $find_project_id->id;
+                                    $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                                    $point->gained_as = "Individual";
+                                    $point->points= $distribute_amount;
+
+                                    if ($user_last_point != null) {
+                                        $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                                    } else {
+                                        $point->total_points_earn=  $distribute_amount;
                                     }
+
+                                    $point->save();
                                 }
                             }
                         }
@@ -3367,6 +3430,32 @@ class ProjectController extends AccountBaseController
       $milestone->status = 'pending';
 
       $milestone->save();
+      $data = $request->all();
+
+        $plugin_names = json_encode($data['plugin_name']);
+        $plugin_urls = json_encode($data['plugin_url']);
+        
+      $project_portfolio = new ProjectPortfolio();
+      $project_portfolio->project_id = $project->project_id;
+      $project_portfolio->cms_category = $data['cms_category'];
+      $project_portfolio->website_type = $data['website_type'];
+      $project_portfolio->niche = $data['niche'];
+      $project_portfolio->sub_niche = $data['sub_niche'];
+      $project_portfolio->theme_name = $data['theme_name'];
+      $project_portfolio->theme_url = $data['theme_url'];
+      $project_portfolio->plugin_information = $data['plugin_information'];
+      $project_portfolio->main_page_number = $data['main_page_number'];
+      $project_portfolio->main_page_name = $data['main_page_name'];
+      $project_portfolio->secondary_page_number = $data['secondary_page_number'];
+      $project_portfolio->secondary_page_name = $data['secondary_page_name'];
+      $project_portfolio->backup_email_address = $data['backup_email_address'];
+      $project_portfolio->day_interval = $data['day_interval'];
+      $project_portfolio->description = $data['description'];
+      $project_portfolio->portfolio_link = $data['actual_link'];
+      $project_portfolio->added_by = $data['added_by'];
+      $project_portfolio->plugin_name = $plugin_names;
+      $project_portfolio->plugin_url = $plugin_urls;
+      $project_portfolio->save();
       $milestone_update= ProjectMilestone::where('id',$milestone->milestone_id)->first();
       $milestone_update->project_completion_status= 2;
       $milestone_update->save();
@@ -3387,8 +3476,6 @@ class ProjectController extends AccountBaseController
             'redirectUrl' => url('/account/projects/'.$milestone->project_id.'?tab=milestones')
         ]);
 //        route('dealDetails', $deal->id)
-
-
 
     }
     public function viewCms(){
@@ -3894,5 +3981,10 @@ class ProjectController extends AccountBaseController
         ], [
             'new_date.required' => 'This field is required!',
         ]);
+    }
+    public function getSubNiches($niche_id)
+    {
+        $sub_niches = ProjectNiche::find($niche_id)->child;
+        return response()->json($sub_niches);
     }
 }

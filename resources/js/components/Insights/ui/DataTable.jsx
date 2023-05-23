@@ -5,6 +5,7 @@ import Pagination from './Pagination';
 import TableFilterButton from './TableFilterButton';
 import { useDrag, useDrop} from 'react-dnd';
 import { Icon } from '../utils/Icon';
+import {motion, AnimatePresence} from 'framer-motion';
 
 
 const DataTableContext = React.createContext();
@@ -31,11 +32,22 @@ const useTableState = () => {
 
 
 // data table 
-const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleColumns}, ref) => {
+const DataTable = React.forwardRef(({
+    data, 
+    isLoading, 
+    defaultColumns, 
+    visibleColumns,
+    goal
+}, ref) => {
     const [currentPageData, setCurrentPageData] = React.useState([...data]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
     const { activeColumns, setActiveColumns, sortConfig, setSortConfig } = useTableState();
     const [totalPage, setTotalPage] = React.useState(1);
+    const [selectionStart, setSelectionStart] = React.useState(false);
+    const [startRowId, setStartRowId] = React.useState();
+    const [actualAmount, setActualAmount] = React.useState(0);
+    const [contributedAmount, setContributedAmount] = React.useState(0);
+    const [showSelectedRowSummary, setShowSelectedRowSummary] = React.useState(false);
 
 
     // columns
@@ -99,10 +111,97 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
     };
 
 
+    // mouse down in row
+    const handleMouseDown = (e) => {
+        e.preventDefault();
+        setActualAmount(0);
+        setContributedAmount(0);
+        setSelectionStart(true);
+        let {rowId} = e.target.parentNode.dataset;
+        setStartRowId(Number(rowId)); 
+    }
+
+    // mouse up in row
+    const handleMouseUp = (e) => {
+        e.preventDefault();
+        setSelectionStart(false);
+        let parent = e.target.parentNode;
+        let {rowId} = parent.dataset;
+        let isBetweenRange = Math.abs(rowId - startRowId);
+        
+        setShowSelectedRowSummary(isBetweenRange);
+        
+        let _filterData = data.filter(d => (d.id >= startRowId && d.id <= rowId) || (d.id <= startRowId && d.id >= rowId));
+
+
+        _filterData.map(d => {
+                let amount = d['amount'] || d['deal_amount'];
+                if(amount){
+                    setActualAmount(p => p + Number(amount));
+                }
+        }); 
+
+        _filterData.map(d => {
+                let amount = d['team_total_amount'];
+                if(amount){
+                    setContributedAmount(p => p + Number(amount));
+                }
+        });    
+    }
+
+    // mouse move in row
+    const handleMouseMove = (e) => {
+        e.preventDefault();
+        if(!selectionStart) return;
+        let rows = document.querySelectorAll('.cnx__table_tr');
+        let parent = e.target.parentNode;
+        let {rowId} = parent.dataset;
+        rowId = Number(rowId);
+
+        for(let i = 0; i < rows.length; i++){
+            const row  = rows[i];
+            const currentRowId = Number(row.dataset.rowId);
+
+            const isBetweenRange = 
+                (currentRowId >= startRowId && currentRowId <= rowId) ||
+                (currentRowId <= startRowId && currentRowId >= rowId);
+            
+            if(isBetweenRange){
+                row.classList.add('__selected'); 
+            }else{
+                row.classList.remove('__selected'); 
+            } 
+
+        }
+
+    }
+
+    /*
+    ** If any row is selected, 
+    ** unselect that row on click.
+    */ 
+     
+    const handleOnClickOfRow = (e) => {
+        e.preventDefault();
+        if(startRowId){
+            let rows = document.querySelectorAll('.cnx__table_tr');
+            rows.forEach(row=> {
+               if(row.classList.contains('__selected')) {
+                row.classList.remove('__selected'); 
+               }
+            })
+            setShowSelectedRowSummary(false);
+            setActualAmount(0);
+            setContributedAmount(0);
+            setStartRowId(null);
+        }
+    }
+  
 
     const columns = defaultColumns.filter(d => activeColumns.includes(d.id))
                     .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
-                                
+             
+      
 
     return (
         <div style={{maxWidth: '100%'}}>
@@ -112,6 +211,32 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
                             {/* <TableFilterButton  /> */}
                         </div> 
                     {/* header */}
+
+            {/* select row data */}
+                <AnimatePresence>
+                    {showSelectedRowSummary && <motion.div 
+                        initial={{x:10}} 
+                        animate={{ x: 0}}
+                        exit={{x: 10}}
+                        className='cnx__table_calculated_value'
+                    >
+                            <div className='cnx__table_calculated_item'>
+                                <span>Actual Amount</span>
+                                <h6>${actualAmount.toFixed(2)}</h6>
+                            </div> 
+                            
+                            { (data[1].team_total_amount && Number(goal?.team_id) !== 1) && 
+                            <div className='cnx__table_calculated_item'>
+                                <span>Contribution Amount</span>
+                                <h6>${contributedAmount.toFixed(2)}</h6>
+                            </div> }
+                        
+                    </motion.div>}
+                </AnimatePresence>
+
+                   {/* end selected row data */}
+
+
                 <div className='cnx__table' >
                    
                     {/* <div className="cnx__table_head" style={{paddingRight: currentPageData.length > 34 ? '5px' : ''}}>
@@ -154,7 +279,10 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
                             <div key={i} className="cnx__table_tr">
                                 {columns.map(d => 
                                     <div key={d.id} className="cnx__table_td cnx__table_td_loading ">
-                                        <span className='animate-pulse' style={{width: `${ Math.floor(Math.random() * (70 - 20) + 20)}%`}}>loading</span>
+                                        <span 
+                                            className='animate-pulse' 
+                                            style={{width: `${ Math.floor(Math.random() * (70 - 20) + 20)}%`}}
+                                        >loading</span>
                                     </div>
                                 )}
                             </div> 
@@ -166,7 +294,15 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
                         <React.Fragment>
                             {
                                 currentPageData.length > 0 ? currentPageData.map((data) => (
-                                        <div key={data.id} className="cnx__table_tr">
+                                        <div 
+                                            key={data.id} 
+                                            className="cnx__table_tr"
+                                            data-row-id = {data.id}
+                                            onMouseDown={handleMouseDown}
+                                            onMouseUp={handleMouseUp}
+                                            onMouseMove={handleMouseMove}
+                                            onClick={handleOnClickOfRow}
+                                        >
                                             {columns.map(d => (
                                                 <div key={d.id} className="cnx__table_td">
                                                     {d.cell(data) || <span> &nbsp; </span>}
@@ -225,7 +361,7 @@ const DataTable = React.forwardRef(({data, isLoading, defaultColumns, visibleCol
 })
 
 
-const DataTableComponent = React.forwardRef(({data, isLoading, defaultColumns, visibleColumns}, ref) => {
+const DataTableComponent = React.forwardRef(({data, goal, isLoading, defaultColumns, visibleColumns}, ref) => {
     return(
         <ContextProvider>
            <DataTable 
@@ -233,6 +369,7 @@ const DataTableComponent = React.forwardRef(({data, isLoading, defaultColumns, v
                 data={data} 
                 isLoading={isLoading}  
                 defaultColumns={defaultColumns}
+                goal={goal}
                 visibleColumns={visibleColumns}
            />
         </ContextProvider>

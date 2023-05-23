@@ -76,6 +76,7 @@ class LeadController extends AccountBaseController
     }
     public function DealStageChange(Request $request)
     {
+//        dd($request->all());
         $validator = Validator::make($request->all(), [
             'client_username' => 'required|unique:deal_stages|max:255',
             'profile_link' => 'required',
@@ -95,7 +96,7 @@ class LeadController extends AccountBaseController
 
         abort_403(user()->permission('view_contract') == 'none');
 
-        
+
         $lead= Lead::where('id',$request->id)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
@@ -110,7 +111,7 @@ class LeadController extends AccountBaseController
 
           }
         }
-         DB::beginTransaction();
+        // DB::beginTransaction();
         $deal= new DealStage();
         $deal->short_code= 'DSEOP1'. $suffle;
         $deal->lead_id= $lead->id;
@@ -128,16 +129,16 @@ class LeadController extends AccountBaseController
         $deal->added_by= Auth::id();
         $deal->converted_by= Auth::id();
         $deal->save();
-        //goal achieve check start here 
+        //goal achieve check start here
         $goals = GoalSetting::where([
-            'goal_status' =>  0, 
+            'goal_status' =>  0,
         ])->get();
         // /dd($goals);
-        
+
         if($goals != null)
         {
 
-       
+
         foreach ($goals as $goal) {
             $start = Carbon::parse($goal->startDate);
             $end = Carbon::parse($goal->endDate);
@@ -161,17 +162,17 @@ class LeadController extends AccountBaseController
             $user_data[]= $goal->user_id;
         }
     }
-        
-        
+
+
         // Always use an array of user IDs, even if $goal->user_id is set
         $goal2 = $goal->user_id ? [$goal->user_id] : $user_data;
-       
-        
+
+
         if ($goal->entryType == 'Added') {
 
             if($goal->dealType == 'New Client')
             {
-    
+
        //dd("nksdnlas");
             $dealStage = DealStage::select([
                 'deal_stages.*',
@@ -192,27 +193,27 @@ class LeadController extends AccountBaseController
             ->whereIn('leads.added_by', $goal2)
             ->whereDate('deal_stages.created_at', '>=', $goal->startDate)
             ->groupBy('deal_stages.client_username');
-            
+
         //  /dd($dealStage);
-    
+
             if (!is_null($goal->endDate)) {
                 $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $goal->endDate);
                // dd($dealStage);
             }
-    
+
             $dealStage_amount2 = $dealStage->get();
             $dealStage_amount = $dealStage->sum('deal_stages.amount');
             $dealStage_count = $dealStage->count();
            // dd($dealStage_amount,$dealStage_count);
             if ($goal->trackingType == 'value') {
-                
+
                     $deal_amount = $dealStage_amount;
                 //    / dd($deal_amount);
-                
+
             } else {
-               
+
                     $deal_amount = $dealStage_count;
-               
+
             }
            //dd($deal_amount);
             if ($deal_amount >= (int) $goal->trackingValue) {
@@ -221,8 +222,8 @@ class LeadController extends AccountBaseController
                 $goal_update->save();
                 if ($goal->achievablePoints > 0) {
 
-                    $distribute_amount = $goal->achievablePoints / count($user_data); 
-                    
+                    $distribute_amount = $goal->achievablePoints / count($user_data);
+
                     foreach ($user_data as $value) {
 
                         $user_name = User::find($value);
@@ -247,7 +248,7 @@ class LeadController extends AccountBaseController
 
             }
 
-        }else 
+        }else
         {
             $dealStage = DealStage::select([
                 'deal_stages.*',
@@ -269,23 +270,23 @@ class LeadController extends AccountBaseController
             ->whereDate('deal_stages.created_at', '>=', $goal->startDate);
             // ->groupBy('deal_stages.client_username');
         //  /dd($dealStage);
-    
+
             if (!is_null($goal->endDate)) {
                 $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $goal->endDate);
                // dd($dealStage);
             }
-    
+
             $dealStage_amount = $dealStage->sum('deal_stages.amount');
             $dealStage_count = $dealStage->count();
             if ($goal->trackingType == 'value') {
-                
+
                     $deal_amount = $dealStage_amount;
                 //    / dd($deal_amount);
-                
+
             } else {
-               
+
                     $deal_amount = $dealStage_count;
-               
+
             }
             // dd($deal_amount);
             if ($deal_amount >= (int) $goal->trackingValue) {
@@ -295,7 +296,7 @@ class LeadController extends AccountBaseController
                 if ($goal->achievablePoints > 0) {
 
                     $distribute_amount = $goal->achievablePoints / count($user_data);
-                    
+
                     foreach ($user_data as $value) {
 
                         $user_name = User::find($value);
@@ -324,15 +325,15 @@ class LeadController extends AccountBaseController
 
 
          // kpi points distribution end here
-    
-    
-        }
-       
 
-            
+
+        }
+
+
+
         }
     }
-     
+
 
 
 
@@ -399,7 +400,7 @@ class LeadController extends AccountBaseController
         foreach ($users as $user) {
           Mail::to($user->email)->send(new LeadConversionMail($lead));
         }
-        
+
 
         $deal= DealStage::where('lead_id',$lead->id)->first();
         // add pusher with admin role id 1
@@ -414,7 +415,7 @@ class LeadController extends AccountBaseController
                 'body' => 'Please check new deals',
                 'redirectUrl' => route('deals.show', $deal->id)
             ];
-            
+
             $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
             $user->notify(new DealUpdate($deal, $pusher_options));
         }
@@ -423,8 +424,8 @@ class LeadController extends AccountBaseController
             'status' => 'success'
         ]);
 
-        
-    
+
+
 
     }
 
@@ -437,7 +438,7 @@ class LeadController extends AccountBaseController
         $request->validate([
             'comments' => 'required',
         ]);
-        
+
         $deal_stage= DealStage::where('id',$request->id)->first();
         if ($deal_stage->deal_stage == 5 && $request->won_lost == "No") {
             $deal= DealStage::find($request->id);

@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import _ from 'lodash';
 import * as React from 'react';
 
 
@@ -8,22 +9,24 @@ const JqueryDateRangePicker = ({
     setStartDate,
     setEndDate,
 }) => {
-   
-    React.useEffect(() => {
+
+    const handleTimePicker = () => {
         if(window.$){
             let $ = window.$;
             let moment = window.moment;
-            let today = moment().format('D'); 
+            // let today = moment().format('D'); 
             
             $(function() {
-                let start = moment().subtract(1, 'months').date(21);
-                let end = moment().date(19);
+                let start = moment().startOf('month');
+                let end = moment();
+ 
+               
 
-                if(today > 20){
-                    end = moment().add(1, 'months').date(20);
-                }else {
-                    end = moment().date(20);
-                }
+                // if(today > 20){
+                //     end = moment().add(1, 'months').date(20);
+                // }else {
+                //     end = moment().date(20);
+                // }
 
                 
                setStartDate(start.format());
@@ -76,8 +79,13 @@ const JqueryDateRangePicker = ({
 
             });
         }
+    }
+   
+    React.useEffect(() => {
+        handleTimePicker();
     }, []);
 
+  
     return (
         <div id="jqueryDatePicker" className='sp1__jquery_date_picker' style={{position: 'relative'}}>
             <div className='sp1__jquery_date_btn'>
