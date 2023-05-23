@@ -235,7 +235,7 @@ class GoalAchieveCheck extends Command
                         }
                         $deals_data = $deals_data->where('deals.status', '!=','Denied')
                        // ->whereIn('deals.added_by', $user_id)
-                        ->groupBy('deals.client_id')
+                      //  ->groupBy('deals.client_id')
                         ->orderBy('deals.id', 'desc')
                         ->get();
                        // dd($deals_data);
