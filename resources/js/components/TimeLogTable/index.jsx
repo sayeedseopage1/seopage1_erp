@@ -12,6 +12,9 @@ import TaskWiseTable from "./TaskWiseTable";
 import { useEffect } from "react";
 import axios from "axios";
 import EmployeeWiseSessionTable from "./EmployeeWiseSessionModal";
+import TimeLogTableFilterBar from "./components/TimeLogTableFilterBar";
+import { Provider } from "react-redux";
+import { store } from '../services/store'
 
 // table context
 export const EmployeeWiseTableContext = React.createContext();
@@ -232,9 +235,12 @@ if (timeLogTableContainer) {
     const root = ReactDOM.createRoot(timeLogTableContainer);
     root.render(
         <React.StrictMode>
-            <EmployeeWiseTableProvider>
-                <TimeLogTable />
-            </EmployeeWiseTableProvider>
+            <Provider store={store}>
+                <EmployeeWiseTableProvider>
+                    <TimeLogTableFilterBar />
+                    <TimeLogTable />
+                </EmployeeWiseTableProvider>
+            </Provider>
         </React.StrictMode>
     );
 }

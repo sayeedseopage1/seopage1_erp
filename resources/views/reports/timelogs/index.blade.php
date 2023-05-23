@@ -5,9 +5,15 @@
     @include('sections.datatable_css')
 @endpush
 
+    @section('filter-section')
+        <div id="timeLogTableFilterBar">
+
+        </div>
+    @endsection
+
 {{-- @section('filter-section')
 
-
+    
     <x-filters.filter-box>
         <!-- DATE START -->
         <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0" style="z-index: 1000">

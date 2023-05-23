@@ -9,7 +9,10 @@ import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
 import dayjs from "dayjs";
 
-const cols =  [{ key: "task_name", label: "Task Name" }]
+const cols =  [
+    { key: "task_name", label: "Task Name" },
+    { key: 'session_details', label: 'Session Details' }
+]
 
 
 const employeeWise = [
@@ -90,7 +93,6 @@ const EmployeeWiseSessionTable = ({control}) => {
         if (columnOrderFromLocalStore) {
             setColumnOrder([...JSON.parse(columnOrderFromLocalStore)]);
         } else {
-            console.log({subColumns})
             setColumnOrder([...subColumns.map((item) => item.key)]);
         }
 
@@ -194,6 +196,23 @@ const EmployeeWiseSessionTable = ({control}) => {
             return r;
         }, {});
 
+        
+        // get total session 
+        const getSessionDetails = (id) => {
+            let data = sortedData.filter(d => d['task_id'] === id)
+            let len = data?.length || 0;
+
+            return(
+               <>
+                    Total Session: {len < 10 ? `0${len}` : len} <br/>
+                    Total Session Duration: <br />
+                        {convertTime(data?.reduce((acc, curr) => 
+                                acc + Number(curr['total_minutes']), 
+                            0))}
+                </>
+            )
+        }
+
 
         // console.log(groupedData)
         for (const [key, value] of Object.entries(groupedData)) {
@@ -202,13 +221,26 @@ const EmployeeWiseSessionTable = ({control}) => {
                     <tr key={key}>
                         <EmployeeProfileTd
                             rowSpan={value.length + 1}
-                            style={{ borderBottom: "2px solid #AAD1FC" }}
+                            style={{ 
+                                borderBottom: "2px solid #AAD1FC",
+                            }}
                         >
                            <span> 
                                 <a href={`tasks/${value[0].task_id}`}>
                                     {value[0].task_name}
                                 </a>
                             </span>
+                        </EmployeeProfileTd>
+
+                        <EmployeeProfileTd
+                            rowSpan={value.length + 1}
+                            style={{ 
+                                borderBottom: "2px solid #AAD1FC",
+                                borderLeft: "2px solid #fff",
+                                borderRight: "2px solid #fff"
+                            }}
+                        >
+                           <span>  {getSessionDetails(value[0]?.task_id)} </span>
                         </EmployeeProfileTd>
                     </tr>
 
