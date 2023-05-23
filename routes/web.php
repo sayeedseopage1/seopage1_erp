@@ -316,7 +316,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('attendances/update-clock-in', [DashboardController::class, 'updateClockIn'])->name('attendances.update_clock_in');
     Route::get('dashboard/private_calendar', [DashboardController::class, 'privateCalendar'])->name('dashboard.private_calendar');
     // Route::resource('points/', PointsController::class)->only
-    
+
     Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
     Route::get('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
     Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
@@ -1132,6 +1132,10 @@ Route::post('/deals/deny', [ContractController::class, 'DealDeny'])->name('deny-
 Route::post('/deals/client-form', [HomeController::class, 'ClientForm'])->name('client-submission');
 Route::post('/deals/client-form-submit', [ContractController::class, 'ClientFormSubmit'])->name('form-submit-to-client');
 Route::get('/thankyou', [HomeController::class, 'Thankyou']);
+Route::get('/deals/service-type/web-content', [HomeController::class, 'webContent']);
+Route::post('/deals/store/web-content', [HomeController::class, 'storeWebContent'])->name('store_web_content');
+Route::get('/deals/service-type/blogs-articles', [HomeController::class, 'blogArticle']);
+Route::post('/deals/store/blog-articles', [HomeController::class, 'storeBlogArticle'])->name('store_blog_articles');
 /* Account prefix routes end here */
 //store custom lead route for seaopage1
 Route::post('/lead/store', [LeadController::class, 'storeLead'])->name('store-lead');

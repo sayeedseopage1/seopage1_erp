@@ -177,6 +177,15 @@
                               @include('contracts.modals.milestoneeditmodal')
                               @include('contracts.modals.milestonedeletemodal')
                               </div>
+{{--                                  <div class="row mb-3">--}}
+{{--                                      <div class="col-md-6">--}}
+{{--                                          <input type="text" name="" id="" class="form-control height-35 f-14" placeholder="http://127.0.0.1:8000/deals/details/edit/487">--}}
+{{--                                      </div>--}}
+{{--                                      <div class="col-md-6">--}}
+{{--                                          <a href="" class="btn btn-primary" style="padding: 5px 10px 5px 10px;">Confirm Submission</a>--}}
+{{--                                      </div>--}}
+{{--                                  </div>--}}
+
                             </div>
 
 
