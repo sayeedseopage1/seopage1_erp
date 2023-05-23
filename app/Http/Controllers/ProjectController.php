@@ -1676,7 +1676,9 @@ class ProjectController extends AccountBaseController
                         ])
                         ->leftjoin('leads', 'leads.id', 'deals.lead_id')
                         ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
-                        ->whereDate('deals.created_at', '>=', $goal->startDate);
+                        ->whereDate('deals.created_at', '>=', $goal->startDate)
+                        ->where('deals.client_badge','=','new client');
+                        ;
 
                         if (!is_null($goal->endDate)) {
                             $deals_data = $deals_data->whereDate('deals.created_at', '<=', $goal->endDate);

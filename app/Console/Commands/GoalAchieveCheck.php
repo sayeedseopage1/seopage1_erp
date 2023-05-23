@@ -227,7 +227,8 @@ class GoalAchieveCheck extends Command
                         ])
                         ->leftjoin('leads', 'leads.id', 'deals.lead_id')
                        
-                        ->whereDate('deals.created_at', '>=', $goal->startDate);
+                        ->whereDate('deals.created_at', '>=', $goal->startDate)
+                        ->where('deals.client_badge','=','new client');
         
                         if (!is_null($goal->endDate)) {
                             $deals_data = $deals_data->whereDate('deals.created_at', '<=', $goal->endDate);
@@ -406,7 +407,7 @@ class GoalAchieveCheck extends Command
                 ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
                 ->whereIn('leads.added_by', $goal2)
                 ->whereDate('deal_stages.created_at', '>=', $goal->startDate)
-                ->groupBy('deal_stages.client_username');
+                ->where('deal_stages.client_badge','=','new client');
                 
             //  /dd($dealStage);
         
