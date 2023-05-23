@@ -74,7 +74,7 @@ const IncentiveCurrent = () => {
                             <div className={`${!isLoading ? 'sp1__incentive_row_item' : 'sp1__incentive_row_item animate-pulse'}`}>
                                 <div className='sp1__incentive_item'>
                                     {!isLoading && (
-                                        <span> Minimum team goal:  {data?.minimum_team_goal} </span>
+                                        <span> Minimum goal for your team:  {data?.minimum_team_goal} </span>
                                     )}  
                                 </div>
                             </div>

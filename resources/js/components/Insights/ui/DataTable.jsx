@@ -134,17 +134,16 @@ const DataTable = React.forwardRef(({
         let _filterData = data.filter(d => (d.id >= startRowId && d.id <= rowId) || (d.id <= startRowId && d.id >= rowId));
 
 
-        _filterData.map(d => {
-                let amount = d['amount'] || d['deal_amount'];
-                if(amount){
+        _filterData?.map(d => {
+                if(d['amount'] || d['deal_amount']){
+                    let amount = d['amount'] || d['deal_amount'];
                     setActualAmount(p => p + Number(amount));
                 }
         }); 
 
-        _filterData.map(d => {
-                let amount = d['team_total_amount'];
-                if(amount){
-                    setContributedAmount(p => p + Number(amount));
+        _filterData?.map(d => {
+                if(d['team_total_amount']){
+                    setContributedAmount(p => p + Number(d['team_total_amount']));
                 }
         });    
     }
@@ -225,7 +224,7 @@ const DataTable = React.forwardRef(({
                                 <h6>${actualAmount.toFixed(2)}</h6>
                             </div> 
                             
-                            { (data[1].team_total_amount && Number(goal?.team_id) !== 1) && 
+                            { (data[1]?.team_total_amount !== undefined && Number(goal?.team_id) !== 1) && 
                             <div className='cnx__table_calculated_item'>
                                 <span>Contribution Amount</span>
                                 <h6>${contributedAmount.toFixed(2)}</h6>
