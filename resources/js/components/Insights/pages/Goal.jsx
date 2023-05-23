@@ -285,9 +285,9 @@ const Goal = () => {
 
     }
 
-    const getGoalDealsDate = (deals, goal) => {
-        if(goal.entryType === "Won" && goal.team_id !== 1){
-            return deals.filter(deal => Number(deal["team_total_amount"]) !== 0) || []
+    const getGoalDealsData = (deals, goal) => {
+        if(goal?.entryType === "Won" && goal?.team_id !== 1){
+            return deals?.filter(deal => Number(deal["team_total_amount"]) !== 0) || []
         }else{
             return deals || []
         }
@@ -720,7 +720,7 @@ const Goal = () => {
                             <div >
                                 <DataTable
                                     ref={dealTableRef}
-                                    data={[...getGoalDealsDate(goalDealsData, goal)]}
+                                    data={[...getGoalDealsData(goalDealsData, goal)]}
                                     defaultColumns={
                                         goal?.entryType === 'Won' ?
                                         WonTableData :
@@ -739,6 +739,7 @@ const Goal = () => {
                                         addedTableVisibleColumns:
                                         processedTableVisibleColumns
                                     }
+                                    goal={goal}
                                     isLoading={dealsIsFetching}
                                 />
                             </div>
@@ -746,7 +747,12 @@ const Goal = () => {
 
                         {
                             // activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
-                            activeTable === 'summary' && <GoalSummaryTable ref={dealTableRef} data={goalSummary} isLoading={isSummarizing} />
+                            activeTable === 'summary' && 
+                            <GoalSummaryTable 
+                                ref={dealTableRef} 
+                                data={goalSummary} 
+                                isLoading={isSummarizing}
+                            />
                         }
                     </div>
                     {/* end graph table */}

@@ -146,7 +146,7 @@ export const ModalDataTable = () =>{
                                     AddedTableColumns : 
                                     DataTableColumns
                                 }
-
+                                goal={goal}
                                 visibleColumns={ [...visibleColumns] }
                                 isLoading={isLoading } 
                             />

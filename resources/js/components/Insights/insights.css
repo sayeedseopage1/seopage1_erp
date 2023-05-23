@@ -1475,6 +1475,25 @@ opacity: 1;
   overflow-y: auto;
 }
 
+.cnx__table_calculated_value{
+  position: absolute;
+  top: 60px;
+  right: 0px;
+  border: 1px solid #517aff;
+  background-color: #517aff;
+  color: #fff;
+  box-shadow: 0 0 6px rgba(88, 138, 245, 0.05);
+  padding: 10px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  gap: 10px;
+  width: fit-content;
+  z-index: 2;
+}
+
 .cnx__table_tr {
     width: 100%;
     display: flex ;
