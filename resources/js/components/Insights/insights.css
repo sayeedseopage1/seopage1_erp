@@ -1489,7 +1489,7 @@ opacity: 1;
   display: flex;
   -ms-flex-direction: column;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
   width: fit-content;
   z-index: 2;
 }
@@ -1555,6 +1555,9 @@ opacity: 1;
       text-overflow: ellipsis; */
   }
 
+  .cnx__table_td  span:hover{
+    cursor: text;
+  }
   
 
   .cnx__table_td  a{
