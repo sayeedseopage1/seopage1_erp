@@ -110,7 +110,7 @@ class LeadController extends AccountBaseController
 
           }
         }
-         DB::beginTransaction();
+        // DB::beginTransaction();
         $deal= new DealStage();
         $deal->short_code= 'DSEOP1'. $suffle;
         $deal->lead_id= $lead->id;
