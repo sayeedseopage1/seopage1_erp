@@ -125,10 +125,12 @@ const DataTable = React.forwardRef(({
     const handleMouseUp = (e) => {
         e.preventDefault();
         setSelectionStart(false);
-        setShowSelectedRowSummary(true);
         let parent = e.target.parentNode;
         let {rowId} = parent.dataset;
-
+        let isBetweenRange = Math.abs(rowId - startRowId);
+        
+        setShowSelectedRowSummary(isBetweenRange);
+        
         let _filterData = data.filter(d => (d.id >= startRowId && d.id <= rowId) || (d.id <= startRowId && d.id >= rowId));
 
 
