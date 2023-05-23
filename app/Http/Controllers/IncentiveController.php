@@ -83,7 +83,7 @@ class IncentiveController extends AccountBaseController
             'assigneeType' => 'Team',
             'goalType' => 'minimum',
             'goal_status' => '1',
-            'team_id'=>1,
+            
         ])->get();
         
         foreach ($team_achieve_goal as $value) {
