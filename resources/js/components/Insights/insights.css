@@ -1555,13 +1555,9 @@ opacity: 1;
       text-overflow: ellipsis; */
   }
 
-  .cnx__table_td  span:hover{
-    cursor: text;
-  }
-  
-
+    
   .cnx__table_td  a{
-    color: #777;
+    color: #444;
     white-space: pre-wrap !important;
     -ms-word-break: break-all;
     word-break: break-all;

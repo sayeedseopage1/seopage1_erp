@@ -12,7 +12,7 @@ import DataTable from '../ui/DataTable';
 // import { useDealsState } from '../hooks/useDealsState';
 import { useGoals } from '../hooks/useGoals';
 import { useTeams } from '../hooks/useTeams';
-import { useFetcher, useLocation, useParams } from 'react-router-dom';
+import { useFetcher, useLocation, useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { useUsers } from '../hooks/useUsers';
 
@@ -39,6 +39,7 @@ const numberToUnits = (value, decimal = 1) => {
 const Goal = () => {
     const params = useParams(); // get goal id from url
     const location = useLocation(); // get location
+    const navigate = useNavigate();
     const day = new CompareDate();
     const [goalSummary, setGoalSummary] = React.useState(null); // store goal summary data here
     const [tableDeals, setTableDeals] = React.useState([]);
@@ -115,6 +116,8 @@ const Goal = () => {
                 team_id: Number(goal?.team_id) 
             }
             localStorage.setItem(`goal_${userId}`, JSON.stringify(_g));
+        }else{
+            navigate('/account/insights/goal-404');
         }
     }, [goalIsFetching]);
 
@@ -149,7 +152,7 @@ const Goal = () => {
 
     // distribute deals by period
     const distributeDealsByPeriod = (deals, startDate, endDate, accessor) => {
-        return deals.filter(deal => {
+        return deals?.filter(deal => {
             return day.isSameOrAfter(day.dayjs(deal[accessor]).format('YYYY-MM-DD'), day.dayjs(startDate).format('YYYY-MM-DD')) &&
                 day.isSameOrBefore(day.dayjs(deal[accessor]).format('YYYY-MM-DD'), day.dayjs(endDate).format('YYYY-MM-DD'))
         })
