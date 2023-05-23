@@ -102,8 +102,8 @@ class IncentiveController extends AccountBaseController
 
         $minimum_team_goals = GoalSetting::where([
             'assigneeType' => 'Team',
-            'goalType' => 'minimum',
-            'team_id'=>1
+            'goalType' => 'minimum'
+            
         ])->get();
         
         foreach ($minimum_team_goals as $value) {
