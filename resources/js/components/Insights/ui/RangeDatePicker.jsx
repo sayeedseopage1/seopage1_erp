@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-
+ 
 const RangeDatePicker = ({startDate, endDate, setStartDate, setEndDate}) => {
+   
     return (
         <div className="cnx_range_date_wrapper">
             <div style={{width: '100%'}}>
@@ -20,7 +20,7 @@ const RangeDatePicker = ({startDate, endDate, setStartDate, setEndDate}) => {
             <div style={{width: '100%'}}>
                 <DatePicker
                     selected={endDate}
-                    onChange={(date) => setEndDate(date)}
+                    onChange={date => setEndDate(date)}
                     selectsEnd
                     startDate={startDate}
                     endDate={endDate}

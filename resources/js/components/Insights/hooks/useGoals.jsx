@@ -198,6 +198,7 @@ export const useGoals = () => {
             target = 0;
             goal = Number(period.value);
             rowCount = 0;
+            totalRow = 0;
         } else {
             totalDeal = _deals.length;
             

@@ -150,8 +150,8 @@ const Goal = () => {
     // distribute deals by period
     const distributeDealsByPeriod = (deals, startDate, endDate, accessor) => {
         return deals.filter(deal => {
-            return day.isSameOrAfter(deal[accessor], startDate) &&
-                day.isSameOrBefore(deal[accessor], endDate)
+            return day.isSameOrAfter(day.dayjs(deal[accessor]).format('YYYY-MM-DD'), day.dayjs(startDate).format('YYYY-MM-DD')) &&
+                day.isSameOrBefore(day.dayjs(deal[accessor]).format('YYYY-MM-DD'), day.dayjs(endDate).format('YYYY-MM-DD'))
         })
     }
 
