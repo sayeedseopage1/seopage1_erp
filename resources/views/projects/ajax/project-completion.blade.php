@@ -784,6 +784,7 @@
                 'description': description,
                 'milestone_id': {{$milestone->id}},
                 'added_by': {{Auth::user()->id}},
+                'plugin_information': website_plugin_box_information,
             }
             // console.log(data);
             $.ajaxSetup({

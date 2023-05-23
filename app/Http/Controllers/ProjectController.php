@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DealStageChange;
 use App\Models\kpiSettingGenerateSale;
 use App\Models\ProjectCms;
+use App\Models\ProjectPortfolio;
 use App\Models\ProjectWebsiteType;
 use Carbon\Carbon;
 use App\Models\Task;
@@ -3429,6 +3430,32 @@ class ProjectController extends AccountBaseController
       $milestone->status = 'pending';
 
       $milestone->save();
+      $data = $request->all();
+
+        $plugin_names = json_encode($data['plugin_name']);
+        $plugin_urls = json_encode($data['plugin_url']);
+        
+      $project_portfolio = new ProjectPortfolio();
+      $project_portfolio->project_id = $project->project_id;
+      $project_portfolio->cms_category = $data['cms_category'];
+      $project_portfolio->website_type = $data['website_type'];
+      $project_portfolio->niche = $data['niche'];
+      $project_portfolio->sub_niche = $data['sub_niche'];
+      $project_portfolio->theme_name = $data['theme_name'];
+      $project_portfolio->theme_url = $data['theme_url'];
+      $project_portfolio->plugin_information = $data['plugin_information'];
+      $project_portfolio->main_page_number = $data['main_page_number'];
+      $project_portfolio->main_page_name = $data['main_page_name'];
+      $project_portfolio->secondary_page_number = $data['secondary_page_number'];
+      $project_portfolio->secondary_page_name = $data['secondary_page_name'];
+      $project_portfolio->backup_email_address = $data['backup_email_address'];
+      $project_portfolio->day_interval = $data['day_interval'];
+      $project_portfolio->description = $data['description'];
+      $project_portfolio->portfolio_link = $data['actual_link'];
+      $project_portfolio->added_by = $data['added_by'];
+      $project_portfolio->plugin_name = $plugin_names;
+      $project_portfolio->plugin_url = $plugin_urls;
+      $project_portfolio->save();
       $milestone_update= ProjectMilestone::where('id',$milestone->milestone_id)->first();
       $milestone_update->project_completion_status= 2;
       $milestone_update->save();
