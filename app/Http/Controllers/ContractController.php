@@ -264,7 +264,7 @@ class ContractController extends AccountBaseController
         $deal->original_currency_id= $request->original_currency_id;
         $date = date('Y-m-d H:i:s');
 
-        $newDate = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $date)
+        $newDate = Carbon::createFromFormat('Y-m-d H:i:s', $date)
             ->format('Y-m-d');
 
         //dd($newDate);
@@ -272,6 +272,14 @@ class ContractController extends AccountBaseController
         $deal->deal_creation_date = $newDate;
 
         $deal->start_date = $newDate;
+        if($existing_client != null)
+        {
+            $deal->client_badge = 'existing client';
+           
+        }else {
+            $deal->client_badge= 'new client';
+        }
+        
         $deal->save();
         if (Auth::user()->role_id == 7) {
             $agent_id = SalesCount::where('user_id', Auth::id())->first();
@@ -529,12 +537,7 @@ class ContractController extends AccountBaseController
         if($existing_client != null)
         {
             $deal->client_badge = 'existing client';
-            $find_clients= Deal::where('client_username',$request->user_name)->where('client_badge','new client')->get();
-            foreach ($find_clients as $find_client) {
-                $client_update= Deal::find($find_client->id);
-                $client_update->client_badge= 'existing client';
-                $client_update->save();
-            }
+           
         }else {
             $deal->client_badge= 'new client';
         }

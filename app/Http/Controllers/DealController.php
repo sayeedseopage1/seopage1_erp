@@ -185,12 +185,7 @@ class DealController extends AccountBaseController
         if($existing_client != null)
         {
             $deal->client_badge = 'existing client';
-            $find_clients= DealStage::where('client_username',$request->user_name)->where('client_badge','new client')->get();
-            foreach ($find_clients as $find_client) {
-                $client_update= DealStage::find($find_client->id);
-                $client_update->client_badge= 'existing client';
-                $client_update->save();
-            }
+            
         }else {
             $deal->client_badge= 'new client';
         }
