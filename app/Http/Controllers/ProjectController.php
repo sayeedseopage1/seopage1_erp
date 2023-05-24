@@ -806,21 +806,21 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-        
-        //kpi distribution start from here 
+
+        //kpi distribution start from here
         $find_project_id= Project::where('id',$id)->first();
         $find_deal_id= Deal::where('id',$find_project_id->deal_id)->first();
         // dd($find_project_id);
         if ($find_project_id->status == 'not started') {
             $kpi= kpiSetting::first();
 
-         
+
             $project_budget= ($find_deal_id->amount * $kpi->accepted_by_pm)/100;
 
             if($find_deal_id->lead_id != null)
             {
                 $lead = Lead::where('id',$find_deal_id->lead_id)->first();
-                $user_name= User::where('id',$lead->added_by)->first(); 
+                $user_name= User::where('id',$lead->added_by)->first();
                 $cash_points= CashPoint::where('user_id',$lead->added_by)->orderBy('id','desc')->first();
                 $point= new CashPoint();
                 $point->user_id= $lead->added_by;
@@ -830,10 +830,10 @@ class ProjectController extends AccountBaseController
                 $point->points= ($project_budget*$kpi->the_bidder)/100;
 
                 if ($cash_points != null) {
-               
+
                     $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget*$kpi->the_bidder)/100;
 
-                }else 
+                }else
                 {
                     $point->total_points_earn=  ($project_budget*$kpi->the_bidder)/100;
 
@@ -843,7 +843,7 @@ class ProjectController extends AccountBaseController
                     $deal_qualified= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',1)->first();
 
 
-                    $user_name= User::where('id',$deal_qualified->updated_by)->first(); 
+                    $user_name= User::where('id',$deal_qualified->updated_by)->first();
                     $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
                     $point->user_id= $deal_qualified->updated_by;
@@ -853,21 +853,21 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget*$kpi->qualify)/100;
 
                     if ($cash_points_qualified != null) {
-                   
+
                         $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($project_budget*$kpi->qualify)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=  ($project_budget*$kpi->qualify)/100;
 
                     }
                     $point->save();
-                  
 
-               
+
+
                     $deal_short_code= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',2)->first();
 
-                    $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
+                    $user_name= User::where('id',$deal_short_code->updated_by)->first();
                     $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
                     $point->user_id= $deal_short_code->updated_by;
@@ -877,21 +877,21 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget*$kpi->requirements_defined)/100;
 
                     if ($cash_points_requirements_defined != null) {
-                   
+
                         $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($project_budget*$kpi->requirements_defined)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=  ($project_budget*$kpi->requirements_defined)/100;
 
                     }
                     $point->save();
-                   
 
-              
-                
+
+
+
                     $deal_proposal= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',3)->first();
-                    $user_name= User::where('id',$deal_proposal->updated_by)->first(); 
+                    $user_name= User::where('id',$deal_proposal->updated_by)->first();
                     $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
                     $point->user_id= $deal_proposal->updated_by;
@@ -901,20 +901,20 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget*$kpi->proposal_made)/100;
 
                     if ($cash_points_proposal_made != null) {
-                   
+
                         $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($project_budget*$kpi->proposal_made)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=  ($project_budget*$kpi->proposal_made)/100;
 
                     }
                     $point->save();
-                   
 
-                
-                    $deal_negotiation_started= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',4)->first();                               
-                    $user_name= User::where('id',$deal_negotiation_started->updated_by)->first(); 
+
+
+                    $deal_negotiation_started= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',4)->first();
+                    $user_name= User::where('id',$deal_negotiation_started->updated_by)->first();
                     $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
                     $point->user_id= $deal_negotiation_started->updated_by;
@@ -924,23 +924,23 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget*$kpi->negotiation_started)/100;
 
                     if ($cash_points_negotiation_started != null) {
-                   
+
                         $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($project_budget*$kpi->negotiation_started)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=  ($project_budget*$kpi->negotiation_started)/100;
 
                     }
                     $point->save();
 
-                  
-                   
-               
+
+
+
                     $deal_milestone_breakdown= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',5)->first();
                     if($deal_milestone_breakdown != null)
                     {
-                        $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
+                        $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first();
 
                     $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
@@ -951,10 +951,10 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget*$kpi->milestone_breakdown)/100;
 
                     if ($cash_points_milestone_breakdown != null) {
-                   
+
                         $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($project_budget*$kpi->milestone_breakdown)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=
                         ($project_budget*$kpi->milestone_breakdown)/100;
@@ -967,7 +967,7 @@ class ProjectController extends AccountBaseController
 
                     $deal_id= Deal::where('id',$find_deal_id->id)->first();
                     //dd($deal_id);
-                    $user_name= User::where('id',$deal_id->added_by)->first(); 
+                    $user_name= User::where('id',$deal_id->added_by)->first();
 
                     $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
@@ -978,10 +978,10 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget*$kpi->closed_deal)/100;
 
                     if ($cash_points_close_deal != null) {
-                   
+
                         $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget*$kpi->closed_deal)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=
                         ($project_budget*$kpi->closed_deal)/100;
@@ -989,7 +989,7 @@ class ProjectController extends AccountBaseController
                     }
                     $point->save();
                     $deal_id_contact= Deal::where('id',$find_deal_id->id)->first();
-                    $user_name= User::where('id',$deal_id_contact->added_by)->first(); 
+                    $user_name= User::where('id',$deal_id_contact->added_by)->first();
 
                     $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
@@ -1000,10 +1000,10 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget*$kpi->contact_form)/100;
 
                     if ($cash_points_contact != null) {
-                   
+
                         $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=
                         ($project_budget*$kpi->contact_form)/100;
@@ -1013,7 +1013,7 @@ class ProjectController extends AccountBaseController
                     if ($find_deal_id->authorization_status == 1) {
                         $earned_point = ($kpi->authorized_by_leader * $project_budget) / 100;
 
-                     $user_name= User::where('role_id',8)->first(); 
+                     $user_name= User::where('role_id',8)->first();
                      $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                      //kpi point
                      $point= new CashPoint();
@@ -1022,17 +1022,17 @@ class ProjectController extends AccountBaseController
                      $point->activity= $user_name->name . ' for authorizing deal';
                      $point->gained_as = "Individual";
                      $point->points= $earned_point;
-             
-                     if ($cash_points_team_lead != null) {            
+
+                     if ($cash_points_team_lead != null) {
                          $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point;
                      } else {
                          $point->total_points_earn= $earned_point;
                      }
-             
+
                      $point->save();
                      }
-                   
-                    
+
+
 
 
                     if ($find_deal_id->amount > $kpi->generate_single_deal) {
@@ -1041,7 +1041,7 @@ class ProjectController extends AccountBaseController
                         if($find_deal_id->lead_id != null)
              {
                  $lead = Lead::where('id',$find_deal_id->lead_id)->first();
-                 $user_name= User::where('id',$lead->added_by)->first(); 
+                 $user_name= User::where('id',$lead->added_by)->first();
                  $cash_points= CashPoint::where('user_id',$lead->added_by)->orderBy('id','desc')->first();
                  $point= new CashPoint();
                  $point->user_id= $lead->added_by;
@@ -1051,10 +1051,10 @@ class ProjectController extends AccountBaseController
                  $point->points= ($bonus_point*$kpi->the_bidder)/100;
 
                  if ($cash_points != null) {
-                
+
                      $point->total_points_earn= $cash_points->total_points_earn+ ($bonus_point*$kpi->the_bidder)/100;
 
-                 }else 
+                 }else
                  {
                      $point->total_points_earn=  ($bonus_point*$kpi->the_bidder)/100;
 
@@ -1066,7 +1066,7 @@ class ProjectController extends AccountBaseController
                      $deal_qualified= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',1)->first();
 
 
-                     $user_name= User::where('id',$deal_qualified->updated_by)->first(); 
+                     $user_name= User::where('id',$deal_qualified->updated_by)->first();
                      $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                      $point= new CashPoint();
                      $point->user_id= $deal_qualified->updated_by;
@@ -1076,21 +1076,21 @@ class ProjectController extends AccountBaseController
                      $point->points= ($bonus_point*$kpi->qualify)/100;
 
                      if ($cash_points_qualified != null) {
-                    
+
                          $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($bonus_point*$kpi->qualify)/100;
 
-                     }else 
+                     }else
                      {
                          $point->total_points_earn=  ($bonus_point*$kpi->qualify)/100;
 
                      }
                      $point->save();
-                   
 
-                
+
+
                      $deal_short_code= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',2)->first();
 
-                     $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
+                     $user_name= User::where('id',$deal_short_code->updated_by)->first();
                      $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                      $point= new CashPoint();
                      $point->user_id= $deal_short_code->updated_by;
@@ -1100,21 +1100,21 @@ class ProjectController extends AccountBaseController
                      $point->points= ($bonus_point*$kpi->requirements_defined)/100;
 
                      if ($cash_points_requirements_defined != null) {
-                    
+
                          $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($bonus_point*$kpi->requirements_defined)/100;
 
-                     }else 
+                     }else
                      {
                          $point->total_points_earn=  ($bonus_point*$kpi->requirements_defined)/100;
 
                      }
                      $point->save();
-                    
 
-               
-                 
+
+
+
                      $deal_proposal= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',3)->first();
-                     $user_name= User::where('id',$deal_proposal->updated_by)->first(); 
+                     $user_name= User::where('id',$deal_proposal->updated_by)->first();
                      $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                      $point= new CashPoint();
                      $point->user_id= $deal_proposal->updated_by;
@@ -1124,20 +1124,20 @@ class ProjectController extends AccountBaseController
                      $point->points= ($bonus_point*$kpi->proposal_made)/100;
 
                      if ($cash_points_proposal_made != null) {
-                    
+
                          $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($bonus_point*$kpi->proposal_made)/100;
 
-                     }else 
+                     }else
                      {
                          $point->total_points_earn=  ($bonus_point*$kpi->proposal_made)/100;
 
                      }
                      $point->save();
-                    
 
-                 
-                     $deal_negotiation_started= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',4)->first();                               
-                     $user_name= User::where('id',$deal_negotiation_started->updated_by)->first(); 
+
+
+                     $deal_negotiation_started= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',4)->first();
+                     $user_name= User::where('id',$deal_negotiation_started->updated_by)->first();
                      $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                      $point= new CashPoint();
                      $point->user_id= $deal_negotiation_started->updated_by;
@@ -1147,22 +1147,22 @@ class ProjectController extends AccountBaseController
                      $point->points= ($bonus_point*$kpi->negotiation_started)/100;
 
                      if ($cash_points_negotiation_started != null) {
-                    
+
                          $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($bonus_point*$kpi->negotiation_started)/100;
 
-                     }else 
+                     }else
                      {
                          $point->total_points_earn=  ($bonus_point*$kpi->negotiation_started)/100;
 
                      }
                      $point->save();
-                    
-                
+
+
                      $deal_milestone_breakdown= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',5)->first();
 
                      if($deal_milestone_breakdown != null)
                      {
-                        $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
+                        $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first();
                         $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                         $point= new CashPoint();
                         $point->user_id= $deal_milestone_breakdown->updated_by;
@@ -1172,10 +1172,10 @@ class ProjectController extends AccountBaseController
                         $point->points= ($bonus_point*$kpi->milestone_breakdown)/100;
 
                         if ($cash_points_milestone_breakdown != null) {
-                       
+
                             $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($bonus_point*$kpi->milestone_breakdown)/100;
 
-                        }else 
+                        }else
                         {
                             $point->total_points_earn=
                             ($bonus_point*$kpi->milestone_breakdown)/100;
@@ -1187,7 +1187,7 @@ class ProjectController extends AccountBaseController
                      }
                      $deal_id= Deal::where('id',$find_deal_id->id)->first();
                      //dd($deal_id);
-                     $user_name= User::where('id',$deal_id->added_by)->first(); 
+                     $user_name= User::where('id',$deal_id->added_by)->first();
 
                      $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                      $point= new CashPoint();
@@ -1198,10 +1198,10 @@ class ProjectController extends AccountBaseController
                      $point->points= ($project_budget*$kpi->closed_deal)/100;
 
                      if ($cash_points_close_deal != null) {
-                    
+
                          $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget*$kpi->closed_deal)/100;
 
-                     }else 
+                     }else
                      {
                          $point->total_points_earn=
                          ($project_budget*$kpi->closed_deal)/100;
@@ -1209,7 +1209,7 @@ class ProjectController extends AccountBaseController
                      }
                      $point->save();
                      $deal_id_contact= Deal::where('id',$find_deal_id->id)->first();
-                     $user_name= User::where('id',$deal_id_contact->added_by)->first(); 
+                     $user_name= User::where('id',$deal_id_contact->added_by)->first();
 
                      $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                      $point= new CashPoint();
@@ -1220,10 +1220,10 @@ class ProjectController extends AccountBaseController
                      $point->points= ($project_budget*$kpi->contact_form)/100;
 
                      if ($cash_points_contact != null) {
-                    
+
                          $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
 
-                     }else 
+                     }else
                      {
                          $point->total_points_earn=
                          ($project_budget*$kpi->contact_form)/100;
@@ -1234,7 +1234,7 @@ class ProjectController extends AccountBaseController
                      if ($find_deal_id->authorization_status == 1) {
                         $earned_point = ($kpi->authorized_by_leader * $find_deal_id->amount) / 100;
 
-                     $user_name= User::where('role_id',8)->first(); 
+                     $user_name= User::where('role_id',8)->first();
                      $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                      //kpi point
                      $point= new CashPoint();
@@ -1243,21 +1243,21 @@ class ProjectController extends AccountBaseController
                      $point->activity= $user_name->name . ' for authorizing deal';
                      $point->gained_as = "Individual";
                      $point->points= $earned_point;
-             
-                     if ($cash_points_team_lead != null) {            
+
+                     if ($cash_points_team_lead != null) {
                          $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point;
                      } else {
                          $point->total_points_earn= $earned_point;
                      }
-             
+
                      $point->save();
                      }
 
-                    
-                    
 
-                     
-                    
+
+
+
+
                      }
                      $currentMonth = Carbon::now()->month;
                     // / dd($currentMonth);
@@ -1266,7 +1266,7 @@ class ProjectController extends AccountBaseController
 
                      $kpi_settings= kpiSettingGenerateSale::all();
                     // dd($kpi_settings);
-                     $user_name= User::where('role_id',8)->first(); 
+                     $user_name= User::where('role_id',8)->first();
                      $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                      foreach ($kpi_settings as $value) {
                         // /dd($value);
@@ -1280,22 +1280,22 @@ class ProjectController extends AccountBaseController
                      $point->points= ($project_budget*$value->generate_sales_amount)/100;
 
                      if ($cash_points_team_lead != null) {
-                    
+
                          $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($project_budget*$value->generate_sales_amount)/100;
 
-                     }else 
+                     }else
                      {
                          $point->total_points_earn=
                          ($project_budget*$value->generate_sales_amount)/100;
 
                      }
                      $point->save();
-                            
+
                         }
                      }
                      if ($monthly_deal > $kpi->generate_sales_above)
                 {
-                        $user_name= User::where('role_id',8)->first(); 
+                        $user_name= User::where('role_id',8)->first();
                         $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                         $point= new CashPoint();
                      $point->user_id= $user_name->id;
@@ -1305,10 +1305,10 @@ class ProjectController extends AccountBaseController
                      $point->points= ($project_budget*$kpi->generate_sales_above_point)/100;
 
                      if ($cash_points_team_lead != null) {
-                    
+
                          $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($project_budget*$kpi->generate_sales_above_point)/100;
 
-                     }else 
+                     }else
                      {
                          $point->total_points_earn=
                          ($project_budget*$kpi->generate_sales_above_point)/100;
@@ -1319,11 +1319,11 @@ class ProjectController extends AccountBaseController
                      if ($monthly_deal > $kpi->after && $monthly_deal >= $monthly_deal+ $kpi->additional_sales_amount ) {
 
                         $project_budget_additional= $kpi->after_reach_amount;
-                       
+
             if($find_deal_id->lead_id != null)
             {
                 $lead = Lead::where('id',$find_deal_id->lead_id)->first();
-                $user_name= User::where('id',$lead->added_by)->first(); 
+                $user_name= User::where('id',$lead->added_by)->first();
                 $cash_points= CashPoint::where('user_id',$lead->added_by)->orderBy('id','desc')->first();
                 $point= new CashPoint();
                 $point->user_id= $lead->added_by;
@@ -1333,10 +1333,10 @@ class ProjectController extends AccountBaseController
                 $point->points= ($project_budget_additional*$kpi->the_bidder)/100;
 
                 if ($cash_points != null) {
-               
+
                     $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget_additional*$kpi->the_bidder)/100;
 
-                }else 
+                }else
                 {
                     $point->total_points_earn=  ($project_budget_additional*$kpi->the_bidder)/100;
 
@@ -1348,7 +1348,7 @@ class ProjectController extends AccountBaseController
                     $deal_qualified= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',1)->first();
 
 
-                    $user_name= User::where('id',$deal_qualified->updated_by)->first(); 
+                    $user_name= User::where('id',$deal_qualified->updated_by)->first();
                     $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
                     $point->user_id= $deal_qualified->updated_by;
@@ -1358,21 +1358,21 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget_additional*$kpi->qualify)/100;
 
                     if ($cash_points_qualified != null) {
-                   
+
                         $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($project_budget_additional*$kpi->qualify)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=  ($project_budget_additional*$kpi->qualify)/100;
 
                     }
                     $point->save();
-                  
 
-               
+
+
                     $deal_short_code= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',2)->first();
 
-                    $user_name= User::where('id',$deal_short_code->updated_by)->first(); 
+                    $user_name= User::where('id',$deal_short_code->updated_by)->first();
                     $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
                     $point->user_id= $deal_short_code->updated_by;
@@ -1382,21 +1382,21 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget_additional*$kpi->requirements_defined)/100;
 
                     if ($cash_points_requirements_defined != null) {
-                   
+
                         $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($project_budget_additional*$kpi->requirements_defined)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=  ($project_budget_additional*$kpi->requirements_defined)/100;
 
                     }
                     $point->save();
-                   
 
-              
-                
+
+
+
                     $deal_proposal= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',3)->first();
-                    $user_name= User::where('id',$deal_proposal->updated_by)->first(); 
+                    $user_name= User::where('id',$deal_proposal->updated_by)->first();
                     $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
                     $point->user_id= $deal_proposal->updated_by;
@@ -1406,20 +1406,20 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget_additional*$kpi->proposal_made)/100;
 
                     if ($cash_points_proposal_made != null) {
-                   
+
                         $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($project_budget_additional*$kpi->proposal_made)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=  ($project_budget_additional*$kpi->proposal_made)/100;
 
                     }
                     $point->save();
-                   
 
-                
-                    $deal_negotiation_started= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',4)->first();                               
-                    $user_name= User::where('id',$deal_negotiation_started->updated_by)->first(); 
+
+
+                    $deal_negotiation_started= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',4)->first();
+                    $user_name= User::where('id',$deal_negotiation_started->updated_by)->first();
                     $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
                     $point->user_id= $deal_negotiation_started->updated_by;
@@ -1429,23 +1429,23 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget_additional*$kpi->negotiation_started)/100;
 
                     if ($cash_points_negotiation_started != null) {
-                   
+
                         $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($project_budget_additional*$kpi->negotiation_started)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=  ($project_budget_additional*$kpi->negotiation_started)/100;
 
                     }
                     $point->save();
 
-                  
-                   
-               
+
+
+
                     $deal_milestone_breakdown= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',5)->first();
                     if($deal_milestone_breakdown != null)
                     {
-                        $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first(); 
+                        $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first();
 
                     $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
@@ -1456,10 +1456,10 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget_additional*$kpi->milestone_breakdown)/100;
 
                     if ($cash_points_milestone_breakdown != null) {
-                   
+
                         $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($project_budget_additional*$kpi->milestone_breakdown)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=
                         ($project_budget_additional*$kpi->milestone_breakdown)/100;
@@ -1472,7 +1472,7 @@ class ProjectController extends AccountBaseController
 
                     $deal_id= Deal::where('id',$find_deal_id->id)->first();
                     //dd($deal_id);
-                    $user_name= User::where('id',$deal_id->added_by)->first(); 
+                    $user_name= User::where('id',$deal_id->added_by)->first();
 
                     $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
@@ -1483,10 +1483,10 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget_additional*$kpi->closed_deal)/100;
 
                     if ($cash_points_close_deal != null) {
-                   
+
                         $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget_additional*$kpi->closed_deal)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=
                         ($project_budget_additional*$kpi->closed_deal)/100;
@@ -1494,7 +1494,7 @@ class ProjectController extends AccountBaseController
                     }
                     $point->save();
                     $deal_id_contact= Deal::where('id',$find_deal_id->id)->first();
-                    $user_name= User::where('id',$deal_id_contact->added_by)->first(); 
+                    $user_name= User::where('id',$deal_id_contact->added_by)->first();
 
                     $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
@@ -1505,10 +1505,10 @@ class ProjectController extends AccountBaseController
                     $point->points= ($project_budget_additional*$kpi->contact_form)/100;
 
                     if ($cash_points_contact != null) {
-                   
+
                         $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget_additional*$kpi->contact_form)/100;
 
-                    }else 
+                    }else
                     {
                         $point->total_points_earn=
                         ($project_budget_additional*$kpi->contact_form)/100;
@@ -1516,14 +1516,14 @@ class ProjectController extends AccountBaseController
                     }
                     $point->save();
 
-                       
+
 
                      }
 
             //5% kpi setting start
-            
+
             $goals = GoalSetting::where([
-                'goal_status' =>  0, 
+                'goal_status' =>  0,
             ])->get();
 
             foreach($goals as $goal) {
@@ -1572,11 +1572,11 @@ class ProjectController extends AccountBaseController
                                 $value->amount = 1;
                                 $value->tracking_type = 'count';
                             }
-                            
+
                             $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
                             $value->bidder_amount = round((24 * $value->amount) / 100, 2);
                             $value->team_total_amount = 0;
-                            
+
 
                             foreach ($value->deal_stage as $key => $deal_stage) {
                                 $amount = 0;
@@ -1629,11 +1629,11 @@ class ProjectController extends AccountBaseController
                             {
                                 $team_total_amount = Deal::where('status','!=','Denied')->sum('amount');
 
-                            }else 
+                            }else
                             {
-                                $team_total_amount = Deal::where('status','!=','Denied')->count(); 
+                                $team_total_amount = Deal::where('status','!=','Denied')->count();
                             }
-                           
+
 
                         }
                         if ($team_total_amount >= (int) $goal->trackingValue) {
@@ -1643,7 +1643,7 @@ class ProjectController extends AccountBaseController
                             if ($goal->achievablePoints > 0) {
 
                                 $distribute_amount = $goal->achievablePoints / count($user_id);
-                                
+
                                 foreach ($user_id as $value) {
 
                                     $user_name = User::find($value);
@@ -1666,7 +1666,7 @@ class ProjectController extends AccountBaseController
                                 }
                             }
                         }
-                        
+
                     } elseif ($goal->dealType == 'New Client') {
                         $deals_data = Deal::select([
                             'deals.*',
@@ -1700,7 +1700,7 @@ class ProjectController extends AccountBaseController
                             $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
                             $value->bidder_amount = round((24 * $value->amount) / 100, 2);
                             $value->team_total_amount = 0;
-                           
+
 
                             foreach ($value->deal_stage as $key => $deal_stage) {
                                 $amount = 0;
@@ -1744,9 +1744,9 @@ class ProjectController extends AccountBaseController
                             }
 
                             $array[] = $value;
-                            
 
-                            
+
+
                         }
                         if($goal->team_id == 1)
                         {
@@ -1754,11 +1754,11 @@ class ProjectController extends AccountBaseController
                             {
                                 $team_total_amount = Deal::where('status','!=','Denied')->sum('amount');
 
-                            }else 
+                            }else
                             {
-                                $team_total_amount = Deal::where('status','!=','Denied')->count(); 
+                                $team_total_amount = Deal::where('status','!=','Denied')->count();
                             }
-                           
+
 
                         }
                         if ($team_total_amount >= (int) $goal->trackingValue) {
@@ -1768,7 +1768,7 @@ class ProjectController extends AccountBaseController
                             if ($goal->achievablePoints > 0) {
 
                                 $distribute_amount = $goal->achievablePoints / count($user_id);
-                                
+
                                 foreach ($user_id as $value) {
 
                                     $user_name = User::find($value);
@@ -1799,7 +1799,7 @@ class ProjectController extends AccountBaseController
             //5% kpi setting end
         }
 
-         
+
 
         //kpi distribution ends here
         $project = Project::findOrFail($id);
@@ -1897,7 +1897,7 @@ class ProjectController extends AccountBaseController
         $project->comments= $request->comments;
         $project->save();
 
-        
+
         // $this->logProjectActivity($project->id, 'Project accepted by ');
         $users= User::where('role_id',1)->get();
 
@@ -2130,7 +2130,7 @@ class ProjectController extends AccountBaseController
         if ($redirectUrl == '') {
             $redirectUrl = route('projects.index');
         }
-        
+
         return Reply::successWithData(__('messages.projectUpdated'), ['projectID' => $project->id, 'redirectUrl' => $redirectUrl]);
     }
 
@@ -3434,7 +3434,7 @@ class ProjectController extends AccountBaseController
 
         $plugin_names = json_encode($data['plugin_name']);
         $plugin_urls = json_encode($data['plugin_url']);
-        
+
       $project_portfolio = new ProjectPortfolio();
       $project_portfolio->project_id = $project->project_id;
       $project_portfolio->cms_category = $data['cms_category'];
@@ -3975,7 +3975,7 @@ class ProjectController extends AccountBaseController
         return $html;
     }
     public function timeExtension(Request $request){
-        dd($request->all());
+//        dd($request->all());
         $request->validate([
             'new_date' => 'required',
         ], [

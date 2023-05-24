@@ -179,6 +179,7 @@ use App\Http\Controllers\PointsController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProjectCredential;
 use App\Http\Controllers\IncentiveController;
+use App\Http\Controllers\PolicyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -868,6 +869,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     //KPI Settings
     Route::resource('kpi-settings', KpiSettingController::class);
+//    Policy section
+    Route::resource('policy', PolicyController::class);
     //Incentives Settings
     Route::resource('incentive-settings',IncentiveSettingController::class);
 
