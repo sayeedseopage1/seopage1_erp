@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
 import TimeLogTableFilterBar from "./components/TimeLogTableFilterBar";
-import { useLazyGetTaskWiseDataQuery } from "../services/api/timeLogTableApiSlice";
+import { useGetTaskWiseDataMutation } from "../services/api/timeLogTableApiSlice";
 
 // pivot table
 const TaskWiseTable = ({ columns, subColumns }) => {
@@ -28,22 +28,21 @@ const TaskWiseTable = ({ columns, subColumns }) => {
     } = React.useContext(EmployeeWiseTableContext);
 
     const [data, setData] = useState([]);
-    // const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [filterOptions, setFilterOptions] = useState({});
 
-    const [getTaskWiseData, {isFetching: loading}] = useLazyGetTaskWiseDataQuery();
+    const [getTaskWiseData, {isLoading: dataIsLoading}] = useGetTaskWiseDataMutation();
 
     // handle data request
     const handleDataRequest = async (filter, page, pagePageRow) => {
+        setData([]);
         setFilterOptions(filter);
-        let query = {
+        let data = {
             ...filter,
             page: page || currentPage,
             per_page_row: pagePageRow || nPageRows,
         }
-        console.log(query)
-
-        let res = await getTaskWiseData().unwrap();
+        let res = await getTaskWiseData(data).unwrap();
         if(res) setData(res);            
     }
 
@@ -59,6 +58,15 @@ const TaskWiseTable = ({ columns, subColumns }) => {
         setNPageRows(n);
         handleDataRequest(filterOptions, currentPage, Number(n));
     }
+
+    useEffect(()=> {
+        let timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000)
+
+
+        return () => clearTimeout(timer);
+    }, []) 
 
 
     // // get employee table data
@@ -392,20 +400,25 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                 <table>
                     <thead>{prepareHeader()}</thead>
                     <tbody>
-                        {(!loading && data.length > 0) ?    
+                        {(!loading && !dataIsLoading && data.length > 0) ?    
                             prepareRows() 
                         : null}
                     </tbody>
                 </table>
             </TableWrapper>
 
-            {loading &&
+            {(loading || dataIsLoading) &&
                 <Loading> 
                     <div className="spinner-border" role="status"> </div>
                     Loading...
                 </Loading>
             }
-
+            
+            {!loading && !dataIsLoading && !data.length &&
+                <Loading> 
+                    Data Not Found
+                </Loading>
+            }
 
             {/* pagination */}
             <Pagination

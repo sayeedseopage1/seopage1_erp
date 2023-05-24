@@ -10,7 +10,7 @@ import { convertTime } from "./utils/converTime";
 import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
 import TimeLogTableFilterBar from "./components/TimeLogTableFilterBar";
-import { useLazyGetEmployeeWiseDataQuery } from "../services/api/timeLogTableApiSlice";
+import { useGetEmployeeWiseDataMutation } from "../services/api/timeLogTableApiSlice";
 
 // pivot table
 const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
@@ -31,23 +31,21 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
     } = React.useContext(EmployeeWiseTableContext);
     const [data, setData] = useState([]);
     const [filterOptions, setFilterOptions] = useState({});
-    // const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
 
-    const [getEmployeeWiseData, {data:em, isFetching: loading }] = useLazyGetEmployeeWiseDataQuery();
+    const [getEmployeeWiseData, {isLoading: dataIsLoading }] = useGetEmployeeWiseDataMutation();
     
 
     // handle data request
     const handleDataRequest = async (filter, page, pagePageRow) => {
         setFilterOptions(filter);
-        let query = {
+        let data = {
             ...filter,
             page: page || currentPage,
             per_page_row: pagePageRow || nPageRows,
         }
-        console.log(query)
-
-        let res = await getEmployeeWiseData().unwrap();
+        let res = await getEmployeeWiseData(data).unwrap();
         if(res) setData(res);            
     }
 
@@ -63,7 +61,16 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
         handleDataRequest(filterOptions, currentPage, Number(n));
     }
 
-    
+    useEffect(()=> {
+        let timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000)
+
+
+        return () => clearTimeout(timer);
+    }, []) 
+
+
     // get employee table data
     // useEffect(() => {
     //     if(data.length > 0) return;
@@ -347,17 +354,23 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
                 <table>
                     <thead>{prepareHeader()}</thead>
                     <tbody>
-                        {(!loading && data.length > 0) ?    
+                        {(!loading && !dataIsLoading && data.length > 0) ?    
                             prepareRows() 
                         : null}
                     </tbody>
                 </table>
             </TableWrapper>
 
-            {loading &&
+            {(loading || dataIsLoading) &&
                 <Loading> 
                     <div className="spinner-border" role="status"> </div>
                     Loading...
+                </Loading>
+            }
+
+            {!loading && !dataIsLoading && !data.length &&
+                <Loading> 
+                    Data Not Found
                 </Loading>
             }
 

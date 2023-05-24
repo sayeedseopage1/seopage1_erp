@@ -61,16 +61,185 @@ class TimelogReportController extends AccountBaseController
     }
     // public function getTimeLog($type)
     
-    public function getTimeLog($type)
+    // public function getTimeLog($type)
+    // {
+
+    //     $users = DB::table('users')->select(['id'])->whereIn('role_id', [5, 9, 10])->get()->toArray();
+    //     $filtered_array = array_filter($users, function($item) {
+    //         return isset($item->id);
+    //     });
+    //     $id_array = array_map(function($item) {
+    //         return $item->id;
+    //     }, $filtered_array);
+    //     if ($type == 'employees') {
+    //         $data = DB::table('project_time_logs')->select([
+    //             'employee.id as employee_id',
+    //             'employee.name as employee_name',
+    //             'employee.image as employee_image',
+    //             'employee_designations.name as employee_designation',
+                 
+    //             'projects.client_id',
+    //             'client.name as client_name',
+    //             'client.image as client_image',
+    //             'deals.profile_link as client_from',
+    //             'pm.id as pm_id',
+    //             'pm.image as pm_image',
+    //             'pm.name as pm_name', 
+    //             'pm_roles.display_name as pm_roles',
+    //             'projects.id as project_id',
+    //             'projects.project_name',
+    //             'projects.status as project_status',
+    //             'tasks.id as task_id',
+    //             'tasks.heading as task_name',
+    //             'tasks.id as task_id',
+    //             'tasks.start_date as task_start',
+    //             'tasks.due_date as task_end',
+    //             DB::raw('COUNT(project_time_logs.id) as number_of_session'),
+    //             DB::raw('sum(project_time_logs.total_minutes) as total_minutes'),
+    //         ])
+    //         ->join('projects', 'project_time_logs.project_id', '=', 'projects.id')
+            
+            
+    //         ->join('users as pm', 'projects.pm_id', '=', 'pm.id')
+    //         ->join('roles as pm_roles', 'pm.role_id', 'pm_roles.id')
+    //         ->join('employee_details as pm_emp_details', 'pm.id', '=', 'pm_emp_details.user_id')
+    //         ->join('designations as pm_employee_designations', 'pm_emp_details.designation_id', '=', 'pm_employee_designations.id')
+            
+    //         ->join('users as client', 'projects.client_id', '=', 'client.id')
+    //         ->join('deals', 'client.id', '=', 'deals.client_id')
+            
+    //         ->join('users as employee', 'project_time_logs.user_id', '=', 'employee.id')
+    //         ->join('employee_details', 'employee.id', '=', 'employee_details.user_id')
+    //         ->join('designations as employee_designations', 'employee_details.designation_id', '=', 'employee_designations.id')
+            
+            
+    //         ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
+    //         ->whereIn('project_time_logs.user_id', $id_array)
+    //         ->groupBy('project_time_logs.user_id', 'employee.id')
+    //         ->groupBy('project_time_logs.project_id')
+    //     //     ->groupBy('projects.client_id')
+    //         //->where('projects.status','=','in progress')
+           
+    //         ->orderBy('project_time_logs.task_id' , 'desc')
+    //         ->get();
+    //        // dd($data);
+    //     } else if($type == 'tasks') {
+    //         $data = ProjectTimeLog::select([
+    //             'tasks.id as task_id',
+    //             'tasks.heading as task_name',   
+    //             'projects.client_id',
+    //             'client.name as client_name',
+    //             'client.image as client_image',
+    //             'deals.profile_link as client_from',
+                
+    //             'projects.id as project_id',
+    //             'projects.project_name',
+    //             'projects.status as project_status',
+
+    //             'pm.id as pm_id',
+    //             'pm.name as pm_name',
+    //             'pm.image as pm_image',
+    //             'pm_roles.display_name as pm_roles',
+                
+    //             'employee.id as employee_id',
+    //             'employee.name as employee_name',
+    //             'employee.image as employee_image',
+    //             'emp_roles.display_name as employee_roles',
+    //             'project_time_logs.start_time',
+    //             'project_time_logs.end_time',
+    //             'project_time_logs.total_minutes as total_minutes'
+    //         ])  
+    //         ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
+    //         ->join('projects', 'project_time_logs.project_id', 'projects.id')
+            
+    //         ->join('users as pm', 'projects.pm_id', 'pm.id')
+    //         ->join('roles as pm_roles', 'pm.role_id', 'pm_roles.id')
+            
+    //         ->join('users as employee', 'project_time_logs.user_id', 'employee.id')
+    //         ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
+            
+    //         ->join('users as client', 'projects.client_id', 'client.id')
+    //         ->join('deals', 'client.id', '=', 'deals.client_id')
+    //         ->where('projects.status','in progress')
+    //         ->orderBy('project_time_logs.task_id' , 'desc')
+           
+    //         ->get();
+    //     } else if($type == 'projects') {
+    //         $data = ProjectTimeLog::select([
+    //             'projects.id as project_id',
+    //             'projects.project_name',   
+    //             'projects.client_id',
+    //             'projects.status as project_status',
+                
+    //             'client.name as client_name',
+    //             'client.image as client_image',
+    //             'deals.profile_link as client_from',
+
+
+    //             'pm.id as pm_id',
+    //             'pm.name as pm_name',
+    //             'pm.image as pm_image',
+    //             'pm_roles.display_name as pm_roles',
+                
+    //             'employee.id as employee_id',
+    //             'employee.name as employee_name',
+    //             'employee.image as employee_image',
+    //             'emp_roles.display_name as employee_roles',
+    //             'project_time_logs.start_time',
+    //             'project_time_logs.end_time',
+    //             DB::raw('COUNT(project_time_logs.id) as number_of_session'),
+    //             DB::raw('SUM(project_time_logs.total_minutes) as total_minutes'),
+
+    //            // 'project_time_logs.total_minutes as total_minutes'
+    //         ])  
+    //         ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
+    //         ->join('projects', 'project_time_logs.project_id', 'projects.id')
+            
+    //         ->join('users as pm', 'projects.pm_id', 'pm.id')
+    //         ->join('roles as pm_roles', 'pm.role_id', 'pm_roles.id')
+            
+    //         ->join('users as employee', 'project_time_logs.user_id', 'employee.id')
+    //         ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
+            
+    //         ->join('users as client', 'projects.client_id', 'client.id')
+    //         ->join('deals', 'client.id', '=', 'deals.client_id')
+
+    //         ->groupBy('project_time_logs.project_id')
+    //         ->groupBy('project_time_logs.user_id')
+    //         ->where('projects.status','in progress')
+    //         //->groupBy('project_time_logs.total_minutes')
+    //         ->orderBy('project_time_logs.project_id' , 'desc')
+           
+
+    //         ->get();
+    //         //dd($data);
+    //     }
+
+    //     return response()->json($data);
+    // }
+
+
+    public function getTimeLog(Request $request, $type)
     {
+        $page = $request->input('page', 1);
+        $perPage = $request->input('per_page_row', 10);
+        $offset = ($page - 1) * $perPage;
+        $startDate = $request->input('start_date', null);
+        $endDate = $request->input('end_date', null);
+        $employeeId = $request->input('employee_id', null);
+        $pmId = $request->input('pm_id', null);
+        $clientId = $request->input('client_id', null);
+
 
         $users = DB::table('users')->select(['id'])->whereIn('role_id', [5, 9, 10])->get()->toArray();
         $filtered_array = array_filter($users, function($item) {
             return isset($item->id);
         });
+
         $id_array = array_map(function($item) {
             return $item->id;
         }, $filtered_array);
+
         if ($type == 'employees') {
             $data = DB::table('project_time_logs')->select([
                 'employee.id as employee_id',
@@ -116,13 +285,25 @@ class TimelogReportController extends AccountBaseController
             ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
             ->whereIn('project_time_logs.user_id', $id_array)
             ->groupBy('project_time_logs.user_id', 'employee.id')
-            ->groupBy('project_time_logs.project_id')
-        //     ->groupBy('projects.client_id')
-            //->where('projects.status','=','in progress')
-           
-            ->orderBy('project_time_logs.task_id' , 'desc')
+            ->groupBy('project_time_logs.project_id');
+            if (!is_null($startDate)) {
+                $data = $data->where('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+            }
+            if (!is_null($endDate)) {
+                $data = $data->where('project_time_logs.end_time', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+            }
+            if (!is_null($pmId)) {
+                $data = $data->where('projects.pm_id' , $pmId);
+            }
+            if (!is_null($employeeId)) {
+                $data = $data->where('project_time_logs.user_id' , $pmId);
+            }
+            if (!is_null($clientId)) {
+                $data = $data->where('projects.client_id' , $clientId);
+            }
+            $data = $data->orderBy('project_time_logs.task_id' , 'desc')->offset($offset)
+            ->limit($perPage)
             ->get();
-           // dd($data);
         } else if($type == 'tasks') {
             $data = ProjectTimeLog::select([
                 'tasks.id as task_id',
@@ -162,7 +343,8 @@ class TimelogReportController extends AccountBaseController
             ->join('deals', 'client.id', '=', 'deals.client_id')
             ->where('projects.status','in progress')
             ->orderBy('project_time_logs.task_id' , 'desc')
-           
+            ->offset($offset)
+            ->limit($perPage)
             ->get();
         } else if($type == 'projects') {
             $data = ProjectTimeLog::select([
@@ -207,16 +389,17 @@ class TimelogReportController extends AccountBaseController
             ->groupBy('project_time_logs.project_id')
             ->groupBy('project_time_logs.user_id')
             ->where('projects.status','in progress')
-            //->groupBy('project_time_logs.total_minutes')
             ->orderBy('project_time_logs.project_id' , 'desc')
-           
-
+            ->offset($offset)
+            ->limit($perPage)
             ->get();
-            //dd($data);
         }
 
         return response()->json($data);
     }
+
+
+
 
     public function timelogChartData(Request $request)
     {
