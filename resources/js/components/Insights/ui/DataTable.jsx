@@ -33,12 +33,21 @@ const useTableState = () => {
 
 // data table
 const DataTable = React.forwardRef(({
+<<<<<<< HEAD
                                         data,
                                         isLoading,
                                         defaultColumns,
                                         visibleColumns,
                                         goal
                                     }, ref) => {
+=======
+    data, 
+    isLoading, 
+    defaultColumns, 
+    visibleColumns,
+    goal
+}, ref) => {
+>>>>>>> 3b6595cde ('update_goal_table')
     const [currentPageData, setCurrentPageData] = React.useState([...data]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
     const { activeColumns, setActiveColumns, sortConfig, setSortConfig } = useTableState();
@@ -118,19 +127,27 @@ const DataTable = React.forwardRef(({
         setContributedAmount(0);
         setSelectionStart(true);
         let {rowId} = e.target.parentNode.dataset;
+<<<<<<< HEAD
         setStartRowId(Number(rowId));
+=======
+        setStartRowId(Number(rowId)); 
+>>>>>>> 3b6595cde ('update_goal_table')
     }
 
     // mouse up in row
     const handleMouseUp = (e) => {
         e.preventDefault();
         setSelectionStart(false);
+        setShowSelectedRowSummary(true);
         let parent = e.target.parentNode;
         let {rowId} = parent.dataset;
         let isBetweenRange = Math.abs(rowId - startRowId);
 
+<<<<<<< HEAD
         setShowSelectedRowSummary(isBetweenRange);
 
+=======
+>>>>>>> 3b6595cde ('update_goal_table')
         let _filterData = data.filter(d => (d.id >= startRowId && d.id <= rowId) || (d.id <= startRowId && d.id >= rowId));
 
 
@@ -141,11 +158,20 @@ const DataTable = React.forwardRef(({
             }
         });
 
+<<<<<<< HEAD
         _filterData?.map(d => {
             if(d['team_total_amount']){
                 setContributedAmount(p => p + Number(d['team_total_amount']));
             }
         });
+=======
+        _filterData.map(d => {
+                let amount = d['team_total_amount'];
+                if(amount){
+                    setContributedAmount(p => p + Number(amount));
+                }
+        });    
+>>>>>>> 3b6595cde ('update_goal_table')
     }
 
     // mouse move in row
@@ -176,18 +202,31 @@ const DataTable = React.forwardRef(({
     }
 
     /*
+<<<<<<< HEAD
     ** If any row is selected,
     ** unselect that row on click.
     */
 
+=======
+    ** If any row is selected, 
+    ** unselect that row on click.
+    */ 
+     
+>>>>>>> 3b6595cde ('update_goal_table')
     const handleOnClickOfRow = (e) => {
         e.preventDefault();
         if(startRowId){
             let rows = document.querySelectorAll('.cnx__table_tr');
             rows.forEach(row=> {
+<<<<<<< HEAD
                 if(row.classList.contains('__selected')) {
                     row.classList.remove('__selected');
                 }
+=======
+               if(row.classList.contains('__selected')) {
+                row.classList.remove('__selected'); 
+               }
+>>>>>>> 3b6595cde ('update_goal_table')
             })
             setShowSelectedRowSummary(false);
             setActualAmount(0);
@@ -195,16 +234,26 @@ const DataTable = React.forwardRef(({
             setStartRowId(null);
         }
     }
+<<<<<<< HEAD
 
 
     const columns = defaultColumns.filter(d => activeColumns.includes(d.id))
         .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
 
 
+=======
+  
+
+    const columns = defaultColumns.filter(d => activeColumns.includes(d.id))
+                    .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
+             
+      
+>>>>>>> 3b6595cde ('update_goal_table')
 
     return (
         <div style={{maxWidth: '100%'}}>
             <div className='cnx__table_wrapper'>
+<<<<<<< HEAD
                 {/* filter button */}
                 <div className='cnx__table_td_filter_btn'>
                     {/* <TableFilterButton  /> */}
@@ -215,10 +264,23 @@ const DataTable = React.forwardRef(({
                 <AnimatePresence>
                     {showSelectedRowSummary && <motion.div
                         initial={{x:10}}
+=======
+                 {/* filter button */}
+                        <div className='cnx__table_td_filter_btn'>
+                            {/* <TableFilterButton  /> */}
+                        </div> 
+                    {/* header */}
+
+            {/* select row data */}
+                <AnimatePresence>
+                    {showSelectedRowSummary && <motion.div 
+                        initial={{x:10}} 
+>>>>>>> 3b6595cde ('update_goal_table')
                         animate={{ x: 0}}
                         exit={{x: 10}}
                         className='cnx__table_calculated_value'
                     >
+<<<<<<< HEAD
                         <div className='cnx__table_calculated_item'>
                             <span>Actual Amount</span>
                             <h6>${actualAmount.toFixed(2)}</h6>
@@ -234,6 +296,23 @@ const DataTable = React.forwardRef(({
                 </AnimatePresence>
 
                 {/* end selected row data */}
+=======
+                            <div className='cnx__table_calculated_item'>
+                                <span>Actual Amount</span>
+                                <h6>${actualAmount.toFixed(2)}</h6>
+                            </div> 
+                            
+                            { (data[1].team_total_amount && Number(goal?.team_id) !== 1) && 
+                            <div className='cnx__table_calculated_item'>
+                                <span>Contribution Amount</span>
+                                <h6>${contributedAmount.toFixed(2)}</h6>
+                            </div> }
+                        
+                    </motion.div>}
+                </AnimatePresence>
+
+                   {/* end selected row data */}
+>>>>>>> 3b6595cde ('update_goal_table')
 
 
                 <div className='cnx__table' >
