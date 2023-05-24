@@ -236,8 +236,7 @@ if (timeLogTableContainer) {
     root.render(
         <React.StrictMode>
             <Provider store={store}>
-                <EmployeeWiseTableProvider>
-                    <TimeLogTableFilterBar />
+                <EmployeeWiseTableProvider> 
                     <TimeLogTable />
                 </EmployeeWiseTableProvider>
             </Provider>

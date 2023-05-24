@@ -8,6 +8,8 @@ import { convertTime } from "./utils/converTime";
 import dayjs from "dayjs";
 import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
+import TimeLogTableFilterBar from "./components/TimeLogTableFilterBar";
+import { useLazyGetTaskWiseDataQuery } from "../services/api/timeLogTableApiSlice";
 
 // pivot table
 const TaskWiseTable = ({ columns, subColumns }) => {
@@ -26,25 +28,57 @@ const TaskWiseTable = ({ columns, subColumns }) => {
     } = React.useContext(EmployeeWiseTableContext);
 
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    // get employee table data
-    useEffect(() => {
-        if(data.length > 0) return;
-        setLoading(true);
-        const fetch = async () => {
-            axios.get("/get-timelogs/tasks").then((res) => {
-                let data = res.data.filter(d => d.project_status === 'in progress');
-                if(data){
-                    setData(data.sort((a, b) => a["project_id"] < b["project-id"]));
-                }
-                setLoading(false)
-            });
-        };
+    // const [loading, setLoading] = useState(true);
+    const [filterOptions, setFilterOptions] = useState({});
 
-        fetch();
+    const [getTaskWiseData, {isFetching: loading}] = useLazyGetTaskWiseDataQuery();
 
-        return () => fetch();
-    }, []);
+    // handle data request
+    const handleDataRequest = async (filter, page, pagePageRow) => {
+        setFilterOptions(filter);
+        let query = {
+            ...filter,
+            page: page || currentPage,
+            per_page_row: pagePageRow || nPageRows,
+        }
+        console.log(query)
+
+        let res = await getTaskWiseData().unwrap();
+        if(res) setData(res);            
+    }
+
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        handleDataRequest(filterOptions, page);
+    }
+
+    // handle per page row number change
+
+    const handleParPageRowNumberChange = (n) => {
+        setNPageRows(n);
+        handleDataRequest(filterOptions, currentPage, Number(n));
+    }
+
+
+    // // get employee table data
+    // useEffect(() => {
+    //     if(data.length > 0) return;
+    //     setLoading(true);
+    //     const fetch = async () => {
+    //         axios.get("/get-timelogs/tasks").then((res) => {
+    //             let data = res.data.filter(d => d.project_status === 'in progress');
+    //             if(data){
+    //                 setData(data.sort((a, b) => a["project_id"] < b["project-id"]));
+    //             }
+    //             setLoading(false)
+    //         });
+    //     };
+
+    //     fetch();
+
+    //     return () => fetch();
+    // }, []);
 
     /* ================ Initial State ==================== */
     React.useEffect(() => {
@@ -350,7 +384,9 @@ const TaskWiseTable = ({ columns, subColumns }) => {
 
     return (
         <TableContainer>
-            
+            <TimeLogTableFilterBar
+                handleDataRequest = {handleDataRequest} 
+            /> 
             <TableWrapper>
                 {/* table */}
                 <table>
@@ -363,7 +399,7 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                 </table>
             </TableWrapper>
 
-            {loading && data.length === 0 &&
+            {loading &&
                 <Loading> 
                     <div className="spinner-border" role="status"> </div>
                     Loading...
@@ -376,8 +412,8 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                 data={data}
                 nPageRows={nPageRows}
                 currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                setNPageRows={setNPageRows}
+                setCurrentPage={handlePageChange}
+                setNPageRows={handleParPageRowNumberChange}
             />
         </TableContainer>
     );

@@ -8,6 +8,7 @@ const JqueryDateRangePicker = ({
     endDate,
     setStartDate,
     setEndDate,
+    onApply= () => {} 
 }) => {
 
     const handleTimePicker = () => {
@@ -35,6 +36,7 @@ const JqueryDateRangePicker = ({
                 function cb(start, end) {
                     setStartDate(start.format('YYYY-MM-DD'));
                     setEndDate(end.format('YYYY-MM-DD'));
+                    onApply && onApply(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
                     $('#jqueryDatePicker div.sp1__jquery_date_text')
                     .html(start.format('MMMM D, YYYY') + ' to ' + end.format('MMMM D, YYYY'));
                 }

@@ -7,6 +7,9 @@ import "./table.css";
 import { convertTime } from "./utils/converTime";
 import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
+import TimeLogTableFilterBar from "./components/TimeLogTableFilterBar";
+import { useLazyGetProjectWiseDataQuery } from "../services/api/timeLogTableApiSlice";
+ 
 
 // pivot table
 const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
@@ -24,24 +27,54 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
         setFilterColumn,
     } = React.useContext(EmployeeWiseTableContext);
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    // get employee table data
-    useEffect(() => {
-        setLoading(true);
-        const fetch = async () => {
-            axios.get("/get-timelogs/projects").then((res) => {
-                let data = res.data.filter(d => d.project_status === 'in progress');
-                if(data){
-                    setData(data.sort((a, b) => a["project_id"] < b["project-id"]));
-                }
-                setLoading(false);
-            });
-        };
+    const [filterOptions, setFilterOptions] = useState({});
 
-        fetch();
+    const [getProjectWiseData, {isFetching: loading}] = useLazyGetProjectWiseDataQuery();
 
-        return () => fetch();
-    }, []);
+     // handle data request
+    const handleDataRequest = async (filter, page, pagePageRow) => {
+        setFilterOptions(filter);
+        let query = {
+            ...filter,
+            page: page || currentPage,
+            per_page_row: pagePageRow || nPageRows,
+        }
+        console.log(query)
+
+        let res = await getProjectWiseData().unwrap();
+        if(res) setData(res);            
+    }
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        handleDataRequest(filterOptions, page);
+    }
+
+    // handle per page row number change
+
+    const handleParPageRowNumberChange = (n) => {
+        setNPageRows(n);
+        handleDataRequest(filterOptions, currentPage, Number(n));
+    }
+
+
+    // // get employee table data
+    // useEffect(() => {
+    //     setLoading(true);
+    //     const fetch = async () => {
+    //         axios.get("/get-timelogs/projects").then((res) => {
+    //             let data = res.data.filter(d => d.project_status === 'in progress');
+    //             if(data){
+    //                 setData(data.sort((a, b) => a["project_id"] < b["project-id"]));
+    //             }
+    //             setLoading(false);
+    //         });
+    //     };
+
+    //     fetch();
+
+    //     return () => fetch();
+    // }, []);
 
     /* ================ Initial State ==================== */
     React.useEffect(() => {
@@ -337,7 +370,9 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
     return (
         <TableContainer>
             {/* <ColumnFilter columns={columnOrder} filterColumn={filterColumn} setFilterColumn={setFilterColumn} root={columnFilterButtonId} /> */}
-
+            <TimeLogTableFilterBar
+                handleDataRequest = {handleDataRequest} 
+            />
             <TableWrapper>
                 {/* table */}
                 <table>
@@ -350,7 +385,7 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
                 </table>
             </TableWrapper>
 
-            {loading && data.length === 0 &&
+            {loading &&
                 <Loading> 
                     <div className="spinner-border" role="status"> </div>
                     Loading...
@@ -363,8 +398,8 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
                 data={data}
                 nPageRows={nPageRows}
                 currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                setNPageRows={setNPageRows}
+                setCurrentPage={handlePageChange}
+                setNPageRows={handleParPageRowNumberChange}
             />
         </TableContainer>
     );

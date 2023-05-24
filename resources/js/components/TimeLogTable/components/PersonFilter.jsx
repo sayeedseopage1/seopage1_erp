@@ -15,8 +15,6 @@ export default function PersonFilterItem({
     const [search, setSearch] = React.useState(''); 
     const [maxHeight, setMaxHeight] = React.useState(720);
 
-
-
      // set max height
      React.useEffect(() => {
         if(window){
@@ -28,19 +26,17 @@ export default function PersonFilterItem({
 
 
     return(
-        <div className='d-flex align-items-center px-3 border-right'>
+        <div className='d-flex align-items-center px-3 py-2 border-right'>
             <span className='mr-2'>{title}</span>
             <Dropdown>
                 <Dropdown.Toggle
                     className="sp1__pp_filter_dd_toggle"
                 >
-                All
+                {_.isEmpty(selected) ? 'All' : selected?.name}
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                     className="sp1__pp_filter_dd"
                 >
-
-
 
                 {
                     isLoading ? (
@@ -49,7 +45,7 @@ export default function PersonFilterItem({
                                 className={`mt-2`}    
                             >
                                <div 
-                                    class="spinner-border" 
+                                    className="spinner-border" 
                                     role="status" 
                                     style={{
                                         width: '1rem', 
@@ -95,15 +91,27 @@ export default function PersonFilterItem({
                                 {
                                     items?.map(item => (
                                         <Dropdown.Item
+                                            key={item?.id}
                                             onClick={(e) => onSelect(e, item)}
                                             className={`sp1__pp_filter_dd_item mb-1 ${selected?.id === item?.id }`} 
                                         >
-                                        {item?.name} 
+                                            {item.image_url ?
+                                                <img
+                                                   src={item.image_url} 
+                                                   alt={item.name}
+                                                   style={{
+                                                       width: 26,
+                                                       height: 26,
+                                                       borderRadius: '50%'
+                                                       
+                                                   }}
+                                                />
+                                                : null  
+                                            }
+                                            {item?.name} 
                                         </Dropdown.Item>
                                     ))
                                 } 
-
-
                             </div>
                         
                         </React.Fragment>
