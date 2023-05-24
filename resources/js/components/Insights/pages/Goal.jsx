@@ -752,18 +752,10 @@ const Goal = () => {
 
                         {
                             // activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
-<<<<<<< HEAD
-                            activeTable === 'summary' &&
-                            <GoalSummaryTable
-                                ref={dealTableRef}
-                                data={goalSummary}
-                                goal={goal}
-=======
                             activeTable === 'summary' && 
                             <GoalSummaryTable 
                                 ref={dealTableRef} 
                                 data={goalSummary} 
->>>>>>> 3b6595cde ('update_goal_table')
                                 isLoading={isSummarizing}
                             />
                         }
