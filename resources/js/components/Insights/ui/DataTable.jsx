@@ -31,14 +31,14 @@ const useTableState = () => {
 }
 
 
-// data table 
+// data table
 const DataTable = React.forwardRef(({
-    data, 
-    isLoading, 
-    defaultColumns, 
-    visibleColumns,
-    goal
-}, ref) => {
+                                        data,
+                                        isLoading,
+                                        defaultColumns,
+                                        visibleColumns,
+                                        goal
+                                    }, ref) => {
     const [currentPageData, setCurrentPageData] = React.useState([...data]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
     const { activeColumns, setActiveColumns, sortConfig, setSortConfig } = useTableState();
@@ -69,11 +69,11 @@ const DataTable = React.forwardRef(({
 
 
     React.useEffect(()=> {
-      if(!data) return;
-       const sorted = sortedData(data, sortConfig);
-       let t = Math.ceil(sorted.length / numberOfRowPerPage)
-       setCurrentPageData([...sorted]);
-       setTotalPage(t);
+        if(!data) return;
+        const sorted = sortedData(data, sortConfig);
+        let t = Math.ceil(sorted.length / numberOfRowPerPage)
+        setCurrentPageData([...sorted]);
+        setTotalPage(t);
     }, [data, sortConfig])
 
 
@@ -97,7 +97,7 @@ const DataTable = React.forwardRef(({
 
     // SORT REQUEST
     const requestSort = (key) => {
-        
+
         let direction = "asc";
         if (
             sortConfig &&
@@ -105,7 +105,7 @@ const DataTable = React.forwardRef(({
             sortConfig.direction === "asc"
         ) {
             direction = "desc";
-        } else direction = "asc"; 
+        } else direction = "asc";
 
         setSortConfig({ key, direction });
     };
@@ -118,7 +118,7 @@ const DataTable = React.forwardRef(({
         setContributedAmount(0);
         setSelectionStart(true);
         let {rowId} = e.target.parentNode.dataset;
-        setStartRowId(Number(rowId)); 
+        setStartRowId(Number(rowId));
     }
 
     // mouse up in row
@@ -128,24 +128,24 @@ const DataTable = React.forwardRef(({
         let parent = e.target.parentNode;
         let {rowId} = parent.dataset;
         let isBetweenRange = Math.abs(rowId - startRowId);
-        
+
         setShowSelectedRowSummary(isBetweenRange);
-        
+
         let _filterData = data.filter(d => (d.id >= startRowId && d.id <= rowId) || (d.id <= startRowId && d.id >= rowId));
 
 
         _filterData?.map(d => {
-                if(d['amount'] || d['deal_amount']){
-                    let amount = d['amount'] || d['deal_amount'];
-                    setActualAmount(p => p + Number(amount));
-                }
-        }); 
+            if(d['amount'] || d['deal_amount']){
+                let amount = d['amount'] || d['deal_amount'];
+                setActualAmount(p => p + Number(amount));
+            }
+        });
 
         _filterData?.map(d => {
-                if(d['team_total_amount']){
-                    setContributedAmount(p => p + Number(d['team_total_amount']));
-                }
-        });    
+            if(d['team_total_amount']){
+                setContributedAmount(p => p + Number(d['team_total_amount']));
+            }
+        });
     }
 
     // mouse move in row
@@ -161,33 +161,33 @@ const DataTable = React.forwardRef(({
             const row  = rows[i];
             const currentRowId = Number(row.dataset.rowId);
 
-            const isBetweenRange = 
+            const isBetweenRange =
                 (currentRowId >= startRowId && currentRowId <= rowId) ||
                 (currentRowId <= startRowId && currentRowId >= rowId);
-            
+
             if(isBetweenRange){
-                row.classList.add('__selected'); 
+                row.classList.add('__selected');
             }else{
-                row.classList.remove('__selected'); 
-            } 
+                row.classList.remove('__selected');
+            }
 
         }
 
     }
 
     /*
-    ** If any row is selected, 
+    ** If any row is selected,
     ** unselect that row on click.
-    */ 
-     
+    */
+
     const handleOnClickOfRow = (e) => {
         e.preventDefault();
         if(startRowId){
             let rows = document.querySelectorAll('.cnx__table_tr');
             rows.forEach(row=> {
-               if(row.classList.contains('__selected')) {
-                row.classList.remove('__selected'); 
-               }
+                if(row.classList.contains('__selected')) {
+                    row.classList.remove('__selected');
+                }
             })
             setShowSelectedRowSummary(false);
             setActualAmount(0);
@@ -195,106 +195,106 @@ const DataTable = React.forwardRef(({
             setStartRowId(null);
         }
     }
-  
+
 
     const columns = defaultColumns.filter(d => activeColumns.includes(d.id))
-                    .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
-             
-      
+        .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
+
+
 
     return (
         <div style={{maxWidth: '100%'}}>
             <div className='cnx__table_wrapper'>
-                 {/* filter button */}
-                        <div className='cnx__table_td_filter_btn'>
-                            {/* <TableFilterButton  /> */}
-                        </div> 
-                    {/* header */}
+                {/* filter button */}
+                <div className='cnx__table_td_filter_btn'>
+                    {/* <TableFilterButton  /> */}
+                </div>
+                {/* header */}
 
-            {/* select row data */}
+                {/* select row data */}
                 <AnimatePresence>
-                    {showSelectedRowSummary && <motion.div 
-                        initial={{x:10}} 
+                    {showSelectedRowSummary && <motion.div
+                        initial={{x:10}}
                         animate={{ x: 0}}
                         exit={{x: 10}}
                         className='cnx__table_calculated_value'
                     >
-                            <div className='cnx__table_calculated_item'>
-                                <span>Actual Amount</span>
-                                <h6>${actualAmount.toFixed(2)}</h6>
-                            </div> 
-                            
-                            { (data[1]?.team_total_amount !== undefined && Number(goal?.team_id) !== 1) && 
-                            <div className='cnx__table_calculated_item'>
-                                <span>Contribution Amount</span>
-                                <h6>${contributedAmount.toFixed(2)}</h6>
-                            </div> }
-                        
+                        <div className='cnx__table_calculated_item'>
+                            <span>Actual Amount</span>
+                            <h6>${actualAmount.toFixed(2)}</h6>
+                        </div>
+
+                        { (data[1]?.team_total_amount !== undefined && Number(goal?.team_id) !== 1) &&
+                        <div className='cnx__table_calculated_item'>
+                            <span>Contribution Amount</span>
+                            <h6>${contributedAmount.toFixed(2)}</h6>
+                        </div> }
+
                     </motion.div>}
                 </AnimatePresence>
 
-                   {/* end selected row data */}
+                {/* end selected row data */}
 
 
                 <div className='cnx__table' >
-                   
+
                     {/* <div className="cnx__table_head" style={{paddingRight: currentPageData.length > 34 ? '5px' : ''}}>
                         <div className="cnx__table_tr">
                             {columns.map(column => (
-                                <DraggableColumn 
+                                <DraggableColumn
                                     sort={sortConfig}
                                     requestSort={requestSort}
-                                    key={column.id} 
+                                    key={column.id}
                                     column={column}
                                     activeColumns={activeColumns}
                                     setActiveColumns={setActiveColumns}
                                 />
                             ))}
-                        </div>                         
+                        </div>
                     </div> */}
-                    
+
                     {/* end header */}
 
                     {/* table body */}
 
                     <div className="cnx__table_body" ref={ref} style={{padding: 0}}>
-                    <div className="cnx__table_head">
-                        <div className="cnx__table_tr">
-                            {columns.map(column => (
-                                <DraggableColumn 
-                                    sort={sortConfig}
-                                    requestSort={requestSort}
-                                    key={column.id} 
-                                    column={column}
-                                    activeColumns={activeColumns}
-                                    setActiveColumns={setActiveColumns}
-                                />
-                            ))}
-                        </div>                         
-                    </div>
+                        <div className="cnx__table_head">
+                            <div className="cnx__table_tr">
+                                {columns.map(column => (
+                                    <DraggableColumn
+                                        sort={sortConfig}
+                                        requestSort={requestSort}
+                                        key={column.id}
+                                        column={column}
+                                        activeColumns={activeColumns}
+                                        setActiveColumns={setActiveColumns}
+                                    />
+                                ))}
+                            </div>
+                        </div>
 
-                    {isLoading && (
-                        [...Array(Number(numberOfRowPerPage))].map((_, i) => (
-                            <div key={i} className="cnx__table_tr">
-                                {columns.map(d => 
-                                    <div key={d.id} className="cnx__table_td cnx__table_td_loading ">
-                                        <span 
-                                            className='animate-pulse' 
+                        {isLoading && (
+                            [...Array(Number(numberOfRowPerPage))].map((_, i) => (
+                                <div key={i} className="cnx__table_tr">
+                                    {columns.map(d =>
+                                        <div key={d.id} className="cnx__table_td cnx__table_td_loading ">
+                                        <span
+                                            className='animate-pulse'
                                             style={{width: `${ Math.floor(Math.random() * (70 - 20) + 20)}%`}}
                                         >loading</span>
-                                    </div>
-                                )}
-                            </div> 
-                        ))
-                    )}
+                                        </div>
+                                    )}
+                                </div>
+                            ))
+                        )}
 
-                    
-                    {!isLoading && 
+
+                        {!isLoading &&
                         <React.Fragment>
                             {
                                 currentPageData.length > 0 ? currentPageData.map((data) => (
-                                        <div 
-                                            key={data.id} 
+                                        <div
+                                            key={data.id}
                                             className="cnx__table_tr"
                                             data-row-id = {data.id}
                                             onMouseDown={handleMouseDown}
@@ -307,27 +307,27 @@ const DataTable = React.forwardRef(({
                                                     {d.cell(data) || <span> &nbsp; </span>}
                                                 </div>
                                             ))}
-                                        </div> 
-                                )): 
-                                <div className='cnx__empty_table'>
-                                    <div className='cnx__empty_table_content'>
-                                        <Icon type="EmptyTable" /> 
-                                        <div>No Data to show</div>
+                                        </div>
+                                    )):
+                                    <div className='cnx__empty_table'>
+                                        <div className='cnx__empty_table_content'>
+                                            <Icon type="EmptyTable" />
+                                            <div>No Data to show</div>
+                                        </div>
                                     </div>
-                                </div> 
                             }
                         </React.Fragment>
-                    }
+                        }
                     </div>
                     {/* end table body  */}
                 </div>
             </div>
-        {/* table footer  */}
-         {/* {   
+            {/* table footer  */}
+            {/* {
             totalPage > 1 &&
             <div className="cnx__table_footer">
                 <div className="__show_entries">
-                    <span>Show</span> 
+                    <span>Show</span>
                     <select onChange={(e) => setNumberOfRowPerPage(e.target.value)}>
                         <option value="10">10</option>
                         <option value="20">20</option>
@@ -352,7 +352,7 @@ const DataTable = React.forwardRef(({
                     data={[...data]}
                     setCurrentPageData={(v) => setCurrentPageData(v)}
                     numOfPerPageRow={Number(numberOfRowPerPage)}
-                />  
+                />
             </div>
         }  */}
         </div>
@@ -363,17 +363,17 @@ const DataTable = React.forwardRef(({
 const DataTableComponent = React.forwardRef(({data, goal, isLoading, defaultColumns, visibleColumns}, ref) => {
     return(
         <ContextProvider>
-           <DataTable 
+            <DataTable
                 ref={ref}
-                data={data} 
-                isLoading={isLoading}  
+                data={data}
+                isLoading={isLoading}
                 defaultColumns={defaultColumns}
                 goal={goal}
                 visibleColumns={visibleColumns}
-           />
+            />
         </ContextProvider>
     )
-}) 
+})
 
 
 export default DataTableComponent;
@@ -384,12 +384,12 @@ export default DataTableComponent;
 
 // drag able column
 const DraggableColumn = ({
-    sort,
-    requestSort,
-    column,
-    activeColumns,
-    setActiveColumns
-}) => {
+                             sort,
+                             requestSort,
+                             column,
+                             activeColumns,
+                             setActiveColumns
+                         }) => {
     const ref = React.useRef(null);
     // re ordering column
     const reOrder = (curr, target) => {
@@ -436,20 +436,20 @@ const DraggableColumn = ({
 
 
     return(
-        <div 
+        <div
             id={`cnx__table_th_${column.id}`}
             className={`cnx__table_th`}
-        
+
         >
             <div ref={ref}
-            onClick = {(() => requestSort(column.accessor))}
-            className={`cnx__table_th_toggle  ${isDragging ? '__dragging': ''}`}>
+                 onClick = {(() => requestSort(column.accessor))}
+                 className={`cnx__table_th_toggle  ${isDragging ? '__dragging': ''}`}>
                 {column.header}
                 {
                     sort.key === column.accessor &&
                     <i className={`fa-solid fa-caret-${sort.direction === 'desc' ? 'down': 'up'}`}></i>
                 }
-                
+
             </div>
         </div>
     )
