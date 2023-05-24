@@ -1132,10 +1132,13 @@ Route::post('/deals/deny', [ContractController::class, 'DealDeny'])->name('deny-
 Route::post('/deals/client-form', [HomeController::class, 'ClientForm'])->name('client-submission');
 Route::post('/deals/client-form-submit', [ContractController::class, 'ClientFormSubmit'])->name('form-submit-to-client');
 Route::get('/thankyou', [HomeController::class, 'Thankyou']);
+//Service type section
 Route::get('/deals/service-type/web-content', [HomeController::class, 'webContent']);
 Route::post('/deals/store/web-content', [HomeController::class, 'storeWebContent'])->name('store_web_content');
 Route::get('/deals/service-type/blogs-articles', [HomeController::class, 'blogArticle']);
 Route::post('/deals/store/blog-articles', [HomeController::class, 'storeBlogArticle'])->name('store_blog_articles');
+Route::get('/deals/service-type/product-description', [HomeController::class, 'productDescription']);
+Route::post('/deals/store/product-description', [HomeController::class, 'storeProductDescription'])->name('store_product_description');
 /* Account prefix routes end here */
 //store custom lead route for seaopage1
 Route::post('/lead/store', [LeadController::class, 'storeLead'])->name('store-lead');
@@ -1219,7 +1222,7 @@ Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCate
 //add project niche
 Route:: get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
 Route::get('/projects/get-sub-category/{id}',[ProjectController::class,'parentCategoryId']);
-Route::put('/projects/update-niche-category/{id}', [ProjectController::class, 'updateCategory']); 
+Route::put('/projects/update-niche-category/{id}', [ProjectController::class, 'updateCategory']);
 
 //add project cms
 Route:: get('/projects/view-cms', [ProjectController::class, 'viewCms'])->name('project-view-cms');

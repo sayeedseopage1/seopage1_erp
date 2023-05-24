@@ -31,15 +31,16 @@ class PortfolioController extends AccountBaseController
     public function index()
     {
         $this->portfolios = DB::table('project_portfolios')
-            ->leftJoin('project_niches', 'project_portfolios.project_id', '=', 'project_niches.id')
-            ->leftJoin('project_cms', 'project_portfolios.id', '=', 'project_cms.id')
-            ->leftJoin('project_website_types', 'project_portfolios.id', '=', 'project_website_types.id')
-            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
-            ->join('users', 'projects.client_id', '=', 'users.id')
-            ->select('project_portfolios.*','users.user_name','projects.project_name','project_niches.category_name','project_cms.cms_name','project_website_types.website_type')
+            ->rightJoin('project_niches', 'project_portfolios.project_id', '=', 'project_niches.id')
+            ->select('project_portfolios.*','project_niches.category_name')
+//            ->leftJoin('project_cms', 'project_portfolios.id', '=', 'project_cms.id')
+//            ->leftJoin('project_website_types', 'project_portfolios.id', '=', 'project_website_types.id')
+//            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
+//            ->join('users', 'projects.client_id', '=', 'users.id')
+//            ->select('project_portfolios.*','users.user_name','projects.project_name','project_niches.category_name','project_cms.cms_name','project_website_types.website_type')
             ->get();
 
-//                dd($this->portfolios);
+                dd($this->portfolios);
         return view('portfolio.index',$this->data);
     }
 
