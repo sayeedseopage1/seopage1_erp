@@ -1379,6 +1379,7 @@ class HomeController extends Controller
 
     }
 
+
     public function productDescription(){
         return view('service-type.product_description');
     }
@@ -1386,4 +1387,5 @@ class HomeController extends Controller
     public function storeProductDescription(Request $request){
         dd($request->all());
     }
+
 }

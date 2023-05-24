@@ -1274,7 +1274,7 @@ Route::controller(DealController::class)->group(function(){
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
 
-Route::get('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
+Route::any('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
 
 Route::any('get-users', [InsightsController::class, 'getusers'])->name('get-users');
 Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams');
@@ -1301,5 +1301,8 @@ Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deal
 // Route::get('/goal/get-goal-details/{data}', [InsightsController::class, 'get_goal_details'])->name('get_goal_details');
 Route::get('deals/request/authorization/{data}', [ContractController::class, 'authorization_request'])->name('authorization_request');
 Route::post('/authorization/deal-details/', [ContractController::class, 'authorization_submit'])->name('authorization_submit');
+
+
+//Route::get('fix-database', [HomeController::class, 'fix_database'])->name('fix_database');
 
 

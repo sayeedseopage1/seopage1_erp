@@ -668,15 +668,10 @@ class InsightsController extends AccountBaseController
                     $team_summation = DealStageChange::where('deal_id', $value->deal_id)->whereIn('updated_by', $member)->get();
 
                     if (in_array($value->added_by, $member)) {
-
-                    //$team_total_amount = $team_total_amount + $amount;
-
                         $value->team_total_amount = round($value->team_total_amount + $value->won_deal_amount, 2);
                     }
 
                     if (in_array($value->bidder, $member)) {
-
-                    //$team_total_amount = $team_total_amount + $amount;
                         $value->team_total_amount = round($value->team_total_amount + $value->bidder_amount, 2);
                     }
 
