@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import ReactDOM from "react-dom";
-import _, { update } from "lodash";
+import _ from "lodash";
 import styled from "styled-components";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider, useDrag, useDrop, useDragLayer } from "react-dnd";
+import { useDrag, useDrop } from "react-dnd";
 import { EmployeeWiseTableContext } from ".";
 import "./table.css";
 import { convertTime } from "./utils/converTime";
@@ -39,6 +38,7 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
 
     // handle data request
     const handleDataRequest = async (filter, page, pagePageRow) => {
+        
         setFilterOptions(filter);
         let data = {
             ...filter,

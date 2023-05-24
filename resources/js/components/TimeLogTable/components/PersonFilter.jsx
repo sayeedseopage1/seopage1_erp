@@ -32,7 +32,7 @@ export default function PersonFilterItem({
                 <Dropdown.Toggle
                     className="sp1__pp_filter_dd_toggle"
                 >
-                {_.isEmpty(selected) ? 'All' : selected?.name}
+                {!selected ? 'All' : selected?.name}
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                     className="sp1__pp_filter_dd"
@@ -81,6 +81,7 @@ export default function PersonFilterItem({
                                 style={{maxHeight}}
                             >
                                 <Dropdown.Item
+                                    onClick={(e) => onSelect(e, null)}
                                     className={`sp1__pp_filter_dd_item mb-1 active`} 
                                 >
                                     Select All

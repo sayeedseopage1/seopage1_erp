@@ -44,38 +44,75 @@ export default function TimeLogTableFilterBar ({handleDataRequest}){
         })
     }
 
-    const handleEmployeeFilter = (e, data) => {
-        setSelectedEmployeeId(data.id);
-        handleDataRequest({
-            start_date: startDate,
-            end_date: endDate ,
-            employee_id: data.id,
-            pm_id: selectedPMId,
-            client_id: selectedClientId,   
-        })
+    const handleEmployeeFilter = (e, data) => { 
+        e.preventDefault();
+        if(data){
+            setSelectedEmployeeId(data.id);
+            handleDataRequest({
+                start_date: startDate,
+                end_date: endDate ,
+                employee_id: data.id,
+                pm_id: selectedPMId,
+                client_id: selectedClientId,   
+            })
+        }else{
+            setSelectedEmployeeId(null);
+            handleDataRequest({
+                start_date: startDate,
+                end_date: endDate ,
+                employee_id: null,
+                pm_id: selectedPMId,
+                client_id: selectedClientId,   
+            })
+        }
+        
     }
 
     const handlePMFilter = (e, data) => {
-        setSelectedPMId(data.id);
-        handleDataRequest({
-            start_date: startDate,
-            end_date: endDate ,
-            employee_id: selectedEmployeeId,
-            pm_id: data.id,
-            client_id: selectedClientId,   
-        })
+        e.preventDefault();
+        if(data){
+            setSelectedPMId(data.id);
+            handleDataRequest({
+                start_date: startDate,
+                end_date: endDate ,
+                employee_id: selectedEmployeeId,
+                pm_id: data.id,
+                client_id: selectedClientId,   
+            })
+        }else{
+            setSelectedPMId(null);
+            handleDataRequest({
+                start_date: startDate,
+                end_date: endDate ,
+                employee_id: selectedEmployeeId,
+                pm_id: null,
+                client_id: selectedClientId,   
+            })
+        }
     }
 
 
     const handleClientFilter = (e, data) => {
+        e.preventDefault();
+       if(data){
         setSelectedClientId(data.id);
-        handleDataRequest({
-            start_date: startDate,
-            end_date: endDate ,
-            employee_id: selectedEmployeeId,
-            pm_id: selectedPMId,
-            client_id: data.id,
-        })
+            handleDataRequest({
+                start_date: startDate,
+                end_date: endDate ,
+                employee_id: selectedEmployeeId,
+                pm_id: selectedPMId,
+                client_id: data.id,
+            })
+       } else{
+            setSelectedClientId(null);
+            handleDataRequest({
+                start_date: startDate,
+                end_date: endDate ,
+                employee_id: selectedEmployeeId,
+                pm_id: selectedPMId,
+                client_id: null,
+            })
+       }
     }
 
     content =  <div className='d-flex flex-wrap bg-white p-1'>
@@ -93,7 +130,7 @@ export default function TimeLogTableFilterBar ({handleDataRequest}){
         <PersonFilter
             title="Employee"
             items={users ? [...users?.filter(user => user.role_id && Number(user.role_id) !== 4)] : []}
-            selected={users?.find(u => Number(u.id) === selectedEmployeeId)}
+            selected={selectedEmployeeId ? users?.find(u => Number(u.id) === selectedEmployeeId) : null}
             isLoading={userIsFetching}
             onSelect={handleEmployeeFilter}
         />
@@ -103,7 +140,7 @@ export default function TimeLogTableFilterBar ({handleDataRequest}){
         <PersonFilter
             title="Project Manager"
             items={users ? [...users?.filter(user => user.role_id && Number(user.role_id) === 4)] : []}
-            selected={users?.find(u => Number(u.id) === selectedPMId)}
+            selected={selectedPMId ? users?.find(u => Number(u.id) === selectedPMId): null}
             isLoading={userIsFetching}
             onSelect={handlePMFilter}
         />
@@ -112,7 +149,7 @@ export default function TimeLogTableFilterBar ({handleDataRequest}){
         <PersonFilter
             title="Client"
             items={users ? [...users?.filter(user => !user.role_id)] : []}
-            selected={users?.find(u => Number(u.id) === selectedClientId)}
+            selected={selectedClientId ? users?.find(u => Number(u.id) === selectedClientId): null}
             isLoading={userIsFetching}
             onSelect={handleClientFilter}
         />
