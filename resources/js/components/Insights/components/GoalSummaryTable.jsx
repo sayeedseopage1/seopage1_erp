@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 
 
-const GoalSummaryTable = React.forwardRef(({data, isLoading}, ref) => {
+const GoalSummaryTable = React.forwardRef(({data, isLoading, goal}, ref) => {
     // const { getSummary } = useDealsState();
     // const [data, setData] = React.useState([]);
     // const [isLoading, setIsLoading] = React.useState(false);
@@ -49,6 +49,7 @@ const GoalSummaryTable = React.forwardRef(({data, isLoading}, ref) => {
                 data={data}
                 isLoading={isLoading}
                 defaultColumns={GoalSummaryTableColumns}
+                goal={goal}
             />
         </div>
     )

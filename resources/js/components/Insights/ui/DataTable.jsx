@@ -37,14 +37,17 @@ const DataTable = React.forwardRef(({
     isLoading, 
     defaultColumns, 
     visibleColumns,
-    goal
+    goal,
+    isRowSelectedAble = false,
 }, ref) => {
     const [currentPageData, setCurrentPageData] = React.useState([...data]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
     const { activeColumns, setActiveColumns, sortConfig, setSortConfig } = useTableState();
     const [totalPage, setTotalPage] = React.useState(1);
     const [selectionStart, setSelectionStart] = React.useState(false);
-    const [startRowId, setStartRowId] = React.useState();
+    const [rowSelected, setRowSelected] = React.useState(0);
+    const [rowSelectionStatus, setRowSelectionStatus] = React.useState('idle'); 
+    const [startRowIndex, setStartRowIndex] = React.useState();
     const [actualAmount, setActualAmount] = React.useState(0);
     const [contributedAmount, setContributedAmount] = React.useState(0);
     const [showSelectedRowSummary, setShowSelectedRowSummary] = React.useState(false);
@@ -113,58 +116,68 @@ const DataTable = React.forwardRef(({
 
     // mouse down in row
     const handleMouseDown = (e) => {
+        if(!isRowSelectedAble) return;
         e.preventDefault();
         setActualAmount(0);
+        setRowSelected(0);
+        setStartRowIndex(null); 
         setContributedAmount(0);
         setSelectionStart(true);
-        let {rowId} = e.target.parentNode.dataset;
-        setStartRowId(Number(rowId)); 
+        let {rowIndex} = e.target.parentNode.dataset;
+        setStartRowIndex(Number(rowIndex)); 
     }
 
     // mouse up in row
     const handleMouseUp = (e) => {
+        if(!isRowSelectedAble) return;
         e.preventDefault();
         setSelectionStart(false);
+        setRowSelectionStatus('selected');
         let parent = e.target.parentNode;
-        let {rowId} = parent.dataset;
-        let isBetweenRange = Math.abs(rowId - startRowId);
+        let {rowIndex} = parent.dataset;
+        let isBetweenRange = Math.abs(rowIndex - startRowIndex);
         
         setShowSelectedRowSummary(isBetweenRange);
         
-        let _filterData = data.filter(d => (d.id >= startRowId && d.id <= rowId) || (d.id <= startRowId && d.id >= rowId));
+        // let _filterData = data.filter(d => (d.id >= startRowIndex && d.id <= rowId) || (d.id <= startRowIndex && d.id >= rowId));
+        let _filterData = currentPageData.filter((d, i) => (i >= startRowIndex && i<= rowIndex) || (i <= startRowIndex && i >= rowIndex));
 
-
-        _filterData.map(d => {
-                let amount = d['amount'] || d['deal_amount'];
-                if(amount){
+        setRowSelected(_filterData.length);
+        _filterData?.map(d => {
+                if(d['amount'] || d['deal_amount']){
+                    let amount = d['amount'] || d['deal_amount'];
                     setActualAmount(p => p + Number(amount));
                 }
         }); 
 
-        _filterData.map(d => {
-                let amount = d['team_total_amount'];
-                if(amount){
-                    setContributedAmount(p => p + Number(amount));
+        _filterData?.map(d => {
+                if(d['team_total_amount']){
+                    setContributedAmount(p => p + Number(d['team_total_amount']));
                 }
         });    
     }
 
     // mouse move in row
     const handleMouseMove = (e) => {
+        if(!isRowSelectedAble) return;
         e.preventDefault();
         if(!selectionStart) return;
+        setRowSelectionStatus('selecting');
         let rows = document.querySelectorAll('.cnx__table_tr');
         let parent = e.target.parentNode;
-        let {rowId} = parent.dataset;
+        let {rowId, rowIndex} = parent.dataset;
         rowId = Number(rowId);
+        rowIndex = Number(rowIndex);
 
         for(let i = 0; i < rows.length; i++){
             const row  = rows[i];
             const currentRowId = Number(row.dataset.rowId);
+            const currentRowIndex = Number(row.dataset.rowIndex);
+            
 
             const isBetweenRange = 
-                (currentRowId >= startRowId && currentRowId <= rowId) ||
-                (currentRowId <= startRowId && currentRowId >= rowId);
+                (currentRowIndex >= startRowIndex && currentRowIndex <= rowIndex) ||
+                (currentRowIndex <= startRowIndex && currentRowIndex >= rowIndex);
             
             if(isBetweenRange){
                 row.classList.add('__selected'); 
@@ -180,23 +193,41 @@ const DataTable = React.forwardRef(({
     ** If any row is selected, 
     ** unselect that row on click.
     */ 
-     
-    const handleOnClickOfRow = (e) => {
-        e.preventDefault();
-        if(startRowId){
+      
+    React.useEffect(() => {
+        if(!isRowSelectedAble) return;
+
+        const resetSelectedRow = (e) => {
             let rows = document.querySelectorAll('.cnx__table_tr');
             rows.forEach(row=> {
                if(row.classList.contains('__selected')) {
                 row.classList.remove('__selected'); 
                }
             })
+            console.log('clicked');
+            setSelectionStart(false);
+            setRowSelected(0);
+            setRowSelectionStatus('idle');
             setShowSelectedRowSummary(false);
             setActualAmount(0);
             setContributedAmount(0);
-            setStartRowId(null);
+            setStartRowIndex(null);
         }
-    }
-  
+    
+       let timer;
+
+       if(rowSelectionStatus === 'selected'){
+            timer = setTimeout(() => window.addEventListener('click', resetSelectedRow), 10); 
+       } else{
+            window.removeEventListener('click', resetSelectedRow);
+            clearTimeout(timer)
+       }
+
+       return () =>{
+            window.removeEventListener('click', resetSelectedRow);
+            clearTimeout(timer)
+       } 
+    }, [startRowIndex, selectionStart])
 
     const columns = defaultColumns.filter(d => activeColumns.includes(d.id))
                     .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
@@ -214,18 +245,24 @@ const DataTable = React.forwardRef(({
 
             {/* select row data */}
                 <AnimatePresence>
-                    {showSelectedRowSummary && <motion.div 
+                    {rowSelectionStatus === 'selected' && showSelectedRowSummary && <motion.div 
                         initial={{x:10}} 
                         animate={{ x: 0}}
                         exit={{x: 10}}
                         className='cnx__table_calculated_value'
                     >
+                             <div className='cnx__table_calculated_item'>
+                                <span>Total Row Selected</span>
+                                <h6>{rowSelected}</h6>
+                            </div> 
+
+
                             <div className='cnx__table_calculated_item'>
                                 <span>Actual Amount</span>
                                 <h6>${actualAmount.toFixed(2)}</h6>
                             </div> 
                             
-                            { (data[1].team_total_amount && Number(goal?.team_id) !== 1) && 
+                            { (data[1]?.team_total_amount !== undefined && Number(goal?.team_id) !== 1) && 
                             <div className='cnx__table_calculated_item'>
                                 <span>Contribution Amount</span>
                                 <h6>${contributedAmount.toFixed(2)}</h6>
@@ -293,15 +330,16 @@ const DataTable = React.forwardRef(({
                     {!isLoading && 
                         <React.Fragment>
                             {
-                                currentPageData.length > 0 ? currentPageData.map((data) => (
+                                currentPageData.length > 0 ? currentPageData.map((data, index) => (
                                         <div 
                                             key={data.id} 
                                             className="cnx__table_tr"
+                                            data-row-index = {index} 
                                             data-row-id = {data.id}
                                             onMouseDown={handleMouseDown}
                                             onMouseUp={handleMouseUp}
                                             onMouseMove={handleMouseMove}
-                                            onClick={handleOnClickOfRow}
+                                            // onClick={handleOnClickOfRow}
                                         >
                                             {columns.map(d => (
                                                 <div key={d.id} className="cnx__table_td">
@@ -361,7 +399,7 @@ const DataTable = React.forwardRef(({
 })
 
 
-const DataTableComponent = React.forwardRef(({data, goal, isLoading, defaultColumns, visibleColumns}, ref) => {
+const DataTableComponent = React.forwardRef(({data, goal, isRowSelectedAble = false, isLoading, defaultColumns, visibleColumns}, ref) => {
     return(
         <ContextProvider>
            <DataTable 
@@ -371,6 +409,8 @@ const DataTableComponent = React.forwardRef(({data, goal, isLoading, defaultColu
                 defaultColumns={defaultColumns}
                 goal={goal}
                 visibleColumns={visibleColumns}
+                isRowSelectedAble = {isRowSelectedAble}
+                
            />
         </ContextProvider>
     )

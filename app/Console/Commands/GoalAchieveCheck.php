@@ -235,7 +235,7 @@ class GoalAchieveCheck extends Command
                         }
                         $deals_data = $deals_data->where('deals.status', '!=','Denied')
                        // ->whereIn('deals.added_by', $user_id)
-                        ->groupBy('deals.client_id')
+                      //  ->groupBy('deals.client_id')
                         ->orderBy('deals.id', 'desc')
                         ->get();
                        // dd($deals_data);
@@ -300,19 +300,19 @@ class GoalAchieveCheck extends Command
                            
                         }
                       //  dd($team_total_amount);
-                        if($goal->team_id == 1)
-                        {
-                            if($goal->trackingType == 'value')
-                            {
-                                $team_total_amount = Deal::where('status','!=','Denied')->sum('amount');
+                      if($goal->team_id == 1)
+                      {
+                          if($goal->trackingType == 'value')
+                          {
+                              $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')->sum('amount');
 
-                            }else 
-                            {
-                                $team_total_amount = Deal::where('status','!=','Denied')->count(); 
-                            }
-                           
+                          }else 
+                          {
+                              $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')->count(); 
+                          }
+                         
 
-                        }
+                      }
                      //   dd($team_total_amount);
                         if ($team_total_amount >= (int) $goal->trackingValue) {
                             $goal_id= GoalSetting::find($goal->id);

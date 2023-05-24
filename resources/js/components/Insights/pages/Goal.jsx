@@ -745,6 +745,7 @@ const Goal = () => {
                                     }
                                     goal={goal}
                                     isLoading={dealsIsFetching}
+                                    isRowSelectedAble = {true}
                                 />
                             </div>
                         )}
@@ -755,6 +756,7 @@ const Goal = () => {
                             <GoalSummaryTable 
                                 ref={dealTableRef} 
                                 data={goalSummary} 
+                                goal={goal}
                                 isLoading={isSummarizing}
                             />
                         }
