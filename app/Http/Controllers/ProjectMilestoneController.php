@@ -338,6 +338,7 @@ class ProjectMilestoneController extends AccountBaseController
 
     public function CancelMilestone(Request $request)
     {
+//        dd($request->all());
         $validator = Validator::make($request->all(), [
             'comments' => 'required',
         ]);
@@ -366,7 +367,7 @@ class ProjectMilestoneController extends AccountBaseController
     }
     public function CancelMilestoneApprove(Request $request)
     {
-        // dd($request->milestomeId);
+//         dd($request->milestoneId);
 
         $milestone_id= ProjectMilestone::where('id',$request->milestoneId)->first();
         $milestone= ProjectMilestone::find($milestone_id->id);
@@ -406,9 +407,9 @@ class ProjectMilestoneController extends AccountBaseController
         $activity = new ProjectActivity();
         $activity->activity= $milestone->milestone_title. '- Milestone canceled by '. $user->name;
 
-     
+
         $activity->project_id = $update_project->id;
-       
+
         $activity->save();
         $project_update_status= Project::find($update_project->id);
         if ($update_project->due < 3) {
@@ -429,8 +430,8 @@ class ProjectMilestoneController extends AccountBaseController
           }
         }
 
-        
-        
+
+
 
 
 
