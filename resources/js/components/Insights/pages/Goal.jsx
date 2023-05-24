@@ -68,14 +68,14 @@ const Goal = () => {
     })
 
 
-    // authorized for edit 
+    // authorized for edit
     const isAuthorizedToEdit = () => {
-              
+
         if(
             goalData?.goal?.added_by === window?.Laravel?.user?.id
         ) {
-          // if goal have end date and end date is greater than today
-          // disable edit
+            // if goal have end date and end date is greater than today
+            // disable edit
             return true;
         }
 
@@ -114,11 +114,11 @@ const Goal = () => {
                 entry: goalData?.goal?.entry,
                 entryType: goalData?.goal?.entryType,
                 trackingType: goalData?.goal?.trackingType,
-                team_id: Number(goal?.team_id) 
+                team_id: Number(goal?.team_id)
             }
             localStorage.setItem(`goal_${userId}`, JSON.stringify(_g));
         }else{
-           !goalIsFetching && navigate("/account/insights/goal-404"); 
+            !goalIsFetching && navigate("/account/insights/goal-404");
         }
     }, [goalIsFetching]);
 
@@ -132,12 +132,12 @@ const Goal = () => {
     //                 return Number(deal['team_total_amount']) !== 0
     //             });
     //             setTableDeals([...d]);
-    //         }else{  
+    //         }else{
     //             setTableDeals([...goalDealsData])
     //         }
     //     }
     // }, [dealsIsFetching, goalDealsData, goalData, goalIsFetching])
-    
+
     // get filter period
     const handleRelativeTimePeriod = (value) => {
         setSelectedPeriod(value);
@@ -145,11 +145,11 @@ const Goal = () => {
     }
 
     // change goal title
-     // save title change
-     const handleTitleChange = ({id, title}) => {
+    // save title change
+    const handleTitleChange = ({id, title}) => {
         editGoalTitle({id, title});
     }
-    
+
 
     // distribute deals by period
     const distributeDealsByPeriod = (deals, startDate, endDate, accessor) => {
@@ -192,7 +192,7 @@ const Goal = () => {
                 return total + Number(deal.amount);
             }, 0);
 
-            
+
 
             // count total deal added value
             _deals.map(deal => {
@@ -216,7 +216,7 @@ const Goal = () => {
             goal = fixedDecimalPlace(goal);
             const {goal: _goalData} = goalData;
 
-          
+
 
             result = _.lowerCase(_goalData.trackingType) === 'value' ? dealAdded : totalDeal;
             result = fixedDecimalPlace(result);
@@ -245,7 +245,7 @@ const Goal = () => {
                 difference = totalDeal - Number(period.value);
             }
 
-            
+
             dealAdded = fixedDecimalPlace(dealAdded);
             difference = fixedDecimalPlace(difference);
         } else {
@@ -297,10 +297,10 @@ const Goal = () => {
         }
     }
 
-    // calculate goal summary 
+    // calculate goal summary
     const calculateGoalSummary = React.useCallback(() => {
-        
-        
+
+
         // create time period for graph view
         if (goalData) {
             const { goal, recurring } = goalData;
@@ -308,7 +308,7 @@ const Goal = () => {
             const _targetPeriod = getTargetPeriod({...goal,recurring: recurring || [] }, filter);
             const summarizedData = [];
 
-            
+
 
             if (_targetPeriod) {
                 _targetPeriod.map((period, index) => {
@@ -316,7 +316,7 @@ const Goal = () => {
                     let endDate = period.end;
                     let accessor = goal.entryType === 'Added' ? 'deal_created_at' : 'created_at';
                     let _deals = distributeDealsByPeriod(deals, startDate, endDate, accessor);
-                    let _summarizedData = {};                   
+                    let _summarizedData = {};
 
                     if(goal.entryType === 'Added'){
                         _summarizedData = addedGoalSummary(_deals, goalData, period, index);
@@ -326,11 +326,11 @@ const Goal = () => {
                         _summarizedData = summarized(_deals, goalData, period, index)
                     }
                     summarizedData.push(_summarizedData);
-                    
+
                 })
             }
 
-           
+
 
             setIsSummarizing(false);
             setGoalSummary(summarizedData);
@@ -364,7 +364,7 @@ const Goal = () => {
             <div style={{ display: 'flex', alignItems: 'center', "justifyContent": 'center', width: "100%", height: '100vh' }}>
                 <div>Loading...</div>
             </div>
-        )    
+        )
     }
 
 
@@ -380,7 +380,7 @@ const Goal = () => {
             <div className="cnx__ins_dashboard_navbar">
                 <EditAbleBox
                     text={`${goal?.title || _title}`}
-                    onSave={(title) => 
+                    onSave={(title) =>
                         isAuthorizedToEdit() && handleTitleChange({
                             id: goal?.id,
                             title,
@@ -407,22 +407,22 @@ const Goal = () => {
                                         "My Dashboard 2",
                                         "Other Dashboard",
                                     ].map(d => (
-                                        <Dropdown.Item 
-                                            key={d} 
+                                        <Dropdown.Item
+                                            key={d}
                                             className={`cnx_select_box_option cnx__relative_time__menu__item`}
-                                        > 
+                                        >
                                             {d}
                                         </Dropdown.Item>
                                     ))}
                                     <div className='cnx_divider'/>
-                                    <Dropdown.Item 
+                                    <Dropdown.Item
                                         style={{justifyContent: 'flex-start', gap: '8px'}}
                                         className={`cnx_select_box_option cnx__relative_time__menu__item`}
-                                    > 
+                                    >
                                         <i className='fa-solid fa-plus' />
                                         <span>New Dashboard</span>
                                     </Dropdown.Item>
- 
+
 
                                 </Dropdown.Menu>
                             </Dropdown> */}
@@ -443,10 +443,10 @@ const Goal = () => {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu offset={[0, 8]} placement='bottom-end' className="cnx__period_filter_dd_menu">
-                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}> 
+                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
                                         Duplicate
                                     </Dropdown.Item>
-                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}> 
+                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
                                         <i className='fa-solid fa-trash-can' />
                                         Delete
                                     </Dropdown.Item>
@@ -534,7 +534,7 @@ const Goal = () => {
                                     <span>{added_by?.name}</span>
                                 </div>
                             </Tooltip>
-                            
+
                         </div>
 
                         <div className='cnx__ins_details_col'>
@@ -561,7 +561,7 @@ const Goal = () => {
 
                             <Tooltip text='Client type'>
                                 <div className='cnx__ins_details_item'>
-                                <i className='fa-solid fa-users' />
+                                    <i className='fa-solid fa-users' />
                                     {goal?.dealType}
                                 </div>
                             </Tooltip>
@@ -676,19 +676,19 @@ const Goal = () => {
                                 className={`cnx__ins_table_view_button ${activeTable === 'summary' ? 'active' : ""}`}>
                                 Summary
                             </Button>
-                            
+
 
                             {
                                 printPreparing && <div>
                                     <div className="spinner-border" role="status" style={{
                                         width: '1.3rem',
                                         height: '1.3rem',
-                                        
+
                                     }}>  </div>
                                 </div>
                             }
                         </div>
-                        
+
                         <div>
                             <Dropdown>
                                 <Dropdown.Toggle
@@ -720,28 +720,28 @@ const Goal = () => {
                     {/* graph table */}
                     <div className='cnx__ins_table pb-3'>
                         {activeTable === 'deals' && (
-                           
+
                             <div >
                                 <DataTable
                                     ref={dealTableRef}
                                     data={[...getGoalDealsData(goalDealsData, goal)]}
                                     defaultColumns={
                                         goal?.entryType === 'Won' ?
-                                        WonTableData :
-                                        goal?.entryType === 'Added'?
-                                        AddedTableColumns : 
-                                        DataTableColumns
+                                            WonTableData :
+                                            goal?.entryType === 'Added'?
+                                                AddedTableColumns :
+                                                DataTableColumns
                                     }
 
                                     visibleColumns={
                                         goal?.entryType === 'Won' ?
-                                        Number(goal?.team_id) === 1 ? 
-                                        wonTableVisibleColumns.filter(item => item.accessor !== 'team_total_amount') : 
-                                        wonTableVisibleColumns
-                                        :
-                                        goal?.entryType === 'Added'?
-                                        addedTableVisibleColumns:
-                                        processedTableVisibleColumns
+                                            Number(goal?.team_id) === 1 ?
+                                                wonTableVisibleColumns.filter(item => item.accessor !== 'team_total_amount') :
+                                                wonTableVisibleColumns
+                                            :
+                                            goal?.entryType === 'Added'?
+                                                addedTableVisibleColumns:
+                                                processedTableVisibleColumns
                                     }
                                     goal={goal}
                                     isLoading={dealsIsFetching}
@@ -751,10 +751,10 @@ const Goal = () => {
 
                         {
                             // activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
-                            activeTable === 'summary' && 
-                            <GoalSummaryTable 
-                                ref={dealTableRef} 
-                                data={goalSummary} 
+                            activeTable === 'summary' &&
+                            <GoalSummaryTable
+                                ref={dealTableRef}
+                                data={goalSummary}
                                 goal={goal}
                                 isLoading={isSummarizing}
                             />
