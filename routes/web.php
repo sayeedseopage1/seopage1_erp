@@ -870,6 +870,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //KPI Settings
     Route::resource('kpi-settings', KpiSettingController::class);
 //    Policy section
+    Route::get('policy/next-month-policy',[PolicyController::class,'nextMonthPolicy'])->name('nextMonthPolicy');
     Route::resource('policy', PolicyController::class);
     //Incentives Settings
     Route::resource('incentive-settings',IncentiveSettingController::class);

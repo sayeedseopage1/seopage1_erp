@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\IncentiveSetting;
+use App\Models\kpiSetting;
+use App\Models\kpiSettingGenerateSale;
+use App\Models\kpiSettingLoggedHour;
 use Illuminate\Http\Request;
 use function Doctrine\Common\Collections\Expr\visit;
 
@@ -25,6 +29,10 @@ class PolicyController extends AccountBaseController
      */
     public function index()
     {
+        $this->kpi = kpiSetting::first();
+        $this->kpi_setting_generate_sale = kpiSettingGenerateSale::first();
+        $this->kpi_setting_logged_hour = kpiSettingLoggedHour::first();
+        $this->incentive_setting = IncentiveSetting::first();
         return view('policy.index',$this->data);
     }
 
@@ -92,5 +100,10 @@ class PolicyController extends AccountBaseController
     public function destroy($id)
     {
         //
+    }
+    public function nextMonthPolicy()
+    {
+        $this->pageTitle = 'Next Month Policy';
+        return view('policy.next_month_policy',$this->data);
     }
 }
