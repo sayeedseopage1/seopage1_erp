@@ -149,6 +149,7 @@ export const ModalDataTable = () =>{
                                 goal={goal}
                                 visibleColumns={ [...visibleColumns] }
                                 isLoading={isLoading } 
+                                isRowSelectedAble = {true}
                             />
                          </div> 
                     </Card.Body>
