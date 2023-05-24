@@ -308,9 +308,9 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                                                     value.length - 1 ===  index? "2px solid #AAD1FC" : "1px solid #E7EFFC",
                                                 }}
                                             >
-                                                {dayjs(
+                                                {item['start_time'] ? dayjs(
                                                     item["start_time"]
-                                                ).format("hh:mm A")}
+                                                ).format("hh:mm A"): <span>No start date</span>}
                                             </td>
                                         ) : column === "task_end" ? (
                                             <td
@@ -320,9 +320,9 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                                                             index ? "2px solid #AAD1FC" : "1px solid #E7EFFC",
                                                 }}
                                             >
-                                                {dayjs(item["end_time"]).format(
+                                                {item["end_time"] ? dayjs(item["end_time"]).format(
                                                     "hh:mm A"
-                                                )}
+                                                ):<span>No end date</span>}
                                             </td>
                                         ) : (
                                             <td
