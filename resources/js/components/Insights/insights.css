@@ -1518,8 +1518,10 @@
 }
 
 .cnx__table_head > .cnx__table_tr {
-    border-bottom: 1px solid #aaa;
-}
+
+    border-bottom: 1px solid #d3d3d3;
+  }
+
 
 .cnx__table_body {
     min-width: 100%;
@@ -1528,8 +1530,10 @@
 }
 
 .cnx__table_body > .cnx__table_tr {
-    border-bottom: 1px solid #c9c9c9;
-}
+
+    border-bottom: 1px solid #ececec;
+  }
+
 
 .cnx__table_body > .cnx__table_tr:hover {
     background-color: #fafafa;

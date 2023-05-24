@@ -503,7 +503,7 @@ class InsightsController extends AccountBaseController
                     'leads.added_by as lead_converted_by',
                     'leads.id as lead_id',
                 ])
-                ->join('leads', 'leads.id', '=', 'deal_stages.lead_id')
+                ->leftjoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
                 ->whereIn('leads.added_by', $data2)
                 ->whereDate('deal_stages.created_at', '>=', $data->startDate)
                 ->where('deal_stages.client_badge','=','new client');

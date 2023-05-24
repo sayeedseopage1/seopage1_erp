@@ -745,6 +745,7 @@ const Goal = () => {
                                     }
                                     goal={goal}
                                     isLoading={dealsIsFetching}
+                                    isRowSelectedAble = {true}
                                 />
                             </div>
                         )}
