@@ -8,7 +8,7 @@
         </div>
 
         <form class="" >
-         
+
 
           <input type="hidden" name='milestoneId' id="milestoneId" value="">
 
@@ -17,7 +17,6 @@
           <div class="col-md-12">
             <div class="form-group">
               <label for="exampleFormControlTextarea1">Please Describe the reason<span style="color:red;">*</span></label>
-  {{--            <textarea name="comments" class="form-control" id="comment2" rows="3" required></textarea>--}}
                 <textarea name="comments" id="comment2" class="form-control"></textarea>
                <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                 <script>
@@ -40,13 +39,6 @@
       </div>
     </div>
   </div>
-  {{--<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>--}}
-  <script>
-  // $(document).ready(function() {
-  //   $('#comment2').summernote();
-  // });
-
-  </script>
   <script>
       $('#cancelMilestone').click(function(e){
           e.preventDefault();
@@ -59,7 +51,7 @@
             'milestoneId': $('#milestoneId').val(),
         }
 
-          //console.log(data);
+          console.log(data);
           $.ajaxSetup({
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

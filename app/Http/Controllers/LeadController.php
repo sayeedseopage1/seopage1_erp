@@ -909,6 +909,7 @@ class LeadController extends AccountBaseController
     {
         $request->validate([
             'client_name' => 'required|max:255',
+            'project_id'=>'required|unique:leads,project_id,'.$request->project_id,
             'country' => 'required',
             'project_link' => 'required|url',
             'deadline' => 'required|date',
@@ -924,6 +925,7 @@ class LeadController extends AccountBaseController
             'projectpage_screenshot' => 'required|url',
         ], [
             'client_name.required' => 'Please enter the project name!',
+            'project_id.required' => 'The project id has already been taken!',
             'country.required' => 'Please select client country!',
             'project_link.required' => 'Please enter correct project link (Freelancer.com) with https!',
             'deadline.required' => 'Please select project deadline from Freelancer.com!',

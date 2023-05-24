@@ -1379,18 +1379,13 @@ class HomeController extends Controller
 
     }
 
-    public function fix_database()
-    // {
-    //     $deals = Deal::groupBy('client_name')->get();
-    //     foreach ($deals as $value) {
-    //         $get_deals = Deal::where('client_name', $value->client_name)->get();
 
-    //         if ($get_deals->count() > 1) {
-    //             $client_name = '';
-    //             foreach ($get_deals as $key => $value) {
-    //                 $client_na
-    //             }
-    //         }
-    //     }
-    // }
+    public function productDescription(){
+        return view('service-type.product_description');
+    }
+
+    public function storeProductDescription(Request $request){
+        dd($request->all());
+    }
+
 }
