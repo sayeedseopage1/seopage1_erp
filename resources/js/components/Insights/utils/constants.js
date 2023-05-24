@@ -153,7 +153,7 @@ export const wonTableVisibleColumns =[
 
 export const addedTableVisibleColumns =[
     { accessor: "project_name", priority: 1, status: 1 },
-    { accessor: "client_name", priority: 2, status: 1 },
+    { accessor: "client_username", priority: 2, status: 1 },
     { accessor: "deal_amount", priority: 3, status: 1 },
     { accessor: 'currency', priority: 4, status: 1 },
     { accessor: "deal_created_at", priority: 5, status: 1 },

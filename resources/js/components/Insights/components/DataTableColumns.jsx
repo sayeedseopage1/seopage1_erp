@@ -2,6 +2,7 @@ import dayjs from "dayjs"
 import Tooltip from '../ui/Tooltip';
 import { useUsers } from "../hooks/useUsers";
 import { stage } from "../utils/constants";
+import { Link } from "react-router-dom";
 
 
 
@@ -504,7 +505,9 @@ const OwnerCell = ({id}) => {
     const {users, getUserById} = useUsers(); 
     const user = getUserById(users, Number(id));
     if(!user) return <span> - </span>
-    return <span> {user.name} </span>
+    return <a href={`/account/employees/${id}`} >
+        <span> {user.name} </span>
+    </a> 
 }
 
 
