@@ -61,16 +61,27 @@ class TimelogReportController extends AccountBaseController
     }
     // public function getTimeLog($type)
     
-    public function getTimeLog($type)
+    public function getTimeLog(Request $request, $type)
     {
+        $page = $request->input('page', 1);
+        $perPage = $request->input('per_page_row', 10);
+        $offset = ($page - 1) * $perPage;
+        $startDate = $request->input('start_date', null);
+        $endDate = $request->input('end_date', null);
+        $employeeId = $request->input('employee_id', null);
+        $pmId = $request->input('pm_id', null);
+        $clientId = $request->input('client_id', null);
+
 
         $users = DB::table('users')->select(['id'])->whereIn('role_id', [5, 9, 10])->get()->toArray();
         $filtered_array = array_filter($users, function($item) {
             return isset($item->id);
         });
+
         $id_array = array_map(function($item) {
             return $item->id;
         }, $filtered_array);
+
         if ($type == 'employees') {
             $data = DB::table('project_time_logs')->select([
                 'employee.id as employee_id',
@@ -116,13 +127,27 @@ class TimelogReportController extends AccountBaseController
             ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
             ->whereIn('project_time_logs.user_id', $id_array)
             ->groupBy('project_time_logs.user_id', 'employee.id')
-            ->groupBy('project_time_logs.project_id')
-        //     ->groupBy('projects.client_id')
-            //->where('projects.status','=','in progress')
-           
-            ->orderBy('project_time_logs.task_id' , 'desc')
+            ->groupBy('project_time_logs.project_id');
+            if (!is_null($startDate)) {
+                $data = $data->where('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+            }
+            if (!is_null($endDate)) {
+                $data = $data->where('project_time_logs.end_time', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+            }
+            if (!is_null($pmId)) {
+                $data = $data->where('projects.pm_id' , $pmId)->orderBy('projects.pm_id' , 'desc');
+            }
+            if (!is_null($employeeId)) {
+                $data = $data->where('project_time_logs.user_id' , $employeeId)->orderBy('project_time_logs.user_id' , 'desc');
+            }
+            if (!is_null($clientId)) {
+                $data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
+            }
+
+            $data = $data->orderBy('project_time_logs.task_id' , 'desc')
+            ->offset($offset)
+            ->limit($perPage)
             ->get();
-           // dd($data);
         } else if($type == 'tasks') {
             $data = ProjectTimeLog::select([
                 'tasks.id as task_id',
@@ -160,9 +185,27 @@ class TimelogReportController extends AccountBaseController
             
             ->join('users as client', 'projects.client_id', 'client.id')
             ->join('deals', 'client.id', '=', 'deals.client_id')
-            ->where('projects.status','in progress')
-            ->orderBy('project_time_logs.task_id' , 'desc')
-           
+            ->where('projects.status','in progress');
+
+            if (!is_null($startDate)) {
+                $data = $data->where('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+            }
+            if (!is_null($endDate)) {
+                $data = $data->where('project_time_logs.end_time', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+            }
+            if (!is_null($pmId)) {
+                $data = $data->where('projects.pm_id' , $pmId)->orderBy('projects.pm_id' , 'desc');
+            }
+            if (!is_null($employeeId)) {
+                $data = $data->where('project_time_logs.user_id' , $employeeId)->orderBy('project_time_logs.user_id' , 'desc');
+            }
+            if (!is_null($clientId)) {
+                $data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
+            }
+
+            $data = $data->orderBy('project_time_logs.task_id' , 'desc')
+            ->offset($offset)
+            ->limit($perPage)
             ->get();
         } else if($type == 'projects') {
             $data = ProjectTimeLog::select([
@@ -206,13 +249,26 @@ class TimelogReportController extends AccountBaseController
 
             ->groupBy('project_time_logs.project_id')
             ->groupBy('project_time_logs.user_id')
-            ->where('projects.status','in progress')
-            //->groupBy('project_time_logs.total_minutes')
-            ->orderBy('project_time_logs.project_id' , 'desc')
-           
-
+            ->where('projects.status','in progress');
+            if (!is_null($startDate)) {
+                $data = $data->where('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+            }
+            if (!is_null($endDate)) {
+                $data = $data->where('project_time_logs.end_time', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+            }
+            if (!is_null($pmId)) {
+                $data = $data->where('projects.pm_id' , $pmId)->orderBy('projects.pm_id' , 'desc');
+            }
+            if (!is_null($employeeId)) {
+                $data = $data->where('project_time_logs.user_id' , $employeeId)->orderBy('project_time_logs.user_id' , 'desc');
+            }
+            if (!is_null($clientId)) {
+                $data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
+            }
+            $data = $data->orderBy('project_time_logs.project_id' , 'desc')
+            ->offset($offset)
+            ->limit($perPage)
             ->get();
-            //dd($data);
         }
 
         return response()->json($data);
