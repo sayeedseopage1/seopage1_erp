@@ -296,7 +296,7 @@ class TimelogReportController extends AccountBaseController
                 $data = $data->where('projects.pm_id' , $pmId);
             }
             if (!is_null($employeeId)) {
-                $data = $data->where('project_time_logs.user_id' , $pmId);
+                $data = $data->where('project_time_logs.user_id' , $employeeId);
             }
             if (!is_null($clientId)) {
                 $data = $data->where('projects.client_id' , $clientId);
