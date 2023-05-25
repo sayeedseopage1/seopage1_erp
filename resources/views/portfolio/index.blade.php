@@ -276,6 +276,7 @@
                             website_plugin: website_plugin
                         },
                         success: function(response) {
+                            console.log(response);
                             $('.displayFilterData').empty();
 
                             var categoryHtml = '<p class="mt-2 f-20">Website Category: ' + selectedCmsName + '</p>';

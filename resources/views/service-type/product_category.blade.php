@@ -58,12 +58,12 @@
     <div class="container">
         <div class="row ">
             <div class="col-md-12 myshadow">
-                <h2 class="text-center">Form Type: Blogs/Articles</h2>
+                <h2 class="text-center">Form Type: Product Category/Collection Pages</h2>
                 <hr />
                 <!-- form   -->
 
 
-                <form class="row g-3" action="" method="post" id="storeBlogArticle">
+                <form class="row g-3" action="" method="post" id="storeProductCategory">
                 @csrf
 
                 <!-- Website Link & Niche Starts Here -->
@@ -95,7 +95,7 @@
                         <div class="col-md-9">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <textarea name="business_information" id="business_information" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!"></textarea>
+                                    <textarea name="business_information" id="business_information" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here"></textarea>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -140,11 +140,11 @@
                         <div class="col-md-10 dynamic-blog-url" id="dynamic-blog-url-list-1">
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    <h6>Reference Blogs:</h6>
+                                    <h6>Reference product category/collection page description for the tone and style:</h6>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="form-group" style="margin-left: 50px;">
-                                        <input type="url" id="blog_url" class="form-control placeholderText height-35 f-14" placeholder="Enter reference blog url" name="blog_url[]"/>
+                                        <input type="url" id="category_url" class="form-control placeholderText height-35 f-14" placeholder="Enter reference product category/collection page URL" name="category_url[]"/>
                                     </div>
                                 </div>
                             </div>
@@ -159,101 +159,45 @@
                     <!--Product Description-->
                     <div class="row mt-3">
                         <div class="col-md-3">
-                            <h6>How many blogs/articles do you need written?</h6>
+                            <h6>How many product category/collection pages do you need written</h6>
                         </div>
                         <div class="col-md-9">
-                            <input type="text" name="product_no" id="product_no" class="form-control placeholderText height-35 f-14" placeholder="Input the no. of products here!">
+                            <input type="text" name="product_no" id="product_no" class="form-control placeholderText height-35 f-14" placeholder="Input the no. of product category/collection pages here!">
                         </div>
                     </div>
-                    <!--Topics-->
+                    <!--Product list-->
                     <div class="row mt-3">
-                        <div class="col-md-3">
-                            <h6>Topics:</h6>
+                        <div class="col-md-10 dynamic-productList" id="dynamic-productList-list-1">
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <h6>List of product category/collection pages that need texts:</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-group" style="margin-left: 50px;">
+                                        <input type="text" id="category_list" class="form-control placeholderText height-35 f-14" placeholder="Paste product category/collection page's URL that need texts" name="category_list[]"/>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-9">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="mt-2 d-flex">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="topic_info" value="1" id="topicBtn1">
-                                                <label class="form-check-label" for="topicBtn1">
-                                                    Research and collect topics for me
-                                                </label>
-                                            </div>
-                                            <div class="form-check" style="margin-left: 10px;">
-                                                <input class="form-check-input" type="radio" name="topic_info" value="0" id="topicBtn2">
-                                                <label class="form-check-label" for="topicBtn2">
-                                                    I have the topics
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-3" id="topicForm" style="display: none;">
-                                    <div class="col-md-10 dynamic-topic-link" id="dynamic-topic-link-list-1">
-                                        <div class="row mb-3">
-                                            <div class="col-md-12">
-                                                <input type="text" name="topic_link[]" id="topic_link" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where topics are available">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 append-buttons">
-                                        <div class="clearfix">
-                                            <button type="button" id="add-topic-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                            <button type="button" id="remove-topic-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="col-md-2 append-buttons">
+                            <div class="clearfix">
+                                <button type="button" id="add-productList-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                <button type="button" id="remove-productList-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
                             </div>
                         </div>
                     </div>
 
-                    <!--Keywords-->
+                    <!--Expected word cont-->
                     <div class="row mt-3">
                         <div class="col-md-3">
-                            <h6>Keywords:</h6>
+                            <h6>Expected word count per product category/collection page</h6>
                         </div>
                         <div class="col-md-9">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="mt-2 d-flex">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="keyword_info" value="1" id="keywordBtn1">
-                                                <label class="form-check-label" for="keywordBtn1">
-                                                    Research and collect keywords for me
-                                                </label>
-                                            </div>
-                                            <div class="form-check" style="margin-left: 10px;">
-                                                <input class="form-check-input" type="radio" name="keyword_info" value="0" id="keywordBtn2">
-                                                <label class="form-check-label" for="keywordBtn2">
-                                                    I have the keywords
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-3" id="keywordForm" style="display: none;">
-                                    <div class="col-md-10 dynamic-keyword-link" id="dynamic-keyword-link-list-1">
-                                        <div class="row mb-3">
-                                            <div class="col-md-12">
-                                                <input type="text" name="keyword_link[]" id="keyword_link" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where keywords are available">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 append-buttons">
-                                        <div class="clearfix">
-                                            <button type="button" id="add-keyword-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                            <button type="button" id="remove-keyword-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <input type="text" name="word_count" id="word_count" class="form-control placeholderText height-35 f-14" placeholder="Input word count here">
                         </div>
                     </div>
                     <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary rounded-pill py-0 px-5" id="submitBtn2">Submit</button>
+                        <button type="submit" class="btn btn-primary rounded-pill py-0 px-5" id="submitBtn3">Submit</button>
                     </div>
                 </form>
             </div>
@@ -268,43 +212,26 @@
             $('#folderLinkForm').toggle();
         });
     });
-    $(document).ready(function() {
-        $('#topicBtn2').click(function() {
-            $('#topicForm').toggle();
-        });
-    });
-    $(document).ready(function() {
-        $('#keywordBtn2').click(function() {
-            $('#keywordForm').toggle();
-        });
-    });
-    $('#submitBtn2').click(function(e){
+    $('#submitBtn3').click(function(e){
         e.preventDefault();
         // console.log(formData);
-        $('#submitBtn2').attr("disabled", true);
-        $('#submitBtn2').html("Processing...");
+        $('#submitBtn3').attr("disabled", true);
+        $('#submitBtn3').html("Processing...");
         var share_file_info = $('input[name="share_file_info"]:checked').val();
-        var topic_info = $('input[name="topic_info"]:checked').val();
-        var keyword_info = $('input[name="keyword_info"]:checked').val();
         var folder_link = document.getElementsByName("folder_link[]");
         var folder_link_values = [];
         for (var i = 0; i < folder_link.length; i++) {
             folder_link_values.push(folder_link[i].value);
         }
-        var blog_url = document.getElementsByName("blog_url[]");
-        var blog_url_values = [];
-        for (var i = 0; i < blog_url.length; i++) {
-            blog_url_values.push(blog_url[i].value);
+        var category_url = document.getElementsByName("category_url[]");
+        var category_url_values = [];
+        for (var i = 0; i < category_url.length; i++) {
+            category_url_values.push(category_url[i].value);
         }
-        var topic_link = document.getElementsByName("topic_link[]");
-        var topic_link_values = [];
-        for (var i = 0; i < topic_link.length; i++) {
-            topic_link_values.push(topic_link[i].value);
-        }
-        var keyword_link = document.getElementsByName("keyword_link[]");
-        var keyword_link_values = [];
-        for (var i = 0; i < keyword_link.length; i++) {
-            keyword_link_values.push(keyword_link[i].value);
+        var category_list = document.getElementsByName("category_list[]");
+        var category_list_values = [];
+        for (var i = 0; i < category_list.length; i++) {
+            category_list_values.push(category_list[i].value);
         }
         var data= {
             '_token': "{{ csrf_token() }}",
@@ -312,13 +239,11 @@
             'website_niche': document.getElementById("website_niche").value,
             'website_name': document.getElementById("website_name").value,
             'business_information': document.getElementById("business_information").value,
+            'word_count': document.getElementById("word_count").value,
             'share_file_info': share_file_info,
             'folder_link': folder_link_values,
-            'blog_url': blog_url_values,
-            'topic_info': topic_info,
-            'topic_link': topic_link_values,
-            'keyword_info': keyword_info,
-            'keyword_link': keyword_link_values,
+            'category_url': category_url_values,
+            'category_list': category_list_values,
         }
         // console.log(data);
         $.ajaxSetup({
@@ -328,22 +253,21 @@
         });
         $.ajax({
             type: "POST",
-            url: "{{route('store_blog_articles')}}",
+            url: "{{route('store_product_category')}}",
             data: data,
             dataType: "json",
             success: function (response) {
                 if (response.status==200) {
-                    $('#storeBlogArticle').trigger("reset");
                     $(location).prop('href', '{{url('/thankyou')}}');
-                    toastr.success('Blogs Articles Added Successfully');
-                    $('#submitBtn2').attr("disabled", false);
-                    $('#submitBtn2').html("Submit");
+                    toastr.success('Product Category/Collection Added Successfully');
+                    $('#submitBtn3').attr("disabled", false);
+                    $('#submitBtn3').html("Submit");
                 }
             },
             error: function(error) {
                 // console.log(response);
-                $('#submitBtn2').attr("disabled", false);
-                $('#submitBtn2').html("Submit");
+                $('#submitBtn3').attr("disabled", false);
+                $('#submitBtn3').html("Submit");
             }
         });
     });
@@ -366,11 +290,11 @@
             count = totalFields() + 1;
             field = $("#dynamic-folder-link-list-1").clone();
             field.attr("id", "dynamic-folder-link-" + count);
-            field.children("label").attr("for", "linkError_" + 'total').text("Field " + count);
-            field.find("input").attr("id", "linkError_" + 'total').val("");
-            field.append('<span id="linkError_'+total+'" class="text-danger" for="link"></span>');
+            field.find('input[name="folder_link[]"]').val("");
+            field.find('input[name="folder_link[]"]').attr("id", "folder_link_" + count);
             $(className + ":last").after($(field));
         }
+
 
         function removeLastField() {
             if (totalFields() > 1) {
@@ -429,15 +353,13 @@
         function totalFields() {
             return $(className).length;
         }
-
         function addNewField() {
-            var total = $('input[name="blog_url[]"]').length;
+            var total = $('input[name="category_url[]"]').length;
             count = totalFields() + 1;
             field = $("#dynamic-blog-url-list-1").clone();
             field.attr("id", "dynamic-blog-url-" + count);
-            field.children("label").attr("for", "linkError_" + 'total').text("Field " + count);
-            field.find("input").attr("id", "linkError_" + 'total').val("");
-            field.append('<span id="linkError_'+total+'" class="text-danger" for="link"></span>');
+            field.find('input[name="category_url[]"]').val("");
+            field.find('input[name="category_url[]"]').attr("id", "category_url_" + count);
             $(className + ":last").after($(field));
         }
 
@@ -488,9 +410,9 @@
         });
     });
     $(document).ready(function () {
-        var buttonAdd = $("#add-topic-button");
-        var buttonRemove = $("#remove-topic-button");
-        var className = ".dynamic-topic-link";
+        var buttonAdd = $("#add-productList-button");
+        var buttonRemove = $("#remove-productList-button");
+        var className = ".dynamic-productList";
         var count = 0;
         var field = "";
         var maxFields = 50;
@@ -498,84 +420,13 @@
         function totalFields() {
             return $(className).length;
         }
-
         function addNewField() {
-            var total = $('input[name="topic-link[]"]').length;
+            var total = $('input[name="category_list[]"]').length;
             count = totalFields() + 1;
-            field = $("#dynamic-topic-link-list-1").clone();
-            field.attr("id", "dynamic-topic-link-" + count);
-            field.children("label").attr("for", "linkError_" + 'total').text("Field " + count);
-            field.find("input").attr("id", "linkError_" + 'total').val("");
-            field.append('<span id="linkError_'+total+'" class="text-danger" for="link"></span>');
-            $(className + ":last").after($(field));
-        }
-
-        function removeLastField() {
-            if (totalFields() > 1) {
-                $(className + ":last").remove();
-            }
-        }
-
-        function enableButtonRemove() {
-            if (totalFields() === 2) {
-                buttonRemove.removeAttr("disabled");
-                buttonRemove.addClass("shadow-sm");
-            }
-        }
-
-        function disableButtonRemove() {
-            if (totalFields() === 1) {
-                buttonRemove.attr("disabled", "disabled");
-                buttonRemove.removeClass("shadow-sm");
-            }
-        }
-
-        function disableButtonAdd() {
-            if (totalFields() === maxFields) {
-                buttonAdd.attr("disabled", "disabled");
-                buttonAdd.removeClass("shadow-sm");
-            }
-        }
-
-        function enableButtonAdd() {
-            if (totalFields() === maxFields - 1) {
-                buttonAdd.removeAttr("disabled");
-                buttonAdd.addClass("shadow-sm");
-            }
-        }
-
-        buttonAdd.click(function () {
-            addNewField();
-            enableButtonRemove();
-            disableButtonAdd();
-        });
-
-        buttonRemove.click(function () {
-            removeLastField();
-            disableButtonRemove();
-            enableButtonAdd();
-        });
-    });
-    $(document).ready(function () {
-        var buttonAdd = $("#add-keyword-button");
-        var buttonRemove = $("#remove-keyword-button");
-        var className = ".dynamic-keyword-link";
-        var count = 0;
-        var field = "";
-        var maxFields = 50;
-
-        function totalFields() {
-            return $(className).length;
-        }
-
-        function addNewField() {
-            var total = $('input[name="keyword-link[]"]').length;
-            count = totalFields() + 1;
-            field = $("#dynamic-keyword-link-list-1").clone();
-            field.attr("id", "dynamic-keyword-link-" + count);
-            field.children("label").attr("for", "linkError_" + 'total').text("Field " + count);
-            field.find("input").attr("id", "linkError_" + 'total').val("");
-            field.append('<span id="linkError_'+total+'" class="text-danger" for="link"></span>');
+            field = $("#dynamic-productList-list-1").clone();
+            field.attr("id", "dynamic-productList-" + count);
+            field.find('input[name="category_list[]"]').val("");
+            field.find('input[name="category_list[]"]').attr("id", "category_list_" + count);
             $(className + ":last").after($(field));
         }
 

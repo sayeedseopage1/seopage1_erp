@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-12">
                 <button type="button" class="btn-primary rounded f-14 mt-5" data-toggle="modal" data-target="#addcmsmodal">
-                    <i class="fa fa-plus mr-1"></i>Add CMs
+                    <i class="fa fa-plus mr-1"></i>Add CMS
                 </button>
                 @include('projects.modals.addcmsmodal')
                 <div class="card mt-3">
@@ -19,13 +19,13 @@
                             <th class="text-center">Action</th>
                         </tr>
                         </thead>
-                        @php
-                          $all_cms =\App\Models\ProjectCms::all();
-                        @endphp
                         <tbody>
-                        @foreach($all_cms as $key=>$cms)
+                        @php
+                            $key = $all_cms->currentPage() * $all_cms->perPage() - $all_cms->perPage() + 1;
+                        @endphp
+                        @foreach($all_cms as $cms)
                             <tr>
-                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $key++ }}</td>
                                 <td class="text-center"> {{$cms->cms_name}}</td>
                                 <td class="text-center">
                                     <a href="" class="btn btn-primary update_cms_form" data-toggle="modal" data-target="#editcmsmodal" data-id="{{ $cms->id }}" data-name="{{ $cms->cms_name }}">
@@ -36,10 +36,11 @@
                             </tr>
                         @endforeach
                         </tbody>
-                        @include('projects.modals.editcmsmodal')
                     </table>
+                    <div class="row my-3 ml-3">{{ $all_cms->links() }}</div>
                 </div>
             </div>
         </div>
     </div>
+    @include('projects.modals.editcmsmodal')
 @endsection

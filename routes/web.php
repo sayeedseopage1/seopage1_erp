@@ -1143,6 +1143,9 @@ Route::get('/deals/service-type/blogs-articles', [HomeController::class, 'blogAr
 Route::post('/deals/store/blog-articles', [HomeController::class, 'storeBlogArticle'])->name('store_blog_articles');
 Route::get('/deals/service-type/product-description', [HomeController::class, 'productDescription']);
 Route::post('/deals/store/product-description', [HomeController::class, 'storeProductDescription'])->name('store_product_description');
+Route::get('/deals/service-type/product-category', [HomeController::class, 'productCategory']);
+Route::post('/deals/store/product-category', [HomeController::class, 'storeProductCategory'])->name('store_product_category');
+Route::get('/deals/service-type/basic-seo', [HomeController::class, 'productBasicSeo']);
 /* Account prefix routes end here */
 //store custom lead route for seaopage1
 Route::post('/lead/store', [LeadController::class, 'storeLead'])->name('store-lead');

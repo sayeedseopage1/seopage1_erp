@@ -3480,6 +3480,7 @@ class ProjectController extends AccountBaseController
     }
     public function viewCms(){
         $this->pageTitle = 'CMS';
+        $this->all_cms =DB::table('project_cms')->orderBy('id','desc')->paginate(10);
         return view('projects.cms.index',$this->data);
     }
     public function storeCms(Request $request){
@@ -3504,6 +3505,7 @@ class ProjectController extends AccountBaseController
     // VIEW PROJECT WEBSITE SECTION
     public function viewWebsiteType(){
         $this->pageTitle = 'Website Type';
+        $this->website_types =DB::table('project_website_types')->orderBy('id','desc')->paginate(10);
         return view('projects.website-type.index',$this->data);
     }
     public function storeWebsiteType(Request $request){
@@ -3529,6 +3531,7 @@ class ProjectController extends AccountBaseController
     // VIEW PROJECT CATEGORY SECTION
     public function viewCategory(){
         $this->pageTitle = 'Categories';
+        $this->categories =ProjectNiche::with('parent','child')->paginate(10);
         return view('projects.category.index',$this->data);
     }
 
