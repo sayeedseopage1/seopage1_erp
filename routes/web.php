@@ -1051,12 +1051,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('task-report', TaskReportController::class);
 
     Route::post('time-log-report-chart', [TimelogReportController::class, 'timelogChartData'])->name('time-log-report.chart');
-    Route::resource('time-log-report', TimelogReportController::class);
+    
     Route::get('time-log-report/{project_id}/{employee_id}', [TimelogReportController::class, 'show'])->where([
         'project_id' => '[0-9]+',
         'employee_id' => '[0-9]+',
     ]);
 
+    // Route::get('time-log-report/{any?}', [TimelogReportController::class, 'index'])->where('any', '.*');
+    Route::resource('time-log-report', TimelogReportController::class);
     Route::post('finance-report-chart', [FinanceReportController::class, 'financeChartData'])->name('finance-report.chart');
     Route::resource('finance-report', FinanceReportController::class);
 
@@ -1264,7 +1266,7 @@ Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMile
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
 
 Route::any('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
-
+Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
 Route::any('get-users', [InsightsController::class, 'getusers'])->name('get-users');
 Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams');
 Route::get('get-users/all', [InsightsController::class, 'get_users_all'])->name('get_users_all');

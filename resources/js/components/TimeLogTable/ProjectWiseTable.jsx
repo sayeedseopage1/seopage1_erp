@@ -9,6 +9,8 @@ import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
 import TimeLogTableFilterBar from "./components/TimeLogTableFilterBar";
 import { useGetProjectWiseDataMutation } from "../services/api/timeLogTableApiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setProjectWiseTable } from "../services/features/projectWiseTableDataSlice";
  
 
 // pivot table
@@ -26,35 +28,68 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
         filterColumn,
         setFilterColumn,
     } = React.useContext(EmployeeWiseTableContext);
-    const [data, setData] = useState([]);
+    const {data: preFetchData } = useSelector(state => state.projectWiseDataTable);
+    const dispatch = useDispatch();
+
+
+    const [data, setData] = useState([...preFetchData]);
+    const [allData, setAllData] = useState([]);
     const [filterOptions, setFilterOptions] = useState({});
     const [loading, setLoading] = useState(true);
+    const [totalRows, setTotalRows] = useState(0);
 
     const [getProjectWiseData, {isLoading: dataIsLoading}] = useGetProjectWiseDataMutation();
 
-     // handle data request
-    const handleDataRequest = async (filter, page, pagePageRow) => {
-        setFilterOptions(filter);
-        let data = {
-            ...filter,
-            page: page || currentPage,
-            per_page_row: pagePageRow || nPageRows,
-        } 
-        let res = await getProjectWiseData(data).unwrap();
-        if(res) setData(res);       
+   
+      // handle data request
+      const handleDataRequest = async (filter) => {
+        setFilterOptions(filter); 
+        const {
+            client_id,
+            employee_id,
+            end_date,
+            start_date,
+            pm_id
+        } =  filter;
+
+        let filteredData = [...preFetchData];
+
+        if(employee_id){ filteredData = filteredData.filter(d => Number(d.employee_id) === Number(employee_id))}
+        if(pm_id){  filteredData = filteredData.filter(d => Number(d.pm_id) === Number(pm_id))}
+        if(client_id){ filteredData = filteredData.filter(d => Number(d.client_id) === Number(client_id))}
+ 
+        setData([...filteredData]);
+        setTotalRows(filteredData.length);
     }
+
+    
+    useEffect(()=> {
+        
+        if(preFetchData.length === 0 && !dataIsLoading){
+            (async () => {
+                let res = await getProjectWiseData({}).unwrap();
+                if(res) {
+                    dispatch(setProjectWiseTable(res?.data));
+                    setData(res?.data);
+                    setTotalRows(res?.data?.length);
+                }  
+            })();
+        }
+    }, [])
+
+
 
     
     const handlePageChange = (page) => {
         setCurrentPage(page);
-        handleDataRequest(filterOptions, page);
+        // handleDataRequest(filterOptions, page);
     }
     
     // handle per page row number change
     
     const handleParPageRowNumberChange = (n) => {
         setNPageRows(n);
-        handleDataRequest(filterOptions, currentPage, Number(n));
+        // handleDataRequest(filterOptions, currentPage, Number(n));
     }
     
     useEffect(()=> {
@@ -409,7 +444,7 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
 
             {/* pagination */}
             <Pagination
-                data={data}
+                totalRows={totalRows}
                 nPageRows={nPageRows}
                 currentPage={currentPage}
                 setCurrentPage={handlePageChange}

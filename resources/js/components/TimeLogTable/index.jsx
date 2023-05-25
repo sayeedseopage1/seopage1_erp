@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import EmployeeWiseTable from "./EmployeeWiseTable";
-// import data from "./data.json";
 import styled from "styled-components";
 import ColumnFilter from "./ColumnFilterButton";
 import "./table.css";
@@ -9,10 +8,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import ProjectWiseTable from "./ProjectWiseTable";
 import TaskWiseTable from "./TaskWiseTable";
-import { useEffect } from "react";
-import axios from "axios";
 import EmployeeWiseSessionTable from "./EmployeeWiseSessionModal";
-import TimeLogTableFilterBar from "./components/TimeLogTableFilterBar";
 import { Provider } from "react-redux";
 import { store } from '../services/store'
 
@@ -124,6 +120,7 @@ const taskWiseTableConfig = {
 
 // log table
 const TimeLogTable = () => {
+    const [loading, setLoading] = React.useState(true);
     const [activeTab, setActiveTab] = React.useState("Employee Wise");
     const [employeeSessionModal, setEmployeeSessionModal] = React.useState({
         isOpen: false,
@@ -146,8 +143,18 @@ const TimeLogTable = () => {
             employeeID: 0,
             projectID: 0
         })
-    }
+    } 
 
+    React.useEffect(() => {
+        let timeOut = setTimeout(() => {
+            setLoading(false);
+        }, [300])
+
+
+        return () => clearTimeout(timeOut)
+    }, [])
+
+    
     const activeTableNamespace =
         activeTab === "Employee Wise"
             ? "employee"
@@ -157,6 +164,7 @@ const TimeLogTable = () => {
             ? "task"
             : "";
 
+    if(loading) return null;
     return (
         <DndProvider backend={HTML5Backend}>
             <Tabs>

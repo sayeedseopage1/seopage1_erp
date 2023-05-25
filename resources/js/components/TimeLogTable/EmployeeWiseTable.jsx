@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import ReactDOM from "react-dom";
 import _ from "lodash";
 import styled from "styled-components";
@@ -10,10 +10,16 @@ import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
 import TimeLogTableFilterBar from "./components/TimeLogTableFilterBar";
 import { useGetEmployeeWiseDataMutation } from "../services/api/timeLogTableApiSlice";
+import {CompareDate} from '../Insights/utils/dateController';
+import { useDispatch, useSelector } from "react-redux";
+import { setEmployeeWiseData } from '../services/features/employeeWiseTableDataSlice';
 
 // pivot table
 const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
-    
+   const {data: preFetchData } = useSelector(state => state.employeeWiseTableData);
+   const dispatch = useDispatch();
+
+
     const {
         setColumns,
         setSubColumns,
@@ -28,48 +34,83 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
         filterColumn,
         setFilterColumn,
     } = React.useContext(EmployeeWiseTableContext);
-    const [data, setData] = useState([]);
+    const [allData, setAllData] = useState([]);
     const [filterOptions, setFilterOptions] = useState({});
     const [loading, setLoading] = useState(true);
+    const [totalRows, setTotalRows] = useState(0);
+    const [data, setData] = useState([...preFetchData]);
+    
+    const dateCompare = new CompareDate();
 
-
-    const [getEmployeeWiseData, {isLoading: dataIsLoading }] = useGetEmployeeWiseDataMutation();
+    const [getEmployeeWiseData, { isLoading: dataIsLoading }] = useGetEmployeeWiseDataMutation({skip: preFetchData.length});
     
 
     // handle data request
-    const handleDataRequest = async (filter, page, pagePageRow) => {
-        
+    const handleDataRequest = async (filter) => {
         setFilterOptions(filter);
-        let data = {
-            ...filter,
-            page: page || currentPage,
-            per_page_row: pagePageRow || nPageRows,
-        }
-        let res = await getEmployeeWiseData(data).unwrap();
-        if(res) setData(res);            
+        setLoading(true); 
+        const {
+            client_id,
+            employee_id,
+            end_date,
+            start_date,
+            pm_id
+        } =  filter;
+
+        let filteredData = [...preFetchData];
+
+        if(employee_id){ filteredData = filteredData.filter(d => Number(d.employee_id) === Number(employee_id))}
+        if(pm_id){  filteredData = filteredData.filter(d => Number(d.pm_id) === Number(pm_id))}
+        if(client_id){ filteredData = filteredData.filter(d => Number(d.client_id) === Number(client_id))}
+        // if(end_data) {
+        //     filteredData = filteredData.filter() 
+        // }
+ 
+        setData([...filteredData]);
+        setTotalRows(filteredData.length);
+        setLoading(false);
     }
+
+
+    const fetchData = async () => {
+        let res = await getEmployeeWiseData({}).unwrap();
+        if(res) {
+            dispatch(setEmployeeWiseData(res?.data || []))
+            setData(res?.data);
+            setTotalRows(res?.data?.length);
+        }  
+    }
+
+
+    useEffect(()=> {
+        if(preFetchData.length === 0 && !dataIsLoading){
+            fetchData();
+        }
+    }, [])
+
+    useEffect(()=> {
+        let timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000)
+        return () => clearTimeout(timer);
+    }, []) 
+
+
+
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
-        handleDataRequest(filterOptions, page);
+        // handleDataRequest(filterOptions, page);
     }
 
     // handle per page row number change
 
     const handleParPageRowNumberChange = (n) => {
         setNPageRows(n);
-        handleDataRequest(filterOptions, currentPage, Number(n));
+        // handleDataRequest(filterOptions, currentPage, Number(n));
     }
 
-    useEffect(()=> {
-        let timer = setTimeout(() => {
-            setLoading(false);
-        }, 1000)
-
-
-        return () => clearTimeout(timer);
-    }, []) 
-
+    
 
     // get employee table data
     // useEffect(() => {
@@ -376,11 +417,11 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
 
             {/* pagination */}
             <Pagination
-                data={data}
                 nPageRows={nPageRows}
                 currentPage={currentPage}
                 setCurrentPage={handlePageChange}
                 setNPageRows={handleParPageRowNumberChange}
+                totalRows={totalRows}
             />
         </TableContainer>
     );

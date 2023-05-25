@@ -3,9 +3,13 @@ import ReactDOM from 'react-dom';
 import JqueryDateRangePicker from './JqueryDateRangePicker';
 import PersonFilter from './PersonFilter';
 import { useLazyGetAllUsersQuery } from '../../services/api/userSliceApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUsers } from '../../services/features/usersSlice';
 
 
 export default function TimeLogTableFilterBar ({handleDataRequest}){
+    const { users } = useSelector(s => s.users);
+    const dispatch = useDispatch();
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
 
@@ -18,13 +22,19 @@ export default function TimeLogTableFilterBar ({handleDataRequest}){
 
 
     // fetch all users
-    const [getAllUsers, {data:users, isFetching:userIsFetching}] = useLazyGetAllUsersQuery();
+    const [getAllUsers, {  isFetching:userIsFetching}] = useLazyGetAllUsersQuery('', {
+        skip: users.length
+    });
 
     
-
     React.useEffect(() => {
-        if(!userIsFetching){
-            (async () => { await getAllUsers().unwrap(); })()
+        if( !users.length && !userIsFetching){
+            (async () => { 
+                let res = await getAllUsers().unwrap(); 
+                if(res){
+                    dispatch(setUsers(res))
+                }
+            })()
         }
     }, [])
 
@@ -116,7 +126,7 @@ export default function TimeLogTableFilterBar ({handleDataRequest}){
     }
 
     content =  <div className='d-flex flex-wrap bg-white p-1'>
-        <div className='border-right pr-1'>
+        {/* <div className='border-right pr-1'>
             <JqueryDateRangePicker 
                 startDate={startDate}
                 setStartDate={setStartDate}
@@ -124,7 +134,7 @@ export default function TimeLogTableFilterBar ({handleDataRequest}){
                 setEndDate={setEndDate}
                 onApply={handleDateFilter}
             />
-        </div>
+        </div> */}
 
         {/* employee */}
         <PersonFilter

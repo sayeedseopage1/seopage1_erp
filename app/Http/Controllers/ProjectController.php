@@ -3955,4 +3955,28 @@ class ProjectController extends AccountBaseController
             'new_date.required' => 'This field is required!',
         ]);
     }
+
+
+    // get projects
+    public function get_project_json($type = null)
+    {
+        if (! is_null($type)) {
+            if ($type = 'in_progress') {
+                $mode = 'in progress';
+            } else if ($type == 'partially_finished') {
+                $mode = 'partially finished';
+            } else if ($type == 'finished') {
+                $mode = 'finished';
+            } else if ($type == 'canceled') {
+                $mode = 'canceled';
+            } else {
+
+            }
+            $data = Project::select('id', 'project_name')->where('status', $mode)->get();
+        } else {
+            $data = Project::select('id', 'project_name')->get();
+        }
+        
+        return response()->json($data);
+    }
 }

@@ -10,9 +10,14 @@ import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
 import TimeLogTableFilterBar from "./components/TimeLogTableFilterBar";
 import { useGetTaskWiseDataMutation } from "../services/api/timeLogTableApiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setTaskWiseTableData } from "../services/features/taskWiseTableDataSlice";
 
 // pivot table
 const TaskWiseTable = ({ columns, subColumns }) => {
+    const { data: preFetchData} = useSelector(s => s.taskWiseDataTable);
+    const dispatch = useDispatch();
+
     const {
         setSubColumns,
         sortConfig,
@@ -27,44 +32,66 @@ const TaskWiseTable = ({ columns, subColumns }) => {
         setFilterColumn,
     } = React.useContext(EmployeeWiseTableContext);
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([...preFetchData]);
+    const [allData, setAllData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filterOptions, setFilterOptions] = useState({});
+    const [totalRows, setTotalRows] = useState(0);
 
     const [getTaskWiseData, {isLoading: dataIsLoading}] = useGetTaskWiseDataMutation();
 
-    // handle data request
-    const handleDataRequest = async (filter, page, pagePageRow) => {
-        setData([]);
-        setFilterOptions(filter);
-        let data = {
-            ...filter,
-            page: page || currentPage,
-            per_page_row: pagePageRow || nPageRows,
-        }
-        let res = await getTaskWiseData(data).unwrap();
-        if(res) setData(res);            
-    }
+   // handle data request
+   const handleDataRequest = async (filter) => {
+    setFilterOptions(filter); 
+    const {
+        client_id,
+        employee_id,
+        end_date,
+        start_date,
+        pm_id
+    } =  filter;
 
+    let filteredData = [...preFetchData];
+
+    if(employee_id){ filteredData = filteredData.filter(d => Number(d.employee_id) === Number(employee_id))}
+    if(pm_id){  filteredData = filteredData.filter(d => Number(d.pm_id) === Number(pm_id))}
+    if(client_id){ filteredData = filteredData.filter(d => Number(d.client_id) === Number(client_id))}
+
+    setData([...filteredData]);
+    setTotalRows(filteredData.length);
+}
+
+    useEffect(()=> { 
+        if(!preFetchData.length && !dataIsLoading){
+            (async () => {
+                let res = await getTaskWiseData({}).unwrap();
+                if(res) {
+                    dispatch(setTaskWiseTableData(res?.data))
+                    // setAllData(res?.data); 
+                    setData(res?.data);
+                    setTotalRows(res?.data?.length);
+                }  
+            })();
+        }
+    }, [])
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
-        handleDataRequest(filterOptions, page);
+        // handleDataRequest(filterOptions, page);
     }
 
     // handle per page row number change
 
     const handleParPageRowNumberChange = (n) => {
         setNPageRows(n);
-        handleDataRequest(filterOptions, currentPage, Number(n));
+        // handleDataRequest(filterOptions, currentPage, Number(n));
     }
 
     useEffect(()=> {
         let timer = setTimeout(() => {
             setLoading(false);
         }, 1000)
-
-
+ 
         return () => clearTimeout(timer);
     }, []) 
 
@@ -422,7 +449,7 @@ const TaskWiseTable = ({ columns, subColumns }) => {
 
             {/* pagination */}
             <Pagination
-                data={data}
+                totalRows={totalRows}
                 nPageRows={nPageRows}
                 currentPage={currentPage}
                 setCurrentPage={handlePageChange}
