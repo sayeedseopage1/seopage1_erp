@@ -76,7 +76,7 @@ class GoalAchieveCheck extends Command
                         $deals_data = Deal::select([
                             'deals.*',
                            
-                            'leads.added_by as bidder',
+                            DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                         ])
                         ->leftJoin('leads', 'leads.id', 'deals.lead_id')
                        
@@ -197,7 +197,7 @@ class GoalAchieveCheck extends Command
                         $deals_data = Deal::select([
                             'deals.*',
                            
-                            'leads.added_by as bidder',
+                            DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                         ])
                         ->leftjoin('leads', 'leads.id', 'deals.lead_id')
                        
