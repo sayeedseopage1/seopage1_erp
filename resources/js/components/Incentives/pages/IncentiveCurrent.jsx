@@ -109,7 +109,7 @@ const IncentiveCurrent = () => {
                                 <div className='sp1__incentive_item'>
                                     {!isLoading && (
                                         <span>
-                                            *Approximate incentive amount for your shift (Provided all your shift and team minimum goals are met):({diff > 0 ? diff.toFixed(2) : 0}) * {data?.point_value} =  BDT {approximateIncentive.toFixed(2)}
+                                            *Approximate incentive amount for your shift (Provided all your shift and team minimum goals are met): {diff > 0 ? diff.toFixed(2) : 0} X {data?.point_value} =  BDT {approximateIncentive.toFixed(2)}
                                         </span>
                                     )}    
                                 </div> 

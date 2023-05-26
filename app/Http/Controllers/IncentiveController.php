@@ -208,7 +208,7 @@ class IncentiveController extends AccountBaseController
 
         // dd($data['toal_share_incentive']);
         $data['point_value']= $incentive_setting->point_of_value;
-        $data['percentage_of_share']= $total_percentage_share_incentive_of_this_user;
+        $data['percentage_of_share']= $total_percentage_share_incentive_of_this_user ?? 0;
 
         // dd($data);
 
