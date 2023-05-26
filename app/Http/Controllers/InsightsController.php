@@ -696,7 +696,7 @@ class InsightsController extends AccountBaseController
                 }
                 $deals_data = $deals_data->where('deals.status', '!=','Denied')
                // ->whereIn('deals.added_by', $data2)
-                ->groupBy('client_id')
+                //->groupBy('client_id')
                 ->orderBy('deals.id', 'desc')
                 ->get();
 

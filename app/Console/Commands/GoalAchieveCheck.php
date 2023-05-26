@@ -156,10 +156,31 @@ class GoalAchieveCheck extends Command
                             $array[] = $value;
                         }
                         if($goal->team_id == 1) {
-                            if($goal->trackingType == 'value') {
-                                $team_total_amount = Deal::where('status','!=','Denied')->sum('amount');
+                            if (is_null($goal->endDate)) {
+                                $end_date = Carbon::parse($goal->startDate);
+                                if ($goal->frequency == 'Monthly') {
+                                    $end_date = $end_date->addMonths()->format('Y-m-d');
+                                } elseif ($goal->frequency == 'Quarterly') {
+                                    $end_date = $end_date->addMonths(3)->format('Y-m-d');
+                                } elseif ($goal->frequency == 'Yearly') {
+                                    $end_date = $end_date->addMonths(12)->format('Y-m-d');
+                                } else {
+                                    $end_date = $end_date->addDays(10)->format('Y-m-d');
+                                }
                             } else {
-                                $team_total_amount = Deal::where('status','!=','Denied')->count(); 
+                                $end_date = $goal->endDate;
+                            }
+
+                            if($goal->trackingType == 'value') {
+                                $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
+                                ->whereDate('start_date', '>=', $goal->startDate)
+                                ->whereDate('start_date', '<=', $end_date)
+                                ->sum('amount');
+                            } else {
+                                $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
+                                ->whereDate('start_date', '>=', $goal->startDate)
+                                ->whereDate('start_date', '<=', $end_date)
+                                ->count(); 
                             }
                         }
                   
