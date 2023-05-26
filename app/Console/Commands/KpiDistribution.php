@@ -744,9 +744,10 @@ class KpiDistribution extends Command
     }
     
     $currentMonth = Carbon::now()->month;
-    // / dd($currentMonth);
+    // dd($currentMonth);
   $monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
     //$monthly_deal = 20000;
+    //dd($monthly_deal);
 
      $kpi_settings= kpiSettingGenerateSale::all();
     // dd($kpi_settings);
@@ -758,7 +759,7 @@ class KpiDistribution extends Command
 
      $point= new CashPoint();
      $point->user_id= $user_name->id;
-     $point->project_id= $find_project_id->id;
+    // / $point->project_id= $find_project_id->id;
      $point->activity= $user_name->name . ' for achieving monthly target';
      $point->gained_as = "Individual";
      $point->points= ($monthly_deal*$value->generate_sales_amount)/100;
@@ -784,7 +785,7 @@ class KpiDistribution extends Command
         $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
         $point= new CashPoint();
      $point->user_id= $user_name->id;
-     $point->project_id= $find_project_id->id;
+    // $point->project_id= $find_project_id->id;
      $point->activity= $user_name->name . ' for achieving monthly target';
      $point->gained_as = "Individual";
      $point->points= ($monthly_deal*$kpi->generate_sales_above_point)/100;
