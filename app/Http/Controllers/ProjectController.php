@@ -848,7 +848,7 @@ class ProjectController extends AccountBaseController
                     $point= new CashPoint();
                     $point->user_id= $deal_qualified->updated_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' made the deal qulaify deal';
+                    $point->activity= $user_name->name . ' made the deal qualify deal';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget*$kpi->qualify)/100;
 

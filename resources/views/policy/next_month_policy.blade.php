@@ -429,8 +429,8 @@
                 dataType: "json",
                 success: function (response) {
                     $('#save-kpi-settings').trigger("reset");
-                    toastr.success('Kpi Update Successfully');
-                    window.location.reload();
+                    toastr.success('Kpi drt Successfully');
+                    window.location.href= "{{route('policy.index')}}";
                     $('#save-form').attr("disabled", false);
                     $('#save-form').html("Save");
                 },
