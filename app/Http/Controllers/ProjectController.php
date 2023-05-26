@@ -1048,15 +1048,15 @@ class ProjectController extends AccountBaseController
                  $point->project_id= $find_project_id->id;
                  $point->activity= $user_name->name . ' created the bid Project : '.$find_project_id->project_name. ', Client: '. $find_project_id->client_name->name. '(Higher Single Deal('.$kpi->bonus_point.' points))';
                  $point->gained_as = "Individual";
-                 $point->points= ($bonus_point*$kpi->the_bidder)/100;
+                 $point->points= $bonus_point;
 
                  if ($cash_points != null) {
 
-                     $point->total_points_earn= $cash_points->total_points_earn+ ($bonus_point*$kpi->the_bidder)/100;
+                     $point->total_points_earn= $cash_points->total_points_earn+ $bonus_point;
 
                  }else
                  {
-                     $point->total_points_earn=  ($bonus_point*$kpi->the_bidder)/100;
+                     $point->total_points_earn=  $bonus_point;
 
                  }
                  $point->save();
@@ -1073,15 +1073,15 @@ class ProjectController extends AccountBaseController
                      $point->project_id= $find_project_id->id;
                      $point->activity= $user_name->name . ' made the deal qualify deal Project : '.$find_project_id->project_name. ', Client: '. $find_project_id->client_name->name. '(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($bonus_point*$kpi->qualify)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_qualified != null) {
 
-                         $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($bonus_point*$kpi->qualify)/100;
+                         $point->total_points_earn= $cash_points_qualified->total_points_earn+ $bonus_point;
 
                      }else
                      {
-                         $point->total_points_earn=  ($bonus_point*$kpi->qualify)/100;
+                         $point->total_points_earn=  $bonus_point;
 
                      }
                      $point->save();
@@ -1097,15 +1097,15 @@ class ProjectController extends AccountBaseController
                      $point->project_id= $find_project_id->id;
                      $point->activity= $user_name->name . ' made the deal requirements defined Project : '.$find_project_id->project_name. ', Client: '. $find_project_id->client_name->name. '(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($bonus_point*$kpi->requirements_defined)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_requirements_defined != null) {
 
-                         $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($bonus_point*$kpi->requirements_defined)/100;
+                         $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ $bonus_point;
 
                      }else
                      {
-                         $point->total_points_earn=  ($bonus_point*$kpi->requirements_defined)/100;
+                         $point->total_points_earn= $bonus_point;
 
                      }
                      $point->save();
@@ -1121,15 +1121,15 @@ class ProjectController extends AccountBaseController
                      $point->project_id= $find_project_id->id;
                      $point->activity= $user_name->name . ' created the proposal Project : '.$find_project_id->project_name. ', Client: '. $find_project_id->client_name->name. '(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($bonus_point*$kpi->proposal_made)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_proposal_made != null) {
 
-                         $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($bonus_point*$kpi->proposal_made)/100;
+                         $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ $bonus_point;
 
                      }else
                      {
-                         $point->total_points_earn=  ($bonus_point*$kpi->proposal_made)/100;
+                         $point->total_points_earn=  $bonus_point;
 
                      }
                      $point->save();
@@ -1144,15 +1144,15 @@ class ProjectController extends AccountBaseController
                      $point->project_id= $find_project_id->id;
                      $point->activity= $user_name->name . ' started negotiation started Project : '.$find_project_id->project_name. ', Client: '. $find_project_id->client_name->name. '(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($bonus_point*$kpi->negotiation_started)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_negotiation_started != null) {
 
-                         $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($bonus_point*$kpi->negotiation_started)/100;
+                         $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ $bonus_point;
 
                      }else
                      {
-                         $point->total_points_earn=  ($bonus_point*$kpi->negotiation_started)/100;
+                         $point->total_points_earn=  $bonus_point;
 
                      }
                      $point->save();
@@ -1169,16 +1169,16 @@ class ProjectController extends AccountBaseController
                         $point->project_id= $find_project_id->id;
                         $point->activity= $user_name->name . ' created the milestone breakdown Project : '.$find_project_id->project_name. ', Client: '. $find_project_id->client_name->name. '(Higher Single Deal('.$kpi->bonus_point.' points))';
                         $point->gained_as = "Individual";
-                        $point->points= ($bonus_point*$kpi->milestone_breakdown)/100;
+                        $point->points= $bonus_point;
 
                         if ($cash_points_milestone_breakdown != null) {
 
-                            $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($bonus_point*$kpi->milestone_breakdown)/100;
+                            $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ $bonus_point;
 
                         }else
                         {
                             $point->total_points_earn=
-                            ($bonus_point*$kpi->milestone_breakdown)/100;
+                            $bonus_point;
 
                         }
                         $point->save();
@@ -1195,16 +1195,16 @@ class ProjectController extends AccountBaseController
                      $point->project_id= $find_project_id->id;
                      $point->activity= $user_name->name . ' closed the deal Project : '.$find_project_id->project_name. ', Client: '. $find_project_id->client_name->name. '(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($project_budget*$kpi->closed_deal)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_close_deal != null) {
 
-                         $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget*$kpi->closed_deal)/100;
+                         $point->total_points_earn= $cash_points_close_deal->total_points_earn+ $bonus_point;
 
                      }else
                      {
                          $point->total_points_earn=
-                         ($project_budget*$kpi->closed_deal)/100;
+                         $bonus_point;
 
                      }
                      $point->save();
@@ -1217,41 +1217,21 @@ class ProjectController extends AccountBaseController
                      $point->project_id= $find_project_id->id;
                      $point->activity= $user_name->name . ' submitted the contact form for the project manager Project : '.$find_project_id->project_name. ', Client: '. $find_project_id->client_name->name. '(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($project_budget*$kpi->contact_form)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_contact != null) {
 
-                         $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
+                         $point->total_points_earn= $cash_points_contact->total_points_earn+ $bonus_point;
 
                      }else
                      {
                          $point->total_points_earn=
-                         ($project_budget*$kpi->contact_form)/100;
+                         $bonus_point;
 
                      }
                      $point->save();
 
-                     if ($find_deal_id->authorization_status == 1) {
-                        $earned_point = ($kpi->authorized_by_leader * $find_deal_id->amount) / 100;
-
-                     $user_name= User::where('role_id',8)->first();
-                     $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                     //kpi point
-                     $point= new CashPoint();
-                     $point->user_id= $user_name->id;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' for authorizing deal Project : '.$find_project_id->project_name. ', Client: '. $find_project_id->client_name->name. '(Higher Single Deal('.$kpi->bonus_point.' points))';
-                     $point->gained_as = "Individual";
-                     $point->points= $earned_point;
-
-                     if ($cash_points_team_lead != null) {
-                         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point;
-                     } else {
-                         $point->total_points_earn= $earned_point;
-                     }
-
-                     $point->save();
-                     }
+                    
 
 
 
