@@ -291,7 +291,7 @@ class KpiDistribution extends Command
 
                     if ($find_deal_id->amount > $kpi->generate_single_deal) {
 
-                        $bonus_point= $kpi->bonus_point;
+                        $bonus_point= $kpi->bonus_point/9;
                         if($find_deal_id->lead_id != null)
              {
                  $lead = Lead::where('id',$find_deal_id->lead_id)->first();
