@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Project;
@@ -155,8 +156,16 @@ class PointsController extends AccountBaseController
         if ($request->end_date != '') {
             $data = $data->where(\DB::raw('DATE(created_at)'), '<=', Carbon::parse($request->end_date)->format('Y-m-d'));
         }
+        if(Auth::user()->role_id == 1)
+        {
+            $data = $data->orderBy('id', 'desc')->get();
+        }elseif(Auth::user()->role_id == 8 ||Auth::user()->role_id == 7 )
+        {
+            $data = $data->where('user_id',Auth::id())->orderBy('id', 'desc')->get();
 
-        $data = $data->orderBy('id', 'desc')->get();
+        }
+
+        
 
         return response()->json($data);
     }

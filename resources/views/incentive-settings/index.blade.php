@@ -92,9 +92,6 @@
                 @csrf
                 <input type="hidden" name="id" value="{{$incentive_setting->id}}">
                 <section class="point__distribution">
-                    @php
-
-                    @endphp
                     <div class="point__row">
                         <div class="point__col">1. For every shift, every point above </div>
                         <div class="point__col"> <input type="number" class="point__input" name="every_shift_every_point_above" id="every_shift_every_point_above" value="{{$incentive_setting->every_shift_every_point_above}}"> </div>
@@ -111,13 +108,13 @@
                         <div class="point__col">  TK.</div>
                     </div>
                     <h3 class="text-center mt-2 mb-5 border-1 shadow-sm mx-auto p-3 rounded text-uppercase" style="width: fit-content;">Logical Settings for Incentive</h3>
+{{--                    <div class="point__row">--}}
+{{--                        <div class="point__col">1. If a shift has</div>--}}
+{{--                        <div class="point__col"> <input type="number" class="point__input" name="point_of_contribute" id="point_of_contribute" value="{{$incentive_setting->point_of_contribute}}"> </div>--}}
+{{--                        <div class="point__col">  points that contribute to the incentive, those points will be distributed proportionally among the shift members.</div>--}}
+{{--                    </div>--}}
                     <div class="point__row">
-                        <div class="point__col">1. If a shift has</div>
-                        <div class="point__col"> <input type="number" class="point__input" name="point_of_contribute" id="point_of_contribute" value="{{$incentive_setting->point_of_contribute}}"> </div>
-                        <div class="point__col">  points that contribute to the incentive, those points will be distributed proportionally among the shift members.</div>
-                    </div>
-                    <div class="point__row">
-                        <div class="point__col">2. For missing any 10 days goals, the sales shift will get</div>
+                        <div class="point__col">1. For missing any 10 days goals, the sales shift will get</div>
                         <div class="point__col"> <input type="number" class="point__input" name="incentive_deduction" id="incentive_deduction" value="{{$incentive_setting->incentive_deduction}}"> </div>
                         <div class="point__col">% less from the total incentive amount.</div>
                     </div>
@@ -154,10 +151,10 @@
                 'every_shift_every_point_above': document.getElementById("every_shift_every_point_above").value,
                 'individual_goal_percentage': document.getElementById("individual_goal_percentage").value,
                 'point_of_value': document.getElementById("point_of_value").value,
-                'point_of_contribute': document.getElementById("point_of_contribute").value,
+                // 'point_of_contribute': document.getElementById("point_of_contribute").value,
                 'incentive_deduction': document.getElementById("incentive_deduction").value,
                 'id':{{$incentive_setting->id}},
-                
+
             }
             // console.log(data);
             $.ajaxSetup({

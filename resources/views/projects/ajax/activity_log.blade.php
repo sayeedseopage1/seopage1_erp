@@ -15,7 +15,7 @@
 							@if(is_null($value->addedBy))
 								---
 							@else
-							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image)}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">
+							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">
 							{{$value->addedBy->name}}
 							@endif
 						</td>
@@ -59,6 +59,7 @@
 						</td>
 					</tr>
 					@endforeach
+					
 					@foreach($lead_deal_activity_log as $value)
 					<tr>
 						<td>{{$value->created_at->format('Y-m-d g:i A')}}<br>(GMT {{$value->created_at->format('P')}})</td>
@@ -66,8 +67,8 @@
 							@if(is_null($value->addedBy))
 								---
 							@else
-							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image)}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">
-							{{$value->addedBy->name}}
+							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name ?? '--'}}" title="{{$value->addedBy->name ?? '--'}}">
+							{{$value->addedBy->name ?? '--'}}
 							@endif
 						</td>
 						<td>
@@ -141,7 +142,7 @@
 								@if(is_null($value->addedBy))
 									---
 								@else
-								<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image)}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">
+								<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">
 								{{$value->addedBy->name}}
 								@endif
 							</td>

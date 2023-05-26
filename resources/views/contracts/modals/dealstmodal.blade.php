@@ -128,7 +128,7 @@
                 message_links_values.push(message_links[i].value);
             }
             var comments = CKEDITOR.instances.commentsText.getData();
-            // console.log(message_links_values);
+            // console.log(comments);
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'client_username': document.getElementById("client_username").value,
@@ -266,7 +266,7 @@
                 }, 0);
             });
         });
-        
+
         $("#client_username").on('keydown', function(e) {
             $('#clientUsernameError').text('');
             if (e.keyCode === 32) {

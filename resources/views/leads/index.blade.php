@@ -395,15 +395,12 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
 
 
           $('#lead-convert-button').click(function() {
-
-              var note3 = document.getElementById('comments').children[0].innerHTML;
+            var commentsElement = document.getElementById('comments');
+            if (commentsElement && commentsElement.children.length > 0) {
+                var note3 = commentsElement.children[0].innerHTML;
                 document.getElementById('comments-text').value = note3;
-
-
-         } );
-
-
-
+            }
+            });
 
 
       </script>

@@ -187,14 +187,12 @@
                                 <div class="point__col"> For every sales that gets accepted by project manager, respective sales shift will get </div>
                                 <div class="point__col"> <input type="number" class="point__input" name="accepted_by_pm" id="accepted_by_pm" value="{{$kpi->accepted_by_pm}}"> </div>
                                 <div class="point__col"> %  </div>
-                                {{-- <div class="point__col"> <input type="number" class="point__input" name="logged_hours_above_sales_amount" id="logged_hours_above_sales_amount" value="{{$kpi->logged_hours_above_sales_amount}}"> % </div>
-                                <div class="point__col"> of the sales amount. </div> --}}
                             </div>
                         <div class="point__row_wrapper_container">
                             @php
                                 $kpi_setting_logged_hour = \App\Models\kpiSettingLoggedHour::all();
                             @endphp
-                           
+
                             @if(count($kpi_setting_logged_hour)>0)
                                 <div class="point__row_wrapper">
                                     @foreach($kpi_setting_logged_hour as $kpi_setting_logged_hour)
@@ -289,7 +287,7 @@
                         </div>
                          <div class="point__row">
                              <div class="point__col"> If a sales shift generate any project equal/more than</div>
-                            
+
                              <div class="point__col"> $<input type="number" class="point__input" name="generate_single_deal" id="generate_single_deal" value="{{$kpi->generate_single_deal}}">  </div>
                              <div class="point__col"> on single deal, that shift will get a flat</div>
                              <div class="point__col"> <input type="number" class="point__input" name="bonus_point" id="bonus_point" value="{{$kpi->bonus_point}}">  </div>
@@ -390,7 +388,7 @@
                 'client_type': document.getElementById("client_type").value,
                 'after': document.getElementById("after").value,
                 'after_reach_amount': document.getElementById("after_reach_amount").value,
-               
+
                 'generate_single_deal': document.getElementById("generate_single_deal").value,
                 'bonus_point': document.getElementById("bonus_point").value,
                 'generate_sales_above': document.getElementById("generate_sales_above").value,

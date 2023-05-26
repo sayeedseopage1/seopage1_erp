@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlogArticle;
+use App\Models\WebContent;
 use Artisan;
 use Carbon\Carbon;
 use Stripe\Stripe;
@@ -222,7 +224,7 @@ class HomeController extends Controller
 
         $text = 'Client ('.$project->client->name.') Disagree with delivarables';
         $link = '<a href="'.route('projects.show', $project->id).'?tab=deliverables">'.$text.'</a>';
-        
+
 
         $activity = new ProjectActivity();
         $activity->activity= $link;
@@ -241,15 +243,15 @@ class HomeController extends Controller
 
         if ($this->pusherSettings->status) {
             $user = User::find($data['user_id']);
-            
+
             Notification::send($user, new PusherNotificaiton($data));
-            
+
             $pusher = new Pusher(
-                $this->pusherSettings->pusher_app_key, 
-                $this->pusherSettings->pusher_app_secret, 
-                $this->pusherSettings->pusher_app_id, 
+                $this->pusherSettings->pusher_app_key,
+                $this->pusherSettings->pusher_app_secret,
+                $this->pusherSettings->pusher_app_id,
                 array(
-                    'cluster' => $this->pusherSettings->pusher_cluster, 
+                    'cluster' => $this->pusherSettings->pusher_cluster,
                     'useTLS' => $this->pusherSettings->force_tls
                 )
             );
@@ -1296,11 +1298,94 @@ class HomeController extends Controller
     public function deals_data()
     {
         // $data = DealStage::join('deal_stage_changes', 'deal_stages.short_code', 'deal_stage_changes.deal_id')->groupBy('deal_stages.short_code')->get()->take(10);
-        
+
         // $new_array = [];
         // foreach ($data as $key => $value) {
-                
+
         // }
         // dd($groupedData);
     }
+    public function webContent(){
+        return view('service-type.web_content');
+    }
+    public function storeWebContent(Request $request){
+//        dd($request->all());
+
+        $data = $request->all();
+        $reference_websites = json_encode($data['reference_website']);
+        $page_names = json_encode($data['page_name']);
+        $quantitys = json_encode($data['quantity']);
+        $approximate_words = json_encode($data['approximate_word']);
+
+        $web_content = new WebContent();
+        $web_content->website_link = $data['website_link'];
+        $web_content->website_niche = $data['website_niche'];
+        $web_content->website_name = $data['website_name'];
+        $web_content->business_information = $data['business_information'];
+        $web_content->drive_link = $data['drive_link'];
+        $web_content->reference_website = $data['reference_website'];
+        $web_content->competitor_content = $data['competitor_content'];
+        $web_content->description1 = $data['description1'];
+        $web_content->description2 = $data['description2'];
+        $web_content->description3 = $data['description3'];
+        $web_content->product_list = $data['product_list'];
+        $web_content->gender = $data['gender'];
+        $web_content->age1 = $data['age1'];
+        $web_content->age2 = $data['age2'];
+        $web_content->monthly_income = $data['monthly_income'];
+        $web_content->education_level = $data['education_level'];
+        $web_content->country = $data['country'];
+        $web_content->city = $data['city'];
+        $web_content->interest = $data['interest'];
+        $web_content->buying_habit = $data['buying_habit'];
+        $web_content->thor_native_language = $data['thor_native_language'];
+        $web_content->reference_website = $reference_websites;
+        $web_content->page_name = $page_names;
+        $web_content->quantity = $quantitys;
+        $web_content->approximate_word = $approximate_words;
+        $web_content->save();
+
+        return response()->json(['status'=>200]);
+    }
+    public function blogArticle(){
+        return view('service-type.blog_article');
+    }
+    public function storeBlogArticle(Request $request){
+
+        $data = $request->all();
+
+        $folderLinks = json_encode($data['folder_link']);
+        $blogUrls = json_encode($data['blog_url']);
+        $topicLinks = json_encode($data['topic_link']);
+        $keywordLinks = json_encode($data['keyword_link']);
+
+        $blog_article= new BlogArticle();
+        $blog_article->website_link = $data['website_link'];
+        $blog_article->website_niche = $data['website_niche'];
+        $blog_article->website_name = $data['website_name'];
+        $blog_article->business_information = $data['business_information'];
+        $blog_article->share_file_info = $data['share_file_info'];
+        $blog_article->topic_info = $data['topic_info'];
+        $blog_article->keyword_info = $data['keyword_info'];
+        $blog_article->folder_link = $folderLinks;
+        $blog_article->blog_url = $blogUrls;
+        $blog_article->topic_link = $topicLinks;
+        $blog_article->keyword_link = $keywordLinks;
+        $blog_article->save();
+
+
+        return response()->json(['status'=>200]);
+
+
+    }
+
+
+    public function productDescription(){
+        return view('service-type.product_description');
+    }
+
+    public function storeProductDescription(Request $request){
+        dd($request->all());
+    }
+
 }

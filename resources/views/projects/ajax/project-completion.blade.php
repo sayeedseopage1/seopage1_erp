@@ -342,7 +342,7 @@
                                 @php
                                     $all_cms = \App\Models\ProjectCms::all();
                                 @endphp
-                                <label class="" for="">Select CMC Category
+                                <label class="" for="">Select CMS Category
                                     <sup class="f-14 mr-1">*</sup>
                                     <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Select CMC Category" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
                                         <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
@@ -383,8 +383,8 @@
                     <div class="col-md-12 col-lg-12 mt-5">
                         <div class="row">
                             <div class="col-md-6 col-lg-6 mt-1">
-                                 <label class="" for="">Submit The Niche/Category of The Project
-                                     <sup class="f-14 mr-1">*</sup>
+                                <label class="" for="">Submit The Niche/Category of The Project
+                                    <sup class="f-14 mr-1">*</sup>
                                     <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Submit The Niche/Category of The Project" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
                                         <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                                     </svg>
@@ -508,114 +508,114 @@
                                 </div>
                             </div>
                         </div>
-                            <div class="col-lg-12 col-md-12 mt-5" id="use_theme_box">
-                                <label for="">
-                                    Did you use any significant plugin for this project?
-                                    <sup class="f-14 mr-1">*</sup>
-                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Did you use any significant plugin for this project?" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                    </svg>
-                                </label>
-                                <div class="row">
-                                    <div class="col-md-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="website_plugin_box_information"  id="website_plugin_box_information2" value="1">
-                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault11">
-                                                Yes
-                                            </label>
-                                        </div>
+                        <div class="col-lg-12 col-md-12 mt-5" id="use_theme_box">
+                            <label for="">
+                                Did you use any significant plugin for this project?
+                                <sup class="f-14 mr-1">*</sup>
+                                <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Did you use any significant plugin for this project?" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                    <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                </svg>
+                            </label>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="website_plugin_box_information"  id="website_plugin_box_information2" value="1">
+                                        <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault11">
+                                            Yes
+                                        </label>
                                     </div>
-                                    <div class="col-md-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="website_plugin_box_information" id="website_plugin_box_information2" value="0" >
-                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault12">
-                                                No
-                                            </label>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="website_plugin_box_information" id="website_plugin_box_information2" value="0" >
+                                        <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault12">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <span id="plugin_informationError" class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-12 col-md-12 mt-5" id="plugin_box">
+                            <div class="row">
+                                <div class="col-md-10 dynamic-field" id="dynamic-field-1">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="plugin_name">Plugin Name</label>
+                                                <input type="text" id="plugin_name" class="form-control height-35 f-14" placeholder="Type official plugin name" name="plugin_name[]"/>
+                                                <span id="plugin_nameError" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label for="plugin_url">Plugin Url</label>
+                                                <input type="url" id="plugin_url" class="form-control height-35 f-14" placeholder="Add plugin url" name="plugin_url[]"/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <span id="plugin_informationError" class="text-danger"></span>
-                            </div>
-                            <div class="col-lg-12 col-md-12 mt-5" id="plugin_box">
-                                <div class="row">
-                                    <div class="col-md-10 dynamic-field" id="dynamic-field-1">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="plugin_name">Plugin Name</label>
-                                                    <input type="text" id="plugin_name" class="form-control height-35 f-14" placeholder="Type official plugin name" name="plugin_name[]"/>
-                                                    <span id="plugin_nameError" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                    <label for="plugin_url">Plugin Url</label>
-                                                    <input type="url" id="plugin_url" class="form-control height-35 f-14" placeholder="Add plugin url" name="plugin_url[]"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-md-2 append-buttons" style="margin-top: 25px;">
-                                        <div class="clearfix">
-                                            <button type="button" id="add-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                            <button type="button" id="remove-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                        </div>
+                                <div class="col-md-2 append-buttons" style="margin-top: 25px;">
+                                    <div class="clearfix">
+                                        <button type="button" id="add-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                        <button type="button" id="remove-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 mt-5">
-                                <div class="form-group">
-                                    <div class="d-flex">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="dummy_yes" name="dummy_yes" value="1">
-                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="">Did you collect the dummy/test site information?
-                                                <sup class="f-14 mr-1">*</sup>
-                                                <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Did you collect the dummy/test site information?" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                                    <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                                </svg>
-                                            </label>
-                                        </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 mt-5">
+                            <div class="form-group">
+                                <div class="d-flex">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="dummy_yes" name="dummy_yes" value="1">
+                                        <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="">Did you collect the dummy/test site information?
+                                            <sup class="f-14 mr-1">*</sup>
+                                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Did you collect the dummy/test site information?" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                                <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                            </svg>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 mt-3" id="dummy_yes_box">
-                                <label for="">
-                                    Did You share the dummy/test site link info with client?
-                                    <sup class="f-14 mr-1">*</sup>
-                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Did You share the dummy/test site link info with client?" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                    </svg>
-                                </label>
-                                <div class="row">
-                                    <div class="col-md-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="dummy_information"  id="dummy_information1" value="1">
-                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault11">
-                                                Yes
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="dummy_information" id="dummy_information2" value="0" >
-                                            <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault12">
-                                                No
-                                            </label>
-                                        </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 mt-3" id="dummy_yes_box">
+                            <label for="">
+                                Did You share the dummy/test site link info with client?
+                                <sup class="f-14 mr-1">*</sup>
+                                <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Did You share the dummy/test site link info with client?" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                    <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                </svg>
+                            </label>
+                            <div class="row">
+                                <div class="col-md-1">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="dummy_information"  id="dummy_information1" value="1">
+                                        <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault11">
+                                            Yes
+                                        </label>
                                     </div>
                                 </div>
-                                <span id="dummy_informationError" class="text-danger"></span>
+                                <div class="col-md-1">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="dummy_information" id="dummy_information2" value="0" >
+                                        <label class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap" for="flexRadioDefault12">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 mt-3" id="dummy_box">
-                                <label for="">Submit The Dummy/Test Site Link <sup class="f-14 mr-1">*</sup>
-                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Submit The Dummy/Test Site Link" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                    </svg>
-                                </label>
-                                <input type="text" class="form-control height-35 f-14" name="dummy_link" id="dummy_link" value="">
-                                <span id="dummy_linkError" class="text-danger"></span>
-                            </div>
+                            <span id="dummy_informationError" class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-6 col-md-6 mt-3" id="dummy_box">
+                            <label for="">Submit The Dummy/Test Site Link <sup class="f-14 mr-1">*</sup>
+                                <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Submit The Dummy/Test Site Link" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                    <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                </svg>
+                            </label>
+                            <input type="text" class="form-control height-35 f-14" name="dummy_link" id="dummy_link" value="">
+                            <span id="dummy_linkError" class="text-danger"></span>
+                        </div>
                     </div>
                     <div class="col-lg-12 col-md-12 mt-5">
                         <label for="">Did You Notify the Client About Dummy Site Removal After 2-Weeks?
@@ -769,7 +769,7 @@
                 'secondary_page_name': document.getElementById("secondary_page_name").value,
                 'backup_email_address': document.getElementById("backup_email_address").value,
                 'day_interval': document.getElementById("day_interval").value,
-                'website_plugin_box_information': website_plugin_box_information,
+                'plugin_information': website_plugin_box_information,
                 'plugin_name': plugin_name_values,
                 'plugin_url': plugin_url_values,
                 'theme_name': document.getElementById("theme_name").value,
@@ -992,6 +992,26 @@
                 }
             });
         });
+        $(document).ready(function () {
+            $('#niche').change(function () {
+                var niche_id = $(this).val();
+                if (niche_id) {
+                    $.ajax({
+                        url: '/projects/project-completion/get-sub-niche/' + niche_id,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('#sub_niche').empty();
+                            $.each(data, function (index, sub_niche) {
+                                $('#sub_niche').append('<option value="' + sub_niche.id + '">' + sub_niche.category_name + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#sub_niche').empty();
+                }
+            });
+        });
 
 
 
@@ -1076,6 +1096,7 @@
                         type: "GET",
                         dataType: "json",
                         success: function (data) {
+                            $('#sub_niche').empty();
                             $.each(data, function (index, sub_niche) {
                                 $('#sub_niche').append('<option value="' + sub_niche.id + '">' + sub_niche.category_name + '</option>');
                             });
@@ -1086,135 +1107,6 @@
                 }
             });
         });
-
-    </script>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            fetchniche();
-            function fetchniche()
-            {
-                $.ajax({
-                    type: "GET",
-                    url: "{{route('get-niche')}}",
-
-                    dataType: "json",
-                    success: function (response){
-                        //  console.log(response.milestones);
-                        let spans= '';
-                        response.categories.forEach((item)=> {
-
-                            spans += `<tr>
-          <td>${item.id}</td>
-          <td>${item.category_name}</td>
-          <td class="text-right">
-            <button type="button" class="btn-secondary rounded f-14 p-2 delete_niche" value="${item.id}" >
-        <svg class="svg-inline--fa fa-trash fa-w-14 mr-1" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
-          <path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"></path></svg><!-- <i class="fa fa-trash mr-1"></i> Font Awesome fontawesome.com -->
-    Delete
-    </button></td>
-        </tr>`
-                        });
-
-                        document.querySelector('#niche_value').innerHTML= spans;
-
-
-                    }
-                });
-            }
-            $(document).on('click','.delete_niche',function(e){
-                e.preventDefault();
-                var category_id= $(this).val();
-                //  console.log(category_id);
-                $('#delete_niche_id').val(category_id);
-
-                $('#deleteniche').modal('show');
-            });
-            $(document).on('click','.delete_niche_btn',function(e){
-                e.preventDefault();
-
-                var category_id= $('#delete_niche_id').val();
-                //console.log(category_id);
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: "DELETE",
-                    url: "/projects/delete-niche/"+category_id,
-                    success: function (response){
-                        //console.log(response);
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: 'success',
-                            title: 'Category Deleted Successfully',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-
-
-                        $('#success_message').addClass('alert alert-danger');
-                        $('#success_message').text(response.message);
-                        $('#deleteniche').modal('hide');
-                        $('delete_niche_btn').text("Yes Delete");
-                        fetchniche();
-                    }
-
-                });
-
-            });
-            $(document).on('click','.add_niche',function(e){
-                //alert('success');
-                e.preventDefault();
-                $('#editmilestone').modal('show');
-//console.log("test");
-                var data= {
-                    'category_name': $('.category_name').val(),
-
-
-
-                }
-//console.log(data);
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: "POST",
-                    url: "{{route('add-niche')}}",
-                    data: data,
-                    dataType: "json",
-                    success: function (response){
-                        if (response.status == 400) {
-                            $('#saveform_errList').html("");
-                            $('#saveform_errList').addClass('alert alert-danger');
-                            $.each(response.errors, function (key, err_values){
-                                $('#saveform_errList').append('<li>'+err_values+'</li>');
-                            });
-                        }
-                        else {
-                            Swal.fire({
-                                position: 'top-end',
-                                icon: 'success',
-                                title: 'Category Added Successfully',
-                                showConfirmButton: false,
-                                timer: 1500
-                            })
-                            $('#saveform_errList').html("");
-                            $('#success_message').addClass('alert alert-success');
-                            $('#success_message').text(response.message);
-                            $('#nicheaddmodal').modal('hide');
-                            $('#nicheaddmodal').find('input').val("");
-                            fetchniche();
-
-                        }
-                    }
-                });
-            });
-        });
-
 
     </script>
     <script type="text/javascript">

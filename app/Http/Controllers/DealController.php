@@ -162,7 +162,7 @@ class DealController extends AccountBaseController
             'description' => 'required',
             'comments' => 'required',
         ]);
-       
+        $existing_client= User::where('user_name',$request->user_name)->first(); 
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new DealStage();
@@ -182,6 +182,13 @@ class DealController extends AccountBaseController
         $deal->description= $request->description;
         $deal->added_by= Auth::id();
         $deal->converted_by= Auth::id();
+        if($existing_client != null)
+        {
+            $deal->client_badge = 'existing client';
+            
+        }else {
+            $deal->client_badge= 'new client';
+        }
         $deal->save();
         $goals = GoalSetting::where([
             'goal_status' =>  0, 
@@ -252,7 +259,7 @@ class DealController extends AccountBaseController
            // ->get();
             // /$clientUsernames = $dealStage->pluck('client_username')->unique()->toArray();
         //    / dd($dealStage);
-           ->groupBy('deal_stages.client_username');
+        ->where('deal_stages.client_badge','=','new client');
         //  /dd($dealStage);
     
             if (!is_null($goal->endDate)) {

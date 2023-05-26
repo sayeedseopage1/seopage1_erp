@@ -179,6 +179,7 @@ use App\Http\Controllers\PointsController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProjectCredential;
 use App\Http\Controllers\IncentiveController;
+use App\Http\Controllers\PolicyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -316,7 +317,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('attendances/update-clock-in', [DashboardController::class, 'updateClockIn'])->name('attendances.update_clock_in');
     Route::get('dashboard/private_calendar', [DashboardController::class, 'privateCalendar'])->name('dashboard.private_calendar');
     // Route::resource('points/', PointsController::class)->only
-    
+
     Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
     Route::get('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
     Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
@@ -633,6 +634,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('project-notes', ProjectNoteController::class);
     Route::resource('projects', ProjectController::class);
 
+    Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
+
     /* PRODUCTS */
     Route::post('products/apply-quick-action', [ProductController::class, 'applyQuickAction'])->name('products.apply_quick_action');
     Route::post('products/remove-cart-item/{id}', [ProductController::class, 'removeCartItem'])->name('products.remove_cart_item');
@@ -868,6 +871,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     //KPI Settings
     Route::resource('kpi-settings', KpiSettingController::class);
+//    Policy section
+    Route::get('policy/next-month-policy',[PolicyController::class,'nextMonthPolicy'])->name('nextMonthPolicy');
+    Route::get('policy/show-month-policy/{id}',[PolicyController::class,'show_month_policy'])->name('show_month_policy');
+    Route::resource('policy', PolicyController::class);
     //Incentives Settings
     Route::resource('incentive-settings',IncentiveSettingController::class);
 
@@ -1134,6 +1141,13 @@ Route::post('/deals/deny', [ContractController::class, 'DealDeny'])->name('deny-
 Route::post('/deals/client-form', [HomeController::class, 'ClientForm'])->name('client-submission');
 Route::post('/deals/client-form-submit', [ContractController::class, 'ClientFormSubmit'])->name('form-submit-to-client');
 Route::get('/thankyou', [HomeController::class, 'Thankyou']);
+//Service type section
+Route::get('/deals/service-type/web-content', [HomeController::class, 'webContent']);
+Route::post('/deals/store/web-content', [HomeController::class, 'storeWebContent'])->name('store_web_content');
+Route::get('/deals/service-type/blogs-articles', [HomeController::class, 'blogArticle']);
+Route::post('/deals/store/blog-articles', [HomeController::class, 'storeBlogArticle'])->name('store_blog_articles');
+Route::get('/deals/service-type/product-description', [HomeController::class, 'productDescription']);
+Route::post('/deals/store/product-description', [HomeController::class, 'storeProductDescription'])->name('store_product_description');
 /* Account prefix routes end here */
 //store custom lead route for seaopage1
 Route::post('/lead/store', [LeadController::class, 'storeLead'])->name('store-lead');
@@ -1217,7 +1231,7 @@ Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCate
 //add project niche
 Route:: get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
 Route::get('/projects/get-sub-category/{id}',[ProjectController::class,'parentCategoryId']);
-Route::put('/projects/update-niche-category/{id}', [ProjectController::class, 'updateCategory']); 
+Route::put('/projects/update-niche-category/{id}', [ProjectController::class, 'updateCategory']);
 
 //add project cms
 Route:: get('/projects/view-cms', [ProjectController::class, 'viewCms'])->name('project-view-cms');
@@ -1266,7 +1280,11 @@ Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMile
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
 
 Route::any('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
+
 Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
+
+
+
 Route::any('get-users', [InsightsController::class, 'getusers'])->name('get-users');
 Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams');
 Route::get('get-users/all', [InsightsController::class, 'get_users_all'])->name('get_users_all');
@@ -1292,5 +1310,8 @@ Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deal
 // Route::get('/goal/get-goal-details/{data}', [InsightsController::class, 'get_goal_details'])->name('get_goal_details');
 Route::get('deals/request/authorization/{data}', [ContractController::class, 'authorization_request'])->name('authorization_request');
 Route::post('/authorization/deal-details/', [ContractController::class, 'authorization_submit'])->name('authorization_submit');
+
+
+//Route::get('fix-database', [HomeController::class, 'fix_database'])->name('fix_database');
 
 

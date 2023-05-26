@@ -13,7 +13,7 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <h5 for="exampleFormControlTextarea1">Reason given by project manager</h5>
-                    <p class="commentId text-justify"></p>
+                    <p class="text-justify commentId"></p>
                 </div>
               </div>
             </div>
@@ -29,13 +29,8 @@
     </div>
   </div>
   <script>
-
-  </script>
-  <script>
       $('#cancelMilestoneApprove').click(function(e){
           e.preventDefault();
-
-          // alert('ok');
 
           var data= {
             '_token': "{{ csrf_token() }}",
@@ -43,7 +38,7 @@
             'milestoneId': $('.milestoneId').val(),
         }
 
-          //console.log(data);
+          // console.log(data);
           $.ajaxSetup({
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -55,12 +50,11 @@
               data: data,
               dataType: "json",
               success: function (response) {
-                   //console.log(response.status)
+                   console.log(response.status)
 
                       if (response.status == 'success') {
                         toastr.success('Cancelation request Accept successfully!');
                           $("#cancel-milestone-approve").modal("hide");
-
                           window.location.reload();
                       }
 
