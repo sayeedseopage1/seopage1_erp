@@ -2225,7 +2225,6 @@ class ProjectController extends AccountBaseController
         case 'activity_log':
             $this->activityLog = ProjectActivity::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
             $this->lead_deal_activity_log = LeadsDealsActivityLog::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
-
             $this->view = 'projects.ajax.activity_log';
             break;
         case 'expenses':
@@ -3951,7 +3950,9 @@ class ProjectController extends AccountBaseController
         ->orderBy('id', 'desc')
         ->get();
 
-        $view = view('projects.ajax.activity_log', compact('activityLog'))->render();
+        $lead_deal_activity_log = LeadsDealsActivityLog::where('project_id', $request->project_id)->orderBy('id', 'desc')->get();
+
+        $view = view('projects.ajax.activity_log', compact('activityLog', 'lead_deal_activity_log'))->render();
 
         return response()->json([
             'success' => 200,
