@@ -752,10 +752,15 @@ const Goal = () => {
 
                         {
                             // activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
-                            activeTable === 'summary' && 
-                            <GoalSummaryTable 
-                                ref={dealTableRef} 
-                                data={goalSummary} 
+
+
+                            activeTable === 'summary' &&
+                            <GoalSummaryTable
+                                ref={dealTableRef}
+                                data={goalSummary}
+                                goal={goal}
+
+
                                 isLoading={isSummarizing}
                             />
                         }
