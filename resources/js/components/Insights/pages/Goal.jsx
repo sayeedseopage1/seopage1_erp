@@ -44,6 +44,8 @@ const Goal = () => {
     const day = new CompareDate();
     const [goalSummary, setGoalSummary] = React.useState(null); // store goal summary data here
     const [tableDeals, setTableDeals] = React.useState([]);
+    const {usersIsFetching} = useUsers();
+    const {isTeamsFetching} = useTeams();
 
     // custom filter by data
     const [selectedPeriod, setSelectedPeriod] = React.useState('Today');

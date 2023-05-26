@@ -204,7 +204,6 @@ const DataTable = React.forwardRef(({
                 row.classList.remove('__selected'); 
                }
             })
-            console.log('clicked');
             setSelectionStart(false);
             setRowSelected(0);
             setRowSelectionStatus('idle');
@@ -259,13 +258,13 @@ const DataTable = React.forwardRef(({
 
                             <div className='cnx__table_calculated_item'>
                                 <span>Actual Amount</span>
-                                <h6>${actualAmount.toFixed(2)}</h6>
+                                <h6>{goal?.trackingType === 'value' ? '$': ''}{actualAmount.toFixed(2)}</h6>
                             </div> 
                             
                             { (data[1]?.team_total_amount !== undefined && Number(goal?.team_id) !== 1) && 
                             <div className='cnx__table_calculated_item'>
                                 <span>Contribution Amount</span>
-                                <h6>${contributedAmount.toFixed(2)}</h6>
+                                <h6>{goal?.trackingType === 'value' ? '$': ''}{contributedAmount.toFixed(2)}</h6>
                             </div> }
                         
                     </motion.div>}

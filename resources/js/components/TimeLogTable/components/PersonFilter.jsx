@@ -3,6 +3,8 @@ import Dropdown from '../../Insights/ui/Dropdown';
 import SearchBox from '../../Insights/ui/Searchbox';
 
 import { useGetEmployeeOptionsMutation } from '../../services/api/FilterBarOptionsApiSlice';
+import _ from 'lodash';
+import  TextHighlighter from '../../Insights/components/TextHighlighter';
 
 
 export default function PersonFilterItem({
@@ -82,7 +84,7 @@ export default function PersonFilterItem({
                             >
                                 <Dropdown.Item
                                     onClick={(e) => onSelect(e, null)}
-                                    className={`sp1__pp_filter_dd_item mb-1 active`} 
+                                    className={`sp1__pp_filter_dd_item mb-1 ${!selected && 'active'}`} 
                                 >
                                     Select All
                                 </Dropdown.Item>
@@ -90,11 +92,12 @@ export default function PersonFilterItem({
 
                                 {/* item */}
                                 {
-                                    items?.map(item => (
+                                    items?.filter(item => _.lowerCase(item?.name).includes(_.lowerCase(search)))
+                                    .map(item => (
                                         <Dropdown.Item
                                             key={item?.id}
                                             onClick={(e) => onSelect(e, item)}
-                                            className={`sp1__pp_filter_dd_item mb-1 ${selected?.id === item?.id }`} 
+                                            className={`sp1__pp_filter_dd_item mb-1 ${selected?.id === item?.id ? 'active': ''}`} 
                                         >
                                             {item.image_url ?
                                                 <img
@@ -109,7 +112,10 @@ export default function PersonFilterItem({
                                                 />
                                                 : null  
                                             }
-                                            {item?.name} 
+                                            <TextHighlighter
+                                                textToHighlight={item?.name}
+                                                searchWords={search}
+                                            /> 
                                         </Dropdown.Item>
                                     ))
                                 } 
