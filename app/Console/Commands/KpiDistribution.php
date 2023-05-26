@@ -353,7 +353,7 @@ class KpiDistribution extends Command
                      $point->project_id= $find_project_id->id;
                      $point->activity= $user_name->name . ' made the deal requirements defined Project : '.$find_project_id->project_name. ', Client: '. $find_project_id->client_name->name. '(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($bonus_point*$kpi->requirements_defined)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_requirements_defined != null) {
                     
@@ -378,7 +378,7 @@ class KpiDistribution extends Command
                      $point->project_id= $find_project_id->id;
                      $point->activity= $user_name->name . ' created the proposal Project : '.$find_project_id->project_name. ', Client: '. $find_project_id->client_name->name. '(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($bonus_point*$kpi->proposal_made)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_proposal_made != null) {
                     
@@ -527,7 +527,7 @@ class KpiDistribution extends Command
                     
                      if ($monthly_deal > $kpi->after && $monthly_deal >= $monthly_deal+ $kpi->additional_sales_amount ) {
 
-                        $project_budget_additional= $kpi->after_reach_amount;
+                        $project_budget_additional= $kpi->additional_sales_amount;
                        
             if($find_deal_id->lead_id != null)
             {
@@ -756,22 +756,23 @@ class KpiDistribution extends Command
      foreach ($kpi_settings as $value) {
         // /dd($value);
         if ( $monthly_deal >= $value->generate_sales_from  &&  $monthly_deal <= $value->generate_sales_to ) {
+        $budget= $value->generate_sales_to - $value->generate_sales_from;
 
      $point= new CashPoint();
      $point->user_id= $user_name->id;
     // / $point->project_id= $find_project_id->id;
      $point->activity= $user_name->name . ' for achieving monthly target';
      $point->gained_as = "Individual";
-     $point->points= ($monthly_deal*$value->generate_sales_amount)/100;
+     $point->points= ($budget*$value->generate_sales_amount)/100;
 
      if ($cash_points_team_lead != null) {
     
-         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($monthly_deal*$value->generate_sales_amount)/100;
+         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($budget*$value->generate_sales_amount)/100;
 
      }else 
      {
          $point->total_points_earn=
-         ($monthly_deal*$value->generate_sales_amount)/100;
+         ($budget*$value->generate_sales_amount)/100;
 
      }
     // $point->created_at= $find_project_id->created_at;
@@ -779,6 +780,8 @@ class KpiDistribution extends Command
             
         }
      }
+     $last_value= kpiSettingGenerateSale::where('kpi_id',$kpi->id)->orderBy('id','desc')->first();
+     $budget= $kpi->generate_sales_above -$last_value->generate_sales_from;
      if ($monthly_deal > $kpi->generate_sales_above)
 {
         $user_name= User::where('role_id',8)->first(); 
@@ -788,16 +791,16 @@ class KpiDistribution extends Command
     // $point->project_id= $find_project_id->id;
      $point->activity= $user_name->name . ' for achieving monthly target';
      $point->gained_as = "Individual";
-     $point->points= ($monthly_deal*$kpi->generate_sales_above_point)/100;
+     $point->points= ($budget*$kpi->generate_sales_above_point)/100;
 
      if ($cash_points_team_lead != null) {
     
-         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($monthly_deal*$kpi->generate_sales_above_point)/100;
+         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($budget*$kpi->generate_sales_above_point)/100;
 
      }else 
      {
          $point->total_points_earn=
-         ($monthly_deal*$kpi->generate_sales_above_point)/100;
+         ($budget*$kpi->generate_sales_above_point)/100;
 
      }
     // / $point->created_at= $find_project_id->created_at;

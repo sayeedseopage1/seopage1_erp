@@ -1298,7 +1298,7 @@ class ProjectController extends AccountBaseController
                 //      }
                      if ($monthly_deal > $kpi->after && $monthly_deal >= $monthly_deal+ $kpi->additional_sales_amount ) {
 
-                        $project_budget_additional= $kpi->after_reach_amount;
+                        $project_budget_additional= $kpi->additional_sales_amount;
 
             if($find_deal_id->lead_id != null)
             {
