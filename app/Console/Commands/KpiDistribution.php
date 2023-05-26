@@ -761,19 +761,19 @@ class KpiDistribution extends Command
      $point->project_id= $find_project_id->id;
      $point->activity= $user_name->name . ' for achieving monthly target';
      $point->gained_as = "Individual";
-     $point->points= ($project_budget*$value->generate_sales_amount)/100;
+     $point->points= ($monthly_deal*$value->generate_sales_amount)/100;
 
      if ($cash_points_team_lead != null) {
     
-         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($project_budget*$value->generate_sales_amount)/100;
+         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($monthly_deal*$value->generate_sales_amount)/100;
 
      }else 
      {
          $point->total_points_earn=
-         ($project_budget*$value->generate_sales_amount)/100;
+         ($monthly_deal*$value->generate_sales_amount)/100;
 
      }
-     $point->created_at= $find_project_id->created_at;
+    // $point->created_at= $find_project_id->created_at;
      $point->save();
             
         }
@@ -787,19 +787,19 @@ class KpiDistribution extends Command
      $point->project_id= $find_project_id->id;
      $point->activity= $user_name->name . ' for achieving monthly target';
      $point->gained_as = "Individual";
-     $point->points= ($project_budget*$kpi->generate_sales_above_point)/100;
+     $point->points= ($monthly_deal*$kpi->generate_sales_above_point)/100;
 
      if ($cash_points_team_lead != null) {
     
-         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($project_budget*$kpi->generate_sales_above_point)/100;
+         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($monthly_deal*$kpi->generate_sales_above_point)/100;
 
      }else 
      {
          $point->total_points_earn=
-         ($project_budget*$kpi->generate_sales_above_point)/100;
+         ($monthly_deal*$kpi->generate_sales_above_point)/100;
 
      }
-     $point->created_at= $find_project_id->created_at;
+    // / $point->created_at= $find_project_id->created_at;
      $point->save();
      }
     

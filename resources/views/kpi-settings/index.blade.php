@@ -190,7 +190,7 @@
                             </div>
                         <div class="point__row_wrapper_container">
                             @php
-                                $kpi_setting_logged_hour = \App\Models\kpiSettingLoggedHour::all();
+                                $kpi_setting_logged_hour = \App\Models\kpiSettingLoggedHour::where('kpi_id',$kpi->id)->get();
                             @endphp
 
                             @if(count($kpi_setting_logged_hour)>0)
@@ -241,7 +241,7 @@
                         </div>
                         <div class="point__row_wrapper_container">
                             @php
-                                $kpi_setting_generate_sales = \App\Models\kpiSettingGenerateSale::all();
+                                $kpi_setting_generate_sales = \App\Models\kpiSettingGenerateSale::where('kpi_id',$kpi->id)->get();
                             @endphp
                             @if(count($kpi_setting_generate_sales)>0)
                                 <div class="point__row_wrapper">

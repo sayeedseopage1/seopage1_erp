@@ -37,7 +37,7 @@ class KpiSettingController extends AccountBaseController
      */
     public function index()
     {
-        $this->kpi = kpiSetting::first();
+        $this->kpi = kpiSetting::where('kpi_status','1')->first();
 
         return view('kpi-settings.index', $this->data);
     }
