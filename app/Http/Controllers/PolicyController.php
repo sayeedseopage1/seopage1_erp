@@ -119,13 +119,12 @@ class PolicyController extends AccountBaseController
             'kpi_status' => '2',
             'cron_status' => '0'
         ])->get();
-        //dd($this->kpi);
+
         $this->next_month_incentive = IncentiveSetting::where([
             'incentive_status' => '2',
             'cron_status' => '0',
             'start_month' => $this->kpi->start_month
         ])->latest()->first();
-        //dd($this->next_month_incentive, $this->kpi->start_month);
         return view('policy.next_month_index',$this->data);
     }
 }
