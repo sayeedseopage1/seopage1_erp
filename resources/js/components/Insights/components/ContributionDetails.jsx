@@ -1,14 +1,15 @@
 import * as React from 'react'
 import { usePopper } from 'react-popper'
 import { useSelector } from 'react-redux';
-
-
+import { useClickAway } from 'react-use';
+import Dropdown from '../ui/Dropdown';
+import { useTeams } from '../hooks/useTeams';
 
 
 const LI = ({text, words}) => {
     // replace $p 
-    words.forEach(element => {
-        let replace = `<span className='font-weight-bold'> ${element} </span>`;
+    words.forEach((element, index) => {
+        let replace = `<span style='font-weight: bold; color: ${ index === 1 ? 'rgb(29, 134, 3)': '#000'}'> ${element} </span>`;
         let regex = new RegExp("\\$p");
         text = text.replace(regex, replace);
     });
@@ -26,32 +27,39 @@ const LI = ({text, words}) => {
 
 const ContributionDetails = ({row}) => {
     const { usersObjects } = useSelector(s => s.users);
-    const [ref, setRef] = React.useState(null);
-    const [popperRef, setPopperRef] = React.useState(null);
     const [isOpen, setIsOpen] = React.useState(false);
- 
-
-    const { styles, attributes} = usePopper(ref, popperRef, {
-        placement: 'bottom-start',
-        modifiers: [
-            {
-                name: 'flip',
-                options:{
-                    fallbackPlacements: ['bottom', 'left', 'right', 'top' ],
-                }
-            }
-        ]
-    })
+    const {teamsObject, isTeamsFetching, getTeamMembers} = useTeams(); 
+    const [goal, setGoal] = React.useState(null);
 
 
+    React.useEffect(() => {
+       // get goal details from local
+       let localGoal = localStorage.getItem(`goal_${window.Laravel.user.id}`) 
+
+       if(localGoal){
+        setGoal(JSON.parse(localGoal));
+       }
+    }, [])
+   
     if(_.isEmpty(row)){
         return <span> - </span>
     }
 
 
+
+    const isInTeam = (id) => {
+        if(!isTeamsFetching){
+           let members = getTeamMembers(teamsObject[goal?.team_id]);
+           return members?.findIndex(m => Number(m) === id) !== -1;
+        }
+    }
+
+    
     const getUserName = (a) => {
         let id = row[a];
-        return usersObjects && usersObjects[id]?.name;
+        let name = usersObjects && usersObjects[id]?.name;
+        return isInTeam(id) ? name : undefined;
+        
     }
 
    
@@ -72,70 +80,111 @@ const ContributionDetails = ({row}) => {
   const won_deal_amount = row['won_deal_amount'];
 
 
-
-//   console.log({
-//     bidder,
-//     bidder_amount,
-//     qualified_by,
-//     qualified_amount,
-//     required_defined_by,
-//     required_defined_amount,
-//   })
-
-  return (
-    <React.Fragment>
-        
-        <span
-            onClick={() => setIsOpen(!isOpen)}
-            ref={setRef} 
-            style={{fontWeight: 'bold', cursor: 'pointer'}}
-        >
-            {row['tracking_type'] === 'count' ? 
-                amount > 1 ? '1.00' : Number(amount).toFixed(2)
-            : `$ ${Number(amount).toFixed(2)}`}  
-        </span>
+  const tv = goal?.trackingType === 'value'
 
 
-        {/*
-            isOpen &&  
-            <div 
-                ref={setPopperRef}
-                style={{
-                    ...styles.popper,
-                    width: '250px',
-                    height: '300px',
-                    overflowY: 'auto',
-                    background: '#fff',
-                    boxShadow: '0 0 6px rgba(0,0,0,0.2)',
-                    borderRadius: '6px',
-                    border: '1px solid rgba(0,0,0,0.2)',
-                }}
-                {...attributes}
-            >
-                <div className="p-2 fs-small">
-                    <ol type='1' style={{listStyle:'inside', padding: '20px'}}>
+    return(
+        <Dropdown>
+            <Dropdown.Toggle>
+                <span
+                    onClick={() => setIsOpen(!isOpen)}
+                    style={{fontWeight: 'bold', cursor: 'pointer'}}
+                >
+                    {row['tracking_type'] === 'count' ? 
+                        amount > 1 ? '1.00' : Number(amount).toFixed(2)
+                    : `$ ${Number(amount).toFixed(2)}`}  
+                </span>
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+
+                    {
+                        (!goal || isTeamsFetching) ? (
+                            <span>Loading...</span>
+                        ):(
+                        <ol type='1' style={{listStyle:'inside', padding: '0 20px', margin: '0'}}>                         
+
+                        {bidder !== undefined && (
                         <LI
                             text="$p got $p for converting the lead."
                             words= {[
                                 `${bidder}`,
-                                `$${bidder_amount}`
+                                `${tv ? '$':''}${bidder_amount}`
                             ]}
                         />
-                        {/* <li style={{listStyle: 'decimal'}}>
-                            {bidder} got ${bidder_amount} for converting the lead.
-                        </li>
-                        <li style={{listStyle: 'decimal'}}>
-                            <span className="font-weight-bold">{qualified_by}</span>  got <span className="font-weight-bold">${qualified_amount}</span> for qualifying the deal. 
-                        </li>
+                        )}
+
+                        {qualified_by !== undefined && (
+                        <LI
+                            text="$p got $p for qualifying the deal."
+                            words= {[
+                                `${qualified_by}`,
+                                `${tv ? '$':''}${qualified_amount}`
+                            ]}
+                        />
+                        )}
+
+                        {required_defined_by !== undefined && (
+                        <LI
+                            text="$p got $p for defined requirements."
+                            words= {[
+                                `${required_defined_by}`,
+                                `${tv ? '$':''}${required_defined_amount}`
+                            ]}
+                        />
+                        )} 
+
+                        {proposal_made_by !== undefined && (
+                        <LI
+                            text="$p got $p for sending proposal to the client."
+                            words= {[
+                                `${proposal_made_by}`,
+                                `${tv ? '$':''}${proposal_made_amount}`
+                            ]}
+                        />
+                        )}   
 
 
-                        <li style={{listStyle: 'decimal'}}>{required_defined_by} got ${required_defined_amount} for qualifying the deal. </li> */}
-                    {/* </ol>
-                </div> 
-            </div>
-        }  */}
-    </React.Fragment>
-  )
+
+
+                        {negotiation_started_by !== undefined && (
+                        <LI
+                            text="$p got $p for starting negotiation with the client."
+                            words= {[
+                                `${negotiation_started_by}`,
+                                `${tv ? '$':''}${negotiation_started_amount}`
+                            ]}
+                        />
+                        )} 
+
+
+                        {milestone_breakdown_by !== undefined && (
+                        <LI
+                            text="$p got $p for sharing milestone with the client."
+                            words= {[
+                                `${milestone_breakdown_by}`,
+                                `${tv ? '$':''}${milestone_breakdown_amount}`
+                            ]}
+                        />
+                        )} 
+
+
+                        {deal_won_by !== undefined && (
+                        <LI
+                            text="$p got $p for marking this deal as won."
+                            words= {[
+                                `${deal_won_by}`,
+                                `${tv ? '$':''}${won_deal_amount}`
+                            ]}
+                        />
+                        )}  
+                        </ol>
+                        )
+                    }
+                    
+            </Dropdown.Menu>
+        </Dropdown>
+    )
 }
 
 export default ContributionDetails

@@ -493,9 +493,9 @@ export const AddedTableColumns = [
 
 // owner cell
 const OwnerCell = ({id}) => {
-    const {users, getUserById} = useUsers(); 
-    const user = getUserById(users, Number(id));
-    if(!user) return <span> - </span>
+    const {users, usersIsFetching} = useUsers(); 
+    const user = users?.usersObjects && users?.usersObjects[id];
+    if(!user || usersIsFetching) return <span> - </span>
     return <a href={`/account/employees/${id}`} >
         <span> {user.name} </span>
     </a> 
