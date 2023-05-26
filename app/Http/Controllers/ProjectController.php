@@ -3987,4 +3987,26 @@ class ProjectController extends AccountBaseController
         $sub_niches = ProjectNiche::find($niche_id)->child;
         return response()->json($sub_niches);
     }
+
+    public function get_project_json($type = null)
+    {
+        if (! is_null($type)) {
+            if ($type = 'in_progress') {
+                $mode = 'in progress';
+            } else if ($type == 'partially_finished') {
+                $mode = 'partially finished';
+            } else if ($type == 'finished') {
+                $mode = 'finished';
+            } else if ($type == 'canceled') {
+                $mode = 'canceled';
+            } else {
+
+            }
+            $data = Project::select('id', 'project_name')->where('status', $mode)->get();
+        } else {
+            $data = Project::select('id', 'project_name')->where('status', 'in progress')->get();
+        }
+        
+        return response()->json($data);
+    }
 }

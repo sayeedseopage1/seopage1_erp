@@ -634,6 +634,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('project-notes', ProjectNoteController::class);
     Route::resource('projects', ProjectController::class);
 
+    Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
+
     /* PRODUCTS */
     Route::post('products/apply-quick-action', [ProductController::class, 'applyQuickAction'])->name('products.apply_quick_action');
     Route::post('products/remove-cart-item/{id}', [ProductController::class, 'removeCartItem'])->name('products.remove_cart_item');
@@ -871,6 +873,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('kpi-settings', KpiSettingController::class);
 //    Policy section
     Route::get('policy/next-month-policy',[PolicyController::class,'nextMonthPolicy'])->name('nextMonthPolicy');
+    Route::get('policy/show-month-policy/{id}',[PolicyController::class,'show_month_policy'])->name('show_month_policy');
     Route::resource('policy', PolicyController::class);
     //Incentives Settings
     Route::resource('incentive-settings',IncentiveSettingController::class);

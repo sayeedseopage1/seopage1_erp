@@ -93,13 +93,18 @@ class TimelogReportController extends AccountBaseController
                 'client.name as client_name',
                 'client.image as client_image',
                 'deals.profile_link as client_from',
+                
                 'pm.id as pm_id',
                 'pm.image as pm_image',
                 'pm.name as pm_name', 
                 'pm_roles.display_name as pm_roles',
+                
                 'projects.id as project_id',
                 'projects.project_name',
                 'projects.status as project_status',
+                'projects.start_date as project_start_date',
+                'projects.deadline as project_end_date',
+
                 'tasks.id as task_id',
                 'tasks.heading as task_name',
                 'tasks.id as task_id',
@@ -126,9 +131,10 @@ class TimelogReportController extends AccountBaseController
             
             ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
             ->whereIn('project_time_logs.user_id', $id_array)
+            ->where('projects.status','in progress')
             ->groupBy('project_time_logs.user_id', 'employee.id')
-            ->groupBy('project_time_logs.project_id');
-            if (!is_null($startDate)) {
+            ->groupBy('project_time_logs.project_id')
+            /*if (!is_null($startDate)) {
                 $data = $data->where('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
             }
             if (!is_null($endDate)) {
@@ -143,11 +149,14 @@ class TimelogReportController extends AccountBaseController
             if (!is_null($clientId)) {
                 $data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
             }
+            $total_rows = $data->get()->count();
 
             $data = $data->orderBy('project_time_logs.task_id' , 'desc')
             ->offset($offset)
-            ->limit($perPage)
+            ->limit($perPage)*/
+            ->orderBy('project_time_logs.task_id' , 'desc')
             ->get();
+            
         } else if($type == 'tasks') {
             $data = ProjectTimeLog::select([
                 'tasks.id as task_id',
@@ -160,6 +169,8 @@ class TimelogReportController extends AccountBaseController
                 'projects.id as project_id',
                 'projects.project_name',
                 'projects.status as project_status',
+                'projects.start_date as project_start_date',
+                'projects.deadline as project_end_date',
 
                 'pm.id as pm_id',
                 'pm.name as pm_name',
@@ -185,9 +196,9 @@ class TimelogReportController extends AccountBaseController
             
             ->join('users as client', 'projects.client_id', 'client.id')
             ->join('deals', 'client.id', '=', 'deals.client_id')
-            ->where('projects.status','in progress');
-
-            if (!is_null($startDate)) {
+            ->where('projects.status','in progress')
+            ->orderBy('project_time_logs.task_id' , 'desc')
+            /*if (!is_null($startDate)) {
                 $data = $data->where('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
             }
             if (!is_null($endDate)) {
@@ -202,10 +213,10 @@ class TimelogReportController extends AccountBaseController
             if (!is_null($clientId)) {
                 $data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
             }
-
+            $total_rows = $data->get()->count();
             $data = $data->orderBy('project_time_logs.task_id' , 'desc')
             ->offset($offset)
-            ->limit($perPage)
+            ->limit($perPage)*/
             ->get();
         } else if($type == 'projects') {
             $data = ProjectTimeLog::select([
@@ -230,6 +241,8 @@ class TimelogReportController extends AccountBaseController
                 'emp_roles.display_name as employee_roles',
                 'project_time_logs.start_time',
                 'project_time_logs.end_time',
+                'projects.start_date as project_start_date',
+                'projects.deadline as project_end_date',
                 DB::raw('COUNT(project_time_logs.id) as number_of_session'),
                 DB::raw('SUM(project_time_logs.total_minutes) as total_minutes'),
 
@@ -249,8 +262,9 @@ class TimelogReportController extends AccountBaseController
 
             ->groupBy('project_time_logs.project_id')
             ->groupBy('project_time_logs.user_id')
-            ->where('projects.status','in progress');
-            if (!is_null($startDate)) {
+            ->where('projects.status','in progress')
+            ->orderBy('project_time_logs.project_id' , 'desc')
+            /*if (!is_null($startDate)) {
                 $data = $data->where('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
             }
             if (!is_null($endDate)) {
@@ -265,13 +279,17 @@ class TimelogReportController extends AccountBaseController
             if (!is_null($clientId)) {
                 $data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
             }
+            $total_rows = $data->get()->count();
             $data = $data->orderBy('project_time_logs.project_id' , 'desc')
             ->offset($offset)
-            ->limit($perPage)
+            ->limit($perPage)*/
             ->get();
         }
 
-        return response()->json($data);
+        return response()->json([
+            //'total_rows' => $total_rows,
+            'data' => $data
+        ]);
     }
 
     public function timelogChartData(Request $request)

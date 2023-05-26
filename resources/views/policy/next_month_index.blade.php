@@ -214,17 +214,19 @@
                         <div class="point__col"> <input type="number" class="point__input" name="accepted_by_pm" id="accepted_by_pm" value="{{$kpi->accepted_by_pm}}" readonly> </div>
                         <div class="point__col"> %  </div>
                     </div>
+                    @foreach($kpi->logged_hours as $value)
                     <div class="point__row_wrapper_container">
                         <div class="point__row dynamicMore-field" id="dynamicMore-field-1">
                             <div class="point__col"> If the hourly rate of the project based on logged hours between </div>
-                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between" id="logged_hours_between" value="{{$kpi->logged_hours->logged_hours_between}}" readonly>  </div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between" id="logged_hours_between" value="{{$value->logged_hours_between}}" readonly>  </div>
                             <div class="point__col"> To</div>
-                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between_to" id="logged_hours_between" value="{{$kpi_setting_logged_hour->logged_hours_between_to}}" readonly> </div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between_to" id="logged_hours_between" value="{{$value->logged_hours_between_to}}" readonly> </div>
                             <div class="point__col"> shift will get</div>
-                            <div class="point__col"> <input type="number" class="point__input" name="logged_hours_sales_amount" id="logged_hours_sales_amount"  value="{{$kpi_setting_logged_hour->logged_hours_sales_amount}}" readonly> % </div>
+                            <div class="point__col"> <input type="number" class="point__input" name="logged_hours_sales_amount" id="logged_hours_sales_amount"  value="{{$value->logged_hours_sales_amount}}" readonly> % </div>
                             <div class="point__col"> of the sales amount.</div>
                         </div>
                     </div>
+                    @endforeach
                     <div class="point__row">
                         <div class="point__col"> If the hourly rate of the project based on logged hours above </div>
                         <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_above" id="logged_hours_above" value="{{$kpi->logged_hours_above}}" readonly> , </div>
@@ -239,18 +241,20 @@
                         <div class="point__col"> Minimum project value cannot be less than </div>
                         <div class="point__col"> $<input type="number" class="point__input" name="achieve_less_than" id="achieve_less_than" value="{{$kpi->achieve_less_than}}" readonly> </div>
                     </div>
+                    @foreach($kpi->generate_sales as $value)
                     <div class="point__row_wrapper_container">
                         <div class="point__row dynamic-field" id="dynamic-field-1">
                             <div class="point__col"> If sales team generates sales from </div>
-                            <div class="point__col"> <input type="number" class="point__input" name="generate_sales_from" id="generate_sales_from" value="{{$kpi_setting_generate_sale->generate_sales_from}}" readonly>  </div>
+                            <div class="point__col"> <input type="number" class="point__input" name="generate_sales_from" id="generate_sales_from" value="{{$value->generate_sales_from}}" readonly>  </div>
                             <div class="point__col"> To</div>
-                            <div class="point__col"> <input type="number" class="point__input" name="generate_sales_to" id="generate_sales_to" value="{{$kpi_setting_generate_sale->generate_sales_to}}" readonly>  </div>
+                            <div class="point__col"> <input type="number" class="point__input" name="generate_sales_to" id="generate_sales_to" value="{{$value->generate_sales_to}}" readonly>  </div>
                             <div class="point__col"> per month,</div>
                             <div class="point__col"> team lead will get </div>
-                            <div class="point__col"> <input type="number" class="point__input" name="generate_sales_amount" id="generate_sales_amount"  value="{{$kpi_setting_generate_sale->generate_sales_amount}}" readonly> % </div>
+                            <div class="point__col"> <input type="number" class="point__input" name="generate_sales_amount" id="generate_sales_amount"  value="{{$value->generate_sales_amount}}" readonly> % </div>
                             <div class="point__col"> points of the sales amount.</div>
                         </div>
                     </div>
+                    @endforeach
                     <div class="point__row">
                         <div class="point__col"> If sales team generates sales above </div>
                         <div class="point__col"> $<input type="number" class="point__input" name="generate_sales_above" id="generate_sales_above" value="{{$kpi->generate_sales_above}}" readonly>  </div>
@@ -292,23 +296,23 @@
                 <section class="point__distribution">
                     <div class="point__row">
                         <div class="point__col">1. For every shift, every point above </div>
-                        <div class="point__col"> <input type="number" class="point__input" name="every_shift_every_point_above" id="every_shift_every_point_above" value="{{$incentive_setting->every_shift_every_point_above}}" readonly> </div>
+                        <div class="point__col"> <input type="number" class="point__input" name="every_shift_every_point_above" id="every_shift_every_point_above" value="{{$next_month_incentive->every_shift_every_point_above}}" readonly> </div>
                         <div class="point__col"> points will count towards incentive.</div>
                     </div>
                     <div class="point__row">
                         <div class="point__col">2. If the team does not meet the minimum goal, shifts that meet their individual goals will receive</div>
-                        <div class="point__col"> <input type="number" class="point__input" name="individual_goal_percentage" id="individual_goal_percentage" value="{{$incentive_setting->individual_goal_percentage}}" readonly> % </div>
+                        <div class="point__col"> <input type="number" class="point__input" name="individual_goal_percentage" id="individual_goal_percentage" value="{{$next_month_incentive->individual_goal_percentage}}" readonly> % </div>
                         <div class="point__col">  of their actual incentive.</div>
                     </div>
                     <div class="point__row">
                         <div class="point__col">3. Each point will have a value of BDT</div>
-                        <div class="point__col"> <input type="number" class="point__input" name="point_of_value" id="point_of_value" value="{{$incentive_setting->point_of_value}}" readonly> </div>
+                        <div class="point__col"> <input type="number" class="point__input" name="point_of_value" id="point_of_value" value="{{$next_month_incentive->point_of_value}}" readonly> </div>
                         <div class="point__col">  TK.</div>
                     </div>
                     <h3 class="text-center mt-2 mb-5 border-1 shadow-sm mx-auto p-3 rounded text-uppercase" style="width: fit-content;">Logical Settings for Incentive Policy</h3>
                     <div class="point__row">
                         <div class="point__col">1. For missing any 10 days goals, the sales shift will get</div>
-                        <div class="point__col"> <input type="number" class="point__input" name="incentive_deduction" id="incentive_deduction" value="{{$incentive_setting->incentive_deduction}}" readonly> </div>
+                        <div class="point__col"> <input type="number" class="point__input" name="incentive_deduction" id="incentive_deduction" value="{{$next_month_incentive->incentive_deduction}}" readonly> </div>
                         <div class="point__col">% less from the total incentive amount.</div>
                     </div>
                 </section>
@@ -340,104 +344,4 @@
         });
     })
 </script>
-
-{{--    <script>--}}
-{{--        $('#save-form').click(function(e){--}}
-{{--            e.preventDefault();--}}
-{{--            // console.log(formData);--}}
-{{--            $('#save-form').attr("disabled", true);--}}
-{{--            $('#save-form').html("Processing...");--}}
-{{--            var sales_from = document.getElementsByName("generate_sales_from[]");--}}
-{{--            var sales_from_values = [];--}}
-{{--            for (var i = 0; i < sales_from.length; i++) {--}}
-{{--                sales_from_values.push(sales_from[i].value);--}}
-{{--            }--}}
-{{--            var sales_to = document.getElementsByName("generate_sales_to[]");--}}
-{{--            var sales_to_values = [];--}}
-{{--            for (var i = 0; i < sales_to.length; i++) {--}}
-{{--                sales_to_values.push(sales_to[i].value);--}}
-{{--            }--}}
-{{--            var sales_amount = document.getElementsByName("generate_sales_amount[]");--}}
-{{--            var sales_amount_values = [];--}}
-{{--            for (var i = 0; i < sales_amount.length; i++) {--}}
-{{--                sales_amount_values.push(sales_amount[i].value);--}}
-{{--            }--}}
-{{--            var logged_hours_between = document.getElementsByName("logged_hours_between[]");--}}
-{{--            var logged_hours_between_values = [];--}}
-{{--            for (var i = 0; i < logged_hours_between.length; i++) {--}}
-{{--                logged_hours_between_values.push(logged_hours_between[i].value);--}}
-{{--            }--}}
-{{--            var logged_hours_between_to = document.getElementsByName("logged_hours_between_to[]");--}}
-{{--            var logged_hours_between_to_values = [];--}}
-{{--            for (var i = 0; i < logged_hours_between_to.length; i++) {--}}
-{{--                logged_hours_between_to_values.push(logged_hours_between_to[i].value);--}}
-{{--            }--}}
-{{--            var logged_hours_sales_amount = document.getElementsByName("logged_hours_sales_amount[]");--}}
-{{--            var logged_hours_sales_amount_values = [];--}}
-{{--            for (var i = 0; i < logged_hours_sales_amount.length; i++) {--}}
-{{--                logged_hours_sales_amount_values.push(logged_hours_sales_amount[i].value);--}}
-{{--            }--}}
-{{--            var data= {--}}
-{{--                '_token': "{{ csrf_token() }}",--}}
-{{--                'the_bidder': document.getElementById("the_bidder").value,--}}
-{{--                'qualify': document.getElementById("qualify").value,--}}
-{{--                'requirements_defined': document.getElementById("requirements_defined").value,--}}
-{{--                'less_than': document.getElementById("less_than").value,--}}
-{{--                'less_than_get': document.getElementById("less_than_get").value,--}}
-{{--                'more_than': document.getElementById("more_than").value,--}}
-{{--                'more_than_get': document.getElementById("more_than_get").value,--}}
-{{--                'proposal_made': document.getElementById("proposal_made").value,--}}
-{{--                'negotiation_started': document.getElementById("negotiation_started").value,--}}
-{{--                'milestone_breakdown': document.getElementById("milestone_breakdown").value,--}}
-{{--                'closed_deal': document.getElementById("closed_deal").value,--}}
-{{--                'contact_form': document.getElementById("contact_form").value,--}}
-{{--                'authorized_by_leader': document.getElementById("authorized_by_leader").value,--}}
-{{--                'additional_sales_amount': document.getElementById("additional_sales_amount").value,--}}
-{{--                'client_type': document.getElementById("client_type").value,--}}
-{{--                'after': document.getElementById("after").value,--}}
-{{--                'after_reach_amount': document.getElementById("after_reach_amount").value,--}}
-
-{{--                'generate_single_deal': document.getElementById("generate_single_deal").value,--}}
-{{--                'bonus_point': document.getElementById("bonus_point").value,--}}
-{{--                'generate_sales_above': document.getElementById("generate_sales_above").value,--}}
-{{--                'generate_sales_above_point': document.getElementById("generate_sales_above_point").value,--}}
-{{--                'logged_hours_above': document.getElementById("logged_hours_above").value,--}}
-{{--                'logged_hours_above_sales_amount': document.getElementById("logged_hours_above_sales_amount").value,--}}
-{{--                'achieve_more_than': document.getElementById("achieve_more_than").value,--}}
-{{--                'achieve_less_than': document.getElementById("achieve_less_than").value,--}}
-{{--                'generate_sales_from': sales_from_values,--}}
-{{--                'generate_sales_to': sales_to_values,--}}
-{{--                'generate_sales_amount': sales_amount_values,--}}
-{{--                'logged_hours_between': logged_hours_between_values,--}}
-{{--                'logged_hours_between_to': logged_hours_between_to_values,--}}
-{{--                'logged_hours_sales_amount': logged_hours_sales_amount_values,--}}
-{{--                'accepted_by_pm': document.getElementById("accepted_by_pm").value,--}}
-{{--                'id':{{$kpi->id}},--}}
-{{--            }--}}
-{{--            // console.log(data);--}}
-{{--            $.ajaxSetup({--}}
-{{--                headers: {--}}
-{{--                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
-{{--                }--}}
-{{--            });--}}
-{{--            $.ajax({--}}
-{{--                type: "PUT",--}}
-{{--                url: "{{ route('kpi-settings.update',$kpi->id) }}",--}}
-{{--                data: data,--}}
-{{--                dataType: "json",--}}
-{{--                success: function (response) {--}}
-{{--                    $('#save-kpi-settings').trigger("reset");--}}
-{{--                    toastr.success('Kpi Update Successfully');--}}
-{{--                    window.location.reload();--}}
-{{--                    $('#save-form').attr("disabled", false);--}}
-{{--                    $('#save-form').html("Save");--}}
-{{--                },--}}
-{{--                error: function(error) {--}}
-{{--                    // console.log(response);--}}
-{{--                    $('#save-form').attr("disabled", false);--}}
-{{--                    $('#save-form').html("Save");--}}
-{{--                }--}}
-{{--            });--}}
-{{--        });--}}
-{{--    </script>--}}
 @endpush

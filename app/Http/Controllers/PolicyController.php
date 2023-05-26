@@ -33,6 +33,11 @@ class PolicyController extends AccountBaseController
         $this->kpi_setting_generate_sale = kpiSettingGenerateSale::first();
         $this->kpi_setting_logged_hour = kpiSettingLoggedHour::first();
         $this->incentive_setting = IncentiveSetting::first();
+        $this->next_month_kpi = kpiSetting::select('id', 'start_month')->where([
+            'kpi_status' => '2',
+            'cron_status' => '0'
+        ])->get();
+
         return view('policy.index',$this->data);
     }
 
@@ -105,5 +110,22 @@ class PolicyController extends AccountBaseController
     {
         $this->pageTitle = 'Next Month Policy';
         return view('policy.next_month_policy',$this->data);
+    }
+
+    public function show_month_policy($id)
+    {
+        $this->kpi = kpiSetting::with('logged_hours', 'generate_sales')->find($id);
+        $this->next_month_kpi = kpiSetting::select('id', 'start_month')->where([
+            'kpi_status' => '2',
+            'cron_status' => '0'
+        ])->get();
+
+        $this->next_month_incentive = IncentiveSetting::where([
+            'incentive_status' => '2',
+            'cron_status' => '0',
+            'start_month' => \Carbon\Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d')
+        ])->latest()->first();
+
+        return view('policy.next_month_index',$this->data);
     }
 }

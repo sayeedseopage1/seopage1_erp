@@ -43,9 +43,7 @@ class IncentiveController extends AccountBaseController
         }
         if (Auth::user()->role_id == 8 || Auth::user()->role_id == 7 ) {
             $userID = Auth::id();
-
         } else {
-
             $userID = $request->user_id;
         }
 
