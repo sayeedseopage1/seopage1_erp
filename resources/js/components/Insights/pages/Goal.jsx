@@ -508,7 +508,7 @@ const Goal = () => {
                     {/* details */}
                     <div className='cnx__ins_details'>
                         <div className='cnx__ins_details_col'>
-                            <Tooltip text="Assignee for">
+                            <Tooltip text="Assigned for">
                                 <div className='cnx__ins_details_item'>
                                     <i className='fa-regular fa-user' />
                                     <span>{goal?.name || goal?.team_name}</span>
@@ -530,7 +530,7 @@ const Goal = () => {
                             </Tooltip>
 
 
-                            <Tooltip text="Assignee by">
+                            <Tooltip text="Assigned by">
                                 <div className='cnx__ins_details_item'>
                                     <i className='fa-solid fa-user' />
                                     <span>{added_by?.name}</span>
