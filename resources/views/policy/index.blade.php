@@ -214,17 +214,19 @@
                         <div class="point__col"> <input type="number" class="point__input" name="accepted_by_pm" id="accepted_by_pm" value="{{$kpi->accepted_by_pm}}" readonly> </div>
                         <div class="point__col"> %  </div>
                     </div>
+                    @foreach($kpi->logged_hours as $value)
                     <div class="point__row_wrapper_container">
                         <div class="point__row dynamicMore-field" id="dynamicMore-field-1">
                             <div class="point__col"> If the hourly rate of the project based on logged hours between </div>
-                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between" id="logged_hours_between" value="{{$kpi->logged_hours->logged_hours_between}}" readonly>  </div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between" id="logged_hours_between" value="{{$value->logged_hours_between}}" readonly>  </div>
                             <div class="point__col"> To</div>
-                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between_to" id="logged_hours_between" value="{{$kpi_setting_logged_hour->logged_hours_between_to}}" readonly> </div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between_to" id="logged_hours_between" value="{{$value->logged_hours_between_to}}" readonly> </div>
                             <div class="point__col"> shift will get</div>
-                            <div class="point__col"> <input type="number" class="point__input" name="logged_hours_sales_amount" id="logged_hours_sales_amount"  value="{{$kpi_setting_logged_hour->logged_hours_sales_amount}}" readonly> % </div>
+                            <div class="point__col"> <input type="number" class="point__input" name="logged_hours_sales_amount" id="logged_hours_sales_amount"  value="{{$value->logged_hours_sales_amount}}" readonly> % </div>
                             <div class="point__col"> of the sales amount.</div>
                         </div>
                     </div>
+                    @endforeach
                     <div class="point__row">
                         <div class="point__col"> If the hourly rate of the project based on logged hours above </div>
                         <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_above" id="logged_hours_above" value="{{$kpi->logged_hours_above}}" readonly> , </div>
