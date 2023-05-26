@@ -315,7 +315,7 @@ class PaymentController extends AccountBaseController
             $pm= User::where('id',$project->pm_id)->first();
             $kpi_settings = kpiSettingLoggedHour::all();
                 $total_minutes = ProjectTimeLog::where('project_id', $project->id)->sum('total_minutes');
-                $kpi= kpiSetting::first();
+                $kpi= kpiSetting::where('kpi_status',1)->first();
                 
                 //$total_minutes = 1500;
                 //$project->project_budget = 4000;
@@ -338,7 +338,7 @@ class PaymentController extends AccountBaseController
                                 $point= new CashPoint();
                                 $point->user_id= $lead->added_by;
                                 $point->project_id= $project->id;
-                                $point->activity= $user_name->name . ' created the bid';
+                                $point->activity= $user_name->name . ' created the bid Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged '.$value->logged_hours_sales_amount. '%';
                                 $point->gained_as = "Individual";
                                 $point->points= ($project_budget*$kpi->the_bidder)/100;
 
@@ -358,7 +358,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal_qualified->updated_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' made the deal qulaify deal';
+                            $point->activity= $user_name->name . ' made the deal qualify deal Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged '.$value->logged_hours_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->qualify)/100;
 
@@ -377,7 +377,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal_short_code->updated_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' made the deal requirements defined';
+                            $point->activity= $user_name->name . ' made the deal requirements defined Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged '.$value->logged_hours_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->requirements_defined)/100;
 
@@ -395,7 +395,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal_proposal->updated_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' created the proposal';
+                            $point->activity= $user_name->name . ' created the proposal Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged '.$value->logged_hours_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->proposal_made)/100;
 
@@ -413,7 +413,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal_negotiation_started->updated_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' started negotiation started';
+                            $point->activity= $user_name->name . ' started negotiation started Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged '.$value->logged_hours_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->negotiation_started)/100;
 
@@ -433,7 +433,7 @@ class PaymentController extends AccountBaseController
                                 $point= new CashPoint();
                                 $point->user_id= $deal_milestone_breakdown->updated_by;
                                 $point->project_id= $project->id;
-                                $point->activity= $user_name->name . ' created the milestone breakdown';
+                                $point->activity= $user_name->name . ' created the milestone breakdown Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged '.$value->logged_hours_sales_amount. '%';
                                 $point->gained_as = "Individual";
                                 $point->points= ($project_budget*$kpi->milestone_breakdown)/100;
 
@@ -452,7 +452,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal->added_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' closed the deal';
+                            $point->activity= $user_name->name . ' closed the deal Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged '.$value->logged_hours_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->closed_deal)/100;
 
@@ -472,7 +472,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal->added_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                            $point->activity= $user_name->name . ' submitted the contact form for the project manager Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged '.$value->logged_hours_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->contact_form)/100;
 
@@ -492,7 +492,7 @@ class PaymentController extends AccountBaseController
                                 $point= new CashPoint();
                                 $point->user_id= $team_lead->id;
                                 $point->project_id= $project->id;
-                                $point->activity= $user_name->name . ' authorizes the deal';
+                                $point->activity= $user_name->name . ' authorizes the deal Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged '.$value->logged_hours_sales_amount. '%';
                                 $point->gained_as = "Individual";
                                 $point->points= ($project_budget*$kpi->authorized_by_leader)/100;
 
@@ -521,7 +521,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $lead->added_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' created the bid';
+                            $point->activity= $user_name->name . ' created the bid Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->the_bidder)/100;
 
@@ -541,7 +541,7 @@ class PaymentController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal_qualified->updated_by;
                         $point->project_id= $project->id;
-                        $point->activity= $user_name->name . ' made the deal qulaify deal';
+                        $point->activity= $user_name->name . ' made the deal qualify deal Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                         $point->gained_as = "Individual";
                         $point->points= ($project_budget*$kpi->qualify)/100;
 
@@ -560,7 +560,7 @@ class PaymentController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal_short_code->updated_by;
                         $point->project_id= $project->id;
-                        $point->activity= $user_name->name . ' made the deal requirements defined';
+                        $point->activity= $user_name->name . ' made the deal requirements defined Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                         $point->gained_as = "Individual";
                         $point->points= ($project_budget*$kpi->requirements_defined)/100;
 
@@ -578,7 +578,7 @@ class PaymentController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal_proposal->updated_by;
                         $point->project_id= $project->id;
-                        $point->activity= $user_name->name . ' created the proposal';
+                        $point->activity= $user_name->name . ' created the proposal Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                         $point->gained_as = "Individual";
                         $point->points= ($project_budget*$kpi->proposal_made)/100;
 
@@ -596,7 +596,7 @@ class PaymentController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal_negotiation_started->updated_by;
                         $point->project_id= $project->id;
-                        $point->activity= $user_name->name . ' started negotiation started';
+                        $point->activity= $user_name->name . ' started negotiation started Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                         $point->gained_as = "Individual";
                         $point->points= ($project_budget*$kpi->negotiation_started)/100;
 
@@ -616,7 +616,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal_milestone_breakdown->updated_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' created the milestone breakdown';
+                            $point->activity= $user_name->name . ' created the milestone breakdown Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->milestone_breakdown)/100;
 
@@ -635,7 +635,7 @@ class PaymentController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal->added_by;
                         $point->project_id= $project->id;
-                        $point->activity= $user_name->name . ' closed the deal';
+                        $point->activity= $user_name->name . ' closed the deal Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                         $point->gained_as = "Individual";
                         $point->points= ($project_budget*$kpi->closed_deal)/100;
 
@@ -655,7 +655,7 @@ class PaymentController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal->added_by;
                         $point->project_id= $project->id;
-                        $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                        $point->activity= $user_name->name . ' submitted the contact form for the project manager Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                         $point->gained_as = "Individual";
                         $point->points= ($project_budget*$kpi->contact_form)/100;
 
@@ -675,7 +675,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $team_lead->id;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' authorizes the deal';
+                            $point->activity= $user_name->name . ' authorizes the deal Project : '.$project->project_name. ', Client: '. $project->client_name->name. 'Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->authorized_by_leader)/100;
 
