@@ -59,6 +59,7 @@
 						</td>
 					</tr>
 					@endforeach
+					
 					@foreach($lead_deal_activity_log as $value)
 					<tr>
 						<td>{{$value->created_at->format('Y-m-d g:i A')}}<br>(GMT {{$value->created_at->format('P')}})</td>
