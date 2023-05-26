@@ -4013,11 +4013,13 @@ class ProjectController extends AccountBaseController
             'new_date.required' => 'This field is required!',
         ]);
     }
+
     public function getSubNiches($niche_id)
     {
         $sub_niches = ProjectNiche::find($niche_id)->child;
         return response()->json($sub_niches);
     }
+
 
     public function get_project_json($type = null)
     {
@@ -4035,7 +4037,9 @@ class ProjectController extends AccountBaseController
             }
             $data = Project::select('id', 'project_name')->where('status', $mode)->get();
         } else {
+
             $data = Project::select('id', 'project_name')->where('status', 'in progress')->get();
+
         }
         
         return response()->json($data);

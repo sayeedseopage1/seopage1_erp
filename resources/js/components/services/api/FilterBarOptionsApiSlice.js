@@ -22,7 +22,10 @@ const filterBarOptionsApiSlice = apiSlice.injectEndpoints({
         getDepartmentOptions: build.mutation({
             query: () => `/account/menu/filter-options/department`
         }), 
-
+         
+        getAllProjectsOptions:build.query({
+            query: (query) => `/account/get-projects/${query}`
+        }),
     })
 
 }) ;
@@ -33,6 +36,7 @@ export const {
     useGetDepartmentOptionsMutation,
     useGetEmployeeOptionsMutation,
     useGetShiftOptionsMutation,
-    useGetProjectsOptionsMutation
+    useGetProjectsOptionsMutation,
+    getAllProjectsOptions
  } = filterBarOptionsApiSlice;
 

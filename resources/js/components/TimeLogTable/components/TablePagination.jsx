@@ -8,19 +8,20 @@ const Pagination = ({
     currentPage,
     setCurrentPage,
     setNPageRows,
+    totalRows,
 }) => {
     const [pageNumbers, setPageNumbers] = React.useState([]);
     const [renderButtons, setRenderButtons] = React.useState([]);
     const [totalPages, setTotalPages] = React.useState(0);
 
-    const isDataChange = React.useMemo(() => data , [data]);
+    
     const isTotalPagesChange = React.useMemo(() => totalPages, [totalPages])
 
     // count total pages
     React.useEffect(() => {
-        const tPages = Math.ceil(data.length / nPageRows);
+        const tPages = Math.ceil(totalRows / nPageRows);
         setTotalPages(tPages);
-    }, [isDataChange, nPageRows]);
+    }, [totalRows, nPageRows]);
 
     // render buttons
     React.useEffect(() => {
@@ -54,12 +55,12 @@ const Pagination = ({
     // total page
     React.useEffect(() => {
         const pageNumbers = [];
-        if(data.length < 0) return;
-        for (let i = 1; i <= Math.ceil(data.length / nPageRows); i++) {
+        if(totalRows < 0) return;
+        for (let i = 1; i <= Math.ceil(totalRows / nPageRows); i++) {
             pageNumbers.push(i);
         }
         setPageNumbers(pageNumbers);
-    }, [isDataChange, nPageRows]);
+    }, [totalRows, nPageRows]);
 
     
     const handleClick = (e) => {
@@ -105,10 +106,10 @@ const Pagination = ({
             <PaginationGroup>
                 <EntriesPerPage>
                     Showing {currentPage * nPageRows - nPageRows + 1} to{" "}
-                    {currentPage * nPageRows > data.length
-                        ? data.length
+                    {currentPage * nPageRows > totalRows
+                        ? totalRows
                         : currentPage * nPageRows}{" "}
-                    of {data.length} entries
+                    of {totalRows} entries
                 </EntriesPerPage>
                 <PaginationButtons>
                     <PreviousBtn

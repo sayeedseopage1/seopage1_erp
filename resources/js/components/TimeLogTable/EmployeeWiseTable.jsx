@@ -1,17 +1,25 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import ReactDOM from "react-dom";
-import _, { update } from "lodash";
+import _ from "lodash";
 import styled from "styled-components";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { DndProvider, useDrag, useDrop, useDragLayer } from "react-dnd";
+import { useDrag, useDrop } from "react-dnd";
 import { EmployeeWiseTableContext } from ".";
 import "./table.css";
 import { convertTime } from "./utils/converTime";
 import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
+import TimeLogTableFilterBar from "./components/TimeLogTableFilterBar";
+import { useGetEmployeeWiseDataMutation } from "../services/api/timeLogTableApiSlice";
+import {CompareDate} from '../Insights/utils/dateController';
+import { useDispatch, useSelector } from "react-redux";
+import { setEmployeeWiseData } from '../services/features/employeeWiseTableDataSlice';
 
 // pivot table
 const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
+   const {data: preFetchData } = useSelector(state => state.employeeWiseTableData);
+   const dispatch = useDispatch();
+
+
     const {
         setColumns,
         setSubColumns,
@@ -26,27 +34,105 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
         filterColumn,
         setFilterColumn,
     } = React.useContext(EmployeeWiseTableContext);
-    const [data, setData] = useState([]);
+    const [allData, setAllData] = useState([]);
+    const [filterOptions, setFilterOptions] = useState({});
     const [loading, setLoading] = useState(true);
-    // get employee table data
-    useEffect(() => {
-        if(data.length > 0) return;
-        setLoading(true);
-        const fetch = async () => {
-            axios.get("/get-timelogs/employees").then((res) => {
-                let data = res.data?.filter(d => d.project_status === 'in progress');
-                
-                if(data){
-                    setData(data);
-                }
+    const [totalRows, setTotalRows] = useState(0);
+    const [data, setData] = useState([...preFetchData]);
+    
+    const dateCompare = new CompareDate();
 
-                // setData(res.data);
-                setLoading(false)
-            });
-        };
-        fetch();
-        return () => fetch();
-    }, []);
+    const [getEmployeeWiseData, { isLoading: dataIsLoading }] = useGetEmployeeWiseDataMutation({skip: preFetchData.length});
+    
+
+    // handle data request
+    const handleDataRequest = async (filter) => {
+        setFilterOptions(filter);
+        setLoading(true); 
+        const {
+            client_id,
+            employee_id,
+            end_date,
+            start_date,
+            pm_id
+        } =  filter;
+
+        let filteredData = [...preFetchData];
+
+        if(employee_id){ filteredData = filteredData.filter(d => Number(d.employee_id) === Number(employee_id))}
+        if(pm_id){  filteredData = filteredData.filter(d => Number(d.pm_id) === Number(pm_id))}
+        if(client_id){ filteredData = filteredData.filter(d => Number(d.client_id) === Number(client_id))}
+        // if(end_data) {
+        //     filteredData = filteredData.filter() 
+        // }
+ 
+        setData([...filteredData]);
+        setTotalRows(filteredData.length);
+        setLoading(false);
+    }
+
+
+    const fetchData = async () => {
+        let res = await getEmployeeWiseData({}).unwrap();
+        if(res) {
+            dispatch(setEmployeeWiseData(res?.data || []))
+            setData(res?.data);
+            setTotalRows(res?.data?.length);
+        }  
+    }
+
+
+    useEffect(()=> {
+        if(preFetchData.length === 0 && !dataIsLoading){
+            fetchData();
+        }
+    }, [])
+
+    useEffect(()=> {
+        let timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000)
+        return () => clearTimeout(timer);
+    }, []) 
+
+
+
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        // handleDataRequest(filterOptions, page);
+    }
+
+    // handle per page row number change
+
+    const handleParPageRowNumberChange = (n) => {
+        setNPageRows(n);
+        // handleDataRequest(filterOptions, currentPage, Number(n));
+    }
+
+    
+
+    // get employee table data
+    // useEffect(() => {
+    //     if(data.length > 0) return;
+    //     setLoading(true);
+    //     const fetch = async () => {
+    //         axios.get("/get-timelogs/employees").then((res) => {
+    //             let data = res.data?.filter(d => d.project_status === 'in progress');
+                
+    //             if(data){
+    //                 setData(data);
+    //             }
+
+    //             // setData(res.data);
+    //             setLoading(false)
+    //         });
+    //     };
+    //     fetch();
+    //     return () => fetch();
+    // }, []);
+
+    
 
     // initial default 
     React.useEffect(() => {
@@ -298,6 +384,9 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
 
     return (
         <TableContainer>
+            <TimeLogTableFilterBar
+                handleDataRequest = {handleDataRequest} 
+            />
             {/* <ColumnFilter columns={columnOrder} filterColumn={filterColumn} 
             setFilterColumn={setFilterColumn} root={columnFilterButtonId} /> */}
 
@@ -306,27 +395,33 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
                 <table>
                     <thead>{prepareHeader()}</thead>
                     <tbody>
-                        {(!loading && data.length > 0) ?    
+                        {(!loading && !dataIsLoading && data.length > 0) ?    
                             prepareRows() 
                         : null}
                     </tbody>
                 </table>
             </TableWrapper>
 
-            {loading && data.length === 0 &&
+            {(loading || dataIsLoading) &&
                 <Loading> 
                     <div className="spinner-border" role="status"> </div>
                     Loading...
                 </Loading>
             }
 
+            {!loading && !dataIsLoading && !data.length &&
+                <Loading> 
+                    Data Not Found
+                </Loading>
+            }
+
             {/* pagination */}
             <Pagination
-                data={data}
                 nPageRows={nPageRows}
                 currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                setNPageRows={setNPageRows}
+                setCurrentPage={handlePageChange}
+                setNPageRows={handleParPageRowNumberChange}
+                totalRows={totalRows}
             />
         </TableContainer>
     );

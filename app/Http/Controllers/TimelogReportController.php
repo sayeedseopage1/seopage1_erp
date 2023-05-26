@@ -60,7 +60,7 @@ class TimelogReportController extends AccountBaseController
         return $dataTable->render('reports.timelogs.index', $this->data);
     }
     // public function getTimeLog($type)
-    
+
     public function getTimeLog(Request $request, $type)
     {
         $page = $request->input('page', 1);

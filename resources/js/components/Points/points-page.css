@@ -142,6 +142,7 @@
   -ms-text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
+  max-height: 450px;
 }
 
 .sp1__pp_filter_dd_toggle {
