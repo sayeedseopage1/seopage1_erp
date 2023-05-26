@@ -56,10 +56,11 @@ class HourlyKpiDistribution extends Command
        // dd($completed_projects);
     foreach ($completed_projects as $project) {
     //    / dd($project);
-        $kpi_settings = kpiSettingLoggedHour::all();
+       
         $total_minutes = ProjectTimeLog::where('project_id', $project->id)->sum('total_minutes');
  
-        $kpi= kpiSetting::where('kpi_status',1)->first();
+        $kpi= kpiSetting::where('kpi_status','1')->first();
+        $kpi_settings = kpiSettingLoggedHour::where('kpi_id',$kpi->id)->get();
     
 
         if ($total_minutes > 0 && $project->project_budget >= $kpi->achieve_less_than) {

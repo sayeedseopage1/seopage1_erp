@@ -812,7 +812,7 @@ class ProjectController extends AccountBaseController
         $find_deal_id= Deal::where('id',$find_project_id->deal_id)->first();
         // dd($find_project_id);
         if ($find_project_id->status == 'not started') {
-            $kpi= kpiSetting::where('kpi_status',1)->first();
+            $kpi= kpiSetting::where('kpi_status','1')->first();
 
 
             $project_budget= ($find_deal_id->amount * $kpi->accepted_by_pm)/100;
@@ -1260,62 +1260,62 @@ class ProjectController extends AccountBaseController
 
                      }
                      $currentMonth = Carbon::now()->month;
-                    // / dd($currentMonth);
+                //     // / dd($currentMonth);
                   $monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
-                    //$monthly_deal = 20000;
+                //     //$monthly_deal = 20000;
 
-                     $kpi_settings= kpiSettingGenerateSale::all();
-                    // dd($kpi_settings);
-                     $user_name= User::where('role_id',8)->first();
-                     $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                     foreach ($kpi_settings as $value) {
-                        // /dd($value);
-                        if ( $monthly_deal >= $value->generate_sales_from  &&  $monthly_deal <= $value->generate_sales_to ) {
+                //      $kpi_settings= kpiSettingGenerateSale::where('kpi_id',$kpi->id)->get();
+                //     // dd($kpi_settings);
+                //      $user_name= User::where('role_id',8)->first();
+                //      $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                //      foreach ($kpi_settings as $value) {
+                //         // /dd($value);
+                //         if ( $monthly_deal >= $value->generate_sales_from  &&  $monthly_deal <= $value->generate_sales_to ) {
 
-                     $point= new CashPoint();
-                     $point->user_id= $user_name->id;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' for achieving monthly target '.$value->generate_sales_amount. '%';
-                     $point->gained_as = "Individual";
-                     $point->points= ($project_budget*$value->generate_sales_amount)/100;
+                //      $point= new CashPoint();
+                //      $point->user_id= $user_name->id;
+                //      $point->project_id= $find_project_id->id;
+                //      $point->activity= $user_name->name . ' for achieving monthly target '.$value->generate_sales_amount. '%';
+                //      $point->gained_as = "Individual";
+                //      $point->points= ($project_budget*$value->generate_sales_amount)/100;
 
-                     if ($cash_points_team_lead != null) {
+                //      if ($cash_points_team_lead != null) {
 
-                         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($project_budget*$value->generate_sales_amount)/100;
+                //          $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($project_budget*$value->generate_sales_amount)/100;
 
-                     }else
-                     {
-                         $point->total_points_earn=
-                         ($project_budget*$value->generate_sales_amount)/100;
+                //      }else
+                //      {
+                //          $point->total_points_earn=
+                //          ($project_budget*$value->generate_sales_amount)/100;
 
-                     }
-                     $point->save();
+                //      }
+                //      $point->save();
 
-                        }
-                     }
-                     if ($monthly_deal > $kpi->generate_sales_above)
-                {
-                        $user_name= User::where('role_id',8)->first();
-                        $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                        $point= new CashPoint();
-                     $point->user_id= $user_name->id;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' for achieving monthly target'.$value->generate_sales_amount. '%';
-                     $point->gained_as = "Individual";
-                     $point->points= ($project_budget*$kpi->generate_sales_above_point)/100;
+                //         }
+                //      }
+                //      if ($monthly_deal > $kpi->generate_sales_above)
+                // {
+                //         $user_name= User::where('role_id',8)->first();
+                //         $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                //         $point= new CashPoint();
+                //      $point->user_id= $user_name->id;
+                //      $point->project_id= $find_project_id->id;
+                //      $point->activity= $user_name->name . ' for achieving monthly target'.$value->generate_sales_amount. '%';
+                //      $point->gained_as = "Individual";
+                //      $point->points= ($project_budget*$kpi->generate_sales_above_point)/100;
 
-                     if ($cash_points_team_lead != null) {
+                //      if ($cash_points_team_lead != null) {
 
-                         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($project_budget*$kpi->generate_sales_above_point)/100;
+                //          $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($project_budget*$kpi->generate_sales_above_point)/100;
 
-                     }else
-                     {
-                         $point->total_points_earn=
-                         ($project_budget*$kpi->generate_sales_above_point)/100;
+                //      }else
+                //      {
+                //          $point->total_points_earn=
+                //          ($project_budget*$kpi->generate_sales_above_point)/100;
 
-                     }
-                     $point->save();
-                     }
+                //      }
+                //      $point->save();
+                //      }
                      if ($monthly_deal > $kpi->after && $monthly_deal >= $monthly_deal+ $kpi->additional_sales_amount ) {
 
                         $project_budget_additional= $kpi->after_reach_amount;

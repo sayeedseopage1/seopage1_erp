@@ -64,7 +64,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">Service Type <span style="color:red;">*</span></label>
                             <select class="form-control milestone_type height-35 f-14" name="service_type">
@@ -76,7 +76,7 @@
                                 <option value="Basic SEO">Basic SEO</option>
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
 
 
                     <div class="col-md-12">

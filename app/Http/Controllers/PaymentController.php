@@ -313,9 +313,11 @@ class PaymentController extends AccountBaseController
 
             $client= User::where('id',$project->client_id)->first();
             $pm= User::where('id',$project->pm_id)->first();
-            $kpi_settings = kpiSettingLoggedHour::all();
+            
                 $total_minutes = ProjectTimeLog::where('project_id', $project->id)->sum('total_minutes');
-                $kpi= kpiSetting::where('kpi_status',1)->first();
+               
+                $kpi= kpiSetting::where('kpi_status','1')->first();
+                $kpi_settings = kpiSettingLoggedHour::where('kpi_id',$kpi->id)->get();
                 
                 //$total_minutes = 1500;
                 //$project->project_budget = 4000;
