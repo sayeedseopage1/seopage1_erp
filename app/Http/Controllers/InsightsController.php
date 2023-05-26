@@ -683,6 +683,7 @@ class InsightsController extends AccountBaseController
                     'deals.*',
                     'pm.id as pm_id',
                     'pm.name as pm_name',
+                    
 
                     'leads.added_by as bidder',
                 ])

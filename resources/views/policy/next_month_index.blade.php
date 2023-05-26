@@ -292,6 +292,7 @@
                 </section>
                 <hr>
                 <hr>
+               
                 <h3 class="text-center  border-1 shadow-sm mx-auto p-3 rounded text-uppercase" style="width: fit-content;">Incentive Settings Policy</h3>
                 <section class="point__distribution">
                     <div class="point__row">
@@ -299,6 +300,7 @@
                         <div class="point__col"> <input type="number" class="point__input" name="every_shift_every_point_above" id="every_shift_every_point_above" value="{{$next_month_incentive->every_shift_every_point_above}}" readonly> </div>
                         <div class="point__col"> points will count towards incentive.</div>
                     </div>
+                    
                     <div class="point__row">
                         <div class="point__col">2. If the team does not meet the minimum goal, shifts that meet their individual goals will receive</div>
                         <div class="point__col"> <input type="number" class="point__input" name="individual_goal_percentage" id="individual_goal_percentage" value="{{$next_month_incentive->individual_goal_percentage}}" readonly> % </div>
