@@ -3990,4 +3990,30 @@ class ProjectController extends AccountBaseController
         $sub_niches = ProjectNiche::find($niche_id)->child;
         return response()->json($sub_niches);
     }
+    public function filterSubcategories(Request $request)
+    {
+//        $categoryId = $request->category_id;
+        $search = $request->search;
+
+        $query = ProjectNiche::query();
+
+//        if (!empty($categoryId)) {
+//            $query->where('parent_category_id', $categoryId);
+//        }
+
+        if (!empty($search)) {
+            $query->where('category_name', 'like', '%' . $search . '%');
+        }
+
+        $categories = $query->orderBy('id', 'desc')->paginate(10);
+        foreach ($categories as $category) {
+            $category->parent_category_name = ProjectNiche::where('id',$category->parent_category_id)->first();
+        }
+
+        if ($categories->count() >= 1) {
+            return response()->json(['categories' => $categories]);
+        } else {
+            return response()->json(['status' => 400]);
+        }
+    }
 }

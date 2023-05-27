@@ -138,7 +138,7 @@ $projectArchived = $project->trashed();
                     @endif
                     @if(Auth::user()->role_id == 1)
                         <li>
-                            <a href="{{route('project-credentials.index')}}" class="text-dark-grey text-capitalize border-right-grey p-sub-menu project_credentials"><span>project credentials</span></a>
+                            <a href="{{route('project_credential', request()->segment(3))}}" class="text-dark-grey text-capitalize border-right-grey p-sub-menu project_credentials"><span>project credentials</span></a>
                         </li>
                     @endif
                 </ul>
