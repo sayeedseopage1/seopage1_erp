@@ -593,7 +593,7 @@ class InsightsController extends AccountBaseController
                     'pm.id as pm_id',
                     'pm.name as pm_name',
 
-                    'leads.added_by as bidder',
+                    DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                 ])
 
                 ->leftJoin('leads', 'leads.id', 'deals.lead_id')
@@ -685,7 +685,7 @@ class InsightsController extends AccountBaseController
                     'pm.name as pm_name',
                     
 
-                    'leads.added_by as bidder',
+                    DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                 ])
                 ->leftJoin('leads', 'leads.id', 'deals.lead_id')
                 ->join('users as pm', 'pm.id', '=', 'deals.pm_id')

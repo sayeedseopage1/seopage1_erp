@@ -36,7 +36,7 @@ class PortfolioController extends AccountBaseController
             ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
             ->join('users', 'projects.client_id', '=', 'users.id')
             ->join('project_niches', 'project_portfolios.id', '=', 'project_niches.id')
-            ->select('project_portfolios.*','users.user_name','projects.project_name','project_niches.category_name','project_cms.cms_name','project_website_types.website_type')
+            ->select('project_portfolios.*','users.user_name','projects.project_name', 'projects.project_budget', 'project_niches.category_name','project_cms.cms_name','project_website_types.website_type')
             ->get();
 
 //                dd($this->portfolios);

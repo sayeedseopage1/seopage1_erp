@@ -1914,6 +1914,7 @@ class ContractController extends AccountBaseController
             'price_authorization' => 'required',
             'requirment_define' => 'required',
         ]);
+        
         $deal = Deal::find($request->id);
         $deal->authorization_status = 1;
         $deal->price_authorization = $request->price_authorization;
@@ -1926,9 +1927,13 @@ class ContractController extends AccountBaseController
         $user_name= User::where('role_id',8)->first();
         $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
         //kpi point
+
+        $project = Project::where('deal_id', $request->id)->first();
+        //dd($project);
+
         $point= new CashPoint();
         $point->user_id= $user_name->id;
-        $point->project_id= $project_id->id;
+        $point->project_id= $project->id;
         $point->activity= $user_name->name . ' for authorizing deal';
         $point->gained_as = "Individual";
         $point->points= $earned_point;

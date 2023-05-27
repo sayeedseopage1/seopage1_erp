@@ -55,7 +55,7 @@ class DealsDataTable extends BaseDataTable
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
 
-               $action .= ' <a href="' . route('deals.show', [$row->id]) . '" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
+                $action .= ' <a href="' . route('deals.show', [$row->id]) . '" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
 
                 // if (!$row->signature) {
                 //     $action .= '<a class="dropdown-item" href="' . route('front.contract.show', $row->hash) . '" target="_blank"><i class="fa fa-link mr-2"></i>'.__('modules.proposal.publicLink').'</a>';
@@ -74,27 +74,26 @@ class DealsDataTable extends BaseDataTable
                     || ($this->editContractPermission == 'owned' && user()->id == $row->client_id)
                     || ($this->editContractPermission == 'both' && (user()->id == $row->client_id || user()->id == $row->added_by))
                     ) {
-                      if ($row->won_lost != 'Yes') {
+                    if ($row->won_lost != 'Yes') {
                         $action .= '<a class="dropdown-item" href="' . route('deals.edit', [$row->id]) . '">
-                                <i class="fa fa-edit mr-2"></i>
-                                ' . trans('app.edit') . '
-                            </a>';
-                      }else {
+                        <i class="fa fa-edit mr-2"></i>
+                        ' . trans('app.edit') . '
+                        </a>';
+                    }else {
                         $won_deal_id= Deal::where('deal_id',$row->short_code)->first();
                         $action .= '<a class="dropdown-item" href="/deals/details/edit/'.$won_deal_id->id.'">
-                                <i class="fa fa-edit mr-2"></i>
-                                ' . trans('app.edit') . '
-                            </a>';
-                      }
-                      if ($row->won_lost == 'Yes') {
+                        <i class="fa fa-edit mr-2"></i>
+                        ' . trans('app.edit') . '
+                        </a>';
+                    }
+                    if ($row->won_lost == 'Yes') {
                         $won_deal_id= Deal::where('deal_id',$row->short_code)->first();
                         $action .= '<a class="dropdown-item" href="/account/deal-url/'.$won_deal_id->id.'">
 
-                                <i class="fa fa-file mr-2"></i>
-                                ' . trans('Client Form') . '
-                            </a>';
-                      }
-
+                        <i class="fa fa-file mr-2"></i>
+                        ' . trans('Client Form') . '
+                        </a>';
+                    }
                 }
 
                 if (

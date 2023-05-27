@@ -99,13 +99,16 @@
                             $numberOfMonths = 12; // Number of next months to retrieve
                             $currentMonth = \Carbon\Carbon::now();
                             for ($i = 0; $i < $numberOfMonths; $i++) {
+                                $left_days = (int) \Carbon\Carbon::now()->endOfMonth()->format('d') - (int) $currentMonth->format('d');
                                 $nextMonth = $currentMonth->addMonth();
                                 echo '<option value="'.$nextMonth->startOfMonth()->format('Y-m-d').'">'.$nextMonth->format('F').'  ('.$nextMonth->format('Y').')</option>';
                             }
                             @endphp
                         </select>
+                        
                     </div>
                 </div>
+                <p id="already_exist_month" class="text-danger row mx-0"></p>
                 <div class="form-group row">
                     <label for="inputPassword" class="col-sm-4 col-form-label">1. The Bidder will get:</label>
                     <div class="col-sm-8 d-flex">
@@ -428,11 +431,17 @@
                 data: data,
                 dataType: "json",
                 success: function (response) {
-                    $('#save-kpi-settings').trigger("reset");
-                    toastr.success('Kpi drt Successfully');
-                    window.location.href= "{{route('policy.index')}}";
-                    $('#save-form').attr("disabled", false);
-                    $('#save-form').html("Save");
+
+                    if (response.already_exist_month) {
+                        $('#already_exist_month').text('already exist goal of this month');
+                    } else {
+                        $('#save-kpi-settings').trigger("reset");
+                        toastr.success('Kpi Update Successfully');
+                        window.location.reload();
+                        $('#save-form').attr("disabled", false);
+                        $('#save-form').html("Save");
+                    }
+
                 },
                 error: function(error) {
                     // console.log(response);

@@ -515,7 +515,7 @@
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label>Confirm that is price is ok?</label>
-                                <textarea class="form-control" name="price_authorization" rows="10"></textarea>
+                                <textarea class="form-control" name="price_authorization" rows="10">{{$deal->price_authorization}}</textarea>
                                 <script>
                                       CKEDITOR.replace('price_authorization');
                                   </script>
@@ -526,7 +526,7 @@
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label>Confirm that is requirment is defined or not?</label>
-                                <textarea class="form-control" name="requirment_define" rows="10"></textarea>
+                                <textarea class="form-control" name="requirment_define" rows="10">{{$deal->requirment_define}}</textarea>
                                 <script>
                                       CKEDITOR.replace('requirment_define');
                                   </script>
