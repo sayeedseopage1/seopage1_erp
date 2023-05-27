@@ -179,15 +179,17 @@ class PointsController extends AccountBaseController
 
         foreach ($team as $value) {
             $seopage_team = Seopage1Team::where('department_id', $value->id)->get();
+
             if ($seopage_team) {
                 foreach ($seopage_team as $key => $seoteam) {
                     $item = [
                         'id' => $seoteam->id,
                         'team_name' => $seoteam->team_name,
-                        'department_id' => $value->id
+                        'department_id' => $value->id,
+                        'members' => $seoteam->members
                     ];
+                    array_push($data['team'], $item);
                 }
-                array_push($data['team'], $item);
             }
         }
 
@@ -204,7 +206,7 @@ class PointsController extends AccountBaseController
                 array_push($data['employee'], $item);
             }
         }
-
+        dd($data);
         return response()->json($data);
     }
 }

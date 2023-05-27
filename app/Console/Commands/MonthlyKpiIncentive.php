@@ -69,15 +69,24 @@ class MonthlyKpiIncentive extends Command
                     ->whereDate('created_at', '>=', Carbon::now()->startOfMonth())
                     ->whereDate('created_at', '<=', Carbon::now()->endOfMonth())
                     ->get()
-                    ->sum('amount');
+                    ->sum('points');
                     
                     $user_incentive = new UserIncentive();
                     $user_incentive->user_id = $value->id;
                     $user_incentive->point_earned = $deals;
                     $user_incentive->point_earned = $deals;
-                    $user_incentive->start_month = $this_month_kpi->start_month;
-                    //need to work finished here\
+                    $user_incentive->month = $this_month_kpi->start_month;
                     $user_incentive->save();
+
+                    $point= new CashPoint();
+                    $point->user_id= $value->id;
+                    $point->activity= $value->name . ' deduct '.$deals.' points';
+                    $point->gained_as = "Individual";
+                    $point->points= -$deals;
+                    $point->total_points_earn = 0;
+                    $point->total_points_redeem = $deals;
+                    $point->total_points_void = 0;
+                    $point->save();
                 }
 
                 $this_month_kpi->kpi_status = '0';
