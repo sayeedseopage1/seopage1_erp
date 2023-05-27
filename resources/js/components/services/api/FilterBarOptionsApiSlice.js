@@ -7,6 +7,10 @@ import { apiSlice } from "./apiSlice";
 
 const filterBarOptionsApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
+        getAllFilterOption: build.query({
+            query: () => `/account/search-bar-filter`,
+            providesTags: () => ["points_page_filter_options"] 
+        }),
         // getEmployeeOptions: build.query({
         //     query: query => `/account/menu/filter/get-employee${query}`
         // }),
@@ -55,10 +59,12 @@ const filterBarOptionsApiSlice = apiSlice.injectEndpoints({
 
 export const { 
     // // query
+    useGetAllFilterOptionQuery,
     // useGetAllProjectsOptionsQuery,
     // useGetDepartmentOptionsQuery,
     // useGetShiftOptionsQuery,
     // useGetEmployeeOptionsQuery,
+    // useGetProjectsOptionsQuery,
 
 
     // mutation
@@ -66,6 +72,6 @@ export const {
     useGetEmployeeOptionsMutation,
     useGetShiftOptionsMutation,
     useGetProjectsOptionsMutation,
-    getAllProjectsOptions
+    // getAllProjectsOptions
  } = filterBarOptionsApiSlice;
 

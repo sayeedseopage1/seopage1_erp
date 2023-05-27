@@ -3,19 +3,24 @@ import DataTable from '../ui/DataTable';
 import PointPageFilterBar from '../components/FilterBar';
 import PointPageNavbar from '../components/Navbar';
 import dayjs from 'dayjs';
+import CashPointsFilter from '../components/CashPointsFilter';
 
 
 
 const CashPoints = () => {
     const [data, setData] = React.useState([]);
-    const [pointTableDataIsLoading, setPointTableDataIsLoading] = React.useState([]);
-
+    const [isDataFetching, setIsDataFetching] = React.useState(true);
+   
 
 
     
     return(
         <div className='sp1_point_page'>
-            <PointPageFilterBar setData={setData} setPointTableDataIsLoading={setPointTableDataIsLoading} />
+            <CashPointsFilter
+                setData={setData} 
+                setIsDataFetching={setIsDataFetching}
+            />
+            {/* <PointPageFilterBar setData={setData} setPointTableDataIsLoading={setPointTableDataIsLoading} /> */}
             
             <div className='sp1_point_page_container'>
             <PointPageNavbar />
@@ -23,7 +28,7 @@ const CashPoints = () => {
                     <div className="" style={{padding: '16px'}}> 
                     <DataTable
                         data={[...data]}
-                        isLoading={pointTableDataIsLoading}
+                        isLoading={isDataFetching}
                         defaultColumns={[
                             {
                                 header: 'ID',
