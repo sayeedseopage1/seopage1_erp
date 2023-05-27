@@ -326,11 +326,9 @@
 
 
 {{--                            <x-sub-menu-item link="" :text="'Resource'" />--}}
-                            {{-- <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" /> --}}
+                            <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" />
 
-                            {{-- <x-sub-menu-item link="" :text="'Resource'" /> --}}
-{{--                             <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" />--}}
-
+              
                         </div>
 
                     </x-menu-item>

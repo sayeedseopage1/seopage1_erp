@@ -25,7 +25,7 @@ class IncentiveSettingController extends AccountBaseController
      */
     public function index()
     {
-        $this->incentive_setting = IncentiveSetting::first();
+        $this->incentive_setting = IncentiveSetting::where('incentive_status','1')->first();
         return view('incentive-settings.index',$this->data);
     }
 

@@ -7,6 +7,11 @@ import "./table.css";
 import { convertTime } from "./utils/converTime";
 import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
+import TimeLogTableFilterBar from "./components/TimeLogTableFilterBar";
+import { useGetProjectWiseDataMutation } from "../services/api/timeLogTableApiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setProjectWiseTable } from "../services/features/projectWiseTableDataSlice";
+ 
 
 // pivot table
 const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
@@ -23,25 +28,96 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
         filterColumn,
         setFilterColumn,
     } = React.useContext(EmployeeWiseTableContext);
-    const [data, setData] = useState([]);
+    const {data: preFetchData } = useSelector(state => state.projectWiseDataTable);
+    const dispatch = useDispatch();
+
+
+    const [data, setData] = useState([...preFetchData]);
+    const [allData, setAllData] = useState([]);
+    const [filterOptions, setFilterOptions] = useState({});
     const [loading, setLoading] = useState(true);
-    // get employee table data
-    useEffect(() => {
-        setLoading(true);
-        const fetch = async () => {
-            axios.get("/get-timelogs/projects").then((res) => {
-                let data = res.data.filter(d => d.project_status === 'in progress');
-                if(data){
-                    setData(data.sort((a, b) => a["project_id"] < b["project-id"]));
-                }
-                setLoading(false);
-            });
-        };
+    const [totalRows, setTotalRows] = useState(0);
 
-        fetch();
+    const [getProjectWiseData, {isLoading: dataIsLoading}] = useGetProjectWiseDataMutation();
 
-        return () => fetch();
-    }, []);
+   
+      // handle data request
+      const handleDataRequest = async (filter) => {
+        setFilterOptions(filter); 
+        const {
+            client_id,
+            employee_id,
+            end_date,
+            start_date,
+            pm_id
+        } =  filter;
+
+        let filteredData = [...preFetchData];
+
+        if(employee_id){ filteredData = filteredData.filter(d => Number(d.employee_id) === Number(employee_id))}
+        if(pm_id){  filteredData = filteredData.filter(d => Number(d.pm_id) === Number(pm_id))}
+        if(client_id){ filteredData = filteredData.filter(d => Number(d.client_id) === Number(client_id))}
+ 
+        setData([...filteredData]);
+        setTotalRows(filteredData.length);
+    }
+
+    
+    useEffect(()=> {
+        
+        if(preFetchData.length === 0 && !dataIsLoading){
+            (async () => {
+                let res = await getProjectWiseData({}).unwrap();
+                if(res) {
+                    dispatch(setProjectWiseTable(res?.data));
+                    setData(res?.data);
+                    setTotalRows(res?.data?.length);
+                }  
+            })();
+        }
+    }, [])
+
+
+
+    
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+        // handleDataRequest(filterOptions, page);
+    }
+    
+    // handle per page row number change
+    
+    const handleParPageRowNumberChange = (n) => {
+        setNPageRows(n);
+        // handleDataRequest(filterOptions, currentPage, Number(n));
+    }
+    
+    useEffect(()=> {
+        let timer = setTimeout(() => {
+            setLoading(false);
+        }, 1000)
+
+
+        return () => clearTimeout(timer);
+    }, [])
+
+    // // get employee table data
+    // useEffect(() => {
+    //     setLoading(true);
+    //     const fetch = async () => {
+    //         axios.get("/get-timelogs/projects").then((res) => {
+    //             let data = res.data.filter(d => d.project_status === 'in progress');
+    //             if(data){
+    //                 setData(data.sort((a, b) => a["project_id"] < b["project-id"]));
+    //             }
+    //             setLoading(false);
+    //         });
+    //     };
+
+    //     fetch();
+
+    //     return () => fetch();
+    // }, []);
 
     /* ================ Initial State ==================== */
     React.useEffect(() => {
@@ -337,34 +413,42 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
     return (
         <TableContainer>
             {/* <ColumnFilter columns={columnOrder} filterColumn={filterColumn} setFilterColumn={setFilterColumn} root={columnFilterButtonId} /> */}
-
+            <TimeLogTableFilterBar
+                handleDataRequest = {handleDataRequest} 
+            />
             <TableWrapper>
                 {/* table */}
                 <table>
                     <thead>{prepareHeader()}</thead>
                     <tbody>
-                        {(!loading && data.length > 0) ?    
+                        {(!loading && !dataIsLoading && data.length > 0) ?    
                             prepareRows() 
                         : null}
                     </tbody>
                 </table>
             </TableWrapper>
 
-            {loading && data.length === 0 &&
+            {(loading || dataIsLoading )&&
                 <Loading> 
                     <div className="spinner-border" role="status"> </div>
                     Loading...
                 </Loading>
             }
 
+            {!loading && !dataIsLoading && !data.length &&
+                <Loading> 
+                    Data Not Found
+                </Loading>
+            }
+
 
             {/* pagination */}
             <Pagination
-                data={data}
+                totalRows={totalRows}
                 nPageRows={nPageRows}
                 currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                setNPageRows={setNPageRows}
+                setCurrentPage={handlePageChange}
+                setNPageRows={handleParPageRowNumberChange}
             />
         </TableContainer>
     );

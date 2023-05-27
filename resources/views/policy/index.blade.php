@@ -314,7 +314,7 @@
                         <div class="point__col">% less from the total incentive amount.</div>
                     </div>
                 </section>
-                <x-slot name="action">
+                {{-- <x-slot name="action">
                     <!-- Buttons Start -->
                     <div class="w-100 border-top-grey">
                         <x-setting-form-actions>
@@ -323,7 +323,7 @@
                             </x-settingsform-actions>
                     </div>
                     <!-- Buttons End -->
-                </x-slot>
+                </x-slot> --}}
             </form>
     </x-setting-card>
 

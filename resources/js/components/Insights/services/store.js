@@ -24,6 +24,7 @@ import dealReducer from './slices/dealSlice';
 
 // users
 import usersReducer from './slices/usersSlice';
+import teamReducer from './slices/teamSlice';
 
 
 export const store = configureStore({
@@ -40,7 +41,8 @@ export const store = configureStore({
         reportModal: reportModalReducer,
         sectionModal: sectionModalReducer,
         dataTableModal: dataTableModalReducer,
-        users: usersReducer
+        users: usersReducer,
+        teams: teamReducer
     },
    // serializableCheck: false, 
 

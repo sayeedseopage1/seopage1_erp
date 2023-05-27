@@ -683,6 +683,7 @@ class InsightsController extends AccountBaseController
                     'deals.*',
                     'pm.id as pm_id',
                     'pm.name as pm_name',
+                    
 
                     DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                 ])
@@ -696,7 +697,7 @@ class InsightsController extends AccountBaseController
                 }
                 $deals_data = $deals_data->where('deals.status', '!=','Denied')
                // ->whereIn('deals.added_by', $data2)
-                ->groupBy('client_id')
+                //->groupBy('client_id')
                 ->orderBy('deals.id', 'desc')
                 ->get();
 

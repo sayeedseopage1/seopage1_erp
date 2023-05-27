@@ -270,12 +270,34 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                             <td class="border-left-0">{{ $contract->deal->deadline }}
                             </td>
                         </tr>
+                        {{-- {{dd($contract->deal->lead_id)}} --}}
+                        @if($contract->deal->lead_id != null)
+                        <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                              Lead Name</td>
+                            <td class="border-left-0"><a href="{{route('leads.show',$contract->deal->lead_id)}}">{{ $contract->deal->project_name }}</a>
+                            </td>
+                        </tr>
+                        @endif   
                           <tr>
                               <td class="bg-light-grey border-right-0 f-w-500">
                                 Deal Name</td>
-                              <td class="border-left-0">{{ $contract->deal->project_name }}
+                                @php
+                                    $deal= App\Models\DealStage::where('short_code',$contract->deal->deal_id)->first();
+                                @endphp
+                              <td class="border-left-0"><a href="{{route('deals.show',$deal->id)}}">{{ $contract->deal->project_name }}</a>
                               </td>
                           </tr>
+                          @php
+                              $project= App\Models\Project::where('deal_id',$contract->deal->id)->first();
+                          @endphp
+                          <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                              Project Name</td>
+                             
+                            <td class="border-left-0"><a href="{{route('projects.show',$project->id)}}">{{ $project->project_name }}</a>
+                            </td>
+                        </tr>
                           @if ($contract->actual_amount != 0)
                           <tr>
                             <td class="bg-light-grey border-right-0 f-w-500">

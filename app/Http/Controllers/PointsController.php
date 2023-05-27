@@ -158,10 +158,10 @@ class PointsController extends AccountBaseController
         }
         if(Auth::user()->role_id == 1)
         {
-            $data = $data->orderBy('id', 'desc')->get();
+            $data = $data->orderBy('id', 'desc')->where('points','>',0)->orderBy('id', 'desc')->get();
         }elseif(Auth::user()->role_id == 8 ||Auth::user()->role_id == 7 )
         {
-            $data = $data->where('user_id',Auth::id())->orderBy('id', 'desc')->get();
+            $data = $data->where('user_id',Auth::id())->where('points','>',0)->orderBy('id', 'desc')->get();
 
         }
 

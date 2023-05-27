@@ -160,6 +160,7 @@ class IncentiveController extends AccountBaseController
 
         $cash_point = CashPoint::whereIn('user_id', $user_array)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->sum('points');
         //    / dd($cash_point);
+
         $ten_days_incomplete_goal = GoalSetting::where([
             'assigneeType' => 'User',
             'goalType' => 'minimum',

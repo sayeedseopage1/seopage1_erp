@@ -431,6 +431,7 @@
                 data: data,
                 dataType: "json",
                 success: function (response) {
+
                     if (response.already_exist_month) {
                         $('#already_exist_month').text('already exist goal of this month');
                     } else {
@@ -440,6 +441,7 @@
                         $('#save-form').attr("disabled", false);
                         $('#save-form').html("Save");
                     }
+
                 },
                 error: function(error) {
                     // console.log(response);
