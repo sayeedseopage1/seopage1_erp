@@ -950,6 +950,11 @@ class ContractController extends AccountBaseController
         ]);
         //dd("hello");
         $project_milestone= Project::where('deal_id',$request->id)->first();
+        $won_deal_id= Deal::where('id',$request->id)->first();
+        if($won_deal_id->project_type != 'hourly')
+        {
+
+       
         $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
         if ($milestone == null) {
             return response()->json([
@@ -961,6 +966,7 @@ class ContractController extends AccountBaseController
                 ]
             ], 422);
         }
+    }
         DB::beginTransaction();
 
         try {
@@ -1168,7 +1174,18 @@ class ContractController extends AccountBaseController
             $project_admin_update->added_by= $project_id->pm_id;
             $project_admin_update->project_admin= $project_id->pm_id;
             $project_admin_update->save();
+            if($deal->project_type == 'hourly')
+            {
+                $milestone= new ProjectMilestone();
+                $milestone->project_id= $project->id;
+                $milestone->currency_id = 1;
+                $milestone->milestone_title= $project->project_name . '- InitialMilestone'
 
+                $milestone->save();
+    
+
+            }
+           
             $user= User::where('id',$deal_pm_id->pm_id)->first();
             $this->triggerPusher('notification-channel', 'notification', [
                 'user_id' => $user->id,
@@ -1280,6 +1297,12 @@ class ContractController extends AccountBaseController
         $project_milestone= Project::where('deal_id',$request->id)->first();
         $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
 //      dd($milestone);
+        $won_deal_id= Deal::where('id',$request->id)->first();
+        if($won_deal_id->project_type != 'hourly')
+        {
+
+
+        $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
         if ($milestone == null) {
             return response()->json([
                 "message" => "The given data was invalid.",
@@ -1289,7 +1312,9 @@ class ContractController extends AccountBaseController
                     ]
                 ]
             ], 422);
-        } else {
+        }
+        }
+         
             DB::beginTransaction();
 
             try {
@@ -1559,7 +1584,7 @@ class ContractController extends AccountBaseController
             }
 
             return response()->json(['message' => 'Deal Updated Successfully']);
-        }
+        
 
 
     }
