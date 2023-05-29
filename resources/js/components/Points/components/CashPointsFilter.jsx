@@ -2,21 +2,20 @@ import * as React from 'react';
 import { setFilterState } from '../../services/features/pointPageFilterSlice';
 import {  useGetAllFilterOptionQuery, useGetProjectsOptionsQuery } from '../../services/api/FilterBarOptionsApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import FilterItem from '../../Points/components/FilterItem';
+import FilterItem from './FilterItem';
 import JqueryDateRangePicker from './JqueryDateRangePicker';
-import DepartmentFilter from '../../Points/components/DepartmentFilter';
+import DepartmentFilter from './DepartmentFilter';
 import _ from 'lodash';
-import ShiftFilterOption from '../../Points/components/ShiftFilterOption';
-import EmployeeFilterOptions from '../../Points/components/EmployeeFilterOptions';
+import ShiftFilterOption from './ShiftFilterOption';
+import EmployeeFilterOptions from './EmployeeFilterOptions';
 import { useUsers } from '../../hooks/useUsers';
+import { usePointTableDataMutation } from '../../services/api/PointTableDataApiSlice';
 import Button from '../../Insights/ui/Button';
-import { useIncentiveCurrentDataMutation } from '../../services/api/IncentiveApiSlice';
-
+import ProjectFilterOptions from './ProjectFilterOptions';
 
 export default function CashPointsFilter ({
     setData,
-    setIsDataFetching,
-    defaultSelectedDate
+    setIsDataFetching
 }) {
     const { departments, shift, employees } = useSelector(s => s.pointPageFilterOption);
     const { getUserById, usersObject, usersIsFetching } = useUsers();
@@ -65,12 +64,12 @@ export default function CashPointsFilter ({
 
     // table data
     const [
-        incentiveCurrentData,
+        pointTableData,
         {
             data: tableData,
             isLoading: dataFetchingStateIsLoading
         }
-    ] = useIncentiveCurrentDataMutation();
+    ] = usePointTableDataMutation();
 
 
 
@@ -117,6 +116,35 @@ export default function CashPointsFilter ({
     }, [selectedShift])
 
 
+    // get employees
+    // const handleDateFilter = (start, end, dept, shift, employee) => {
+    //      console.log({
+    //         dept,shift,employee
+    //      })
+    //     if(dept && selectedShift && selectedEmployee){
+    //         pointTableData({
+    //             department_id: dept?.id,
+    //             team_id: shift?.id,
+    //             user_id: employee?.id,
+    //             start_date: start,
+    //             end_date: end,
+    //             project_id: null
+    //         })
+    // }
+
+    // const handleDateFilter = (start, end, dept, shift, employee)=>{
+    //     console.log({
+    //         start,
+    //         end,
+    //         shift,
+    //         dept,
+    //         employee
+    //     })
+    // }
+    
+    
+
+
 
     // handle dept select
     const handleDepartmentSelect = (dept) => {
@@ -134,11 +162,13 @@ export default function CashPointsFilter ({
     React.useEffect(() => {
         if(!dept || !selectedEmployee || !selectedShift) return;
 
-        incentiveCurrentData({
+        pointTableData({
+            department_id: dept?.id,
             team_id: selectedShift?.id,
             user_id: selectedEmployee?.id,
             start_date: startDate,
             end_date: endDate,
+            project_id: null
         })
     }, [_employee]);
 
@@ -146,11 +176,13 @@ export default function CashPointsFilter ({
     React.useEffect(() => {
         if(!dept || !selectedEmployee || !selectedShift) return;
 
-        incentiveCurrentData({
+        pointTableData({
+            department_id: dept?.id,
             team_id: selectedShift?.id,
             user_id: selectedEmployee?.id,
             start_date: startDate,
             end_date: endDate,
+            project_id: null
         })
     }, [endDate]);
 
@@ -179,8 +211,8 @@ export default function CashPointsFilter ({
                     startDate={startDate}
                     endDate={endDate}
                     setStartDate={setStartDate}
-                    setEndDate={setEndDate} 
-                    defaultSelectedType={defaultSelectedDate}
+                    setEndDate={setEndDate}
+                    onApply={() => {}}
                 />
             </FilterItem>
 
@@ -188,7 +220,15 @@ export default function CashPointsFilter ({
             {
                 Number(window?.Laravel?.user?.role_id) === 1 ? (
                     <>
-                         
+                        <FilterItem className='hide'>
+                            <DepartmentFilter 
+                                data={departments}
+                                selected={dept}
+                                setSelectedDept = {setDept}
+                                loading = {isFetching}
+                                onSelect={handleDepartmentSelect}
+                            />
+                        </FilterItem>
 
                         <FilterItem className='hide'>
                             <ShiftFilterOption 
@@ -198,7 +238,15 @@ export default function CashPointsFilter ({
                                 onSelect={handleShiftSelection}
                             />
                         </FilterItem>
- 
+
+                        <FilterItem className='hide'>
+                            <span className='mr-2'>Credit/Debit: <span className='font-weight-bold' >Point Earned </span> </span>
+                        </FilterItem>
+
+                        <FilterItem className=' hide'>
+                            <span className='mr-2'>Points gained as: <span className='font-weight-bold'>Individual</span> </span>
+                        </FilterItem>
+
                        
                         <FilterItem className='hide'> 
                             <EmployeeFilterOptions 
@@ -210,7 +258,18 @@ export default function CashPointsFilter ({
                             />
                         </FilterItem>
                        
-                         
+                        {/* <FilterItem className='hide'>
+                            <ProjectFilterOptions
+                                selected={project}
+                                data={projects || []}
+                                loading={projectsIsFetching}
+                                onSelect={handleProjectFilter}
+                            
+                            />
+                        </FilterItem> */}
+
+
+                        
                     </>
                 ) : 
                 <FilterItem className='border-right-0'>
@@ -245,7 +304,18 @@ export default function CashPointsFilter ({
                                 </Button>
                             </div>
 
-                            <div className="sp1__pp_filter_sidebar_items">  
+                            <div className="sp1__pp_filter_sidebar_items">
+                                <FilterItem className='w-100 border-right-0'>
+                                    <DepartmentFilter 
+                                        data={departments}
+                                        selected={dept}
+                                        setSelectedDept = {setDept}
+                                        loading = {isFetching}
+                                        onSelect={handleDepartmentSelect}
+                                        sidebarItem={true}
+                                    />
+                                </FilterItem>
+
                                 <FilterItem className='w-100 border-right-0'>
                                     <ShiftFilterOption 
                                         data={ dept ? shift.filter(s => s.id !== 1 && s.department_id === dept.id) : []}
@@ -254,8 +324,18 @@ export default function CashPointsFilter ({
                                         onSelect={handleShiftSelection}
                                         sidebarItem= {true}
                                     />
-                                </FilterItem> 
+                                </FilterItem>
 
+
+                                <FilterItem className='hide d-flex align-items-center w-100 border-right-0'>
+                                    <span className='mr-2 w-100'>Credit/Debit: <span className='d-block font-weight-bold border py-2 px-2 w-100' >Point Earned </span> </span>
+                                </FilterItem>
+
+                                <FilterItem className='hide d-flex align-items-center w-100 border-right-0'>
+                                    <span className='mr-2 w-100'>Points gained as: <span className='d-block font-weight-bold border py-2 px-2 w-100'>Individual</span> </span>
+                                </FilterItem>
+
+                            
                                 <FilterItem className='w-100 border-right-0'>
                                     <EmployeeFilterOptions 
                                         selected={selectedEmployee}
@@ -266,6 +346,16 @@ export default function CashPointsFilter ({
                                         sidebarItem= {true}
                                     />
                                 </FilterItem>
+
+                                {/* <FilterItem className='w-100 border-right-0'>
+                                    <ProjectFilterOptions
+                                        selected={project}
+                                        data={projects || []}
+                                        loading={projectsIsFetching}
+                                        onSelect={handleProjectFilter}
+                                        sidebarItem={true}
+                                    />
+                                </FilterItem> */}
                             </div>
                         </aside>
                     )

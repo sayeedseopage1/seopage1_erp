@@ -130,9 +130,12 @@
 }
 
 .sp1__pp_filter_bar_item {
-    border-right: 1px solid #e1e1e1 !important;
+    border-right: 1px solid #e1e1e1;
   }
 
+@media screen and (max-width: 1136px){
+  .sp1__pp_filter_bar_item{height: fit-content}
+}
 
 
 .sp1__pp_filter_dd {
@@ -155,6 +158,12 @@
   -ms-text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 1136px){
+  .sp1__pp_filter_dd_toggle{
+    max-width: 100%;
+  }
 }
 
 .sp1__pp_menu_items{
@@ -386,4 +395,18 @@
 
 .sp1__pp_sidebar_filter_label{
   display: block;
+}
+
+
+.sp1__pp_sidebar_filter_dd{
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+
+.sp1__pp_filter_dd_menu{
+  width: 300px;
+  max-height: 450px;
+  overflow-y: auto;
 }
