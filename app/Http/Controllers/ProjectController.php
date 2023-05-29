@@ -4029,7 +4029,7 @@ class ProjectController extends AccountBaseController
             return response()->json(['status' => 400]);
         }
 
-
+    }
 
     public function get_project_json($type = null)
     {
