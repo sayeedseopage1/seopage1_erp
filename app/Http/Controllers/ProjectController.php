@@ -1231,7 +1231,7 @@ class ProjectController extends AccountBaseController
                      }
                      $point->save();
 
-                    
+
 
 
 
@@ -1628,7 +1628,7 @@ class ProjectController extends AccountBaseController
                                 $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
                                 ->whereDate('start_date', '>=', $goal->startDate)
                                 ->whereDate('start_date', '<=', $end_date)
-                                ->count(); 
+                                ->count();
                             }
                         }
                         if ($team_total_amount >= (int) $goal->trackingValue) {
@@ -1681,7 +1681,7 @@ class ProjectController extends AccountBaseController
                         }
                         $deals_data = $deals_data->where('deals.status', '!=','Denied')
                        // ->whereIn('deals.added_by', $user_id)
-                      
+
                         ->orderBy('deals.id', 'desc')
                         ->get();
                         $team_total_amount = 0;
@@ -1768,7 +1768,7 @@ class ProjectController extends AccountBaseController
                                 $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
                                 ->whereDate('start_date', '>=', $goal->startDate)
                                 ->whereDate('start_date', '<=', $end_date)
-                                ->count(); 
+                                ->count();
                             }
                         }
                         if ($team_total_amount >= (int) $goal->trackingValue) {
@@ -4020,7 +4020,7 @@ class ProjectController extends AccountBaseController
 
         $categories = $query->orderBy('id', 'desc')->paginate(10);
         foreach ($categories as $category) {
-            $category->parent_category_name = ProjectNiche::where('id',$category->parent_category_id)->first();
+            $category->parent_category_name = ProjectNiche::where('id', $category->parent_category_id)->first();
         }
 
         if ($categories->count() >= 1) {
@@ -4028,6 +4028,7 @@ class ProjectController extends AccountBaseController
         } else {
             return response()->json(['status' => 400]);
         }
+    }
 
 
 
@@ -4051,7 +4052,7 @@ class ProjectController extends AccountBaseController
             $data = Project::select('id', 'project_name')->where('status', 'in progress')->get();
 
         }
-        
+
         return response()->json($data);
 
     }

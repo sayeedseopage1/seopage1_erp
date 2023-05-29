@@ -989,7 +989,7 @@ class LeadController extends AccountBaseController
         $lead->bidding_minutes= $request->bidding_minutes;
         $lead->bidding_seconds= $request->bidding_seconds;
         $lead->cover_letter= $request->cover_letter;
-        // $lead->explanation= $request->explanation;
+         $lead->explanation= $request->explanation;
         $lead->insight_screenshot= $request->insight_screenshot;
         $lead->bidpage_screenshot= $request->bidpage_screenshot;
         $lead->projectpage_screenshot =$request->projectpage_screenshot;
@@ -1018,6 +1018,7 @@ class LeadController extends AccountBaseController
     {
 //        dd($request->all());
         $request->validate([
+            'project_id'=>'required|unique:leads,project_id,'.$request->project_id,
             'description' => 'required',
             'cover_letter' => 'required',
         ], [
