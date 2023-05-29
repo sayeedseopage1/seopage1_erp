@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
-    <h2>dadsasda</h2>
+   <div id="qualifiedSales"></div>
 @endsection

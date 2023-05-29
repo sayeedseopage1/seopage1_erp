@@ -900,7 +900,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('incentive-settings',IncentiveSettingController::class);
     //Monthly Incentive Settings
     Route::resource('monthly-incentive',MonthlyIncentiveController::class);
-    //qualified sales Settings
+    //qualified sales Settings 
     Route::resource('qualified-sales',QualifiedSalesController::class);
 
     // Estimates
