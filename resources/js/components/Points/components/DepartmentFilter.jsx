@@ -3,26 +3,28 @@ import Dropdown from '../../Insights/ui/Dropdown';
 import Tooltip from '../../Insights/ui/Tooltip';
 import _ from 'lodash';
 
-const DepartmentFilter = ({data, onSelect, loading}) => {
-  const [selected, setSelected] = React.useState(data[0]);
+const DepartmentFilter = ({data, onSelect,setSelectedDept, selected, loading, sidebarItem = false}) => {
   
   React.useEffect(() => {
-    data && setSelected(data[0]);
+    data && setSelectedDept(data[0]);
   }, [data])
 
 
   const handleSelection = (e, dept) => {
     e.preventDefault();
-    setSelected(dept);
+    setSelectedDept(dept);
     if(onSelect !== undefined) {
         onSelect(dept)
     }
   }
 
+  const textLength = sidebarItem ? 33 : 11;
+  const splitLength = sidebarItem ? 32 : 10;
+
 
   return (
-    <React.Fragment>
-        <span>Department: </span>
+    <div className={ sidebarItem ? `d-flex flex-column w-100 mt-2` : 'd-flex align-items-center'}>
+        <span className='mr-2'>Department: </span>
         {loading ? (
             <div className="spinner-border" role="status" style={{
                 width: '14px',
@@ -31,15 +33,15 @@ const DepartmentFilter = ({data, onSelect, loading}) => {
             }}>  </div>
         ) : (
             <Dropdown>
-                <Dropdown.Toggle className="sp1__pp_filter_dd_toggle">
+                <Dropdown.Toggle className={sidebarItem ? 'sp1__pp_filter_dd_toggle py-2 px-2 border w-100' : 'sp1__pp_filter_dd_toggle'}>
                     <Tooltip
                         text={_.startCase(selected?.team_name)} 
                     >
                         <>
                         {
                                 selected?.team_name ?
-                                selected?.team_name?.length > 11 ?
-                                    _.startCase(selected?.team_name?.slice(0, 10)) + '...'
+                                selected?.team_name?.length > textLength ?
+                                    _.startCase(selected?.team_name?.slice(0, splitLength)) + '...'
                                     : selected?.team_name
                                 : ''
                             } 
@@ -62,7 +64,7 @@ const DepartmentFilter = ({data, onSelect, loading}) => {
                 </Dropdown.Menu>
             </Dropdown>
         )}
-    </React.Fragment>
+    </div>
   )
 }
 

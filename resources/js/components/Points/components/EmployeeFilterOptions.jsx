@@ -3,7 +3,7 @@ import Dropdown from '../../Insights/ui/Dropdown';
 import Tooltip from '../../Insights/ui/Tooltip';
 import _ from 'lodash';
 
-const EmployeeFilterOptions = ({data = [], onSelect, selected, loading, setSelectedEmployee}) => {
+const EmployeeFilterOptions = ({data = [], sidebarItem=false, onSelect, selected, loading, setSelectedEmployee}) => {
 //   const [selected, setSelected] = React.useState(null);
 
     const _data = React.useMemo(() => data, [data]) 
@@ -27,10 +27,14 @@ const EmployeeFilterOptions = ({data = [], onSelect, selected, loading, setSelec
 
   if(!data.length && !loading) return <span>No Employee</span>
 
+  const textLength = sidebarItem ? 33 : 11;
+  const splitLength = sidebarItem ? 32 : 10;
+
 
   return (
-    <React.Fragment>
-        <span>Employee: </span>
+    
+    <div className={ sidebarItem ? `d-flex flex-column w-100 mt-2` : 'd-flex align-items-center'}>
+        <span className='mr-2'>Employee: </span>
         {loading ? (
             <div className="spinner-border" role="status" style={{
                 width: '14px',
@@ -39,15 +43,17 @@ const EmployeeFilterOptions = ({data = [], onSelect, selected, loading, setSelec
             }}>  </div>
         ) : (
             <Dropdown>
-                <Dropdown.Toggle className="sp1__pp_filter_dd_toggle">
+                 <Dropdown.Toggle 
+                    className={sidebarItem ? 'sp1__pp_filter_dd_toggle py-2 px-2 border w-100' : 'sp1__pp_filter_dd_toggle'}
+                >
                     <Tooltip
                         text={_.startCase(selected?.name)} 
                     >
                         <>
                             {
                                 selected?.name ?
-                                selected.name?.length > 11 ?
-                                    _.startCase(selected?.name?.slice(0, 10)) + '...'
+                                selected.name?.length > textLength ?
+                                    _.startCase(selected?.name?.slice(0, splitLength)) + '...'
                                     : selected.name
                                 : ''
                             } 
@@ -70,7 +76,7 @@ const EmployeeFilterOptions = ({data = [], onSelect, selected, loading, setSelec
                 </Dropdown.Menu>
             </Dropdown>
         )}
-    </React.Fragment>
+    </div>
   )
 }
 

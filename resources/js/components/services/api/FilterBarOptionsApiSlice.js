@@ -15,9 +15,9 @@ const filterBarOptionsApiSlice = apiSlice.injectEndpoints({
         //     query: query => `/account/menu/filter/get-employee${query}`
         // }),
 
-        // getProjectsOptions: build.query({
-        //     query: () => `/account/menu/filter-options/projects`
-        // }),
+        getProjectsOptions: build.query({
+            query: () => `/account/menu/filter-options/projects`
+        }),
 
         
         // getShiftOptions: build.query({
@@ -38,9 +38,9 @@ const filterBarOptionsApiSlice = apiSlice.injectEndpoints({
             query: (query) => `/account/menu/filter/get-employee${query}`
         }),
 
-        getProjectsOptions: build.mutation({
-            query: () => `/account/menu/filter-options/projects`
-        }),
+        // getProjectsOptions: build.mutation({
+        //     query: () => `/account/menu/filter-options/projects`
+        // }),
 
         getShiftOptions: build.mutation({
             query: (department) => `/account/menu/filter-options/shift${department}`
@@ -64,14 +64,14 @@ export const {
     // useGetDepartmentOptionsQuery,
     // useGetShiftOptionsQuery,
     // useGetEmployeeOptionsQuery,
-    // useGetProjectsOptionsQuery,
+    useGetProjectsOptionsQuery,
 
 
     // mutation
     useGetDepartmentOptionsMutation,
     useGetEmployeeOptionsMutation,
     useGetShiftOptionsMutation,
-    useGetProjectsOptionsMutation,
+    // useGetProjectsOptionsMutation,
     // getAllProjectsOptions
  } = filterBarOptionsApiSlice;
 
