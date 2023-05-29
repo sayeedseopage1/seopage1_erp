@@ -57,7 +57,7 @@ class MonthlyKpiIncentive extends Command
             $existing_kpi->start_month = Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d');
             
             kpiSetting::insert($existing_kpi->toArray());
-        } else if (/*Carbon::today() == Carbon::now()->endOfMonth()*/ 1==1) {
+        } else if (Carbon::today() == Carbon::now()->endOfMonth()) {
             $this_month_kpi = kpiSetting::where([
                 'kpi_status' => '1',
                 'cron_status' => '1',
@@ -175,15 +175,15 @@ class MonthlyKpiIncentive extends Command
                         //dd($user_incentive);
                         $user_incentive->save();
 
-                        // $point = new CashPoint();
-                        // $point->user_id= $value->id;
-                        // $point->activity= $value->name . ' deduct '.$deals.' points';
-                        // $point->gained_as = "Individual";
-                        // $point->points= -$deals;
-                        // $point->total_points_earn = 0;
-                        // $point->total_points_redeem = $deals;
-                        // $point->total_points_void = 0;
-                        //$point->save();
+                        $point = new CashPoint();
+                        $point->user_id= $value->id;
+                        $point->activity= $value->name . ' deduct '.$deals.' points';
+                        $point->gained_as = "Individual";
+                        $point->points= -$user_incentive_amount;
+                        $point->total_points_earn = 0;
+                        $point->total_points_redeem = $deals;
+                        $point->total_points_void = 0;
+                        $point->save();
                     }
                 }
 
