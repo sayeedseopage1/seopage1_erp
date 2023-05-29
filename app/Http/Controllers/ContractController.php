@@ -275,11 +275,11 @@ class ContractController extends AccountBaseController
         if($existing_client != null)
         {
             $deal->client_badge = 'existing client';
-           
+
         }else {
             $deal->client_badge= 'new client';
         }
-        
+
         $deal->save();
         if (Auth::user()->role_id == 7) {
             $agent_id = SalesCount::where('user_id', Auth::id())->first();
@@ -425,6 +425,7 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
+//        dd($request->all());
         \DB::beginTransaction();
         $current_time= Carbon::now()->format('d-m-Y H:i:s' );
         $award_date= strtotime($request->award_time);
@@ -514,6 +515,7 @@ class ContractController extends AccountBaseController
         $deal->message_link= $value;
         $deal->original_currency_id= $request->original_currency_id;
         $deal->currency_id= 1;
+        $deal->project_type= $request->project_type;
         $deal->actual_amount=  $request->amount;
         $currency= Currency::where('id',$request->original_currency_id)->first();
         //  dd($currency);
@@ -537,7 +539,7 @@ class ContractController extends AccountBaseController
         if($existing_client != null)
         {
             $deal->client_badge = 'existing client';
-           
+
         }else {
             $deal->client_badge= 'new client';
         }
@@ -1947,7 +1949,7 @@ class ContractController extends AccountBaseController
             'price_authorization' => 'required',
             'requirment_define' => 'required',
         ]);
-        
+
         $deal = Deal::find($request->id);
         $deal->authorization_status = 1;
         $deal->price_authorization = $request->price_authorization;

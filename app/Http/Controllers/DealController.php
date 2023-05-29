@@ -153,28 +153,31 @@ class DealController extends AccountBaseController
 
     public function store(Request $request)
     {
+//        dd($request->all());
         $request->validate([
             'client_name' => 'required',
             'client_username' => 'required',
             'project_name' => 'required',
             'project_link' => 'required|url',
+            'project_type' => 'required',
             'amount' => 'required',
             'description' => 'required',
             'comments' => 'required',
         ]);
-        $existing_client= User::where('user_name',$request->user_name)->first(); 
+        $existing_client= User::where('user_name',$request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new DealStage();
         $deal->client_name= $request->client_name;
         $deal->short_code = 'DSEOP1' . $suffle;
-        
+
         $deal->client_username= $request->client_username;
         $deal->deal_stage= 0;
         $deal->project_name = $request->project_name;
         $deal->project_link = $request->project_link;
         $deal->currency_id= 1;
         $deal->original_currency_id= $request->original_currency_id;
+        $deal->project_type= $request->project_type;
         $deal->actual_amount=  $request->amount;
         $currency= Currency::where('id',$request->original_currency_id)->first();
         //dd($currency);
@@ -185,20 +188,20 @@ class DealController extends AccountBaseController
         if($existing_client != null)
         {
             $deal->client_badge = 'existing client';
-            
+
         }else {
             $deal->client_badge= 'new client';
         }
         $deal->save();
         $goals = GoalSetting::where([
-            'goal_status' =>  0, 
+            'goal_status' =>  0,
         ])->get();
         // /dd($goals);
-        
+
         if($goals != null)
         {
 
-       
+
         foreach ($goals as $goal) {
             $start = Carbon::parse($goal->startDate);
             $end = Carbon::parse($goal->endDate);
@@ -222,19 +225,19 @@ class DealController extends AccountBaseController
             $user_data[]= $goal->user_id;
         }
     }
-        
-        
+
+
         // Always use an array of user IDs, even if $goal->user_id is set
         $goal2 = $goal->user_id ? [$goal->user_id] : $user_data;
-       
-        
+
+
         if ($goal->entryType == 'Added') {
 
             if($goal->dealType == 'New Client')
             {
                // dd("true");
 
-            
+
        //dd("nksdnlas");
             $dealStage = DealStage::select([
                 'deal_stages.*',
@@ -253,7 +256,7 @@ class DealController extends AccountBaseController
             ])
             ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
             ->whereIn('deal_stages.added_by', $goal2)
-           
+
             ->whereDate('deal_stages.created_at', '>=', $goal->startDate)
             //->pluck('client_username')->unique()
            // ->get();
@@ -261,7 +264,7 @@ class DealController extends AccountBaseController
         //    / dd($dealStage);
         ->where('deal_stages.client_badge','=','new client');
         //  /dd($dealStage);
-    
+
             if (!is_null($goal->endDate)) {
                 $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $goal->endDate);
                // dd($dealStage);
@@ -272,14 +275,14 @@ class DealController extends AccountBaseController
          //dd($dealStage_amount2,$dealStage_amount,$dealStage_count, $dealStage_amount2->sum('amount'));
             if ($goal->trackingType == 'value') {
                 // /dd("true");
-                
+
                     $deal_amount = $dealStage_amount;
                // dd($deal_amount);
-                
+
             } else {
-               
+
                     $deal_amount = $dealStage_count;
-               
+
             }
            // dd($deal_amount);
             // /dd("true");
@@ -291,7 +294,7 @@ class DealController extends AccountBaseController
                 if ($goal->achievablePoints > 0) {
 
                     $distribute_amount = $goal->achievablePoints / count($user_data);
-                    
+
                     foreach ($user_data as $value) {
 
                         $user_name = User::find($value);
@@ -315,7 +318,7 @@ class DealController extends AccountBaseController
                 }
             }
 
-        }else 
+        }else
         {
             $dealStage = DealStage::select([
                 'deal_stages.*',
@@ -337,25 +340,25 @@ class DealController extends AccountBaseController
             ->whereDate('deal_stages.created_at', '>=', $goal->startDate);
             // ->groupBy('deal_stages.client_username');
         //  /dd($dealStage);
-    
+
             if (!is_null($goal->endDate)) {
                 $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $goal->endDate);
                // dd($dealStage);
             }
-    
+
             $dealStage_amount = $dealStage->sum('deal_stages.amount');
             $dealStage_count = $dealStage->count();
            // dd($dealStage_amount,$dealStage_count);
             if ($goal->trackingType == 'value') {
                 //dd("true");
-                
+
                     $deal_amount = $dealStage_amount;
                 //    / dd($deal_amount);
-                
+
             } else {
-               
+
                     $deal_amount = $dealStage_count;
-               
+
             }
             // dd($deal_amount);
             if ($deal_amount >= (int) $goal->trackingValue) {
@@ -366,7 +369,7 @@ class DealController extends AccountBaseController
                 if ($goal->achievablePoints > 0) {
 
                     $distribute_amount = $goal->achievablePoints / count($user_data);
-                    
+
                     foreach ($user_data as $value) {
 
                         $user_name = User::find($value);
@@ -395,15 +398,15 @@ class DealController extends AccountBaseController
 
 
          // kpi points distribution end here
-    
-    
-        }
-       
 
-            
+
+        }
+
+
+
         }
     }
-    
+
 
 
 
@@ -428,7 +431,7 @@ class DealController extends AccountBaseController
         $deal_stage->updated_by= Auth::id();
         $deal_stage->save();
 
-        
+
         //dd($deal_sum, $deal_count);
         return response()->json([
             'status' => 'success',
@@ -482,6 +485,7 @@ class DealController extends AccountBaseController
         $deal->project_link = $request->project_link;
         $deal->currency_id= 1;
         $deal->original_currency_id= $request->original_currency_id;
+        $deal->project_type= $request->project_type;
         $deal->actual_amount=  $request->amount;
         $currency= Currency::where('id',$request->original_currency_id)->first();
         //dd($currency);
@@ -507,7 +511,7 @@ class DealController extends AccountBaseController
     //     $deal->save();
     //     $sender= User::where('id',Auth::id())->first();
     //   $users= User::where('role_id',8)->orWhere('role_id',1)->get();
-     
+
     //   foreach ($users as $key => $user) {
     //     Notification::send($users, new DealAuthorizationSendNotification($deal,$sender));
     //     $this->triggerPusher('notification-channel', 'notification', [
@@ -517,11 +521,11 @@ class DealController extends AccountBaseController
     //         'body' => $sender->name. ' send price authorization request for '.$deal->project_name,
     //         'redirectUrl' => route('deals.show',$deal->id)
     //     ]);
-       
+
     //   }
     //   return Reply::success('Authorizations send successfully');
-      
-       
+
+
 
     // }
 
@@ -704,7 +708,7 @@ class DealController extends AccountBaseController
 
     }
 
-    
+
 
     /**
 
@@ -719,14 +723,14 @@ class DealController extends AccountBaseController
     public function SearchClient(Request $request)
 
     {
-       
+
 
         $data = User::select(["name","user_name"])
         ->where('role_id',null)
         ->where('name', 'LIKE', '%'. $request->get('query'). '%')
         ->orwhere('user_name', 'LIKE', '%'. $request->get('query'). '%')
         ->get();
-     
+
 
         return response()->json($data);
     }

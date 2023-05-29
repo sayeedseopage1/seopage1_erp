@@ -47,7 +47,7 @@
 
                       <label id="clientUsernameError" class="error text-danger" for="client_username"></label>
 
-                      
+
                   </div>
               </div>
               <div class="col-md-6">
@@ -312,7 +312,7 @@
           return false;
         }
     });
-    
+
     $('.modal-content').click(function() {
         $('#clientUsernameError').text('');
     });

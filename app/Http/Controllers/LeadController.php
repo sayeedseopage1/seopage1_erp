@@ -907,7 +907,7 @@ class LeadController extends AccountBaseController
     }
     public function storeLead(Request $request)
     {
-        dd($request);
+//        dd($request->all());
         $request->validate([
             'client_name' => 'required|max:255',
             'project_id'=>'required|unique:leads,project_id,'.$request->project_id,
@@ -986,6 +986,7 @@ class LeadController extends AccountBaseController
         $lead->bid_value= $request->bid_value;
         $lead->bid_value2= $request->bid_value2;
         $lead->country= $request->country;
+        $lead->project_type= $request->project_type;
         $lead->note= $request->description;
         $lead->status_id= 1;
         $lead->currency_id= 1;
@@ -1044,6 +1045,7 @@ class LeadController extends AccountBaseController
       $lead->bid_value= $request->bid_value;
       $lead->bid_value2= $request->bid_value2;
       $lead->country= $request->country;
+      $lead->project_type= $request->project_type;
       $lead->note= $request->description;
       $lead->cover_letter= $request->cover_letter;
       $lead->status_id= $request->status;
