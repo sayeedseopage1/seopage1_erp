@@ -10,7 +10,6 @@ const JqueryDateRangePicker = ({
     setEndDate,
     defaultSelectedType = "monthly" 
 }) => {
-
     const handleTimePicker = () => {
         if(window.$){
             let $ = window.$;

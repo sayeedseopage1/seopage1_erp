@@ -437,6 +437,61 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 </script>
 
+@if($project->deal->project_type == 'hourly')
+<script type="text/javascript">
+    $(document).ready(function() {
+        
+        $('.complete_milestone').click(function(e) {
+        var id = $(this).data('row-id');
+        alert(id);
+        // var url = "{{ route('milestones.destroy', ':id') }}";
+        // url = url.replace(':id', id);
+
+        var token = "{{ csrf_token() }}";
+            e.preventDefault();
+            Swal.fire({
+            title: "Will you work more hours on this project after this?",
+            //text: "Will you work more hours on this project after this?",
+            icon: 'warning',
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: "@lang('app.yes')",
+            cancelButtonText: "@lang('app.no')",
+            customClass: {
+                confirmButton: 'btn btn-primary mr-3',
+                cancelButton: 'btn btn-secondary'
+            },
+            showClass: {
+                popup: 'swal2-noanimation',
+                backdrop: 'swal2-noanimation'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // $.easyAjax({
+                //     type: 'POST',
+                //     url: url,
+                //     data: {
+                //         '_token': token,
+                //         '_method': 'POST'
+                //     },
+                //     success: function(response) {
+                //         if (response.status == "success") {
+                        
+                //         }
+                //     }
+                // });
+            //    / $(this).closest("form").submit();
+            }else {
+                $(this).closest("form").submit();
+            }
+        });
+        })
+    })
+</script>
+
+
+@else
 <script type="text/javascript">
     $(document).ready(function() {
         $('.complete_milestone').click(function(e) {
@@ -466,6 +521,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
         })
     })
 </script>
+@endif
 <script type="text/javascript">
   $(document).ready(function() {
       $('.cancel_milestone').click(function(e) {

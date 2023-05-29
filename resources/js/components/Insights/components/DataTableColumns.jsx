@@ -4,6 +4,7 @@ import { useUsers } from "../hooks/useUsers";
 import { stage } from "../utils/constants";
 import { Link } from "react-router-dom";
 import ContributionDetails from "./ContributionDetails";
+import WonAmountDetails from "./WonAmountDetails";
 
 
 
@@ -194,18 +195,8 @@ export const WonTableData = [
         header: "Actual Amount",
         id: "amount",
         accessor: 'amount',
-        cell: (row) => {
-            const amount = row['amount'];
-
-            return (amount !== undefined) ?
-                <span style={{fontWeight: 'bold'}}>
-                    {row['tracking_type'] === 'count' ? 
-                            amount > 1 ? '1.00' : Number(amount).toFixed(2)
-                    : `$ ${Number(amount).toFixed(2)}`     
-                }
-                </span>
-                : <span> - </span>
-        }
+        cell: (row) =>  <WonAmountDetails row={row} />
+         
     },
 
     {

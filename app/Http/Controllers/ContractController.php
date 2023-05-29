@@ -952,6 +952,11 @@ class ContractController extends AccountBaseController
         ]);
         //dd("hello");
         $project_milestone= Project::where('deal_id',$request->id)->first();
+        $won_deal_id= Deal::where('id',$request->id)->first();
+        if($won_deal_id->project_type != 'hourly')
+        {
+
+       
         $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
         if ($milestone == null) {
             return response()->json([
@@ -963,6 +968,7 @@ class ContractController extends AccountBaseController
                 ]
             ], 422);
         }
+    }
         DB::beginTransaction();
 
         try {
@@ -1013,6 +1019,32 @@ class ContractController extends AccountBaseController
             $project->due = $deal->amount;
             $project->currency_id = 1;
             $project->save();
+            if($deal->project_type == 'hourly')
+            {
+                // dd("true");
+                $milestone= new ProjectMilestone();
+                $milestone->project_id= $project->id;
+                
+                $milestone->currency_id = 1;
+                $milestone->milestone_title= $project->project_name . '- InitialMilestone';
+               
+                $milestone->original_currency_id= $deal->original_currency_id;
+                $milestone->cost= 0;
+               
+                $milestone->actual_cost= 0;
+                 
+                $milestone->invoice_created= 0;
+                $milestone->status= 'incomplete';
+                $milestone->added_by= Auth::id();
+                $milestone->last_updated_by= Auth::id();
+                $milestone->milestone_type= 'Client Created this Milestone';
+                //dd($milestone->actual_cost,$milestone->invoice_created,$milestone->status,$milestone->added_by,$milestone->last_updated_by, $milestone->milestone_type);
+
+                $milestone->save();
+              //  dd($milestone);
+    
+
+            }
 
 
             //for testing purpose
@@ -1170,7 +1202,7 @@ class ContractController extends AccountBaseController
             $project_admin_update->added_by= $project_id->pm_id;
             $project_admin_update->project_admin= $project_id->pm_id;
             $project_admin_update->save();
-
+            
             $user= User::where('id',$deal_pm_id->pm_id)->first();
             $this->triggerPusher('notification-channel', 'notification', [
                 'user_id' => $user->id,
@@ -1282,6 +1314,12 @@ class ContractController extends AccountBaseController
         $project_milestone= Project::where('deal_id',$request->id)->first();
         $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
 //      dd($milestone);
+        $won_deal_id= Deal::where('id',$request->id)->first();
+        if($won_deal_id->project_type != 'hourly')
+        {
+
+
+        $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
         if ($milestone == null) {
             return response()->json([
                 "message" => "The given data was invalid.",
@@ -1291,7 +1329,9 @@ class ContractController extends AccountBaseController
                     ]
                 ]
             ], 422);
-        } else {
+        }
+        }
+         
             DB::beginTransaction();
 
             try {
@@ -1343,6 +1383,32 @@ class ContractController extends AccountBaseController
                 $project->due = $deal->amount;
                 $project->currency_id = 1;
                 $project->save();
+                if($deal->project_type == 'hourly')
+            {
+                // dd("true");
+                $milestone= new ProjectMilestone();
+                $milestone->project_id= $project->id;
+                
+                $milestone->currency_id = 1;
+                $milestone->milestone_title= $project->project_name . '- InitialMilestone';
+               
+                $milestone->original_currency_id= $deal->original_currency_id;
+                $milestone->cost= 0;
+               
+                $milestone->actual_cost= 0;
+                 
+                $milestone->invoice_created= 0;
+                $milestone->status= 'incomplete';
+                $milestone->added_by= Auth::id();
+                $milestone->last_updated_by= Auth::id();
+                $milestone->milestone_type= 'Client Created this Milestone';
+                //dd($milestone->actual_cost,$milestone->invoice_created,$milestone->status,$milestone->added_by,$milestone->last_updated_by, $milestone->milestone_type);
+
+                $milestone->save();
+              //  dd($milestone);
+    
+
+            }
                 $contract_id = Contract::where('deal_id', $request->id)->first();
                 $contract = Contract::find($contract_id->id);
                 $contract->subject = $request->project_name;
@@ -1561,7 +1627,7 @@ class ContractController extends AccountBaseController
             }
 
             return response()->json(['message' => 'Deal Updated Successfully']);
-        }
+        
 
 
     }
