@@ -32,7 +32,7 @@ const IncentiveCurrent = () => {
         <div className="">
             <IncentivesFilterBar
                 setData={setData}
-                setTableDataIsFetching={setTableDataIsFetching}
+                setIsDataFetching={setTableDataIsFetching}
                 defaultSelectedDate={params.period || 'monthly'}
             />
             <div className='sp1_point_page_container'>
