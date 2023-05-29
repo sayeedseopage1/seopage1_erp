@@ -95,7 +95,12 @@ export const columns = [
 const RenderGroupHeader = () => {
     return(
         <div className="d-flex flex-column">
-            <div className="w-100 py-1 border-bottom text-center">
+            <div 
+                className="w-100 py-1 border-bottom text-center"
+                style={{
+                    background: '#F3F9FF'
+                }}
+            >
                 Notes 
             </div>
 
