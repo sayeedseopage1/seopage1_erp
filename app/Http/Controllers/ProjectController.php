@@ -4030,7 +4030,7 @@ class ProjectController extends AccountBaseController
         }
     }
 
-
+    }
 
     public function get_project_json($type = null)
     {
