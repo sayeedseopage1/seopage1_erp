@@ -46,7 +46,11 @@ const CashPoints = () => {
                                 accessor: 'activity',
                                 id: 'activity',
                                 cell: (row) => {
-                                    return <span>{row['activity']}</span>
+                                    let data = row['activity'];
+                                    if(data){
+                                        return <span dangerouslySetInnerHTML={{__html: data}} />
+                                    }
+                                    return <span> - </span>
                                 } 
                             },
                             {

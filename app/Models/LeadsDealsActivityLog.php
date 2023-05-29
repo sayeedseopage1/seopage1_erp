@@ -12,7 +12,7 @@ class LeadsDealsActivityLog extends BaseModel
 
     protected $table = 'leads_deals_activity_logs';
     
-    public function addedBy(): BelongsTo
+    public function addedBy()
     {
         return $this->belongsTo(User::class, 'created_by');
     }

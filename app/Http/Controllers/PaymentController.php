@@ -313,9 +313,11 @@ class PaymentController extends AccountBaseController
 
             $client= User::where('id',$project->client_id)->first();
             $pm= User::where('id',$project->pm_id)->first();
-            $kpi_settings = kpiSettingLoggedHour::all();
+            
                 $total_minutes = ProjectTimeLog::where('project_id', $project->id)->sum('total_minutes');
-                $kpi= kpiSetting::first();
+               
+                $kpi= kpiSetting::where('kpi_status','1')->first();
+                $kpi_settings = kpiSettingLoggedHour::where('kpi_id',$kpi->id)->get();
                 
                 //$total_minutes = 1500;
                 //$project->project_budget = 4000;
@@ -338,7 +340,7 @@ class PaymentController extends AccountBaseController
                                 $point= new CashPoint();
                                 $point->user_id= $lead->added_by;
                                 $point->project_id= $project->id;
-                                $point->activity= $user_name->name . ' created the bid';
+                                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. $project->client_name->name. '</a>Hours logged '.$value->logged_hours_sales_amount. '%';
                                 $point->gained_as = "Individual";
                                 $point->points= ($project_budget*$kpi->the_bidder)/100;
 
@@ -358,7 +360,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal_qualified->updated_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' made the deal qulaify deal';
+                            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. $project->client_name->name. '</a>Hours logged '.$value->logged_hours_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->qualify)/100;
 
@@ -377,7 +379,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal_short_code->updated_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' made the deal requirements defined';
+                            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. $project->client_name->name. '</a>Hours logged '.$value->logged_hours_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->requirements_defined)/100;
 
@@ -395,7 +397,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal_proposal->updated_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' created the proposal';
+                            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. $project->client_name->name. '</a>Hours logged '.$value->logged_hours_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->proposal_made)/100;
 
@@ -413,7 +415,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal_negotiation_started->updated_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' started negotiation started';
+                            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. $project->client_name->name. '</a>Hours logged '.$value->logged_hours_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->negotiation_started)/100;
 
@@ -433,7 +435,7 @@ class PaymentController extends AccountBaseController
                                 $point= new CashPoint();
                                 $point->user_id= $deal_milestone_breakdown->updated_by;
                                 $point->project_id= $project->id;
-                                $point->activity= $user_name->name . ' created the milestone breakdown';
+                                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. $project->client_name->name. '</a>Hours logged '.$value->logged_hours_sales_amount. '%';
                                 $point->gained_as = "Individual";
                                 $point->points= ($project_budget*$kpi->milestone_breakdown)/100;
 
@@ -452,7 +454,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal->added_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' closed the deal';
+                            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. $project->client_name->name. '</a>Hours logged '.$value->logged_hours_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->closed_deal)/100;
 
@@ -472,7 +474,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal->added_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. $project->client_name->name. '</a>Hours logged '.$value->logged_hours_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->contact_form)/100;
 
@@ -492,7 +494,7 @@ class PaymentController extends AccountBaseController
                                 $point= new CashPoint();
                                 $point->user_id= $team_lead->id;
                                 $point->project_id= $project->id;
-                                $point->activity= $user_name->name . ' authorizes the deal';
+                                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> authorizes the deal Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. $project->client_name->name. '</a>Hours logged '.$value->logged_hours_sales_amount. '%';
                                 $point->gained_as = "Individual";
                                 $point->points= ($project_budget*$kpi->authorized_by_leader)/100;
 
@@ -521,7 +523,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $lead->added_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' created the bid';
+                            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->id).'">'. $project->client_name->name. '</a>Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->the_bidder)/100;
 
@@ -541,7 +543,7 @@ class PaymentController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal_qualified->updated_by;
                         $point->project_id= $project->id;
-                        $point->activity= $user_name->name . ' made the deal qulaify deal';
+                        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->id).'">'. $project->client_name->name. '</a>Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                         $point->gained_as = "Individual";
                         $point->points= ($project_budget*$kpi->qualify)/100;
 
@@ -560,7 +562,7 @@ class PaymentController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal_short_code->updated_by;
                         $point->project_id= $project->id;
-                        $point->activity= $user_name->name . ' made the deal requirements defined';
+                        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->id).'">'. $project->client_name->name. '</a>Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                         $point->gained_as = "Individual";
                         $point->points= ($project_budget*$kpi->requirements_defined)/100;
 
@@ -578,7 +580,7 @@ class PaymentController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal_proposal->updated_by;
                         $point->project_id= $project->id;
-                        $point->activity= $user_name->name . ' created the proposal';
+                        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->id).'">'. $project->client_name->name. '</a>Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                         $point->gained_as = "Individual";
                         $point->points= ($project_budget*$kpi->proposal_made)/100;
 
@@ -596,7 +598,7 @@ class PaymentController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal_negotiation_started->updated_by;
                         $point->project_id= $project->id;
-                        $point->activity= $user_name->name . ' started negotiation started';
+                        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->id).'">'. $project->client_name->name. '</a>Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                         $point->gained_as = "Individual";
                         $point->points= ($project_budget*$kpi->negotiation_started)/100;
 
@@ -616,7 +618,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $deal_milestone_breakdown->updated_by;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' created the milestone breakdown';
+                            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->id).'">'. $project->client_name->name. '</a>Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->milestone_breakdown)/100;
 
@@ -635,7 +637,7 @@ class PaymentController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal->added_by;
                         $point->project_id= $project->id;
-                        $point->activity= $user_name->name . ' closed the deal';
+                        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->id).'">'. $project->client_name->name. '</a>Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                         $point->gained_as = "Individual";
                         $point->points= ($project_budget*$kpi->closed_deal)/100;
 
@@ -655,7 +657,7 @@ class PaymentController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal->added_by;
                         $point->project_id= $project->id;
-                        $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->id).'">'. $project->client_name->name. '</a>Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                         $point->gained_as = "Individual";
                         $point->points= ($project_budget*$kpi->contact_form)/100;
 
@@ -675,7 +677,7 @@ class PaymentController extends AccountBaseController
                             $point= new CashPoint();
                             $point->user_id= $team_lead->id;
                             $point->project_id= $project->id;
-                            $point->activity= $user_name->name . ' authorizes the deal';
+                            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> authorizes the deal Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->id).'">'. $project->client_name->name. '</a>Hours logged more than '.$kpi->logged_hours_above_sales_amount. '%';
                             $point->gained_as = "Individual";
                             $point->points= ($project_budget*$kpi->authorized_by_leader)/100;
 

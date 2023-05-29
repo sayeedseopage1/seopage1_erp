@@ -254,8 +254,9 @@ const CustomTooltip = ({
                         <Icon type='Goal' />
                         <span>Goal</span>
                         <span>{_.lowerCase(targetType) === 'value'  ? 
-                            `$${convertNumberToUnits(goal, 2)}` :
-                            convertNumberToUnits(goal, 2)}
+                            `$${convertNumberToUnits(goal, 2)}` : 
+                            entryType === 'Won' ? convertNumberToUnits(goal, 2) : 
+                            convertNumberToUnits(goal, 0)}
                         </span> 
                             
                     </div>
@@ -265,7 +266,9 @@ const CustomTooltip = ({
                         <span>{entry} {entryType}</span>
                         <span>{
                             _.lowerCase(targetType) === 'value'  
-                            ? `$${convertNumberToUnits(dealAdded, 2)}` : totalDeal
+                            ? `$${convertNumberToUnits(dealAdded, 2)}` :  
+                            entryType === 'Won' ? convertNumberToUnits(totalDeal, 2) : 
+                            convertNumberToUnits(totalDeal, 0)
                         }</span>
                     </div>
 
@@ -280,7 +283,8 @@ const CustomTooltip = ({
                         >{
                             _.lowerCase(targetType) === 'value' ?
                             `${difference < 0 ? '-' : ""} $${convertNumberToUnits(difference, 2)}` :
-                            convertNumberToUnits(difference, 2)
+                             entryType === 'Won' ? convertNumberToUnits(difference, 2) : 
+                                convertNumberToUnits(difference, 0)
                         }</span>
                     </div>
                 </div>
@@ -377,6 +381,7 @@ const CustomBar = (props) => {
                                 padding: '10px 0',
                             }}
                         >
+                            
                             {_.lowerCase(targetType) === 'value'  ?
                                 `$${convertNumberToUnits(actual, 2)}` :
                                 goalData?.goal?.entryType === 'Won' ? convertNumberToUnits(actual, 2) :

@@ -634,6 +634,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('project-notes', ProjectNoteController::class);
     Route::resource('projects', ProjectController::class);
 
+    Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
+
     /* PRODUCTS */
     Route::post('products/apply-quick-action', [ProductController::class, 'applyQuickAction'])->name('products.apply_quick_action');
     Route::post('products/remove-cart-item/{id}', [ProductController::class, 'removeCartItem'])->name('products.remove_cart_item');
@@ -889,6 +891,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('kpi-settings', KpiSettingController::class);
 //    Policy section
     Route::get('policy/next-month-policy',[PolicyController::class,'nextMonthPolicy'])->name('nextMonthPolicy');
+    Route::get('policy/show-month-policy/{id}',[PolicyController::class,'show_month_policy'])->name('show_month_policy');
     Route::resource('policy', PolicyController::class);
     //Incentives Settings
     Route::resource('incentive-settings',IncentiveSettingController::class);
@@ -1073,12 +1076,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('task-report', TaskReportController::class);
 
     Route::post('time-log-report-chart', [TimelogReportController::class, 'timelogChartData'])->name('time-log-report.chart');
-    Route::resource('time-log-report', TimelogReportController::class);
+    
     Route::get('time-log-report/{project_id}/{employee_id}', [TimelogReportController::class, 'show'])->where([
         'project_id' => '[0-9]+',
         'employee_id' => '[0-9]+',
     ]);
 
+    // Route::get('time-log-report/{any?}', [TimelogReportController::class, 'index'])->where('any', '.*');
+    Route::resource('time-log-report', TimelogReportController::class);
     Route::post('finance-report-chart', [FinanceReportController::class, 'financeChartData'])->name('finance-report.chart');
     Route::resource('finance-report', FinanceReportController::class);
 
@@ -1299,7 +1304,11 @@ Route::controller(DealController::class)->group(function(){
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
 
-Route::get('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
+Route::any('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
+
+Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
+
+
 
 Route::any('get-users', [InsightsController::class, 'getusers'])->name('get-users');
 Route::get('get-teams', [InsightsController::class, 'getteam'])->name('get-teams');
@@ -1327,4 +1336,7 @@ Route::get('/deals/get-data', [HomeController::class, 'deals_data'])->name('deal
 Route::get('deals/request/authorization/{data}', [ContractController::class, 'authorization_request'])->name('authorization_request');
 Route::post('/authorization/deal-details/', [ContractController::class, 'authorization_submit'])->name('authorization_submit');
 
+
+//Route::get('fix-database', [HomeController::class, 'fix_database'])->name('fix_database');
+Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
 

@@ -44,6 +44,8 @@ const Goal = () => {
     const day = new CompareDate();
     const [goalSummary, setGoalSummary] = React.useState(null); // store goal summary data here
     const [tableDeals, setTableDeals] = React.useState([]);
+    const {usersIsFetching} = useUsers();
+    const {isTeamsFetching} = useTeams();
 
     // custom filter by data
     const [selectedPeriod, setSelectedPeriod] = React.useState('Today');
@@ -506,7 +508,7 @@ const Goal = () => {
                     {/* details */}
                     <div className='cnx__ins_details'>
                         <div className='cnx__ins_details_col'>
-                            <Tooltip text="Assignee for">
+                            <Tooltip text="Assigned for">
                                 <div className='cnx__ins_details_item'>
                                     <i className='fa-regular fa-user' />
                                     <span>{goal?.name || goal?.team_name}</span>
@@ -528,7 +530,7 @@ const Goal = () => {
                             </Tooltip>
 
 
-                            <Tooltip text="Assignee by">
+                            <Tooltip text="Assigned by">
                                 <div className='cnx__ins_details_item'>
                                     <i className='fa-solid fa-user' />
                                     <span>{added_by?.name}</span>
@@ -752,18 +754,15 @@ const Goal = () => {
 
                         {
                             // activeTable === 'summary' && <GoalSummaryTable deals={dealsData} goal={goal} />
-<<<<<<< HEAD
+
+
                             activeTable === 'summary' &&
                             <GoalSummaryTable
                                 ref={dealTableRef}
                                 data={goalSummary}
                                 goal={goal}
-=======
-                            activeTable === 'summary' && 
-                            <GoalSummaryTable 
-                                ref={dealTableRef} 
-                                data={goalSummary} 
->>>>>>> 3b6595cde ('update_goal_table')
+
+
                                 isLoading={isSummarizing}
                             />
                         }

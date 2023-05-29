@@ -78,14 +78,34 @@
         .__point_field_add_btn_group{
             margin-bottom: 15px;
         }
+
+        .form_height {
+            height: 38px !important;
+        }
     </style>
 
 
     <x-setting-card>
         @if(Auth::user()->role_id == 1)
         <x-slot name="header">
-            <div class="s-b-n-header" id="tabs">
+            <div class="s-b-n-header row mx-0" id="tabs">
                 <a href="{{route('nextMonthPolicy')}}" class="btn btn-success my-3 ml-3"><i class="fa fa-plus mr-1" aria-hidden="true"></i>Add Next Month Policy</a>
+                <div class="align-self-center col-12 col-sm-3">
+                    <div class="form-group mb-0">
+                        <select class="form-control form_height" name="next_month_kpi" id="next_month_kpi">
+                            <option value="">Select month</option>
+                            @foreach($next_month_kpi as $value)
+                            <option value="{{$value->id}}">
+                                @php
+                                    $date = \Carbon\Carbon::parse($value->start_month);
+                                @endphp
+                                {{$date->format('F')}}  ({{$date->format('Y')}})
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                
                 <hr>
 {{--                <h2 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">--}}
 {{--                    @lang($pageTitle)</h2>--}}
@@ -194,17 +214,19 @@
                         <div class="point__col"> <input type="number" class="point__input" name="accepted_by_pm" id="accepted_by_pm" value="{{$kpi->accepted_by_pm}}" readonly> </div>
                         <div class="point__col"> %  </div>
                     </div>
+                    @foreach($kpi->logged_hours as $value)
                     <div class="point__row_wrapper_container">
                         <div class="point__row dynamicMore-field" id="dynamicMore-field-1">
                             <div class="point__col"> If the hourly rate of the project based on logged hours between </div>
-                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between" id="logged_hours_between" value="{{$kpi_setting_logged_hour->logged_hours_between}}" readonly>  </div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between" id="logged_hours_between" value="{{$value->logged_hours_between}}" readonly>  </div>
                             <div class="point__col"> To</div>
-                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between_to" id="logged_hours_between" value="{{$kpi_setting_logged_hour->logged_hours_between_to}}" readonly> </div>
+                            <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_between_to" id="logged_hours_between" value="{{$value->logged_hours_between_to}}" readonly> </div>
                             <div class="point__col"> shift will get</div>
-                            <div class="point__col"> <input type="number" class="point__input" name="logged_hours_sales_amount" id="logged_hours_sales_amount"  value="{{$kpi_setting_logged_hour->logged_hours_sales_amount}}" readonly> % </div>
+                            <div class="point__col"> <input type="number" class="point__input" name="logged_hours_sales_amount" id="logged_hours_sales_amount"  value="{{$value->logged_hours_sales_amount}}" readonly> % </div>
                             <div class="point__col"> of the sales amount.</div>
                         </div>
                     </div>
+                    @endforeach
                     <div class="point__row">
                         <div class="point__col"> If the hourly rate of the project based on logged hours above </div>
                         <div class="point__col"> $<input type="number" class="point__input" name="logged_hours_above" id="logged_hours_above" value="{{$kpi->logged_hours_above}}" readonly> , </div>
@@ -292,7 +314,7 @@
                         <div class="point__col">% less from the total incentive amount.</div>
                     </div>
                 </section>
-                <x-slot name="action">
+                {{-- <x-slot name="action">
                     <!-- Buttons Start -->
                     <div class="w-100 border-top-grey">
                         <x-setting-form-actions>
@@ -301,7 +323,7 @@
                             </x-settingsform-actions>
                     </div>
                     <!-- Buttons End -->
-                </x-slot>
+                </x-slot> --}}
             </form>
     </x-setting-card>
 
@@ -309,6 +331,17 @@
 @endsection
 
 @push('scripts')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#next_month_kpi').change(function() {
+            var selectedId = $(this).val();
+            if (selectedId) {
+                var redirectUrl = '{{route("show_month_policy", '')}}/' + selectedId;
+                window.location.href = redirectUrl;
+            }
+        });
+    })
+</script>
 
 {{--    <script>--}}
 {{--        $('#save-form').click(function(e){--}}

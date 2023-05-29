@@ -593,7 +593,7 @@ class InsightsController extends AccountBaseController
                     'pm.id as pm_id',
                     'pm.name as pm_name',
 
-                    'leads.added_by as bidder',
+                    DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                 ])
 
                 ->leftJoin('leads', 'leads.id', 'deals.lead_id')
@@ -668,15 +668,10 @@ class InsightsController extends AccountBaseController
                     $team_summation = DealStageChange::where('deal_id', $value->deal_id)->whereIn('updated_by', $member)->get();
 
                     if (in_array($value->added_by, $member)) {
-
-                    //$team_total_amount = $team_total_amount + $amount;
-
                         $value->team_total_amount = round($value->team_total_amount + $value->won_deal_amount, 2);
                     }
 
                     if (in_array($value->bidder, $member)) {
-
-                    //$team_total_amount = $team_total_amount + $amount;
                         $value->team_total_amount = round($value->team_total_amount + $value->bidder_amount, 2);
                     }
 
@@ -688,8 +683,9 @@ class InsightsController extends AccountBaseController
                     'deals.*',
                     'pm.id as pm_id',
                     'pm.name as pm_name',
+                    
 
-                    'leads.added_by as bidder',
+                    DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                 ])
                 ->leftJoin('leads', 'leads.id', 'deals.lead_id')
                 ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
@@ -701,7 +697,7 @@ class InsightsController extends AccountBaseController
                 }
                 $deals_data = $deals_data->where('deals.status', '!=','Denied')
                // ->whereIn('deals.added_by', $data2)
-                ->groupBy('client_id')
+                //->groupBy('client_id')
                 ->orderBy('deals.id', 'desc')
                 ->get();
 

@@ -58,7 +58,7 @@ class KpiDistribution extends Command
         $find_deal_id= Deal::where('id',$find_project_id->deal_id)->first();
         // dd($find_project_id);
        
-            $kpi= kpiSetting::first();
+        $kpi= kpiSetting::where('kpi_status','1')->first();
         //    / dd($kpi);
 
          
@@ -72,7 +72,7 @@ class KpiDistribution extends Command
                 $point= new CashPoint();
                 $point->user_id= $lead->added_by;
                 $point->project_id= $find_project_id->id;
-                $point->activity= $user_name->name . ' created the bid';
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
                 $point->gained_as = "Individual";
                 $point->points= ($project_budget*$kpi->the_bidder)/100;
 
@@ -85,6 +85,7 @@ class KpiDistribution extends Command
                     $point->total_points_earn=  ($project_budget*$kpi->the_bidder)/100;
 
                 }
+                $point->created_at= $find_project_id->created_at;
                 $point->save();
             }
                     $deal_qualified= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',1)->first();
@@ -95,7 +96,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_qualified->updated_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' made the deal qulaify deal';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget*$kpi->qualify)/100;
 
@@ -108,6 +109,7 @@ class KpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget*$kpi->qualify)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
                   
 
@@ -119,7 +121,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_short_code->updated_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' made the deal requirements defined';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget*$kpi->requirements_defined)/100;
 
@@ -132,6 +134,7 @@ class KpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget*$kpi->requirements_defined)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
                    
 
@@ -143,7 +146,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_proposal->updated_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' created the proposal';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget*$kpi->proposal_made)/100;
 
@@ -156,6 +159,7 @@ class KpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget*$kpi->proposal_made)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
                    
 
@@ -166,7 +170,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_negotiation_started->updated_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' started negotiation started';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget*$kpi->negotiation_started)/100;
 
@@ -179,6 +183,7 @@ class KpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget*$kpi->negotiation_started)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
 
                   
@@ -193,7 +198,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_milestone_breakdown->updated_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' created the milestone breakdown';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget*$kpi->milestone_breakdown)/100;
 
@@ -207,6 +212,7 @@ class KpiDistribution extends Command
                         ($project_budget*$kpi->milestone_breakdown)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
 
 
@@ -220,7 +226,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_id->added_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' closed the deal';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget*$kpi->closed_deal)/100;
 
@@ -242,7 +248,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_id_contact->added_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget*$kpi->contact_form)/100;
 
@@ -256,6 +262,7 @@ class KpiDistribution extends Command
                         ($project_budget*$kpi->contact_form)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
                     if ($find_deal_id->authorization_status == 1) {
                         $earned_point = ($kpi->authorized_by_leader * $project_budget) / 100;
@@ -266,7 +273,7 @@ class KpiDistribution extends Command
                      $point= new CashPoint();
                      $point->user_id= $user_name->id;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' for authorizing deal';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> for authorizing deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
                      $point->gained_as = "Individual";
                      $point->points= $earned_point;
              
@@ -275,7 +282,7 @@ class KpiDistribution extends Command
                      } else {
                          $point->total_points_earn= $earned_point;
                      }
-             
+                     $point->created_at= $find_project_id->created_at;
                      $point->save();
                      }
                    
@@ -284,7 +291,7 @@ class KpiDistribution extends Command
 
                     if ($find_deal_id->amount > $kpi->generate_single_deal) {
 
-                        $bonus_point= $kpi->bonus_point;
+                        $bonus_point= $kpi->bonus_point/9;
                         if($find_deal_id->lead_id != null)
              {
                  $lead = Lead::where('id',$find_deal_id->lead_id)->first();
@@ -293,19 +300,20 @@ class KpiDistribution extends Command
                  $point= new CashPoint();
                  $point->user_id= $lead->added_by;
                  $point->project_id= $find_project_id->id;
-                 $point->activity= $user_name->name . ' created the bid';
+                 $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                  $point->gained_as = "Individual";
-                 $point->points= ($bonus_point*$kpi->the_bidder)/100;
+                 $point->points= $bonus_point;
 
                  if ($cash_points != null) {
                 
-                     $point->total_points_earn= $cash_points->total_points_earn+ ($bonus_point*$kpi->the_bidder)/100;
+                     $point->total_points_earn= $cash_points->total_points_earn+ $bonus_point;
 
                  }else 
                  {
-                     $point->total_points_earn=  ($bonus_point*$kpi->the_bidder)/100;
+                     $point->total_points_earn=  $bonus_point;
 
                  }
+                 $point->created_at= $find_project_id->created_at;
                  $point->save();
                 // dd($point);
 
@@ -318,19 +326,20 @@ class KpiDistribution extends Command
                      $point= new CashPoint();
                      $point->user_id= $deal_qualified->updated_by;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' made the deal qulaify deal';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($bonus_point*$kpi->qualify)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_qualified != null) {
                     
-                         $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($bonus_point*$kpi->qualify)/100;
+                         $point->total_points_earn= $cash_points_qualified->total_points_earn+ $bonus_point;
 
                      }else 
                      {
-                         $point->total_points_earn=  ($bonus_point*$kpi->qualify)/100;
+                         $point->total_points_earn=  $bonus_point;
 
                      }
+                     $point->created_at= $find_project_id->created_at;
                      $point->save();
                    
 
@@ -342,19 +351,20 @@ class KpiDistribution extends Command
                      $point= new CashPoint();
                      $point->user_id= $deal_short_code->updated_by;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' made the deal requirements defined';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($bonus_point*$kpi->requirements_defined)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_requirements_defined != null) {
                     
-                         $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($bonus_point*$kpi->requirements_defined)/100;
+                         $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ $bonus_point;
 
                      }else 
                      {
-                         $point->total_points_earn=  ($bonus_point*$kpi->requirements_defined)/100;
+                         $point->total_points_earn=  $bonus_point;
 
                      }
+                     $point->created_at= $find_project_id->created_at;
                      $point->save();
                     
 
@@ -366,19 +376,20 @@ class KpiDistribution extends Command
                      $point= new CashPoint();
                      $point->user_id= $deal_proposal->updated_by;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' created the proposal';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($bonus_point*$kpi->proposal_made)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_proposal_made != null) {
                     
-                         $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($bonus_point*$kpi->proposal_made)/100;
+                         $point->total_points_earn= $cash_points_proposal_made->total_points_earn+$bonus_point;
 
                      }else 
                      {
-                         $point->total_points_earn=  ($bonus_point*$kpi->proposal_made)/100;
+                         $point->total_points_earn=  $bonus_point;
 
                      }
+                     $point->created_at= $find_project_id->created_at;
                      $point->save();
                     
 
@@ -389,19 +400,20 @@ class KpiDistribution extends Command
                      $point= new CashPoint();
                      $point->user_id= $deal_negotiation_started->updated_by;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' started negotiation started';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($bonus_point*$kpi->negotiation_started)/100;
+                     $point->points=$bonus_point;
 
                      if ($cash_points_negotiation_started != null) {
                     
-                         $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($bonus_point*$kpi->negotiation_started)/100;
+                         $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ $bonus_point;
 
                      }else 
                      {
-                         $point->total_points_earn=  ($bonus_point*$kpi->negotiation_started)/100;
+                         $point->total_points_earn=  $bonus_point;
 
                      }
+                     $point->created_at= $find_project_id->created_at;
                      $point->save();
                     
                 
@@ -414,20 +426,21 @@ class KpiDistribution extends Command
                         $point= new CashPoint();
                         $point->user_id= $deal_milestone_breakdown->updated_by;
                         $point->project_id= $find_project_id->id;
-                        $point->activity= $user_name->name . ' created the milestone breakdown';
+                        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                         $point->gained_as = "Individual";
-                        $point->points= ($bonus_point*$kpi->milestone_breakdown)/100;
+                        $point->points= $bonus_point;
 
                         if ($cash_points_milestone_breakdown != null) {
                        
-                            $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($bonus_point*$kpi->milestone_breakdown)/100;
+                            $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ $bonus_point;
 
                         }else 
                         {
                             $point->total_points_earn=
-                            ($bonus_point*$kpi->milestone_breakdown)/100;
+                            $bonus_point;
 
                         }
+                        $point->created_at= $find_project_id->created_at;
                         $point->save();
 
 
@@ -440,18 +453,18 @@ class KpiDistribution extends Command
                      $point= new CashPoint();
                      $point->user_id= $deal_id->added_by;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' closed the deal';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($project_budget*$kpi->closed_deal)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_close_deal != null) {
                     
-                         $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget*$kpi->closed_deal)/100;
+                         $point->total_points_earn= $cash_points_close_deal->total_points_earn+ $bonus_point;
 
                      }else 
                      {
                          $point->total_points_earn=
-                         ($project_budget*$kpi->closed_deal)/100;
+                         $bonus_point;
 
                      }
                      $point->save();
@@ -462,43 +475,45 @@ class KpiDistribution extends Command
                      $point= new CashPoint();
                      $point->user_id= $deal_id_contact->added_by;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
-                     $point->points= ($project_budget*$kpi->contact_form)/100;
+                     $point->points= $bonus_point;
 
                      if ($cash_points_contact != null) {
                     
-                         $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
+                         $point->total_points_earn= $cash_points_contact->total_points_earn+ $bonus_point;
 
                      }else 
                      {
                          $point->total_points_earn=
-                         ($project_budget*$kpi->contact_form)/100;
+                         $bonus_point;
 
                      }
+                     $point->created_at= $find_project_id->created_at;
                      $point->save();
 
-                     if ($find_deal_id->authorization_status == 1) {
-                        $earned_point = ($kpi->authorized_by_leader * $find_deal_id->amount) / 100;
+                    //  if ($find_deal_id->authorization_status == 1) {
+                    //     $earned_point = ($kpi->authorized_by_leader * $find_deal_id->amount) / 100;
 
-                     $user_name= User::where('role_id',8)->first(); 
-                     $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                     //kpi point
-                     $point= new CashPoint();
-                     $point->user_id= $user_name->id;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' for authorizing deal';
-                     $point->gained_as = "Individual";
-                     $point->points= $earned_point;
+                    //  $user_name= User::where('role_id',8)->first(); 
+                    //  $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                    //  //kpi point
+                    //  $point= new CashPoint();
+                    //  $point->user_id= $user_name->id;
+                    //  $point->project_id= $find_project_id->id;
+                    //  $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> for authorizing deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                    //  $point->gained_as = "Individual";
+                    //  $point->points= $earned_point;
              
-                     if ($cash_points_team_lead != null) {            
-                         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point;
-                     } else {
-                         $point->total_points_earn= $earned_point;
-                     }
+                    //  if ($cash_points_team_lead != null) {            
+                    //      $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point;
+                    //  } else {
+                    //      $point->total_points_earn= $earned_point;
+                    //  }
+                    //  $point->created_at= $find_project_id->created_at;
              
-                     $point->save();
-                     }
+                    //  $point->save();
+                    //  }
 
                     
                     
@@ -507,65 +522,12 @@ class KpiDistribution extends Command
                     
                      }
                      $currentMonth = Carbon::now()->month;
-                    // / dd($currentMonth);
-                  $monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
-                    //$monthly_deal = 20000;
-
-                     $kpi_settings= kpiSettingGenerateSale::all();
-                    // dd($kpi_settings);
-                     $user_name= User::where('role_id',8)->first(); 
-                     $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                     foreach ($kpi_settings as $value) {
-                        // /dd($value);
-                        if ( $monthly_deal >= $value->generate_sales_from  &&  $monthly_deal <= $value->generate_sales_to ) {
-
-                     $point= new CashPoint();
-                     $point->user_id= $user_name->id;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' for achieving monthly target';
-                     $point->gained_as = "Individual";
-                     $point->points= ($project_budget*$value->generate_sales_amount)/100;
-
-                     if ($cash_points_team_lead != null) {
+    // / dd($currentMonth);
+  $monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
                     
-                         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($project_budget*$value->generate_sales_amount)/100;
-
-                     }else 
-                     {
-                         $point->total_points_earn=
-                         ($project_budget*$value->generate_sales_amount)/100;
-
-                     }
-                     $point->save();
-                            
-                        }
-                     }
-                     if ($monthly_deal > $kpi->generate_sales_above)
-                {
-                        $user_name= User::where('role_id',8)->first(); 
-                        $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                        $point= new CashPoint();
-                     $point->user_id= $user_name->id;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= $user_name->name . ' for achieving monthly target';
-                     $point->gained_as = "Individual";
-                     $point->points= ($project_budget*$kpi->generate_sales_above_point)/100;
-
-                     if ($cash_points_team_lead != null) {
-                    
-                         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($project_budget*$kpi->generate_sales_above_point)/100;
-
-                     }else 
-                     {
-                         $point->total_points_earn=
-                         ($project_budget*$kpi->generate_sales_above_point)/100;
-
-                     }
-                     $point->save();
-                     }
                      if ($monthly_deal > $kpi->after && $monthly_deal >= $monthly_deal+ $kpi->additional_sales_amount ) {
 
-                        $project_budget_additional= $kpi->after_reach_amount;
+                        $project_budget_additional= $kpi->additional_sales_amount;
                        
             if($find_deal_id->lead_id != null)
             {
@@ -575,7 +537,7 @@ class KpiDistribution extends Command
                 $point= new CashPoint();
                 $point->user_id= $lead->added_by;
                 $point->project_id= $find_project_id->id;
-                $point->activity= $user_name->name . ' created the bid';
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
                 $point->gained_as = "Individual";
                 $point->points= ($project_budget_additional*$kpi->the_bidder)/100;
 
@@ -588,6 +550,7 @@ class KpiDistribution extends Command
                     $point->total_points_earn=  ($project_budget_additional*$kpi->the_bidder)/100;
 
                 }
+                $point->created_at= $find_project_id->created_at;
                 $point->save();
                // dd($point);
 
@@ -600,7 +563,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_qualified->updated_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' made the deal qulaify deal';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget_additional*$kpi->qualify)/100;
 
@@ -613,6 +576,7 @@ class KpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget_additional*$kpi->qualify)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
                   
 
@@ -624,7 +588,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_short_code->updated_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' made the deal requirements defined';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget_additional*$kpi->requirements_defined)/100;
 
@@ -637,6 +601,7 @@ class KpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget_additional*$kpi->requirements_defined)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
                    
 
@@ -648,7 +613,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_proposal->updated_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' created the proposal';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget_additional*$kpi->proposal_made)/100;
 
@@ -661,6 +626,7 @@ class KpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget_additional*$kpi->proposal_made)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
                    
 
@@ -671,7 +637,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_negotiation_started->updated_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' started negotiation started';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget_additional*$kpi->negotiation_started)/100;
 
@@ -684,6 +650,7 @@ class KpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget_additional*$kpi->negotiation_started)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
 
                   
@@ -698,7 +665,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_milestone_breakdown->updated_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' created the milestone breakdown';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget_additional*$kpi->milestone_breakdown)/100;
 
@@ -712,6 +679,7 @@ class KpiDistribution extends Command
                         ($project_budget_additional*$kpi->milestone_breakdown)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
 
 
@@ -725,7 +693,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_id->added_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' closed the deal';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget_additional*$kpi->closed_deal)/100;
 
@@ -739,6 +707,7 @@ class KpiDistribution extends Command
                         ($project_budget_additional*$kpi->closed_deal)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
                     $deal_id_contact= Deal::where('id',$find_deal_id->id)->first();
                     $user_name= User::where('id',$deal_id_contact->added_by)->first(); 
@@ -747,7 +716,7 @@ class KpiDistribution extends Command
                     $point= new CashPoint();
                     $point->user_id= $deal_id_contact->added_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= $user_name->name . ' submitted the contact form for the project manager';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget_additional*$kpi->contact_form)/100;
 
@@ -761,6 +730,7 @@ class KpiDistribution extends Command
                         ($project_budget_additional*$kpi->contact_form)/100;
 
                     }
+                    $point->created_at= $find_project_id->created_at;
                     $point->save();
 
                        
@@ -772,6 +742,70 @@ class KpiDistribution extends Command
             
         
     }
+    
+    $currentMonth = Carbon::now()->month;
+    // dd($currentMonth);
+  $monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
+    //$monthly_deal = 20000;
+    //dd($monthly_deal);
+
+     $kpi_settings= kpiSettingGenerateSale::all();
+    // dd($kpi_settings);
+     $user_name= User::where('role_id',8)->first(); 
+     $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+     foreach ($kpi_settings as $value) {
+        // /dd($value);
+        if ( $monthly_deal >= $value->generate_sales_from  &&  $monthly_deal <= $value->generate_sales_to ) {
+        $budget= $value->generate_sales_to - $value->generate_sales_from;
+
+     $point= new CashPoint();
+     $point->user_id= $user_name->id;
+    // / $point->project_id= $find_project_id->id;
+     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> for achieving monthly target from $'.$value->generate_sales_from.' to $'.$value->generate_sales_to;
+     $point->gained_as = "Individual";
+     $point->points= ($budget*$value->generate_sales_amount)/100;
+
+     if ($cash_points_team_lead != null) {
+    
+         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($budget*$value->generate_sales_amount)/100;
+
+     }else 
+     {
+         $point->total_points_earn=
+         ($budget*$value->generate_sales_amount)/100;
+
+     }
+    // $point->created_at= $find_project_id->created_at;
+     $point->save();
+            
+        }
+     }
+     $last_value= kpiSettingGenerateSale::where('kpi_id',$kpi->id)->orderBy('id','desc')->first();
+     $budget= $kpi->generate_sales_above -$last_value->generate_sales_from;
+     if ($monthly_deal > $kpi->generate_sales_above)
+{
+        $user_name= User::where('role_id',8)->first(); 
+        $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+        $point= new CashPoint();
+     $point->user_id= $user_name->id;
+    // $point->project_id= $find_project_id->id;
+     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> for achieving monthly target above $'.$kpi->generate_sales_above;
+     $point->gained_as = "Individual";
+     $point->points= ($budget*$kpi->generate_sales_above_point)/100;
+
+     if ($cash_points_team_lead != null) {
+    
+         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($budget*$kpi->generate_sales_above_point)/100;
+
+     }else 
+     {
+         $point->total_points_earn=
+         ($budget*$kpi->generate_sales_above_point)/100;
+
+     }
+    // / $point->created_at= $find_project_id->created_at;
+     $point->save();
+     }
     
 
     

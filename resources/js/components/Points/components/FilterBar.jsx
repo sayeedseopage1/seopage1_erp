@@ -602,6 +602,11 @@ const PointPageFilterBar = ({ setData, setPointTableDataIsLoading }) => {
 
     }
 
+   // projects
+   const handleProjectFilter = (value) => {
+    
+   }
+
 
     // create responsive item 
 
@@ -618,90 +623,100 @@ const PointPageFilterBar = ({ setData, setPointTableDataIsLoading }) => {
                 />
             </PointPageFilterBarItem>
 
-            {/* shift */}
+            {
+                Number(window?.Laravel?.user?.role_id) === 1 ? (
+                    <>
+                        {/* shift */}
 
-            <FilterDropdownItem
-                title="Select Department"
-                selected={selectedDepartment}
-                isLoading={departmentDataIsLoading}
-                id="department"
-                items={departments}
-                inVisible={inVisible}
-                setInVisible={setInVisible}
-                onClick={handleDepartmentFilter}
-            />
-
-
-            {/* credit/debit */}
-            <FilterDropdownItem
-                title="Select Shift"
-                selected={shift}
-                isLoading={shiftDataIsLoading}
-                items={shifts}
-                id="shift"
-                inVisible={inVisible}
-                setInVisible={setInVisible}
-                onClick={handleShiftFilter}
-            />
+                        <FilterDropdownItem
+                            title="Select Department"
+                            selected={selectedDepartment}
+                            isLoading={departmentDataIsLoading}
+                            id="department"
+                            items={departments}
+                            inVisible={inVisible}
+                            setInVisible={setInVisible}
+                            onClick={handleDepartmentFilter}
+                        />
 
 
-            {/* credit/debit */}
-            <FilterDropdownItem
-                title="Select Credit/Debit"
-                selected={creditOrDebit}
-                items={[
-                    { id: 'earn', name: 'Point Earned' },
-                    // { id: 'lost', name: 'Point Lost' }
-                ]}
-                id="creditOrDebit"
-                inVisible={inVisible}
-                setInVisible={setInVisible}
-                onClick={setCreditOrDebit}
-            />
+                        {/* credit/debit */}
+                        <FilterDropdownItem
+                            title="Select Shift"
+                            selected={shift}
+                            isLoading={shiftDataIsLoading}
+                            items={shifts}
+                            id="shift"
+                            inVisible={inVisible}
+                            setInVisible={setInVisible}
+                            onClick={handleShiftFilter}
+                        />
 
 
-            {/* credit/debit */}
-            <FilterDropdownItem
-                title="Points gained as"
-                selected={pointGainedAs}
-                id="pointGainedAs"
-                inVisible={inVisible}
-                setInVisible={setInVisible}
-                items={[
-                    {
-                        id: 'individual',
-                        name: 'Individual'
-                    }
-                ]}
-                onClick={setPointGainedAs}
-            />
+                        {/* credit/debit */}
+                        <FilterDropdownItem
+                            title="Select Credit/Debit"
+                            selected={creditOrDebit}
+                            items={[
+                                { id: 'earn', name: 'Point Earned' },
+                                // { id: 'lost', name: 'Point Lost' }
+                            ]}
+                            id="creditOrDebit"
+                            inVisible={inVisible}
+                            setInVisible={setInVisible}
+                            onClick={setCreditOrDebit}
+                        />
 
 
-            {/* projects */}
-            <FilterDropdownItem
-                title="Select Project"
-                id="project"
-                selected={selectedProject}
-                isLoading={projectsDataIsLoading}
-                inVisible={inVisible}
-                setInVisible={setInVisible}
-                items={projects ? projects.map(project => ({ id: project.id, name: project.project_name })) : []}
-                onClick={setSelectedProject}
-            />
+                        {/* credit/debit */}
+                        <FilterDropdownItem
+                            title="Points gained as"
+                            selected={pointGainedAs}
+                            id="pointGainedAs"
+                            inVisible={inVisible}
+                            setInVisible={setInVisible}
+                            items={[
+                                {
+                                    id: 'individual',
+                                    name: 'Individual'
+                                }
+                            ]}
+                            onClick={setPointGainedAs}
+                        />
 
 
-            <FilterDropdownItem
-                title="Select Employee"
-                id="employee"
-                selected={selectedEmployee}
-                isLoading={employeeDataIsLoading}
-                items={employee}
-                inVisible={inVisible}
-                setInVisible={setInVisible}
-                avatar='image'
-                onClick={handleEmployeeFilter}
-            />
+                        {/* projects */}
+                        <FilterDropdownItem
+                            title="Select Project"
+                            id="project"
+                            selected={selectedProject}
+                            isLoading={projectsDataIsLoading}
+                            inVisible={inVisible}
+                            setInVisible={setInVisible}
+                            items={projects ? projects.map(project => ({ id: project.id, name: project.project_name })) : []}
+                            onClick={setSelectedProject}
+                        />
 
+
+                        <FilterDropdownItem
+                            title="Select Employee"
+                            id="employee"
+                            selected={selectedEmployee}
+                            isLoading={employeeDataIsLoading}
+                            items={employee}
+                            inVisible={inVisible}
+                            setInVisible={setInVisible}
+                            avatar='image'
+                            onClick={handleEmployeeFilter}
+                        />
+
+                    </>
+                ) : (
+                    <PointPageFilterBarItem className='border-right-0'>
+                        Showing Data for: <span className='font-weight-bold'>{window?.Laravel?.user?.name}</span>
+                    </PointPageFilterBarItem>
+                )
+            }
 
 
             <div className='sp1__pp_filter_sidebar_container'>
@@ -711,7 +726,7 @@ const PointPageFilterBar = ({ setData, setPointTableDataIsLoading }) => {
                 </div>
 
 
-                {isOpen && (
+                {Number(window?.Laravel?.user?.role_id) === 1 && isOpen && (
                     <div className='sp1__pp_filter_sidebar'>
                         <div className='sp1__pp_filter_sidebar_header'>
                             <span>Filters</span>

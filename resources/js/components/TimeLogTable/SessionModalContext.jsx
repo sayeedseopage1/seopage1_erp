@@ -1,5 +1,4 @@
-import * as React from "react";
+// import * as React from "react";
 
-export const SessionModalContext = React.createContext();
+// export const SessionModalContext = React.createContext();
 
-SessionModalContext;

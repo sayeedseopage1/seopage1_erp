@@ -18,12 +18,9 @@ import Goal from './pages/Goal';
 import {useDashboards} from './hooks/useDashboards';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useGoals } from './hooks/useGoals';
-import { useUsers } from './hooks/useUsers';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { useGetGoalsQuery } from './services/api/goalsApiSlice';
-import { useGetAllUsersQuery, useGetUsersQuery } from './services/api/userSliceApi';
 
 import NotPermission from './pages/NotPermission';
 import ExportDealTableDataPdf from './export/ExportDealTableDataPdf';
@@ -37,9 +34,8 @@ const InsightsComponent = () => {
   const {sectionModalOpen} = useSelector((state) => state.sectionModal);
   const {reportModalOpen} = useSelector((state) => state.reportModal);
   const {isOpenDataTable} = useSelector(state => state.dataTableModal);
-  const {goalsIsFetching} = useGoals();
   const [isLoadingPage, setIsLoadingPage] = React.useState(true);
-  const { data: users,} = useGetAllUsersQuery();
+  
 
 
   useEffect(() => {

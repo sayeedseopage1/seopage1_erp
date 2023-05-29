@@ -448,7 +448,7 @@ export const useGoals = () => {
         // fixed decimal place to 2 if not integer
         const fixedDecimalPlace = (_value) => {
             let value = Number(_value);
-            return parseInt(value) === value ? value : value.toFixed(1);
+            return parseInt(value) === value ? value : value.toFixed(2);
         }
 
         if (_deals.length > 0) {
@@ -464,7 +464,7 @@ export const useGoals = () => {
                 dealAdded = _deals.reduce((total, deal) => {
                     return total + Number(deal.team_total_amount);
                 }, 0);
-
+                
                 rowCount = _deals.filter(deal =>  Number(deal.team_total_amount) !== 0).length;
             }
 
@@ -538,9 +538,9 @@ export const useGoals = () => {
             //     difference = totalDeal - Number(period.value);
             // }
             
-            
             dealAdded = fixedDecimalPlace(dealAdded);
             // difference = fixedDecimalPlace(difference);
+            
             
         } else {
             totalDeal = 0;

@@ -3,6 +3,7 @@ import Tooltip from '../ui/Tooltip';
 import { useUsers } from "../hooks/useUsers";
 import { stage } from "../utils/constants";
 import { Link } from "react-router-dom";
+import ContributionDetails from "./ContributionDetails";
 
 
 
@@ -211,17 +212,7 @@ export const WonTableData = [
         header: "Contribution Amount",
         id: "team_total_amount",
         accessor: 'team_total_amount',
-        cell: (row) => {
-            const amount = row['team_total_amount'];
-
-            return (amount !== undefined) ?
-                <span style={{fontWeight: 'bold'}}>
-                    {row['tracking_type'] === 'count' ? 
-                         amount > 1 ? '1.00' : Number(amount).toFixed(2)
-                    : `$ ${Number(amount).toFixed(2)}`} 
-                </span>
-                : <span>  </span>
-        }
+        cell: (row) => <ContributionDetails row={row}/> 
     },
     {
         header: 'Deal Won By',
@@ -502,9 +493,9 @@ export const AddedTableColumns = [
 
 // owner cell
 const OwnerCell = ({id}) => {
-    const {users, getUserById} = useUsers(); 
-    const user = getUserById(users, Number(id));
-    if(!user) return <span> - </span>
+    const {users, usersIsFetching} = useUsers(); 
+    const user = users?.usersObjects && users?.usersObjects[id];
+    if(!user || usersIsFetching) return <span> - </span>
     return <a href={`/account/employees/${id}`} >
         <span> {user.name} </span>
     </a> 

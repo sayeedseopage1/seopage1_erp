@@ -88,8 +88,27 @@
         <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
             <h3 class="text-center  border-1 shadow-sm mx-auto p-3 rounded text-uppercase" style="width: fit-content;">Base Point Distribution</h3>
             <br>
-            <form id="save-kpi-settings" action="" method="PUT">
+            <form id="save-kpi-settings" action="" method="post">
                 @csrf
+                <div class="form-group row">
+                    <label for="inputPassword" class="col-sm-4 col-form-label">Select Months</label>
+                    <div class="col-sm-4 d-flex">
+                        <select class="form-control" name="start_month" id="start_month">
+                            <option>Select Month</option>
+                            @php
+                            $numberOfMonths = 12; // Number of next months to retrieve
+                            $currentMonth = \Carbon\Carbon::now();
+                            for ($i = 0; $i < $numberOfMonths; $i++) {
+                                $left_days = (int) \Carbon\Carbon::now()->endOfMonth()->format('d') - (int) $currentMonth->format('d');
+                                $nextMonth = $currentMonth->addMonth();
+                                echo '<option value="'.$nextMonth->startOfMonth()->format('Y-m-d').'">'.$nextMonth->format('F').'  ('.$nextMonth->format('Y').')</option>';
+                            }
+                            @endphp
+                        </select>
+                        
+                    </div>
+                </div>
+                <p id="already_exist_month" class="text-danger row mx-0"></p>
                 <div class="form-group row">
                     <label for="inputPassword" class="col-sm-4 col-form-label">1. The Bidder will get:</label>
                     <div class="col-sm-8 d-flex">
@@ -323,105 +342,115 @@
 
 @push('scripts')
 
-{{--    <script>--}}
-{{--        $('#save-form').click(function(e){--}}
-{{--            e.preventDefault();--}}
-{{--            // console.log(formData);--}}
-{{--            $('#save-form').attr("disabled", true);--}}
-{{--            $('#save-form').html("Processing...");--}}
-{{--            var sales_from = document.getElementsByName("generate_sales_from[]");--}}
-{{--            var sales_from_values = [];--}}
-{{--            for (var i = 0; i < sales_from.length; i++) {--}}
-{{--                sales_from_values.push(sales_from[i].value);--}}
-{{--            }--}}
-{{--            var sales_to = document.getElementsByName("generate_sales_to[]");--}}
-{{--            var sales_to_values = [];--}}
-{{--            for (var i = 0; i < sales_to.length; i++) {--}}
-{{--                sales_to_values.push(sales_to[i].value);--}}
-{{--            }--}}
-{{--            var sales_amount = document.getElementsByName("generate_sales_amount[]");--}}
-{{--            var sales_amount_values = [];--}}
-{{--            for (var i = 0; i < sales_amount.length; i++) {--}}
-{{--                sales_amount_values.push(sales_amount[i].value);--}}
-{{--            }--}}
-{{--            var logged_hours_between = document.getElementsByName("logged_hours_between[]");--}}
-{{--            var logged_hours_between_values = [];--}}
-{{--            for (var i = 0; i < logged_hours_between.length; i++) {--}}
-{{--                logged_hours_between_values.push(logged_hours_between[i].value);--}}
-{{--            }--}}
-{{--            var logged_hours_between_to = document.getElementsByName("logged_hours_between_to[]");--}}
-{{--            var logged_hours_between_to_values = [];--}}
-{{--            for (var i = 0; i < logged_hours_between_to.length; i++) {--}}
-{{--                logged_hours_between_to_values.push(logged_hours_between_to[i].value);--}}
-{{--            }--}}
-{{--            var logged_hours_sales_amount = document.getElementsByName("logged_hours_sales_amount[]");--}}
-{{--            var logged_hours_sales_amount_values = [];--}}
-{{--            for (var i = 0; i < logged_hours_sales_amount.length; i++) {--}}
-{{--                logged_hours_sales_amount_values.push(logged_hours_sales_amount[i].value);--}}
-{{--            }--}}
-{{--            var data= {--}}
-{{--                '_token': "{{ csrf_token() }}",--}}
-{{--                'the_bidder': document.getElementById("the_bidder").value,--}}
-{{--                'qualify': document.getElementById("qualify").value,--}}
-{{--                'requirements_defined': document.getElementById("requirements_defined").value,--}}
-{{--                'less_than': document.getElementById("less_than").value,--}}
-{{--                'less_than_get': document.getElementById("less_than_get").value,--}}
-{{--                'more_than': document.getElementById("more_than").value,--}}
-{{--                'more_than_get': document.getElementById("more_than_get").value,--}}
-{{--                'proposal_made': document.getElementById("proposal_made").value,--}}
-{{--                'negotiation_started': document.getElementById("negotiation_started").value,--}}
-{{--                'milestone_breakdown': document.getElementById("milestone_breakdown").value,--}}
-{{--                'closed_deal': document.getElementById("closed_deal").value,--}}
-{{--                'contact_form': document.getElementById("contact_form").value,--}}
-{{--                'authorized_by_leader': document.getElementById("authorized_by_leader").value,--}}
-{{--                'additional_sales_amount': document.getElementById("additional_sales_amount").value,--}}
-{{--                'client_type': document.getElementById("client_type").value,--}}
-{{--                'after': document.getElementById("after").value,--}}
-{{--                'after_reach_amount': document.getElementById("after_reach_amount").value,--}}
+<script>
+        $('#save-form').click(function(e){
+            e.preventDefault();
+            // console.log(formData);
+            $('#save-form').attr("disabled", true);
+            $('#save-form').html("Processing...");
+            var sales_from = document.getElementsByName("generate_sales_from[]");
+            var sales_from_values = [];
+            for (var i = 0; i < sales_from.length; i++) {
+                sales_from_values.push(sales_from[i].value);
+            }
+            var sales_to = document.getElementsByName("generate_sales_to[]");
+            var sales_to_values = [];
+            for (var i = 0; i < sales_to.length; i++) {
+                sales_to_values.push(sales_to[i].value);
+            }
+            var sales_amount = document.getElementsByName("generate_sales_amount[]");
+            var sales_amount_values = [];
+            for (var i = 0; i < sales_amount.length; i++) {
+                sales_amount_values.push(sales_amount[i].value);
+            }
+            var logged_hours_between = document.getElementsByName("logged_hours_between[]");
+            var logged_hours_between_values = [];
+            for (var i = 0; i < logged_hours_between.length; i++) {
+                logged_hours_between_values.push(logged_hours_between[i].value);
+            }
+            var logged_hours_between_to = document.getElementsByName("logged_hours_between_to[]");
+            var logged_hours_between_to_values = [];
+            for (var i = 0; i < logged_hours_between_to.length; i++) {
+                logged_hours_between_to_values.push(logged_hours_between_to[i].value);
+            }
+            var logged_hours_sales_amount = document.getElementsByName("logged_hours_sales_amount[]");
+            var logged_hours_sales_amount_values = [];
+            for (var i = 0; i < logged_hours_sales_amount.length; i++) {
+                logged_hours_sales_amount_values.push(logged_hours_sales_amount[i].value);
+            }
+            var data= {
+                '_token': "{{ csrf_token() }}",
+                'the_bidder': document.getElementById("the_bidder").value,
+                'qualify': document.getElementById("qualify").value,
+                'requirements_defined': document.getElementById("requirements_defined").value,
+                'less_than': document.getElementById("less_than").value,
+                'less_than_get': document.getElementById("less_than_get").value,
+                'more_than': document.getElementById("more_than").value,
+                'more_than_get': document.getElementById("more_than_get").value,
+                'proposal_made': document.getElementById("proposal_made").value,
+                'negotiation_started': document.getElementById("negotiation_started").value,
+                'milestone_breakdown': document.getElementById("milestone_breakdown").value,
+                'closed_deal': document.getElementById("closed_deal").value,
+                'contact_form': document.getElementById("contact_form").value,
+                'authorized_by_leader': document.getElementById("authorized_by_leader").value,
+                'additional_sales_amount': document.getElementById("additional_sales_amount").value,
+                'client_type': document.getElementById("client_type").value,
+                'after': document.getElementById("after").value,
+                'after_reach_amount': document.getElementById("after_reach_amount").value,
 
-{{--                'generate_single_deal': document.getElementById("generate_single_deal").value,--}}
-{{--                'bonus_point': document.getElementById("bonus_point").value,--}}
-{{--                'generate_sales_above': document.getElementById("generate_sales_above").value,--}}
-{{--                'generate_sales_above_point': document.getElementById("generate_sales_above_point").value,--}}
-{{--                'logged_hours_above': document.getElementById("logged_hours_above").value,--}}
-{{--                'logged_hours_above_sales_amount': document.getElementById("logged_hours_above_sales_amount").value,--}}
-{{--                'achieve_more_than': document.getElementById("achieve_more_than").value,--}}
-{{--                'achieve_less_than': document.getElementById("achieve_less_than").value,--}}
-{{--                'generate_sales_from': sales_from_values,--}}
-{{--                'generate_sales_to': sales_to_values,--}}
-{{--                'generate_sales_amount': sales_amount_values,--}}
-{{--                'logged_hours_between': logged_hours_between_values,--}}
-{{--                'logged_hours_between_to': logged_hours_between_to_values,--}}
-{{--                'logged_hours_sales_amount': logged_hours_sales_amount_values,--}}
-{{--                'accepted_by_pm': document.getElementById("accepted_by_pm").value,--}}
-{{--                'id':{{$kpi->id}},--}}
-{{--            }--}}
-{{--            // console.log(data);--}}
-{{--            $.ajaxSetup({--}}
-{{--                headers: {--}}
-{{--                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
-{{--                }--}}
-{{--            });--}}
-{{--            $.ajax({--}}
-{{--                type: "PUT",--}}
-{{--                url: "{{ route('kpi-settings.update',$kpi->id) }}",--}}
-{{--                data: data,--}}
-{{--                dataType: "json",--}}
-{{--                success: function (response) {--}}
-{{--                    $('#save-kpi-settings').trigger("reset");--}}
-{{--                    toastr.success('Kpi Update Successfully');--}}
-{{--                    window.location.reload();--}}
-{{--                    $('#save-form').attr("disabled", false);--}}
-{{--                    $('#save-form').html("Save");--}}
-{{--                },--}}
-{{--                error: function(error) {--}}
-{{--                    // console.log(response);--}}
-{{--                    $('#save-form').attr("disabled", false);--}}
-{{--                    $('#save-form').html("Save");--}}
-{{--                }--}}
-{{--            });--}}
-{{--        });--}}
-{{--    </script>--}}
+                'generate_single_deal': document.getElementById("generate_single_deal").value,
+                'bonus_point': document.getElementById("bonus_point").value,
+                'generate_sales_above': document.getElementById("generate_sales_above").value,
+                'generate_sales_above_point': document.getElementById("generate_sales_above_point").value,
+                'logged_hours_above': document.getElementById("logged_hours_above").value,
+                'logged_hours_above_sales_amount': document.getElementById("logged_hours_above_sales_amount").value,
+                'achieve_more_than': document.getElementById("achieve_more_than").value,
+                'achieve_less_than': document.getElementById("achieve_less_than").value,
+                'generate_sales_from': sales_from_values,
+                'generate_sales_to': sales_to_values,
+                'generate_sales_amount': sales_amount_values,
+                'logged_hours_between': logged_hours_between_values,
+                'logged_hours_between_to': logged_hours_between_to_values,
+                'logged_hours_sales_amount': logged_hours_sales_amount_values,
+                'accepted_by_pm': document.getElementById("accepted_by_pm").value,
+                'every_shift_every_point_above': document.getElementById("every_shift_every_point_above").value,
+                'individual_goal_percentage': document.getElementById("individual_goal_percentage").value,
+                'point_of_value': document.getElementById("point_of_value").value,
+                'incentive_deduction': document.getElementById("incentive_deduction").value,
+                'start_month': $('#start_month option:selected').val(),
+            }
+            // console.log(data);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{ route('kpi-settings.store') }}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+
+                    if (response.already_exist_month) {
+                        $('#already_exist_month').text('already exist goal of this month');
+                    } else {
+                        $('#save-kpi-settings').trigger("reset");
+                        toastr.success('Kpi Update Successfully');
+                        window.location.reload();
+                        $('#save-form').attr("disabled", false);
+                        $('#save-form').html("Save");
+                    }
+
+                },
+                error: function(error) {
+                    // console.log(response);
+                    $('#save-form').attr("disabled", false);
+                    $('#save-form').html("Save");
+                }
+            });
+        });
+    </script>
     <script>
         $(document).ready(function () {
             var buttonAdd = $("#add-button");
