@@ -55,6 +55,7 @@ class ProjectMilestoneController extends AccountBaseController
     }
     public function CompleteMilestone(Request $request)
     {
+//        dd($request->all());
         $milestone_id= ProjectMilestone::where('id',$request->id)->first();
         //dd($request);
         $milestone= ProjectMilestone::find($request->id);
@@ -77,25 +78,26 @@ class ProjectMilestoneController extends AccountBaseController
 
         //  dd($output);
 
-        return back()->with('success','Milestone Status Updated Successfully');
+//        return back()->with('success','Milestone Status Updated Successfully');
+        return response()->json(['status'=>200]);
     }
     public function createAutoMilestone(Request $request)
     {
-        dd($request);
+       // dd($request->all());
         $project=Project::where('id',$request->project_id)->first();
         $deal=Deal::where('id',$project->deal_id)->first();
         $milestone_count= ProjectMilestone::where('project_id',$request->project_id)->count();
         $milestone= new ProjectMilestone();
         $milestone->project_id= $project->id;
-        
+
         $milestone->currency_id = 1;
         $milestone->milestone_title= $project->project_name . '- Milestone('.$milestone_count+1 .')';
-       
+
         $milestone->original_currency_id= $deal->original_currency_id;
         $milestone->cost= 0;
-       
+
         $milestone->actual_cost= 0;
-         
+
         $milestone->invoice_created= 0;
         $milestone->status= 'incomplete';
         $milestone->added_by= Auth::id();
@@ -106,7 +108,8 @@ class ProjectMilestoneController extends AccountBaseController
         $milestone->save();
         // /$milestone_id= ProjectMilestone::where('id',$request->id)->first();
         //dd($request);
-        $milestone_update= ProjectMilestone::find($request->id);
+        $milestone_update= ProjectMilestone::find($request->milestone_id);
+//        dd($milestone_update);
         $milestone_update->status= "complete";
         $milestone_update->last_updated_by= Auth::id();
         $milestone_update->save();
@@ -126,7 +129,8 @@ class ProjectMilestoneController extends AccountBaseController
 
         //  dd($output);
 
-        return back()->with('success','Milestone Status Updated Successfully');
+//        return back()->with('success','Milestone Status Updated Successfully');
+        return response()->json(['status'=>200]);
     }
 
     /**
