@@ -13,19 +13,19 @@
                     </div>
                     <table class="table table-hover">
                         <thead>
-                        <tr>
+                        <tr class="text-center">
                             <th>#</th>
                             <th>Name</th>
                             <th>Action</th>
                         </tr>
                         </thead>
-                        @php
-                            $website_types = \App\Models\ProjectWebsiteType::all();
-                        @endphp
                         <tbody>
-                        @foreach($website_types as $key=>$website_type)
-                            <tr>
-                                <td>{{ $key + 1 }}</td>
+                        @php
+                            $key = $website_types->currentPage() * $website_types->perPage() - $website_types->perPage() + 1;
+                        @endphp
+                        @foreach($website_types as $website_type)
+                            <tr class="text-center">
+                                <td>{{ $key ++ }}</td>
                                 <td> {{$website_type->website_type}} </td>
                                 <td>
                                     <a href="" class="btn btn-primary update_website_type_form" data-toggle="modal" data-target="#editwebsitetypemodal" data-id="{{ $website_type->id }}" data-name="{{ $website_type->website_type }}">
@@ -36,10 +36,11 @@
                             </tr>
                         @endforeach
                         </tbody>
-                        @include('projects.modals.editwebsitetypemodal')
                     </table>
+                    <div class="row my-3 ml-3">{{ $website_types->links() }}</div>
                 </div>
             </div>
         </div>
     </div>
+    @include('projects.modals.editwebsitetypemodal')
 @endsection

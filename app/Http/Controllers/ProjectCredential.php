@@ -7,6 +7,7 @@ use App\Models\ProjectPortfolio;
 use App\Models\ProjectSubmission;
 use App\Models\QCSubmission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use function Doctrine\Common\Collections\Expr\visit;
 
 class ProjectCredential extends AccountBaseController
@@ -26,11 +27,11 @@ class ProjectCredential extends AccountBaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        $this->q_c_submission = QCSubmission::latest()->first();
-        $this->project_submission = ProjectSubmission::latest()->first();
-        $this->project_portfolio = ProjectPortfolio::latest()->first();
+        $this->q_c_submission = QCSubmission::where('project_id',$id)->first();
+        $this->project_submission = ProjectSubmission::where('project_id',$id)->first();
+        $this->project_portfolio = ProjectPortfolio::where('project_id',$id)->first();
         return view('project-credentials.index',$this->data);
     }
 

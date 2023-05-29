@@ -3489,6 +3489,7 @@ class ProjectController extends AccountBaseController
     }
     public function viewCms(){
         $this->pageTitle = 'CMS';
+        $this->all_cms =DB::table('project_cms')->orderBy('id','desc')->paginate(10);
         return view('projects.cms.index',$this->data);
     }
     public function storeCms(Request $request){
@@ -3513,6 +3514,7 @@ class ProjectController extends AccountBaseController
     // VIEW PROJECT WEBSITE SECTION
     public function viewWebsiteType(){
         $this->pageTitle = 'Website Type';
+        $this->website_types =DB::table('project_website_types')->orderBy('id','desc')->paginate(10);
         return view('projects.website-type.index',$this->data);
     }
     public function storeWebsiteType(Request $request){
@@ -3538,6 +3540,7 @@ class ProjectController extends AccountBaseController
     // VIEW PROJECT CATEGORY SECTION
     public function viewCategory(){
         $this->pageTitle = 'Categories';
+        $this->categories =ProjectNiche::with('parent','child')->paginate(10);
         return view('projects.category.index',$this->data);
     }
 
@@ -4000,6 +4003,33 @@ class ProjectController extends AccountBaseController
         return response()->json($sub_niches);
     }
 
+    public function filterSubcategories(Request $request)
+    {
+//        $categoryId = $request->category_id;
+        $search = $request->search;
+
+        $query = ProjectNiche::query();
+
+//        if (!empty($categoryId)) {
+//            $query->where('parent_category_id', $categoryId);
+//        }
+
+        if (!empty($search)) {
+            $query->where('category_name', 'like', '%' . $search . '%');
+        }
+
+        $categories = $query->orderBy('id', 'desc')->paginate(10);
+        foreach ($categories as $category) {
+            $category->parent_category_name = ProjectNiche::where('id',$category->parent_category_id)->first();
+        }
+
+        if ($categories->count() >= 1) {
+            return response()->json(['categories' => $categories]);
+        } else {
+            return response()->json(['status' => 400]);
+        }
+
+    }
 
     public function get_project_json($type = null)
     {
@@ -4023,5 +4053,6 @@ class ProjectController extends AccountBaseController
         }
         
         return response()->json($data);
+
     }
 }
