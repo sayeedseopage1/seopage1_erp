@@ -95,7 +95,7 @@
                         <div class="col-md-9">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <textarea name="business_information" id="business_information" cols="3" rows="1" class="form-control placeholderText" placeholder="Type what you want to see on your website"></textarea>
+                                    <textarea name="business_information" id="business_information" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!"></textarea>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -154,6 +154,15 @@
                                 <button type="button" id="add-blog-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
                                 <button type="button" id="remove-blog-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
                             </div>
+                        </div>
+                    </div>
+                    <!--Product Description-->
+                    <div class="row mt-3">
+                        <div class="col-md-3">
+                            <h6>How many blogs/articles do you need written?</h6>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" name="product_no" id="product_no" class="form-control placeholderText height-35 f-14" placeholder="Input the no. of products here!">
                         </div>
                     </div>
                     <!--Topics-->

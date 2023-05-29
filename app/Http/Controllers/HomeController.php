@@ -1388,4 +1388,14 @@ class HomeController extends Controller
         dd($request->all());
     }
 
+    public function productCategory(){
+        return view('service-type.product_category');
+    }
+    public function storeProductCategory(Request $request){
+        dd($request->all());
+    }
+    public function productBasicSeo(){
+        return view('service-type.basic_seo');
+    }
+
 }

@@ -37,13 +37,20 @@ class KpiSettingController extends AccountBaseController
      */
     public function index()
     {
-        $this->kpi = kpiSetting::first();
+        $this->kpi = kpiSetting::where('kpi_status','1')->first();
 
         return view('kpi-settings.index', $this->data);
     }
 
     public function store(Request $request)
     {
+        $kpi_setting = kpiSetting::where('start_month', $request->start_month)->first();
+        if ($kpi_setting) {
+            return response()->json([
+                'already_exist_month' => 'Already you have an existing goal of this month'
+            ]);
+        }
+
         $kpi_setting = new kpiSetting();
         $kpi_setting->the_bidder = $request->the_bidder;
         $kpi_setting->qualify = $request->qualify;

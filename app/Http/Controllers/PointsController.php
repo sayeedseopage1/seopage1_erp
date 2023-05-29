@@ -158,10 +158,10 @@ class PointsController extends AccountBaseController
         }
         if(Auth::user()->role_id == 1)
         {
-            $data = $data->orderBy('id', 'desc')->get();
+            $data = $data->orderBy('id', 'desc')->where('points','>',0)->orderBy('id', 'desc')->get();
         }elseif(Auth::user()->role_id == 8 ||Auth::user()->role_id == 7 )
         {
-            $data = $data->where('user_id',Auth::id())->orderBy('id', 'desc')->get();
+            $data = $data->where('user_id',Auth::id())->where('points','>',0)->orderBy('id', 'desc')->get();
 
         } 
         return response()->json($data);
@@ -204,6 +204,46 @@ class PointsController extends AccountBaseController
                 array_push($data['employee'], $item);
             }
         }
+        return response()->json($data);
+    }
+
+    public function get_all_search_bar_data()
+    {
+        $team = Team::all();
+        $data['department'] = $team;
+        $data['team'] = [];
+        $data['employee'] = [];
+
+        foreach ($team as $value) {
+            $seopage_team = Seopage1Team::where('department_id', $value->id)->get();
+
+            if ($seopage_team) {
+                foreach ($seopage_team as $key => $seoteam) {
+                    $item = [
+                        'id' => $seoteam->id,
+                        'team_name' => $seoteam->team_name,
+                        'department_id' => $value->id,
+                        'members' => $seoteam->members
+                    ];
+                    array_push($data['team'], $item);
+                }
+            }
+        }
+
+        $seopage_team = Seopage1Team::all();
+
+        foreach ($seopage_team as $key => $s_team) {
+            $members = explode(',', rtrim($s_team->members, ','));
+            foreach($members as $member) {
+                $item = [
+                    'user_id' => $member,
+                    'dept_id' => $s_team->id
+                ];
+
+                array_push($data['employee'], $item);
+            }
+        }
+        dd($data);
         return response()->json($data);
     }
 }

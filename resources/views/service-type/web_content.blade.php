@@ -89,17 +89,52 @@
                             <input type="text" name="website_name" id="website_name" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
                         </div>
                     </div>
-                    <div class="row mt-3">
-                        <div class="col-md-3">
-                            <h6>Business profile/Leaflet/Brochure/Any important information:</h6>
+                        <div class="row mt-3">
+                            <div class="col-md-3">
+                                <h6>Business profile/Leaflet/Brochure/Any important information:</h6>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <textarea name="business_information" id="business_information" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!"></textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Want to share file?</label>
+                                            <div class="mt-2 d-flex">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="share_file_info" value="1" id="yesBtn">
+                                                    <label class="form-check-label" for="yesBtn">
+                                                        Yes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check" style="margin-left: 10px;">
+                                                    <input class="form-check-input" type="radio" name="share_file_info" value="0" id="noBtn">
+                                                    <label class="form-check-label" for="noBtn">
+                                                        No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3" id="folderLinkForm" style="display: none;">
+                                        <div class="col-md-10 dynamic-folder-link" id="dynamic-folder-link-list-1">
+                                            <div class="row mb-3">
+                                                <div class="col-md-12">
+                                                    <input type="text" name="folder_link[]" id="folder_link" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 append-buttons">
+                                            <div class="clearfix">
+                                                <button type="button" id="add-folder-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                <button type="button" id="remove-folder-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-5">
-                            <textarea name="business_information" id="business_information" cols="3" rows="1" class="form-control placeholderText" placeholder="Type your bussiness information"></textarea>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" name="drive_link" id="drive_link" class="form-control placeholderText height-35 f-14" placeholder="Drive link here">
-                        </div>
-                    </div>
 
 
                     <div class="row mt-3">
@@ -256,19 +291,36 @@
                         <h5 class="text-center py-1">Buying Habits</h5>
                         <div class="col-md-3"></div>
                         <div class="col-md-9">
-                            <label for="">How does your client's target audience make purchasing decisions? Do they shop online ot in-store? What are their favorite brands?</label>
-                            <textarea name="buying_habit" id="buying_habit" rows="5" class="form-control"></textarea>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="">How does your client's target audience make purchasing decisions?</label>
+                                    <textarea name="buying_habit1" id="buying_habit1" rows="5" class="form-control"></textarea>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 20px;">
+                                    <label for="">Do they shop online or in-store?</label>
+                                    <textarea name="buying_habit2" id="buying_habit2" rows="5" class="form-control"></textarea>
+                                </div>
+                                <div class="col-md-4" style="margin-top: 20px;">
+                                    <label for="">What are their favorite brands?</label>
+                                    <textarea name="buying_habit3" id="buying_habit3" rows="5" class="form-control"></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <h5 class="text-center py-1">Thor Native Language</h5>
                         <div class="col-md-3"></div>
                         <div class="col-md-9">
-                            <label for="">What is their native language? (Developers need to give a dropdown of all the languages here and client should be able to write as well)</label>
-                            <textarea name="thor_native_language" id="thor_native_language" rows="5" class="form-control"></textarea>
+                            <label for="">What is their native language?</label>
+                            <select name="thor_native_language" id="thor_native_language" class="form-select height-35 f-14">
+                                <option value="">--</option>
+                                <option value="">1</option>
+                                <option value="">2</option>
+                                <option value="">3</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="col-12 text-center">
+                    <div class="col-12 text-center" style="margin-top: 50px;">
                         <button type="submit" class="btn btn-primary rounded-pill py-0 px-5" id="submitBtn1">Submit</button>
                     </div>
                 </form>
@@ -279,6 +331,11 @@
 <script src="{{asset('custom/client/js/jquery-3.5.1.min.js')}}"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script>
+    $(document).ready(function() {
+        $('#yesBtn').click(function() {
+            $('#folderLinkForm').toggle();
+        });
+    });
     $(document).ready(function() {
         $('#noBtn1').click(function() {
             $('#noForm').toggle();
@@ -381,7 +438,75 @@
         });
     });
 
+    $(document).ready(function () {
+        var buttonAdd = $("#add-folder-button");
+        var buttonRemove = $("#remove-folder-button");
+        var className = ".dynamic-folder-link";
+        var count = 0;
+        var field = "";
+        var maxFields = 50;
 
+        function totalFields() {
+            return $(className).length;
+        }
+
+        function addNewField() {
+            var total = $('input[name="folder_link[]"]').length;
+            count = totalFields() + 1;
+            field = $("#dynamic-folder-link-list-1").clone();
+            field.attr("id", "dynamic-folder-link-" + count);
+            field.find('input[name="folder_link[]"]').val("");
+            field.find('input[name="folder_link[]"]').attr("id", "folder_link_" + count);
+            $(className + ":last").after($(field));
+        }
+
+
+        function removeLastField() {
+            if (totalFields() > 1) {
+                $(className + ":last").remove();
+            }
+        }
+
+        function enableButtonRemove() {
+            if (totalFields() === 2) {
+                buttonRemove.removeAttr("disabled");
+                buttonRemove.addClass("shadow-sm");
+            }
+        }
+
+        function disableButtonRemove() {
+            if (totalFields() === 1) {
+                buttonRemove.attr("disabled", "disabled");
+                buttonRemove.removeClass("shadow-sm");
+            }
+        }
+
+        function disableButtonAdd() {
+            if (totalFields() === maxFields) {
+                buttonAdd.attr("disabled", "disabled");
+                buttonAdd.removeClass("shadow-sm");
+            }
+        }
+
+        function enableButtonAdd() {
+            if (totalFields() === maxFields - 1) {
+                buttonAdd.removeAttr("disabled");
+                buttonAdd.addClass("shadow-sm");
+            }
+        }
+
+        buttonAdd.click(function () {
+            addNewField();
+            enableButtonRemove();
+            disableButtonAdd();
+        });
+
+        buttonRemove.click(function () {
+            removeLastField();
+            disableButtonRemove();
+            enableButtonAdd();
+        });
+    });
     $(document).ready(function () {
         var buttonAdd = $("#add-button");
         var buttonRemove = $("#remove-button");

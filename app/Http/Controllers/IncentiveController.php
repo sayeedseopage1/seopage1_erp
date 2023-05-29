@@ -47,7 +47,6 @@ class IncentiveController extends AccountBaseController
             $userID = $request->user_id;
         }
 
-
         $user_goals = GoalSetting::where([
             'assigneeType' => 'User',
             'goalType' => 'minimum',

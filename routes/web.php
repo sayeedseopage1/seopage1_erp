@@ -180,7 +180,9 @@ use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProjectCredential;
 use App\Http\Controllers\IncentiveController;
 use App\Http\Controllers\PolicyController;
-
+use App\Http\Controllers\ReportCentralController;
+use App\Http\Controllers\MonthlyIncentiveController;
+use App\Http\Controllers\QualifiedSalesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -870,6 +872,24 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('invoices', InvoiceController::class);
 
 
+    //report-central
+    Route::get('report-central/performance-predefined-cycle',[ReportCentralController::class,'performancePredefinedCycle'])->name('performance_predefined_cycle');
+    Route::get('report-central/performance-real-time',[ReportCentralController::class,'performanceRealTime'])->name('performance_real_time');
+    Route::get('report-central/revision-calculator',[ReportCentralController::class,'revisionCalculator'])->name('revision_calculator');
+    Route::get('report-central/reward-point',[ReportCentralController::class,'rewardPoint'])->name('reward_point');
+    Route::get('report-central/graphs',[ReportCentralController::class,'graphs'])->name('graphs');
+    Route::get('report-central/deliverable-issues',[ReportCentralController::class,'deliverableIssues'])->name('deliverable_issues');
+    Route::get('report-central/performance',[ReportCentralController::class,'performance'])->name('performance');
+    Route::get('report-central/reward-point2',[ReportCentralController::class,'rewardPoint2'])->name('reward_point2');
+    Route::get('report-central/performance2',[ReportCentralController::class,'performance2'])->name('performance2');
+    Route::get('report-central/bandwidth',[ReportCentralController::class,'bandwidth'])->name('bandwidth');
+    Route::get('report-central/revisions',[ReportCentralController::class,'revisions'])->name('revisions');
+    Route::get('report-central/reward-point3',[ReportCentralController::class,'rewardPoint3'])->name('reward-point3');
+    Route::get('report-central/graphs2',[ReportCentralController::class,'graphs2'])->name('graphs2');
+    Route::get('report-central/time-log',[ReportCentralController::class,'timeLog'])->name('time_log');
+    Route::resource('report-central', ReportCentralController::class);
+
+
     //KPI Settings
     Route::resource('kpi-settings', KpiSettingController::class);
 //    Policy section
@@ -878,6 +898,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('policy', PolicyController::class);
     //Incentives Settings
     Route::resource('incentive-settings',IncentiveSettingController::class);
+    //Monthly Incentive Settings
+    Route::resource('monthly-incentive',MonthlyIncentiveController::class);
+    //qualified sales Settings
+    Route::resource('qualified-sales',QualifiedSalesController::class);
 
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
@@ -1149,6 +1173,9 @@ Route::get('/deals/service-type/blogs-articles', [HomeController::class, 'blogAr
 Route::post('/deals/store/blog-articles', [HomeController::class, 'storeBlogArticle'])->name('store_blog_articles');
 Route::get('/deals/service-type/product-description', [HomeController::class, 'productDescription']);
 Route::post('/deals/store/product-description', [HomeController::class, 'storeProductDescription'])->name('store_product_description');
+Route::get('/deals/service-type/product-category', [HomeController::class, 'productCategory']);
+Route::post('/deals/store/product-category', [HomeController::class, 'storeProductCategory'])->name('store_product_category');
+Route::get('/deals/service-type/basic-seo', [HomeController::class, 'productBasicSeo']);
 /* Account prefix routes end here */
 //store custom lead route for seaopage1
 Route::post('/lead/store', [LeadController::class, 'storeLead'])->name('store-lead');
@@ -1221,6 +1248,9 @@ Route::get('/projects/q&c/{id}/{milestone_id}', [ProjectController::class, 'qc']
 Route::get('/projects/project-completion/{id}', [ProjectController::class, 'ProjectCompletion']);
 Route::post('/acoounts/project-completion/store', [ProjectController::class, 'ProjectCompletionSubmit'])->name('project-completion');
 Route::get('/projects/project-completion/get-sub-niche/{niche_id}', [ProjectController::class, 'getSubNiches']);
+//Route::post('/projects/project-completion/search-niche', [ProjectController::class, 'searchNiche'])->name('search_niche');
+Route::post('/projects/project-completion/filter-subcategories', [ProjectController::class, 'filterSubcategories'])->name('filter_subcategories');
+
 
 
 //Portfolio Section
@@ -1251,7 +1281,8 @@ Route::get('/projects/niches', [ProjectController::class, 'Niche'])->name('get-n
 Route::delete('/projects/delete-niche/{id}', [ProjectController::class, 'deleteNiche']);
 
 //project credentials
-Route::resource('project-credentials',ProjectCredential::class);
+Route::get('project-credentials/{id}',[ProjectCredential::class,'index'])->name('project_credential');
+//Route::resource('project-credentials',ProjectCredential::class);
 
 //top-management project accept/deny
 Route::post('/projects/accept/', [ProjectController::class, 'ProjectAccept'])->name('project-accept');
@@ -1314,5 +1345,5 @@ Route::post('/authorization/deal-details/', [ContractController::class, 'authori
 
 
 //Route::get('fix-database', [HomeController::class, 'fix_database'])->name('fix_database');
-
+Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
 

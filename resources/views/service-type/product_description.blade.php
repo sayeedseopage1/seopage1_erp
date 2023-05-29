@@ -95,7 +95,7 @@
                         <div class="col-md-9">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <textarea name="business_information" id="business_information" cols="3" rows="1" class="form-control placeholderText" placeholder="Put some details about your company here"></textarea>
+                                    <textarea name="business_information" id="business_information" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here"></textarea>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">

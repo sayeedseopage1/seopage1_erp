@@ -95,77 +95,77 @@
 
                         {{-- top filter bar --}}
 
-                            <div class="row">
-                                <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
-                                    <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select CMS Category</label>
-                                    <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
-                                        <select name="cms_id" id="cms_id" data-live-search="true" class="w-100 form-control select-picker error" data-size="8">
-                                            <option value="">--</option>
-                                            @foreach ($portfolios as $portfolio)
-                                                <option value="{{ $portfolio->id }}">{{ $portfolio->cms_name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
-                                    <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Website Types</label>
-                                    <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
-                                        <select name="website_type" id="website_type" data-live-search="true" class="w-100 form-control select-picker error" data-size="8">
-                                            <option value="">--</option>
-                                            @foreach ($portfolios as $portfolio)
-                                                <option value="{{$portfolio->id}}">{{$portfolio->website_type}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
-                                    <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Category</label>
-                                    <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
-                                        <select name="website_category" id="website_category" data-live-search="true" class="w-100 form-control select-picker error" data-size="8">
-                                            <option value="">--</option>
-                                            @foreach ($portfolios as $portfolio)
-                                                <option value="{{$portfolio->id}}">{{$portfolio->category_name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
-                                    <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Subcategory</label>
-                                    <div style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
-                                        <select class="form-control height-35 f-14" name="website_sub_cat" id="website_sub_cat" data-live-search="true" data-size="8">
-                                            <option value="">--</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
-                                    <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Theme</label>
-                                    <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
-                                        <select name="theme_name" id="theme_name" data-live-search="true" class="form-control select-picker error" data-size="8">
-                                            <option value="">--</option>
-                                            @foreach ($portfolios as $portfolio)
-                                                <option value="{{$portfolio->id}}">{{$portfolio->theme_name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
-                                    <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Plugin</label>
-                                    <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
-                                        <select name="website_plugin" id="website_plugin" data-live-search="true" class="form-control select-picker error" data-size="8">
-                                            <option value="">--</option>
-                                            @foreach ($portfolios as $portfolio)
-                                                <option value="{{$portfolio->id}}">{{implode(',',Json_decode($portfolio->plugin_name))}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
+                                <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select CMS Category</label>
+                                <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
+                                    <select name="cms_id" id="cms_id" data-live-search="true" class="w-100 form-control select-picker error" data-size="8">
+                                        <option value="">--</option>
+                                        @foreach ($portfolios as $portfolio)
+                                            <option value="{{ $portfolio->id }}">{{ $portfolio->cms_name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
+
+                            <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
+                                <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Website Types</label>
+                                <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
+                                    <select name="website_type" id="website_type" data-live-search="true" class="w-100 form-control select-picker error" data-size="8">
+                                        <option value="">--</option>
+                                        @foreach ($portfolios as $portfolio)
+                                            <option value="{{$portfolio->id}}">{{$portfolio->website_type}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
+                                <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Category</label>
+                                <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
+                                    <select name="website_category" id="website_category" data-live-search="true" class="w-100 form-control select-picker error" data-size="8">
+                                        <option value="">--</option>
+                                        @foreach ($portfolios as $portfolio)
+                                            <option value="{{$portfolio->id}}">{{$portfolio->category_name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
+                                <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Subcategory</label>
+                                <div style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
+                                    <select class="form-control height-35 f-14" name="website_sub_cat" id="website_sub_cat" data-live-search="true" data-size="8">
+                                        <option value="">--</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
+                                <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Theme</label>
+                                <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
+                                    <select name="theme_name" id="theme_name" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                        <option value="">--</option>
+                                        @foreach ($portfolios as $portfolio)
+                                            <option value="{{$portfolio->id}}">{{$portfolio->theme_name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
+                                <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Plugin</label>
+                                <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
+                                    <select name="website_plugin" id="website_plugin" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                        <option value="">--</option>
+                                        @foreach ($portfolios as $portfolio)
+                                            <option value="{{$portfolio->id}}">{{implode(',',Json_decode($portfolio->plugin_name))}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
                         {{-- end top filter bar --}}
 
@@ -184,11 +184,13 @@
                                     <span class="linkBtn">www.seopage1.com</span>
                                 </div>
                             </div>
-
                         </div>
 
                         @foreach($portfolios as $index => $portfolio)
-                            <section style="background-color: #f4f4f4; display: none;" class="py-3 mt-3 linkShow" id="linkShow{{$index}}">
+                        @php
+                        $project = \App\Models\Project::find($portfolio->project_id);
+                        @endphp
+                            <section style="background-color: #f4f4f4; display: none;" class="py-3 mt-3 linkShow rounded" id="linkShow{{$index}}">
                                     <div class="container-fluid">
                                         <div class="mb-3">
                                             <h5 class="f-20">Project Title:</h5>
@@ -205,7 +207,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <h5>Agree price:</h5>
-                                                <span>$ 3587 USD</span>
+                                                <span>$ {{$portfolio->project_budget}} USD</span>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
@@ -221,17 +223,56 @@
                                         <div class="row mt-3">
                                             <div class="col-md-6 mb-3 mb-md-0">
                                                 <h5>Total estimated hours:</h5>
-                                                <span>350 Hours & 25 Min</span>
+                                                @php
+
+                                                    $hours = floor($project->hours_allocated); // Extract the whole number of hours
+                                                    $minutes = ($project->hours_allocated - $hours) * 60; // Calculate the minutes
+
+                                                    // Create a Carbon instance to format the hours and minutes
+                                                    $time = \Carbon\Carbon::createFromTime($hours, $minutes);
+
+                                                    $formattedDuration = $time->format('H \H\o\u\r\s i \M\i\n');
+                                                @endphp
+                                                <span>{{$formattedDuration}}</span>
                                             </div>
                                             <div class="col-md-6">
                                                 <h5>Total Logged hours:</h5>
-                                                <p class="ml-2">250 Hours & 10 Min</p>
+                                                @php
+                                                $project_time_logs_hours= \App\Models\ProjectTimeLog::where('project_id', $project->id)->sum('total_hours');
+                                                $project_time_logs_minutes= \App\Models\ProjectTimeLog::where('project_id', $project->id)->sum('total_minutes');
+                                                $project_time_logs=  ($project_time_logs_minutes / 60);
+                                                $project_time_minutes = $project_time_logs_minutes % 60;
+
+                                                $currentTime = \Carbon\Carbon::now();
+
+                                                $totalMinutes = \DB::table('project_time_logs')
+                                                ->where('project_id',$project->id)
+                                                ->whereNull('end_time')
+                                                ->select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF('$currentTime', start_time)))/60 as total_minutes"))
+                                                ->value('total_minutes');
+
+                                                $active_time_hours = intval(round($totalMinutes,1) / 60);
+                                                $active_time_minutes = intval(round($totalMinutes,1) % 60);
+                                                $update_hours = $project_time_minutes + $active_time_minutes / 60 ;
+                                                $update_minutes = $project_time_minutes + $active_time_minutes / 60 ;
+                                                if($project_time_minutes + $active_time_minutes >= 60)
+                                                {
+                                                    $add_hours = intval(round(($project_time_minutes + $active_time_minutes) / 60, 1)) ;
+                                                    $add_minutes = ($project_time_minutes + $active_time_minutes) % 60;
+                                                }else {
+                                                    $add_hours = 0;
+                                                    $add_minutes = $project_time_minutes + $active_time_minutes;
+                                                } 
+                                                $total_hours = intval(round($project_time_logs, 1)) + $active_time_hours + $add_hours.'.'.$add_minutes;
+                                                $logged_hours = intval(round($project_time_logs, 1)) + $active_time_hours + $add_hours . ' hrs '. $add_minutes . ' mins';
+                                                @endphp
+                                                <p class="ml-2">{{$logged_hours}}</p>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
                                             <div class="col-md-6 mb-3 mb-md-0">
                                                 <h5>Average hourly price based on the final logged hours:</h5>
-                                                <span>$ 50 USD</span>
+                                                <span>$ {{round($project->project_budget / $total_hours, 2)}} USD</span>
                                             </div>
                                             <div class="col-md-6">
                                                 <h5>Total number of pages with page numbers:</h5>
@@ -276,6 +317,7 @@
                             website_plugin: website_plugin
                         },
                         success: function(response) {
+                            console.log(response);
                             $('.displayFilterData').empty();
 
                             var categoryHtml = '<p class="mt-2 f-20">Website Category: ' + selectedCmsName + '</p>';
