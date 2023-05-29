@@ -1,3 +1,31 @@
+<style>
+    .sidebar_sub_item{
+        width: 239px;
+        overflow-x: hidden;
+    }
+
+    .sidebar_sub_item_accordion_item{
+        width: 100%;
+    }
+    .sidebar_sub_item_btn{
+        padding: 6px 10px 6px 58px;
+        color: #616e80;
+    }
+
+    .sidebar_sub_item_btn:hover{
+        color: var(--header_color) !important;
+    }
+
+    .sidebar_sub_item_body{
+        margin-left: 16px;
+    }
+
+    .sidebar_sub_item_body a{
+        width: 100%;
+        overflow-x:  hidden;
+        white-space: normal !important;
+    }
+</style>
 <!-- SIDEBAR START -->
 <aside class="{{ !user()->dark_theme ? 'sidebar-' . $appTheme->sidebar_theme : '' }}">
     <!-- MOBILE CLOSE SIDEBAR PANEL START -->
@@ -637,6 +665,96 @@
 
 
                 <!-- NAV ITEM - REPORTS COLLAPASE MENU -->
+
+                 <x-menu-item icon="gear" :text="__('Report Central')">
+                    <x-slot name="iconPath">
+                        <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"></path>
+                    </x-slot>
+                    <div class="accordionItemContent pb-2">
+                        <div class="accordion sidebar_sub_item" id="accordionExample">
+                            <div class="accordion-item sidebar_sub_item_accordion_item">
+                                <div class="accordion-header" id="headingOne">
+                                    <div class="accordion-button sidebar_sub_item_btn d-flex" type="button" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                                        Project Managers
+                                        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: auto; margin-right: 5px; font-size: 16px;"></i>
+                                    </div>
+                                </div>
+                                <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <div class="accordion-body sidebar_sub_item_body">
+                                        <a href="{{route('performance_predefined_cycle')}}" class="text-lightest">
+                                            Performance (Predefined Cycle)
+                                        </a>
+                                        <a href="{{route('performance_real_time')}}" class="text-lightest">
+                                            Performance (Real Time)
+                                        </a>
+                                        <a href="{{route('revision_calculator')}}" class="text-lightest">
+                                            Revisions Calculator
+                                        </a>
+                                        <a href="{{route('reward_point')}}" class="text-lightest">
+                                            Reward Points
+                                        </a>
+                                        <a href="{{route('graphs')}}" class="text-lightest">
+                                            Graphs
+                                        </a>
+                                        <a href="{{route('deliverable_issues')}}" class="text-lightest">
+                                            Deliverables Issues
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item sidebar_sub_item_accordion_item">
+                                <div class="accordion-header" id="headingOne">
+                                    <div class="accordion-button sidebar_sub_item_btn d-flex" type="button" data-toggle="collapse" data-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
+                                        Lead Developers
+                                        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: auto; margin-right: 5px; font-size: 16px;"></i>
+                                    </div>
+                                </div>
+                                <div id="collapse2" class="accordion-collapse collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <div class="accordion-body sidebar_sub_item_body">
+                                        <a href="{{route('performance')}}" class="text-lightest">
+                                            Performance
+                                        </a>
+                                        <a href="{{route('reward_point2')}}" class="text-lightest">
+                                            Reward Points
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item sidebar_sub_item_accordion_item">
+                                <div class="accordion-header" id="headingOne">
+                                    <div class="accordion-button sidebar_sub_item_btn d-flex" type="button" data-toggle="collapse" data-target="#collapse3" aria-expanded="true" aria-controls="collapse3">
+                                        Developers
+                                        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: auto; margin-right: 5px; font-size: 16px;"></i>
+                                    </div>
+                                </div>
+                                <div id="collapse3" class="accordion-collapse collapse " aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <div class="accordion-body sidebar_sub_item_body">
+                                        <a href="{{route('performance2')}}" class="text-lightest">
+                                            Performance
+                                        </a>
+                                        <a href="{{route('bandwidth')}}" class="text-lightest">
+                                            Bandwidth
+                                        </a>
+                                        <a href="{{route('revisions')}}" class="text-lightest">
+                                            Revisions
+                                        </a>
+                                        <a href="{{route('reward-point3')}}" class="text-lightest">
+                                            Reward Points
+                                        </a>
+                                        <a href="{{route('graphs2')}}" class="text-lightest">
+                                            Graphs
+                                        </a>
+                                        <a href="{{route('time_log')}}" class="text-lightest">
+                                            Time Log
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </x-menu-item>
+
+
                 <!-- NAV ITEM - SETTINGS -->
                 <x-menu-item icon="gear" :text="__('app.menu.settings')">
                     <x-slot name="iconPath">
@@ -651,6 +769,31 @@
                         <x-sub-menu-item  :link="route('kpi-settings.index')" :text="'KPI Settings'" />
                         <x-sub-menu-item  :link="route('incentive-settings.index')" :text="'Incentives Settings'" />
 
+                        <div class="accordionItemContent pb-2">
+                            <div class="accordion sidebar_sub_item" id="accordionExample">
+                                <div class="accordion-item sidebar_sub_item_accordion_item">
+                                    <div class="accordion-header" id="headingOne">
+                                        <div class="accordion-button sidebar_sub_item_btn d-flex" type="button" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                                            Project Settings
+                                            <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: auto; margin-right: 5px; font-size: 16px;"></i>
+                                        </div>
+                                    </div>
+                                    <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                        <div class="accordion-body sidebar_sub_item_body">
+                                            <a href="{{route('project-view-category')}}" class="text-lightest">
+                                                Categories
+                                            </a>
+                                            <a href="{{route('project-view-cms')}}" class="text-lightest">
+                                                CMS
+                                            </a>
+                                            <a href="{{route('project-view-website-type')}}" class="text-lightest">
+                                                Website Types
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         @endif
                     </div>
                 </x-menu-item>

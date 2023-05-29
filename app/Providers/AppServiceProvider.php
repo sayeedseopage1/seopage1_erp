@@ -13,6 +13,7 @@ use App\Observers\ProjectActivityObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
 
         Setting::observe(SettingsObserver::class);
         ProjectActivity::observe(ProjectActivityObserver::class);
-        
+
         LeadsDealsActivityLog::observe(LeadsDealsActivityLogObserver::class);
 
         Model::preventLazyLoading(app()->environment('development'));
@@ -47,6 +48,9 @@ class AppServiceProvider extends ServiceProvider
         if (app()->environment('development')) {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
+
+        Paginator::useBootstrapFive();
+        Paginator::useBootstrapFour();
     }
 
 }
