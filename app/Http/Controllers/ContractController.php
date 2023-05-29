@@ -1179,7 +1179,15 @@ class ContractController extends AccountBaseController
                 $milestone= new ProjectMilestone();
                 $milestone->project_id= $project->id;
                 $milestone->currency_id = 1;
-                $milestone->milestone_title= $project->project_name . '- InitialMilestone'
+                $milestone->milestone_title= $project->project_name . '- InitialMilestone';
+                $milestone->actual_currency_id= $deal->actual_currency_id;
+                $milestone->cost= 0;
+                $milestone->actual_cost= 0;
+                $milestone->invoice_created= 0;
+                $milestone->status= 'incomplete';
+                $milestone->added_by= Auth::id();
+                $milestone->last_updated_by= Auth::id();
+                $milestone->milestone_type= 'Client Created this Milestone';
 
                 $milestone->save();
     
