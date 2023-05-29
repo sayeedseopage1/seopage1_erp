@@ -1310,6 +1310,7 @@ Route::controller(DealController::class)->group(function(){
 });
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
+Route::post('/create-auto-milestone', [ProjectMilestoneController::class, 'createAutoMilestone'])->name('create-auto-milestone');
 
 Route::any('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
 
