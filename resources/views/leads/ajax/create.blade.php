@@ -196,13 +196,13 @@
                         </label>
                         <div class="row">
                     <div class="form-check">
-                        <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="project_type" id="project_type">
+                        <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="project_type" value="fixed" id="project_type">
                         <label class="form-check-label" for="flexRadioDefault1">
                          Fixed Project
                         </label>
                       </div>
                       <div class="form-check">
-                        <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="project_type" id="project_type">
+                        <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="project_type" value="hourly" id="project_type">
                         <label class="form-check-label" for="flexRadioDefault2">
                           Hourly Project
                         </label>
@@ -346,6 +346,7 @@
             'bid_value': document.getElementById("bid_value").value,
             'bid_value2': document.getElementById("bid_value2").value,
             'value': document.getElementById("value").value,
+            'project_type': document.getElementById("project_type").value,
             'bidding_minutes': document.getElementById("bidding_minutes").value,
             'bidding_seconds': document.getElementById("bidding_seconds").value,
             'description': description,
@@ -383,6 +384,11 @@
                 }
                 if(error.responseJSON.errors.project_id){
                     $('#project_idError').text(error.responseJSON.errors.project_id);
+                }else{
+                    $('#project_idError').text('');
+                }
+                if(error.responseJSON.errors.project_type){
+                    $('#project_typeError').text(error.responseJSON.errors.project_type);
                 }else{
                     $('#project_idError').text('');
                 }
