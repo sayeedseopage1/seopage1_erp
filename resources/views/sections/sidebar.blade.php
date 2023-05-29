@@ -246,6 +246,9 @@
                              @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
                             <x-sub-menu-item :link="route('teams.index')" :text="__('Team')" />
                              @endif
+                                @if(Auth::user()->role_id == 1)
+                                <x-sub-menu-item :link="route('monthly-incentive.index')" :text="__('Monthly Incentive')" />
+                                @endif
                         {{-- @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
 
                                 <x-sub-menu-item :link="route('kpi-settings.index')" :text="__('Kpi Settings')" />
@@ -321,7 +324,6 @@
                             </x-sub-menu-item>
                             <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
                             <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
-                            {{--<x-sub-menu-item link="" :text="'Qualified Sales'" />--}}
                             <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
                             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
 
@@ -330,6 +332,9 @@
 
                            <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
                            @endif
+                            @if($user->role_id == 1)
+                            <x-sub-menu-item :link="route('qualified-sales.index')" :text="'Qualified Sales'" />
+                            @endif
 
 
 

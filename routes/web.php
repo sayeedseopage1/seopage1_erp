@@ -181,6 +181,8 @@ use App\Http\Controllers\ProjectCredential;
 use App\Http\Controllers\IncentiveController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ReportCentralController;
+use App\Http\Controllers\MonthlyIncentiveController;
+use App\Http\Controllers\QualifiedSalesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -895,6 +897,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('policy', PolicyController::class);
     //Incentives Settings
     Route::resource('incentive-settings',IncentiveSettingController::class);
+    //Monthly Incentive Settings
+    Route::resource('monthly-incentive',MonthlyIncentiveController::class);
+    //qualified sales Settings
+    Route::resource('qualified-sales',QualifiedSalesController::class);
 
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
