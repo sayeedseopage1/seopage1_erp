@@ -276,7 +276,7 @@
                                                                   </label>
                                                               </div>
                                                           </div>
-                                                          <label id="hubstaff_trackingError" class="error" for="descriptionText"></label>
+                                                          <label id="hubstaff_trackingError" class="error text-danger" for="descriptionText"></label>
                                                       </div>
                                                   </div>
                                               </div>

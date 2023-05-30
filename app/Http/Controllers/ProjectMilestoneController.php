@@ -76,9 +76,6 @@ class ProjectMilestoneController extends AccountBaseController
             }
         }
 
-        //  dd($output);
-
-//        return back()->with('success','Milestone Status Updated Successfully');
         return response()->json(['status'=>200]);
     }
     public function createAutoMilestone(Request $request)

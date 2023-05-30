@@ -13,7 +13,7 @@
                             @if($project_submission != null)
                                 <a href="{{$project_submission->actual_link}}" style="font-size: 16px;">{{$project_submission->actual_link}}</a>
                             @else
-                                <a href="#" style="font-size: 16px;">--</a>
+                                <p class="text-danger">Website url was not submitted</p>
                             @endif
                         </div>
                         <div class="form-group">
@@ -21,7 +21,7 @@
                             @if($project_submission != null)
                             <a href="{{$project_submission->dummy_link}}" style="font-size: 16px;">{{$project_submission->dummy_link}}</a>
                             @else
-                                <a href="#" style="font-size: 16px;">--</a>
+                                <p class="text-danger">Demo website url was not submitted</p>
                             @endif
                         </div>
                         <div class="form-group">
@@ -29,7 +29,7 @@
                             @if($project_submission != null)
                             <a href="{{$project_submission->login_url}}" style="font-size: 16px;">{{$project_submission->login_url}}</a>
                             @else
-                                <a href="#" style="font-size: 16px;">--</a>
+                                <p class="text-danger">Admin panel url was not submitted</p>
                             @endif
                         </div>
                         <div class="row">
@@ -39,7 +39,7 @@
                                     @if($project_submission != null)
                                     <p>{{$project_submission->login}}</p>
                                     @else
-                                        <a href="#" style="font-size: 16px;">--</a>
+                                        <p class="text-danger">Admin panel username was not submitted</p>
                                     @endif
                                 </div>
                             </div>
@@ -49,7 +49,7 @@
                                     @if($project_submission != null)
                                     <p>{{$project_submission->password}}</p>
                                     @else
-                                        <a href="#" style="font-size: 16px;">--</a>
+                                        <p class="text-danger">Admin panel Password was not submitted</p>
                                     @endif
                                 </div>
                             </div>
@@ -59,7 +59,7 @@
                             @if($project_submission != null)
                             <a href="{{$project_submission->google_link}}" style="font-size: 16px;">{{$project_submission->google_link}}</a>
                             @else
-                                <a href="#" style="font-size: 16px;">--</a>
+                                <p class="text-danger">Latest backup of the website file link was not submitted</p>
                             @endif
                         </div>
                         <div class="row">
@@ -69,7 +69,7 @@
                                     @if($project_portfolio != null)
                                     <p>{{$project_portfolio->backup_email_address}}</p>
                                     @else
-                                        <a href="#" style="font-size: 16px;">--</a>
+                                        <p class="text-danger">Backup email was not submitted</p>
                                     @endif
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                                     @if($project_portfolio != null)
                                     <p>{{$project_portfolio->day_interval}}</p>
                                     @else
-                                        <a href="#" style="font-size: 16px;">--</a>
+                                        <p class="text-danger">Days interval was not submitted</p>
                                     @endif
                                 </div>
                             </div>
