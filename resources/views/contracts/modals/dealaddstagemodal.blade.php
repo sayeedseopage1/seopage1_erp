@@ -200,7 +200,7 @@
                         </label>
                         <div class="d-flex py-3 align-items-center justify-content-center">
                             <div class="form-check">
-                                <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="project_type" value="fixed" id="project_type" @if($deal->project_type == 'fixed') checked @endif>
+                                <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="project_type" value="fixed" id="project_type" @if($deal->project_type == null) checked @endif @if($deal->project_type == 'fixed') checked @endif>
                                 <label class="form-check-label" for="flexRadioDefault1">
                                     Fixed Project
                                 </label>
