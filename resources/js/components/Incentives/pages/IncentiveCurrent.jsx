@@ -32,7 +32,7 @@ const IncentiveCurrent = () => {
         <div className="">
             <IncentivesFilterBar
                 setData={setData}
-                setTableDataIsFetching={setTableDataIsFetching}
+                setIsDataFetching={setTableDataIsFetching}
                 defaultSelectedDate={params.period || 'monthly'}
             />
             <div className='sp1_point_page_container'>
@@ -74,14 +74,14 @@ const IncentiveCurrent = () => {
                             <div className={`${!isLoading ? 'sp1__incentive_row_item' : 'sp1__incentive_row_item animate-pulse'}`}>
                                 <div className='sp1__incentive_item'>
                                     {!isLoading && (
-                                        <span> Minimum goal for your team:  {data?.minimum_team_goal} </span>
+                                        <span> Minimum Team goal:  {data?.minimum_team_goal} </span>
                                     )}  
                                 </div>
                             </div>
                             <div className={`${!isLoading ? 'sp1__incentive_row_item' : 'sp1__incentive_row_item animate-pulse'}`}>
                                 <div className="sp1__incentive_item">
                                     {!isLoading && (
-                                        <span> Minimum team goal achieved by your team:   {data?.mimimum_team_achieve_goal} </span>
+                                        <span> Minimum Team goal achieved:   {data?.mimimum_team_achieve_goal} </span>
                                     )} 
                                 </div>
                             </div>
@@ -109,7 +109,7 @@ const IncentiveCurrent = () => {
                                 <div className='sp1__incentive_item'>
                                     {!isLoading && (
                                         <span>
-                                            *Approximate incentive amount for your shift (Provided all your shift and team minimum goals are met):({diff > 0 ? diff.toFixed(2) : 0}) * {data?.point_value} =  BDT {approximateIncentive.toFixed(2)}
+                                            *Approximate incentive amount for your shift (Provided all your shift and team minimum goals are met): {diff > 0 ? diff.toFixed(2) : 0} X {data?.point_value} =  BDT {approximateIncentive.toFixed(2)}
                                         </span>
                                     )}    
                                 </div> 

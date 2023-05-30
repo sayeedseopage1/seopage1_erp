@@ -165,7 +165,7 @@
                             </div>
                         </div>
                     </div>
-                   
+
                     <!-- BID VALUE END -->
                     <!-- BIDDING DELAY TIME START -->
                     <div class="col-md-5 mt-3" id="set-time-estimate-fields">
@@ -188,27 +188,33 @@
                         </div>
                     </div>
                     <!-- BIDDING DELAY TIME END -->
-                    <div class="col-md-2 mt-3 mb-5" id="set-time-estimate-fields">
+                    <div class="col-md-5 mt-3">
                         <label for="">Project Type <span style="color:red;">*</span>
-                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Enter the bid value." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Collect the bidding delay time from Freelancer.com and enter the exact delay time here." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
                                 <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                             </svg>
                         </label>
-                        <div class="row">
-                    <div class="form-check">
-                        <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="project_type" id="project_type">
-                        <label class="form-check-label" for="flexRadioDefault1">
-                         Fixed Project
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="project_type" id="project_type">
-                        <label class="form-check-label" for="flexRadioDefault2">
-                          Hourly Project
-                        </label>
-                      </div>
-                    </div>
-                    <label id="project_typeError" class="error" for="descriptionText"></label>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="form-check">
+                                            <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="project_type" value="fixed" id="project_type">
+                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                Fixed Project
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="project_type" value="hourly" id="project_type">
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                Hourly Project
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <label id="project_typeError" class="error" for="descriptionText"></label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- PROJECT DESCRIPTION START -->
                     <div class="col-md-12 col-lg-12">
@@ -335,6 +341,7 @@
         var description = CKEDITOR.instances.descriptionText.getData();
         var coverLetter = CKEDITOR.instances.coverLetterText.getData();
         var explanation = CKEDITOR.instances.explanationText.getData();
+        var project_type = $('input[name="project_type"]:checked').val();
         var data= {
             '_token': "{{ csrf_token() }}",
             'client_name': document.getElementById("client_name").value,
@@ -346,11 +353,13 @@
             'bid_value': document.getElementById("bid_value").value,
             'bid_value2': document.getElementById("bid_value2").value,
             'value': document.getElementById("value").value,
+            'project_type': document.getElementById("project_type").value,
             'bidding_minutes': document.getElementById("bidding_minutes").value,
             'bidding_seconds': document.getElementById("bidding_seconds").value,
             'description': description,
             'cover_letter': coverLetter,
             'explanation': explanation,
+            'project_type': project_type,
             'insight_screenshot': document.getElementById("insight_screenshot").value,
             'bidpage_screenshot': document.getElementById("bidpage_screenshot").value,
             'projectpage_screenshot': document.getElementById("projectpage_screenshot").value,
@@ -385,6 +394,11 @@
                     $('#project_idError').text(error.responseJSON.errors.project_id);
                 }else{
                     $('#project_idError').text('');
+                }
+                if(error.responseJSON.errors.project_type){
+                    $('#project_typeError').text(error.responseJSON.errors.project_type);
+                }else{
+                    $('#project_typeError').text('');
                 }
                 if(error.responseJSON.errors.country){
                     $('#countryError').text(error.responseJSON.errors.country);

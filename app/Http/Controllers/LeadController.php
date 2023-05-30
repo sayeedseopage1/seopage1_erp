@@ -907,6 +907,7 @@ class LeadController extends AccountBaseController
     }
     public function storeLead(Request $request)
     {
+//        dd($request->all());
         $request->validate([
             'client_name' => 'required|max:255',
             'project_id'=>'required|unique:leads,project_id,'.$request->project_id,
@@ -917,6 +918,7 @@ class LeadController extends AccountBaseController
             'bid_value' => 'required',
             'bid_value2' => 'required',
             'value' => 'required',
+            'project_type' => 'required',
             'bidding_minutes' => 'required',
             'bidding_seconds' => 'required',
             'description' => 'required',
@@ -926,6 +928,7 @@ class LeadController extends AccountBaseController
         ], [
             'client_name.required' => 'Please enter the project name!',
             'project_id.required' => 'The project id has already been taken!',
+            'project_type.required' => 'The project type field is required!',
             'country.required' => 'Please select client country!',
             'project_link.required' => 'Please enter correct project link (Freelancer.com) with https!',
             'deadline.required' => 'Please select project deadline from Freelancer.com!',
@@ -983,13 +986,14 @@ class LeadController extends AccountBaseController
         $lead->bid_value= $request->bid_value;
         $lead->bid_value2= $request->bid_value2;
         $lead->country= $request->country;
+        $lead->project_type= $request->project_type;
         $lead->note= $request->description;
         $lead->status_id= 1;
         $lead->currency_id= 1;
         $lead->bidding_minutes= $request->bidding_minutes;
         $lead->bidding_seconds= $request->bidding_seconds;
         $lead->cover_letter= $request->cover_letter;
-        // $lead->explanation= $request->explanation;
+         $lead->explanation= $request->explanation;
         $lead->insight_screenshot= $request->insight_screenshot;
         $lead->bidpage_screenshot= $request->bidpage_screenshot;
         $lead->projectpage_screenshot =$request->projectpage_screenshot;
@@ -1018,6 +1022,7 @@ class LeadController extends AccountBaseController
     {
 //        dd($request->all());
         $request->validate([
+            'project_id'=>'required|unique:leads,project_id,'.$request->project_id,
             'description' => 'required',
             'cover_letter' => 'required',
         ], [
@@ -1040,6 +1045,7 @@ class LeadController extends AccountBaseController
       $lead->bid_value= $request->bid_value;
       $lead->bid_value2= $request->bid_value2;
       $lead->country= $request->country;
+      $lead->project_type= $request->project_type;
       $lead->note= $request->description;
       $lead->cover_letter= $request->cover_letter;
       $lead->status_id= $request->status;

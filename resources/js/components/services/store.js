@@ -4,6 +4,7 @@ import employeeWiseTableDataReducer from "./features/employeeWiseTableDataSlice"
 import projectWiseDataTableReducer from "./features/projectWiseTableDataSlice";
 import taskWiseDataTableReducer from './features/taskWiseTableDataSlice';
 import usersReducer from './features/usersSlice';
+import pointPageFilterReducer from "./features/pointPageFilterSlice";
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         projectWiseDataTable: projectWiseDataTableReducer,
         taskWiseDataTable: taskWiseDataTableReducer,
         users: usersReducer,
+        pointPageFilterOption: pointPageFilterReducer
     },
    // serializableCheck: false, 
 

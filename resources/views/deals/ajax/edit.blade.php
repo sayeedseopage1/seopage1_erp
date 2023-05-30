@@ -37,11 +37,50 @@
                         <input type="text" class="form-control height-35 f-14" name="project_name" id="project_name" value="{{$deal->project_name}}" autocomplete="off">
                         <label id="projectNameError" class="error text-danger" for="project_name"></label>
                     </div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="form-group my-3 mr-0 mr-lg-2 mr-md-2">
+                            <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_type">Project Type
+                                <sup class="f-14 mr-1">*</sup>
+                                <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Enter the project type from Freelancer.com." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                    <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                </svg>
+                            </label>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="form-check">
+                                                <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="project_type" value="fixed" id="project_type" @if($deal->project_type == 'fixed') checked @endif>
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                    Fixed Project
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="project_type" value="hourly" id="project_type" @if($deal->project_type == 'hourly') checked @endif>
+                                                <label class="form-check-label" for="flexRadioDefault2">
+                                                    Hourly Project
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 mt-3">
+                        <label for="">Project Budget</label>
+                        <sup class="text-danger f-14 mr-1">*</sup>
+                        <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Enter the project budget from Freelancer.com." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                            <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                        </svg>
+                        <input type="text" class="form-control height-35 f-14" name="amount" id="amount" value="{{$deal->actual_amount}}" autocomplete="off">
+                        <label id="amountError" class="error text-danger" for="amount"></label>
+                    </div>
                       <?php
                        $currencies= App\Models\Currency::all();
 
                        ?>
-                    <div class="col-md-6 col-lg-6 mt-3 ">
+                    <div class="col-md-4 col-lg-4 mt-3 ">
                         <div class="form-group c-inv-select mb-lg-0 mb-md-0 mb-4">
                             <label class="f-14 text-dark-grey mb-12" data-label="" for="original_currency_id">Currency</label>
                             <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Copy the project URL from the browser and paste it here." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
@@ -58,15 +97,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 mt-3">
-                        <label for="">Project Budget</label>
-                        <sup class="text-danger f-14 mr-1">*</sup>
-                        <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Enter the project budget from Freelancer.com." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                            <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                        </svg>
-                        <input type="text" class="form-control height-35 f-14" name="amount" id="amount" value="{{$deal->actual_amount}}" autocomplete="off">
-                        <label id="amountError" class="error text-danger" for="amount"></label>
                     </div>
                     <div class="col-lg-12 col-md-12 mt-3">
                         <label for="">Project Link</label>
@@ -107,10 +137,35 @@
 
 <script src="{{ asset('vendor/jquery/dropzone.min.js') }}"></script>
 <script>
+    const projectTypeRadio = document.getElementsByName('project_type');
+    const amountInput = document.getElementById('amount');
+    const oldAmount = '{{$deal->actual_amount}}';
+
+    function handleProjectTypeChange() {
+        if (this.value === 'hourly') {
+            amountInput.readOnly = true;
+            amountInput.value = '0';
+        } else {
+            amountInput.readOnly = false;
+            amountInput.value = oldAmount;
+        }
+    }
+
+    for (let i = 0; i < projectTypeRadio.length; i++) {
+        projectTypeRadio[i].addEventListener('change', handleProjectTypeChange);
+    }
+
+    const selectedRadio = document.querySelector('input[name="project_type"]:checked');
+    if (selectedRadio) {
+        handleProjectTypeChange.call(selectedRadio);
+    }
+</script>
+<script>
     $('#updateBtn').click(function(e){
         // alert("success");
         e.preventDefault();
         var description = CKEDITOR.instances.description.getData();
+        var project_type = $('input[name="project_type"]:checked').val();
         // console.log(description);
         var data= {
             '_token': "{{ csrf_token() }}",
@@ -121,6 +176,7 @@
             'amount': document.getElementById("amount").value,
             'project_link': document.getElementById("project_link").value,
             'description': description,
+            'project_type': project_type,
             'id': {{$deal->id}},
         }
         // console.log(data);
@@ -149,7 +205,6 @@
                     $('#clientUserNameError').html(error.responseJSON.errors.client_username);
                     $('#projectNameError').html(error.responseJSON.errors.project_name);
                     $('#projectLinkError').html(error.responseJSON.errors.project_link);
-                    $('#amountError').html(error.responseJSON.errors.amount);
                     $('#descriptionError').html(error.responseJSON.errors.description);
                     $('#commentsError').html(error.responseJSON.errors.comments);
                 }
@@ -165,7 +220,6 @@
     const username = document.getElementById('client_username');
     const projectName = document.getElementById('project_name');
     const projectLink = document.getElementById('project_link');
-    const amount = document.getElementById('amount');
 
 
     form.addEventListener('input', () => {
@@ -193,12 +247,6 @@
             projectLinkError.textContent = 'Please enter correct project link (Freelancer.com) with https!';
         } else {
             projectLinkError.textContent = '';
-        }
-        if (amount.value.trim() === '') {
-            valid = false;
-            amountError.textContent = 'Please select project budget!';
-        } else {
-            amountError.textContent = '';
         }
         $("#updateBtn").attr("disabled", false);
         $("#updateBtn").html("Update Deal");

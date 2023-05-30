@@ -181,6 +181,8 @@ use App\Http\Controllers\ProjectCredential;
 use App\Http\Controllers\IncentiveController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ReportCentralController;
+use App\Http\Controllers\MonthlyIncentiveController;
+use App\Http\Controllers\QualifiedSalesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -321,6 +323,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
     Route::get('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
     Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
+    Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
     Route::get('/points/{any?}', [PointsController::class,'index'])->where('any', '.*')->name('points.index');
     Route::post('/incentives-json/get', [IncentiveController::class, 'index_json'])->name('incentives.json');
     Route::get('/incentives/{any?}/', [IncentiveController::class, 'index'])->where('any', '.*')->name('incentives.index');
@@ -895,6 +898,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('policy', PolicyController::class);
     //Incentives Settings
     Route::resource('incentive-settings',IncentiveSettingController::class);
+    //Monthly Incentive Settings
+    Route::resource('monthly-incentive',MonthlyIncentiveController::class);
+    //qualified sales Settings
+    Route::resource('qualified-sales',QualifiedSalesController::class);
 
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
@@ -1303,6 +1310,7 @@ Route::controller(DealController::class)->group(function(){
 });
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
+Route::post('/create-auto-milestone', [ProjectMilestoneController::class, 'createAutoMilestone'])->name('create-auto-milestone');
 
 Route::any('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
 

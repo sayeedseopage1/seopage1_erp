@@ -275,11 +275,11 @@ class ContractController extends AccountBaseController
         if($existing_client != null)
         {
             $deal->client_badge = 'existing client';
-           
+
         }else {
             $deal->client_badge= 'new client';
         }
-        
+
         $deal->save();
         if (Auth::user()->role_id == 7) {
             $agent_id = SalesCount::where('user_id', Auth::id())->first();
@@ -425,6 +425,7 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
+//        dd($request->all());
         \DB::beginTransaction();
         $current_time= Carbon::now()->format('d-m-Y H:i:s' );
         $award_date= strtotime($request->award_time);
@@ -514,6 +515,7 @@ class ContractController extends AccountBaseController
         $deal->message_link= $value;
         $deal->original_currency_id= $request->original_currency_id;
         $deal->currency_id= 1;
+        $deal->project_type= $request->project_type;
         $deal->actual_amount=  $request->amount;
         $currency= Currency::where('id',$request->original_currency_id)->first();
         //  dd($currency);
@@ -537,7 +539,7 @@ class ContractController extends AccountBaseController
         if($existing_client != null)
         {
             $deal->client_badge = 'existing client';
-           
+
         }else {
             $deal->client_badge= 'new client';
         }
@@ -923,44 +925,100 @@ class ContractController extends AccountBaseController
     }
     public function storedealDetails(Request $request)
     {
-        $validated = $request->validate([
-            'project_name' => 'required',
-            'deadline' => 'required',
-            'amount' => 'required',
-            'description2' => 'required',
-            'description3' => 'required',
-            'description4' => 'required',
-            'description5' => 'required',
-            'description6' => 'required',
-            'description7' => 'required',
-            'description8' => 'required',
-            'description9' => 'required',
-        ], [
-            'project_name.required' => 'Please enter the project name!',
-            'deadline.required' => 'Please select project deadline from Freelancer.com!',
-            'amount.required' => 'Please enter the project budget!',
-            'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
-            'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
-            'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
-            'description5.required' => 'Client\'s focus or concerning points are required. Please share as detailed explanation as you can!',
-            'description6.required' => 'Login details are required. Please provide all the access details of the project!',
-            'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
-            'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
-            'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
-        ]);
+        $deal_hourly_checked = Deal::where('id',$request->id)->first();
+        if ($deal_hourly_checked->project_type !='hourly'){
+            $validated = $request->validate([
+                'project_name' => 'required',
+                'deadline' => 'required',
+                'amount' => 'required',
+                'message_link' => 'required',
+                'description2' => 'required',
+                'description3' => 'required',
+                'description4' => 'required',
+                'description5' => 'required',
+                'description6' => 'required',
+                'description7' => 'required',
+                'description8' => 'required',
+                'description9' => 'required',
+            ], [
+                'project_name.required' => 'Please enter the project name!',
+                'deadline.required' => 'Please select project deadline from Freelancer.com!',
+                'amount.required' => 'Please enter the project budget!',
+                'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
+                'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
+                'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
+                'description5.required' => 'Client\'s focus or concerning points are required. Please share as detailed explanation as you can!',
+                'description6.required' => 'Login details are required. Please provide all the access details of the project!',
+                'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
+                'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
+                'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+            ]);
+        }else{
+            $validated = $request->validate([
+                'project_name' => 'required',
+                'estimated_hour_task' => 'required',
+                'hourly_rate' => 'required',
+                'hubstaff_tracking' => 'required',
+                'tracked_hours' => 'required',
+                'second_day_tracked_hours' => 'required',
+                'expect_amount' => 'required',
+                'certain_amount_hour' => 'required',
+                'long_project' => 'required',
+                'description2' => 'required',
+                'description3' => 'required',
+                'description4' => 'required',
+                'description5' => 'required',
+                'description6' => 'required',
+                'description7' => 'required',
+                'description8' => 'required',
+                'description9' => 'required',
+            ], [
+                'project_name.required' => 'Please enter the project name!',
+                'estimated_hour_task.required' => 'This filed is required!',
+                'hourly_rate.required' => 'This filed is required!',
+                'hubstaff_tracking.required' => 'This filed is required!',
+                'tracked_hours.required' => 'This filed is required!',
+                'second_day_tracked_hours.required' => 'This filed is required!',
+                'expect_amount.required' => 'This filed is required!',
+                'certain_amount_hour.required' => 'This filed is required!',
+                'long_project.required' => 'This filed is required!',
+                'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
+                'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
+                'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
+                'description5.required' => 'Client\'s focus or concerning points are required. Please share as detailed explanation as you can!',
+                'description6.required' => 'Login details are required. Please provide all the access details of the project!',
+                'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
+                'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
+                'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+            ]);
+        }
         //dd("hello");
         $project_milestone= Project::where('deal_id',$request->id)->first();
+        $won_deal_id= Deal::where('id',$request->id)->first();
+        if($won_deal_id->project_type != 'hourly')
+        {
+
+
         $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
-        if ($milestone == null) {
-            return response()->json([
-                "message" => "The given data was invalid.",
-                "errors" => [
-                    "milestone_value" => [
-                        "Milestone not found!!!."
+//      dd($milestone);
+        $won_deal_id= Deal::where('id',$request->id)->first();
+        if($won_deal_id->project_type != 'hourly')
+        {
+
+
+            $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
+            if ($milestone == null) {
+                return response()->json([
+                    "message" => "The given data was invalid.",
+                    "errors" => [
+                        "milestone_value" => [
+                            "Milestone not found!!!."
+                        ]
                     ]
-                ]
-            ], 422);
+                ], 422);
+            }
         }
+    }
         DB::beginTransaction();
 
         try {
@@ -987,6 +1045,14 @@ class ContractController extends AccountBaseController
                 }
             }
             $deal->deadline = $request->deadline;
+            $deal->estimated_hour_task = $request->estimated_hour_task;
+            $deal->hourly_rate = $request->hourly_rate;
+            $deal->hubstaff_tracking = $request->hubstaff_tracking;
+            $deal->tracked_hours = $request->tracked_hours;
+            $deal->second_day_tracked_hours = $request->second_day_tracked_hours;
+            $deal->expect_amount = $request->expect_amount;
+            $deal->certain_amount_hour = $request->certain_amount_hour;
+            $deal->long_project = $request->long_project;
             $deal->currency_id = $request->currency_id;
             $deal->message_link = $value;
             $deal->profile_link = $request->profile_link;
@@ -1011,6 +1077,32 @@ class ContractController extends AccountBaseController
             $project->due = $deal->amount;
             $project->currency_id = 1;
             $project->save();
+            if($deal->project_type == 'hourly')
+            {
+                // dd("true");
+                $milestone= new ProjectMilestone();
+                $milestone->project_id= $project->id;
+
+                $milestone->currency_id = 1;
+                $milestone->milestone_title= $project->project_name . '- InitialMilestone';
+
+                $milestone->original_currency_id= $deal->original_currency_id;
+                $milestone->cost= 0;
+
+                $milestone->actual_cost= 0;
+
+                $milestone->invoice_created= 0;
+                $milestone->status= 'incomplete';
+                $milestone->added_by= Auth::id();
+                $milestone->last_updated_by= Auth::id();
+                $milestone->milestone_type= 'Client Created this Milestone';
+                //dd($milestone->actual_cost,$milestone->invoice_created,$milestone->status,$milestone->added_by,$milestone->last_updated_by, $milestone->milestone_type);
+
+                $milestone->save();
+              //  dd($milestone);
+
+
+            }
 
 
             //for testing purpose
@@ -1248,38 +1340,85 @@ class ContractController extends AccountBaseController
     }
     public function updatedealDetails(Request $request)
     {
-
-        // dd($request->all());
-        $validated = $request->validate([
-            'project_name' => 'required',
-            'deadline' => 'required',
-            'amount' => 'required',
-            'message_link' => 'required',
-            'description2' => 'required',
-            'description3' => 'required',
-            'description4' => 'required',
-            'description5' => 'required',
-            'description6' => 'required',
-            'description7' => 'required',
-            'description8' => 'required',
-            'description9' => 'required',
-        ], [
-            'project_name.required' => 'Please enter the project name!',
-            'deadline.required' => 'Please select project deadline from Freelancer.com!',
-            'amount.required' => 'Please enter the project budget!',
-            'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
-            'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
-            'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
-            'description5.required' => 'Client\'s focus or concerning points are required. Please share as detailed explanation as you can!',
-            'description6.required' => 'Login details are required. Please provide all the access details of the project!',
-            'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
-            'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
-            'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
-        ]);
+//        dd($request->all());
+        $deal_hourly_checked = Deal::where('id',$request->id)->first();
+        if ($deal_hourly_checked->project_type !='hourly'){
+            $validated = $request->validate([
+                'project_name' => 'required',
+                'deadline' => 'required',
+                'amount' => 'required',
+                'message_link' => 'required',
+                'description2' => 'required',
+                'description3' => 'required',
+                'description4' => 'required',
+                'description5' => 'required',
+                'description6' => 'required',
+                'description7' => 'required',
+                'description8' => 'required',
+                'description9' => 'required',
+            ], [
+                'project_name.required' => 'Please enter the project name!',
+                'deadline.required' => 'Please select project deadline from Freelancer.com!',
+                'amount.required' => 'Please enter the project budget!',
+                'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
+                'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
+                'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
+                'description5.required' => 'Client\'s focus or concerning points are required. Please share as detailed explanation as you can!',
+                'description6.required' => 'Login details are required. Please provide all the access details of the project!',
+                'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
+                'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
+                'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+            ]);
+        }else{
+            $validated = $request->validate([
+                'project_name' => 'required',
+                'estimated_hour_task' => 'required',
+                'hourly_rate' => 'required',
+                'hubstaff_tracking' => 'required',
+                'tracked_hours' => 'required',
+                'second_day_tracked_hours' => 'required',
+                'expect_amount' => 'required',
+                'certain_amount_hour' => 'required',
+                'long_project' => 'required',
+                'description2' => 'required',
+                'description3' => 'required',
+                'description4' => 'required',
+                'description5' => 'required',
+                'description6' => 'required',
+                'description7' => 'required',
+                'description8' => 'required',
+                'description9' => 'required',
+            ], [
+                'project_name.required' => 'Please enter the project name!',
+                'estimated_hour_task.required' => 'This filed is required!',
+                'hourly_rate.required' => 'This filed is required!',
+                'hubstaff_tracking.required' => 'This filed is required!',
+                'tracked_hours.required' => 'This filed is required!',
+                'second_day_tracked_hours.required' => 'This filed is required!',
+                'expect_amount.required' => 'This filed is required!',
+                'certain_amount_hour.required' => 'This filed is required!',
+                'long_project.required' => 'This filed is required!',
+                'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
+                'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
+                'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
+                'description5.required' => 'Client\'s focus or concerning points are required. Please share as detailed explanation as you can!',
+                'description6.required' => 'Login details are required. Please provide all the access details of the project!',
+                'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
+                'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
+                'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+            ]);
+        }
 //      dd("hello");
         $project_milestone= Project::where('deal_id',$request->id)->first();
         $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
 //      dd($milestone);
+        $won_deal_id= Deal::where('id',$request->id)->first();
+        if($won_deal_id->project_type != 'hourly')
+        {
+
+
+
+        $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
         if ($milestone == null) {
             return response()->json([
                 "message" => "The given data was invalid.",
@@ -1289,7 +1428,10 @@ class ContractController extends AccountBaseController
                     ]
                 ]
             ], 422);
-        } else {
+        }
+        }
+
+
             DB::beginTransaction();
 
             try {
@@ -1316,6 +1458,14 @@ class ContractController extends AccountBaseController
                     }
                 }
                 $deal->deadline = $request->deadline;
+                $deal->estimated_hour_task = $request->estimated_hour_task;
+                $deal->hourly_rate = $request->hourly_rate;
+                $deal->hubstaff_tracking = $request->hubstaff_tracking;
+                $deal->tracked_hours = $request->tracked_hours;
+                $deal->second_day_tracked_hours = $request->second_day_tracked_hours;
+                $deal->expect_amount = $request->expect_amount;
+                $deal->certain_amount_hour = $request->certain_amount_hour;
+                $deal->long_project = $request->long_project;
                 $deal->currency_id = $request->currency_id;
                 $deal->message_link = $value;
                 $deal->profile_link = $request->profile_link;
@@ -1341,6 +1491,32 @@ class ContractController extends AccountBaseController
                 $project->due = $deal->amount;
                 $project->currency_id = 1;
                 $project->save();
+                if($deal->project_type == 'hourly')
+            {
+                // dd("true");
+                $milestone= new ProjectMilestone();
+                $milestone->project_id= $project->id;
+
+                $milestone->currency_id = 1;
+                $milestone->milestone_title= $project->project_name . '- InitialMilestone';
+
+                $milestone->original_currency_id= $deal->original_currency_id;
+                $milestone->cost= 0;
+
+                $milestone->actual_cost= 0;
+
+                $milestone->invoice_created= 0;
+                $milestone->status= 'incomplete';
+                $milestone->added_by= Auth::id();
+                $milestone->last_updated_by= Auth::id();
+                $milestone->milestone_type= 'Client Created this Milestone';
+                //dd($milestone->actual_cost,$milestone->invoice_created,$milestone->status,$milestone->added_by,$milestone->last_updated_by, $milestone->milestone_type);
+
+                $milestone->save();
+              //  dd($milestone);
+
+
+            }
                 $contract_id = Contract::where('deal_id', $request->id)->first();
                 $contract = Contract::find($contract_id->id);
                 $contract->subject = $request->project_name;
@@ -1559,7 +1735,9 @@ class ContractController extends AccountBaseController
             }
 
             return response()->json(['message' => 'Deal Updated Successfully']);
-        }
+
+
+
 
 
     }
@@ -1914,7 +2092,7 @@ class ContractController extends AccountBaseController
             'price_authorization' => 'required',
             'requirment_define' => 'required',
         ]);
-        
+
         $deal = Deal::find($request->id);
         $deal->authorization_status = 1;
         $deal->price_authorization = $request->price_authorization;

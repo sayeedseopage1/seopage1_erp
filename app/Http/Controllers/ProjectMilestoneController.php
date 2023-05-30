@@ -55,6 +55,7 @@ class ProjectMilestoneController extends AccountBaseController
     }
     public function CompleteMilestone(Request $request)
     {
+//        dd($request->all());
         $milestone_id= ProjectMilestone::where('id',$request->id)->first();
         //dd($request);
         $milestone= ProjectMilestone::find($request->id);
@@ -77,7 +78,59 @@ class ProjectMilestoneController extends AccountBaseController
 
         //  dd($output);
 
-        return back()->with('success','Milestone Status Updated Successfully');
+//        return back()->with('success','Milestone Status Updated Successfully');
+        return response()->json(['status'=>200]);
+    }
+    public function createAutoMilestone(Request $request)
+    {
+       // dd($request->all());
+        $project=Project::where('id',$request->project_id)->first();
+        $deal=Deal::where('id',$project->deal_id)->first();
+        $milestone_count= ProjectMilestone::where('project_id',$request->project_id)->count();
+        $milestone= new ProjectMilestone();
+        $milestone->project_id= $project->id;
+
+        $milestone->currency_id = 1;
+        $milestone->milestone_title= $project->project_name . '- Milestone('.$milestone_count+1 .')';
+
+        $milestone->original_currency_id= $deal->original_currency_id;
+        $milestone->cost= 0;
+
+        $milestone->actual_cost= 0;
+
+        $milestone->invoice_created= 0;
+        $milestone->status= 'incomplete';
+        $milestone->added_by= Auth::id();
+        $milestone->last_updated_by= Auth::id();
+        $milestone->milestone_type= 'Client Created this Milestone';
+        //dd($milestone->actual_cost,$milestone->invoice_created,$milestone->status,$milestone->added_by,$milestone->last_updated_by, $milestone->milestone_type);
+
+        $milestone->save();
+        // /$milestone_id= ProjectMilestone::where('id',$request->id)->first();
+        //dd($request);
+        $milestone_update= ProjectMilestone::find($request->milestone_id);
+//        dd($milestone_update);
+        $milestone_update->status= "complete";
+        $milestone_update->last_updated_by= Auth::id();
+        $milestone_update->save();
+        $project_id= Project::where('id',$milestone_update->project_id)->first();
+        $milestone_updated_count= ProjectMilestone::where('project_id',$milestone_update->project_id)->count();
+
+        $milestone_complete= ProjectMilestone::where('project_id',$milestone_update->project_id)->where('status','complete')->count();
+        //  dd($milestone_count,$milestone_complete);
+        if ($milestone_updated_count == $milestone_complete) {
+            $users= User::where('role_id',1)->get();
+            foreach ($users as $user) {
+
+
+                Notification::send($user, new MilestoneComplete($project,$milestone_update));
+            }
+        }
+
+        //  dd($output);
+
+//        return back()->with('success','Milestone Status Updated Successfully');
+        return response()->json(['status'=>200]);
     }
 
     /**
