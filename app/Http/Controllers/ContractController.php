@@ -2076,7 +2076,7 @@ class ContractController extends AccountBaseController
 
     public function authorization_request(Deal $data)
     {
-        $this->pageTitle = 'Add Deal Details';
+        $this->pageTitle = 'Authorize Deal';
         $this->middleware(function ($request, $next) {
             abort_403(!in_array('contracts', $this->user->modules));
             return $next($request);
