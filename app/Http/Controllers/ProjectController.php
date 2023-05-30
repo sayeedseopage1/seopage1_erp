@@ -806,6 +806,7 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
+//        dd($request->all());
 
         //kpi distribution start from here
         $find_project_id= Project::where('id',$id)->first();
@@ -1231,7 +1232,7 @@ class ProjectController extends AccountBaseController
                      }
                      $point->save();
 
-                    
+
 
 
 
@@ -1628,7 +1629,7 @@ class ProjectController extends AccountBaseController
                                 $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
                                 ->whereDate('start_date', '>=', $goal->startDate)
                                 ->whereDate('start_date', '<=', $end_date)
-                                ->count(); 
+                                ->count();
                             }
                         }
                         if ($team_total_amount >= (int) $goal->trackingValue) {
@@ -1681,7 +1682,7 @@ class ProjectController extends AccountBaseController
                         }
                         $deals_data = $deals_data->where('deals.status', '!=','Denied')
                        // ->whereIn('deals.added_by', $user_id)
-                      
+
                         ->orderBy('deals.id', 'desc')
                         ->get();
                         $team_total_amount = 0;
@@ -1768,7 +1769,7 @@ class ProjectController extends AccountBaseController
                                 $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
                                 ->whereDate('start_date', '>=', $goal->startDate)
                                 ->whereDate('start_date', '<=', $end_date)
-                                ->count(); 
+                                ->count();
                             }
                         }
                         if ($team_total_amount >= (int) $goal->trackingValue) {
@@ -1816,6 +1817,13 @@ class ProjectController extends AccountBaseController
         $originalValues = $project->getOriginal();
         $project->project_name = $request->project_name;
         $project->project_short_code = $request->project_code;
+        if ($project->status== 'not started')
+        {
+             $project->requirement_defined = $request->requirement_defined;
+             $project->deadline_meet = $request->deadline_meet;
+
+        }
+
 
         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
         $project->project_challenge = ($request->project_challenge !== '<p><br></p>') ? $request->project_challenge : null;
@@ -1903,6 +1911,7 @@ class ProjectController extends AccountBaseController
         if (!$request->private && !$request->public && $request->member_id) {
             $project->membersMany()->sync($request->member_id);
         }
+
 
         $project->comments= $request->comments;
         $project->save();
@@ -4051,7 +4060,7 @@ class ProjectController extends AccountBaseController
             $data = Project::select('id', 'project_name')->where('status', 'in progress')->get();
 
         }
-        
+
         return response()->json($data);
 
     }

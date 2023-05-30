@@ -76,6 +76,7 @@ class ProjectMilestoneController extends AccountBaseController
             }
         }
 
+
         //  dd($output);
         if($project->deal->project_type == 'hourly')
         {
@@ -86,8 +87,9 @@ class ProjectMilestoneController extends AccountBaseController
             return back()->with('success','Milestone Status Updated Successfully');
         }
 
-//       
+     
        
+
     }
     public function createAutoMilestone(Request $request)
     {

@@ -18,8 +18,16 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
 
 <div class="row">
+
     <div class="col-sm-12">
         <x-form id="save-project-data-form" method="PUT">
+            @if($project->status == 'not started')
+            <input type="hidden" name="status_validation" value="not started">
+            @else
+                <input type="hidden" name="status_validation" value="in progress">
+
+
+                @endif
             <div class="add-client bg-white rounded">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
                     @lang('modules.projects.projectInfo')</h4>
@@ -350,6 +358,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                 <?php
                   $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->first();
                  ?>
+                @if($project->status=='not started' && $project->pm_id==Auth::user()->id )
                 <div class="col-md-6 col-lg-6 mb-3">
 
 
@@ -373,8 +382,6 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         </div>
 
                       </div>
-
-
                 </div>
                 <div class="col-md-12 col-lg-12 mb-5">
                     <div class="form-group">
@@ -385,6 +392,25 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         </div>
                     </div>
                 </div>
+                <div class="col-md-12 col-lg-12">
+                    <div class="form-group mt-3">
+                        <label class="text-dark-grey" data-label="true" for="description">Were the requirements properly defined by Sales?<sup class="mr-1">*</sup></label>
+                        <textarea name="requirement_defined" id="requirement_defined" cols="30" rows="10" class="form-control @error('requirement_defined') is-invalid @enderror">{!! $project->requirement_defined !!}</textarea>
+                        @error('requirement_defined')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12">
+                        <div class="form-group mt-3">
+                            <label class="text-dark-grey" data-label="true" for="description">Is the deadline provided by Sales realistic?<sup class="mr-1">*</sup></label>
+                            <textarea name="deadline_meet" id="deadline_meet" cols="30" rows="10" class="form-control @error('deadline_meet') is-invalid @enderror">{!! $project->deadline_meet !!}</textarea>
+                            @error('deadline_meet')
+                            <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                @endif
                   <br>
 
 

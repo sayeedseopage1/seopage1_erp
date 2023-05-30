@@ -485,8 +485,8 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                         }
                     });
                 }else{
-                
-  
+
+
                     $.ajax({
                         url: '{{route('milestone-complete')}}',
                         type: 'POST',
@@ -527,6 +527,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
      $(document).ready(function() {
         $('.complete_milestone').click(function(e) {
             e.preventDefault();
+
             Swal.fire({
             title: "Complete milestone",
             text: "Are you sure want to complete milestone?",
@@ -549,9 +550,10 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                 $(this).closest("form").submit();
             }
         });
+
         })
     })
-    
+
 </script>
 @endif
 <script type="text/javascript">
