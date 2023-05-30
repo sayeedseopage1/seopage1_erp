@@ -405,7 +405,7 @@
                         <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                             @lang('Client')</p>
                      
-                        <x-employee :user="$task->project->client" />
+                        <x-client :user="$task->project->client" />
                        
                     </div>
                     <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">

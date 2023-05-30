@@ -1829,13 +1829,15 @@ class ProjectController extends AccountBaseController
         $project->project_challenge = ($request->project_challenge !== '<p><br></p>') ? $request->project_challenge : null;
 
         $project->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
-
+        if($project->deal->project_type != 'hourly')
+        {
         if (!$request->has('without_deadline')) {
             $project->deadline = Carbon::createFromFormat($this->global->date_format, $request->deadline)->format('Y-m-d');
         }
         else {
             $project->deadline = null;
         }
+    }
 
         if ($request->notes != '') {
             $project->notes = str_replace('<p><br></p>', '', trim($request->notes));

@@ -31,7 +31,7 @@ class UpdateProject extends CoreRequest
         $rules = [
             'project_name' => 'required|max:150',
             'start_date' => 'required',
-            'deadline' => 'required',
+           
             'project_summary'=>'required',
 
             // 'hours_allocated' => 'required|numeric',
@@ -39,9 +39,9 @@ class UpdateProject extends CoreRequest
             'project_code' => 'required|unique:projects,project_short_code,'.$this->route('project'),
         ];
 
-        if (!$this->has('without_deadline')) {
-            $rules['deadline'] = 'required';
-        }
+        // if (!$this->has('without_deadline')) {
+        //     $rules['deadline'] = 'required';
+        // }
 
         if ($this->project_budget != '') {
             $rules['project_budget'] = 'numeric';
@@ -62,6 +62,11 @@ class UpdateProject extends CoreRequest
 
         if (!request()->private && !request()->public && $project->public == 0 && request()->member_id) {
             $rules['member_id.0'] = 'required';
+        }
+      //  dd($project->deal->project_type);
+        if($project->deal->project_type != 'hourly')
+        {
+            $rules['deadline'] = 'required';
         }
 
         if (request()->get('custom_fields_data')) {
