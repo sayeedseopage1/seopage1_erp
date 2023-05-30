@@ -443,6 +443,9 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
         $('.complete_milestone').click(function(e) {
             e.preventDefault();
             var id = $(this).attr('data-id');
+            var button = $(this); // Store reference to the button
+        button.prop('disabled', true); // Disable the button
+        button.text('Processing'); // Change the button text
             Swal.fire({
                 title: "Will you work more hours on this project after this?",
                 icon: 'warning',
