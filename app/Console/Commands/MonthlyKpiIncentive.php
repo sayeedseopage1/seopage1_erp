@@ -101,7 +101,7 @@ class MonthlyKpiIncentive extends Command
                         ->whereDate('created_at', '<=', Carbon::now()->endOfMonth())
                         ->get()
                         ->sum('points');
-                        
+                        $deduction_amount = 0;
                         $user_incentive_amount = $total_cash_point_sum - $this_month_incentive->every_shift_every_point_above;
                         $user_team_goal_monthly = GoalSetting::where([
                             'assigneeType' => 'Team',
@@ -116,6 +116,7 @@ class MonthlyKpiIncentive extends Command
                             $point_deduction = 100 - $this_month_incentive->individual_goal_percentage;
                             
                             $user_incentive_amount_deduction = ($user_incentive_amount * $point_deduction) / 100;
+                            $deduction_amount = $deduction_amount + $user_incentive_amount_deduction;
                             $user_incentive_amount = $user_incentive_amount - $user_incentive_amount_deduction;
                         }
 
@@ -136,6 +137,7 @@ class MonthlyKpiIncentive extends Command
 
                         if ($user_team_goal_10_days) {
                             $user_incentive_amount_deduction = ($user_incentive_amount * $this_month_incentive->incentive_deduction) / 100;
+                            $deduction_amount = $deduction_amount + $user_incentive_amount_deduction;
                             $user_incentive_amount = $user_incentive_amount - $user_incentive_amount_deduction;
                         }
                         
@@ -172,6 +174,8 @@ class MonthlyKpiIncentive extends Command
                         $user_incentive->redeem_point = $deals;
                         $user_incentive->achieve_goal = $this_user_goal + $this_user_team_goal;
                         $user_incentive->month = $this_month_kpi->start_month;
+                        $user_incentive->deduction_amount = $deduction_amount;
+                        $user_incentive->deduction_incentive_amount = $deduction_amount * $this_month_incentive->point_of_contribute;
                         //dd($user_incentive);
                         $user_incentive->save();
 

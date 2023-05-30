@@ -510,7 +510,7 @@
                               </div>
                             </div>
                           </div>
-                          @if(Auth::user()->role_id == 8 && Route::currentRouteName() == 'authorization_request')
+                          @if((Auth::user()->role_id == 8 || Auth::user()->role_id == 1) && Route::currentRouteName() == 'authorization_request')
                           <div class="row">
                             <div class="col-md-12">
                               <div class="form-group">
@@ -529,6 +529,18 @@
                                 <textarea class="form-control" name="requirment_define" rows="10">{{$deal->requirment_define}}</textarea>
                                 <script>
                                       CKEDITOR.replace('requirment_define');
+                                  </script>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>Has sales team set project deadline properly?</label>
+                                <textarea class="form-control" name="project_deadline_authorization" rows="10">{{$deal->project_deadline_authorization}}</textarea>
+                                <script>
+                                      CKEDITOR.replace('project_deadline_authorization');
                                   </script>
                               </div>
                             </div>
@@ -787,6 +799,7 @@
         var description9 = CKEDITOR.instances.description9Text.getData();
         var price_authorization = CKEDITOR.instances.price_authorization.getData();
         var requirment_define = CKEDITOR.instances.requirment_define.getData();
+        var project_deadline_authorization = CKEDITOR.instances.project_deadline_authorization.getData();
         // console.log(name);
         var message_links = document.getElementsByName("message_link[]");
         var message_links_values = [];
@@ -812,6 +825,7 @@
             'description7': description7,
             'price_authorization': price_authorization,
             'requirment_define': requirment_define,
+            'project_deadline_authorization': project_deadline_authorization,
             'id': '{{$deal->id}}',
         }
         // console.log(data);

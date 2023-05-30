@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserIncentive;
 use Illuminate\Http\Request;
 
 class MonthlyIncentiveController extends AccountBaseController
@@ -24,7 +25,22 @@ class MonthlyIncentiveController extends AccountBaseController
      */
     public function index()
     {
-        return view('monthly-incentive.index',$this->data);
+        $this->user_incentive = UserIncentive::where([
+            ['point_earned' , '>', 0],
+            'status' => '0'
+        ])->orderBy('id', 'desc')->get();
+
+        return view('monthly-incentive.index', $this->data);
+    }
+
+    public function get_index_json()
+    {
+        $user_incentive = UserIncentive::with('user')->where([
+            ['point_earned' , '>', 0],
+            'status' => '0'
+        ])->orderBy('id', 'desc')->get();
+        //dd('ok');
+        return response()->json($user_incentive);
     }
 
     /**

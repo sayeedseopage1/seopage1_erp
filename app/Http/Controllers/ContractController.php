@@ -2097,6 +2097,7 @@ class ContractController extends AccountBaseController
         $deal->authorization_status = 1;
         $deal->price_authorization = $request->price_authorization;
         $deal->requirment_define = $request->requirment_define;
+        $deal->project_deadline_authorization = $request->project_deadline_authorization;
 
         //kpi settings
         $kpiSetting = kpiSetting::first();
