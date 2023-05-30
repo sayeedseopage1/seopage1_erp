@@ -77,9 +77,17 @@ class ProjectMilestoneController extends AccountBaseController
         }
 
         //  dd($output);
+        if($project->deal->project_type == 'hourly')
+        {
+            return response()->json(['status'=>200]);
 
-//        return back()->with('success','Milestone Status Updated Successfully');
-        return response()->json(['status'=>200]);
+        }else 
+        {
+            return back()->with('success','Milestone Status Updated Successfully');
+        }
+
+//       
+       
     }
     public function createAutoMilestone(Request $request)
     {
