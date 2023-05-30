@@ -468,10 +468,9 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                     text: 'Milestone completed successfully.',
                                     icon: 'success',
                                 }).then(function() {
+                                    $(this).closest("form").submit();
                                     window.location.reload();
                                 });
-                            }else{
-                                $(this).closest("form").submit();
                             }
                         },
                         error: function(response) {
@@ -483,6 +482,8 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                         }
                     });
                 }else{
+                
+  
                     $.ajax({
                         url: '{{route('milestone-complete')}}',
                         type: 'POST',
@@ -498,10 +499,9 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                     text: 'Milestone Status Updated Successfully',
                                     icon: 'success',
                                 }).then(function() {
+                                    $(this).closest("form").submit();
                                     window.location.reload();
                                 });
-                            }else{
-                                $(this).closest("form").submit();
                             }
                         },
                         error: function(response) {
@@ -521,80 +521,34 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 @else
 <script type="text/javascript">
-    $(document).ready(function() {
+     $(document).ready(function() {
         $('.complete_milestone').click(function(e) {
             e.preventDefault();
-            var id = $(this).attr('data-id');
-            // console.log(id);
             Swal.fire({
-                title: "Complete milestone",
-                text: "Are you sure want to complete milestone?",
-                icon: 'warning',
-                showCancelButton: true,
-                focusConfirm: false,
-                confirmButtonText: "Yes",
-                cancelButtonText: "Cancel",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        // url: '/projects/delete-deliverables/' + id,
-                        url: '{{route('create-auto-milestone')}}',
-                        type: 'POST',
-                        dataType: 'JSON',
-                        data: {
-                            '_token': '{{ csrf_token() }}',
-                            'id':id,
-                        },
-                        success: function(response) {
-                            if(response.status==400){
-                                swal.fire({
-                                    title: 'Deleted!',
-                                    text: 'The item has been deleted successfully.',
-                                    icon: 'success',
-                                }).then(function() {
-                                    window.location.reload();
-                                });
-                            }
-                        },
-                        error: function(response) {
-                            swal.fire({
-                                title: 'Error!',
-                                text: 'An error occurred while deleting the item.',
-                                icon: 'error',
-                            });
-                        }
-                    });
-                }
-            });
+            title: "Complete milestone",
+            text: "Are you sure want to complete milestone?",
+            icon: 'warning',
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: "@lang('messages.confirm')",
+            cancelButtonText: "@lang('app.cancel')",
+            customClass: {
+                confirmButton: 'btn btn-primary mr-3',
+                cancelButton: 'btn btn-secondary'
+            },
+            showClass: {
+                popup: 'swal2-noanimation',
+                backdrop: 'swal2-noanimation'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $(this).closest("form").submit();
+            }
+        });
         })
     })
-    {{--$(document).ready(function() {--}}
-    {{--    $('.complete_milestone').click(function(e) {--}}
-    {{--        e.preventDefault();--}}
-    {{--        Swal.fire({--}}
-    {{--        title: "Complete milestone",--}}
-    {{--        text: "Are you sure want to complete milestone?",--}}
-    {{--        icon: 'warning',--}}
-    {{--        showCancelButton: true,--}}
-    {{--        focusConfirm: false,--}}
-    {{--        confirmButtonText: "@lang('messages.confirm')",--}}
-    {{--        cancelButtonText: "@lang('app.cancel')",--}}
-    {{--        customClass: {--}}
-    {{--            confirmButton: 'btn btn-primary mr-3',--}}
-    {{--            cancelButton: 'btn btn-secondary'--}}
-    {{--        },--}}
-    {{--        showClass: {--}}
-    {{--            popup: 'swal2-noanimation',--}}
-    {{--            backdrop: 'swal2-noanimation'--}}
-    {{--        },--}}
-    {{--        buttonsStyling: false--}}
-    {{--    }).then((result) => {--}}
-    {{--        if (result.isConfirmed) {--}}
-    {{--            $(this).closest("form").submit();--}}
-    {{--        }--}}
-    {{--    });--}}
-    {{--    })--}}
-    {{--})--}}
+    
 </script>
 @endif
 <script type="text/javascript">
