@@ -2,6 +2,7 @@
 
 @section('filter-section')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+<script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
 <style>
 .milestone-wrapper{
   height: auto !important;
@@ -38,7 +39,6 @@
 @section('content')
 <?php
   $project_id= App\Models\Project::where('deal_id',$deal->id)->first();
-  //dd($project_id->id);
 
  ?>
 
@@ -148,8 +148,263 @@
 
       </div>
 
-    
-           
+    <h4 class="text-center">Deal Details From Sales Team</h4>
+      <hr>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Project Milestones</h4>
+                          <br>
+                          <?php
+                          //dd($deal);
+                          //$project= App\Models\Project::where('deal_id',$deal->id)->first();
+                          $milestones= App\Models\ProjectMilestone::where('project_id',$project_id->id)->get();
+                           ?>
+                           <table class="table table-responsive table-bordered table-striped">
+                             <thead class="thead-dark">
+                               <tr>
+                                 <th scope="col">#</th>
+                                 <th scope="col" class="col-3 col-sm-2">Milestone Name</th>
+                                 <th scope="col" class="col-3 col-sm-2">Milestone Type</th>
+                                 <th scope="col" class="col-3 col-sm-2">Milestone Cost</th>
+                                  <th scope="col" class="col-6 col-md-8">Milestone Summary</th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                               @foreach($milestones as $milestone)
+                               <tr>
+                                 <th>{{$loop->index+1}}</th>
+                                 <td>{{$milestone->milestone_title}}</td>
+                                 <td>{{$milestone->milestone_type}}</td>
+                                 <td>{{$milestone->actual_cost}}{{$milestone->original_currency->currency_symbol}}</td>
+                                 <td>@if($milestone->summary != null)
+                                   {!!$milestone->summary!!}
+                                 @else
+                                 --
+                                 @endif
+                                </td>
+                               </tr>
+                               @endforeach
+
+                             </tbody>
+                        </table>
+
+
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      @php
+      $contract = App\Models\Contract::with([
+
+            'client',
+            'client.clientDetails',
+            
+            'renewHistory',
+            'renewHistory.renewedBy',
+            
+            'discussion.user',
+        ])->findOrFail($project_id->deal_id);
+      @endphp
+           <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Freelancer Profile Link</h4>
+                          <br>
+                          <p><a target="_blank" href="{{ $contract->deal->profile_link}}">{{ $contract->deal->profile_link}}</a></p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Freelancer Message Link</h4>
+                          <br>
+                          <?php
+                          $mystring = $contract->deal->message_link;
+
+                              $output = str_replace('<br>',' ', $mystring);
+
+                              $output_final= (trim($output));
+                              $data= explode("  ", $output_final);
+                            //  dd(($data));
+
+                           ?>
+                           @foreach($data as $message)
+                          <p><a target="_blank" href="{{ $message}}">{{ $message}}</a></p>
+                          @endforeach
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description2 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>
+                            Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency.
+                            It should include home, about, his services in one page, blog, and contact. The look and feel should be
+                            better than the references.)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description3 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>
+                            Reference websites and what the references are for (Ex: ABC.com is for the color scheme. XYZ.com is for
+                              section layouts DEF.com is for header & footer styling. However, none of these can be copied)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description4 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>
+                            Any particular focus/concern of the client (Ex: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work
+                            the way he wants.)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description5 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>
+                            Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description6 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description7 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>  If there is any cross-departmental work involved in this project
+                            (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web
+                            development)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description8 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Any other notes for the project manager/technical team</h4>
+                          <br>
+                          <p>{!! $contract->deal->description9 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
              
       <div class="content-wrapper border-top-0 client-detail-wrapper">
         <div class="card border-0 invoice">
@@ -230,7 +485,7 @@
     </div>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
+    <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
     <script type="text/javascript">
     function myFunction{{$deal->hash}}() {
       // Get the text field
@@ -256,14 +511,14 @@
         // alert('ok');
         $('#createDeal').attr("disabled", true);
         $('#createDeal').html("Processing...");
-        var description2 = CKEDITOR.instances.description2Text.getData();
+        /*var description2 = CKEDITOR.instances.description2Text.getData();
         var description3 = CKEDITOR.instances.description3Text.getData();
         var description4 = CKEDITOR.instances.description4Text.getData();
         var description5 = CKEDITOR.instances.description5Text.getData();
         var description6 = CKEDITOR.instances.description6Text.getData();
         var description7 = CKEDITOR.instances.description7Text.getData();
         var description8 = CKEDITOR.instances.description8Text.getData();
-        var description9 = CKEDITOR.instances.description9Text.getData();
+        var description9 = CKEDITOR.instances.description9Text.getData();*/
         var price_authorization = CKEDITOR.instances.price_authorization.getData();
         var requirment_define = CKEDITOR.instances.requirment_define.getData();
         var project_deadline_authorization = CKEDITOR.instances.project_deadline_authorization.getData();
@@ -275,7 +530,7 @@
         }
         var data= {
             '_token': "{{ csrf_token() }}",
-            'project_name': document.getElementById("project_name").value,
+            /*'project_name': document.getElementById("project_name").value,
             'deadline': document.getElementById("deadline").value,
             'amount': document.getElementById("amount").value,
             'original_currency_id': document.getElementById("original_currency_id").value,
@@ -289,11 +544,11 @@
             'description4': description4,
             'description5': description5,
             'description6': description6,
-            'description7': description7,
+            'description7': description7,*/
             'price_authorization': price_authorization,
             'requirment_define': requirment_define,
             'project_deadline_authorization': project_deadline_authorization,
-            'id': '{{$deal->id}}',
+            'id': '{{$project_id->deal_id}}',
         }
         // console.log(data);
         $.ajaxSetup({
