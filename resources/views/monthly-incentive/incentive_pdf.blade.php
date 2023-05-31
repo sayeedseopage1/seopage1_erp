@@ -321,7 +321,6 @@
                     <th>Title</th>
                     <th>Earned Point</th>
                     <th>Deduction Point</th>
-                    <th>Achieve Goal</th>
                     <th>Earned Incentive</th>
                 </tr>
             </thead>
@@ -331,7 +330,6 @@
                     <td>Monthly Incentive</td>
                     <td>{{ $data['point_earned'] }}</td>
                     <td>{{ $data['deduction_amount'] }}</td>
-                    <td>{{ $data['achieve_goal'] }}</td>
                     <td>{{ $data['incentive_earned'] }} BDT</td>
                 </tr>
                 <!-- and so on... -->

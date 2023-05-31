@@ -57,7 +57,7 @@ class MonthlyKpiIncentive extends Command
             $existing_kpi->start_month = Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d');
             
             kpiSetting::insert($existing_kpi->toArray());
-        } else if (Carbon::today() == Carbon::now()->endOfMonth() || 1==1) {
+        } else if (Carbon::today() == Carbon::now()->endOfMonth()) {
             $this_month_kpi = kpiSetting::where([
                 'kpi_status' => '1',
                 'cron_status' => '1',

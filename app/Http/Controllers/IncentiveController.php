@@ -53,6 +53,7 @@ class IncentiveController extends AccountBaseController
         ])->get()->pluck('id');
 
         $user_shift_goal = GoalSetting::whereIn('team_id', $user_shift)
+        ->where('goalType', 'minimum',)
         ->whereDate('startDate', '>=', $start_date)
         ->whereDate('endDate', '<=', $end_date)
         ->get()->count();
