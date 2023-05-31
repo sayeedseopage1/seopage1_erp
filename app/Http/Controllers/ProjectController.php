@@ -3406,7 +3406,7 @@ class ProjectController extends AccountBaseController
     }
     public function ProjectCompletionSubmit(Request $request)
      {
-     // dd($request);
+//      dd($request);
         $validated = $request->validate([
             'qc_protocol' => 'required',
             'login_information' => 'required',
@@ -3418,9 +3418,16 @@ class ProjectController extends AccountBaseController
             'comments3'=> 'required',
             'dummy_yes'=> 'required',
             'dummy_information'=> 'required',
+            'main_page_number'=> 'required',
+            'secondary_page_number'=> 'required',
+            'backup_email_address'=> 'required',
+            'theme_name'=> 'required',
+            'theme_url'=> 'required',
+            'day_interval'=> 'required',
             'notify' => 'required',
             'actual_yes' => 'required',
             'actual_information' => 'required',
+            'website_plugin_box_information' => 'required',
             'price' => 'required',
             'login_url' => 'required_if:login_information,1',
             'login' => 'required_if:login_information,1',
@@ -3450,6 +3457,13 @@ class ProjectController extends AccountBaseController
             'price.required' => 'This field is required. Please give rating to the sales team for defining price!!',
             'actual_link' => 'This field is required. Please input the actual site link here!!',
             'dummy_link' => 'This field is required. Please input the Dummy or Test site link!!',
+            'main_page_number.required' => 'This field is required!!',
+            'secondary_page_number.required' => 'This field is required!!',
+            'backup_email_address.required' => 'This field is required!!',
+            'day_interval.required' => 'This field is required!!',
+            'theme_name.required' => 'This field is required!!',
+            'theme_url.required' => 'This field is required!!',
+            'website_plugin_box_information.required' => 'This field is required. Please select Yes or No!!',
         ]);
 //      dd($request);
       $milestone= new ProjectSubmission();
@@ -3498,11 +3512,9 @@ class ProjectController extends AccountBaseController
       $project_portfolio->sub_niche = $data['sub_niche'];
       $project_portfolio->theme_name = $data['theme_name'];
       $project_portfolio->theme_url = $data['theme_url'];
-      $project_portfolio->plugin_information = $data['plugin_information'];
+      $project_portfolio->plugin_information = $data['website_plugin_box_information'];
       $project_portfolio->main_page_number = $data['main_page_number'];
-      $project_portfolio->main_page_name = $data['main_page_name'];
       $project_portfolio->secondary_page_number = $data['secondary_page_number'];
-      $project_portfolio->secondary_page_name = $data['secondary_page_name'];
       $project_portfolio->backup_email_address = $data['backup_email_address'];
       $project_portfolio->day_interval = $data['day_interval'];
       $project_portfolio->description = $data['description'];

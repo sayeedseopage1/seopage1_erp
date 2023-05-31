@@ -96,13 +96,14 @@
                         {{-- top filter bar --}}
 
                         <div class="row">
+{{--                            {{dd($portfolios)}}--}}
                             <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
                                 <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select CMS Category</label>
                                 <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
                                     <select name="cms_id" id="cms_id" data-live-search="true" class="w-100 form-control select-picker error" data-size="8">
                                         <option value="">--</option>
-                                        @foreach ($portfolios as $portfolio)
-                                            <option value="{{ $portfolio->id }}">{{ $portfolio->cms_name }}</option>
+                                        @foreach ($project_cmss as $project_cms)
+                                            <option value="{{ $project_cms->id }}">{{ $project_cms->cms_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -113,8 +114,8 @@
                                 <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
                                     <select name="website_type" id="website_type" data-live-search="true" class="w-100 form-control select-picker error" data-size="8">
                                         <option value="">--</option>
-                                        @foreach ($portfolios as $portfolio)
-                                            <option value="{{$portfolio->id}}">{{$portfolio->website_type}}</option>
+                                        @foreach ($website_types as $website_type)
+                                            <option value="{{$website_type->id}}">{{$website_type->website_type}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -126,8 +127,8 @@
                                 <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
                                     <select name="website_category" id="website_category" data-live-search="true" class="w-100 form-control select-picker error" data-size="8">
                                         <option value="">--</option>
-                                        @foreach ($portfolios as $portfolio)
-                                            <option value="{{$portfolio->id}}">{{$portfolio->category_name}}</option>
+                                        @foreach ($website_categories as $website_category)
+                                            <option value="{{$website_category->id}}">{{$website_category->category_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -211,10 +212,10 @@
                                             </div>
                                         </div>
                                         <div class="row mt-3">
-                                            <div class="col-md-6 mb-3 mb-md-0">
-                                                <h5>Final price with bonus and additional requirements:</h5>
-                                                <span>$ 4654 USD</span>
-                                            </div>
+{{--                                            <div class="col-md-6 mb-3 mb-md-0">--}}
+{{--                                                <h5>Final price with bonus and additional requirements:</h5>--}}
+{{--                                                <span>$ 4654 USD</span>--}}
+{{--                                            </div>--}}
                                             <div class="col-md-6 d-flex">
                                                 <h5>Theme Name:</h5>
                                                 <p class="ml-2">{{$portfolio->theme_name}}</p>
@@ -262,7 +263,7 @@
                                                 }else {
                                                     $add_hours = 0;
                                                     $add_minutes = $project_time_minutes + $active_time_minutes;
-                                                } 
+                                                }
                                                 $total_hours = intval(round($project_time_logs, 1)) + $active_time_hours + $add_hours.'.'.$add_minutes;
                                                 $logged_hours = intval(round($project_time_logs, 1)) + $active_time_hours + $add_hours . ' hrs '. $add_minutes . ' mins';
                                                 @endphp
