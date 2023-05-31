@@ -9,7 +9,14 @@ import './incentives.css'
 import { useUsers } from '../hooks/useUsers';
 
 const IncentiveContainer  = () => {  
-    return <Outlet />;
+    const { usersIsFetching } = useUsers();
+    if(usersIsFetching){
+        <div style={{ display: 'flex', alignItems: 'center', "justifyContent": 'center', width: "100%", height: '100vh' }}>
+                <div>Loading...</div>
+            </div>
+    }else {
+        return <Outlet />
+    };
 }
 
 

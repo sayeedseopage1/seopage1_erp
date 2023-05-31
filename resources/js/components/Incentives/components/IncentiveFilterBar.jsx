@@ -87,50 +87,25 @@ export default function CashPointsFilter ({
 
 
 
-    // const getEmployees = (shift) => { 
-    //     let users = []; 
-         
-    //     if(shift.members){
-    //         let members = shift?.members?.split(',')?.filter(d => d !== '');
-    //         members?.map( m => {
-    //             let user = getUserById(m);
-    //             console.log(user)
-    //             users.push({
-    //                 id: user?.id,
-    //                 name: user?.name,
-    //                 image_url: user?.image_url,
-    //             });
-    //         }); 
-
-    //         users.length && setSelectedEmployee(users[0])
-    //     }
-         
-    //     return users;
-    // }
-
-    const getEmployees = async (shift) => { 
+    const getEmployees = (shift) => { 
         let users = []; 
-    
+         
         if(shift.members){
             let members = shift?.members?.split(',')?.filter(d => d !== '');
-            for (const m of members) {
-                let user = await getUserById(m);
-                console.log(user)
+            members?.map( m => {
+                let user = getUserById(m);
                 users.push({
                     id: user?.id,
                     name: user?.name,
                     image_url: user?.image_url,
                 });
-            }
-    
-            if (users.length) {
-                setSelectedEmployee(users[0]);
-            }
+            }); 
+
+            users.length && setSelectedEmployee(users[0])
         }
-    
+         
         return users;
     }
-
 
     React.useEffect(()=> {
         if(selectedShift){
