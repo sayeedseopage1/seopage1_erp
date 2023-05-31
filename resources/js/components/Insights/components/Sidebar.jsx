@@ -316,7 +316,7 @@ const InsightSidebar = () => {
                                                                     }}/>  
                                                                 </div>:
                                                                 <span className='cnx_ins__sidebar_dashboards_title_badge'>
-                                                                    {filteredGoals[_.toLower(section)].length || 0}
+                                                                    {filteredGoals[_.toLower(section)].filter(d => _.toLower(d.title).includes(_.lowerCase(search))).length || 0}
                                                                 </span>
                                                             }
                                                         </div>

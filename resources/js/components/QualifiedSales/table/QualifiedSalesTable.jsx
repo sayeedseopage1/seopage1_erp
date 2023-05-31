@@ -18,18 +18,20 @@ const QualifiedSalesTable = ({data = []}) => {
 
         
 
-        //  // sort by lsColumn
+        // //  // sort by lsColumn
 
-        // //  const columns = _columns.filter(d => activeColumns.includes(d.id))
-        // //             .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
+        // // //  const columns = _columns.filter(d => activeColumns.includes(d.id))
+        // // //             .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
                  
         
         // if(lsColumn){
         //     lsColumn = JSON.parse(lsColumn);
-        //      _columns = _columns.sort((a, b) = lsColumn.indexOf(a.id) - lsColumn.indexOf(b.id));
+        //     console.log({lsColumn})
+        //      _columns = _columns.sort((a, b) => lsColumn.indexOf(a.id) - lsColumn.indexOf(b.id));
+        //      console.log({sort: _columns});
         // }
        
-        // console.log(_columns)
+        // console.log({_columns})
 
         setColumns([..._columns]);
         

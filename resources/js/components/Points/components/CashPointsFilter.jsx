@@ -296,7 +296,9 @@ export default function CashPointsFilter ({
 
 
             {/* sidebar */}
-            <div className='sp1__pp_filter_sidebar_container'>
+           {
+             Number(window?.Laravel?.user?.role_id) === 1 && 
+             <div className='sp1__pp_filter_sidebar_container'>
                 <div 
                     className='sp1__pp_filter_sidebar_toggle' 
                     onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
@@ -377,6 +379,7 @@ export default function CashPointsFilter ({
                     )
                 }
             </div>
+           } 
 
 
         </div>
