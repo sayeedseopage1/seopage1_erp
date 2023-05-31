@@ -76,14 +76,30 @@
 
          {{-- item --}}
          <section class="sp1_pa_tasks">
-            <div class="d-flex pt-3 pb-1 border-bottom" style="border-color: #eef2f8;">
-               <div>
-                  <h6>"QC form for project Taking screenshot a quick mockup was authorized by you"</h6>
-               </div>
+            <div class="py-3 border-bottom" style="border-color: #eef2f8;">
+               <div class="row">
+                  <div class="col-9 ">
+                     <h6>"QC form for project Taking screenshot a quick mockup was authorized by you"</h6>
 
-               {{-- action view --}}
-               <div>
-                  
+                     <p>
+                        "<a href="#">Develierables</a> for project <a href="#">Taking screenshot and changing names etc to do a quick mockup</a> (PM: <a href="#">Diner M Islam</a>) from Client: <a href="#">Friends. cigjai</a> needs to be authorized"
+                     </p>
+
+
+                     <div class="d-flex align-items-center">
+                        <button class="sp1_pa_nav_link mr-2">Review</button>
+                        <button class="sp1_pa_nav_link mr-2">Approve</button>
+                        <button class="sp1_pa_nav_link mr-2">Deny</button>
+                        <button class="sp1_pa_nav_link mr-2">Request Modifications</button> 
+                     </div>
+
+                  </div>
+
+                  <div class="col-2">
+                     <div>
+                        akdfklsdj
+                     </div>
+                  </div>
                </div>
             </div>
          </section>
@@ -97,11 +113,13 @@
 <style type="text/css">
    .sp1_pa_nav_link{
       padding: 6px 32px !important;
-      width: 120px;
+      min-width: 120px;
       text-align: center;
       border: 2px solid var(--header_color);
       border-radius: 6px;
       margin-right: 10px;
+      background: #fff;
+      white-space: nowrap;
    }
 
    .sp1_pa_nav_link:hover{
