@@ -20,6 +20,47 @@
         </div>
     </div>
 </div>
+{{--<div class="modal" id="taskRevision">--}}
+{{--    <div class="modal-dialog modal-dialog-centered">--}}
+{{--        <div class="modal-content">--}}
+{{--            <div class="modal-header">--}}
+{{--                <h4 class="modal-title">Revision of Task</h4>--}}
+{{--                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>--}}
+{{--            </div>--}}
+{{--            <form  action="{{route('task-status-revision')}}" method="post">--}}
+{{--                @csrf--}}
+{{--                <input type="hidden" name="task_id" value="{{$task->id}}">--}}
+{{--                <input type="hidden" name="user_id" value="{{$task->last_updated_by}}">--}}
+{{--                <input type="hidden" id="revision_reason" name="revision_acknowledgement" value="">--}}
+{{--                <div class="modal-body">--}}
+{{--                    <div class="container">--}}
+{{--                        <div class="row flex-column">--}}
+{{--                            <div class="mb-3">--}}
+{{--                                Comments--}}
+{{--                                <sup class="f-14 text-danger">*</sup>--}}
+{{--                                <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Comments" data-html="true" data-trigger="hover"></i>--}}
+{{--                            </div>--}}
+{{--                            <div class="">--}}
+{{--                                <textarea name="comments2" id="comments2" class="form-control"></textarea>--}}
+{{--                                <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>--}}
+{{--                                <script>--}}
+{{--                                    CKEDITOR.replace('comments2',{--}}
+{{--                                        height:100,--}}
+{{--                                    });--}}
+{{--                                </script>--}}
+{{--                                <span id="comments2Error" class="invalid-feedback" style="display: none;"></span>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div class="modal-footer">--}}
+{{--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--}}
+{{--                    <button type="submit" id="submitBtnRevision_ajax" class="btn btn-primary" name="pm_revision">Submit</button>--}}
+{{--                </div>--}}
+{{--            </form>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
 <div class="modal" id="taskRevision">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -27,7 +68,7 @@
                 <h4 class="modal-title">Revision of Task</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form  action="{{route('task-status-revision')}}" method="post">
+            <form  action="{{route('task-status-revision')}}" method="post" id="revisionForm">
                 @csrf
                 <input type="hidden" name="task_id" value="{{$task->id}}">
                 <input type="hidden" name="user_id" value="{{$task->last_updated_by}}">
@@ -48,48 +89,32 @@
                                         height:100,
                                     });
                                 </script>
-                                <span id="commentsError" class="text-danger" ></span>
+                                <span id="comments2Error" class="invalid-feedback" style="display: none;"></span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" id="submitBtnRevision_ajax" class="btn btn-primary" name="pm_revision" onclick="submitBtnRevision()">Submit</button>
+                    <button type="submit" id="submitBtnRevision_ajax" class="btn btn-primary" name="pm_revision">Submit</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
 <script>
-    /*$('.revision_reason_btn').click(function(e){
-        e.preventDefault();
-        var revision_reason = this.name;
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            type: "POST",
-            url: "{{route('tasks.revision_reason')}}",
-            data: {
-                '_token': "{{ csrf_token() }}",
-                'task_id': {{$task->id}},
-                'revision_reason': revision_reason,
-            },
-            dataType: "json",
-            success: function (response) {
-                // console.log(response.status);
-                // if(response.status==200){
-                //     // window.location.reload();
-                //     toastr.success('Task Revision Reason Successfully');
-                // }
+    document.getElementById("revisionForm").addEventListener("submit", function(event) {
+        var comments2Value = CKEDITOR.instances.comments2.getData().trim();
+        var comments2Error = document.getElementById("comments2Error");
 
-            },
-        });
-    });*/
+        if (comments2Value === "") {
+            comments2Error.textContent = "Comments field is required.";
+            comments2Error.style.display = "block";
+            event.preventDefault(); // Prevent form submission
+        }
+    });
 
 
     $('.revision_reason_btn').click(function() {
