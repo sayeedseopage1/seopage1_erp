@@ -39,7 +39,7 @@ const DragableHeader = ({column, columns, setColumns, sortConfig }) => {
             if(item.column !== column) {
                 const reOrderColumn = reOrder(item.column, column);
                 setColumns(reOrderColumn);
-                localStorage.setItem(`pointTableColumn_${window?.Laravel?.user?.id}`, JSON.stringify(reOrderColumn));
+                localStorage.setItem(`qualifiedSalesTable_${window?.Laravel?.user?.id}`, JSON.stringify(reOrderColumn));
             }
         },
         collect: (monitor) => ({

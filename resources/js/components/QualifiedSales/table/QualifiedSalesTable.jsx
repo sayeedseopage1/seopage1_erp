@@ -12,11 +12,33 @@ const QualifiedSalesTable = ({data = []}) => {
         setSortConfig,
     } = React.useContext(QualifiedSalesContext);
 
-
-    // initial state
     React.useEffect(() => {
-        setColumns([...defaultColumns]);
-    }, []);
+        let _columns = defaultColumns;
+        // let lsColumn = localStorage.getItem(`qualifiedSalesTable_${window?.Laravel?.user?.id}`);
+
+        
+
+        //  // sort by lsColumn
+
+        // //  const columns = _columns.filter(d => activeColumns.includes(d.id))
+        // //             .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
+                 
+        
+        // if(lsColumn){
+        //     lsColumn = JSON.parse(lsColumn);
+        //      _columns = _columns.sort((a, b) = lsColumn.indexOf(a.id) - lsColumn.indexOf(b.id));
+        // }
+       
+        // console.log(_columns)
+
+        setColumns([..._columns]);
+        
+    }, [])
+
+    // // initial state
+    // React.useEffect(() => {
+    //     setColumns([...defaultColumns]);
+    // }, []);
 
 
     // config sort
@@ -52,6 +74,7 @@ const QualifiedSalesTable = ({data = []}) => {
         setSortConfig({ key, direction });
     };
 
+    
 
   return (
     <div className="sp1_qs_table">

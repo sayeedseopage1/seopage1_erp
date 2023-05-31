@@ -46,11 +46,11 @@ export default function CashPointsFilter ({
     });
 
     // fetch project list
-    // projects
-    const {
-        data: projects,
-        isFetching: projectsIsFetching
-    } = useGetProjectsOptionsQuery(); 
+    // // projects
+    // const {
+    //     data: projects,
+    //     isFetching: projectsIsFetching
+    // } = useGetProjectsOptionsQuery(); 
     
 
     React.useEffect(() => {
@@ -160,40 +160,56 @@ export default function CashPointsFilter ({
     const _employee = React.useMemo(() => selectedEmployee, [selectedEmployee])
 
     React.useEffect(() => {
-        if(!dept || !selectedEmployee || !selectedShift) return;
-
-        pointTableData({
-            department_id: dept?.id,
-            team_id: selectedShift?.id,
-            user_id: selectedEmployee?.id,
-            start_date: startDate,
-            end_date: endDate,
-            project_id: null
-        })
+        const user = window?.Laravel?.user;
+        if(user?.role_id === 1){
+            if(!dept || !selectedEmployee || !selectedShift) return;
+            pointTableData({
+                department_id: dept?.id,
+                team_id: selectedShift?.id,
+                user_id: selectedEmployee?.id,
+                start_date: startDate,
+                end_date: endDate,
+                project_id: null
+            })
+        }else if(selectedEmployee){ 
+            pointTableData({
+                user_id: user?.id,
+                start_date: startDate,
+                end_date: endDate, 
+            })
+        }
     }, [_employee]);
 
 
     React.useEffect(() => {
-        if(!dept || !selectedEmployee || !selectedShift) return;
-
-        pointTableData({
-            department_id: dept?.id,
-            team_id: selectedShift?.id,
-            user_id: selectedEmployee?.id,
-            start_date: startDate,
-            end_date: endDate,
-            project_id: null
-        })
+        const user = window?.Laravel?.user; 
+      if(user?.role_id === 1) {
+            if(!dept || !selectedEmployee || !selectedShift) return;
+            pointTableData({
+                department_id: dept?.id,
+                team_id: selectedShift?.id,
+                user_id: selectedEmployee?.id,
+                start_date: startDate,
+                end_date: endDate,
+                project_id: null
+            })
+      } else if(selectedEmployee) { 
+            pointTableData({ 
+                user_id: user?.id,
+                start_date: startDate,
+                end_date: endDate,
+            })
+      }
     }, [endDate]);
 
 
 
-    // handle project filter
-    const handleProjectFilter = (e, project) => {
-        e.preventDefault();
-        setProject(project);
+    // // handle project filter
+    // const handleProjectFilter = (e, project) => {
+    //     e.preventDefault();
+    //     setProject(project);
         
-    }
+    // }
 
     // set table data
     React.useEffect(() => {
