@@ -668,6 +668,58 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
           </div>
           <!-- BUDGET VS SPENT END -->
       </div>
+
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Price Authorization</h4>
+                          <br>
+                          <p>{!!$contract->deal->price_authorization!!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Requirment Define</h4>
+                          <br>
+                          <p>{!! $contract->deal->requirment_define !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Project Deadline Authorization</h4>
+                          <br>
+                          <p>{!! $contract->deal->project_deadline_authorization !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
     <!-- CARD FOOTER START -->
 
     <!-- CARD FOOTER END -->
