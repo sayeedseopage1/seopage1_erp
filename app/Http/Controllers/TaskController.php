@@ -1448,6 +1448,11 @@ class TaskController extends AccountBaseController
     }
 //    ACCEPT AND CONTINUE BUTTON SECTION
     public function acceptContinue(Request $request){
+        $request->validate([
+            'text3' => 'required',
+        ], [
+            'text3.required' => 'This field is required!',
+        ]);
             $task_status= Task::find($request->task_id);
             $task_status->task_status="in progress";
             $task_status->board_column_id=3;
@@ -1499,6 +1504,11 @@ class TaskController extends AccountBaseController
 
 //        DENY AND CONTINUE BUTTON SECTION
         public function denyContinue(Request $request) {
+            $request->validate([
+                'text2' => 'required',
+            ], [
+                'text2.required' => 'This field is required!',
+            ]);
             $task_status= Task::find($request->task_id);
             $task_status->task_status="in progress";
             $task_status->board_column_id=3;
@@ -1512,7 +1522,7 @@ class TaskController extends AccountBaseController
                 $sub_task_status= Task::find($find_task_id->id);
                 $sub_task_status->task_status = "incomplete";
                 $sub_task_status->board_column_id=1;
-                $sub_task_status->save(); 
+                $sub_task_status->save();
                 //dd($request->subTask[$key]);
                 $tasks_accept = new TaskRevision();
                 $tasks_accept->deny_and_continue = $request->text3;
