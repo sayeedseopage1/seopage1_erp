@@ -130,7 +130,7 @@ export default function CashPointsFilter ({
 
 
     const _employee = React.useMemo(() => selectedEmployee, [selectedEmployee])
-    console.log({selectedEmployee})
+    //console.log({selectedEmployee})
 
     React.useEffect(() => {
         const user = window?.Laravel?.user;
