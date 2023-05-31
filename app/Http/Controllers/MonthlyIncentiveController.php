@@ -72,7 +72,25 @@ class MonthlyIncentiveController extends AccountBaseController
      */
     public function show($id)
     {
-        //
+        $data = UserIncentive::findOrfail($id);
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option('enable_php', true);
+        return view('monthly-incentive.incentive_pdf', compact('data'));
+        $pdf->loadView('monthly-incentive.incentive_pdf', $data->toArray());
+        
+        $dom_pdf = $pdf->getDomPDF();
+        $canvas = $dom_pdf->getCanvas();
+        $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
+        
+        $pdfString = $dom_pdf->output();
+
+        return response($pdfString)->header('Content-Type', 'application/pdf');
+
+        return [
+            'pdf' => $pdf,
+            //'fileName' => $filename,
+        ];
     }
 
     /**
