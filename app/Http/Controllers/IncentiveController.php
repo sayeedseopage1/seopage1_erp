@@ -38,7 +38,7 @@ class IncentiveController extends AccountBaseController
         if (isset($request->start_date)) {
             $start_date = Carbon::parse($request->start_date)->format('Y-m-d');
         }
-        if (isset($request->end->date)) {
+        if (isset($request->end_date)) {
             $end_date = Carbon::parse($request->end_date)->format('Y-m-d');
         }
         if (Auth::user()->role_id == 8 || Auth::user()->role_id == 7 ) {
@@ -46,6 +46,16 @@ class IncentiveController extends AccountBaseController
         } else {
             $userID = $request->user_id;
         }
+
+        $user_shift = Seopage1Team::where([
+            ['id', '!=', 1],
+            ['members', 'LIKE', '%'.$userID.'%']
+        ])->get()->pluck('id');
+
+        $user_shift_goal = GoalSetting::whereIn('team_id', $user_shift)
+        ->whereDate('startDate', '>=', $start_date)
+        ->whereDate('endDate', '<=', $end_date)
+        ->get()->count();
 
         $user_goals = GoalSetting::where([
             'assigneeType' => 'User',
@@ -55,6 +65,7 @@ class IncentiveController extends AccountBaseController
             ['created_at', '>=', Carbon::now()->startOfMonth()]
         ])->count();
 
+        $user_goals = $user_shift_goal + $user_goals;
         $team_goal = GoalSetting::where([
             'assigneeType' => 'Team',
             'goalType' => 'minimum',
