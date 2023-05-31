@@ -161,7 +161,7 @@ export default function CashPointsFilter ({
 
     React.useEffect(() => {
         const user = window?.Laravel?.user;
-        if(user?.role_id === 1){
+        if(Number(user?.role_id) === 1){
             if( selectedEmployee ){
                 pointTableData({
                     department_id: dept?.id,
@@ -188,7 +188,7 @@ export default function CashPointsFilter ({
 
     React.useEffect(() => {
         const user = window?.Laravel?.user; 
-      if(user?.role_id === 1) {
+      if(Number(user?.role_id) === 1) {
             if(!dept || !selectedEmployee || !selectedShift) return;
             pointTableData({
                 department_id: dept?.id,

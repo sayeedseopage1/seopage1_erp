@@ -132,14 +132,29 @@ export default function CashPointsFilter ({
     const _employee = React.useMemo(() => selectedEmployee, [selectedEmployee])
 
     React.useEffect(() => {
-        if(!dept || !selectedEmployee || !selectedShift) return;
-
-        incentiveCurrentData({
-            team_id: selectedShift?.id,
-            user_id: selectedEmployee?.id,
-            start_date: startDate,
-            end_date: endDate,
-        })
+        const user = window?.Laravel?.user;
+        if(Number(user?.role_id) === 1){
+            if(_employee){
+                incentiveCurrentData({
+                    team_id: selectedShift?.id,
+                    user_id: selectedEmployee?.id,
+                    start_date: startDate,
+                    end_date: endDate,
+                    period: defaultSelectedDate
+                })
+            }else{
+                setIsDataFetching(false);
+                setData(null);
+            }
+        }else if(_employee){
+            incentiveCurrentData({
+                user_id: user?.id,
+                start_date: startDate,
+                end_date: endDate,
+                period: defaultSelectedDate
+            })
+        }
+        
     }, [_employee]);
 
 
@@ -151,6 +166,7 @@ export default function CashPointsFilter ({
             user_id: selectedEmployee?.id,
             start_date: startDate,
             end_date: endDate,
+            period: defaultSelectedDate
         })
     }, [endDate]);
 

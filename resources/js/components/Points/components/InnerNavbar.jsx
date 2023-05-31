@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import {motion} from 'framer-motion';
+import _ from 'lodash';
 
 
 const InnerNavbar = ({
@@ -12,6 +13,7 @@ const InnerNavbar = ({
     const wrapperRef = React.useRef(null);
     const [width, setWidth] = React.useState(0);
     const [x, setX] = React.useState(0);
+    const params  = useParams();
 
 
     React.useEffect(() => {
@@ -28,6 +30,12 @@ const InnerNavbar = ({
 
 
     }, [active])
+
+
+    React.useEffect(() => {
+        let item = items.find(d => _.lowerCase(d.name) === params?.period);
+        setActive(item?.id); 
+    }, [params]);
 
 
     return(
