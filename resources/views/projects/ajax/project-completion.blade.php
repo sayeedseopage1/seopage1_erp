@@ -423,44 +423,26 @@
                             </div>
                         </div>
                         <div class="row mt-3">
-                            <div class="col-md-3">
-                                <label for="main_page" style="margin-top: 35px;">Total Primary or Main Pages:</label>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="plugin_name">Insert Number of Pages<sup class="f-14 mr-1">*</sup></label>
-                                    <input type="number" id="main_page_number" class="form-control height-35 f-14" placeholder="0" name="main_page_number"/>
-                                    <span id="main_page_numberError" class="text-danger"></span>
-                                </div>
+                            <div class="col-md-6">
+                                <label for="main_page_number">Total Primary or Main Pages<sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Input Numeric Values Only" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <input type="number" class="form-control height-35 f-14 " name="main_page_number" id="main_page_number" value="" placeholder="0">
+                                <span id="main_page_numberError" class="text-danger"></span>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="plugin_name">Insert Name of Pages <sup class="f-14 mr-1">*</sup> <span style="font-size: 10px;">(For example: Home, Services)</span></label>
-                                    <input type="text" id="main_page_name" class="form-control height-35 f-14" placeholder="Insert page name" name="main_page_name"/>
-                                    <span id="main_page_nameError" class="text-danger"></span>
-                                </div>
+                                <label for="secondary_page_number">Total Secondary Pages<sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Input Numeric Values Only" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <input type="number" class="form-control height-35 f-14" name="secondary_page_number" id="secondary_page_number" placeholder="0">
+                                <span id="secondary_page_numberError" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mt-3">
-                            <div class="col-md-3">
-                                <label for="main_page" style="margin-top: 35px;">Total Secondary Pages:</label>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="secondary_page">Insert Number of Pages <sup class="f-14 mr-1">*</sup></label>
-                                    <input type="number" id="secondary_page_number" class="form-control height-35 f-14" placeholder="0" name="secondary_page_number"/>
-                                    <span id="secondary_page_numberError" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="secondary_page_name">Insert Name of Pages <sup class="f-14 mr-1">*</sup> <span style="font-size: 10px;">(For example: Contact Us, About)</span></label>
-                                    <input type="text" id="secondary_page_name" class="form-control height-35 f-14" placeholder="Insert page name" name="secondary_page_name"/>
-                                    <span id="secondary_page_nameError" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-6">
                                 <label for="backup_email_address">Backup email address<sup class="f-14 mr-1">*</sup></label>
                                 <input type="email" class="form-control height-35 f-14 " name="backup_email_address" id="backup_email_address" value="" placeholder="Enter Backup email address">
@@ -475,9 +457,8 @@
                         <div class="row mt-3">
                             <div class="col-md-12 col-lg-12">
                                 <div class="form-group">
-                                    <label class="text-dark-grey" data-label="true" for="descriptionText">Description
-                                        <sup class="mr-1">*</sup>
-                                        <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Description" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                    <label class="text-dark-grey" data-label="true" for="descriptionText">Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot)
+                                        <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot)" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
                                             <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                                         </svg>
                                     </label>
@@ -764,12 +745,10 @@
                 'niche': document.getElementById("niche").value,
                 'sub_niche': document.getElementById("sub_niche").value,
                 'main_page_number': document.getElementById("main_page_number").value,
-                'main_page_name': document.getElementById("main_page_name").value,
                 'secondary_page_number': document.getElementById("secondary_page_number").value,
-                'secondary_page_name': document.getElementById("secondary_page_name").value,
                 'backup_email_address': document.getElementById("backup_email_address").value,
                 'day_interval': document.getElementById("day_interval").value,
-                'plugin_information': website_plugin_box_information,
+                'website_plugin_box_information': website_plugin_box_information,
                 'plugin_name': plugin_name_values,
                 'plugin_url': plugin_url_values,
                 'theme_name': document.getElementById("theme_name").value,
@@ -912,20 +891,10 @@
                     }else{
                         $('#main_page_numberError').text('');
                     }
-                    if(error.responseJSON.errors.main_page_name){
-                        $('#main_page_nameError').text(error.responseJSON.errors.main_page_name);
-                    }else{
-                        $('#main_page_nameError').text('');
-                    }
                     if(error.responseJSON.errors.secondary_page_number){
                         $('#secondary_page_numberError').text(error.responseJSON.errors.secondary_page_number);
                     }else{
                         $('#secondary_page_numberError').text('');
-                    }
-                    if(error.responseJSON.errors.secondary_page_name){
-                        $('#secondary_page_nameError').text(error.responseJSON.errors.secondary_page_name);
-                    }else{
-                        $('#secondary_page_nameError').text('');
                     }
                     if(error.responseJSON.errors.backup_email_address){
                         $('#backup_email_addressError').text(error.responseJSON.errors.backup_email_address);
