@@ -24,6 +24,7 @@
                                 height:100,
                             });
                         </script>
+                        <span id="text2_error" class="text-danger"></span>
                     </div>
                     <div class="modal-footer">
                         <a data-toggle="modal" href="#denyAndContinue2" class="btn btn-primary">Next</a>
@@ -162,6 +163,15 @@
                 }
 
             },
+            error: function(error) {
+                if(error.responseJSON.errors.text2){
+                    $('#text2_error').text(error.responseJSON.errors.text2);
+                }else{
+                    $('#text2_error').text('');
+                }
+                $('#denyBtn').attr("disabled", false);
+                $('#denyBtn').html("Deny & Continue");
+            }
         });
     });
 </script>

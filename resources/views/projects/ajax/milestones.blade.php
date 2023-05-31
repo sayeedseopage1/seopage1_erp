@@ -178,7 +178,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                   @if($item->cancelation_status == null)
 
 
-                                     <button type="submit" class="btn-primary btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
+                                     <button type="submit" class="btn-primary btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone" data-id="{{ $item->id }}">Mark As Complete</button>
                                      <button type="submit" class="btn-danger btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}" >Cancel Milestone</button>
                   @else
                   @if(Auth::user()->role_id == 1)
@@ -437,10 +437,97 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 </script>
 
+@if($project->deal->project_type == 'hourly')
 <script type="text/javascript">
     $(document).ready(function() {
         $('.complete_milestone').click(function(e) {
             e.preventDefault();
+            var id = $(this).attr('data-id');
+            var button = $(this); // Store reference to the button
+        button.prop('disabled', true); // Disable the button
+        button.text('Processing'); // Change the button text
+            Swal.fire({
+                title: "Will you work more hours on this project after this?",
+                icon: 'warning',
+                showCancelButton: true,
+                focusConfirm: false,
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '{{route('create-auto-milestone')}}',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            'milestone_id':id,
+                            'project_id':{{$project->id}},
+                        },
+                        success: function(response) {
+                            if(response.status==200){
+                                swal.fire({
+                                    title: 'Success!',
+                                    text: 'Milestone completed successfully.',
+                                    icon: 'success',
+                                }).then(function() {
+                                    $(this).closest("form").submit();
+                                    window.location.reload();
+                                });
+                            }
+                        },
+                        error: function(response) {
+                            swal.fire({
+                                title: 'Error!',
+                                text: 'An error occurred while deleting the item.',
+                                icon: 'error',
+                            });
+                        }
+                    });
+                }else{
+
+
+                    $.ajax({
+                        url: '{{route('milestone-complete')}}',
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            'id':id,
+                        },
+                        success: function(response) {
+                            if(response.status==200){
+                                swal.fire({
+                                    title: 'Success!',
+                                    text: 'Milestone Status Updated Successfully',
+                                    icon: 'success',
+                                }).then(function() {
+                                    $(this).closest("form").submit();
+                                    window.location.reload();
+                                });
+                            }
+                        },
+                        error: function(response) {
+                            swal.fire({
+                                title: 'Error!',
+                                text: 'An error occurred while deleting the item.',
+                                icon: 'error',
+                            });
+                        }
+                    });
+                }
+            });
+        })
+    })
+</script>
+
+
+@else
+<script type="text/javascript">
+     $(document).ready(function() {
+        $('.complete_milestone').click(function(e) {
+            e.preventDefault();
+
             Swal.fire({
             title: "Complete milestone",
             text: "Are you sure want to complete milestone?",
@@ -463,9 +550,12 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                 $(this).closest("form").submit();
             }
         });
+
         })
     })
+
 </script>
+@endif
 <script type="text/javascript">
   $(document).ready(function() {
       $('.cancel_milestone').click(function(e) {

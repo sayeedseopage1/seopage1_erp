@@ -2,6 +2,7 @@
 
 @section('filter-section')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+<script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
 <style>
 .milestone-wrapper{
   height: auto !important;
@@ -38,7 +39,6 @@
 @section('content')
 <?php
   $project_id= App\Models\Project::where('deal_id',$deal->id)->first();
-  //dd($project_id->id);
 
  ?>
 
@@ -51,466 +51,378 @@
               <h5 class="d-flex justify-content-center">Link Submission for Client Data Collection</h5>
 
             @else
-                <h5>Deal Details</h5>
+                <h5>Deal Authorization</h5>
             @endif
             <hr>
-            <?php
-            $url= url('/');
-             ?>
-              <div class="invoice-table-wrapper">
-                @if($deal->submission_status == 'pending')
-                <div class="d-flex justify-content-center">
-                  <form class=""action="{{route('form-submit-to-client')}}" method="post">
-                    @csrf
-                      <input type="hidden" name="id" value="{{$deal->id}}">
+            <div class="col-md-4">
+                <td >
+                    <table  class="inv-num-date text-dark f-13 mt-3">
+                        <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                                Deal Number</td>
+                            <td class="border-left-0">#{{ $deal->deal_id }}</td>
+                        </tr>
+                        <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                                @lang('modules.projects.startDate')</td>
+                            <td class="border-left-0">{{ $deal->start_date }}
+                            </td>
+                        </tr>
+                        <tr>
+                          <td class="bg-light-grey border-right-0 f-w-500">
+                              @lang('Deadline')</td>
+                          <td class="border-left-0">{{ $deal->deadline }}
+                          </td>
+                      </tr>
+                      {{-- {{dd($deal->lead_id)}} --}}
+                      @if($deal->lead_id != null)
+                      <tr>
+                          <td class="bg-light-grey border-right-0 f-w-500">
+                            Lead Name</td>
+                          <td class="border-left-0"><a href="{{route('leads.show',$deal->lead_id)}}">{{ $deal->project_name }}</a>
+                          </td>
+                      </tr>
+                      @endif   
+                        <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                              Deal Name</td>
+                              @php
+                                  $deal= App\Models\DealStage::where('short_code',$deal->deal_id)->first();
+                              @endphp
+                            <td class="border-left-0"><a href="{{route('deals.show',$deal->id)}}">{{ $deal->project_name }}</a>
+                            </td>
+                        </tr>
+                        @php
+                            $project= App\Models\Project::where('deal_id',$deal->id)->first();
+                        @endphp
+                        
+                        @if ($deal->actual_amount != 0)
+                        <tr>
+                          <td class="bg-light-grey border-right-0 f-w-500">
+                            Deal Value </td>
+                            <td class="border-left-0">
+                                <h4>
+                                    {{$deal->actual_amount}}{{$deal->original_currency->currency_symbol}}</h4>
+                            </td>
 
 
-                  <div class="mt-3">
-                      <label for="input-state-3" class="form-label"><strong style="color:red;">Please Copy This URL, Send It To The Client & Confirm Submission</strong></label>
-                    <div class="row" style="margin-left:40px;">
+                        </tr>
 
-                      <div class="col-md-10">
-                          <input type="text" class="form-control height-35 f-14"  value="{{$url}}/deals/client-form/{{$deal->deal_id}}" id="{{$deal->deal_id}}">
+
+                        @endif
+                      {{-- @if ($deal->end_date != null)
+                            <tr>
+                                <td class="bg-light-grey border-right-0 f-w-500">@lang('modules.contracts.endDate')
+                                </td>
+                                <td class="border-left-0">{{ $deal->end_date->format(global_setting()->date_format) }}
+                                </td>
+                            </tr>
+                        @endif --}}
+                        <tr>
+                            {{--}}<td class="bg-light-grey border-right-0 f-w-500">
+                                @lang('modules.contracts.contractType')</td>
+                            <td class="border-left-0">{{ $deal->contractType->name }}
+                            </td> --}}
+                        </tr>
+                        <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                              Project Manager</td>
+                              @if($deal->pm_id != null)
+                            <td class="border-left-0"><a class="text-darkest-grey" href="/account/employees/{{$deal->pm_id}}">{{ $deal->pm->name }}</a>
+                            </td>
+                            @else
+                            <td class="border-left-0"><a class="text-darkest-grey" href="#">--</a>
+                            </td>
+                            @endif
+
+                        </tr>
+                    </table>
+
+                </td>
+              </div>
+
+            </div>
+
+          </div>
+
+
+      </div>
+
+    <h4 class="text-center">Deal Details From Sales Team</h4>
+      <hr>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Project Milestones</h4>
+                          <br>
+                          <?php
+                          //dd($deal);
+                          //$project= App\Models\Project::where('deal_id',$deal->id)->first();
+                          $milestones= App\Models\ProjectMilestone::where('project_id',$project_id->id)->get();
+                           ?>
+                           <table class="table table-responsive table-bordered table-striped">
+                             <thead class="thead-dark">
+                               <tr>
+                                 <th scope="col">#</th>
+                                 <th scope="col" class="col-3 col-sm-2">Milestone Name</th>
+                                 <th scope="col" class="col-3 col-sm-2">Milestone Type</th>
+                                 <th scope="col" class="col-3 col-sm-2">Milestone Cost</th>
+                                  <th scope="col" class="col-6 col-md-8">Milestone Summary</th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                               @foreach($milestones as $milestone)
+                               <tr>
+                                 <th>{{$loop->index+1}}</th>
+                                 <td>{{$milestone->milestone_title}}</td>
+                                 <td>{{$milestone->milestone_type}}</td>
+                                 <td>{{$milestone->actual_cost}}{{$milestone->original_currency->currency_symbol}}</td>
+                                 <td>@if($milestone->summary != null)
+                                   {!!$milestone->summary!!}
+                                 @else
+                                 --
+                                 @endif
+                                </td>
+                               </tr>
+                               @endforeach
+
+                             </tbody>
+                        </table>
+
+
+
                       </div>
-                      <div class="col-md-2">
-                              <button type="button" class="btn btn-info" onclick="myFunction{{$deal->hash}}()"><i class="fa-solid fa-copy"></i></button>
-                      </div>
-
-
-                    </div>
-
-
-
-                          <!-- The button used to copy the text -->
 
                   </div>
-                  <div class="mt-3 d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary">Confirm Submission</button>
-                  </div>
-                    </form>
-                </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      @php
+      $contract = App\Models\Contract::with([
 
-                @else
+            'client',
+            'client.clientDetails',
+            
+            'renewHistory',
+            'renewHistory.renewedBy',
+            
+            'discussion.user',
+        ])->findOrFail($project_id->deal_id);
+      @endphp
+           <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Freelancer Profile Link</h4>
+                          <br>
+                          <p><a target="_blank" href="{{ $contract->deal->profile_link}}">{{ $contract->deal->profile_link}}</a></p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Freelancer Message Link</h4>
+                          <br>
+                          <?php
+                          $mystring = $contract->deal->message_link;
+
+                              $output = str_replace('<br>',' ', $mystring);
+
+                              $output_final= (trim($output));
+                              $data= explode("  ", $output_final);
+                            //  dd(($data));
+
+                           ?>
+                           @foreach($data as $message)
+                          <p><a target="_blank" href="{{ $message}}">{{ $message}}</a></p>
+                          @endforeach
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description2 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>
+                            Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency.
+                            It should include home, about, his services in one page, blog, and contact. The look and feel should be
+                            better than the references.)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description3 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>
+                            Reference websites and what the references are for (Ex: ABC.com is for the color scheme. XYZ.com is for
+                              section layouts DEF.com is for header & footer styling. However, none of these can be copied)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description4 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>
+                            Any particular focus/concern of the client (Ex: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work
+                            the way he wants.)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description5 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>
+                            Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description6 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description7 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>  If there is any cross-departmental work involved in this project
+                            (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web
+                            development)</h4>
+                          <br>
+                          <p>{!! $contract->deal->description8 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+      <div class="row mb-4" >
+          <!-- BUDGET VS SPENT START -->
+          <div class="col-md-12">
+              <x-cards.data>
+                  <div class="row-cols-lg-1">
+                      <div class="col">
+                          <h4>Any other notes for the project manager/technical team</h4>
+                          <br>
+                          <p>{!! $contract->deal->description9 !!}</p>
+
+                      </div>
+
+                  </div>
+              </x-cards.data>
+          </div>
+          <!-- BUDGET VS SPENT END -->
+      </div>
+             
+      <div class="content-wrapper border-top-0 client-detail-wrapper">
+        <div class="card border-0 invoice">
+  
+            <!-- CARD BODY START -->
+            <div class="card-body">
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <form method="post" action="{{route('store-deal-details')}}" id="storeDeal">
-                          @csrf
-
-                          <input type="hidden" name="id" value="{{$deal->id}}">
-                          <div class="row">
-
-                            <div class="col-md-3">
-                              <div class="form-group">
-                              <label for="deal_id">Deal Id</label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16 mr-1" data-toggle="popover" data-placement="top" data-content="This is system generated unique ID for every won deal." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="text" class="form-control height-35 f-14" value="{{$deal->deal_id}}" id="deal_id" placeholder="deal_id" readonly>
-                              </div>
-
-
-                            </div>
-                            <div class="col-md-3">
-                              <div class="form-group">
-                              <label for="deal_date">Deal Creation Date</label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="This date is picked automatically when deal was converted as won deal." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="text" value="{{$deal->deal_creation_date}}" class="form-control height-35 f-14" id="deal_date" placeholder="deal_date" readonly>
-                              </div>
-
-
-                            </div>
-                            <div class="col-md-3">
-                              <div class="form-group">
-                              <label for="project_name">Project Name <span style="color:red;">*</span></label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Copy the project name from Freelancer.com." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="text" name="project_name" value="{{$deal->project_name}}" class="form-control height-35 f-14" id="project_name" placeholder="Enter project name" >
-                                  <label id="projectNameError" class="error text-danger" for="project_name"></label>
-                              </div>
-                            </div>
-                            @if($deal->lead_id != null)
-                            <div class="col-md-3">
-                              <div class="form-group">
-                              <label for="deadline">Deadline<span style="color:red;">*</span></label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Enter the deadline you mentioned when you submitted the bid. If you have discussed the deadline in-details with client, please based on your discussion enter the deadline here." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="datetime-local" name="deadline" value="{{$deal->lead->deadline}}"  class="form-control height-35 f-14" id="deadline" placeholder="Enter deadline" style="background: #ffffff;">
-                                  <label id="deadlineError" class="error text-danger" for="deadline"></label>
-                              </div>
-                            </div>
-                            @else
-                            <div class="col-md-3">
-                              <div class="form-group">
-                              <label for="deadline">Deadline<span style="color:red;">*</span></label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Enter the deadline you mentioned when you submitted the bid. If you have discussed the deadline in-details with client, please based on your discussion enter the deadline here." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="datetime-local" name="deadline"  class="form-control height-35 f-14" id="deadline" placeholder="Enter deadline" style="background: #ffffff;">
-                                  <label id="deadlineError" class="error text-danger" for="deadline"></label>
-                              </div>
-                            </div>
-                            @endif
-                          </div>
-                          <div id="success_message">
-
-                          </div>
-                          @if(Session::has('error'))
-                          <div class="alert alert-danger" role="alert">
-
-                              <div class="alert-body">
-                                  {{Session::get('error')}}
-                              </div>
-                          </div>
-                          @endif
-                          <div class="row">
-                            <div class="col-md-3">
-                              <div class="form-group">
-                              <label for="amount">Project Budget <span style="color:red;">*</span></label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="This budget is automatically taken from deal. After negotiation stage, if the price changes, please change the price in this project budget field." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="text" name="amount" value="{{$deal->actual_amount}}" class="form-control height-35 f-14" id="amount" placeholder="Enter amount">
-                                  <label id="amountError" class="error text-danger" for="amount"></label>
-                              </div>
-                            </div>
-                            <div class="col-md-3">
-                              <?php
-                              $currency= App\Models\Currency::where('id',$deal->original_currency_id)->first();
-
-                               ?>
-                              <label for="original_currency_id">Currency <span style="color:red;">*</span></label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="The currency is automatically taken when the deal was won. You cannot change the currency here." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                            <select class="form-control height-35 f-14" name="original_currency_id" readonly id="original_currency_id">
-                              <option selected value="{{$deal->original_currency->id}}">{{$deal->original_currency->currency_code}} ({{$deal->original_currency->currency_symbol}})</option>
-                            </select>
-                            </div>
-                            <div class="col-md-6">
-                              <?php
-                                $milestones= App\Models\ProjectMilestone::where('project_id',$project_id->id)->get();
-                               ?>
-                                <label for="exampleFormControlInput1">Milestones <span style="color:red;">*</span></label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Create milestones of the project. Milestone names must match the original name of the milestone on Freelancer.com. You can add as many milestone as you want but the sum of all milestone's cost must not exceed the project budget." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <div class="input-group mb-3 w-100">
-                                <div class="milestone-wrapper d-flex align-items-center flex-wrap form-control" id="milestone_value"></div>
-
-                              <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" data-toggle="modal" data-target="#milestoneaddmodal" type="button">Add</button>
-                              </div>
-
-                                <input type="hidden" class="project_id" name="project_id" id="project_id" value="{{$project_id->id}}">
-                                  <label id="milestoneError" class="error text-danger" for=""></label>
-                              @include('contracts.modals.milestoneviewmodal')
-                              @include('contracts.modals.milestonecreatemodal')
-                                @include('contracts.modals.milestoneeditmodal')
-                                @include('contracts.modals.milestonedeletemodal')
-                              </div>
-                            </div>
-
-
-
-                          </div>
-                          <div class="row">
-                            <div class="col-md-3">
-                              <div class="form-group">
-                              <label for="client_name">Client Name</label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Go to client profile or project page to see the full name of the client. Copy the full name of the client and paste the name in this field. Be sure to check after pasting whether client name is pasted on something else is pasted mistakenly." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="text" name="client_name" value="{{$deal->client_name}}" class="form-control height-35 f-14" id="client_name" placeholder="name@example.com" >
-                              </div>
-                            </div>
-                            <div class="col-md-3">
-                              <div class="form-group">
-                              <label for="client_username">Client Username</label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Copy the client's username from Freelancer.com and paste it here." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="text" name="client_username" value="{{$deal->client_username}}" class="form-control height-35 f-14" id="client_username" placeholder="name@example.com" readonly>
-                              </div>
-                            </div>
-                            <div class="col-md-3">
-                              <div class="form-group">
-                              <label for="organization">Organization</label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="This is a mandatory field. If you can manage to get the organization name of the client, please input the name in this field." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="text" name="organization" class="form-control height-35 f-14" id="organization" placeholder="Company Name" >
-                              </div>
-                            </div>
-                            <div class="col-md-3">
-                              <div class="form-group">
-                              <label for="client_email">Client Email</label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="If you get the email address from client, input it here. So, that we can contact with them when the client is not available on Freelancer.com." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="text" name="client_email" class="form-control height-35 f-14" id="client_email" placeholder="name@example.com" >
-                              </div>
-                            </div>
-
-                          </div>
+                        
+                         
+                          
+                         
+                         
                           <br>
-                          <div class="row">
-                            @if($deal->profile_link != null)
-                            <div class="col-md-12">
-                              <div class="form-group">
-                              <label for="profile_link">Freelancer Profile Link </label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Copy client's profile URL from Freelancer.com and paste it here." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="text" name="profile_link" readonly value="{{$deal->profile_link}}" class="form-control height-35 f-14" id="profile_link" placeholder="Input here">
-                              </div>
-                            </div>
-                            @else
-                            <div class="col-md-12">
-                              <div class="form-group">
-                              <label for="profile_link">Freelancer Profile Link </label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Copy the project message thread link from Freelancer.com and paste it in this field." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="text" name="profile_link" class="form-control height-35 f-14" id="profile_link" placeholder="Input here">
-                              </div>
-                            </div>
-
-
-
-                            @endif
-                              @if($deal->message_link != null)
-                              <?php
-                              $mystring = $deal->message_link;
-
-                                  $output = str_replace('<br>',' ', $mystring);
-
-                                  $output_final= (trim($output));
-                                  $data= explode("  ", $output_final);
-                                //  dd(($data));
-
-                               ?>
-                                  @foreach($data as $message)
-                            <div class="col-md-12">
-                              <div class="form-group">
-                              <label for="">Freelancer Message Link <span style="color:red;">*</span></label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Copy client's profile URL from Freelancer.com and paste it here." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                              <input type="text" name="message_link[]"  value="{{$message}}" class="form-control height-35 f-14" id="" placeholder="Input here">
-                              </div>
-                            </div>
-                            @endforeach
-                            <div class="col-md-7 dynamic-field" id="dynamic-field-1">
-
-                                       <div class="row">
-                                           <div class="col-md-9 my-2">
-                                               <div class="form-group">
-                                                   <input type="text" id="message_link"  class="form-control height-35 f-14 message_link" placeholder="Add Link Here" name="message_link[]"/>
-                                                   <label id="messageLinkError" class="error text-danger" for="message_link"></label>
-                                               </div>
-                                           </div>
-                                       </div>
-                                   </div>
-
-                                   <div class="col-md-3 my-2 form-group append-buttons">
-                                       <div class="clearfix">
-                                           <button type="button" id="add-button" class="btn btn-secondary2 float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                           <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                       </div>
-                                   </div>
-                            @else
-
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                  <label for="freelancer_message_link">Freelancer Message Thread Link</label>
-                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Copy the project message thread link from Freelancer.com and paste it in this field." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                  </svg>
-                                  <div class="col-md-7 dynamic-field" id="dynamic-field-1">
-
-                                             <div class="row">
-                                                 <div class="col-md-9 my-2">
-                                                     <div class="form-group">
-                                                         <input type="text" id="message_link"  class="form-control height-35 f-14 message_link" placeholder="Add Link Here" name="message_link[]"/>
-                                                         <label id="messageLinkError" class="error text-danger" for="message_link"></label>
-                                                     </div>
-                                                 </div>
-                                             </div>
-                                         </div>
-
-                                         <div class="col-md-3 my-2 form-group append-buttons">
-                                             <div class="clearfix">
-                                                 <button type="button" id="add-button" class="btn btn-secondary2 float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                 <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                             </div>
-                                         </div>
-
-                              </div>
-
-
-                            </div>
-                            @endif
-
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="text-dark-grey" data-label="true" for="description2Text">Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.)
-                                        <sup class="mr-1">*</sup>
-                                        <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.)" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                            <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                        </svg>
-                                    </label>
-                                    <textarea name="description2" id="description2Text" class="form-control">{!!old('description2')!!}</textarea>
-                                   <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
-                                    <script>
-                                        CKEDITOR.replace('description2');
-                                    </script>
-                                    <label id="description2Error" class="error text-danger" for="description2Text"></label>
-                                </div>
-                            </div>
-
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="description3Text">Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency.
-                                  It should include home, about, his services in one page, blog, and contact.
-                                  The look and feel should be better than the references.)
-
-                                   <span style="color:red;">*</span>
-                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Elaborate the 'WHAT' 3-4 lines here(The client needs a 5 page static WordPress website for his new design agency. It should include home, about, his services in one page, blog,and contact. The look and feel should be better than the references.)" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                    </svg></label>
-                                  <textarea name="description3" id="description3Text" class="form-control">{!!old('description3')!!}</textarea>
-                                  <script>
-                                      CKEDITOR.replace('description3');
-                                  </script>
-                                  <label id="description3Error" class="error text-danger" for="description3Text"></label>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="description4Text">Reference websites and what the references are for (Ex: ABC.com is for the color scheme.
-                                                XYZ.com is for section layouts
-                                                DEF.com is for header & footer styling.
-                                                However, none of these can be copied)
-
-                                   <span style="color:red;">*</span>
-                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Reference websites and what the references are for (Ex: ABC.com is for the color scheme.
-                                                XYZ.com is for section layouts
-                                                DEF.com is for header & footer styling.
-                                                However, none of these can be copied)" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                    </svg>
-                                </label>
-                                <textarea name="description4" class="form-control" id="description4Text" rows="3">{!!old('description4')!!}</textarea>
-                                  <script>
-                                      CKEDITOR.replace('description4');
-                                  </script>
-                                  <label id="description4Error" class="error text-danger" for="description4Text"></label>
-                              </div>
-                            </div>
-
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="description5Text">Any particular focus/concern of the client (Ex: 1. The client is very concerned about the
-                                  final look & feel so needs to be careful with the design 2.
-                                  The client is very concerned if the booking functionality will work the way he wants.)
-
-                                   <span style="color:red;">*</span>
-                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Any particular focus/concern of the client (Ex: 1. The client is very concerned about the
-                                  final look & feel so needs to be careful with the design 2.
-                                  The client is very concerned if the booking functionality will work the way he wants.)" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                    </svg>
-                                </label>
-                                <textarea name="description5" class="form-control" id="description5Text" rows="3">{!!old('description5')!!}</textarea>
-                                  <script>
-                                      CKEDITOR.replace('description5');
-                                  </script>
-                                  <label id="description5Error" class="error text-danger" for="description5Text"></label>
-                              </div>
-                            </div>
-
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="description6Text">Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)
-
-                                   <span style="color:red;">*</span><svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Required logins (Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register)" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                    </svg></label>
-                                <textarea name="description6" class="form-control" id="description6Text" rows="3">{!!old('description6')!!}</textarea>
-                                  <script>
-                                      CKEDITOR.replace('description6');
-                                  </script>
-                                  <label id="description6Error" class="error text-danger" for="description6Text"></label>
-                              </div>
-                            </div>
-
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="description7Text">Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)
-
-
-                                   <span style="color:red;">*</span><svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Logo (Upload the google drive link here. Always ask for PSD and AI files so they are editable)" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                    </svg></label>
-                                <textarea name="description7" class="form-control " id="description7Text" rows="3">{!!old('description7')!!}</textarea>
-                                  <script>
-                                      CKEDITOR.replace('description7');
-                                  </script>
-                                  <label id="description7Error" class="error text-danger" for="description7Text"></label>
-                              </div>
-                            </div>
-
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="description8Text">If there is any cross-departmental work involved in this project (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web development)
-
-
-                                   <span style="color:red;">*</span><svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="If there is any cross-departmental work involved in this project (Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web development)" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                    </svg></label>
-                                <textarea name="description8" class="form-control " id="description8Text" rows="3">{!!old('description8')!!}</textarea>
-                                  <script>
-                                      CKEDITOR.replace('description8');
-                                  </script>
-                                  <label id="description8Error" class="error text-danger" for="description8Text"></label>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="description9Text">Any other notes for the project manager/technical team
-                                   <span style="color:red;">*</span><svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Any other notes for the project manager/technical team" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                    </svg></label>
-                                <textarea name="description9" class="form-control" id="description9Text" rows="3">{!!old('description9')!!}</textarea>
-                                  <script>
-                                      CKEDITOR.replace('description9');
-                                  </script>
-                                  <label id="description9Error" class="error text-danger" for="description9Text"></label>
-                              </div>
-                            </div>
-                          </div>
-                          @if(Auth::user()->role_id == 8 && Route::currentRouteName() == 'authorization_request')
+                         
+ 
+                          @if((Auth::user()->role_id == 8 ) && Route::currentRouteName() == 'authorization_request')
                           <div class="row">
                             <div class="col-md-12">
                               <div class="form-group">
@@ -533,23 +445,35 @@
                               </div>
                             </div>
                           </div>
+
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>Has sales team set project deadline properly?</label>
+                                <textarea class="form-control" name="project_deadline_authorization" rows="10">{{$deal->project_deadline_authorization}}</textarea>
+                                <script>
+                                      CKEDITOR.replace('project_deadline_authorization');
+                                  </script>
+                              </div>
+                            </div>
+                          </div>
                           @endif
 
                           <br>
                           <div class="d-flex justify-content-center">
-                              <button class="btn btn-primary" type="submit" id="createDeal" ><span class="btn-txt">Complete Deal Creation</span></button>
+                              <button class="btn btn-primary" type="submit" id="createDeal" ><span class="btn-txt">Authorize Deal</span></button>
                           </div>
                         </form>
 
                     </div>
                 </div>
-                @endif
-              </div>
+            </div>
+        </div>
+    </div>
+               
+              
 
-              <div class="d-flex flex-column">
-
-              </div>
-
+              
 
 
 
@@ -561,7 +485,7 @@
     </div>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
+    <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
     <script type="text/javascript">
     function myFunction{{$deal->hash}}() {
       // Get the text field
@@ -578,197 +502,7 @@
       alert("Copied the text: " + copyText.value);
     }
 
-    $(document).ready(function() {
-        fetchmilestone();
-        function fetchmilestone()
-        {
-            $.ajax({
-                type: "GET",
-                url: "/deals/milestone-get/{{$project_id->id}}",
-
-                dataType: "json",
-                success: function (response){
-                    //  console.log(response.milestones);
-                    let spans= '';
-                    response.milestones.forEach((item)=> {
-                        spans += `<span class="badge badge-light mr-2"><a href="javascript:;" data-milestone-id="${item.id}" class="taskView milestone-detail text-darkest-grey f-w-500" title="${item.milestone_title}">${item.milestone_title.substr(0, 20)} (${item.actual_cost}) </a><button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
-                    });
-
-                    document.querySelector('#milestone_value').innerHTML= spans;
-
-                }
-            });
-        }
-
-        $(document).on('click',' .edit_milestone',function(e){
-            e.preventDefault();
-            var milestone_id = $(this).val();
-            //console.log(milestone_id);
-            $('#editmilestone').modal('show');
-            $.ajax({
-                type: "GET",
-                url: "/deals/edit-milestone/"+milestone_id,
-
-                success: function(response){
-                    //console.log(response);
-                    if (response.status == 404) {
-                        $('#success_message').html("");
-                        $('#success_message').addClass('alert alert-danger');
-                        $('#success_message').text(response.message);
-                    }else {
-                        $('#title').val(response.milestone.milestone_title);
-                        $('#cost').val(response.milestone.actual_cost);
-                        $('#summary').val(response.milestone.summary);
-                        $('#milestone_type').val(response.milestone.milestone_type);
-                        $('#milestone_id').val(milestone_id);
-                    }
-                }
-            });
-
-        });
-
-        $(document).on('click',' .update_milestone',function(e){
-            e.preventDefault();
-            var summary = CKEDITOR.instances.summary1.getData();
-
-            var milestone_id = $('#milestone_id').val();
-            var data= {
-                'title' : $('#title').val(),
-                'cost' : $('#cost').val(),
-                'milestone_type': $('#milestone_type').val(),
-                'original_currency_id': $('#original_currency_id').val(),
-                'summary' : summary,
-            }
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                type: "PUT",
-                url: "/deals/update-milestone/"+milestone_id,
-                data: data,
-                dataType: "json",
-                success: function(response){
-                    //  console.log(response);
-                    if (response.status == 400) {
-                        $('#updateform_errList').html("");
-                        $('#updateform_errList').addClass('alert alert-danger');
-                        $.each(response.errors, function (key, err_values){
-                            $('#updateform_errList').append('<li>'+err_values+'</li>');
-                        });
-                    }
-                    else if (response.status == 400)
-                    {
-                        $('#updateform_errList').html("");
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
-                    }
-
-                    else{
-                        $('#updateform_errList').html("");
-                        $('#success_message').html("");
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
-                        $('#editmilestone').modal('hide');
-                        fetchmilestone();
-                    }
-                }
-            });
-
-
-        });
-        $(document).on('click','.delete_milestone',function(e){
-            e.preventDefault();
-            var milestone_id= $(this).val();
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be delete this item!",
-                icon: 'warning',
-                showCancelButton: true,
-                focusConfirm: false,
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "Cancel",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "/deals/delete-milestone/"+milestone_id,
-                        type: "DELETE",
-                        data: {
-                            '_token': '{{ csrf_token() }}',
-                            'id':milestone_id,
-                        },
-                        success: function (response){
-                            //console.log(response);
-                            swal.fire({
-                                title: 'Deleted!',
-                                text: 'The item has been deleted successfully.',
-                                icon: 'success',
-                            })
-                            fetchmilestone();
-                        }
-                    });
-                }
-            });
-        });
-
-        $(document).on('click','.add_milestone',function(e){
-
-            e.preventDefault();
-            var summary = CKEDITOR.instances.summary1.getData();
-            // console.log(summary);
-            var data= {
-                'title': $('.title').val(),
-                'cost': $('.cost').val(),
-                'milestone_type': $('.milestone_type').val(),
-
-                'summary': summary,
-                //'project_id': document.querySelector('.project_id').value,
-                'project_id': document.getElementById("project_id").value,
-                'original_currency_id': document.getElementById("original_currency_id").value,
-            }
-            //console.log(data);
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "POST",
-                url: "{{route('add-milestone')}}",
-                data: data,
-                dataType: "json",
-                success: function (response){
-                    if (response.status == 400) {
-                        $('#saveform_errList').html("");
-                        $('#saveform_errList').addClass('alert alert-danger');
-                        $.each(response.errors, function (key, err_values){
-                            $('#saveform_errList').append('<li>'+err_values+'</li>');
-                        });
-                    }
-                    else {
-                        $('#saveform_errList').html("");
-                        $('#success_message').addClass('alert alert-success');
-                        $('#success_message').text(response.message);
-                        $('#milestoneaddmodal').modal('hide');
-                        $('#milestoneaddmodal').find('input').val("");
-                        document.querySelector('#summary1').value= '';
-                        fetchmilestone();
-
-                    }
-                }
-            });
-        });
-
-    });
-    $('body').on('click', '.milestone-detail', function() {
-        var id = $(this).data('milestone-id');
-        var url = "{{ route('milestones.show', ':id') }}";
-        url = url.replace(':id', id);
-        $(MODAL_XL + ' ' + MODAL_HEADING).html('...');
-        $.ajaxModal(MODAL_XL, url);
-    });
+  
     </script>
 <!--ADD DEAL DETAILS START-->
 <script>
@@ -777,16 +511,17 @@
         // alert('ok');
         $('#createDeal').attr("disabled", true);
         $('#createDeal').html("Processing...");
-        var description2 = CKEDITOR.instances.description2Text.getData();
+        /*var description2 = CKEDITOR.instances.description2Text.getData();
         var description3 = CKEDITOR.instances.description3Text.getData();
         var description4 = CKEDITOR.instances.description4Text.getData();
         var description5 = CKEDITOR.instances.description5Text.getData();
         var description6 = CKEDITOR.instances.description6Text.getData();
         var description7 = CKEDITOR.instances.description7Text.getData();
         var description8 = CKEDITOR.instances.description8Text.getData();
-        var description9 = CKEDITOR.instances.description9Text.getData();
+        var description9 = CKEDITOR.instances.description9Text.getData();*/
         var price_authorization = CKEDITOR.instances.price_authorization.getData();
         var requirment_define = CKEDITOR.instances.requirment_define.getData();
+        var project_deadline_authorization = CKEDITOR.instances.project_deadline_authorization.getData();
         // console.log(name);
         var message_links = document.getElementsByName("message_link[]");
         var message_links_values = [];
@@ -795,7 +530,7 @@
         }
         var data= {
             '_token': "{{ csrf_token() }}",
-            'project_name': document.getElementById("project_name").value,
+            /*'project_name': document.getElementById("project_name").value,
             'deadline': document.getElementById("deadline").value,
             'amount': document.getElementById("amount").value,
             'original_currency_id': document.getElementById("original_currency_id").value,
@@ -809,10 +544,11 @@
             'description4': description4,
             'description5': description5,
             'description6': description6,
-            'description7': description7,
+            'description7': description7,*/
             'price_authorization': price_authorization,
             'requirment_define': requirment_define,
-            'id': '{{$deal->id}}',
+            'project_deadline_authorization': project_deadline_authorization,
+            'id': '{{$project_id->deal_id}}',
         }
         // console.log(data);
         $.ajaxSetup({

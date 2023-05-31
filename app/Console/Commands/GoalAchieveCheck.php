@@ -102,7 +102,22 @@ class GoalAchieveCheck extends Command
                                 $value->amount = 1;
                                 $value->tracking_type = 'count';
                             }
-                            
+                            if ($value->project_type == 'hourly') {
+                                $project = Project::where('deal_id', $value->id)->first();
+                                if (!is_null($project)) {
+                                    $payments = Payment::where([
+                                        'project_id' => $project->id,
+                                    ])->whereBetween(DB::raw('DATE(paid_on)'), [$goal->startDate, $goal->endDate])->get();
+
+                                    if (count($payments) > 0 ) {
+                                        $value->amount = $payments->sum('amount');
+                                    } else {
+                                        $value->amount = 0;
+                                    }
+                                } else {
+                                    $value->amount = 0;
+                                }
+                            }
                             $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
                             $value->bidder_amount = round((24 * $value->amount) / 100, 2);
                             $value->team_total_amount = 0;
@@ -238,6 +253,23 @@ class GoalAchieveCheck extends Command
                             if ($goal->trackingType == 'count') {
                                 $value->amount = 1;
                                 $value->tracking_type = 'count';
+                            }
+
+                            if ($value->project_type == 'hourly') {
+                                $project = Project::where('deal_id', $value->id)->first();
+                                if (!is_null($project)) {
+                                    $payments = Payment::where([
+                                        'project_id' => $project->id,
+                                    ])->whereBetween(DB::raw('DATE(paid_on)'), [$goal->startDate, $goal->endDate])->get();
+
+                                    if (count($payments) > 0 ) {
+                                        $value->amount = $payments->sum('amount');
+                                    } else {
+                                        $value->amount = 0;
+                                    }
+                                } else {
+                                    $value->amount = 0;
+                                }
                             }
         
                             $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();

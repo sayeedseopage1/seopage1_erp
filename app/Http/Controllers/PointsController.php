@@ -117,38 +117,39 @@ class PointsController extends AccountBaseController
     {
         $data = CashPoint::select('*');
 
-        if ($request->department_id != '') {
-            $user = Seopage1Team::where('department_id', $request->department_id)->get();
-            $user_list = explode(',', $user);
+        // if ($request->department_id != '') {
+        //     $user = Seopage1Team::where('department_id', $request->department_id)->get();
+        //     $user_list = explode(',', $user);
 
-            $data = $data->whereIn('user_id', $user_list);
-        }
+        //     $data = $data->whereIn('user_id', $user_list);
+        // }
 
-        if ($request->team_id != '') {
-            //$team = Team::where('id', $request->team_id)->first();
-            //if ($team) {
-                $team = Seopage1Team::where('id', $request->team_id)->get();
-                //dd($team);
-                $user_list = [];
-                foreach ($team as $key => $value) {
-                    $users = explode(',', $value->members);
+        // if ($request->team_id != '') {
+        //     //$team = Team::where('id', $request->team_id)->first();
+        //     //if ($team) {
+        //         $team = Seopage1Team::where('id', $request->team_id)->get();
+        //         //dd($team);
+        //         $user_list = [];
+        //         foreach ($team as $key => $value) {
+        //             $users = explode(',', $value->members);
                     
-                    foreach ($users as $user) {
-                        if ($user != '') {
-                            array_push($user_list, $user);
-                        }
-                    }
-                }
-            //}
+        //             foreach ($users as $user) {
+        //                 if ($user != '') {
+        //                     array_push($user_list, $user);
+        //                 }
+        //             }
+        //         }
+        //     //}
 
-            $data = $data->whereIn('user_id', $user_list);
-        }
-        if ($request->project_id != '') {
-            $data = $data->where('project_id', $request->project_id);
-        }
-        if ($request->user_id != '') {
-            $data = $data->where('user_id', $request->user_id);
-        }
+        //     $data = $data->whereIn('user_id', $user_list);
+        // }
+        // if ($request->project_id != '') {
+        //     $data = $data->where('project_id', $request->project_id);
+        // }
+        // if ($request->user_id != '') {
+        //     $data = $data->where('user_id', $request->user_id);
+           
+        // }
         if ($request->start_date != '') {
             $data = $data->where(\DB::raw('DATE(created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
         }
@@ -164,9 +165,13 @@ class PointsController extends AccountBaseController
             $data = $data->where('user_id',Auth::id())->where('points','>',0)->orderBy('id', 'desc')->get();
 
         } 
+        //dd($data);
         return response()->json($data);
     }
 
+
+
+   
 
     public function get_all_search_bar_data()
     {
@@ -204,7 +209,7 @@ class PointsController extends AccountBaseController
                 array_push($data['employee'], $item);
             }
         }
-        // dd($data);
+
         return response()->json($data);
     }
 }

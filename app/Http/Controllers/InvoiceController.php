@@ -14,9 +14,11 @@ use App\Http\Requests\Invoices\UpdateInvoice;
 use App\Http\Requests\Stripe\StoreStripeDetail;
 use App\Models\ClientDetails;
 use App\Models\CompanyAddress;
+use App\Models\Contract;
 use App\Models\Country;
 use App\Models\CreditNotes;
 use App\Models\Currency;
+use App\Models\Deal;
 use App\Models\Estimate;
 use App\Models\Invoice;
 use App\Models\InvoiceItemImage;
@@ -25,8 +27,10 @@ use App\Models\OfflinePaymentMethod;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\PaymentGatewayCredentials;
+use App\Models\PMAssign;
 use App\Models\Product;
 use App\Models\Project;
+use App\Models\ProjectActivity;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectTimeLog;
 use App\Models\Proposal;
@@ -153,6 +157,7 @@ class InvoiceController extends AccountBaseController
 
     public function store(StoreInvoice $request)
     {
+ //dd($request);
       $milestone_check = ProjectMilestone::where('id',$request->milestone_id)->first();
       if($milestone_check->invoice_created == 1)
       {
@@ -162,6 +167,66 @@ class InvoiceController extends AccountBaseController
       {
         return Reply::error(__('You cannot insert equal amount of payment for partial payment.'));
       }
+      $hourly_project_check= Project::where('id',$request->project_id)->first();
+//    /dd($request->total_amount);
+      if($hourly_project_check->deal->project_type=='hourly' && $request->total <= 0)
+      {
+        return Reply::error(__('You cannot insert zero on the amount for creating the invoice.'));
+      }elseif($hourly_project_check->deal->project_type && $request->total > 0) {
+
+         // /dd($request);
+         $currency= Currency::where('id',$request->currency_id)->first();
+        
+         //dd($currency->exchange_rate);
+         $milestone = ProjectMilestone::find($request->milestone_id);
+        
+         $milestone->cost = ($request->total)/$currency->exchange_rate;
+         //dd($milestone->cost);
+         $milestone->actual_cost = ($request->total == '') ? '0' : $request->total;
+         $milestone->currency_id = 1;
+ 
+         $milestone->original_currency_id = $request->currency_id;
+ 
+         $milestone->save();
+ 
+         $project = Project::where('id',$request->project_id)->first();
+ 
+         $project_milestone_cost= ProjectMilestone::where('project_id',$project->id)->sum('cost');
+
+             $project_update= Project::find($project->id);
+             $project_update->project_budget= $project->project_budget+$milestone->cost;
+             $project_update->due= $project->due+ $milestone->cost;
+             
+             $project_update->save();
+             $pm_id= PMAssign::where('pm_id',$project->pm_id)->first();
+             $pm_assign= PMAssign::find($pm_id->id);
+             $pm_assign->amount= $pm_assign->amount+ $milestone->cost;
+             $pm_assign->actual_amount= $pm_assign->actual_amount+ $milestone->cost;
+             $pm_assign->monthly_project_amount= $pm_assign->monthly_project_amount+ $milestone->cost;
+             $pm_assign->monthly_actual_project_amount= $pm_assign->monthly_actual_project_amount+ $milestone->cost;
+             $pm_assign->save();
+ 
+             $deal_id= Deal::where('id',$project->deal_id)->first();
+             $deal= Deal::find($deal_id->id);
+             $deal->actual_amount= $deal->actual_amount+ $milestone->actual_cost;
+             $deal->amount= $deal->amount+ $milestone->cost;
+             $deal->save();
+             $contract_id= Contract::where('deal_id',$deal->id)->first();
+             $contract= Contract::find($contract_id->id);
+             $contract->actual_amount= $contract->actual_amount+ $milestone->actual_cost;
+             $contract->original_amount= $contract->original_amount+ $milestone->actual_cost;
+             $contract->amount= $contract->amount+ $milestone->cost;
+             $contract->save();
+             $log_user = Auth::user();
+             $activity = new ProjectActivity();
+             $activity->activity= $milestone->milestone_title. '- New milestone added by '. $log_user->name;
+ 
+             $activity->project_id = $project_update->id;
+ 
+             $activity->save();
+         
+      }
+    //  / dd("true");
       $redirectUrl = urldecode($request->redirect_url);
 
         if ($redirectUrl == '') {

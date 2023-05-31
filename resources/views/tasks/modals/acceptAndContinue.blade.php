@@ -24,6 +24,7 @@
                                 height:100,
                             });
                         </script>
+                        <span id="text3_error" class="text-danger"></span>
                     </div>
                     <div class="modal-footer">
                         <a data-toggle="modal" href="#acceptAndContinue2" class="btn btn-primary">Next</a>
@@ -168,6 +169,16 @@
             }
 
         },
+        error: function(error) {
+            // console.log(response);
+            if(error.responseJSON.errors.text3){
+                $('#text3_error').text(error.responseJSON.errors.text3);
+            }else{
+                $('#text3_error').text('');
+            }
+            $('#acceptBtn').attr("disabled", false);
+            $('#acceptBtn').html("Accept & Continue");
+        }
     });
 });
 </script>

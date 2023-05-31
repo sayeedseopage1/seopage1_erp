@@ -111,11 +111,15 @@ class WonDealsDataTable extends BaseDataTable
                         if(Auth::user()->role_id == 1 || Auth::user()->role_id== 7 || Auth::user()->role_id == 8) {
                             $action .= '<a class="dropdown-item" href="/deals/details/edit/'.$row->id.'"><i class="fa-solid fa-pen-to-square mr-2"></i>'.trans('Edit').'</a>';
                         }
-                        if (Auth::user()->role_id == 8) {
+                        if (Auth::user()->role_id == 8 || Auth::user()->role_id == 1) {
                             if ($row->authorization_status == 0 || $row->authorization_status == '2') {
-                                $action .= '<a class="dropdown-item bg-warning" href="'.route("authorization_request", $row->id).'"><i class="fa-solid fa-user mr-2'.($row->auth).'"></i>'.trans('Authorization Need').'</a>';
+                                if(Auth::user()->role_id == 8)
+                                {
+                                    $action .= '<a class="dropdown-item bg-warning" href="'.route("authorization_request", $row->id).'"><i class="fa-solid fa-user mr-2'.($row->auth).'"></i>'.trans('Authorization Need').'</a>';
+                                }
+                               
                             } else {
-                                $action .= '<a class="dropdown-item bg-success" href="'.route("contracts.show", $row->id).'"><i class="fa-solid fa-user mr-2'.($row->auth).'"></i>'.trans('Authorization accepted').'</a>';
+                                $action .= '<a class="dropdown-item bg-success" href="'.route("contracts.show", $row->id).'"><i class="fa-solid fa-user mr-2'.($row->auth).'"></i>'.trans('Authorization Details').'</a>';
                             }
                         }
                     $action .= '

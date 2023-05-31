@@ -655,7 +655,7 @@ ul.fileList {
                        <div class="deal_item">
                         @if($deal->client_name == null)
                            <h3><i class="fa-solid fa-user-large"></i> Client Username: <span>{{$deal->client_username}}</span> </h3>
-                          @else 
+                          @else
                           <h3><i class="fa-solid fa-user-large"></i> Client Name: <span>{{$deal->client_name}}</span> </h3>
 
 
@@ -696,7 +696,7 @@ ul.fileList {
                             {{-- @endif --}}
 
                            </div>
-                          
+
                            @include('contracts.modals.dealaddstagemodal')
                          @include('contracts.modals.deallostmodal')
                          @else
@@ -1683,7 +1683,7 @@ ul.fileList {
  // });
  })()
  </script>
- 
+
 
 
 

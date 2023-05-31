@@ -5,6 +5,7 @@ namespace App\Http\Requests\Project;
 use App\Http\Requests\CoreRequest;
 use App\Models\CustomField;
 use App\Models\Project;
+use AWS\CRT\HTTP\Request;
 
 class UpdateProject extends CoreRequest
 {
@@ -26,24 +27,30 @@ class UpdateProject extends CoreRequest
      */
     public function rules()
     {
+
         $rules = [
             'project_name' => 'required|max:150',
             'start_date' => 'required',
-            'deadline' => 'required',
+           
             'project_summary'=>'required',
-          
 
             // 'hours_allocated' => 'required|numeric',
             'client_id' => 'requiredIf:client_view_task,true',
             'project_code' => 'required|unique:projects,project_short_code,'.$this->route('project'),
         ];
 
-        if (!$this->has('without_deadline')) {
-            $rules['deadline'] = 'required';
-        }
+        // if (!$this->has('without_deadline')) {
+        //     $rules['deadline'] = 'required';
+        // }
 
         if ($this->project_budget != '') {
             $rules['project_budget'] = 'numeric';
+
+        }
+        if($this->status_validation == 'not started')
+        {
+            $rules['requirement_defined'] = 'required';
+            $rules['deadline_meet'] = 'required';
 
         }
 
@@ -55,6 +62,11 @@ class UpdateProject extends CoreRequest
 
         if (!request()->private && !request()->public && $project->public == 0 && request()->member_id) {
             $rules['member_id.0'] = 'required';
+        }
+      //  dd($project->deal->project_type);
+        if($project->deal->project_type != 'hourly')
+        {
+            $rules['deadline'] = 'required';
         }
 
         if (request()->get('custom_fields_data')) {

@@ -903,7 +903,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('incentive-settings',IncentiveSettingController::class);
     //Monthly Incentive Settings
     Route::resource('monthly-incentive',MonthlyIncentiveController::class);
-    //qualified sales Settings 
+
+    Route::get('monthly-incentive/get-json/index',[MonthlyIncentiveController::class, 'get_index_json']);
+    //qualified sales Settings
+
     Route::resource('qualified-sales',QualifiedSalesController::class);
 
     // Estimates
@@ -1313,6 +1316,7 @@ Route::controller(DealController::class)->group(function(){
 });
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
+Route::post('/create-auto-milestone', [ProjectMilestoneController::class, 'createAutoMilestone'])->name('create-auto-milestone');
 
 Route::any('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
 
