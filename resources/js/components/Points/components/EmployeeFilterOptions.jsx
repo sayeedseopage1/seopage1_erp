@@ -7,7 +7,6 @@ const EmployeeFilterOptions = ({data = [],  sidebarItem=false, onSelect, selecte
 //   const [selected, setSelected] = React.useState(null);
 
     const _data = React.useMemo(() => data, [data]) 
-    console.log({_data});
   
   React.useEffect(() => {
     if(_data.length > 0){
