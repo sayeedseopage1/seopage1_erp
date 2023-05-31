@@ -107,6 +107,7 @@ export default function CashPointsFilter ({
     }
 
 
+
     React.useEffect(()=> {
         if(selectedShift){
             let users = getEmployees(selectedShift);
@@ -130,6 +131,7 @@ export default function CashPointsFilter ({
 
 
     const _employee = React.useMemo(() => selectedEmployee, [selectedEmployee])
+    console.log({selectedEmployee})
 
     React.useEffect(() => {
         const user = window?.Laravel?.user;
@@ -172,13 +174,6 @@ export default function CashPointsFilter ({
 
 
 
-    // handle project filter
-    const handleProjectFilter = (e, project) => {
-        e.preventDefault();
-        setProject(project);
-        
-    }
-
     // set table data
     React.useEffect(() => {
         setIsDataFetching(isFetching || dataFetchingStateIsLoading);
@@ -186,6 +181,7 @@ export default function CashPointsFilter ({
             setData(tableData);
         }
     }, [tableData, dataFetchingStateIsLoading])
+
 
 
     return (
