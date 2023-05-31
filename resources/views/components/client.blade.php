@@ -15,18 +15,14 @@ if ($user->session) {
     @if (!is_null($user))
         <a href="{{ route('clients.show', [$user->id]) }}" class="position-relative">
             @if ($active)
-                <span class="text-light-green position-absolute f-8 user-online"
-                    title="@lang('modules.client.online')"><i class="fa fa-circle"></i></span>
+                <span class="text-light-green position-absolute f-8 user-online" title="@lang('modules.client.online')"><i class="fa fa-circle"></i></span>
             @endif
-            <img src="{{ $user->image_url }}" class="mr-2 taskEmployeeImg rounded-circle"
-                alt="{{ ucfirst($user->name) }}" title="{{ ucfirst($user->name) }}">
+            <img src="{{ $user->image_url }}" class="mr-2 taskEmployeeImg rounded-circle" alt="{{ ucfirst($user->name) }}" title="{{ ucfirst($user->name) }}">
         </a>
         <div class="media-body">
-            <h5 class="mb-0 f-12"><a href="{{ route('clients.show', [$user->id]) }}"
-                    class="text-darkest-grey">{{ mb_ucfirst($user->name) }}</a>
+            <h5 class="mb-0 f-12"><a href="{{ route('clients.show', [$user->id]) }}" class="text-darkest-grey">{{ mb_ucfirst($user->name) }}</a>
                 @if (isset($user->admin_approval) && $user->admin_approval == 0)
-                    <i class="bi bi-person-x text-red" data-toggle="tooltip"
-                        data-original-title="@lang('modules.dashboard.verificationPending')"></i>
+                    <i class="bi bi-person-x text-red" data-toggle="tooltip" data-original-title="@lang('modules.dashboard.verificationPending')"></i>
                 @elseif (user() && user()->id == $user->id)
                     <span class="badge badge-secondary">@lang('app.itsYou')</span>
                 @endif
