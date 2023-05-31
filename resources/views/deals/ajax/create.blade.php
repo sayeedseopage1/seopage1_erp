@@ -430,8 +430,8 @@
 </script>
 <script>
     $("#submitButton").on('click',function() {
-        // $("#submitButton").attr("disabled", true);
-        // $("#submitButton").html("Processing...");
+        $("#submitButton").attr("disabled", true);
+        $("#submitButton").html("Processing...");
     });
 </script>
 <script>
