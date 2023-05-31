@@ -124,32 +124,32 @@ class PointsController extends AccountBaseController
         //     $data = $data->whereIn('user_id', $user_list);
         // }
 
-        // if ($request->team_id != '') {
-        //     //$team = Team::where('id', $request->team_id)->first();
-        //     //if ($team) {
-        //         $team = Seopage1Team::where('id', $request->team_id)->get();
-        //         //dd($team);
-        //         $user_list = [];
-        //         foreach ($team as $key => $value) {
-        //             $users = explode(',', $value->members);
+        if ($request->team_id != '') {
+            //$team = Team::where('id', $request->team_id)->first();
+            //if ($team) {
+                $team = Seopage1Team::where('id', $request->team_id)->get();
+                //dd($team);
+                $user_list = [];
+                foreach ($team as $key => $value) {
+                    $users = explode(',', $value->members);
                     
-        //             foreach ($users as $user) {
-        //                 if ($user != '') {
-        //                     array_push($user_list, $user);
-        //                 }
-        //             }
-        //         }
-        //     //}
+                    foreach ($users as $user) {
+                        if ($user != '') {
+                            array_push($user_list, $user);
+                        }
+                    }
+                }
+            //}
 
-        //     $data = $data->whereIn('user_id', $user_list);
-        // }
-        // if ($request->project_id != '') {
-        //     $data = $data->where('project_id', $request->project_id);
-        // }
-        // if ($request->user_id != '') {
-        //     $data = $data->where('user_id', $request->user_id);
+            $data = $data->whereIn('user_id', $user_list);
+        }
+        if ($request->project_id != '') {
+            $data = $data->where('project_id', $request->project_id);
+        }
+        if ($request->user_id != '') {
+            $data = $data->where('user_id', $request->user_id);
            
-        // }
+        }
         if ($request->start_date != '') {
             $data = $data->where(\DB::raw('DATE(created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
         }
