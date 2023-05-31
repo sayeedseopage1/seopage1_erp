@@ -143,13 +143,13 @@ class PointsController extends AccountBaseController
 
         //     $data = $data->whereIn('user_id', $user_list);
         // }
-        if ($request->project_id != '') {
-            $data = $data->where('project_id', $request->project_id);
-        }
-        if ($request->user_id != '') {
-            $data = $data->where('user_id', $request->user_id);
+        // if ($request->project_id != '') {
+        //     $data = $data->where('project_id', $request->project_id);
+        // }
+        // if ($request->user_id != '') {
+        //     $data = $data->where('user_id', $request->user_id);
            
-        }
+        // }
         if ($request->start_date != '') {
             $data = $data->where(\DB::raw('DATE(created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
         }
