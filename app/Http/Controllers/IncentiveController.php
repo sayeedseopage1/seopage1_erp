@@ -53,23 +53,23 @@ class IncentiveController extends AccountBaseController
         ])->get()->pluck('id');
 
         $user_shift_goal = GoalSetting::whereIn('team_id', $user_shift)
-        ->where('goalType', 'minimum',)
+        ->where('goalType', 'Minimum',)
         ->whereDate('startDate', '>=', $start_date)
         ->whereDate('endDate', '<=', $end_date)
         ->get()->count();
 
         $user_goals = GoalSetting::where([
             'assigneeType' => 'User',
-            'goalType' => 'minimum',
+            'goalType' => 'Minimum',
             'user_id' => $userID,
             'frequency' => $request->period,
             ['created_at', '>=', Carbon::now()->startOfMonth()]
         ])->count();
 
         $user_goals = $user_shift_goal + $user_goals;
-        $team_goal = GoalSetting::where([
+        /*$team_goal = GoalSetting::where([
             'assigneeType' => 'Team',
-            'goalType' => 'minimum',
+            'goalType' => 'Minimum',
             'frequency' => $request->period,
         ])->get();
 
@@ -80,13 +80,13 @@ class IncentiveController extends AccountBaseController
             if (in_array($userID, $members)) {
                 $user_goals++;
             }
-        }
+        }*/
 
         $data['minimum_user_goals_shift'] = $user_goals;
 
         $user_achieve_goals = GoalSetting::where([
             'assigneeType' => 'User',
-            'goalType' => 'minimum',
+            'goalType' => 'Minimum',
             'goal_status' => '1',
             'frequency' => $request->period,
             'user_id' => $userID
@@ -94,7 +94,7 @@ class IncentiveController extends AccountBaseController
 
         $team_achieve_goal = GoalSetting::where([
             'assigneeType' => 'Team',
-            'goalType' => 'minimum',
+            'goalType' => 'Minimum',
             'goal_status' => '1',
 
         ])->get();
@@ -175,7 +175,7 @@ class IncentiveController extends AccountBaseController
 
         $ten_days_incomplete_goal = GoalSetting::where([
             'assigneeType' => 'User',
-            'goalType' => 'minimum',
+            'goalType' => 'Minimum',
             'frequency' => '10 Days',
             'goal_status' => 0,
             'frequency' => $request->period,
