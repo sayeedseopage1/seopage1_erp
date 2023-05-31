@@ -6,9 +6,9 @@ import { Provider } from 'react-redux';
 import {store} from '../services/store';
 import IncentiveCurrent from './pages/IncentiveCurrent';
 import './incentives.css'
+import { useUsers } from '../hooks/useUsers';
 
-const IncentiveContainer  = () => {
-
+const IncentiveContainer  = () => {  
     return <Outlet />;
 }
 
