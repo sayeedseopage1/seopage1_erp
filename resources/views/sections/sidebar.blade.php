@@ -324,9 +324,9 @@
                             </x-sub-menu-item>
                             <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
                             <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
-                            @if($user->role_id == 1)
+                            {{-- @if($user->role_id == 1)
                             <x-sub-menu-item :link="route('qualified-sales.index')" :text="'Qualified Sales'" />
-                            @endif
+                            @endif --}}
                             <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
                             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
 
@@ -335,7 +335,7 @@
 
                            <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
                            @endif
-                            
+
 
 
 
@@ -360,9 +360,9 @@
 
 
 {{--                            <x-sub-menu-item link="" :text="'Resource'" />--}}
-                            <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" />
+{{--                            <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" />--}}
 
-              
+
                         </div>
 
                     </x-menu-item>
@@ -381,6 +381,16 @@
                         <path d="M 3.246094 10.910156 L 10.035156 10.910156 C 10.328125 10.910156 10.566406 10.671875 10.566406 10.375 C 10.566406 10.082031 10.328125 9.84375 10.035156 9.84375 L 3.246094 9.84375 C 2.953125 9.84375 2.714844 10.082031 2.714844 10.375 C 2.714844 10.671875 2.953125 10.910156 3.246094 10.910156 Z M 3.246094 10.910156 "></path>
                     </x-slot>
                 </x-menu-item>
+                {{-- <x-menu-item class="policy-menu" icon="chat-left-text" :text="__('Pending Actions')" :count="$unreadMessagesCount"
+                             :link="route('pending-action.index')">
+                    <x-slot name="iconPath">
+                        <path d="M 11.824219 0.21875 C 11.722656 0.0820312 11.5625 0 11.390625 0 L 2.277344 0 C 1.394531 0 0.675781 0.714844 0.675781 1.601562 L 0.675781 14.398438 C 0.675781 15.285156 1.394531 16 2.277344 16 L 13.71875 16 C 14.601562 16 15.320312 15.285156 15.320312 14.398438 L 15.320312 5.199219 C 15.320312 5.085938 15.285156 4.976562 15.21875 4.886719 Z M 11.121094 1.066406 L 14.253906 5.375 L 14.253906 14.398438 C 14.253906 14.695312 14.015625 14.933594 13.71875 14.933594 L 2.277344 14.933594 C 1.984375 14.933594 1.742188 14.695312 1.742188 14.398438 L 1.742188 1.601562 C 1.742188 1.304688 1.984375 1.066406 2.277344 1.066406 Z M 11.121094 1.066406 "></path>
+                        <path d="M 3.246094 4.460938 L 8 4.460938 C 8.292969 4.460938 8.53125 4.222656 8.53125 3.925781 C 8.53125 3.632812 8.292969 3.394531 8 3.394531 L 3.246094 3.394531 C 2.953125 3.394531 2.714844 3.632812 2.714844 3.925781 C 2.714844 4.222656 2.953125 4.460938 3.246094 4.460938 Z M 3.246094 4.460938 "></path>
+                        <path d="M 14.785156 5.429688 L 11.925781 5.429688 L 11.925781 0.535156 C 11.925781 0.238281 11.6875 0 11.390625 0 C 11.097656 0 10.859375 0.238281 10.859375 0.535156 L 10.859375 5.964844 C 10.859375 6.257812 11.097656 6.496094 11.390625 6.496094 L 14.785156 6.496094 C 15.082031 6.496094 15.320312 6.257812 15.320312 5.964844 C 15.320312 5.667969 15.082031 5.429688 14.785156 5.429688 Z M 14.785156 5.429688 "></path>
+                        <path d="M 3.246094 7.855469 L 8 7.855469 C 8.292969 7.855469 8.53125 7.617188 8.53125 7.320312 C 8.53125 7.027344 8.292969 6.789062 8 6.789062 L 3.246094 6.789062 C 2.953125 6.789062 2.714844 7.027344 2.714844 7.320312 C 2.714844 7.617188 2.953125 7.855469 3.246094 7.855469 Z M 3.246094 7.855469 "></path>
+                        <path d="M 3.246094 10.910156 L 10.035156 10.910156 C 10.328125 10.910156 10.566406 10.671875 10.566406 10.375 C 10.566406 10.082031 10.328125 9.84375 10.035156 9.84375 L 3.246094 9.84375 C 2.953125 9.84375 2.714844 10.082031 2.714844 10.375 C 2.714844 10.671875 2.953125 10.910156 3.246094 10.910156 Z M 3.246094 10.910156 "></path>
+                    </x-slot>
+                </x-menu-item> --}}
                 <!-- NAV ITEM - FINANCE COLLAPASE MENU -->
                 {{--  @if ((in_array('estimates', user_modules()) || in_array('invoices', user_modules()) || in_array('payments', user_modules()) || in_array('expenses', user_modules())) && ($sidebarUserPermissions['view_estimates'] != 5 || $sidebarUserPermissions['view_invoices'] != 5 || $sidebarUserPermissions['view_payments'] != 5 || $sidebarUserPermissions['view_expenses'] != 5 || $sidebarUserPermissions['view_lead_proposals'] != 5) && ($sidebarUserPermissions['view_estimates'] != 'none' || $sidebarUserPermissions['view_invoices'] != 'none' || $sidebarUserPermissions['view_payments'] != 'none' || $sidebarUserPermissions['view_expenses'] != 'none' || $sidebarUserPermissions['view_lead_proposals'] != 'none'))
                     <x-menu-item icon="cash-coin" :active="($currentRouteName === 'payments.index')"

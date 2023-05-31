@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Project;
 use App\Models\ProjectCms;
 use App\Models\ProjectNiche;
 use App\Models\ProjectPortfolio;
@@ -30,16 +31,23 @@ class PortfolioController extends AccountBaseController
      */
     public function index()
     {
-        $this->portfolios = DB::table('project_portfolios')
-            ->leftJoin('project_cms', 'project_portfolios.id', '=', 'project_cms.id')
-            ->leftJoin('project_website_types', 'project_portfolios.id', '=', 'project_website_types.id')
-            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
-            ->join('users', 'projects.client_id', '=', 'users.id')
-            ->join('project_niches', 'project_portfolios.id', '=', 'project_niches.id')
-            ->select('project_portfolios.*','users.user_name','projects.project_name', 'projects.project_budget', 'project_niches.category_name','project_cms.cms_name','project_website_types.website_type')
-            ->get();
+        $this->project_cmss = ProjectCms::all();
+        $this->website_types = ProjectWebsiteType::all();
+        $this->website_categories = ProjectNiche::all();
+        $this->portfolios = ProjectPortfolio::all();
+        $this->projects = Project::select('project_name')->get();
+//        dd($this->projects);
 
-//                dd($this->portfolios);
+//        $this->portfolios = DB::table('project_portfolios')
+//            ->leftJoin('project_cms', 'project_portfolios.id', '=', 'project_cms.id')
+//            ->leftJoin('project_website_types', 'project_portfolios.id', '=', 'project_website_types.id')
+//            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
+//            ->join('users', 'projects.client_id', '=', 'users.id')
+//            ->join('project_niches', 'project_portfolios.id', '=', 'project_niches.id')
+//            ->select('project_portfolios.*','users.user_name','projects.project_name', 'projects.project_budget', 'project_niches.category_name','project_cms.cms_name','project_website_types.website_type')
+//            ->get();
+
+//                dd($this->project_cmss);
         return view('portfolio.index',$this->data);
     }
 

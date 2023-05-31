@@ -117,12 +117,12 @@ class PointsController extends AccountBaseController
     {
         $data = CashPoint::select('*');
 
-        if ($request->department_id != '') {
-            $user = Seopage1Team::where('department_id', $request->department_id)->get();
-            $user_list = explode(',', $user);
+        // if ($request->department_id != '') {
+        //     $user = Seopage1Team::where('department_id', $request->department_id)->get();
+        //     $user_list = explode(',', $user);
 
-            $data = $data->whereIn('user_id', $user_list);
-        }
+        //     $data = $data->whereIn('user_id', $user_list);
+        // }
 
         if ($request->team_id != '') {
             //$team = Team::where('id', $request->team_id)->first();
@@ -148,6 +148,7 @@ class PointsController extends AccountBaseController
         }
         if ($request->user_id != '') {
             $data = $data->where('user_id', $request->user_id);
+           
         }
         if ($request->start_date != '') {
             $data = $data->where(\DB::raw('DATE(created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
@@ -164,48 +165,13 @@ class PointsController extends AccountBaseController
             $data = $data->where('user_id',Auth::id())->where('points','>',0)->orderBy('id', 'desc')->get();
 
         } 
+        //dd($data);
         return response()->json($data);
     }
 
 
-    // public function get_all_search_bar_data()
-    // {
-    //     $team = Team::all();
-    //     $data['department'] = $team;
-    //     $data['team'] = [];
-    //     $data['employee'] = [];
 
-    //     foreach ($team as $value) {
-    //         $seopage_team = Seopage1Team::where('department_id', $value->id)->get();
-
-    //         if ($seopage_team) {
-    //             foreach ($seopage_team as $key => $seoteam) {
-    //                 $item = [
-    //                     'id' => $seoteam->id,
-    //                     'team_name' => $seoteam->team_name,
-    //                     'department_id' => $value->id,
-    //                     'members' => $seoteam->members
-    //                 ];
-    //                 array_push($data['team'], $item);
-    //             }
-    //         }
-    //     }
-
-    //     $seopage_team = Seopage1Team::all();
-
-    //     foreach ($seopage_team as $key => $s_team) {
-    //         $members = explode(',', rtrim($s_team->members, ','));
-    //         foreach($members as $member) {
-    //             $item = [
-    //                 'user_id' => $member,
-    //                 'dept_id' => $s_team->id
-    //             ];
-
-    //             array_push($data['employee'], $item);
-    //         }
-    //     }
-    //     return response()->json($data);
-    // }
+   
 
     public function get_all_search_bar_data()
     {
@@ -243,7 +209,7 @@ class PointsController extends AccountBaseController
                 array_push($data['employee'], $item);
             }
         }
-       // dd($data);
+
         return response()->json($data);
     }
 }

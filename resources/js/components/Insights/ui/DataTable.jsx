@@ -11,7 +11,7 @@ import {motion, AnimatePresence} from 'framer-motion';
 const DataTableContext = React.createContext();
 const ContextProvider = ({children}) => {
     const [activeColumns, setActiveColumns] = React.useState([]);
-    const [sortConfig, setSortConfig] = React.useState({key: 'id', direction: 'asc'});
+    const [sortConfig, setSortConfig] = React.useState({key: 'id', direction: 'desc'});
 
     return <DataTableContext.Provider value={{
         activeColumns,

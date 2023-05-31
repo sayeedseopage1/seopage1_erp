@@ -107,6 +107,7 @@ export default function CashPointsFilter ({
     }
 
 
+
     React.useEffect(()=> {
         if(selectedShift){
             let users = getEmployees(selectedShift);
@@ -130,16 +131,32 @@ export default function CashPointsFilter ({
 
 
     const _employee = React.useMemo(() => selectedEmployee, [selectedEmployee])
+    console.log({selectedEmployee})
 
     React.useEffect(() => {
-        if(!dept || !selectedEmployee || !selectedShift) return;
-
-        incentiveCurrentData({
-            team_id: selectedShift?.id,
-            user_id: selectedEmployee?.id,
-            start_date: startDate,
-            end_date: endDate,
-        })
+        const user = window?.Laravel?.user;
+        if(Number(user?.role_id) === 1){
+            if(_employee){
+                incentiveCurrentData({
+                    team_id: selectedShift?.id,
+                    user_id: selectedEmployee?.id,
+                    start_date: startDate,
+                    end_date: endDate,
+                    period: defaultSelectedDate
+                })
+            }else{
+                setIsDataFetching(false);
+                setData(null);
+            }
+        }else if(_employee){
+            incentiveCurrentData({
+                user_id: user?.id,
+                start_date: startDate,
+                end_date: endDate,
+                period: defaultSelectedDate
+            })
+        }
+        
     }, [_employee]);
 
 
@@ -151,17 +168,11 @@ export default function CashPointsFilter ({
             user_id: selectedEmployee?.id,
             start_date: startDate,
             end_date: endDate,
+            period: defaultSelectedDate
         })
     }, [endDate]);
 
 
-
-    // handle project filter
-    const handleProjectFilter = (e, project) => {
-        e.preventDefault();
-        setProject(project);
-        
-    }
 
     // set table data
     React.useEffect(() => {
@@ -170,6 +181,7 @@ export default function CashPointsFilter ({
             setData(tableData);
         }
     }, [tableData, dataFetchingStateIsLoading])
+
 
 
     return (

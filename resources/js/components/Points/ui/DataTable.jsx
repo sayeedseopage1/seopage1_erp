@@ -87,11 +87,12 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
     };
 
     // sort by user id
-    
+  
 
     const columns = defaultColumns.filter(d => activeColumns.includes(d.id))
                     .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
-                                
+                 
+                    
 
     return(
         <div style={{maxWidth: '100%'}}>
@@ -142,7 +143,7 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
                                 currentPageData.length > 0 ? currentPageData.map((data) => (
                                         <div key={data.id} className="cnx__table_tr sp1__pp_table_tr">
                                             {columns.map(d => (
-                                                <div key={d.id} className="cnx__table_td sp1__pp_table_td">
+                                                <div key={d.id} className={`cnx__table_td sp1__pp_table_td sp1__pp_table_col_${d.id}`}>
                                                     {d.cell(data)}
                                                 </div>
                                             ))}
@@ -279,41 +280,42 @@ const DraggableColumn = ({
     return(
         <>
             <div 
-            id={`cnx__table_th_${column.id}`}
-            className={`cnx__table_th sp1__pp_table_td`}
-        
-        >
-            <div ref={ref}
-                // onClick = {(() => requestSort(column.accessor))}
-                className={`cnx__table_th_toggle  ${isDragging ? '__dragging': ''} ${isOver ? '__dragging_over': ''}`}
-                style={{
-                    opacity: isDragging? 0.5 : 1,
-                    backgroundColor: isDragging? '#f8f8f8' :isOver ? '#f3f3f3' : '#fff',
-                    justifyContent: 'flex-start',
-                    gap: '6px',
-                    borderInline: isOver? '1px solid #ccc' : 'none'
-                }}
+                id={`cnx__table_th_${column.id}`}
+                className={`cnx__table_th sp1__pp_table_td sp1__pp_table_col_${column.id}`}
+            
             >
-                
-                {/* {
-                    sort.key === column.accessor ?
-                    sort.direction === "asc" ? (
-                            <span className="table_asc_dec asc"></span>
-                        ) : (
-                            <span className="table_asc_dec dec"></span>
-                    ) : <span className="table_asc_dec"></span>
-                } */}
-                {column.header}             
-            </div>
+                <div ref={ref}
+                    // onClick = {(() => requestSort(column.accessor))}
+                    className={`cnx__table_th_toggle  ${isDragging ? '__dragging': ''} ${isOver ? '__dragging_over': ''}`}
+                    style={{
+                        opacity: isDragging? 0.5 : 1,
+                        backgroundColor: isDragging? '#f8f8f8' :isOver ? '#f3f3f3' : '#fff',
+                        justifyContent: 'flex-start',
+                        gap: '6px',
+                        borderInline: isOver? '1px solid #ccc' : 'none'
+                    }}
+                >
+                    
+                    {/* {
+                        sort.key === column.accessor ?
+                        sort.direction === "asc" ? (
+                                <span className="table_asc_dec asc"></span>
+                            ) : (
+                                <span className="table_asc_dec dec"></span>
+                        ) : <span className="table_asc_dec"></span>
+                    } */}
+                    {column.header}             
+                </div>
 
             
             </div>
+
                 {/* drag item */}
                 <CustomDragLayer 
-                width={ref?.current?.offsetWidth}
-                height={ref?.current?.offsetHeight}
-            />
-        
+                    width={ref?.current?.offsetWidth}
+                    height={ref?.current?.offsetHeight}
+                />
+ 
         </>
     )
 
