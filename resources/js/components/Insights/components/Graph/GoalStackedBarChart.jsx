@@ -283,8 +283,7 @@ const CustomTooltip = ({
                         >{
                             _.lowerCase(targetType) === 'value' ?
                             `${difference < 0 ? '-' : ""} $${convertNumberToUnits(difference, 2)}` :
-                             entryType === 'Won' ? convertNumberToUnits(difference, 2) : 
-                                convertNumberToUnits(difference, 0)
+                            difference
                         }</span>
                     </div>
                 </div>
