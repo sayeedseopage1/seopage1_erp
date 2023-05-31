@@ -183,6 +183,7 @@ use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ReportCentralController;
 use App\Http\Controllers\MonthlyIncentiveController;
 use App\Http\Controllers\QualifiedSalesController;
+use App\Http\Controllers\PendingActionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -479,6 +480,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
         Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
         Route::resource('employee-shifts', EmployeeShiftController::class);
+        Route::get('pending-action/{any?}', [PendingActionController::class, 'index'])->where('any', '.*');
+        Route::resource('pending-action', PendingActionController::class);
     });
 
 

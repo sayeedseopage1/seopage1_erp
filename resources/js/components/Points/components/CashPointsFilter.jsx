@@ -162,15 +162,20 @@ export default function CashPointsFilter ({
     React.useEffect(() => {
         const user = window?.Laravel?.user;
         if(user?.role_id === 1){
-            if(!dept || !selectedEmployee || !selectedShift) return;
-            pointTableData({
-                department_id: dept?.id,
-                team_id: selectedShift?.id,
-                user_id: selectedEmployee?.id,
-                start_date: startDate,
-                end_date: endDate,
-                project_id: null
-            })
+            if( selectedEmployee ){
+                pointTableData({
+                    department_id: dept?.id,
+                    team_id: selectedShift?.id,
+                    user_id: selectedEmployee?.id,
+                    start_date: startDate,
+                    end_date: endDate,
+                    project_id: null
+                })
+            }else{
+                setIsDataFetching(false);
+                setData([]);
+            }
+            
         }else if(selectedEmployee){ 
             pointTableData({
                 user_id: user?.id,

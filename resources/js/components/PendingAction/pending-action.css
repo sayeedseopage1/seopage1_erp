@@ -1,0 +1,17 @@
+
+
+.sp1_pa_nav_link{
+    padding: 6px 32px;
+    border: 2px solid var(--header_color);
+    border-radius: 6px;
+    margin-right: 10px;
+}
+
+.sp1_pa_nav_link:hover{
+    background-color: #1d82f525;
+}
+
+.sp1_pa_nav_link.active{
+    background-color: var(--header_color);
+    color: #fff !important;
+}
