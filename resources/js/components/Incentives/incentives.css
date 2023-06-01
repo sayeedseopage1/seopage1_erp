@@ -44,6 +44,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 4px;
 }
 
 .sp1_inc_month:hover{

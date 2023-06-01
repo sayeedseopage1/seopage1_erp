@@ -53,7 +53,7 @@ const DatePicker = ({startDate, endDate, setStartDate, setEndDate}) => {
                         {[...Array(12)].map((_, i) => {
                             let d = dayjs().year(year).month(i);
                             let m = dayjs().year(year).month(i).format('MMM');
-                            return <li key={m} onClick={() => handleDatePick(dayjs(d).startOf('month').format('MM-DD-YYYY'), dayjs(d).endOf('month').format("MM-DD-YYYY"))} className="sp1_inc_month">
+                            return <li key={m} onClick={() => handleDatePick(dayjs(d).startOf('month').format('MM-DD-YYYY'), dayjs(d).endOf('month').format("MM-DD-YYYY"))} className={`sp1_inc_month ${dayjs(startDate).format('MMM') === m ? 'active': ''}`}>
                                 {m}
                             </li>
                         })}
