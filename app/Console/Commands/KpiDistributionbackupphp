@@ -736,11 +736,7 @@ class KpiDistribution extends Command
                        
 
                      }
-                    
 
-            
-            
-        
     }
     
     $currentMonth = Carbon::now()->month;
