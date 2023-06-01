@@ -84,7 +84,7 @@
                   <div class="col-12 col-lg-9">
                      <h6>"QC form for project Taking screenshot a quick mockup was authorized by you"</h6>
 
-                     <p>
+                     <p class="sp1_pa_text">
                         "<a href="#">Develierables</a> for project <a href="#">Taking screenshot and changing names etc to do a quick mockup</a> (PM: <a href="#">Diner M Islam</a>) from Client: <a href="#">Friends. cigjai</a> needs to be authorized"
                      </p>
 
@@ -96,7 +96,7 @@
                         <button class="sp1_pa_nav_link mb-2 mr-2">Request Modifications</button> 
                      </div>
 
-                     <p>
+                     <p class="sp1_pa_text">
                         Authorized By: <a href="#">Rajat Chakraborty</a> at <i class="bi bi-stopwatch-fill"></i> 10:30PM <i class="bi bi-calendar-event-fill"></i> May 31,23 
                      </p>
 
@@ -134,7 +134,7 @@
                   <div class="col-12 col-lg-9">
                      <h6>"QC form for project Taking screenshot a quick mockup was authorized by you"</h6>
 
-                     <p>
+                     <p class="sp1_pa_text">
                         "<a href="#">Develierables</a> for project <a href="#">Taking screenshot and changing names etc to do a quick mockup</a> (PM: <a href="#">Diner M Islam</a>) from Client: <a href="#">Friends. cigjai</a> needs to be authorized"
                      </p>
 
@@ -146,7 +146,7 @@
                         <button class="sp1_pa_nav_link mb-2 mr-2">Request Modifications</button> 
                      </div>
 
-                     <p>
+                     <p class="sp1_pa_text">
                         Authorized By: <a href="#">Rajat Chakraborty</a> at <i class="bi bi-stopwatch-fill"></i> 10:30PM <i class="bi bi-calendar-event-fill"></i> May 31,23 
                      </p>
 
@@ -184,7 +184,7 @@
                <div class="col-12 col-lg-9">
                   <h6>"QC form for project Taking screenshot a quick mockup was authorized by you"</h6>
 
-                  <p>
+                  <p class="sp1_pa_text">
                      "<a href="#">Develierables</a> for project <a href="#">Taking screenshot and changing names etc to do a quick mockup</a> (PM: <a href="#">Diner M Islam</a>) from Client: <a href="#">Friends. cigjai</a> needs to be authorized"
                   </p>
 
@@ -196,7 +196,7 @@
                      <button class="sp1_pa_nav_link mb-2 mr-2">Request Modifications</button> 
                   </div>
 
-                  <p>
+                  <p class="sp1_pa_text">
                      Authorized By: <a href="#">Rajat Chakraborty</a> at <i class="bi bi-stopwatch-fill"></i> 10:30PM <i class="bi bi-calendar-event-fill"></i> May 31,23 
                   </p>
 
@@ -225,59 +225,28 @@
                </div>
             </div>
          </div>
-        {{-- end card --}}
-
-        
-         {{-- card --}}
-         <div class="py-3 border-bottom" style="border-color: #eef2f8;">
-            <div class="row">
-               <div class="col-12 col-lg-9">
-                  <h6>"QC form for project Taking screenshot a quick mockup was authorized by you"</h6>
-
-                  <p>
-                     "<a href="#">Develierables</a> for project <a href="#">Taking screenshot and changing names etc to do a quick mockup</a> (PM: <a href="#">Diner M Islam</a>) from Client: <a href="#">Friends. cigjai</a> needs to be authorized"
-                  </p>
-
-
-                  <div class="d-flex align-items-center flex-wrap">
-                     <button class="sp1_pa_nav_link mb-2 mr-2">Review</button>
-                     <button class="sp1_pa_nav_link mb-2 mr-2">Approve</button>
-                     <button class="sp1_pa_nav_link mb-2 mr-2">Deny</button>
-                     <button class="sp1_pa_nav_link mb-2 mr-2">Request Modifications</button> 
-                  </div>
-
-                  <p>
-                     Authorized By: <a href="#">Rajat Chakraborty</a> at <i class="bi bi-stopwatch-fill"></i> 10:30PM <i class="bi bi-calendar-event-fill"></i> May 31,23 
-                  </p>
-
-               </div>
-
-               <div class="col-12 col-lg-3">
-                  <div class="d-flex d-lg-block flex-wrap">
-                     <div class="sp1_pa_time_item ml-lg-auto mr-sm-2 mr-lg-0 mb-2">
-                        <i class="bi bi-stopwatch-fill"></i>
-                        <div>
-                           <span class="d-block">6:30 pm</span>
-                           <span class="d-block">May 15, 23</span>
-                        </div>
-                     </div>
-
-                     <div class="sp1_pa_time_item ml-lg-auto">
-                        <i class="bi bi-hourglass-split"></i>
-                        <div>
-                           <span class="d-block">Time Left</span>
-                           <span class="d-block">
-                              06:20:10
-                           </span>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-        {{-- end card --}}
-        
+        {{-- end card --}} 
          </section>
+
+
+         <nav aria-label="PaginationGroupButtons" class="mt-3">
+            <ul class="pagination justify-content-end">
+              <li class="page-item disabled">
+                <span class="page-link">Previous</span>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item active">
+                <span class="page-link">
+                  2
+                  <span class="sr-only">(current)</span>
+                </span>
+              </li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+              </li>
+            </ul>
+          </nav>
 
       </section>
 
@@ -316,7 +285,8 @@
    .sp1_pa_date_picker{
       border: none;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: bold; 
+      width: 180px; 
    }
 
    .sp1_pa_date_picker:hover{
@@ -362,6 +332,15 @@
 
    .sp1_pa_time_item > div span{
       white-space: nowrap;
+   }
+
+   .sp1_pa_text a:hover{
+      color: var(--header_color) !important;
+      text-decoration: underline;
+   }
+
+   .page-link{
+      border-radius: 4px;
    }
 
 
