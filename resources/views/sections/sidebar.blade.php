@@ -246,9 +246,9 @@
                              @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
                             <x-sub-menu-item :link="route('teams.index')" :text="__('Team')" />
                              @endif
-                                @if(Auth::user()->role_id == 1)
+                               
                                 <x-sub-menu-item :link="route('monthly-incentive.index')" :text="__('Monthly Incentive')" />
-                                @endif
+                               
                         {{-- @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
 
                                 <x-sub-menu-item :link="route('kpi-settings.index')" :text="__('Kpi Settings')" />
