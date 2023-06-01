@@ -57,16 +57,17 @@ class MonthlyKpiIncentive extends Command
             $existing_kpi->start_month = Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d');
             
             kpiSetting::insert($existing_kpi->toArray());
-        } else if (Carbon::today() == Carbon::now()->endOfMonth() || 1==1) {
+        } else if (Carbon::today() == Carbon::now()->endOfMonth()) {
             $this_month_kpi = kpiSetting::where([
                 'kpi_status' => '1',
                 'cron_status' => '1',
-                'start_month' => Carbon::now()->subMonth(1)->startOfMonth()->format('Y-m-d')
+                'start_month' => Carbon::now()->startOfMonth()->format('Y-m-d')
             ])->first();
+
             $this_month_incentive = IncentiveSetting::where([
                 'incentive_status' => '1',
                 'cron_status' => '1',
-                'start_month' => Carbon::now()->subMonth(1)->startOfMonth()->format('Y-m-d')
+                'start_month' => Carbon::now()->startOfMonth()->format('Y-m-d')
             ])->first();
 
             if ($this_month_kpi) {
@@ -93,8 +94,8 @@ class MonthlyKpiIncentive extends Command
                         $team_members = array_unique($team_members);*/
 
                         $total_cash_point = CashPoint::whereIn('user_id', $shift)
-                        ->whereDate('created_at', '>=', Carbon::now()->subMonth(1)->startOfMonth())
-                        ->whereDate('created_at', '<=', Carbon::now()->subMonth(1)->endOfMonth())
+                        ->whereDate('created_at', '>=', Carbon::now()->startOfMonth())
+                        ->whereDate('created_at', '<=', Carbon::now()->endOfMonth())
                         ->get();
                         $total_cash_point_sum = $total_cash_point->sum('points');
 
@@ -102,8 +103,8 @@ class MonthlyKpiIncentive extends Command
                             $user_incentive_amount = $total_cash_point_sum - $this_month_incentive->every_shift_every_point_above;
                             foreach ($shift as $value) {
                                 $deals = CashPoint::where('user_id', $value)
-                                ->whereDate('created_at', '>=', Carbon::now()->subMonth(1)->startOfMonth())
-                                ->whereDate('created_at', '<=', Carbon::now()->subMonth(1)->endOfMonth())
+                                ->whereDate('created_at', '>=', Carbon::now()->startOfMonth())
+                                ->whereDate('created_at', '<=', Carbon::now()->endOfMonth())
                                 ->get()
                                 ->sum('points');
 
@@ -113,8 +114,8 @@ class MonthlyKpiIncentive extends Command
                                     'goal_status' => 0,
                                     'frequency' => 'Monthly',
                                     'team_id' => 1,
-                                ])->whereDate('startDate', '>=', Carbon::now()->subMonth(1)->startOfMonth()->format('Y-m-d'))
-                                ->whereDate('endDate', '<=', Carbon::now()->subMonth(1)->endOfMonth()->format('Y-m-d'))
+                                ])->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
+                                ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
                                 ->first();
 
                                 if ($user_team_goal_monthly) {
@@ -135,8 +136,8 @@ class MonthlyKpiIncentive extends Command
                                     'assigneeType' => 'User',
                                     'goal_status' => 0,
                                     'frequency' => '10 Days',
-                                ])->whereDate('startDate', '>=', Carbon::now()->subMonth(1)->startOfMonth()->format('Y-m-d'))
-                                ->whereDate('endDate', '<=', Carbon::now()->subMonth(1)->endOfMonth()->format('Y-m-d'))
+                                ])->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
+                                ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
                                 ->whereIn('id', $user_goal_from_team)
                                 ->first();
 
@@ -147,8 +148,8 @@ class MonthlyKpiIncentive extends Command
                                 }
 
                                 $this_user_cashpoint = CashPoint::where('user_id', $value)
-                                ->whereDate('created_at', '>=', Carbon::now()->subMonth(1)->startOfMonth())
-                                ->whereDate('created_at', '<=', Carbon::now()->subMonth(1)->endOfMonth())
+                                ->whereDate('created_at', '>=', Carbon::now()->startOfMonth())
+                                ->whereDate('created_at', '<=', Carbon::now()->endOfMonth())
                                 ->get();
 
                                 $this_user_contribution = (100 / $total_cash_point->sum('points')) * $this_user_cashpoint->sum('points');
@@ -156,8 +157,8 @@ class MonthlyKpiIncentive extends Command
                                 $this_user_goal = GoalSetting::where([
                                     'goal_status' => 1,
                                     'user_id' => $value,
-                                ])->whereDate('startDate', '>=', Carbon::now()->subMonth(1)->startOfMonth()->format('Y-m-d'))
-                                ->whereDate('endDate', '<=', Carbon::now()->subMonth(1)->endOfMonth()->format('Y-m-d'))
+                                ])->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
+                                ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
                                 ->count();
 
                                 $this_users_team = Seopage1Team::where([
@@ -167,8 +168,8 @@ class MonthlyKpiIncentive extends Command
                                 $this_user_team_goal = GoalSetting::where([
                                     'goal_status' => 1,
                                 ])->whereIn('team_id', $this_users_team)
-                                ->whereDate('startDate', '>=', Carbon::now()->subMonth(1)->startOfMonth()->format('Y-m-d'))
-                                ->whereDate('endDate', '<=', Carbon::now()->subMonth(1)->endOfMonth()->format('Y-m-d'))
+                                ->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
+                                ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
                                 ->count();
 
                                 $user_incentive = new UserIncentive();
@@ -194,11 +195,11 @@ class MonthlyKpiIncentive extends Command
                                 $point->total_points_void = 0;
                                 $point->save();
                             }
-                        } else {
                         }
                     //}
                 }
                 
+                dd($total_cash_point_sum);
                 $this_month_kpi->kpi_status = '0';
                 $this_month_kpi->save();
             }
@@ -206,7 +207,7 @@ class MonthlyKpiIncentive extends Command
             $kpi = kpiSetting::where([
                 'kpi_status' => '2',
                 'cron_status' => '0',
-                'start_month' => Carbon::now()->subMonth(1)->addMonth()->startOfMonth()->format('Y-m-d')
+                'start_month' => Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d')
             ])->get();
 
             if ($kpi) {
@@ -225,7 +226,7 @@ class MonthlyKpiIncentive extends Command
             $incentive = IncentiveSetting::where([
                 'incentive_status' => '2',
                 'cron_status' => '0',
-                'start_month' => Carbon::now()->subMonth(1)->addMonth()->startOfMonth()->format('Y-m-d')
+                'start_month' => Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d')
             ])->get();
 
             if ($incentive) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\UserIncentive;
 use Illuminate\Http\Request;
+use Auth;
 
 class MonthlyIncentiveController extends AccountBaseController
 {
@@ -24,13 +25,26 @@ class MonthlyIncentiveController extends AccountBaseController
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $this->user_incentive = UserIncentive::where([
-            ['point_earned' , '>', 0],
-            'status' => '0'
-        ])->orderBy('id', 'desc')->get();
+    { 
+        if(Auth::user()->role_id == 1)
+        {
+            $this->user_incentive = UserIncentive::where([
+                ['point_earned' , '>', 0],
+                'status' => '0'
+            ])->orderBy('id', 'desc')->get();
+            return view('monthly-incentive.index', $this->data);
 
-        return view('monthly-incentive.index', $this->data);
+        }else 
+        {
+            $this->user_incentive = UserIncentive::where([
+                ['point_earned' , '>', 0],
+                'status' => '0'
+            ])->orderBy('id', 'desc')->where('user_id',Auth::id())->get();
+            return view('monthly-incentive.index', $this->data);
+
+        }
+        
+       
     }
 
     public function get_index_json()
