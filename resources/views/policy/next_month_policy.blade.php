@@ -98,6 +98,7 @@
                             @php
                             $numberOfMonths = 12; // Number of next months to retrieve
                             $currentMonth = \Carbon\Carbon::now();
+                           
                             for ($i = 0; $i < $numberOfMonths; $i++) {
                                 $left_days = (int) \Carbon\Carbon::now()->endOfMonth()->format('d') - (int) $currentMonth->format('d');
                                 $nextMonth = $currentMonth->addMonth();
