@@ -41,7 +41,7 @@ class QualifiedSalesController extends AccountBaseController
         'client.id as client_id',
         'client.name as client_name',
         'contact_form.id as contact_form',
-        'deals.deal_id as deal_short_code',
+        'deals.id as deal_id',
         'contact_form.name as contact_form_name',
         'deals.submission_status as submission_status',
         'deals.authorization_status as authorized_by_sales_lead',
