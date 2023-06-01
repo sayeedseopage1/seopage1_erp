@@ -25,25 +25,19 @@ class MonthlyIncentiveController extends AccountBaseController
      */
     public function index()
     { 
-        if(Auth::user()->role_id == 1)
-        {
+        if (Auth::user()->role_id == 1) {
             $this->user_incentive = UserIncentive::where([
                 ['point_earned' , '>', 0],
                 'status' => '0'
             ])->orderBy('id', 'desc')->get();
-            return view('monthly-incentive.index', $this->data);
-
-        }else 
-        {
+        } else {
             $this->user_incentive = UserIncentive::where([
                 ['point_earned' , '>', 0],
                 'status' => '0'
             ])->orderBy('id', 'desc')->where('user_id',Auth::id())->get();
-            return view('monthly-incentive.index', $this->data);
-
         }
-        
-       
+
+        return view('monthly-incentive.index', $this->data);
     }
 
     public function get_index_json()
@@ -83,7 +77,7 @@ class MonthlyIncentiveController extends AccountBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function download($id)
     {
         $data = UserIncentive::findOrfail($id);
         $user = User::findOrfail($data->user_id);
@@ -108,9 +102,10 @@ class MonthlyIncentiveController extends AccountBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function show($id)
     {
-        //
+        $this->user_incentive = UserIncentive::findOrfail($id);
+        return view('monthly-incentive.show', $this->data);
     }
 
     /**

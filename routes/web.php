@@ -903,6 +903,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('incentive-settings',IncentiveSettingController::class);
     //Monthly Incentive Settings
     Route::resource('monthly-incentive',MonthlyIncentiveController::class);
+    Route::get('monthly-incentive/download/{id}',[MonthlyIncentiveController::class, 'download'])->name('monthly-incentive.download');
 
     Route::get('monthly-incentive/get-json/index',[MonthlyIncentiveController::class, 'get_index_json']);
     //qualified sales Settings
