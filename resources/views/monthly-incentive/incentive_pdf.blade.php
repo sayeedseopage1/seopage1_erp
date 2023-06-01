@@ -359,21 +359,25 @@
                 <tr>
                     <td align="left">
                         <table border="0" cellspacing="0" colspacing='0'>
-                            <tr><td> <h4>Top Managment</h4></td></tr>
-                            <tr><td style="height: 20px"> </td></tr>
-                            <tr><td style="height: 5px"> ..............................</td></tr>
-                            <tr><td> Rajat Chakraboty</td></tr>
-                            <tr><td>Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}}</td></tr>
+                            <tbody align="left">
+                                <tr><td> <h4>Top Managment</h4></td></tr>
+                                <tr><td style="height: 20px"> </td></tr>
+                                <tr><td style="height: 5px"> ..............................</td></tr>
+                                <tr><td> Rajat Chakraboty</td></tr>
+                                <tr><td>Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}}</td></tr>
+                            </tbody>
                         </table>
                     </td>
 
                     <td align="right">
                         <table border="0" cellspacing="0" colspacing='0' width="100%">
-                            <tr><td> <h4>HR Department</h4></td></tr>
-                            <tr><td style="height: 20px"> </td></tr>
-                            <tr><td style="height: 5px"> ..............................</td></tr>
-                            <tr><td> Hasan Hafizul Islam </td></tr>
-                            <tr><td> Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}} </td></tr>
+                            <tbody align="right">
+                                <tr><td> <h4>HR Department</h4></td></tr>
+                                <tr><td style="height: 20px"> </td></tr>
+                                <tr><td style="height: 5px"> ..............................</td></tr>
+                                <tr><td> Hasan Hafizul Islam </td></tr>
+                                <tr><td> Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}} </td></tr>
+                            </tbody>
                         </table>
                     </td>
                 </tr>
