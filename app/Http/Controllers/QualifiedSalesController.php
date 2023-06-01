@@ -50,6 +50,7 @@ class QualifiedSalesController extends AccountBaseController
         'projects.requirement_defined as project_manager_requirement_define',
         'projects.deadline_meet as project_manager_deadline_define',
         'deals.project_deadline_authorization as sales_lead_deadline_define',
+        'projects.admin_authorization_comment as top_management_comment',
         DB::raw('(SELECT SUM(points) FROM cash_points WHERE project_id = projects.id) as total_points'),
 
 
