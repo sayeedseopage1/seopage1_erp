@@ -631,7 +631,14 @@ class InsightsController extends AccountBaseController
                             ])->whereBetween(DB::raw('DATE(paid_on)'), [$data->startDate, $data->endDate])->get();
 
                             if (count($payments) > 0 ) {
-                                $value->amount = $payments->sum('amount');
+                                if($data->trackingType != 'count')
+                                {
+                                    $value->amount = $payments->sum('amount');
+
+                                }else {
+                                    $value->amount = 1;
+                                }
+                               
                             } else {
                                 $value->amount = 0;
                             }
