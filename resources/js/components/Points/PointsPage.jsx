@@ -12,10 +12,18 @@ import NonCashPoint from './pages/NonCashPoints';
 import NonCashPointHistory from './pages/NonCashPointHistory';
 import PointPageFilterBar from "./components/FilterBar";
 import PointPageNavbar from "./components/Navbar";
+import { useUsers } from '../hooks/useUsers';
 
 
 const PointsPageContainer = () => {
-    return <Outlet />
+    const { usersIsFetching } = useUsers();
+    if(usersIsFetching){
+        <div style={{ display: 'flex', alignItems: 'center', "justifyContent": 'center', width: "100%", height: '100vh' }}>
+                <div>Loading...</div>
+            </div>
+    }else {
+        return <Outlet />
+    };
 }
 
 

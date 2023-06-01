@@ -35,6 +35,7 @@ const useTableState = () => {
 
 // data table 
 const DataTable = ({data, defaultColumns, isLoading}) => {
+    const [currentPage, setCurrentPage] = React.useState(1)
     const [currentPageData, setCurrentPageData] = React.useState([]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
     const { activeColumns, setActiveColumns, sortConfig, setSortConfig } = useTableState();
@@ -51,7 +52,11 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
         }else{
             setActiveColumns([...columns]);
         }
-    }, [])
+    }, []);
+
+    React.useEffect(() => {
+        currentPage !== 1 ? setCurrentPage(1) : null
+    }, [data])
 
 
     // config sort
@@ -190,6 +195,8 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
                     sortConfig={sortConfig}
                     sortedData={sortedData}
                     data={data}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
                     setCurrentPageData={(v) => setCurrentPageData(v)}
                     numOfPerPageRow={Number(numberOfRowPerPage)}
                 />

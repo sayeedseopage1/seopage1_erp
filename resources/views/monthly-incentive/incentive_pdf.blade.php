@@ -309,7 +309,7 @@
 
     <div>
         <h5 class="text-grey text-capitalize">@lang('app.subject')</h5>
-        <p class="f-15 text-black text-capitalize">Project Disbursment</p>
+        <p class="f-15 text-black text-capitalize">Incentive Disbursment</p>
 
         <h5>@lang('Project Deliverables')</h5>
 
@@ -337,7 +337,7 @@
         </table>
 
 
-        <div class="row justify-content-between" style="display: flex; justify-content: space-between;">
+        {{-- <div class="row justify-content-between" style="display: flex; justify-content: space-between;">
             <div style="text-align: left;">
                 <h3 class="name">@lang('Top Managment')</h3>
 
@@ -352,7 +352,37 @@
                 <p>Hasan Hafizul Islam</p>
                 <p>Date: {{\Carbon\Carbon::today()->format('Y-m-d')}}</p>
             </div>
-        </div>
+        </div> --}}
+
+        <table border="0" cellspacing="0" colspacing="0" width="100%">
+            <tbody>
+                <tr>
+                    <td align="left">
+                        <table border="0" cellspacing="0" colspacing='0'>
+                            <tbody align="left">
+                                <tr><td> <h4>Top Managment</h4></td></tr>
+                                <tr><td style="height: 14px"> </td></tr>
+                                <tr><td style="height: 5px"> ..............................</td></tr>
+                                <tr><td> Rajat Chakraboty</td></tr>
+                                <tr><td>Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}}</td></tr>
+                            </tbody>
+                        </table>
+                    </td>
+
+                    <td align="right">
+                        <table border="0" cellspacing="0" colspacing='0' width="100%">
+                            <tbody align="right">
+                                <tr><td> <h4>HR Department</h4></td></tr>
+                                <tr><td style="height: 14px"> </td></tr>
+                                <tr><td style="height: 5px"> .....................................</td></tr>
+                                <tr><td> Hasan Hafizul Islam </td></tr>
+                                <tr><td> Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}} </td></tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>

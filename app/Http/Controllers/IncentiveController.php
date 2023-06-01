@@ -46,7 +46,7 @@ class IncentiveController extends AccountBaseController
         } else {
             $userID = $request->user_id;
         }
-        $request->period = ucfirst($request->period);
+       // $request->period = ucfirst($request->period);
         $user_shift = Seopage1Team::where([
             ['id', '!=', 1],
             ['members', 'LIKE', '%'.$userID.'%']

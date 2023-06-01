@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\UserIncentive;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Auth;
 
 class MonthlyIncentiveController extends AccountBaseController
 {
@@ -13,10 +16,7 @@ class MonthlyIncentiveController extends AccountBaseController
         parent::__construct();
         $this->pageTitle = 'Monthly Incentive';
         $this->activeSettingMenu = 'monthly-incentive';
-        $this->middleware(function ($request, $next) {
-            abort_403(user()->permission('manage_company_setting') !== 'all');
-            return $next($request);
-        });
+        
     }
     /**
      * Display a listing of the resource.
@@ -24,13 +24,26 @@ class MonthlyIncentiveController extends AccountBaseController
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $this->user_incentive = UserIncentive::where([
-            ['point_earned' , '>', 0],
-            'status' => '0'
-        ])->orderBy('id', 'desc')->get();
+    { 
+        if(Auth::user()->role_id == 1)
+        {
+            $this->user_incentive = UserIncentive::where([
+                ['point_earned' , '>', 0],
+                'status' => '0'
+            ])->orderBy('id', 'desc')->get();
+            return view('monthly-incentive.index', $this->data);
 
-        return view('monthly-incentive.index', $this->data);
+        }else 
+        {
+            $this->user_incentive = UserIncentive::where([
+                ['point_earned' , '>', 0],
+                'status' => '0'
+            ])->orderBy('id', 'desc')->where('user_id',Auth::id())->get();
+            return view('monthly-incentive.index', $this->data);
+
+        }
+        
+       
     }
 
     public function get_index_json()
@@ -73,12 +86,13 @@ class MonthlyIncentiveController extends AccountBaseController
     public function show($id)
     {
         $data = UserIncentive::findOrfail($id);
+        $user = User::findOrfail($data->user_id);
 
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option('enable_php', true);
         //return view('monthly-incentive.incentive_pdf', compact('data'));
         $pdf->loadView('monthly-incentive.incentive_pdf', compact('data'));
-        return $pdf->download('download.pdf');
+        return $pdf->download('Monthly_Incentive_'.Carbon::now()->subMonth(1)->format('Y-m-d').'-'.$user->name.'.pdf');
         $dom_pdf = $pdf->getDomPDF();
         $canvas = $dom_pdf->getCanvas();
         $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
@@ -86,11 +100,6 @@ class MonthlyIncentiveController extends AccountBaseController
         $pdfString = $dom_pdf->output();
 
         return response($pdfString)->header('Content-Type', 'application/pdf');
-
-        return [
-            'pdf' => $pdf,
-            //'fileName' => $filename,
-        ];
     }
 
     /**

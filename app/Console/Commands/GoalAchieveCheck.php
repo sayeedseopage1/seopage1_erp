@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Payment;
 use Illuminate\Console\Command;
 use App\Models\GoalSetting;
 use App\Models\kpiSettingGenerateSale;

@@ -3,11 +3,10 @@ import Dropdown from '../../Insights/ui/Dropdown';
 import Tooltip from '../../Insights/ui/Tooltip';
 import _ from 'lodash';
 
-const EmployeeFilterOptions = ({data = [], sidebarItem=false, onSelect, selected, loading, setSelectedEmployee}) => {
+const EmployeeFilterOptions = ({data = [],  sidebarItem=false, onSelect, selected, loading, setSelectedEmployee}) => {
 //   const [selected, setSelected] = React.useState(null);
 
     const _data = React.useMemo(() => data, [data]) 
-    console.log({_data});
   
   React.useEffect(() => {
     if(_data.length > 0){

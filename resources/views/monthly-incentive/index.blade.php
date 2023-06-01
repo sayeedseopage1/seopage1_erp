@@ -36,12 +36,12 @@
                                         <a class="text-primary f-20 mx-1" href="{{route('monthly-incentive.show', $value->id)}}">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a class="text-warning f-20 mx-1" href="{{route('monthly-incentive.edit', $value->id)}}">
+                                        {{-- <a class="text-warning f-20 mx-1" href="{{route('monthly-incentive.edit', $value->id)}}">
                                             <i class="fa fa-eye"></i>
-                                        </a>
-                                        <a class="text-danger f-20 mx-1" href="{{route('monthly-incentive.destroy', $value->id)}}">
+                                        </a> --}}
+                                        {{-- <a class="text-danger f-20 mx-1" href="{{route('monthly-incentive.destroy', $value->id)}}">
                                             <i class="fa fa-trash"></i>
-                                        </a>
+                                        </a> --}}
                                     </td>
                                 </tr>
                                 @empty

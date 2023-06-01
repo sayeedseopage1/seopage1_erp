@@ -48,10 +48,10 @@ export default function CashPointsFilter ({
 
     // fetch project list
     // projects
-    const {
-        data: projects,
-        isFetching: projectsIsFetching
-    } = useGetProjectsOptionsQuery(); 
+    // const {
+    //     data: projects,
+    //     isFetching: projectsIsFetching
+    // } = useGetProjectsOptionsQuery(); 
     
 
     React.useEffect(() => {
@@ -103,10 +103,9 @@ export default function CashPointsFilter ({
 
             users.length && setSelectedEmployee(users[0])
         }
+         
         return users;
     }
-
-
 
     React.useEffect(()=> {
         if(selectedShift){
@@ -131,7 +130,7 @@ export default function CashPointsFilter ({
 
 
     const _employee = React.useMemo(() => selectedEmployee, [selectedEmployee])
-    console.log({selectedEmployee})
+    //console.log({selectedEmployee})
 
     React.useEffect(() => {
         const user = window?.Laravel?.user;
@@ -142,7 +141,7 @@ export default function CashPointsFilter ({
                     user_id: selectedEmployee?.id,
                     start_date: startDate,
                     end_date: endDate,
-                    period: defaultSelectedDate
+                    period: _.startCase(defaultSelectedDate)
                 })
             }else{
                 setIsDataFetching(false);
@@ -153,7 +152,7 @@ export default function CashPointsFilter ({
                 user_id: user?.id,
                 start_date: startDate,
                 end_date: endDate,
-                period: defaultSelectedDate
+                period: _.startCase(defaultSelectedDate)
             })
         }
         
@@ -161,15 +160,25 @@ export default function CashPointsFilter ({
 
 
     React.useEffect(() => {
-        if(!dept || !selectedEmployee || !selectedShift) return;
+        const user = window?.Laravel?.user;
+        if(Number(user?.role_id) === 1){
+            if(!dept || !selectedEmployee || !selectedShift) return;
 
-        incentiveCurrentData({
-            team_id: selectedShift?.id,
-            user_id: selectedEmployee?.id,
-            start_date: startDate,
-            end_date: endDate,
-            period: defaultSelectedDate
-        })
+            incentiveCurrentData({
+                team_id: selectedShift?.id,
+                user_id: selectedEmployee?.id,
+                start_date: startDate,
+                end_date: endDate,
+                period: defaultSelectedDate
+            })
+        }else if(selectedEmployee){
+            incentiveCurrentData({
+                user_id: user?.id,
+                start_date: startDate,
+                end_date: endDate,
+                period: defaultSelectedDate
+            })
+        }
     }, [endDate]);
 
 
