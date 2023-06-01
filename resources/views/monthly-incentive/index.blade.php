@@ -45,21 +45,30 @@
                                     <td>
                                         @php
                                         $user_goal = App\Models\GoalSetting::where([
-                                            'user_id' => $value->user_id,
-                                            
-                                        ])->get()->count();
+                                            'user_id' => $value->user_id
+                                        ])
+                                        ->whereDate('startDate', '>=', $value->month)
+                                        ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
+                                        ->get()->count();
+
                                         $user_in_team = App\Models\Seopage1Team::where('members', 'LIKE', '%'.$value->user_id.'%')->get()->pluck('id');
-                                        $user_in_team_goal = App\Models\GoalSetting::whereIn('team_id', $user_in_team)->get()->count();
-                                        //dd($user_in_team_goal);
+
+                                        $user_in_team_goal = App\Models\GoalSetting::whereIn('team_id', $user_in_team)
+                                        ->where('id', '!=', 1)
+                                        ->whereDate('startDate', '>=', $value->month)
+                                        ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
+                                        ->get()
+                                        ->count();
                                         @endphp
-                                        {{$value->achieve_goal}}</td>
+                                        {{$user_goal + $user_in_team_goal}}
+                                    </td>
                                     <td>{{$value->achieve_goal}}</td>
                                     <td>
                                         <a class="text-primary f-20 mx-1" href="{{route('monthly-incentive.download', $value->id)}}">
                                             <i class="fa fa-download"></i>
                                         </a>
-                                        <a class="text-dark f-20 mx-1" href="{{route('monthly-incentive.show', $value->id)}}">
-                                            <i class="fa fa-eye"></i>
+                                        {{--<a class="text-dark f-20 mx-1" href="{{route('monthly-incentive.show', $value->id)}}">
+                                            <i class="fa fa-eye"></i>--}}
                                         </a>
                                         {{-- <a class="text-danger f-20 mx-1" href="{{route('monthly-incentive.destroy', $value->id)}}">
                                             <i class="fa fa-trash"></i>
