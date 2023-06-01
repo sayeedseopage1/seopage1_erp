@@ -309,7 +309,7 @@
 
     <div>
         <h5 class="text-grey text-capitalize">@lang('app.subject')</h5>
-        <p class="f-15 text-black text-capitalize">Project Disbursment</p>
+        <p class="f-15 text-black text-capitalize">Incentive Disbursment</p>
 
         <h5>@lang('Project Deliverables')</h5>
 
