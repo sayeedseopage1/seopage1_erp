@@ -14,10 +14,7 @@ class MonthlyIncentiveController extends AccountBaseController
         parent::__construct();
         $this->pageTitle = 'Monthly Incentive';
         $this->activeSettingMenu = 'monthly-incentive';
-        $this->middleware(function ($request, $next) {
-            abort_403(user()->permission('manage_company_setting') !== 'all');
-            return $next($request);
-        });
+        
     }
     /**
      * Display a listing of the resource.
