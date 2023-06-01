@@ -22,6 +22,8 @@ return new class extends Migration
             $table->integer('achieve_goal')->nullable();
             $table->date('month');
             $table->enum('status', [0, 1])->default(0);
+            $table->float('deduction_amount')->default(0);
+            $table->float('deduction_incentive_amount')->defualt(0);
             $table->timestamps();
         });
     }

@@ -246,7 +246,7 @@
                              @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
                             <x-sub-menu-item :link="route('teams.index')" :text="__('Team')" />
                              @endif
-                                @if(Auth::user()->role_id == 1)
+                                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
                                 <x-sub-menu-item :link="route('monthly-incentive.index')" :text="__('Monthly Incentive')" />
                                 @endif
                         {{-- @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
@@ -335,7 +335,7 @@
 
                            <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
                            @endif
-                            
+
 
 
 
@@ -360,9 +360,9 @@
 
 
 {{--                            <x-sub-menu-item link="" :text="'Resource'" />--}}
-                            <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" />
+{{--                            <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" />--}}
 
-              
+
                         </div>
 
                     </x-menu-item>

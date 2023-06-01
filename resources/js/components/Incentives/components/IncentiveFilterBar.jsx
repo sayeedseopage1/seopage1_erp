@@ -130,7 +130,7 @@ export default function CashPointsFilter ({
 
 
     const _employee = React.useMemo(() => selectedEmployee, [selectedEmployee])
-    console.log({selectedEmployee})
+    //console.log({selectedEmployee})
 
     React.useEffect(() => {
         const user = window?.Laravel?.user;
@@ -141,7 +141,7 @@ export default function CashPointsFilter ({
                     user_id: selectedEmployee?.id,
                     start_date: startDate,
                     end_date: endDate,
-                    period: defaultSelectedDate
+                    period: _.startCase(defaultSelectedDate)
                 })
             }else{
                 setIsDataFetching(false);
@@ -152,7 +152,7 @@ export default function CashPointsFilter ({
                 user_id: user?.id,
                 start_date: startDate,
                 end_date: endDate,
-                period: defaultSelectedDate
+                period: _.startCase(defaultSelectedDate)
             })
         }
         

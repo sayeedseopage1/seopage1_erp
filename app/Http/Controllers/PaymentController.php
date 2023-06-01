@@ -219,7 +219,7 @@ class PaymentController extends AccountBaseController
 
         $payment->gateway = $request->gateway;
         $payment->transaction_id = $request->transaction_id;
-        $payment->paid_on = Carbon::createFromFormat($this->global->date_format, $request->paid_on)->format('Y-m-d');
+        $payment->paid_on = Carbon::now();
 
         $payment->remarks = $request->remarks;
 
