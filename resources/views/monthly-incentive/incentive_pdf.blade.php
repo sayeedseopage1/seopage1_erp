@@ -337,7 +337,7 @@
         </table>
 
 
-        <div class="row justify-content-between" style="display: flex; justify-content: space-between;">
+        {{-- <div class="row justify-content-between" style="display: flex; justify-content: space-between;">
             <div style="text-align: left;">
                 <h3 class="name">@lang('Top Managment')</h3>
 
@@ -352,7 +352,31 @@
                 <p>Hasan Hafizul Islam</p>
                 <p>Date: {{\Carbon\Carbon::today()->format('Y-m-d')}}</p>
             </div>
-        </div>
+        </div> --}}
+
+        <table border="0" cellspacing="0" colspacing="0">
+            <tbody>
+                <tr>
+                    <td>
+                        <table border="0" cellspacing="0" colspacing='0'>
+                            <tr><td> <h4>Top Managment</h4></td></tr>
+                            <tr><td style="height: 40px"> </td></tr>
+                            <tr><td> Rajat Chakraboty</td></tr>
+                            <tr><td>Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}}</td></tr>
+                        </table>
+                    </td>
+
+                    <td>
+                        <table border="0" cellspacing="0" colspacing='0'>
+                            <tr><td> <h4>HR Department</h4></td></tr>
+                            <tr><td style="height: 40px"> </td></tr>
+                            <tr><td> Hasan Hafizul Islam </td></tr>
+                            <tr><td> Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}} </td></tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>
