@@ -361,7 +361,7 @@
                         <table border="0" cellspacing="0" colspacing='0'>
                             <tbody align="left">
                                 <tr><td> <h4>Top Managment</h4></td></tr>
-                                <tr><td style="height: 20px"> </td></tr>
+                                <tr><td style="height: 14px"> </td></tr>
                                 <tr><td style="height: 5px"> ..............................</td></tr>
                                 <tr><td> Rajat Chakraboty</td></tr>
                                 <tr><td>Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}}</td></tr>
@@ -373,8 +373,8 @@
                         <table border="0" cellspacing="0" colspacing='0' width="100%">
                             <tbody align="right">
                                 <tr><td> <h4>HR Department</h4></td></tr>
-                                <tr><td style="height: 20px"> </td></tr>
-                                <tr><td style="height: 5px"> ..............................</td></tr>
+                                <tr><td style="height: 14px"> </td></tr>
+                                <tr><td style="height: 5px"> .....................................</td></tr>
                                 <tr><td> Hasan Hafizul Islam </td></tr>
                                 <tr><td> Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}} </td></tr>
                             </tbody>
