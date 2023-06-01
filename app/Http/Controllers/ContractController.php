@@ -2113,7 +2113,11 @@ class ContractController extends AccountBaseController
         $point= new CashPoint();
         $point->user_id= $user_name->id;
         $point->project_id= $project->id;
-        $point->activity= $user_name->name . ' for authorizing deal';
+        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . 
+        '</a> authorized the deal : <a style="color:blue" href="'.route('projects.show',$project->id).'">'
+        .$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. 
+        $project->client_name->name;
+
         $point->gained_as = "Individual";
         $point->points= $earned_point;
 
