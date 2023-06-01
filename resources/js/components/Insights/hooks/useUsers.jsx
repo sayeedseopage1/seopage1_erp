@@ -49,6 +49,6 @@ export const useUsers = () => {
     }
 
 
-    return {users, usersIsFetching ,usersIsLoading, getUserById}
+    return {users,usersObjects: users?.usersObjects,  usersIsFetching ,usersIsLoading, getUserById}
 
 } 
