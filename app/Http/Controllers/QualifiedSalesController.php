@@ -33,6 +33,7 @@ class QualifiedSalesController extends AccountBaseController
     //    / dd("nsdkasndkasnd");
     $this->projects = Project::select([
         'projects.id as id',
+        'deals.updated_at as date',
         'pm.id as pm_id',
         'pm.name as pm_name',
         'projects.project_name as project_name',
@@ -51,6 +52,7 @@ class QualifiedSalesController extends AccountBaseController
         'projects.deadline_meet as project_manager_deadline_define',
         'deals.project_deadline_authorization as sales_lead_deadline_define',
         'projects.admin_authorization_comment as top_management_comment',
+        
         DB::raw('(SELECT SUM(points) FROM cash_points WHERE project_id = projects.id) as total_points'),
 
 
@@ -71,7 +73,7 @@ class QualifiedSalesController extends AccountBaseController
     ;
     if($request->mode == 'json')
     {
-        return response()->json($this->data);
+        return response()->json($this->projects);
 
     }
    
