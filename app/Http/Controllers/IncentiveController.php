@@ -89,15 +89,20 @@ class IncentiveController extends AccountBaseController
             'goalType' => 'Minimum',
             'goal_status' => '1',
             'frequency' => $request->period,
-            'user_id' => $userID
-        ])->count();
+            'user_id' => $userID,
+        ])
+        ->whereDate('startDate', '>=', $start_date)
+        ->whereDate('endDate', '>=', $end_date)
+        ->count();
 
         $team_achieve_goal = GoalSetting::where([
             'assigneeType' => 'Team',
             'goalType' => 'Minimum',
             'goal_status' => '1',
-
-        ])->get();
+        ])
+        ->whereDate('startDate', '>=', $start_date)
+        ->whereDate('endDate', '>=', $end_date)
+        ->get();
 
         foreach ($team_achieve_goal as $value) {
             $members = $value->goal->members;
@@ -138,15 +143,24 @@ class IncentiveController extends AccountBaseController
 
         /*$teams = Seopage1Team::where('members', 'LIKE', '%'.$this->user->id.'%')->get()->pluck('id')->toArray();
         $team_goals = GoalSetting::whereIn('team_id', array_values($teams))->get();*/
-        $team_goals = GoalSetting::where('team_id', 1)->get();
-        $team_goals_achieve = GoalSetting::where('goal_status', 1)->where('team_id', 1)->get();
+        $team_goals = GoalSetting::where('team_id', 1)
+        ->whereDate('startDate', '>=', $start_date)
+        ->whereDate('endDate', '>=', $end_date)
+        ->get();
+        $team_goals_achieve = GoalSetting::where('goal_status', 1)
+        ->whereDate('startDate', '>=', $start_date)
+        ->whereDate('endDate', '>=', $end_date)
+        ->where('team_id', 1)->get();
 
         $data['minimum_team_goal'] = $team_goals->count();
         $data['mimimum_team_achieve_goal'] = $team_goals_achieve->count();
 
         //minimum team goal you and your shift
 
-        $incentive_setting = IncentiveSetting::first();
+        $incentive_setting = IncentiveSetting::where([
+            'incentive_status' => '1',
+            'cron_status' => '1'
+        ])->first();
         $data['non_incentive_point_above'] = $incentive_setting->every_shift_every_point_above;
 
         // dd($data['non_incentive_point_above']);
