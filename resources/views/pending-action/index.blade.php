@@ -29,50 +29,82 @@
          {{-- search with some filter options --}}
          <section class="row pt-3 pb-1 border-bottom" style="border-color: #eef2f8;">
             {{-- search --}}
-               <div class="col-12 col-md-8 input-group mb-2 w-100 pr-2">
-                  <div class="input-group-prepend border-right-0">
+               <div class="col-12 col-lg-6 input-group mb-2 w-100 pr-2">
+                  <div class="input-group-prepend border-right-0" style="height: 39px;">
                     <div class="input-group-text  outline-none" style="background: #F7F7F7;">
                         <i class="bi bi-search" ></i>
                     </div>
                   </div>
                   <input 
                      type="text" 
-                     class="form-control py-2 border-left-0 sp1_pa_search" 
+                     class="form-control border-left-0 sp1_pa_search" 
                      id="inlineFormInputGroup" 
                      placeholder="Search Project what you need"
-                     style="background: #F7F7F7;"
+                     style="background: #F7F7F7; height: 39px;"
                   >
                </div>
             
                {{--  --}}
 
-               <div class="col-12 col-md-4 d-flex align-items-center justify-content-start justify-content-md-end">
-                  <div class="d-flex align-items mx-2">
-                     <div class="form-group d-flex align-items-center">
-                        <label for="exampleFormControlSelect1" class="mb-0 mr-2">Show: </label>
-                        <select class="form-control sp1_pa_search py-2" id="exampleFormControlSelect1" style="width: 60px;">
-                        <option>10</option>
-                        <option>20</option>
-                        <option>30</option>
-                        <option>40</option>
-                        <option>50</option>
+               <div class="col-12 col-lg-6 d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end mb-3">
+                  {{-- employee filter --}}
+                  <div class="d-flex align-items-center flex-wrap flex-md-nowrap">
+                     {{-- <div class="form-group d-flex align-items-center">
+                        <label for="exampleFormControlSelect1" class="mb-0 mr-2">Employee: </label>
+                        <select class="form-control sp1_pa_search py-2" id="exampleFormControlSelect1" style="width: 250px;">
+                           <option selected>All</option>
+                           <option value="">
+                              <div>
+                                 <div>
+                                    <img src="https://www.gravatar.com/avatar/15c5d9a90a96c5ba476930ad2fde65fc.png?s=200&d=mp" alt="" width="30" height="30">
+                                 </div>
+                                 <span>Mohammad Fazle Rabbi</span>
+                              </div>
+                           </option>
+                           <option value="">Farhan Rahman</option>
+                           <option value="">Farhan Rahman</option>
+                           <option value="">Farhan Rahman</option>
+                           <option value="">Farhan Rahman</option>
+                        </select>
+                     </div>
+                  </div>  --}}
+
+                 <div class="d-flex align-items-center flex-wrap">
+                     <div class="select-box d-flex pr-2 border-right-grey-sm-0">
+                        <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.employee'):</p>
+                        <div class="select-status">
+                           <select class="form-control select-picker sp1_pa_search sp1_pa_employee_filter" name="employee" id="employee" data-live-search="true"
+                              data-size="8">
+                              {{-- @if ($employees->count() > 1) --}}
+                                    <option value="all">All</option>
+                              {{-- @endif --}}
+                              {{-- @foreach ($employees as $employee) --}}
+                                    <option
+                                       data-content="<div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='https://www.gravatar.com/avatar/15c5d9a90a96c5ba476930ad2fde65fc.png?s=200&d=mp'></div> Employee_name"
+                                       value="#employe_id"> Emplyee_name
+                                    </option>
+                              {{-- @endforeach --}}
+                           </select>
+                        </div>
+                     </div>
+                 </div>
+
+                  
+
+                  {{-- per page item --}}
+                  <div class="d-flex align-items-center mt-2 mt-md-0 mx-0 mx-md-2">
+                     <div class="d-flex align-items-center">
+                        <label for="exampleFormControlSelect1" class="mb-0 pr-1 pr-sm-0 mr-3 mr-sm-2">Show: </label>
+                        <select class="form-control sp1_pa_search py-2 ml-4 ml-sm-0" id="exampleFormControlSelect1" style="width: 60px;">
+                           <option value="10" selected>10</option>
+                           <option value="25">25</option>
+                           <option value="50">50</option>
+                           <option value="100">100</option>
                         </select>
                      </div>
                   </div>
 
-                  {{-- view all --}}
-                  <div class="d-flex align-items">
-                     <div class="form-group d-flex align-items-center">
-                        <label for="exampleFormControlSelect1" class="mb-0 mr-2">View: </label>
-                        <select class="form-control sp1_pa_search py-2" id="exampleFormControlSelect1" style="width: 60px;">
-                        <option selected>All</option>
-                        <option>20</option>
-                        <option>30</option>
-                        <option>40</option>
-                        <option>50</option>
-                        </select>
-                     </div>
-                  </div> 
+                  
               </div>
          </section>
 
@@ -103,8 +135,8 @@
                   </div>
 
                   <div class="col-12 col-lg-3">
-                     <div class="d-flex d-lg-block flex-wrap">
-                        <div class="sp1_pa_time_item ml-lg-auto mr-sm-2 mr-lg-0 mb-2">
+                     <div class="d-flex d-lg-block ">
+                        <div class="sp1_pa_time_item ml-lg-auto mr-2 mr-lg-0 mb-2">
                            <i class="bi bi-stopwatch-fill"></i>
                            <div>
                               <span class="d-block">6:30 pm</span>
@@ -295,7 +327,7 @@
 
    .sp1_pa_search{
       outline: none !important;
-      background: #F7F7F7 !important;
+      background: #F7F7F7 !important; 
    }
    .sp1_pa_search:hover,
    .sp1_pa_search:focus{
@@ -311,7 +343,8 @@
 
 
    .sp1_pa_time_item{
-      width: 200px;
+      max-width: 200px; 
+      min-width: 100px;
       padding: 10px 16px;
       border-radius: 6px;
       background: #F2F4F7;
@@ -334,6 +367,13 @@
       white-space: nowrap;
    }
 
+
+   @media screen and (max-width: 372px){
+      .sp1_pa_time_item{
+         padding: 8px 12px;
+      }
+   }
+
    .sp1_pa_text a:hover{
       color: var(--header_color) !important;
       text-decoration: underline;
@@ -341,6 +381,16 @@
 
    .page-link{
       border-radius: 4px;
+   }
+
+   .sp1_pa_employee_filter{
+      width: 250px !important;
+      outline: none !important;
+   }
+
+   .sp1_pa_employee_filter > button{
+      background: #F7F7F7 !important;
+      outline: none !important;
    }
 
 
@@ -354,6 +404,13 @@
       .sp1_pa_title{
          font-weight: bold;
          font-size: 24px;
+      }
+   }
+
+   @media screen and (max-width: 320px){
+      .sp1_pa_employee_filter{
+         width: 200px !important;
+         outline: none !important;
       }
    }
 </style>
