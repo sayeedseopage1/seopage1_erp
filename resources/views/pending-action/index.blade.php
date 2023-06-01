@@ -384,7 +384,7 @@
    }
 
    .sp1_pa_employee_filter{
-      width: 250px !important;
+      width: 200px !important;
       outline: none !important;
    }
 
