@@ -7,6 +7,7 @@ import { DndProvider } from 'react-dnd'; 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Provider } from 'react-redux';
 import { store } from '../services/store';
+import { BrowserRouter } from 'react-router-dom';
 
 
 const container = document.getElementById("qualifiedSales");
@@ -17,7 +18,9 @@ if(container){
      <Provider store={store}>
         <DndProvider backend={HTML5Backend}>
             <QualifiedSalesContextProvider>
-              <QualifiedSales />
+              <BrowserRouter>
+                <QualifiedSales />
+              </BrowserRouter> 
           </QualifiedSalesContextProvider> 
         </DndProvider>
       </Provider> 

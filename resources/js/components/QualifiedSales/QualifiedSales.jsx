@@ -1,9 +1,10 @@
 import React from 'react'
 import QualifiedSalesTable from './table/QualifiedSalesTable'
 import { useGetQualifiedSalesQuery } from '../services/api/qualifiedSalesApiSlice'
-
+import {useUsers} from '../hooks/useUsers';
 
 const QualifiedSales = () => {
+  const { users } = useUsers();
   const {
     data,
     isFetching
@@ -20,11 +21,7 @@ const QualifiedSales = () => {
 
         {/*table section */}
         <div className='p-4'>
-            <div className="w-100 bg-white p-3 rounded sp1_qs_tbl_container">
-                <div className='bg-white'>
-                  <QualifiedSalesTable data={data || []} isLoading={isFetching}/>
-                </div>
-            </div>
+            <QualifiedSalesTable data={data || []} users={users || []} isLoading={isFetching}/>
         </div>
     </div>
   )

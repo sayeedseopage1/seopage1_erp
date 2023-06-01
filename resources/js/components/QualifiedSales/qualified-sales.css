@@ -66,3 +66,7 @@
 .sp1_qs_table_th_sub_head{
     background: rgba(60, 62, 65, 0.08);
 }
+
+.sp1_qs_comment_view:hover{
+   font-weight: bold; 
+}
