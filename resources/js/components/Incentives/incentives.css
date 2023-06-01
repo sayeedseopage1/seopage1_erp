@@ -31,3 +31,27 @@
     border-radius: 6px;
     font-weight: bold;
 }
+
+.sp1_inc_month_wrapper{
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr)
+}
+
+.sp1_inc_month{
+    width: 35px;
+    height: 35px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sp1_inc_month:hover{
+    background-color: #ececec;
+    cursor: pointer;
+}
+
+.sp1_inc_month.active{
+    background-color: var(--header_color);
+    color: #fff;
+}

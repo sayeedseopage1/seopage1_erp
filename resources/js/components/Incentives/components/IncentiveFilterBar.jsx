@@ -11,6 +11,7 @@ import EmployeeFilterOptions from '../../Points/components/EmployeeFilterOptions
 import { useUsers } from '../../hooks/useUsers';
 import Button from '../../Insights/ui/Button';
 import { useIncentiveCurrentDataMutation } from '../../services/api/IncentiveApiSlice';
+import DatePicker from './DatePicker';
 
 
 export default function CashPointsFilter ({
@@ -196,12 +197,18 @@ export default function CashPointsFilter ({
     return (
         <div className='sp1__pp_filter_bar'>
             <FilterItem>
-                <JqueryDateRangePicker
+                {/* <JqueryDateRangePicker
                     startDate={startDate}
                     endDate={endDate}
                     setStartDate={setStartDate}
                     setEndDate={setEndDate} 
                     defaultSelectedType={defaultSelectedDate}
+                /> */}
+                <DatePicker 
+                    startDate={startDate}
+                    endDate={endDate}
+                    setStartDate={setStartDate}
+                    setEndDate={setEndDate} 
                 />
             </FilterItem>
 
