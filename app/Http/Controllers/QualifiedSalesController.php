@@ -73,7 +73,7 @@ class QualifiedSalesController extends AccountBaseController
     ;
     if($request->mode == 'json')
     {
-        return response()->json($this->data);
+        return response()->json($this->projects);
 
     }
    
