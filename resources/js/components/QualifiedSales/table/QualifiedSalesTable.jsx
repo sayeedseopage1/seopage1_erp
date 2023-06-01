@@ -4,13 +4,15 @@ import _ from 'lodash';
 import { QualifiedSalesContext } from '../context';
 import DragableHeader from './DragableHeader';
 
-const QualifiedSalesTable = ({data = []}) => {
+const QualifiedSalesTable = ({data = [], isLoading=true}) => {
     const {
         columns,
         sortConfig,
         setColumns,
         setSortConfig,
     } = React.useContext(QualifiedSalesContext);
+
+     
 
     React.useEffect(() => {
         let _columns = defaultColumns;
