@@ -11,11 +11,13 @@ use App\Models\GoalRecurring;
 use App\Models\Section;
 use App\Models\Dashboard;
 use App\Models\DealStage;
+use App\Models\Payment;
 use App\Models\Lead;
+use App\Models\Project;
 use Illuminate\Support\Facades\DB;
-use Auth;
 use App\Models\Deal;
 use App\Models\DealStageChange;
+use Auth;
 
 class InsightsController extends AccountBaseController
 {
@@ -609,7 +611,7 @@ class InsightsController extends AccountBaseController
                 //->whereIn('deals.added_by', $data2)
                 ->orderBy('deals.id', 'desc')
                 ->get();
-                // /dd($deals_data);
+
                 foreach ($deals_data as $key => $value) {
                     $check_client = Deal::whereDate('created_at', '>=', $data->startDate);
                     if (!is_null($data->endDate)) {
@@ -620,6 +622,29 @@ class InsightsController extends AccountBaseController
                     if ($data->trackingType == 'count') {
                         $value->amount = 1;
                         $value->tracking_type = 'count';
+                    }
+                    if ($value->project_type == 'hourly') {
+                        $project = Project::where('deal_id', $value->id)->first();
+                        if (!is_null($project)) {
+                            $payments = Payment::where([
+                                'project_id' => $project->id,
+                            ])->whereBetween(DB::raw('DATE(paid_on)'), [$data->startDate, $data->endDate])->get();
+
+                            if (count($payments) > 0 ) {
+                                if($data->trackingType == 'value')
+                                {
+                                    $value->amount = $payments->sum('amount');
+
+                                }else {
+                                    $value->amount = 1;
+                                }
+                               
+                            } else {
+                                $value->amount = 0;
+                            }
+                        } else {
+                            $value->amount = 0;
+                        }
                     }
 
                     if (!is_null($data->goal)) {
@@ -677,7 +702,6 @@ class InsightsController extends AccountBaseController
 
                     $array[] = $value;
                 }
-
             } elseif ($data->dealType == 'New Client') {
                 $deals_data = Deal::select([
                     'deals.*',
@@ -706,6 +730,30 @@ class InsightsController extends AccountBaseController
                         $value->amount = 1;
                         $value->tracking_type = 'count';
                     }
+                    if ($value->project_type == 'hourly') {
+                        $project = Project::where('deal_id', $value->id)->first();
+                        if (!is_null($project)) {
+                            $payments = Payment::where([
+                                'project_id' => $project->id,
+                            ])->whereBetween(DB::raw('DATE(paid_on)'), [$data->startDate, $data->endDate])->get();
+
+                            if (count($payments) > 0 ) {
+                                if($data->trackingType == 'value')
+                                {
+                                    $value->amount = $payments->sum('amount');
+
+                                }else {
+                                    $value->amount = 1;
+                                }
+                               
+                            } else {
+                                $value->amount = 0;
+                            }
+                        } else {
+                            $value->amount = 0;
+                        }
+                    }
+
                     if (!is_null($data->goal)) {
                         $member = rtrim($data->goal->members, ',');
                         $member = explode(',', $member);

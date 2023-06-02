@@ -108,6 +108,20 @@ class PolicyController extends AccountBaseController
     }
     public function nextMonthPolicy()
     {
+        $this->kpi = kpiSetting::where([
+            'kpi_status' => '1',
+            'cron_status' => '1',
+        ])->first();
+        //dd($this->kpi);
+
+        $this->incentive = IncentiveSetting::where([
+            'incentive_status' => '1',
+            'cron_status' => '1',
+        ])->first();
+
+        $this->kpi_generate_sale = kpiSettingGenerateSale::where('kpi_id', $this->kpi->id)->get();
+        $this->kpi_logged_hours = kpiSettingLoggedHour::where('kpi_id', $this->kpi->id)->get();
+
         $this->pageTitle = 'Next Month Policy';
         return view('policy.next_month_policy',$this->data);
     }

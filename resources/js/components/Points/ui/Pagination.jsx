@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Button from '../../Insights/ui/Button';
 
 
-const Pagination = ({data, setCurrentPageData, numOfPerPageRow = 10, sortConfig, sortedData }) => {
-    const [currentPage, setCurrentPage] = React.useState(1)
+const Pagination = ({data, setCurrentPageData, numOfPerPageRow = 10, sortConfig, sortedData, currentPage = 1, setCurrentPage}) => {
+    
     const [renderButtons,setRenderButtons] = React.useState([]);
     const [totalPages, setTotalPages] = React.useState(1);
 

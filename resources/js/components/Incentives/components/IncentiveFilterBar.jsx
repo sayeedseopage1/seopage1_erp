@@ -11,6 +11,7 @@ import EmployeeFilterOptions from '../../Points/components/EmployeeFilterOptions
 import { useUsers } from '../../hooks/useUsers';
 import Button from '../../Insights/ui/Button';
 import { useIncentiveCurrentDataMutation } from '../../services/api/IncentiveApiSlice';
+import DatePicker from './DatePicker';
 
 
 export default function CashPointsFilter ({
@@ -48,10 +49,10 @@ export default function CashPointsFilter ({
 
     // fetch project list
     // projects
-    const {
-        data: projects,
-        isFetching: projectsIsFetching
-    } = useGetProjectsOptionsQuery(); 
+    // const {
+    //     data: projects,
+    //     isFetching: projectsIsFetching
+    // } = useGetProjectsOptionsQuery(); 
     
 
     React.useEffect(() => {
@@ -103,9 +104,9 @@ export default function CashPointsFilter ({
 
             users.length && setSelectedEmployee(users[0])
         }
+         
         return users;
     }
-
 
     React.useEffect(()=> {
         if(selectedShift){
@@ -130,38 +131,58 @@ export default function CashPointsFilter ({
 
 
     const _employee = React.useMemo(() => selectedEmployee, [selectedEmployee])
+    //console.log({selectedEmployee})
 
     React.useEffect(() => {
-        if(!dept || !selectedEmployee || !selectedShift) return;
-
-        incentiveCurrentData({
-            team_id: selectedShift?.id,
-            user_id: selectedEmployee?.id,
-            start_date: startDate,
-            end_date: endDate,
-        })
+        const user = window?.Laravel?.user;
+        if(Number(user?.role_id) === 1){
+            if(_employee){
+                incentiveCurrentData({
+                    team_id: selectedShift?.id,
+                    user_id: selectedEmployee?.id,
+                    start_date: startDate,
+                    end_date: endDate,
+                    period: _.startCase(defaultSelectedDate)
+                })
+            }else{
+                setIsDataFetching(false);
+                setData(null);
+            }
+        }else if(_employee){
+            incentiveCurrentData({
+                user_id: user?.id,
+                start_date: startDate,
+                end_date: endDate,
+                period: _.startCase(defaultSelectedDate)
+            })
+        }
+        
     }, [_employee]);
 
 
     React.useEffect(() => {
-        if(!dept || !selectedEmployee || !selectedShift) return;
+        const user = window?.Laravel?.user;
+        if(Number(user?.role_id) === 1){
+            if(!dept || !selectedEmployee || !selectedShift) return;
 
-        incentiveCurrentData({
-            team_id: selectedShift?.id,
-            user_id: selectedEmployee?.id,
-            start_date: startDate,
-            end_date: endDate,
-        })
+            incentiveCurrentData({
+                team_id: selectedShift?.id,
+                user_id: selectedEmployee?.id,
+                start_date: startDate,
+                end_date: endDate,
+                period: defaultSelectedDate
+            })
+        }else if(selectedEmployee){
+            incentiveCurrentData({
+                user_id: user?.id,
+                start_date: startDate,
+                end_date: endDate,
+                period: defaultSelectedDate
+            })
+        }
     }, [endDate]);
 
 
-
-    // handle project filter
-    const handleProjectFilter = (e, project) => {
-        e.preventDefault();
-        setProject(project);
-        
-    }
 
     // set table data
     React.useEffect(() => {
@@ -172,15 +193,22 @@ export default function CashPointsFilter ({
     }, [tableData, dataFetchingStateIsLoading])
 
 
+
     return (
         <div className='sp1__pp_filter_bar'>
             <FilterItem>
-                <JqueryDateRangePicker
+                {/* <JqueryDateRangePicker
                     startDate={startDate}
                     endDate={endDate}
                     setStartDate={setStartDate}
                     setEndDate={setEndDate} 
                     defaultSelectedType={defaultSelectedDate}
+                /> */}
+                <DatePicker 
+                    startDate={startDate}
+                    endDate={endDate}
+                    setStartDate={setStartDate}
+                    setEndDate={setEndDate} 
                 />
             </FilterItem>
 

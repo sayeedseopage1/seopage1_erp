@@ -1,0 +1,72 @@
+
+.sp1_qs_tbl_container{
+    width: 100%;
+    overflow-x: auto;
+}
+
+.sp1_qs_table{
+    width: fit-content;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.sp1_qs_table_tr{
+    display: flex;
+    border-bottom: 1px solid #ddd;
+}
+
+.sp1_qs_table_tr:last-child{
+    border-bottom: none;
+}
+
+
+.sp1_qs_table_th{
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+
+.sp1_qs_table_td{ 
+    width: 150px;
+    padding: 6px 16px;
+    white-space: wrap;
+    border-right: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+}
+
+.sp1_qs_table_td:last-child{
+    border: 0;
+}
+
+.sp1_qs_table_th_sub{
+    padding: 12px 16px; 
+}
+
+
+.sp1_qs_table_td_date{
+    width: 100px;
+}
+
+.sp1_qs_table_td_status{
+    width: 120px;
+}
+
+
+
+.sp1_qs_table_td_project_name{
+    width: 250px;
+}
+
+.sp1_qs_table_td_notes{
+    width: auto;
+}
+
+.sp1_qs_table_th_sub_head{
+    background: rgba(60, 62, 65, 0.08);
+}
+
+.sp1_qs_comment_view:hover{
+   font-weight: bold; 
+}
