@@ -7,7 +7,7 @@ const RedeemHistory = () => {
         <h6>You Are Currently Receiving The Following Benefits: </h6>
 
         <div className='row w-100'>
-            <div className="col-6">
+            <div className="col-12 col-lg-6">
                 <div>
                     <table className='sp1_rr_tbl'>
                         <thead>
@@ -38,48 +38,50 @@ const RedeemHistory = () => {
                 </div>
             </div>
 
-            <div className='col-6 p-0 sp1_redeem_pending_rewards'>
-                <div className="text-center py-2 sp1_rpwt">
-                    Your Pending Rewards
-                </div>
+            <div className='col-12 col-lg-6 mt-4 mt-lg-0'>
+                <div className='sp1_redeem_pending_rewards'>
+                    <div className="text-center py-2 sp1_rpwt">
+                        Your Pending Rewards
+                    </div>
 
 
-                <div className="px-5 py-2 w-100">
-                    <div className="row sp1_rpwt_item">
-                        <div className="col-3 p-2">
-                            <div className='sp1_rpwt_item_inner'>
-                                Adjust one day's home office
-                            </div>
-                        </div> 
-                        <div className="col-3 p-2">
-                            <div className='sp1_rpwt_item_inner'>
-                                Adjust one day's home office
-                            </div>
-                        </div> <div className="col-3 p-2">
-                            <div className='sp1_rpwt_item_inner'>
-                                Adjust one day's home office
-                            </div>
-                        </div> <div className="col-3 p-2">
-                            <div className='sp1_rpwt_item_inner'>
-                                Adjust one day's home office
-                            </div>
-                        </div> <div className="col-3 p-2">
-                            <div className='sp1_rpwt_item_inner'>
-                                Adjust one day's home office
-                            </div>
-                        </div> <div className="col-3 p-2">
-                            <div className='sp1_rpwt_item_inner'>
-                                Adjust one day's home office
-                            </div>
-                        </div> <div className="col-3 p-2">
-                            <div className='sp1_rpwt_item_inner'>
-                                Adjust one day's home office
-                            </div>
-                        </div> <div className="col-3 p-2">
-                            <div className='sp1_rpwt_item_inner'>
-                                Adjust one day's home office
-                            </div>
-                        </div> 
+                    <div className="px-5 py-2 w-100">
+                        <div className="row sp1_rpwt_item">
+                            <div className="col-4 col-lg-3 p-2">
+                                <div className='sp1_rpwt_item_inner'>
+                                    Adjust one day's home office
+                                </div>
+                            </div> 
+                            <div className="col-4 col-lg-3 p-2">
+                                <div className='sp1_rpwt_item_inner'>
+                                    Adjust one day's home office
+                                </div>
+                            </div> <div className="col-4 col-lg-3 p-2">
+                                <div className='sp1_rpwt_item_inner'>
+                                    Adjust one day's home office
+                                </div>
+                            </div> <div className="col-4 col-lg-3 p-2">
+                                <div className='sp1_rpwt_item_inner'>
+                                    Adjust one day's home office
+                                </div>
+                            </div> <div className="col-4 col-lg-3 p-2">
+                                <div className='sp1_rpwt_item_inner'>
+                                    Adjust one day's home office
+                                </div>
+                            </div> <div className="col-4 col-lg-3 p-2">
+                                <div className='sp1_rpwt_item_inner'>
+                                    Adjust one day's home office
+                                </div>
+                            </div> <div className="col-4 col-lg-3 p-2">
+                                <div className='sp1_rpwt_item_inner'>
+                                    Adjust one day's home office
+                                </div>
+                            </div> <div className="col-4 col-lg-3 p-2">
+                                <div className='sp1_rpwt_item_inner'>
+                                    Adjust one day's home office
+                                </div>
+                            </div> 
+                        </div>
                     </div>
                 </div>
             </div>
