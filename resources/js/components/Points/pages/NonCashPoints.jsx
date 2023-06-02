@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import InnerNavbar from "../components/InnerNavbar";
-
+import PointPageNavbar from '../components/Navbar';
 
 const NonCashPoint = () => {
 
@@ -12,12 +12,20 @@ const NonCashPoint = () => {
 
     return(
     //    <PointPageContainer>
-        <div className="" style={{padding: '16px'}}> 
-            <InnerNavbar items={tabs} /> 
-            <div className="">
-                <Outlet />
+       <div className="sp1_point_page">
+
+        <div className="sp1_point_page_container">
+            <PointPageNavbar />
+            <div className="sp1_point_page_main" style={{padding: '16px'}}> 
+                <div className="d-flex align-items-center justify-space-between">
+                    <InnerNavbar items={tabs} /> 
+                </div>
+                <div className="mt-3">
+                    <Outlet />
+                </div>
             </div>
         </div>
+       </div> 
     //    </PointPageContainer> 
     )
 }

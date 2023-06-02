@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import {motion} from 'framer-motion';
 import _ from 'lodash';
 
@@ -12,8 +12,17 @@ const InnerNavbar = ({
     const ref = React.useRef(null);
     const wrapperRef = React.useRef(null);
     const [width, setWidth] = React.useState(0);
-    const [x, setX] = React.useState(0);
-    const params  = useParams();
+    const [x, setX] = React.useState(0); 
+    const location = useLocation();
+
+    
+    // initial
+    React.useEffect(() => {
+       if(items.length){ 
+        let item = items?.find(d => location.pathname  === d.url); 
+        setActive(item?.id);
+       }
+    }, [location]);
 
 
     React.useEffect(() => {
@@ -29,14 +38,10 @@ const InnerNavbar = ({
         setX(x - wRect.x);
 
 
-    }, [active])
+    }, [active]);
+ 
 
-
-    React.useEffect(() => {
-        let item = items.find(d => _.lowerCase(d.name) === params?.period);
-        setActive(item?.id); 
-    }, [params]);
-
+    
 
     return(
         <div ref={wrapperRef} className="sp1__pp_inner_navigate">
@@ -81,12 +86,12 @@ const InnerNavbar = ({
                             whiteSpace: 'nowrap',
                         }}
                     >
-                        {items.find(item => item.id === active).name}
+                        {items?.find(item => item.id === active)?.name}
                     </motion.div>
             </motion.div>
 
 
-            {items.map(item => (
+            {items?.map(item => (
                 <NavLink
                     to={item.url}
                     key={item.id}

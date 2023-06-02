@@ -13,6 +13,10 @@ import NonCashPointHistory from './pages/NonCashPointHistory';
 import PointPageFilterBar from "./components/FilterBar";
 import PointPageNavbar from "./components/Navbar";
 import { useUsers } from '../hooks/useUsers';
+import NonCashPointEarn from './pages/NonCashPointEarn';
+import RedeemPoints from './pages/RedeemPoints';
+import RedeemPointShop from './pages/RedeemPointShop';
+import RedeemHistory from './pages/RedeemHistory';
 
 
 const PointsPageContainer = () => {
@@ -39,10 +43,13 @@ const PointsPage = () => {
                         <Route path='non-cash-points' element={<NonCashPoint />}>
                             <Route index element={ <Navigate to='/non-cash-points/history' /> } />
                             <Route path="history" element={<NonCashPointHistory />} />
-                            <Route path="earn-non-cash-points" element={<div>Earn non-cash points</div>} />
+                            <Route path="earn-non-cash-points" element={<NonCashPointEarn />} />
                         </Route>
-                        <Route path='redeem-points' element={<div>Redeem points</div>} />
-                        
+                        <Route path='redeem-points' element={<RedeemPoints />}>
+                            <Route index element={ <Navigate to='/redeem-points/point-shop' /> } />
+                            <Route path="point-shop" element={<RedeemPointShop />} />
+                            <Route path="history" element={<RedeemHistory />} />
+                        </Route> 
                     </Route>
                 </Routes>
             </BrowserRouter>
