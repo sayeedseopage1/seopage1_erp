@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\DepartmentDataTable;
+use App\DataTables\Seopage1TeamDataTable;
 use App\Helper\Reply;
 use App\Models\BaseModel;
 use App\Models\Team;
@@ -32,11 +32,11 @@ class Seopage1TeamController extends AccountBaseController
     }
 
     /**
-    * @param DepartmentDataTable $dataTable
+    * @param Seopage1TeamDataTable $dataTable
     * @return mixed|void
     */
 
-    public function index(DepartmentDataTable $dataTable)
+    public function index(Seopage1TeamDataTable $dataTable)
     {
         $viewPermission = user()->permission('view_department');
         abort_403(!in_array($viewPermission, ['all', 'added', 'owned', 'both']));
@@ -99,7 +99,7 @@ public function getEmployeesByParentTeam(Request $request)
     }
 
     /**
-     * @param StoreDepartment $request
+     * @param StoreSeopage1Team $request
      * @return array
      * @throws \Froiden\RestAPI\Exceptions\RelatedResourceNotFoundException
      */

@@ -2,7 +2,7 @@ import _ from 'lodash'
 import * as React from 'react'
 import { useDrag, useDrop } from 'react-dnd';
 
-const DragableHeader = ({column, columns, setColumns, sortConfig }) => {
+const DragableHeader = ({column, columns, setColumns, sortConfig, requestSort }) => {
     const ref = React.useRef(null);
 
     // re ordering column
@@ -62,10 +62,24 @@ const DragableHeader = ({column, columns, setColumns, sortConfig }) => {
         className={`sp1_qs_table_td sp1_qs_table_th sp1_qs_table_td_${column?.id} ${column?.headClass}`}
     >
 
-        
+       {column.accessor ? <>
+            <div onClick={() => requestSort(column.accessor)}>
+            {
+              sortConfig.key === column.accessor ? 
+                sortConfig.direction === "asc" ? (
+                    <span className="table_asc_dec asc"></span>
+                    ) : (  <span className="table_asc_dec dec"></span>
+                ) : <span className="table_asc_dec"></span>
+              
+            }
+            </div>
         {/* <span className="table_asc_dec asc"></span>
         <span className="table_asc_dec dec"></span> */}
-        {_.isFunction(column.header) ? column.header() : column.header}
+
+            {_.isFunction(column.header) ? column.header() : column.header}
+       </> : 
+            _.isFunction(column.header) ? column.header() : column.header
+        }
     </div>
   )
 }

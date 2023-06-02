@@ -2100,8 +2100,8 @@ class ContractController extends AccountBaseController
         $deal->project_deadline_authorization = $request->project_deadline_authorization;
 
         //kpi settings
-        $kpiSetting = kpiSetting::first();
-        $earned_point = ($kpiSetting->authorized_by_leader * $deal->actual_amount) / 100;
+        $kpiSetting = kpiSetting::where('kpi_status',1)->first();
+        $earned_point = ($kpiSetting->accepted_by_pm * $deal->actual_amount/100)*$kpiSetting->authorized_by_leader /100;
 
         $user_name= User::where('role_id',8)->first();
         $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
@@ -2113,7 +2113,11 @@ class ContractController extends AccountBaseController
         $point= new CashPoint();
         $point->user_id= $user_name->id;
         $point->project_id= $project->id;
-        $point->activity= $user_name->name . ' for authorizing deal';
+        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . 
+        '</a> authorized the deal : <a style="color:blue" href="'.route('projects.show',$project->id).'">'
+        .$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. 
+        $project->client_name->name;
+
         $point->gained_as = "Individual";
         $point->points= $earned_point;
 

@@ -65,9 +65,11 @@
 @endpush
 @section('content')
 
+
 @php
     $data = $user_incentive;
 @endphp    
+
     <section>
         <div class="d-flex align-items-center justify-content-center py-5">
             <div class="sp1_incentive_pdf_container bg-white" >
@@ -75,7 +77,9 @@
                     <img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
                         class="logo" style="height:70px;" />
 
+
                     <a href="{{ route('monthly-incentive.download', $user_incentive->id) }}" aria-label="download" class="sp1_inc_pdf_dl_btn">
+
                         <i class="fa-solid fa-download"></i>
                         <span class="d-none d-sm-inline">Download</span>
                     </a>
@@ -109,6 +113,8 @@
                             <tr>
                                 <th>#</th>
                                 <th>Month</th>
+
+
                                 <th>Non Incentive Points</th>
                                 <th>Achieved Point</th>
                                 <th>Incentive Amount</th>
@@ -120,6 +126,7 @@
                         </thead>
                         <tbody>
                             <tr>
+
                                 <td>{{ $user_incentive->id }}</td>
                                 <td>{{ \Carbon\Carbon::parse($user_incentive->start_month)->format('M (Y)') }}</td>
                                 <td>{{ $non_incentive_point->every_shift_every_point_above }}</td>
@@ -127,6 +134,7 @@
                                 <td>{{ $user_incentive->incentive_earned }}</td>
                                 <td>{{ $user_incentive->deduction_amount }}</td>
                                 <td>{{ $user_incentive->deduction_incentive_amount }}</td>
+
                                 <td>Total Goal</td>
                                 <td>Achieved Goal</td>
                             </tr>  
@@ -136,4 +144,5 @@
             </div>
         </div>
     </section>
+
 @endsection
