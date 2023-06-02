@@ -172,7 +172,7 @@ class InvoiceController extends AccountBaseController
       if($hourly_project_check->deal->project_type=='hourly' && $request->total <= 0)
       {
         return Reply::error(__('You cannot insert zero on the amount for creating the invoice.'));
-      }elseif($hourly_project_check->deal->project_type && $request->total > 0) {
+      }elseif($hourly_project_check->deal->project_type == 'hourly' && $request->total > 0) {
 
          // /dd($request);
          $currency= Currency::where('id',$request->currency_id)->first();

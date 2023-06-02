@@ -11,6 +11,7 @@ use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Project;
+use App\Models\QualifiedSale;
 use App\Models\User;
 use App\Models\ProjectTimeLog;
 use App\Models\kpiSetting;;
@@ -692,6 +693,15 @@ class PaymentController extends AccountBaseController
                         }
                     }
                 }
+                $qualified_sale_id= QualifiedSale::where('project_id',$project->id)->first();
+                if($qualified_sale_id != null)
+                {
+                    $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+                 $total_points= CashPoint::where('project_id',$project->id)->sum('points');
+                 $qualified_sale->total_points= $total_points;
+                 $qualified_sale->save();
+                }
+                 
 
 
 
