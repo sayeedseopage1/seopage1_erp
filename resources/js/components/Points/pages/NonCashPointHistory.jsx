@@ -1,4 +1,4 @@
-import DataTable from '../../Insights/ui/DataTable';
+import DataTable from '../ui/DataTable';
 
 const NonCashPointHistory = () => {
     const data = []
@@ -9,14 +9,14 @@ const NonCashPointHistory = () => {
                 data={data}
                 isLoading={false}
                 defaultColumns={[
-                    {
-                        header: 'ID',
-                        accessor: 'id',
-                        id: 'id',
-                        cell: (row) => {
-                            return <span>{row['id']}</span>
-                        } 
-                    },
+                    // {
+                    //     header: 'ID',
+                    //     accessor: 'id',
+                    //     id: 'id',
+                    //     cell: (row) => {
+                    //         return <span>{row['id']}</span>
+                    //     } 
+                    // },
                     {
                         header: 'Date',
                         accessor: 'date',
@@ -29,6 +29,14 @@ const NonCashPointHistory = () => {
                         header: 'Action',
                         accessor: 'action',
                         id: 'action',
+                        cell: (row) => {
+                            return <span>{row['action']}</span>
+                        } 
+                    },
+                    {
+                        header: 'Gained as a',
+                        accessor: 'gained_as_a',
+                        id: 'gained_as',
                         cell: (row) => {
                             return <span>{row['action']}</span>
                         } 
