@@ -3,18 +3,25 @@ import { columns as defaultColumns } from './Columns';
 import _ from 'lodash';
 import { QualifiedSalesContext } from '../context';
 import DragableHeader from './DragableHeader';
+import Pagination from '../../Points/ui/Pagination';
 
-const QualifiedSalesTable = ({data = []}) => {
+const QualifiedSalesTable = ({data = [], users=[], isLoading=true}) => {
+    const [currentPageData, setCurrentPageData] = React.useState([]);
     const {
         columns,
         sortConfig,
         setColumns,
         setSortConfig,
+        activePage,
+        setActivePage,
+        parPageRow,
+        setParPageRow
     } = React.useContext(QualifiedSalesContext);
+ 
 
     React.useEffect(() => {
         let _columns = defaultColumns;
-        // let lsColumn = localStorage.getItem(`qualifiedSalesTable_${window?.Laravel?.user?.id}`);
+        let lsColumn = localStorage.getItem(`qualifiedSalesTable_${window?.Laravel?.user?.id}`);
 
         
 
@@ -24,12 +31,10 @@ const QualifiedSalesTable = ({data = []}) => {
         // // //             .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
                  
         
-        // if(lsColumn){
-        //     lsColumn = JSON.parse(lsColumn);
-        //     console.log({lsColumn})
-        //      _columns = _columns.sort((a, b) => lsColumn.indexOf(a.id) - lsColumn.indexOf(b.id));
-        //      console.log({sort: _columns});
-        // }
+        if(lsColumn){
+            lsColumn = JSON.parse(lsColumn);
+            _columns = _columns.sort((a, b) => lsColumn.findIndex(d => d.id === a.id) - lsColumn.findIndex(d => d.id === b.id)); 
+        }
        
         // console.log({_columns})
 
@@ -76,40 +81,91 @@ const QualifiedSalesTable = ({data = []}) => {
         setSortConfig({ key, direction });
     };
 
+
+
+    const salesLead = users?.find(u => Number(u.role_id) === 8);
+
+    
+
     
 
   return (
-    <div className="sp1_qs_table">
-        {/* head */}
-        <div className='sp1_qs_table_tr'>
-            {columns?.map(column => {
-                return(
-                    <DragableHeader 
-                        key={column.id} 
-                        column={column} 
-                        columns={columns}
-                        setColumns={setColumns}
-                        sortConfig={sortConfig}
-                        setSortConfig={setSortConfig}
-                    />
-                )
-            })}
+    <>
+    <div className="w-100 bg-white p-3 rounded sp1_qs_tbl_container">
+        <div className='bg-white'>
+            <div className="sp1_qs_table">
+            {/* head */}
+            <div className='sp1_qs_table_tr'>
+                {columns?.map(column => {
+                    return(
+                        <DragableHeader 
+                            key={column.id} 
+                            column={column} 
+                            columns={columns}
+                            setColumns={setColumns}
+                            sortConfig={sortConfig}
+                            requestSort= {requestSort}
+                        />
+                    )
+                })}
+            </div>
+
+
+            {/* body */}
+            {/* head */}
+        {
+            currentPageData?.map(row  => (
+                <div key={row?.id} className='sp1_qs_table_tr'>
+                    {columns?.map(column => {
+                        return(
+                            <div key={column.id} className={`sp1_qs_table_td sp1_qs_table_td_${column.id} ${column?.headClass}`}>
+                                {column?.cell({
+                                    ...row,
+                                    salesLead,
+                                })}
+                            </div>
+                        )
+                    })}
+                </div>
+            ))
+        } 
         </div>
-
-
-        {/* body */}
-        {/* head */}
-        <div className='sp1_qs_table_tr'>
-            {columns?.map(column => {
-                return(
-                    <div key={column.id} className={`sp1_qs_table_td sp1_qs_table_td_${column.id} ${column?.headClass}`}>
-                        {column?.cell([])}
-                    </div>
-                )
-            })}
         </div>
-
     </div>
+     <div className="cnx__table_footer">
+        <div className="__show_entries">
+            <span>Show</span> 
+            <select className='py-2 border' onChange={(e) => setParPageRow(Number(e.target.value))}>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+            </select>
+
+            <span>entries</span>
+        </div>
+
+
+        <div className='__total_entries'>
+            Showing {currentPageData.length > 0 ? 1 : 0} to {currentPageData.length} of {data.length} entries
+        </div>
+
+
+        {/* pagination */}
+        <Pagination
+            sortConfig={sortConfig}
+            sortedData={sortedData}
+            data={data}
+            currentPage={activePage}
+            setCurrentPage={setActivePage}
+            setCurrentPageData={(v) => setCurrentPageData(v)}
+            numOfPerPageRow={Number(parPageRow)}
+        />
+        {/* end pagination */} 
+    </div>
+    </>
   )
 }
 

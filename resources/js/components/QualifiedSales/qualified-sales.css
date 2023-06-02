@@ -22,6 +22,8 @@
 
 .sp1_qs_table_th{
     font-weight: 600;
+    display: flex;
+    align-items: center;
 }
 
 
@@ -30,6 +32,8 @@
     padding: 6px 16px;
     white-space: wrap;
     border-right: 1px solid #ddd;
+    display: flex;
+    align-items: center;
 }
 
 .sp1_qs_table_td:last-child{
@@ -61,4 +65,8 @@
 
 .sp1_qs_table_th_sub_head{
     background: rgba(60, 62, 65, 0.08);
+}
+
+.sp1_qs_comment_view:hover{
+   font-weight: bold; 
 }
