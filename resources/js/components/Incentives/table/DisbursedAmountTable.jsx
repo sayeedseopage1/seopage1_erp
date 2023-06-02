@@ -44,7 +44,7 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
 
     React.useEffect(() => {
         let columns = defaultColumns.map(d => d.id);
-        let lsColumn = localStorage.getItem(`pointTableColumn_${window?.Laravel?.user?.id}`);
+        let lsColumn = localStorage.getItem(`disbursedAmount${window?.Laravel?.user?.id}`);
         if(lsColumn){
             // order by lsColumn
             setActiveColumns([...JSON.parse(lsColumn)])
@@ -268,7 +268,7 @@ const DraggableColumn = ({
             if(item.column !== column) {
                 const reOrderColumn = reOrder(item.column, column);
                 setActiveColumns(reOrderColumn);
-                localStorage.setItem(`pointTableColumn_${window?.Laravel?.user?.id}`, JSON.stringify(reOrderColumn));
+                localStorage.setItem(`disbursedAmount${window?.Laravel?.user?.id}`, JSON.stringify(reOrderColumn));
             }
         },
         collect: (monitor) => ({
