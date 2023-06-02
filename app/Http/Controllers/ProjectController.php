@@ -1806,6 +1806,8 @@ class ProjectController extends AccountBaseController
             $project->requirement_defined = $request->requirement_defined;
             $project->deadline_meet = $request->deadline_meet;
             $qualified_sale_id= QualifiedSale::where('project_id',$project->id)->first();
+            if($qualified_sale_id != null)
+            {
             $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
             $qualified_sale->accepted_by_project_manager = 1;
             $qualified_sale->project_manager_needs_define= $request->requirement_defined;
@@ -1813,6 +1815,8 @@ class ProjectController extends AccountBaseController
             $total_points= CashPoint::where('project_id',$project->id)->sum('points');
             $qualified_sale->total_points= $total_points;
             $qualified_sale->save();
+            }
+            
 
 
         }

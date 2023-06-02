@@ -2177,13 +2177,18 @@ class ContractController extends AccountBaseController
 
         $point->save();
         $qualified_sale_id= QualifiedSale::where('deal_id',$deal->id)->first();
-        $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
-        $qualified_sale->authorized_by_sales_lead = 1;
-        $qualified_sale->sales_lead_need_define = $request->requirment_define;
-        $qualified_sale->sales_lead_price_authorization = $request->price_authorization;
-        $qualified_sale->sales_lead_deadline_comment = $request->project_deadline_authorization;
-        $qualified_sale->total_points = $point->points + $qualified_sale->total_points;
-        $qualified_sale->save();
+        if($qualified_sale_id != null)
+        {
+            $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+            $qualified_sale->authorized_by_sales_lead = 1;
+            $qualified_sale->sales_lead_need_define = $request->requirment_define;
+            $qualified_sale->sales_lead_price_authorization = $request->price_authorization;
+            $qualified_sale->sales_lead_deadline_comment = $request->project_deadline_authorization;
+            $qualified_sale->total_points = $point->points + $qualified_sale->total_points;
+            $qualified_sale->save();
+
+        }
+       
 
 
        
