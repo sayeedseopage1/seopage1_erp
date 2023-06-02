@@ -322,7 +322,7 @@ class PaymentController extends AccountBaseController
                 
                 //$total_minutes = 1500;
                 //$project->project_budget = 4000;
-
+                
                 if ($total_minutes > 0 && $project->project_budget >= $kpi->achieve_less_than ) {
                     $total_hours = $total_minutes / 60;
                     //un-comment this when finished
