@@ -184,7 +184,7 @@ class IncentiveController extends AccountBaseController
         }
         $user_array = array_unique($user_array);
 
-        $cash_point = CashPoint::where('user_id', $request->user_id)
+        $cash_point = CashPoint::whereIn('user_id', $user_array)
         ->where('points', '>', 0)
         ->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
         ->sum('points');
@@ -213,13 +213,15 @@ class IncentiveController extends AccountBaseController
         $data['every_shift_team_total_acheive'] = $cash_point;
 
         $cash_point_total = CashPoint::whereIn('user_id', $user_array)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
-        $cash_point_total_of_this_user = CashPoint::where('user_id', $request->user_id)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->sum('points');
+        $cash_point_total_of_this_user = CashPoint::where('user_id', $request->user_id)->where('points', '>', 0)->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->sum('points');
         $data['point_achieve_by_your_shift'] = round($cash_point,2);
 
         if ($cash_point > 0) {
             $total_percentage_share_incentive = (100 * ($cash_point - $cash_point_total_of_this_user)) / $cash_point ;
+            //dd($total_percentage_share_incentive);
 
             $total_percentage_share_incentive_of_this_user = 100 - $total_percentage_share_incentive;
+            //dd($total_percentage_share_incentive_of_this_user);
 
             $data['toal_share_incentive'] = ($data['every_shift_team_total_acheive'] / 100) * $total_percentage_share_incentive;
         } else {
