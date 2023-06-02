@@ -7,6 +7,7 @@ use App\Models\kpiSettingGenerateSale;
 use App\Models\ProjectCms;
 use App\Models\ProjectPortfolio;
 use App\Models\ProjectWebsiteType;
+use App\Models\QualifiedSale;
 use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Team;
@@ -1243,60 +1244,8 @@ class ProjectController extends AccountBaseController
                      $currentMonth = Carbon::now()->month;
                 //     // / dd($currentMonth);
                   $monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
-                //     //$monthly_deal = 20000;
-
-                //      $kpi_settings= kpiSettingGenerateSale::where('kpi_id',$kpi->id)->get();
-                //     // dd($kpi_settings);
-                //      $user_name= User::where('role_id',8)->first();
-                //      $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                //      foreach ($kpi_settings as $value) {
-                //         // /dd($value);
-                //         if ( $monthly_deal >= $value->generate_sales_from  &&  $monthly_deal <= $value->generate_sales_to ) {
-
-                //      $point= new CashPoint();
-                //      $point->user_id= $user_name->id;
-                //      $point->project_id= $find_project_id->id;
-                //      $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> for achieving monthly target '.$value->generate_sales_amount. '%';
-                //      $point->gained_as = "Individual";
-                //      $point->points= ($project_budget*$value->generate_sales_amount)/100;
-
-                //      if ($cash_points_team_lead != null) {
-
-                //          $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($project_budget*$value->generate_sales_amount)/100;
-
-                //      }else
-                //      {
-                //          $point->total_points_earn=
-                //          ($project_budget*$value->generate_sales_amount)/100;
-
-                //      }
-                //      $point->save();
-
-                //         }
-                //      }
-                //      if ($monthly_deal > $kpi->generate_sales_above)
-                // {
-                //         $user_name= User::where('role_id',8)->first();
-                //         $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                //         $point= new CashPoint();
-                //      $point->user_id= $user_name->id;
-                //      $point->project_id= $find_project_id->id;
-                //      $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> for achieving monthly target'.$value->generate_sales_amount. '%';
-                //      $point->gained_as = "Individual";
-                //      $point->points= ($project_budget*$kpi->generate_sales_above_point)/100;
-
-                //      if ($cash_points_team_lead != null) {
-
-                //          $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($project_budget*$kpi->generate_sales_above_point)/100;
-
-                //      }else
-                //      {
-                //          $point->total_points_earn=
-                //          ($project_budget*$kpi->generate_sales_above_point)/100;
-
-                //      }
-                //      $point->save();
-                //      }
+               
+              
                      if ($monthly_deal > $kpi->after && $monthly_deal >= $monthly_deal+ $kpi->additional_sales_amount ) {
 
                         $project_budget_additional= $kpi->additional_sales_amount;
@@ -1854,8 +1803,17 @@ class ProjectController extends AccountBaseController
         $project->project_short_code = $request->project_code;
         if ($project->status== 'not started')
         {
-             $project->requirement_defined = $request->requirement_defined;
-             $project->deadline_meet = $request->deadline_meet;
+            $project->requirement_defined = $request->requirement_defined;
+            $project->deadline_meet = $request->deadline_meet;
+            $qualified_sale_id= QualifiedSale::where('project_id',$project->id)->first();
+            $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+            $qualified_sale->accepted_by_project_manager = 1;
+            $qualified_sale->project_manager_needs_define= $request->requirement_defined;
+            $qualified_sale->project_manager_deadline_comment= $request->deadline_meet;
+            $total_points= CashPoint::where('project_id',$project->id)->sum('points');
+            $qualified_sale->total_points= $total_points;
+            $qualified_sale->save();
+
 
         }
 
@@ -3918,6 +3876,11 @@ class ProjectController extends AccountBaseController
         $project->authorization_status = 'approved';
         $project->deliverable_authorization= 1;
         $project->save();
+        $qualified_sale_id= QualifiedSale::where('project_id',$project->id)->first();
+        $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+        $qualified_sale->authorized_by_admin = 1;
+        $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
+        $qualified_sale->save();
         $pm_project= PMProject::where('project_id',$project->id)->first();
         $pm_project_update= PMProject::find($pm_project->id);
         $pm_project_update->deliverable_status = 1;
