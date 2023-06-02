@@ -157,7 +157,7 @@ export default function CashPointsFilter ({
             })
         }
         
-    }, [_employee]);
+    }, [_employee, defaultSelectedDate]);
 
 
     React.useEffect(() => {
