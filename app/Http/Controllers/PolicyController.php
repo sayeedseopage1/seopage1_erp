@@ -9,6 +9,7 @@ use App\Models\kpiSettingGenerateSale;
 use App\Models\kpiSettingLoggedHour;
 use Illuminate\Http\Request;
 use function Doctrine\Common\Collections\Expr\visit;
+use Carbon\Carbon;
 
 class PolicyController extends AccountBaseController
 {
@@ -29,13 +30,17 @@ class PolicyController extends AccountBaseController
      */
     public function index()
     {
-        $this->kpi = kpiSetting::first();
-        $this->kpi_setting_generate_sale = kpiSettingGenerateSale::first();
-        $this->kpi_setting_logged_hour = kpiSettingLoggedHour::first();
-        $this->incentive_setting = IncentiveSetting::first();
+        $this->kpi = kpiSetting::where('start_month', Carbon::now()->startOfMonth()->format('Y-m-d'))->first();
+        $this->kpi_setting_generate_sale = kpiSettingGenerateSale::where('kpi_id', $this->kpi->id)->first();
+        $this->kpi_setting_logged_hour = kpiSettingLoggedHour::where('kpi_id', $this->kpi->id)->first();
+        $this->incentive_setting = IncentiveSetting::where('start_month', $this->kpi->start_month)->first();
+        
         $this->next_month_kpi = kpiSetting::select('id', 'start_month')->where([
             'kpi_status' => '2',
             'cron_status' => '0'
+        ])->orWhere([
+            'kpi_status' => '0',
+            'cron_status' => '1'
         ])->get();
 
         return view('policy.index',$this->data);
@@ -132,11 +137,14 @@ class PolicyController extends AccountBaseController
         $this->next_month_kpi = kpiSetting::select('id', 'start_month')->where([
             'kpi_status' => '2',
             'cron_status' => '0'
+        ])->orWhere([
+            'kpi_status' => '0',
+            'cron_status' => '1'
         ])->get();
 
         $this->next_month_incentive = IncentiveSetting::where([
-            'incentive_status' => '2',
-            'cron_status' => '0',
+            //'incentive_status' => '2',
+            //'cron_status' => '0',
             'start_month' => $this->kpi->start_month
         ])->latest()->first();
         return view('policy.next_month_index',$this->data);
