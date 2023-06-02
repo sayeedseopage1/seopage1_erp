@@ -1,6 +1,72 @@
 @extends('layouts.app')
+@push('styles')
+<style type="text/css">
+	.sp1_incentive_pdf_container{
+		width: 100%;
+		max-width: 1400px;
+		padding: 48px;
+		position: relative;
+	}
+
+	@media screen and (max-width: 557px){
+		.sp1_incentive_pdf_container{
+			padding: 16px;
+			height: 100%;
+		}
+	}
+
+	.sp1_styled-table{
+		width: 100%;
+	}
+
+
+	.sp1_styled-table thead th{
+		background: #009879;
+		color: #fff;
+		padding: 6px 12px;
+		white-space: nowrap;
+	}
+
+	.sp1_styled-table tbody td{
+		color: #555;
+		padding: 12px 12px; 
+		white-space: nowrap;
+	}
+
+	.sp1_styled_tabel_container{
+		max-width: 100%;
+		overflow-x: auto;
+		padding-bottom: 16px;
+	}
+
+	.sp1_styled-table {
+		border-bottom: 2px solid #009879;
+	}
+
+	.sp1_inc_pdf_dl_btn{ 
+		background: #009879;
+		color: #fff;
+		padding: 6px 12px;
+		position: absolute;
+		top: 58px;
+		right: 48px;
+		border-radius: 4px;
+	}
+
+	.sp1_inc_pdf_dl_btn > span{
+		color: inherit;
+	}
+
+	.sp1_inc_pdf_dl_btn:hover{ 
+		background: #008369;
+		color: #fff !important;
+	}
+</style>
+@endpush
 @section('content')
- @php
+
+
+@php
     $data = $user_incentive;
 @endphp    
 
@@ -11,7 +77,9 @@
                     <img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
                         class="logo" style="height:70px;" />
 
-                    <a href='#' aria-label="download" class="sp1_inc_pdf_dl_btn">
+
+                    <a href="{{ route('monthly-incentive.download', $user_incentive->id) }}" aria-label="download" class="sp1_inc_pdf_dl_btn">
+
                         <i class="fa-solid fa-download"></i>
                         <span class="d-none d-sm-inline">Download</span>
                     </a>
@@ -45,7 +113,8 @@
                             <tr>
                                 <th>#</th>
                                 <th>Month</th>
-                                <th>Name</th>
+
+
                                 <th>Non Incentive Points</th>
                                 <th>Achieved Point</th>
                                 <th>Incentive Amount</th>
@@ -57,14 +126,15 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>#</td>
-                                <td>Month</td>
-                                <td>Name</td>
-                                <td>Non Incentive Points</td>
-                                <td>Achieved Point</td>
-                                <td>Incentive Amount</td>
-                                <td>Point Deduction</td>
-                                <td>Incentive Deduction</td>
+
+                                <td>{{ $user_incentive->id }}</td>
+                                <td>{{ \Carbon\Carbon::parse($user_incentive->start_month)->format('M (Y)') }}</td>
+                                <td>{{ $non_incentive_point->every_shift_every_point_above }}</td>
+                                <td>{{ $user_incentive->point_earned }}</td>
+                                <td>{{ $user_incentive->incentive_earned }}</td>
+                                <td>{{ $user_incentive->deduction_amount }}</td>
+                                <td>{{ $user_incentive->deduction_incentive_amount }}</td>
+
                                 <td>Total Goal</td>
                                 <td>Achieved Goal</td>
                             </tr>  
@@ -74,70 +144,5 @@
             </div>
         </div>
     </section>
- 
 
-
-    <style type="text/css">
-        .sp1_incentive_pdf_container{
-            width: 100%;
-            max-width: 1400px;
-            padding: 48px;
-            position: relative;
-        }
-
-        @media screen and (max-width: 557px){
-            .sp1_incentive_pdf_container{
-                padding: 16px;
-                height: 100%;
-            }
-        }
-
-        .sp1_styled-table{
-            width: 100%;
-        }
-
-
-        .sp1_styled-table thead th{
-            background: #009879;
-            color: #fff;
-            padding: 6px 12px;
-            white-space: nowrap;
-        }
-
-        .sp1_styled-table tbody td{
-            color: #555;
-            padding: 12px 12px; 
-            white-space: nowrap;
-        }
-
-        .sp1_styled_tabel_container{
-            max-width: 100%;
-            overflow-x: auto;
-            padding-bottom: 16px;
-        }
-
-        .sp1_styled-table {
-            border-bottom: 2px solid #009879;
-        }
-
-        .sp1_inc_pdf_dl_btn{ 
-            background: #009879;
-            color: #fff;
-            padding: 6px 12px;
-            position: absolute;
-            top: 58px;
-            right: 48px;
-            border-radius: 4px;
-        }
-
-        .sp1_inc_pdf_dl_btn > span{
-            color: inherit;
-        }
-
-        .sp1_inc_pdf_dl_btn:hover{ 
-            background: #008369;
-            color: #fff !important;
-        }
-
-    </style>
 @endsection

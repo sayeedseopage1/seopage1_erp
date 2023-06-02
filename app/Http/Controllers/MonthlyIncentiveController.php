@@ -8,6 +8,7 @@ use App\Models\UserIncentive;
 use App\Models\Seopage1Team;
 use App\Models\CashPoint;
 use App\Models\GoalSetting;
+use App\Models\IncentiveSetting;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
@@ -174,6 +175,8 @@ class MonthlyIncentiveController extends AccountBaseController
     public function show($id)
     {
         $this->user_incentive = UserIncentive::findOrfail($id);
+        $this->non_incentive_point = IncentiveSetting::where('start_month', $this->user_incentive->month)->first();
+
         return view('monthly-incentive.show', $this->data);
     }
 

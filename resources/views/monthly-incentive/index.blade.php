@@ -80,12 +80,29 @@
                                     <td>{{$value->team_goal_achieved}}</td>
                                     <td>{{$value->team_goal_achieved_last}}</td>
                                     <td>
-                                        <a class="text-primary f-20 mx-1" href="{{route('monthly-incentive.download', $value->id)}}">
+                                        <div class="task_view">
+                                            <div class="dropdown">
+                                                <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
+                                                    id="dropdownMenuLink-{{ $value->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="icon-options-vertical icons"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-{{ $value->id }}" tabindex="0">
+                                                    <a class="dropdown-item text-primary mx-1" href="{{route('monthly-incentive.download', $value->id)}}">
+                                                        <i class="fa fa-download mr-2"></i>Download
+                                                    </a>
+                                                    <a class="dropdown-item text-dark mx-1" href="{{route('monthly-incentive.show', $value->id)}}">
+                                                        <i class="fa fa-eye mr-2"></i>View
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- <a class="text-primary f-20 mx-1" href="{{route('monthly-incentive.download', $value->id)}}">
                                             <i class="fa fa-download"></i>
                                         </a>
-                                        {{--<a class="text-dark f-20 mx-1" href="{{route('monthly-incentive.show', $value->id)}}">
+                                        <a class="text-dark f-20 mx-1" href="{{route('monthly-incentive.show', $value->id)}}">
                                             <i class="fa fa-eye"></i>
-                                        </a>--}}
+                                        </a> --}}
                                         {{-- <a class="text-danger f-20 mx-1" href="{{route('monthly-incentive.destroy', $value->id)}}">
                                             <i class="fa fa-trash"></i>
                                         </a> --}}
