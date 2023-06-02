@@ -113,8 +113,6 @@
                             <tr>
                                 <th>#</th>
                                 <th>Month</th>
-
-
                                 <th>Non Incentive Points</th>
                                 <th>Achieved Point</th>
                                 <th>Incentive Amount</th>
@@ -126,7 +124,6 @@
                         </thead>
                         <tbody>
                             <tr>
-
                                 <td>{{ $user_incentive->id }}</td>
                                 <td>{{ \Carbon\Carbon::parse($user_incentive->start_month)->format('M (Y)') }}</td>
                                 <td>{{ $non_incentive_point->every_shift_every_point_above }}</td>
@@ -134,9 +131,6 @@
                                 <td>{{ $user_incentive->incentive_earned }}</td>
                                 <td>{{ $user_incentive->deduction_amount }}</td>
                                 <td>{{ $user_incentive->deduction_incentive_amount }}</td>
-
-                                <td>Total Goal</td>
-                                <td>Achieved Goal</td>
                             </tr>  
                         </tbody>
                     </table>
