@@ -110,7 +110,7 @@
     $pm_project= App\Models\PMProject::where('project_id',$project->id)->first();
 ?>
 @if($signature == null)
-    @if($project->pm_id == Auth::id() || Auth::user()->role_id == 1)
+    @if($project->pm_id == Auth::id())
         @if($diff_in_minutes >1440 && $pm_project->deliverable_status == 0)
             <div class="col-md-2 mt-3">
                 <button type="button" class="btn btn-primary"  disabled><i class="fas fa-plus"></i> Add Deliverable</button>
