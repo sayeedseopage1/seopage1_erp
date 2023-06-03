@@ -323,7 +323,7 @@ const InsightSidebar = () => {
                                                 </>} 
                                                 </Accordion.Item.Header>
 
-                                                <Dropdown className='cnx_ins__sidebar_dashboards_dd __inner'>
+                                                {/* <Dropdown className='cnx_ins__sidebar_dashboards_dd __inner'>
                                                         <Dropdown.Toggle icon={false}>
                                                             <Button aria-label="GoalAddButton" className='cnx_ins__sidebar_dashboards_dd_btn'>
                                                                 <i className="fa-solid fa-ellipsis-h" />
@@ -348,7 +348,7 @@ const InsightSidebar = () => {
                                                                 <span>Bulk delete goal</span>
                                                             </Dropdown.Item>
                                                         </Dropdown.Menu>
-                                                </Dropdown>
+                                                </Dropdown> */}
                                             </div>
                                             <Accordion.Item.Body>
                                                 {/* {goalsIsFetching && 
