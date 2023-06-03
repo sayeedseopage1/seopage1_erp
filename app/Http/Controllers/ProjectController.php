@@ -3881,10 +3881,15 @@ class ProjectController extends AccountBaseController
         $project->deliverable_authorization= 1;
         $project->save();
         $qualified_sale_id= QualifiedSale::where('project_id',$project->id)->first();
+        if($qualified_sale_id != null)
+        {
         $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
         $qualified_sale->authorized_by_admin = 1;
         $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
         $qualified_sale->save();
+
+        }
+        
         $pm_project= PMProject::where('project_id',$project->id)->first();
         $pm_project_update= PMProject::find($pm_project->id);
         $pm_project_update->deliverable_status = 1;
