@@ -1,5 +1,8 @@
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 import Dropdown from '../../Insights/ui/Dropdown';
+import { CompareDate } from '../../Insights/utils/dateController';
+const dayjs = new CompareDate;
+
 
 
 export const columns = [
@@ -9,7 +12,7 @@ export const columns = [
         accessor: 'date',
         priority: 0,
         cell: (row) => {  
-            return <span>{dayjs(row?.date).format('MMM DD,YYYY')}</span> 
+            return <span>{dayjs.dayjs(row?.date).format('MMM DD,YYYY')}</span> 
         }
     },
 
@@ -46,7 +49,7 @@ export const columns = [
         header: 'Amount',
         accessor: 'project_budget',
         priority: 3,
-        cell: row => <span className="font-weight-bold">${row?.project_budget}</span>
+        cell: row => <span className="font-weight-bold">${Number(row?.amount).toFixed(2)}</span>
     },
 
     {
@@ -67,12 +70,12 @@ export const columns = [
         priority: 5,
         cell: row => {
             return(
-                <a href={`/account/deal-url/${row?.contact_form}`} 
+                <a href={`/account/deal-url/${row?.deal_id}`} 
                     style={{
                         wordBreak: 'break-all'
                     }}
                 >
-                    {`https://seopage1.net/account/deal-url/${row?.contact_form}`}
+                    {`https://seopage1.net/account/deal-url/${row?.deal_id}`}
                 </a>
             )
         }
@@ -83,17 +86,19 @@ export const columns = [
         header: 'Authorized by sales lead',
         priority: 6,
         cell: row => {
-            let approved = Number(row?.authorized_by_sales_lead);
+            let isApproved = Number(row?.authorized_by_sales_lead); 
+            let bgColor = isApproved ? '#00AA00' : '#1D82F5';
 
-            if(approved){
-                return (
-                    <a href={`/account/employees/${row?.salesLead?.id}`}>
-                        {row?.salesLead?.name}
-                    </a>
-                )
-            }else{
-                return <span>--</span>
-            }
+            return <span style={{
+                    background: bgColor, 
+                    color: '#fff',
+                    padding: '0 6px',
+                    borderRadius: '10px',
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                }}>
+                    {isApproved ? "Accepted" : 'Pending'}
+                </span> 
         }
     },
     
@@ -102,15 +107,20 @@ export const columns = [
         header: 'Accepted by project manager',
         priority: 7,
         cell: row => {
-            let isAccepted = row?.status === 'Accepted';
+            let isApproved = row?.status === 'Accepted';
 
-            if(isAccepted){
-                return <a href={`/account/employees/${row?.pm_id}`}>
-                    {row?.pm_name}
-                </a>
-            }else{
-                return <span> -- </span>
-            }
+            let bgColor = isApproved ? '#00AA00' : '#1D82F5';
+
+            return <span style={{
+                    background: bgColor, 
+                    color: '#fff',
+                    padding: '0 6px',
+                    borderRadius: '10px',
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                }}>
+                    {isApproved ? "Approved" : 'Pending'}
+                </span> 
         }
     },
     
@@ -200,10 +210,10 @@ const RenderRow = ({row}) => {
             <div className="sp1_qs_table_td p-0" >
                 <div className="d-flex flex-column" >
                     <div className="border-bottom p-2"> 
-                        <Comment commentBy="* Sales leads comment" text={row?.sales_lead_requirement_define}/>
+                        <Comment commentBy="* Sales leads comment" text={row?.sales_lead_need_define}/>
                     </div>
                     <div className="p-2"> 
-                        <Comment commentBy="* Project manager comment" text ={row?.project_manager_requirement_define}/>
+                        <Comment commentBy="* Project manager comment" text ={row?.project_manager_needs_define}/>
                     </div>
                 </div>
             </div>
@@ -217,13 +227,13 @@ const RenderRow = ({row}) => {
                     <div className="border-bottom p-2"> 
                         <Comment 
                             commentBy="* Sales leads comment"
-                            text={row?.sales_lead_deadline_define}
+                            text={row?.sales_lead_deadline_comment}
                         />
                     </div>
                     <div className="p-2"> 
                     <Comment 
                             commentBy="* Project manager comment"
-                            text={row?.project_manager_deadline_define}
+                            text={row?.project_manager_deadline_comment}
                     /> 
                     </div>
                 </div>
@@ -232,7 +242,7 @@ const RenderRow = ({row}) => {
             <div className="sp1_qs_table_td">
                 <Comment 
                     commentBy="* Sales lead comment"
-                    text={row?.top_management_comment}
+                    text={row?.admin_authorization_comment}
                 /> 
             </div>
         </div>
@@ -242,57 +252,65 @@ const RenderRow = ({row}) => {
 
 const Status = ({row}) => {
     let isPMAccepted = row?.status === 'Accepted';
-            let isTopMApproved = Number(row?.authorized_by_top_management);
-            let isSLApproved = Number(row?.authorized_by_sales_lead);
+    let isTopMApproved = Number(row?.authorized_by_top_management);
+    let isSLApproved = Number(row?.authorized_by_sales_lead);
+    let date = dayjs.dayjs(row?.date).format('YYYY-MM-DD');
+    let curr = dayjs.dayjs().format('YYYY-MM-DD');
+    let diff = dayjs.dayjs(curr).diff(date, 'day');
 
-            if(isPMAccepted && isTopMApproved && isSLApproved){ // all accept
-                return <span
-                    style={{
-                        background: '#00AA00', 
-                        color: '#fff',   
-                        padding: '0 6px',
-                        borderRadius: '10px',
-                        fontSize: '12px',
-                        fontWeight: 'bold'
-                    }}
-                > Qualified  </span>
-            }else if((isPMAccepted && isTopMApproved) || (isPMAccepted && isSLApproved) || (isTopMApproved && isSLApproved)){ // any of two accept
-                return <span
-                    style={{
-                        background: '#FCBD01', 
-                        color: '#fff',   
-                        padding: '0 6px',
-                        borderRadius: '10px',
-                        fontSize: '12px',
-                        fontWeight: 'bold'
-                    }}
-                > On Hold </span>
-            }else if(isPMAccepted || isTopMApproved || isSLApproved){ // any of approve
-                return <span
-                    style={{
-                        background: '#1D82F5', 
-                        color: '#fff',   
-                        padding: '0 6px',
-                        borderRadius: '10px',
-                        fontSize: '12px',
-                        fontWeight: 'bold'
-                    }}
-                >  In Progress  </span>
-            }else{ // no one approve
-                return <span
-                    style={{
-                            background: '#FF0000', 
-                            color: '#fff',   
-                            padding: '0 6px',
-                            borderRadius: '10px',
-                            fontSize: '12px',
-                            fontWeight: 'bold'
-                    }}
-                > 
-                    Disqualified 
-                </span>
-            }
+
+    if(isPMAccepted && isTopMApproved && isSLApproved){ // all accept
+        return <span
+            style={{
+                background: '#00AA00', 
+                color: '#fff',   
+                padding: '0 6px',
+                borderRadius: '10px',
+                fontSize: '12px',
+                fontWeight: 'bold'
+            }}
+        > Qualified  </span>
+    }else if(!isPMAccepted || !isTopMApproved || !isSLApproved){ // any of two accept
+        if(diff > 5){
+            return <span
+                style={{
+                    background: '#1D82F5', 
+                    color: '#fff',   
+                    padding: '0 6px',
+                    borderRadius: '10px',
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                }}
+            >  On Hold  </span>
+        }
         
+        
+        return <span
+            style={{
+                background: '#FCBD01', 
+                color: '#fff',
+                padding: '0 6px',
+                borderRadius: '10px',
+                fontSize: '12px',
+                fontWeight: 'bold'
+            }}
+        > In Progress  </span>
+    }
+    
+    
+      // no one approve
+            // return <span
+            //     style={{
+            //             background: '#FF0000', 
+            //             color: '#fff',   
+            //             padding: '0 6px',
+            //             borderRadius: '10px',
+            //             fontSize: '12px',
+            //             fontWeight: 'bold'
+            //     }}
+            // > 
+            //     Disqualified 
+            // </span>    
 
 }
 

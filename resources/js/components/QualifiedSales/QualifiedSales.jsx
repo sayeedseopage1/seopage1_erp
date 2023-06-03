@@ -10,7 +10,6 @@ const QualifiedSales = () => {
     isFetching
   } = useGetQualifiedSalesQuery();
 
-  console.log(data)
 
   return (
     <div className='d-flex flex-column'>
