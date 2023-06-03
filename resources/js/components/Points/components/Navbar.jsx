@@ -10,16 +10,16 @@ const PointPageNavbar = () => {
             name: 'Cash points',
             url: '/'
         },
-        // {
-        //     id: 'pp_navbar_item_2',
-        //     name: 'Non-cash Points',
-        //     url: '/non-cash-points'
-        // },
-        // {
-        //     id: 'pp_navbar_item_3',
-        //     name: 'Redeem Points',
-        //     url: '/redeem-points'
-        // },
+        {
+            id: 'pp_navbar_item_2',
+            name: 'Non-cash Points',
+            url: '/non-cash-points'
+        },
+        {
+            id: 'pp_navbar_item_3',
+            name: 'Redeem Points',
+            url: '/redeem-points'
+        },
     ]
 
 

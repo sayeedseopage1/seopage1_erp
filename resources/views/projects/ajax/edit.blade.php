@@ -14,6 +14,18 @@ $createPublicProjectPermission = user()->permission('create_public_project');
   vertical-align: middle;
   border-top: 1px solid #dee2e6;
 }
+
+@if($project->deal->project_type == 'hourly')
+    .selectpicker + .dropdown-toggle {
+        pointer-events: none;
+        touch-action: none;
+    }
+
+    .selectpicker + .dropdown-toggle > span {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
+    }
+@endif
 </style>
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
 
@@ -72,12 +84,22 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                             :fieldLabel="__('modules.projects.projectCategory')">
                         </x-forms.label>
                         <x-forms.input-group>
-                            <select class="form-control select-picker" name="category_id" id="project_category_id"
-                                data-live-search="true">
+                            <select class="form-control select-picker" name="category_id" id="project_category_id" data-live-search="true">
                                 <option value="">--</option>
                                 @foreach ($categories as $category)
-                                    <option @if ($project->category_id == $category->id) selected @endif value="{{ $category->id }}">
-                                        {{ mb_ucwords($category->category_name) }}</option>
+                                    @if($project->deal->project_type == 'hourly')
+                                        <option @if (3 == $category->id) selected @endif value="{{ $category->id }}">
+                                            {{ mb_ucwords($category->category_name) }}
+                                        </option>
+                                    @elseif($project->deal->project_type == 'fixed')
+                                        <option @if (2 == $category->id) selected @endif value="{{ $category->id }}">
+                                            {{ mb_ucwords($category->category_name) }}
+                                        </option>
+                                    @else
+                                        <option @if ($project->category_id == $category->id) selected @endif value="{{ $category->id }}">
+                                            {{ mb_ucwords($category->category_name) }}
+                                        </option>
+                                    @endif
                                 @endforeach
                             </select>
 
@@ -589,7 +611,10 @@ $createPublicProjectPermission = user()->permission('create_public_project');
             ...datepickerConfig
         });
 
-
+        @if ($project->deal->project_type == 'hourly')
+            $('#project_category_id').prop('disabled', true);
+            $('.select-picker').selectpicker('refresh');
+        @endif
 
         @if ($project->deadline == null)
             $('#deadlineBox').hide();
