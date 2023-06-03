@@ -91,6 +91,10 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                         <option @if (3 == $category->id) selected @endif value="{{ $category->id }}">
                                             {{ mb_ucwords($category->category_name) }}
                                         </option>
+                                    @elseif($project->deal->project_type == 'fixed')
+                                        <option @if (2 == $category->id) selected @endif value="{{ $category->id }}">
+                                            {{ mb_ucwords($category->category_name) }}
+                                        </option>
                                     @else
                                         <option @if ($project->category_id == $category->id) selected @endif value="{{ $category->id }}">
                                             {{ mb_ucwords($category->category_name) }}

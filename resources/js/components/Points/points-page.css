@@ -18,6 +18,7 @@
 .sp1__pp_navbar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
   color: #777;
 }
@@ -34,6 +35,13 @@
     text-decoration: none;
   }
 
+  @media screen and (max-width: 320px){
+    .sp1__pp_navbar_item{
+      width: 100%;
+    }
+  }
+
+  
 .sp1__pp_navbar_item.active {
       background-color: #2083F4;
       background-color: var(--sp1-primary-color);
@@ -43,6 +51,8 @@
 .sp1__pp_inner_navigate {
   display: flex;
   align-items: center;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
   background-color: #f0f6ff;
   width: -moz-fit-content;
   width: fit-content;
@@ -75,6 +85,13 @@
            box-shadow: 0 0 5px #ddd;
         } */
   }
+
+  @media screen and (max-width: 470px){
+    .sp1__pp_inner_navigate_item{
+          padding: 10px 8px;
+    }
+  }
+
 
 .sp1__pp_inner_navigate_active {
   height: 40px;
@@ -412,3 +429,73 @@
   max-height: 450px;
   overflow-y: auto;
 }
+
+/* earn non cash point */
+
+.sp1_point_card{
+  padding: 12px 0;
+}
+
+.sp1_point_card_icon{
+  min-width: 50px;
+  height: 50px;
+  font-size: 24px; 
+  border-radius: 4px;
+  opacity: 1;
+}
+
+
+.sp1_point_card_text{
+  padding-left: 10px;
+}
+
+.sp1_point_card_text  p{
+  margin: 0;
+  color: #555;
+}
+
+@media screen and (max-width: 320px){
+  .sp1_point_card_text p{
+    font-size: 13px;
+    line-height: 1;
+  }
+}
+
+
+.sp1_redeem_pending_rewards{
+  border-radius: 6px;
+  background: rgba(29, 130, 245, 0.1);
+}
+
+.sp1_rpwt{
+  height: 45px;
+  color: #1D82F5;
+  background-color: #B2D6FF ;
+  box-shadow: 0px 3px 6px #A7A7A729;
+  border: 2px solid #1D82F5;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.sp1_rpwt_item div > .sp1_rpwt_item_inner{
+  height: 150px;
+  box-shadow: 0px 3px 6px #8D8D8D29;
+  border-radius: 5px;
+  background: #fff;
+  padding: 10px;
+}
+
+
+.sp1_rr_tbl{
+  width: 100%;
+}
+
+
+
+.sp1_rr_tbl_tr > th,
+.sp1_rr_tbl_tr > td{
+  padding: 10px;
+  background: #E7EFFC;
+  border-bottom: 1px solid #fff;
+}
+

@@ -3,10 +3,12 @@
 /public/storage
 /public/user-uploads
 /storage/*.key
-public/js/app.js.map
+
+/public/js/app.js.map
 .env
 #vendor
-public/js/app.js
+/public/js/app.js
+
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

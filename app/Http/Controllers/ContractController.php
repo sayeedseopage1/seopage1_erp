@@ -54,6 +54,7 @@ use App\Models\kpiSetting;
 use App\Models\CashPoint;
 use App\Models\LeadsDealsActivityLog;
 use App\Models\DealStageChange;
+use App\Models\QualifiedSale;
 
 
 class ContractController extends AccountBaseController
@@ -1261,6 +1262,37 @@ class ContractController extends AccountBaseController
             $project_admin_update->project_admin= $project_id->pm_id;
             $project_admin_update->save();
 
+            //qualified sales start from here 
+            $qualified_sale = new QualifiedSale();
+            $qualified_sale->project_name= $deal->project_name;
+           
+            $qualified_sale->deal_id= $deal->id;
+           
+            $qualified_sale->project_id= $project->id;
+            $qualified_sale->deal_short_code= $deal->deal_id;
+           
+            $qualified_sale->date= Carbon::now();
+           
+            $qualified_sale->client_id= $deal->client_id;
+           
+            $qualified_sale->client_name= $deal->client_name;
+            $qualified_sale->pm_id = $project_id->pm_id;
+           
+            $qualified_sale->pm_name= $project_id->pm_name->name; 
+           
+           // $actual_currency= Currency::where('id',$deal->currency_id)->first();
+           
+            $qualified_sale->amount= $deal->amount;
+            //$qualified_sale->actual_amount= $deal->actual_amount . $currency->currency_code;
+            $qualified_sale->save();
+        //    / dd($qualified_sale);
+          
+
+
+
+
+            //qualified sales start from here
+
             $user= User::where('id',$deal_pm_id->pm_id)->first();
             $this->triggerPusher('notification-channel', 'notification', [
                 'user_id' => $user->id,
@@ -1667,6 +1699,21 @@ class ContractController extends AccountBaseController
                     $project_admin_update->added_by= $project_id->pm_id;
                     $project_admin_update->project_admin= $project_id->pm_id;
                     $project_admin_update->save();
+                    $qualified_sale = new QualifiedSale();
+                    $qualified_sale->project_name= $deal->project_name;
+                    
+                    $qualified_sale->deal_id= $deal->id;
+                    $qualified_sale->project_id= $project->id;
+                    $qualified_sale->deal_short_code= $deal->deal_id;
+                    $qualified_sale->date= Carbon::now();
+                    $qualified_sale->client_id= $deal->client_id;
+                    $qualified_sale->client_name= $deal->client_name;
+                    $qualified_sale->pm_id = $project_id->pm_id;
+                    $qualified_sale->pm_name= $project_id->pm_name->name; 
+                   
+                    $qualified_sale->amount= $deal->amount;
+                   
+                    $qualified_sale->save();
 
 
 
@@ -1706,6 +1753,7 @@ class ContractController extends AccountBaseController
                     //   }
 
 
+                
                 }
                 // $deal= Deal::find($deal->id);
                 //         $deal->authorization_status= 2;
@@ -2122,12 +2170,28 @@ class ContractController extends AccountBaseController
         $point->points= $earned_point;
 
         if ($cash_points_team_lead != null) {
-            $point->total_points_earn=$cash_points_team_lead->total_points_earn+ ($deal->amount*$earned_point)/100;
+            $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point/100;
         } else {
-            $point->total_points_earn= ($deal->amount*$earned_point)/100;
+            $point->total_points_earn= $earned_point/100;
         }
 
         $point->save();
+        $qualified_sale_id= QualifiedSale::where('deal_id',$deal->id)->first();
+        if($qualified_sale_id != null)
+        {
+            $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+            $qualified_sale->authorized_by_sales_lead = 1;
+            $qualified_sale->sales_lead_need_define = $request->requirment_define;
+            $qualified_sale->sales_lead_price_authorization = $request->price_authorization;
+            $qualified_sale->sales_lead_deadline_comment = $request->project_deadline_authorization;
+            $qualified_sale->total_points = $point->points + $qualified_sale->total_points;
+            $qualified_sale->save();
+
+        }
+       
+
+
+       
 
         if ($deal->save()) {
             return response()->json([
@@ -2135,5 +2199,6 @@ class ContractController extends AccountBaseController
                 'message' => 'Data inserted successfully'
             ]);
         }
+       
     }
 }
