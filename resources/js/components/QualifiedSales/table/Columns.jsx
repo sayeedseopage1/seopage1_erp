@@ -107,7 +107,7 @@ export const columns = [
         header: 'Accepted by project manager',
         priority: 7,
         cell: row => {
-            let isApproved = row?.status === 'Accepted';
+            let isApproved = Number(row?.accepted_by_project_manager);
 
             let bgColor = isApproved ? '#00AA00' : '#1D82F5';
 
@@ -251,7 +251,7 @@ const RenderRow = ({row}) => {
 
 
 const Status = ({row}) => {
-    let isPMAccepted = row?.status === 'Accepted';
+    let isPMAccepted = Number(row?.accepted_by_project_manager);
     let isTopMApproved = Number(row?.authorized_by_top_management);
     let isSLApproved = Number(row?.authorized_by_sales_lead);
     let date = dayjs.dayjs(row?.date).format('YYYY-MM-DD');
