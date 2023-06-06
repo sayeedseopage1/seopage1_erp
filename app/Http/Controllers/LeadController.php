@@ -77,7 +77,7 @@ class LeadController extends AccountBaseController
     public function DealStageChange(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'client_username' => 'required|unique:deal_stages|max:255',
+            'client_username' => 'required|max:255',
             'profile_link' => 'required',
             'message_link' => 'required',
             'comments' => 'required',

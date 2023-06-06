@@ -176,12 +176,17 @@
                               <li><i class="fa-solid fa-user"></i> <span>Client Username:</span> {{ucwords($deal->client_username)}} </li>
                               @if($deal->client_name != null)
                               <li><i class="fa-solid fa-user"></i> <span>Client Name:</span> {{ucwords($deal->client_name)}} </li>
-                              @else 
+                              @else
                               <li><i class="fa-solid fa-user"></i> <span>Client Name:</span>Not Available</li>
 
 
                               @endif
 
+                              @endif
+                              @if($lead->project_id != null)
+                              <li><i class="fa-solid fa-file-lines"></i> <span>Project ID:</span> {{$lead->project_id}} </li>
+                              @else
+                              <li><i class="fa-solid fa-file-lines"></i> <span>Project ID:</span> Not Available </li>
                               @endif
 
                               <li><i class="fa-solid fa-globe"></i> <span>Client Country:</span> {{ucwords($lead->country)}} </li>
