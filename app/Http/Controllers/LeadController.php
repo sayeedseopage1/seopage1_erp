@@ -849,7 +849,7 @@ class LeadController extends AccountBaseController
 if ($request->project_type !='hourly'){
     $request->validate([
         'client_name' => 'required|max:255',
-        'project_id'=>'required|unique:leads,project_id,'.$request->project_id,
+        'project_id' => 'required|unique:leads,project_id,'.$request->project_id.'|numeric',
         'country' => 'required',
         'project_link' => 'required|url',
         'deadline' => 'required|date',

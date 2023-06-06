@@ -693,7 +693,7 @@
 
                 dataType: "json",
                 success: function (response){
-                    //  console.log(response.milestones);
+                     // console.log(response.milestones);
                     let spans= '';
                     response.milestones.forEach((item)=> {
                         spans += `<span class="badge badge-light mr-2"><a href="javascript:;" data-milestone-id="${item.id}" class="taskView milestone-detail text-darkest-grey f-w-500" title="${item.milestone_title}">${item.milestone_title.substr(0, 20)} (${item.actual_cost}) </a><button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
@@ -704,38 +704,33 @@
                 }
             });
         }
-
-        $(document).on('click',' .edit_milestone',function(e){
+        $(document).on('click', '.edit_milestone', function(e) {
             e.preventDefault();
             var milestone_id = $(this).val();
-            //console.log(milestone_id);
+
             $('#editmilestone').modal('show');
+
             $.ajax({
                 type: "GET",
-                url: "/deals/edit-milestone/"+milestone_id,
-
-                success: function(response){
-                    //console.log(response);
+                url: "/deals/edit-milestone/" + milestone_id,
+                success: function(response) {
                     if (response.status == 404) {
                         $('#success_message').html("");
                         $('#success_message').addClass('alert alert-danger');
                         $('#success_message').text(response.message);
-                    }else {
+                    } else {
                         $('#title').val(response.milestone.milestone_title);
                         $('#cost').val(response.milestone.actual_cost);
-                        $('#summary').val(response.milestone.summary);
+                        CKEDITOR.instances['summary2'].setData(response.milestone.summary);
                         $('#milestone_type').val(response.milestone.milestone_type);
                         $('#milestone_id').val(milestone_id);
                     }
                 }
             });
-
         });
-
         $(document).on('click',' .update_milestone',function(e){
             e.preventDefault();
             var summary = CKEDITOR.instances.summary1.getData();
-
             var milestone_id = $('#milestone_id').val();
             var data= {
                 'title' : $('#title').val(),

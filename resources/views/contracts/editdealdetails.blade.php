@@ -597,35 +597,32 @@
                 }
             });
         }
-
-        $(document).on('click',' .edit_milestone',function(e){
+        $(document).on('click', '.edit_milestone', function(e) {
             e.preventDefault();
             var milestone_id = $(this).val();
-            //console.log(milestone_id);
+
             $('#editmilestone').modal('show');
+
             $.ajax({
                 type: "GET",
-                url: "/deals/edit-milestone/"+milestone_id,
-
-                success: function(response){
-                    //console.log(response);
+                url: "/deals/edit-milestone/" + milestone_id,
+                success: function(response) {
                     if (response.status == 404) {
                         $('#success_message').html("");
                         $('#success_message').addClass('alert alert-danger');
                         $('#success_message').text(response.message);
-                    }else {
+                    } else {
                         $('#title').val(response.milestone.milestone_title);
-
                         $('#cost').val(response.milestone.actual_cost);
-                        $('#summary').val(response.milestone.summary);
+                        CKEDITOR.instances['summary2'].setData(response.milestone.summary);
+                        $('#milestone_type').val(response.milestone.milestone_type);
                         $('#milestone_id').val(milestone_id);
                     }
                 }
             });
-
         });
 
-        $(document).on('click',' .update_milestone',function(e){
+        $(document).on('click',' .update_milestone',function(e ){
             e.preventDefault();
             var summary = CKEDITOR.instances.summary2.getData();
 
