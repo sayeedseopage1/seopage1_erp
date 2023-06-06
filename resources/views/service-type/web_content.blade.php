@@ -169,20 +169,34 @@
                                 </div>
                             </div>
                             <div class="row mt-3 mb-4" id="noForm" style="display: none;">
-                                <div class="col-md-3"></div>
-                                <div class="col-md-3">
-                                    <label class="form-label" for="">What are the major differences?</label>
-                                    <textarea name="description1" id="description1" rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
+                                <div class="col-3"></div>
+                                <div class="col-9" style="padding-left: 62px;">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <label class="form-label" for="">What are the major differences?</label>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <label class="form-label" for="">What are things that they do, and you don't?</label>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label" for="">What are things that they don't, and you do?</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <textarea name="description1[]" id="description1" rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <textarea name="description2[]" id="description2"  rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
+                                        </div>
+                                        <div class="col-4">
+                                            <textarea name="description3[]" id="description3" rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="col-md-3">
-                                    <label class="form-label" for="">What are things that they do, and you don't?</label>
-                                    <textarea name="description2" id="description2"  rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label" for="">What are things that they don't, and you do?</label>
-                                    <textarea name="description3" id="description3" rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
-                                </div>
                             </div>
                         </div>
                         <div class="col-md-2 append-buttons">
@@ -205,7 +219,7 @@
                     </div>
 
                      <!--Pages List-->
-                        <div class="row mt-3">
+                        <div class="row mt-4">
                             <div class="col-md-10 dynamic-page" id="dynamic-page-list-1">
                                 <div class="row mb-3">
                                     <div class="col-md-3" style="margin-top: 22px;">
@@ -312,12 +326,7 @@
                         <div class="col-md-3"></div>
                         <div class="col-md-9">
                             <label for="">What is their native language?</label>
-                            <select name="thor_native_language" id="thor_native_language" class="form-select height-35 f-14">
-                                <option value="">--</option>
-                                <option value="">1</option>
-                                <option value="">2</option>
-                                <option value="">3</option>
-                            </select>
+                            <input type="text" name="language" id="language" class="form-control placeholderText height-35 f-14" placeholder="Type your language">
                         </div>
                     </div>
                     <div class="col-12 text-center" style="margin-top: 50px;">
@@ -346,12 +355,38 @@
         // console.log(formData);
         $('#submitBtn1').attr("disabled", true);
         $('#submitBtn1').html("Processing...");
-        var competitor_content = $('input[name="competitor_content"]:checked').val();
-        var reference_website = document.getElementsByName("reference_website[]");
-        var reference_website_values = [];
-        for (var i = 0; i < reference_website.length; i++) {
-            reference_website_values.push(reference_website[i].value);
+        var folder_link = document.getElementsByName("folder_link[]");
+        var folder_link_values = [];
+        for (var i = 0; i < folder_link.length; i++) {
+            folder_link_values.push(folder_link[i].value);
         }
+        // var reference_website = document.getElementsByName("reference_website[]");
+        // var reference_website_values = [];
+        // for (var i = 0; i < reference_website.length; i++) {
+        //     reference_website_values.push(reference_website[i].value);
+        // }
+        // var description1 = document.getElementsByName("description1[]");
+        // var description1_values = [];
+        // for (var i = 0; i < description1.length; i++) {
+        //     description1_values.push(description1[i].value);
+        // }
+        // var description2 = document.getElementsByName("description2[]");
+        // var description2_values = [];
+        // for (var i = 0; i < description2.length; i++) {
+        //     description2_values.push(description2[i].value);
+        // }
+        // var description3 = document.getElementsByName("description3[]");
+        // var description3_values = [];
+        // for (var i = 0; i < description3.length; i++) {
+        //     description3_values.push(description3[i].value);
+        // }
+        // var competitor_content = [];
+        // var competitor_content_inputs = document.getElementsByName("competitor_content");
+        // for (var i = 0; i < competitor_content_inputs.length; i++) {
+        //     if (competitor_content_inputs[i].checked) {
+        //         competitor_content.push(competitor_content_inputs[i].value);
+        //     }
+        // }
         var page_name = document.getElementsByName("page_name[]");
         var page_name_values = [];
         for (var i = 0; i < page_name.length; i++) {
@@ -367,30 +402,27 @@
         for (var i = 0; i < approximate_word.length; i++) {
             approximate_word_values.push(approximate_word[i].value);
         }
-        // var description1 = document.getElementsByName("description1[]");
-        // var description1_values = [];
-        // for (var i = 0; i < description1.length; i++) {
-        //     description1_values.push(description1[i].value);
-        // }
-        // console.log(description1);
-        // var description2 = document.getElementsByName("description2[]");
-        // var description2_values = [];
-        // for (var i = 0; i < description2.length; i++) {
-        //     description2_values.push(description2[i].value);
-        // }
-        // var description3 = document.getElementsByName("description3[]");
-        // var description3_values = [];
-        // for (var i = 0; i < description3.length; i++) {
-        //     description3_values.push(description3[i].value);
-        // }
+
+        var share_file_info = $('input[name="share_file_info"]:checked').val();
+        // var competitor_content = $('input[name="competitor_content"]:checked').val();
+
         var data= {
             '_token': "{{ csrf_token() }}",
             'website_link': document.getElementById("website_link").value,
             'website_niche': document.getElementById("website_niche").value,
             'website_name': document.getElementById("website_name").value,
             'business_information': document.getElementById("business_information").value,
-            'drive_link': document.getElementById("drive_link").value,
+            'share_file_info': share_file_info,
+            'folder_link': folder_link_values,
+            // 'reference_website': reference_website_values,
+            // 'competitor_content': competitor_content,
+            // 'description1': description1_values,
+            // 'description2': description2_values,
+            // 'description3': description3_values,
             'product_list': document.getElementById("product_list").value,
+            'page_name': page_name_values,
+            'quantity': quantity_values,
+            'approximate_word': approximate_word_values,
             'gender': document.getElementById("gender").value,
             'age1': document.getElementById("age1").value,
             'age2': document.getElementById("age2").value,
@@ -399,16 +431,10 @@
             'country': document.getElementById("country").value,
             'city': document.getElementById("city").value,
             'interest': document.getElementById("interest").value,
-            'buying_habit': document.getElementById("buying_habit").value,
-            'thor_native_language': document.getElementById("thor_native_language").value,
-            'competitor_content': competitor_content,
-            'description1': document.getElementById("description1").value,
-            'description2': document.getElementById("description2").value,
-            'description3': document.getElementById("description3").value,
-            'reference_website': reference_website_values,
-            'page_name': page_name_values,
-            'quantity': quantity_values,
-            'approximate_word': approximate_word_values,
+            'buying_habit1': document.getElementById("buying_habit1").value,
+            'buying_habit2': document.getElementById("buying_habit2").value,
+            'buying_habit3': document.getElementById("buying_habit3").value,
+            'language': document.getElementById("language").value,
         }
         console.log(data);
         $.ajaxSetup({
@@ -423,7 +449,6 @@
             dataType: "json",
             success: function (response) {
                 if (response.status==200) {
-                    $('#store-lead').trigger("reset");
                     $(location).prop('href', '{{url('/thankyou')}}');
                     toastr.success('Service Type Added Successfully');
                     $('#submitBtn1').attr("disabled", false);
