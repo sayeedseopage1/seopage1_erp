@@ -1398,4 +1398,8 @@ class HomeController extends Controller
         return view('service-type.basic_seo');
     }
 
+    // public function fix_database()
+    // {
+    //     dd('ok');
+    // }
 }

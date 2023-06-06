@@ -100,6 +100,7 @@ use App\Models\LeadsDealsActivityLog;
 use App\Models\kpiSetting;
 use App\Models\CashPoint;
 use App\Models\Seopage1Team;
+use App\Models\AuthorizationAction;
 
 class ProjectController extends AccountBaseController
 {
@@ -1048,7 +1049,7 @@ class ProjectController extends AccountBaseController
                  $point= new CashPoint();
                  $point->user_id= $lead->added_by;
                  $point->project_id= $find_project_id->id;
-                 $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('project.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                 $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                  $point->gained_as = "Individual";
                  $point->points= $bonus_point;
 
@@ -1073,7 +1074,7 @@ class ProjectController extends AccountBaseController
                      $point= new CashPoint();
                      $point->user_id= $deal_qualified->updated_by;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="'.route('project.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
                      $point->points= $bonus_point;
 
@@ -1097,7 +1098,7 @@ class ProjectController extends AccountBaseController
                      $point= new CashPoint();
                      $point->user_id= $deal_short_code->updated_by;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('project.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
                      $point->points= $bonus_point;
 
@@ -1121,7 +1122,7 @@ class ProjectController extends AccountBaseController
                      $point= new CashPoint();
                      $point->user_id= $deal_proposal->updated_by;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('project.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
                      $point->points= $bonus_point;
 
@@ -1144,7 +1145,7 @@ class ProjectController extends AccountBaseController
                      $point= new CashPoint();
                      $point->user_id= $deal_negotiation_started->updated_by;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('project.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
                      $point->points= $bonus_point;
 
@@ -1169,7 +1170,7 @@ class ProjectController extends AccountBaseController
                         $point= new CashPoint();
                         $point->user_id= $deal_milestone_breakdown->updated_by;
                         $point->project_id= $find_project_id->id;
-                        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="'.route('project.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                         $point->gained_as = "Individual";
                         $point->points= $bonus_point;
 
@@ -1195,7 +1196,7 @@ class ProjectController extends AccountBaseController
                      $point= new CashPoint();
                      $point->user_id= $deal_id->added_by;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('project.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
                      $point->points= $bonus_point;
 
@@ -1217,7 +1218,7 @@ class ProjectController extends AccountBaseController
                      $point= new CashPoint();
                      $point->user_id= $deal_id_contact->added_by;
                      $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('project.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                      $point->gained_as = "Individual";
                      $point->points= $bonus_point;
 
@@ -1928,7 +1929,6 @@ class ProjectController extends AccountBaseController
             }
         }
         if ($project->project_status != 'Accepted') {
-
             foreach ($users as $user) {
                 $this->triggerPusher('notification-channel', 'notification', [
                     'user_id' => $user->id,
@@ -1939,6 +1939,18 @@ class ProjectController extends AccountBaseController
                 ]);
             }
         } else {
+            //authorizatoin action start here
+            $authorization_action = new AuthorizationAction();
+            $authorization_action->deal_id = $project->deal_id;
+            $authorization_action->project_id = $project->id;
+            $authorization_action->link = route('projects.show', $project->id);
+            $authorization_action->title = Auth::user()->name.' accept this project';
+            $authorization_action->authorization_by = Auth::id();
+            $authorization_action->authorization_for = Auth::id();
+            $authorization_action->status = '1';
+            $authorization_action->save();
+            //end authorization action here
+
             foreach ($users as $user) {
                 $this->triggerPusher('notification-channel', 'notification', [
                     'user_id' => $user->id,
@@ -3490,7 +3502,17 @@ class ProjectController extends AccountBaseController
       $milestone_update->save();
       //$user= User::where('id',$project->pm_id)->first();
 
+      // authorization action section
+      $project_id = Project::find($project->project_id);
 
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->deal_id = $project_id->deal_id;
+        $authorization_action->project_id = $project_id->id;
+        $authorization_action->link = route('projects.show', $project_id->id);
+        $authorization_action->title = Auth::user()->name.'  send QC form authorization request ';
+        $authorization_action->authorization_for = 1;
+        $authorization_action->save();
+        //end authorization action
       $users= User::where('role_id',1)->get();
       foreach ($users as $user) {
 
@@ -3679,7 +3701,21 @@ class ProjectController extends AccountBaseController
     $user= User::where('id',$project_id->pm_id)->first();
 
 
+    //update authoziation action
+    $authorization_action = AuthorizationAction::where([
+        'deal_id' => $project_id->deal_id,
+        'project_id' => $project_id->id,
+        'status' => '0'
+    ])->first();
 
+    if ($authorization_action) {
+        $authorization_action->authorization_by = Auth::id();
+        $authorization_action->status = '1';
+        $authorization_action->save();
+    }
+    //end authorization action
+
+    
       Notification::send($user, new ProjectSubmissionAcceptNotification($project_id));
 
     Toastr::success('Project Submission Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -3726,6 +3762,16 @@ class ProjectController extends AccountBaseController
             $project->agree= $request->agree;
             $project->status= 'pending';
             if ($project->save()) {
+                $project = Project::find($request->project_id);
+
+                $authorization_action = new AuthorizationAction();
+                $authorization_action->deal_id = $project->deal_id;
+                $authorization_action->project_id = $project->id;
+                $authorization_action->link = route('projects.show', $project->id);
+                $authorization_action->title = Auth::user()->name.'  send QC form authorization request ';
+                $authorization_action->authorization_for = 1;
+                $authorization_action->save();
+
                 $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
                 $milestone_update= ProjectMilestone::find($milestone->id);
                 $milestone_update->qc_status = 2;
@@ -3775,6 +3821,20 @@ class ProjectController extends AccountBaseController
       $mile->save();
     }
 
+    //update authoziation action
+    $authorization_action = AuthorizationAction::where([
+        'deal_id' => $project_id->deal_id,
+        'project_id' => $project_id->id,
+        'status' => '0'
+    ])->first();
+
+    if ($authorization_action) {
+        $authorization_action->authorization_by = Auth::id();
+        $authorization_action->status = '1';
+        $authorization_action->save();
+    }
+    //end authorization action
+
     Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
     return back();
 
@@ -3800,6 +3860,16 @@ class ProjectController extends AccountBaseController
         $project_id= Project::where('id',$request->project_id)->first();
         $log_user = Auth::user();
 
+        //authorizatoin action start here
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->deal_id = $project_id->deal_id;
+        $authorization_action->project_id = $project_id->id;
+        $authorization_action->link = route('projects.show', $project_id->id).'?tab=deliverables';
+        $authorization_action->title = Auth::user()->name.'  send project deliverable time extention request ';
+        $authorization_action->authorization_for = 1;
+        $authorization_action->save();
+        //end authorization action here
+
         $text = Auth::user()->name.'  send project deliverable time extention request ';
         $link = '<a style="color:blue" href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
         $this->logProjectActivity($project->id, $link);
@@ -3820,7 +3890,7 @@ class ProjectController extends AccountBaseController
         // $comments = $request->comments;
         // $comments_without_br = str_replace('<br>', '', $comments);
         // $explanation = explode("<p></p>", $comments_without_br);
-       //dd($explanation );
+        //dd($explanation );
 
 
         $project= PMProject::where('project_id',$request->project_id)->first();
@@ -3831,6 +3901,20 @@ class ProjectController extends AccountBaseController
 
         $project_id= Project::where('id',$request->project_id)->first();
         $log_user = Auth::user();
+
+        //update authoziation action
+        $authorization_action = AuthorizationAction::where([
+            'deal_id' => $project->deal_id,
+            'project_id' => $project->id,
+            'status' => '0'
+        ])->first();
+
+        if ($authorization_action) {
+            $authorization_action->authorization_by = Auth::id();
+            $authorization_action->status = '1';
+            $authorization_action->save();
+        }
+        //end authorization action
 
         $text = Auth::user()->name.' accepted project deliverable time extention request';
         $link = '<a style="color:blue" href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
@@ -3855,6 +3939,16 @@ class ProjectController extends AccountBaseController
 
         $project_id= Project::where('id',$id)->first();
         $log_user = Auth::user();
+        //authorizatoin action start here
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->deal_id = $project_id->deal_id;
+        $authorization_action->project_id = $project_id->id;
+        $authorization_action->link = route('projects.show', $project_id->id).'?tab=deliverables';
+        $authorization_action->title = 'Top managment authorization for delivarable';
+        $authorization_action->authorization_for = 1;
+        $authorization_action->save();
+
+        //end authorization action here
 
         $users= User::where('role_id',1)->get();
         foreach ($users as $user) {
@@ -3880,11 +3974,15 @@ class ProjectController extends AccountBaseController
         $project->authorization_status = 'approved';
         $project->deliverable_authorization= 1;
         $project->save();
+        
         $qualified_sale_id= QualifiedSale::where('project_id',$project->id)->first();
-        $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
-        $qualified_sale->authorized_by_admin = 1;
-        $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
-        $qualified_sale->save();
+        if ($qualified_sale_id) {
+            $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+            $qualified_sale->authorized_by_admin = 1;
+            $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
+            $qualified_sale->save();
+        }
+
         $pm_project= PMProject::where('project_id',$project->id)->first();
         $pm_project_update= PMProject::find($pm_project->id);
         $pm_project_update->deliverable_status = 1;
