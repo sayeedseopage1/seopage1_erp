@@ -44,7 +44,6 @@ use App\Models\SalesCount;
 use Mail;
 use App\Mail\WonDealMail;
 use App\Models\Country;
-
 use Toastr;
 use Exception;
 use App\Models\EmployeeDetails;
@@ -55,6 +54,7 @@ use App\Models\CashPoint;
 use App\Models\LeadsDealsActivityLog;
 use App\Models\DealStageChange;
 use App\Models\QualifiedSale;
+use App\Models\AuthorizationAction;
 
 
 class ContractController extends AccountBaseController
@@ -1344,6 +1344,15 @@ class ContractController extends AccountBaseController
             $users= User::where('role_id',8)->get();
 
             foreach ($users as $key => $user) {
+
+                $authorization_action = new AuthorizationAction();
+                $authorization_action->deal_id = $deal->id;
+                $authorization_action->project_id = $project->id;
+                $authorization_action->link = route('authorization_request', $deal->id);
+                $authorization_action->title = 'Team Lead Authorization';
+                $authorization_action->authorization_for = $user->id;
+                $authorization_action->save();
+
                 Notification::send($user, new DealAuthorizationSendNotification($deal,$sender));
                 $this->triggerPusher('notification-channel', 'notification', [
                     'user_id' => $user->id,
@@ -2156,7 +2165,6 @@ class ContractController extends AccountBaseController
         //kpi point
 
         $project = Project::where('deal_id', $request->id)->first();
-        //dd($project);
 
         $point= new CashPoint();
         $point->user_id= $user_name->id;
