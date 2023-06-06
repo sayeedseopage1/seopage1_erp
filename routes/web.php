@@ -1096,7 +1096,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         'employee_id' => '[0-9]+',
     ]);
 
-    Route::get('time-log-report/{any?}', [TimelogReportController::class, 'index'])->where('any', '.*');
+    // Route::get('time-log-report/{any?}', [TimelogReportController::class, 'index'])->where('any', '.*');
     Route::resource('time-log-report', TimelogReportController::class);
     Route::post('finance-report-chart', [FinanceReportController::class, 'financeChartData'])->name('finance-report.chart');
     Route::resource('finance-report', FinanceReportController::class);
