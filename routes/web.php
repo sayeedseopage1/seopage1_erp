@@ -1090,7 +1090,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('task-report', TaskReportController::class);
 
     Route::post('time-log-report-chart', [TimelogReportController::class, 'timelogChartData'])->name('time-log-report.chart');
-    
+
     Route::get('time-log-report/{project_id}/{employee_id}', [TimelogReportController::class, 'show'])->where([
         'project_id' => '[0-9]+',
         'employee_id' => '[0-9]+',
@@ -1185,6 +1185,7 @@ Route::post('/deals/store/product-description', [HomeController::class, 'storePr
 Route::get('/deals/service-type/product-category', [HomeController::class, 'productCategory']);
 Route::post('/deals/store/product-category', [HomeController::class, 'storeProductCategory'])->name('store_product_category');
 Route::get('/deals/service-type/basic-seo', [HomeController::class, 'productBasicSeo']);
+Route::post('/deals/store/basic-seo', [HomeController::class, 'storeProductBasicSeo'])->name('store_product_basic_seo');
 /* Account prefix routes end here */
 //store custom lead route for seaopage1
 Route::post('/lead/store', [LeadController::class, 'storeLead'])->name('store-lead');

@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\ProjectCms;
 use App\Models\ProjectNiche;
 use App\Models\ProjectPortfolio;
+use App\Models\ProjectWebsiteTheme;
 use App\Models\ProjectWebsiteType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -33,21 +34,16 @@ class PortfolioController extends AccountBaseController
     {
         $this->project_cmss = ProjectCms::all();
         $this->website_types = ProjectWebsiteType::all();
-        $this->website_categories = ProjectNiche::all();
-        $this->portfolios = ProjectPortfolio::all();
-        $this->projects = Project::select('project_name')->get();
-//        dd($this->projects);
+        $this->website_categories = ProjectNiche::whereNull('parent_category_id')->get();
+//        $this->website_themes = ProjectWebsiteTheme::all();
 
-//        $this->portfolios = DB::table('project_portfolios')
-//            ->leftJoin('project_cms', 'project_portfolios.id', '=', 'project_cms.id')
-//            ->leftJoin('project_website_types', 'project_portfolios.id', '=', 'project_website_types.id')
-//            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
-//            ->join('users', 'projects.client_id', '=', 'users.id')
-//            ->join('project_niches', 'project_portfolios.id', '=', 'project_niches.id')
-//            ->select('project_portfolios.*','users.user_name','projects.project_name', 'projects.project_budget', 'project_niches.category_name','project_cms.cms_name','project_website_types.website_type')
-//            ->get();
+        $this->portfolios = DB::table('project_portfolios')
+            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
+            ->join('users', 'projects.client_id', '=', 'users.id')
+            ->select('project_portfolios.*','users.user_name','projects.project_name', 'projects.project_budget')
+            ->get();
 
-//                dd($this->project_cmss);
+//                dd($this->portfolios);
         return view('portfolio.index',$this->data);
     }
 
@@ -77,8 +73,8 @@ class PortfolioController extends AccountBaseController
             $filteredCategories = ProjectPortfolio::where('niche', $selectedCategoryId);
         }
 
-        if (!is_null($request->input('website_sub_cat'))) {
-            $selectedCategoryId = $request->input('website_sub_cat');
+        if (!is_null($request->input('sub_niche'))) {
+            $selectedCategoryId = $request->input('sub_niche');
             $filteredCategories = ProjectPortfolio::where('sub_niche', $selectedCategoryId);
         }
 

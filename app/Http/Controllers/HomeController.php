@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BasicSeo;
 use App\Models\BlogArticle;
+use App\Models\ProductCategoryCollection;
+use App\Models\ProductDescription;
+use App\Models\projectDescription;
 use App\Models\WebContent;
 use Artisan;
 use Carbon\Carbon;
@@ -1309,8 +1313,7 @@ class HomeController extends Controller
         return view('service-type.web_content');
     }
     public function storeWebContent(Request $request){
-//        dd($request->all());
-
+        dd($request->all());
         $data = $request->all();
         $reference_websites = json_encode($data['reference_website']);
         $page_names = json_encode($data['page_name']);
@@ -1351,7 +1354,7 @@ class HomeController extends Controller
         return view('service-type.blog_article');
     }
     public function storeBlogArticle(Request $request){
-
+//dd($request->all());
         $data = $request->all();
 
         $folderLinks = json_encode($data['folder_link']);
@@ -1385,17 +1388,84 @@ class HomeController extends Controller
     }
 
     public function storeProductDescription(Request $request){
-        dd($request->all());
+        $data = $request->all();
+
+        $folder_links = json_encode($data['folder_link']);
+        $blogUrls = json_encode($data['blog_url']);
+        $product_lists = json_encode($data['product_list']);
+
+        $product_description = new ProductDescription();
+        $product_description->website_link = $data['website_link'];
+        $product_description->website_niche = $data['website_niche'];
+        $product_description->website_name = $data['website_name'];
+        $product_description->business_information = $data['business_information'];
+        $product_description->share_file_info = $data['share_file_info'];
+        $product_description->folder_link = $folder_links;
+        $product_description->blog_url = $blogUrls;
+        $product_description->product_no = $data['product_no'];
+        $product_description->product_list = $product_lists;
+        $product_description->word_count = $data['word_count'];
+        $product_description->save();
+
+        return response()->json(['status'=>200]);
+
     }
 
     public function productCategory(){
         return view('service-type.product_category');
     }
     public function storeProductCategory(Request $request){
-        dd($request->all());
+        $data = $request->all();
+
+        $folder_links = json_encode($data['folder_link']);
+        $categoryUrls = json_encode($data['category_url']);
+        $category_lists = json_encode($data['category_list']);
+
+        $product_category_collection = new ProductCategoryCollection();
+        $product_category_collection->website_link = $data['website_link'];
+        $product_category_collection->website_niche = $data['website_niche'];
+        $product_category_collection->website_name = $data['website_name'];
+        $product_category_collection->business_information = $data['business_information'];
+        $product_category_collection->share_file_info = $data['share_file_info'];
+        $product_category_collection->folder_link = $folder_links;
+        $product_category_collection->category_url = $categoryUrls;
+        $product_category_collection->product_no = $data['product_no'];
+        $product_category_collection->category_list = $category_lists;
+        $product_category_collection->word_count = $data['word_count'];
+        $product_category_collection->save();
+
+        return response()->json(['status'=>200]);
     }
     public function productBasicSeo(){
         return view('service-type.basic_seo');
+    }
+    public function storeProductBasicSeo(Request $request){
+
+        $basic_seo = new BasicSeo();
+        $basic_seo->owner_name = $request->owner_name;
+        $basic_seo->business_name = $request->business_name;
+        $basic_seo->business_address = $request->business_address;
+        $basic_seo->phone_number = $request->phone_number;
+        $basic_seo->zip_code = $request->zip_code;
+        $basic_seo->google_search_info = $request->google_search_info;
+        $basic_seo->done1 = $request->done1;
+        $basic_seo->email1 = $request->email1;
+        $basic_seo->password1 = $request->password1;
+        $basic_seo->google_analytic_info = $request->google_analytic_info;
+        $basic_seo->done2 = $request->done2;
+        $basic_seo->email2 = $request->email2;
+        $basic_seo->password2 = $request->password2;
+        $basic_seo->google_business_account_info = $request->google_business_account_info;
+        $basic_seo->done3 = $request->done3;
+        $basic_seo->email3 = $request->email3;
+        $basic_seo->password3 = $request->password3;
+        $basic_seo->share_cms_access_info = $request->share_cms_access_info;
+        $basic_seo->url = $request->url;
+        $basic_seo->user_name = $request->user_name;
+        $basic_seo->password4 = $request->password4;
+        $basic_seo->confirm_adding = $request->confirm_adding;
+        $basic_seo->save();
+        return response()->json(['status'=>200]);
     }
 
     // public function fix_database()

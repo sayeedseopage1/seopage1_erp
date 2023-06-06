@@ -55,7 +55,7 @@ class LeadsDataTable extends BaseDataTable
      */
     public function dataTable($query)
     {
-      //dd($query);
+//      dd($query);
         $currentDate = Carbon::now(global_setting()->timezone)->format('Y-m-d');
         $status = $this->status;
 
@@ -116,7 +116,7 @@ class LeadsDataTable extends BaseDataTable
                                   ' . trans('Convert to Deal') . '
                               </button>';
                     }
-                    
+
 
 
 
@@ -159,6 +159,9 @@ class LeadsDataTable extends BaseDataTable
             $datatables->addColumn('project_link', function ($row) {
               //  return $row->project_link;
                 return '<a target="_blank" class="mb-0 f-13 text-darkest-grey" href="' . $row->project_link . '">' . Str::limit($row->project_link,15). '</a>';
+            });
+            $datatables->addColumn('project_id', function ($row) {
+                  return $row->project_id;
             });
             $datatables->addColumn('bid_value', function ($row) {
               $currency= Currency::where('id',$row->original_currency_id)->first();
@@ -368,7 +371,7 @@ class LeadsDataTable extends BaseDataTable
             $datatables->removeColumn('source');
             $datatables->removeColumn('next_follow_up');
             $datatables->removeColumn('statusName');
-            $datatables->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date', 'agent_name', 'check','project_link','deal_status','won_lost','added_by']);
+            $datatables->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date', 'agent_name', 'check','project_link','project_id','deal_status','won_lost','added_by']);
 
             return $datatables;
     }
@@ -410,6 +413,7 @@ class LeadsDataTable extends BaseDataTable
             'bid_value2',
 
             'project_link',
+            'project_id',
             'company_name',
             'lead_status.type as statusName',
             'status_id',
@@ -514,7 +518,7 @@ class LeadsDataTable extends BaseDataTable
                 $lead = $lead->where('leads.status_id', '1');
             }
         }
-        
+
         $lead->orderBy('id', 'desc');
         return $lead->groupBy('leads.id');
     }
@@ -580,6 +584,8 @@ class LeadsDataTable extends BaseDataTable
             __('app.name') => ['data' => 'client_name', 'name' => 'client_name', 'title' => __('app.name')],
 
                 __('app.project_link') => ['data' => 'project_link', 'name' => 'project_link', 'title' => __('Project Link')],
+
+            __('project_id') => ['data' => 'project_id', 'name' => 'project_id', 'title' => __('Project Id')],
 
 
 

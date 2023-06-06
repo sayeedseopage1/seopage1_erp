@@ -216,6 +216,7 @@ class ProjectsDataTable extends BaseDataTable
 
             $datatables->editColumn('project_name', function ($row) {
                 $pin = '';
+                $deal = Deal::find($row->deal_id);
 
                 if (($row->pinned_project)) {
                     $pin .= '<span class="badge badge-secondary"><i class="fa fa-thumbtack"></i> ' . __('app.pinned') . '</span>';
@@ -225,19 +226,27 @@ class ProjectsDataTable extends BaseDataTable
                     $pin = '<span class="badge badge-primary"><i class="fa fa-globe"></i> ' . __('app.public') . '</span>';
                 }
                 if ($row->status == 'not started' && Auth::user()->role_id == 4) {
-                  return '<div class="media align-items-center">
+                  $html = '<div class="media align-items-center">
                           <div class="media-body">
                       <h5 class="mb-0 f-13 text-darkest-grey"><a>' . ucfirst($row->project_name) . '</a></h5>
-                      <p class="mb-0">' . $pin . '</p>
-                      </div>
+                      <p class="mb-0">' . $pin . '</p>';
+                      if ($deal->project_type == 'hourly') {
+                          $html .= '<span class="badge badge-success">Hourly</span>';
+                      }
+                     $html .= '</div>
                   </div>';
+                  return $html;
                 }else {
-                  return '<div class="media align-items-center">
+                  $html = '<div class="media align-items-center">
                           <div class="media-body">
                       <h5 class="mb-0 f-13 text-darkest-grey"><a title="'.ucfirst($row->project_name).'" href="' . route('projects.show', [$row->id]) . '">' . ucfirst(Str::limit($row->project_name,15)) . '</a></h5>
-                      <p class="mb-0">' . $pin . '</p>
-                      </div>
+                      <p class="mb-0">' . $pin . '</p>';
+                      if ($deal->project_type == 'hourly') {
+                          $html .= '<span class="badge badge-success">Hourly</span>';
+                      }
+                      $html .= '</div>
                   </div>';
+                  return $html;
                 }
 
 
@@ -282,7 +291,7 @@ class ProjectsDataTable extends BaseDataTable
                 $project= Project::where('id',$row->id)->first();
                 if (!is_null($project->hours_allocated)) {
                     return $project->hours_allocated. ' hours';
-                }else{
+                } else {
                     return '--';
                 }
             });
@@ -513,7 +522,7 @@ class ProjectsDataTable extends BaseDataTable
             ->leftJoin('project_members', 'project_members.project_id', 'projects.id')
             ->leftJoin('users', 'project_members.user_id', 'users.id')
             ->leftJoin('users as client', 'projects.client_id', 'users.id')
-            ->selectRaw('projects.id, projects.pm_id, projects.project_short_code, projects.hash, projects.added_by, projects.project_name, projects.start_date, projects.deadline, projects.client_id,
+            ->selectRaw('projects.id, projects.deal_id, projects.pm_id, projects.project_short_code, projects.hash, projects.added_by, projects.project_name, projects.start_date, projects.deadline, projects.client_id,
               projects.completion_percent, projects.project_budget, projects.currency_id,
             projects.status, users.name, client.name as client_name, client.email as client_email, projects.public,
            ( select count("id") from pinned where pinned.project_id = projects.id and pinned.user_id = ' . user()->id . ') as pinned_project');
