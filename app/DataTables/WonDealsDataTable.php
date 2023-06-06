@@ -47,6 +47,10 @@ class WonDealsDataTable extends BaseDataTable
             })
             ->addColumn('project_name', function ($row) {
                 $title = Str::limit($row->project_name, 30, ' ...');
+                if ($row->project_type == 'hourly') {
+                    $title .= '<span class="badge badge-success">Hourly</span>';
+                }
+
                 if ($row->status == 'Accepted') {
                     $project_id= Project::where('deal_id',$row->id)->first();
                     return '<a class="openRightModal" href="'.route('projects.show', $project_id->id).'" title="'.$row->project_name.'">'.$title.'</a>';

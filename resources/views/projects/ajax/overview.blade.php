@@ -307,24 +307,29 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         <h4 class="f-18 f-w-500 mb-4">@lang('app.statistics')</h4>
                     </div>
                     @if ($projectBudgetPermission == 'all')
-                    <div class="col">
+                    <div class="col-12 col-sm-6">
                         <x-cards.widget
                             :title="__('Project Budget (USD)')"
                             :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->project_budget, $project->currency->currency_symbol) : '0')"
                             icon="coins"
                         />
                     </div>
-                    @endif @if ($projectBudgetPermission == 'all') @if($project->currency_id != $project->deal->original_currency_id)
-                    <div class="col">
-                        <x-cards.widget
-                            :title="__('Project Budget ('. $project->deal->original_currency->currency_code .')')"
-                            :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->deal->actual_amount, $project->deal->original_currency->currency_symbol) : '0')"
-                            icon="coins"
-                        />
+                    @endif
+
+                    @if ($projectBudgetPermission == 'all') 
+                        @if($project->currency_id != $project->deal->original_currency_id)
+                        <div class="col-12 col-sm-6">
+                            <x-cards.widget
+                                :title="__('Project Budget ('. $project->deal->original_currency->currency_code .')')"
+                                :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->deal->actual_amount, $project->deal->original_currency->currency_symbol) : '0')"
+                                icon="coins"
+                            />
+                        </div>
+                        @endif 
+                    @endif
+                    <div class="col-12 mt-3">
+                        <x-cards.widget :title="__('Project Type')" :value="$project->deal->project_type" icon="clock" badge="true"/>
                     </div>
-                    @endif @endif
-
-
                 </div>
                 <div class="row mt-3">
                   @if ($viewPaymentPermission == 'all')

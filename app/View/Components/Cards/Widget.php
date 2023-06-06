@@ -11,19 +11,21 @@ class Widget extends Component
     public $icon;
     public $info;
     public $widgetId;
+    public $badge;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($title, $value, $icon, $info = null, $widgetId = null)
+    public function __construct($title, $value, $icon, $info = null, $widgetId = null, $badge = false)
     {
         $this->title = $title;
         $this->value = $value;
         $this->icon = $icon;
         $this->info = $info;
         $this->widgetId = $widgetId;
+        $this->badge = $badge;
     }
 
     /**

@@ -56,7 +56,6 @@ use App\Models\DealStageChange;
 use App\Models\QualifiedSale;
 use App\Models\AuthorizationAction;
 
-
 class ContractController extends AccountBaseController
 {
     public function __construct()
@@ -2184,6 +2183,22 @@ class ContractController extends AccountBaseController
         }
 
         $point->save();
+
+        //update authoziation action
+        $authorization_action = AuthorizationAction::where([
+            'deal_id' => $deal->id,
+            'project_id' => $project->id,
+            'status' => '0'
+        ])->first();
+
+        if ($authorization_action) {
+            $authorization_action->authorization_by = Auth::id();
+            $authorization_action->status = '1';
+            $authorization_action->save();
+        }
+
+        //end authorization action
+
         $qualified_sale_id= QualifiedSale::where('deal_id',$deal->id)->first();
         if($qualified_sale_id != null)
         {
@@ -2194,12 +2209,7 @@ class ContractController extends AccountBaseController
             $qualified_sale->sales_lead_deadline_comment = $request->project_deadline_authorization;
             $qualified_sale->total_points = $point->points + $qualified_sale->total_points;
             $qualified_sale->save();
-
         }
-       
-
-
-       
 
         if ($deal->save()) {
             return response()->json([
@@ -2207,6 +2217,5 @@ class ContractController extends AccountBaseController
                 'message' => 'Data inserted successfully'
             ]);
         }
-       
     }
 }

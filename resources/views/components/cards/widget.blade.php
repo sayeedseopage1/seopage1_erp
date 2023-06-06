@@ -7,8 +7,12 @@
         @endif
         </h5>
         <div class="d-flex">
-            <p class="mb-0 f-15 font-weight-bold text-blue text-primary d-grid"><span
-                    id="{{ $widgetId }}">{{ $value }}</span>
+            <p class="mb-0 f-15 font-weight-bold text-blue text-primary d-grid">
+                @if ($badge == true)
+                    <span class="badge badge-primary" id="{{ $widgetId }}">{{ $value }}</span>
+                @else
+                    <span id="{{ $widgetId }}">{{ $value }}</span>
+                @endif
             </p>
         </div>
     </div>
