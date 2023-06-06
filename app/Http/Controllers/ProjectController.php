@@ -811,6 +811,7 @@ class ProjectController extends AccountBaseController
 //        dd($request->all());
 
         //kpi distribution start from here
+       
         $find_project_id= Project::where('id',$id)->first();
         $find_deal_id= Deal::where('id',$find_project_id->deal_id)->first();
         // dd($find_project_id);
@@ -3730,13 +3731,14 @@ class ProjectController extends AccountBaseController
             'milestone_id' => $request->milestone_id,
             'project_id' => $request->project_id,
         ])->first();
+       
 
         if (!$project) {
             $project = new QCSubmission();
         }
         if ($request->step == '1') {
             $project->milestone_id= $request->milestone_id;
-            $milestone_id= ProjectMilestone::where('id',$request->milestone_id)->first();
+            $milestone_id= ProjectMilestone::find($request->milestone_id);
             $project->project_id= $milestone_id->project_id;
             $project->site_https= $request->site_https;
             $project->favicon= $request->favicon;
@@ -3774,7 +3776,8 @@ class ProjectController extends AccountBaseController
                 $authorization_action->authorization_for = 1;
                 $authorization_action->save();
 
-                $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
+                $milestone= ProjectMilestone::where('id',$request->milestone_id)->first();
+                //dd($milestone);
                 $milestone_update= ProjectMilestone::find($milestone->id);
                 $milestone_update->qc_status = 2;
                 $milestone_update->save();
@@ -3792,7 +3795,8 @@ class ProjectController extends AccountBaseController
 
     public function ProjectQcSubmissionAccept(Request $request)
     {
-//      dd($request->all());
+    
+    // DB::beginTransaction();
       $project= QcSubmission::find($request->id);
       $project->admin_comment= $request->admin_comment_qc;
       if ($request->deny != null) {
@@ -3801,6 +3805,7 @@ class ProjectController extends AccountBaseController
         $project->status= 'accepted';
     }
     $project->save();
+   
     if ($request->deny != null) {
       $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
       $mile= ProjectMilestone::find($milestone->id);
@@ -3818,12 +3823,14 @@ class ProjectController extends AccountBaseController
       $qc_submission->delete();
     }else {
       $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
+     // dd($milestone);
       $mile= ProjectMilestone::find($milestone->id);
       $mile->qc_status= 1;
       $mile->save();
     }
 
     //update authoziation action
+    $project_id= Project::where('id',$project->project_id)->first();
     $authorization_action = AuthorizationAction::where([
         'deal_id' => $project_id->deal_id,
         'project_id' => $project_id->id,
@@ -3849,6 +3856,7 @@ class ProjectController extends AccountBaseController
         // $comments_without_br = str_replace('<br>', '', $comments);
         // $explanation = explode("<p></p>", $comments_without_br);
        //dd($explanation );
+
         $validated = $request->validate([
             'comments' => ['required','string','min:10'],
         ]);
