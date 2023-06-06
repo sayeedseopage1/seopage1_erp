@@ -154,49 +154,49 @@ class ProjectController extends AccountBaseController
 
 
 
-      return $dataTable->render('projects.index', $this->data);
+        return $dataTable->render('projects.index', $this->data);
 
     }
     public function ProjectOverviewFilter(Request $request)
     {
-    //  dd($request);
-          //   $start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
-          // //  dd($start_date);
-          //    $due_date =  Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
-          //    $type_id= $request->type_id;
-          //    $status_id= $request->status_id;
-          //   if ($start_date != null) {
-          //     $data2= Project::where('start_date','>=',$start_date)->get();
-          //   }
-          //   if ($due_date != null) {
-          //       $data2= Project::where('deadline','>=',$due_date)->get();
-          //   }
-          //   if ($type_id != null && $type_id == 'budget') {
-          //       $data2= Project::orderBy('project_budget','desc')->get();
-          //   }if ($type_id != null && $type_id == 'progress') {
-          //       $data2= Project::orderBy('completion_percent')->get();
-          //   }
-          //   if ($status_id != null) {
-          //     $data2= Project::where('status',$status_id)->get();
-          //   }
-          //   $data2->get();
-          // return Response::json($data2);
-         //$projects= Project::query();
-         if($request->ajax()){
-           if ($request->type_id == "budget") {
+        //  dd($request);
+        //   $start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+        // //  dd($start_date);
+        //    $due_date =  Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+        //    $type_id= $request->type_id;
+        //    $status_id= $request->status_id;
+        //   if ($start_date != null) {
+        //     $data2= Project::where('start_date','>=',$start_date)->get();
+        //   }
+        //   if ($due_date != null) {
+        //       $data2= Project::where('deadline','>=',$due_date)->get();
+        //   }
+        //   if ($type_id != null && $type_id == 'budget') {
+        //       $data2= Project::orderBy('project_budget','desc')->get();
+        //   }if ($type_id != null && $type_id == 'progress') {
+        //       $data2= Project::orderBy('completion_percent')->get();
+        //   }
+        //   if ($status_id != null) {
+        //     $data2= Project::where('status',$status_id)->get();
+        //   }
+        //   $data2->get();
+        // return Response::json($data2);
+        //$projects= Project::query();
+        if($request->ajax()){
+            if ($request->type_id == "budget") {
 
-              $projects= Project::orderBy('project_budget','desc')->get();
+                $projects= Project::orderBy('project_budget','desc')->get();
 
-           }else {
-             $projects= Project::orderBy('completion_percent','desc')->get();
-           }
-           if ($request->status_id) {
-               $projects= Project::where('status',$request->status_id)->get();
-           }
+            }else {
+                $projects= Project::orderBy('completion_percent','desc')->get();
+            }
+            if ($request->status_id) {
+                $projects= Project::where('status',$request->status_id)->get();
+            }
 
-         }
-         //$projects= $qu->get();
-         return Response::json(['projects'=>$projects]);
+        }
+        //$projects= $qu->get();
+        return Response::json(['projects'=>$projects]);
     }
     /**
      * XXXXXXXXXXX
@@ -206,16 +206,16 @@ class ProjectController extends AccountBaseController
     public function applyQuickAction(Request $request)
     {
         switch ($request->action_type) {
-        case 'delete':
-            $this->deleteRecords($request);
+            case 'delete':
+                $this->deleteRecords($request);
                 return Reply::success(__('messages.deleteSuccess'));
-        case 'archive':
-            $this->archiveRecords($request);
+            case 'archive':
+                $this->archiveRecords($request);
                 return Reply::success(__('messages.projectArchiveSuccessfully'));
-        case 'change-status':
-            $this->changeStatus($request);
+            case 'change-status':
+                $this->changeStatus($request);
                 return Reply::success(__('messages.statusUpdatedSuccessfully'));
-        default:
+            default:
                 return Reply::error(__('messages.selectAction'));
         }
     }
@@ -652,51 +652,51 @@ class ProjectController extends AccountBaseController
     public function storeDispute(Request $request)
     {
 
-     $validator=  $request->validate([
-           'client_username' => 'required',
-           'project_value' => 'required|numeric|min:0',
-           'description1' => 'required',
-           'description2' => 'required',
-           'description3' => 'required',
-           'description4' => 'required',
-           'description5' => 'required',
-           'description6' => 'required',
-           'description7' => 'required',
-           'description8' => 'required',
-           'description10' => 'required',
-           'description11' => 'required',
-           'description12' => 'required',
-           'description13' => 'required',
-           'description14' => 'required',
-           'description15' => 'required',
-           'description16' => 'required',
-           'description17' => 'required',
-           'pm_name' => 'required',
-           'pm_email' => 'required|email',
+        $validator=  $request->validate([
+            'client_username' => 'required',
+            'project_value' => 'required|numeric|min:0',
+            'description1' => 'required',
+            'description2' => 'required',
+            'description3' => 'required',
+            'description4' => 'required',
+            'description5' => 'required',
+            'description6' => 'required',
+            'description7' => 'required',
+            'description8' => 'required',
+            'description10' => 'required',
+            'description11' => 'required',
+            'description12' => 'required',
+            'description13' => 'required',
+            'description14' => 'required',
+            'description15' => 'required',
+            'description16' => 'required',
+            'description17' => 'required',
+            'pm_name' => 'required',
+            'pm_email' => 'required|email',
 
-         ],[
-             'client_username.required' => 'This field is required!',
-             'project_value.required' => 'This field is required!',
-             'description1.required' => 'This field is required!',
-             'description2.required' => 'This field is required!',
-             'description3.required' => 'This field is required!',
-             'description4.required' => 'This field is required!',
-             'description5.required' => 'This field is required!',
-             'description6.required' => 'This field is required!',
-             'description7.required' => 'This field is required!',
-             'description8.required' => 'This field is required!',
-             'description10.required' => 'This field is required!',
-             'description11.required' => 'This field is required!',
-             'description12.required' => 'This field is required!',
-             'description13.required' => 'This field is required!',
-             'description14.required' => 'This field is required!',
-             'description15.required' => 'This field is required!',
-             'description16.required' => 'This field is required!',
-             'description17.required' => 'This field is required!',
-             'pm_name.required' => 'This field is required!',
-             'pm_email.required' => 'This field is required!',
-             'pm_email.email' => 'Please enter your current email for example(example@gmail.com)!',
-         ]);
+        ],[
+            'client_username.required' => 'This field is required!',
+            'project_value.required' => 'This field is required!',
+            'description1.required' => 'This field is required!',
+            'description2.required' => 'This field is required!',
+            'description3.required' => 'This field is required!',
+            'description4.required' => 'This field is required!',
+            'description5.required' => 'This field is required!',
+            'description6.required' => 'This field is required!',
+            'description7.required' => 'This field is required!',
+            'description8.required' => 'This field is required!',
+            'description10.required' => 'This field is required!',
+            'description11.required' => 'This field is required!',
+            'description12.required' => 'This field is required!',
+            'description13.required' => 'This field is required!',
+            'description14.required' => 'This field is required!',
+            'description15.required' => 'This field is required!',
+            'description16.required' => 'This field is required!',
+            'description17.required' => 'This field is required!',
+            'pm_name.required' => 'This field is required!',
+            'pm_email.required' => 'This field is required!',
+            'pm_email.email' => 'Please enter your current email for example(example@gmail.com)!',
+        ]);
 
         $dispute = new ProjectDispute();
         $dispute->client_username= $request->client_username;
@@ -730,17 +730,17 @@ class ProjectController extends AccountBaseController
         foreach ($users as $user) {
 
 
-           Notification::send($user, new ProjectDisputeNotification($project));
+            Notification::send($user, new ProjectDisputeNotification($project));
         }
 
 //        Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         //  return Redirect::route('projects.index');
 //          return redirect('/account/projects/' .$dispute->project_id);
-          return response()->json([
-              'status'=>200,
-              'redirectUrl' => url('/account/projects/'.$dispute->project_id)
+        return response()->json([
+            'status'=>200,
+            'redirectUrl' => url('/account/projects/'.$dispute->project_id)
 
-          ]);
+        ]);
 
 
 
@@ -811,7 +811,7 @@ class ProjectController extends AccountBaseController
 //        dd($request->all());
 
         //kpi distribution start from here
-       
+
         $find_project_id= Project::where('id',$id)->first();
         $find_deal_id= Deal::where('id',$find_project_id->deal_id)->first();
         // dd($find_project_id);
@@ -844,540 +844,540 @@ class ProjectController extends AccountBaseController
                 }
                 $point->save();
             }
-                    $deal_qualified= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',1)->first();
+            $deal_qualified= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',1)->first();
 
 
-                    $user_name= User::where('id',$deal_qualified->updated_by)->first();
-                    $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+            $user_name= User::where('id',$deal_qualified->updated_by)->first();
+            $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+            $point= new CashPoint();
+            $point->user_id= $deal_qualified->updated_by;
+            $point->project_id= $find_project_id->id;
+            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
+            $point->gained_as = "Individual";
+            $point->points= ($project_budget*$kpi->qualify)/100;
+
+            if ($cash_points_qualified != null) {
+
+                $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($project_budget*$kpi->qualify)/100;
+
+            }else
+            {
+                $point->total_points_earn=  ($project_budget*$kpi->qualify)/100;
+
+            }
+            $point->save();
+
+
+
+            $deal_short_code= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',2)->first();
+
+            $user_name= User::where('id',$deal_short_code->updated_by)->first();
+            $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+            $point= new CashPoint();
+            $point->user_id= $deal_short_code->updated_by;
+            $point->project_id= $find_project_id->id;
+            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
+            $point->gained_as = "Individual";
+            $point->points= ($project_budget*$kpi->requirements_defined)/100;
+
+            if ($cash_points_requirements_defined != null) {
+
+                $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($project_budget*$kpi->requirements_defined)/100;
+
+            }else
+            {
+                $point->total_points_earn=  ($project_budget*$kpi->requirements_defined)/100;
+
+            }
+            $point->save();
+
+
+
+
+            $deal_proposal= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',3)->first();
+            $user_name= User::where('id',$deal_proposal->updated_by)->first();
+            $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+            $point= new CashPoint();
+            $point->user_id= $deal_proposal->updated_by;
+            $point->project_id= $find_project_id->id;
+            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
+            $point->gained_as = "Individual";
+            $point->points= ($project_budget*$kpi->proposal_made)/100;
+
+            if ($cash_points_proposal_made != null) {
+
+                $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($project_budget*$kpi->proposal_made)/100;
+
+            }else
+            {
+                $point->total_points_earn=  ($project_budget*$kpi->proposal_made)/100;
+
+            }
+            $point->save();
+
+
+
+            $deal_negotiation_started= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',4)->first();
+            $user_name= User::where('id',$deal_negotiation_started->updated_by)->first();
+            $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+            $point= new CashPoint();
+            $point->user_id= $deal_negotiation_started->updated_by;
+            $point->project_id= $find_project_id->id;
+            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
+            $point->gained_as = "Individual";
+            $point->points= ($project_budget*$kpi->negotiation_started)/100;
+
+            if ($cash_points_negotiation_started != null) {
+
+                $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($project_budget*$kpi->negotiation_started)/100;
+
+            }else
+            {
+                $point->total_points_earn=  ($project_budget*$kpi->negotiation_started)/100;
+
+            }
+            $point->save();
+
+
+
+
+            $deal_milestone_breakdown= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',5)->first();
+            if($deal_milestone_breakdown != null)
+            {
+                $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first();
+
+                $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                $point= new CashPoint();
+                $point->user_id= $deal_milestone_breakdown->updated_by;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
+                $point->gained_as = "Individual";
+                $point->points= ($project_budget*$kpi->milestone_breakdown)/100;
+
+                if ($cash_points_milestone_breakdown != null) {
+
+                    $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($project_budget*$kpi->milestone_breakdown)/100;
+
+                }else
+                {
+                    $point->total_points_earn=
+                        ($project_budget*$kpi->milestone_breakdown)/100;
+
+                }
+                $point->save();
+
+
+            }
+
+            $deal_id= Deal::where('id',$find_deal_id->id)->first();
+            //dd($deal_id);
+            $user_name= User::where('id',$deal_id->added_by)->first();
+
+            $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+            $point= new CashPoint();
+            $point->user_id= $deal_id->added_by;
+            $point->project_id= $find_project_id->id;
+            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
+            $point->gained_as = "Individual";
+            $point->points= ($project_budget*$kpi->closed_deal)/100;
+
+            if ($cash_points_close_deal != null) {
+
+                $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget*$kpi->closed_deal)/100;
+
+            }else
+            {
+                $point->total_points_earn=
+                    ($project_budget*$kpi->closed_deal)/100;
+
+            }
+            $point->save();
+            $deal_id_contact= Deal::where('id',$find_deal_id->id)->first();
+            $user_name= User::where('id',$deal_id_contact->added_by)->first();
+
+            $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+            $point= new CashPoint();
+            $point->user_id= $deal_id_contact->added_by;
+            $point->project_id= $find_project_id->id;
+            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
+            $point->gained_as = "Individual";
+            $point->points= ($project_budget*$kpi->contact_form)/100;
+
+            if ($cash_points_contact != null) {
+
+                $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
+
+            }else
+            {
+                $point->total_points_earn=
+                    ($project_budget*$kpi->contact_form)/100;
+
+            }
+            $point->save();
+            if ($find_deal_id->authorization_status == 1) {
+                $earned_point = ($kpi->authorized_by_leader * $project_budget) / 100;
+
+                $user_name= User::where('role_id',8)->first();
+                $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                //kpi point
+                $point= new CashPoint();
+                $point->user_id= $user_name->id;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> for authorizing deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
+                $point->gained_as = "Individual";
+                $point->points= $earned_point;
+
+                if ($cash_points_team_lead != null) {
+                    $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point;
+                } else {
+                    $point->total_points_earn= $earned_point;
+                }
+
+                $point->save();
+            }
+
+
+
+
+            if ($find_deal_id->amount > $kpi->generate_single_deal) {
+
+                $bonus_point= $kpi->bonus_point/9;
+                if($find_deal_id->lead_id != null)
+                {
+                    $lead = Lead::where('id',$find_deal_id->lead_id)->first();
+                    $user_name= User::where('id',$lead->added_by)->first();
+                    $cash_points= CashPoint::where('user_id',$lead->added_by)->orderBy('id','desc')->first();
                     $point= new CashPoint();
-                    $point->user_id= $deal_qualified->updated_by;
+                    $point->user_id= $lead->added_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                     $point->gained_as = "Individual";
-                    $point->points= ($project_budget*$kpi->qualify)/100;
+                    $point->points= $bonus_point;
 
-                    if ($cash_points_qualified != null) {
+                    if ($cash_points != null) {
 
-                        $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($project_budget*$kpi->qualify)/100;
+                        $point->total_points_earn= $cash_points->total_points_earn+ $bonus_point;
 
                     }else
                     {
-                        $point->total_points_earn=  ($project_budget*$kpi->qualify)/100;
+                        $point->total_points_earn=  $bonus_point;
 
                     }
                     $point->save();
+                    // dd($point);
+
+                }
+                $deal_qualified= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',1)->first();
+
+
+                $user_name= User::where('id',$deal_qualified->updated_by)->first();
+                $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                $point= new CashPoint();
+                $point->user_id= $deal_qualified->updated_by;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                $point->gained_as = "Individual";
+                $point->points= $bonus_point;
+
+                if ($cash_points_qualified != null) {
+
+                    $point->total_points_earn= $cash_points_qualified->total_points_earn+ $bonus_point;
+
+                }else
+                {
+                    $point->total_points_earn=  $bonus_point;
+
+                }
+                $point->save();
 
 
 
-                    $deal_short_code= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',2)->first();
+                $deal_short_code= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',2)->first();
 
-                    $user_name= User::where('id',$deal_short_code->updated_by)->first();
-                    $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                    $point= new CashPoint();
-                    $point->user_id= $deal_short_code->updated_by;
-                    $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
-                    $point->gained_as = "Individual";
-                    $point->points= ($project_budget*$kpi->requirements_defined)/100;
+                $user_name= User::where('id',$deal_short_code->updated_by)->first();
+                $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                $point= new CashPoint();
+                $point->user_id= $deal_short_code->updated_by;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                $point->gained_as = "Individual";
+                $point->points= $bonus_point;
 
-                    if ($cash_points_requirements_defined != null) {
+                if ($cash_points_requirements_defined != null) {
 
-                        $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($project_budget*$kpi->requirements_defined)/100;
+                    $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ $bonus_point;
 
-                    }else
-                    {
-                        $point->total_points_earn=  ($project_budget*$kpi->requirements_defined)/100;
+                }else
+                {
+                    $point->total_points_earn= $bonus_point;
 
-                    }
-                    $point->save();
-
-
-
-
-                    $deal_proposal= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',3)->first();
-                    $user_name= User::where('id',$deal_proposal->updated_by)->first();
-                    $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                    $point= new CashPoint();
-                    $point->user_id= $deal_proposal->updated_by;
-                    $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
-                    $point->gained_as = "Individual";
-                    $point->points= ($project_budget*$kpi->proposal_made)/100;
-
-                    if ($cash_points_proposal_made != null) {
-
-                        $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($project_budget*$kpi->proposal_made)/100;
-
-                    }else
-                    {
-                        $point->total_points_earn=  ($project_budget*$kpi->proposal_made)/100;
-
-                    }
-                    $point->save();
-
-
-
-                    $deal_negotiation_started= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',4)->first();
-                    $user_name= User::where('id',$deal_negotiation_started->updated_by)->first();
-                    $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                    $point= new CashPoint();
-                    $point->user_id= $deal_negotiation_started->updated_by;
-                    $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
-                    $point->gained_as = "Individual";
-                    $point->points= ($project_budget*$kpi->negotiation_started)/100;
-
-                    if ($cash_points_negotiation_started != null) {
-
-                        $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($project_budget*$kpi->negotiation_started)/100;
-
-                    }else
-                    {
-                        $point->total_points_earn=  ($project_budget*$kpi->negotiation_started)/100;
-
-                    }
-                    $point->save();
+                }
+                $point->save();
 
 
 
 
-                    $deal_milestone_breakdown= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',5)->first();
-                    if($deal_milestone_breakdown != null)
-                    {
-                        $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first();
+                $deal_proposal= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',3)->first();
+                $user_name= User::where('id',$deal_proposal->updated_by)->first();
+                $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                $point= new CashPoint();
+                $point->user_id= $deal_proposal->updated_by;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                $point->gained_as = "Individual";
+                $point->points= $bonus_point;
 
+                if ($cash_points_proposal_made != null) {
+
+                    $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ $bonus_point;
+
+                }else
+                {
+                    $point->total_points_earn=  $bonus_point;
+
+                }
+                $point->save();
+
+
+
+                $deal_negotiation_started= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',4)->first();
+                $user_name= User::where('id',$deal_negotiation_started->updated_by)->first();
+                $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                $point= new CashPoint();
+                $point->user_id= $deal_negotiation_started->updated_by;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                $point->gained_as = "Individual";
+                $point->points= $bonus_point;
+
+                if ($cash_points_negotiation_started != null) {
+
+                    $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ $bonus_point;
+
+                }else
+                {
+                    $point->total_points_earn=  $bonus_point;
+
+                }
+                $point->save();
+
+
+                $deal_milestone_breakdown= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',5)->first();
+
+                if($deal_milestone_breakdown != null)
+                {
+                    $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first();
                     $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
                     $point->user_id= $deal_milestone_breakdown->updated_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                     $point->gained_as = "Individual";
-                    $point->points= ($project_budget*$kpi->milestone_breakdown)/100;
+                    $point->points= $bonus_point;
 
                     if ($cash_points_milestone_breakdown != null) {
 
-                        $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ ($project_budget*$kpi->milestone_breakdown)/100;
+                        $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ $bonus_point;
 
                     }else
                     {
                         $point->total_points_earn=
-                        ($project_budget*$kpi->milestone_breakdown)/100;
-
-                    }
-                    $point->save();
-
-
-                    }
-
-                    $deal_id= Deal::where('id',$find_deal_id->id)->first();
-                    //dd($deal_id);
-                    $user_name= User::where('id',$deal_id->added_by)->first();
-
-                    $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                    $point= new CashPoint();
-                    $point->user_id= $deal_id->added_by;
-                    $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
-                    $point->gained_as = "Individual";
-                    $point->points= ($project_budget*$kpi->closed_deal)/100;
-
-                    if ($cash_points_close_deal != null) {
-
-                        $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget*$kpi->closed_deal)/100;
-
-                    }else
-                    {
-                        $point->total_points_earn=
-                        ($project_budget*$kpi->closed_deal)/100;
-
-                    }
-                    $point->save();
-                    $deal_id_contact= Deal::where('id',$find_deal_id->id)->first();
-                    $user_name= User::where('id',$deal_id_contact->added_by)->first();
-
-                    $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                    $point= new CashPoint();
-                    $point->user_id= $deal_id_contact->added_by;
-                    $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
-                    $point->gained_as = "Individual";
-                    $point->points= ($project_budget*$kpi->contact_form)/100;
-
-                    if ($cash_points_contact != null) {
-
-                        $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
-
-                    }else
-                    {
-                        $point->total_points_earn=
-                        ($project_budget*$kpi->contact_form)/100;
-
-                    }
-                    $point->save();
-                    if ($find_deal_id->authorization_status == 1) {
-                        $earned_point = ($kpi->authorized_by_leader * $project_budget) / 100;
-
-                     $user_name= User::where('role_id',8)->first();
-                     $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                     //kpi point
-                     $point= new CashPoint();
-                     $point->user_id= $user_name->id;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> for authorizing deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
-                     $point->gained_as = "Individual";
-                     $point->points= $earned_point;
-
-                     if ($cash_points_team_lead != null) {
-                         $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point;
-                     } else {
-                         $point->total_points_earn= $earned_point;
-                     }
-
-                     $point->save();
-                     }
-
-
-
-
-                    if ($find_deal_id->amount > $kpi->generate_single_deal) {
-
-                        $bonus_point= $kpi->bonus_point/9;
-                        if($find_deal_id->lead_id != null)
-             {
-                 $lead = Lead::where('id',$find_deal_id->lead_id)->first();
-                 $user_name= User::where('id',$lead->added_by)->first();
-                 $cash_points= CashPoint::where('user_id',$lead->added_by)->orderBy('id','desc')->first();
-                 $point= new CashPoint();
-                 $point->user_id= $lead->added_by;
-                 $point->project_id= $find_project_id->id;
-                 $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
-                 $point->gained_as = "Individual";
-                 $point->points= $bonus_point;
-
-                 if ($cash_points != null) {
-
-                     $point->total_points_earn= $cash_points->total_points_earn+ $bonus_point;
-
-                 }else
-                 {
-                     $point->total_points_earn=  $bonus_point;
-
-                 }
-                 $point->save();
-                // dd($point);
-
-             }
-                     $deal_qualified= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',1)->first();
-
-
-                     $user_name= User::where('id',$deal_qualified->updated_by)->first();
-                     $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                     $point= new CashPoint();
-                     $point->user_id= $deal_qualified->updated_by;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
-                     $point->gained_as = "Individual";
-                     $point->points= $bonus_point;
-
-                     if ($cash_points_qualified != null) {
-
-                         $point->total_points_earn= $cash_points_qualified->total_points_earn+ $bonus_point;
-
-                     }else
-                     {
-                         $point->total_points_earn=  $bonus_point;
-
-                     }
-                     $point->save();
-
-
-
-                     $deal_short_code= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',2)->first();
-
-                     $user_name= User::where('id',$deal_short_code->updated_by)->first();
-                     $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                     $point= new CashPoint();
-                     $point->user_id= $deal_short_code->updated_by;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
-                     $point->gained_as = "Individual";
-                     $point->points= $bonus_point;
-
-                     if ($cash_points_requirements_defined != null) {
-
-                         $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ $bonus_point;
-
-                     }else
-                     {
-                         $point->total_points_earn= $bonus_point;
-
-                     }
-                     $point->save();
-
-
-
-
-                     $deal_proposal= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',3)->first();
-                     $user_name= User::where('id',$deal_proposal->updated_by)->first();
-                     $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                     $point= new CashPoint();
-                     $point->user_id= $deal_proposal->updated_by;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
-                     $point->gained_as = "Individual";
-                     $point->points= $bonus_point;
-
-                     if ($cash_points_proposal_made != null) {
-
-                         $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ $bonus_point;
-
-                     }else
-                     {
-                         $point->total_points_earn=  $bonus_point;
-
-                     }
-                     $point->save();
-
-
-
-                     $deal_negotiation_started= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',4)->first();
-                     $user_name= User::where('id',$deal_negotiation_started->updated_by)->first();
-                     $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                     $point= new CashPoint();
-                     $point->user_id= $deal_negotiation_started->updated_by;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
-                     $point->gained_as = "Individual";
-                     $point->points= $bonus_point;
-
-                     if ($cash_points_negotiation_started != null) {
-
-                         $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ $bonus_point;
-
-                     }else
-                     {
-                         $point->total_points_earn=  $bonus_point;
-
-                     }
-                     $point->save();
-
-
-                     $deal_milestone_breakdown= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',5)->first();
-
-                     if($deal_milestone_breakdown != null)
-                     {
-                        $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first();
-                        $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                        $point= new CashPoint();
-                        $point->user_id= $deal_milestone_breakdown->updated_by;
-                        $point->project_id= $find_project_id->id;
-                        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
-                        $point->gained_as = "Individual";
-                        $point->points= $bonus_point;
-
-                        if ($cash_points_milestone_breakdown != null) {
-
-                            $point->total_points_earn= $cash_points_milestone_breakdown->total_points_earn+ $bonus_point;
-
-                        }else
-                        {
-                            $point->total_points_earn=
                             $bonus_point;
 
-                        }
-                        $point->save();
+                    }
+                    $point->save();
 
 
-                     }
-                     $deal_id= Deal::where('id',$find_deal_id->id)->first();
-                     //dd($deal_id);
-                     $user_name= User::where('id',$deal_id->added_by)->first();
+                }
+                $deal_id= Deal::where('id',$find_deal_id->id)->first();
+                //dd($deal_id);
+                $user_name= User::where('id',$deal_id->added_by)->first();
 
-                     $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                     $point= new CashPoint();
-                     $point->user_id= $deal_id->added_by;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
-                     $point->gained_as = "Individual";
-                     $point->points= $bonus_point;
-
-                     if ($cash_points_close_deal != null) {
-
-                         $point->total_points_earn= $cash_points_close_deal->total_points_earn+ $bonus_point;
-
-                     }else
-                     {
-                         $point->total_points_earn=
-                         $bonus_point;
-
-                     }
-                     $point->save();
-                     $deal_id_contact= Deal::where('id',$find_deal_id->id)->first();
-                     $user_name= User::where('id',$deal_id_contact->added_by)->first();
-
-                     $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                     $point= new CashPoint();
-                     $point->user_id= $deal_id_contact->added_by;
-                     $point->project_id= $find_project_id->id;
-                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
-                     $point->gained_as = "Individual";
-                     $point->points= $bonus_point;
-
-                     if ($cash_points_contact != null) {
-
-                         $point->total_points_earn= $cash_points_contact->total_points_earn+ $bonus_point;
-
-                     }else
-                     {
-                         $point->total_points_earn=
-                         $bonus_point;
-
-                     }
-                     $point->save();
-
-
-
-
-
-
-
-
-                     }
-                     $currentMonth = Carbon::now()->month;
-                //     // / dd($currentMonth);
-                  $monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
-               
-              
-                     if ($monthly_deal > $kpi->after && $monthly_deal >= $monthly_deal+ $kpi->additional_sales_amount ) {
-
-                        $project_budget_additional= $kpi->additional_sales_amount;
-
-            if($find_deal_id->lead_id != null)
-            {
-                $lead = Lead::where('id',$find_deal_id->lead_id)->first();
-                $user_name= User::where('id',$lead->added_by)->first();
-                $cash_points= CashPoint::where('user_id',$lead->added_by)->orderBy('id','desc')->first();
+                $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                 $point= new CashPoint();
-                $point->user_id= $lead->added_by;
+                $point->user_id= $deal_id->added_by;
                 $point->project_id= $find_project_id->id;
-                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
                 $point->gained_as = "Individual";
-                $point->points= ($project_budget_additional*$kpi->the_bidder)/100;
+                $point->points= $bonus_point;
 
-                if ($cash_points != null) {
+                if ($cash_points_close_deal != null) {
 
-                    $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget_additional*$kpi->the_bidder)/100;
+                    $point->total_points_earn= $cash_points_close_deal->total_points_earn+ $bonus_point;
 
                 }else
                 {
-                    $point->total_points_earn=  ($project_budget_additional*$kpi->the_bidder)/100;
+                    $point->total_points_earn=
+                        $bonus_point;
 
                 }
                 $point->save();
-               // dd($point);
+                $deal_id_contact= Deal::where('id',$find_deal_id->id)->first();
+                $user_name= User::where('id',$deal_id_contact->added_by)->first();
+
+                $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                $point= new CashPoint();
+                $point->user_id= $deal_id_contact->added_by;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>(Higher Single Deal('.$kpi->bonus_point.' points))';
+                $point->gained_as = "Individual";
+                $point->points= $bonus_point;
+
+                if ($cash_points_contact != null) {
+
+                    $point->total_points_earn= $cash_points_contact->total_points_earn+ $bonus_point;
+
+                }else
+                {
+                    $point->total_points_earn=
+                        $bonus_point;
+
+                }
+                $point->save();
+
+
+
+
+
+
+
 
             }
-                    $deal_qualified= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',1)->first();
+            $currentMonth = Carbon::now()->month;
+            //     // / dd($currentMonth);
+            $monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
 
 
-                    $user_name= User::where('id',$deal_qualified->updated_by)->first();
-                    $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+            if ($monthly_deal > $kpi->after && $monthly_deal >= $monthly_deal+ $kpi->additional_sales_amount ) {
+
+                $project_budget_additional= $kpi->additional_sales_amount;
+
+                if($find_deal_id->lead_id != null)
+                {
+                    $lead = Lead::where('id',$find_deal_id->lead_id)->first();
+                    $user_name= User::where('id',$lead->added_by)->first();
+                    $cash_points= CashPoint::where('user_id',$lead->added_by)->orderBy('id','desc')->first();
                     $point= new CashPoint();
-                    $point->user_id= $deal_qualified->updated_by;
+                    $point->user_id= $lead->added_by;
                     $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
+                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
                     $point->gained_as = "Individual";
-                    $point->points= ($project_budget_additional*$kpi->qualify)/100;
+                    $point->points= ($project_budget_additional*$kpi->the_bidder)/100;
 
-                    if ($cash_points_qualified != null) {
+                    if ($cash_points != null) {
 
-                        $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($project_budget_additional*$kpi->qualify)/100;
+                        $point->total_points_earn= $cash_points->total_points_earn+ ($project_budget_additional*$kpi->the_bidder)/100;
 
                     }else
                     {
-                        $point->total_points_earn=  ($project_budget_additional*$kpi->qualify)/100;
+                        $point->total_points_earn=  ($project_budget_additional*$kpi->the_bidder)/100;
 
                     }
                     $point->save();
+                    // dd($point);
+
+                }
+                $deal_qualified= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',1)->first();
+
+
+                $user_name= User::where('id',$deal_qualified->updated_by)->first();
+                $cash_points_qualified= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                $point= new CashPoint();
+                $point->user_id= $deal_qualified->updated_by;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
+                $point->gained_as = "Individual";
+                $point->points= ($project_budget_additional*$kpi->qualify)/100;
+
+                if ($cash_points_qualified != null) {
+
+                    $point->total_points_earn= $cash_points_qualified->total_points_earn+ ($project_budget_additional*$kpi->qualify)/100;
+
+                }else
+                {
+                    $point->total_points_earn=  ($project_budget_additional*$kpi->qualify)/100;
+
+                }
+                $point->save();
 
 
 
-                    $deal_short_code= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',2)->first();
+                $deal_short_code= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',2)->first();
 
-                    $user_name= User::where('id',$deal_short_code->updated_by)->first();
-                    $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                    $point= new CashPoint();
-                    $point->user_id= $deal_short_code->updated_by;
-                    $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
-                    $point->gained_as = "Individual";
-                    $point->points= ($project_budget_additional*$kpi->requirements_defined)/100;
+                $user_name= User::where('id',$deal_short_code->updated_by)->first();
+                $cash_points_requirements_defined= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                $point= new CashPoint();
+                $point->user_id= $deal_short_code->updated_by;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
+                $point->gained_as = "Individual";
+                $point->points= ($project_budget_additional*$kpi->requirements_defined)/100;
 
-                    if ($cash_points_requirements_defined != null) {
+                if ($cash_points_requirements_defined != null) {
 
-                        $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($project_budget_additional*$kpi->requirements_defined)/100;
+                    $point->total_points_earn= $cash_points_requirements_defined->total_points_earn+ ($project_budget_additional*$kpi->requirements_defined)/100;
 
-                    }else
-                    {
-                        $point->total_points_earn=  ($project_budget_additional*$kpi->requirements_defined)/100;
+                }else
+                {
+                    $point->total_points_earn=  ($project_budget_additional*$kpi->requirements_defined)/100;
 
-                    }
-                    $point->save();
-
-
-
-
-                    $deal_proposal= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',3)->first();
-                    $user_name= User::where('id',$deal_proposal->updated_by)->first();
-                    $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                    $point= new CashPoint();
-                    $point->user_id= $deal_proposal->updated_by;
-                    $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
-                    $point->gained_as = "Individual";
-                    $point->points= ($project_budget_additional*$kpi->proposal_made)/100;
-
-                    if ($cash_points_proposal_made != null) {
-
-                        $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($project_budget_additional*$kpi->proposal_made)/100;
-
-                    }else
-                    {
-                        $point->total_points_earn=  ($project_budget_additional*$kpi->proposal_made)/100;
-
-                    }
-                    $point->save();
-
-
-
-                    $deal_negotiation_started= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',4)->first();
-                    $user_name= User::where('id',$deal_negotiation_started->updated_by)->first();
-                    $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                    $point= new CashPoint();
-                    $point->user_id= $deal_negotiation_started->updated_by;
-                    $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
-                    $point->gained_as = "Individual";
-                    $point->points= ($project_budget_additional*$kpi->negotiation_started)/100;
-
-                    if ($cash_points_negotiation_started != null) {
-
-                        $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($project_budget_additional*$kpi->negotiation_started)/100;
-
-                    }else
-                    {
-                        $point->total_points_earn=  ($project_budget_additional*$kpi->negotiation_started)/100;
-
-                    }
-                    $point->save();
+                }
+                $point->save();
 
 
 
 
-                    $deal_milestone_breakdown= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',5)->first();
-                    if($deal_milestone_breakdown != null)
-                    {
-                        $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first();
+                $deal_proposal= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',3)->first();
+                $user_name= User::where('id',$deal_proposal->updated_by)->first();
+                $cash_points_proposal_made= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                $point= new CashPoint();
+                $point->user_id= $deal_proposal->updated_by;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the proposal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
+                $point->gained_as = "Individual";
+                $point->points= ($project_budget_additional*$kpi->proposal_made)/100;
+
+                if ($cash_points_proposal_made != null) {
+
+                    $point->total_points_earn= $cash_points_proposal_made->total_points_earn+ ($project_budget_additional*$kpi->proposal_made)/100;
+
+                }else
+                {
+                    $point->total_points_earn=  ($project_budget_additional*$kpi->proposal_made)/100;
+
+                }
+                $point->save();
+
+
+
+                $deal_negotiation_started= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',4)->first();
+                $user_name= User::where('id',$deal_negotiation_started->updated_by)->first();
+                $cash_points_negotiation_started= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                $point= new CashPoint();
+                $point->user_id= $deal_negotiation_started->updated_by;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
+                $point->gained_as = "Individual";
+                $point->points= ($project_budget_additional*$kpi->negotiation_started)/100;
+
+                if ($cash_points_negotiation_started != null) {
+
+                    $point->total_points_earn= $cash_points_negotiation_started->total_points_earn+ ($project_budget_additional*$kpi->negotiation_started)/100;
+
+                }else
+                {
+                    $point->total_points_earn=  ($project_budget_additional*$kpi->negotiation_started)/100;
+
+                }
+                $point->save();
+
+
+
+
+                $deal_milestone_breakdown= DealStageChange::where('deal_id',$find_deal_id->deal_id)->where('deal_stage_id',5)->first();
+                if($deal_milestone_breakdown != null)
+                {
+                    $user_name= User::where('id',$deal_milestone_breakdown->updated_by)->first();
 
                     $cash_points_milestone_breakdown= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
                     $point= new CashPoint();
@@ -1394,63 +1394,63 @@ class ProjectController extends AccountBaseController
                     }else
                     {
                         $point->total_points_earn=
-                        ($project_budget_additional*$kpi->milestone_breakdown)/100;
+                            ($project_budget_additional*$kpi->milestone_breakdown)/100;
 
                     }
                     $point->save();
 
 
-                    }
+                }
 
-                    $deal_id= Deal::where('id',$find_deal_id->id)->first();
-                    //dd($deal_id);
-                    $user_name= User::where('id',$deal_id->added_by)->first();
+                $deal_id= Deal::where('id',$find_deal_id->id)->first();
+                //dd($deal_id);
+                $user_name= User::where('id',$deal_id->added_by)->first();
 
-                    $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                    $point= new CashPoint();
-                    $point->user_id= $deal_id->added_by;
-                    $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
-                    $point->gained_as = "Individual";
-                    $point->points= ($project_budget_additional*$kpi->closed_deal)/100;
+                $cash_points_close_deal= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                $point= new CashPoint();
+                $point->user_id= $deal_id->added_by;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> closed the deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
+                $point->gained_as = "Individual";
+                $point->points= ($project_budget_additional*$kpi->closed_deal)/100;
 
-                    if ($cash_points_close_deal != null) {
+                if ($cash_points_close_deal != null) {
 
-                        $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget_additional*$kpi->closed_deal)/100;
+                    $point->total_points_earn= $cash_points_close_deal->total_points_earn+ ($project_budget_additional*$kpi->closed_deal)/100;
 
-                    }else
-                    {
-                        $point->total_points_earn=
+                }else
+                {
+                    $point->total_points_earn=
                         ($project_budget_additional*$kpi->closed_deal)/100;
 
-                    }
-                    $point->save();
-                    $deal_id_contact= Deal::where('id',$find_deal_id->id)->first();
-                    $user_name= User::where('id',$deal_id_contact->added_by)->first();
+                }
+                $point->save();
+                $deal_id_contact= Deal::where('id',$find_deal_id->id)->first();
+                $user_name= User::where('id',$deal_id_contact->added_by)->first();
 
-                    $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
-                    $point= new CashPoint();
-                    $point->user_id= $deal_id_contact->added_by;
-                    $point->project_id= $find_project_id->id;
-                    $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
-                    $point->gained_as = "Individual";
-                    $point->points= ($project_budget_additional*$kpi->contact_form)/100;
+                $cash_points_contact= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                $point= new CashPoint();
+                $point->user_id= $deal_id_contact->added_by;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a>Additional milestone reach '.$kpi->after_reach_amount. '%';
+                $point->gained_as = "Individual";
+                $point->points= ($project_budget_additional*$kpi->contact_form)/100;
 
-                    if ($cash_points_contact != null) {
+                if ($cash_points_contact != null) {
 
-                        $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget_additional*$kpi->contact_form)/100;
+                    $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget_additional*$kpi->contact_form)/100;
 
-                    }else
-                    {
-                        $point->total_points_earn=
+                }else
+                {
+                    $point->total_points_earn=
                         ($project_budget_additional*$kpi->contact_form)/100;
 
-                    }
-                    $point->save();
+                }
+                $point->save();
 
 
 
-                     }
+            }
 
             //5% kpi setting start
 
@@ -1480,17 +1480,17 @@ class ProjectController extends AccountBaseController
 
                                 DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                             ])
-                            ->leftJoin('leads', 'leads.id', 'deals.lead_id')
-                            ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
-                            ->whereDate('deals.created_at', '>=', $goal->startDate);
+                                ->leftJoin('leads', 'leads.id', 'deals.lead_id')
+                                ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
+                                ->whereDate('deals.created_at', '>=', $goal->startDate);
 
                             if (!is_null($goal->endDate)) {
                                 $deals_data = $deals_data->whereDate('deals.created_at', '<=', $goal->endDate);
                             }
                             $deals_data = $deals_data->where('deals.status', '!=','Denied')
-                           // ->whereIn('deals.added_by', $user_id)
-                            ->orderBy('deals.id', 'desc')
-                            ->get();
+                                // ->whereIn('deals.added_by', $user_id)
+                                ->orderBy('deals.id', 'desc')
+                                ->get();
                             $team_total_amount = 0;
 
                             foreach ($deals_data as $key => $value) {
@@ -1561,12 +1561,12 @@ class ProjectController extends AccountBaseController
                                 $team_summation = DealStageChange::where('deal_id', $value->deal_id)->whereIn('updated_by', $user_id)->get();
 
                                 if (in_array($value->added_by, $user_id)) {
-                                //$team_total_amount = $team_total_amount + $amount;
+                                    //$team_total_amount = $team_total_amount + $amount;
                                     $value->team_total_amount = round($value->team_total_amount + $value->won_deal_amount, 2);
                                 }
 
                                 if (in_array($value->bidder, $user_id)) {
-                                //$team_total_amount = $team_total_amount + $amount;
+                                    //$team_total_amount = $team_total_amount + $amount;
                                     $value->team_total_amount = round($value->team_total_amount + $value->bidder_amount, 2);
                                 }
 
@@ -1590,14 +1590,14 @@ class ProjectController extends AccountBaseController
 
                                 if($goal->trackingType == 'value') {
                                     $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
-                                    ->whereDate('start_date', '>=', $goal->startDate)
-                                    ->whereDate('start_date', '<=', $end_date)
-                                    ->sum('amount');
+                                        ->whereDate('start_date', '>=', $goal->startDate)
+                                        ->whereDate('start_date', '<=', $end_date)
+                                        ->sum('amount');
                                 } else {
                                     $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
-                                    ->whereDate('start_date', '>=', $goal->startDate)
-                                    ->whereDate('start_date', '<=', $end_date)
-                                    ->count();
+                                        ->whereDate('start_date', '>=', $goal->startDate)
+                                        ->whereDate('start_date', '<=', $end_date)
+                                        ->count();
                                 }
                             }
                             if ($team_total_amount >= (int) $goal->trackingValue) {
@@ -1639,20 +1639,20 @@ class ProjectController extends AccountBaseController
 
                                 DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                             ])
-                            ->leftjoin('leads', 'leads.id', 'deals.lead_id')
-                            ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
-                            ->whereDate('deals.created_at', '>=', $goal->startDate)
-                            ->where('deals.client_badge','=','new client');
+                                ->leftjoin('leads', 'leads.id', 'deals.lead_id')
+                                ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
+                                ->whereDate('deals.created_at', '>=', $goal->startDate)
+                                ->where('deals.client_badge','=','new client');
                             ;
 
                             if (!is_null($goal->endDate)) {
                                 $deals_data = $deals_data->whereDate('deals.created_at', '<=', $goal->endDate);
                             }
                             $deals_data = $deals_data->where('deals.status', '!=','Denied')
-                           // ->whereIn('deals.added_by', $user_id)
+                                // ->whereIn('deals.added_by', $user_id)
 
-                            ->orderBy('deals.id', 'desc')
-                            ->get();
+                                ->orderBy('deals.id', 'desc')
+                                ->get();
                             $team_total_amount = 0;
 
                             foreach ($deals_data as $key => $value) {
@@ -1747,14 +1747,14 @@ class ProjectController extends AccountBaseController
 
                                 if($goal->trackingType == 'value') {
                                     $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
-                                    ->whereDate('start_date', '>=', $goal->startDate)
-                                    ->whereDate('start_date', '<=', $end_date)
-                                    ->sum('amount');
+                                        ->whereDate('start_date', '>=', $goal->startDate)
+                                        ->whereDate('start_date', '<=', $end_date)
+                                        ->sum('amount');
                                 } else {
                                     $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
-                                    ->whereDate('start_date', '>=', $goal->startDate)
-                                    ->whereDate('start_date', '<=', $end_date)
-                                    ->count();
+                                        ->whereDate('start_date', '>=', $goal->startDate)
+                                        ->whereDate('start_date', '<=', $end_date)
+                                        ->count();
                                 }
                             }
                             if ($team_total_amount >= (int) $goal->trackingValue) {
@@ -1810,42 +1810,42 @@ class ProjectController extends AccountBaseController
             $qualified_sale_id= QualifiedSale::where('project_id',$project->id)->first();
             if($qualified_sale_id != null)
             {
-            $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
-            $qualified_sale->accepted_by_project_manager = 1;
-            $qualified_sale->project_manager_needs_define= $request->requirement_defined;
-            $qualified_sale->project_manager_deadline_comment= $request->deadline_meet;
-            $total_points= CashPoint::where('project_id',$project->id)->sum('points');
-            $qualified_sale->total_points= $total_points;
-            $qualified_sale->save();
+                $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+                $qualified_sale->accepted_by_project_manager = 1;
+                $qualified_sale->project_manager_needs_define= $request->requirement_defined;
+                $qualified_sale->project_manager_deadline_comment= $request->deadline_meet;
+                $total_points= CashPoint::where('project_id',$project->id)->sum('points');
+                $qualified_sale->total_points= $total_points;
+                $qualified_sale->save();
             }
             $project->project_challenge = ($request->project_challenge !== '<p><br></p>') ? $request->project_challenge : null;
             if ($request->project_challenge != 'No Challenge') {
-               
+
                 $project->status= 'under review';
                 $admin= User::where('role_id',1)->get();
                 foreach ($admin  as $user) {
                     Notification::send($user, new ProjectReviewNotification($project));
                 }
             }
-            
+
 
 
         }
 
 
         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
-      
+
 
         $project->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
         if($project->deal->project_type != 'hourly')
         {
-        if (!$request->has('without_deadline')) {
-            $project->deadline = Carbon::createFromFormat($this->global->date_format, $request->deadline)->format('Y-m-d');
+            if (!$request->has('without_deadline')) {
+                $project->deadline = Carbon::createFromFormat($this->global->date_format, $request->deadline)->format('Y-m-d');
+            }
+            else {
+                $project->deadline = null;
+            }
         }
-        else {
-            $project->deadline = null;
-        }
-    }
 
         if ($request->notes != '') {
             $project->notes = str_replace('<p><br></p>', '', trim($request->notes));
@@ -1930,7 +1930,7 @@ class ProjectController extends AccountBaseController
         // $this->logProjectActivity($project->id, 'Project accepted by ');
         $users= User::where('role_id',1)->get();
 
-      
+
         if ($project->project_status != 'Accepted') {
             foreach ($users as $user) {
                 $this->triggerPusher('notification-channel', 'notification', [
@@ -1975,12 +1975,12 @@ class ProjectController extends AccountBaseController
         $lead_developer_id= RoleUser::where('role_id',6)->get();
         //dd($lead_developer_id);
         foreach ($lead_developer_id as $lead) {
-          $lead_developer= new ProjectMember();
-          $lead_developer->user_id= $lead->user_id;
-          $lead_developer->project_id= $project->id;
-          $lead_developer->lead_developer_id= $lead->user_id;
-          $lead_developer->hourly_rate= 0;
-          $lead_developer->save();
+            $lead_developer= new ProjectMember();
+            $lead_developer->user_id= $lead->user_id;
+            $lead_developer->project_id= $project->id;
+            $lead_developer->lead_developer_id= $lead->user_id;
+            $lead_developer->hourly_rate= 0;
+            $lead_developer->save();
         }
 
         //$deal_id = PMProject::where('project_id',$project->deal_id)->first();
@@ -1994,119 +1994,119 @@ class ProjectController extends AccountBaseController
         $pmproject->save();
 
         if ($request->graphics_design != null) {
-          $deliverable= new ProjectDeliverable();
-          $deliverable->project_id= $project->id;
-          $deliverable->deliverable_type= $request->graphics_design;
-          $deliverable->title= $request->graphics_title;
-          $deliverable->quantity= $request->graphics_quantity;
-          $deliverable->from= $request->graphics_from;
-          $deliverable->to= $request->graphics_to;
-          $deliverable->description = $request->graphics_deliverable_description;
-          $deliverable->save();
+            $deliverable= new ProjectDeliverable();
+            $deliverable->project_id= $project->id;
+            $deliverable->deliverable_type= $request->graphics_design;
+            $deliverable->title= $request->graphics_title;
+            $deliverable->quantity= $request->graphics_quantity;
+            $deliverable->from= $request->graphics_from;
+            $deliverable->to= $request->graphics_to;
+            $deliverable->description = $request->graphics_deliverable_description;
+            $deliverable->save();
 
         }
         if ($request->ux_design != null) {
-          $deliverable = new ProjectDeliverable();
-          $deliverable->project_id= $project->id;
-          $deliverable->deliverable_type= $request->ux_design;
-          $deliverable->title= $request->ux_title;
-          $deliverable->quantity= $request->ux_quantity;
-          $deliverable->from= $request->ux_from;
-          $deliverable->to= $request->ux_to;
-          $deliverable->description= $request->ux_deliverable_description;
-          $deliverable->save();
+            $deliverable = new ProjectDeliverable();
+            $deliverable->project_id= $project->id;
+            $deliverable->deliverable_type= $request->ux_design;
+            $deliverable->title= $request->ux_title;
+            $deliverable->quantity= $request->ux_quantity;
+            $deliverable->from= $request->ux_from;
+            $deliverable->to= $request->ux_to;
+            $deliverable->description= $request->ux_deliverable_description;
+            $deliverable->save();
         }
         if ($request->main_page_development != null) {
-          $deliverable= new ProjectDeliverable();
-          $deliverable->project_id= $project->id;
-          $deliverable->title= $request->main_title;
-          $deliverable->deliverable_type= $request->main_page_development;
-          $deliverable->quantity= $request->main_quantity;
-          $deliverable->from= $request->main_from;
-          $deliverable->to= $request->main_to;
-          $deliverable->description= $request->main_deliverable_description;
-          $deliverable->save();
+            $deliverable= new ProjectDeliverable();
+            $deliverable->project_id= $project->id;
+            $deliverable->title= $request->main_title;
+            $deliverable->deliverable_type= $request->main_page_development;
+            $deliverable->quantity= $request->main_quantity;
+            $deliverable->from= $request->main_from;
+            $deliverable->to= $request->main_to;
+            $deliverable->description= $request->main_deliverable_description;
+            $deliverable->save();
         }
         if ($request->secondary_page_development != null) {
-          $deliverable= new ProjectDeliverable();
-          $deliverable->project_id= $project->id;
-          $deliverable->deliverable_type= $request->secondary_page_development;
-          $deliverable->title= $request->secondary_title;
-          $deliverable->quantity= $request->secondary_quantity;
-          $deliverable->from= $request->secondary_from;
-          $deliverable->to= $request->secondary_to;
-          $deliverable->description= $request->secondary_deliverable_description;
-          $deliverable->save();
+            $deliverable= new ProjectDeliverable();
+            $deliverable->project_id= $project->id;
+            $deliverable->deliverable_type= $request->secondary_page_development;
+            $deliverable->title= $request->secondary_title;
+            $deliverable->quantity= $request->secondary_quantity;
+            $deliverable->from= $request->secondary_from;
+            $deliverable->to= $request->secondary_to;
+            $deliverable->description= $request->secondary_deliverable_description;
+            $deliverable->save();
         }
         if ($request->content_creation != null) {
-          $deliverable= new ProjectDeliverable();
-          $deliverable->project_id= $project->id;
-          $deliverable->deliverable_type= $request->content_creation;
-          $deliverable->title= $request->content_title;
-          $deliverable->quantity= $request->content_quantity;
-          $deliverable->from= $request->content_from;
-          $deliverable->to= $request->content_to;
-          $deliverable->description= $request->content_deliverable_description;
-          $deliverable->save();
+            $deliverable= new ProjectDeliverable();
+            $deliverable->project_id= $project->id;
+            $deliverable->deliverable_type= $request->content_creation;
+            $deliverable->title= $request->content_title;
+            $deliverable->quantity= $request->content_quantity;
+            $deliverable->from= $request->content_from;
+            $deliverable->to= $request->content_to;
+            $deliverable->description= $request->content_deliverable_description;
+            $deliverable->save();
 
         }
         if ($request->marketing != null) {
-          $deliverable = new ProjectDeliverable();
-          $deliverable->project_id= $project->id;
-          $deliverable->deliverable_type= $request->marketing;
-          $deliverable->title= $request->marketing_title;
-          $deliverable->quantity= $request->marketing_quantity;
-          $deliverable->from= $request->marketing_from;
-          $deliverable->to= $request->marketing_to;
-          $deliverable->description= $request->marketing_deliverable_description;
-          $deliverable->save();
+            $deliverable = new ProjectDeliverable();
+            $deliverable->project_id= $project->id;
+            $deliverable->deliverable_type= $request->marketing;
+            $deliverable->title= $request->marketing_title;
+            $deliverable->quantity= $request->marketing_quantity;
+            $deliverable->from= $request->marketing_from;
+            $deliverable->to= $request->marketing_to;
+            $deliverable->description= $request->marketing_deliverable_description;
+            $deliverable->save();
 
         }
         if ($request->domain_hosting != null)
         {
-          $deliverable= new ProjectDeliverable();
-          $deliverable->project_id= $project->id;
-          $deliverable->deliverable_type= $request->domain_hosting;
-          $deliverable->title= $request->domain_title;
-          $deliverable->quantity= $request->domain_quantity;
-          $deliverable->from= $request->domain_from;
-          $deliverable->to= $request->domain_to;
-          $deliverable->description= $request->domain_deliverable_description;
-          $deliverable->save();
+            $deliverable= new ProjectDeliverable();
+            $deliverable->project_id= $project->id;
+            $deliverable->deliverable_type= $request->domain_hosting;
+            $deliverable->title= $request->domain_title;
+            $deliverable->quantity= $request->domain_quantity;
+            $deliverable->from= $request->domain_from;
+            $deliverable->to= $request->domain_to;
+            $deliverable->description= $request->domain_deliverable_description;
+            $deliverable->save();
         }
         if ($request->products != null) {
-          $deliverable= new ProjectDeliverable();
-          $deliverable->project_id= $project->id;
-          $deliverable->deliverable_type= $request->products;
-          $deliverable->title= $request->products_title;
-          $deliverable->from= $request->products_from;
-          $deliverable->to= $request->products_to;
-          $deliverable->quantity= $request->products_quantity;
-          $deliverable->description = $request->products_deliverable_description;
-          $deliverable->save();
+            $deliverable= new ProjectDeliverable();
+            $deliverable->project_id= $project->id;
+            $deliverable->deliverable_type= $request->products;
+            $deliverable->title= $request->products_title;
+            $deliverable->from= $request->products_from;
+            $deliverable->to= $request->products_to;
+            $deliverable->quantity= $request->products_quantity;
+            $deliverable->description = $request->products_deliverable_description;
+            $deliverable->save();
         }
         if ($request->collection != null) {
-          $deliverable= new ProjectDeliverable();
-          $deliverable->project_id= $project->id;
-          $deliverable->deliverable_type= $request->collection;
-          $deliverable->title= $request->collection_title;
-          $deliverable->quantity= $request->collection_quantity;
-          $deliverable->from= $request->collection_from;
-          $deliverable->to= $request->collection_to;
-          $deliverable->description= $request->collection_deliverable_description;
-          $deliverable->save();
+            $deliverable= new ProjectDeliverable();
+            $deliverable->project_id= $project->id;
+            $deliverable->deliverable_type= $request->collection;
+            $deliverable->title= $request->collection_title;
+            $deliverable->quantity= $request->collection_quantity;
+            $deliverable->from= $request->collection_from;
+            $deliverable->to= $request->collection_to;
+            $deliverable->description= $request->collection_deliverable_description;
+            $deliverable->save();
         }
         if ($request->others != null)
         {
-          $deliverable= new ProjectDeliverable();
-          $deliverable->project_id= $project->id;
-          $deliverable->deliverable_type= $request->others;
-          $deliverable->title= $request->others_title;
-          $deliverable->quantity= $request->others_quantity;
-          $deliverable->from= $request->others_from;
-          $deliverable->to= $request->others_to;
-          $deliverable->description= $request->others_deliverable_description;
-          $deliverable->save();
+            $deliverable= new ProjectDeliverable();
+            $deliverable->project_id= $project->id;
+            $deliverable->deliverable_type= $request->others;
+            $deliverable->title= $request->others_title;
+            $deliverable->quantity= $request->others_quantity;
+            $deliverable->from= $request->others_from;
+            $deliverable->to= $request->others_to;
+            $deliverable->description= $request->others_deliverable_description;
+            $deliverable->save();
         }
 
 
@@ -2225,72 +2225,72 @@ class ProjectController extends AccountBaseController
         $tab = request('tab');
 
         switch ($tab) {
-        case 'members':
-            abort_403(!(
-                $this->viewProjectMemberPermission == 'all'
-            ));
-            $this->view = 'projects.ajax.members';
+            case 'members':
+                abort_403(!(
+                    $this->viewProjectMemberPermission == 'all'
+                ));
+                $this->view = 'projects.ajax.members';
                 break;
-        case 'milestones':
-            $this->view = 'projects.ajax.milestones';
+            case 'milestones':
+                $this->view = 'projects.ajax.milestones';
                 break;
-        case 'deliverables':
-                    $this->view = 'projects.ajax.deliverables';
-                        break;
-        case 'taskboard':
-            session()->forget('pusher_settings');
-            $this->view = 'projects.ajax.taskboard';
+            case 'deliverables':
+                $this->view = 'projects.ajax.deliverables';
                 break;
-        case 'tasks':
-            $this->taskBoardStatus = TaskboardColumn::all();
+            case 'taskboard':
+                session()->forget('pusher_settings');
+                $this->view = 'projects.ajax.taskboard';
+                break;
+            case 'tasks':
+                $this->taskBoardStatus = TaskboardColumn::all();
                 return (!$this->project->trashed()) ? $this->tasks($this->project->project_admin == user()->id) : $this->archivedTasks($this->project->project_admin == user()->id);
-        case 'gantt':
-            $this->taskBoardStatus = TaskboardColumn::all();
-            $this->view = 'projects.ajax.gantt';
+            case 'gantt':
+                $this->taskBoardStatus = TaskboardColumn::all();
+                $this->view = 'projects.ajax.gantt';
                 break;
-        case 'invoices':
+            case 'invoices':
                 return $this->invoices();
-        case 'files':
-            $this->view = 'projects.ajax.files';
+            case 'files':
+                $this->view = 'projects.ajax.files';
                 break;
-        case 'timelogs':
+            case 'timelogs':
                 return $this->timelogs($this->project->project_admin == user()->id);
-        case 'activity_log':
-            $this->activityLog = ProjectActivity::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
-            $this->lead_deal_activity_log = LeadsDealsActivityLog::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
-            $this->view = 'projects.ajax.activity_log';
-            break;
-        case 'expenses':
+            case 'activity_log':
+                $this->activityLog = ProjectActivity::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
+                $this->lead_deal_activity_log = LeadsDealsActivityLog::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
+                $this->view = 'projects.ajax.activity_log';
+                break;
+            case 'expenses':
                 return $this->expenses();
-        case 'payments':
+            case 'payments':
                 return $this->payments();
-        case 'discussion':
-            $this->discussionCategories = DiscussionCategory::orderBy('order', 'asc')->get();
+            case 'discussion':
+                $this->discussionCategories = DiscussionCategory::orderBy('order', 'asc')->get();
                 return $this->discussions($this->project->project_admin == user()->id);
-        case 'notes':
+            case 'notes':
                 return $this->notes($this->project->project_admin == user()->id);
-        case 'rating':
+            case 'rating':
                 return $this->rating($this->project->project_admin == user()->id);
-        case 'burndown-chart':
-            $this->fromDate = now($this->global->timezone)->startOfMonth();
-            $this->toDate = now($this->global->timezone);
+            case 'burndown-chart':
+                $this->fromDate = now($this->global->timezone)->startOfMonth();
+                $this->toDate = now($this->global->timezone);
                 return $this->burndownChart($this->project);
-        default:
-            $this->activities = ProjectActivity::getProjectActivities($id, 10);
-            $this->taskChart = $this->taskChartData($id);
-            $this->hoursBudgetChart = $this->hoursBudgetChartData($this->project);
-            $this->amountBudgetChart = $this->amountBudgetChartData($this->project);
-            $this->taskBoardStatus = TaskboardColumn::all();
-            $this->earnings = Payment::where('status', 'complete')
-                ->where('project_id', $id)
-                ->sum('amount');
-            $hoursLogged = $this->project->times()->sum('total_minutes');
+            default:
+                $this->activities = ProjectActivity::getProjectActivities($id, 10);
+                $this->taskChart = $this->taskChartData($id);
+                $this->hoursBudgetChart = $this->hoursBudgetChartData($this->project);
+                $this->amountBudgetChart = $this->amountBudgetChartData($this->project);
+                $this->taskBoardStatus = TaskboardColumn::all();
+                $this->earnings = Payment::where('status', 'complete')
+                    ->where('project_id', $id)
+                    ->sum('amount');
+                $hoursLogged = $this->project->times()->sum('total_minutes');
 
-            $breakMinutes = ProjectTimeLogBreak::projectBreakMinutes($id);
+                $breakMinutes = ProjectTimeLogBreak::projectBreakMinutes($id);
 
-            $this->hoursLogged = intdiv($hoursLogged - $breakMinutes, 60);
-            $this->expenses = Expense::where(['project_id' => $id, 'status' => 'approved'])->sum('price');
-            $this->view = 'projects.ajax.overview';
+                $this->hoursLogged = intdiv($hoursLogged - $breakMinutes, 60);
+                $this->expenses = Expense::where(['project_id' => $id, 'status' => 'approved'])->sum('price');
+                $this->view = 'projects.ajax.overview';
                 break;
         }
 
@@ -2922,12 +2922,12 @@ class ProjectController extends AccountBaseController
     }
     public function deliverables($id)
     {
-      //dd($id);
+        //dd($id);
     }
     public function download($id)
     {
         $this->project = Project::findOrFail($id);
-      //  $viewPermission = user()->permission('view_project');
+        //  $viewPermission = user()->permission('view_project');
         $this->project = Project::with('client', 'client.clientDetails', 'files')->findOrFail($id);
 
         // abort_403(
@@ -3243,13 +3243,13 @@ class ProjectController extends AccountBaseController
 
 
 
-      $deliverable = ProjectDeliverable::findOrFail($id)->delete();
-      $log_user = Auth::user();
+        $deliverable = ProjectDeliverable::findOrFail($id)->delete();
+        $log_user = Auth::user();
 
         $text = Auth::user()->name.' deleted project deliverable : '.$deliverable_id->title;
         $link = '<a style="color:blue" href="'.route('projects.show', $project->id).'?tab=deliverable">'.$text.'</a>';
         $this->logProjectActivity($project->id, $link);
-      return response()->json(['status'=>400]);
+        return response()->json(['status'=>400]);
     }
     public function approveDeliverable($id)
     {
@@ -3276,12 +3276,12 @@ class ProjectController extends AccountBaseController
     public function InComplete(Request $request)
     {
 //        dd($request->all());
-      $project= Project::find($request->id);
-      $project->dispute_status = 1;
-      $project->save();
-      return response()->json([
-          'status'=>400,
-      ]);
+        $project= Project::find($request->id);
+        $project->dispute_status = 1;
+        $project->save();
+        return response()->json([
+            'status'=>400,
+        ]);
     }
     public function qc($id,$milestone_id)
     {
@@ -3382,7 +3382,7 @@ class ProjectController extends AccountBaseController
 
     }
     public function ProjectCompletionSubmit(Request $request)
-     {
+    {
 //      dd($request);
         $validated = $request->validate([
             'qc_protocol' => 'required',
@@ -3443,70 +3443,70 @@ class ProjectController extends AccountBaseController
             'website_plugin_box_information.required' => 'This field is required. Please select Yes or No!!',
         ]);
 //      dd($request);
-      $milestone= new ProjectSubmission();
-      $milestone->qc_protocol= $request->qc_protocol;
-      $milestone->milestone_id= $request->milestone_id;
+        $milestone= new ProjectSubmission();
+        $milestone->qc_protocol= $request->qc_protocol;
+        $milestone->milestone_id= $request->milestone_id;
 
-      $project= ProjectMilestone::where('id',$request->milestone_id)->first();
-      $milestone->project_id= $project->project_id;
+        $project= ProjectMilestone::where('id',$request->milestone_id)->first();
+        $milestone->project_id= $project->project_id;
 
-      $milestone->login_yes = $request->login_yes;
-      $milestone->login_information = $request->login_information;
-      $milestone->login_url= $request->login_url;
-      $milestone->login= $request->login;
-      $milestone->password= $request->password;
-      $milestone->screenshot= $request->screenshot;
-      $milestone->drive_yes = $request->drive_yes;
-      $milestone->drive_information = $request->drive_information;
-      $milestone->google_link= $request->google_link;
-      $milestone->rating= $request->rating;
-      $milestone->comments= $request->comments;
-      $milestone->comments3= $request->comments3;
-      $milestone->comments2= $request->comments2;
-      $milestone->requirements= $request->requirements;
-      $milestone->price= $request->price;
-      $milestone->niche= $request->niche;
-      $milestone->dummy_yes = $request->dummy_yes;
-      $milestone->dummy_information = $request->dummy_information;
-      $milestone->dummy_link= $request->dummy_link;
-      $milestone->notify= $request-> notify;
-      $milestone->actual_yes = $request->actual_yes;
-      $milestone->actual_information = $request->actual_information;
-      $milestone->actual_link= $request->actual_link;
-      $milestone->status = 'pending';
+        $milestone->login_yes = $request->login_yes;
+        $milestone->login_information = $request->login_information;
+        $milestone->login_url= $request->login_url;
+        $milestone->login= $request->login;
+        $milestone->password= $request->password;
+        $milestone->screenshot= $request->screenshot;
+        $milestone->drive_yes = $request->drive_yes;
+        $milestone->drive_information = $request->drive_information;
+        $milestone->google_link= $request->google_link;
+        $milestone->rating= $request->rating;
+        $milestone->comments= $request->comments;
+        $milestone->comments3= $request->comments3;
+        $milestone->comments2= $request->comments2;
+        $milestone->requirements= $request->requirements;
+        $milestone->price= $request->price;
+        $milestone->niche= $request->niche;
+        $milestone->dummy_yes = $request->dummy_yes;
+        $milestone->dummy_information = $request->dummy_information;
+        $milestone->dummy_link= $request->dummy_link;
+        $milestone->notify= $request-> notify;
+        $milestone->actual_yes = $request->actual_yes;
+        $milestone->actual_information = $request->actual_information;
+        $milestone->actual_link= $request->actual_link;
+        $milestone->status = 'pending';
 
-      $milestone->save();
-      $data = $request->all();
+        $milestone->save();
+        $data = $request->all();
 
         $plugin_names = json_encode($data['plugin_name']);
         $plugin_urls = json_encode($data['plugin_url']);
 
-      $project_portfolio = new ProjectPortfolio();
-      $project_portfolio->project_id = $project->project_id;
-      $project_portfolio->cms_category = $data['cms_category'];
-      $project_portfolio->website_type = $data['website_type'];
-      $project_portfolio->niche = $data['niche'];
-      $project_portfolio->sub_niche = $data['sub_niche'];
-      $project_portfolio->theme_name = $data['theme_name'];
-      $project_portfolio->theme_url = $data['theme_url'];
-      $project_portfolio->plugin_information = $data['website_plugin_box_information'];
-      $project_portfolio->main_page_number = $data['main_page_number'];
-      $project_portfolio->secondary_page_number = $data['secondary_page_number'];
-      $project_portfolio->backup_email_address = $data['backup_email_address'];
-      $project_portfolio->day_interval = $data['day_interval'];
-      $project_portfolio->description = $data['description'];
-      $project_portfolio->portfolio_link = $data['actual_link'];
-      $project_portfolio->added_by = $data['added_by'];
-      $project_portfolio->plugin_name = $plugin_names;
-      $project_portfolio->plugin_url = $plugin_urls;
-      $project_portfolio->save();
-      $milestone_update= ProjectMilestone::where('id',$milestone->milestone_id)->first();
-      $milestone_update->project_completion_status= 2;
-      $milestone_update->save();
-      //$user= User::where('id',$project->pm_id)->first();
+        $project_portfolio = new ProjectPortfolio();
+        $project_portfolio->project_id = $project->project_id;
+        $project_portfolio->cms_category = $data['cms_category'];
+        $project_portfolio->website_type = $data['website_type'];
+        $project_portfolio->niche = $data['niche'];
+        $project_portfolio->sub_niche = $data['sub_niche'];
+        $project_portfolio->theme_name = $data['theme_name'];
+        $project_portfolio->theme_url = $data['theme_url'];
+        $project_portfolio->plugin_information = $data['website_plugin_box_information'];
+        $project_portfolio->main_page_number = $data['main_page_number'];
+        $project_portfolio->secondary_page_number = $data['secondary_page_number'];
+        $project_portfolio->backup_email_address = $data['backup_email_address'];
+        $project_portfolio->day_interval = $data['day_interval'];
+        $project_portfolio->description = $data['description'];
+        $project_portfolio->portfolio_link = $data['actual_link'];
+        $project_portfolio->added_by = $data['added_by'];
+        $project_portfolio->plugin_name = $plugin_names;
+        $project_portfolio->plugin_url = $plugin_urls;
+        $project_portfolio->save();
+        $milestone_update= ProjectMilestone::where('id',$milestone->milestone_id)->first();
+        $milestone_update->project_completion_status= 2;
+        $milestone_update->save();
+        //$user= User::where('id',$project->pm_id)->first();
 
-      // authorization action section
-      $project_id = Project::find($project->project_id);
+        // authorization action section
+        $project_id = Project::find($project->project_id);
 
         $authorization_action = new AuthorizationAction();
         $authorization_action->deal_id = $project_id->deal_id;
@@ -3516,11 +3516,11 @@ class ProjectController extends AccountBaseController
         $authorization_action->authorization_for = 1;
         $authorization_action->save();
         //end authorization action
-      $users= User::where('role_id',1)->get();
-      foreach ($users as $user) {
+        $users= User::where('role_id',1)->get();
+        foreach ($users as $user) {
 
-      Notification::send($user, new ProjectSubmissionNotification($milestone));
-    }
+            Notification::send($user, new ProjectSubmissionNotification($milestone));
+        }
 
 //      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
 
@@ -3636,93 +3636,93 @@ class ProjectController extends AccountBaseController
     }
     public function deleteNiche($id)
     {
-    $milestone= ProjectNiche::find($id);
-    $milestone->delete();
-    return response()->json([
-        'status' => 200,
-        'message' => 'Category Deleted Successfully',
-    ]);
+        $milestone= ProjectNiche::find($id);
+        $milestone->delete();
+        return response()->json([
+            'status' => 200,
+            'message' => 'Category Deleted Successfully',
+        ]);
 
     }
     public function ProjectAccept(Request $request)
     {
-      // /dd($request);
-      $project= Project::find($request->project_id);
-      $project->status= 'in progress';
-      $project->project_status= 'Accepted';
-      $project->admin_comment= $request->admin_comment;
-      $project->save();
-      $user= User::where('id',$project->pm_id)->first();
-
-
-
-         Notification::send($user, new ProjectReviewAcceptNotification($project));
-
-      Toastr::success('Project Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-      return back();
-
-    }
-    public function ProjectDeny(Request $request)
-    {
-      //dd($request);
-      $project= Project::find($request->project_id);
-      $project->status= 'canceled';
-      $project->project_status= 'Canceled';
-      $project->admin_comment= $request->admin_comment;
-      $project->save();
-      $user= User::where('id',$project->pm_id)->first();
+        // /dd($request);
+        $project= Project::find($request->project_id);
+        $project->status= 'in progress';
+        $project->project_status= 'Accepted';
+        $project->admin_comment= $request->admin_comment;
+        $project->save();
+        $user= User::where('id',$project->pm_id)->first();
 
 
 
         Notification::send($user, new ProjectReviewAcceptNotification($project));
-      Toastr::success('Project Canceled Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-      return back();
+
+        Toastr::success('Project Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return back();
+
+    }
+    public function ProjectDeny(Request $request)
+    {
+        //dd($request);
+        $project= Project::find($request->project_id);
+        $project->status= 'canceled';
+        $project->project_status= 'Canceled';
+        $project->admin_comment= $request->admin_comment;
+        $project->save();
+        $user= User::where('id',$project->pm_id)->first();
+
+
+
+        Notification::send($user, new ProjectReviewAcceptNotification($project));
+        Toastr::success('Project Canceled Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return back();
     }
     public function ProjectSubmissionAccept(Request $request)
     {
-      $project= ProjectSubmission::find($request->id);
-      $project->admin_comment= $request->admin_comment;
-      if ($request->deny != null) {
-      $project->status= 'revision';
-    }else {
-        $project->status= 'accepted';
-    }
-    $project->save();
-    if ($request->deny != null) {
-      $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
-      $mile= ProjectMilestone::find($milestone->id);
-      $mile->project_completion_status= 0;
-      $mile->save();
-    }else {
-      $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
-      $mile= ProjectMilestone::find($milestone->id);
-      $mile->project_completion_status= 1;
-      $mile->save();
-    }
-    $project_id= Project::where('id',$project->project_id)->first();
+        $project= ProjectSubmission::find($request->id);
+        $project->admin_comment= $request->admin_comment;
+        if ($request->deny != null) {
+            $project->status= 'revision';
+        }else {
+            $project->status= 'accepted';
+        }
+        $project->save();
+        if ($request->deny != null) {
+            $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
+            $mile= ProjectMilestone::find($milestone->id);
+            $mile->project_completion_status= 0;
+            $mile->save();
+        }else {
+            $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
+            $mile= ProjectMilestone::find($milestone->id);
+            $mile->project_completion_status= 1;
+            $mile->save();
+        }
+        $project_id= Project::where('id',$project->project_id)->first();
 
-    $user= User::where('id',$project_id->pm_id)->first();
+        $user= User::where('id',$project_id->pm_id)->first();
 
 
-    //update authoziation action
-    $authorization_action = AuthorizationAction::where([
-        'deal_id' => $project_id->deal_id,
-        'project_id' => $project_id->id,
-        'status' => '0'
-    ])->first();
+        //update authoziation action
+        $authorization_action = AuthorizationAction::where([
+            'deal_id' => $project_id->deal_id,
+            'project_id' => $project_id->id,
+            'status' => '0'
+        ])->first();
 
-    if ($authorization_action) {
-        $authorization_action->authorization_by = Auth::id();
-        $authorization_action->status = '1';
-        $authorization_action->save();
-    }
-    //end authorization action
+        if ($authorization_action) {
+            $authorization_action->authorization_by = Auth::id();
+            $authorization_action->status = '1';
+            $authorization_action->save();
+        }
+        //end authorization action
 
-    
-      Notification::send($user, new ProjectSubmissionAcceptNotification($project_id));
 
-    Toastr::success('Project Submission Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-    return back();
+        Notification::send($user, new ProjectSubmissionAcceptNotification($project_id));
+
+        Toastr::success('Project Submission Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return back();
 
     }
     public function ProjectSubmissionQC(Request $request)
@@ -3731,7 +3731,7 @@ class ProjectController extends AccountBaseController
             'milestone_id' => $request->milestone_id,
             'project_id' => $request->project_id,
         ])->first();
-       
+
 
         if (!$project) {
             $project = new QCSubmission();
@@ -3795,57 +3795,57 @@ class ProjectController extends AccountBaseController
 
     public function ProjectQcSubmissionAccept(Request $request)
     {
-    
-    // DB::beginTransaction();
-      $project= QcSubmission::find($request->id);
-      $project->admin_comment= $request->admin_comment_qc;
-      if ($request->deny != null) {
-      $project->status= 'revision';
-    }else {
-        $project->status= 'accepted';
-    }
-    $project->save();
-   
-    if ($request->deny != null) {
-      $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
-      $mile= ProjectMilestone::find($milestone->id);
-      $mile->qc_status= 0;
-      $mile->save();
-      $project_id= Project::where('id',$project->project_id)->first();
 
-      $user= User::where('id',$project_id->pm_id)->first();
+        // DB::beginTransaction();
+        $project= QcSubmission::find($request->id);
+        $project->admin_comment= $request->admin_comment_qc;
+        if ($request->deny != null) {
+            $project->status= 'revision';
+        }else {
+            $project->status= 'accepted';
+        }
+        $project->save();
+
+        if ($request->deny != null) {
+            $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
+            $mile= ProjectMilestone::find($milestone->id);
+            $mile->qc_status= 0;
+            $mile->save();
+            $project_id= Project::where('id',$project->project_id)->first();
+
+            $user= User::where('id',$project_id->pm_id)->first();
 
 
 
-        Notification::send($user, new QcSubmissionAcceptNotification($project_id));
+            Notification::send($user, new QcSubmissionAcceptNotification($project_id));
 
-      $qc_submission= QcSubmission::find($request->id);
-      $qc_submission->delete();
-    }else {
-      $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
-     // dd($milestone);
-      $mile= ProjectMilestone::find($milestone->id);
-      $mile->qc_status= 1;
-      $mile->save();
-    }
+            $qc_submission= QcSubmission::find($request->id);
+            $qc_submission->delete();
+        }else {
+            $milestone= ProjectMilestone::where('id',$project->milestone_id)->first();
+            // dd($milestone);
+            $mile= ProjectMilestone::find($milestone->id);
+            $mile->qc_status= 1;
+            $mile->save();
+        }
 
-    //update authoziation action
-    $project_id= Project::where('id',$project->project_id)->first();
-    $authorization_action = AuthorizationAction::where([
-        'deal_id' => $project_id->deal_id,
-        'project_id' => $project_id->id,
-        'status' => '0'
-    ])->first();
+        //update authoziation action
+        $project_id= Project::where('id',$project->project_id)->first();
+        $authorization_action = AuthorizationAction::where([
+            'deal_id' => $project_id->deal_id,
+            'project_id' => $project_id->id,
+            'status' => '0'
+        ])->first();
 
-    if ($authorization_action) {
-        $authorization_action->authorization_by = Auth::id();
-        $authorization_action->status = '1';
-        $authorization_action->save();
-    }
-    //end authorization action
+        if ($authorization_action) {
+            $authorization_action->authorization_by = Auth::id();
+            $authorization_action->status = '1';
+            $authorization_action->save();
+        }
+        //end authorization action
 
-    Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-    return back();
+        Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return back();
 
     }
 
@@ -3855,7 +3855,7 @@ class ProjectController extends AccountBaseController
         // $comments = $request->comments;
         // $comments_without_br = str_replace('<br>', '', $comments);
         // $explanation = explode("<p></p>", $comments_without_br);
-       //dd($explanation );
+        //dd($explanation );
 
         $validated = $request->validate([
             'comments' => ['required','string','min:10'],
@@ -3984,18 +3984,18 @@ class ProjectController extends AccountBaseController
         $project->authorization_status = 'approved';
         $project->deliverable_authorization= 1;
         $project->save();
-        
+
         $qualified_sale_id= QualifiedSale::where('project_id',$project->id)->first();
 
         if($qualified_sale_id != null)
         {
-        $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
-        $qualified_sale->authorized_by_admin = 1;
-        $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
-        $qualified_sale->save();
+            $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+            $qualified_sale->authorized_by_admin = 1;
+            $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
+            $qualified_sale->save();
 
         }
-        
+
 
         $pm_project= PMProject::where('project_id',$project->id)->first();
         $pm_project_update= PMProject::find($pm_project->id);
@@ -4097,8 +4097,8 @@ class ProjectController extends AccountBaseController
         }
 
         $activityLog = $activityLog->whereBetween('created_at', [Carbon::parse($date[0])->format('Y-m-d H:i:s'), Carbon::parse($date[1])->format('Y-m-d H:i:s')])
-        ->orderBy('id', 'desc')
-        ->get();
+            ->orderBy('id', 'desc')
+            ->get();
 
         $lead_deal_activity_log = LeadsDealsActivityLog::where('project_id', $request->project_id)->orderBy('id', 'desc')->get();
 

@@ -360,7 +360,9 @@
 
 
 {{--                            <x-sub-menu-item link="" :text="'Resource'" />--}}
+
                            <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" />
+
 
 
                         </div>
@@ -681,7 +683,7 @@
 
 
                 <!-- NAV ITEM - REPORTS COLLAPASE MENU -->
-                
+
 
                  {{-- <x-menu-item icon="gear" :text="__('Report Central')">
                     <x-slot name="iconPath">

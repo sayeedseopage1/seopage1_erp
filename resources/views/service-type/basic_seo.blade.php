@@ -150,10 +150,10 @@
                                 <div class="row">
                                     <label for="">Please open and share a gmail login and password so we can use it to create an account for you</label>
                                     <div class="col-md-6">
-                                        <input type="email" name="email" id="email" class="form-control placeholderText height-35 f-14" placeholder="Type email here">
+                                        <input type="email" name="email1" id="email1" class="form-control placeholderText height-35 f-14" placeholder="Type email here">
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="password" name="password" id="password" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
+                                        <input type="password" name="password1" id="password1" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
                                     </div>
                                 </div>
                             </div>
@@ -195,10 +195,10 @@
                                 <div class="row">
                                     <label for="">Please open and share a gmail login and password so we can use it to create an account for you</label>
                                     <div class="col-md-6">
-                                        <input type="email" name="email" id="email" class="form-control placeholderText height-35 f-14" placeholder="Type email here">
+                                        <input type="email" name="email2" id="email2" class="form-control placeholderText height-35 f-14" placeholder="Type email here">
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="password" name="password" id="password" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
+                                        <input type="password" name="password2" id="password2" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
                                     </div>
                                 </div>
                             </div>
@@ -240,10 +240,10 @@
                                 <div class="row">
                                     <label for="">Please open and share a gmail login and password so we can use it to create an account for you</label>
                                     <div class="col-md-6">
-                                        <input type="email" name="email" id="email" class="form-control placeholderText height-35 f-14" placeholder="Type email here">
+                                        <input type="email" name="email3" id="email3" class="form-control placeholderText height-35 f-14" placeholder="Type email here">
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="password" name="password" id="password" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
+                                        <input type="password" name="password3" id="password3" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
                                     </div>
                                 </div>
                             </div>
@@ -282,7 +282,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label for="">Password</label>
-                                        <input type="password" name="password" id="password" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
+                                        <input type="password" name="password4" id="password4" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
                                     </div>
                                 </div>
                             </div>
@@ -290,8 +290,8 @@
                                 <div class="d-flex">
                                     <label for="">Please add info@seopage1.net as an admin there</label>
                                     <div class="form-check" style="margin-left: 30px;">
-                                        <input class="form-check-input" type="radio" name="done4" value="1" id="done4">
-                                        <label class="form-check-label" for="done4">
+                                        <input class="form-check-input" type="radio" name="confirmAdding" value="1" id="confirmAdding">
+                                        <label class="form-check-label" for="confirmAdding">
                                             Confirm After Adding
                                         </label>
                                     </div>
@@ -355,11 +355,38 @@
         $('#submitBtn4').attr("disabled", true);
         $('#submitBtn4').html("Processing...");
         var google_search_info = $('input[name="google_search_info"]:checked').val();
+        var google_analytic_info = $('input[name="google_analytic_info"]:checked').val();
+        var google_business_account_info = $('input[name="google_business_account_info"]:checked').val();
+        var share_cms_access_info = $('input[name="share_cms_access_info"]:checked').val();
+        var done1 = $('input[name="done1"]:checked').val();
+        var done2 = $('input[name="done2"]:checked').val();
+        var done3 = $('input[name="done3"]:checked').val();
+        var confirmAdding = $('input[name="confirmAdding"]:checked').val();
 
         var data= {
             '_token': "{{ csrf_token() }}",
-            'website_link': document.getElementById("website_link").value,
+            'owner_name': document.getElementById("owner_name").value,
+            'business_name': document.getElementById("business_name").value,
+            'business_address': document.getElementById("business_address").value,
+            'phone_number': document.getElementById("phone_number").value,
+            'zip_code': document.getElementById("zip_code").value,
             'google_search_info': google_search_info,
+            'done1': done1,
+            'email1': document.getElementById("email1").value,
+            'password1': document.getElementById("password1").value,
+            'google_analytic_info': google_analytic_info,
+            'done2': done2,
+            'email2': document.getElementById("email2").value,
+            'password2': document.getElementById("password2").value,
+            'google_business_account_info': google_business_account_info,
+            'done3': done3,
+            'email3': document.getElementById("email3").value,
+            'password3': document.getElementById("password3").value,
+            'share_cms_access_info': share_cms_access_info,
+            'url': document.getElementById("url").value,
+            'user_name': document.getElementById("user_name").value,
+            'password4': document.getElementById("password4").value,
+            'confirmAdding': confirmAdding,
         }
         // console.log(data);
         $.ajaxSetup({
@@ -369,7 +396,7 @@
         });
         $.ajax({
             type: "POST",
-            url: "{{route('store_product_category')}}",
+            url: "{{route('store_product_basic_seo')}}",
             data: data,
             dataType: "json",
             success: function (response) {
