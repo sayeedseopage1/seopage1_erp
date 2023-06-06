@@ -13,18 +13,18 @@ const IncentiveNavbar = () => {
         {
             id: 'incentive_navbar_item_2',
             name: 'Disbursed amounts',
-            url: '/#'
+            url: '/disbursed-amounts'
         },
         {
             id: 'incentive_navbar_item_3',
             name: 'Held amounts',
-            url: '/#'
+            url: '/hold-amounts'
         },
-        {
-            id: 'incentive_navbar_item_4',
-            name: 'Rewards left to be redeemed ',
-            url: '/#'
-        },
+        // {
+        //     id: 'incentive_navbar_item_4',
+        //     name: 'Rewards left to be redeemed ',
+        //     url: '/#'
+        // },
     ]
 
 

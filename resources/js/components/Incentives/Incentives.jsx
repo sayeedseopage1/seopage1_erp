@@ -7,6 +7,8 @@ import {store} from '../services/store';
 import IncentiveCurrent from './pages/IncentiveCurrent';
 import './incentives.css'
 import { useUsers } from '../hooks/useUsers';
+import DisbursedAmounts from './pages/DisbursedAmounts';
+import HoldAmounts from './pages/HoldAmounts';
 
 const IncentiveContainer  = () => {  
     const { usersIsFetching } = useUsers();
@@ -30,6 +32,8 @@ const Incentives = () => {
                     <Route index element={<Navigate to="/current/monthly"  />} />
                     <Route path="/current" element={<Navigate to="/current/monthly"  />} /> 
                     <Route path='/current/:period' element={<IncentiveCurrent />} />
+                    <Route path="/disbursed-amounts" element={<DisbursedAmounts/>} />
+                    <Route path="/hold-amounts" element={<HoldAmounts/>} />
                   </Route> 
               </Routes>
           </BrowserRouter> 

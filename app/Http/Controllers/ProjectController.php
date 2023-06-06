@@ -1817,6 +1817,15 @@ class ProjectController extends AccountBaseController
             $qualified_sale->total_points= $total_points;
             $qualified_sale->save();
             }
+            $project->project_challenge = ($request->project_challenge !== '<p><br></p>') ? $request->project_challenge : null;
+            if ($request->project_challenge != 'No Challenge') {
+               
+                $project->status= 'under review';
+                $admin= User::where('role_id',1)->get();
+                foreach ($admin  as $user) {
+                    Notification::send($user, new ProjectReviewNotification($project));
+                }
+            }
             
 
 
@@ -1824,7 +1833,7 @@ class ProjectController extends AccountBaseController
 
 
         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
-        $project->project_challenge = ($request->project_challenge !== '<p><br></p>') ? $request->project_challenge : null;
+      
 
         $project->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
         if($project->deal->project_type != 'hourly')
@@ -1920,14 +1929,7 @@ class ProjectController extends AccountBaseController
         // $this->logProjectActivity($project->id, 'Project accepted by ');
         $users= User::where('role_id',1)->get();
 
-        if ($request->project_challenge != 'No Challenge') {
-            $project_update= Project::find($project->id);
-            $project_update->status= 'under review';
-            $project_update->save();
-            foreach ($users as $user) {
-                Notification::send($user, new ProjectReviewNotification($project));
-            }
-        }
+      
         if ($project->project_status != 'Accepted') {
             foreach ($users as $user) {
                 $this->triggerPusher('notification-channel', 'notification', [
@@ -3976,12 +3978,16 @@ class ProjectController extends AccountBaseController
         $project->save();
         
         $qualified_sale_id= QualifiedSale::where('project_id',$project->id)->first();
-        if ($qualified_sale_id) {
-            $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
-            $qualified_sale->authorized_by_admin = 1;
-            $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
-            $qualified_sale->save();
+
+        if($qualified_sale_id != null)
+        {
+        $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+        $qualified_sale->authorized_by_admin = 1;
+        $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
+        $qualified_sale->save();
+
         }
+        
 
         $pm_project= PMProject::where('project_id',$project->id)->first();
         $pm_project_update= PMProject::find($pm_project->id);

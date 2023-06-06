@@ -198,7 +198,7 @@
                                             <span>{{$portfolio->project_name}}</span>
                                         </div>
                                         <div class="mb-3">
-                                            <span class="f-20">Client Name: {{$portfolio->user_name}}</span><br>
+                                            <span class="f-20">Client Name: {{$project->client_name->name}}</span><br>
                                             <img src="img/avatar.png" alt="" class="rounded-circle m-1" width="30" height="30"><span class="ml-2">{{$portfolio->user_name}}</span>
                                         </div>
                                         <div class="row">
@@ -208,7 +208,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <h5>Agree price:</h5>
-                                                <span>$ {{$portfolio->project_budget}} USD</span>
+                                                <span>${{$project->project_budget}}</span>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
@@ -273,7 +273,20 @@
                                         <div class="row mt-3">
                                             <div class="col-md-6 mb-3 mb-md-0">
                                                 <h5>Average hourly price based on the final logged hours:</h5>
+                                                @if ($project->deal->project_type == 'hourly')
+
+                                                <span>{{$proejct->deal->hourly_rate}}</span>
+
+                                                @else 
+                                                @if($total_hours != 0)
                                                 <span>$ {{round($project->project_budget / $total_hours, 2)}} USD</span>
+                                                @else 
+                                                <span>No Data</span>
+                                                @endif
+
+                                                    
+                                                @endif
+                                               
                                             </div>
                                             <div class="col-md-6">
                                                 <h5>Total number of pages with page numbers:</h5>

@@ -56,3 +56,26 @@
     background-color: var(--header_color);
     color: #fff;
 }
+ 
+
+.sp1_da_tab{
+    padding: 6px 16px;
+    border-radius: 6px;
+    margin-right: 10px;
+    border: 1px solid var(--header_color);
+}
+
+.sp1_da_tab:hover{
+    cursor: pointer;
+}
+
+.sp1_da_tab.active{
+    color: #fff;
+    background-color: var(--header_color);
+}
+
+
+.sp1__dis_amount_tbl_tr{
+    background-color: rgba(243, 249, 255, 1);
+    border-color: #fff !important;
+}

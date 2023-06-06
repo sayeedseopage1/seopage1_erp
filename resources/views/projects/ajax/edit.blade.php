@@ -102,12 +102,13 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                     @endif
                                 @endforeach
                             </select>
-
+                            @if(Auth::user()->role_id == 1)
                             @if ($addProjectCategoryPermission == 'all' || $addProjectCategoryPermission == 'added')
                                 <x-slot name="append">
                                     <button id="addProjectCategory" type="button"
                                         class="btn btn-outline-secondary border-grey">@lang('app.add')</button>
                                 </x-slot>
+                            @endif
                             @endif
                         </x-forms.input-group>
                     </div>

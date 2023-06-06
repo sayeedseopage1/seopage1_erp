@@ -28,13 +28,16 @@
         "bootstrap-icons": "^1.10.4",
         "bootstrap-select": "^1.13.18",
         "chart.js": "^4.2.1",
+        "cipher-base": "^1.0.4",
         "cropperjs": "^1.5.12",
+        "crypto-browserify": "^3.12.0",
         "dayjs": "^1.11.7",
         "dropify": "^0.2.2",
         "file-saver": "^2.0.5",
         "flag-icon-css": "^4.1.7",
         "framer-motion": "^10.10.0",
         "frappe-charts": "^1.5.5",
+        "fs": "^0.0.1-security",
         "immutability-helper": "^3.1.1",
         "laravel-echo": "^1.11.2",
         "mix": "^0.0.1",
@@ -44,6 +47,7 @@
         "react": "^18.2.0",
         "react-chartjs-2": "^5.2.0",
         "react-custom-scrollbars-2": "^4.5.0",
+        "react-data-export": "^0.6.0",
         "react-datepicker": "^4.11.0",
         "react-dnd": "^16.0.1",
         "react-dnd-html5-backend": "^16.0.1",
@@ -61,6 +65,7 @@
         "recharts": "^2.5.0",
         "signature_pad": "^3.0.0-beta.4",
         "styled-components": "^5.3.9",
-        "sweetalert2": "^10.12.0"
+        "sweetalert2": "^10.12.0",
+        "xlsx": "^0.18.5"
     }
 }
