@@ -28,6 +28,9 @@ import { useGetDealsByGoalIdQuery } from '../services/api/dealSliceApi';
 import { CompareDate } from '../utils/dateController';
 import { useReactToPrint } from 'react-to-print';
 import { replace } from 'lodash';
+import ExportDealTableDataExcel from '../export/excel/ExportDealTableDataExcel';
+import ExportDealAddedTableDataExcel from '../export/excel/ExportDealAddedTableDataExcel';
+ 
 
 
 // convert to unit
@@ -612,7 +615,7 @@ const Goal = () => {
 
                                 <Dropdown.Menu offset={[0, 8]} placement='bottom-end' className="cnx__period_filter_dd_menu">
                                     <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
-                                        Pdf
+                                         PDF
                                     </Dropdown.Item>
                                     <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
                                         PNG
@@ -702,10 +705,21 @@ const Goal = () => {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu offset={[0, 8]} placement='bottom-end' className="cnx__period_filter_dd_menu">
-                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
-                                        <div onClick={handlePrintDealTable}>
-                                            Pdf
-                                        </div>
+                                    <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item p-0`}> 
+                                        {
+                                            goal?.entryType === 'Added' && 
+                                            <ExportDealAddedTableDataExcel
+                                                goal={goal}
+                                                data={[...getGoalDealsData(goalDealsData, goal)]} 
+                                            />
+                                        }
+                                        {
+                                            goal?.entryType === 'Won' && 
+                                            <ExportDealTableDataExcel 
+                                                goal={goal} 
+                                                data = {[...getGoalDealsData(goalDealsData, goal)]}
+                                            />
+                                        }
                                     </Dropdown.Item>
                                     {/* <Dropdown.Item className={`cnx_select_box_option cnx__relative_time__menu__item`}>
                                         PNG

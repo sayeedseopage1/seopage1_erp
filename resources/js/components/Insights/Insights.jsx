@@ -23,8 +23,9 @@ import { useEffect } from 'react';
 import { useGetGoalsQuery } from './services/api/goalsApiSlice';
 
 import NotPermission from './pages/NotPermission';
-import ExportDealTableDataPdf from './export/ExportDealTableDataPdf';
 import Goal404 from './pages/Goal404';
+import ExportDealTableDataExcel from './export/excel/ExportDealTableDataExcel';
+import ExportGoalGraphPdf from './export/pdf/ExportGoalGraph';
 
 const InsightsComponent = () => {
   const {dashboards} = useDashboards();
@@ -111,7 +112,7 @@ const AppRoutes = () => {
       <Route path="/">
         <Route index element= {<NotPermission />} />
         <Route path="dashboards/:dashboardId" element={<Dashboard />} />
-        {/* <Route path="deal-export" element={<ExportDealTableDataPdf />} /> */}
+        {/* <Route path="deal-export" element={<ExportGoalGraphPdf /> } /> */}
         <Route path="goal-404" element={<Goal404 />} />
         <Route path="goals/:goalId" element={<Goal />} />
         <Route path="*" element={<Navigate to="/dashboards/My Dashboard" replace={true} />} />

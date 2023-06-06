@@ -136,19 +136,19 @@ export const dataTableColumns = ["ID", "Deal created", "Owner", "Pipeline", "Tit
 // goal table default visible columns
 
 export const wonTableVisibleColumns =[
-    { accessor: "project_name", priority: 1, status: 1},
-    { accessor: "client_name", priority: 2, status: 1},
-    { accessor: "amount", priority: 3, status: 1},
-    { accessor: 'team_total_amount', priority: 4, status: 1},
-    { accessor: "deal_won_by", priority: 5, status: 1},
-    { accessor: "deal_created_date", priority: 6, status: 1},
-    { accessor: "currency", priority: 7, status: 1},
-    { accessor: "pipeline", priority: 8, status: 1},
-    { accessor: "current_stage", priority: 9, status: 1},
-    { accessor: "deal_status", priority: 10, status: 1},
-    { accessor: "submission_status", priority: 11, status: 1},
-    { accessor: "project_award_time", priority: 12, status: 1},
-    { accessor: "project_manager", priority: 13, status: 1},
+    { accessor: "project_name", header: 'Deal Name', priority: 1, status: 1},
+    { accessor: "client_name", header: "Client Name", priority: 2, status: 1},
+    { accessor: "amount", header:"Actual Amount", priority: 3, status: 1},
+    { accessor: 'team_total_amount', header: "Contribution Amount", priority: 4, status: 1},
+    { accessor: "deal_won_by", header: 'Deal Won By', priority: 5, status: 1},
+    { accessor: "deal_created_date",  header: 'Deal Created Date', priority: 6, status: 1},
+    { accessor: "currency", header: "Currency", priority: 7, status: 1},
+    { accessor: "pipeline", header: 'Pipeline', priority: 8, status: 1},
+    // { accessor: "current_stage", priority: 9, status: 1},
+    { accessor: "deal_status",  header: 'Deal Status', priority: 10, status: 1},
+    { accessor: "submission_status",  header: 'Client Contact Form', priority: 11, status: 1},
+    { accessor: "project_award_time", header: 'Project Award Time', priority: 12, status: 1},
+    { accessor: "project_manager", header: 'Project Manager', priority: 13, status: 1},
 ]
 
 export const addedTableVisibleColumns =[

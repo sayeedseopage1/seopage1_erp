@@ -11,7 +11,19 @@ const pointTableDataApiSlice = apiSlice.injectEndpoints({
                     _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
                 },
             })
-       }) 
+       }),
+       
+       
+       nonCashPoint: build.mutation({
+        query: (data) => ({
+            url: `/account/store-non-cash-points`,
+            method: 'POST',
+            body: {
+                ...data,
+                _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
+            },
+        })
+       })
 
     })
 
@@ -20,6 +32,7 @@ const pointTableDataApiSlice = apiSlice.injectEndpoints({
 
 
 export const { 
-    usePointTableDataMutation
+    usePointTableDataMutation,
+    useNonCashPointMutation
  } = pointTableDataApiSlice;
 

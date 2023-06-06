@@ -36,4 +36,18 @@ mix.js("resources/js/app.jsx", "public/js")
     )
     .sass("resources/scss/main.scss", "public/css")
     .options({ processCssUrls: false })
-    .sourceMaps(true, "source-map");
+    .sourceMaps(true, "source-map")
+    .webpackConfig((webpack) => {
+        return {
+           resolve: {
+              fallback: {
+                 crypto: require.resolve('crypto-browserify'),
+                 fs: false,
+                 stream: false,
+              },
+           },
+        };
+     });
+
+
+
