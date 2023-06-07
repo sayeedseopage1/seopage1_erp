@@ -18,10 +18,11 @@ return new class extends Migration
             $table->string('website_link');
             $table->string('website_niche');
             $table->string('website_name');
-            $table->string('business_information');
-            $table->string('drive_link');
-            $table->string('reference_website');
-            $table->integer('competitor_content')->default(1);
+            $table->text('business_information');
+            $table->integer('share_file_info')->nullable();
+            $table->string('folder_link')->nullable();
+            $table->string('reference_website')->nullable();
+            $table->integer('competitor_content')->nullable();
             $table->text('description1')->nullable();
             $table->text('description2')->nullable();
             $table->text('description3')->nullable();
@@ -37,8 +38,10 @@ return new class extends Migration
             $table->string('country');
             $table->string('city');
             $table->text('interest');
-            $table->text('buying_habit');
-            $table->text('thor_native_language');
+            $table->text('buying_habit1');
+            $table->text('buying_habit2');
+            $table->text('buying_habit3');
+            $table->string('language');
             $table->timestamps();
         });
     }

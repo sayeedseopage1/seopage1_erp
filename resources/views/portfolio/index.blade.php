@@ -19,6 +19,46 @@
             border-color: #4a6fdf;
         }
 
+        .copyBtn{
+            position: relative;
+            padding: 0px;
+            height: 38px;
+            width: 38px;
+            border: none !important;
+            border-color: rgba(0,0,0,0);
+            color: rgba(0,0,0,.3);
+        }
+        .copyBtn:hover{
+            background: transparent;
+            color: #0c6af3;
+        }
+        .copyBtn:before {
+            content: "Copied";
+            position: absolute;
+            top: -45px;
+            right: 0px;
+            background: #5c81dc;
+            padding: 6px 8px;
+            border-radius: 15px;
+            font-size: 13px;
+            display: none;
+        }
+        .copyBtn:after {
+            content: "";
+            position: absolute;
+            top: -20px;
+            right: 25px;
+            width: 10px;
+            height: 10px;
+            background: #5c81dc;
+            transform: rotate(45deg);
+            display: none;
+        }
+        .copyBtn.active:before,
+        .copyBtn.active:after {
+            display: block;
+        }
+
     </style>
     <div class="container-fluid">
         <div class="row">
@@ -67,7 +107,7 @@
                             <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
                                 <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Subcategory</label>
                                 <div style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
-                                    <select class="form-control height-35 f-14" name="sub_niche" id="sub_niche" data-live-search="true" data-size="8">
+                                    <select class="form-control height-35 f-14" name="website_sub_cat" id="website_sub_cat" data-live-search="true" data-size="8">
                                         <option value="">--</option>
                                     </select>
                                 </div>
@@ -78,9 +118,9 @@
                                 <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
                                     <select name="theme_name" id="theme_name" data-live-search="true" class="form-control select-picker error" data-size="8">
                                         <option value="">--</option>
-                                        {{--                                        @foreach ($website_themes as $website_theme)--}}
-                                        {{--                                            <option value="{{$website_theme->id}}">{{$website_theme->theme_name}}</option>--}}
-                                        {{--                                        @endforeach--}}
+                                        @foreach ($website_themes as $website_theme)
+                                            <option value="{{$website_theme->id}}">{{$website_theme->theme_name}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -89,8 +129,8 @@
                                 <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
                                     <select name="website_plugin" id="website_plugin" data-live-search="true" class="form-control select-picker error" data-size="8">
                                         <option value="">--</option>
-                                        @foreach ($portfolios as $portfolio)
-                                            <option value="{{$portfolio->id}}">{{implode(',',Json_decode($portfolio->plugin_name))}}</option>
+                                        @foreach ($website_plugins as $website_plugin)
+                                            <option value="{{$website_plugin->id}}">{{$website_plugin->plugin_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -98,10 +138,16 @@
                         </div>
 
 
+
+
                         <br>
                         <div class="displayFilterData">
                             <p class="mt-2 f-18" style="color:#5e6168; font-weight: 500">Website Category: <span id="displaySelectedCategory">Seopage1</span></p>
+
+
                             <div id="categoryLinkWrapper" class="d-flex flex-wrap m-0 p-0">
+
+
                                 <div class="categoryLink linkBtn" >
                                     <img src="/user-uploads/favicon/14d159b3d5548dfbc48b977da1ede616.png" alt="" class="rounded-circle m-1" width="26" height="26" style="border: 2px solid #dddddd;">
                                     <span class="linkBtn">www.seopage1.com</span>
@@ -128,21 +174,6 @@
                                             <h5>Website Link:</h5>
                                             <span>{{implode(', ',Json_decode($portfolio->plugin_url))}}</span>
                                         </div>
-<<<<<<< HEAD
-                                        <div class="mb-3">
-                                            <span class="f-20">Client Name: {{$project->client_name->name}}</span><br>
-                                            <img src="img/avatar.png" alt="" class="rounded-circle m-1" width="30" height="30"><span class="ml-2">{{$portfolio->user_name}}</span>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3 mb-md-0">
-                                                <h5>Website Link:</h5>
-                                                <span>{{implode(', ',Json_decode($portfolio->plugin_url))}}</span>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h5>Agree price:</h5>
-                                                <span>${{$project->project_budget}}</span>
-                                            </div>
-=======
                                         <div class="col-md-6">
                                             <h5>Agree price:</h5>
                                             <span>$ {{$portfolio->project_budget}} USD</span>
@@ -156,7 +187,6 @@
                                         <div class="col-md-6 d-flex">
                                             <h5>Theme Name:</h5>
                                             <p class="ml-2">{{$portfolio->theme_name}}</p>
->>>>>>> 1b1ae8373 (mileston ck editor value show done)
                                         </div>
                                     </div>
                                     <div class="row mt-3">
@@ -204,48 +234,14 @@
                                                 }
                                                 $total_hours = intval(round($project_time_logs, 1)) + $active_time_hours + $add_hours.'.'.$add_minutes;
                                                 $logged_hours = intval(round($project_time_logs, 1)) + $active_time_hours + $add_hours . ' hrs '. $add_minutes . ' mins';
-<<<<<<< HEAD
-                                                @endphp
-                                                <p class="ml-2">{{$logged_hours}}</p>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-6 mb-3 mb-md-0">
-                                                <h5>Average hourly price based on the final logged hours:</h5>
-                                                @if ($project->deal->project_type == 'hourly')
-
-                                                <span>{{$proejct->deal->hourly_rate}}</span>
-
-                                                @else 
-                                                @if($total_hours != 0)
-                                                <span>$ {{round($project->project_budget / $total_hours, 2)}} USD</span>
-                                                @else 
-                                                <span>No Data</span>
-                                                @endif
-
-                                                    
-                                                @endif
-                                               
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h5>Total number of pages with page numbers:</h5>
-                                                <p class="ml-2">Main page name and number: {{$portfolio->main_page_number}} page ({{$portfolio->main_page_name}})</p>
-                                                <p class="ml-2">Secondary page name and number: {{$portfolio->secondary_page_number}} page ({{$portfolio->secondary_page_name}})</p>
-                                            </div>
-                                        </div>
-                                        <div class="mt-3">
-                                            <h5>Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot)</h5>
-                                            <span>{!! $portfolio->description !!}</span>
-=======
                                             @endphp
                                             <p class="ml-2">{{$logged_hours}}</p>
->>>>>>> 1b1ae8373 (mileston ck editor value show done)
                                         </div>
                                     </div>
                                     <div class="row mt-3">
                                         <div class="col-md-6 mb-3 mb-md-0">
                                             <h5>Average hourly price based on the final logged hours:</h5>
-                                            {{--                                                <span>$ {{round($project->project_budget / $total_hours, 2)}} USD</span>--}}
+{{--                                            <span>$ {{round($project->project_budget / $total_hours, 2)}} USD</span>--}}
                                         </div>
                                         <div class="col-md-6">
                                             <h5>Total number of pages with page numbers:</h5>
@@ -269,11 +265,11 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#cms_id, #website_type, #website_category, #sub_niche, #theme_name, #website_plugin').change(function(event) {
+        $('#cms_id, #website_type, #website_category, #website_sub_cat, #theme_name, #website_plugin').change(function(event) {
             var selectedCategoryId = $('#cms_id').val();
             var websiteType = $('#website_type').val();
             var website_category = $('#website_category').val();
-            var sub_niche = $('#sub_cat').val();
+            var website_sub_cat = $('#website_sub_cat').val();
             var theme_name = $('#theme_name').val();
             var website_plugin = $('#website_plugin').val();
             var selectedCmsName = $(this).find(':selected').text();
@@ -285,7 +281,7 @@
                     category_id: selectedCategoryId,
                     website_type: websiteType,
                     website_category: website_category,
-                    sub_niche: sub_niche,
+                    website_sub_cat: website_sub_cat,
                     theme_name: theme_name,
                     website_plugin: website_plugin
                 },
@@ -300,9 +296,11 @@
                             '<div class="categoryLink linkBtn">' +
                             '<img src="/user-uploads/favicon/14d159b3d5548dfbc48b977da1ede616.png" alt="" class="rounded-circle m-1" width="26" height="26" style="border: 2px solid #dddddd;">' +
                             '<a href="#" class="ml-2 linkBtn mr-4">' + category.portfolio_link + '</a>' +
+                            '<button type="submit" class="ml-2 btn btn-outline-primary copyBtn"><i class="fa fa-clone"></i></button>' +
                             '</div>' +
                             '</div>';
                         $('.displayFilterData').append(linkHtml);
+                        CopyTextLink();
                     });
 
                     // Add event listener to new linkBtn elements
@@ -331,29 +329,49 @@
         });
     });
 
+    function CopyTextLink() {
+        $('.categoryLink').each(function () {
+            var text = $(this).children('a.linkBtn').text();
+            var copyBtn = $(this).children('.copyBtn');
+
+            copyBtn.on('click', function () {
+                copyBtn.addClass('active');
+
+                var tempInput = $('<input>');
+                tempInput.val(text);
+                $('body').append(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                tempInput.remove();
+
+                setTimeout(function () {
+                    copyBtn.removeClass('active');
+                }, 1000);
+            });
+        });
+    }
+
 </script>
 <script>
     // AUTO SELECT SUBCATEGORY SECTION
     $(document).ready(function () {
         $('#website_category').change(function () {
-            var niche_id = $(this).val();
-            if (niche_id) {
+            var website_cat_id = $(this).val();
+            if (website_cat_id) {
                 $.ajax({
-                    url: '/projects/project-completion/get-sub-niche/' + niche_id,
+                    url: '/portfolio/get-sub-category/' + website_cat_id,
                     type: "GET",
                     dataType: "json",
                     success: function (data) {
-                        $('#sub_niche').empty();
-                        $.each(data, function (index, sub_niche) {
-                            $('#sub_niche').append('<option value="' + sub_niche.id + '">' + sub_niche.category_name + '</option>');
+                        $('#website_sub_cat').empty();
+                        $.each(data, function (index, website_sub_cat) {
+                            $('#website_sub_cat').append('<option value="' + website_sub_cat.id + '">' + website_sub_cat.category_name + '</option>');
                         });
                     }
                 });
             } else {
-                $('#sub_niche').empty();
+                $('#website_sub_cat').empty();
             }
         });
     });
 </script>
-
-

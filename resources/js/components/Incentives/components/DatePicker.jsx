@@ -21,8 +21,8 @@ const DatePicker = ({startDate, endDate, setStartDate, setEndDate}) => {
         const e = dayjs(end).format('MMM DD, YYYY');
         setStart(s);
         setEnd(e);
-        setEndDate(dayjs(e).format('YYYY-MM-DD'));
-        setStartDate(dayjs(s).format('YYYY-MM-DD'));
+        setEndDate(dayjs(start).format('YYYY-MM-DD'));
+        setStartDate(dayjs(end).format('YYYY-MM-DD'));
     }
 
     const prevYear = () => {
@@ -53,7 +53,7 @@ const DatePicker = ({startDate, endDate, setStartDate, setEndDate}) => {
                         {[...Array(12)].map((_, i) => {
                             let d = dayjs().year(year).month(i);
                             let m = dayjs().year(year).month(i).format('MMM');
-                            return <li key={m} onClick={() => handleDatePick(dayjs(d).startOf('month').format('MM-DD-YYYY'), dayjs(d).endOf('month').format("MM-DD-YYYY"))} className={`sp1_inc_month ${dayjs(startDate).format('MMM') === m ? 'active': ''}`}>
+                            return <li key={m} onClick={() => handleDatePick(dayjs(d).startOf('month').format('YYYY-MM-DD'), dayjs(d).endOf('month').format("YYYY-DD-MM"))} className={`sp1_inc_month ${dayjs(startDate).format('MMM') === m ? 'active': ''}`}>
                                 {m}
                             </li>
                         })}
@@ -61,7 +61,7 @@ const DatePicker = ({startDate, endDate, setStartDate, setEndDate}) => {
                 </div>
             </Dropdown.Menu>
         </Dropdown>
-        
+
     </div>
   )
 }

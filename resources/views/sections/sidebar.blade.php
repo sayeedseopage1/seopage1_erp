@@ -807,6 +807,12 @@
                                             <a href="{{route('project-view-website-type')}}" class="text-lightest">
                                                 Website Types
                                             </a>
+                                            <a href="{{route('project-view-website-theme')}}" class="text-lightest">
+                                                Website Theme
+                                            </a>
+                                            <a href="{{route('project-view-website-plugin')}}" class="text-lightest">
+                                                Website Plugin
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
