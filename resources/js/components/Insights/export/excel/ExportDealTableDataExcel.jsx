@@ -197,10 +197,10 @@ const ExportDealTableDataExcel = ({goal, data}) => {
       data: getData  (data)
     }
    ]
- 
- 
+
+   const filename = (goal?.title || '').replace(/\s/g, '_') + '_' + dayjs().format('MMM_DD_YYYY');
     return (
-      <ExcelFile element={<button className='export_to_excel_btn'>Export Excel (.xlsx)</button>} >
+      <ExcelFile filename={filename || 'document'} element={<button className='export_to_excel_btn'>Export Excel (.xlsx)</button>} >
           <ExcelSheet  dataSet={multiDataSet} name="Deals" /> 
       </ExcelFile>
     ) 

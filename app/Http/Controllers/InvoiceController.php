@@ -169,10 +169,12 @@ class InvoiceController extends AccountBaseController
       }
       $hourly_project_check= Project::where('id',$request->project_id)->first();
 //    /dd($request->total_amount);
-      if($hourly_project_check->deal->project_type=='hourly' && $request->total <= 0)
+    if($milestone_check->cost < 1)
+    {
+      if($hourly_project_check->deal->project_type=='hourly' && $request->total <= 0 )
       {
         return Reply::error(__('You cannot insert zero on the amount for creating the invoice.'));
-      }elseif($hourly_project_check->deal->project_type == 'hourly' && $request->total > 0) {
+      }elseif($hourly_project_check->deal->project_type == 'hourly' && $request->total > 0 && $milestone_check->cost < 1) {
 
          // /dd($request);
          $currency= Currency::where('id',$request->currency_id)->first();
@@ -226,6 +228,7 @@ class InvoiceController extends AccountBaseController
              $activity->save();
          
       }
+    }
     //  / dd("true");
       $redirectUrl = urldecode($request->redirect_url);
 

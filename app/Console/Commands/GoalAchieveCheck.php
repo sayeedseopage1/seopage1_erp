@@ -109,9 +109,16 @@ class GoalAchieveCheck extends Command
                                     $payments = Payment::where([
                                         'project_id' => $project->id,
                                     ])->whereBetween(DB::raw('DATE(paid_on)'), [$goal->startDate, $goal->endDate])->get();
-
+        
                                     if (count($payments) > 0 ) {
-                                        $value->amount = $payments->sum('amount');
+                                        if($goal->trackingType == 'value')
+                                        {
+                                            $value->amount = $payments->sum('amount');
+        
+                                        }else {
+                                            $value->amount = 1;
+                                        }
+                                       
                                     } else {
                                         $value->amount = 0;
                                     }
@@ -217,6 +224,7 @@ class GoalAchieveCheck extends Command
                                     $point->user_id= $value2;
                                     $point->project_id= $deal_project->id;
                                     $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                                    $point->bonus_type= "Bonus";
                                     $point->gained_as = "Individual";
                                     $point->points= $distribute_amount;
         
@@ -262,9 +270,16 @@ class GoalAchieveCheck extends Command
                                     $payments = Payment::where([
                                         'project_id' => $project->id,
                                     ])->whereBetween(DB::raw('DATE(paid_on)'), [$goal->startDate, $goal->endDate])->get();
-
+        
                                     if (count($payments) > 0 ) {
-                                        $value->amount = $payments->sum('amount');
+                                        if($goal->trackingType == 'value')
+                                        {
+                                            $value->amount = $payments->sum('amount');
+        
+                                        }else {
+                                            $value->amount = 1;
+                                        }
+                                       
                                     } else {
                                         $value->amount = 0;
                                     }
@@ -272,6 +287,7 @@ class GoalAchieveCheck extends Command
                                     $value->amount = 0;
                                 }
                             }
+                           
         
                             $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
                             $value->bidder_amount = round((24 * $value->amount) / 100, 2);
