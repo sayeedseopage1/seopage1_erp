@@ -504,6 +504,7 @@ class LeadsDataTable extends BaseDataTable
                 ->orWhere('leads.company_name', 'like', '%' . request('searchText') . '%')
 
                 ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
+                ->orWhere('leads.project_id', 'like', '%' . request('searchText') . '%')
                 ->orWhere('leads.actual_value', 'like', '%' . request('searchText') . '%')
                 ->orWhere('users.name', 'like', '%' . request('searchText') . '%')
 
