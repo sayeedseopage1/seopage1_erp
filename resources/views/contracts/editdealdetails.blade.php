@@ -597,29 +597,31 @@
                 }
             });
         }
-        $(document).on('click', '.edit_milestone', function(e) {
+
+        $(document).on('click',' .edit_milestone',function(e){
             e.preventDefault();
             var milestone_id = $(this).val();
-
             $('#editmilestone').modal('show');
-
             $.ajax({
                 type: "GET",
-                url: "/deals/edit-milestone/" + milestone_id,
-                success: function(response) {
+                url: "/deals/edit-milestone/"+milestone_id,
+
+                success: function(response){
                     if (response.status == 404) {
                         $('#success_message').html("");
                         $('#success_message').addClass('alert alert-danger');
                         $('#success_message').text(response.message);
-                    } else {
+                    }else {
+                        console.log(response);
                         $('#title').val(response.milestone.milestone_title);
                         $('#cost').val(response.milestone.actual_cost);
-                        CKEDITOR.instances['summary2'].setData(response.milestone.summary);
                         $('#milestone_type').val(response.milestone.milestone_type);
+                        CKEDITOR.instances['summary2'].setData(response.milestone.summary);
                         $('#milestone_id').val(milestone_id);
                     }
                 }
             });
+
         });
 
         $(document).on('click',' .update_milestone',function(e ){
@@ -630,6 +632,7 @@
             var data= {
                 'title' : $('#title').val(),
                 'cost' : $('#cost').val(),
+                'milestone_type' : $('#milestone_type').val(),
                 'summary' : summary,
             }
             $.ajaxSetup({
@@ -709,11 +712,11 @@
         $(document).on('click','.add_milestone',function(e){
 
             e.preventDefault();
-            var summary = CKEDITOR.instances.summary2.getData();
-            //console.log("test");
+            var summary = CKEDITOR.instances.summary1.getData();
             var data= {
                 'title': $('.title').val(),
                 'cost': $('.cost').val(),
+                'milestone_type': $('.milestone_type').val(),
                 'summary': summary,
                 //'project_id': document.querySelector('.project_id').value,
                 'project_id': document.getElementById("project_id").value,

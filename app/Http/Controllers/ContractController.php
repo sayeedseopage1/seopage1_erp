@@ -856,7 +856,6 @@ class ContractController extends AccountBaseController
     }
     public function updateMilestone(Request $request, $id)
     {
-//        dd($request->all());
 
         $projectmilestone = ProjectMilestone::where('id', $id)->first();
         $project_id = Project::where('id', $projectmilestone->project_id)->first();

@@ -360,26 +360,26 @@
         for (var i = 0; i < folder_link.length; i++) {
             folder_link_values.push(folder_link[i].value);
         }
-        // var reference_website = document.getElementsByName("reference_website[]");
-        // var reference_website_values = [];
-        // for (var i = 0; i < reference_website.length; i++) {
-        //     reference_website_values.push(reference_website[i].value);
-        // }
-        // var description1 = document.getElementsByName("description1[]");
-        // var description1_values = [];
-        // for (var i = 0; i < description1.length; i++) {
-        //     description1_values.push(description1[i].value);
-        // }
-        // var description2 = document.getElementsByName("description2[]");
-        // var description2_values = [];
-        // for (var i = 0; i < description2.length; i++) {
-        //     description2_values.push(description2[i].value);
-        // }
-        // var description3 = document.getElementsByName("description3[]");
-        // var description3_values = [];
-        // for (var i = 0; i < description3.length; i++) {
-        //     description3_values.push(description3[i].value);
-        // }
+        var reference_website = document.getElementsByName("reference_website[]");
+        var reference_website_values = [];
+        for (var i = 0; i < reference_website.length; i++) {
+            reference_website_values.push(reference_website[i].value);
+        }
+        var description1 = document.getElementsByName("description1[]");
+        var description1_values = [];
+        for (var i = 0; i < description1.length; i++) {
+            description1_values.push(description1[i].value);
+        }
+        var description2 = document.getElementsByName("description2[]");
+        var description2_values = [];
+        for (var i = 0; i < description2.length; i++) {
+            description2_values.push(description2[i].value);
+        }
+        var description3 = document.getElementsByName("description3[]");
+        var description3_values = [];
+        for (var i = 0; i < description3.length; i++) {
+            description3_values.push(description3[i].value);
+        }
         // var competitor_content = [];
         // var competitor_content_inputs = document.getElementsByName("competitor_content");
         // for (var i = 0; i < competitor_content_inputs.length; i++) {
@@ -404,7 +404,7 @@
         }
 
         var share_file_info = $('input[name="share_file_info"]:checked').val();
-        // var competitor_content = $('input[name="competitor_content"]:checked').val();
+        var competitor_content = $('input[name="competitor_content"]:checked').val();
 
         var data= {
             '_token': "{{ csrf_token() }}",
@@ -414,11 +414,11 @@
             'business_information': document.getElementById("business_information").value,
             'share_file_info': share_file_info,
             'folder_link': folder_link_values,
-            // 'reference_website': reference_website_values,
-            // 'competitor_content': competitor_content,
-            // 'description1': description1_values,
-            // 'description2': description2_values,
-            // 'description3': description3_values,
+            'reference_website': reference_website_values,
+            'competitor_content': competitor_content,
+            'description1': description1_values,
+            'description2': description2_values,
+            'description3': description3_values,
             'product_list': document.getElementById("product_list").value,
             'page_name': page_name_values,
             'quantity': quantity_values,
@@ -436,7 +436,6 @@
             'buying_habit3': document.getElementById("buying_habit3").value,
             'language': document.getElementById("language").value,
         }
-        console.log(data);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

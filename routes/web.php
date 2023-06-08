@@ -1284,6 +1284,15 @@ Route:: get('/projects/view-website-type', [ProjectController::class, 'viewWebsi
 Route:: post('/projects/add-website-type', [ProjectController::class, 'storeWebsiteType'])->name('add-website-type');
 Route::put('/projects/update-website-type/{id}', [ProjectController::class, 'updateWebsiteType']);
 
+//add project website theme
+Route:: get('/projects/view-website-theme', [ProjectController::class, 'viewWebsiteTheme'])->name('project-view-website-theme');
+Route:: post('/projects/add-website-theme', [ProjectController::class, 'storeWebsiteTheme'])->name('add-website-theme');
+Route::put('/projects/update-website-theme/{id}', [ProjectController::class, 'updateWebsiteTheme']);
+
+//add project website plugin
+Route:: get('/projects/view-website-plugin', [ProjectController::class, 'viewWebsitePlugin'])->name('project-view-website-plugin');
+Route:: post('/projects/add-website-plugin', [ProjectController::class, 'storeWebsitePlugin'])->name('add-website-plugin');
+Route::put('/projects/update-website-plugin/{id}', [ProjectController::class, 'updateWebsitePlugin']);
 
 //add project niche
 Route::post('/projects/niche-store', [ProjectController::class, 'storeNiche'])->name('add-niche');

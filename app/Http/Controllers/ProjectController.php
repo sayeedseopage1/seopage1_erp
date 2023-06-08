@@ -6,6 +6,8 @@ use App\Models\DealStageChange;
 use App\Models\kpiSettingGenerateSale;
 use App\Models\ProjectCms;
 use App\Models\ProjectPortfolio;
+use App\Models\ProjectWebsitePlugin;
+use App\Models\ProjectWebsiteTheme;
 use App\Models\ProjectWebsiteType;
 use App\Models\QualifiedSale;
 use Carbon\Carbon;
@@ -3666,6 +3668,60 @@ class ProjectController extends AccountBaseController
         $project_website_type = ProjectWebsiteType::find($id);
         $project_website_type->website_type = $request->website_type;
         $project_website_type->save();
+
+        return response()->json(['status'=>200]);
+    }
+    // VIEW PROJECT WEBSITE THEME SECTION
+    public function viewWebsiteTheme(){
+        $this->pageTitle = 'Website Theme';
+        $this->website_themes =DB::table('project_website_themes')->orderBy('id','desc')->paginate(10);
+        return view('projects.website-theme.index',$this->data);
+    }
+    public function storeWebsiteTheme(Request $request){
+        $validated = $request->validate([
+            'theme_name' => 'required',
+            'theme_url' => 'required|url',
+        ], [
+            'theme_name.required' => 'This field is required!!',
+            'theme_url.required' => 'This field is required!!',
+        ]);
+        $project_website_theme = new ProjectWebsiteTheme();
+        $project_website_theme->theme_name = $request->theme_name;
+        $project_website_theme->theme_url = $request->theme_url;
+        $project_website_theme->save();
+        return response()->json(['status'=>200]);
+    }
+    public function updateWebsiteTheme(Request $request,$id)
+    {
+        $project_website_theme = ProjectWebsiteTheme::find($id);
+        $project_website_theme->theme_name = $request->theme_name;
+        $project_website_theme->theme_url = $request->theme_url;
+        $project_website_theme->save();
+
+        return response()->json(['status'=>200]);
+    }
+
+    // VIEW PROJECT WEBSITE PLUGIN SECTION
+    public function viewWebsitePlugin(){
+        $this->pageTitle = 'Website Plugin';
+        $this->website_plugins =DB::table('project_website_plugins')->orderBy('id','desc')->paginate(10);
+        return view('projects.website-plugin.index',$this->data);
+    }
+    public function storeWebsitePlugin(Request $request){
+        foreach($request->plugin_name as $key => $plugin_name) {
+            $project_website_plugin = new ProjectWebsitePlugin();
+            $project_website_plugin->plugin_name = $plugin_name;
+            $project_website_plugin->plugin_url  = $request->plugin_url[$key] ;
+            $project_website_plugin->save();
+        }
+        return response()->json(['status'=>200]);
+    }
+    public function updateWebsitePlugin(Request $request,$id)
+    {
+        $project_website_plugin = ProjectWebsitePlugin::find($id);
+        $project_website_plugin->plugin_name = $request->plugin_name;
+        $project_website_plugin->plugin_url = $request->plugin_url;
+        $project_website_plugin->save();
 
         return response()->json(['status'=>200]);
     }
