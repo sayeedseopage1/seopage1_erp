@@ -73,7 +73,8 @@ const EmployeeWiseTableProvider = ({ children }) => {
 // table context/state provider end
 
 // tabs
-const tabs = ["Employee Wise", "Project Wise", "Task Wise"];
+// const tabs = ["Employee Wise", "Project Wise", "Task Wise"];
+const tabs = [ "Project Wise", "Task Wise"];
 // tabs end
 
 // project wise table columns
@@ -121,7 +122,7 @@ const taskWiseTableConfig = {
 // log table
 const TimeLogTable = () => {
     const [loading, setLoading] = React.useState(true);
-    const [activeTab, setActiveTab] = React.useState("Employee Wise");
+    const [activeTab, setActiveTab] = React.useState("Project Wise");
     const [employeeSessionModal, setEmployeeSessionModal] = React.useState({
         isOpen: false,
         employeeID: 0,
@@ -155,10 +156,16 @@ const TimeLogTable = () => {
     }, [])
 
     
-    const activeTableNamespace =
-        activeTab === "Employee Wise"
-            ? "employee"
-            : activeTab === "Project Wise"
+    // const activeTableNamespace =
+    //     activeTab === "Employee Wise"
+    //         ? "employee"
+    //         : activeTab === "Project Wise"
+    //         ? "project"
+    //         : activeTab === "Task Wise"
+    //         ? "task"
+    //         : "";
+
+    const activeTableNamespace = activeTab === "Project Wise"
             ? "project"
             : activeTab === "Task Wise"
             ? "task"
@@ -180,14 +187,16 @@ const TimeLogTable = () => {
                 <ColumnFilter table={activeTableNamespace} />
                 <Tab>Export</Tab>
             </Tabs>
-            {activeTab === "Employee Wise" ? (
-                <EmployeeWiseTable
-                    open={openEmployeeSession}
-                    close={closeEmployeeSession}
-                    columns={employeeWiseTableConfig.columns}
-                    subColumns={employeeWiseTableConfig.subColumns}
-                />
-            ) : activeTab === "Project Wise" ? (
+            {
+            // activeTab === "Employee Wise" ? (
+            //     <EmployeeWiseTable
+            //         open={openEmployeeSession}
+            //         close={closeEmployeeSession}
+            //         columns={employeeWiseTableConfig.columns}
+            //         subColumns={employeeWiseTableConfig.subColumns}
+            //     />
+            // ) : 
+            activeTab === "Project Wise" ? (
                 <ProjectWiseTable
                     open={openEmployeeSession}
                     close={closeEmployeeSession}

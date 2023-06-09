@@ -13,6 +13,7 @@ import { useGetEmployeeWiseDataMutation } from "../services/api/timeLogTableApiS
 import {CompareDate} from '../Insights/utils/dateController';
 import { useDispatch, useSelector } from "react-redux";
 import { setEmployeeWiseData } from '../services/features/employeeWiseTableDataSlice';
+import dayjs from "dayjs";
 
 // pivot table
 const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
@@ -73,7 +74,20 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
 
 
     const fetchData = async () => {
-        let res = await getEmployeeWiseData({}).unwrap();
+        let res = await getEmployeeWiseData({
+            start_date: dayjs().startOf('month').format('YYYY-MM-DD'),
+            end_date: dayjs().format('YYYY-MM-DD')
+        }).unwrap();
+        if(res) {
+            dispatch(setEmployeeWiseData(res?.data || []))
+            setData(res?.data);
+            setTotalRows(res?.data?.length);
+        }  
+    }
+    
+    const handleTimeFilter = async(d) => {  
+        let res = await getEmployeeWiseData(d).unwrap();
+  
         if(res) {
             dispatch(setEmployeeWiseData(res?.data || []))
             setData(res?.data);
@@ -82,11 +96,11 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
     }
 
 
-    useEffect(()=> {
-        if(preFetchData.length === 0 && !dataIsLoading){
-            fetchData();
-        }
-    }, [])
+    // useEffect(()=> {
+    //     if(preFetchData.length === 0 && !dataIsLoading){
+    //         fetchData();
+    //     }
+    // }, [])
 
     useEffect(()=> {
         let timer = setTimeout(() => {
@@ -386,6 +400,7 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
         <TableContainer>
             <TimeLogTableFilterBar
                 handleDataRequest = {handleDataRequest} 
+                handleTimeFilter = {handleTimeFilter}
             />
             {/* <ColumnFilter columns={columnOrder} filterColumn={filterColumn} 
             setFilterColumn={setFilterColumn} root={columnFilterButtonId} /> */}

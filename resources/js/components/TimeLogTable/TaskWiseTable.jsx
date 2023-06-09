@@ -61,19 +61,30 @@ const TaskWiseTable = ({ columns, subColumns }) => {
     setTotalRows(filteredData.length);
 }
 
-    useEffect(()=> { 
-        if(!preFetchData.length && !dataIsLoading){
-            (async () => {
-                let res = await getTaskWiseData({}).unwrap();
-                if(res) {
-                    dispatch(setTaskWiseTableData(res?.data))
-                    // setAllData(res?.data); 
-                    setData(res?.data);
-                    setTotalRows(res?.data?.length);
-                }  
-            })();
-        }
-    }, [])
+    // useEffect(()=> { 
+    //     if(!preFetchData.length && !dataIsLoading){
+    //         (async () => {
+    //             let res = await getTaskWiseData({}).unwrap();
+    //             if(res) {
+    //                 dispatch(setTaskWiseTableData(res?.data))
+    //                 // setAllData(res?.data); 
+    //                 setData(res?.data);
+    //                 setTotalRows(res?.data?.length);
+    //             }  
+    //         })();
+    //     }
+    // }, [])
+
+    const handleTimeFilter = async(d) => {  
+        let res = await getTaskWiseData(d).unwrap();
+  
+        if(res) {
+            dispatch(setTaskWiseTableData(res?.data || []))
+            setData(res?.data);
+            setTotalRows(res?.data?.length);
+        }  
+    }
+
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -421,6 +432,7 @@ const TaskWiseTable = ({ columns, subColumns }) => {
         <TableContainer>
             <TimeLogTableFilterBar
                 handleDataRequest = {handleDataRequest} 
+                handleTimeFilter={handleTimeFilter}
             /> 
             <TableWrapper>
                 {/* table */}

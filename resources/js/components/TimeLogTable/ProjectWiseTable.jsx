@@ -63,19 +63,29 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
     }
 
     
-    useEffect(()=> {
+    // useEffect(()=> {
         
-        if(preFetchData.length === 0 && !dataIsLoading){
-            (async () => {
-                let res = await getProjectWiseData({}).unwrap();
-                if(res) {
-                    dispatch(setProjectWiseTable(res?.data));
-                    setData(res?.data);
-                    setTotalRows(res?.data?.length);
-                }  
-            })();
-        }
-    }, [])
+    //     if(preFetchData.length === 0 && !dataIsLoading){
+    //         (async () => {
+    //             let res = await getProjectWiseData({}).unwrap();
+    //             if(res) {
+    //                 dispatch(setProjectWiseTable(res?.data));
+    //                 setData(res?.data);
+    //                 setTotalRows(res?.data?.length);
+    //             }  
+    //         })();
+    //     }
+    // }, [])
+
+    const handleTimeFilter = async(d) => {  
+        let res = await getProjectWiseData(d).unwrap();
+  
+        if(res) {
+            dispatch(setProjectWiseTable(res?.data || []))
+            setData(res?.data);
+            setTotalRows(res?.data?.length);
+        }  
+    }
 
 
 
@@ -414,7 +424,8 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
         <TableContainer>
             {/* <ColumnFilter columns={columnOrder} filterColumn={filterColumn} setFilterColumn={setFilterColumn} root={columnFilterButtonId} /> */}
             <TimeLogTableFilterBar
-                handleDataRequest = {handleDataRequest} 
+                handleDataRequest = {handleDataRequest}  
+                handleTimeFilter = {handleTimeFilter}
             />
             <TableWrapper>
                 {/* table */}

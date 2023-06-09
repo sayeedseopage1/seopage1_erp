@@ -5,19 +5,25 @@ import PersonFilter from './PersonFilter';
 import { useLazyGetAllUsersQuery } from '../../services/api/userSliceApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUsers } from '../../services/features/usersSlice';
+import FilterItem from './FilterBarItem';
+import dayjs from 'dayjs';
+import { useGetProjectsOptionsQuery } from '../../services/api/FilterBarOptionsApiSlice';
+import PersonFilterItem from './ProjectFilter';
+import ProjectFilterItem from './ProjectFilter';
 
 
-export default function TimeLogTableFilterBar ({handleDataRequest}){
+export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFilter}){
     const { users } = useSelector(s => s.users);
     const dispatch = useDispatch();
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
+    const [status, setStatus] = React.useState('in progress');
 
     // employee
     const [selectedEmployeeId, setSelectedEmployeeId] = React.useState(null);
     const [selectedPMId, setSelectedPMId] = React.useState(null);
     const [selectedClientId, setSelectedClientId] = React.useState(null);
-    const [selectedProjectId, setSelectedProjectId] = React.useState(null);
+    const [selectedProject, setSelectedProject] = React.useState(null);
 
 
 
@@ -25,6 +31,8 @@ export default function TimeLogTableFilterBar ({handleDataRequest}){
     const [getAllUsers, {  isFetching:userIsFetching}] = useLazyGetAllUsersQuery('', {
         skip: users.length
     });
+
+    const { data: getProjectsOptions, isFetching } = useGetProjectsOptionsQuery('');
 
     
     React.useEffect(() => {
@@ -36,22 +44,56 @@ export default function TimeLogTableFilterBar ({handleDataRequest}){
                 }
             })()
         }
-    }, [])
-
-
-  
-
+    }, []) 
+   
 
     let content = null;
+
+
+    const handleStatusFilter = (status) => {
+        if(status){
+            setStatus(status); 
+            handleTimeFilter({
+                start_date: dayjs(startDate).format('YYYY-MM-DD'),
+                end_date: dayjs(endDate).format('YYYY-MM-DD'),
+                employee_id: selectedEmployeeId,
+                pm_id: selectedPMId,
+                client_id: selectedClientId,   
+                status: status,
+                project_id: selectedProject ? selectedProject.id : null
+            })
+        }else{
+            setStatus(null)
+        }
+    }   
     
-    const handleDateFilter = (s, e) => {
-        handleDataRequest({
+    const handleDateFilter = (s, e) => { 
+        handleTimeFilter({
             start_date: s,
             end_date: e ,
             employee_id: selectedEmployeeId,
             pm_id: selectedPMId,
-            client_id: selectedClientId,   
+            client_id: selectedClientId,
+            status: status,
+            project_id: selectedProject ? selectedProject.id : null
         })
+    } 
+
+    const handleProjectFilter = (e, data) => {
+        if(data){
+            setSelectedProject(data);
+            handleTimeFilter({
+                start_date: dayjs(startDate).format('YYYY-MM-DD'),
+                end_date: dayjs(endDate).format('YYYY-MM-DD'),
+                employee_id: selectedEmployeeId,
+                pm_id: selectedPMId,
+                client_id: selectedClientId,   
+                status: status,
+                project_id: data.id
+            })
+        }else{
+            setSelectedProject(null)
+        }
     }
 
     const handleEmployeeFilter = (e, data) => { 
@@ -125,8 +167,11 @@ export default function TimeLogTableFilterBar ({handleDataRequest}){
        }
     }
 
+
+    
+
     content =  <div className='d-flex flex-wrap bg-white p-1'>
-        {/* <div className='border-right pr-1'>
+        <div className='border-right pr-1'>
             <JqueryDateRangePicker 
                 startDate={startDate}
                 setStartDate={setStartDate}
@@ -134,7 +179,7 @@ export default function TimeLogTableFilterBar ({handleDataRequest}){
                 setEndDate={setEndDate}
                 onApply={handleDateFilter}
             />
-        </div> */}
+        </div>
 
         {/* employee */}
         <PersonFilter
@@ -163,7 +208,23 @@ export default function TimeLogTableFilterBar ({handleDataRequest}){
             isLoading={userIsFetching}
             onSelect={handleClientFilter}
         />
+ 
 
+        <ProjectFilterItem
+            title="Project"
+            items={getProjectsOptions ? [...getProjectsOptions]: []}
+            isLoading={isFetching}
+            selected={selectedProject}
+            onSelect={handleProjectFilter}
+        />
+    
+        <FilterItem
+            title="Status"
+            items = {["finished", "canceled", "in progress", "partially finished", "under review"]}
+            selected={status}
+            isLoading={false}
+            onSelect={handleStatusFilter}
+        />
 
 
 
