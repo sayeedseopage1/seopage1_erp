@@ -7,7 +7,7 @@ import _ from 'lodash';
 import  TextHighlighter from '../../Insights/components/TextHighlighter';
 
 
-export default function PersonFilterItem({
+export default function ProjectFilterItem({
     items= [],
     title,
     selected,
@@ -34,7 +34,7 @@ export default function PersonFilterItem({
                 <Dropdown.Toggle
                     className="sp1__pp_filter_dd_toggle"
                 >
-                {!selected ? 'All' : selected?.name}
+                {!selected ? 'All' : selected?.project_name}
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                     className="sp1__pp_filter_dd"
@@ -93,28 +93,16 @@ export default function PersonFilterItem({
 
                                 {/* item */}
                                 {
-                                    items?.filter(item => _.lowerCase(item?.name).includes(_.lowerCase(search)))
+                                    items?.filter(item => _.lowerCase(item?.project_name).includes(_.lowerCase(search)))
                                     .map(item => (
                                         <Dropdown.Item
                                             key={item?.id}
                                             onClick={(e) => onSelect(e, item)}
                                             className={`sp1__pp_filter_dd_item mb-1 ${selected?.id === item?.id ? 'active': ''}`} 
                                         >
-                                            {item.image_url ?
-                                                <img
-                                                   src={item.image_url} 
-                                                   alt={item.name}
-                                                   style={{
-                                                       width: 26,
-                                                       height: 26,
-                                                       borderRadius: '50%'
-                                                       
-                                                   }}
-                                                />
-                                                : null  
-                                            }
+                                            
                                             <TextHighlighter
-                                                textToHighlight={item?.name}
+                                                textToHighlight={item?.project_name}
                                                 searchWords={search}
                                             /> 
                                         </Dropdown.Item>

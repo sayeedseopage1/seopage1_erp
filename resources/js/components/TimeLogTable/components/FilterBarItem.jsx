@@ -7,7 +7,7 @@ import _ from 'lodash';
 import  TextHighlighter from '../../Insights/components/TextHighlighter';
 
 
-export default function PersonFilterItem({
+export default function  FilterItem({
     items= [],
     title,
     selected,
@@ -34,7 +34,7 @@ export default function PersonFilterItem({
                 <Dropdown.Toggle
                     className="sp1__pp_filter_dd_toggle"
                 >
-                {!selected ? 'All' : selected?.name}
+                {!selected ? 'All' : _.startCase(selected)}
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                     className="sp1__pp_filter_dd"
@@ -62,33 +62,19 @@ export default function PersonFilterItem({
                             </div>
                         </React.Fragment>
                     ) :
-                        <React.Fragment>
-
-                            {
-                                items?.length > 15 && 
-                                <React.Fragment>
-                                    <div className="sp1__pp_filter_dd_search">
-                                        <SearchBox
-                                            value={search}
-                                            onChange={setSearch}
-                                            autoFocus={true}
-                                        />
-                                    </div>
-                                    <div className='cnx_divider'/>
-                                </React.Fragment>
-                            }
+                        <React.Fragment> 
                              
                             {/* data */}
                             <div
                                 className='sp1__pp_menu_items'
                                 style={{maxHeight}}
                             >
-                                <Dropdown.Item
-                                    onClick={(e) => onSelect(e, null)}
+                                {/* <Dropdown.Item
+                                    onClick={(e) => onSelect(null)}
                                     className={`sp1__pp_filter_dd_item mb-1 ${!selected && 'active'}`} 
                                 >
                                     Select All
-                                </Dropdown.Item>
+                                </Dropdown.Item> */}
                                 
 
                                 {/* item */}
@@ -96,27 +82,12 @@ export default function PersonFilterItem({
                                     items?.filter(item => _.lowerCase(item?.name).includes(_.lowerCase(search)))
                                     .map(item => (
                                         <Dropdown.Item
-                                            key={item?.id}
-                                            onClick={(e) => onSelect(e, item)}
-                                            className={`sp1__pp_filter_dd_item mb-1 ${selected?.id === item?.id ? 'active': ''}`} 
+                                            key={item}
+                                            onClick={(e) => onSelect(item)}
+                                            className={`sp1__pp_filter_dd_item mb-1 ${selected === item ? 'active': ''}`} 
                                         >
-                                            {item.image_url ?
-                                                <img
-                                                   src={item.image_url} 
-                                                   alt={item.name}
-                                                   style={{
-                                                       width: 26,
-                                                       height: 26,
-                                                       borderRadius: '50%'
-                                                       
-                                                   }}
-                                                />
-                                                : null  
-                                            }
-                                            <TextHighlighter
-                                                textToHighlight={item?.name}
-                                                searchWords={search}
-                                            /> 
+                                            
+                                             {_.startCase(item)}
                                         </Dropdown.Item>
                                     ))
                                 } 

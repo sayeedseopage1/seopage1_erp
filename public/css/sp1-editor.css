@@ -1,0 +1,137 @@
+.sp1_editor {
+  width: 100%;
+  min-height: 300px;
+  height: -moz-fit-content;
+  height: fit-content;
+  border: 1px solid #ddd;
+}
+.sp1_editor--textarea {
+  width: 100%;
+  border: none;
+  height: 0;
+}
+.sp1_editor--content {
+  width: 100%;
+  height: -moz-fit-content;
+  height: fit-content;
+  min-height: 268px;
+  background-color: #fff;
+  padding: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.sp1_editor--content i {
+  font-style: italic;
+}
+.sp1_editor-toolbar {
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  background: #fcfcfc;
+  border-bottom: 1px solid #ddd;
+}
+.sp1_editor-toolbar--div {
+  margin-inline: 10px;
+  width: 1px;
+  height: 24px;
+  background: #dfdfdf;
+}
+.sp1_editor-toolbar--btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 2px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 3px;
+  color: #777;
+}
+.sp1_editor-toolbar--btn:hover {
+  cursor: pointer;
+  background-color: #ececec;
+}
+.sp1_editor-toolbar--btn.active {
+  background-color: #ececec;
+}
+
+.sp1_editor-dropdown {
+  position: relative;
+}
+.sp1_editor-dropdown--toggle {
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 24px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 6px;
+}
+.sp1_editor-dropdown--toggle:hover {
+  cursor: pointer;
+  background-color: #ececec;
+}
+.sp1_editor-dropdown--toggle i.fa-caret-down {
+  font-size: 12px;
+  margin-left: 6px;
+  color: #777;
+}
+.sp1_editor-dropdown--menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  border: 1px solid #ddd;
+  z-index: 1;
+  border-radius: 6px;
+  background-color: #fff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4 ease-in-out;
+}
+.sp1_editor-dropdown--menu.show {
+  opacity: 1;
+  pointer-events: all;
+}
+.sp1_editor-dropdown--menu-item {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  padding-inline: 8px;
+  margin: 0;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: rgba(67, 70, 102, 0.8);
+}
+.sp1_editor-dropdown--menu-item.normal {
+  font-weight: 400;
+}
+.sp1_editor-dropdown--menu-item.h1 {
+  font-size: 16px;
+}
+.sp1_editor-dropdown--menu-item.h2 {
+  font-size: 15px;
+}
+.sp1_editor-dropdown--menu-item.h3 {
+  font-size: 14px;
+}
+.sp1_editor-dropdown--menu-item.h4 {
+  font-size: 13px;
+}
+.sp1_editor-dropdown--menu-item.h5 {
+  font-size: 12px;
+}
+.sp1_editor-dropdown--menu-item.h6 {
+  font-size: 11px;
+}
+.sp1_editor-dropdown--menu-item:hover {
+  color: #333;
+  background-color: #ececec;
+}
+
+/*# sourceMappingURL=sp1-editor.css.map*/

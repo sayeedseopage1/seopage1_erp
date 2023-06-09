@@ -1,0 +1,162 @@
+ $editor-width: 100% !default;
+ $editor-height: fit-content;
+ $editor-min-height: 300px !default;
+ $editor-border-color: #ddd;
+ $editor-border: 1px solid $editor-border-color;
+
+// textarea
+ $editor-text-width: 100% !default;
+ $editor-text-height: fit-content !default;
+ $editor-text-min-height: 268px !default;
+
+// editor toolbar button
+ $editor-toolbar-width: 24px !default;
+ $editor-toolbar-height: 24px !default;
+ $editor-toolbar-bg-color: #ececec;
+ $editor-toolbar-btn-radius: 2px;
+
+
+ .sp1_editor{
+    width: $editor-width;
+    min-height: $editor-min-height;
+    height: $editor-height;
+    border: $editor-border;
+
+
+    // text area
+    &--textarea {
+        width: $editor-text-width; 
+        border: none;
+        height: 0;
+    }
+
+    &--content {
+        width: $editor-text-width; 
+        height: $editor-text-height;
+        min-height: $editor-text-min-height;
+        background-color: #fff;
+        padding: 10px;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        i{font-style: italic;}
+    }
+
+    &-toolbar{
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        background: #fcfcfc;
+        border-bottom: $editor-border;
+
+
+        &--div{
+            margin-inline: 10px;
+            width: 1px;
+            height: $editor-toolbar-height;
+            background: #dfdfdf;
+        }
+    }
+
+    &-toolbar--btn{
+        width: $editor-toolbar-width;
+        height: $editor-toolbar-height;
+        border-radius: $editor-toolbar-btn-radius;
+        background-color: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 3px;
+        color: #777; 
+
+        &:hover{
+            cursor: pointer;
+            background-color: $editor-toolbar-bg-color;
+        }
+
+        &.active{
+            background-color: $editor-toolbar-bg-color;
+        }
+    }
+ }
+
+
+ .sp1_editor-dropdown{
+    position: relative;
+
+    &--toggle{
+        width: fit-content;
+        height: $editor-toolbar-height;
+        border-radius: $editor-toolbar-btn-radius;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-inline: 6px;
+    
+        &:hover{
+            cursor: pointer;
+            background-color: $editor-toolbar-bg-color;
+        }
+    
+        i.fa-caret-down{
+            font-size: 12px;
+            margin-left: 6px;
+            color: #777;
+        }
+            
+     }
+
+     &--menu{
+        position: absolute;
+        top: 100%;
+        left: 0;
+        border: $editor-border;
+        z-index: 1;
+        border-radius: 6px;
+        background-color: #fff;
+        box-shadow: 0 3px 6px rgb(0 0 0 / 10%);
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4 ease-in-out;
+        &.show{
+            opacity: 1;
+            pointer-events: all;
+        }
+     }
+
+     &--menu-item{
+        font-size: 14px;
+        font-weight: 500;
+        white-space: nowrap;
+        padding-inline:8px;
+        margin: 0;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        color: rgba(67, 70, 102, 0.8);
+        
+        &.normal{
+            font-weight: 400;
+        }
+        &.h1{font-size: 16px;}
+        &.h2{font-size: 15px;}
+        &.h3{font-size: 14px;}
+        &.h4{font-size: 13px;}
+        &.h5{font-size: 12px;}
+        &.h6{font-size: 11px;}
+
+        &:hover{
+            color: #333;
+            background-color: $editor-toolbar-bg-color;
+        }
+
+     }
+ }
+
+
+ 
+
+ 

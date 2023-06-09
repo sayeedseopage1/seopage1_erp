@@ -205,7 +205,7 @@ export default function CashPointsFilter ({
                 end_date: endDate,
             })
       }
-    }, [endDate]);
+    }, [endDate, startDate]);
 
 
 

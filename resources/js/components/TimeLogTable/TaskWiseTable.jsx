@@ -18,6 +18,7 @@ const TaskWiseTable = ({ columns, subColumns }) => {
     const { data: preFetchData} = useSelector(s => s.taskWiseDataTable);
     const dispatch = useDispatch();
 
+    const [totalTrackTime, setTotalTrackTime] = useState(0);
     const {
         setSubColumns,
         sortConfig,
@@ -61,19 +62,36 @@ const TaskWiseTable = ({ columns, subColumns }) => {
     setTotalRows(filteredData.length);
 }
 
-    useEffect(()=> { 
-        if(!preFetchData.length && !dataIsLoading){
-            (async () => {
-                let res = await getTaskWiseData({}).unwrap();
-                if(res) {
-                    dispatch(setTaskWiseTableData(res?.data))
-                    // setAllData(res?.data); 
-                    setData(res?.data);
-                    setTotalRows(res?.data?.length);
-                }  
-            })();
-        }
-    }, [])
+    // useEffect(()=> { 
+    //     if(!preFetchData.length && !dataIsLoading){
+    //         (async () => {
+    //             let res = await getTaskWiseData({}).unwrap();
+    //             if(res) {
+    //                 dispatch(setTaskWiseTableData(res?.data))
+    //                 // setAllData(res?.data); 
+    //                 setData(res?.data);
+    //                 setTotalRows(res?.data?.length);
+    //             }  
+    //         })();
+    //     }
+    // }, [])
+
+    const handleTimeFilter = async(d) => {  
+        let res = await getTaskWiseData(d).unwrap();
+  
+        if(res) {
+            dispatch(setTaskWiseTableData(res?.data || []))
+            setData(res?.data);
+            setTotalRows(res?.data?.length);
+            if(res?.data){
+                let _totalTrackTime = res.data.reduce((total, curr) => (
+                    total += Number(curr['total_minutes'])
+                ), 0);
+                setTotalTrackTime(_totalTrackTime);
+            }
+        }  
+    }
+
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -377,9 +395,12 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                                                     value.length - 1 ===  index? "2px solid #AAD1FC" : "1px solid #E7EFFC",
                                                 }}
                                             >
-                                                {item['start_time'] ? dayjs(
-                                                    item["start_time"]
-                                                ).format("hh:mm A"): <span>No start date</span>}
+                                                {item['start_time'] ? 
+                                                    <>
+                                                        {dayjs( item["start_time"]).format("MMM DD, YYYY")} <br/>
+                                                        {dayjs( item["start_time"]).format("hh:mm A")}
+                                                    </>
+                                                : <span>No start date</span>}
                                             </td>
                                         ) : column === "task_end" ? (
                                             <td
@@ -389,9 +410,11 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                                                             index ? "2px solid #AAD1FC" : "1px solid #E7EFFC",
                                                 }}
                                             >
-                                                {item["end_time"] ? dayjs(item["end_time"]).format(
-                                                    "hh:mm A"
-                                                ):<span>No end date</span>}
+                                                {item["end_time"] ? 
+                                                <>
+                                                    {dayjs(item["end_time"]).format("MMM DD, YYYY")} <br/>
+                                                    {dayjs(item["end_time"]).format("hh:mm A")}
+                                                </>:<span>No end date</span>}
                                             </td>
                                         ) : (
                                             <td
@@ -421,7 +444,13 @@ const TaskWiseTable = ({ columns, subColumns }) => {
         <TableContainer>
             <TimeLogTableFilterBar
                 handleDataRequest = {handleDataRequest} 
+                handleTimeFilter={handleTimeFilter}
             /> 
+            <div className="d-flex align-items-center justify-content-center">
+                    Total Tracked Time: <span className="font-weight-bold ml-1">
+                        {convertTime(totalTrackTime)}
+                    </span>
+                </div>
             <TableWrapper>
                 {/* table */}
                 <table>
