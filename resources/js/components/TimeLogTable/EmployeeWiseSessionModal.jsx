@@ -8,6 +8,7 @@ import { convertTime } from "./utils/converTime";
 import Pagination from "./components/TablePagination";
 import RenderWithImageAndRole from "./components/RenderCellWithImageAndRole";
 import dayjs from "dayjs";
+import { useGetSessionDetailsMutation } from "../services/api/timeLogTableSessionDetails";
 
 const cols =  [
     { key: "task_name", label: "Task Name" },
@@ -45,35 +46,38 @@ const EmployeeWiseSessionTable = ({control}) => {
     const [filterColumn, setFilterColumn] = useState([]);
 
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
 
-    const {isOpen, type:ModalType, projectID, employeeID} = control.employeeSessionModal;
+    const {isOpen, type:ModalType, projectID, employeeID, startDate, endDate} = control.employeeSessionModal;
 
     const close = () => control.setEmployeeSessionModal({
         isOpen: false,
         projectID: 0,
         employeeID: 0
     })
+ 
 
+    const [
+        getSessionDetails,
+        {
+            data: sessionData, 
+            isLoading: loading
+        }
+    ] = useGetSessionDetailsMutation('');
 
     // get employee table data
-    useEffect(() => {
-        if(data.length > 0) return;
-        setLoading(true);
-        const fetch = async () => {
-            axios.get(`/account/time-log-report/${projectID}/${employeeID}`).then((res) => {
-                let data = res.data;
-                if(data){
-                    setData(data);
-                }
-
-                // setData(res.data);
-                setLoading(false)
-            });
-        };
-        fetch();
-        return () => fetch();
+    useEffect(() => { 
+        getSessionDetails({
+            projectID, employeeID, startDate, endDate
+        }).unwrap();  
     }, []);
+
+    
+    React.useEffect(() => {
+        if(sessionData){
+            setData(sessionData)
+        }
+    }, [sessionData])
 
     React.useEffect(() => {
         ModalType === 'projectWise' ? setSubColumns([...subColsProjectWise]) :  setSubColumns([...employeeWise])
@@ -310,7 +314,8 @@ const EmployeeWiseSessionTable = ({control}) => {
                                                             : "1px solid #E7EFFC",
                                                 }}
                                             >
-                                                {dayjs(item['start_time']).format('hh:mm a')}
+                                                {dayjs(item['start_time']).format('MMM DD, YYYY')} <br/>
+                                                {dayjs(item['start_time']).format('hh:mm A')}
                                             </td>
                                         }else if(column === 'end_time'){
                                             return <td 
@@ -323,7 +328,9 @@ const EmployeeWiseSessionTable = ({control}) => {
                                                             : "1px solid #E7EFFC",
                                                 }}
                                             >
-                                                {dayjs(item['end_time']).format('hh:mm a')}
+                                                
+                                                {dayjs(item['start_time']).format('MMM DD, YYYY')} <br/>
+                                                {dayjs(item['end_time']).format('hh:mm A')}
                                             </td>
                                         } else {
                                             return <td 
@@ -393,6 +400,7 @@ const EmployeeWiseSessionTable = ({control}) => {
                                 currentPage={currentPage}
                                 setCurrentPage={setCurrentPage}
                                 setNPageRows={setNPageRows}
+                                totalRows={data.length}
                             />
 
                             <CloseButton onClick={close} className="btn btn-sm btn-primary">

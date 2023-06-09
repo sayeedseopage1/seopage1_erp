@@ -129,12 +129,14 @@ const TimeLogTable = () => {
         projectID: 0
     })
 
-    const openEmployeeSession = (employeeId, projectId, type="") => {
+    const openEmployeeSession = (employeeId, projectId, type="", startDate,endDate) => {
         setEmployeeSessionModal({
             isOpen: true,
             type,
             employeeID: employeeId,
-            projectID: projectId
+            projectID: projectId,
+            startDate,
+            endDate
         })
     }
     const closeEmployeeSession = () => {
@@ -184,6 +186,8 @@ const TimeLogTable = () => {
                         {tab}
                     </Tab>
                 ))}
+                
+
                 <ColumnFilter table={activeTableNamespace} />
                 <Tab>Export</Tab>
             </Tabs>

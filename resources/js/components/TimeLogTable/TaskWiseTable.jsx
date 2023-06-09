@@ -18,6 +18,7 @@ const TaskWiseTable = ({ columns, subColumns }) => {
     const { data: preFetchData} = useSelector(s => s.taskWiseDataTable);
     const dispatch = useDispatch();
 
+    const [totalTrackTime, setTotalTrackTime] = useState(0);
     const {
         setSubColumns,
         sortConfig,
@@ -82,6 +83,12 @@ const TaskWiseTable = ({ columns, subColumns }) => {
             dispatch(setTaskWiseTableData(res?.data || []))
             setData(res?.data);
             setTotalRows(res?.data?.length);
+            if(res?.data){
+                let _totalTrackTime = res.data.reduce((total, curr) => (
+                    total += Number(curr['total_minutes'])
+                ), 0);
+                setTotalTrackTime(_totalTrackTime);
+            }
         }  
     }
 
@@ -434,6 +441,11 @@ const TaskWiseTable = ({ columns, subColumns }) => {
                 handleDataRequest = {handleDataRequest} 
                 handleTimeFilter={handleTimeFilter}
             /> 
+            <div className="d-flex align-items-center justify-content-center">
+                    Total Tracked Time: <span className="font-weight-bold ml-1">
+                        {convertTime(totalTrackTime)}
+                    </span>
+                </div>
             <TableWrapper>
                 {/* table */}
                 <table>

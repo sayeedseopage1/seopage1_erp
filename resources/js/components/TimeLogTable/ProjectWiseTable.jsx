@@ -37,6 +37,10 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
     const [filterOptions, setFilterOptions] = useState({});
     const [loading, setLoading] = useState(true);
     const [totalRows, setTotalRows] = useState(0);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [totalSession, setTotalSession] = useState(0);
+    const [totalTrackTime, setTotalTrackTime] = useState(0);
 
     const [getProjectWiseData, {isLoading: dataIsLoading}] = useGetProjectWiseDataMutation();
 
@@ -78,15 +82,29 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
     // }, [])
 
     const handleTimeFilter = async(d) => {  
+        setStartDate(d.start_date);
+        setEndDate(d.end_date);
         let res = await getProjectWiseData(d).unwrap();
-  
+        
         if(res) {
             dispatch(setProjectWiseTable(res?.data || []))
             setData(res?.data);
             setTotalRows(res?.data?.length);
+
+            if(res?.data){
+                let _totalTrackTime = res.data.reduce((total, curr) => (
+                    total += Number(curr['total_minutes'])
+                ), 0);
+
+                let _totalSession = res.data.reduce((total, curr) => (
+                    total += Number(curr['number_of_session'])
+                ), 0)
+
+                setTotalSession(_totalSession);
+                setTotalTrackTime(_totalTrackTime);
+            }
         }  
     }
-
 
 
     
@@ -386,7 +404,7 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
                                                 style={{ borderBottom: value.length - 1 === index ? "2px solid #AAD1FC" : "1px solid #E7EFFC" }}
                                             >
                                                 <ModalOpeningButton
-                                                    onClick={() => open(value[0].employee_id, item["project_id"], 'projectWise')}
+                                                    onClick={() => open(value[0].employee_id, item["project_id"], 'projectWise', startDate, endDate)}
                                                     type="button"
                                                     aria-label="session_modal"
                                                 >
@@ -427,6 +445,14 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
                 handleDataRequest = {handleDataRequest}  
                 handleTimeFilter = {handleTimeFilter}
             />
+
+            
+                <div className="d-flex align-items-center justify-content-center">
+                    Total No. of Session: <span className="font-weight-bold ml-1">{totalSession}</span> <span className="mx-2">|</span> Total Tracked Time: <span className="font-weight-bold ml-1">
+                        {convertTime(totalTrackTime)}
+                    </span>
+                </div>
+
             <TableWrapper>
                 {/* table */}
                 <table>

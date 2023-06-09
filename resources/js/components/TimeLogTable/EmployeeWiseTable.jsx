@@ -59,6 +59,7 @@ const EmployeeWiseTable = ({open,close, columns, subColumns }) => {
         } =  filter;
 
         let filteredData = [...preFetchData];
+        console.log({client_id})
 
         if(employee_id){ filteredData = filteredData.filter(d => Number(d.employee_id) === Number(employee_id))}
         if(pm_id){  filteredData = filteredData.filter(d => Number(d.pm_id) === Number(pm_id))}

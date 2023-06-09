@@ -100,6 +100,15 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
         e.preventDefault();
         if(data){
             setSelectedEmployeeId(data.id);
+            // handleTimeFilter({
+            //     start_date: dayjs(startDate).format('YYYY-MM-DD'),
+            //     end_date: dayjs(endDate).format('YYYY-MM-DD'),
+            //     employee_id: data.id,
+            //     pm_id: selectedPMId,
+            //     client_id: selectedClientId,   
+            //     status: status,
+            //     project_id: project_id.id || null
+            // })
             handleDataRequest({
                 start_date: startDate,
                 end_date: endDate ,
@@ -116,6 +125,15 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
                 pm_id: selectedPMId,
                 client_id: selectedClientId,   
             })
+            // handleTimeFilter({
+            //     start_date: dayjs(startDate).format('YYYY-MM-DD'),
+            //     end_date: dayjs(endDate).format('YYYY-MM-DD'),
+            //     employee_id: null,
+            //     pm_id: selectedPMId,
+            //     client_id: selectedClientId,   
+            //     status: status,
+            //     project_id: project_id.id || null
+            // })
         }
         
     }
@@ -131,6 +149,16 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
                 pm_id: data.id,
                 client_id: selectedClientId,   
             })
+
+            // handleTimeFilter({
+            //     start_date: dayjs(startDate).format('YYYY-MM-DD'),
+            //     end_date: dayjs(endDate).format('YYYY-MM-DD'),
+            //     employee_id: selectedEmployeeId,
+            //     pm_id: data.id,
+            //     client_id: selectedClientId,   
+            //     status: status,
+            //     project_id: project_id.id || null
+            // })
         }else{
             setSelectedPMId(null);
             handleDataRequest({
@@ -140,6 +168,16 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
                 pm_id: null,
                 client_id: selectedClientId,   
             })
+
+            // handleTimeFilter({
+            //     start_date: dayjs(startDate).format('YYYY-MM-DD'),
+            //     end_date: dayjs(endDate).format('YYYY-MM-DD'),
+            //     employee_id: selectedEmployeeId,
+            //     pm_id: null,
+            //     client_id: selectedClientId,   
+            //     status: status,
+            //     project_id: project_id.id || null
+            // })
         }
     }
 
@@ -155,6 +193,15 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
                 pm_id: selectedPMId,
                 client_id: data.id,
             })
+            // handleTimeFilter({
+            //     start_date: dayjs(startDate).format('YYYY-MM-DD'),
+            //     end_date: dayjs(endDate).format('YYYY-MM-DD'),
+            //     employee_id: selectedEmployeeId,
+            //     pm_id: selectedPMId,
+            //     client_id: data.id,   
+            //     status: status,
+            //     project_id: project_id.id || null
+            // })
        } else{
             setSelectedClientId(null);
             handleDataRequest({
@@ -164,6 +211,15 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
                 pm_id: selectedPMId,
                 client_id: null,
             })
+            // handleTimeFilter({
+            //     start_date: dayjs(startDate).format('YYYY-MM-DD'),
+            //     end_date: dayjs(endDate).format('YYYY-MM-DD'),
+            //     employee_id: selectedEmployeeId,
+            //     pm_id: selectedPMId,
+            //     client_id: null,   
+            //     status: status,
+            //     project_id: project_id.id || null
+            // })
        }
     }
 
