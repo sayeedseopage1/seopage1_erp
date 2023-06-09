@@ -189,7 +189,7 @@
 
                                         @if (Auth::user()->role_id == 5)
                                             @include('tasks.modals.develoepr_revision')
-                                        @elseif(Auth::user()->role_id == 6)
+                                        @elseif(Auth::user()->role_id == 6 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
                                             @include('tasks.modals.revision')
                                         @endif
                                     @endif
