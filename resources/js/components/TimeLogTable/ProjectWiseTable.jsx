@@ -404,7 +404,7 @@ const ProjectWiseTable = ({ open, close, columns, subColumns }) => {
                                                 style={{ borderBottom: value.length - 1 === index ? "2px solid #AAD1FC" : "1px solid #E7EFFC" }}
                                             >
                                                 <ModalOpeningButton
-                                                    onClick={() => open(value[0].employee_id, item["project_id"], 'projectWise', startDate, endDate)}
+                                                    onClick={() => open(item?.employee_id, item["project_id"], 'projectWise', startDate, endDate)}
                                                     type="button"
                                                     aria-label="session_modal"
                                                 >
