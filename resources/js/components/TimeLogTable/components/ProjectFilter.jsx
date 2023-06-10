@@ -71,6 +71,7 @@ export default function ProjectFilterItem({
                                         <SearchBox
                                             value={search}
                                             onChange={setSearch}
+                                            autoFocus={true}
                                         />
                                     </div>
                                     <div className='cnx_divider'/>
