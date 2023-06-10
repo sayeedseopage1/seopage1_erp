@@ -1,0 +1,217 @@
+.sp1_task_btn_group {
+  border-color: #E7EFFC;
+}
+
+.sp1_task_btn_group button {
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.sp1_task_card {
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.sp1_task_card--head {
+  padding: 10px 16px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background: rgb(231, 239, 252);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.sp1_task_card--head > .__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgb(231, 239, 252);
+  color: rgb(227, 62, 79);
+  font-size: 14px;
+}
+
+.sp1_task_card--body {
+  padding: 10px 16px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.sp1_task_card--sub-card {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+}
+
+.sp1_task_card--sub-card:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.sp1_tc_sc-inx {
+  padding: 10px;
+  border-radius: 16px;
+  background: #f6f9ff;
+  width: -moz-fit-content;
+  width: fit-content;
+  float: left;
+  margin: 0 10px 10px 0;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.sp1_tc_sc-inx > h2 {
+  font-weight: bold;
+  color: rgb(227, 62, 79);
+  margin: 0;
+  font-size: 24px;
+}
+
+.sp1_task_right_card {
+  padding: 16px 24px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  max-height: 180px;
+  position: relative;
+}
+
+.sp1_task_right_card--body {
+  height: 110px;
+  overflow-y: auto;
+  padding-bottom: 5px;
+  padding-right: 5px;
+}
+
+.sp1_task_right_card--body::-webkit-scrollbar {
+  width: 4px;
+  border-radius: 4px !important;
+}
+
+.sp1_task_right_card--body::-webkit-scrollbar-track {
+  background: rgb(240, 240, 240) !important;
+  border-radius: 4px;
+  padding: 0 !important;
+}
+
+.sp1_task_right_card--body::-webkit-scrollbar-thumb {
+  border: none;
+}
+
+.sp1_tark_add_item {
+  color: #777;
+  font-weight: 50;
+  padding: 2px 10px;
+  border-radius: 6px;
+}
+
+.sp1_tark_add_item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.sp1_task_righ_action_btn {
+  color: #777;
+}
+
+.sp1_task_righ_action_btn:hover {
+  color: var(--header_color);
+}
+
+.sp1_tark_right_item:not(:last-child) {
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-style: dashed;
+}
+
+.sp1_task_right_dropleft {
+  position: absolute;
+  top: 50%;
+  left: -12px;
+  transform: translateY(-50%);
+}
+
+.sp1_task_right_dl_toggle {
+  padding: 0;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  border-radius: 50%;
+  font-size: 24px;
+  background: transparent;
+}
+
+.sp1_task_right_dropleft_menu {
+  width: 650px;
+  height: 550px;
+  overflow-y: auto;
+  padding: 24px;
+  left: 12px !important;
+  top: -80px !important;
+  border: 0.5px solid #84caf8 !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: rgb(250, 250, 252);
+  border-radius: 16px;
+}
+
+.sp1_task_right_dropleft_menu::-webkit-scrollbar {
+  width: 4px;
+  border-radius: 4px !important;
+}
+
+.sp1_task_right_dropleft_menu::-webkit-scrollbar-track {
+  background: rgb(240, 240, 240) !important;
+  border-radius: 4px;
+  padding: 0 !important;
+}
+
+.sp1_task_right_dropleft_menu::-webkit-scrollbar-thumb {
+  border: none;
+}
+
+/* comment */
+.sp1_task_comments {
+  display: flex;
+  flex-direction: column;
+}
+
+.sp1_task_write_comment {
+  display: flex;
+  gap: 10px;
+}
+
+.sp1_task_comment_send_box {
+  width: 100%;
+  flex: 1;
+  max-width: 500px;
+  padding: 8px 10px;
+  background: #fff;
+  display: flex;
+  border: 1px solid rgb(237, 237, 237);
+  border-radius: 6px;
+  cursor: text;
+  flex-direction: column;
+}
+.sp1_task_comment_send_box span {
+  font-size: 14px;
+  color: #989;
+}
+
+.sp1_task_comment_send_box.active {
+  padding: 0;
+  background: transparent;
+  border-color: transparent;
+}
+.sp1_task_comment_send_box.active span.placeholder {
+  display: none;
+}
+
+.sp1_task_comment_send_box.active #sp1_task_editor {
+  display: block;
+  width: 100%;
+}
+
+.sp1_task_comment_send_box.active .ck-editor {
+  width: 100% !important;
+}
+
+/*# sourceMappingURL=seopage1.css.map*/

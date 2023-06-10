@@ -36,7 +36,8 @@ mix.js("resources/js/app.jsx", "public/js")
         "public/js/main.js"
     )
     .sass("resources/scss/main.scss", "public/css")
-    .sass("resources/scss/sp1/sp1-editor.scss", "public/css/sp1-editor.css")
+    .sass("resources/scss/sp1/ck-editor.scss", "public/css/ck-editor.css")
+    .sass("resources/scss/sp1/seopage1.scss", "public/css/seopage1.css")
     .options({ processCssUrls: false })
     .sourceMaps(true, "source-map")
     .webpackConfig((webpack) => {
