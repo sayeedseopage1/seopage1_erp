@@ -10,6 +10,7 @@ use App\Http\Requests\Tasks\UpdateTask;
 use App\Models\BaseModel;
 use App\Models\EmployeeDetails;
 use App\Models\Pinned;
+use App\Models\PmTaskGuideline;
 use App\Models\Project;
 use App\Models\ProjectMember;
 use App\Models\ProjectMilestone;
@@ -1591,4 +1592,48 @@ class TaskController extends AccountBaseController
             ]);
         }
 
+//        TASK GUIDELINE SECTION
+    public function viewTaskGuideline($project_id){
+        $this->pageTitle = 'Task Guideline';
+        $this->project_id = $project_id;
+        return view('task-guideline.index',$this->data);
+    }
+
+    public function storeTaskGuideline(Request $request)
+    {
+        $request->validate([
+            'theme_details' => 'required',
+            'design' => 'required',
+            'plugin_research' => 'required',
+        ], [
+            'theme_details.required' => 'This field is required!',
+            'design.required' => 'This field is required!',
+            'plugin_research.required' => 'This field is required!',
+        ]);
+        $data = $request->all();
+        $reference_links = json_encode($data['reference_link']);
+        $colors = json_encode($data['color']);
+        $color_descriptions = json_encode($data['color_description']);
+
+        $pm_task_guideline = new PmTaskGuideline();
+        $pm_task_guideline->project_id = $data['project_id'];
+        $pm_task_guideline->theme_details = $data['theme_details'];
+        $pm_task_guideline->theme_name = $data['theme_name'];
+        $pm_task_guideline->theme_url = $data['theme_url'];
+        $pm_task_guideline->design = $data['design'];
+        $pm_task_guideline->xd_url = $data['xd_url'];
+        $pm_task_guideline->drive_url = $data['drive_url'];
+        $pm_task_guideline->reference_link = $reference_links;
+        $pm_task_guideline->instruction = $data['instruction'];
+        $pm_task_guideline->color = $colors;
+        $pm_task_guideline->color_description = $color_descriptions;
+        $pm_task_guideline->plugin_research = $data['plugin_research'];
+        $pm_task_guideline->plugin_name = $data['plugin_name'];
+        $pm_task_guideline->plugin_url = $data['plugin_url'];
+        $pm_task_guideline->google_drive_link = $data['google_drive_link'];
+        $pm_task_guideline->instruction_plugin = $data['instruction_plugin'];
+        $pm_task_guideline->save();
+
+        return response()->json(['status'=>200]);
+    }
 }

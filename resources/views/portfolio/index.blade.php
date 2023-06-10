@@ -200,9 +200,9 @@
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
-                                <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select Website Plugin</label>
-                                <div class="dropdown bootstrap-select form-control select-picker" style="width: 100%; box-shadow: 0 1px 3pxpx rgba(0,0,0,0.1);">
-                                    <select name="website_plugin" id="website_plugin" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="" >Select Website Plugin</label>
+                                <div class="dropdown bootstrap-select form-control select-picker "  style="width: 100%; box-shadow: 0 1px 3px rgba(0,0,0,0.1); width: 200px;">
+                                    <select name="website_plugin" id="website_plugin" x-placement="bottom-end" data-live-search="true" style="width: 200px !important;" class="form-control select-picker error" data-size="8">
                                         <option value="">--</option>
                                         @foreach ($website_plugins as $website_plugin)
                                             <option value="{{$website_plugin->id}}">{{$website_plugin->plugin_name}}</option>
@@ -325,7 +325,7 @@
                                                 <h5>Average hourly price based on the final logged hours:</h5>
                                                 @if($total_hours != 0)
                                                 <span>${{round($project->project_budget / $total_hours, 2)}}</span>
-                                                @else 
+                                                @else
                                                 <span>$0</span>
 
                                                 @endif
