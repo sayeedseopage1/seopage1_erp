@@ -1398,4 +1398,28 @@ class HomeController extends Controller
         return view('service-type.basic_seo');
     }
 
+
+
+    // ck editor image upload
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+        ]);
+
+        // Retrieve the uploaded file
+        $image = $request->file('image');
+
+        // Generate a unique name for the file
+        $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+
+        // Move the uploaded file to a designated directory
+        $image->move(public_path('uploads'), $imageName);
+
+        // Perform any additional operations as needed (e.g., saving the file path to a database)
+
+        return response()->json([
+            'filename' => \URL::asset('uploads/'.$imageName)
+        ]);
+    }
 }

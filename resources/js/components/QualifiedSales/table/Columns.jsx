@@ -18,12 +18,12 @@ export const columns = [
 
     {
         id: 'project_name',
-        header: 'Project name',
+        header: 'Project Name',
         accessor: 'project_name',
         priority: 1,
         cell: (row) => {
             return(
-                <a href={`/account/projects/${row?.id}`}>
+                <a href={`/account/projects/${row?.project_id}`}>
                     {row?.project_name}
                 </a>
             )
@@ -32,7 +32,7 @@ export const columns = [
 
     {
         id: 'client_name',
-        header: "Client name",
+        header: "Client Name",
         accessor: 'client_name',
         priority: 2,
         cell: (row) => {
@@ -54,7 +54,7 @@ export const columns = [
 
     {
         id: 'pm_name',
-        header: 'Project manager',
+        header: 'Project Manager',
         accessor: 'pm_name',
         priority: 4,
         cell: row => {
@@ -66,7 +66,7 @@ export const columns = [
 
     {
         id: 'contact_form',
-        header: 'Contact form',
+        header: 'Contact Form',
         priority: 5,
         cell: row => {
             return(
@@ -83,7 +83,7 @@ export const columns = [
 
     {
         id: 'authorized_by_sales_lead',
-        header: 'Authorized by sales lead',
+        header: 'Authorized By Sale\'s Lead',
         priority: 6,
         cell: row => {
             let isApproved = Number(row?.authorized_by_sales_lead); 
@@ -104,7 +104,7 @@ export const columns = [
     
     {
         id: 'accepted_by_project_manager',
-        header: 'Accepted by project manager',
+        header: 'Accepted By Project Manager',
         priority: 7,
         cell: row => {
 
@@ -128,7 +128,7 @@ export const columns = [
     
     {
         id: 'authorized_by_top_management',
-        header: 'Authorized by top management',
+        header: 'Authorized By Top Management',
         priority: 8,
         cell: row => {
             let isApproved = Number(row?.authorized_by_top_management);
@@ -186,7 +186,7 @@ const RenderGroupHeader = () => {
 
             <div className="sp1_qs_table_tr">
                 <div className="sp1_qs_table_td sp1_qs_table_th sp1_qs_table_th_sub">
-                    Needs defined
+                    Needs Defined
                 </div>
 
                 <div className="sp1_qs_table_td sp1_qs_table_th sp1_qs_table_th_sub">
@@ -198,7 +198,7 @@ const RenderGroupHeader = () => {
                 </div>
 
                 <div className="sp1_qs_table_td sp1_qs_table_th sp1_qs_table_th_sub">
-                    Top management
+                    Top Management
                 </div>
             </div>
         </div>
@@ -207,34 +207,49 @@ const RenderGroupHeader = () => {
 
 // render row 
 const RenderRow = ({row}) => {
+    let isApproved = Number(row?.authorized_by_top_management); 
+    const topManagementComment = row?.admin_authorization_comment ||  (isApproved ? 'Top Management has authorized the sale but left no comments.' : 'No Comment')
+
+
     return(
         <div className="sp1_qs_table_tr">
             <div className="sp1_qs_table_td p-0" >
                 <div className="d-flex flex-column" >
                     <div className="border-bottom p-2"> 
-                        <Comment commentBy="* Sales leads comment" text={row?.sales_lead_need_define}/>
+                        <Comment
+                            question='Did the sales executive defined requirements for this project properly?' 
+                            commentBy="* Sales Lead's Comment" text={row?.sales_lead_need_define}
+                        />
                     </div>
                     <div className="p-2"> 
-                        <Comment commentBy="* Project manager comment" text ={row?.project_manager_needs_define}/>
+                        <Comment 
+                            question='Did the sales team defined requirements for this project properly?' 
+                            commentBy="* Project Manager's Comment" text ={row?.project_manager_needs_define}
+                        />
                     </div>
                 </div>
             </div>
 
             <div className="sp1_qs_table_td"> 
-                <Comment commentBy="* Sales leads comment" text={row?.sales_lead_price_authorization}/>
+                <Comment 
+                    question=' Did the sales executive set price for this project properly?'
+                    commentBy="* Sales Lead's Comment" text={row?.sales_lead_price_authorization}
+                />
             </div>
 
             <div className="sp1_qs_table_td p-0">
                 <div className="d-flex flex-column">
                     <div className="border-bottom p-2"> 
                         <Comment 
-                            commentBy="* Sales leads comment"
+                            question='Did the sales executive set deadline for this project correctly?'
+                            commentBy="* Sales Lead's Comment"
                             text={row?.sales_lead_deadline_comment}
                         />
                     </div>
                     <div className="p-2"> 
                     <Comment 
-                            commentBy="* Project manager comment"
+                            question='Did the sales team set deadline for this project correctly?'
+                            commentBy="* Project Manager's Comment"
                             text={row?.project_manager_deadline_comment}
                     /> 
                     </div>
@@ -242,9 +257,11 @@ const RenderRow = ({row}) => {
             </div>
 
             <div className="sp1_qs_table_td">
+                
                 <Comment 
-                    commentBy="* Sales lead comment"
-                    text={row?.admin_authorization_comment}
+                    question='Was the sale authorized by the top management?'
+                    commentBy="* Top Management's Comment"
+                    text={topManagementComment}
                 /> 
             </div>
         </div>
@@ -319,6 +336,7 @@ const Status = ({row}) => {
 }
 
 const Comment = ({
+    question="",
     commentBy='',
     text=""
 }) => {
@@ -338,10 +356,11 @@ const Comment = ({
                     </span>: <span>--</span>} 
                 </> 
             </Dropdown.Toggle>
-            <Dropdown.Menu>
-                <>
+            <Dropdown.Menu >
+                <div style={{maxWidth: '450px'}}>
+                    <h6>{question}</h6>
                     <p>  {text ? text : 'No comment'} </p>
-                </>
+                </div>
             </Dropdown.Menu>
         </Dropdown>
 
