@@ -27,6 +27,7 @@ use App\Models\TaskReply;
 use App\Models\TaskRevision;
 use App\Models\TaskUser;
 use App\Models\User;
+use App\Models\WorkingEnvironment;
 use App\Traits\ProjectProgress;
 use Carbon\Carbon;
 use GrahamCampbell\GitLab\Facades\GitLab;
@@ -1633,6 +1634,35 @@ class TaskController extends AccountBaseController
         $pm_task_guideline->google_drive_link = $data['google_drive_link'];
         $pm_task_guideline->instruction_plugin = $data['instruction_plugin'];
         $pm_task_guideline->save();
+
+        return response()->json(['status'=>200]);
+    }
+    public function viewWorkingEnvironment($project_id){
+        $this->pageTitle = 'Working Environment';
+        $this->project_id = $project_id;
+        return view('working-environment.index',$this->data);
+    }
+    public function storeWorkingEnvironment(Request $request)
+    {
+        $request->validate([
+            'site_url' => 'required',
+            'login_url' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+        ], [
+            'site_url.required' => 'This field is required!',
+            'login_url.required' => 'This field is required!',
+            'email.required' => 'This field is required!',
+            'password.required' => 'This field is required!',
+        ]);
+
+        $working_environment = new WorkingEnvironment();
+        $working_environment->project_id = $request->project_id;
+        $working_environment->site_url = $request->site_url;
+        $working_environment->login_url = $request->login_url;
+        $working_environment->email = $request->email;
+        $working_environment->password = $request->password;
+        $working_environment->save();
 
         return response()->json(['status'=>200]);
     }
