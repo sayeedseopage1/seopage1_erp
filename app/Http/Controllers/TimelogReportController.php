@@ -144,25 +144,41 @@ class TimelogReportController extends AccountBaseController
             
 
             
-            if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+            if($status != 'canceled') {
+                if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+                {
+                   
+                    $data = $data->whereDate('project_time_logs.start_time', '=', Carbon::parse($startDate)->format('Y-m-d'));
+                }else 
+                {
+                    if (!is_null($startDate)) {
+                        $data = $data->whereDate('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                    }
+                    if (!is_null($endDate)) {
+                        $data = $data->whereDate('project_time_logs.end_time', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                    }
+                }
+            } else {
+                if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
             {
                
-                $data = $data->whereDate('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                $data = $data->whereDate('projects.updated_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
             }else 
             {
                 if (!is_null($startDate)) {
-                    $data = $data->whereDate('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                    $data = $data->whereDate('projects.updated_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
                 }
                 if (!is_null($endDate)) {
-                    $data = $data->whereDate('project_time_logs.end_time', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                    $data = $data->whereDate('projects.updated_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
                 }
             }
-            /*if (!is_null($pmId)) {
-                $data = $data->where('projects.pm_id' , $pmId)->orderBy('projects.pm_id' , 'desc');
             }
+            if (!is_null($pmId)) {
+                $data = $data->where('projects.pm_id' , $pmId)->orderBy('projects.pm_id' , 'desc');
+            } 
             if (!is_null($employeeId)) {
                 $data = $data->where('project_time_logs.user_id' , $employeeId)->orderBy('project_time_logs.user_id' , 'desc');
-            }*/
+            }
             if (!is_null($clientId)) {
                 //$data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
                 $data = $data->where('projects.client_id' , $clientId);

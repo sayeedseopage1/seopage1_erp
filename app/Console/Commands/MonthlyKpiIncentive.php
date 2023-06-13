@@ -35,6 +35,7 @@ class MonthlyKpiIncentive extends Command
      */
     public function handle()
     {
+        
         $check_kpi = kpiSetting::where([
             'kpi_status' => '2',
             'cron_status' => '0',
@@ -184,22 +185,49 @@ class MonthlyKpiIncentive extends Command
                                 //dd($user_incentive);
                                 $user_incentive->save();
 
-                                $point = new CashPoint();
-                                $point->user_id= $value;
-                                $user = User::find($value);
-                                $point->activity= $user->name. ' deduct '.$deals.' points';
-                                $point->gained_as = "Individual";
-                                $point->points= -$deals;
-                                $point->total_points_earn = 0;
-                                $point->total_points_redeem = $deals;
-                                $point->total_points_void = 0;
-                                $point->save();
+                                // $point = new CashPoint();
+                                // $point->user_id= $value;
+                                // $user = User::find($value);
+                                // $point->activity= $user->name. ' deduct '.$deals.' points';
+                                // $point->gained_as = "Individual";
+                                // $point->points= -$deals;
+                                // $point->total_points_earn = 0;
+                                // $point->total_points_redeem = $deals;
+                                // $point->total_points_void = 0;
+                                // $point->save();
                             }
                         }
                     //}
                 }
+        $team= Seopage1Team::where('id',1)->first();
+        $users = explode(',', $team->members);
+        $user_data = [];
+                    foreach ($users as $key => $value) {
+                        if ($value != '') {
+                             //$user = User::find($value);
+                            array_push($user_data,$value);
+                        }
+                    }
+        foreach($user_data as $user)
+        {
+            // /dd($user);
+            $user_cash_points= CashPoint::where('user_id',$user)->sum('points');
+            $point = new CashPoint();
+            $point->user_id= $user;
+            $user_name = User::where('id',$user)->first();
+        //    / dd($value);
+            $point->activity= $user_name->name. ' deduct '.$user_cash_points.' points';
+            $point->gained_as = "Individual";
+            $point->points= -$user_cash_points;
+            $point->total_points_earn = 0;
+            $point->total_points_redeem = $user_cash_points;
+            $point->total_points_void = 0;
+            $point->save();
+
+        }
+               
                 
-                dd($total_cash_point_sum);
+              //  dd($total_cash_point_sum);
                 $this_month_kpi->kpi_status = '0';
                 $this_month_kpi->save();
             }
