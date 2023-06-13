@@ -760,6 +760,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         }
     );
     Route::resource('tasks', TaskController::class);
+    Route::get('task-guideline/{project_id}',[TaskController::class,'viewTaskGuideline'])->name('task-guideline');
+    Route::post('task-guideline-store',[TaskController::class,'storeTaskGuideline'])->name('task-guideline-store');
+    Route::get('working-environment/{project_id}',[TaskController::class,'viewWorkingEnvironment'])->name('working-environment');
+    Route::post('working-environment-store',[TaskController::class,'storeWorkingEnvironment'])->name('working-environment-store');
 
     // Holidays
     Route::get('holidays/mark-holiday', [HolidayController::class, 'markHoliday'])->name('holidays.mark_holiday');
