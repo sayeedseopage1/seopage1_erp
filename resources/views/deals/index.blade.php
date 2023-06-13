@@ -74,9 +74,9 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
                     <x-forms.link-primary :link="route('deals.create')" class="mr-3" icon="plus">
                         @lang('Create Deal')
                     </x-forms.link-primary>
-                    <x-forms.link-secondary :link="route('deals.create')" class="mr-3" icon="user">
+                    {{-- <x-forms.link-secondary :link="route('deals.create')" class="mr-3" icon="user">
                         @lang('Authorization Request')
-                    </x-forms.link-secondary>
+                    </x-forms.link-secondary> --}}
                     @endif
                 @endif
 
