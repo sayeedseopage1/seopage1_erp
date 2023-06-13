@@ -72,7 +72,7 @@ $projectArchived = $project->trashed();
     </div>
 
     @elseif($diff_in_minutes >= 2880 && $signature == null)
-    <div class="d-flex" id="table-actions">
+    <div class="d-flex" id="table-actions">  
         @php
             $tasks = \App\Models\Task::where('project_id',$project->id)->get();
            $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->get();
