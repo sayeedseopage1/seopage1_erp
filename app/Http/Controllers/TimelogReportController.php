@@ -279,7 +279,7 @@ class TimelogReportController extends AccountBaseController
             $data = $data->orderBy('project_time_logs.task_id' , 'desc')
             ->offset($offset)
             ->limit($perPage)*/
-          $data = $data->groupBy('tasks.id','project_time_logs.total_minutes')
+          $data = $data->groupBy('tasks.id','project_time_logs.created_at')
          // ->orderBy('project_time_logs.id', 'desc')
           ->get();
         } else if($type == 'projects') {
