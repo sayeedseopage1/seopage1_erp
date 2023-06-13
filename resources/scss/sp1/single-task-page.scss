@@ -140,12 +140,7 @@
             border-style: dashed;
         }
 
-        .sp1_task_right_dropleft{ 
-            position: absolute;
-            top: 50%;
-            left: -12px;
-            transform: translateY(-50%);
-        }
+    
 
         .sp1_task_right_dl_toggle{
             padding: 0;
@@ -154,9 +149,12 @@
             border-radius: 50%;
             font-size: 24px;
             background: transparent;
+            position: absolute;
+            top: 50%;
+            left: -10px;
         }
 
-        .sp1_task_right_dropleft_menu{
+        .sp1_task_comment_modal{
             width: 800px;
             height: 550px;
             overflow-y: auto;
@@ -166,21 +164,21 @@
             border: 0.5px solid #84caf8 !important;
             box-shadow: 0 0 10px rgba(0,0,0,.1);
             background: rgb(250, 250, 252);
-            border-radius: 16px;
+            border-radius: 16px; 
         }
 
-        .sp1_task_right_dropleft_menu::-webkit-scrollbar{ 
+        .sp1_task_comment_modal::-webkit-scrollbar{ 
             width: 4px;
             border-radius: 4px !important;
         } 
 
-        .sp1_task_right_dropleft_menu::-webkit-scrollbar-track{
+        .sp1_task_comment_modal::-webkit-scrollbar-track{
             background: rgb(240, 240, 240) !important;
             border-radius: 4px;
             padding: 0 !important;
         }
 
-        .sp1_task_right_dropleft_menu::-webkit-scrollbar-thumb{
+        .sp1_task_comment_modal::-webkit-scrollbar-thumb{
             border: none;
         }
 
@@ -343,4 +341,5 @@
         }
     }
 }
+
 

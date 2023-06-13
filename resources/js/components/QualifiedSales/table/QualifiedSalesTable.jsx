@@ -114,6 +114,18 @@ const QualifiedSalesTable = ({data = [], users=[], isLoading=true}) => {
             {/* body */}
             {/* head */}
         {
+            isLoading ? [...Array(parPageRow)].map((_, i) => (
+                <div key={i} className='sp1_qs_table_tr'>
+                    {columns?.map(column => {
+                        return(
+                            <div key={column.id} className={`sp1_qs_table_td sp1_qs_table_td_${column.id} ${column?.headClass}`}>
+                                {column?.cell({}, isLoading)}
+                            </div>
+                        )
+                    })}
+                </div>
+            )) :
+
             currentPageData?.map(row  => (
                 <div key={row?.id} className='sp1_qs_table_tr'>
                     {columns?.map(column => {
@@ -122,7 +134,7 @@ const QualifiedSalesTable = ({data = [], users=[], isLoading=true}) => {
                                 {column?.cell({
                                     ...row,
                                     salesLead,
-                                })}
+                                }, isLoading)}
                             </div>
                         )
                     })}

@@ -2,7 +2,15 @@ import * as React from 'react'
 import Button from './components/Button'
 import Accordion from './components/Accordion' 
 import Guideline from './components/Guideline'
-import RevisionText from './components/RevisionText'
+import RevisionText from './components/RevisionText' 
+import CommentSection from './section/comments/CommentsSection'
+import SubTaskSection from './section/sub-task/SubTaskSection'
+import NoteSection from './section/notes/NoteSection'
+import SubmittedWork from './section/submitted-work/SubmittedWork'
+import TimeLogSection from './section/time-logs/TimeLogSection'
+import HistorySection from './section/history/historySection'
+import RevisionSection from './section/revisions/RevisionSection'
+ 
 
 const SingleTask = () => {
   return (
@@ -15,7 +23,6 @@ const SingleTask = () => {
 
         <div className='row'>
             <div className="col-8">
-
                 <div className="bg-white rounded-lg p-3">
                     {/* button groups */}
                     <div className="d-flex flex-wrap border-bottom pb-3 sp1_task_btn_group">
@@ -81,7 +88,6 @@ const SingleTask = () => {
                             <i className="bi bi-three-dots" ></i>
                         </button>
                     </div> 
-
 
                     {/* task information */}
                     <div>
@@ -192,11 +198,8 @@ const SingleTask = () => {
                         </div>
                     </div>
                     
-
-                    {/* guidelines */}
-
                    <div>
-                    <Accordion expendable={false} title="General Guidelines">
+                        <Accordion expendable={false} title="General Guidelines">
                             <Guideline  text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with " />
 
                             <Guideline  text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with " />
@@ -231,11 +234,66 @@ const SingleTask = () => {
                             <Guideline  text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with " />
                         </Accordion>
                    </div>
-
-
-                    
                 </div>
-                
+            </div>
+
+
+            <div className="col-4">
+              <div className="d-flex flex-column">
+                {/* period */}
+                <div className="sp1_task_right_card mb-3">
+                    <div className="d-flex align-items-center mb-2"> 
+                        <span
+                            style={{
+                                display: 'block',
+                                width: '6px',
+                                height: '6px',
+                                borderRadius: '100%',
+                                background: 'var(--header_color)',
+                                marginRight: '6px'
+                            }} 
+                        ></span>
+                        Doing
+                    </div> 
+
+                    <div className="d-flex align-items-center mb-2">
+                        <div className="" style={{width: '110px'}}>Start Date : </div>
+                        <div className="d-flex align-items-center font-weight-bold">
+                            Jun 06, 2023
+                        </div>
+                    </div> 
+
+                    <div className="d-flex align-items-center mb-2">
+                        <div className="" style={{width: '110px'}}>Due Date : </div>
+                        <div className="d-flex align-items-center font-weight-bold">
+                            Jun 06, 2023
+                        </div>
+                    </div> 
+
+                    <div className="d-flex align-items-center mb-2">
+                        <div className="" style={{width: '110px'}}>Time Estimate : </div>
+                        <div className="d-flex align-items-center font-weight-bold">
+                            8 hour 30 min
+                        </div>
+                    </div> 
+
+                    <div className="d-flex align-items-center mb-2">
+                        <div className="" style={{width: '110px'}}>Hours Logged : </div>
+                        <div className="d-flex align-items-center font-weight-bold">
+                            8 hour 30 min
+                        </div>
+                    </div> 
+                </div>
+                            
+                {/* comments */}
+                <CommentSection />
+                <SubTaskSection />
+                <NoteSection />
+                <SubmittedWork />
+                <TimeLogSection />
+                <HistorySection />
+                <RevisionSection />
+              </div>
             </div>
         </div>
     </React.Fragment>
