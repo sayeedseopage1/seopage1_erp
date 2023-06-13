@@ -428,11 +428,14 @@ class GoalAchieveCheck extends Command
                 } else {
                     $user_data[]= $goal->user_id;
                 }
+                $goal2 = $goal->user_id ? [$goal->user_id] : $user_data;
             }
             
             
             // Always use an array of user IDs, even if $goal->user_id is set
-            $goal2 = $goal->user_id ? [$goal->user_id] : $user_data;
+            // /dd($user_data);
+           
+           
            
             
             if ($goal->entryType == 'Added') {
