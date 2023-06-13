@@ -4,7 +4,7 @@ import { useGetQualifiedSalesQuery } from '../services/api/qualifiedSalesApiSlic
 import {useUsers} from '../hooks/useUsers';
 
 const QualifiedSales = () => {
-  const { users } = useUsers();
+  const { users, usersObject } = useUsers();
   const {
     data,
     isFetching
@@ -22,7 +22,7 @@ const QualifiedSales = () => {
 
         {/*table section */}
         <div className='p-4'>
-            <QualifiedSalesTable data={data || []} users={users || []} isLoading={isFetching}/>
+            <QualifiedSalesTable data={data || []} users={users || []} usersObject ={usersObject} isLoading={isFetching}/>
         </div>
     </div>
   )

@@ -238,8 +238,9 @@ const RenderGroupHeader = () => {
 
 // render row 
 const RenderRow = ({row, loading}) => {
-    let isApproved = Number(row?.authorized_by_admin); 
-    const topManagementComment = row?.admin_authorization_comment ||  (isApproved ? 'Top Management has authorized the sale but left no comments.' : 'No Comment')
+    let isApproved = Number(row?.authorized_by_admin);  
+    const topManagementComment = row?.admin_authorization_comment ||  (isApproved ? `<span> 
+    <a href="/account/employees/${row['admin_id']}" class='font-weight-bold'>${row?.admin?.name}</a> has authorized the sale but left no comments.</span>` : 'No Comment')
 
 
     return(
