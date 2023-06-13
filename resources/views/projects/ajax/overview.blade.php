@@ -707,7 +707,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>
-        <div class="row mb-4" >
+        {{-- <div class="row mb-4" >
             <!-- BUDGET VS SPENT START -->
             <div class="col-md-12">
                 <x-cards.data>
@@ -897,7 +897,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 </x-cards.data>
             </div>
             <!-- BUDGET VS SPENT END -->
-        </div>
+        </div> --}}
 
 
 

@@ -30,18 +30,38 @@ class QualifiedSalesController extends AccountBaseController
      */
     public function index(Request $request)
     {
-        // dd($request->all());
-    //    / dd("nsdkasndkasnd");
-   
-    $this->projects= QualifiedSale::all();
-    //dd($this->projects);
-    if($request->mode == 'json')
-    {
-        return response()->json($this->projects);
+        $this->projects= QualifiedSale::all();
+        if($request->mode == 'json')  
+        {
+            $this->data = QualifiedSale::select('*');
+            if ($request->project_id != '') {
+                $this->data = $this->data->where('project_id', $request->project_id);
+            }
+            if ($request->client_id != 'null') {
+                $this->data = $this->data->where('client_id', $request->client_id);
+            
+            }
+            if ($request->start_date != 'null') {
+                $this->data = $this->data->where(DB::raw('DATE(created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
+            }
 
-    }
+            if ($request->end_date != 'null') {
+                $this->data = $this->data->where(DB::raw('DATE(created_at)'), '<=', Carbon::parse($request->end_date)->format('Y-m-d'));
+            }
+
+            if ($request->pm_id != 'null') {
+                $this->data = $this->data->where('pm_id', $request->pm_id);
+            }
+
+            if($request->search != 'null') {
+                $this->data = $this->data->where('project_name', 'LIKE', '%'.$request->search.'%')
+                ->orWhere('pm_name', 'LIKE', '%'.$request->search.'%');
+            }
+            return response()->json($this->data->get()->toArray());
+
+        }
    
-    // /dd($projects);
+        // /dd($projects);
 
         return view('qualified-sales.index',$this->data);
     }
