@@ -42,10 +42,12 @@ class PortfolioController extends AccountBaseController
         $this->portfolios = DB::table('project_portfolios')
             ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
             ->join('users', 'projects.client_id', '=', 'users.id')
-            ->select('project_portfolios.*','users.user_name','projects.project_name', 'projects.project_budget')
+            ->join('project_submissions', 'project_portfolios.project_id', '=', 'project_submissions.project_id')
+            ->select('project_portfolios.*', 'users.user_name', 'projects.project_name', 'projects.project_budget', 'project_submissions.actual_link')
             ->get();
 
-//                dd($this->portfolios);
+//        dd($this->portfolios);
+
         return view('portfolio.index',$this->data);
     }
 

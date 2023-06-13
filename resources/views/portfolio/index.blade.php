@@ -180,7 +180,7 @@
                                                     <div class="row">
                                                         <div class="col-md-6 mb-3 mb-md-0">
                                                             <h5>Website Link:</h5>
-                                                            <span>{{implode(', ',Json_decode($portfolio->plugin_url))}}</span>
+                                                            <span>{{$portfolio->portfolio_link}}</span>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <h5>Agree price:</h5>
@@ -311,15 +311,21 @@
                     $('.displayFilterData').append(rowHtml);
 
                    $.each(response, function(index, category) {
-                        var linkHtml = '<div class="col-md-4">' +
-                            '<div id="categoryLinkWrapper" class="m-0 p-0">' +
-                            '<div class="categoryLink linkBtn">' +
-                            '<img src="/user-uploads/favicon/14d159b3d5548dfbc48b977da1ede616.png" alt="" class="rounded-circle m-1" width="26" height="26" style="border: 2px solid #dddddd;">' +
-                            '<a href="#" class="ml-2 linkBtn mr-4" data-toggle="modal" data-target="#linkModal">' + category.portfolio_link + '</a>' +
-                            '<button type="submit" class="ml-2 btn btn-outline-primary copyBtn"><i class="fa fa-clone"></i></button>' +
-                            '</div>' +
-                            '</div>' +
-                            '</div>';
+                       var linkHtml = '<div class="col-md-4">' +
+                           '<div id="categoryLinkWrapper" class="m-0 p-0">' +
+                           '<div class="categoryLink linkBtn d-flex align-items-center">' +
+                           '<img src="/user-uploads/favicon/14d159b3d5548dfbc48b977da1ede616.png" alt="" class="rounded-circle m-1" width="26" height="26" style="border: 2px solid #dddddd;">';
+
+                       if (category.portfolio_link) {
+                           linkHtml += '<a href="#" class="mr-auto linkBtn" data-toggle="modal" data-target="#linkModal">' + category.portfolio_link + '</a>';
+                       } else {
+                           linkHtml += '<span class="mr-auto">--Link are not available--</span>';
+                       }
+
+                       linkHtml += '<button type="submit" class="btn btn-outline-primary copyBtn"><i class="fa fa-clone"></i></button>' +
+                           '</div>' +
+                           '</div>' +
+                           '</div>';
 
                         $('.displayFilterData .row').append(linkHtml);
                        CopyTextLink();
