@@ -286,7 +286,15 @@ class PaymentController extends AccountBaseController
                         if ($total_minutes > 0 && $project->project_budget >= $kpi->achieve_less_than ) {
                             $total_hours = floor($total_minutes / 60);
                             //un-comment this when finished
-                            $project_hourly_rate = $project->project_budget / $total_hours;
+                          if($total_hours > 0)
+                          {
+                             $project_hourly_rate = $project->project_budget / $total_hours;
+                          
+                          }else 
+                          {
+                            $project_hourly_rate= 0;
+                          }
+                            //$project_hourly_rate = $project->project_budget / $total_hours;
                         //    / $project_hourly_rate = 44;
                             
                             //--------------

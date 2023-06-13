@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use DateTime;
+use DB;
 use Illuminate\Console\Command;
 use App\Models\kpiSetting;
 use App\Models\User;
@@ -34,8 +36,32 @@ class MonthlyKpiIncentive extends Command
      * @return int
      */
     public function handle()
-    {
-        
+    {   
+    //     $last_day_of_month= Carbon::now()->endOfMonth();
+    //     $date = new DateTime($last_day_of_month);
+    //     $date->setTime(23, 59);  // Set the time to 23:59
+
+    // $lastMinute = $date->format('Y-m-d h:m:s');
+    //     $current_time= Carbon::now()->format('Y-d-m h:m:s');
+    //     dd($current_time, $lastMinute);
+    DB::beginTransaction();
+    $shift_users= User::where('shift','!=',null)->get();
+    $current_month = Carbon::now()->startofMonth()->format('Y-m-d');
+    foreach ($shift_users as $shift) {
+        $shift_members= User::where('shift',$shift->shift)->get();
+        $shift_points = 0;
+        foreach ($shift_members as $value) {
+            $shift_points= CashPoint::where('user_id',$value->id)->sum('points') + $shift_points;
+           
+        }
+      
+        $individual_points= CashPoint::where('user_id',$shift->id)->sum('points');
+      
+        $contribution= ($individual_points*100 )/$shift_points;
+        dd($current_month,$shift_points, $individual_points, $contribution);
+    //    / $total_shift_points= CashPoint::
+    }
+    dd($shift_users);
         $check_kpi = kpiSetting::where([
             'kpi_status' => '2',
             'cron_status' => '0',
@@ -58,7 +84,7 @@ class MonthlyKpiIncentive extends Command
             $existing_kpi->start_month = Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d');
             
             kpiSetting::insert($existing_kpi->toArray());
-        } else if (Carbon::today() == Carbon::now()->endOfMonth()) {
+        } else if (Carbon::today() == Carbon::now()->endOfMonth() ) {
             $this_month_kpi = kpiSetting::where([
                 'kpi_status' => '1',
                 'cron_status' => '1',
@@ -142,11 +168,11 @@ class MonthlyKpiIncentive extends Command
                                 ->whereIn('id', $user_goal_from_team)
                                 ->first();
 
-                                if ($user_team_goal_10_days) {
-                                    $user_incentive_amount_deduction = ($user_incentive_amount * $this_month_incentive->incentive_deduction) / 100;
-                                    $deduction_amount = $deduction_amount + $user_incentive_amount_deduction;
-                                    $user_incentive_amount = $user_incentive_amount - $user_incentive_amount_deduction;
-                                }
+                                // if ($user_team_goal_10_days) {
+                                //     $user_incentive_amount_deduction = ($user_incentive_amount * $this_month_incentive->incentive_deduction) / 100;
+                                //     $deduction_amount = $deduction_amount + $user_incentive_amount_deduction;
+                                //     $user_incentive_amount = $user_incentive_amount - $user_incentive_amount_deduction;
+                                // }
 
                                 $this_user_cashpoint = CashPoint::where('user_id', $value)
                                 ->whereDate('created_at', '>=', Carbon::now()->startOfMonth())
@@ -231,6 +257,8 @@ class MonthlyKpiIncentive extends Command
                 $this_month_kpi->kpi_status = '0';
                 $this_month_kpi->save();
             }
+            $shift_users= User::where('shift','!=',null)->get();
+            dd($shift_users);
 
             $kpi = kpiSetting::where([
                 'kpi_status' => '2',

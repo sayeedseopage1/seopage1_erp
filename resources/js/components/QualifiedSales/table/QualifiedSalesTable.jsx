@@ -5,7 +5,7 @@ import { QualifiedSalesContext } from '../context';
 import DragableHeader from './DragableHeader';
 import Pagination from '../../Points/ui/Pagination';
 
-const QualifiedSalesTable = ({data = [], users=[], isLoading=true}) => {
+const QualifiedSalesTable = ({data = [], users=[], usersObject, isLoading=true}) => {
     const [currentPageData, setCurrentPageData] = React.useState([]);
     const {
         columns,
@@ -81,13 +81,15 @@ const QualifiedSalesTable = ({data = [], users=[], isLoading=true}) => {
         setSortConfig({ key, direction });
     };
 
+ 
 
+    const getUser = (id) => { 
+        if(usersObject && usersObject !== {}){
+            id = Number(id);
+            return usersObject[id];
+        } else return {};
+    }
 
-    const salesLead = users?.find(u => Number(u.role_id) === 8);
-
-    
-
-    
 
   return (
     <>
@@ -114,6 +116,18 @@ const QualifiedSalesTable = ({data = [], users=[], isLoading=true}) => {
             {/* body */}
             {/* head */}
         {
+            isLoading ? [...Array(parPageRow)].map((_, i) => (
+                <div key={i} className='sp1_qs_table_tr'>
+                    {columns?.map(column => {
+                        return(
+                            <div key={column.id} className={`sp1_qs_table_td sp1_qs_table_td_${column.id} ${column?.headClass}`}>
+                                {column?.cell({}, isLoading)}
+                            </div>
+                        )
+                    })}
+                </div>
+            )) :
+
             currentPageData?.map(row  => (
                 <div key={row?.id} className='sp1_qs_table_tr'>
                     {columns?.map(column => {
@@ -121,8 +135,9 @@ const QualifiedSalesTable = ({data = [], users=[], isLoading=true}) => {
                             <div key={column.id} className={`sp1_qs_table_td sp1_qs_table_td_${column.id} ${column?.headClass}`}>
                                 {column?.cell({
                                     ...row,
-                                    salesLead,
-                                })}
+                                    salesLead: getUser(row['sales_lead_id']),
+                                    admin: getUser(row['admin_id'])
+                                }, isLoading)}
                             </div>
                         )
                     })}
