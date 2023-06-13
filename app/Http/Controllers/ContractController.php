@@ -2207,6 +2207,7 @@ class ContractController extends AccountBaseController
             $qualified_sale->sales_lead_price_authorization = $request->price_authorization;
             $qualified_sale->sales_lead_deadline_comment = $request->project_deadline_authorization;
             $qualified_sale->total_points = $point->points + $qualified_sale->total_points;
+            $qualified_sale->sales_lead_id = Auth::id();
             $qualified_sale->save();
         }
 

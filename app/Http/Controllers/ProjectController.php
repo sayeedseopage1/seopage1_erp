@@ -4152,6 +4152,7 @@ class ProjectController extends AccountBaseController
             $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
             $qualified_sale->authorized_by_admin = 1;
             $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
+            $qualified_sale->admin_id = Auth::id();
             $qualified_sale->save();
 
         }
