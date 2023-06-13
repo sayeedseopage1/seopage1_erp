@@ -119,7 +119,11 @@ export const columns = [
                     fontSize: '12px',
                     fontWeight: 'bold'
                 }}>
-                    {isApproved ? "Accepted" : 'Pending'}
+                     {isApproved ? <span
+                         data-toggle="tooltip" 
+                         data-placement="top"
+                         title={row?.salesLead?.name} 
+                    >Approved</span> : 'Pending'}
                 </span> 
         }
     },
@@ -143,8 +147,12 @@ export const columns = [
                     fontSize: '12px',
                     fontWeight: 'bold'
                 }}>
-                    {isApproved ? "Approved" : 'Pending'}
-                </span> 
+                    {isApproved ? <span
+                         data-toggle="tooltip" 
+                         data-placement="top"
+                         title={row['pm_name']} 
+                    >Accepted</span> : 'Pending'}
+                </span>  
         }
     },
     
@@ -165,7 +173,20 @@ export const columns = [
                     fontSize: '12px',
                     fontWeight: 'bold'
                 }}>
-                    {isApproved ? "Approved" : 'Pending'}
+                    <span style={{
+                    background: bgColor, 
+                    color: '#fff',
+                    padding: '0 6px',
+                    borderRadius: '10px',
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                }}>
+                     {isApproved ? <span
+                         data-toggle="tooltip" 
+                         data-placement="top"
+                         title={row?.admin?.name} 
+                    >Approved</span> : 'Pending'}
+                </span> 
                 </span>
         }
     },
@@ -237,10 +258,17 @@ const RenderGroupHeader = () => {
 }
 
 // render row 
-const RenderRow = ({row, loading}) => {
-    let isApproved = Number(row?.authorized_by_admin);  
-    const topManagementComment = row?.admin_authorization_comment ||  (isApproved ? `<span> 
-    <a href="/account/employees/${row['admin_id']}" class='font-weight-bold'>${row?.admin?.name}</a> has authorized the sale but left no comments.</span>` : 'No Comment')
+const RenderRow = ({row, loading}) => {  
+    let isPMAccepted = Number(row?.accepted_by_project_manager);
+    let isTopMApproved = Number(row?.authorized_by_admin);
+    let isSLApproved = Number(row?.authorized_by_sales_lead);
+
+
+    const topManagementComment = row?.admin_authorization_comment ||  (isTopMApproved ? `<span> 
+    <a href="/account/employees/${row['admin_id']}" class='font-weight-bold'>${row?.admin?.name}</a> has authorized the sale but left no comments.</span>` : 'Top Management has not authorized the sale yet.');
+
+    const leadComment = isSLApproved ? '' : 'Sales Lead has not authorized the sale yet.'
+    const pmComment = isPMAccepted ? '' : 'Project Manager has not accepted the project yet.'
 
 
     return(
@@ -251,9 +279,12 @@ const RenderRow = ({row, loading}) => {
                         {
                             loading ? <span className='__loading animate-pulse' style={{width: randomWidth()}}>loading...</span>:
                             <Comment
-                            question='Did the sales executive defined requirements for this project properly?' 
-                            commentBy="* Sales Lead's Comment" text={row?.sales_lead_need_define}
-                        />
+                                question='Did the sales executive defined requirements for this project properly?' 
+                                commentBy="* Sales Lead's Comment" 
+                                text={row?.sales_lead_need_define || leadComment}
+                                author={row?.salesLead?.name}
+                                isCommented={row?.sales_lead_need_define}
+                            />
                         } 
                         
                     </div>
@@ -262,7 +293,10 @@ const RenderRow = ({row, loading}) => {
                         loading ? <span className='__loading animate-pulse' style={{width: randomWidth()}}>loading...</span>:
                         <Comment 
                             question='Did the sales team defined requirements for this project properly?' 
-                            commentBy="* Project Manager's Comment" text ={row?.project_manager_needs_define}
+                            commentBy="* Project Manager's Comment" 
+                            text ={row?.project_manager_needs_define || pmComment}
+                            author={row?.pm_name} 
+                            isCommented={row?.project_manager_needs_define}
                         />
                       }
                     </div>
@@ -274,7 +308,10 @@ const RenderRow = ({row, loading}) => {
                         loading ? <span className='__loading animate-pulse' style={{width: randomWidth()}}>loading...</span>:
                         <Comment 
                             question=' Did the sales executive set price for this project properly?'
-                            commentBy="* Sales Lead's Comment" text={row?.sales_lead_price_authorization}
+                            commentBy="* Sales Lead's Comment" 
+                            text={row?.sales_lead_price_authorization || leadComment}
+                            author={row?.salesLead?.name}
+                            isCommented={row?.sales_lead_price_authorization}
                         />
                     }
                 
@@ -288,7 +325,9 @@ const RenderRow = ({row, loading}) => {
                         <Comment 
                             question='Did the sales executive set deadline for this project correctly?'
                             commentBy="* Sales Lead's Comment"
-                            text={row?.sales_lead_deadline_comment}
+                            text={row?.sales_lead_deadline_comment || leadComment}
+                            author={row?.salesLead?.name}
+                            isCommented={row?.sales_lead_deadline_comment}
                         />
                     }
                        
@@ -299,7 +338,9 @@ const RenderRow = ({row, loading}) => {
                         <Comment 
                             question='Did the sales team set deadline for this project correctly?'
                             commentBy="* Project Manager's Comment"
-                            text={row?.project_manager_deadline_comment}
+                            text={row?.project_manager_deadline_comment || pmComment}
+                            author={row?.pm_name}
+                            isCommented={row?.project_manager_deadline_comment}
                         /> 
                     }
                     
@@ -314,6 +355,8 @@ const RenderRow = ({row, loading}) => {
                         question='Was the sale authorized by the top management?'
                         commentBy="* Top Management's Comment"
                         text={topManagementComment}
+                        author={row?.admin?.name}
+                        isCommented={row?.admin_authorization_comment}
                     /> 
                 }
                 
@@ -394,7 +437,9 @@ const Status = ({row}) => {
 const Comment = ({
     question="",
     commentBy='',
-    text=""
+    text="",
+    author="",
+    isCommented
 }) => {
 
     return(
@@ -413,9 +458,24 @@ const Comment = ({
                 </> 
             </Dropdown.Toggle>
             <Dropdown.Menu >
-                <div style={{maxWidth: '450px'}}>
-                    <h6>{question}</h6>
-                    <div dangerouslySetInnerHTML={{__html: text || 'No comment'}} />
+                <div className='p-2' style={{maxWidth: '450px'}}>
+                    {text ? <>
+                        {isCommented && <h6>{question}</h6>}
+                        <div
+                            style={{
+                                background: '#f8f8f8',
+                                padding: '8px',
+                                borderRadius: '6px',
+                                marginTop: '10px'
+                            }}
+                        >
+                            <div dangerouslySetInnerHTML={{__html: text || 'No comment'}} />
+                            {isCommented && <div className='d-flex align-items-center justify-content-end'>
+                                <span style={{color:'rgba(0,0,0,.6)'}}>-- by <span className='font-weight-bold' dangerouslySetInnerHTML={{__html: author}} /></span>
+                            </div>}
+                        </div>
+                        
+                    </>: 'No Comment available'}
                 </div>
             </Dropdown.Menu>
         </Dropdown>
