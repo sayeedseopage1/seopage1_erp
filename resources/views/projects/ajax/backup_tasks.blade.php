@@ -31,21 +31,41 @@ $projectArchived = $project->trashed();
                  $tasks = \App\Models\Task::where('project_id',$project->id)->get();
                 $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->get();
              @endphp
-             @if(count($tasks) <1 && count($task_guideline) < 1)
-                 <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
-                                       class="mr-3 disabled" icon="plus" data-redirect-url="{{ url()->full() }}" onclick="event.preventDefault(); return null">
-                     @lang('app.add')
-                     @lang('app.task')
-                 </x-forms.link-primary>
+            @if(count($tasks) <1 && count($task_guideline) < 1)
+                <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                    class="mr-3 disabled" icon="plus" data-redirect-url="{{ url()->full() }}" onclick="event.preventDefault(); return null">
+                    @lang('app.add')
+                    @lang('app.task')
+                </x-forms.link-primary>
              @else
+                @php
+                  $working_environments = \App\Models\WorkingEnvironment::where('project_id',$project->id)->get();
+                @endphp
+             @if(Auth::user()->role_id ==6)
+                 @if(count($working_environments) <1)
+                     <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                           class="mr-3 disabled" icon="plus" data-redirect-url="{{ url()->full() }}" onclick="event.preventDefault(); return null">
+                         @lang('app.add')
+                         @lang('app.task')
+                     </x-forms.link-primary>
+                     <a href="{{route('working-environment',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Working Environment</a>
+                     @else
+                         <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                               class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
+                             @lang('app.add')
+                             @lang('app.task')
+                         </x-forms.link-primary>
+                     @endif
+                 @else
                  <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
                                        class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
                      @lang('app.add')
                      @lang('app.task')
                  </x-forms.link-primary>
+                 @endif
              @endif
-             @if(count($task_guideline) <1)
-                 <a href="{{route('task-guideline',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Parent Task Guideline</a>
+            @if(count($task_guideline) <1)
+              <a href="{{route('task-guideline',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Parent Task Guideline</a>
              @endif
         @endif
     </div>
@@ -63,11 +83,32 @@ $projectArchived = $project->trashed();
                 @lang('app.task')
             </x-forms.link-primary>
         @else
-            <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
-                                  class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
-                @lang('app.add')
-                @lang('app.task')
-            </x-forms.link-primary>
+            @php
+                // $sub_tasks = \App\Models\Task::where('project_id',$project->subtask_id)->get();
+                 $working_environments = \App\Models\WorkingEnvironment::where('project_id',$project->id)->get();
+            @endphp
+            @if(Auth::user()->role_id ==6)
+                @if(count($working_environments) <1)
+                    <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                          class="mr-3 disabled" icon="plus" data-redirect-url="{{ url()->full() }}" onclick="event.preventDefault(); return null">
+                        @lang('app.add')
+                        @lang('app.task')
+                    </x-forms.link-primary>
+                    <a href="{{route('working-environment',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Working Environment</a>
+                @else
+                    <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                          class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
+                        @lang('app.add')
+                        @lang('app.task')
+                    </x-forms.link-primary>
+                @endif
+            @else
+                <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                      class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
+                    @lang('app.add')
+                    @lang('app.task')
+                </x-forms.link-primary>
+            @endif
         @endif
         @if(count($task_guideline) <1)
             <a href="{{route('task-guideline',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Parent Task Guideline</a>
@@ -91,11 +132,32 @@ $projectArchived = $project->trashed();
                     @lang('app.task')
                 </x-forms.link-primary>
             @else
-                <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
-                                      class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
-                    @lang('app.add')
-                    @lang('app.task')
-                </x-forms.link-primary>
+                @php
+                    // $sub_tasks = \App\Models\Task::where('project_id',$project->subtask_id)->get();
+                     $working_environments = \App\Models\WorkingEnvironment::where('project_id',$project->id)->get();
+                @endphp
+                @if(Auth::user()->role_id ==6)
+                    @if(count($working_environments) <1)
+                        <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                              class="mr-3 disabled" icon="plus" data-redirect-url="{{ url()->full() }}" onclick="event.preventDefault(); return null">
+                            @lang('app.add')
+                            @lang('app.task')
+                        </x-forms.link-primary>
+                        <a href="{{route('working-environment',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Working Environment</a>
+                    @else
+                        <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                              class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
+                            @lang('app.add')
+                            @lang('app.task')
+                        </x-forms.link-primary>
+                    @endif
+                @else
+                    <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                          class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
+                        @lang('app.add')
+                        @lang('app.task')
+                    </x-forms.link-primary>
+                @endif
             @endif
             @if(count($task_guideline) <1)
                 <a href="{{route('task-guideline',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Parent Task Guideline</a>
