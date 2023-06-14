@@ -39,14 +39,14 @@ class QualifiedSalesController extends AccountBaseController
             {
                 $this->data = QualifiedSale::select([
                     'qualified_sales.*',
-                   
                     'converted_by.id as closed_by',
                     'converted_by.name as closed_by_name',
-                    
+                    DB::raw('(SELECT SUM(cash_points.points) FROM cash_points WHERE cash_points.project_id = qualified_sales.project_id) as total_points'),
                 ])
-                ->leftjoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
+                ->leftJoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
                 ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
                 ;
+            
 
             }else 
             {
@@ -126,7 +126,8 @@ class QualifiedSalesController extends AccountBaseController
         ->join('users', 'users.id', '=', 'cash_points.user_id')
         ->groupBy('cash_points.user_id', 'users.name');
         //->get();
-        return response()->json($this->userPoints->get());
+        return response()->json($this->userPoints->get()); 
+       
     //    / ->pluck('total_points', 'name');
     //    / dd($userPoints);
 
