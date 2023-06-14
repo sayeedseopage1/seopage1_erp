@@ -522,6 +522,18 @@
                         @endif
                     </div>
                     <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">Frontend Password</p>
+                        @if ($working_environment != null)
+                            <p class="mb-0 text-dark-grey f-14 w-70">
+                                {{ $working_environment->frontend_password }}
+                            </p>
+                        @else
+                            <p class="mb-0 text-dark-grey f-14 w-70">
+                                --
+                            </p>
+                        @endif
+                    </div>
+                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                         <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">Working/Staging Site’s
                             Login URL</p>
                         @if ($working_environment != null)
@@ -547,7 +559,7 @@
                         @endif
                     </div>
                     <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
-                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">Frontend Password</p>
+                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">Password</p>
                         @if ($working_environment != null)
                             <p class="mb-0 text-dark-grey f-14 w-70">
                                 {{ $working_environment->password }}
@@ -558,6 +570,7 @@
                             </p>
                         @endif
                     </div> --}}
+
 
                     <div class="card">
                         <div class="body">
