@@ -366,9 +366,9 @@ class LeadController extends AccountBaseController
             $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
             $user->notify(new DealUpdate($deal, $pusher_options));
         }
-        Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
         return response()->json([
-            'status' => 'success'
+            'status' => 'success',
+            'deal_id' => $deal->id,
         ]);
     }
     public function DealStageUpdate(Request $request)

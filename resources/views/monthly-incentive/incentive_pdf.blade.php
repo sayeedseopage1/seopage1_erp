@@ -9,7 +9,7 @@
     <!-- Template CSS -->
     <!-- <link type="text/css" rel="stylesheet" media="all" href="css/main.css"> -->
 
-    <title>@lang('Agreement NO') - #FFFFFFFFFFFFFFFF</title>
+    <title>Incentive Disbursement for Month-({{$data->month}}) - {{$data->user->name}}</title>
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{ global_setting()->favicon_url }}">
     <meta name="theme-color" content="#ffffff">
@@ -309,28 +309,44 @@
 
     <div>
         <h5 class="text-grey text-capitalize">@lang('app.subject')</h5>
-        <p class="f-15 text-black text-capitalize">Incentive Disbursment</p>
+        <p class="f-15 text-black text-capitalize">Monthly Incentive Disbursment</p>
 
-        <h5>@lang('Project Deliverables')</h5>
+        
 
 
         <table class="styled-table">
             <thead>
                 <tr>
-                    <th>#</th>
+                  
+                    <th>Month</th>
                     <th>Title</th>
-                    <th>Earned Point</th>
-                    <th>Deduction Point</th>
-                    <th>Earned Incentive</th>
+                    <th>Incentive Achievable Point</th>
+                    <th>Disbursed Points</th>
+                    <th>Held Points (20%)</th>
+                    <th>Disbursed Amount</th>
+                    
+                    
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                	<td>#</td>
+                	
+                    <td>@php 
+                    $date = $data['month'];
+                    $formattedDate = date("F Y", strtotime($date));
+                   
+                    @endphp
+                    {{$formattedDate}}    
+                </td>
                     <td>Monthly Incentive</td>
-                    <td>{{ $data['point_earned'] }}</td>
-                    <td>{{ $data['deduction_amount'] }}</td>
-                    <td>{{ $data['incentive_earned'] }} BDT</td>
+                  
+                    <td>{{round( $data['incentive_earned']/100,2) }}</td>
+                    {{-- <td>{{ $data['point_earned'] }}</td> --}}
+                    <td>{{ round(($data['incentive_earned']/100)-($data['incentive_earned']/100*20/100),2) }}</td>
+                  
+                    {{-- <td>{{ $data['deduction_amount'] }}</td> --}}
+                    <td>{{round(($data['incentive_earned']/100) -(($data['incentive_earned']/100)-($data['incentive_earned']/100*20/100)),2) }}</td>
+                    <td>{{ round((($data['incentive_earned']/100)-($data['incentive_earned']/100*20/100))*100,2) }} BDT</td>
                 </tr>
                 <!-- and so on... -->
             </tbody>
@@ -353,6 +369,19 @@
                 <p>Date: {{\Carbon\Carbon::today()->format('Y-m-d')}}</p>
             </div>
         </div> --}}
+        <table border="0" cellspacing="0" colspacing="0" width="100%">
+            <tbody>
+                <tr>
+                    <td align="left">
+                      <h4>Comments: </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" style="height:250px;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <table border="0" cellspacing="0" colspacing="0" width="100%">
             <tbody>
@@ -377,6 +406,8 @@
                                 <tr><td style="height: 5px"> .....................................</td></tr>
                                 <tr><td> Hasan Hafizul Islam </td></tr>
                                 <tr><td> Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}} </td></tr>
+
+                                
                             </tbody>
                         </table>
                     </td>

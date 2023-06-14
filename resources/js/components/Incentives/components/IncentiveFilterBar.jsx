@@ -21,7 +21,7 @@ export default function CashPointsFilter ({
 }) {
     const { departments, shift, employees } = useSelector(s => s.pointPageFilterOption);
     const { getUserById, usersObject, usersIsFetching } = useUsers();
-    const dispatch = useDispatch(); 
+    const dispatch = useDispatch();
 
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
@@ -34,16 +34,15 @@ export default function CashPointsFilter ({
     const [project, setProject] = React.useState(null);
 
 
-    // sidebar 
+    // sidebar
     const [sidebarIsOpen, setSidebarIsOpen] = React.useState(false);
 
- 
     // fetch data
     const {
         data,
         isFetching
     } = useGetAllFilterOptionQuery('', {
-        refetchOnMountOrArgChange: true, 
+        refetchOnMountOrArgChange: true,
         skip: departments.length && shift.length && employees.length
     });
 
@@ -52,8 +51,8 @@ export default function CashPointsFilter ({
     // const {
     //     data: projects,
     //     isFetching: projectsIsFetching
-    // } = useGetProjectsOptionsQuery(); 
-    
+    // } = useGetProjectsOptionsQuery();
+
 
     React.useEffect(() => {
         if(data && !isFetching){
@@ -75,22 +74,22 @@ export default function CashPointsFilter ({
 
 
 
-    
+
     // select shift
     React.useEffect(() => {
-        if(!dept || isFetching) return; 
+        if(!dept || isFetching) return;
             setEmployeeLoading(true);
             let _shift = shift?.filter(s => s.department_id === dept.id && s.id !== 1)[0];
-            setSelectedShift(_shift); 
+            setSelectedShift(_shift);
             setEmployeeLoading(false);
     } , [dept]);
 
 
 
 
-    const getEmployees = (shift) => { 
-        let users = []; 
-         
+    const getEmployees = (shift) => {
+        let users = [];
+
         if(shift.members){
             let members = shift?.members?.split(',')?.filter(d => d !== '');
             members?.map( m => {
@@ -100,11 +99,11 @@ export default function CashPointsFilter ({
                     name: user?.name,
                     image_url: user?.image_url,
                 });
-            }); 
+            });
 
             users.length && setSelectedEmployee(users[0])
         }
-         
+
         return users;
     }
 
@@ -156,7 +155,7 @@ export default function CashPointsFilter ({
                 period: _.startCase(defaultSelectedDate)
             })
         }
-        
+
     }, [_employee, defaultSelectedDate]);
 
 
@@ -201,14 +200,14 @@ export default function CashPointsFilter ({
                     startDate={startDate}
                     endDate={endDate}
                     setStartDate={setStartDate}
-                    setEndDate={setEndDate} 
+                    setEndDate={setEndDate}
                     defaultSelectedType={defaultSelectedDate}
                 /> */}
-                <DatePicker 
+                <DatePicker
                     startDate={startDate}
                     endDate={endDate}
                     setStartDate={setStartDate}
-                    setEndDate={setEndDate} 
+                    setEndDate={setEndDate}
                 />
             </FilterItem>
 
@@ -216,20 +215,20 @@ export default function CashPointsFilter ({
             {
                 Number(window?.Laravel?.user?.role_id) === 1 ? (
                     <>
-                         
+
 
                         <FilterItem className='hide'>
-                            <ShiftFilterOption 
+                            <ShiftFilterOption
                                 data={ dept ? shift.filter(s => s.id !== 1 && s.department_id === dept.id) : []}
                                 loading = {!dept}
                                 selected={selectedShift}
                                 onSelect={handleShiftSelection}
                             />
                         </FilterItem>
- 
-                       
-                        <FilterItem className='hide'> 
-                            <EmployeeFilterOptions 
+
+
+                        <FilterItem className='hide'>
+                            <EmployeeFilterOptions
                                 selected={selectedEmployee}
                                 setSelectedEmployee={setSelectedEmployee}
                                 data={shiftEmployee}
@@ -237,10 +236,10 @@ export default function CashPointsFilter ({
                                 onSelect={() => {}}
                             />
                         </FilterItem>
-                       
-                         
+
+
                     </>
-                ) : 
+                ) :
                 <FilterItem className='border-right-0'>
                     Showing Data for: <span className='font-weight-bold'>{window?.Laravel?.user?.name}</span>
                 </FilterItem>
@@ -250,8 +249,8 @@ export default function CashPointsFilter ({
 
             {/* sidebar */}
             <div className='sp1__pp_filter_sidebar_container'>
-                <div 
-                    className='sp1__pp_filter_sidebar_toggle' 
+                <div
+                    className='sp1__pp_filter_sidebar_toggle'
                     onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
                 >
                     <i className="fa-solid fa-filter"></i>
@@ -273,19 +272,19 @@ export default function CashPointsFilter ({
                                 </Button>
                             </div>
 
-                            <div className="sp1__pp_filter_sidebar_items">  
+                            <div className="sp1__pp_filter_sidebar_items">
                                 <FilterItem className='w-100 border-right-0'>
-                                    <ShiftFilterOption 
+                                    <ShiftFilterOption
                                         data={ dept ? shift.filter(s => s.id !== 1 && s.department_id === dept.id) : []}
                                         loading = {!dept}
                                         selected={selectedShift}
                                         onSelect={handleShiftSelection}
                                         sidebarItem= {true}
                                     />
-                                </FilterItem> 
+                                </FilterItem>
 
                                 <FilterItem className='w-100 border-right-0'>
-                                    <EmployeeFilterOptions 
+                                    <EmployeeFilterOptions
                                         selected={selectedEmployee}
                                         setSelectedEmployee={setSelectedEmployee}
                                         data={shiftEmployee}

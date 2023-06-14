@@ -10,7 +10,8 @@
         @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
             <a href="{{ route('tasks.index') }}"><button class="btn btn-primary mb-3">Go back</button></a>
         @else
-            <a href="{{ route('projects.show', $task->project_id) }}?tab=tasks"><button class="btn btn-primary mb-3">Go back</button></a>
+            <a href="{{ route('projects.show', $task->project_id) }}?tab=tasks"><button class="btn btn-primary mb-3">Go
+                    back</button></a>
         @endif
         <h3 class="heading-h1 mb-3 ml-2 align-self-center">{{ ucfirst($task->heading) }}</h3>
     </div>
@@ -23,10 +24,10 @@
                             @php
                                 $task_member = App\Models\TaskUser::where('task_id', $task->id)->first();
                             @endphp
-                            {{--@if(Auth::user()->role_id == 5 && $task->board_column_id == 1 && $task_member->user_id == Auth::user()->id)
+                            {{-- @if (Auth::user()->role_id == 5 && $task->board_column_id == 1 && $task_member->user_id == Auth::user()->id)
                                 <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#revision">Revision</button>
                                 @include('tasks.modals.develoepr_revision')
-                            @endif--}}
+                            @endif --}}
                             @if (
                                 $changeStatusPermission == 'all' ||
                                     ($changeStatusPermission == 'added' && $task->added_by == user()->id) ||
@@ -45,7 +46,9 @@
                                     @lang('modules.tasks.markComplete')
                                 </x-forms.button-primary> -->
 
-                                        <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#extensionrequest">Extension Request</button>
+                                        <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white"
+                                            data-toggle="modal" data-target="#extensionrequest">Extension
+                                            Request</button>
 
 
                                         @include('tasks.modals.extensionrequest')
@@ -62,8 +65,8 @@
                                     <!-- <x-forms.button-primary icon="check" data-status="completed"
                                         class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
                                         @if ($task->board_column_id != 7)
-                                        @lang('modules.tasks.markComplete')
-                                        @endif
+@lang('modules.tasks.markComplete')
+@endif
                                     </x-forms.button-primary> -->
 
                                     @if ($task->added_by == Auth::user()->id || Auth::user()->role_id == 1)
@@ -86,17 +89,25 @@
                             @endif
                             @if (Auth::user()->role_id == 4)
                                 @if ($task->board_column_id == 9)
-                                    <button class="btn btn-success mr-2 mb-2 mb-lg-0 mb-md-0" id="client_approve_task">Client Approved Task</button>
-                                    <button class="btn btn-danger mr-2 mb-2 mb-lg-0 mb-md-0" data-toggle="modal" data-target="#task_client_has_revision">Client Has Revision</button>
+                                    <button class="btn btn-success mr-2 mb-2 mb-lg-0 mb-md-0"
+                                        id="client_approve_task">Client Approved Task</button>
+                                    <button class="btn btn-danger mr-2 mb-2 mb-lg-0 mb-md-0" data-toggle="modal"
+                                        data-target="#task_client_has_revision">Client Has Revision</button>
                                     @include('tasks.modals.task_client_has_revision')
                                 @endif
                             @endif
 
                             @php
-                                $val = App\Models\ProjectTimeLog::where('task_id', $task->id)->latest()->first();
+                                $val = App\Models\ProjectTimeLog::where('task_id', $task->id)
+                                    ->latest()
+                                    ->first();
                                 $task_active_id = App\Models\Task::where('id', $task->id)->first();
                             @endphp
-                            @if ($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision' || $task->task_status == 'incomplete')
+                            @if (
+                                $task->task_status == 'in progress' ||
+                                    $task->task_status == 'pending' ||
+                                    $task->task_status == 'revision' ||
+                                    $task->task_status == 'incomplete')
                                 @if ($task->boardColumn->slug != 'completed' && !is_null($task->is_task_user))
                                     @if ($task->boardColumn->id != 1)
                                         @if (is_null($task->userActiveTimer))
@@ -131,7 +142,11 @@
                                         Auth::user()->role_id == 9 ||
                                         Auth::user()->role_id == 10)
 
-                                    @if ($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision' || $task->board_column_id == 3)
+                                    @if (
+                                        $task->task_status == 'in progress' ||
+                                            $task->task_status == 'pending' ||
+                                            $task->task_status == 'revision' ||
+                                            $task->board_column_id == 3)
                                         @php
                                             $task_time = App\Models\ProjectTimelog::orderBy('id', 'desc')
                                                 ->where('task_id', $task->id)
@@ -145,10 +160,9 @@
 
                                                 $subtask_incompleted_count = 0;
                                                 foreach ($subtasks as $sub) {
-                                                   
                                                     $subtask_check = App\Models\Task::where('subtask_id', $sub->id)->first();
 
-                                                    if($subtask_check->board_column_id == 1 || $subtask_check->board_column_id == 2 || $subtask_check->board_column_id == 3 || $subtask_check->board_column_id == 6) {
+                                                    if ($subtask_check->board_column_id == 1 || $subtask_check->board_column_id == 2 || $subtask_check->board_column_id == 3 || $subtask_check->board_column_id == 6) {
                                                         $has_incompleted_task = true;
                                                     }
                                                 }
@@ -156,12 +170,15 @@
                                                 //dd($task, $subtasks, $incompleted_subtask, $has_incompleted_task);
                                             @endphp
                                             {{-- && $subtasks->count() != $subtask_incompleted_count --}}
-                                            @if (Auth::user()->role_id == 6 && $has_incompleted_task == true && $subtasks->count() != 0) 
-                                                <button class="btn-secondary rounded f-14 p-2 my-3 disabled"><i class="fa-solid fa-check"></i> Mark As Complete</button>
+                                            @if (Auth::user()->role_id == 6 && $has_incompleted_task == true && $subtasks->count() != 0)
+                                                <button class="btn-secondary rounded f-14 p-2 my-3 disabled"><i
+                                                        class="fa-solid fa-check"></i> Mark As Complete</button>
                                                 <!-- <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete"><i class="fa-solid fa-check"></i> Mark As Complete</button> -->
                                             @else
                                                 @if ($task->boardColumn->id != 1)
-                                                    <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete"><i class="fa-solid fa-check"></i> Mark As Complete</button>
+                                                    <button class="btn-secondary rounded f-14 p-2 my-3"
+                                                        data-toggle="modal" data-target="#markcomplete"><i
+                                                            class="fa-solid fa-check"></i> Mark As Complete</button>
                                                 @endif
                                             @endif
                                         @endif
@@ -184,8 +201,9 @@
                                         @endif
                                     @endif
 
-                                    @if (($task->board_column_id == 1 && $task_member->user_id == Auth::user()->id) )
-                                        <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#revision"> Revision</button>
+                                    @if ($task->board_column_id == 1 && $task_member->user_id == Auth::user()->id)
+                                        <button class="btn-secondary rounded f-14 p-2" data-toggle="modal"
+                                            data-target="#revision"> Revision</button>
 
                                         @if (Auth::user()->role_id == 5)
                                             @include('tasks.modals.develoepr_revision')
@@ -205,7 +223,7 @@
 
 
                                     <?php
-                                    
+
                                     $extension_status = App\Models\TaskTimeExtension::orderBy('id', 'desc')
                                         ->where('task_id', $task->id)
                                         ->first();
@@ -283,9 +301,9 @@
 
                 <div class="card-body">
                     <?php
-                    
+
                     $task_name = App\Models\Task::where('id', $task->dependent_task_id)->first();
-                    
+
                     ?>
                     @if ($task_name != null)
                         @if (
@@ -388,25 +406,25 @@
                             <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                                 <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                                     @lang('modules.tasks.assignBy')</p>
-                             
+
                                 <x-employee :user="$task->createBy" />
-                               
+
                             </div>
                         @endif
                     @endif
                     <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                         <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                             @lang('Project Manager')</p>
-                     
+
                         <x-employee :user="$task->project->pm" />
-                       
+
                     </div>
                     <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                         <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                             @lang('Client')</p>
-                     
+
                         <x-client :user="$task->project->client" />
-                       
+
                     </div>
                     <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                         <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
@@ -484,6 +502,62 @@
 
 
                     <x-cards.data-row :label="__('General Guidelines')" :value="!empty($task->project->project_summary) ? $task->project->project_summary : '--'" html="true" />
+
+                    @php
+                        $working_environment = \App\Models\WorkingEnvironment::where('project_id', $task->project->id)
+                            ->orderBy('id', 'desc')
+                            ->first();
+                    @endphp
+                    {{-- <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">Working/Staging Site’s
+                            URL</p>
+                        @if ($working_environment != null)
+                            <p class="mb-0 text-dark-grey f-14 w-70">
+                                {{ $working_environment->site_url }}
+                            </p>
+                        @else
+                            <p class="mb-0 text-dark-grey f-14 w-70">
+                                --
+                            </p>
+                        @endif
+                    </div>
+                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">Working/Staging Site’s
+                            Login URL</p>
+                        @if ($working_environment != null)
+                            <p class="mb-0 text-dark-grey f-14 w-70">
+                                {{ $working_environment->login_url }}
+                            </p>
+                        @else
+                            <p class="mb-0 text-dark-grey f-14 w-70">
+                                --
+                            </p>
+                        @endif
+                    </div>
+                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">Username/Email</p>
+                        @if ($working_environment != null)
+                            <p class="mb-0 text-dark-grey f-14 w-70">
+                                {{ $working_environment->email }}
+                            </p>
+                        @else
+                            <p class="mb-0 text-dark-grey f-14 w-70">
+                                --
+                            </p>
+                        @endif
+                    </div>
+                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">Frontend Password</p>
+                        @if ($working_environment != null)
+                            <p class="mb-0 text-dark-grey f-14 w-70">
+                                {{ $working_environment->password }}
+                            </p>
+                        @else
+                            <p class="mb-0 text-dark-grey f-14 w-70">
+                                --
+                            </p>
+                        @endif
+                    </div> --}}
 
                     <div class="card">
                         <div class="body">
@@ -635,9 +709,9 @@
             $task_review = App\Models\TaskApprove::where('task_id', $task->id)
                 ->orderBy('id', 'desc')
                 ->first();
-            
+
             ?>
-            
+
         </div>
         <div class="col-sm-3 review-card">
             <x-cards.data>
@@ -646,7 +720,8 @@
                         in_array('admin', user_roles()) ||
                         in_array('employee', user_roles()))
                     <p class="f-w-500">
-                        <i class="fa fa-circle mr-1 text-yellow" style="color: {{ $task->boardColumn->label_color }}"></i>
+                        <i class="fa fa-circle mr-1 text-yellow"
+                            style="color: {{ $task->boardColumn->label_color }}"></i>
                         {{ $task->boardColumn->column_name }}
                     </p>
                 @endif
@@ -722,8 +797,8 @@
                         </div>
                     @endif
                 @endif
-                @if($task->status == 'completed')
-              
+                @if ($task->status == 'completed')
+
                     <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                         <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Actual Completion Date') }}
                         </p>
@@ -736,7 +811,7 @@
 
                         </p>
                     </div>
-              
+
                 @endif
 
                 @if (
@@ -757,7 +832,7 @@
                 @php
                     $totalMinutes = $task->timeLogged->sum('total_minutes') - $breakMinutes;
                     $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-                    
+
                     if ($totalMinutes % 60 > 0) {
                         $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
                     }
@@ -779,24 +854,24 @@
                         $subtask_count = App\Models\Subtask::where('task_id', $tas_id->id)->count();
                         // dd($subtasks);
                         $time = 0;
-                        
+
                         foreach ($subtasks as $subtask) {
                             $task = App\Models\Task::where('subtask_id', $subtask->id)->first();
                             $time += $task->timeLogged->sum('total_minutes');
                         }
                         $timeL = intdiv($time, 60) . ' ' . __('app.hrs') . ' ';
-                        
+
                         if ($time % 60 > 0) {
                             $timeL .= $time % 60 . ' ' . __('app.mins');
                         }
                         if ($subtasks != null) {
                             $timeLo = intdiv($time + $totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-                        
+
                             if ($time % 60 > 0) {
                                 $timeLo .= ($time + $totalMinutes) % 60 . ' ' . __('app.mins');
                             }
                         }
-                        
+
                     @endphp
                     @if ($subtasks != null)
                         <div class="col-12 px-0 pb-3 d-lg-flex d-block">
@@ -829,7 +904,7 @@
                     <?php
                     $avg = ($task_review->rating + $task_review->rating2 + $task_review->rating3) / 3;
                     $avgRating = number_format($avg, 1);
-                    
+
                     ?>
 
                     <div class="col-12 px-0 pb-3 d-lg-flex d-block">
@@ -1727,8 +1802,8 @@
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'comments2': comments2,
-                'task_id': {{$task->id}},
-                'user_id': {{$task->last_updated_by}},
+                'task_id': {{ $task->id }},
+                'user_id': {{ $task->last_updated_by }},
                 'revision_status': status,
             }
             // console.log(data);
@@ -1739,7 +1814,7 @@
             });
             $.ajax({
                 type: "POST",
-                url: "{{route('task-status-revision')}}",
+                url: "{{ route('task-status-revision') }}",
                 data: data,
                 dataType: "json",
                 success: function (response) {
@@ -1748,7 +1823,7 @@
                         $('#submitBtnRevision').attr("disabled", false);
                         $('#submitBtnRevision').html("Submit");
                         //window.location.reload();
-                        window.location.href = '{{route("tasks.show", $task->id)}}'
+                        window.location.href = '{{ route('tasks.show', $task->id) }}'
                         toastr.success('Task Revision Successfully');
                     }
 
@@ -1761,7 +1836,7 @@
                     $('#submitBtnRevision').html("Submit");
                 }
             });
-        //}); 
+        //});
     }*/
 </script>
 

@@ -324,9 +324,9 @@
                             </x-sub-menu-item>
                             <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
                             <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
-                            {{-- @if($user->role_id == 1)
+                            @if($user->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
                             <x-sub-menu-item :link="route('qualified-sales.index')" :text="'Qualified Sales'" />
-                            @endif --}}
+                            @endif
                             <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
                             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
 
@@ -335,8 +335,6 @@
 
                            <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
                            @endif
-
-
 
 
                             {{--<x-sub-menu-item :link="route('points.index')" :text="'Points'" />--}}
@@ -685,7 +683,7 @@
                 <!-- NAV ITEM - REPORTS COLLAPASE MENU -->
 
 
-                 {{-- <x-menu-item icon="gear" :text="__('Report Central')">
+                 <x-menu-item icon="gear" :text="__('Report Central')">
                     <x-slot name="iconPath">
                         <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"></path>
                     </x-slot>
@@ -771,7 +769,7 @@
                             </div>
                         </div>
                     </div>
-                </x-menu-item> --}}
+                </x-menu-item>
 
                 <!-- NAV ITEM - SETTINGS -->
                 <x-menu-item icon="gear" :text="__('app.menu.settings')">
@@ -806,6 +804,12 @@
                                             </a>
                                             <a href="{{route('project-view-website-type')}}" class="text-lightest">
                                                 Website Types
+                                            </a>
+                                            <a href="{{route('project-view-website-theme')}}" class="text-lightest">
+                                                Website Theme
+                                            </a>
+                                            <a href="{{route('project-view-website-plugin')}}" class="text-lightest">
+                                                Website Plugin
                                             </a>
                                         </div>
                                     </div>

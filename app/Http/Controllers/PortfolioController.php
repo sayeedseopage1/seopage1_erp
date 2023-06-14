@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\ProjectCms;
 use App\Models\ProjectNiche;
 use App\Models\ProjectPortfolio;
+use App\Models\ProjectWebsitePlugin;
 use App\Models\ProjectWebsiteTheme;
 use App\Models\ProjectWebsiteType;
 use Illuminate\Http\Request;
@@ -35,15 +36,18 @@ class PortfolioController extends AccountBaseController
         $this->project_cmss = ProjectCms::all();
         $this->website_types = ProjectWebsiteType::all();
         $this->website_categories = ProjectNiche::whereNull('parent_category_id')->get();
-//        $this->website_themes = ProjectWebsiteTheme::all();
+        $this->website_themes = ProjectWebsiteTheme::all();
+        $this->website_plugins = ProjectWebsitePlugin::all();
 
         $this->portfolios = DB::table('project_portfolios')
             ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
             ->join('users', 'projects.client_id', '=', 'users.id')
-            ->select('project_portfolios.*','users.user_name','projects.project_name', 'projects.project_budget')
+            ->join('project_submissions', 'project_portfolios.project_id', '=', 'project_submissions.project_id')
+            ->select('project_portfolios.*', 'users.user_name', 'projects.project_name', 'projects.project_budget', 'project_submissions.actual_link')
             ->get();
 
-//                dd($this->portfolios);
+//        dd($this->portfolios);
+
         return view('portfolio.index',$this->data);
     }
 
@@ -80,12 +84,12 @@ class PortfolioController extends AccountBaseController
 
         if (!is_null($request->input('theme_name'))) {
             $selectedCategoryId = $request->input('theme_name');
-            $filteredCategories = ProjectPortfolio::where('id', $selectedCategoryId);
+            $filteredCategories = ProjectPortfolio::where('theme_name', $selectedCategoryId);
         }
 
         if (!is_null($request->input('website_plugin'))) {
             $selectedCategoryId = $request->input('website_plugin');
-            $filteredCategories = ProjectPortfolio::where('id', $selectedCategoryId);
+            $filteredCategories = ProjectPortfolio::where('plugin_name', $selectedCategoryId);
         }
 
         $filteredCategories = $filteredCategories->get();

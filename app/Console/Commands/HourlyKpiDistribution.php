@@ -47,32 +47,41 @@ class HourlyKpiDistribution extends Command
     }
     public function handle()
     {
-       // $date= '2022-04-30';
-        $currentMonth = Carbon::now()->startOfMonth();
+         $date= '2023-05-01';
+         $currentMonth = Carbon::now()->startOfMonth();
+    //    / $date = '2023-05-01';
+        //dd($currentMonth);
+       // $completed_projects = Project::whereDate('start_date','>=',$date)->where('project_status','Accepted')->where('status','finished')->get();
         // /dd($currentMonth);
         
-        $completed_projects = Project::where('start_date', '>=', $currentMonth)
-        ->where('project_status','Accepted')->where('status','finished')->get();
+         $completed_projects = Project::where('updated_at','>=',$currentMonth)->where('start_date','>=',$date)
+         ->where('project_status','Accepted')->where('status','finished')->get();
        // dd($completed_projects);
     foreach ($completed_projects as $project) {
     //    / dd($project);
+    //   /  $project= Project::where('id',475)->first();
        
         $total_minutes = ProjectTimeLog::where('project_id', $project->id)->sum('total_minutes');
+        $total_hours = floor($total_minutes / 60);
  
-        $kpi= kpiSetting::where('kpi_status','1')->first();
+      $kpi= kpiSetting::where('kpi_status','1')->first();
+       // $kpi= kpiSetting::first();
         $kpi_settings = kpiSettingLoggedHour::where('kpi_id',$kpi->id)->get();
+    //   /  dd($kpi_settings);
     
 
-        if ($total_minutes > 0 && $project->project_budget >= $kpi->achieve_less_than) {
-            $total_hours = $total_minutes / 60;
+        if ($total_hours > 0 && $project->project_budget >= $kpi->achieve_less_than) {
+           
             //un-comment this when finished
             $project_hourly_rate = $project->project_budget / $total_hours;
+           // dd($project->project_budget,$total_minutes,$total_hours,$project_hourly_rate );
             //--------------
             foreach ($kpi_settings as $value) {
                 //$value->logged_hours_between_to = 200;
-                if ($value->logged_hours_between <= $project_hourly_rate && $value->logged_hours_between_to >= $project_hourly_rate) {
+                if ($project_hourly_rate >= $value->logged_hours_between  && $project_hourly_rate <= $value->logged_hours_between_to ) {
                     $deal = Deal::find($project->deal_id);
-                    $project_budget= ($deal->amount * ($value->logged_hours_sales_amount) - $kpi->accepted_by_pm) / 100;
+                    $project_budget= ($project->project_budget * ($value->logged_hours_sales_amount - $kpi->accepted_by_pm) )/ 100;
+                   // dd(($project_budget*$kpi->contact_form)/100);
 
                     if($deal->lead_id != null) {
                         $lead = Lead::where('id',$deal->lead_id)->first();
@@ -91,7 +100,7 @@ class HourlyKpiDistribution extends Command
                             $point->total_points_earn=  ($project_budget*$kpi->the_bidder)/100;
                         }
 
-                         $point->created_at= $project->created_at;
+                         $point->created_at= $project->updated_at;
                         $point->save();
                     }
 
@@ -112,7 +121,7 @@ class HourlyKpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget*$kpi->qualify)/100;
                     }
 
-                     $point->created_at= $project->created_at;
+                     $point->created_at= $project->updated_at;
                     $point->save();
 
                     $deal_short_code= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',2)->first();
@@ -132,7 +141,7 @@ class HourlyKpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget*$kpi->requirements_defined)/100;
                     }
 
-                     $point->created_at= $project->created_at;
+                     $point->created_at= $project->updated_at;
                     $point->save();
 
                     $deal_proposal= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',3)->first();
@@ -151,7 +160,7 @@ class HourlyKpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget*$kpi->proposal_made)/100;
                     }
 
-                     $point->created_at= $project->created_at;
+                     $point->created_at= $project->updated_at;
                     $point->save();
 
                     $deal_negotiation_started= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',4)->first();                               
@@ -170,7 +179,7 @@ class HourlyKpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget*$kpi->negotiation_started)/100;
                     }
 
-                     $point->created_at= $project->created_at;
+                     $point->created_at= $project->updated_at;
                     $point->save();
 
 
@@ -191,7 +200,7 @@ class HourlyKpiDistribution extends Command
                             $point->total_points_earn= ($project_budget*$kpi->milestone_breakdown)/100;
                         }
 
-                         $point->created_at= $project->created_at;
+                         $point->created_at= $project->updated_at;
                         $point->save();
                     }
 
@@ -214,7 +223,7 @@ class HourlyKpiDistribution extends Command
                         $point->total_points_earn= ($project_budget*$kpi->closed_deal)/100;
 
                     }
-                     $point->created_at= $project->created_at;
+                     $point->created_at= $project->updated_at;
                     $point->save();
                     $user_name= User::where('id',$deal->added_by)->first(); 
 
@@ -225,6 +234,7 @@ class HourlyKpiDistribution extends Command
                     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. $project->client_name->name. '</a>Hours logged '.$value->logged_hours_sales_amount. '%';
                     $point->gained_as = "Individual";
                     $point->points= ($project_budget*$kpi->contact_form)/100;
+                    // /dd($point->points);
 
                     if ($cash_points_contact != null) {
                         $point->total_points_earn= $cash_points_contact->total_points_earn+ ($project_budget*$kpi->contact_form)/100;
@@ -232,7 +242,7 @@ class HourlyKpiDistribution extends Command
                         $point->total_points_earn= ($project_budget*$kpi->contact_form)/100;
 
                     }
-                     $point->created_at= $project->created_at;
+                     $point->created_at= $project->updated_at;
                     $point->save();
 
                     if ($deal->authorization_status == 1) {
@@ -253,7 +263,7 @@ class HourlyKpiDistribution extends Command
                             $point->total_points_earn= ($project_budget*$kpi->authorized_by_leader)/100;
 
                         }
-                         $point->created_at= $project->created_at;
+                         $point->created_at= $project->updated_at;
                         $point->save();
                         
                     }
@@ -262,9 +272,9 @@ class HourlyKpiDistribution extends Command
 
             //$project_hourly_rate = 35;
 
-            if ($kpi->logged_hours_above >= $project_hourly_rate) {
+            if ($project_hourly_rate >= $kpi->logged_hours_above ) {
                 $deal = Deal::find($project->deal_id);
-                $project_budget= ($deal->amount * ($kpi->logged_hours_above_sales_amount) - $kpi->accepted_by_pm) / 100;
+                $project_budget= ($deal->amount * ($kpi->logged_hours_above_sales_amount - $kpi->accepted_by_pm)) / 100;
 
                 if($deal->lead_id != null) {
                     $lead = Lead::where('id',$deal->lead_id)->first();
@@ -283,7 +293,7 @@ class HourlyKpiDistribution extends Command
                         $point->total_points_earn=  ($project_budget*$kpi->the_bidder)/100;
                     }
 
-                     $point->created_at= $project->created_at;
+                     $point->created_at= $project->updated_at;
                     $point->save();
                 }
 
@@ -304,7 +314,7 @@ class HourlyKpiDistribution extends Command
                     $point->total_points_earn=  ($project_budget*$kpi->qualify)/100;
                 }
 
-                 $point->created_at= $project->created_at;
+                 $point->created_at= $project->updated_at;
                 $point->save();
 
                 $deal_short_code= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',2)->first();
@@ -324,7 +334,7 @@ class HourlyKpiDistribution extends Command
                     $point->total_points_earn=  ($project_budget*$kpi->requirements_defined)/100;
                 }
 
-                 $point->created_at= $project->created_at;
+                 $point->created_at= $project->updated_at;
                 $point->save();
 
                 $deal_proposal= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',3)->first();
@@ -343,7 +353,7 @@ class HourlyKpiDistribution extends Command
                     $point->total_points_earn=  ($project_budget*$kpi->proposal_made)/100;
                 }
 
-                 $point->created_at= $project->created_at;
+                 $point->created_at= $project->updated_at;
                 $point->save();
 
                 $deal_negotiation_started= DealStageChange::where('deal_id',$deal->deal_id)->where('deal_stage_id',4)->first();                               
@@ -362,7 +372,7 @@ class HourlyKpiDistribution extends Command
                     $point->total_points_earn=  ($project_budget*$kpi->negotiation_started)/100;
                 }
 
-                 $point->created_at= $project->created_at;
+                 $point->created_at= $project->updated_at;
                 $point->save();
 
 
@@ -383,7 +393,7 @@ class HourlyKpiDistribution extends Command
                         $point->total_points_earn= ($project_budget*$kpi->milestone_breakdown)/100;
                     }
 
-                     $point->created_at= $project->created_at;
+                     $point->created_at= $project->updated_at;
                     $point->save();
                 }
 
@@ -406,7 +416,7 @@ class HourlyKpiDistribution extends Command
                     $point->total_points_earn= ($project_budget*$kpi->closed_deal)/100;
 
                 }
-                 $point->created_at= $project->created_at;
+                 $point->created_at= $project->updated_at;
                 $point->save();
                 $user_name= User::where('id',$deal->added_by)->first(); 
 
@@ -424,7 +434,7 @@ class HourlyKpiDistribution extends Command
                     $point->total_points_earn= ($project_budget*$kpi->contact_form)/100;
 
                 }
-                 $point->created_at= $project->created_at;
+                 $point->created_at= $project->updated_at;
                 $point->save();
 
                 if ($deal->authorization_status == 1) {
@@ -446,7 +456,7 @@ class HourlyKpiDistribution extends Command
 
                     }
                    
-                    $point->created_at= $project->created_at;
+                    $point->created_at= $project->updated_at;
                     $point->save();
                     
                 }

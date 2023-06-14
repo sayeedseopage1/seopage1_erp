@@ -34,6 +34,7 @@ class IncentiveController extends AccountBaseController
 
     public function index_json(Request $request)
     {
+        // /dd($request);
 
         if (isset($request->start_date)) {
             $start_date = Carbon::parse($request->start_date)->format('Y-m-d');

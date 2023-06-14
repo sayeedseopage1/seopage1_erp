@@ -36,6 +36,7 @@
     align-items: center;
 }
 
+
 .sp1_qs_table_td:last-child{
     border: 0;
 }
@@ -69,4 +70,21 @@
 
 .sp1_qs_comment_view:hover{
    font-weight: bold; 
+}
+
+
+
+.sp1_qs_table_td .__loading{
+    background-color:rgb(235, 234, 234);
+    color: rgb(235, 234, 234);
+    pointer-events: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.sp1_qualified_filterbar{ 
+    width: 100%;
+    z-index: 1;
+    background: #fff;
+    gap: 10px;
 }

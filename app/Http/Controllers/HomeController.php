@@ -1327,9 +1327,13 @@ class HomeController extends Controller
         return view('service-type.web_content');
     }
     public function storeWebContent(Request $request){
-        dd($request->all());
+//        dd($request->all());
         $data = $request->all();
+        $folder_links = json_encode($data['folder_link']);
         $reference_websites = json_encode($data['reference_website']);
+        $description1 = json_encode($data['description1']);
+        $description2 = json_encode($data['description2']);
+        $description3 = json_encode($data['description3']);
         $page_names = json_encode($data['page_name']);
         $quantitys = json_encode($data['quantity']);
         $approximate_words = json_encode($data['approximate_word']);
@@ -1339,13 +1343,17 @@ class HomeController extends Controller
         $web_content->website_niche = $data['website_niche'];
         $web_content->website_name = $data['website_name'];
         $web_content->business_information = $data['business_information'];
-        $web_content->drive_link = $data['drive_link'];
-        $web_content->reference_website = $data['reference_website'];
+        $web_content->share_file_info = $data['share_file_info'];
+        $web_content->folder_link = $folder_links;
+        $web_content->reference_website = $reference_websites;
         $web_content->competitor_content = $data['competitor_content'];
-        $web_content->description1 = $data['description1'];
-        $web_content->description2 = $data['description2'];
-        $web_content->description3 = $data['description3'];
+        $web_content->description1 = $description1;
+        $web_content->description2 = $description2;
+        $web_content->description3 = $description3;
         $web_content->product_list = $data['product_list'];
+        $web_content->page_name = $page_names;
+        $web_content->quantity = $quantitys;
+        $web_content->approximate_word = $approximate_words;
         $web_content->gender = $data['gender'];
         $web_content->age1 = $data['age1'];
         $web_content->age2 = $data['age2'];
@@ -1354,12 +1362,10 @@ class HomeController extends Controller
         $web_content->country = $data['country'];
         $web_content->city = $data['city'];
         $web_content->interest = $data['interest'];
-        $web_content->buying_habit = $data['buying_habit'];
-        $web_content->thor_native_language = $data['thor_native_language'];
-        $web_content->reference_website = $reference_websites;
-        $web_content->page_name = $page_names;
-        $web_content->quantity = $quantitys;
-        $web_content->approximate_word = $approximate_words;
+        $web_content->buying_habit1 = $data['buying_habit1'];
+        $web_content->buying_habit2 = $data['buying_habit2'];
+        $web_content->buying_habit3 = $data['buying_habit3'];
+        $web_content->language = $data['language'];
         $web_content->save();
 
         return response()->json(['status'=>200]);

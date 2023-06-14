@@ -162,6 +162,7 @@
                         $('#lead-convert').trigger("reset");
                         $('#dealstmodal').hide();
                         $('.table').DataTable().ajax.reload();
+                        window.location.href = "/account/deals/" + response.deal_id;
                     }
                 },
             });
