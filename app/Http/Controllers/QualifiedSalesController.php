@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\CashPoint;
 use DB;
 use Illuminate\Http\Request;
 use App\Models\Deal;
@@ -117,6 +118,19 @@ class QualifiedSalesController extends AccountBaseController
 
         return view('qualified-sales.index',$this->data);
     }
+    public function get_point_details($id)
+    {
+        $qualified_sale= QualifiedSale::where('id',$id)->first();
+        $this->userPoints = CashPoint::select('cash_points.user_id', 'users.name', DB::raw('SUM(cash_points.points) as total_points'))
+        ->where('project_id', $qualified_sale->project_id)
+        ->join('users', 'users.id', '=', 'cash_points.user_id')
+        ->groupBy('cash_points.user_id', 'users.name');
+        //->get();
+        return response()->json($this->userPoints->get());
+    //    / ->pluck('total_points', 'name');
+    //    / dd($userPoints);
+
+    }
 
     
 
@@ -149,7 +163,7 @@ class QualifiedSalesController extends AccountBaseController
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
