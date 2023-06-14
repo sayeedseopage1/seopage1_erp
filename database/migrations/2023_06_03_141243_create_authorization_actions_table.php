@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('authorization_actions', function (Blueprint $table) {
             $table->id();
+            $table->string('model_name');
+            $table->integer('model_id');
+            $table->string('type');
             $table->integer('deal_id');
             $table->integer('project_id');
             $table->string('link');
@@ -23,6 +26,7 @@ return new class extends Migration
             $table->integer('authorization_by')->nullable();
             $table->integer('authorization_for')->nullable();
             $table->enum('status', [0, 1, 2, 3, 4])->default(0);
+            $table->datetime('approved_at')->nullable();
             $table->timestamps();
         });
     }

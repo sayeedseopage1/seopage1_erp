@@ -57,6 +57,7 @@ use App\Models\ProjectDeliverable;
 use function _PHPStan_7d6f0f6a4\React\Promise\all;
 use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
+use App\Models\AuthorizationAction;
 use Toaster;
 
 use function Symfony\Component\Cache\Traits\role;
@@ -146,7 +147,6 @@ class TaskController extends AccountBaseController
         }
 
         if ($request->link != null) {
-            // code...
             foreach ($request->link as $lin) {
                 $task_submit= new TaskSubmission();
                 $task_submit->task_id= $request->id;
@@ -159,22 +159,14 @@ class TaskController extends AccountBaseController
                     $task_submit->submission_no= $order->submission_no+1;
                 }
 
-
                 $task_submit->save();
-
             }
         }
 
         if($request->file('file') != null)
         {
-
-
             foreach ($request->file('file') as $att) {
                 $task_submit= new TaskSubmission();
-
-
-
-
                 $filename=null;
                 if ($att) {
                     $filename = time() . $att->getClientOriginalName();
@@ -184,7 +176,6 @@ class TaskController extends AccountBaseController
                         $att,
                         $filename
                     );
-
                 }
                 $task_submit->attach= $filename;
                 $task_submit->task_id= $request->id;
@@ -194,10 +185,7 @@ class TaskController extends AccountBaseController
                 }else {
                     $task_submit->submission_no= $order->submission_no+1;
                 }
-
-
                 $task_submit->save();
-
             }
         }
 
@@ -207,6 +195,30 @@ class TaskController extends AccountBaseController
         $task->board_column_id= 6;
         $task->task_status="submitted";
         $task->save();
+
+        if ($this->user->role_id == 6) {
+            $type = 'task_submission_by_lead_developer';
+            $authorization_for = $task->project->pm_id;
+        } else {
+            $type = 'task_submission_by_developer';
+            $task_user = TaskUser::where('task_id', $task->id)->get();
+            foreach ($task_user as $value) {
+                if ($value->user->role_id == 6) {
+                    $authorization_for = $value->user_id;
+                }
+            }
+        }
+
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $task->getMorphClass();
+        $authorization_action->model_id = $task->id;
+        $authorization_action->type = $type;
+        $authorization_action->deal_id = $task->project->deal_id;
+        $authorization_action->project_id = $task->project->id;
+        $authorization_action->link = route('projects.show', $task->project->id).'?tab=tasks';
+        $authorization_action->title = Auth::user()->name.' submitted task for approved';
+        $authorization_action->authorization_for = $authorization_for;
+        $authorization_action->save();
 
         $task_id= Task::where('id',$task->id)->first();
 
@@ -261,6 +273,18 @@ class TaskController extends AccountBaseController
       $task->comments= $request->comments;
       $task->save();
 
+        //authorizatoin action start here
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $task_status->getMorphClass();
+        $authorization_action->model_id = $task_status->id;
+        $authorization_action->type = 'task_approved_by_lead_develoer';
+        $authorization_action->deal_id = $task_status->project->deal_id;
+        $authorization_action->project_id = $task_status->project_id;
+        $authorization_action->link = route('tasks.show', $request->task_id);
+        $authorization_action->title = Auth::user()->name.' approved this task';
+        $authorization_action->authorization_for = 1;
+        $authorization_action->save();
+        //end authorization action here
 
         $text = Auth::user()->name.' mark task completed';
         $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
@@ -280,12 +304,13 @@ class TaskController extends AccountBaseController
       Notification::send($user, new TaskApproveNotification($task_status,$sender));
         return response()->json([
             'status'=>200,
-    ]);
+        ]);
 
 
     }
     public function TaskRevision(Request $request)
     {
+        //DB::beginTransaction();
         $request->validate([
             'comments2' => 'required',
         ], [
@@ -320,9 +345,27 @@ class TaskController extends AccountBaseController
             $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
         }
         $task_revision->save();
+        if ($this->user->role_id == 6) {
+            $type = 'task_revision_by_lead_developer';
+        } else {
+            $type = 'task_revision_by_project_manager';
+        }
+        //dd($type);
+        //authorizatoin action start here
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $task_status->getMorphClass();
+        $authorization_action->model_id = $task_status->id;
+        $authorization_action->type = 'task_revision_by_lead_developer';
+        $authorization_action->deal_id = $task_status->project->deal_id;
+        $authorization_action->project_id = $task_status->project->id;
+        $authorization_action->link = route('tasks.show', $request->task_id);
+        $authorization_action->title = Auth::user()->name.' send task revision request to developer';
+        $authorization_action->authorization_for = $task_status->project->pm_id;
+        $authorization_action->save();
+        //end authorization action here
 
         $task_submission= TaskSubmission::where('task_id',$task_status->id)->first();
-        $sender= User::where('id',$request->user_id)->first();
+
         $text = Auth::user()->name.' send revision request';
         $link = '<a href="'.route('tasks.show', $task_status->id).'">'.$text.'</a>';
         $this->logProjectActivity($task_status->project->id, $link);
@@ -337,9 +380,11 @@ class TaskController extends AccountBaseController
             'body' => Auth::user()->name.' send revision request',
             'redirectUrl' => route('tasks.show', $task_status->id)
         ]);
-        $user= User::where('id',$task_submission->user_id)->first();
 
+        $user= User::where('id',$task_submission->user_id)->first();
+        $sender= User::where('id',$request->user_id)->first();
         Notification::send($user, new TaskRevisionNotification($task_status, $sender));
+        
         Toastr::success('Task Revision Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return redirect()->back();
     }
@@ -354,6 +399,30 @@ class TaskController extends AccountBaseController
       $task->due_date=$date;
       $task->description=$request->description;
       $task->save();
+
+        // authorization action section
+        $task_id = Task::find($request->task_id);
+        $project_id = Project::find($task_id->project_id);
+
+        if ($this->user->role_id == 6) {
+            $type = 'task_time_extension_by_lead_developer';
+            $authorization_for = $project_id->pm_id;
+        } else {
+            $type = 'task_time_extension_by_developer';
+            $authorization_for = $task_id->added_by;
+        }
+
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $task->getMorphClass();
+        $authorization_action->model_id = $task->id;
+        $authorization_action->type = $type;
+        $authorization_action->deal_id = $project_id->deal_id;
+        $authorization_action->project_id = $project_id->id;
+        $authorization_action->link = route('tasks.show', $task_id->id);
+        $authorization_action->title = Auth::user()->name.' send task time extention';
+        $authorization_action->authorization_for = $authorization_for;
+        $authorization_action->save();
+        //end authorization action
 
       return Redirect::back()->with('messages.taskUpdatedSuccessfully');
     }
@@ -786,6 +855,21 @@ class TaskController extends AccountBaseController
 
         if (is_array($request->user_id)) {
             $assigned_to = User::find($request->user_id[0]);
+            if ($assigned_to->role_id == 6) {
+                //authorization action start
+
+                $authorization_action = new AuthorizationAction();
+                $authorization_action->model_name = $task->getMorphClass();
+                $authorization_action->model_id = $task->id;
+                $authorization_action->type = 'task_assigned_on_lead_developer';
+                $authorization_action->deal_id = $task->project->deal_id;
+                $authorization_action->project_id = $task->project_id;
+                $authorization_action->link = route('projects.show', $task->project->id).'?tab=tasks';
+                $authorization_action->title = Auth::user()->name.' assigned task on you';
+                $authorization_action->authorization_for = $assigned_to->id;
+                $authorization_action->save();
+                //authorization action end
+            }
             $text = Auth::user()->name.' assigned new task on '.$assigned_to->name;
             $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
             $this->logProjectActivity($project->id, $link);
@@ -799,6 +883,21 @@ class TaskController extends AccountBaseController
             ]);
         } else {
             $assigned_to = User::find($request->user_id);
+            if ($assigned_to->role_id == 6) {
+                //authorization action start
+
+                $authorization_action = new AuthorizationAction();
+                $authorization_action->model_name = $task->getMorphClass();
+                $authorization_action->model_id = $task->id;
+                $authorization_action->type = 'task_assigned_on_lead_developer';
+                $authorization_action->deal_id = $task->project->deal_id;
+                $authorization_action->project_id = $task->project_id;
+                $authorization_action->link = route('projects.show', $task->project_id).'?tab=tasks';
+                $authorization_action->title = Auth::user()->name.' assigned task on you';
+                $authorization_action->authorization_for = $assigned_to->id;
+                $authorization_action->save();
+                //authorization action end
+            }
             $text = Auth::user()->name.' assigned new task on '.$assigned_to->name;
             $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
             $this->logProjectActivity($project->id, $link);
@@ -826,7 +925,10 @@ class TaskController extends AccountBaseController
     /**
      * XXXXXXXXXXX
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|
+     * \Illuminate\Contracts\View\Factory|
+     * \Illuminate\Contracts\View\View
+     * \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -1453,142 +1555,142 @@ class TaskController extends AccountBaseController
         ], [
             'text3.required' => 'This field is required!',
         ]);
-            $task_status= Task::find($request->task_id);
-            $task_status->task_status="in progress";
-            $task_status->board_column_id=3;
-            $task_status->save();
+        $task_status= Task::find($request->task_id);
+        $task_status->task_status="in progress";
+        $task_status->board_column_id=3;
+        $task_status->save();
 
-            $subtasks = SubTask::where('task_id',$request->task_id)->get();
-            $selected_subtasks = SubTask::whereIn('id',$request->subTask)->get();
-            foreach ($selected_subtasks as $key => $selected_subtask){
+        $subtasks = SubTask::where('task_id',$request->task_id)->get();
+        $selected_subtasks = SubTask::whereIn('id',$request->subTask)->get();
+        foreach ($selected_subtasks as $key => $selected_subtask){
 
-                $find_task_id= Task::where('subtask_id',$selected_subtask->id)->first();
+            $find_task_id= Task::where('subtask_id',$selected_subtask->id)->first();
+            $sub_task_status= Task::find($find_task_id->id);
+            $sub_task_status->task_status = "incomplete";
+            $sub_task_status->board_column_id=1;
+            $sub_task_status->save();
+
+            $tasks_accept = new TaskRevision();
+            $tasks_accept->accept_and_continue = $request->text3;
+            $tasks_accept->subtask_id = $request->subTask[$key];
+            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+            $tasks_accept->comment = $request->comment[$key];
+            $tasks_accept->save();
+        }
+
+        $tasks_accept = TaskRevision::find($request->revision_id);
+        $tasks_accept->deny_and_continue = $request->text2;
+        $tasks_accept->subtask_id = implode(",", $request->subTask);
+        $tasks_accept->revision_reason = $request->revision_acknowledgement;
+        $tasks_accept->comment = implode(",", $request->comment);
+        $tasks_accept->save();
+
+        foreach ($subtasks as $subtask){
+
+            $find_task_id= Task::where('subtask_id',$subtask->id)->first();
+            if($find_task_id->board_column_id == 8)
+            {
                 $sub_task_status= Task::find($find_task_id->id);
-                $sub_task_status->task_status = "incomplete";
-                $sub_task_status->board_column_id=1;
+
+                $sub_task_status->task_status = "completed";
+                $sub_task_status->board_column_id=4;
                 $sub_task_status->save();
 
-                $tasks_accept = new TaskRevision();
-                $tasks_accept->accept_and_continue = $request->text3;
-                $tasks_accept->subtask_id = $request->subTask[$key];
-                $tasks_accept->revision_reason = $request->revision_acknowledgement;
-                $tasks_accept->comment = $request->comment[$key];
-                $tasks_accept->save();
             }
-
-            $tasks_accept = TaskRevision::find($request->revision_id);
-            $tasks_accept->deny_and_continue = $request->text2;
-            $tasks_accept->subtask_id = implode(",", $request->subTask);
-            $tasks_accept->revision_reason = $request->revision_acknowledgement;
-            $tasks_accept->comment = implode(",", $request->comment);
-            $tasks_accept->save();
-
-            foreach ($subtasks as $subtask){
-
-                $find_task_id= Task::where('subtask_id',$subtask->id)->first();
-                if($find_task_id->board_column_id == 8)
-                {
-                    $sub_task_status= Task::find($find_task_id->id);
-
-                    $sub_task_status->task_status = "completed";
-                    $sub_task_status->board_column_id=4;
-                    $sub_task_status->save();
-
-                }
-            }
-
-            return response()->json([
-                'status'=>200,
-            ]);
         }
+
+        return response()->json([
+            'status'=>200,
+        ]);
+    }
 
 //        DENY AND CONTINUE BUTTON SECTION
-        public function denyContinue(Request $request) {
-            $request->validate([
-                'text2' => 'required',
-            ], [
-                'text2.required' => 'This field is required!',
-            ]);
-            $task_status= Task::find($request->task_id);
-            $task_status->task_status="in progress";
-            $task_status->board_column_id=3;
-            $task_status->save();
+    public function denyContinue(Request $request) {
+        $request->validate([
+            'text2' => 'required',
+        ], [
+            'text2.required' => 'This field is required!',
+        ]);
+        $task_status= Task::find($request->task_id);
+        $task_status->task_status="in progress";
+        $task_status->board_column_id=3;
+        $task_status->save();
 
-            $subtasks = SubTask::where('task_id',$request->task_id)->get();
-            $selected_subtasks = SubTask::whereIn('id',$request->subTask)->get();
-            foreach ($selected_subtasks as $key => $selected_subtask){
+        $subtasks = SubTask::where('task_id',$request->task_id)->get();
+        $selected_subtasks = SubTask::whereIn('id',$request->subTask)->get();
+        foreach ($selected_subtasks as $key => $selected_subtask){
 
-                $find_task_id= Task::where('subtask_id',$selected_subtask->id)->first();
-                $sub_task_status= Task::find($find_task_id->id);
-                $sub_task_status->task_status = "incomplete";
-                $sub_task_status->board_column_id=1;
-                $sub_task_status->save();
-                //dd($request->subTask[$key]);
-                $tasks_accept = new TaskRevision();
-                $tasks_accept->deny_and_continue = $request->text3;
-                $tasks_accept->subtask_id = $request->subTask[$key];
-                $tasks_accept->revision_reason = $request->revision_acknowledgement;
-                $tasks_accept->comment = $request->comment[$key];
-                $tasks_accept->save();
-            }
-
-            $tasks_accept = TaskRevision::find($request->revision_id);
-            $tasks_accept->deny_and_continue = $request->text2;
-            $tasks_accept->subtask_id = implode(",", $request->subTask);
+            $find_task_id= Task::where('subtask_id',$selected_subtask->id)->first();
+            $sub_task_status= Task::find($find_task_id->id);
+            $sub_task_status->task_status = "incomplete";
+            $sub_task_status->board_column_id=1;
+            $sub_task_status->save();
+            //dd($request->subTask[$key]);
+            $tasks_accept = new TaskRevision();
+            $tasks_accept->deny_and_continue = $request->text3;
+            $tasks_accept->subtask_id = $request->subTask[$key];
             $tasks_accept->revision_reason = $request->revision_acknowledgement;
-            $tasks_accept->comment = implode(",", $request->comment);
+            $tasks_accept->comment = $request->comment[$key];
             $tasks_accept->save();
-
-            foreach ($subtasks as $subtask){
-
-                $find_task_id= Task::where('subtask_id',$subtask->id)->first();
-                if($find_task_id->board_column_id == 8) {
-                    $sub_task_status= Task::find($find_task_id->id);
-
-                    $sub_task_status->task_status = "completed";
-                    $sub_task_status->board_column_id=4;
-                    $sub_task_status->save();
-
-                }
-            }
-            return response()->json([
-                'status'=>200,
-            ]);
         }
+
+        $tasks_accept = TaskRevision::find($request->revision_id);
+        $tasks_accept->deny_and_continue = $request->text2;
+        $tasks_accept->subtask_id = implode(",", $request->subTask);
+        $tasks_accept->revision_reason = $request->revision_acknowledgement;
+        $tasks_accept->comment = implode(",", $request->comment);
+        $tasks_accept->save();
+
+        foreach ($subtasks as $subtask){
+
+            $find_task_id= Task::where('subtask_id',$subtask->id)->first();
+            if($find_task_id->board_column_id == 8) {
+                $sub_task_status= Task::find($find_task_id->id);
+
+                $sub_task_status->task_status = "completed";
+                $sub_task_status->board_column_id=4;
+                $sub_task_status->save();
+
+            }
+        }
+        return response()->json([
+            'status'=>200,
+        ]);
+    }
 
 //        REVISION REASON SYSTEM
-        public function revisionReason(Request $request){
-            $revision_reason = new TaskRevision();
-            $revision_reason->task_id = $request->task_id;
-            $revision_reason->revision_reason =$request->revision_reason;
-            $revision_reason->save();
-            return response()->json([
-                'status'=>200,
-            ]);
+    public function revisionReason(Request $request){
+        $revision_reason = new TaskRevision();
+        $revision_reason->task_id = $request->task_id;
+        $revision_reason->revision_reason =$request->revision_reason;
+        $revision_reason->save();
+        return response()->json([
+            'status'=>200,
+        ]);
+    }
+
+    public function accept_or_revision_by_developer(Request $request)
+    {
+        $task_status= Task::find($request->task_id);
+        $task_status->task_status="in progress";
+        $task_status->board_column_id=3;
+        $task_status->save();
+
+        $tasks_accept = TaskRevision::find($request->revision_id);
+        if ($request->mode == 'deny') {
+            $tasks_accept->deny_and_continue = $request->text2;
+        } else {
+            $tasks_accept->accept_and_continue = $request->text2;
         }
+        $tasks_accept->task_id = $task_status->id;
+        $tasks_accept->subtask_id = $task_status->subTask;
+        $tasks_accept->revision_acknowledgement = $request->revision_acknowledgement;
+        $tasks_accept->dev_comment = $request->comment;
+        $tasks_accept->save();
 
-        public function accept_or_revision_by_developer(Request $request)
-        {
-            $task_status= Task::find($request->task_id);
-            $task_status->task_status="in progress";
-            $task_status->board_column_id=3;
-            $task_status->save();
-
-            $tasks_accept = TaskRevision::find($request->revision_id);
-            if ($request->mode == 'deny') {
-                $tasks_accept->deny_and_continue = $request->text2;
-            } else {
-                $tasks_accept->accept_and_continue = $request->text2;
-            }
-            $tasks_accept->task_id = $task_status->id;
-            $tasks_accept->subtask_id = $task_status->subTask;
-            $tasks_accept->revision_acknowledgement = $request->revision_acknowledgement;
-            $tasks_accept->dev_comment = $request->comment;
-            $tasks_accept->save();
-
-            return response()->json([
-                'status'=>200,
-            ]);
-        }
+        return response()->json([
+            'status'=>200,
+        ]);
+    }
 
 }

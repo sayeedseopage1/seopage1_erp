@@ -66,12 +66,12 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
               @if(Auth::user()->role_id == 1 && $project->status == 'under review')
             <a id="project-deny" class="btn btn-danger border height-35 f-15 px-3 py-2 text-white text-capitalize rounded" >
-                @lang('Deny')
+                @lang('Project Challenge Deny')
             </a>
 
 
             <a id="project-accept" class="btn btn-primary bg-white border height-35 f-15 px-3 py-2 text-dark-grey text-capitalize rounded mr-3">
-                @lang('Accept')
+                @lang('Project Challenge Accept')
             </a>
 
             @endif

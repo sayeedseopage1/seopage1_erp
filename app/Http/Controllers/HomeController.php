@@ -69,6 +69,7 @@ use Pusher\Pusher;
 use App\Notifications\PusherNotificaiton;
 use Notification;
 use App\Models\TaskUser;
+use App\Models\AuthorizationAction;
 
 class HomeController extends Controller
 {
@@ -216,9 +217,22 @@ class HomeController extends Controller
                 $data = new ProjectDeliverablesClientDisagree();
                 $data->project_id = $project->id;
                 $data->delivarable_id = $key;
-                $data->comment = $value;
+                $data->comment = $value; 
                 $data->save();
             }
+            //start authorization action
+
+            $authorization_action = new AuthorizationAction();
+            $authorization_action->model_name = $project->getMorphClass();
+            $authorization_action->model_id = $project->id;
+            $authorization_action->type = 'deliverable_modification_by_client';
+            $authorization_action->deal_id = $project->deal_id;
+            $authorization_action->project_id = $project->id;
+            $authorization_action->link = route('projects.show', $project->id).'?tab=deliverable';
+            $authorization_action->title = 'Client send delivarables modification request';
+            $authorization_action->authorization_for = 62;
+            $authorization_action->save();
+            //end authorization action
         }
 
         $project->authorization_status = 'pending';
@@ -239,7 +253,7 @@ class HomeController extends Controller
             'user_id' => $project->pm_id,
             'role_id' => 4,
             'title' => 'Client Disagree Delivarables',
-            'body' => $link,
+            'body' => $text,
             'redirectUrl' => route('projects.show', $project->id).'?tab=deliverables'
         ];
 
@@ -1472,4 +1486,26 @@ class HomeController extends Controller
     // {
     //     dd('ok');
     // }
+
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+        ]);
+
+        // Retrieve the uploaded file
+        $image = $request->file('image');
+
+        // Generate a unique name for the file
+        $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+
+        // Move the uploaded file to a designated directory
+        $image->move(public_path('uploads'), $imageName);
+
+        // Perform any additional operations as needed (e.g., saving the file path to a database)
+
+        return response()->json([
+            'filename' => \URL::asset('uploads/'.$imageName)
+        ]);
+    }
 }
