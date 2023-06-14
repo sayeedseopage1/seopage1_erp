@@ -184,6 +184,7 @@ use App\Http\Controllers\ReportCentralController;
 use App\Http\Controllers\MonthlyIncentiveController;
 use App\Http\Controllers\QualifiedSalesController;
 use App\Http\Controllers\PendingActionController;
+use App\Http\Controllers\NonCashPointSettingsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1168,6 +1169,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
 
     Route::resource('authorization-action', AuthorizationAction::class);
+    Route::get('index-non-cash-points', [NonCashPointSettingsController::class, 'index'])->name('non_cash_point.index');
+    Route::post('store-non-cash-points', [NonCashPointSettingsController::class, 'store'])->name('non_cash_point.store');
 });
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);

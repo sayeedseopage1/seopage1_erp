@@ -4488,6 +4488,5 @@ class ProjectController extends AccountBaseController
         }
 
         return response()->json($data);
-
     }
 }
