@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 use App\Models\PMAssign;
 use App\Models\PMProject;
 use App\Models\ProjectMilestone;
+use App\Models\AuthorizationAction;
 use Notification;
 use App\Notifications\MilestoneReleaseNotification;
 use App\Notifications\ProjectCompleteNotification;
@@ -232,7 +233,19 @@ class PaymentController extends AccountBaseController
         $payment->status = 'complete';
         $payment->save();
 
+        //authorization action start
 
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $payment->getMorphClass();
+        $authorization_action->model_id = $payment->id;
+        $authorization_action->type = 'payment_created';
+        $authorization_action->deal_id = $payment->project->deal_id;
+        $authorization_action->project_id = $payment->project->id;
+        $authorization_action->link = route('projects.show', $payment->project->id).'?tab=milestones';
+        $authorization_action->title = $this->user->name.' create payment for this project';
+        $authorization_action->authorization_for = 62;
+        $authorization_action->save();
+        //authorization action end
 
         if (isset($invoice) && isset($paidAmount)) {
 

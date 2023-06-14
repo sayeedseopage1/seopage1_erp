@@ -2041,6 +2041,26 @@ class ProjectController extends AccountBaseController
         // $this->logProjectActivity($project->id, 'Project accepted by ');
         $users= User::where('role_id',1)->get();
 
+        if ($request->project_challenge != 'No Challenge') {
+            $project_update= Project::find($project->id);
+            $project_update->status= 'under review';
+            $project_update->save();
+
+            $authorization_action = new AuthorizationAction();
+            $authorization_action->model_name = $project_update->getMorphClass();
+            $authorization_action->model_id = $project_update->id;
+            $authorization_action->type = 'project_challenge';
+            $authorization_action->deal_id = $project_update->deal_id;
+            $authorization_action->project_id = $project_update->id;
+            $authorization_action->link = route('projects.show', $project_update->id);
+            $authorization_action->title = 'Project Challenge Authorization';
+            $authorization_action->authorization_for = 62;
+            $authorization_action->save();
+
+            foreach ($users as $user) {
+                Notification::send($user, new ProjectReviewNotification($project));
+            }
+        }
 
         if ($project->project_status != 'Accepted') {
             foreach ($users as $user) {
@@ -2055,13 +2075,14 @@ class ProjectController extends AccountBaseController
         } else {
             //authorizatoin action start here
             $authorization_action = new AuthorizationAction();
+            $authorization_action->model_name = $project->getMorphClass();
+            $authorization_action->model_id = $project->id;
+            $authorization_action->type = 'project_challenge';
             $authorization_action->deal_id = $project->deal_id;
             $authorization_action->project_id = $project->id;
             $authorization_action->link = route('projects.show', $project->id);
-            $authorization_action->title = Auth::user()->name.' accept this project';
-            $authorization_action->authorization_by = Auth::id();
-            $authorization_action->authorization_for = Auth::id();
-            $authorization_action->status = '1';
+            $authorization_action->title = 'Project Challenge Authorization';
+            $authorization_action->authorization_for = 1;
             $authorization_action->save();
             //end authorization action here
 
@@ -3194,6 +3215,18 @@ class ProjectController extends AccountBaseController
             }
 
             if($request->deliverable_type == 'Others') {
+                $authorization_action = new AuthorizationAction();
+                $authorization_action->model_name = $deliverable->getMorphClass();
+                $authorization_action->model_id = $deliverable->id;
+                $authorization_action->type = 'other_type_deliverable';
+                $authorization_action->deal_id = $project_id->deal_id;
+                $authorization_action->project_id = $project_id->id;
+                $authorization_action->link = route('projects.show', $project_id->id).'?tab=deliverable';
+                $authorization_action->title = Auth::user()->name.'  send "OTHER TYPE" delivarable authorization request ';
+                $authorization_action->authorization_for = 62;
+                $authorization_action->save();
+                //end authorization action
+
                 $project_id= Project::where('id',$project->id)->first();
                 foreach ($users as $user) {
                     Notification::send($user, new DeliverableOthersAuthorizationNotification($project_id));
@@ -3369,7 +3402,7 @@ class ProjectController extends AccountBaseController
         $project->authorization = 1;
         $project->save();
         $project_id= Project::where('id',$deliverable_id->project_id)->first();
-
+        
         $user= User::where('id',$project_id->pm_id)->first();
 
         $this->triggerPusher('notification-channel', 'notification', [
@@ -3620,11 +3653,14 @@ class ProjectController extends AccountBaseController
         $project_id = Project::find($project->project_id);
 
         $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $milestone->getMorphClass();
+        $authorization_action->model_id = $milestone->id;
+        $authorization_action->type = 'project_completion';
         $authorization_action->deal_id = $project_id->deal_id;
         $authorization_action->project_id = $project_id->id;
         $authorization_action->link = route('projects.show', $project_id->id);
-        $authorization_action->title = Auth::user()->name.'  send QC form authorization request ';
-        $authorization_action->authorization_for = 1;
+        $authorization_action->title = Auth::user()->name.' send project completion authorization request ';
+        $authorization_action->authorization_for = 62;
         $authorization_action->save();
         //end authorization action
         $users= User::where('role_id',1)->get();
@@ -3811,7 +3847,6 @@ class ProjectController extends AccountBaseController
     }
     public function ProjectAccept(Request $request)
     {
-        // /dd($request);
         $project= Project::find($request->project_id);
         $project->status= 'in progress';
         $project->project_status= 'Accepted';
@@ -3819,13 +3854,27 @@ class ProjectController extends AccountBaseController
         $project->save();
         $user= User::where('id',$project->pm_id)->first();
 
-
+        //if request comes from original authrization serction then data will be update form authorizatin action
+        if (is_null($request->authorization_form)) {
+            $authorization_action = AuthorizationAction::where([
+                'project_id' => $project->id,
+                'type' => 'project_challenge',
+                'authorization_for' => $this->user->id,
+                'status' => '0'
+            ])->first();
+            if ($authorization_action) {
+                $authorization_action->description = $request->admin_comment;
+                $authorization_action->authorization_by = $this->user->id;
+                $authorization_action->approved_at = Carbon::now();
+                $authorization_action->status = '1';
+                $authorization_action->save();
+            }
+        }
 
         Notification::send($user, new ProjectReviewAcceptNotification($project));
 
         Toastr::success('Project Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
-
     }
     public function ProjectDeny(Request $request)
     {
@@ -3843,6 +3892,38 @@ class ProjectController extends AccountBaseController
         Toastr::success('Project Canceled Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
     }
+
+    public function ProjectDeny(Request $request)
+    {
+        //dd($request);
+        $project= Project::find($request->project_id);
+        $project->status= 'canceled';
+        $project->project_status= 'Canceled';
+        $project->admin_comment= $request->admin_comment;
+        $project->save();
+        $user= User::where('id',$project->pm_id)->first();
+
+        if (is_null($request->authorization_form)) {
+            $authorization_action = AuthorizationAction::where([
+                'project_id' => $project->id,
+                'type' => 'project_challenge',
+                'authorization_for' => $this->user->id,
+                'status' => '0'
+            ])->first();
+            if ($authorization_action) {
+                $authorization_action->description = $request->admin_comment;
+                $authorization_action->authorization_by = $this->user->id;
+                $authorization_action->approved_at = Carbon::now();
+                $authorization_action->status = '1';
+                $authorization_action->save();
+            }
+        }
+
+        Notification::send($user, new ProjectReviewAcceptNotification($project));
+        Toastr::success('Project Canceled Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return back();
+    }
+
     public function ProjectSubmissionAccept(Request $request)
     {
         $project= ProjectSubmission::find($request->id);
@@ -3869,19 +3950,22 @@ class ProjectController extends AccountBaseController
         $user= User::where('id',$project_id->pm_id)->first();
 
 
-        //update authoziation action
-        $authorization_action = AuthorizationAction::where([
-            'deal_id' => $project_id->deal_id,
-            'project_id' => $project_id->id,
-            'status' => '0'
-        ])->first();
 
-        if ($authorization_action) {
-            $authorization_action->authorization_by = Auth::id();
-            $authorization_action->status = '1';
-            $authorization_action->save();
+        if (is_null($request->authorization_form)) {
+            $authorization_action = AuthorizationAction::where([
+                'project_id' => $project_id->id,
+                'type' => 'project_completion',
+                'authorization_for' => $this->user->id,
+                'status' => '0'
+            ])->first();
+            if ($authorization_action) {
+                $authorization_action->description = $request->admin_comment;
+                $authorization_action->authorization_by = $this->user->id;
+                $authorization_action->approved_at = Carbon::now();
+                $authorization_action->status = '1';
+                $authorization_action->save();
+            }
         }
-        //end authorization action
 
 
         Notification::send($user, new ProjectSubmissionAcceptNotification($project_id));
@@ -3931,14 +4015,17 @@ class ProjectController extends AccountBaseController
             $project->agree= $request->agree;
             $project->status= 'pending';
             if ($project->save()) {
-                $project = Project::find($request->project_id);
+                $deal = Project::find($request->project_id);
 
                 $authorization_action = new AuthorizationAction();
-                $authorization_action->deal_id = $project->deal_id;
-                $authorization_action->project_id = $project->id;
-                $authorization_action->link = route('projects.show', $project->id);
-                $authorization_action->title = Auth::user()->name.'  send QC form authorization request ';
-                $authorization_action->authorization_for = 1;
+                $authorization_action->model_name = $project->getMorphClass();
+                $authorization_action->model_id = $project->id;
+                $authorization_action->type = 'project_qc';
+                $authorization_action->deal_id = $deal->deal_id;
+                $authorization_action->project_id = $project->project_id;
+                $authorization_action->link = route('projects.show', $project->project_id);
+                $authorization_action->title = Auth::user()->name.' send QC form authorization request ';
+                $authorization_action->authorization_for = 62;
                 $authorization_action->save();
 
                 $milestone= ProjectMilestone::where('id',$request->milestone_id)->first();
@@ -3994,24 +4081,28 @@ class ProjectController extends AccountBaseController
             $mile->save();
         }
 
-        //update authoziation action
         $project_id= Project::where('id',$project->project_id)->first();
-        $authorization_action = AuthorizationAction::where([
-            'deal_id' => $project_id->deal_id,
-            'project_id' => $project_id->id,
-            'status' => '0'
-        ])->first();
 
-        if ($authorization_action) {
-            $authorization_action->authorization_by = Auth::id();
-            $authorization_action->status = '1';
-            $authorization_action->save();
+        //update authoziation action
+        if (is_null($request->authorization_form)) {
+            $authorization_action = AuthorizationAction::where([
+                'project_id' => $project_id->id,
+                'type' => 'project_qc',
+                'authorization_for' => $this->user->id,
+                'status' => '0'
+            ])->first();
+            if ($authorization_action) {
+                $authorization_action->description = $request->admin_comment;
+                $authorization_action->authorization_by = $this->user->id;
+                $authorization_action->approved_at = Carbon::now();
+                $authorization_action->status = '1';
+                $authorization_action->save();
+            }
         }
         //end authorization action
 
         Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
-
     }
 
     public function DeliverableAuthorizationRequest(Request $request)
@@ -4037,11 +4128,14 @@ class ProjectController extends AccountBaseController
 
         //authorizatoin action start here
         $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $pm_project->getMorphClass();
+        $authorization_action->model_id = $pm_project->id;
+        $authorization_action->type = 'project_deliverable_time_extention';
         $authorization_action->deal_id = $project_id->deal_id;
         $authorization_action->project_id = $project_id->id;
         $authorization_action->link = route('projects.show', $project_id->id).'?tab=deliverables';
-        $authorization_action->title = Auth::user()->name.'  send project deliverable time extention request ';
-        $authorization_action->authorization_for = 1;
+        $authorization_action->title = Auth::user()->name.' send project deliverable time extention request ';
+        $authorization_action->authorization_for = 62;
         $authorization_action->save();
         //end authorization action here
 
@@ -4078,16 +4172,20 @@ class ProjectController extends AccountBaseController
         $log_user = Auth::user();
 
         //update authoziation action
-        $authorization_action = AuthorizationAction::where([
-            'deal_id' => $project->deal_id,
-            'project_id' => $project->id,
-            'status' => '0'
-        ])->first();
-
-        if ($authorization_action) {
-            $authorization_action->authorization_by = Auth::id();
-            $authorization_action->status = '1';
-            $authorization_action->save();
+        if (is_null($request->authorization_form)) {
+            $authorization_action = AuthorizationAction::where([
+                'project_id' => $project_id->id,
+                'type' => 'project_deliverable_time_extention',
+                'authorization_for' => $this->user->id,
+                'status' => '0'
+            ])->first();
+            if ($authorization_action) {
+                $authorization_action->description = $this->user->name.' Accept this request';
+                $authorization_action->authorization_by = $this->user->id;
+                $authorization_action->approved_at = Carbon::now();
+                $authorization_action->status = '1';
+                $authorization_action->save();
+            }
         }
         //end authorization action
 
@@ -4116,13 +4214,15 @@ class ProjectController extends AccountBaseController
         $log_user = Auth::user();
         //authorizatoin action start here
         $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $project->getMorphClass();
+        $authorization_action->model_id = $project->id;
+        $authorization_action->type = 'deliverable';
         $authorization_action->deal_id = $project_id->deal_id;
         $authorization_action->project_id = $project_id->id;
         $authorization_action->link = route('projects.show', $project_id->id).'?tab=deliverables';
-        $authorization_action->title = 'Top managment authorization for delivarable';
-        $authorization_action->authorization_for = 1;
+        $authorization_action->title = $this->user->name.' send project deliverable authorization request';
+        $authorization_action->authorization_for = 62;
         $authorization_action->save();
-
         //end authorization action here
 
         $users= User::where('role_id',1)->get();
@@ -4185,6 +4285,22 @@ class ProjectController extends AccountBaseController
             }
         }
 
+        if (is_null($request->authorization_form)) {
+            $authorization_action = AuthorizationAction::where([
+                'project_id' => $project_id->id,
+                'type' => 'deliverable',
+                'authorization_for' => $this->user->id,
+                'status' => '0'
+            ])->first();
+            if ($authorization_action) {
+                $authorization_action->description = $this->user->name.' Accept this request';
+                $authorization_action->authorization_by = $this->user->id;
+                $authorization_action->approved_at = Carbon::now();
+                $authorization_action->status = '1';
+                $authorization_action->save();
+            }
+        }
+        
         $log_user = Auth::user();
 
         $text = Auth::user()->name.' finally authorized project deliverable';
@@ -4225,6 +4341,9 @@ class ProjectController extends AccountBaseController
     public function set_column_edit_permission(Request $request)
     {
         if (count($request->permission_column) == count($request->data)) {
+            $deliverable = ProjectDeliverable::find($request->delivarable_id);
+            $project = Project::find($deliverable->project_id);
+
             foreach ($request->permission_column as $key => $value) {
                 $data = new DelivarableColumnEdit();
                 $data->delivarable_id = $request->delivarable_id;
@@ -4232,6 +4351,19 @@ class ProjectController extends AccountBaseController
                 $data->comment = $request->data[$key];
                 $data->save();
             }
+
+            //authorizatoin action start here
+            $authorization_action = new AuthorizationAction();
+            $authorization_action->model_name = $deliverable->getMorphClass();
+            $authorization_action->model_id = $deliverable->id;
+            $authorization_action->type = 'deliverable_modification_by_top_managment';
+            $authorization_action->deal_id = $project->deal_id;
+            $authorization_action->project_id = $project->id;
+            $authorization_action->link = route('projects.show', $project->id).'?tab=deliverables';
+            $authorization_action->title = $this->user->name.' Send deliverable modification request';
+            $authorization_action->authorization_for = $project->pm_id;
+            $authorization_action->save();
+            //end authorization action here
 
             $data = ProjectDeliverable::find($request->delivarable_id);
             $url = route('projects.show', $data->project_id).'?tab=deliverables';

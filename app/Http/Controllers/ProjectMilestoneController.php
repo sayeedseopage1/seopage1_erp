@@ -19,6 +19,7 @@ use App\Models\PMAssign;
 use App\Models\Contract;
 use App\Models\Deal;
 use App\Models\ProjectActivity;
+use App\Models\AuthorizationAction;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\MilestoneCancelNotification;
 use App\Notifications\MilestoneCancelApproveNotification;
@@ -55,18 +56,31 @@ class ProjectMilestoneController extends AccountBaseController
     }
     public function CompleteMilestone(Request $request)
     {
-//        dd($request->all());
         $milestone_id= ProjectMilestone::where('id',$request->id)->first();
-        //dd($request);
         $milestone= ProjectMilestone::find($request->id);
         $milestone->status= "complete";
         $milestone->last_updated_by= Auth::id();
         $milestone->save();
+
         $project= Project::where('id',$milestone->project_id)->first();
+
+        //authorization action start
+
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $milestone->getMorphClass();
+        $authorization_action->model_id = $milestone->id;
+        $authorization_action->type = 'complete_milestone';
+        $authorization_action->deal_id = $project->deal_id;
+        $authorization_action->project_id = $project->id;
+        $authorization_action->link = route('projects.show', $project->id).'?tab=milestones';
+        $authorization_action->title = Auth::user()->name.' mark milestone complete';
+        $authorization_action->authorization_for = 62;
+        $authorization_action->save();
+        //authorization action end
+
         $milestone_count= ProjectMilestone::where('project_id',$milestone->project_id)->count();
 
         $milestone_complete= ProjectMilestone::where('project_id',$milestone->project_id)->where('status','complete')->count();
-        //  dd($milestone_count,$milestone_complete);
         if ($milestone_count == $milestone_complete) {
             $users= User::where('role_id',1)->get();
             foreach ($users as $user) {
@@ -119,7 +133,6 @@ class ProjectMilestoneController extends AccountBaseController
         // /$milestone_id= ProjectMilestone::where('id',$request->id)->first();
         //dd($request);
         $milestone_update= ProjectMilestone::find($request->milestone_id);
-//        dd($milestone_update);
         $milestone_update->status= "complete";
         $milestone_update->last_updated_by= Auth::id();
         $milestone_update->save();
@@ -137,9 +150,6 @@ class ProjectMilestoneController extends AccountBaseController
             }
         }
 
-        //  dd($output);
-
-//        return back()->with('success','Milestone Status Updated Successfully');
         return response()->json(['status'=>200]);
     }
 
@@ -401,7 +411,6 @@ class ProjectMilestoneController extends AccountBaseController
 
     public function CancelMilestone(Request $request)
     {
-//        dd($request->all());
         $validator = Validator::make($request->all(), [
             'comments' => 'required',
         ]);
@@ -416,10 +425,22 @@ class ProjectMilestoneController extends AccountBaseController
         $milestone->comments= $request->comments;
         $milestone->save();
         $project= Project::where('id',$milestone->project_id)->first();
+
+        //authorizatoin action start here
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $milestone->getMorphClass();
+        $authorization_action->model_id = $milestone->id;
+        $authorization_action->type = 'milestone_cancel';
+        $authorization_action->deal_id = $project->deal_id;
+        $authorization_action->project_id = $project->id;
+        $authorization_action->link = route('projects.show', $project->id).'?tab=milestones';
+        $authorization_action->title = Auth::user()->name.' send milestone canceled request ';
+        $authorization_action->authorization_for = 62;
+        $authorization_action->save();
+        //end authorization action here
+
         $users= User::where('role_id',1)->get();
         foreach ($users as $user) {
-
-
             Notification::send($user, new MilestoneCancelNotification($milestone));
         }
         return response()->json([
@@ -474,6 +495,25 @@ class ProjectMilestoneController extends AccountBaseController
         $activity->project_id = $update_project->id;
 
         $activity->save();
+
+        //update authoziation action
+        if (is_null($request->authorization_form)) {
+            $authorization_action = AuthorizationAction::where([
+                'project_id' => $project->id,
+                'type' => 'project_deliverable_time_extention',
+                'authorization_for' => $this->user->id,
+                'status' => '0'
+            ])->first();
+            if ($authorization_action) {
+                $authorization_action->description = $this->user->name.' Accept this request';
+                $authorization_action->authorization_by = $this->user->id;
+                $authorization_action->approved_at = Carbon::now();
+                $authorization_action->status = '1';
+                $authorization_action->save();
+            }
+        }
+        //end authorization action
+
         $project_update_status= Project::find($update_project->id);
         if ($update_project->due < 3) {
           $project_update_status->status = 'partially finished';
