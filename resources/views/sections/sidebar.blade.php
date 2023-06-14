@@ -324,7 +324,7 @@
                             </x-sub-menu-item>
                             <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
                             <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
-                            @if($user->role_id == 1)
+                            @if($user->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
                             <x-sub-menu-item :link="route('qualified-sales.index')" :text="'Qualified Sales'" />
                             @endif
                             <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />

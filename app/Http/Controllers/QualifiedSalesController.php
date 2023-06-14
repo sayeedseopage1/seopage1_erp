@@ -31,6 +31,7 @@ class QualifiedSalesController extends AccountBaseController
     public function index(Request $request)
     {
       //  $this->projects= QualifiedSale::all();
+      if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) {
         $this->projects = QualifiedSale::select([
             'qualified_sales.*',
             'converted_by.id as closed_by',
@@ -40,6 +41,20 @@ class QualifiedSalesController extends AccountBaseController
         ->leftjoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
         ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
         ->get();
+      }else 
+      {
+        $this->projects = QualifiedSale::select([
+            'qualified_sales.*',
+            'converted_by.id as closed_by',
+            'converted_by.name as closed_by_name',
+            
+        ])
+        ->leftjoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
+        ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
+        ->where('deals.added_by',Auth::id())
+        ->get();
+      }
+       
         //dd($this->projects);
         if($request->mode == 'json')  
         {
@@ -82,7 +97,13 @@ class QualifiedSalesController extends AccountBaseController
                 
                 ;
             }
-            return response()->json($this->data->get()->toArray());
+            if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) {
+                return response()->json($this->data->get()->toArray());
+            }else 
+            {
+                return response()->json($this->data->where('deals.added_by',Auth::id())->get()->toArray());
+            }
+           
 
         }
    
