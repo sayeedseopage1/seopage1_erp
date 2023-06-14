@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';  
 import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
-import ImageUploadAdapterPlugin from './custom/ImageUploadAdapter';
+import ImageUploadAdapterPlugin from './custom/ImageUploadAdapter'; 
+
+
 
 export default function CKEditorComponent (){
     const [editor, setEditor] = React.useState(null);
@@ -12,7 +14,7 @@ export default function CKEditorComponent (){
                 onReady={editor => {
                     console.log('Editor is Ready to use!', editor);
                     // Insert the toolbar before the editable area.
-                    editor.ui.getEditableElement().parentElement.insertBefore(
+                    editor.ui.getEditableElement()?.parentElement.insertBefore(
                         editor.ui.view.toolbar.element,
                         editor.ui.getEditableElement()
                     );
@@ -32,7 +34,7 @@ export default function CKEditorComponent (){
                 editor={ DecoupledEditor }
                 data="<p>Hello from CKEditor 5's decoupled editor!</p>"
                 config={{
-                     toolbar: [ 
+                    toolbar: [ 
                         'undo','redo', 
                         '|',
                         'heading', 
@@ -44,11 +46,12 @@ export default function CKEditorComponent (){
                         'link', 'imageUpload', 'mediaEmbed', 'insertTable',  
                         "|",  
                         'indent', 'outdent',
-                     ],
+                    ],
 
-                     image:{
+                    image:{
                         toolbar:["imageStyle:inline","imageStyle:block","imageStyle:side","|","toggleImageCaption","imageTextAlternative", "ImageResize"]
                     },
+                    
                     table:{
                         contentToolbar:["tableColumn","tableRow","mergeTableCells"]
                     },

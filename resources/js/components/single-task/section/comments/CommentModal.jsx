@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { usePopper } from 'react-popper';
 import { motion, AnimatePresence } from 'framer-motion';
-import CommentSendBox from './CommentSendBox';
+import CommentSendBox from './CommentSendBox';  
+import InnerComment from './InnerComment';
 
 const CommentModal = ({toggleRef = null, isOpen}) => {
     const [modalRef, setModalRef] = React.useState(null); 
@@ -26,7 +27,15 @@ const CommentModal = ({toggleRef = null, isOpen}) => {
                 exit={{opacity: 0}}
                 className='sp1_task_comment_modal'
             >
-               <CommentSendBox />
+                <div className='d-flex flex-column'>
+                    <CommentSendBox />  
+                    <div className='sp1_task_comment_list mt-4'>
+                        <div className='font-weight-bold pb-3'>Comments: </div>
+                        <div className='sp1_task_comment_list_items'>
+                            <InnerComment />
+                        </div>
+                    </div>
+                </div> 
             </motion.div>
         )}
     </AnimatePresence>
