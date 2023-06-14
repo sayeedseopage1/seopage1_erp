@@ -30,32 +30,57 @@ class QualifiedSalesController extends AccountBaseController
      */
     public function index(Request $request)
     {
-        $this->projects= QualifiedSale::all();
+      //  $this->projects= QualifiedSale::all();
+        $this->projects = QualifiedSale::select([
+            'qualified_sales.*',
+            'converted_by.id as closed_by',
+            'converted_by.name as closed_by_name',
+            
+        ])
+        ->leftjoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
+        ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
+        ->get();
+        //dd($this->projects);
         if($request->mode == 'json')  
         {
-            $this->data = QualifiedSale::select('*');
-            if ($request->project_id != '') {
-                $this->data = $this->data->where('project_id', $request->project_id);
+            $this->data = QualifiedSale::select([
+                'qualified_sales.*',
+               
+                'converted_by.id as closed_by',
+                'converted_by.name as closed_by_name',
+                
+            ])
+            ->leftjoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
+            ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
+            ;
+            if ($request->project_id != 'null') {
+                $this->data = $this->data->where('qualified_sales.project_id', $request->project_id);
             }
             if ($request->client_id != 'null') {
-                $this->data = $this->data->where('client_id', $request->client_id);
+                $this->data = $this->data->where('qualified_sales.client_id', $request->client_id);
             
             }
             if ($request->start_date != 'null') {
-                $this->data = $this->data->where(DB::raw('DATE(created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
+                $this->data = $this->data->where(DB::raw('DATE(qualified_sales.created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
             }
 
             if ($request->end_date != 'null') {
-                $this->data = $this->data->where(DB::raw('DATE(created_at)'), '<=', Carbon::parse($request->end_date)->format('Y-m-d'));
+                $this->data = $this->data->where(DB::raw('DATE(qualified_sales.created_at)'), '<=', Carbon::parse($request->end_date)->format('Y-m-d'));
             }
 
             if ($request->pm_id != 'null') {
-                $this->data = $this->data->where('pm_id', $request->pm_id);
+                $this->data = $this->data->where('qualified_sales.pm_id', $request->pm_id);
+            }
+            if ($request->closed_by != 'null') {
+                $this->data = $this->data->where('deals.added_by', $request->closed_by);
             }
 
             if($request->search != 'null') {
-                $this->data = $this->data->where('project_name', 'LIKE', '%'.$request->search.'%')
-                ->orWhere('pm_name', 'LIKE', '%'.$request->search.'%');
+                $this->data = $this->data->where('deals.project_name', 'LIKE', '%'.$request->search.'%')
+                ->orWhere('qualified_sales.pm_name', 'LIKE', '%'.$request->search.'%')
+                ->orWhere('qualified_sales.client_name', 'LIKE', '%'.$request->search.'%')
+                
+                ;
             }
             return response()->json($this->data->get()->toArray());
 

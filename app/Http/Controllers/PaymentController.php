@@ -8,6 +8,7 @@ use App\Helper\Reply;
 use App\Http\Requests\Payments\StorePayment;
 use App\Http\Requests\Payments\UpdatePayments;
 use App\Models\Currency;
+use App\Models\DealStage;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Project;
@@ -281,6 +282,8 @@ class PaymentController extends AccountBaseController
                     //$project->project_budget = 4000;
                     $total_invoice_amount= Invoice::where('project_id',$project->id)->sum('total');
                     // dd($project->deal->actual_amount);
+                    $dealStage= DealStage::where('short_code',$project_update->deal->deal_id)->first();
+        if ($dealStage != null) {
                     if($project->deal->actual_amount - $total_invoice_amount < 1)
                     {
                         if ($total_minutes > 0 && $project->project_budget >= $kpi->achieve_less_than ) {
@@ -673,6 +676,7 @@ class PaymentController extends AccountBaseController
                         }
     
                     }
+                }
             }
 
             $project_update->completion_percent= 100;
