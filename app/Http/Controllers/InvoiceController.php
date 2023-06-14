@@ -35,6 +35,7 @@ use App\Models\ProjectMilestone;
 use App\Models\ProjectTimeLog;
 use App\Models\Proposal;
 use App\Models\Setting;
+use App\Models\AuthorizationAction;
 use App\Models\Tax;
 use App\Models\User;
 use Carbon\Carbon;
@@ -157,7 +158,6 @@ class InvoiceController extends AccountBaseController
 
     public function store(StoreInvoice $request)
     {
- //dd($request);
       $milestone_check = ProjectMilestone::where('id',$request->milestone_id)->first();
       if($milestone_check->invoice_created == 1)
       {
@@ -168,10 +168,12 @@ class InvoiceController extends AccountBaseController
         return Reply::error(__('You cannot insert equal amount of payment for partial payment.'));
       }
       $hourly_project_check= Project::where('id',$request->project_id)->first();
+
 //    /dd($request->total_amount);
     if($milestone_check->cost < 1)
     {
       if($hourly_project_check->deal->project_type=='hourly' && $request->total <= 0 )
+
       {
         return Reply::error(__('You cannot insert zero on the amount for creating the invoice.'));
       }elseif($hourly_project_check->deal->project_type == 'hourly' && $request->total > 0 && $milestone_check->cost < 1) {
@@ -228,8 +230,10 @@ class InvoiceController extends AccountBaseController
              $activity->save();
          
       }
+
     }
     //  / dd("true");
+
       $redirectUrl = urldecode($request->redirect_url);
 
         if ($redirectUrl == '') {
@@ -293,6 +297,19 @@ class InvoiceController extends AccountBaseController
         $invoice->estimate_id = $request->estimate_id ? $request->estimate_id : null;
         $invoice->save();
        
+       //authorization action start
+
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $invoice->getMorphClass();
+        $authorization_action->model_id = $invoice->id;
+        $authorization_action->type = 'invoice_created';
+        $authorization_action->deal_id = $invoice->project->deal_id;
+        $authorization_action->project_id = $invoice->project->id;
+        $authorization_action->link = route('projects.show', $invoice->project->id).'?tab=milestones';
+        $authorization_action->title = Auth::user()->name.' create invoice for this project';
+        $authorization_action->authorization_for = 62;
+        $authorization_action->save();
+        //authorization action end
 
         if($milestone_check->status == 'incomplete')
       {

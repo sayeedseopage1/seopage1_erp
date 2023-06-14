@@ -1373,4 +1373,6 @@ Route::post('/authorization/deal-details/', [ContractController::class, 'authori
 
 //Route::get('fix-database', [HomeController::class, 'fix_database'])->name('fix_database');
 Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
+Route::post('/upload', [HomeController::class, 'upload'])->name('upload');
+
 
