@@ -6,6 +6,7 @@ use App\DataTables\TimeLogReportDataTable;
 use App\Helper\Reply;
 use App\Models\Project;
 use App\Models\ProjectTimeLog;
+use App\Models\TaskboardColumn;
 use App\Models\Task;
 use App\Models\User;
 use Carbon\Carbon;
@@ -60,6 +61,7 @@ class TimelogReportController extends AccountBaseController
         return $dataTable->render('reports.timelogs.index', $this->data);
     }
     
+
     public function getTimeLog(Request $request, $type)
     {
         $page = $request->input('page', 1);
@@ -140,6 +142,7 @@ class TimelogReportController extends AccountBaseController
                 $data = $data->groupBy('project_time_logs.project_id');
             } else {
                 $data = $data->groupBy('project_time_logs.'.$project_id);
+
             }
             
 
@@ -172,13 +175,14 @@ class TimelogReportController extends AccountBaseController
                     $data = $data->whereDate('projects.updated_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
                 }
             }
+
             }
-            if (!is_null($pmId)) {
+            /*if (!is_null($pmId)) {
                 $data = $data->where('projects.pm_id' , $pmId)->orderBy('projects.pm_id' , 'desc');
             } 
             if (!is_null($employeeId)) {
                 $data = $data->where('project_time_logs.user_id' , $employeeId)->orderBy('project_time_logs.user_id' , 'desc');
-            }
+            }*/
             if (!is_null($clientId)) {
                 //$data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
                 $data = $data->where('projects.client_id' , $clientId);
@@ -221,7 +225,9 @@ class TimelogReportController extends AccountBaseController
              // DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
                //DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as total_minutes'),
             ])  
+
            ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
+
             ->leftJoin('projects', 'project_time_logs.project_id', 'projects.id')
             
             ->join('users as pm', 'projects.pm_id', 'pm.id')
@@ -232,15 +238,19 @@ class TimelogReportController extends AccountBaseController
             
             ->join('users as client', 'projects.client_id', 'client.id')
             ->join('deals', 'client.id', '=', 'deals.client_id')
+
            	->where('projects.status',$status)
             ->where('total_minutes', '>', 0)
             ->where('project_time_logs.end_time','!=',null);
            // ->orderBy('project_time_logs.task_id' , 'desc');
+
             if($status != 'canceled') {
                 if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
                 {
                    
+
                     $data = $data->whereDate('project_time_logs.start_time', '=', Carbon::parse($startDate)->format('Y-m-d'));
+
                 }else 
                 {
                     if (!is_null($startDate)) {
@@ -254,7 +264,9 @@ class TimelogReportController extends AccountBaseController
                 if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
             {
                
+
                 $data = $data->whereDate('projects.updated_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+
             }else 
             {
                 if (!is_null($startDate)) {
@@ -263,6 +275,7 @@ class TimelogReportController extends AccountBaseController
                 if (!is_null($endDate)) {
                     $data = $data->whereDate('projects.updated_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
                 }
+
             }
             }
             if (!is_null($pmId)) {
@@ -278,26 +291,30 @@ class TimelogReportController extends AccountBaseController
             
             /*if (!is_null($startDate)) {
                 $data = $data->where('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+
             }
-            if (!is_null($endDate)) {
-                $data = $data->where('project_time_logs.end_time', '<=', Carbon::parse($endDate)->format('Y-m-d'));
             }
             if (!is_null($pmId)) {
-                $data = $data->where('projects.pm_id' , $pmId)->orderBy('projects.pm_id' , 'desc');
+                //$data = $data->where('projects.pm_id' , $pmId)->orderBy('projects.pm_id' , 'desc');
+                $data = $data->where('projects.pm_id' , $pmId);
             }
             if (!is_null($employeeId)) {
-                $data = $data->where('project_time_logs.user_id' , $employeeId)->orderBy('project_time_logs.user_id' , 'desc');
+                //$data = $data->where('project_time_logs.user_id' , $employeeId)->orderBy('project_time_logs.user_id' , 'desc');
+                $data = $data->where('project_time_logs.user_id' , $employeeId);
             }
             if (!is_null($clientId)) {
-                $data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
+                //$data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
+                $data = $data->where('projects.client_id' , $clientId);
             }
-            $total_rows = $data->get()->count();
+            /*$total_rows = $data->get()->count();
             $data = $data->orderBy('project_time_logs.task_id' , 'desc')
             ->offset($offset)
             ->limit($perPage)*/
+
           $data = $data->groupBy('tasks.id','project_time_logs.created_at')
          // ->orderBy('project_time_logs.id', 'desc')
           ->get();
+
         } else if($type == 'projects') {
             $data = ProjectTimeLog::select([
                 'projects.id as project_id',
@@ -345,6 +362,7 @@ class TimelogReportController extends AccountBaseController
                 $data = $data->groupBy('project_time_logs.project_id');
             } else {
                 $data = $data->where('projects.id', $project_id);
+
             }
             $data = $data->groupBy('project_time_logs.user_id')
             ->where('projects.status', $status)
@@ -379,6 +397,7 @@ class TimelogReportController extends AccountBaseController
                         $data = $data->whereDate('projects.updated_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
                     }
                 }
+
             }
             if (!is_null($pmId)) {
                 $data = $data->where('projects.pm_id' , $pmId);
@@ -473,6 +492,7 @@ class TimelogReportController extends AccountBaseController
         return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
     }
 
+
     public function show(Request $request, $project_id ,$employee_id)
     {        
         $data = ProjectTimeLog::select([
@@ -494,7 +514,9 @@ class TimelogReportController extends AccountBaseController
         ->where([
             'project_time_logs.user_id' => $employee_id,
             'project_time_logs.project_id' => $project_id
+
         ])->where('project_time_logs.end_time','!=',null);
+
         
         if(!is_null($request->start_date) && !is_null($request->end_date) && $request->start_date == $request->end_date) {
             $data = $data->whereDate('project_time_logs.start_time', Carbon::parse($request->start_date)->format('Y-m-d'));
@@ -510,6 +532,12 @@ class TimelogReportController extends AccountBaseController
         
         $data = $data->get();
 
+        return response()->json($data);
+    }
+
+    public function board_column_json()
+    {
+        $data = TaskboardColumn::select(['id', 'column_name'])->get();
         return response()->json($data);
     }
 }

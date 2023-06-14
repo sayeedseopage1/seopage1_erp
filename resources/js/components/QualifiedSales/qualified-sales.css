@@ -81,3 +81,10 @@
     border-radius: 10px;
     overflow: hidden;
 }
+
+.sp1_qualified_filterbar{ 
+    width: 100%;
+    z-index: 1;
+    background: #fff;
+    gap: 10px;
+}

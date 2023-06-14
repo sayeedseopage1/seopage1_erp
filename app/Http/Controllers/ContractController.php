@@ -1342,15 +1342,16 @@ class ContractController extends AccountBaseController
             $users= User::where('role_id',8)->get();
 
             foreach ($users as $key => $user) {
-
+                //start authorization action
                 $authorization_action = new AuthorizationAction();
                 $authorization_action->deal_id = $deal->id;
                 $authorization_action->project_id = $project->id;
                 $authorization_action->link = route('authorization_request', $deal->id);
-                $authorization_action->title = 'Team Lead Authorization';
+                $authorization_action->title = 'Project manager accept Project';
                 $authorization_action->authorization_for = $user->id;
                 $authorization_action->save();
-
+                //end authorization action
+                
                 Notification::send($user, new DealAuthorizationSendNotification($deal,$sender));
                 $this->triggerPusher('notification-channel', 'notification', [
                     'user_id' => $user->id,

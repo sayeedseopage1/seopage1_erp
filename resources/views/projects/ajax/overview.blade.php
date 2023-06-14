@@ -66,12 +66,12 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
               @if(Auth::user()->role_id == 1 && $project->status == 'under review')
             <a id="project-deny" class="btn btn-danger border height-35 f-15 px-3 py-2 text-white text-capitalize rounded" >
-                @lang('Deny')
+                @lang('Project Challenge Deny')
             </a>
 
 
             <a id="project-accept" class="btn btn-primary bg-white border height-35 f-15 px-3 py-2 text-dark-grey text-capitalize rounded mr-3">
-                @lang('Accept')
+                @lang('Project Challenge Accept')
             </a>
 
             @endif
@@ -904,6 +904,199 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>
+
+         <div class="row mb-4" >
+            <!-- BUDGET VS SPENT START -->
+            <div class="col-md-12">
+                <x-cards.data>
+                    <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                        <div class="col-md-12">
+                            <h4 class="mb-4">Parent Task Guideline</h4>
+                        </div>
+                    </div>
+                    @php
+                      $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->orderBy('id','desc')->first();
+                    @endphp
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12 d-flex">
+                                <h6>Provide Theme Details :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">
+                                        @if($task_guideline->theme_details ==1)
+                                            Yes
+                                        @else
+                                            No
+                                        @endif
+                                    </p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 d-flex">
+                            <h6>Theme Name :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">{{$task_guideline->theme_name}}</p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                            <div class="col-md-6 d-flex">
+                            <h6>Theme Url :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">{{$task_guideline->theme_url}}</p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 d-flex">
+                                <h6>Design :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">{{$task_guideline->design}}</p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 d-flex">
+                                <h6 for="">Input XD/Figma URL :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">{{$task_guideline->xd_url}}</p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                            <div class="col-md-6 d-flex">
+                                <h6>Input Google Drive File/Folder URL :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">{{$task_guideline->drive_url}}</p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 d-flex">
+                                <h6>Reference Site Link :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">
+                                        @if ($task_guideline != null && !empty($task_guideline->reference_link))
+                                            @php
+                                                $referenceLinks = is_array($task_guideline->reference_link) ? $task_guideline->reference_link : json_decode($task_guideline->reference_link, true);
+                                            @endphp
+
+                                            @foreach ($referenceLinks as $reference_link)
+                                                <a target="_blank" href="{{ $reference_link }}">{{ $reference_link }}</a>
+                                                <br>
+                                            @endforeach
+                                        @else
+                                            -- No reference links available --
+                                        @endif
+                                    </p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h6>Instruction :</h6>
+                                @if($task_guideline != null )
+                                    <span>{!! $task_guideline->instruction !!}</span>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 d-flex">
+                                <h6>Color Schema :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">{{implode(',  ',json_decode($task_guideline->color))}}</p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h6>Developers Use This Color:</h6>
+                                @if($task_guideline != null && !empty($task_guideline->color_description))
+                                    @php
+                                        $colorDescriptions = is_array($task_guideline->color_description) ? $task_guideline->color_description : json_decode($task_guideline->color_description, true);
+                                    @endphp
+
+                                    @foreach($colorDescriptions as $color_description)
+                                        <p class="ml-2">{{ $color_description }}</p>
+                                    @endforeach
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 d-flex">
+                                <h6>Plugin Research :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">
+                                        @if($task_guideline->plugin_research ==1)
+                                            Yes
+                                        @else
+                                            No
+                                        @endif
+                                    </p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 d-flex">
+                                <h6>Plugin Name :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">{{$task_guideline->plugin_name}}</p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                            <div class="col-md-6 d-flex">
+                                <h6>Plugin URL :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">{{$task_guideline->plugin_url}}</p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 d-flex">
+                                <h6>Google Drive Link :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">{{$task_guideline->google_drive_link}}</p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                            <div class="col-md-6 d-flex">
+                                <h6>Instructions for Using This Plugin :</h6>
+                                @if($task_guideline != null)
+                                    <p class="ml-2">{{$task_guideline->instruction_plugin}}</p>
+                                @else
+                                    <p class="ml-2">--</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </x-cards.data>
+            </div>
+            <!-- BUDGET VS SPENT END -->
+        </div> 
+
 
 
 

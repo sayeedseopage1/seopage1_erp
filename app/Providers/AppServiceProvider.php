@@ -43,6 +43,8 @@ class AppServiceProvider extends ServiceProvider
 
         LeadsDealsActivityLog::observe(LeadsDealsActivityLogObserver::class);
 
+        //AuthorizationAction::observe(AuthorizationActionOnserver::class);
+
         Model::preventLazyLoading(app()->environment('development'));
 
         if (app()->environment('development')) {

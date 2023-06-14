@@ -8,6 +8,7 @@ use App\Helper\Reply;
 use App\Http\Requests\Payments\StorePayment;
 use App\Http\Requests\Payments\UpdatePayments;
 use App\Models\Currency;
+use App\Models\DealStage;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Project;
@@ -25,6 +26,7 @@ use Illuminate\Http\Request;
 use App\Models\PMAssign;
 use App\Models\PMProject;
 use App\Models\ProjectMilestone;
+use App\Models\AuthorizationAction;
 use Notification;
 use App\Notifications\MilestoneReleaseNotification;
 use App\Notifications\ProjectCompleteNotification;
@@ -231,7 +233,19 @@ class PaymentController extends AccountBaseController
         $payment->status = 'complete';
         $payment->save();
 
+        //authorization action start
 
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $payment->getMorphClass();
+        $authorization_action->model_id = $payment->id;
+        $authorization_action->type = 'payment_created';
+        $authorization_action->deal_id = $payment->project->deal_id;
+        $authorization_action->project_id = $payment->project->id;
+        $authorization_action->link = route('projects.show', $payment->project->id).'?tab=milestones';
+        $authorization_action->title = $this->user->name.' create payment for this project';
+        $authorization_action->authorization_for = 62;
+        $authorization_action->save();
+        //authorization action end
 
         if (isset($invoice) && isset($paidAmount)) {
 
@@ -281,6 +295,8 @@ class PaymentController extends AccountBaseController
                     //$project->project_budget = 4000;
                     $total_invoice_amount= Invoice::where('project_id',$project->id)->sum('total');
                     // dd($project->deal->actual_amount);
+                    $dealStage= DealStage::where('short_code',$project_update->deal->deal_id)->first();
+        if ($dealStage != null) {
                     if($project->deal->actual_amount - $total_invoice_amount < 1)
                     {
                         if ($total_minutes > 0 && $project->project_budget >= $kpi->achieve_less_than ) {
@@ -673,6 +689,7 @@ class PaymentController extends AccountBaseController
                         }
     
                     }
+                }
             }
 
             $project_update->completion_percent= 100;
