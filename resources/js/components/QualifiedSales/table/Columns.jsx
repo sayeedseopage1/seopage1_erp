@@ -217,8 +217,15 @@ export const columns = [
         priority: 10,
         header: 'Points Earned',
         cell: (row, loading) => {
+            const logged_user = window?.Laravel?.user;
             if(loading) return <span className='__loading animate-pulse' style={{width: randomWidth()}}>loading...</span>
-            return <span style={{color: '#00AA00', fontWeight: 'bold'}}>{Number(row?.total_points).toFixed(2)}</span>
+
+            if([1, 8].includes(Number(logged_user?.role_id))){
+                return <span style={{color: '#00AA00', fontWeight: 'bold'}}>{Number(row?.total_points).toFixed(2)}</span>
+            }else{
+                return <span style={{color: '#00AA00', fontWeight: 'bold'}}>{Number(row?.total_cash_points_by_user).toFixed(2)}</span>
+
+            }
         }
     }
  

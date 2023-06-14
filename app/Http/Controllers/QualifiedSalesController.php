@@ -30,44 +30,50 @@ class QualifiedSalesController extends AccountBaseController
      */
     public function index(Request $request)
     {
-      //  $this->projects= QualifiedSale::all();
-      if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) {
-        $this->projects = QualifiedSale::select([
-            'qualified_sales.*',
-            'converted_by.id as closed_by',
-            'converted_by.name as closed_by_name',
-            
-        ])
-        ->leftjoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
-        ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
-        ->get();
-      }else 
-      {
-        $this->projects = QualifiedSale::select([
-            'qualified_sales.*',
-            'converted_by.id as closed_by',
-            'converted_by.name as closed_by_name',
-            
-        ])
-        ->leftjoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
-        ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
-        ->where('deals.added_by',Auth::id())
-        ->get();
-      }
+    
        
-        //dd($this->projects);
         if($request->mode == 'json')  
         {
-            $this->data = QualifiedSale::select([
+            if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+            {
+                $this->data = QualifiedSale::select([
+                    'qualified_sales.*',
+                   
+                    'converted_by.id as closed_by',
+                    'converted_by.name as closed_by_name',
+                    
+                ])
+                ->leftjoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
+                ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
+                ;
+
+            }else 
+            {
+                $userId = Auth::id();
+        $shiftId = Auth::user()->shift;
+
+        $this->data = QualifiedSale::select([
                 'qualified_sales.*',
-               
                 'converted_by.id as closed_by',
                 'converted_by.name as closed_by_name',
-                
+                DB::raw('SUM(cash_points.points) as total_cash_points_by_user'),
+                'cash_points.user_id',
             ])
-            ->leftjoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
+            ->leftJoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
             ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
-            ;
+            ->leftJoin('cash_points', function ($join) use ($userId, $shiftId) {
+                $join->on('cash_points.project_id', '=', 'qualified_sales.project_id')
+                    ->whereIn('cash_points.user_id', function ($query) use ($shiftId) {
+                        $query->select('id')
+                            ->from('users')
+                            ->where('shift', '=', $shiftId);
+                    });
+            })
+            ->where('deals.added_by', $userId)
+            ->groupBy('qualified_sales.id', 'converted_by.id', 'converted_by.name', 'cash_points.user_id');
+
+            }
+           
             if ($request->project_id != 'null') {
                 $this->data = $this->data->where('qualified_sales.project_id', $request->project_id);
             }

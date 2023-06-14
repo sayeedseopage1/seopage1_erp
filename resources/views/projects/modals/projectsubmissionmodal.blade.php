@@ -494,7 +494,7 @@
           </td>
           <td>
               <div class="d-flex align-items-center">
-                  Description
+                Is There Any Major Functions You Want To Mention About This Project?
 
               </div>
           </td>
