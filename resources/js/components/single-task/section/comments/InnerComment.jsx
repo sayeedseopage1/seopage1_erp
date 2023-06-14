@@ -155,7 +155,7 @@ const InnerComment = ({replies=data}) => {
 
             <div className='sp1_task_replies_comment_list w-100'> 
                 {showReplies && replies ? replies.map((r, i) => (
-                    <div className='pl-3 border-left mt-3 w-100'>
+                    <div key={i} className='pl-3 border-left mt-3 w-100'>
                         <InnerComment replies={r.replies} />
                     </div>
                 )) : null}

@@ -3,7 +3,7 @@ import Comment from './Comment'
 import CommentModal from './CommentModal';
   
 const CommentSection = () => {
-  const [modalIsOpen, setModalIsOpen] = React.useState(true);
+  const [modalIsOpen, setModalIsOpen] = React.useState(false);
   const [modalToggleRef, setModalToggleRef] = React.useState(null);
 
 

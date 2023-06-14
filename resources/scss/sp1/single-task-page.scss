@@ -397,7 +397,7 @@
 // single comment view
 
 .sp1_st_cnt_modal{
-    background: #00000009 !important;
+    background: #00000034 !important;
 }
 
 .sp1_st_comment_preview{
@@ -414,7 +414,7 @@
     border-radius: 10px;
     padding: 16px; 
 
-    &> ._close-modal{
+    &> div > ._close-modal{
         background: #f5f5f5;
         border: none;
         margin-left: auto;
@@ -424,15 +424,18 @@
         }
 
         &:hover{
-            background: #ebebeb;
+            background: #e7e7e7;
+            color: #fff;
+            i{
+                color: #575757;
+            }
         }
     }
 
     & > ._comment_list{
         max-height: 80vh;
         overflow-x: hidden;
-        overflow-y: auto;
-        margin-top: 30px;
+        overflow-y: auto; 
         padding-right: 10px;
     }
 }
