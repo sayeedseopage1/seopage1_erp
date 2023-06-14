@@ -909,6 +909,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //qualified sales Settings
 
     Route::resource('qualified-sales',QualifiedSalesController::class);
+    Route::get('qualified-sales/get-points/{id}',[QualifiedSalesController::class,'get_point_details']); 
+
 
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');

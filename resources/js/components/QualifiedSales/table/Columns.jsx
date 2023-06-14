@@ -1,6 +1,7 @@
 // import dayjs from "dayjs";
 import Dropdown from '../../Insights/ui/Dropdown';
 import { CompareDate } from '../../Insights/utils/dateController';
+import { useGetPointDistributionDetailsQuery } from '../../services/api/qualifiedSalesApiSlice';
 const dayjs = new CompareDate;
 
 const randomWidth = () => {
@@ -67,6 +68,19 @@ export const columns = [
         cell: (row, loading) => {
             if(loading) return <span className='__loading animate-pulse' style={{width: randomWidth()}}>loading...</span>
             return <span className="font-weight-bold">${Number(row?.amount).toFixed(2)}</span>
+        }
+    },
+
+    {
+        id: 'closed_by',
+        header: 'Closed by',
+        accessor: 'closed_by',
+        priority: 4,
+        cell: (row, loading) => {
+            if(loading) return <span className='__loading animate-pulse' style={{width: randomWidth()}}>loading...</span>
+            return <a href={`/account/employees/${row?.closed_by}`}>
+                {row?.closed_by_name}
+            </a>
         }
     },
 
@@ -217,13 +231,96 @@ export const columns = [
         priority: 10,
         header: 'Points Earned',
         cell: (row, loading) => {
+            const logged_user = window?.Laravel?.user;
             if(loading) return <span className='__loading animate-pulse' style={{width: randomWidth()}}>loading...</span>
-            return <span style={{color: '#00AA00', fontWeight: 'bold'}}>{Number(row?.total_points).toFixed(2)}</span>
+
+
+            return <Point row={row} isAuthorized={[1, 8].includes(Number(logged_user?.role_id))} />
+
+            
         }
     }
  
 ]
 
+
+// Point 
+const Point = ({row, isAuthorized}) => {
+    if(isAuthorized){
+        return(
+            <>
+                <Dropdown>
+                    <Dropdown.Toggle icon={false}>
+                        <span 
+                            style={{color: '#000000', fontWeight: 'bold'}}>
+                                {Number(row?.total_points).toFixed(2)}
+                            </span>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <PointDetails row={row} />
+                    </Dropdown.Menu>
+                </Dropdown>
+            
+            </>
+        ) 
+    }else{
+        return <span style={{color: '#00AA00', fontWeight: 'bold'}}>{Number(row?.total_cash_points_by_user).toFixed(2)}</span>
+    }
+}
+
+
+const PointDetails = ({row}) => { 
+    const {data, isFetching} = useGetPointDistributionDetailsQuery(`${row['id']}`);
+
+
+    const Tbody = ({data}) => {
+        return(
+            <tbody>
+                {data?.map((d, i)=>  <tr key={i}>
+                        <td> <a href={`/account/employees/${d?.user_id}`}>{d?.name}</a></td>
+                        <td>{Number(d?.total_points).toFixed(2)}</td>
+                    </tr> )}
+            </tbody>
+        )
+    }
+
+    const LoadingState = () => {
+        return (
+            <tbody>
+                {[...Array(5)].map((_, i) => (
+                    <tr key={i}>
+                        <td> <span className='__loading animate-pulse' style={{width: randomWidth()}}>loading...</span> </td>
+                        <td> <span className='__loading animate-pulse' style={{width: randomWidth()}}>loading...</span> </td>
+                    </tr>
+                ))}
+            </tbody>
+        )
+    }
+
+    const EmptyState = () => {
+        return (
+            <tbody>
+                <tr key={i}>
+                    <td style={{height: '100px', textAlign: 'center'}}> No Data Available</td>
+                </tr>
+            </tbody>
+        )
+    }
+
+    return(
+        <div>
+           <table className='table' style={{minWidth: '350px'}}>
+                {!isFetching && !data?.length ? null : <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Point</th>
+                    </tr>
+                </thead>}
+                {isFetching ? <LoadingState /> : data?.length ? <Tbody data={data} /> : <EmptyState />}
+           </table>
+        </div>
+    )
+}
 
 
 

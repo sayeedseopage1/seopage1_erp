@@ -29,6 +29,8 @@ const QualifiedSalesFilterbar = ({onFilter}) => {
     const [shift, setShift] = React.useState(null);
     const [closedBy, setClosedBy] = React.useState(null);
 
+    const logged_user = window?.Laravel?.user
+
 
     const {
         data,
@@ -140,58 +142,63 @@ if(usersIsFetching || isFetching) return null;
             </div>
     
 
-            {/* project manager */}
-            <PersonFilter
-                title="Project Manager"
-                items={users ? [...users?.filter(user => user.role_id && Number(user.role_id) === 4)] : []}
-                selected={selectedPMId ? users?.find(u => Number(u.id) === selectedPMId): null}
-                isLoading={usersIsFetching}
-                onSelect={(e, d) => setSelectedPMId(d.id)}
-            />
+         {
+            [1, 8].includes(Number(logged_user?.role_id)) && 
+            <>
+                  {/* project manager */}
+                <PersonFilter
+                    title="Project Manager"
+                    items={users ? [...users?.filter(user => user.role_id && Number(user.role_id) === 4)] : []}
+                    selected={selectedPMId ? users?.find(u => Number(u.id) === selectedPMId): null}
+                    isLoading={usersIsFetching}
+                    onSelect={(e, d) => setSelectedPMId(d.id)}
+                />
 
-            {/* client */}
-            <PersonFilter
-                title="Client"
-                items={users ? [...users?.filter(user => !user.role_id)] : []}
-                selected={selectedClientId ? users?.find(u => Number(u.id) === selectedClientId): null}
-                isLoading={usersIsFetching}
-                onSelect={(e, d) => setSelectedClientId(d.id)}
-            />
-
-
-            <DepartmentFilter 
-                data={departments.filter(d => d.id == 1) || []}
-                selected={dept}
-                setSelectedDept = {setDept}
-                loading = {isFetching}
-                onSelect={() => {}}
-            />
+                {/* client */}
+                <PersonFilter
+                    title="Client"
+                    items={users ? [...users?.filter(user => !user.role_id)] : []}
+                    selected={selectedClientId ? users?.find(u => Number(u.id) === selectedClientId): null}
+                    isLoading={usersIsFetching}
+                    onSelect={(e, d) => setSelectedClientId(d.id)}
+                />
 
 
-            <ShiftFilterOption 
-                data={ dept ? teams.filter(s => s.id === 1 && s.department_id === dept.id) : []}
-                loading = {!dept}
-                selected={shift}
-                onSelect={handleTeamSelection}
-            />
+                <DepartmentFilter 
+                    data={departments.filter(d => d.id == 1) || []}
+                    selected={dept}
+                    setSelectedDept = {setDept}
+                    loading = {isFetching}
+                    onSelect={() => {}}
+                />
 
 
-            {/* project manager */}
-            <PersonFilter
-                title="Closed by"
-                items={shiftMembers}
-                selected={shiftMembers.length ? shiftMembers?.find(d => d.id === closedBy) : null}
-                isLoading={usersIsFetching}
-                onSelect={(e, d) => setClosedBy(d.id)}
-            />
+                <ShiftFilterOption 
+                    data={ dept ? teams.filter(s => s.id === 1 && s.department_id === dept.id) : []}
+                    loading = {!dept}
+                    selected={shift}
+                    onSelect={handleTeamSelection}
+                />
 
-            <ProjectFilterItem
-                title="Project"
-                items={getProjectsOptions ? [...getProjectsOptions]: []}
-                isLoading={isFetching}
-                selected={selectedProject}
-                onSelect={(e, d) => setSelectedProject(d)}
-            />
+
+                {/* project manager */}
+                <PersonFilter
+                    title="Closed by"
+                    items={shiftMembers}
+                    selected={shiftMembers.length ? shiftMembers?.find(d => d.id === closedBy) : null}
+                    isLoading={usersIsFetching}
+                    onSelect={(e, d) => setClosedBy(d.id)}
+                />
+
+                <ProjectFilterItem
+                    title="Project"
+                    items={getProjectsOptions ? [...getProjectsOptions]: []}
+                    isLoading={isFetching}
+                    selected={selectedProject}
+                    onSelect={(e, d) => setSelectedProject(d)}
+                />
+            </>
+         } 
         
     
         </div>

@@ -78,7 +78,9 @@ const InnerComment = ({replies=data}) => {
                         <i className="fa-regular fa-face-smile"></i>
                     </Dropdown.Toggle>
                     <Dropdown.Menu> 
-                        <EmojiPicker /> 
+                        <EmojiPicker
+                            lazyLoadEmojis= {true} 
+                        /> 
                     </Dropdown.Menu>
                 </Dropdown>
                 
@@ -90,7 +92,7 @@ const InnerComment = ({replies=data}) => {
                 <a href="#"><i className="fa-solid fa-paperclip"></i></a>
 
                 
-               <div className='replies_count' onClick={() => setShowReplies(true)}>
+               <div className='replies_count' onClick={() => setShowReplies(!showReplies)}>
                        <div className='reply_auth_avatar'>
                             <div>
                                 <img 
