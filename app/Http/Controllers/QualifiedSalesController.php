@@ -70,7 +70,7 @@ class QualifiedSalesController extends AccountBaseController
                             ->where('shift', '=', $shiftId);
                     });
             })
-            ->where('deals.added_by', $userId)
+            //->where('deals.added_by', $userId)
             ->groupBy('qualified_sales.id', 'converted_by.id', 'converted_by.name', 'cash_points.user_id');
 
             }
@@ -108,7 +108,13 @@ class QualifiedSalesController extends AccountBaseController
                 return response()->json($this->data->get()->toArray());
             }else 
             {
-                return response()->json($this->data->where('deals.added_by',Auth::id())->get()->toArray());
+                return response()->json(
+                    $this->data
+                        ->groupBy('cash_points.user_id')
+                        ->having('cash_points.user_id', Auth::id())
+                        ->get()
+                        ->toArray()
+                );
             }
            
 
