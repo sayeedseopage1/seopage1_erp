@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\CashPoint;
 use DB;
 use Illuminate\Http\Request;
 use App\Models\Deal;
@@ -38,14 +39,14 @@ class QualifiedSalesController extends AccountBaseController
             {
                 $this->data = QualifiedSale::select([
                     'qualified_sales.*',
-                   
                     'converted_by.id as closed_by',
                     'converted_by.name as closed_by_name',
-                    
+                    DB::raw('(SELECT SUM(cash_points.points) FROM cash_points WHERE cash_points.project_id = qualified_sales.project_id) as total_points'),
                 ])
-                ->leftjoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
+                ->leftJoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
                 ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
                 ;
+            
 
             }else 
             {
@@ -117,6 +118,20 @@ class QualifiedSalesController extends AccountBaseController
 
         return view('qualified-sales.index',$this->data);
     }
+    public function get_point_details($id)
+    {
+        $qualified_sale= QualifiedSale::where('id',$id)->first();
+        $this->userPoints = CashPoint::select('cash_points.user_id', 'users.name', DB::raw('SUM(cash_points.points) as total_points'))
+        ->where('project_id', $qualified_sale->project_id)
+        ->join('users', 'users.id', '=', 'cash_points.user_id')
+        ->groupBy('cash_points.user_id', 'users.name');
+        //->get();
+        return response()->json($this->userPoints->get()); 
+       
+    //    / ->pluck('total_points', 'name');
+    //    / dd($userPoints);
+
+    }
 
     
 
@@ -149,7 +164,7 @@ class QualifiedSalesController extends AccountBaseController
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**
