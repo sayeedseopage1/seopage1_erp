@@ -914,6 +914,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //qualified sales Settings
 
     Route::resource('qualified-sales',QualifiedSalesController::class);
+    Route::get('qualified-sales/get-points/{id}',[QualifiedSalesController::class,'get_point_details']);
+    
 
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
@@ -1300,6 +1302,7 @@ Route::put('/projects/update-website-theme/{id}', [ProjectController::class, 'up
 Route:: get('/projects/view-website-plugin', [ProjectController::class, 'viewWebsitePlugin'])->name('project-view-website-plugin');
 Route:: post('/projects/add-website-plugin', [ProjectController::class, 'storeWebsitePlugin'])->name('add-website-plugin');
 Route::put('/projects/update-website-plugin/{id}', [ProjectController::class, 'updateWebsitePlugin']);
+
 
 //add project niche
 Route::post('/projects/niche-store', [ProjectController::class, 'storeNiche'])->name('add-niche');
