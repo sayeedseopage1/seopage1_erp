@@ -6,6 +6,10 @@ const qualifiedSalesApiSlice = apiSlice.injectEndpoints({
         getQualifiedSales: build.query({
             query: (query) => `/account/qualified-sales?mode=json&${query}`
         }),
+
+        getPointDistributionDetails: build.query({
+            query: (query) => `/account/qualified-sales/get-points/${query}`
+        }) 
     })
 }) ;
 
@@ -13,6 +17,8 @@ const qualifiedSalesApiSlice = apiSlice.injectEndpoints({
 
 export const { 
     useGetQualifiedSalesQuery,
-    useLazyGetQualifiedSalesQuery
+    useLazyGetQualifiedSalesQuery,
+    useGetPointDistributionDetailsQuery,
+    useLazyGetPointDistributionDetailsQuery
 } = qualifiedSalesApiSlice;
 
