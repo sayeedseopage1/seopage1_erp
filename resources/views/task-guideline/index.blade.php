@@ -179,23 +179,25 @@
                                 <!--Plugin Research End-->
                              </div>
                             <div class="row mb-5" style="display: none;" id="plugin_research_info">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="">Plugin Name</label>
                                     <input type="text" name="plugin_name" id="plugin_name" class="form-control height-35 f-14" placeholder="Type Plugin Name">
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="">Plugin URL</label>
                                     <input type="url" name="plugin_url" id="plugin_url" class="form-control height-35 f-14" placeholder="Type Plugin Url">
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="">Share Google Drive Link</label>
                                     <input type="url" name="google_drive_link" id="google_drive_link" class="form-control height-35 f-14" placeholder="Type Google link">
                                 </div>
-                                <div class="col-md-3">
-                                    <label for="">Write Instructions for Using This Plugin</label>
-                                    <input type="text" name="instruction_plugin" id="instruction_plugin" class="form-control height-35 f-14" placeholder="Write Instructions for Using This Plugin">
-                                </div>
                             </div>
+                            <div class="row mb-5">
+                                    <div class="col-md-12">
+                                        <label for="">Write Instructions for Using This Plugin</label>
+                                        <textarea name="instruction_plugin" id="instruction_plugin" cols="30" rows="5" class="form-control"></textarea>
+                                    </div>
+                                </div>
                             <div class="justify-content-center d-flex">
                                 <button type="submit" class="btn btn-primary py-2" id="submit-button">Submit</button>
                             </div>
