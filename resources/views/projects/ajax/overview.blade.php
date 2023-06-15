@@ -95,18 +95,18 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
             @endphp
 
-@if($project->status == 'canceled' && $project->dispute_status == 1)
+                @if($project->status == 'canceled' && $project->dispute_status == 1)
 
-<div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
-    <div class="">
-        <a class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded openRightModal" href="{{ route('projects.dispute.form', $project->id) }}"  aria-haspopup="true" aria-expanded="false">
-        @lang('See Dispute')
-        </a>
+                <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
+                    <div class="">
+                        <a class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded openRightModal" href="{{ route('projects.dispute.form', $project->id) }}"  aria-haspopup="true" aria-expanded="false">
+                        @lang('See Dispute')
+                        </a>
 
 
-    </div>
-</div>
-@endif
+                    </div>
+                </div>
+                @endif
               @if($project->status == 'in progress' || $project->status == 'not started' || $project->status == 'on hold')
 
               @if($project->dispute_status == 1)
@@ -494,6 +494,32 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <div class="col-lg-6 col-md-12">
                 <x-cards.data :title="__('app.menu.tasks')" padding="false">
                     <x-pie-chart id="task-chart" :labels="$taskChart['labels']" :values="$taskChart['values']" :colors="$taskChart['colors']" height="220" width="250" />
+                </x-cards.data>
+                <br>
+                <x-cards.data padding="false">
+                    <div class="py-3">
+{{--                        <div class="container">--}}
+{{--                            <div class="row mb-4">--}}
+{{--                                <div class="col-md-6">--}}
+{{--                                    <button style="width: 100%" type="button" class="btn-secondary rounded text-center" data-toggle="modal" data-target="#dispute_view">See Dispute</button>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-6">--}}
+{{--                                    <button style="width: 100%" class="btn btn-secondary text-center" id="project-qc-form"  aria-haspopup="true" aria-expanded="false">--}}
+{{--                                       Project QC--}}
+{{--                                    </button>--}}
+{{--                                    <button type="button" style="width: 100%" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#qc_final_modal">Project QC</button>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="row">--}}
+{{--                                <div class="col-md-6">--}}
+{{--                                    <button style="width: 100%" class="btn btn-secondary text-center" id="project-submission-form"  aria-haspopup="true" aria-expanded="false">--}}
+{{--                                        @lang('Project Submission Form')--}}
+{{--                                    </button>--}}
+{{--                                    <button type="button" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#taskGuidelineModal">Project Completion</button>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+                    </div>
                 </x-cards.data>
             </div>
             <!-- TASK STATUS END -->
@@ -1095,7 +1121,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 </x-cards.data>
             </div>
             <!-- BUDGET VS SPENT END -->
-        </div> 
+        </div>
 
 
 
