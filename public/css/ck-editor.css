@@ -321,6 +321,10 @@
   vertical-align: middle;
 }
 
+.ck-content li {
+  list-style: unset !important;
+}
+
 /* @ckeditor/ckeditor5-list/theme/list.css */
 .ck-content ol {
   list-style-type: decimal;
@@ -349,6 +353,7 @@
 /* @ckeditor/ckeditor5-list/theme/list.css */
 .ck-content ul {
   list-style-type: disc;
+  margin-left: 40px !important;
 }
 
 /* @ckeditor/ckeditor5-list/theme/list.css */
@@ -527,6 +532,15 @@
   .ck-content .page-break::after {
     display: none;
   }
+}
+.sp1_ck_content ul {
+  margin-left: 40px !important;
+}
+.sp1_ck_content li {
+  list-style: unset !important;
+}
+.sp1_ck_content p {
+  margin-bottom: 3px !important;
 }
 
 /*# sourceMappingURL=ck-editor.css.map*/

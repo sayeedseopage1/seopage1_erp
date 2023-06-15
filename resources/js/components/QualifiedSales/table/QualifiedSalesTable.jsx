@@ -84,7 +84,7 @@ const QualifiedSalesTable = ({data = [], users=[], usersObject, isLoading=true})
  
 
     const getUser = (id) => { 
-        if(usersObject && usersObject !== {}){
+        if(usersObject){
             id = Number(id);
             return usersObject[id];
         } else return {};

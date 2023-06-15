@@ -5,8 +5,6 @@ import Button from '../../components/Button';
 const CommentSendBox = () => {
   const [editMode, setEditMode] = React.useState(false);
 
-
-
   const commentMode = () => {
     if(editMode){
       return (

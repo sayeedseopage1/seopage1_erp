@@ -45,7 +45,7 @@ const RevisionText = ({text, index, date, time}) => {
                             <span className="d-block"><strong>Date</strong> {date} </span>
                             <span className="d-block"><strong>Time</strong>: {time}</span>
                         </div>
-                        <div>
+                        <div className='sp1_ck_content'>
                             {text}
                         </div>
                     </div>

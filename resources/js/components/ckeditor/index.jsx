@@ -5,14 +5,13 @@ import ImageUploadAdapterPlugin from './custom/ImageUploadAdapter';
 
 
 
-export default function CKEditorComponent (){
+export default function CKEditorComponent ({data="", onChange, placeholder="Type the content here!"}){
     const [editor, setEditor] = React.useState(null);
 
     return (
         <>
             <CKEditor
                 onReady={editor => {
-                    console.log('Editor is Ready to use!', editor);
                     // Insert the toolbar before the editable area.
                     editor.ui.getEditableElement()?.parentElement.insertBefore(
                         editor.ui.view.toolbar.element,
@@ -23,17 +22,15 @@ export default function CKEditorComponent (){
                 }}
 
                 onError={ ( error, { willEditorRestart } ) => {
-                    // If the editor is restarted, the toolbar element will be created once again.
-                    // The `onReady` callback will be called again and the new toolbar will be added.
-                    // This is why you need to remove the older toolbar.
                     if ( willEditorRestart ) {
                         this.editor.ui.view.toolbar.element.remove();
                     }
                 } }
-                onChange={ ( event, editor ) => console.log( { event, editor } ) }
+                onChange={ ( event, editor ) => onChange ? onChange(event, editor): null }
                 editor={ DecoupledEditor }
-                data="<p>Hello from CKEditor 5's decoupled editor!</p>"
+                data={data}
                 config={{
+                    placeholder,
                     toolbar: [ 
                         'undo','redo', 
                         '|',

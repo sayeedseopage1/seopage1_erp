@@ -20,7 +20,8 @@ const Modal = ({ children, isOpen, className }) => {
     }, []);
 
     if(!DOM) return;
- 
+
+
 
     const modalContent = isOpen ? (
         <div className={`cnx_modal ${className}`}>

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 
 const Accordion = ({expendable=true, children, title, headingClass, headingStyle}) => {
-    const [expend,setExpend] = React.useState(true);
+    const [expend,setExpend] = React.useState(false);
 
     const toggle = () => {
         setExpend(!expend);

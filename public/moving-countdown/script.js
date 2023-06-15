@@ -7,18 +7,18 @@ let isDragging = false;
 let currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
 let minimizeBtn = document.querySelector('.minimize-btn');
 
-card.addEventListener('mousedown', dragStart);
-card.addEventListener('mouseup', dragEnd);
-card.addEventListener('mousemove', drag);
-card.addEventListener('mouseleave', dragEnd);
+card?.addEventListener('mousedown', dragStart);
+card?.addEventListener('mouseup', dragEnd);
+card?.addEventListener('mousemove', drag);
+card?.addEventListener('mouseleave', dragEnd);
 
-card.addEventListener('touchstart', dragStart);
-card.addEventListener('touchend', dragEnd);
-card.addEventListener('touchmove', drag);
+card?.addEventListener('touchstart', dragStart);
+card?.addEventListener('touchend', dragEnd);
+card?.addEventListener('touchmove', drag);
 
 // minimizeBtn.addEventListener('click', minimizeCard);
-minimizeBtn.addEventListener('mousedown', minimizeCard);
-minimizeBtn.addEventListener('touchstart', minimizeCard);
+minimizeBtn?.addEventListener('mousedown', minimizeCard);
+minimizeBtn?.addEventListener('touchstart', minimizeCard);
 
 function dragStart(e) {
     if (e.type === 'touchstart') {
