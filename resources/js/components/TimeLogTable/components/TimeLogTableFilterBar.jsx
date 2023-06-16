@@ -8,7 +8,7 @@ import { setUsers } from '../../services/features/usersSlice';
 import FilterItem from './FilterBarItem';
 import dayjs from 'dayjs';
 import { useGetProjectsOptionsQuery } from '../../services/api/FilterBarOptionsApiSlice';
-import PersonFilterItem from './ProjectFilter';
+// import PersonFilterItem from './ProjectFilter';
 import ProjectFilterItem from './ProjectFilter';
 
 
@@ -25,6 +25,8 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
     const [selectedClientId, setSelectedClientId] = React.useState(null);
     const [selectedProject, setSelectedProject] = React.useState(null);
 
+    const logged_user = window?.Laravel?.user;
+    const top_management = [1, 6, 4, 8].includes(Number(logged_user?.role_id));
 
 
     // fetch all users
@@ -40,57 +42,63 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
             (async () => { 
                 let res = await getAllUsers().unwrap(); 
                 if(res){
-                    dispatch(setUsers(res))
+                    dispatch(setUsers(res));
                 }
             })()
         }
     }, []) 
+
+
+    
+    React.useEffect(() => {
+        if(users?.length){
+            if(!top_management){
+                setSelectedEmployeeId(logged_user?.id)
+            }
+        }
+    }, [users]);
+
    
 
     let content = null;
 
+    // filter options
+    const _selectedEmployeeId = React.useMemo(() => selectedEmployeeId, [selectedEmployeeId]);
+    const _selectedClientId = React.useMemo(() => selectedClientId, [selectedClientId]);
+    const _selectedPMId = React.useMemo(() => selectedPMId, [selectedPMId]); 
+    const _status = React.useMemo(() => status, [status]); 
+    const _selectedProject = React.useMemo(() => selectedProject, [selectedProject])
+    const _startDate = React.useMemo(() => startDate, [startDate]);
+    const _endDate = React.useMemo(() => endDate, [endDate]);
+
+    React.useEffect(()=> {
+        if(_startDate && endDate){
+            handleTimeFilter({
+                start_date: dayjs(_startDate).format('YYYY-MM-DD'),
+                end_date: dayjs(_endDate).format('YYYY-MM-DD'),
+                employee_id: _selectedEmployeeId,
+                pm_id: _selectedPMId,
+                client_id: _selectedClientId,   
+                status: _status,
+                project_id: _selectedProject ? _selectedProject.id : null
+            })
+        }
+    }, [_selectedClientId, _selectedEmployeeId, _selectedPMId, _status, _selectedProject, _startDate, _endDate]);
+
 
     const handleStatusFilter = (status) => {
         if(status){
-            setStatus(status); 
-            handleTimeFilter({
-                start_date: dayjs(startDate).format('YYYY-MM-DD'),
-                end_date: dayjs(endDate).format('YYYY-MM-DD'),
-                employee_id: selectedEmployeeId,
-                pm_id: selectedPMId,
-                client_id: selectedClientId,   
-                status: status,
-                project_id: selectedProject ? selectedProject.id : null
-            })
+            setStatus(status);
         }else{
-            setStatus(null)
+            setStatus(null);
         }
     }   
     
-    const handleDateFilter = (s, e) => { 
-        handleTimeFilter({
-            start_date: s,
-            end_date: e ,
-            employee_id: selectedEmployeeId,
-            pm_id: selectedPMId,
-            client_id: selectedClientId,
-            status: status,
-            project_id: selectedProject ? selectedProject.id : null
-        })
-    } 
+    const handleDateFilter = (s, e) => {} 
 
     const handleProjectFilter = (e, data) => {
         if(data){
             setSelectedProject(data);
-            handleTimeFilter({
-                start_date: dayjs(startDate).format('YYYY-MM-DD'),
-                end_date: dayjs(endDate).format('YYYY-MM-DD'),
-                employee_id: selectedEmployeeId,
-                pm_id: selectedPMId,
-                client_id: selectedClientId,   
-                status: status,
-                project_id: data.id
-            })
         }else{
             setSelectedProject(null)
         }
@@ -100,26 +108,8 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
         e.preventDefault();
         if(data){
             setSelectedEmployeeId(data.id);
-            handleTimeFilter({
-                start_date: dayjs(startDate).format('YYYY-MM-DD'),
-                end_date: dayjs(endDate).format('YYYY-MM-DD'),
-                employee_id: data.id,
-                pm_id: selectedPMId,
-                client_id: selectedClientId,   
-                status: status,
-                project_id: selectedProject?.id || null
-            })
         }else{
             setSelectedEmployeeId(null);
-            handleTimeFilter({
-                start_date: dayjs(startDate).format('YYYY-MM-DD'),
-                end_date: dayjs(endDate).format('YYYY-MM-DD'),
-                employee_id: null,
-                pm_id: selectedPMId,
-                client_id: selectedClientId,   
-                status: status,
-                project_id: selectedProject?.id || null
-            })
         }
         
     }
@@ -128,28 +118,8 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
         e.preventDefault();
         if(data){
             setSelectedPMId(data.id);
-
-            handleTimeFilter({
-                start_date: dayjs(startDate).format('YYYY-MM-DD'),
-                end_date: dayjs(endDate).format('YYYY-MM-DD'),
-                employee_id: selectedEmployeeId,
-                pm_id: data.id,
-                client_id: selectedClientId,   
-                status: status,
-                project_id: selectedProject?.id || null
-            })
         }else{
             setSelectedPMId(null);
-
-            handleTimeFilter({
-                start_date: dayjs(startDate).format('YYYY-MM-DD'),
-                end_date: dayjs(endDate).format('YYYY-MM-DD'),
-                employee_id: selectedEmployeeId,
-                pm_id: null,
-                client_id: selectedClientId,   
-                status: status,
-                project_id: selectedProject?.id || null
-            })
         }
     }
 
@@ -157,33 +127,13 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
     const handleClientFilter = (e, data) => {
         e.preventDefault();
        if(data){
-        setSelectedClientId(data.id);
-            handleTimeFilter({
-                start_date: dayjs(startDate).format('YYYY-MM-DD'),
-                end_date: dayjs(endDate).format('YYYY-MM-DD'),
-                employee_id: selectedEmployeeId,
-                pm_id: selectedPMId,
-                client_id: data.id,   
-                status: status,
-                project_id: selectedProject?.id || null
-            })
+            setSelectedClientId(data.id);
        } else{
             setSelectedClientId(null);
-            handleTimeFilter({
-                start_date: dayjs(startDate).format('YYYY-MM-DD'),
-                end_date: dayjs(endDate).format('YYYY-MM-DD'),
-                employee_id: selectedEmployeeId,
-                pm_id: selectedPMId,
-                client_id: null,   
-                status: status,
-                project_id: selectedProject?.id || null
-            })
        }
     }
 
-
-    
-
+ 
     content =  <div className='d-flex flex-wrap bg-white p-1'>
         <div className='border-right pr-1'>
             <JqueryDateRangePicker 
@@ -198,10 +148,17 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
         {/* employee */}
         <PersonFilter
             title="Employee"
-            items={users ? [...users?.filter(user => user.role_id && Number(user.role_id) !== 4)] : []}
+            items={users ? [...users?.filter(user => {
+                if(top_management){
+                    return user.role_id && Number(user.role_id) !== 4
+                }else{
+                    return user.id === logged_user.id
+                }
+            })]:[]}
             selected={selectedEmployeeId ? users?.find(u => Number(u.id) === selectedEmployeeId) : null}
             isLoading={userIsFetching}
             onSelect={handleEmployeeFilter}
+            selectedAllButton = {false}
         />
 
 

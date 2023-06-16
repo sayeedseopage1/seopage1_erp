@@ -9,6 +9,7 @@ use App\Models\ProjectTimeLog;
 use App\Models\TaskboardColumn;
 use App\Models\Task;
 use App\Models\User;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -239,7 +240,7 @@ class TimelogReportController extends AccountBaseController
             ->join('users as client', 'projects.client_id', 'client.id')
             ->join('deals', 'client.id', '=', 'deals.client_id')
 
-           	->where('projects.status',$status)
+           	//->where('projects.status',$status)
             ->where('total_minutes', '>', 0)
             ->where('project_time_logs.end_time','!=',null);
            // ->orderBy('project_time_logs.task_id' , 'desc');
@@ -288,6 +289,9 @@ class TimelogReportController extends AccountBaseController
                 //$data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
                 $data = $data->where('projects.client_id' , $clientId);
             }
+            if (!is_null($status)) {
+                $data = $data->where('projects.status', $status);
+            }
             
             /*if (!is_null($startDate)) {
                 $data = $data->where('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
@@ -310,11 +314,21 @@ class TimelogReportController extends AccountBaseController
             $data = $data->orderBy('project_time_logs.task_id' , 'desc')
             ->offset($offset)
             ->limit($perPage)*/
-
-          $data = $data->groupBy('tasks.id','project_time_logs.created_at')
+        if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
+        {
+            $data = $data->groupBy('tasks.id','project_time_logs.created_at')
          // ->orderBy('project_time_logs.id', 'desc')
           ->get();
 
+
+        }else {
+            $data = $data->groupBy('tasks.id','project_time_logs.created_at')
+            ->where('project_time_logs.user_id',Auth::id())
+         // ->orderBy('project_time_logs.id', 'desc')
+          ->get();
+
+        }
+          
         } else if($type == 'projects') {
             $data = ProjectTimeLog::select([
                 'projects.id as project_id',
@@ -365,7 +379,7 @@ class TimelogReportController extends AccountBaseController
 
             }
             $data = $data->groupBy('project_time_logs.user_id')
-            ->where('projects.status', $status)
+            //->where('projects.status', $status)
             ->where('total_minutes', '>', 0)
             ->orderBy('project_time_logs.project_id' , 'desc');
 
@@ -409,11 +423,20 @@ class TimelogReportController extends AccountBaseController
                 //$data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
                 $data = $data->where('projects.client_id' , $clientId);
             }
+            if (!is_null($status)) {
+                $data = $data->where('projects.status', $status);
+            }
             /*$total_rows = $data->get()->count();
             $data = $data->orderBy('project_time_logs.project_id' , 'desc')
             ->offset($offset)
             ->limit($perPage)*/
-            $data = $data->get();
+            if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
+            {
+                $data = $data->get();
+            }
+           else {
+            $data = $data->where('project_time_logs.user_id',Auth::id())->get();
+           }
            // dd($data);
         }
         
