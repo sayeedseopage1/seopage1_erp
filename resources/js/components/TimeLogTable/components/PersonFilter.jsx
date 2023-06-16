@@ -12,7 +12,8 @@ export default function PersonFilterItem({
     title,
     selected,
     onSelect,
-    isLoading = true
+    isLoading = true,
+    selectedAllButton = true
 }){
     const [search, setSearch] = React.useState(''); 
     const [maxHeight, setMaxHeight] = React.useState(720);
@@ -34,7 +35,15 @@ export default function PersonFilterItem({
                 <Dropdown.Toggle
                     className="sp1__pp_filter_dd_toggle"
                 >
-                {!selected ? 'All' : selected?.name}
+                    <div>
+                        {!selected ? 'All' : 
+                            <div 
+                                data-toggle="tooltip" 
+                                data-placement="bottom" 
+                                title={selected?.name}
+                            >{selected?.name}</div>
+                        }
+                    </div>
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                     className="sp1__pp_filter_dd"
@@ -83,12 +92,12 @@ export default function PersonFilterItem({
                                 className='sp1__pp_menu_items'
                                 style={{maxHeight}}
                             >
-                                <Dropdown.Item
+                                {selectedAllButton && <Dropdown.Item
                                     onClick={(e) => onSelect(e, null)}
                                     className={`sp1__pp_filter_dd_item mb-1 ${!selected && 'active'}`} 
                                 >
                                     Select All
-                                </Dropdown.Item>
+                                </Dropdown.Item>}
                                 
 
                                 {/* item */}

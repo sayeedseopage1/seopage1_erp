@@ -9,7 +9,7 @@
                         <h3 class="text-center mb-5">Provide Design Reference</h3>
                         <form action="{{route('task-guideline-store')}}" method="post">
                             <input type="hidden" name="project_id" id="project_id" value="{{$project_id}}">
-                            <div class="row">
+                                <div class="row">
                                     <!--Theme Details Start-->
                                     <div class="col-sm-12">
                                         <div class="form-group">
@@ -18,13 +18,13 @@
                                             </label>
                                             <div class="d-flex">
                                                 <div class="form-check d-flex align-items-center">
-                                                    <input class="form-check-input mb-1" type="radio" value="1" name="theme_details" id="theme_yes">
+                                                    <input class="form-check-input mb-1" type="radio" value="1" name="theme_details" id="theme_yes" onclick="toggleThemeInfo(true)">
                                                     <label class="form-check-label ml-2 mb-0" for="theme_yes">
                                                         Yes
                                                     </label>
                                                 </div>
                                                 <div class="form-check d-flex align-items-center" style="margin-left: 25px;">
-                                                    <input class="form-check-input mb-1" type="radio" value="0" name="theme_details" id="theme_no">
+                                                    <input class="form-check-input mb-1" type="radio" value="0" name="theme_details" id="theme_no" onclick="toggleThemeInfo(false)">
                                                     <label class="form-check-label ml-2 mb-0" for="theme_no">
                                                         No
                                                     </label>
@@ -32,18 +32,22 @@
                                             </div>
                                             <span id="theme_details_error" class="text-danger"></span>
                                         </div>
-                                        <div class="row mb-3" style="display: none;" id="themeInfo">
-                                            <div class="col-md-6">
-                                                <label for="">Theme Name</label>
-                                                <input type="text" name="theme_name" id="theme_name" class="form-control height-35 f-14" placeholder="Type theme name">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="">Theme Url</label>
-                                                <input type="url" name="theme_url" id="theme_url" class="form-control height-35 f-14" placeholder="Type theme Url">
-                                            </div>
+                                    </div>
+                                </div>
+                                <div style="display: none;" id="themeInfo">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="">Theme Name</label>
+                                            <input type="text" name="theme_name" id="theme_name" class="form-control height-35 f-14" placeholder="Type theme name">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="">Theme Url</label>
+                                            <input type="url" name="theme_url" id="theme_url" class="form-control height-35 f-14" placeholder="Type theme Url">
                                         </div>
                                     </div>
+                                </div>
                                     <!--Theme Details End-->
+                                    <div class="row">
                                     <!--Design  Start-->
                                     <div class="col-sm-12 mb-3">
                                         <label class="text-dark-grey" data-label="true" for="design">Design
@@ -91,13 +95,7 @@
                                             </div>
                                             <div class="col-sm-12">
                                                 <label for="">Add Instruction</label>
-                                                <textarea name="instruction" id="instruction" class="form-control"></textarea>
-                                                <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
-                                                <script>
-                                                    CKEDITOR.replace('instruction',{
-                                                        height:100,
-                                                    });
-                                                </script>
+                                                <textarea name="instruction" id="instruction" cols="30" rows="5" class="form-control"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -107,44 +105,63 @@
                                 <div class="row">
                                     <!--Color Schema Start-->
                                     <div class="col-md-12">
-                                        <label class="text-dark-grey" data-label="true" for="design">Color Schema
-                                            <sup class="mr-1">*</sup>
-                                        </label>
-                                        <div class="row">
-                                            <div class="col-md-10 dynamic-color" id="dynamic-color-list-1">
-                                                <div class="row mb-3">
-                                                    <div class="col-sm-12">
-                                                        <label class="text-dark-grey" data-label="true" for="design">Choose at least two colors
-                                                            <sup class="mr-1">*</sup>
-                                                        </label>
-                                                        <div id="colorpicker" class="input-group colorpicker-element" data-colorpicker-id="1">
-                                                            <div class="input-group">
-                                                                <input type="text" name="color[]" id="colorselector" value="#16813D" class="form-control height-35 f-15 light_text">
-                                                                <span id="color_error" class="text-danger"></span>
-                                                                <div class="input-group-append">
-                                                                <span class="input-group-text colorpicker-input-addon height-35" data-original-title="" title="" tabindex="0">
-                                                                    <i style="background: rgb(22, 129, 61);"></i>
-                                                                </span>
+                                        <div class="form-group">
+                                            <label class="text-dark-grey" data-label="true" for="design">Color Schema
+                                                <sup class="mr-1">*</sup>
+                                            </label>
+                                            <div class="d-flex">
+                                                <div class="form-check d-flex align-items-center">
+                                                    <input class="form-check-input mb-1" type="radio" value="1" name="color_schema" id="color_yes" onclick="toggleColorInfo(true)">
+                                                    <label class="form-check-label ml-2 mb-0" for="color_yes">
+                                                        Yes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check d-flex align-items-center" style="margin-left: 25px;">
+                                                    <input class="form-check-input mb-1" type="radio" value="0" name="color_schema" id="color_no" onclick="toggleColorInfo(false)">
+                                                    <label class="form-check-label ml-2 mb-0" for="color_no">
+                                                        No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <span id="color_schema_error" class="text-danger"></span>
+                                        </div>
+                                        <div style="display: none;" id="colorInfo">
+                                            <div class="row">
+                                                <div class="col-md-10 dynamic-color" id="dynamic-color-list-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-sm-12">
+                                                            <label class="text-dark-grey" data-label="true" for="design">Choose at least two colors
+                                                                <sup class="mr-1">*</sup>
+                                                            </label>
+                                                            <div id="colorpicker" class="input-group colorpicker-element" data-colorpicker-id="1">
+                                                                <div class="input-group">
+                                                                    <input type="text" name="color[]" id="colorselector" value="#16813D" class="form-control height-35 f-15 light_text">
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text colorpicker-input-addon height-35" data-original-title="" title="" tabindex="0">
+                                                                            <i id="color-icon" style="background: rgb(22, 129, 61);"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <span id="color_error" class="text-danger"></span>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row mb-3">
-                                                    <div class="col-sm-12">
-                                                        <label class="text-dark-grey" data-label="true" for="design">Where Should Developers Use This
-                                                            Color?
-                                                            <sup class="mr-1">*</sup>
-                                                        </label>
-                                                        <textarea name="color_description[]" id="color_description" rows="8" class="form-control"></textarea>
-                                                        <span id="color_description_error" class="text-danger"></span>
+                                                    <div class="row mb-3">
+                                                        <div class="col-sm-12">
+                                                            <label class="text-dark-grey" data-label="true" for="design">Where Should Developers Use This
+                                                                Color?
+                                                                <sup class="mr-1">*</sup>
+                                                            </label>
+                                                            <textarea name="color_description[]" id="color_description" rows="5" class="form-control"></textarea>
+                                                            <span id="color_description_error" class="text-danger"></span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-2 append-buttons mt-4">
-                                                <div class="clearfix">
-                                                    <button type="button" id="add-color-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                    <button type="button" id="remove-color-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                <div class="col-md-2 append-buttons mt-4">
+                                                    <div class="clearfix">
+                                                        <button type="button" id="add-color-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                        <button type="button" id="remove-color-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -161,13 +178,13 @@
                                         </label>
                                         <div class="d-flex">
                                             <div class="form-check d-flex align-items-center">
-                                                <input class="form-check-input mb-1" type="radio" value="1" name="plugin_research" id="plugin_research_yes">
+                                                <input class="form-check-input mb-1" type="radio" value="1" name="plugin_research" id="plugin_research_yes" onclick="togglePluginResearchInfo(true)">
                                                 <label class="form-check-label ml-2 mb-0" for="plugin_research_yes">
                                                     Yes
                                                 </label>
                                             </div>
                                             <div class="form-check d-flex align-items-center" style="margin-left: 25px;">
-                                                <input class="form-check-input mb-1" type="radio" value="0" name="plugin_research" id="plugin_research_no">
+                                                <input class="form-check-input mb-1" type="radio" value="0" name="plugin_research" id="plugin_research_no" onclick="togglePluginResearchInfo(false)">
                                                 <label class="form-check-label ml-2 mb-0" for="plugin_research_no">
                                                     No
                                                 </label>
@@ -178,6 +195,7 @@
                                 </div>
                                 <!--Plugin Research End-->
                              </div>
+<<<<<<< HEAD
                             <div class="row mb-5" style="display: none;" id="plugin_research_info">
                                 <div class="col-md-4">
                                     <label for="">Plugin Name</label>
@@ -191,6 +209,29 @@
                                     <label for="">Share Google Drive Link</label>
                                     <input type="url" name="google_drive_link" id="google_drive_link" class="form-control height-35 f-14" placeholder="Type Google link">
                                 </div>
+=======
+                            <div style="display: none;" id="plugin_research_info">
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label for="">Plugin Name</label>
+                                        <input type="text" name="plugin_name" id="plugin_name" class="form-control height-35 f-14" placeholder="Type Plugin Name">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="">Plugin URL</label>
+                                        <input type="url" name="plugin_url" id="plugin_url" class="form-control height-35 f-14" placeholder="Type Plugin Url">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="">Share Google Drive Link</label>
+                                        <input type="url" name="google_drive_link" id="google_drive_link" class="form-control height-35 f-14" placeholder="Type Google link">
+                                    </div>
+                                </div>
+                                <div class="row mb-5">
+                                    <div class="col-md-12">
+                                        <label for="">Write Instructions for Using This Plugin</label>
+                                        <textarea name="instruction_plugin" id="instruction_plugin" cols="30" rows="5" class="form-control"></textarea>
+                                    </div>
+                                </div>
+>>>>>>> cf9e604ed97b6c00e6ed9ab73035938251987bc3
                             </div>
                             <div class="row mb-5">
                                     <div class="col-md-12">
@@ -215,12 +256,12 @@
             $('#submit-button').attr("disabled", true);
             $('#submit-button').html("Processing...");
             var theme_details = $('input[name="theme_details"]:checked').val();
+            var color_schema = $('input[name="color_schema"]:checked').val();
             var reference_link = document.getElementsByName("reference_link[]");
             var reference_link_values = [];
             for (var i = 0; i < reference_link.length; i++) {
                 reference_link_values.push(reference_link[i].value);
             }
-            var instruction = CKEDITOR.instances.instruction.getData();
             var color = document.getElementsByName("color[]");
             var color_values = [];
             for (var i = 0; i < color.length; i++) {
@@ -241,7 +282,8 @@
                 'xd_url': document.getElementById("xd_url").value,
                 'drive_url': document.getElementById("drive_url").value,
                 'reference_link': reference_link_values,
-                'instruction': instruction,
+                'instruction': document.getElementById("instruction").value,
+                'color_schema': color_schema,
                 'color': color_values,
                 'color_description': color_description_values,
                 'plugin_research': plugin_research,
@@ -268,7 +310,6 @@
                     $('#submit-button').html("Submit");
                 },
                 error: function(error) {
-                    // console.log(response);
                     if(error.responseJSON.errors.theme_details){
                         $('#theme_details_error').text(error.responseJSON.errors.theme_details);
                     }else{
@@ -279,12 +320,18 @@
                     }else{
                         $('#design_error').text('');
                     }
-                    if(error.responseJSON.errors.color){
-                        $('#color_error').text(error.responseJSON.errors.color);
+                    if(error.responseJSON.errors.color_schema){
+                        $('#color_schema_error').text(error.responseJSON.errors.color_schema);
                     }else{
-                        $('#color_error').text('');
+                        $('#color_schema_error').text('');
                     }
-                    if(error.responseJSON.errors.design){
+                    $.each(error.responseJSON.errors.color, function(key, value) {
+                        toastr.error('Please choose at least two color');
+                    });
+                    $.each(error.responseJSON.errors.color_description, function(key, value) {
+                        toastr.error('This field is required');
+                    });
+                    if(error.responseJSON.errors.plugin_research){
                         $('#plugin_research_error').text(error.responseJSON.errors.plugin_research);
                     }else{
                         $('#plugin_research_error').text('');
@@ -296,24 +343,35 @@
         });
     </script>
 
-    <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
-
 
     <script>
         $(document).ready(function() {
             $('#colorselector').colorpicker();
         });
-
-        $(document).ready(function() {
-            $('#theme_yes').click(function() {
-                $('#themeInfo').toggle();
-            });
-        });
-        $(document).ready(function() {
-            $('#plugin_research_yes').click(function() {
-                $('#plugin_research_info').toggle();
-            });
-        });
+        function toggleThemeInfo(show) {
+            var themeInfo = document.getElementById("themeInfo");
+            if (show) {
+                themeInfo.style.display = "block";
+            } else {
+                themeInfo.style.display = "none";
+            }
+        }
+        function toggleColorInfo(show) {
+            var colorInfo = document.getElementById("colorInfo");
+            if (show) {
+                colorInfo.style.display = "block";
+            } else {
+                colorInfo.style.display = "none";
+            }
+        }
+        function togglePluginResearchInfo(show) {
+            var plugin_research_info = document.getElementById("plugin_research_info");
+            if (show) {
+                plugin_research_info.style.display = "block";
+            } else {
+                plugin_research_info.style.display = "none";
+            }
+        }
 
         const selectElement = document.getElementById("design");
         const xdInput = document.getElementById("xdInput");
@@ -486,153 +544,5 @@
                 enableButtonAdd();
             });
         });
-
-
-
-
-
-        // function htmlRender(id, counter){
-        //
-        //     return `
-        //     <div class="row" id="color_container_row${id}">
-        //                 <div class="col-md-10 dynamic-color" id="dynamic-color-list-1">
-        //         <div class="row mb-3">
-        //             <div class="col-sm-12">
-        //                 <label class="text-dark-grey" data-label="true" for="design">Choose at least two colors
-        //                     <sup class="mr-1">*</sup>
-        //                 </label>
-        //                 <div id="colorpicker" class="input-group colorpicker-element" data-colorpicker-id="1">
-        //                     <div class="input-group">
-        //                         <input type="text" name="color[]" id="colorselector" value="#16813D" class="form-control height-35 f-15 light_text">
-        //                         <div class="input-group-append">
-        //                             <span class="input-group-text colorpicker-input-addon height-35" data-original-title="" title="" tabindex="0">
-        //                                 <i style="background: rgb(22, 129, 61);"></i>
-        //                             </span>
-        //                         </div>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //         <div class="row mb-3">
-        //             <div class="col-sm-12">
-        //                 <label class="text-dark-grey" data-label="true" for="design">Where Should Developers Use This Color?
-        //                     <sup class="mr-1">*</sup>
-        //                 </label>
-        //                 <textarea name="color_description[]" id="color_description_${id}" class="form-control"></textarea>
-        //             </div>
-        //             </div>
-        //             </div>
-        //             <div class="col-md-2 append-buttons mt-4 color_des_btn" data-id=${id}>
-        //                     <div class="clearfix">
-        //                         <button type="button" id="add-color-button${id}" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-        //                         <button type="button" id="remove-color-button${id}" data-rm-target="color_container_row${id}" class="btn btn-secondary float-left text-uppercase ml-1"><i class="fa fa-minus fa-fw"></i></button>
-        //                     </div>
-        //                 </div>
-        //            </div>
-        //
-        //
-        //
-        //         <script>
-        //             CKEDITOR.replace(\`color_description_${id}\`, {
-        //                 height: 100,
-        //             })
-        //         <\/script>
-        // `}
-        //
-        //
-        // $(document).ready(function() {
-        //     var counter = 1;
-        //
-        //     var html;
-        //
-        //
-        //
-        //     render(counter)
-        //
-        //
-        //     function render(id) {
-        //         html += htmlRender(counter, counter);
-        //
-        //
-        //
-        //         $('#color_container').html(html);
-        //
-        //
-        //
-        //         $(`#add-color-button${counter}`).on('click', function() {
-        //             // cloneDynamicColor();
-        //             $(`#add-color-button${counter}`).attr('style',"display:none");
-        //             counter += 1;
-        //             render(counter);
-        //
-        //             $('.color_des_btn').each(function(){
-        //                 var dataId = $(this).attr('data-id');
-        //                 if(parseInt(dataId) <= id){
-        //                     $(this).attr('style', 'display:none');
-        //                 }
-        //             })
-        //         });
-        //
-        //         $(`#remove-color-button${id}`).on('click', function() {
-        //             var target = $(this).attr('data-rm-target');
-        //             counter--;
-        //             $(`#${target}`).remove();
-        //
-        //
-        //             $('.color_des_btn').each(function(){
-        //                 var dataId = $(this).attr('data-id');
-        //                 console.log({id, counter})
-        //                 if(parseInt(dataId) === id-1){
-        //                     $(this).attr('style', 'display:block');
-        //                 }
-        //             })
-        //
-        //         })
-        //     }
-        //
-        //
-        //     // Clone the dynamic color element
-        //     function cloneDynamicColor() {
-        //         counter++;
-        //         var dynamicColor = $("#dynamic-color-list-1").clone();
-        //         dynamicColor.attr("id", "dynamic-color-list-" + counter);
-        //         dynamicColor.find("textarea").attr("id", "color_description_" + counter);
-        //         dynamicColor.find("textarea").attr("name", "color_description[]");
-        //
-        //         // Reset the cloned textarea's value
-        //         dynamicColor.find("textarea").val("");
-        //
-        //         // Reset the cloned colorpicker element
-        //         dynamicColor.find(".input-group-append i").css("background", "");
-        //         dynamicColor.find(".input-group-append i").parent().attr("data-original-title", "");
-        //         dynamicColor.find(".input-group-append i").parent().attr("title", "");
-        //         dynamicColor.find(".input-group input").val("#16813D");
-        //
-        //         $("#dynamic-color-list-1").after(dynamicColor);
-        //
-        //         dynamicColor.find(".input-group").colorpicker();
-        //
-        //         CKEDITOR.replace('color_description_' + counter, {
-        //             height: 100,
-        //         });
-        //
-        //         if (counter > 1) {
-        //             $("#remove-color-button").prop("disabled", false);
-        //         }
-        //     }
-        //
-        //     function removeDynamicColor() {
-        //         if (counter > 1) {
-        //             $("#color_container_row" + counter).remove();
-        //             counter--;
-        //
-        //             // Disable remove button if there is only one dynamic color element remaining
-        //             // if (counter === 1) {
-        //             //     $("#remove-color-button").prop("disabled", true);
-        //             // }
-        //         }
-        //     }
-        //     $("#dynamic-color-list-1 .input-group").colorpicker();
-        // });
     </script>
 @endsection

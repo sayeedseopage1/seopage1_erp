@@ -1704,15 +1704,40 @@ class TaskController extends AccountBaseController
 
     public function storeTaskGuideline(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->input(), [
             'theme_details' => 'required',
             'design' => 'required',
+            'color_schema' => 'required',
+            'color' => 'required|array',
+            'color.*' => 'required|string|min:2',
+            'color_description' => 'required|array',
             'plugin_research' => 'required',
         ], [
-            'theme_details.required' => 'This field is required!',
-            'design.required' => 'This field is required!',
-            'plugin_research.required' => 'This field is required!',
+            'theme_details.required' => 'This field is required',
+            'design.required' => 'This field is required',
+            'color_schema.required' => 'This field is required',
+            'color.*.required' => 'This field is required',
+            'color_description.required' => 'This field is required',
+            'plugin_research.required' => 'This field is required',
         ]);
+
+        $color = [];
+        foreach ($validator->errors()->toArray() as $key => $value) {
+            if (strpos($key, 'color.') !== false) {
+                $exp= explode('.', $key);
+                $color[$exp[1]] = $value[0];
+            }
+        }
+
+        $errors = $validator->errors()->toArray();
+        $errors = array_merge($errors, ['color' => $color]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $errors
+            ], 422);
+        }
+
         $data = $request->all();
         $reference_links = json_encode($data['reference_link']);
         $colors = json_encode($data['color']);
@@ -1728,6 +1753,7 @@ class TaskController extends AccountBaseController
         $pm_task_guideline->drive_url = $data['drive_url'];
         $pm_task_guideline->reference_link = $reference_links;
         $pm_task_guideline->instruction = $data['instruction'];
+        $pm_task_guideline->color_schema = $data['color_schema'];
         $pm_task_guideline->color = $colors;
         $pm_task_guideline->color_description = $color_descriptions;
         $pm_task_guideline->plugin_research = $data['plugin_research'];
@@ -1748,11 +1774,13 @@ class TaskController extends AccountBaseController
     {
         $request->validate([
             'site_url' => 'required',
+            'frontend_password' => 'required',
             'login_url' => 'required',
             'email' => 'required',
             'password' => 'required',
         ], [
             'site_url.required' => 'This field is required!',
+            'frontend_password.required' => 'This field is required!',
             'login_url.required' => 'This field is required!',
             'email.required' => 'This field is required!',
             'password.required' => 'This field is required!',
@@ -1760,12 +1788,18 @@ class TaskController extends AccountBaseController
 
         $working_environment = new WorkingEnvironment();
         $working_environment->project_id = $request->project_id;
+        $working_environment->frontend_password = $request->frontend_password;
         $working_environment->site_url = $request->site_url;
         $working_environment->login_url = $request->login_url;
         $working_environment->email = $request->email;
         $working_environment->password = $request->password;
         $working_environment->save();
 
-        return response()->json(['status'=>200]);
+        $task_id= Task::where('project_id',$working_environment->project_id)->first();
+
+        return response()->json([
+            'status'=>200,
+            'redirect' => url('/account/tasks/'.$task_id->id),
+        ]);
     }
 }
