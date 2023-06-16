@@ -307,7 +307,7 @@ class TimelogReportController extends AccountBaseController
             $data = $data->orderBy('project_time_logs.task_id' , 'desc')
             ->offset($offset)
             ->limit($perPage)*/
-        if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
+        if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8 || Auth::user()->role_id == 6)
         {
             $data = $data->groupBy('tasks.id','project_time_logs.created_at')
          // ->orderBy('project_time_logs.id', 'desc')
@@ -422,7 +422,7 @@ class TimelogReportController extends AccountBaseController
             $data = $data->orderBy('project_time_logs.project_id' , 'desc')
             ->offset($offset)
             ->limit($perPage)*/
-            if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
+            if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8 || Auth::user()->role_id == 6)
             {
                 $data = $data->get();
             }
