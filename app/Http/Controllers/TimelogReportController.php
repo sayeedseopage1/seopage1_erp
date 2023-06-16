@@ -283,7 +283,7 @@ class TimelogReportController extends AccountBaseController
                 $data = $data->where('projects.pm_id' , $pmId);
             }
             if (!is_null($employeeId)) {
-                $data = $data->where('project_time_logs.user_id' , $employeeId);
+                $data = $data->where('project_time_logs.user_id', $employeeId);
             }
             if (!is_null($clientId)) {
                 //$data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
@@ -296,13 +296,6 @@ class TimelogReportController extends AccountBaseController
             /*if (!is_null($startDate)) {
                 $data = $data->where('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
 
-            }
-            }
-            if (!is_null($pmId)) {
-                //$data = $data->where('projects.pm_id' , $pmId)->orderBy('projects.pm_id' , 'desc');
-                $data = $data->where('projects.pm_id' , $pmId);
-            }
-            if (!is_null($employeeId)) {
                 //$data = $data->where('project_time_logs.user_id' , $employeeId)->orderBy('project_time_logs.user_id' , 'desc');
                 $data = $data->where('project_time_logs.user_id' , $employeeId);
             }
@@ -326,7 +319,6 @@ class TimelogReportController extends AccountBaseController
             ->where('project_time_logs.user_id',Auth::id())
          // ->orderBy('project_time_logs.id', 'desc')
           ->get();
-
         }
           
         } else if($type == 'projects') {
