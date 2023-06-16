@@ -324,21 +324,21 @@ const SingleTask = () => {
                     <div className="d-flex align-items-center mb-2">
                         <div className="" style={{width: '200px'}}>Parent Task Hours Logged: </div>
                         <div className={`d-flex align-items-center font-weight-bold ${loadingClass}`}>
-                            {!loading ? (task?.parent_task_time_log && `${task?.parent_task_time_log}`)  : `0 hrs 0 mins`}
+                            {!loading ? (task?.parent_task_time_log ? `${task?.parent_task_time_log}` : '--')  : `0 hrs 0 mins`}
                         </div>
                     </div> 
 
                     <div className="d-flex align-items-center mb-2">
                         <div className="" style={{width: '200px'}}>Subtask Hours Logged: </div>
                         <div className={`d-flex align-items-center font-weight-bold ${loadingClass}`}>
-                            {!loading ? (task?.sub_task_time_log && `${task?.sub_task_time_log}`)  : `0 hrs 0 mins`}
+                            {!loading ? (task?.sub_task_time_log ? `${task?.sub_task_time_log}` : '--')  : `0 hrs 0 mins`}
                         </div>
                     </div> 
 
                     <div className="d-flex align-items-center mb-2">
                         <div className="" style={{width: '200px'}}>Total Hours Logged : </div>
                         <div className="d-flex align-items-center font-weight-bold">
-                        {!loading ? (task?.timeLog && `${task?.timeLog}`)  : `0 hrs 0 mins`}
+                        {!loading ? (task?.timeLog ? `${task?.timeLog}` : '--')  : `0 hrs 0 mins`}
                         </div>
                     </div> 
                 </div>

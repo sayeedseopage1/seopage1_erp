@@ -69,12 +69,12 @@ export default function  FilterItem({
                                 className='sp1__pp_menu_items'
                                 style={{maxHeight}}
                             >
-                                {/* <Dropdown.Item
+                                <Dropdown.Item
                                     onClick={(e) => onSelect(null)}
                                     className={`sp1__pp_filter_dd_item mb-1 ${!selected && 'active'}`} 
                                 >
                                     Select All
-                                </Dropdown.Item> */}
+                                </Dropdown.Item>
                                 
 
                                 {/* item */}

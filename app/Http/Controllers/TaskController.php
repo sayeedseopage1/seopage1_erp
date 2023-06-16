@@ -1555,9 +1555,7 @@ class TaskController extends AccountBaseController
             'status' => 200,
         ]);
     }
-
-
-
+    
     public function task_json(Request $request, $id)
     {
         if ($request->mode == 'basic') {
@@ -1624,6 +1622,16 @@ class TaskController extends AccountBaseController
                 }
             }
             return response()->json($task);
+        } elseif ($request->mode == 'sub_task') {
+            $sub_tasks = SubTask::select(['id', 'title'])->where('task_id', $id)->get();
+
+            foreach ($sub_tasks as $value) {
+                $value->title = \Str::limit($value->title, 30, '...');
+                $value->edit_url = route('tasks.edit', $value->id);
+                $value->show_url = route('tasks.show', $value->id);
+            }
+
+            return response()->json($sub_tasks);
         }
     }
 }
