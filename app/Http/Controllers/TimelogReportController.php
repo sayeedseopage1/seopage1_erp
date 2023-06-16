@@ -677,7 +677,9 @@ class TimelogReportController extends AccountBaseController
             if (!is_null($employeeId)) {
                 $data = $data->where('project_time_logs.user_id', $employeeId);
             } else {
-                $data = $data->where('project_time_logs.user_id', $this->user->id);
+                if ($this->user->role_id != 1 && $this->user->role_id != 4 && $this->user->role_id != 6 && $this->user->role_id != 8) {
+                    $data = $data->where('project_time_logs.user_id', $this->user->id);
+                }
             }
             if (!is_null($status)) {
                 $data = $data->where('projects.status', $status);
@@ -769,7 +771,10 @@ class TimelogReportController extends AccountBaseController
             if (!is_null($employeeId)) {
                 $data = $data->where('project_time_logs.user_id', $employeeId);
             } else {
-                $data = $data->where('project_time_logs.user_id', $this->user->id);
+                if ($this->user->role_id != 1 && $this->user->role_id != 4 && $this->user->role_id != 6 && $this->user->role_id != 8) {
+                    $data = $data->where('project_time_logs.user_id', $this->user->id);
+                    dd($this->user->role_id);
+                }
             }
 
             if (!is_null($status)) {

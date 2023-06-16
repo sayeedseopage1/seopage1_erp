@@ -9,7 +9,6 @@ const CommentSection = () => {
   const [openAddCommentModal, setOpenAddCommentModal] = React.useState(false);
   const [modalToggleRef, setModalToggleRef] = React.useState(null);
 
-
   const toggleModalButton = () => setModalIsOpen(!modalIsOpen);
   const toggleAddCommentModal = () => setOpenAddCommentModal(!openAddCommentModal);
   const closeAddCommentModal = () => setOpenAddCommentModal(false);
@@ -37,7 +36,7 @@ const CommentSection = () => {
               variant='tertiary'
               className="sp1_tark_add_item" 
               aria-label="addButton"
-              onClick={toggleAddCommentModal}
+              onClick={toggleModalButton}
           > 
               <i 
                   className="fa-solid fa-plus" 

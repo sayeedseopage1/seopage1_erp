@@ -507,3 +507,99 @@
 .sp1_st_write_comment_editor_attach:hover{ 
     background: rgb(0 0 0 / 10%);
 }
+
+
+
+
+
+// sub task
+
+.sp1-subtask-form {
+
+    &.--modal-panel{
+        width: 50vw;
+        height: 80vh;
+        overflow-y: auto;
+        background: #FAFAFC ;
+        border-radius: 16px;
+        padding: 16px; 
+        border: 1px solid var(--header_color);
+
+        &-header{
+            display: flex;
+            align-items: center;
+            padding-bottom: 16px;
+            justify-content: space-between;
+            border-bottom: 1px solid rgb(0 0 0 / 10%);
+
+            h6{margin: 0;}
+        }
+
+        &-body{
+            padding: auto 16px;
+        }
+    } 
+}
+
+
+.sp1-selection-display{
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 10px; 
+
+    i.fa-sort{
+        color: #d5d7da;
+    }
+}
+
+.sp1-selection-display-button{
+    background-color: transparent;
+    position: relative;
+    & > .__icon{
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translate(0, -50%);
+        color: rgba(138, 142, 146, 0.664)
+    }
+}
+
+.sp1-select-options{
+    background: #fff;
+    box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
+    border-radius: 4px;
+    overflow: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 450px;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.sp1-select-option{
+    padding: 10px;
+    cursor: default;
+    user-select: none;
+    color: #777;
+
+    &:hover{
+        background: rgb(24, 96, 240);
+        color: rgb(240, 245, 253);
+    }
+
+    &.active{
+        background: rgb(24, 96, 240);
+        color: rgb(240, 245, 253);
+    }
+}
+
+.sp1-select-option-nodata{ 
+    padding: 10px;
+    cursor: default;
+    user-select: none;
+    color: #777;
+}

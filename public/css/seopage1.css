@@ -461,6 +461,92 @@
   background: rgba(0, 0, 0, 0.1);
 }
 
+.sp1-subtask-form.--modal-panel {
+  width: 50vw;
+  height: 80vh;
+  overflow-y: auto;
+  background: #FAFAFC;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--header_color);
+}
+.sp1-subtask-form.--modal-panel-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 16px;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.sp1-subtask-form.--modal-panel-header h6 {
+  margin: 0;
+}
+.sp1-subtask-form.--modal-panel-body {
+  padding: auto 16px;
+}
+
+.sp1-selection-display {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 10px;
+}
+.sp1-selection-display i.fa-sort {
+  color: #d5d7da;
+}
+
+.sp1-selection-display-button {
+  background-color: transparent;
+  position: relative;
+}
+.sp1-selection-display-button > .__icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translate(0, -50%);
+  color: rgba(138, 142, 146, 0.664);
+}
+
+.sp1-select-options {
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 450px;
+  overflow-y: auto;
+  z-index: 1;
+}
+
+.sp1-select-option {
+  padding: 10px;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  color: #777;
+}
+.sp1-select-option:hover {
+  background: rgb(24, 96, 240);
+  color: rgb(240, 245, 253);
+}
+.sp1-select-option.active {
+  background: rgb(24, 96, 240);
+  color: rgb(240, 245, 253);
+}
+
+.sp1-select-option-nodata {
+  padding: 10px;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  color: #777;
+}
+
 @keyframes glice {
   0% {
     background-position: -200px 0;
