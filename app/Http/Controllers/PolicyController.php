@@ -19,7 +19,7 @@ class PolicyController extends AccountBaseController
         $this->pageTitle = 'Policy';
         $this->activeSettingMenu = 'policy';
         $this->middleware(function ($request, $next) {
-            abort_403(user()->permission('manage_company_setting') !== 'all');
+            //abort_403(user()->permission('manage_company_setting') !== 'all');
             return $next($request);
         });
     }
