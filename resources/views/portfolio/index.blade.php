@@ -180,7 +180,7 @@
                                                     <div class="row">
                                                         <div class="col-md-6 mb-3 mb-md-0">
                                                             <h5>Website Link:</h5>
-                                                            <span>{{$portfolio->portfolio_link}}</span>
+                                                            <span>{{$portfolio->actual_link}}</span>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <h5>Agree price:</h5>
@@ -259,7 +259,11 @@
                                                     </div>
                                                     <div class="mt-3">
                                                         <h5>Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot)</h5>
+                                                        @if($portfolio->description)
                                                         <span>{!! $portfolio->description !!}</span>
+                                                        @else
+                                                        <span>--</span>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </section>
