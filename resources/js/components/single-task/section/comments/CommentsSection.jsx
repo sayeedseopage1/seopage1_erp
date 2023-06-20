@@ -14,7 +14,10 @@ const CommentSection = () => {
   const closeAddCommentModal = () => setOpenAddCommentModal(false);
 
   return (
-   <div className='sp1_task_right_card mb-3'>
+   <div 
+      className='sp1_task_right_card mb-3'
+      style={{zIndex:modalIsOpen ? '99': '' }}
+   >
       <CommentModal 
         isOpen={modalIsOpen}
         toggleRef={modalToggleRef} 
@@ -24,7 +27,8 @@ const CommentSection = () => {
         aria-label='openCommentModalButton' 
         ref={setModalToggleRef} 
         className='sp1_task_right_dl_toggle'
-        onClick={toggleModalButton}
+        onClick={toggleModalButton} 
+        style={{zIndex:modalIsOpen ? '110': '' }}
       >
           <i className={`fa-solid fa-circle-chevron-${modalIsOpen ? 'right' : 'left'}`} style={{color: "#276fec"}} />
       </button>

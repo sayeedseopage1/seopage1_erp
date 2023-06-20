@@ -7,7 +7,8 @@ const Modal = ({ children, isOpen, className }) => {
     // generate random id for dropdown menu
     const id = React.useMemo(() => Math.random().toString(36).substr(2, 9), []);
     let DOM = document.getElementById(id);
-  
+
+    
     React.useEffect(() => {
         setIsBrowser(true);
         const el = document.createElement('div');

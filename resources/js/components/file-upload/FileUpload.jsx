@@ -3,11 +3,15 @@ import Modal from './Modal';
 import Button from './Button';
 import './file-upload.css';
 import UploadedFiles from './UploadedFiles';
+import { useClickAway } from 'react-use';
 
 const FileUpload = ({isOpen, close}) => {
+    const [uploadingModal, setUploadingModal] = React.useState(false);
+    const ref = React.useRef(null);
+    useClickAway(ref,close);
   return (
     <Modal className="upload-file-modal" isOpen={isOpen}>
-        <div className='__panel'>
+        <div ref={ref} className='__panel'>
             <div className="__navbar">
                 <h5>Uploads File</h5>
                 <Button onClick={close} className='ml-auto'>
@@ -32,6 +36,12 @@ const FileUpload = ({isOpen, close}) => {
                     <UploadedFiles title="Jun 13, 2023" />
                 </div>
 
+
+                {/* uploading Modal */}
+                <Modal isOpen={uploadingModal}>
+                    <div></div>
+                </Modal> 
+                {/* uploading modal edit */}
 
             </div>
         </div>

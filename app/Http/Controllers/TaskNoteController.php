@@ -6,6 +6,8 @@ use App\Helper\Reply;
 use App\Http\Requests\Tasks\StoreTaskNote;
 use App\Models\Task;
 use App\Models\TaskNote;
+use App\Models\TaskNoteFile;
+use App\Helper\Files;
 
 class TaskNoteController extends AccountBaseController
 {
@@ -31,23 +33,48 @@ class TaskNoteController extends AccountBaseController
         $task = Task::findOrFail($request->taskId);
         $taskUsers = $task->users->pluck('id')->toArray();
 
-        abort_403(!(
-            $this->addPermission == 'all'
+        abort_403(!($this->addPermission == 'all'
             || ($this->addPermission == 'added' && $task->added_by == user()->id)
             || ($this->addPermission == 'owned' && in_array(user()->id, $taskUsers))
             || ($this->addPermission == 'added' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id))
         ));
 
         $note = new TaskNote();
+        $note->title = $request->title;
         $note->note = str_replace('<p><br></p>', '', trim($request->note));
         $note->task_id = $request->taskId;
         $note->user_id = user()->id;
         $note->save();
+        if ($request->hasFile('file')) {
+
+            foreach ($request->file as $fileData) {
+                $file = new TaskNoteFile();
+                $file->task_id = $request->taskId;
+
+                $filename = Files::uploadLocalOrS3($fileData, TaskNoteFile::FILE_PATH . '/' . $request->taskId);
+
+                $file->user_id = $this->user->id;
+                $file->filename = $fileData->getClientOriginalName();
+                $file->hashname = $filename;
+                $file->size = $fileData->getSize();
+                $file->save();
+
+                $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
+            }
+        }
 
         $this->notes = TaskNote::where('task_id', $request->taskId)->orderBy('id', 'desc')->get();
-        $view = view('tasks.notes.show', $this->data)->render();
+        //$view = view('tasks.notes.show', $this->data)->render();
 
-        return Reply::dataOnly(['status' => 'success', 'view' => $view]);
+        return Reply::dataOnly([
+            'status' => 'success',
+            'message' => 'Note created successfully',
+            'note' => [ 
+                'note' => $note->note,
+                'id' => $note->id,
+                'title' => $note->title,
+            ]
+        ]);
     }
 
     /**
@@ -82,7 +109,6 @@ class TaskNoteController extends AccountBaseController
         abort_403(!($this->editTaskNotePermission == 'all' || ($this->editTaskNotePermission == 'added' && $this->note->added_by == user()->id)));
 
         return view('tasks.notes.edit', $this->data);
-
     }
 
     public function update(StoreTaskNote $request, $id)
@@ -99,7 +125,5 @@ class TaskNoteController extends AccountBaseController
         $view = view('tasks.notes.show', $this->data)->render();
 
         return Reply::dataOnly(['status' => 'success', 'view' => $view]);
-
     }
-
 }

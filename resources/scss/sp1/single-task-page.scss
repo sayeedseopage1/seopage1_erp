@@ -536,7 +536,10 @@
         }
 
         &-body{
-            padding: auto 16px;
+            padding-inline: 24px;
+            max-height: 70vh;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
     } 
 }
@@ -575,9 +578,9 @@
     top: 100%;
     left: 0;
     width: 100%;
-    max-height: 450px;
+    max-height: 350px;
     overflow-y: auto;
-    z-index: 1;
+    z-index: 2;
 }
 
 .sp1-select-option{
@@ -602,4 +605,104 @@
     cursor: default;
     user-select: none;
     color: #777;
+}
+
+.ck-editor__editable{
+    background: #fff; 
+}
+
+.sp1_sub-task-file-upload{
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(0 0 0 / 10%);
+    border-radius: 8px;
+    width: 120px;
+    height: 120px;
+    background-color: #fff;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: background .3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+
+    i.fa-cloud-arrow-up{
+        font-size: 2rem;
+        margin-bottom: 10px;
+        color: rgb(0 0 0 / 60%);
+    }
+
+    &:hover{
+        background: rgb(0 0 0 / 8%);
+        cursor: pointer;
+    }
+
+    & > .__remove--btn{
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        padding-inline: 6px;
+        background: rgb(255, 63, 29);
+        border: 0;
+        outline: 0;
+        opacity: 0;
+        transition: opacity .4s ease-in-out;
+
+        &:hover{ 
+            background: rgb(255, 38, 0);
+        }
+    }
+
+    &:hover > .__remove--btn{
+        opacity: 1;
+    }
+
+    & > input[type=file]{
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.uploaded-file-preview{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    -ms-flex-direction: column;
+    position: relative;
+    & > .__icon{
+        width: 40px;
+        height: 52px;
+        position: relative; 
+    }
+}
+
+.uploaded-file-ext{
+    display: block;
+    width: fit-content;
+    height: fit-content;
+    padding: 2px;
+    background: #fff;
+    position: absolute;
+    bottom: 5px ; 
+    left: 0;
+    transform-origin: 50% 50%;
+    font-weight: bold;
+    font-size: 18px;  
+}
+
+.cursor-processing{
+    cursor: progress !important;
+}
+
+.text-ellipsis{
+    overflow-x: hidden;
+    text-overflow:ellipsis !important;
 }

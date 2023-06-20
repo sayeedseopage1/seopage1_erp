@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SubTaskForm from './SubTaskForm';
 
 
-const SubTaskFormModal = ({toggleRef = null, isOpen}) => {
+const SubTaskFormModal = ({toggleRef = null,  isOpen, close, children}) => {
     const [modalRef, setModalRef] = React.useState(null); 
     const { styles, attributes } = usePopper(toggleRef, modalRef,{
         placement: 'left-start',
@@ -16,8 +16,12 @@ const SubTaskFormModal = ({toggleRef = null, isOpen}) => {
   return (
     <div 
         ref={setModalRef}
-        style={{...styles.popper, pointerEvents: isOpen ? 'all' : 'none'}}
-        {...attributes}
+        style={{
+            ...styles.popper,
+             pointerEvents: isOpen ? 'all' : 'none', 
+             zIndex: '99'
+        }}
+        {...attributes.popper}
     >   
     <AnimatePresence>
         {isOpen && (
@@ -27,7 +31,7 @@ const SubTaskFormModal = ({toggleRef = null, isOpen}) => {
                 exit={{opacity: 0}}
                 className=''
             >
-               <SubTaskForm /> 
+               {children}
             </motion.div>
         )}
     </AnimatePresence>

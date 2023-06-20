@@ -5,7 +5,6 @@ import { Listbox } from '@headlessui/react'
 
 const status = [
     "To Do",
-    "Completed"
 ]
 
 

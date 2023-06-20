@@ -6,13 +6,11 @@ import { Listbox } from '@headlessui/react'
 const priority = ["High", "Medium", "Low"]
 
 
-const PrioritySelection = () => {
-    const [selected, setSelected] = React.useState(priority[0]);
-
+const PrioritySelection = ({selected, setSelected}) => { 
     return(
         <Listbox value={selected} onChange={setSelected}>
             <div className="form-group position-relative my-3">
-                <label htmlFor=""> priority </label>
+                <label htmlFor=""> Priority </label>
                     <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">{selected}
                     
                     <div className='__icon'>

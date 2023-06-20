@@ -4,8 +4,7 @@ import SingleTask from './SingleTask';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import {store} from '../services/store';
-
-
+ 
 
 const container = document.getElementById("sp1SingleTaskPage");
 

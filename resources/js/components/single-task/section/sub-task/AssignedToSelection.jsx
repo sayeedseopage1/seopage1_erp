@@ -1,38 +1,36 @@
 import { Combobox } from '@headlessui/react'
 import * as React from 'react' 
 import _, { filter } from 'lodash';
+import { useParams } from 'react-router-dom';
+import { useGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
 
-const people = [
-    { id: 1, name: 'Durward Reynolds', unavailable: false },
-    { id: 2, name: 'Kenton Towne', unavailable: false },
-    { id: 3, name: 'Therese Wunsch', unavailable: false },
-    { id: 4, name: 'Benedict Kessler', unavailable: true },
-    { id: 5, name: 'Katelyn Rohan', unavailable: false },
-    { id: 6, name: 'Katelyn Rohan', unavailable: false },
-    { id: 7, name: 'Katelyn Rohan', unavailable: false },
-    { id: 8, name: 'Katelyn Rohan', unavailable: false },
-    { id: 9, name: 'Katelyn Rohan', unavailable: false },
-  ]
 
-const AssginedToSelection = () => {
-    const [taskCategory, setTaskCategory] = React.useState(null);
+const AssginedToSelection = ({selected, onSelect}) => {
     const [query, setQuery] = React.useState('');
+
+    const params = useParams(); 
+    const {
+        data:employees,
+        isFetching
+    } = useGetTaskDetailsQuery(`/${params?.taskId}/json?mode=employees`);
+ 
 
     const filteredData =
     query === ''
-      ? people
-      : people.filter((person) => {
-          return person.name.toLowerCase().includes(query.toLowerCase())
+      ? employees
+      : employees?.filter((employee) => {
+          return employee?.name.toLowerCase().includes(query.toLowerCase())
         })
 
   return (
-    <Combobox  value={taskCategory} onChange={setTaskCategory}>
+    <Combobox  value={selected} onChange={onSelect}>
         <div className="form-group position-relative my-3">
-            <label htmlFor="">Task category</label>
+            <label htmlFor="">Assigned To</label>
             <Combobox.Button className="d-flex align-items-center w-100 sp1-selection-display-button">
                 <Combobox.Input 
                     onChange={e => setQuery(e.target.value)} 
-                    displayValue={(value) => value?.name || '--'}
+                    placeholder='--'
+                    displayValue={(value) => value?.name || ''}
                     className="form-control height-35 f-14 sp1-selection-display w-100" 
                 />
                 <div className='__icon'>
@@ -46,27 +44,48 @@ const AssginedToSelection = () => {
                     <div className='sp1-select-option-nodata'>
                          Nothing found.
                     </div>
-                :filteredData.map((person, personIdx) => (
+                :filteredData?.map((employee) => (
                 <Combobox.Option
-                    key={personIdx}
+                    key={employee?.id}
                     className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
-                    value={person}
+                    value={employee}
                 >
                     {({ selected }) => (
-                        <>
+                        <div className="d-flex align-items-center" style={{gap: '10px'}}>
+                            <div 
+                                className="rounded-circle"
+                                style={{
+                                    width: '28px',
+                                    height: '28px',
+                                    overflow: 'hidden',
+                                }}
+                            >
+                                <img 
+                                    src={employee?.image_url} 
+                                    alt={employee?.name} 
+                                    width={100} 
+                                    height={100} 
+                                    className="rounded-circle"
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'fill'
+                                    }}
+                                />
+                            </div>
                             <span
                                 className={`block truncate ${
                                 selected ? 'font-medium' : 'font-normal'
                                 }`}
                             >
-                                {person.name}
+                                {employee?.name} <span className='badge badge-primary'>Open to Work</span> 
                             </span>
                             {selected ? (
-                                <span className="">
-                                
+                                <span className="ml-auto">
+                                    <i className="fa-solid fa-check"></i>
                                 </span>
                             ) : null}
-                        </>
+                        </div>
                     )}
                 </Combobox.Option>
             ))}

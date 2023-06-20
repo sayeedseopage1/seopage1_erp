@@ -1,7 +1,9 @@
-import React, {useState} from 'react' 
+import React, {useState} from 'react'
+import Modal from '../../components/Modal'
 import Button from '../../components/Button'
 import Input from '../../components/form/Input' 
-import TaskCategorySelectionBox from './TaskCategorySelectionBox' 
+import TaskCategorySelectionBox from './TaskCategorySelectionBox'
+import TaskObserverSelection from './TaskObserverSelection'
 import AssginedToSelection from './AssignedToSelection'
 import StatusSelection from './StatusSelection'
 import PrioritySelection from './PrioritySelection'
@@ -10,16 +12,16 @@ import CKEditorComponent from '../../../ckeditor'
 import UploadFilesInLine from '../../../file-upload/UploadFilesInLine'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import { useCreateSubtaskMutation, useGetTaskDetailsQuery} from '../../../services/api/SingleTaskPageApi'
-import { useParams } from 'react-router-dom'
- 
+import { useCreateSubtaskMutation, useDeleteUplaodedFileMutation, useEditSubtaskMutation, useGetTaskDetailsQuery, useLazyGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi'
+import { useLocation, useParams, useSearchParams } from 'react-router-dom'
+import SweetAlert from '../../../global/SweetAlert'
 import { useDispatch, useSelector } from 'react-redux'
-import { storeSubTasks } from '../../../services/features/subTaskSlice'
+import { storeSingleSubTask, storeSubTasks } from '../../../services/features/subTaskSlice'
 
 
 
 
-const SubTaskForm = ({close}) => {
+const  SubtTaskEditForm= ({close, editId}) => {
     const { task, subTask } = useSelector(s => s.subTask);
     const dispatch = useDispatch(); 
  
@@ -34,28 +36,67 @@ const SubTaskForm = ({close}) => {
   const [assignedTo, setAssignedTo] = useState('');
   const [taskObserver, setTaskObserver] = useState('');
   const [description, setDescription] = useState('');
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState('To Do');
   const [priority, setPriority] = useState('Medium');
   const [estimateTimeHour, setEstimateTimeHour ] = useState('');
-  const [estimateTimeMin, setEstimateTimeMin ] = useState('');
-  const [files, setFiles] = React.useState([]);
+  const [estimateTimeMin, setEstimateTimeMin ] = useState(''); 
+  const [attachedFiles, setAttachedFiles] = useState([]); 
+  const [files, setFiles] = React.useState([]); 
+
+    const params = useParams(); 
+
+const [
+    editSubtask,
+    { 
+        isLoading,
+        error, 
+    }
+] = useEditSubtaskMutation();
+
+const [
+    getTaskDetails, 
+    { data: edit, isFetching: editDataIsFetching}
+] = useLazyGetTaskDetailsQuery();
+
+
+// find edited subtask
+const editSubTask = subTask.find(d => d.id === editId);
+
+const { data: estimation, isFetching } = useGetTaskDetailsQuery(`/${params?.taskId}/json?mode=estimation_time`);
+
  
-const params = useParams(); 
-const [createSubtask, {isLoading,error,}] = useCreateSubtaskMutation();
-
-const {
-    data: estimation,
-    isFetching
-} = useGetTaskDetailsQuery(`/${params?.taskId}/json?mode=estimation_time`);
-
-
 const required_error = error?.status === 422 ? error?.data: null;
+
+
 // handle change
 React.useEffect(() => {
-    setMilestone(task?.milestone_title);
-    setProject(task?.project_name);
-    setParentTask(task?.heading);
-}, [task])
+    const formatedDate = (d) => {
+        return new Date(dayjs(d).format('MM-DD-YYYY'));
+    }
+    getTaskDetails(`/${editId}/json?mode=sub_task_edit`).unwrap().then(res => {
+        if(res){ 
+            const assigneeTo = res?.users?.[0]; 
+             
+            setTitle(res.heading);
+            setMilestone(res.milestone_title);
+            setParentTask(task?.heading);
+            setStateDate(formatedDate(res.start_date));
+            setDueDate(formatedDate(res.due_date)); 
+            setProject(res.project_name);
+            setTaskCategory(res.task_category);
+            setAssignedTo(assigneeTo ? {id: assigneeTo?.id, name: assigneeTo?.name}: ''); 
+            setDescription(res.description);
+            setPriority(_.startCase(res.priority));
+            setEstimateTimeHour(res.estimate_hours);
+            setEstimateTimeMin(res.estimate_minutes);
+            setAttachedFiles(res.files);
+        }
+    }).catch((err) => {
+        console.log(err)
+    } )
+}, [task, editId])
+
+ 
 
 // handle onchange
 const handleChange = (e, setState) =>{
@@ -85,30 +126,37 @@ const handleSubmit = (e) => {
     fd.append('estimate_hours', estimateTimeHour);
     fd.append('estimate_minutes', estimateTimeMin);
     fd.append('image_url', null);
-    fd.append('subTaskID', null);
+    fd.append('subTaskID', editSubTask?.subtask_id);
     fd.append('addedFiles', null); 
+    fd.append('_method', 'PUT');
     fd.append('_token', document.querySelector("meta[name='csrf-token']").getAttribute("content"));
     Array.from(files).forEach((file) => {
         fd.append('file[]', file);
     });
    
-    createSubtask(fd).unwrap().then(res => {
-            if(res?.status === 'success'){
-                console.log({subTask})
-                console.log(res)
-                let _subtask = [...subTask, {id: res?.sub_task?.id, title: res?.sub_task?.title}];
-                console.log(_subtask);
+    editSubtask({data: fd, id: editId}).unwrap().then(res => {
+        console.log({res})
+            if(res?.status === 'success'){ 
+                
+                 let _subtask = [...subTask];
+                 console.log({_subtask});
+                 _subtask = _subtask?.map(s => {
+                    if(Number(s?.id) === Number(res?.sub_task?.id)){
+                        return res?.sub_task 
+                    }else return s;
+                 })
                  
-                dispatch(storeSubTasks(_subtask)); 
-                close();
+                dispatch(storeSubTasks(_subtask));  
 
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
-                    title: res.message,
+                    title: res?.message,
                     showConfirmButton: false,
                     timer: 2500
                 }) 
+
+                close();
             }
     }).catch((err) => {
         if(err?.status === 422){
@@ -122,20 +170,36 @@ const handleSubmit = (e) => {
     })
 }
 
+// handle uplaoded file delete request
+const [deleteUplaodedFile] = useDeleteUplaodedFileMutation();
+const handleFileDelete = (e, file) => {
+    // delete
+    deleteUplaodedFile(file?.id).unwrap();
+   
+    // delete form ui
+    let previousFile = [...attachedFiles];
+    let index = previousFile?.indexOf(file);
+    previousFile.splice(index,1);
+    setAttachedFiles(previousFile);
+}
+
+
+// handle loading state
 React.useEffect(() => {
-    if (isLoading) {
+    if (isLoading || editDataIsFetching) {
         document.getElementsByTagName('body')[0].style.cursor = 'progress';
       } else {
         document.getElementsByTagName('body')[0].style.cursor = 'default';
       }
-}, [isLoading])
+}, [isLoading, editDataIsFetching])
 
+ 
 
 const handleEditorChange = (e, editor) => {
     const data = editor.getData();
     setDescription(data);
 } 
- 
+
 const estimateError= (err) =>{
     let errText = '';
     let hoursErr = err?.estimate_hours?.[0];
@@ -149,7 +213,19 @@ const estimateError= (err) =>{
     <> 
         <div className='sp1-subtask-form --modal-panel'>
             <div className='sp1-subtask-form --modal-panel-header'> 
-                <h6>Create Sub Task</h6> 
+                 <h6>
+                        Edit Sub Task
+                        {editDataIsFetching && <div 
+                            className="spinner-border text-dark ml-2" 
+                            role="status"
+                            style={{
+                                width: '16px',
+                                height: '16px',
+                                border: '0.14em solid rgba(0, 0, 0, .25)',
+                                borderRightColor: 'transparent' 
+                            }}
+                        />}
+                </h6>  
                 <Button
                     aria-label="close-modal"
                     className='_close-modal'
@@ -159,7 +235,17 @@ const estimateError= (err) =>{
                 </Button> 
             </div>
 
-            <div className="sp1-subtask-form --modal-panel-body">
+            <div className="sp1-subtask-form --modal-panel-body position-relative">
+                {editDataIsFetching && 
+                    <div className='w-100' style={{
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        zIndex: 1
+                    }}/>
+                }
                 <div className='sp1-subtask-form --form row'>
                     <div className="col-6">
                         <Input 
@@ -169,7 +255,7 @@ const estimateError= (err) =>{
                             placeholder='Enter a task title'
                             name='title'
                             required={true}
-                            value={title} 
+                            value={title}
                             error= {required_error?.title?.[0]}
                             onChange={e => handleChange(e, setTitle)}
                         />
@@ -300,14 +386,19 @@ const estimateError= (err) =>{
                         <div className="form-group my-3">
                             <label htmlFor=""> Description </label>
                             <div className='sp1_st_write_comment_editor' style={{minHeight: '100px'}}>
-                                <CKEditorComponent onChange={handleEditorChange} />
+                                <CKEditorComponent data={description} onChange={handleEditorChange} />
                             </div>
                         </div>
                     </div>
 
 
                     <div className='col-12'>
-                        <UploadFilesInLine files={files} setFiles={setFiles} />
+                        <UploadFilesInLine 
+                            onPreviousFileDelete={handleFileDelete} 
+                            previous={attachedFiles} 
+                            files={files} 
+                            setFiles={setFiles} 
+                        />
                     </div>
 
                     <div className="col-12 mt-3">
@@ -324,7 +415,7 @@ const estimateError= (err) =>{
                             {!isLoading ? (
                                 <Button onClick={handleSubmit}>
                                     <i className="fa-regular fa-paper-plane"></i>
-                                    Create
+                                    Update
                                 </Button>
                             ) : (
                             <Button className='cursor-processing'>
@@ -349,4 +440,4 @@ const estimateError= (err) =>{
   )
 }
 
-export default SubTaskForm
+export default SubtTaskEditForm

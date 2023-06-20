@@ -9,7 +9,9 @@ const Input = ({
     labelClass='', 
     type='text', 
     value, 
+    defaultValue,
     onChange, 
+    error,
     ...rest 
 }) => {
   return (
@@ -28,10 +30,13 @@ const Input = ({
             placeholder={placeholder}
             id={id}
             value={value}
+            defaultValue={defaultValue}
             onChange={onChange}
-            readOnly={readOnly}
+            readOnly={readOnly} 
             {...rest}
         />
+
+        {error? <div className='' style={{color: 'red'}}> {error} </div> : null}
     </div>
   )
 }

@@ -28,7 +28,7 @@ const TaskObserverSelection = () => {
   return (
     <Combobox  value={taskCategory} onChange={setTaskCategory}>
         <div className="form-group position-relative my-3">
-            <label htmlFor="">Task category</label>
+            <label htmlFor="">Task Observer</label>
             <Combobox.Button className="d-flex align-items-center w-100 sp1-selection-display-button">
                 <Combobox.Input 
                     onChange={e => setQuery(e.target.value)} 

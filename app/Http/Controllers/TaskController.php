@@ -57,6 +57,7 @@ use App\Models\ProjectDeliverable;
 use function _PHPStan_7d6f0f6a4\React\Promise\all;
 use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
+use App\Models\TaskNote;
 use Toaster;
 
 use function Symfony\Component\Cache\Traits\role;
@@ -1624,14 +1625,120 @@ class TaskController extends AccountBaseController
             return response()->json($task);
         } elseif ($request->mode == 'sub_task') {
             $sub_tasks = SubTask::select(['id', 'title'])->where('task_id', $id)->get();
-
+            $array = [];
             foreach ($sub_tasks as $value) {
-                $value->title = \Str::limit($value->title, 30, '...');
-                $value->edit_url = route('tasks.edit', $value->id);
-                $value->show_url = route('tasks.show', $value->id);
+                $task = Task::where('subtask_id', $value->id)->first();
+
+                array_push($array, [
+                    'id' => $task->id,
+                    'title' => $task->heading,
+                    //'edit_url' => route('tasks.edit', $task->id),
+                    //'show_url' => route('tasks.edit', $task->id),
+                    'subtask_id' => $value->id,
+                ]);
             }
 
-            return response()->json($sub_tasks);
+            return response()->json($array);
+        } elseif ($request->mode == 'category') {
+            $data = TaskCategory::all();
+            return response()->json($data);
+        } elseif ($request->mode == 'employees') {
+            $data = User::where('role_id', 5)->get()->map(function ($row) {
+                return [
+                    'id' => $row->id,
+                    'name' => $row->name,
+                    'image_url' => $row->image_url
+                ];
+            });
+            return response()->json($data);
+        } elseif ($request->mode == 'estimation_time') {
+            $task  = Task::find($id);
+            $project = Project::find($task->project_id);
+            $task_estimation_hours = Task::where('project_id', $project->id)->where('subtask_id', null)->sum('estimate_hours');
+            $task_estimation_minutes = Task::where('project_id', $project->id)->where('subtask_id', null)->sum('estimate_minutes');
+            $toal_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+            $left_minutes = $project->hours_allocated * 60 - $toal_task_estimation_minutes;
+
+            $left_in_hours = round($left_minutes / 60, 0);
+            $left_in_minutes = $left_minutes % 60;
+
+            return response()->json([
+                'hours_left' => $left_in_hours,
+                'minutes_left' => $left_in_minutes
+            ]);
+        } elseif ($request->mode == 'sub_task_edit') {
+            $task = Task::with('users', 'createBy', 'boardColumn', 'category', 'files')->select([
+                'tasks.*',
+
+                'sub_tasks.id as subtask_id',
+                'sub_tasks.title as subtask_title',
+
+                'projects.id as project_id',
+                'projects.project_name',
+                'projects.project_summary',
+
+                'project_milestones.id as milestone_id',
+                'project_milestones.milestone_title',
+
+                DB::raw('IFNULL(sub_tasks.id, false) as has_subtask'),
+            ])
+                ->join('projects', 'tasks.project_id', 'projects.id')
+                ->leftJoin('sub_tasks', 'tasks.id', 'sub_tasks.task_id')
+                ->join('project_milestones', 'tasks.milestone_id', 'project_milestones.id')
+                ->where('tasks.id', $id)
+                ->first();
+
+            $totalMinutes = $task->timeLogged->sum('total_minutes') - ProjectTimeLogBreak::taskBreakMinutes($task->id);
+            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
+
+            if ($totalMinutes % 60 > 0) {
+                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
+            }
+
+            $task->parent_task_time_log = $timeLog;
+            $task->task_category = $task->category;
+
+            if ($task->has_subtask != 0) {
+                $task->subtask = Subtask::select([
+                    'id', 'title'
+                ])->where('task_id', $task->id)->get();
+
+                $tas_id = Task::where('id', $task->id)->first();
+                $subtasks = Subtask::where('task_id', $tas_id->id)->get();
+                $subtask_count = Subtask::where('task_id', $tas_id->id)->count();
+                // dd($subtasks);
+                $time = 0;
+
+                foreach ($subtasks as $subtask) {
+                    $stask = Task::where('subtask_id', $subtask->id)->first();
+                    $time += $stask->timeLogged->sum('total_minutes');
+                }
+                $timeL = intdiv($time, 60) . ' ' . __('app.hrs') . ' ';
+
+                if ($time % 60 > 0) {
+                    $timeL .= $time % 60 . ' ' . __('app.mins');
+                }
+                if ($subtasks != null) {
+                    $timeLo = intdiv($time + $totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
+
+                    if ($time % 60 > 0) {
+                        $timeLo .= ($time + $totalMinutes) % 60 . ' ' . __('app.mins');
+                    }
+
+                    $task->timeLog = $timeLo;
+                    $task->sub_task_time_log = $timeL;
+                }
+            } 
+            return response()->json($task);
+        } elseif ($request->mode == 'task_note') {
+            $data = TaskNote::where('task_id', $id)->get()->map(function ($row) {
+                return [
+                    'id' => $row->id,
+                    'note' => $row->note,
+                    'title' => $row->title,
+                ];
+            });
+            return response()->json($data);
         }
     }
 }

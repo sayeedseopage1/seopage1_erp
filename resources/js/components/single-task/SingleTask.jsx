@@ -14,14 +14,26 @@ import { useParams } from 'react-router-dom'
 import { useGetTaskDetailsQuery } from '../services/api/SingleTaskPageApi'
 import _ from 'lodash'
 import dayjs from 'dayjs'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { storeTask } from '../services/features/subTaskSlice'
+
  
  
 const SingleTask = () => {
+  const { task } = useSelector(s => s.subTask);
+  const dispatch = useDispatch();
   const params = useParams(); 
   const {
-    data:task,
+    data,
     isFetching
   } = useGetTaskDetailsQuery(`/${params?.taskId}/json?mode=basic`);
+
+  useEffect(() => {
+    if(data){
+        dispatch(storeTask(data));
+    }
+  }, [data])
  
 
 
@@ -345,7 +357,7 @@ const SingleTask = () => {
                             
                 {/* comments */}
                 <CommentSection />
-                <SubTaskSection />
+                <SubTaskSection  />
                 <NoteSection />
                 <SubmittedWork />
                 <TimeLogSection />
