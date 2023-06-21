@@ -153,6 +153,9 @@
   border-style: dashed;
 }
 
+.sp1_tark_right_item {
+  font-size: 13px;
+}
 .sp1_tark_right_item a {
   color: #777;
 }
@@ -464,7 +467,7 @@
 .sp1-subtask-form.--modal-panel {
   width: 50vw;
   height: 80vh;
-  overflow-y: auto;
+  overflow-y: hidden;
   background: #FAFAFC;
   border-radius: 16px;
   padding: 16px;
@@ -642,6 +645,39 @@
 .text-ellipsis {
   overflow-x: hidden;
   text-overflow: ellipsis !important;
+}
+
+.sp1_subtask_log-tbl {
+  width: 100%;
+  border-collapse: collapse;
+}
+.sp1_subtask_log-tbl th {
+  padding: 10px;
+}
+.sp1_subtask_log-tbl > thead.__thead {
+  background-color: rgba(29, 112, 236, 0.1);
+}
+.sp1_subtask_log-tbl td {
+  padding: 4px 10px;
+}
+.sp1_subtask_log-tbl > tbody.__tbody tr.__tbody_tr td.__tbody_td {
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+.sp1_subtask_log-tbl td._tbody_td_employee > img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+.sp1_subtask_log-tbl td {
+  font-size: 14px;
+}
+
+.sp1_time_log_emplyee_name {
+  width: 100%;
+  max-width: 150px;
+  white-space: pre-wrap;
+  line-break: strict;
+  display: block;
 }
 
 @keyframes glice {

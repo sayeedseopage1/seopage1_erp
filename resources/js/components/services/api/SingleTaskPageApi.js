@@ -48,6 +48,20 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 formData: true
             })
         }),
+
+        deleteNoteUploadedFile: build.mutation({
+            query: id => `/account/task/${id}/json?mode=task_note_file_delete`,
+            method: "GET",
+        }),
+
+        updateNote: build.mutation({
+            query: ({data, id}) => ({
+                url: `/account/tasks/task-note/${id}`,
+                method: 'POST',
+                body: data,
+                formData: true 
+            })
+        })
     })
 }) ;
 
@@ -58,5 +72,7 @@ export const {
     useCreateSubtaskMutation,
     useDeleteUplaodedFileMutation,
     useEditSubtaskMutation,
-    useCrateNoteMutation
+    useCrateNoteMutation,
+    useDeleteNoteUploadedFileMutation,
+    useUpdateNoteMutation
 } = singleTaskPageApiSlice;

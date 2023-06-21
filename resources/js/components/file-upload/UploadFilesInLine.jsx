@@ -49,8 +49,6 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles}) =>
       let name = _file?.name; 
       filename = name?.slice(0, 3) + '...' + name?.slice(name.length - 10, name?.length); 
       file = {..._file}
-      
-      console.log({_file})
     }
     
 

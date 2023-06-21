@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     task: [],
     subTask: [],
-    notes: []
+    notes: [],
+    timeLogs: [],
 }
 
 const subTaskSlice = createSlice({
@@ -24,9 +25,13 @@ const subTaskSlice = createSlice({
 
         storeNotes: (state, action) => {
             state.notes = [...action.payload].sort((a,b) => b.id - a.id)
+        },
+
+        storeTimeLogs: (state, action) => {
+            state.timeLogs = [...action.payload].sort((a,b) => b.id - a.id);
         }
     }
 })
 
-export const {storeTask, storeSingleSubTask, storeSubTasks, storeNotes} = subTaskSlice.actions;
+export const {storeTask, storeSingleSubTask, storeSubTasks, storeNotes, storeTimeLogs} = subTaskSlice.actions;
 export default subTaskSlice.reducer;

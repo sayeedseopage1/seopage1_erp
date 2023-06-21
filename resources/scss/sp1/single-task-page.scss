@@ -157,6 +157,7 @@
 
         .sp1_tark_right_item{ 
             a{color: #777;}
+            font-size: 13px;
         }
 
     
@@ -519,7 +520,7 @@
     &.--modal-panel{
         width: 50vw;
         height: 80vh;
-        overflow-y: auto;
+        overflow-y: hidden;
         background: #FAFAFC ;
         border-radius: 16px;
         padding: 16px; 
@@ -705,4 +706,49 @@
 .text-ellipsis{
     overflow-x: hidden;
     text-overflow:ellipsis !important;
+}
+
+
+// time log
+.sp1_subtask_log-tbl{
+    width: 100%;
+    border-collapse: collapse;
+
+    th{
+        padding: 10px;
+    }
+
+    & > thead.__thead{
+        background-color: rgba(29, 112, 236, 0.1);
+    }
+
+    td{
+        padding: 4px 10px;
+    }
+
+    & > tbody.__tbody tr.__tbody_tr td.__tbody_td{
+        border-bottom: 1px dashed rgb(0 0 0 / 10%);
+    }
+
+
+
+    & td._tbody_td_employee{
+        & > img{
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+    }
+
+    & td{
+        font-size: 14px; 
+    }
+}
+
+.sp1_time_log_emplyee_name{
+    width: 100%;
+    max-width: 150px;
+    white-space: pre-wrap;
+    line-break: strict;
+    display: block;
 }

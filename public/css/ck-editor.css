@@ -535,12 +535,16 @@
 }
 .sp1_ck_content ul {
   margin-left: 40px !important;
+  list-style: unset !important;
 }
 .sp1_ck_content li {
   list-style: unset !important;
 }
 .sp1_ck_content p {
   margin-bottom: 3px !important;
+}
+.sp1_ck_content h1 {
+  font-size: 2rem !important;
 }
 
 /*# sourceMappingURL=ck-editor.css.map*/

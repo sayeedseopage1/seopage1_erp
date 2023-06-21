@@ -4,7 +4,7 @@ import SubTaskForm from './SubTaskForm';
 import Button from '../../components/Button';
 import SubTaskFormModal from './SubTaskFormModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { useGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
+import { useGetTaskDetailsQuery, useLazyGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
 import { useNavigate } from 'react-router-dom';
 import { storeSubTasks } from '../../../services/features/subTaskSlice';
 import SubtTaskEditForm from './SubTaskEditForm';
@@ -46,18 +46,40 @@ const SubTaskSection = () => {
   }
 
   // edit modal form control end
-  const {
-    data,
-    isFetching
-  } = useGetTaskDetailsQuery(`/${task?.id}/json?mode=sub_task`, {
+  // const {
+  //   data,
+  //   isFetching
+  // } = useGetTaskDetailsQuery(`/${task?.id}/json?mode=sub_task`, {
+  //   skip: subTask?.length
+  // });
+
+  // fetch all task 
+  const [getTaskDetails, {isFetching}] = useLazyGetTaskDetailsQuery('', {
     skip: subTask?.length
-  });
+  })
+
+  
+  // if task notes fetch completed store data into redux store
+  React.useEffect(()=> {
+    if(task && task.id){
+      getTaskDetails(`/${task?.id}/json?mode=sub_task`)
+      .unwrap()
+      .then(res => {
+        if(res){
+          dispatch(storeSubTasks(res));
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    } 
+  }, [task]);
    
-  React.useEffect(() => {
-    if(!isFetching && data){
-      dispatch(storeSubTasks(data)); 
-    }
-  },[data])
+  // React.useEffect(() => {
+  //   if(!isFetching && data){
+  //     dispatch(storeSubTasks(data)); 
+  //   }
+  // },[data])
  
   return (
     <div className='sp1_task_right_card mb-3' style={{zIndex: isTaskModalOpen? '99' : ''}}>  
@@ -77,6 +99,8 @@ const SubTaskSection = () => {
       </CustomModal>
 
       {/* left dropdown */}
+      
+      {isTaskModalOpen && 
         <button 
           aria-label='openCommentModalButton'  
           ref={setSubtaskModalToggleRef}
@@ -86,6 +110,7 @@ const SubTaskSection = () => {
         >
             <i className={`fa-solid fa-circle-chevron-${isTaskModalOpen ? 'right' : 'left'}`} style={{color: "#276fec"}} />
         </button>
+      }
       {/* left dropdown */}
 
        <div className='d-flex border-bottom pb-2 align-items-center justify-content-between mb-2 font-weight-bold'>
@@ -102,20 +127,20 @@ const SubTaskSection = () => {
                     }}
                 />}
           </div> 
-          <Button
-              variant='tertiary'
-              className="sp1_tark_add_item" 
-              aria-label="addButton"
-              onClick={toggleAddButton}
-          > 
-             {isTaskModalOpen ? (
-                <> <i className="fa-solid fa-xmark" style= {{fontSize: '12px'}}/> Close </> 
-                ) :
-                (
-                  <> <i className="fa-solid fa-plus"  style= {{fontSize: '12px'}} /> Sub Task  </>
-                )
-              } 
-          </Button>
+              <Button
+                  variant='tertiary'
+                  className="sp1_tark_add_item" 
+                  aria-label="addButton"
+                  onClick={toggleAddButton}
+              > 
+                  {isTaskModalOpen ? (
+                    <> <i className="fa-solid fa-xmark" style= {{fontSize: '12px'}}/> Close </> 
+                    ) :
+                    (
+                      <> <i className="fa-solid fa-plus"  style= {{fontSize: '12px'}} /> Sub Task  </>
+                    )
+                  } 
+              </Button>
         </div>
 
         <div className="sp1_task_right_card--body">

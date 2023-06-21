@@ -50,7 +50,7 @@ class TaskNoteController extends AccountBaseController
             foreach ($request->file as $fileData) {
                 $file = new TaskNoteFile();
                 $file->task_id = $request->taskId;
-
+                $file->task_note_id = $note->id;
                 $filename = Files::uploadLocalOrS3($fileData, TaskNoteFile::FILE_PATH . '/' . $request->taskId);
 
                 $file->user_id = $this->user->id;
@@ -117,13 +117,39 @@ class TaskNoteController extends AccountBaseController
         $this->editTaskNotePermission = user()->permission('edit_task_notes');
 
         abort_403(!($this->editTaskNotePermission == 'all' || ($this->editTaskNotePermission == 'added' && $note->added_by == user()->id)));
-
+        $note->title = $request->title;
         $note->note = str_replace('<p><br></p>', '', trim($request->note));
         $note->save();
+        $task = Task::findOrFail($request->taskId);
+        if ($request->hasFile('file')) {
+
+            foreach ($request->file as $fileData) {
+                $file = new TaskNoteFile();
+                $file->task_id = $id;
+                $file->task_note_id = $note->id;
+                $filename = Files::uploadLocalOrS3($fileData, TaskNoteFile::FILE_PATH . '/' . $id);
+
+                $file->user_id = $this->user->id;
+                $file->filename = $fileData->getClientOriginalName();
+                $file->hashname = $filename;
+                $file->size = $fileData->getSize();
+                $file->save();
+
+                $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
+            }
+        }
 
         $this->notes = TaskNote::with('task')->where('task_id', $note->task_id)->orderBy('id', 'desc')->get();
-        $view = view('tasks.notes.show', $this->data)->render();
+        //$view = view('tasks.notes.show', $this->data)->render();
 
-        return Reply::dataOnly(['status' => 'success', 'view' => $view]);
+        return Reply::dataOnly([
+            'status' => 'success',
+            'message' => 'Note updated successfull',
+            'note' => [
+                'note' => $note->note,
+                'id' => $note->id,
+                'title' => $note->title,
+            ]
+        ]);
     }
 }

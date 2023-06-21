@@ -3,30 +3,70 @@ import Button from '../../components/Button'
 import _ from 'lodash'
 import CKEditorComponent from '../../../ckeditor'
 import UploadFilesInLine from '../../../file-upload/UploadFilesInLine'
-import { useCrateNoteMutation } from '../../../services/api/SingleTaskPageApi'
+import { useCrateNoteMutation, useDeleteNoteUploadedFileMutation, useGetTaskDetailsQuery, useUpdateNoteMutation } from '../../../services/api/SingleTaskPageApi'
 import { useDispatch, useSelector } from 'react-redux'
 import { storeNotes } from '../../../services/features/subTaskSlice'
 import Input from '../../components/form/Input'
-import CustomModal from '../../components/CustomModal'
+import { useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import CustomModal from '../../components/CustomModal' 
 
-const CreateNote = ({isOpen, close,toggleRef}) => {
+const EditNote = ({isOpen, close, toggleRef}) => {
   const {task, notes} = useSelector(s => s.subTask); 
   const [files, setFiles] = React.useState([]);
   const [title, setTitle] = React.useState('');
   const [errTitle, setErrTitle] = React.useState(null);
   const [note,setNote] = React.useState('');
+  const [attachedFiles, setAttachedFiles] = React.useState([]);
   const dispatch = useDispatch();
 
+  const [searchParams] = useSearchParams();
+  const noteId = searchParams.get('note');
+  const type = searchParams.get('type');
 
- const [crateNote, {isLoading}] = useCrateNoteMutation();
 
-  // handle onchange
+
+   const [updateNote, {isLoading}] = useUpdateNoteMutation();
+
+  // fetch all task 
+  const {data, isFetching} = useGetTaskDetailsQuery(`/${noteId}/json?mode=task_note_edit`, {
+    skip: type ? (type !== 'edit' || !noteId) : true,
+    refetchOnMountOrArgChange: true
+  }) 
+
+
+
+
+  useEffect(() => {
+    clearField();
+    if(!isFetching && data){ 
+        setTitle(data?.title);
+        setNote(data?.note);
+        setAttachedFiles(data?.files || []);
+    }
+  }, [data, noteId, isFetching]);
+
+  const clearField = () => {
+    setTitle('');
+    setNote('');
+    setAttachedFiles([]);
+  }
+
+  const handleClose = () => {
+    clearField();
+    close();
+  }
+
+
+ // handle onchange
 const handleChange = (e, setState) =>{
     e.preventDefault();
     let value = e.target.value;
     setState(value);
 }
 
+
+// handle submittion
   const handleSubmit = e => { 
     e.preventDefault();
     if(!title){
@@ -38,26 +78,32 @@ const handleChange = (e, setState) =>{
     fd.append('note', note);
     fd.append('taskId', task?.id);
     fd.append('_token', document.querySelector("meta[name='csrf-token']").getAttribute("content"));
+    fd.append('_method', 'PUT');
     Array.from(files).forEach((file) => {
         fd.append('file[]', file);
     });
 
     
-    crateNote(fd).unwrap().then(res => {
-            if(res?.status === 'success'){
+    updateNote({data: fd, id: noteId}).unwrap().then(res => { 
+            if(res?.status === 'success'){  
                 let _notes = [...notes];
-                _notes.push(res?.note);
-                dispatch(storeNotes(_notes));
-
+                _notes = _notes?.map(note => {
+                    if(Number(note?.id) === Number(res?.note?.id)){
+                        return res?.note;
+                    }else return note
+                })
+  
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
-                    title: "Data has been stored Successfully",
+                    title: res?.message,
                     showConfirmButton: false,
                     timer: 2500
                 }) 
 
-                close();
+                dispatch(storeNotes(_notes)); 
+
+                handleClose();
             }
     }).catch((err) => {
         console.log(err)
@@ -66,26 +112,77 @@ const handleChange = (e, setState) =>{
   }
 
 
+  // handle editor
   const handleEditorChange = (e, editor) => {
     const data = editor.getData();
     setNote(data);
   }  
 
+  // handle loading state
+React.useEffect(() => { 
+    if (isLoading || isFetching) {
+        document.getElementsByTagName('body')[0].style.cursor = 'progress';
+      } else {
+        document.getElementsByTagName('body')[0].style.cursor = 'default';
+      }
+}, [isLoading, isFetching])
+
+
+
+
+  // handle uplaoded file delete request
+const [deleteNoteUploadedFile] = useDeleteNoteUploadedFileMutation();
+
+const handleFileDelete = (e, file) => { 
+    // delete
+    deleteNoteUploadedFile(file?.id).unwrap();
+   
+    // delete form ui
+    let previousFile = [...attachedFiles];
+    let index = previousFile?.indexOf(file);
+    previousFile.splice(index,1);
+    setAttachedFiles(previousFile);
+}
+
   return (
-    <CustomModal isOpen={isOpen} toggleRef={toggleRef}> 
+    <CustomModal 
+        isOpen={isOpen} 
+        toggleRef={toggleRef}
+    > 
         <div className='sp1-subtask-form --modal-panel'>
             <div className='sp1-subtask-form --modal-panel-header'> 
-                 <h6>Write Notes</h6> 
+                 <h6>Update Notes
+                        {isFetching && <div 
+                            className="spinner-border text-dark ml-2" 
+                            role="status"
+                            style={{
+                                width: '16px',
+                                height: '16px',
+                                border: '0.14em solid rgba(0, 0, 0, .25)',
+                                borderRightColor: 'transparent' 
+                            }}
+                        />}
+                  </h6> 
                 <Button
                     aria-label="close-modal"
                     className='_close-modal'
-                    onClick={close}
+                    onClick={handleClose}
                 >
                     <i className="fa-solid fa-xmark" />
                 </Button> 
             </div>
 
             <div className="sp1-subtask-form --modal-panel-body">
+                {isFetching && 
+                    <div className='w-100' style={{
+                        width: '100%',
+                        height: '100%',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        zIndex: 1
+                    }}/>
+                }
                 <div className='py-3'>
                     <Input 
                         id='title'
@@ -99,9 +196,9 @@ const handleChange = (e, setState) =>{
                         onChange={e => handleChange(e, setTitle)}
                     />
 
-                    <div className='sp1_st_write_comment_editor' style={{minHeight: '100px'}}>
+                    <div className='sp1_st_write_comment_editor pr-0' style={{minHeight: '100px'}}>
                         <h6 className='mb-3 f-14' style={{color:'#777'}}>Write Note</h6>
-                        <CKEditorComponent onChange={handleEditorChange}/>
+                        <CKEditorComponent data={note} onChange={handleEditorChange}/>
                     </div>
 
                     <div className='mt-3'>
@@ -109,6 +206,8 @@ const handleChange = (e, setState) =>{
                         <UploadFilesInLine  
                             files={files} 
                             setFiles={setFiles} 
+                            previous={attachedFiles}
+                            onPreviousFileDelete={handleFileDelete}
                         />
                     </div>
 
@@ -118,7 +217,7 @@ const handleChange = (e, setState) =>{
                                 <Button
                                     variant='secondary'
                                     className='mr-2'
-                                    onClick={close}
+                                    onClick={handleClose}
                                 > 
                                     Cancel
                                 </Button> 
@@ -126,7 +225,7 @@ const handleChange = (e, setState) =>{
                                 {!isLoading ? (
                                     <Button onClick={handleSubmit}>
                                         <i className="fa-regular fa-paper-plane"></i>
-                                        Keep as Notes
+                                        Update
                                     </Button>
                                 ) : (
                                 <Button className='cursor-processing'>
@@ -151,4 +250,4 @@ const handleChange = (e, setState) =>{
   )
 }
 
-export default CreateNote 
+export default EditNote;

@@ -37,7 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class TaskNote extends BaseModel
 {
 
-    protected $with = ['user'];
+    protected $with = ['user', 'files'];
 
     public function user(): BelongsTo
     {
@@ -49,4 +49,8 @@ class TaskNote extends BaseModel
         return $this->belongsTo(Task::class, 'task_id');
     }
 
+    public function files()
+    {
+        return $this->hasMany(TaskNoteFile::class, 'task_note_id');
+    }
 }

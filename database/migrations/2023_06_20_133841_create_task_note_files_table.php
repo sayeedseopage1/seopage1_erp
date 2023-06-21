@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('task_id');
+            $table->integer('task_note_id');
             $table->string('filename');
             $table->text('description')->nullable();
             $table->string('google_url')->nullable();

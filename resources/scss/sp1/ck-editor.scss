@@ -466,7 +466,11 @@
 
 
 .sp1_ck_content{
-    ul{margin-left: 40px !important;}
+    ul{
+        margin-left: 40px !important;
+        list-style: unset !important;
+    }
     li{list-style: unset !important;}
     p{margin-bottom: 3px !important;}
+    h1{font-size: 2rem !important;}
 }

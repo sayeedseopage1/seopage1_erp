@@ -58,13 +58,12 @@ use function _PHPStan_7d6f0f6a4\React\Promise\all;
 use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
 use App\Models\TaskNote;
+use App\Models\TaskNoteFile;
+use App\Models\ProjectTimeLog;
 use Toaster;
-
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
-
 use Validator;
-
 
 class TaskController extends AccountBaseController
 {
@@ -1738,6 +1737,41 @@ class TaskController extends AccountBaseController
                     'title' => $row->title,
                 ];
             });
+            return response()->json($data);
+        } elseif ($request->mode == 'task_note_edit') {
+            $data = TaskNote::find($id);
+            return response()->json($data);
+        } elseif ($request->mode == 'task_note_file_delete') {
+            $data = TaskNoteFile::find($id);
+            if ($data) {
+                if ($data->delete()) {
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'Task note file deleted successfully'
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Failed to delete task note file'
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Task note file not found' ]);
+            }
+        } elseif ($request->mode == 'task_time_log') {
+            $data = ProjectTimeLog::with('user')->where('task_id', $id)->get();
+            $data->transform(function ($item) {
+                $totalHours = floor($item->total_minutes / 60);
+                $totalMinutes = $item->total_minutes % 60;
+
+                $formattedTime = sprintf('%d Hrs %d Min', $totalHours, $totalMinutes);
+                $item->hours_logged = $formattedTime;
+
+                return $item;
+            });
+
             return response()->json($data);
         }
     }

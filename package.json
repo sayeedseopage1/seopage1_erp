@@ -54,6 +54,7 @@
         "quill-emoji": "^0.1.8",
         "react": "^18.2.0",
         "react-chartjs-2": "^5.2.0",
+        "react-content-loader": "^6.2.1",
         "react-custom-scrollbars-2": "^4.5.0",
         "react-data-export": "^0.6.0",
         "react-datepicker": "^4.11.0",
