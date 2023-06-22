@@ -34,7 +34,7 @@ class PolicyController extends AccountBaseController
         $this->kpi_setting_generate_sale = kpiSettingGenerateSale::where('kpi_id', $this->kpi->id)->first();
         $this->kpi_setting_logged_hour = kpiSettingLoggedHour::where('kpi_id', $this->kpi->id)->first();
         $this->incentive_setting = IncentiveSetting::where('start_month', $this->kpi->start_month)->first();
-        
+
         $this->next_month_kpi = kpiSetting::select('id', 'start_month')->where([
             'kpi_status' => '2',
             'cron_status' => '0'
@@ -43,7 +43,7 @@ class PolicyController extends AccountBaseController
             'cron_status' => '1'
         ])->get();
 
-        return view('policy.index',$this->data);
+        return view('policy.index', $this->data);
     }
 
     /**
@@ -128,7 +128,7 @@ class PolicyController extends AccountBaseController
         $this->kpi_logged_hours = kpiSettingLoggedHour::where('kpi_id', $this->kpi->id)->get();
 
         $this->pageTitle = 'Next Month Policy';
-        return view('policy.next_month_policy',$this->data);
+        return view('policy.next_month_policy', $this->data);
     }
 
     public function show_month_policy($id)
@@ -147,6 +147,6 @@ class PolicyController extends AccountBaseController
             //'cron_status' => '0',
             'start_month' => $this->kpi->start_month
         ])->latest()->first();
-        return view('policy.next_month_index',$this->data);
+        return view('policy.next_month_index', $this->data);
     }
 }

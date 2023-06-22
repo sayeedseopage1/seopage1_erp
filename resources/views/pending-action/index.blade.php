@@ -35,7 +35,7 @@
                         <i class="bi bi-search" ></i>
                     </div>
                 </div>
-                <input type="text" class="form-control border-left-0 sp1_pa_search" id="search-input" value="{{ request()->query('search') }}" placeholder="Search Project what you need" style="background: #F7F7F7; height: 39px;">
+                <input type="text" class="form-control border-left-0 sp1_pa_search" name="search" id="search-input" value="{{ request()->query('search') }}" placeholder="Search Project what you need" style="background: #F7F7F7; height: 39px;">
             </div>
 
             {{--  --}}
@@ -87,31 +87,52 @@
                         <p class="sp1_pa_text">
                             "<a href="{{ $value->link }}">{{ Str::title(Str::snake(class_basename($value->model_name), ' ')) }}</a> for project <a href="{{ route('projects.show', $value->project_id) }}">{{ $value->project->project_name }}</a> (PM: <a href="{{ route('employees.show', $value->project->pm_id) }}">{{ $value->project->pm->name }}</a>) from Client: <a href="{{ route('clients.show', $value->project->client_id) }}">{{ $value->project->client->name }}</a> needs to be authorized"
                         </p>
-                        
-                        <div class="d-flex align-items-center flex-wrap">
-                            @if (in_array('review', $value->status_options))
-                            <button data-id="{{ $value->id }}" data-mode="review" class="sp1_pa_nav_link mb-2 mr-2">
-                                <a href="{{ $value->link }}" target="_blank">Review</a>
-                            </button>
-                            @endif
-                            @if (in_array('approved', $value->status_options))
-                                @if ($value->type == 'deliverable_modification_by_top_managment' || $value->type == 'deliverable_modification_by_client')
-                                    <a href="{{ $value->link }}" class="sp1_pa_nav_link mb-2 mr-2" target="_blank">Approve</a>
+                        @if (request()->query('tab') == 'active')
+                            <div class="d-flex align-items-center flex-wrap">
+                                @if (in_array('review', $value->status_options))
+                                @if ($value->type == 'award_time_extension')
+                                <a href="{{ route('award_time_check.index') }}"
+                                   class="sp1_pa_nav_link mb-2 mr-2"
+                                   target="_blank">Approve</a>
                                 @else
-                                    <button data-id="{{ $value->id }}" data-mode="approved" class="sp1_pa_nav_link mb-2 mr-2 pending_action">Approve</button>
+                                <button data-id="{{ $value->id }}"
+                                        data-mode="review"
+                                        class="sp1_pa_nav_link mb-2 mr-2">
+                                    <a href="{{ $value->link }}"
+                                       target="_blank">Review</a>
+                                </button>
                                 @endif
-                            @endif
-                            @if (in_array('reject', $value->status_options))
-                            <button data-id="{{ $value->id }}" data-mode="deny" class="sp1_pa_nav_link mb-2 mr-2 pending_action">Deny</button>
-                            @endif
-                            @if (in_array('request_modification', $value->status_options))
-                            <button data-id="{{ $value->id }}" data-mode="request_modification" class="sp1_pa_nav_link mb-2 mr-2 pending_action">Request Modifications</button> 
-                            @endif
-                        </div>
-
-                        {{-- <p class="sp1_pa_text">
-                            Authorized By: <a href="#">Rajat Chakraborty</a> at <i class="bi bi-stopwatch-fill"></i> 10:30PM <i class="bi bi-calendar-event-fill"></i> May 31,23 
-                        </p> --}}
+                                @endif
+                                @if (in_array('approved', $value->status_options))
+                                @if ($value->type == 'deliverable_modification_by_top_managment' || $value->type == 'deliverable_modification_by_client')
+                                <a href="{{ $value->link }}"
+                                   class="sp1_pa_nav_link mb-2 mr-2"
+                                   target="_blank">Approve</a>
+                                @else
+                                <button data-id="{{ $value->id }}"
+                                        data-mode="approved"
+                                        class="sp1_pa_nav_link mb-2 mr-2 pending_action">Approve</button>
+                                @endif
+                                @endif
+                                @if (in_array('reject', $value->status_options))
+                                <button data-id="{{ $value->id }}"
+                                        data-mode="deny"
+                                        class="sp1_pa_nav_link mb-2 mr-2 pending_action">Deny</button>
+                                @endif
+                                @if (in_array('request_modification', $value->status_options))
+                                <button data-id="{{ $value->id }}"
+                                        data-mode="request_modification"
+                                        class="sp1_pa_nav_link mb-2 mr-2 pending_action">Request Modifications</button>
+                                @endif
+                            </div>
+                        @endif
+                        
+                        @if (request()->query('tab') == 'past')
+                            <p class="sp1_pa_text">
+                                Authorized By: <a href="#">{{$value->authorization->name}}</a> at <i class="bi bi-stopwatch-fill"></i> {{\Carbon\Carbon::parse($value->approved_at)->format('h:iA')}} <i class="bi bi-calendar-event-fill"></i> {{\Carbon\Carbon::parse($value->approved_at)->format('F j, y')}} 
+                            </p>
+                        @endif
+                        
                     </div>
 
                     <div class="col-12 col-lg-3">

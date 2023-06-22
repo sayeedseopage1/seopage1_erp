@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Observers\TaskCommentObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\TaskComment
@@ -46,4 +47,8 @@ class TaskComment extends BaseModel
         return $this->belongsTo(Task::class, 'task_id');
     }
 
+    public function reply_with_only_image()
+    {
+        return $this->hasMany(TaskReply::class, 'comment_id', 'id');
+    }
 }

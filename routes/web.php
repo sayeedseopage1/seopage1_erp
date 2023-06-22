@@ -184,6 +184,7 @@ use App\Http\Controllers\ReportCentralController;
 use App\Http\Controllers\MonthlyIncentiveController;
 use App\Http\Controllers\QualifiedSalesController;
 use App\Http\Controllers\PendingActionController;
+use App\Http\Controllers\NonCashPointSettingsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -194,6 +195,7 @@ use App\Http\Controllers\PendingActionController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
     return redirect(route('login'));
 });
@@ -325,7 +327,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
     Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
     Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
-    Route::get('/points/{any?}', [PointsController::class,'index'])->where('any', '.*')->name('points.index');
+    Route::get('/points/{any?}', [PointsController::class, 'index'])->where('any', '.*')->name('points.index');
     Route::post('/incentives-json/get', [IncentiveController::class, 'index_json'])->name('incentives.json');
     Route::get('/incentives/{any?}/', [IncentiveController::class, 'index'])->where('any', '.*')->name('incentives.index');
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
@@ -630,7 +632,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::resource('project-template-task', ProjectTemplateTaskController::class);
 
             Route::resource('project-template-sub-task', ProjectTemplateSubTaskController::class);
-
         }
     );
 
@@ -735,8 +736,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
             Route::resource('taskComment', TaskCommentController::class);
             Route::resource('task-note', TaskNoteController::class);
-            Route::post('task-reply',[TaskCommentController::class, 'replyStore'])->name('taskReply.store');
-            Route::delete('reply-delete/{id}',[TaskCommentController::class, 'replyDelete'])->name('taskReply.delete');
+            Route::post('task-reply', [TaskCommentController::class, 'replyStore'])->name('taskReply.store');
+            Route::delete('reply-delete/{id}', [TaskCommentController::class, 'replyDelete'])->name('taskReply.delete');
 
             // task files routes
             Route::get('task-files/download/{id}', [TaskFileController::class, 'download'])->name('task_files.download');
@@ -760,10 +761,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         }
     );
     Route::resource('tasks', TaskController::class);
-    Route::get('task-guideline/{project_id}',[TaskController::class,'viewTaskGuideline'])->name('task-guideline');
-    Route::post('task-guideline-store',[TaskController::class,'storeTaskGuideline'])->name('task-guideline-store');
-    Route::get('working-environment/{project_id}',[TaskController::class,'viewWorkingEnvironment'])->name('working-environment');
-    Route::post('working-environment-store',[TaskController::class,'storeWorkingEnvironment'])->name('working-environment-store');
+    Route::get('task-guideline/{project_id}', [TaskController::class, 'viewTaskGuideline'])->name('task-guideline');
+    Route::post('task-guideline-store', [TaskController::class, 'storeTaskGuideline'])->name('task-guideline-store');
+    Route::get('working-environment/{project_id}', [TaskController::class, 'viewWorkingEnvironment'])->name('working-environment');
+    Route::post('working-environment-store', [TaskController::class, 'storeWorkingEnvironment'])->name('working-environment-store');
 
     // Holidays
     Route::get('holidays/mark-holiday', [HolidayController::class, 'markHoliday'])->name('holidays.mark_holiday');
@@ -875,46 +876,47 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::get('recurring-invoice/export/{startDate}/{endDate}/{status}/{employee}', [RecurringInvoiceController::class, 'export'])->name('recurring_invoice.export');
             Route::get('recurring-invoice/recurring-invoice/{id}', [RecurringInvoiceController::class, 'recurringInvoices'])->name('recurring_invoice.recurring_invoice');
             Route::resource('recurring-invoices', RecurringInvoiceController::class);
-        });
+        }
+    );
     Route::resource('invoices', InvoiceController::class);
 
 
     //report-central
-    Route::get('report-central/performance-predefined-cycle',[ReportCentralController::class,'performancePredefinedCycle'])->name('performance_predefined_cycle');
-    Route::get('report-central/performance-real-time',[ReportCentralController::class,'performanceRealTime'])->name('performance_real_time');
-    Route::get('report-central/revision-calculator',[ReportCentralController::class,'revisionCalculator'])->name('revision_calculator');
-    Route::get('report-central/reward-point',[ReportCentralController::class,'rewardPoint'])->name('reward_point');
-    Route::get('report-central/graphs',[ReportCentralController::class,'graphs'])->name('graphs');
-    Route::get('report-central/deliverable-issues',[ReportCentralController::class,'deliverableIssues'])->name('deliverable_issues');
-    Route::get('report-central/performance',[ReportCentralController::class,'performance'])->name('performance');
-    Route::get('report-central/reward-point2',[ReportCentralController::class,'rewardPoint2'])->name('reward_point2');
-    Route::get('report-central/performance2',[ReportCentralController::class,'performance2'])->name('performance2');
-    Route::get('report-central/bandwidth',[ReportCentralController::class,'bandwidth'])->name('bandwidth');
-    Route::get('report-central/revisions',[ReportCentralController::class,'revisions'])->name('revisions');
-    Route::get('report-central/reward-point3',[ReportCentralController::class,'rewardPoint3'])->name('reward-point3');
-    Route::get('report-central/graphs2',[ReportCentralController::class,'graphs2'])->name('graphs2');
-    Route::get('report-central/time-log',[ReportCentralController::class,'timeLog'])->name('time_log');
+    Route::get('report-central/performance-predefined-cycle', [ReportCentralController::class, 'performancePredefinedCycle'])->name('performance_predefined_cycle');
+    Route::get('report-central/performance-real-time', [ReportCentralController::class, 'performanceRealTime'])->name('performance_real_time');
+    Route::get('report-central/revision-calculator', [ReportCentralController::class, 'revisionCalculator'])->name('revision_calculator');
+    Route::get('report-central/reward-point', [ReportCentralController::class, 'rewardPoint'])->name('reward_point');
+    Route::get('report-central/graphs', [ReportCentralController::class, 'graphs'])->name('graphs');
+    Route::get('report-central/deliverable-issues', [ReportCentralController::class, 'deliverableIssues'])->name('deliverable_issues');
+    Route::get('report-central/performance', [ReportCentralController::class, 'performance'])->name('performance');
+    Route::get('report-central/reward-point2', [ReportCentralController::class, 'rewardPoint2'])->name('reward_point2');
+    Route::get('report-central/performance2', [ReportCentralController::class, 'performance2'])->name('performance2');
+    Route::get('report-central/bandwidth', [ReportCentralController::class, 'bandwidth'])->name('bandwidth');
+    Route::get('report-central/revisions', [ReportCentralController::class, 'revisions'])->name('revisions');
+    Route::get('report-central/reward-point3', [ReportCentralController::class, 'rewardPoint3'])->name('reward-point3');
+    Route::get('report-central/graphs2', [ReportCentralController::class, 'graphs2'])->name('graphs2');
+    Route::get('report-central/time-log', [ReportCentralController::class, 'timeLog'])->name('time_log');
     Route::resource('report-central', ReportCentralController::class);
 
 
     //KPI Settings
     Route::resource('kpi-settings', KpiSettingController::class);
-//    Policy section
-    Route::get('policy/next-month-policy',[PolicyController::class,'nextMonthPolicy'])->name('nextMonthPolicy');
-    Route::get('policy/show-month-policy/{id}',[PolicyController::class,'show_month_policy'])->name('show_month_policy');
+    //    Policy section
+    Route::get('policy/next-month-policy', [PolicyController::class, 'nextMonthPolicy'])->name('nextMonthPolicy');
+    Route::get('policy/show-month-policy/{id}', [PolicyController::class, 'show_month_policy'])->name('show_month_policy');
     Route::resource('policy', PolicyController::class);
     //Incentives Settings
-    Route::resource('incentive-settings',IncentiveSettingController::class);
+    Route::resource('incentive-settings', IncentiveSettingController::class);
     //Monthly Incentive Settings
-    Route::resource('monthly-incentive',MonthlyIncentiveController::class);
-    Route::get('monthly-incentive/download/{id}',[MonthlyIncentiveController::class, 'download'])->name('monthly-incentive.download');
+    Route::resource('monthly-incentive', MonthlyIncentiveController::class);
+    Route::get('monthly-incentive/download/{id}', [MonthlyIncentiveController::class, 'download'])->name('monthly-incentive.download');
 
-    Route::get('monthly-incentive/get-json/index',[MonthlyIncentiveController::class, 'get_index_json']);
+    Route::get('monthly-incentive/get-json/index', [MonthlyIncentiveController::class, 'get_index_json']);
     //qualified sales Settings
 
-    Route::resource('qualified-sales',QualifiedSalesController::class);
-    Route::get('qualified-sales/get-points/{id}',[QualifiedSalesController::class,'get_point_details']);
-    
+    Route::get('qualified-sales/get-points/{id}', [QualifiedSalesController::class, 'get_point_details']);
+
+    Route::resource('qualified-sales', QualifiedSalesController::class);
 
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
@@ -963,7 +965,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         function () {
             Route::post('recurring-expenses/change-status', [RecurringExpenseController::class, 'changeStatus'])->name('recurring-expenses.change_status');
             Route::resource('recurring-expenses', RecurringExpenseController::class);
-        });
+        }
+    );
 
     Route::get('expenses/change-status', [ExpenseController::class, 'getEmployeeProjects'])->name('expenses.get_employee_projects');
     Route::get('expenses/category', [ExpenseController::class, 'getCategoryEmployee'])->name('expenses.get_category_employee');
@@ -979,7 +982,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         function () {
             Route::resource('timelog-calendar', TimelogCalendarController::class);
             Route::resource('timelog-break', ProjectTimelogBreakController::class);
-        });
+        }
+    );
     Route::get('timelogs/export', [TimelogController::class, 'export'])->name('timelogs.export');
     Route::get('timelogs/show-active-timer', [TimelogController::class, 'showActiveTimer'])->name('timelogs.show_active_timer');
     Route::get('timelogs/show-timer', [TimelogController::class, 'showTimer'])->name('timelogs.show_timer');
@@ -1146,30 +1150,39 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('mark_notification_read', [NotificationController::class, 'markAllRead'])->name('mark_notification_read');
 
     // Update app
-    Route::get('/insights/deals', [InsightsController::class,'DealConversion'])->name('insights-deals');
+    Route::get('/insights/deals', [InsightsController::class, 'DealConversion'])->name('insights-deals');
 
-    Route::get('/insights/goals/get/{id}', [InsightsController::class,'getGoal'])->name('insights-goals-get');
+    Route::get('/insights/goals/get/{id}', [InsightsController::class, 'getGoal'])->name('insights-goals-get');
     Route::get('/insights/goal/get-goal-details/{data}', [InsightsController::class, 'get_goal_details'])->name('get_goal_details');
 
-    Route::get('/insights/dashboard/get', [InsightsController::class,'getDashboard'])->name('insights-dashboard-get');
+    Route::get('/insights/dashboard/get', [InsightsController::class, 'getDashboard'])->name('insights-dashboard-get');
     Route::post('update-settings/deleteFile', [UpdateAppController::class, 'deleteFile'])->name('update-settings.deleteFile');
     Route::get('update-settings/install', [UpdateAppController::class, 'install'])->name('update-settings.install');
     Route::get('update-settings/manual-update', [UpdateAppController::class, 'manual'])->name('update-settings.manual');
     Route::resource('search', SearchController::class);
     Route::resource('update-settings', UpdateAppController::class);
-    Route::get('/insights/sections/get', [InsightsController::class,'getSection'])->name('insights-sections-get');
-    Route::get('/insights/deal-details/{data}', [InsightsController::class,'getGoalDetails'])->name('insights-goal-details');
+    Route::get('/insights/sections/get', [InsightsController::class, 'getSection'])->name('insights-sections-get');
+    Route::get('/insights/deal-details/{data}', [InsightsController::class, 'getGoalDetails'])->name('insights-goal-details');
 
-    Route::get('/insights/{any}', [InsightsController::class,'index'])->where('any', '.*');
-    Route::resource('insights', InsightsController::class)->only(['index','show', 'create', 'store', 'edit', 'update', 'destroy']);
-    Route::post('/insights/goals/add', [InsightsController::class,'storeGoal'])->name('insights/goals/add');
-    Route::post('/insights/goals/edit/{id}', [InsightsController::class,'editGoal'])->name('insights/goals/edit');
-    Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class,'editGoalTitle'])->name('insights.goals-title.edit');
-    Route::post('/insights/dashboards/add', [InsightsController::class,'storeDashboard'])->name('insights/dashboards/add');
+    Route::get('/insights/{any}', [InsightsController::class, 'index'])->where('any', '.*');
+    Route::resource('insights', InsightsController::class)->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
+    Route::post('/insights/goals/add', [InsightsController::class, 'storeGoal'])->name('insights/goals/add');
+    Route::post('/insights/goals/edit/{id}', [InsightsController::class, 'editGoal'])->name('insights/goals/edit');
+    Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class, 'editGoalTitle'])->name('insights.goals-title.edit');
+    Route::post('/insights/dashboards/add', [InsightsController::class, 'storeDashboard'])->name('insights/dashboards/add');
 
-    Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
+    Route::post('/insights/sections/add', [InsightsController::class, 'storeSection'])->name('insights/sections/add');
 
     Route::resource('authorization-action', AuthorizationAction::class);
+
+    Route::get('index-non-cash-points', [NonCashPointSettingsController::class, 'index'])->name('non_cash_point.index');
+    Route::post('store-non-cash-points', [NonCashPointSettingsController::class, 'store'])->name('non_cash_point.store');
+
+    Route::get('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
+
+    Route::get('award-time/increase/{id?}', [ContractController::class, 'award_time_increase_index'])->name('award_time_check.index');
+    Route::post('award-time/increase/store', [ContractController::class, 'award_time_incress_store'])->name('award_time_check.store');
+    Route::post('award-time/increase/update', [ContractController::class, 'award_time_incress_update'])->name('award_time_check.update');
 });
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
@@ -1270,34 +1283,34 @@ Route::post('/projects/project-completion/filter-subcategories', [ProjectControl
 
 
 //Portfolio Section
-Route::resource('portfolio',PortfolioController::class);
+Route::resource('portfolio', PortfolioController::class);
 Route::get('/portfolio/get-sub-category/{website_cat_id}', [PortfolioController::class, 'getSubCategory']);
 Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
 
 
 //add project niche
-Route:: get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
-Route::get('/projects/get-sub-category/{id}',[ProjectController::class,'parentCategoryId']);
+Route::get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
+Route::get('/projects/get-sub-category/{id}', [ProjectController::class, 'parentCategoryId']);
 Route::put('/projects/update-niche-category/{id}', [ProjectController::class, 'updateCategory']);
 
 //add project cms
-Route:: get('/projects/view-cms', [ProjectController::class, 'viewCms'])->name('project-view-cms');
-Route:: post('/projects/add-cms', [ProjectController::class, 'storeCms'])->name('add-cms');
+Route::get('/projects/view-cms', [ProjectController::class, 'viewCms'])->name('project-view-cms');
+Route::post('/projects/add-cms', [ProjectController::class, 'storeCms'])->name('add-cms');
 Route::put('/projects/update-cms/{id}', [ProjectController::class, 'updateCms']);
 
 //add project website type
-Route:: get('/projects/view-website-type', [ProjectController::class, 'viewWebsiteType'])->name('project-view-website-type');
-Route:: post('/projects/add-website-type', [ProjectController::class, 'storeWebsiteType'])->name('add-website-type');
+Route::get('/projects/view-website-type', [ProjectController::class, 'viewWebsiteType'])->name('project-view-website-type');
+Route::post('/projects/add-website-type', [ProjectController::class, 'storeWebsiteType'])->name('add-website-type');
 Route::put('/projects/update-website-type/{id}', [ProjectController::class, 'updateWebsiteType']);
 
 //add project website theme
-Route:: get('/projects/view-website-theme', [ProjectController::class, 'viewWebsiteTheme'])->name('project-view-website-theme');
-Route:: post('/projects/add-website-theme', [ProjectController::class, 'storeWebsiteTheme'])->name('add-website-theme');
+Route::get('/projects/view-website-theme', [ProjectController::class, 'viewWebsiteTheme'])->name('project-view-website-theme');
+Route::post('/projects/add-website-theme', [ProjectController::class, 'storeWebsiteTheme'])->name('add-website-theme');
 Route::put('/projects/update-website-theme/{id}', [ProjectController::class, 'updateWebsiteTheme']);
 
 //add project website plugin
-Route:: get('/projects/view-website-plugin', [ProjectController::class, 'viewWebsitePlugin'])->name('project-view-website-plugin');
-Route:: post('/projects/add-website-plugin', [ProjectController::class, 'storeWebsitePlugin'])->name('add-website-plugin');
+Route::get('/projects/view-website-plugin', [ProjectController::class, 'viewWebsitePlugin'])->name('project-view-website-plugin');
+Route::post('/projects/add-website-plugin', [ProjectController::class, 'storeWebsitePlugin'])->name('add-website-plugin');
 Route::put('/projects/update-website-plugin/{id}', [ProjectController::class, 'updateWebsitePlugin']);
 
 
@@ -1307,7 +1320,7 @@ Route::get('/projects/niches', [ProjectController::class, 'Niche'])->name('get-n
 Route::delete('/projects/delete-niche/{id}', [ProjectController::class, 'deleteNiche']);
 
 //project credentials
-Route::get('project-credentials/{id}',[ProjectCredential::class,'index'])->name('project_credential');
+Route::get('project-credentials/{id}', [ProjectCredential::class, 'index'])->name('project_credential');
 //Route::resource('project-credentials',ProjectCredential::class);
 
 //top-management project accept/deny
@@ -1330,7 +1343,7 @@ Route::post('/deliverable-final-authorization-accept', [ProjectController::class
 Route::get('update/timer/box/set/{status}', [HomeController::class, 'timer_session_set'])->whereIn('status', ['on', 'off'])->name('home.timer_session_set');
 
 
-Route::controller(DealController::class)->group(function(){
+Route::controller(DealController::class)->group(function () {
 
     Route::get('search-client', 'SearchClient')->name('client-search');
 });
@@ -1374,5 +1387,3 @@ Route::post('/authorization/deal-details/', [ContractController::class, 'authori
 //Route::get('fix-database', [HomeController::class, 'fix_database'])->name('fix_database');
 Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
 Route::post('/upload', [HomeController::class, 'upload'])->name('upload');
-
-
