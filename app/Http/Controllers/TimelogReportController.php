@@ -9,6 +9,7 @@ use App\Models\ProjectTimeLog;
 use App\Models\TaskboardColumn;
 use App\Models\Task;
 use App\Models\User;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -214,9 +215,34 @@ class TimelogReportController extends AccountBaseController
                 'project_time_logs.start_time',
                 'project_time_logs.end_time',
                 'project_time_logs.total_minutes as total_minutes',
-                // DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
-                //DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as total_minutes'),
-            ])
+
+             // DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
+               //DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as total_minutes'),
+            ])  
+
+           ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
+
+            ->leftJoin('projects', 'project_time_logs.project_id', 'projects.id')
+            
+            ->join('users as pm', 'projects.pm_id', 'pm.id')
+            ->join('roles as pm_roles', 'pm.role_id', 'pm_roles.id')
+            
+            ->leftJoin('users as employee', 'project_time_logs.user_id', 'employee.id')
+            ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
+            
+            ->join('users as client', 'projects.client_id', 'client.id')
+            ->join('deals', 'client.id', '=', 'deals.client_id')
+
+           	//->where('projects.status',$status)
+            ->where('total_minutes', '>', 0)
+            ->where('project_time_logs.end_time','!=',null);
+           // ->orderBy('project_time_logs.task_id' , 'desc');
+
+            if($status != 'canceled') {
+                if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+                {
+                   
+
 
                 ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
 
@@ -268,24 +294,47 @@ class TimelogReportController extends AccountBaseController
             }
             if (!is_null($employeeId)) {
                 $data = $data->where('project_time_logs.user_id', $employeeId);
-            } else {
-                if (Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8) {
-                    $data = $data->groupBy('tasks.id', 'project_time_logs.created_at');
-                } else {
-                    $data = $data->groupBy('tasks.id', 'project_time_logs.created_at')
-                        ->where('project_time_logs.user_id', Auth::id())
-                        // ->orderBy('project_time_logs.id', 'desc')
-                        ->get();
-                }
+
+            }
+            if (!is_null($clientId)) {
+                //$data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
+                $data = $data->where('projects.client_id' , $clientId);
             }
             if (!is_null($status)) {
                 $data = $data->where('projects.status', $status);
             }
+            
+            /*if (!is_null($startDate)) {
+                $data = $data->where('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+
+                //$data = $data->where('project_time_logs.user_id' , $employeeId)->orderBy('project_time_logs.user_id' , 'desc');
+                $data = $data->where('project_time_logs.user_id' , $employeeId);
+
+            }
             if (!is_null($clientId)) {
                 $data = $data->where('projects.client_id', $clientId);
             }
-            $data = $data->groupBy('tasks.id', 'project_time_logs.created_at')->get();
-        } else if ($type == 'projects') {
+
+            /*$total_rows = $data->get()->count();
+            $data = $data->orderBy('project_time_logs.task_id' , 'desc')
+            ->offset($offset)
+            ->limit($perPage)*/
+        if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8 || Auth::user()->role_id == 6)
+        {
+            $data = $data->groupBy('tasks.id','project_time_logs.created_at')
+         // ->orderBy('project_time_logs.id', 'desc')
+          ->get();
+
+
+        }else {
+            $data = $data->groupBy('tasks.id','project_time_logs.created_at')
+            ->where('project_time_logs.user_id',Auth::id())
+         // ->orderBy('project_time_logs.id', 'desc')
+          ->get();
+        }
+          
+        } else if($type == 'projects') {
+
             $data = ProjectTimeLog::select([
                 'projects.id as project_id',
                 'projects.project_name',
@@ -334,11 +383,15 @@ class TimelogReportController extends AccountBaseController
                 $data = $data->where('projects.id', $project_id);
             }
             $data = $data->groupBy('project_time_logs.user_id')
-                ->where('total_minutes', '>', 0)
-                ->orderBy('project_time_logs.project_id', 'desc');
 
-            if ($status != 'canceled') {
-                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
+            //->where('projects.status', $status)
+            ->where('total_minutes', '>', 0)
+            ->orderBy('project_time_logs.project_id' , 'desc');
+
+            if($status != 'canceled') {
+                if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+                {
+                   
 
                     $data = $data->whereDate('project_time_logs.start_time', '=', Carbon::parse($startDate)->format('Y-m-d'));
                 } else {
@@ -380,12 +433,23 @@ class TimelogReportController extends AccountBaseController
                 //$data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
                 $data = $data->where('projects.client_id', $clientId);
             }
+            if (!is_null($status)) {
+                $data = $data->where('projects.status', $status);
+            }
             /*$total_rows = $data->get()->count();
             $data = $data->orderBy('project_time_logs.project_id' , 'desc')
             ->offset($offset)
             ->limit($perPage)*/
-            $data = $data->get();
-            // dd($data);
+
+            if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8 || Auth::user()->role_id == 6)
+            {
+                $data = $data->get();
+            }
+           else {
+            $data = $data->where('project_time_logs.user_id',Auth::id())->get();
+           }
+           // dd($data);
+
         }
 
 

@@ -430,7 +430,7 @@
                                                             @endphp
                                                         </td>
                                                         <td class="pl-20 text-capitalize">{{$value->start_date->format('Y-m-d')}}</td>
-                                                        <td class="pl-20 text-capitalize">{{$value->deadline->format('Y-m-d')}}</td>
+                                                        <td class="pl-20 text-capitalize">{{$value->deadline}}</td>
                                                         <td>
                                                             @php
                                                                 $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();
@@ -1317,7 +1317,7 @@
                                                             @endphp
                                                         </td>
                                                         <td class="pl-20 text-capitalize">{{$value->start_date->format('Y-m-d')}}</td>
-                                                        <td class="pl-20 text-capitalize">{{$value->deadline->format('Y-m-d')}}</td>
+                                                        <td class="pl-20 text-capitalize">{{$value->deadline}}</td>
                                                         
                                                         <td>
                                                             @php

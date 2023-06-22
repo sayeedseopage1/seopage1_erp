@@ -1488,6 +1488,7 @@ class ContractController extends AccountBaseController
             $deal->updated_by = Auth::id();
             //                dd($deal);
             $deal->save();
+           // dd($deal);
             $project_id = Project::where('deal_id', $request->id)->first();
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
@@ -1499,10 +1500,13 @@ class ContractController extends AccountBaseController
             $project->due = $deal->amount;
             $project->currency_id = 1;
             $project->save();
-            if ($deal->project_type == 'hourly') {
-                // dd("true");
-                $milestone = new ProjectMilestone();
-                $milestone->project_id = $project->id;
+
+            if($deal->project_type == 'hourly')
+            {
+               //  dd("true");
+                $milestone= new ProjectMilestone();
+                $milestone->project_id= $project->id;
+
 
                 $milestone->currency_id = 1;
                 $milestone->milestone_title = $project->project_name . '- InitialMilestone';
@@ -1536,11 +1540,13 @@ class ContractController extends AccountBaseController
             $contract->description = $request->description;
             $contract->currency_id = $request->currency_id;
             $contract->save();
+           // dd($contract);
             $client_id = User::where('id', $contract_id->client_id)->first();
             $client = User::find($client_id->id);
             $client->email = $request->client_email;
             $client->name = $request->client_name;
             $client->save();
+           // dd($client);
             if ($deal->pm_id == null) {
                 $lead_developer_id = RoleUser::where('role_id', 6)->get();
                 //dd($lead_developer_id);
@@ -1673,6 +1679,7 @@ class ContractController extends AccountBaseController
                 $project_admin_update->added_by = $project_id->pm_id;
                 $project_admin_update->project_admin = $project_id->pm_id;
                 $project_admin_update->save();
+            //    / dd($project_admin_update);
                 $qualified_sale = new QualifiedSale();
                 $qualified_sale->project_name = $deal->project_name;
 
@@ -1688,6 +1695,7 @@ class ContractController extends AccountBaseController
                 $qualified_sale->amount = $deal->amount;
 
                 $qualified_sale->save();
+                // /dd($qualified_sale);
 
 
 
@@ -2123,12 +2131,14 @@ class ContractController extends AccountBaseController
 
         $project = Project::where('deal_id', $request->id)->first();
 
-        $point = new CashPoint();
-        $point->user_id = $user_name->id;
-        $point->project_id = $project->id;
-        $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name .
-            '</a> authorized the deal : <a style="color:blue" href="' . route('projects.show', $project->id) . '">'
-            . $project->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $project->client_id) . '">' .
+        
+        $point= new CashPoint();
+        $point->user_id= $user_name->id;
+        $point->project_id= $project->id;
+        $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name .
+            '</a> authorized the deal : <a style="color:blue" href="'.route('projects.show',$project->id).'">'
+            .$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'.
+
             $project->client_name->name;
 
         $point->gained_as = "Individual";

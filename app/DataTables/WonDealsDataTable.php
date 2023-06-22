@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Deal;
+use App\Models\DealStage;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use App\DataTables\BaseDataTable;
@@ -120,6 +121,7 @@ class WonDealsDataTable extends BaseDataTable
                         if (Auth::user()->role_id == 8) {
                             $action .= '<a class="dropdown-item bg-warning" href="' . route("authorization_request", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Authorization Need') . '</a>';
                         }
+
                     } else {
                         $action .= '<a class="dropdown-item bg-success" href="' . route("contracts.show", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Authorization Details') . '</a>';
                     }
@@ -163,11 +165,15 @@ class WonDealsDataTable extends BaseDataTable
         $startDate = null;
         $endDate = null;
         if (Auth::user()->role_id == 4) {
-            $model = $model->where('pm_id', Auth::id());
-        } elseif (Auth::user()->role_id == 7) {
-            $model = $model->where('added_by', Auth::id());
-        } else {
-            $model = $model->orderBy('id', 'desc');
+
+            $model = $model->where('pm_id',Auth::id());
+        } 
+        // elseif (Auth::user()->role_id == 7) {
+        //     $model = $model->where('added_by',Auth::id());
+        // } 
+        else {
+            $model = $model->orderBy('id','desc');
+
         }
 
 
