@@ -913,6 +913,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('monthly-incentive/get-json/index', [MonthlyIncentiveController::class, 'get_index_json']);
     //qualified sales Settings
 
+
     Route::resource('qualified-sales', QualifiedSalesController::class);
     Route::get('qualified-sales/get-points/{id}', [QualifiedSalesController::class, 'get_point_details']);
 
@@ -1170,7 +1171,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class, 'editGoalTitle'])->name('insights.goals-title.edit');
     Route::post('/insights/dashboards/add', [InsightsController::class, 'storeDashboard'])->name('insights/dashboards/add');
 
-    Route::post('/insights/sections/add', [InsightsController::class, 'storeSection'])->name('insights/sections/add');
+    Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
+    Route::get('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
+
 
     Route::resource('authorization-action', AuthorizationAction::class);
 });

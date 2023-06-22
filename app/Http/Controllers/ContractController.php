@@ -2177,7 +2177,7 @@ class ContractController extends AccountBaseController
         //kpi point
 
         $project = Project::where('deal_id', $request->id)->first();
-        
+
         $point= new CashPoint();
         $point->user_id= $user_name->id;
         $point->project_id= $project->id;

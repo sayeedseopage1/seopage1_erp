@@ -3891,7 +3891,6 @@ class ProjectController extends AccountBaseController
         Toastr::success('Project Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
     }
-
     public function ProjectDeny(Request $request)
     {
         //dd($request);
@@ -4244,20 +4243,38 @@ class ProjectController extends AccountBaseController
     }
     public function DeliverableFinalAuthorizationAccept(Request $request)
     {
-        $project=Project::find($request->project_id);
-        $project->authorization_status = 'approved';
-        $project->deliverable_authorization= 1;
-        $project->save();
+//        dd($request->all());
+        if ($request->denyAuthorization) {
+            $project = Project::find($request->project_id);
+            $project->authorization_status = 'canceled';
+            $project->project_status = 'canceled';
+            $project->deliverable_authorization = 2;
+            $project->save();
+        }else{
+            $project=Project::find($request->project_id);
+            $project->authorization_status = 'approved';
+            $project->deliverable_authorization= 1;
+            $project->save();
+        }
+
 
         $qualified_sale_id= QualifiedSale::where('project_id',$project->id)->first();
 
         if($qualified_sale_id != null)
         {
-            $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
-            $qualified_sale->authorized_by_admin = 1;
-            $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
-            $qualified_sale->admin_id = Auth::id();
-            $qualified_sale->save();
+            if ($request->denyAuthorization) {
+                $qualified_sale = QualifiedSale::find($qualified_sale_id->id);
+                $qualified_sale->authorized_by_admin = 2;
+                $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
+                $qualified_sale->admin_id = Auth::id();
+                $qualified_sale->save();
+            }else{
+                $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+                $qualified_sale->authorized_by_admin = 1;
+                $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
+                $qualified_sale->admin_id = Auth::id();
+                $qualified_sale->save();
+            }
 
         }
 
