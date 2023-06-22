@@ -9,16 +9,16 @@ import StatusSelection from './StatusSelection'
 import PrioritySelection from './PrioritySelection'
 import DatePicker from '../comments/DatePicker'
 import CKEditorComponent from '../../../ckeditor' 
-import UploadFilesInLine from '../../../file-upload/UploadFilesInLine'
-import dayjs from 'dayjs'
+import UploadFilesInLine from '../../../file-upload/UploadFilesInLine' 
 import _ from 'lodash'
 import { useCreateSubtaskMutation, useDeleteUplaodedFileMutation, useEditSubtaskMutation, useGetTaskDetailsQuery, useLazyGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi'
 import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 import SweetAlert from '../../../global/SweetAlert'
 import { useDispatch, useSelector } from 'react-redux'
 import { storeSingleSubTask, storeSubTasks } from '../../../services/features/subTaskSlice'
+import { CompareDate } from '../../../utils/dateController'
 
-
+const dayjs = new CompareDate();
 
 
 const  SubtTaskEditForm= ({close, editId}) => {
@@ -70,8 +70,9 @@ const required_error = error?.status === 422 ? error?.data: null;
 
 // handle change
 React.useEffect(() => {
-    const formatedDate = (d) => {
-        return new Date(dayjs(d).format('MM-DD-YYYY'));
+    const formatedDate = (d) => { 
+        let day = dayjs.dayjs(d).toDate();
+        return day;  
     }
     getTaskDetails(`/${editId}/json?mode=sub_task_edit`).unwrap().then(res => {
         if(res){ 
@@ -108,8 +109,8 @@ const handleChange = (e, setState) =>{
 // handle sumition
 const handleSubmit = (e) => {
     e.preventDefault();
-  const _startDate = dayjs(startDate).format('DD-MM-YYYY');
-  const _dueDate = dayjs(dueDate).format('DD-MM-YYYY');
+  const _startDate = dayjs.dayjs(startDate).format('DD-MM-YYYY');
+  const _dueDate = dayjs.dayjs(dueDate).format('DD-MM-YYYY');
 
   const fd = new FormData(); 
     fd.append('milestone_id', task?.milestone_id);
@@ -135,11 +136,9 @@ const handleSubmit = (e) => {
     });
    
     editSubtask({data: fd, id: editId}).unwrap().then(res => {
-        console.log({res})
             if(res?.status === 'success'){ 
                 
                  let _subtask = [...subTask];
-                 console.log({_subtask});
                  _subtask = _subtask?.map(s => {
                     if(Number(s?.id) === Number(res?.sub_task?.id)){
                         return res?.sub_task 

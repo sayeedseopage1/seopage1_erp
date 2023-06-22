@@ -752,3 +752,13 @@
     line-break: strict;
     display: block;
 }
+
+
+.file-download-preview{
+    color: inherit !important;
+    width: 100%;
+    height: 100%;
+    &:hover{
+        color: inherit !important
+    }
+}

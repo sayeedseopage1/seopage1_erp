@@ -60,6 +60,7 @@ use App\Models\TaskComment;
 use App\Models\TaskNote;
 use App\Models\TaskNoteFile;
 use App\Models\ProjectTimeLog;
+use App\Models\TaskHistory;
 use Toaster;
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -1689,6 +1690,9 @@ class TaskController extends AccountBaseController
 
             $totalMinutes = $task->timeLogged->sum('total_minutes') - ProjectTimeLogBreak::taskBreakMinutes($task->id);
             $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
+            // dd($task);
+            $task->start_date = Carbon::parse($task->start_date)->format('Y-m-d H:i:s');
+            $task->due_date = Carbon::parse($task->due_date)->format('Y-m-d H:i:s');
 
             if ($totalMinutes % 60 > 0) {
                 $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
@@ -1773,6 +1777,42 @@ class TaskController extends AccountBaseController
             });
 
             return response()->json($data);
+        } elseif ($request->mode=='task_history') {
+            $data = TaskHistory::with('user')->where('task_id', $id)->get();
+            foreach ($data as $item) {
+                $item->lang = __('modules.tasks.' . $item->details) . ' ' . $item->user->name;
+                $created_at = $item->created_at;
+                $item->formatted_created_at = $created_at;
+            }
+
+            return response()->json($data);
+        } elseif ($request->mode == 'task_approve') {
+            $data = TaskApprove::where('task_id', $id)->latest()->first();
+
+            if (!is_null($data)) {
+                $data->deadline_meet = $data->rating;
+                $data->submission_quality = $data->rating2;
+                $data->req_fullfillment = $data->rating3;
+                $data->overall_tasks = ($data->deadline_meet + $data->submission_quality + $data->req_fullfillment) / 3;
+            } 
+            
+            return response()->json($data);
+        } elseif ($request->mode == 'task_comment') {
+            $data = TaskComment::with('user')->where('task_id', $id)->get();
+
+            foreach ($data as $value) {
+                $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
+
+                $value->replies = User::whereIn('id', $replies)->get()->map(function ($row) {
+                    return [
+                        'id' => $row->id,
+                        'image_url' => $row->image_url
+                    ];
+                });
+            }
+            return response()->json($data);
+        } else {
+            abort(403);
         }
     }
 }

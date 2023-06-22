@@ -473,4 +473,11 @@
     li{list-style: unset !important;}
     p{margin-bottom: 3px !important;}
     h1{font-size: 2rem !important;}
+    a{
+        color: var(--header_color);
+        &:hover{
+            color: var(--header_color);
+            text-decoration: underline;
+        }
+    }
 }

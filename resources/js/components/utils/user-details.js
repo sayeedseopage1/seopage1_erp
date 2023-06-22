@@ -52,6 +52,14 @@ export class User {
     // name
     getName(){return this.name};
 
+    // user id
+    getId(){return this.userId};
+
+    // user link
+    getUserLink() {
+      return `/account/employees/${this.userId}`;
+    }
+
     // image URL
     getAvatar(){
       return this.imageUrl;

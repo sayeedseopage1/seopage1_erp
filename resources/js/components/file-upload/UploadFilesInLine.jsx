@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Button from './Button'
 
-const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles}) => {
+const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mode=""}) => {
     const [previews, setPreviews] = React.useState([]);
 
     
@@ -89,11 +89,11 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles}) =>
   return (
     <div className='d-flex align-items-center flex-wrap' style={{gap: '10px'}}>
          
-        <div className="sp1_sub-task-file-upload">
+        {mode !== 'preview' &&  <div className="sp1_sub-task-file-upload">
             <i className="fa-solid fa-cloud-arrow-up"></i>
             <span>Upload Files</span>
             <input type="file" multiple onChange={handleFileUpload}/>
-        </div> 
+        </div> } 
         
         {previous?.map((file) => (
           <div 
@@ -104,24 +104,50 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles}) =>
               title={file?.name}
           >
         
-          {file?.icon ==='images' ? 
-              <img  
-                src={file?.file_url} 
-                alt="" 
-                style={{
-                  width: '100%', 
-                  height:'100%', 
-                  objectFit: 'fill'
-                }} 
-              />
-              :  <RenderIcon _file={file} type='previous'/>
-          } 
-          <Button 
-            onClick={(e) => onPreviousFileDelete(e, file) } 
-            className='__remove--btn'
-          > 
-            <i className="fa-regular fa-trash-can"></i> 
-          </Button>
+          {mode === 'preview' ? (
+            <a 
+              href={file?.file_url} 
+              download={true} 
+              className='file-download-preview d-flex align-items-center justify-content-center' 
+              data-toggle="tooltip" 
+              data-placement='top' 
+              title='Click to Download!'
+            >
+              {file?.icon ==='images' ? 
+            <img  
+              src={file?.file_url} 
+              alt="" 
+              style={{
+                width: '100%', 
+                height:'100%', 
+                objectFit: 'fill'
+              }} 
+            />
+            :  <RenderIcon _file={file} type='previous'/> }
+            </a>
+          ): 
+          file?.icon ==='images' ? 
+            <img  
+              src={file?.file_url} 
+              alt="" 
+              style={{
+                width: '100%', 
+                height:'100%', 
+                objectFit: 'fill'
+              }} 
+            />
+            :  <RenderIcon _file={file} type='previous'/>
+      }
+
+            {
+                mode !== 'preview' &&
+                <Button 
+                  onClick={(e) => onPreviousFileDelete(e, file) } 
+                  className='__remove--btn'
+                > 
+                  <i className="fa-regular fa-trash-can"></i> 
+                </Button>
+            }
       </div>
         ))}
 
@@ -137,7 +163,13 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles}) =>
                     <img src={file?.preview} alt="" style={{width: '100%', height:'100%', objectFit: 'fill'}} />
                     :  <RenderIcon _file={file} type="" />
                 } 
-                <Button onClick={(e) => handleRemoveFile(e, i)} className='__remove--btn'> <i className="fa-regular fa-trash-can"></i> </Button>
+                
+                    <Button 
+                      onClick={(e) => handleRemoveFile(e, i)} 
+                      className='__remove--btn'
+                    > 
+                      <i className="fa-regular fa-trash-can"></i> 
+                    </Button> 
             </div>
         ))}
     </div> 

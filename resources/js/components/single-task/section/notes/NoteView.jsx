@@ -5,6 +5,7 @@ import { useGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi'
 import { useSearchParams } from 'react-router-dom'
 import { User } from '../../../utils/user-details'
 import ContentLoader from "react-content-loader"
+import UploadFilesInLine from '../../../file-upload/UploadFilesInLine'
 
 
 const NoteView = ({close, isOpen, toggleRef}) => {
@@ -62,7 +63,8 @@ const NoteView = ({close, isOpen, toggleRef}) => {
                             </div> 
                             <div className='mt-4'>
                                 <h6 className='font-weight-bold'>{data?.title}</h6>
-                                <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: data?.note}} />
+                                <div className='sp1_ck_content mb-5' dangerouslySetInnerHTML={{__html: data?.note}} />
+                                {data?.files && <UploadFilesInLine previous={data?.files} mode='preview'/>}
                             </div>
                         </>
                         }

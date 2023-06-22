@@ -680,6 +680,15 @@
   display: block;
 }
 
+.file-download-preview {
+  color: inherit !important;
+  width: 100%;
+  height: 100%;
+}
+.file-download-preview:hover {
+  color: inherit !important;
+}
+
 @keyframes glice {
   0% {
     background-position: -200px 0;
@@ -708,6 +717,10 @@
   background-image: linear-gradient(45deg, #f0f0f0, #e0e0e0, #f0f0f0);
   background-size: 200px 100%;
   animation: glice 2s infinite linear, pulse 2s infinite;
+}
+
+.hover-underline:hover {
+  text-decoration: underline;
 }
 
 /*# sourceMappingURL=seopage1.css.map*/

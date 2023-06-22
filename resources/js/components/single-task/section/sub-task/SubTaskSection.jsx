@@ -145,7 +145,7 @@ const SubTaskSection = () => {
 
         <div className="sp1_task_right_card--body">
         {
-          subTask.length
+          !isFetching ? subTask.length !== 0
             ? subTask?.map((sub) => 
                 <SubTask 
                     key={sub.id} 
@@ -153,8 +153,40 @@ const SubTaskSection = () => {
                     task={task}
                     toggleEditForm={toggleEditForm} 
                 />)
-            : null
-        } 
+             :<div
+            className='d-flex align-items-center justify-content-center'
+            style={{
+              color: '#B4BCC4',
+              fontSize: '15px',
+              textAlign: 'center',
+              height: '100%',
+              width: '100%',
+            }}
+          >
+             Sub Task is Not Available
+          </div> : 
+          <div className='d-flex align-items-center justify-content-center'
+            style={{
+              color: '#5A6169',
+              fontSize: '15px',
+              textAlign: 'center',
+              height: '100%',
+              width: '100%',
+            }}
+          > 
+              <div 
+                    className="spinner-border text-dark ml-2" 
+                    role="status"
+                    style={{
+                        width: '16px',
+                        height: '16px',
+                        border: '0.14em solid rgba(0, 0, 0, .25)',
+                        borderRightColor: 'transparent',
+                        marginRight: '10px'
+                    }}
+                />
+              Loading...
+          </div> } 
         </div>
 
    </div>

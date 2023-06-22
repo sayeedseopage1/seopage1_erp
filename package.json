@@ -75,6 +75,7 @@
         "signature_pad": "^3.0.0-beta.4",
         "styled-components": "^5.3.9",
         "sweetalert2": "^10.12.0",
+        "swr": "^2.1.5",
         "xlsx": "^0.18.5"
     }
 }

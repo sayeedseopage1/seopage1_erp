@@ -546,5 +546,12 @@
 .sp1_ck_content h1 {
   font-size: 2rem !important;
 }
+.sp1_ck_content a {
+  color: var(--header_color);
+}
+.sp1_ck_content a:hover {
+  color: var(--header_color);
+  text-decoration: underline;
+}
 
 /*# sourceMappingURL=ck-editor.css.map*/

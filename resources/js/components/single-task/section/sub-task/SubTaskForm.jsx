@@ -8,21 +8,21 @@ import PrioritySelection from './PrioritySelection'
 import DatePicker from '../comments/DatePicker'
 import CKEditorComponent from '../../../ckeditor' 
 import UploadFilesInLine from '../../../file-upload/UploadFilesInLine'
-import dayjs from 'dayjs'
+
 import _ from 'lodash'
 import { useCreateSubtaskMutation, useGetTaskDetailsQuery} from '../../../services/api/SingleTaskPageApi'
 import { useParams } from 'react-router-dom'
  
 import { useDispatch, useSelector } from 'react-redux'
 import { storeSubTasks } from '../../../services/features/subTaskSlice'
-
+import { CompareDate } from '../../../utils/dateController'
 
 
 
 const SubTaskForm = ({close}) => {
     const { task, subTask } = useSelector(s => s.subTask);
     const dispatch = useDispatch(); 
- 
+    const dayjs = new CompareDate()
 //   form data
   const [title, setTitle] = useState('');
   const [milestone, setMilestone] = useState('');
@@ -67,8 +67,8 @@ const handleChange = (e, setState) =>{
 // handle sumition
 const handleSubmit = (e) => {
     e.preventDefault();
-  const _startDate = dayjs(startDate).format('DD-MM-YYYY');
-  const _dueDate = dayjs(dueDate).format('DD-MM-YYYY');
+  const _startDate = dayjs.dayjs(startDate).format('DD-MM-YYYY');
+  const _dueDate = dayjs.dayjs(dueDate).format('DD-MM-YYYY');
 
   const fd = new FormData(); 
     fd.append('milestone_id', task?.milestone_id);
@@ -94,11 +94,7 @@ const handleSubmit = (e) => {
    
     createSubtask(fd).unwrap().then(res => {
             if(res?.status === 'success'){
-                console.log({subTask})
-                console.log(res)
                 let _subtask = [...subTask, {id: res?.sub_task?.id, title: res?.sub_task?.title}];
-                console.log(_subtask);
-                 
                 dispatch(storeSubTasks(_subtask)); 
                 close();
 

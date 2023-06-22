@@ -26,11 +26,11 @@ const TimeLogItem = ({log}) => {
 
         <div>
           {dayjs(log?.start_time).format('MMM DD, YYYY')} <br />
-          {dayjs(log?.start_time).format('HH:mm a')} 
+          {dayjs(log?.start_time).format('hh:mm a')} 
         </div> 
         <div>
           {dayjs(log?.end_time).format('MMM DD, YYYY')} <br/>
-          {dayjs(log?.start_time).format('HH:mm a')} </div> 
+          {dayjs(log?.start_time).format('hh:mm a')} </div> 
         <div>{h} <br/> {m}</div>
     </div>
   )

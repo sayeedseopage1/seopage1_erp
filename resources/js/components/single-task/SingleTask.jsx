@@ -361,8 +361,8 @@ const SingleTask = () => {
                 <NoteSection />
                 <SubmittedWork />
                 <TimeLogSection />
-                <HistorySection />
-                <RevisionSection />
+                {task && task?.id && <HistorySection />}
+                {task && task?.id && <RevisionSection task={task} />}
               </div>
             </div>
         </div>

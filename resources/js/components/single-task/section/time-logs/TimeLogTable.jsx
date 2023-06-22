@@ -74,12 +74,12 @@ const TableRow = ({log}) => {
             
             <td className='__tbody_td _tbody_td_start_time'>
                 {dayjs(log?.start_time).format('MMM DD, YYYY')} <br/>
-                {dayjs(log?.start_time).format('HH:mm a')}
+                {dayjs(log?.start_time).format('hh:mm a')}
             </td>
             
             <td className='__tbody_td _tbody_td_start_time _tbody_td_start_end'>
                 {dayjs(log?.end_time).format('MMM DD, YYYY')} <br/>
-                {dayjs(log?.end_time).format('HH:mm a')}
+                {dayjs(log?.end_time).format('hh:mm a')}
             </td>
 
             <td className='__tbody_td _tbody_td_memo'>
