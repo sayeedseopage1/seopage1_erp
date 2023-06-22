@@ -103,7 +103,7 @@
         formData.append('id', {{$task->id}});
         formData.append('user_id', {{Auth::user()->id}});
 
-        $.ajaxSetup({
+        $.ajaxSetup({    
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
