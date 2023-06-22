@@ -3892,7 +3892,6 @@ class ProjectController extends AccountBaseController
         return back();
     }
 
-
     public function ProjectDeny(Request $request)
     {
         //dd($request);
