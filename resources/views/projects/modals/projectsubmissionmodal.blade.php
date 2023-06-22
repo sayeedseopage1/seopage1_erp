@@ -329,7 +329,7 @@
           <td>
             @if($project_portfolio != null)
                   <p class="fw-normal mb-1">{{$project_portfolio->cms_name}}</p>
-                  @else 
+                  @else
                   <p class="fw-normal mb-1">--</p>
                   @endif
 
@@ -353,7 +353,7 @@
           <td>
             @if($project_portfolio != null)
                   <p class="fw-normal mb-1">{{$project_portfolio->website_type}}</p>
-                  @else 
+                  @else
                   <p class="fw-normal mb-1">--</p>
                   @endif
 
@@ -378,7 +378,7 @@
           @if($project_portfolio != null)
 
                 <p class="fw-normal mb-1">{{$project_portfolio->category_name}}</p>
-                @else 
+                @else
                   <p class="fw-normal mb-1">--</p>
                   @endif
         </td>
@@ -474,8 +474,8 @@
           </td>
           <td>
             @if($project_portfolio != null)
-            
-            
+
+
               <p class="fw-normal mb-1">{{$project_portfolio->day_interval}}</p>
               @else
               <p class="fw-normal mb-1">--</p>
@@ -501,7 +501,7 @@
           <td>
             @if($project_portfolio != null)
               <p class="fw-normal mb-1">{!! $project_portfolio->description !!}</p>
-              @else 
+              @else
               <p class="fw-normal mb-1">--</p>
               @endif
 
@@ -528,7 +528,7 @@
             @if($project_portfolio != null)
               <p class="fw-normal mb-1">{{$project_portfolio->theme_name}}</p>
               <p class="fw-normal mb-1">{{$project_portfolio->theme_url}}</p>
-              @else 
+              @else
               <p class="fw-normal mb-1">--</p>
               @endif
 
@@ -558,7 +558,7 @@
             No
             @endif
             </p>
-            @else 
+            @else
             <p class="fw-normal mb-1">--</p>
             @endif
 
@@ -611,9 +611,25 @@
           </td>
           <td>
             @if($project_portfolio != null)
-            <p class="fw-normal mb-1">{{implode(',',Json_decode($project_portfolio->plugin_name))}}</p>
-            <p class="fw-normal mb-1">{{implode(',',Json_decode($project_portfolio->plugin_url))}}</p>
-              @else 
+                  @if (is_numeric($project_portfolio->plugin_name))
+                      @php
+                          $website_plugin = App\Models\ProjectWebsitePlugin::find($project_portfolio->plugin_name);
+                      @endphp
+                      <p class="fw-normal mb-1">
+                          {{ $website_plugin->plugin_name }}
+                      </p>
+                      <p class="fw-normal mb-1">
+                          {{ $website_plugin->plugin_url }}
+                      </p>
+                  @else
+                      <p class="fw-normal mb-1">
+                          {{ $project_portfolio->plugin_name }}
+                      </p>
+                      <p class="fw-normal mb-1">
+                          {{ $project_portfolio->plugin_url }}
+                      </p>
+                  @endif
+              @else
               <p class="fw-normal mb-1">--</p>
               @endif
 

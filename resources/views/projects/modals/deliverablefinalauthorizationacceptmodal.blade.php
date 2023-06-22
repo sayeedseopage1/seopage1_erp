@@ -30,7 +30,8 @@
                 <input type="hidden" name="project_id" value="{{$project->id}}">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeBtn">Close</button>
-                    <button type="Submit" id="authorizationBtn" class="btn btn-primary" >Authorization</button>
+                    <button type="Submit" id="authorizationBtn" class="btn btn-primary mx-3" >Authorization</button>
+                    <button type="Submit" id="denyBtn" class="btn btn-success" value="denyAuthorization">Deny</button>
                 </div>
             </form>
         </div>
@@ -70,4 +71,37 @@
         });
     });
 
+    $('#denyBtn').click(function(e){
+        e.preventDefault();
+        var id = $(this).attr('data-id');
+        var admin_authorization_comment = CKEDITOR.instances.admin_authorization_comment.getData();
+        var denyAuthorizationValue = $('#denyBtn').val();
+        var data= {
+            '_token': "{{ csrf_token() }}",
+            'project_id': {{$project->id}},
+            'admin_authorization_comment': admin_authorization_comment,
+            'denyAuthorization': denyAuthorizationValue,
+        }
+        console.log(data);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.easyAjax({
+            blockUI: true,
+            disableButton: true,
+            buttonSelector: "#authorizationBtn",
+            type: "POST",
+            url: "{{route('deliverable-final-authorization-accept')}}",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                if (response.status == 400) {
+                    toastr.success('Authorization request accepted successfully');
+                    window.location.reload();
+                }
+            },
+        });
+    });
 </script>

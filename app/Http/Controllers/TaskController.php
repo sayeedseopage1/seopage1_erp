@@ -103,20 +103,16 @@ class TaskController extends AccountBaseController
 
     public function TaskReview(Request $request)
     {
-        $validator = Validator::make($request->input(), [
-            'link' => 'required|array',
-            'link.*' => 'required|url|min:1',
+        $validator = Validator::make($request->all(), [
+            'link' => 'required|string',
             'text' => 'required',
-        ], [
-            'link.url' => 'Invalid url!',
-            'link.*.required' => 'This field is required',
-            'text.required' => 'Please describe what you\'ve done !',
+            'file' => 'required',
         ]);
 
         $link = [];
         foreach ($validator->errors()->toArray() as $key => $value) {
             if (strpos($key, 'link.') !== false) {
-                $exp= explode('.', $key);
+                $exp = explode('.', $key);
                 $link[$exp[1]] = $value[0];
             }
         }
@@ -130,46 +126,46 @@ class TaskController extends AccountBaseController
             ], 422);
         }
 
-        $order= TaskSubmission::orderBy('id','desc')->where('user_id',$request->user_id)->where('task_id',$request->id)->first();
+        $order = TaskSubmission::orderBy('id', 'desc')->where('user_id', $request->user_id)->where('task_id', $request->id)->first();
 
         if ($request->text != null) {
-            $task_submit= new TaskSubmission();
-            $task_submit->task_id= $request->id;
-            $task_submit->user_id= $request->user_id;
+            $task_submit = new TaskSubmission();
+            $task_submit->task_id = $request->id;
+            $task_submit->user_id = $request->user_id;
 
             //$task_submit->table=$request->table;
             //$task_submit->list=$request->list;
-            $task_submit->text=$request->text;
+            $task_submit->text = $request->text;
             if ($order == null) {
-                $task_submit->submission_no= 1;
-            }else {
-                $task_submit->submission_no= $order->submission_no+1;
+                $task_submit->submission_no = 1;
+            } else {
+                $task_submit->submission_no = $order->submission_no + 1;
             }
             $task_submit->save();
         }
 
         if ($request->link != null) {
-            foreach ($request->link as $lin) {
-                $task_submit= new TaskSubmission();
-                $task_submit->task_id= $request->id;
-                $task_submit->user_id= $request->user_id;
+            $links = explode(',', $request->link);
+            foreach ($links as $lin) {
+                $task_submit = new TaskSubmission();
+                $task_submit->task_id = $request->id;
+                $task_submit->user_id = $request->user_id;
 
-                $task_submit->link=$lin;
+                $task_submit->link = $lin;
                 if ($order == null) {
-                    $task_submit->submission_no= 1;
-                }else {
-                    $task_submit->submission_no= $order->submission_no+1;
+                    $task_submit->submission_no = 1;
+                } else {
+                    $task_submit->submission_no = $order->submission_no + 1;
                 }
 
                 $task_submit->save();
             }
         }
 
-        if($request->file('file') != null)
-        {
+        if ($request->file('file') != null) {
             foreach ($request->file('file') as $att) {
-                $task_submit= new TaskSubmission();
-                $filename=null;
+                $task_submit = new TaskSubmission();
+                $filename = null;
                 if ($att) {
                     $filename = time() . $att->getClientOriginalName();
 
@@ -179,13 +175,13 @@ class TaskController extends AccountBaseController
                         $filename
                     );
                 }
-                $task_submit->attach= $filename;
-                $task_submit->task_id= $request->id;
-                $task_submit->user_id= $request->user_id;
+                $task_submit->attach = $filename;
+                $task_submit->task_id = $request->id;
+                $task_submit->user_id = $request->user_id;
                 if ($order == null) {
-                    $task_submit->submission_no= 1;
-                }else {
-                    $task_submit->submission_no= $order->submission_no+1;
+                    $task_submit->submission_no = 1;
+                } else {
+                    $task_submit->submission_no = $order->submission_no + 1;
                 }
                 $task_submit->save();
             }
@@ -193,9 +189,9 @@ class TaskController extends AccountBaseController
 
 
 
-        $task= Task::find($request->id);
-        $task->board_column_id= 6;
-        $task->task_status="submitted";
+        $task = Task::find($request->id);
+        $task->board_column_id = 6;
+        $task->task_status = "submitted";
         $task->save();
 
         if ($this->user->role_id == 6) {
@@ -205,7 +201,7 @@ class TaskController extends AccountBaseController
             $type = 'task_submission_by_developer';
             $task_user = TaskUser::where('task_id', $task->id)->get();
             foreach ($task_user as $value) {
-                if ($value->user->role_id == 6) {
+                if ($value->user->role_id == 5) {
                     $authorization_for = $value->user_id;
                 }
             }
@@ -217,33 +213,32 @@ class TaskController extends AccountBaseController
         $authorization_action->type = $type;
         $authorization_action->deal_id = $task->project->deal_id;
         $authorization_action->project_id = $task->project->id;
-        $authorization_action->link = route('projects.show', $task->project->id).'?tab=tasks';
-        $authorization_action->title = Auth::user()->name.' submitted task for approved';
+        $authorization_action->link = route('projects.show', $task->project->id) . '?tab=tasks';
+        $authorization_action->title = Auth::user()->name . ' submitted task for approved';
         $authorization_action->authorization_for = $authorization_for;
         $authorization_action->save();
 
-        $task_id= Task::where('id',$task->id)->first();
+        $task_id = Task::where('id', $task->id)->first();
 
-        $user= User::where('id',$task->added_by)->first();
-        $sender= User::where('id',$request->user_id)->first();
+        $user = User::where('id', $task->added_by)->first();
+        $sender = User::where('id', $request->user_id)->first();
 
-        $text = Auth::user()->name.' mark task complete';
-        $link = '<a href="'.route('tasks.show', $task->id).'">'.$text.'</a>';
+        $text = Auth::user()->name . ' mark task complete';
+        $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
         $this->logProjectActivity($task->project->id, $link);
 
         $this->triggerPusher('notification-channel', 'notification', [
             'user_id' => $task->project->pm_id,
             'role_id' => 4,
             'title' => 'Task complete request',
-            'body' => Auth::user()->name.' mark task complete',
+            'body' => Auth::user()->name . ' mark task complete',
             'redirectUrl' => route('tasks.show', $task->id)
         ]);
 
-        Notification::send($user, new TaskSubmitNotification($task_id,$sender));
+        Notification::send($user, new TaskSubmitNotification($task_id, $sender));
 
         Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return Redirect::back()->with('messages.taskSubmitNotification');
-
     }
     public function TaskApprove(Request $request)
     {
@@ -386,7 +381,7 @@ class TaskController extends AccountBaseController
         $user= User::where('id',$task_submission->user_id)->first();
         $sender= User::where('id',$request->user_id)->first();
         Notification::send($user, new TaskRevisionNotification($task_status, $sender));
-        
+
         Toastr::success('Task Revision Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return redirect()->back();
     }

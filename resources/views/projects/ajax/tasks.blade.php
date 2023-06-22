@@ -37,6 +37,9 @@ $projectArchived = $project->trashed();
                      @lang('app.add')
                      @lang('app.task')
                  </x-forms.link-primary>
+                 @if(count($task_guideline) <1)
+                     <a href="{{route('task-guideline',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Parent Task Guideline</a>
+                 @endif
              @else
                  <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
                                        class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
@@ -57,7 +60,6 @@ $projectArchived = $project->trashed();
            $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->get();
         @endphp
         @if(count($tasks) <1 && count($task_guideline) < 1)
-
             <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
                 class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
                 @lang('app.add')

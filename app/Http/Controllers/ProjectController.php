@@ -790,13 +790,13 @@ class ProjectController extends AccountBaseController
         }
 
         if (request()->ajax()) {
-            $html = view('projects.ajax.disputeview', $this->data)->render();
+            $html = view('projects.modals.final_dispute_view', $this->data)->render();
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
 
         abort_403(user()->permission('edit_projects') == 'added' && $this->project->added_by != user()->id);
-        $this->view = 'projects.ajax.disputeview';
+        $this->view = 'projects.modals.final_dispute_view';
 
         return view('projects.create', $this->data);
 
@@ -3620,10 +3620,23 @@ class ProjectController extends AccountBaseController
         $milestone->status = 'pending';
 
         $milestone->save();
+
+        $website_themes = new ProjectWebsiteTheme();
+        $website_themes->theme_name = $request->theme_name;
+        $website_themes->theme_url = $request->theme_url;
+        $website_themes->save();
+
+        foreach($request->plugin_name as $key => $plugin_name) {
+            $website_plugins = new ProjectWebsitePlugin();
+            $website_plugins->plugin_name = $plugin_name;
+            $website_plugins->plugin_url = $request->plugin_url[$key] ;
+            $website_plugins->save();
+        }
+
         $data = $request->all();
 
-        $plugin_names = json_encode($data['plugin_name']);
-        $plugin_urls = json_encode($data['plugin_url']);
+//        $plugin_names = json_encode($data['plugin_name']);
+//        $plugin_urls = json_encode($data['plugin_url']);
 
         $project_portfolio = new ProjectPortfolio();
         $project_portfolio->project_id = $project->project_id;
@@ -3631,8 +3644,8 @@ class ProjectController extends AccountBaseController
         $project_portfolio->website_type = $data['website_type'];
         $project_portfolio->niche = $data['niche'];
         $project_portfolio->sub_niche = $data['sub_niche'];
-        $project_portfolio->theme_name = $data['theme_name'];
-        $project_portfolio->theme_url = $data['theme_url'];
+        $project_portfolio->theme_name = $website_themes->id;
+        $project_portfolio->theme_url = $website_themes->id;
         $project_portfolio->plugin_information = $data['website_plugin_box_information'];
         $project_portfolio->main_page_number = $data['main_page_number'];
         $project_portfolio->secondary_page_number = $data['secondary_page_number'];
@@ -3641,12 +3654,14 @@ class ProjectController extends AccountBaseController
         $project_portfolio->description = $data['description'];
         $project_portfolio->portfolio_link = $data['actual_link'];
         $project_portfolio->added_by = $data['added_by'];
-        $project_portfolio->plugin_name = $plugin_names;
-        $project_portfolio->plugin_url = $plugin_urls;
+        $project_portfolio->plugin_name = $website_plugins->id;
+        $project_portfolio->plugin_url = $website_plugins->id;
         $project_portfolio->save();
         $milestone_update= ProjectMilestone::where('id',$milestone->milestone_id)->first();
         $milestone_update->project_completion_status= 2;
         $milestone_update->save();
+
+
         //$user= User::where('id',$project->pm_id)->first();
 
         // authorization action section
