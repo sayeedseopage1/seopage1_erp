@@ -914,7 +914,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::resource('qualified-sales',QualifiedSalesController::class);
     Route::get('qualified-sales/get-points/{id}',[QualifiedSalesController::class,'get_point_details']);
-    
+
 
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
@@ -1374,6 +1374,6 @@ Route::post('/authorization/deal-details/', [ContractController::class, 'authori
 //Route::get('fix-database', [HomeController::class, 'fix_database'])->name('fix_database');
 Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
 Route::post('/upload', [HomeController::class, 'upload'])->name('upload');
-Route::get('app_requirements', [HomeController::class, 'app_requirements']);
+Route::get('account/app_requirements', [HomeController::class, 'app_requirements']);
 
 
