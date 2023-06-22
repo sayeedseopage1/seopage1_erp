@@ -37,13 +37,12 @@ class WonDealsDataTable extends BaseDataTable
     }
     public function dataTable($query)
     {
-        return datatables()
-            ->eloquent($query)
+        return datatables()->eloquent($query)
             ->addColumn('check', function ($row) {
                 return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
             ->addColumn('short_code', function ($row) {
-                return '<a target="__blank" href="'.route('contracts.show', $row->id).'">'.$row->deal_id.'</a>';
+                return '<a target="__blank" href="' . route('contracts.show', $row->id) . '">' . $row->deal_id . '</a>';
             })
             ->addColumn('project_name', function ($row) {
                 $title = Str::limit($row->project_name, 30, ' ...');
@@ -52,39 +51,40 @@ class WonDealsDataTable extends BaseDataTable
                 }
 
                 if ($row->status == 'Accepted') {
-                    $project_id= Project::where('deal_id',$row->id)->first();
-                    return '<a class="openRightModal" href="'.route('projects.show', $project_id->id).'" title="'.$row->project_name.'">'.$title.'</a>';
+                    $project_id = Project::where('deal_id', $row->id)->first();
+                    return '<a class="openRightModal" href="' . route('projects.show', $project_id->id) . '" title="' . $row->project_name . '">' . $title . '</a>';
                 } else {
-                    return '<p title="'.$row->project_name.'">'.$title.'</p>';
+                    return '<p title="' . $row->project_name . '">' . $title . '</p>';
                 }
             })
             ->addColumn('amount', function ($row) {
-                return $row->actual_amount.' '.$row->original_currency->currency_symbol;
+                return $row->actual_amount . ' ' . $row->original_currency->currency_symbol;
             })
             ->addColumn('client_name', function ($row) {
-                return '<a class="openRightModal" href="'.route('clients.show', $row->client_id).'"><img src="'.$row->client->image_url.'" class="mr-3 taskEmployeeImg rounded-circle" alt="'.$row->client->name.'" title="'.$row->client->name.'">'.$row->client_name.'</a>';
+                return '<a class="openRightModal" href="' . route('clients.show', $row->client_id) . '"><img src="' . $row->client->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . $row->client->name . '" title="' . $row->client->name . '">' . $row->client_name . '</a>';
             })
             ->addColumn('project_manager', function ($row) {
                 if (!is_null($row->pm_id)) {
-                    return '<a class="openRightModal" href="'.route('employees.show', $row->pm_id).'"><img src="'.$row->pm->image_url.'" class="mr-3 taskEmployeeImg rounded-circle" alt="'.$row->pm->name.'" title="'.$row->pm->name.'">'.$row->pm->name.'</a>';
+                    return '<a class="openRightModal" href="' . route('employees.show', $row->pm_id) . '"><img src="' . $row->pm->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . $row->pm->name . '" title="' . $row->pm->name . '">' . $row->pm->name . '</a>';
                 } else {
                     return '---';
                 }
             })
             ->addColumn('deal_creation_date', function ($row) {
                 return $row->deal_creation_date;
-            })->addColumn('client_contact_form', function ($row) {
-                if($row->submission_status == 'Submitted') {
+            })
+            ->addColumn('client_contact_form', function ($row) {
+                if ($row->submission_status == 'Submitted') {
                     return '<span class="badge bg-success text-light">Submitted</span>';
-                } elseif($row->submission_status == 'Awaiting for client Response') {
+                } elseif ($row->submission_status == 'Awaiting for client Response') {
                     return '<span class="badge bg-warning">Awaiting for client Response</span>';
                 } else {
-                    return '<a class="text-center" href="/deals/details/'.$row->id.'"><i class="fa-solid fa-eye fa-2x"></i></a>';
+                    return '<a class="text-center" href="/deals/details/' . $row->id . '"><i class="fa-solid fa-eye fa-2x"></i></a>';
                 }
             })
             ->addColumn('added_by', function ($row) {
                 if (!is_null($row->added_by)) {
-                    return '<a class="openRightModal" href="'.route('employees.show', $row->added_by).'"><img src="'.$row->addedBy->image_url.'" class="mr-3 taskEmployeeImg rounded-circle" alt="'.$row->addedBy->name.'" title="'.$row->addedBy->name.'">'.$row->addedBy->name.'</a>';
+                    return '<a class="openRightModal" href="' . route('employees.show', $row->added_by) . '"><img src="' . $row->addedBy->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . $row->addedBy->name . '" title="' . $row->addedBy->name . '">' . $row->addedBy->name . '</a>';
                 } else {
                     return '---';
                 }
@@ -95,40 +95,51 @@ class WonDealsDataTable extends BaseDataTable
                 } elseif ($row->status == 'Denied') {
                     return '<span class="badge badge-danger">Denied</span>';
                 } else {
-                    return '<span class="badge badge-warning">'.$row->status.'</span>';
+                    return '<span class="badge badge-warning">' . $row->status . '</span>';
                 }
             })
             ->addColumn('action', function ($row) {
                 $action = '
-                <div class="dropdown">
-                    <button class="btn f-14 px-0 py-0 text-dark-grey" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="icon-options-vertical icons"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0" aria-labelledby="dropdownMenuLink" tabindex="0">';
+            <div class="dropdown">
+                <button class="btn f-14 px-0 py-0 text-dark-grey" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="icon-options-vertical icons"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0" aria-labelledby="dropdownMenuLink" tabindex="0">';
 
-                        if($row->submission_status == "Awaiting for client Response"){
-                            $action .= '<a class="dropdown-item" href="/account/deal-url/'.$row->id.'"><i class="fa-solid fa-file mr-2"></i>'.trans('Client Form').'</a>';
-                        } else {
-                            $action .= '<a class="dropdown-item" href="deal-url/'.$row->id.'"><i class="fa-solid fa-file mr-2"></i>'.trans('Client Form').'</a>';
+                if ($row->submission_status == "Awaiting for client Response") {
+                    $action .= '<a class="dropdown-item" href="/account/deal-url/' . $row->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
+                } else {
+                    $action .= '<a class="dropdown-item" href="deal-url/' . $row->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
+                }
+
+                if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8) {
+                    $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $row->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
+                }
+                if (Auth::user()->role_id == 8 || Auth::user()->role_id == 1) {
+                    if ($row->authorization_status == 0 || $row->authorization_status == '2') {
+                        if (Auth::user()->role_id == 8) {
+                            $action .= '<a class="dropdown-item bg-warning" href="' . route("authorization_request", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Authorization Need') . '</a>';
                         }
-                        
-                        if(Auth::user()->role_id == 1 || Auth::user()->role_id== 7 || Auth::user()->role_id == 8) {
-                            $action .= '<a class="dropdown-item" href="/deals/details/edit/'.$row->id.'"><i class="fa-solid fa-pen-to-square mr-2"></i>'.trans('Edit').'</a>';
+                    } else {
+                        $action .= '<a class="dropdown-item bg-success" href="' . route("contracts.show", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Authorization Details') . '</a>';
+                    }
+                }
+                if (Auth::user()->role_id == 4) {
+                    $award_time_request = $row->has_award_time_request;
+
+                    if ($award_time_request) {
+                        if ($award_time_request->status == '1') {
+                            $action .= '<a class="dropdown-item bg-success text-light" data-id="' . $row->id . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Award time Accept') . '</a>';
+                        } elseif ($award_time_request->status == '2') {
+                            $action .= '<a class="dropdown-item bg-danger text-light" data-id="' . $row->id . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Award time Rejected') . '</a>';
                         }
-                        if (Auth::user()->role_id == 8 || Auth::user()->role_id == 1) {
-                            if ($row->authorization_status == 0 || $row->authorization_status == '2') {
-                                if(Auth::user()->role_id == 8)
-                                {
-                                    $action .= '<a class="dropdown-item bg-warning" href="'.route("authorization_request", $row->id).'"><i class="fa-solid fa-user mr-2'.($row->auth).'"></i>'.trans('Authorization Need').'</a>';
-                                }
-                               
-                            } else {
-                                $action .= '<a class="dropdown-item bg-success" href="'.route("contracts.show", $row->id).'"><i class="fa-solid fa-user mr-2'.($row->auth).'"></i>'.trans('Authorization Details').'</a>';
-                            }
-                        }
-                    $action .= '
-                    </div>
-                </div>';
+                    } else {
+                        $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Award time update') . '</a>';
+                    }
+                }
+                $action .= '
+                </div>
+            </div>';
 
                 return $action;
             })
@@ -137,8 +148,7 @@ class WonDealsDataTable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['check', 'short_code', 'project_name', 'amount', 'client_name', 'project_manager', 'deal_creation_date', 'client_contact_form', 'added_by', 'status', 'action'])
-        ;
+            ->rawColumns(['check', 'short_code', 'project_name', 'amount', 'client_name', 'project_manager', 'deal_creation_date', 'client_contact_form', 'added_by', 'status', 'action']);
     }
 
     /**
@@ -153,11 +163,11 @@ class WonDealsDataTable extends BaseDataTable
         $startDate = null;
         $endDate = null;
         if (Auth::user()->role_id == 4) {
-            $model = $model->where('pm_id',Auth::id());
+            $model = $model->where('pm_id', Auth::id());
         } elseif (Auth::user()->role_id == 7) {
-            $model = $model->where('added_by',Auth::id());
+            $model = $model->where('added_by', Auth::id());
         } else {
-            $model = $model->orderBy('id','desc');
+            $model = $model->orderBy('id', 'desc');
         }
 
 
@@ -230,7 +240,7 @@ class WonDealsDataTable extends BaseDataTable
                 'scrollX' => true
                 /* 'buttons'      => ['excel'] */
             ])
-        ->buttons(Button::make(['extend' => 'excel', 'text' => '<i class="fa fa-file-export"></i> ' . trans('app.exportExcel')]));
+            ->buttons(Button::make(['extend' => 'excel', 'text' => '<i class="fa fa-file-export"></i> ' . trans('app.exportExcel')]));
     }
 
     /**
