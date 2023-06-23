@@ -36,13 +36,25 @@ export default function CKEditorComponent ({data="", onChange, placeholder="Type
                         '|',
                         'heading', 
                         '|', 
-                        'bold', 'italic', {label: 'More basic styles', icon: 'threeVerticalDots', items: ["underline","strikethrough", "blockQuote","fontsize","fontColor","fontBackgroundColor"]},
+                        'bold', 'italic', 
+                        {
+                            label: 'More basic styles', 
+                            icon: 'text', 
+                            items: ["underline","strikethrough", "blockQuote", 'alignment', "fontColor","fontBackgroundColor,"]
+                        },
                         '|', 
-                          'bulletedList', 'numberedList', 'alignment',
+                        {
+                            label: 'List',
+                            icon: false,
+                            items: ['bulletedList', 'numberedList','indent', 'outdent']
+                        },
                         '|', 
-                        'link', 'imageUpload', 'mediaEmbed', 'insertTable',  
-                        "|",  
-                        'indent', 'outdent',
+                        'link',
+                        {
+                            label: 'Insert',
+                            icon: 'plus',
+                            items: ['imageUpload', 'mediaEmbed', 'insertTable']
+                        },
                     ],
 
                     image:{

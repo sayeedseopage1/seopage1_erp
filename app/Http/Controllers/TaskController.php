@@ -1989,10 +1989,10 @@ class TaskController extends AccountBaseController
             return response()->json($data);
         } elseif ($request->mode == 'task_comment') {
             $data = TaskComment::with('user')->where('task_id', $id)->get();
-
             foreach ($data as $value) {
                 $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
-
+                $value->total_replies = $replies->count();
+                $value->last_updated_at = $value->created_at;
                 $value->replies = User::whereIn('id', $replies)->get()->map(function ($row) {
                     return [
                         'id' => $row->id,
@@ -2035,9 +2035,10 @@ class TaskController extends AccountBaseController
                 return response()->json([]);
             }
         } elseif ($request->mode == 'task_submission_list') {
+           dd(Auth::user()); 
         } elseif ($request->mode == 'task_reply_comment') {
             $data = TaskReply::where('comment_id', $id)->get();
-            dd($data);
+            return response()->json($data);
         } else {
             abort(404);
         }

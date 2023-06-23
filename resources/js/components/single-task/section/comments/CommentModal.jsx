@@ -3,7 +3,7 @@ import CommentSendBox from './CommentSendBox';
 import InnerComment from './InnerComment';
 import CustomModal from '../../components/CustomModal'; 
 
-const CommentModal = ({toggleRef = null, isOpen, close}) => {
+const CommentModal = ({toggleRef = null, isOpen, close, comments=[]}) => {
     
   return (
     <CustomModal toggleRef={toggleRef} isOpen={isOpen}> 
@@ -13,7 +13,9 @@ const CommentModal = ({toggleRef = null, isOpen, close}) => {
                 <div className='sp1_task_comment_list mt-4'>
                     <div className='font-weight-bold pb-3'>Comments: </div>
                     <div className='sp1_task_comment_list_items'>
-                        <InnerComment />
+                        {comments?.length > 0 && comments?.map(comment => (
+                            <InnerComment key={comment.id} comment={comment} />
+                        )) }
                     </div>
                 </div>
             </div> 

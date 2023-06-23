@@ -3,7 +3,7 @@ import React from 'react'
 import Button from '../../components/Button'
 import InnerComment from './InnerComment'
 
-const CommentPreview = ({isOpen, close}) => {
+const CommentPreview = ({isOpen, close, comment}) => {
   return (
     <div className='sp1_st_comment_preview'>
         <div className='sp1_st_comment_panel'> 
@@ -21,7 +21,7 @@ const CommentPreview = ({isOpen, close}) => {
 
             {/* comment */}
             <div className='_comment_list mt-3'>
-                <InnerComment/>
+                <InnerComment comment={comment} />
             </div>
 
         </div>

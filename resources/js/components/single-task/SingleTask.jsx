@@ -355,7 +355,7 @@ const SingleTask = () => {
                 </div>
                             
                 {/* comments */}
-                <CommentSection />
+                <CommentSection task={task} isLoading={isFetching} />
                 <SubTaskSection  />
                 <NoteSection />
                 {task && task?.id && <SubmittedWork task={task} />}

@@ -255,6 +255,7 @@
     -ms-flex-direction: column;
     flex-direction: column;
     padding: 10px;
+    gap: 10px;
 }
 
 .sp1_task_comment_list_items::-webkit-scrollbar{ 
@@ -430,7 +431,7 @@
 
 .sp1_st_comment_panel{
     width: 100%;
-    max-width: 550px;
+    max-width: 50vw;
     background: #fff;
     border-radius: 10px;
     padding: 16px; 
@@ -760,5 +761,53 @@
     height: 100%;
     &:hover{
         color: inherit !important
+    }
+}
+
+
+.sp1_st_comment-view{
+    p{
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+}
+
+
+
+
+
+
+
+
+// offset canvas
+.sp1_subtask_offsetcanvas{
+    width: 100%;
+    height: 100%;
+    max-width: 80vw;
+    max-height: 90vh;
+    background: #fff;
+    border-radius: 10px;
+
+    &--modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999999;
+    }
+
+    &--bar{
+        border-bottom: 1px solid rgb(0 0 0 / 10%);
+    }
+
+    &--body{
+        padding: 10px 16px;
+
+        nav > .nav-tabs{
+            & > .nav-link{
+                padding: 6px 16px;
+                font-weight: 500;
+                color: #44454def;
+            }
+        }
     }
 }
