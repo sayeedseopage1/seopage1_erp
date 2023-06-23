@@ -64,6 +64,10 @@ use App\Models\TaskComment;
 use App\Models\AuthorizationAction;
 use App\Models\TaskNote;
 use App\Models\TaskNoteFile;
+
+use App\Models\ProjectTimeLog;
+use App\Models\TaskHistory;
+
 use Toaster;
 
 use function Symfony\Component\Cache\Traits\role;
@@ -149,8 +153,10 @@ class TaskController extends AccountBaseController
         }
 
         if ($request->link != null) {
+
             $links = explode(',', $request->link);
             foreach ($links as $lin) {
+
                 $task_submit = new TaskSubmission();
                 $task_submit->task_id = $request->id;
                 $task_submit->user_id = $request->user_id;
@@ -204,6 +210,7 @@ class TaskController extends AccountBaseController
         } else {
             $type = 'task_submission_by_developer';
             $task_user = TaskUser::where('task_id', $task->id)->get();
+
             foreach ($task_user as $value) {
                 if ($value->user->role_id == 5) {
                     $authorization_for = $value->user_id;
@@ -1769,6 +1776,7 @@ class TaskController extends AccountBaseController
         $working_environment->save();
 
 
+
         $task_id= Task::where('project_id',$working_environment->project_id)->first();
 
         return response()->json([
@@ -1776,8 +1784,10 @@ class TaskController extends AccountBaseController
             'redirect' => url('/account/tasks/'.$task_id->id),
         ]);
 
+
     }
 
+    public function task_json(Request $request, $id)
     public function task_json(Request $request, $id)
     {
         if ($request->mode == 'basic') {
@@ -1853,8 +1863,9 @@ class TaskController extends AccountBaseController
                 array_push($array, [
                     'id' => $task->id,
                     'title' => $task->heading,
-                    'edit_url' => route('tasks.edit', $task->id),
-                    'show_url' => route('tasks.edit', $task->id),
+                    //'edit_url' => route('tasks.edit', $task->id),
+                    //'show_url' => route('tasks.edit', $task->id),
+                    'subtask_id' => $value->id,
                 ]);
             }
 
@@ -1907,8 +1918,12 @@ class TaskController extends AccountBaseController
                 ->join('project_milestones', 'tasks.milestone_id', 'project_milestones.id')
                 ->where('tasks.id', $id)
                 ->first();
+
             $totalMinutes = $task->timeLogged->sum('total_minutes') - ProjectTimeLogBreak::taskBreakMinutes($task->id);
             $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
+            // dd($task);
+            $task->start_date = Carbon::parse($task->start_date)->format('Y-m-d H:i:s');
+            $task->due_date = Carbon::parse($task->due_date)->format('Y-m-d H:i:s');
 
             if ($totalMinutes % 60 > 0) {
                 $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
@@ -1953,7 +1968,8 @@ class TaskController extends AccountBaseController
             $data = TaskNote::where('task_id', $id)->get()->map(function ($row) {
                 return [
                     'id' => $row->id,
-                    'note' => $row->note
+                    'note' => $row->note,
+                    'title' => $row->title,
                 ];
             });
             return response()->json($data);
@@ -1980,8 +1996,8 @@ class TaskController extends AccountBaseController
                     'message' => 'Task note file not found'
                 ]);
             }
-        } elseif ($request->mode =='task_time_log'){
-            $data = ProjectTimeLog::with('user')->where('task_id',$id)->get();
+        } elseif ($request->mode == 'task_time_log') {
+            $data = ProjectTimeLog::with('user')->where('task_id', $id)->get();
             $data->transform(function ($item) {
                 $totalHours = floor($item->total_minutes / 60);
                 $totalMinutes = $item->total_minutes % 60;
@@ -1993,55 +2009,67 @@ class TaskController extends AccountBaseController
             });
 
             return response()->json($data);
-
-        }elseif ($request->mode=='task_history'){
+        } elseif ($request->mode == 'task_history') {
             $data = TaskHistory::with('user')->where('task_id', $id)->get();
             foreach ($data as $item) {
-                $item->lang = __('modules.tasks.' . $item->details) .' '.$item->user->name;
+                $item->lang = __('modules.tasks.' . $item->details) . ' ' . $item->user->name;
                 $created_at = $item->created_at;
                 $item->formatted_created_at = $created_at;
             }
+
             return response()->json($data);
-        }elseif ($request->mode=='task_approve') {
+        } elseif ($request->mode == 'task_approve') {
             $data = TaskApprove::where('task_id', $id)->latest()->first();
-            if ($data){
+
+            if (!is_null($data)) {
                 $data->deadline_meet = $data->rating;
                 $data->submission_quality = $data->rating2;
                 $data->req_fullfillment = $data->rating3;
                 $data->overall_tasks = ($data->deadline_meet + $data->submission_quality + $data->req_fullfillment) / 3;
-            }else{
-                $data->deadline_meet = 0;
-                $data->submission_quality = 0;
-                $data->req_fullfillment = 0;
-                $data->overall_tasks = 0;
+            }
+
+            return response()->json($data);
+        } elseif ($request->mode == 'task_comment') {
+            $data = TaskComment::with('user')->where('task_id', $id)->get();
+
+            foreach ($data as $value) {
+                $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
+
+                $value->replies = User::whereIn('id', $replies)->get()->map(function ($row) {
+                    return [
+                        'id' => $row->id,
+                        'image_url' => $row->image_url
+                    ];
+                });
             }
             return response()->json($data);
-        }elseif ($request->mode=='task_submission'){
+        } elseif ($request->mode == 'task_submission') {
             $data = TaskSubmission::with('user')->where('task_id', $id)->get();
-            foreach ($data as $item){
-                if ($item->attach !=null) {
+            foreach ($data as $item) {
+                if ($item->attach != null) {
                     $file[] = $item->attach;
                 }
-                if ($item->link !=null){
+                if ($item->link != null) {
                     $url[] = $item->link;
                 }
-                if ($item->text !=null){
+                if ($item->text != null) {
                     $description = $item->text;
                 }
             }
             $user = $data->first()->user;
             $response = [
-                'file'=>$file,
-                'url'=>$url,
-                'description'=>$description,
+                'file' => $file,
+                'url' => $url,
+                'description' => $description,
                 'user' => [
                     'id' => $user->id,
                     'name' =>  $user->name,
-                    'image'=> $user->image_url,
+                    'image' => $user->image_url,
                 ]
             ];
             return response()->json($response);
+        } else {
+            abort(403);
         }
->>>>>>> ddfa7b8ca (seals authorization and api done)
     }
 }
