@@ -880,6 +880,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     );
     Route::resource('invoices', InvoiceController::class);
 
+    Route::get('award-time/increase/{id?}', [ContractController::class, 'award_time_increase_index'])->name('award_time_check.index');
+    Route::post('award-time/increase/store', [ContractController::class, 'award_time_incress_store'])->name('award_time_check.store');
+    Route::post('award-time/increase/update', [ContractController::class, 'award_time_incress_update'])->name('award_time_check.update');
+
 
     //report-central
     Route::get('report-central/performance-predefined-cycle', [ReportCentralController::class, 'performancePredefinedCycle'])->name('performance_predefined_cycle');

@@ -64,8 +64,8 @@ use App\Models\TaskComment;
 
 use App\Models\TaskNote;
 use App\Models\TaskNoteFile;
-use App\Models\ProjectTimeLog;
-use App\Models\TaskHistory;
+
+
 
 use App\Models\AuthorizationAction;
 
@@ -861,7 +861,7 @@ class TaskController extends AccountBaseController
 
         if (is_array($request->user_id)) {
             $assigned_to = User::find($request->user_id[0]);
-<
+
             if ($assigned_to->role_id == 6) {
                 //authorization action start
 
