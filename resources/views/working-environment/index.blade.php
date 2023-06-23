@@ -12,31 +12,48 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="url" class="form-label">Working/Staging Site’s URL</label>
+                                        <label for="url" class="form-label">Working/Staging Site’s URL
+                                            <sup class="mr-1">*</sup>
+                                        </label>
                                         <input type="url" class="form-control height-35 f-14" id="site_url" name="site_url" placeholder="Type Working/Staging Site’s URL">
                                         <span id="site_url_error" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="url" class="form-label">Working/Staging Site’s Login URL</label>
-                                        <input type="url" class="form-control height-35 f-14" id="login_url" name="login_url" placeholder="Type Working/Staging Site’s Login URL">
-                                        <span id="login_url_error" class="text-danger"></span>
+                                        <label for="url" class="form-label">Frontend Password
+                                            <sup class="mr-1">*</sup>
+                                        </label>
+                                        <input type="text" class="form-control height-35 f-14" id="frontend_password" name="frontend_password" placeholder="Type Frontend Password">
+                                        <span id="frontend_password_error" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="email" class="form-label">Working/Staging Site’s Login Username/Email </label>
+                                        <label for="url" class="form-label">Working/Staging Site’s Login URL
+                                            <sup class="mr-1">*</sup>
+                                        </label>
+                                        <input type="url" class="form-control height-35 f-14" id="login_url" name="login_url" placeholder="Type Working/Staging Site’s Login URL">
+                                        <span id="login_url_error" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Working/Staging Site’s Login Username/Email
+                                            <sup class="mr-1">*</sup>
+                                        </label>
                                         <input type="email" class="form-control height-35 f-14" id="email" name="email" placeholder="Type Working/Staging Site’s Login Username/Email">
                                         <span id="email_error" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="mb-3">
-                                        <label for="url" class="form-label">Frontend Password</label>
-                                        <input type="text" class="form-control height-35 f-14" id="password" name="password" placeholder="Type Frontend Password">
+                                        <label for="email" class="form-label">Password
+                                            <sup class="mr-1">*</sup>
+                                        </label>
+                                        <input type="text" class="form-control height-35 f-14" id="password" name="password" placeholder="Type Password">
                                         <span id="password_error" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -58,6 +75,7 @@
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'site_url': document.getElementById("site_url").value,
+                'frontend_password': document.getElementById("frontend_password").value,
                 'login_url': document.getElementById("login_url").value,
                 'email': document.getElementById("email").value,
                 'password': document.getElementById("password").value,
@@ -74,7 +92,7 @@
                 data: data,
                 dataType: "json",
                 success: function (response) {
-                    $(location).prop('href', '{{url('account/projects/'.$project_id.'?tab=tasks')}}');
+                    window.location.href = response.redirect;
                     toastr.success('Working Environment Added Successfully');
                     $('#submit-button').attr("disabled", false);
                     $('#submit-button').html("Submit");
@@ -85,6 +103,11 @@
                         $('#site_url_error').text(error.responseJSON.errors.site_url);
                     }else{
                         $('#site_url_error').text('');
+                    }
+                    if(error.responseJSON.errors.frontend_password){
+                        $('#frontend_password_error').text(error.responseJSON.errors.frontend_password);
+                    }else{
+                        $('#frontend_password_error').text('');
                     }
                     if(error.responseJSON.errors.login_url){
                         $('#login_url_error').text(error.responseJSON.errors.login_url);

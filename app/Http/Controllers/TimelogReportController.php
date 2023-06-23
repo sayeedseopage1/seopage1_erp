@@ -384,6 +384,7 @@ class TimelogReportController extends AccountBaseController
             }
             $data = $data->groupBy('project_time_logs.user_id')
 
+              
             //->where('projects.status', $status)
             ->where('total_minutes', '>', 0)
             ->orderBy('project_time_logs.project_id' , 'desc');
@@ -432,6 +433,9 @@ class TimelogReportController extends AccountBaseController
             if (!is_null($clientId)) {
                 //$data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
                 $data = $data->where('projects.client_id', $clientId);
+            }
+            if (!is_null($status)) {
+                $data = $data->where('projects.status', $status);
             }
             if (!is_null($status)) {
                 $data = $data->where('projects.status', $status);

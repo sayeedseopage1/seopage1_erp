@@ -99,7 +99,6 @@
 
                           <input type="hidden" name="id" value="{{$deal->id}}">
                           <div class="row">
-
                             <div class="col-md-3">
                               <div class="form-group">
                               <label for="deal_id">Deal Id</label>

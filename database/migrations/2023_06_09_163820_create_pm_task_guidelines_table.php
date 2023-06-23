@@ -33,7 +33,7 @@ return new class extends Migration
             $table->integer('color_schema')->nullable();
             $table->text('instruction_plugin')->nullable();
             $table->string('google_drive_link')->nullable();
-           
+
             $table->timestamps();
         });
     }

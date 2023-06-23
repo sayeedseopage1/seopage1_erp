@@ -95,18 +95,18 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
             @endphp
 
-@if($project->status == 'canceled' && $project->dispute_status == 1)
+                @if($project->status == 'canceled' && $project->dispute_status == 1)
 
-<div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
-    <div class="">
-        <a class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded openRightModal" href="{{ route('projects.dispute.form', $project->id) }}"  aria-haspopup="true" aria-expanded="false">
-        @lang('See Dispute')
-        </a>
+                <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
+                    <div class="">
+                        <a class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded openRightModal" href="{{ route('projects.dispute.form', $project->id) }}"  aria-haspopup="true" aria-expanded="false">
+                        @lang('See Dispute')
+                        </a>
 
 
-    </div>
-</div>
-@endif
+                    </div>
+                </div>
+                @endif
               @if($project->status == 'in progress' || $project->status == 'not started' || $project->status == 'on hold')
 
               @if($project->dispute_status == 1)
@@ -217,7 +217,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
         <!-- PROJECT PROGRESS AND CLIENT START -->
         <div class="row">
             <!-- PROJECT PROGRESS START -->
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
                 @php
                        $tasks= App\Models\Task::where('project_id',$project->id)->count();
                 $completed_tasks= App\Models\Task::where('project_id',$project->id)->where('status','completed')->count();
@@ -229,7 +229,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     $percentage= 0;
                 }
                 @endphp
-                <x-cards.data :title="__('modules.projects.projectProgress')" otherClasses="d-flex d-xl-flex d-lg-block d-md-flex  justify-content-between align-items-center">
+                <x-cards.data :title="__('modules.projects.projectProgress')" otherClasses="d-flex flex-wrap d-xl-flex d-lg-block d-md-flex  justify-content-between align-items-center">
                     <div class="text-lightest">{{$percentage}}% Progress</div>
 
                     <!-- PROGRESS START DATE START -->
@@ -246,11 +246,210 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         </p>
                     </div>
                     <!-- PROGRESS END DATE END -->
+                    <!-- See Task Guideline Start -->
+                    <div class="mt-4">
+                        <button type="button" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#taskGuidelineModal">See Task Guideline</button>
+                    </div>
+                    <!-- See Task Guideline End -->
                 </x-cards.data>
+            </div>
+            <!--Task Guideline Modal -->
+            <div class="modal fade" id="taskGuidelineModal" tabindex="-1" aria-labelledby="taskGuidelineModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="taskGuidelineModalLabel">Parent Task Guideline</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @php
+                                $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->orderBy('id','desc')->first();
+                            @endphp
+                            <div class="row mb-3">
+                                <div class="col-md-12 d-flex">
+                                    <h6>Provide Theme Details :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">
+                                            @if($task_guideline->theme_details ==1)
+                                                Yes
+                                            @else
+                                                No
+                                            @endif
+                                        </p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6 d-flex">
+                                    <h6>Theme Name :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">{{$task_guideline->theme_name}}</p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                                <div class="col-md-6 d-flex">
+                                    <h6>Theme Url :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">{{$task_guideline->theme_url}}</p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12 d-flex">
+                                    <h6>Design :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">{{$task_guideline->design}}</p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6 d-flex">
+                                    <h6 for="">Input XD/Figma URL :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">{{$task_guideline->xd_url}}</p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                                <div class="col-md-6 d-flex">
+                                    <h6>Input Google Drive File/Folder URL :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">{{$task_guideline->drive_url}}</p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12 d-flex">
+                                    <h6>Reference Site Link :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">
+                                            @if ($task_guideline != null && !empty($task_guideline->reference_link))
+                                                @php
+                                                    $referenceLinks = is_array($task_guideline->reference_link) ? $task_guideline->reference_link : json_decode($task_guideline->reference_link, true);
+                                                @endphp
+
+                                                @foreach ($referenceLinks as $reference_link)
+                                                    <a target="_blank" href="{{ $reference_link }}">{{ $reference_link }}</a>
+                                                    <br>
+                                                @endforeach
+                                            @else
+                                                -- No reference links available --
+                                            @endif
+                                        </p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <h6>Instruction :</h6>
+                                    @if($task_guideline != null )
+                                        <span>{!! $task_guideline->instruction !!}</span>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12 d-flex">
+                                    <h6>Color Schema :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">{{implode(',  ',json_decode($task_guideline->color))}}</p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <h6>Developers Use This Color:</h6>
+                                    @if($task_guideline != null && !empty($task_guideline->color_description))
+                                        @php
+                                            $colorDescriptions = is_array($task_guideline->color_description) ? $task_guideline->color_description : json_decode($task_guideline->color_description, true);
+                                        @endphp
+
+                                        @foreach($colorDescriptions as $color_description)
+                                            <p class="ml-2">{{ $color_description }}</p>
+                                        @endforeach
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12 d-flex">
+                                    <h6>Plugin Research :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">
+                                            @if($task_guideline->plugin_research ==1)
+                                                Yes
+                                            @else
+                                                No
+                                            @endif
+                                        </p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 d-flex">
+                                    <h6>Plugin Name :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">{{$task_guideline->plugin_name}}</p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                                <div class="col-md-4 d-flex">
+                                    <h6>Plugin URL :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">{{$task_guideline->plugin_url}}</p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                                <div class="col-md-4 d-flex">
+                                    <h6>Google Drive Link :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">{{$task_guideline->google_drive_link}}</p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <h6>Instructions for Using This Plugin :</h6>
+                                    @if($task_guideline != null)
+                                        <p class="ml-2">{{$task_guideline->instruction_plugin}}</p>
+                                    @else
+                                        <p class="ml-2">--</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- PROJECT PROGRESS END -->
             <!-- CLIENT START -->
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
                 @if (!is_null($project->client))
                 <x-cards.data :title="__('app.client')" otherClasses="d-block d-xl-flex d-lg-block d-md-flex  justify-content-between align-items-center">
                     <div class="p-client-detail">
@@ -288,6 +487,33 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 @endif
             </div>
             <!-- CLIENT END -->
+            <div class="col-md-4 mb-4">
+                <!-- PM Start -->
+                <x-cards.data :title="__('Project Manager')" otherClasses="d-block d-xl-flex d-lg-block d-md-flex  justify-content-between align-items-center">
+                    <div class="p-client-detail">
+                        <div class="card border-0">
+                            <div class="card-horizontal">
+                                <div class="card-img m-0">
+                                    <img class="" src="{{ $project->pm->image_url }}" alt="{{ $project->pm->name }}" />
+                                </div>
+                                <div class="card-body border-0 p-0 ml-4 ml-xl-4 ml-lg-3 ml-md-3">
+                                    <h4 class="card-title f-15 font-weight-normal mb-0 text-capitalize">
+                                        <a href="{{ route('employees.show', $project->pm_id) }}" class="text-dark">{{ $project->pm->name }}</a>
+                                    </h4>
+
+                                    @if ($project->pm->country_id)
+                                    <span class="card-text f-12 text-lightest text-capitalize d-flex align-items-center">
+                                        <span class="flag-icon flag-icon-{{ strtolower($project->pm->country->iso) }} mr-2"></span>
+                                        {{$project->pm->country->nicename}}
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </x-cards.data>
+            <!-- PM End -->
+            </div>
         </div>
         <!-- PROJECT PROGRESS AND CLIENT END -->
 
@@ -297,6 +523,40 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <div class="col-lg-6 col-md-12">
                 <x-cards.data :title="__('app.menu.tasks')" padding="false">
                     <x-pie-chart id="task-chart" :labels="$taskChart['labels']" :values="$taskChart['values']" :colors="$taskChart['colors']" height="220" width="250" />
+                </x-cards.data>
+                <br>
+                <x-cards.data padding="false">
+                    <div class="py-3">
+                        <?php
+                        $dispute = App\Models\ProjectDispute::where('project_id', $project->id)->orderBy('id', 'desc')->first();
+                        ?>
+                        <div class="container">
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    @if ($dispute)
+                                    <button style="width: 100%" type="button" class="btn-secondary rounded text-center" data-toggle="modal" data-target="#final_dispute_view">See Dispute</button>
+                                    @include('projects.modals.final_dispute_view')
+                                    @else
+                                        <button style="width: 100%" type="button" class="btn-secondary rounded text-center">See Dispute</button>
+                                    @endif
+                                </div>
+                                <div class="col-md-6">
+{{--                                    @if ($dispute !=null)--}}
+                                    <button type="button" style="width: 100%" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#qc_final_modal">Project QC</button>
+                                    @include('projects.modals.qc_final_modal')
+{{--                                    @endif--}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+{{--                                    @if ($dispute !=null)--}}
+                                    <button type="button" style="width: 100%" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#project_completion_final_modal">Project Completion</button>
+                                    @include('projects.modals.project_completion_final_modal')
+{{--                                    @endif--}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </x-cards.data>
             </div>
             <!-- TASK STATUS END -->
@@ -707,197 +967,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>
-        {{-- <div class="row mb-4" >
-            <!-- BUDGET VS SPENT START -->
-            <div class="col-md-12">
-                <x-cards.data>
-                    <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
-                        <div class="col-md-12">
-                            <h4 class="mb-4">Parent Task Guideline</h4>
-                        </div>
-                    </div>
-                    @php
-                      $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->orderBy('id','desc')->first();
-                    @endphp
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-12 d-flex">
-                                <h6>Provide Theme Details :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">
-                                        @if($task_guideline->theme_details ==1)
-                                            Yes
-                                        @else
-                                            No
-                                        @endif
-                                    </p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 d-flex">
-                            <h6>Theme Name :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">{{$task_guideline->theme_name}}</p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                            <div class="col-md-6 d-flex">
-                            <h6>Theme Url :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">{{$task_guideline->theme_url}}</p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 d-flex">
-                                <h6>Design :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">{{$task_guideline->design}}</p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 d-flex">
-                                <h6 for="">Input XD/Figma URL :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">{{$task_guideline->xd_url}}</p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                            <div class="col-md-6 d-flex">
-                                <h6>Input Google Drive File/Folder URL :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">{{$task_guideline->drive_url}}</p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 d-flex">
-                                <h6>Reference Site Link :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">
-                                        @if ($task_guideline != null && !empty($task_guideline->reference_link))
-                                            @php
-                                                $referenceLinks = is_array($task_guideline->reference_link) ? $task_guideline->reference_link : json_decode($task_guideline->reference_link, true);
-                                            @endphp
 
-                                            @foreach ($referenceLinks as $reference_link)
-                                                <a target="_blank" href="{{ $reference_link }}">{{ $reference_link }}</a>
-                                                <br>
-                                            @endforeach
-                                        @else
-                                            -- No reference links available --
-                                        @endif
-                                    </p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h6>Instruction :</h6>
-                                @if($task_guideline != null )
-                                    <span>{!! $task_guideline->instruction !!}</span>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 d-flex">
-                                <h6>Color Schema :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">{{implode(',  ',json_decode($task_guideline->color))}}</p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h6>Developers Use This Color:</h6>
-                                @if($task_guideline != null && !empty($task_guideline->color_description))
-                                    @php
-                                        $colorDescriptions = is_array($task_guideline->color_description) ? $task_guideline->color_description : json_decode($task_guideline->color_description, true);
-                                    @endphp
-
-                                    @foreach($colorDescriptions as $color_description)
-                                        <p class="ml-2">{{ $color_description }}</p>
-                                    @endforeach
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 d-flex">
-                                <h6>Plugin Research :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">
-                                        @if($task_guideline->plugin_research ==1)
-                                            Yes
-                                        @else
-                                            No
-                                        @endif
-                                    </p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 d-flex">
-                                <h6>Plugin Name :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">{{$task_guideline->plugin_name}}</p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                            <div class="col-md-6 d-flex">
-                                <h6>Plugin URL :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">{{$task_guideline->plugin_url}}</p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 d-flex">
-                                <h6>Google Drive Link :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">{{$task_guideline->google_drive_link}}</p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                            <div class="col-md-6 d-flex">
-                                <h6>Instructions for Using This Plugin :</h6>
-                                @if($task_guideline != null)
-                                    <p class="ml-2">{{$task_guideline->instruction_plugin}}</p>
-                                @else
-                                    <p class="ml-2">--</p>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </x-cards.data>
-            </div>
-            <!-- BUDGET VS SPENT END -->
-        </div> --}}
 
 
 
