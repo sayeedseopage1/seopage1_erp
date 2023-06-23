@@ -14,7 +14,6 @@ use App\Models\PmTaskGuideline;
 use App\Models\Project;
 use App\Models\ProjectMember;
 use App\Models\ProjectMilestone;
-use App\Models\ProjectTimeLog;
 use App\Models\ProjectTimeLogBreak;
 use App\Models\Role;
 use App\Models\SubTask;
@@ -22,7 +21,6 @@ use App\Models\SubTaskFile;
 use App\Models\Task;
 use App\Models\TaskboardColumn;
 use App\Models\TaskCategory;
-use App\Models\TaskHistory;
 use App\Models\TaskLabel;
 use App\Models\TaskLabelList;
 use App\Models\TaskReply;
@@ -61,20 +59,18 @@ use App\Models\ProjectDeliverable;
 use function _PHPStan_7d6f0f6a4\React\Promise\all;
 use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
-
+use App\Models\AuthorizationAction;
 use App\Models\TaskNote;
 use App\Models\TaskNoteFile;
 use App\Models\ProjectTimeLog;
 use App\Models\TaskHistory;
-
-use App\Models\AuthorizationAction;
-
-
-
 use Toaster;
+
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
+
 use Validator;
+
 
 class TaskController extends AccountBaseController
 {
@@ -111,10 +107,14 @@ class TaskController extends AccountBaseController
 
     public function TaskReview(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'link' => 'required|string',
+        $validator = Validator::make($request->input(), [
+            'link' => 'required|array',
+            'link.*' => 'required|url|min:1',
             'text' => 'required',
-            'file' => 'required',
+        ], [
+            'link.url' => 'Invalid url!',
+            'link.*.required' => 'This field is required',
+            'text.required' => 'Please describe what you\'ve done !',
         ]);
 
         $link = [];
@@ -153,15 +153,10 @@ class TaskController extends AccountBaseController
         }
 
         if ($request->link != null) {
-
-
-            $links = explode(',', $request->link);
-            foreach ($links as $lin) {
-
+            foreach ($request->link as $lin) {
                 $task_submit = new TaskSubmission();
                 $task_submit->task_id = $request->id;
                 $task_submit->user_id = $request->user_id;
-
 
                 $task_submit->link = $lin;
                 if ($order == null) {
@@ -175,10 +170,8 @@ class TaskController extends AccountBaseController
         }
 
         if ($request->file('file') != null) {
-
             foreach ($request->file('file') as $att) {
                 $task_submit = new TaskSubmission();
-
                 $filename = null;
                 if ($att) {
                     $filename = time() . $att->getClientOriginalName();
@@ -207,7 +200,6 @@ class TaskController extends AccountBaseController
         $task->board_column_id = 6;
         $task->task_status = "submitted";
         $task->save();
-
 
         if ($this->user->role_id == 6) {
             $type = 'task_submission_by_lead_developer';
@@ -238,7 +230,6 @@ class TaskController extends AccountBaseController
 
         $user = User::where('id', $task->added_by)->first();
         $sender = User::where('id', $request->user_id)->first();
-
 
         $text = Auth::user()->name . ' mark task complete';
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
@@ -378,8 +369,6 @@ class TaskController extends AccountBaseController
 
         $task_submission = TaskSubmission::where('task_id', $task_status->id)->first();
 
-
-
         $text = Auth::user()->name . ' send revision request';
         $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
         $this->logProjectActivity($task_status->project->id, $link);
@@ -394,8 +383,6 @@ class TaskController extends AccountBaseController
             'body' => Auth::user()->name . ' send revision request',
             'redirectUrl' => route('tasks.show', $task_status->id)
         ]);
-
-
 
         $user = User::where('id', $task_submission->user_id)->first();
         $sender = User::where('id', $request->user_id)->first();
@@ -415,7 +402,6 @@ class TaskController extends AccountBaseController
         $task->due_date = $date;
         $task->description = $request->description;
         $task->save();
-
 
         // authorization action section
         $task_id = Task::find($request->task_id);
@@ -440,7 +426,6 @@ class TaskController extends AccountBaseController
         $authorization_action->authorization_for = $authorization_for;
         $authorization_action->save();
         //end authorization action
-
 
         return Redirect::back()->with('messages.taskUpdatedSuccessfully');
     }
@@ -861,7 +846,6 @@ class TaskController extends AccountBaseController
 
         if (is_array($request->user_id)) {
             $assigned_to = User::find($request->user_id[0]);
-<
             if ($assigned_to->role_id == 6) {
                 //authorization action start
 
@@ -877,7 +861,6 @@ class TaskController extends AccountBaseController
                 $authorization_action->save();
                 //authorization action end
             }
-
             $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
             $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
             $this->logProjectActivity($project->id, $link);
@@ -891,7 +874,6 @@ class TaskController extends AccountBaseController
             ]);
         } else {
             $assigned_to = User::find($request->user_id);
-
             if ($assigned_to->role_id == 6) {
                 //authorization action start
 
@@ -907,7 +889,6 @@ class TaskController extends AccountBaseController
                 $authorization_action->save();
                 //authorization action end
             }
-
             $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
             $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
             $this->logProjectActivity($project->id, $link);
@@ -1298,12 +1279,10 @@ class TaskController extends AccountBaseController
                     $this->tab = 'tasks.ajax.sub_tasks';
                 }
                 break;
-
         }
 
         if ($request->mode == 'react_json') {
             return response()->json($this->data);
-
         }
 
         if (request()->ajax()) {
@@ -1316,9 +1295,6 @@ class TaskController extends AccountBaseController
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
-        if ($request->mode == 'task-json') {
-            return response()->json($this->data);
-        }
 
 
         $this->view = 'tasks.ajax.show';
@@ -1694,7 +1670,6 @@ class TaskController extends AccountBaseController
         ]);
     }
 
-
     //        TASK GUIDELINE SECTION
     public function viewTaskGuideline($project_id)
     {
@@ -1705,40 +1680,15 @@ class TaskController extends AccountBaseController
 
     public function storeTaskGuideline(Request $request)
     {
-        $validator = Validator::make($request->input(), [
+        $request->validate([
             'theme_details' => 'required',
             'design' => 'required',
-            'color_schema' => 'required',
-            'color' => 'required|array',
-            'color.*' => 'required|string|min:2',
-            'color_description' => 'required|array',
             'plugin_research' => 'required',
         ], [
-            'theme_details.required' => 'This field is required',
-            'design.required' => 'This field is required',
-            'color_schema.required' => 'This field is required',
-            'color.*.required' => 'This field is required',
-            'color_description.required' => 'This field is required',
-            'plugin_research.required' => 'This field is required',
+            'theme_details.required' => 'This field is required!',
+            'design.required' => 'This field is required!',
+            'plugin_research.required' => 'This field is required!',
         ]);
-
-        $color = [];
-        foreach ($validator->errors()->toArray() as $key => $value) {
-            if (strpos($key, 'color.') !== false) {
-                $exp= explode('.', $key);
-                $color[$exp[1]] = $value[0];
-            }
-        }
-
-        $errors = $validator->errors()->toArray();
-        $errors = array_merge($errors, ['color' => $color]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $errors
-            ], 422);
-        }
-
         $data = $request->all();
         $reference_links = json_encode($data['reference_link']);
         $colors = json_encode($data['color']);
@@ -1754,7 +1704,6 @@ class TaskController extends AccountBaseController
         $pm_task_guideline->drive_url = $data['drive_url'];
         $pm_task_guideline->reference_link = $reference_links;
         $pm_task_guideline->instruction = $data['instruction'];
-        $pm_task_guideline->color_schema = $data['color_schema'];
         $pm_task_guideline->color = $colors;
         $pm_task_guideline->color_description = $color_descriptions;
         $pm_task_guideline->plugin_research = $data['plugin_research'];
@@ -1776,13 +1725,11 @@ class TaskController extends AccountBaseController
     {
         $request->validate([
             'site_url' => 'required',
-            'frontend_password' => 'required',
             'login_url' => 'required',
             'email' => 'required',
             'password' => 'required',
         ], [
             'site_url.required' => 'This field is required!',
-            'frontend_password.required' => 'This field is required!',
             'login_url.required' => 'This field is required!',
             'email.required' => 'This field is required!',
             'password.required' => 'This field is required!',
@@ -1790,25 +1737,14 @@ class TaskController extends AccountBaseController
 
         $working_environment = new WorkingEnvironment();
         $working_environment->project_id = $request->project_id;
-        $working_environment->frontend_password = $request->frontend_password;
         $working_environment->site_url = $request->site_url;
         $working_environment->login_url = $request->login_url;
         $working_environment->email = $request->email;
         $working_environment->password = $request->password;
         $working_environment->save();
 
-
-
-        $task_id= Task::where('project_id',$working_environment->project_id)->first();
-
-        return response()->json([
-            'status'=>200,
-            'redirect' => url('/account/tasks/'.$task_id->id),
-        ]);
-
-
+        return response()->json(['status' => 200]);
     }
-
 
     public function task_json(Request $request, $id)
     {
@@ -2070,7 +2006,7 @@ class TaskController extends AccountBaseController
             if ($data->count() > 0) {
                 $file = [];
                 $url = [];
-                $description = '';
+                $description = [];
                 foreach ($data as $item) {
                     if ($item->attach != null) {
                         array_push($file, $item->attach);
@@ -2079,7 +2015,7 @@ class TaskController extends AccountBaseController
                         array_push($url, $item->link);
                     }
                     if ($item->text != null) {
-                        $description = $item->text;
+                        array_push($description, $item->text);
                     }
                 }
 
@@ -2098,8 +2034,12 @@ class TaskController extends AccountBaseController
             } else {
                 return response()->json([]);
             }
+        } elseif ($request->mode == 'task_submission_list') {
+        } elseif ($request->mode == 'task_reply_comment') {
+            $data = TaskReply::where('comment_id', $id)->get();
+            dd($data);
         } else {
-            abort(403);
+            abort(404);
         }
     }
 }
