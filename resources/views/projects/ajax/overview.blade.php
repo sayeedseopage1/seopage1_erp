@@ -91,7 +91,6 @@ $project->members->pluck('user_id')->toArray(); @endphp
             @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
             @php
               $dispute= App\Models\ProjectDispute::where('project_id',$project->id)->first();
-              //dd($dispute);
 
             @endphp
 
@@ -247,8 +246,13 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </div>
                     <!-- PROGRESS END DATE END -->
                     <!-- See Task Guideline Start -->
+                    @php
+                    $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->first();
+                    @endphp
                     <div class="mt-4">
+                        @if($task_guideline !=null)
                         <button type="button" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#taskGuidelineModal">See Task Guideline</button>
+                        @endif
                     </div>
                     <!-- See Task Guideline End -->
                 </x-cards.data>
@@ -528,31 +532,31 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 <x-cards.data padding="false">
                     <div class="py-3">
                         <?php
-                        $dispute = App\Models\ProjectDispute::where('project_id', $project->id)->orderBy('id', 'desc')->first();
+                        $dispute = App\Models\ProjectDispute::where('project_id', $project->id)->first();
+                        $q_c = \App\Models\QCSubmission::where('project_id',$project->id)->first();
+                        $project_completion = \App\Models\ProjectSubmission::where('project_id',$project->id)->first();
                         ?>
                         <div class="container">
                             <div class="row mb-4">
-                                <div class="col-md-6">
-                                    @if ($dispute)
-                                    <button style="width: 100%" type="button" class="btn-secondary rounded text-center" data-toggle="modal" data-target="#final_dispute_view">See Dispute</button>
-                                    @include('projects.modals.final_dispute_view')
-                                    @else
-                                        <button style="width: 100%" type="button" class="btn-secondary rounded text-center">See Dispute</button>
-                                    @endif
-                                </div>
-                                <div class="col-md-6">
-{{--                                    @if ($dispute !=null)--}}
+                                <div class="col-6">
+                                    @if ($q_c !=null)
                                     <button type="button" style="width: 100%" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#qc_final_modal">Project QC</button>
                                     @include('projects.modals.qc_final_modal')
-{{--                                    @endif--}}
+                                    @endif
+                                </div>
+                                <div class="col-6">
+                                    @if ($project_completion !=null)
+                                    <button type="button" style="width: 100%" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#project_completion_final_modal">Project Completion</button>
+                                    @include('projects.modals.project_completion_final_modal')
+                                    @endif
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
-{{--                                    @if ($dispute !=null)--}}
-                                    <button type="button" style="width: 100%" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#project_completion_final_modal">Project Completion</button>
-                                    @include('projects.modals.project_completion_final_modal')
-{{--                                    @endif--}}
+                                <div class="col-6">
+                                    @if ($dispute != null)
+                                        <button style="width: 100%" type="button" class="btn-secondary rounded text-center" data-toggle="modal" data-target="#final_dispute_view">See Dispute</button>
+                                        @include('projects.modals.final_dispute_view')
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -630,6 +634,152 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <!-- BUDGET VS SPENT END -->
         </div>
         <!-- TASK STATUS AND BUDGET END -->
+        @if($project->deal->project_type=="hourly")
+            <div class="row mb-4" >
+                <!-- BUDGET VS SPENT START -->
+                <div class="col-3">
+                    <x-cards.data>
+                        <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                            <div class="col">
+                                <h4>Estimated Hours</h4>
+                                <br>
+                                @if($project->deal->estimated_hour_task)
+                                <p>{{$project->deal->estimated_hour_task}}</p>
+                                @else
+                                <p>--</p>
+                                @endif
+
+                            </div>
+
+                        </div>
+                    </x-cards.data>
+                </div>
+                <div class="col-3">
+                    <x-cards.data>
+                        <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                            <div class="col">
+                                <h4>Hourly Rate</h4>
+                                <br>
+                                @if($project->deal->hourly_rate)
+                                <p>{{$project->deal->hourly_rate}}</p>
+                                @else
+                                    <p>--</p>
+                                @endif
+
+                            </div>
+
+                        </div>
+                    </x-cards.data>
+                </div>
+                <div class="col-3">
+                    <x-cards.data>
+                        <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                            <div class="col">
+                                <h4>Hub Staff Tracking </h4>
+                                <br>
+                                <p>{{$project->deal->hubstaff_tracking ==1 ? 'Yes' : 'No'}}</p>
+
+                            </div>
+
+                        </div>
+                    </x-cards.data>
+                </div>
+                <div class="col-3">
+                    <x-cards.data>
+                        <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                            <div class="col">
+                                <h4>Tracked Hours </h4>
+                                <br>
+                                @if($project->deal->tracked_hours)
+                                <p>{{$project->deal->tracked_hours}}</p>
+                                @else
+                                    <p>--</p>
+                                @endif
+
+                            </div>
+
+                        </div>
+                    </x-cards.data>
+                </div>
+                <!-- BUDGET VS SPENT END -->
+            </div>
+            <div class="row mb-4" >
+                <!-- BUDGET VS SPENT START -->
+                <div class="col-4">
+                    <x-cards.data>
+                        <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                            <div class="col">
+                                <h4>2nd Day Tracked Hours</h4>
+                                <br>
+                                @if($project->deal->second_day_tracked_hours)
+                                <p>{{$project->deal->second_day_tracked_hours}}</p>
+                                @else
+                                    <p>--</p>
+                                @endif
+
+                            </div>
+
+                        </div>
+                    </x-cards.data>
+                </div>
+                <div class="col-4">
+                    <x-cards.data>
+                        <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                            <div class="col">
+                                <h4>Expects Amount Per Hour</h4>
+                                <br>
+                                @if($project->deal->expect_amount)
+                                <p>{{$project->deal->expect_amount}}</p>
+                                @else
+                                    <p>--</p>
+                                @endif
+
+                            </div>
+
+                        </div>
+                    </x-cards.data>
+                </div>
+                <div class="col-4">
+                    <x-cards.data>
+                        <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                            <div class="col">
+                                <h4>Client Certain Amount Of Hour</h4>
+                                <br>
+                                @if($project->deal->certain_amount_hour)
+                                <p>{{$project->deal->certain_amount_hour}}</p>
+                                @else
+                                    <p>--</p>
+                                @endif
+
+                            </div>
+
+                        </div>
+                    </x-cards.data>
+                </div>
+                <!-- BUDGET VS SPENT END -->
+            </div>
+            <div class="row mb-4" >
+                <!-- BUDGET VS SPENT START -->
+                <div class="col-12">
+                    <x-cards.data>
+                        <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                            <div class="col">
+                                <h4>Long Project Continue </h4>
+                                <br>
+                                @if($project->deal->long_project)
+                                <p>{{$project->deal->long_project}}</p>
+                                @else
+                                    <p>--</p>
+                                @endif
+
+                            </div>
+
+                        </div>
+                    </x-cards.data>
+                </div>
+                <!-- BUDGET VS SPENT END -->
+            </div>
+        @endif
 
         <!-- TASK STATUS AND BUDGET START -->
         {{-- <div class="row mb-4" >
