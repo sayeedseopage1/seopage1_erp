@@ -1,7 +1,7 @@
 @php
-$addTaskPermission = ($project->project_admin == user()->id) ? 'all' : user()->permission('add_tasks');
-$viewUnassignedTasksPermission = ($project->project_admin == user()->id) ? 'all' : user()->permission('view_unassigned_tasks');
-$projectArchived = $project->trashed();
+    $addTaskPermission = ($project->project_admin == user()->id) ? 'all' : user()->permission('add_tasks');
+    $viewUnassignedTasksPermission = ($project->project_admin == user()->id) ? 'all' : user()->permission('view_unassigned_tasks');
+    $projectArchived = $project->trashed();
 @endphp
 
 <!-- ROW START -->
@@ -13,131 +13,134 @@ $projectArchived = $project->trashed();
         @endif
 
         @if($project->project_status == 'Accepted')
-        @php
-           $project_creation_date= $project->created_at;
-           $current_date= \Carbon\Carbon::now();
-           $diff_in_minutes = $current_date->diffInMinutes($project_creation_date);
-         // dd($project_creation_date, $current_date, $diff_in_minutes);
-        @endphp
-        @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 6 || Auth::user()->role_id == 1)
-        @php
-        $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
-     @endphp
-     @if($diff_in_minutes < 2880 && $signature == null)
-     <div class="d-flex" id="table-actions">
-        @if (($addTaskPermission == 'all' || $addTaskPermission == 'added' || $project->project_admin == user()->id) && !$projectArchived)
-
-             @php
-                 $tasks = \App\Models\Task::where('project_id',$project->id)->get();
-                $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->get();
-             @endphp
-             @if(count($tasks) <1 && count($task_guideline) < 1)
-                 <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
-                                       class="mr-3 disabled" icon="plus" data-redirect-url="{{ url()->full() }}" onclick="event.preventDefault(); return null">
-                     @lang('app.add')
-                     @lang('app.task')
-                 </x-forms.link-primary>
-                 @if(count($task_guideline) <1)
-                     <a href="{{route('task-guideline',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Parent Task Guideline</a>
-                 @endif
-             @else
-                 <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
-                                       class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
-                     @lang('app.add')
-                     @lang('app.task')
-                 </x-forms.link-primary>
-             @endif
-             @if(count($task_guideline) <1)
-                 <a href="{{route('task-guideline',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Parent Task Guideline</a>
-             @endif
-        @endif
-    </div>
-
-    @elseif($diff_in_minutes >= 2880 && $signature == null)
-    <div class="d-flex" id="table-actions">
-        @php
-            $tasks = \App\Models\Task::where('project_id',$project->id)->get();
-           $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->get();
-        @endphp
-        @if(count($tasks) <1 && count($task_guideline) < 1)
-            <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
-                class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
-                @lang('app.add')
-                @lang('app.task')
-            </x-forms.link-primary>
-
-            <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
-                                  class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
-                @lang('app.add')
-                @lang('app.task')
-            </x-forms.link-primary>
-
-        @endif
-    </div>
-
-    @elseif($diff_in_minutes >= 2880 && $signature == null)
-    <div class="d-flex" id="table-actions">
-
-        <button id="task-disable" class="btn-primary rounded f-14 p-2 mr-3 float-left">
-            <svg class="svg-inline--fa fa-plus fa-w-14 mr-1" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path></svg><!-- <i class="fa fa-plus mr-1"></i> Font Awesome fontawesome.com -->
-        Add Task
-        </button>
-        {{-- <button class="btn-success rounded f-14 p-2 mr-3" data-toggle="modal" data-target="#request_time_extension"><i class="fa fa-plus mr-1"></i> Request Time Extension</button>
-        @include('projects.modals.request_time_extension') --}}
-
-    </div>
-
-
-    @else
-    <div class="d-flex" id="table-actions">
-        @if (($addTaskPermission == 'all' || $addTaskPermission == 'added' || $project->project_admin == user()->id) && !$projectArchived)
             @php
-                $tasks = \App\Models\Task::where('project_id',$project->id)->get();
-               $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->get();
+                $project_creation_date= $project->created_at;
+                $current_date= \Carbon\Carbon::now();
+                $diff_in_minutes = $current_date->diffInMinutes($project_creation_date);
+              // dd($project_creation_date, $current_date, $diff_in_minutes);
             @endphp
-            @if(count($tasks) <1 && count($task_guideline) < 1)
-                <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
-                                      class="mr-3 disabled" icon="plus" data-redirect-url="{{ url()->full() }}" onclick="event.preventDefault(); return null">
-                    @lang('app.add')
-                    @lang('app.task')
-                </x-forms.link-primary>
+            @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 6 || Auth::user()->role_id == 1)
+                @php
+                    $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
+                @endphp
+                @if($diff_in_minutes < 2880 && $signature == null)
+                    <div class="d-flex" id="table-actions">
+                        @if (($addTaskPermission == 'all' || $addTaskPermission == 'added' || $project->project_admin == user()->id) && !$projectArchived)
+                            @php
+                                $tasks = \App\Models\Task::where('project_id',$project->id)->get();
+                               $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->get();
+                            @endphp
+                            @if(count($tasks) <1 && count($task_guideline) < 1)
+{{--                                <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"--}}
+{{--                                                      class="mr-3 disabled" icon="plus" data-redirect-url="{{ url()->full() }}" onclick="event.preventDefault(); return null">--}}
+{{--                                    @lang('app.add')--}}
+{{--                                    @lang('app.task')--}}
+{{--                                </x-forms.link-primary>--}}
+                                @if(count($task_guideline) <1)
+                                    <a href="{{route('task-guideline',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Parent Task Guideline</a>
+                                @endif
+                            @else
+                                <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                                      class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
+                                    @lang('app.add')
+                                    @lang('app.task')
+                                </x-forms.link-primary>
+                            @endif
+                        @endif
+                    </div>
+
+                @elseif($diff_in_minutes >= 2880 && $signature == null)
+                    <div class="d-flex" id="table-actions">
+                        @php
+                            $tasks = \App\Models\Task::where('project_id',$project->id)->get();
+                           $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->get();
+                        @endphp
+                        @if(count($tasks) <1 && count($task_guideline) < 1)
+                            <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                                  class="mr-3 disabled" icon="plus" data-redirect-url="{{ url()->full() }}" onclick="event.preventDefault(); return null">
+                                @lang('app.add')
+                                @lang('app.task')
+                            </x-forms.link-primary>
+                            @if(count($task_guideline) <1)
+                                <a href="{{route('task-guideline',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Parent Task Guideline</a>
+                            @endif
+                        @else
+                            <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                                  class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
+                                @lang('app.add')
+                                @lang('app.task')
+                            </x-forms.link-primary>
+                        @endif
+                        {{-- <button class="btn-success rounded f-14 p-2 mr-3" data-toggle="modal" data-target="#request_time_extension"><i class="fa fa-plus mr-1"></i> Request Time Extension</button>
+                        @include('projects.modals.request_time_extension') --}}
+                    </div>
+
+
+                @else
+                    <div class="d-flex" id="table-actions">
+                        @if (($addTaskPermission == 'all' || $addTaskPermission == 'added' || $project->project_admin == user()->id) && !$projectArchived)
+                            @php
+                                $tasks = \App\Models\Task::where('project_id',$project->id)->get();
+                               $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->get();
+                            @endphp
+                            @if(count($tasks) <1 && count($task_guideline) < 1)
+                                <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                                      class="mr-3 disabled" icon="plus" data-redirect-url="{{ url()->full() }}" onclick="event.preventDefault(); return null">
+                                    @lang('app.add')
+                                    @lang('app.task')
+                                </x-forms.link-primary>
+                                @if(count($task_guideline) <1)
+                                    <a href="{{route('task-guideline',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Parent Task Guideline</a>
+                                @endif
+                            @else
+                                <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                                      class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
+                                    @lang('app.add')
+                                    @lang('app.task')
+                                </x-forms.link-primary>
+                            @endif
+                        @endif
+
+                    </div>
+
+                @endif
+
+
+
+
             @else
-                <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
-                                      class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
-                    @lang('app.add')
-                    @lang('app.task')
-                </x-forms.link-primary>
-            @endif
-            @if(count($task_guideline) <1)
-                <a href="{{route('task-guideline',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Parent Task Guideline</a>
-            @endif
-        @endif
-
-    </div>
-
-     @endif
-
-
-
-
-     @else
-     <div class="d-flex" id="table-actions">
-        @if (($addTaskPermission == 'all' || $addTaskPermission == 'added' || $project->project_admin == user()->id) && !$projectArchived)
-            <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
-                class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
-                @lang('app.add')
-                @lang('app.task')
-            </x-forms.link-primary>
-        @endif
-    </div>
+                <div class="d-flex" id="table-actions">
+                    @if (($addTaskPermission == 'all' || $addTaskPermission == 'added' || $project->project_admin == user()->id) && !$projectArchived)
+                        @php
+                            $tasks = \App\Models\Task::where('project_id',$project->id)->get();
+                           $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->get();
+                        @endphp
+                        @if(count($tasks) <1 && count($task_guideline) < 1)
+                            <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                                  class="mr-3 disabled" icon="plus" data-redirect-url="{{ url()->full() }}" onclick="event.preventDefault(); return null">
+                                @lang('app.add')
+                                @lang('app.task')
+                            </x-forms.link-primary>
+                            @if(count($task_guideline) <1)
+                                <a href="{{route('task-guideline',['project_id'=>$project->id])}}" class="btn btn-success rounded p-2 mr-3">Parent Task Guideline</a>
+                            @endif
+                        @else
+                            <x-forms.link-primary :link="route('tasks.create').'?task_project_id='.$project->id"
+                                                  class="mr-3 openRightModal" icon="plus" data-redirect-url="{{ url()->full() }}">
+                                @lang('app.add')
+                                @lang('app.task')
+                            </x-forms.link-primary>
+                        @endif
+                    @endif
+                </div>
 
         @endif
-        @endif
+    @endif
 
 
 
 
-        <!-- Add Task Export Buttons End -->
+    <!-- Add Task Export Buttons End -->
 
 
         <div class="d-flex justify-content-between">
@@ -160,7 +163,7 @@ $projectArchived = $project->trashed();
                     <div class="select-box py-2 px-0 mr-3">
                         <x-forms.label :fieldLabel="__('modules.tasks.assignTo')" fieldId="assignedTo" />
                         <select class="form-control select-picker" id="assignedTo" data-live-search="true"
-                        data-container="body" data-size="8">
+                                data-container="body" data-size="8">
                             <option value="all">@lang('app.all')</option>
                             @foreach ($project->membersMany as $employee)
                                 <option
@@ -197,7 +200,7 @@ $projectArchived = $project->trashed();
                                 </span>
                             </div>
                             <input type="text" class="form-control f-14 p-1 height-35 border" id="search-text-field"
-                                placeholder="@lang('app.startTyping')">
+                                   placeholder="@lang('app.startTyping')">
                         </div>
                     </div>
                     <!-- SEARCH BY TASK END -->
@@ -205,7 +208,7 @@ $projectArchived = $project->trashed();
                     <!-- RESET START -->
                     <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 mt-4">
                         <x-forms.button-secondary class="btn-xs d-none height-35" id="reset-filters"
-                            icon="times-circle">
+                                                  icon="times-circle">
                             @lang('app.clearFilters')
                         </x-forms.button-secondary>
                     </div>
@@ -448,27 +451,27 @@ $projectArchived = $project->trashed();
     $('#task-disable2').click(function() {
 
 
-        Swal.fire({
-            title: "@lang('You cannot assign task as client of the project did not sign the deliverables.')",
-            text: "@lang('')",
-            icon: 'error',
-            showCancelButton: true,
-            focusConfirm: false,
+            Swal.fire({
+                title: "@lang('You cannot assign task as client of the project did not sign the deliverables.')",
+                text: "@lang('')",
+                icon: 'error',
+                showCancelButton: true,
+                focusConfirm: false,
 
-            cancelButtonText: "@lang('app.cancel')",
-            customClass: {
-                confirmButton: 'btn btn-primary mr-3',
-                cancelButton: 'btn btn-secondary'
-            },
-            showClass: {
-                popup: 'swal2-noanimation',
-                backdrop: 'swal2-noanimation'
-            },
-            buttonsStyling: false
-        });
+                cancelButtonText: "@lang('app.cancel')",
+                customClass: {
+                    confirmButton: 'btn btn-primary mr-3',
+                    cancelButton: 'btn btn-secondary'
+                },
+                showClass: {
+                    popup: 'swal2-noanimation',
+                    backdrop: 'swal2-noanimation'
+                },
+                buttonsStyling: false
+            });
 
-    }
-);
+        }
+    );
 
 
     const applyQuickAction = () => {
@@ -544,4 +547,4 @@ $projectArchived = $project->trashed();
         }, 1000);
     }
 </script>
-  <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
