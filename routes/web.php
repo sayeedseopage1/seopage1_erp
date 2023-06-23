@@ -1176,19 +1176,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
     Route::get('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
-
-
-
-    Route::resource('authorization-action', AuthorizationAction::class);
-
-    Route::get('index-non-cash-points', [NonCashPointSettingsController::class, 'index'])->name('non_cash_point.index');
-    Route::post('store-non-cash-points', [NonCashPointSettingsController::class, 'store'])->name('non_cash_point.store');
-
-    Route::get('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
-
-    Route::get('award-time/increase/{id?}', [ContractController::class, 'award_time_increase_index'])->name('award_time_check.index');
-    Route::post('award-time/increase/store', [ContractController::class, 'award_time_incress_store'])->name('award_time_check.store');
-    Route::post('award-time/increase/update', [ContractController::class, 'award_time_incress_update'])->name('award_time_check.update');
 });
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
@@ -1393,4 +1380,5 @@ Route::post('/authorization/deal-details/', [ContractController::class, 'authori
 
 //Route::get('fix-database', [HomeController::class, 'fix_database'])->name('fix_database');
 Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
+Route::get('get-board-column-list', [TimelogReportController::class, 'board_column_json'])->name('board_column_json');
 Route::post('/upload', [HomeController::class, 'upload'])->name('upload');

@@ -5,6 +5,7 @@ import projectWiseDataTableReducer from "./features/projectWiseTableDataSlice";
 import taskWiseDataTableReducer from './features/taskWiseTableDataSlice';
 import usersReducer from './features/usersSlice';
 import pointPageFilterReducer from "./features/pointPageFilterSlice";
+import subtaskReducer from './features/subTaskSlice';
 
 export const store = configureStore({
     reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
         projectWiseDataTable: projectWiseDataTableReducer,
         taskWiseDataTable: taskWiseDataTableReducer,
         users: usersReducer,
-        pointPageFilterOption: pointPageFilterReducer
+        pointPageFilterOption: pointPageFilterReducer,
+        subTask: subtaskReducer
     },
    // serializableCheck: false, 
 

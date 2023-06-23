@@ -61,20 +61,20 @@ use App\Models\ProjectDeliverable;
 use function _PHPStan_7d6f0f6a4\React\Promise\all;
 use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
-use App\Models\AuthorizationAction;
+
 use App\Models\TaskNote;
 use App\Models\TaskNoteFile;
-
 use App\Models\ProjectTimeLog;
 use App\Models\TaskHistory;
 
-use Toaster;
+use App\Models\AuthorizationAction;
 
+
+
+use Toaster;
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
-
 use Validator;
-
 
 class TaskController extends AccountBaseController
 {
@@ -154,12 +154,14 @@ class TaskController extends AccountBaseController
 
         if ($request->link != null) {
 
+
             $links = explode(',', $request->link);
             foreach ($links as $lin) {
 
                 $task_submit = new TaskSubmission();
                 $task_submit->task_id = $request->id;
                 $task_submit->user_id = $request->user_id;
+
 
                 $task_submit->link = $lin;
                 if ($order == null) {
@@ -173,8 +175,10 @@ class TaskController extends AccountBaseController
         }
 
         if ($request->file('file') != null) {
+
             foreach ($request->file('file') as $att) {
                 $task_submit = new TaskSubmission();
+
                 $filename = null;
                 if ($att) {
                     $filename = time() . $att->getClientOriginalName();
@@ -203,6 +207,7 @@ class TaskController extends AccountBaseController
         $task->board_column_id = 6;
         $task->task_status = "submitted";
         $task->save();
+
 
         if ($this->user->role_id == 6) {
             $type = 'task_submission_by_lead_developer';
@@ -233,6 +238,7 @@ class TaskController extends AccountBaseController
 
         $user = User::where('id', $task->added_by)->first();
         $sender = User::where('id', $request->user_id)->first();
+
 
         $text = Auth::user()->name . ' mark task complete';
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
@@ -372,6 +378,8 @@ class TaskController extends AccountBaseController
 
         $task_submission = TaskSubmission::where('task_id', $task_status->id)->first();
 
+
+
         $text = Auth::user()->name . ' send revision request';
         $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
         $this->logProjectActivity($task_status->project->id, $link);
@@ -386,6 +394,8 @@ class TaskController extends AccountBaseController
             'body' => Auth::user()->name . ' send revision request',
             'redirectUrl' => route('tasks.show', $task_status->id)
         ]);
+
+
 
         $user = User::where('id', $task_submission->user_id)->first();
         $sender = User::where('id', $request->user_id)->first();
@@ -405,6 +415,7 @@ class TaskController extends AccountBaseController
         $task->due_date = $date;
         $task->description = $request->description;
         $task->save();
+
 
         // authorization action section
         $task_id = Task::find($request->task_id);
@@ -429,6 +440,7 @@ class TaskController extends AccountBaseController
         $authorization_action->authorization_for = $authorization_for;
         $authorization_action->save();
         //end authorization action
+
 
         return Redirect::back()->with('messages.taskUpdatedSuccessfully');
     }
@@ -849,6 +861,7 @@ class TaskController extends AccountBaseController
 
         if (is_array($request->user_id)) {
             $assigned_to = User::find($request->user_id[0]);
+<
             if ($assigned_to->role_id == 6) {
                 //authorization action start
 
@@ -864,6 +877,7 @@ class TaskController extends AccountBaseController
                 $authorization_action->save();
                 //authorization action end
             }
+
             $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
             $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
             $this->logProjectActivity($project->id, $link);
@@ -877,6 +891,7 @@ class TaskController extends AccountBaseController
             ]);
         } else {
             $assigned_to = User::find($request->user_id);
+
             if ($assigned_to->role_id == 6) {
                 //authorization action start
 
@@ -892,6 +907,7 @@ class TaskController extends AccountBaseController
                 $authorization_action->save();
                 //authorization action end
             }
+
             $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
             $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
             $this->logProjectActivity($project->id, $link);
@@ -1282,10 +1298,12 @@ class TaskController extends AccountBaseController
                     $this->tab = 'tasks.ajax.sub_tasks';
                 }
                 break;
+
         }
 
         if ($request->mode == 'react_json') {
             return response()->json($this->data);
+
         }
 
         if (request()->ajax()) {
@@ -1298,6 +1316,9 @@ class TaskController extends AccountBaseController
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
+        if ($request->mode == 'task-json') {
+            return response()->json($this->data);
+        }
 
 
         $this->view = 'tasks.ajax.show';
@@ -1673,6 +1694,7 @@ class TaskController extends AccountBaseController
         ]);
     }
 
+
     //        TASK GUIDELINE SECTION
     public function viewTaskGuideline($project_id)
     {
@@ -1787,7 +1809,7 @@ class TaskController extends AccountBaseController
 
     }
 
-    public function task_json(Request $request, $id)
+
     public function task_json(Request $request, $id)
     {
         if ($request->mode == 'basic') {
